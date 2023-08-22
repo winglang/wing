@@ -1,9 +1,27 @@
 ---
 source: libs/wingc/src/lsp/completions.rs
 ---
+- label: display
+  kind: 5
+  detail: Display
+  documentation:
+    kind: markdown
+    value: "```wing\npreflight display: Display\n```\n---\nInformation on how to display a resource in the UI."
+  sortText: ab|display
+- label: node
+  kind: 5
+  detail: Node
+  documentation:
+    kind: markdown
+    value: "```wing\npreflight node: Node\n```\n---\nThe tree node."
+  sortText: ab|node
 - label: delete
   kind: 2
   detail: "inflight (key: str, opts: BucketDeleteOptions?): void"
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight delete: inflight (key: str, opts: BucketDeleteOptions?): void\n```\n---\nDelete an existing object using a key from the bucket."
+  sortText: ff|delete
   insertText: delete($0)
   insertTextFormat: 2
   command:
@@ -12,6 +30,10 @@ source: libs/wingc/src/lsp/completions.rs
 - label: exists
   kind: 2
   detail: "inflight (key: str): bool"
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight exists: inflight (key: str): bool\n```\n---\nCheck if an object exists in the bucket."
+  sortText: ff|exists
   insertText: exists($0)
   insertTextFormat: 2
   command:
@@ -20,6 +42,10 @@ source: libs/wingc/src/lsp/completions.rs
 - label: get
   kind: 2
   detail: "inflight (key: str): str"
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight get: inflight (key: str): str\n```\n---\nRetrieve an object from the bucket.\n\n\n*@Returns* *the object's body.*\n*@Throws* *if no object with the given key exists.*"
+  sortText: ff|get
   insertText: get($0)
   insertTextFormat: 2
   command:
@@ -28,6 +54,10 @@ source: libs/wingc/src/lsp/completions.rs
 - label: getJson
   kind: 2
   detail: "inflight (key: str): Json"
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight getJson: inflight (key: str): Json\n```\n---\nRetrieve a Json object from the bucket.\n\n\n*@Returns* *the object's parsed Json.*\n*@Throws* *if no object with the given key exists.*"
+  sortText: ff|getJson
   insertText: getJson($0)
   insertTextFormat: 2
   command:
@@ -36,6 +66,10 @@ source: libs/wingc/src/lsp/completions.rs
 - label: list
   kind: 2
   detail: "inflight (prefix: str?): Array<str>"
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight list: inflight (prefix: str?): Array<str>\n```\n---\nRetrieve existing objects keys from the bucket.\n\n\n### Returns\na list of keys or an empty array if the bucket is empty."
+  sortText: ff|list
   insertText: list($0)
   insertTextFormat: 2
   command:
@@ -44,6 +78,10 @@ source: libs/wingc/src/lsp/completions.rs
 - label: publicUrl
   kind: 2
   detail: "inflight (key: str): str"
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight publicUrl: inflight (key: str): str\n```\n---\nReturns a url to the given file.\n\n\n*@Throws* *if the file is not public or if object does not exist.*"
+  sortText: ff|publicUrl
   insertText: publicUrl($0)
   insertTextFormat: 2
   command:
@@ -52,6 +90,10 @@ source: libs/wingc/src/lsp/completions.rs
 - label: put
   kind: 2
   detail: "inflight (key: str, body: str): void"
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight put: inflight (key: str, body: str): void\n```\n---\nPut an object in the bucket."
+  sortText: ff|put
   insertText: put($0)
   insertTextFormat: 2
   command:
@@ -60,6 +102,10 @@ source: libs/wingc/src/lsp/completions.rs
 - label: putJson
   kind: 2
   detail: "inflight (key: str, body: Json): void"
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight putJson: inflight (key: str, body: Json): void\n```\n---\nPut a Json object in the bucket."
+  sortText: ff|putJson
   insertText: putJson($0)
   insertTextFormat: 2
   command:
@@ -68,6 +114,10 @@ source: libs/wingc/src/lsp/completions.rs
 - label: tryDelete
   kind: 2
   detail: "inflight (key: str): bool"
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight tryDelete: inflight (key: str): bool\n```\n---\nDelete an object from the bucket if it exists.\n\n\n### Returns\nthe result of the delete operation"
+  sortText: ff|tryDelete
   insertText: tryDelete($0)
   insertTextFormat: 2
   command:
@@ -76,6 +126,10 @@ source: libs/wingc/src/lsp/completions.rs
 - label: tryGet
   kind: 2
   detail: "inflight (key: str): str?"
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight tryGet: inflight (key: str): str?\n```\n---\nGet an object from the bucket if it exists.\n\n\n### Returns\nthe contents of the object as a string if it exists, nil otherwise"
+  sortText: ff|tryGet
   insertText: tryGet($0)
   insertTextFormat: 2
   command:
@@ -84,19 +138,13 @@ source: libs/wingc/src/lsp/completions.rs
 - label: tryGetJson
   kind: 2
   detail: "inflight (key: str): Json?"
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight tryGetJson: inflight (key: str): Json?\n```\n---\nGets an object from the bucket if it exists, parsing it as Json.\n\n\n### Returns\nthe contents of the object as Json if it exists, nil otherwise"
+  sortText: ff|tryGetJson
   insertText: tryGetJson($0)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
-- label: display
-  kind: 5
-  detail: Display
-  insertText: display
-  insertTextFormat: 2
-- label: node
-  kind: 5
-  detail: Node
-  insertText: node
-  insertTextFormat: 2
 

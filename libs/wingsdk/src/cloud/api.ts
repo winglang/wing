@@ -10,7 +10,7 @@ import { IResource, Resource } from "../std/resource";
 export const API_FQN = fqnForType("cloud.Api");
 
 /**
- * Cors Properties for `Api`.
+ * Cors Options for `Api`.
  */
 export interface ApiCorsProps {
   /**
@@ -44,7 +44,7 @@ export interface ApiCorsProps {
 }
 
 /**
- * Properties for `Api`.
+ * Options for `Api`.
  */
 
 export interface ApiProps {
@@ -69,6 +69,7 @@ export type OpenApiSpecExtension = any;
 
 /**
  * Functionality shared between all `Api` implementations.
+ * @inflight  `@winglang/sdk.cloud.IApiClient`
  */
 
 export abstract class Api extends Resource {
@@ -199,7 +200,7 @@ export abstract class Api extends Resource {
     props?: ApiConnectProps
   ): void;
   /**
-   * validating path:
+   * Validating path:
    * if has curly brackets pairs- the part that inside the brackets is only letter, digit or _, not empty and placed before and after "/"
    * @param path
    * @throws if the path is invalid
@@ -374,7 +375,7 @@ export interface ApiResponse {
 }
 
 /**
- * Represents a resource with an inflight "handle" method that can be passed to
+ * A resource with an inflight "handle" method that can be passed to
  * one of the `Api` request preflight methods.
  *
  * @inflight `@winglang/sdk.cloud.IApiEndpointHandlerClient`

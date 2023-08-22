@@ -14,10 +14,10 @@ import {
   ApiResponse,
   IApiClient,
   IFunctionClient,
-  TraceType,
   parseHttpMethod,
   sanitizeParamLikeObject,
 } from "../cloud";
+import { TraceType } from "../std";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
@@ -210,7 +210,7 @@ function isApiResponse(response: unknown): response is ApiResponse {
 function transformRequest(req: express.Request): ApiRequest {
   return {
     headers: sanitizeParamLikeObject(req.headers),
-    body: req.body,
+    body: Object.keys(req.body).length > 0 ? req.body : "",
     method: parseHttpMethod(req.method),
     path: req.path,
     query: sanitizeParamLikeObject(req.query as any),

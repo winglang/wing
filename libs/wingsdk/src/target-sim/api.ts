@@ -6,7 +6,8 @@ import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { IInflightHost, Resource } from "../std";
+import { Connections } from "../core";
+import { Display, IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 import { Construct } from "constructs";
 
@@ -56,6 +57,8 @@ export class Api extends cloud.Api implements ISimulatorResource {
     }
 
     const fn = Function._newFunction(this, fnPath, inflight, props) as Function;
+    fn.display.sourceModule = Display.SDK_SOURCE_MODULE;
+    fn.display.title = `${method.toLowerCase()}()`;
 
     const eventMapping = new EventMapping(this, eventId, {
       publisher: this,
@@ -85,10 +88,10 @@ export class Api extends cloud.Api implements ISimulatorResource {
     this._addToSpec(path, method, undefined);
 
     const fn = this.createOrGetFunction(inflight, props, path, method);
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: `on_${method.toLowerCase()}_request`,
+    Connections.of(this).add({
+      source: this,
+      target: fn,
+      name: `${method.toLowerCase()}()`,
     });
   }
 
@@ -217,10 +220,9 @@ export class Api extends cloud.Api implements ISimulatorResource {
     return schema;
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */

@@ -1,20 +1,18 @@
 # [add_object.w](../../../../../../examples/tests/sdk_tests/bucket/add_object.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
-module.exports = function({ b, jsonObj1, std_Json }) {
+module.exports = function({ $b, $jsonObj1, $std_Json }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.list()).length === 2)'`)})(((await b.list()).length === 2))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { return JSON.stringify(args[0], null, args[1]) })([(await b.getJson("file1.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj1]))'`)})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await b.getJson("file1.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj1])))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.get("file2.txt")) === "Bar")'`)})(((await b.get("file2.txt")) === "Bar"))};
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.list()).length,2)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(b.getJson(\"file1.json\")) == Json.stringify(jsonObj1)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return JSON.stringify(args[0], null, args[1]) })([(await $b.getJson("file1.json"))]),((args) => { return JSON.stringify(args[0], null, args[1]) })([$jsonObj1]))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.get(\"file2.txt\") == \"Bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.get("file2.txt")),"Bar")))};
     }
   }
   return $Closure1;
@@ -29,7 +27,7 @@ module.exports = function({ b, jsonObj1, std_Json }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -43,7 +41,7 @@ module.exports = function({ b, jsonObj1, std_Json }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:addObject\",\"${aws_lambda_function.root_testaddObject_Handler_F15F7809.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:addObject\",\"${aws_lambda_function.testaddObject_Handler_44ECC49C.arn}\"]]"
     }
   },
   "provider": {
@@ -53,52 +51,51 @@ module.exports = function({ b, jsonObj1, std_Json }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testaddObject_Handler_IamRole_CCB55BBB": {
+      "testaddObject_Handler_IamRole_1A9672A7": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:addObject/Handler/IamRole",
-            "uniqueId": "root_testaddObject_Handler_IamRole_CCB55BBB"
+            "uniqueId": "testaddObject_Handler_IamRole_1A9672A7"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testaddObject_Handler_IamRolePolicy_26F3ADD3": {
+      "testaddObject_Handler_IamRolePolicy_B5188189": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:addObject/Handler/IamRolePolicy",
-            "uniqueId": "root_testaddObject_Handler_IamRolePolicy_26F3ADD3"
+            "uniqueId": "testaddObject_Handler_IamRolePolicy_B5188189"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testaddObject_Handler_IamRole_CCB55BBB.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.testaddObject_Handler_IamRole_1A9672A7.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testaddObject_Handler_IamRolePolicyAttachment_603985A4": {
+      "testaddObject_Handler_IamRolePolicyAttachment_DB1EE647": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:addObject/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testaddObject_Handler_IamRolePolicyAttachment_603985A4"
+            "uniqueId": "testaddObject_Handler_IamRolePolicyAttachment_DB1EE647"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testaddObject_Handler_IamRole_CCB55BBB.name}"
+        "role": "${aws_iam_role.testaddObject_Handler_IamRole_1A9672A7.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testaddObject_Handler_F15F7809": {
+      "testaddObject_Handler_44ECC49C": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:addObject/Handler/Default",
-            "uniqueId": "root_testaddObject_Handler_F15F7809"
+            "uniqueId": "testaddObject_Handler_44ECC49C"
           }
         },
         "environment": {
           "variables": {
-            "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
+            "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
             "WING_FUNCTION_NAME": "Handler-c89ea41b",
             "WING_TARGET": "tf-aws"
           }
@@ -106,10 +103,10 @@ module.exports = function({ b, jsonObj1, std_Json }) {
         "function_name": "Handler-c89ea41b",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testaddObject_Handler_IamRole_CCB55BBB.arn}",
+        "role": "${aws_iam_role.testaddObject_Handler_IamRole_1A9672A7.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testaddObject_Handler_S3Object_1AADCBC8.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testaddObject_Handler_S3Object_88DEF745.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -118,20 +115,20 @@ module.exports = function({ b, jsonObj1, std_Json }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       },
-      "root_cloudBucket_4F3C4F53": {
+      "cloudBucket": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Bucket/Default",
-            "uniqueId": "root_cloudBucket_4F3C4F53"
+            "uniqueId": "cloudBucket"
           }
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
@@ -139,29 +136,29 @@ module.exports = function({ b, jsonObj1, std_Json }) {
       }
     },
     "aws_s3_bucket_public_access_block": {
-      "root_cloudBucket_PublicAccessBlock_319C1C2E": {
+      "cloudBucket_PublicAccessBlock_5946CCE8": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E"
+            "uniqueId": "cloudBucket_PublicAccessBlock_5946CCE8"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
-      "root_cloudBucket_Encryption_8ED0CD9C": {
+      "cloudBucket_Encryption_77B6AEEF": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Bucket/Encryption",
-            "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C"
+            "uniqueId": "cloudBucket_Encryption_77B6AEEF"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -172,36 +169,36 @@ module.exports = function({ b, jsonObj1, std_Json }) {
       }
     },
     "aws_s3_object": {
-      "root_cloudBucket_S3Objectfile1json_2AA43972": {
+      "cloudBucket_S3Object-file1json_574A6AAF": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Bucket/S3Object-file1.json",
-            "uniqueId": "root_cloudBucket_S3Objectfile1json_2AA43972"
+            "uniqueId": "cloudBucket_S3Object-file1json_574A6AAF"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
         "content": "{\"key1\":\"value1\"}",
         "key": "file1.json"
       },
-      "root_cloudBucket_S3Objectfile2txt_2A0B5D22": {
+      "cloudBucket_S3Object-file2txt_C6672D6C": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Bucket/S3Object-file2.txt",
-            "uniqueId": "root_cloudBucket_S3Objectfile2txt_2A0B5D22"
+            "uniqueId": "cloudBucket_S3Object-file2txt_C6672D6C"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
         "content": "Bar",
         "key": "file2.txt"
       },
-      "root_testaddObject_Handler_S3Object_1AADCBC8": {
+      "testaddObject_Handler_S3Object_88DEF745": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:addObject/Handler/S3Object",
-            "uniqueId": "root_testaddObject_Handler_S3Object_1AADCBC8"
+            "uniqueId": "testaddObject_Handler_S3Object_88DEF745"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -214,29 +211,24 @@ module.exports = function({ b, jsonObj1, std_Json }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const b_client = context._lift(b);
-        const jsonObj1_client = context._lift(jsonObj1);
-        const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            b: ${b_client},
-            jsonObj1: ${jsonObj1_client},
-            std_Json: ${std_JsonClient.text},
+          require("./inflight.$Closure1-1.js")({
+            $b: ${context._lift(b)},
+            $jsonObj1: ${context._lift(jsonObj1)},
+            $std_Json: ${context._lift(std.Json)},
           })
         `);
       }
@@ -252,10 +244,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(b, host, []);
-          $Closure1._registerBindObject(jsonObj1, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(b, host, ["get", "getJson", "list"]);
           $Closure1._registerBindObject(jsonObj1, host, []);
@@ -264,28 +252,14 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    const jsonObj1 = Object.freeze({"key1":"value1"});
+    const jsonObj1 = ({"key1": "value1"});
     (b.addObject("file1.json",((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj1])));
     (b.addObject("file2.txt","Bar"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:addObject",new $Closure1(this,"$Closure1"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "add_object", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "add_object", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

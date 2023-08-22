@@ -1,0 +1,87 @@
+---
+source: libs/wingc/src/jsify/tests.rs
+---
+## Code
+
+```w
+
+    class Foo {
+      x: str;
+      
+      init() {
+        this.x = "world";
+      }
+    
+      inflight method() {
+        this.x;
+      }
+    }
+    
+```
+
+## inflight.Foo-1.js
+
+```js
+module.exports = function({  }) {
+  class Foo {
+    constructor({ $this_x }) {
+      this.$this_x = $this_x;
+    }
+    async method() {
+      this.$this_x;
+    }
+  }
+  return Foo;
+}
+```
+
+## preflight.js
+
+```js
+const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const $wing_is_test = process.env.WING_IS_TEST === "true";
+const std = $stdlib.std;
+class $Root extends $stdlib.std.Resource {
+  constructor(scope, id) {
+    super(scope, id);
+    class Foo extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("method", "$inflight_init");
+        this.x = "world";
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.Foo-1.js")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const FooClient = ${Foo._toInflightType(this).text};
+            const client = new FooClient({
+              $this_x: ${this._lift(this.x)},
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          Foo._registerBindObject(this.x, host, []);
+        }
+        if (ops.includes("method")) {
+          Foo._registerBindObject(this.x, host, []);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+  }
+}
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "main", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+```
+

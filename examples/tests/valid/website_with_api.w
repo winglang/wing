@@ -1,4 +1,5 @@
 bring cloud;
+bring ex;
 
 class TestUtils {
   extern "./website_with_api.js" static inflight fetch(url: str, method: str, headers: Json?, body: str?): Json;
@@ -17,13 +18,13 @@ let api = new cloud.Api(
 
 let website = new cloud.Website(path: "./website_with_api");
 
-let usersTable = new cloud.Table(
+let usersTable = new ex.Table(
   name: "users-table",
   primaryKey: "id",
   columns: {
-    id: cloud.ColumnType.STRING,
-    name: cloud.ColumnType.STRING,
-    age: cloud.ColumnType.NUMBER,
+    "id" => ex.ColumnType.STRING,
+    "name" => ex.ColumnType.STRING,
+    "age" => ex.ColumnType.NUMBER,
   }
 );
 

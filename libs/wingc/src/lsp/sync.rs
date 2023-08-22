@@ -1,36 +1,59 @@
-use lsp_types::{DidChangeTextDocumentParams, DidOpenTextDocumentParams, Url};
+use indexmap::IndexMap;
+use lsp_types::{DidChangeTextDocumentParams, DidOpenTextDocumentParams};
 use wingii::type_system::TypeSystem;
 
-use std::path::Path;
-use std::{cell::RefCell, collections::HashMap};
+use std::cell::RefCell;
+use std::path::{Path, PathBuf};
 use tree_sitter::Tree;
 
 use crate::closure_transform::ClosureTransformer;
+use crate::diagnostic::{found_errors, reset_diagnostics};
+use crate::file_graph::FileGraph;
+use crate::files::Files;
 use crate::fold::Fold;
-use crate::lsp::notifications::send_diagnostics;
-use crate::parser::Parser;
+use crate::jsify::JSifier;
+use crate::lifting::LiftVisitor;
+use crate::parser::parse_wing_project;
 use crate::type_check;
-use crate::{ast::Scope, diagnostic::Diagnostics, type_check::Types, wasm_util::ptr_to_string};
+use crate::type_check::jsii_importer::JsiiImportSpec;
+use crate::type_check_assert::TypeCheckAssert;
+use crate::valid_json_visitor::ValidJsonVisitor;
+use crate::visit::Visit;
+use crate::{ast::Scope, type_check::Types, wasm_util::ptr_to_string};
 
-/// The result of running wingc on a file
-pub struct FileData {
-	/// Text data contained in the file (ut ≥f8)
-	pub contents: String,
-	/// tree-sitter tree
-	pub tree: Tree,
-	/// The diagnostics returned by wingc
-	pub diagnostics: Diagnostics,
-	/// The top scope of the file
-	pub scope: Box<Scope>,
-	/// The universal type collection for the scope. This is saved to ensure references live long enough.
-	pub types: Types,
+/// The output of compiling a Wing project with one or more files
+pub struct ProjectData {
+	/// Text data contained in the files (utf8)
+	pub files: Files,
+	/// A graph that tracks the dependencies between files
+	pub file_graph: FileGraph,
+	/// tree-sitter trees
+	pub trees: IndexMap<PathBuf, Tree>,
+	/// AST for each file
+	pub asts: IndexMap<PathBuf, Scope>,
+	/// The JSII imports for the file. This is saved so we can load JSII types (for autocompletion for example)
+	/// which don't exist explicitly in the source.
+	pub jsii_imports: Vec<JsiiImportSpec>,
+}
+
+impl ProjectData {
+	fn new() -> Self {
+		ProjectData {
+			files: Files::new(),
+			file_graph: FileGraph::default(),
+			trees: IndexMap::new(),
+			asts: IndexMap::new(),
+			jsii_imports: Vec::new(),
+		}
+	}
 }
 
 thread_local! {
 	/// When consumed as a WASM library, wingc is not in control of the process/memory in which it is running.
 	/// This means that it cannot reliably manage stateful data like this between function calls.
 	/// Here we will assume the process is single threaded, and use thread_local to store this data.
-	pub static FILES: RefCell<HashMap<Url,FileData>> = RefCell::new(HashMap::new());
+	pub static WING_TYPES: RefCell<Types> = RefCell::new(Types::new());
+	pub static PROJECT_DATA: RefCell<ProjectData> = RefCell::new(ProjectData::new());
 	pub static JSII_TYPES: RefCell<TypeSystem> = RefCell::new(TypeSystem::new());
 }
 
@@ -43,16 +66,23 @@ pub unsafe extern "C" fn wingc_on_did_open_text_document(ptr: u32, len: u32) {
 		eprintln!("Failed to parse 'did open' text document: {}", parse_string);
 	}
 }
-pub fn on_document_did_open(params: DidOpenTextDocumentParams) {
-	JSII_TYPES.with(|jsii_types| {
-		FILES.with(|files| {
-			let uri = params.text_document.uri;
-			let uri_path = uri.to_file_path().unwrap();
-			let path = uri_path.to_str().unwrap();
 
-			let result = partial_compile(path, params.text_document.text.as_bytes(), &mut jsii_types.borrow_mut());
-			send_diagnostics(&uri, &result.diagnostics);
-			files.borrow_mut().insert(uri, result);
+pub fn on_document_did_open(params: DidOpenTextDocumentParams) {
+	WING_TYPES.with(|wing_types| {
+		JSII_TYPES.with(|jsii_types| {
+			PROJECT_DATA.with(|project_data| {
+				let uri = params.text_document.uri;
+				let uri_path = uri.to_file_path().unwrap();
+				let source_text = params.text_document.text;
+
+				partial_compile(
+					&uri_path,
+					source_text,
+					&mut wing_types.borrow_mut(),
+					&mut jsii_types.borrow_mut(),
+					&mut project_data.borrow_mut(),
+				);
+			});
 		});
 	});
 }
@@ -66,74 +96,109 @@ pub unsafe extern "C" fn wingc_on_did_change_text_document(ptr: u32, len: u32) {
 		eprintln!("Failed to parse 'did change' text document: {}", parse_string);
 	}
 }
-pub fn on_document_did_change(params: DidChangeTextDocumentParams) {
-	JSII_TYPES.with(|jsii_types| {
-		FILES.with(|files| {
-			let uri = params.text_document.uri;
-			let uri_path = uri.to_file_path().unwrap();
-			let path = uri_path.to_str().unwrap();
 
-			let result = partial_compile(
-				path,
-				params.content_changes[0].text.as_bytes(),
-				&mut jsii_types.borrow_mut(),
-			);
-			send_diagnostics(&uri, &result.diagnostics);
-			files.borrow_mut().insert(uri, result);
-		});
-	})
+pub fn on_document_did_change(params: DidChangeTextDocumentParams) {
+	let DidChangeTextDocumentParams {
+		text_document,
+		content_changes,
+	} = params;
+
+	WING_TYPES.with(|wing_types| {
+		JSII_TYPES.with(|jsii_types| {
+			PROJECT_DATA.with(|project_data| {
+				let uri = text_document.uri;
+				let uri_path = uri.to_file_path().unwrap();
+				let source_text = content_changes.into_iter().next().unwrap().text;
+
+				partial_compile(
+					&uri_path,
+					source_text,
+					&mut wing_types.borrow_mut(),
+					&mut jsii_types.borrow_mut(),
+					&mut project_data.borrow_mut(),
+				);
+			});
+		})
+	});
 }
 
-/// Runs several phases of the wing compile on a file, including: parsing, type checking, and capturing
-fn partial_compile(source_file: &str, text: &[u8], jsii_types: &mut TypeSystem) -> FileData {
-	let mut types = type_check::Types::new();
+/// Runs several phases of the wing compiler on a file, including: parsing, type checking, and lifting
+/// `ProjectData` is passed with results from previous compilations, and is updated with the results of this compilation.
+fn partial_compile(
+	source_path: &Path,
+	source_text: String,
+	mut types: &mut Types, // TODO: does this need to be shared between recompiles?
+	jsii_types: &mut TypeSystem,
+	project_data: &mut ProjectData,
+) {
+	// Reset diagnostics before new compilation (`partial_compile` can be called multiple times)
+	reset_diagnostics();
 
-	let language = tree_sitter_wing::language();
-	let mut parser = tree_sitter::Parser::new();
-	parser.set_language(language).unwrap();
-
-	let tree = match parser.parse(text, None) {
-		Some(tree) => tree,
-		None => {
-			panic!("Failed parsing source file: {}", source_file);
-		}
-	};
-
-	let wing_parser = Parser::new(text, source_file.to_string());
-
-	let scope = wing_parser.wingit(&tree.root_node());
+	let topo_sorted_files = parse_wing_project(
+		&source_path,
+		source_text,
+		&mut project_data.files,
+		&mut project_data.file_graph,
+		&mut project_data.trees,
+		&mut project_data.asts,
+	);
 
 	// -- DESUGARING PHASE --
 
 	// Transform all inflight closures defined in preflight into single-method resources
-	let mut inflight_transformer = ClosureTransformer::new();
-	// Note: The scope is intentionally boxed here to force heap allocation
-	// Otherwise, the scope will be moved during type checking and we'll be left with dangling references elsewhere
-	let mut scope = Box::new(inflight_transformer.fold_scope(scope));
+	for file in &topo_sorted_files {
+		let mut inflight_transformer = ClosureTransformer::new();
+		let scope = project_data.asts.remove(file).unwrap();
+		let new_scope = inflight_transformer.fold_scope(scope);
+		project_data.asts.insert(file.clone(), new_scope);
+	}
+
+	// Reset all type information
+	types.reset_expr_types();
+	types.reset_scope_envs();
 
 	// -- TYPECHECKING PHASE --
+	let mut jsii_imports = vec![];
 
-	let type_diag = type_check(&mut scope, &mut types, &Path::new(source_file), jsii_types);
+	// Type check all files in topological order (start with files that don't require any other
+	// Wing files, then move on to files that depend on those, etc.)
+	for file in &topo_sorted_files {
+		let mut scope = project_data.asts.get_mut(file).expect("matching AST not found");
+		type_check(&mut scope, &mut types, &file, jsii_types, &mut jsii_imports);
 
-	let mut diagnostics = Diagnostics::new();
-	diagnostics.extend(wing_parser.diagnostics.into_inner());
-	diagnostics.extend(type_diag);
+		// Validate the type checker didn't miss anything - see `TypeCheckAssert` for details
+		let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
+		tc_assert.check(&scope);
 
-	return FileData {
-		contents: String::from_utf8(text.to_vec()).unwrap(),
-		tree,
-		diagnostics,
-		scope,
-		types,
-	};
+		// Validate all Json literals to make sure their values are legal
+		let mut json_checker = ValidJsonVisitor::new(&types);
+		json_checker.check(&scope);
+	}
+
+	// -- LIFTING PHASE --
+
+	// source_file will never be "" because it is the path to the file being compiled and lsp does not allow empty paths
+	let project_dir = source_path.parent().expect("Empty filename");
+
+	let jsifier = JSifier::new(&mut types, &project_data.files, &source_path, &project_dir);
+	for file in &topo_sorted_files {
+		let mut lift = LiftVisitor::new(&jsifier);
+		let scope = project_data.asts.remove(file).expect("matching AST not found");
+		lift.visit_scope(&scope);
+		project_data.asts.insert(file.clone(), scope);
+	}
+
+	// no need to JSify in the LSP
 }
 
 #[cfg(test)]
 pub mod test_utils {
-	use std::str::FromStr;
+	use std::{fs, str::FromStr};
 	use uuid::Uuid;
 
 	use lsp_types::*;
+
+	use crate::diagnostic::assert_no_panics;
 
 	use super::on_document_did_open;
 
@@ -157,8 +222,12 @@ pub mod test_utils {
 	/// ```
 	///
 	pub fn load_file_with_contents(content: &str) -> TextDocumentPositionParams {
-		let filename = format!("file:///{}.w", Uuid::new_v4());
-		let uri = Url::from_str(&filename).unwrap();
+		let temp_dir = tempfile::tempdir().expect("Failed to create temporary directory");
+		let filename = format!("{}.w", Uuid::new_v4());
+		let file_path = temp_dir.path().join(&filename);
+		fs::write(&file_path, content).expect("Failed to write to temporary file");
+		let file_uri_string = format!("file:///{}", file_path.to_str().unwrap());
+		let uri = Url::from_str(&file_uri_string).unwrap();
 		on_document_did_open(DidOpenTextDocumentParams {
 			text_document: lsp_types::TextDocumentItem {
 				uri: uri.clone(),
@@ -167,6 +236,8 @@ pub mod test_utils {
 				text: content.to_string(),
 			},
 		});
+
+		assert_no_panics();
 
 		// find the character cursor position by looking for the character above the ^
 		let mut char_pos = 0_i32;

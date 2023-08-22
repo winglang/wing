@@ -10,7 +10,7 @@ import { IResource, Resource } from "../std";
 export const SERVICE_FQN = fqnForType("cloud.Service");
 
 /**
- * Properties for `Service`.
+ * Options for `Service`.
  */
 export interface ServiceProps {
   /**
@@ -30,7 +30,7 @@ export interface ServiceProps {
 }
 
 /**
- * Represents a service.
+ * A long-running service.
  *
  * @inflight `@winglang/sdk.cloud.IServiceClient`
  */
@@ -84,7 +84,7 @@ export interface IServiceClient {
 }
 
 /**
- * Represents a resource with an inflight "handle" method that can be passed to
+ * A resource with an inflight "handle" method that can be passed to
  * `ServiceProps.on_start` || `ServiceProps.on_stop`.
  *
  * @inflight `@winglang/sdk.cloud.IServiceOnEventClient`

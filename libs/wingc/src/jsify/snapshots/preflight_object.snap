@@ -1,0 +1,126 @@
+---
+source: libs/wingc/src/jsify/tests.rs
+---
+## Code
+
+```w
+
+    class A {
+      inflight hello() {}
+      inflight goodbye() {}
+    }
+    let pf_obj = new A();
+    test "test" {
+      pf_obj.hello();
+      pf_obj.goodbye();
+    }
+    
+```
+
+## inflight.$Closure1-1.js
+
+```js
+module.exports = function({ $pf_obj }) {
+  class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      (await $pf_obj.hello());
+      (await $pf_obj.goodbye());
+    }
+  }
+  return $Closure1;
+}
+```
+
+## inflight.A-1.js
+
+```js
+module.exports = function({  }) {
+  class A {
+    constructor({  }) {
+    }
+    async hello() {
+    }
+    async goodbye() {
+    }
+  }
+  return A;
+}
+```
+
+## preflight.js
+
+```js
+const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const $wing_is_test = process.env.WING_IS_TEST === "true";
+const std = $stdlib.std;
+class $Root extends $stdlib.std.Resource {
+  constructor(scope, id) {
+    super(scope, id);
+    class A extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("hello", "goodbye", "$inflight_init");
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.A-1.js")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const AClient = ${A._toInflightType(this).text};
+            const client = new AClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+    }
+    class $Closure1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.$Closure1-1.js")({
+            $pf_obj: ${context._lift(pf_obj)},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const client = new $Closure1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("handle")) {
+          $Closure1._registerBindObject(pf_obj, host, ["goodbye", "hello"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    const pf_obj = new A(this,"A");
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
+  }
+}
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "main", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+```
+

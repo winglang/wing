@@ -1,12 +1,12 @@
 bring cloud;
 
-class A impl cloud.IQueueAddConsumerHandler {
+class A impl cloud.IQueueSetConsumerHandler {
   inflight handle(msg: str) {
     return;
   }
 }
 
-let x: cloud.IQueueAddConsumerHandler = new A();
+let x: cloud.IQueueSetConsumerHandler = new A();
 
 let y = inflight () => {
   x.handle("hello world!");
@@ -48,3 +48,12 @@ class Dog impl IAnimal {
 }
 
 let z: IAnimal = new Dog();
+
+// base class is checked for implemention of interface
+class Terrier extends Dog {
+  inflight eat() {
+    return;
+  }
+}
+
+let w: IAnimal = new Terrier();

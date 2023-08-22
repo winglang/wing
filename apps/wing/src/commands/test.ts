@@ -1,14 +1,13 @@
-import { basename, sep } from "path";
+import { basename, resolve, sep } from "path";
 import { compile, CompileOptions } from "./compile";
 import chalk from "chalk";
-import * as sdk from "@winglang/sdk";
-import { ITestRunnerClient } from "@winglang/sdk/lib/cloud";
-import { TestRunnerClient } from "@winglang/sdk/lib/shared-aws/test-runner.inflight";
+import { std, testing } from "@winglang/sdk";
 import * as cp from "child_process";
 import debug from "debug";
 import { promisify } from "util";
 import { generateTmpDir, withSpinner } from "../util";
 import { Target } from "@winglang/compiler";
+import { nanoid } from "nanoid";
 import { readFile, rm, rmSync } from "fs";
 
 const log = debug("wing:test");
@@ -25,95 +24,133 @@ const generateTestName = (path: string) => path.split(sep).slice(-2).join("/");
 /**
  * Options for the `test` command.
  */
-export interface TestOptions extends CompileOptions { }
+export interface TestOptions extends CompileOptions {
+  clean: boolean;
+}
 
-export async function test(entrypoints: string[], options: TestOptions) {
+export async function test(entrypoints: string[], options: TestOptions): Promise<number> {
   const startTime = Date.now();
-  const passing: string[] = [];
-  const failing: { testName: string; error: Error }[] = [];
-  for (const entrypoint of entrypoints) {
+  const results: { testName: string; results: std.TestResult[] }[] = [];
+  const testFile = async (entrypoint: string) => {
+    const testName = generateTestName(entrypoint);
     try {
-      const results: sdk.cloud.TestResult[] | void = await testOne(entrypoint, options);
-      if (results?.some(({ pass }) => !pass)) {
-        failing.push(
-          ...results
-            ?.filter(({ pass }) => !pass)
-            .map((item) => ({
-              testName: generateTestName(entrypoint),
-              error: new Error(item.error),
-            }))
-        );
-      } else {
-        passing.push(generateTestName(entrypoint));
-      }
+      const singleTestResults: std.TestResult[] | void = await testOne(entrypoint, options);
+      results.push({ testName, results: singleTestResults ?? [] });
     } catch (error) {
       console.log((error as Error).message);
-      failing.push({ testName: generateTestName(entrypoint), error: error as Error });
+      results.push({
+        testName: generateTestName(entrypoint),
+        results: [{ pass: false, path: "", error: (error as Error).message, traces: [] }],
+      });
+    }
+  };
+  await Promise.all(entrypoints.map(testFile));
+  printResults(results, Date.now() - startTime);
+
+  // if we have any failures, exit with 1
+  for (const test of results) {
+    for (const r of test.results) {
+      if (r.error) {
+        return 1;
+      }
     }
   }
-  printResults(passing, failing, Date.now() - startTime);
+
+  return 0;
 }
 
 function printResults(
-  passing: string[],
-  failing: { testName: string; error: Error }[],
+  testResults: { testName: string; results: std.TestResult[] }[],
   duration: number
 ) {
   const durationInSeconds = duration / 1000;
-  const totalSum = failing.length + passing.length;
+  const totalSum = testResults.length;
+  const failing = testResults.filter(({ results }) => results.some(({ pass }) => !pass));
+  const passing = testResults.filter(({ results }) => results.every(({ pass }) => !!pass));
+  const failingTestsNumber = failing.reduce(
+    (acc, { results }) => acc + results.filter(({ pass }) => !pass).length,
+    0
+  );
+  const passingTestsNumber = testResults.reduce(
+    (acc, { results }) => acc + results.filter(({ pass }) => !!pass).length,
+    0
+  );
   console.log(" "); // for getting a new line- \n does't seem to work :(
-  console.log(`
-${totalSum > 1
-      ? `Tests Results:
-${passing.map((testName) => `    ${chalk.green("✓")} ${testName}`).join("\n")}
-${failing.map(({ testName }) => `    ${chalk.red("×")} ${testName}`).join("\n")}
-${" "}
-`
-      : ""
-    }
-${failing.length && totalSum > 1
-      ? `
-${" "}
-Errors:` +
-      failing
-        .map(
-          ({ testName, error }) => `
+  const areErrors = failing.length > 0 && totalSum > 1;
+  const showTitle = totalSum > 1;
 
-At ${testName}\n ${chalk.red(error.message)}
-        `
-        )
-        .join("\n\n")
-      : ""
-    }
+  const results = [];
 
-${chalk.dim("Tests")}${failing.length ? chalk.red(` ${failing.length} failed`) : ""}${failing.length && passing.length ? chalk.dim(" |") : ""
-    }${passing.length ? chalk.green(` ${passing.length} passed`) : ""} ${chalk.dim(`(${totalSum})`)} 
-${chalk.dim("Duration")} ${Math.floor(durationInSeconds / 60)}m${(durationInSeconds % 60).toFixed(
-      2
-    )}s
-`);
+  if (showTitle) {
+    // prints a list of the tests names with an icon
+    results.push(`Results:`);
+    results.push(...passing.map(({ testName }) => `    ${chalk.green("✓")} ${testName}`));
+    results.push(...failing.map(({ testName }) => `    ${chalk.red("×")} ${testName}`));
+  }
+
+  if (areErrors) {
+    // prints error messages form failed tests
+    results.push(" ");
+    results.push("Errors:");
+    results.push(
+      ...failing.map(({ testName, results }) =>
+        [
+          `At ${testName}`,
+          results.filter(({ pass }) => !pass).map(({ error }) => chalk.red(error)),
+        ].join("\n")
+      )
+    );
+  }
+
+  // prints a summary of how many tests passed and failed
+  results.push(" ");
+  results.push(
+    `${chalk.dim("Tests")}${failingTestsNumber ? chalk.red(` ${failingTestsNumber} failed`) : ""}${
+      failingTestsNumber && passingTestsNumber ? chalk.dim(" |") : ""
+    }${passingTestsNumber ? chalk.green(` ${passingTestsNumber} passed`) : ""} ${chalk.dim(
+      `(${failingTestsNumber + passingTestsNumber})`
+    )}`
+  );
+  // prints a summary of how many tests files passed and failed
+  results.push(
+    `${chalk.dim("Test Files")}${failing.length ? chalk.red(` ${failing.length} failed`) : ""}${
+      failing.length && passing.length ? chalk.dim(" |") : ""
+    }${passing.length ? chalk.green(` ${passing.length} passed`) : ""} ${chalk.dim(
+      `(${totalSum})`
+    )}`
+  );
+
+  // prints the test duration
+  results.push(
+    `${chalk.dim("Duration")} ${Math.floor(durationInSeconds / 60)}m${(
+      durationInSeconds % 60
+    ).toFixed(2)}s`
+  );
+
+  console.log(results.filter((value) => !!value).join("\n"));
 }
 
 async function testOne(entrypoint: string, options: TestOptions) {
-  // since the test cleans up after each run, it's essential to create a temporary directory-
-  // at least one that is different then the usual compilation dir,  otherwise we might end up cleaning up the user's actual resources.
-  const tempFile: string = Target.SIM ? entrypoint : await generateTmpDir(entrypoint);
   const synthDir = await withSpinner(
     `Compiling ${generateTestName(entrypoint)} to ${options.target}...`,
-    () =>
-      compile(tempFile, {
+    async () =>
+      compile(entrypoint, {
         ...options,
+        rootId: options.rootId ?? `Test.${nanoid(10)}`,
         testing: true,
+        // since the test cleans up after each run, it's essential to create a temporary output directory-
+        // at least one that is different then the usual compilation output dir,  otherwise we might end up cleaning up the user's actual resources.
+        ...(options.target !== Target.SIM && { targetDir: `${await generateTmpDir()}/target` }),
       })
   );
 
   switch (options.target) {
     case Target.SIM:
-      return await testSimulator(synthDir);
+      return await testSimulator(synthDir, options);
     case Target.TF_AWS:
-      return await testTfAws(synthDir);
+      return await testTfAws(synthDir, options);
     case Target.AWSCDK:
-      return await testAwsCdk(synthDir);
+      return await testAwsCdk(synthDir, options);
     default:
       throw new Error(`unsupported target ${options.target}`);
   }
@@ -122,7 +159,7 @@ async function testOne(entrypoint: string, options: TestOptions) {
 /**
  * Render a test report for printing out to the console.
  */
-export function renderTestReport(entrypoint: string, results: sdk.cloud.TestResult[]): string {
+export function renderTestReport(entrypoint: string, results: std.TestResult[]): string {
   const out = new Array<string>();
 
   // find the longest `path` of all the tests
@@ -199,18 +236,25 @@ export function renderTestReport(entrypoint: string, results: sdk.cloud.TestResu
   return out.join("\n");
 }
 
-function testResultsContainsFailure(results: sdk.cloud.TestResult[]): boolean {
+function testResultsContainsFailure(results: std.TestResult[]): boolean {
   return results.some((r) => !r.pass);
 }
 
-async function testSimulator(synthDir: string) {
-  const s = new sdk.testing.Simulator({ simfile: synthDir });
+function noCleanUp(synthDir: string) {
+  console.log(
+    chalk.yellowBright.bold(`Cleanup is disabled!\nOutput files available at ${resolve(synthDir)}`)
+  );
+}
+
+async function testSimulator(synthDir: string, options: TestOptions) {
+  const s = new testing.Simulator({ simfile: synthDir });
+  const { clean } = options;
   await s.start();
 
-  const testRunner = s.getResource("root/cloud.TestRunner") as ITestRunnerClient;
+  const testRunner = s.getResource("root/cloud.TestRunner") as std.ITestRunnerClient;
   const tests = await testRunner.listTests();
   const filteredTests = pickOneTestPerEnvironment(tests);
-  const results = new Array<sdk.cloud.TestResult>();
+  const results = new Array<std.TestResult>();
 
   // TODO: run these tests in parallel
   for (const path of filteredTests) {
@@ -222,21 +266,32 @@ async function testSimulator(synthDir: string) {
   const testReport = renderTestReport(synthDir, results);
   console.log(testReport);
 
-  rmSync(synthDir, { recursive: true, force: true });
-
-  if (testResultsContainsFailure(results)) {
-    throw Error(results.map(({ error }) => error).join("\n"));
+  if (clean) {
+    rmSync(synthDir, { recursive: true, force: true });
+  } else {
+    noCleanUp(synthDir);
   }
+
+  return results;
 }
 
-async function testAwsCdk(synthDir: string): Promise<sdk.cloud.TestResult[]> {
+async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.TestResult[]> {
+  const { clean } = options;
   try {
     isAwsCdkInstalled(synthDir);
 
     await withSpinner("cdk deploy", () => awsCdkDeploy(synthDir));
 
     const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
-      const testArns = await awsCdkOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_ARNS_AWSCDK, process.env.CDK_STACK_NAME!);
+      const testArns = await awsCdkOutput(
+        synthDir,
+        ENV_WING_TEST_RUNNER_FUNCTION_ARNS_AWSCDK,
+        process.env.CDK_STACK_NAME!
+      );
+
+      const { TestRunnerClient } = await import(
+        "@winglang/sdk/lib/shared-aws/test-runner.inflight"
+      );
       const testRunner = new TestRunnerClient(testArns);
 
       const tests = await testRunner.listTests();
@@ -244,7 +299,7 @@ async function testAwsCdk(synthDir: string): Promise<sdk.cloud.TestResult[]> {
     });
 
     const results = await withSpinner("Running tests...", async () => {
-      const results = new Array<sdk.cloud.TestResult>();
+      const results = new Array<std.TestResult>();
       for (const path of tests) {
         results.push(await testRunner.runTest(path));
       }
@@ -263,7 +318,11 @@ async function testAwsCdk(synthDir: string): Promise<sdk.cloud.TestResult[]> {
     console.warn((err as Error).message);
     return [{ pass: false, path: "", error: (err as Error).message, traces: [] }];
   } finally {
-    await cleanupCdk(synthDir);
+    if (clean) {
+      await cleanupCdk(synthDir);
+    } else {
+      noCleanUp(synthDir);
+    }
   }
 }
 
@@ -283,7 +342,9 @@ async function isAwsCdkInstalled(synthDir: string) {
 }
 
 export async function awsCdkDeploy(synthDir: string) {
-  await execCapture("cdk deploy --require-approval never --ci true -O ./output.json --app . ", { cwd: synthDir });
+  await execCapture("cdk deploy --require-approval never --ci true -O ./output.json --app . ", {
+    cwd: synthDir,
+  });
 }
 
 export async function awsCdkDestroy(synthDir: string) {
@@ -299,7 +360,8 @@ async function awsCdkOutput(synthDir: string, name: string, stackName: string) {
   return parsed[stackName][name];
 }
 
-async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[] | void> {
+async function testTfAws(synthDir: string, options: TestOptions): Promise<std.TestResult[] | void> {
+  const { clean } = options;
   try {
     if (!isTerraformInstalled(synthDir)) {
       throw new Error(
@@ -313,6 +375,9 @@ async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[] | voi
 
     const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
       const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_ARNS);
+      const { TestRunnerClient } = await import(
+        "@winglang/sdk/lib/shared-aws/test-runner.inflight"
+      );
       const testRunner = new TestRunnerClient(testArns);
 
       const tests = await testRunner.listTests();
@@ -320,7 +385,7 @@ async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[] | voi
     });
 
     const results = await withSpinner("Running tests...", async () => {
-      const results = new Array<sdk.cloud.TestResult>();
+      const results = new Array<std.TestResult>();
       for (const path of tests) {
         results.push(await testRunner.runTest(path));
       }
@@ -339,7 +404,11 @@ async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[] | voi
     console.warn((err as Error).message);
     return [{ pass: false, path: "", error: (err as Error).message, traces: [] }];
   } finally {
-    await cleanupTf(synthDir);
+    if (clean) {
+      await cleanupTf(synthDir);
+    } else {
+      noCleanUp(synthDir);
+    }
   }
 }
 
@@ -418,7 +487,7 @@ function pickOneTestPerEnvironment(testPaths: string[]) {
   return Array.from(tests.values());
 }
 
-function sortTests(a: sdk.cloud.TestResult, b: sdk.cloud.TestResult) {
+function sortTests(a: std.TestResult, b: std.TestResult) {
   if (a.pass && !b.pass) {
     return -1;
   }
@@ -443,5 +512,6 @@ async function execCapture(command: string, options: { cwd: string }) {
   if (stderr) {
     throw new Error(stderr);
   }
+  log(stdout);
   return stdout;
 }

@@ -4,19 +4,36 @@ import {
   TextDocumentSyncKind,
   InitializeResult,
   DiagnosticSeverity,
+  Diagnostic,
+  Range,
+  DocumentUri,
 } from "vscode-languageserver/node";
 
-import * as wingCompiler from "../wingc";
+import * as wingCompiler from "@winglang/compiler";
 
-export async function run_server() {
+export async function lsp() {
   let wingc = await wingCompiler.load({
     imports: {
       env: {
-        send_notification,
+        send_diagnostic,
       },
     },
   });
   let badState = false;
+
+  const seenFiles = new Set<DocumentUri>();
+
+  const raw_diagnostics: wingCompiler.WingDiagnostic[] = [];
+
+  function send_diagnostic(data_ptr: number, data_len: number) {
+    const data_buf = Buffer.from(
+      (wingc.exports.memory as WebAssembly.Memory).buffer,
+      data_ptr,
+      data_len
+    );
+    const data_str = new TextDecoder().decode(data_buf);
+    raw_diagnostics.push(JSON.parse(data_str));
+  }
 
   const callWing = (func: wingCompiler.WingCompilerFunction, args: any): any | null => {
     if (badState) {
@@ -68,7 +85,7 @@ export async function run_server() {
       capabilities: {
         textDocumentSync: TextDocumentSyncKind.Full,
         completionProvider: {
-          triggerCharacters: ["."],
+          triggerCharacters: [".", ":"],
         },
         signatureHelpProvider: {
           triggerCharacters: ["(", ",", ")"],
@@ -81,33 +98,71 @@ export async function run_server() {
     return result;
   });
 
-  connection.onDidOpenTextDocument(async (params) => {
+  async function handle_event_and_update_diagnostics(
+    wingc_handler_name: wingCompiler.WingCompilerFunction,
+    params: any,
+    _uri: DocumentUri
+  ) {
     if (badState) {
       wingc = await wingCompiler.load({
         imports: {
           env: {
-            send_notification,
+            send_diagnostic,
           },
         },
       });
       badState = false;
     }
+    // Reset diagnostics list
+    raw_diagnostics.length = 0;
+    // Call wingc handler
+    callWing(wingc_handler_name, params);
 
-    callWing("wingc_on_did_open_text_document", params);
+    const allDiagnostics = new Map<DocumentUri, Diagnostic[]>();
+
+    // set empty list of diagnostics for files that have been seen before
+    // this way even if we don't get a diagnostic for a file, we clear out the old ones
+    for (const uri of seenFiles) {
+      allDiagnostics.set(uri, []);
+    }
+
+    for (const rd of raw_diagnostics) {
+      if (rd.span) {
+        const diagnosticUri = "file://" + rd.span.file_id;
+        const diag = Diagnostic.create(
+          Range.create(rd.span.start.line, rd.span.start.col, rd.span.end.line, rd.span.end.col),
+          rd.message
+        );
+
+        if (!allDiagnostics.has(diagnosticUri)) {
+          allDiagnostics.set(diagnosticUri, []);
+          seenFiles.add(diagnosticUri);
+        }
+        allDiagnostics.get(diagnosticUri)!.push(diag);
+      } else {
+        // skip if diagnostic is not associated with any file
+      }
+    }
+
+    // purposely not awaiting these calls, notifications are fire-and-forget
+    for (const [uri, diagnostics] of allDiagnostics.entries()) {
+      connection.sendDiagnostics({ uri, diagnostics });
+    }
+  }
+
+  connection.onDidOpenTextDocument(async (params) => {
+    handle_event_and_update_diagnostics(
+      "wingc_on_did_open_text_document",
+      params,
+      params.textDocument.uri
+    );
   });
   connection.onDidChangeTextDocument(async (params) => {
-    if (badState) {
-      wingc = await wingCompiler.load({
-        imports: {
-          env: {
-            send_notification,
-          },
-        },
-      });
-      badState = false;
-    }
-
-    callWing("wingc_on_did_change_text_document", params);
+    handle_event_and_update_diagnostics(
+      "wingc_on_did_change_text_document",
+      params,
+      params.textDocument.uri
+    );
   });
   connection.onCompletion(async (params) => {
     return callWing("wingc_on_completion", params);
@@ -124,34 +179,6 @@ export async function run_server() {
   connection.onHover(async (params) => {
     return callWing("wingc_on_hover", params);
   });
-
-  /**
-   * This function is called by the WASM code to immediately
-   * send a notification to the client.
-   */
-  function send_notification(
-    type_ptr: number,
-    type_len: number,
-    data_ptr: number,
-    data_len: number
-  ) {
-    const type_buf = Buffer.from(
-      (wingc.exports.memory as WebAssembly.Memory).buffer,
-      type_ptr,
-      type_len
-    );
-    const type_str = new TextDecoder().decode(type_buf);
-
-    const data_buf = Buffer.from(
-      (wingc.exports.memory as WebAssembly.Memory).buffer,
-      data_ptr,
-      data_len
-    );
-    const data_str = new TextDecoder().decode(data_buf);
-
-    // purposely not awaiting this, notifications are fire-and-forget
-    void connection.sendNotification(type_str, JSON.parse(data_str));
-  }
 
   connection.listen();
 }

@@ -26,14 +26,13 @@ export class Counter extends cloud.Counter {
     });
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("counters can only be bound by awscdk.Function for now");
     }
 
     host.addPolicyStatements(
-      ...calculateCounterPermissions(this.table.tableArn, ops)
+      calculateCounterPermissions(this.table.tableArn, ops)
     );
 
     host.addEnvironment(this.envName(), this.table.tableName);

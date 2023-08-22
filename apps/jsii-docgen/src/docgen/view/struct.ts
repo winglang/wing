@@ -1,7 +1,7 @@
 import * as reflect from "jsii-reflect";
+import { Properties } from "./properties";
 import { extractDocs, StructSchema } from "../schema";
 import { Transpile, TranspiledStruct } from "../transpile/transpile";
-import { Properties } from "./properties";
 
 export class Struct {
   private readonly transpiled: TranspiledStruct;
@@ -21,7 +21,9 @@ export class Struct {
       id: this.iface.fqn,
       properties: this.properties.toJson(),
       docs: extractDocs(this.iface.docs),
-      usage: `${this.transpiled.import}\n\n${this.transpiled.initialization}`,
+      usage: [this.transpiled.import, this.transpiled.initialization]
+        .filter((item) => !!item)
+        .join("\n\n"),
     };
   }
 }

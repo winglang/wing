@@ -2,6 +2,7 @@
 // They should not be consumed directly by users.
 // TODO: These should be interfaces, currently Wing does not support interface JSII imports
 
+import { Array } from "./array";
 import { T1 } from "./generics";
 import { Code, InflightClient } from "../core";
 
@@ -10,13 +11,15 @@ import { Code, InflightClient } from "../core";
  *
  * @typeparam T1
  */
-export class ImmutableSet {
+export class Set {
   /**
    * @internal
    */
   public static _toInflightType(): Code {
     return InflightClient.forType(__filename, this.name);
   }
+
+  private constructor() {}
 
   /**
    * The length of the set
@@ -43,7 +46,18 @@ export class ImmutableSet {
    *
    * @returns a MutableSet with the same values as this set
    */
-  public copyMut(): MutableSet {
+  public copyMut(): MutSet {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Create an immutable array shallow copy of this set
+   *
+   * @macro [...($self$)]
+   *
+   * @returns an ImmutableArray with the same values as this set
+   */
+  public toArray(): Array {
     throw new Error("Macro");
   }
 }
@@ -53,13 +67,15 @@ export class ImmutableSet {
  *
  * @typeparam T1
  */
-export class MutableSet {
+export class MutSet {
   /**
    * @internal
    */
   public static _toInflightType(): Code {
     return InflightClient.forType(__filename, this.name);
   }
+
+  private constructor() {}
 
   /**
    * The length of the set
@@ -74,7 +90,7 @@ export class MutableSet {
    * @param value value to add
    * @returns true if the value was added, false if it was already in the set
    */
-  public add(value: T1): MutableSet {
+  public add(value: T1): MutSet {
     value;
     throw new Error("Abstract");
   }
@@ -89,11 +105,11 @@ export class MutableSet {
   /**
    * Create an immutable shallow copy of this set
    *
-   * @macro Object.freeze(new Set($self$))
+   * @macro new Set($self$)
    *
    * @returns an ImmutableSet with the same values as this set
    */
-  public copy(): ImmutableSet {
+  public copy(): Set {
     throw new Error("Macro");
   }
 
@@ -115,5 +131,16 @@ export class MutableSet {
   public has(value: T1): boolean {
     value;
     throw new Error("Abstract");
+  }
+
+  /**
+   * Create an immutable array shallow copy of this set
+   *
+   * @macro [...($self$)]
+   *
+   * @returns an ImmutableArray with the same values as this set
+   */
+  public toArray(): Array {
+    throw new Error("Macro");
   }
 }

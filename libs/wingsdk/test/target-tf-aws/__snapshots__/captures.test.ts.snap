@@ -29,106 +29,106 @@ return class Handler {
     }
 };
 })())({
-function: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/function.inflight\\")).FunctionClient(process.env[\\"FUNCTION_NAME_50735b21\\"])
+function: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/function.inflight\\")).FunctionClient(process.env[\\"FUNCTION_NAME_50735b21\\"], \\"root/Default/Function1\\")
 })"
 `;
 
 exports[`function with a function binding 3`] = `
-"{
-  \\"output\\": {
-    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
-      \\"value\\": \\"[]\\"
-    }
+{
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
-  \\"resource\\": {
-    \\"aws_iam_role\\": {
-      \\"root_Function1_IamRole_7017166A\\": {
-        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+  "resource": {
+    "aws_iam_role": {
+      "Function1_IamRole_8B9BC80D": {
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
       },
-      \\"root_Function2_IamRole_1D1C491F\\": {
-        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
-      }
-    },
-    \\"aws_iam_role_policy\\": {
-      \\"root_Function1_IamRolePolicy_2AD9115C\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function1_IamRole_7017166A.name}\\"
+      "Function2_IamRole_62EBED55": {
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
       },
-      \\"root_Function2_IamRolePolicy_66C89FF5\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"lambda:InvokeFunction\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_lambda_function.root_Function1_F6563EFC.arn}\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function2_IamRole_1D1C491F.name}\\"
-      }
     },
-    \\"aws_iam_role_policy_attachment\\": {
-      \\"root_Function1_IamRolePolicyAttachment_8C092D66\\": {
-        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function1_IamRole_7017166A.name}\\"
+    "aws_iam_role_policy": {
+      "Function1_IamRolePolicy_C0724D18": {
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.Function1_IamRole_8B9BC80D.name}",
       },
-      \\"root_Function2_IamRolePolicyAttachment_689FE230\\": {
-        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function2_IamRole_1D1C491F.name}\\"
-      }
+      "Function2_IamRolePolicy_E46C9D6B": {
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"lambda:InvokeFunction\\"],\\"Resource\\":[\\"\${aws_lambda_function.Function1.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.Function2_IamRole_62EBED55.name}",
+      },
     },
-    \\"aws_lambda_function\\": {
-      \\"root_Function1_F6563EFC\\": {
-        \\"environment\\": {
-          \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"Function1-c87c16f1\\"
-          }
+    "aws_iam_role_policy_attachment": {
+      "Function1_IamRolePolicyAttachment_0393C78B": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Function1_IamRole_8B9BC80D.name}",
+      },
+      "Function2_IamRolePolicyAttachment_1D579508": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Function2_IamRole_62EBED55.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "Function1": {
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Function1-c87c16f1",
+          },
         },
-        \\"function_name\\": \\"Function1-c87c16f1\\",
-        \\"handler\\": \\"index.handler\\",
-        \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.root_Function1_IamRole_7017166A.arn}\\",
-        \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.root_Function1_S3Object_AA76C357.key}\\",
-        \\"timeout\\": 30,
-        \\"vpc_config\\": {
-          \\"security_group_ids\\": [],
-          \\"subnet_ids\\": []
-        }
-      },
-      \\"root_Function2_A135D90B\\": {
-        \\"environment\\": {
-          \\"variables\\": {
-            \\"FUNCTION_NAME_50735b21\\": \\"\${aws_lambda_function.root_Function1_F6563EFC.arn}\\",
-            \\"WING_FUNCTION_NAME\\": \\"Function2-c827e998\\"
-          }
+        "function_name": "Function1-c87c16f1",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.Function1_IamRole_8B9BC80D.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Function1_S3Object_AFBA38E0.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
         },
-        \\"function_name\\": \\"Function2-c827e998\\",
-        \\"handler\\": \\"index.handler\\",
-        \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.root_Function2_IamRole_1D1C491F.arn}\\",
-        \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.root_Function2_S3Object_7E3557EA.key}\\",
-        \\"timeout\\": 30,
-        \\"vpc_config\\": {
-          \\"security_group_ids\\": [],
-          \\"subnet_ids\\": []
-        }
-      }
-    },
-    \\"aws_s3_bucket\\": {
-      \\"root_Code_02F3C603\\": {
-        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
-      }
-    },
-    \\"aws_s3_object\\": {
-      \\"root_Function1_S3Object_AA76C357\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
-        \\"key\\": \\"<key>\\",
-        \\"source\\": \\"<source>\\"
       },
-      \\"root_Function2_S3Object_7E3557EA\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
-        \\"key\\": \\"<key>\\",
-        \\"source\\": \\"<source>\\"
-      }
-    }
-  }
-}"
+      "Function2": {
+        "environment": {
+          "variables": {
+            "FUNCTION_NAME_50735b21": "\${aws_lambda_function.Function1.arn}",
+            "WING_FUNCTION_NAME": "Function2-c827e998",
+          },
+        },
+        "function_name": "Function2-c827e998",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.Function2_IamRole_62EBED55.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Function2_S3Object_6F3ED347.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
+    },
+    "aws_s3_bucket": {
+      "Code": {
+        "bucket_prefix": "code-c84a50b1-",
+      },
+    },
+    "aws_s3_object": {
+      "Function1_S3Object_AFBA38E0": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+      "Function2_S3Object_6F3ED347": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+    },
+  },
+}
 `;
 
 exports[`function with a queue binding 1`] = `
@@ -162,113 +162,113 @@ return class Handler {
 `;
 
 exports[`function with a queue binding 3`] = `
-"{
-  \\"output\\": {
-    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
-      \\"value\\": \\"[]\\"
-    }
+{
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
-  \\"resource\\": {
-    \\"aws_iam_role\\": {
-      \\"root_Function_IamRole_88AD864C\\": {
-        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+  "resource": {
+    "aws_iam_role": {
+      "Function_IamRole_678BE84C": {
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
       },
-      \\"root_QueueAddConsumer5cb7e554_IamRole_81BC72C0\\": {
-        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
-      }
-    },
-    \\"aws_iam_role_policy\\": {
-      \\"root_Function_IamRolePolicy_8C4F8AF5\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"sqs:SendMessage\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_sqs_queue.root_Queue_7193B145.arn}\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+      "Queue-SetConsumer-5cb7e554_IamRole_35925398": {
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
       },
-      \\"root_QueueAddConsumer5cb7e554_IamRolePolicy_543EA4EC\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"sqs:ReceiveMessage\\\\\\",\\\\\\"sqs:ChangeMessageVisibility\\\\\\",\\\\\\"sqs:GetQueueUrl\\\\\\",\\\\\\"sqs:DeleteMessage\\\\\\",\\\\\\"sqs:GetQueueAttributes\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_sqs_queue.root_Queue_7193B145.arn}\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_QueueAddConsumer5cb7e554_IamRole_81BC72C0.name}\\"
-      }
     },
-    \\"aws_iam_role_policy_attachment\\": {
-      \\"root_Function_IamRolePolicyAttachment_AF131EC2\\": {
-        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+    "aws_iam_role_policy": {
+      "Function_IamRolePolicy_E3B26607": {
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:SendMessage\\"],\\"Resource\\":[\\"\${aws_sqs_queue.Queue.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
       },
-      \\"root_QueueAddConsumer5cb7e554_IamRolePolicyAttachment_5AE804E7\\": {
-        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.root_QueueAddConsumer5cb7e554_IamRole_81BC72C0.name}\\"
-      }
+      "Queue-SetConsumer-5cb7e554_IamRolePolicy_8502FAE8": {
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":[\\"\${aws_sqs_queue.Queue.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.Queue-SetConsumer-5cb7e554_IamRole_35925398.name}",
+      },
     },
-    \\"aws_lambda_event_source_mapping\\": {
-      \\"root_Queue_EventSourceMapping_A20C741D\\": {
-        \\"batch_size\\": 1,
-        \\"event_source_arn\\": \\"\${aws_sqs_queue.root_Queue_7193B145.arn}\\",
-        \\"function_name\\": \\"\${aws_lambda_function.root_QueueAddConsumer5cb7e554_78AA248E.function_name}\\"
-      }
+    "aws_iam_role_policy_attachment": {
+      "Function_IamRolePolicyAttachment_CACE1358": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
+      },
+      "Queue-SetConsumer-5cb7e554_IamRolePolicyAttachment_14162571": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Queue-SetConsumer-5cb7e554_IamRole_35925398.name}",
+      },
     },
-    \\"aws_lambda_function\\": {
-      \\"root_Function_9F694E40\\": {
-        \\"environment\\": {
-          \\"variables\\": {
-            \\"QUEUE_URL_1cfcc997\\": \\"\${aws_sqs_queue.root_Queue_7193B145.url}\\",
-            \\"WING_FUNCTION_NAME\\": \\"Function-c852aba6\\"
-          }
+    "aws_lambda_event_source_mapping": {
+      "Queue_EventSourceMapping_8332F7DC": {
+        "batch_size": 1,
+        "event_source_arn": "\${aws_sqs_queue.Queue.arn}",
+        "function_name": "\${aws_lambda_function.Queue-SetConsumer-5cb7e554.function_name}",
+      },
+    },
+    "aws_lambda_function": {
+      "Function": {
+        "environment": {
+          "variables": {
+            "QUEUE_URL_1cfcc997": "\${aws_sqs_queue.Queue.url}",
+            "WING_FUNCTION_NAME": "Function-c852aba6",
+          },
         },
-        \\"function_name\\": \\"Function-c852aba6\\",
-        \\"handler\\": \\"index.handler\\",
-        \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
-        \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\",
-        \\"timeout\\": 30,
-        \\"vpc_config\\": {
-          \\"security_group_ids\\": [],
-          \\"subnet_ids\\": []
-        }
-      },
-      \\"root_QueueAddConsumer5cb7e554_78AA248E\\": {
-        \\"environment\\": {
-          \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"Queue-AddConsumer-5cb7e554-c8fc1cae\\"
-          }
+        "function_name": "Function-c852aba6",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
         },
-        \\"function_name\\": \\"Queue-AddConsumer-5cb7e554-c8fc1cae\\",
-        \\"handler\\": \\"index.handler\\",
-        \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.root_QueueAddConsumer5cb7e554_IamRole_81BC72C0.arn}\\",
-        \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.root_QueueAddConsumer5cb7e554_S3Object_DA510611.key}\\",
-        \\"timeout\\": 30,
-        \\"vpc_config\\": {
-          \\"security_group_ids\\": [],
-          \\"subnet_ids\\": []
-        }
-      }
-    },
-    \\"aws_s3_bucket\\": {
-      \\"root_Code_02F3C603\\": {
-        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
-      }
-    },
-    \\"aws_s3_object\\": {
-      \\"root_Function_S3Object_A62722D8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
-        \\"key\\": \\"<key>\\",
-        \\"source\\": \\"<source>\\"
       },
-      \\"root_QueueAddConsumer5cb7e554_S3Object_DA510611\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
-        \\"key\\": \\"<key>\\",
-        \\"source\\": \\"<source>\\"
-      }
+      "Queue-SetConsumer-5cb7e554": {
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Queue-SetConsumer-5cb7e554-c8f6c540",
+          },
+        },
+        "function_name": "Queue-SetConsumer-5cb7e554-c8f6c540",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.Queue-SetConsumer-5cb7e554_IamRole_35925398.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Queue-SetConsumer-5cb7e554_S3Object_074547A5.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
     },
-    \\"aws_sqs_queue\\": {
-      \\"root_Queue_7193B145\\": {
-        \\"name\\": \\"Queue-c822c726\\"
-      }
-    }
-  }
-}"
+    "aws_s3_bucket": {
+      "Code": {
+        "bucket_prefix": "code-c84a50b1-",
+      },
+    },
+    "aws_s3_object": {
+      "Function_S3Object_C62A0C2D": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+      "Queue-SetConsumer-5cb7e554_S3Object_074547A5": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+    },
+    "aws_sqs_queue": {
+      "Queue": {
+        "name": "Queue-c822c726",
+      },
+    },
+  },
+}
 `;
 
 exports[`function with bucket binding > put operation 1`] = `
@@ -282,192 +282,191 @@ return class Handler {
   async handle(event) { await this.bucket.put(\\"hello.txt\\", event); }
 };
 })())({
-bucket: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/bucket.inflight\\")).BucketClient(process.env[\\"BUCKET_NAME_1357ca3a\\"], process.env[\\"BUCKET_NAME_1357ca3a_IS_PUBLIC\\"])
+bucket: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/bucket.inflight\\")).BucketClient(process.env[\\"BUCKET_NAME_1357ca3a\\"])
 })"
 `;
 
 exports[`function with bucket binding > put operation 2`] = `
-"{
-  \\"output\\": {
-    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
-      \\"value\\": \\"[]\\"
-    }
+{
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
-  \\"resource\\": {
-    \\"aws_iam_role\\": {
-      \\"root_Function_IamRole_88AD864C\\": {
-        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
-      }
-    },
-    \\"aws_iam_role_policy\\": {
-      \\"root_Function_IamRolePolicy_8C4F8AF5\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"s3:PutObject*\\\\\\",\\\\\\"s3:Abort*\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_Bucket_966015A6.arn}\\\\\\",\\\\\\"\${aws_s3_bucket.root_Bucket_966015A6.arn}/*\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
-      }
-    },
-    \\"aws_iam_role_policy_attachment\\": {
-      \\"root_Function_IamRolePolicyAttachment_AF131EC2\\": {
-        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
-      }
-    },
-    \\"aws_lambda_function\\": {
-      \\"root_Function_9F694E40\\": {
-        \\"environment\\": {
-          \\"variables\\": {
-            \\"BUCKET_NAME_1357ca3a\\": \\"\${aws_s3_bucket.root_Bucket_966015A6.bucket}\\",
-            \\"BUCKET_NAME_1357ca3a_IS_PUBLIC\\": \\"false\\",
-            \\"WING_FUNCTION_NAME\\": \\"Function-c852aba6\\"
-          }
-        },
-        \\"function_name\\": \\"Function-c852aba6\\",
-        \\"handler\\": \\"index.handler\\",
-        \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
-        \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\",
-        \\"timeout\\": 30,
-        \\"vpc_config\\": {
-          \\"security_group_ids\\": [],
-          \\"subnet_ids\\": []
-        }
-      }
-    },
-    \\"aws_s3_bucket\\": {
-      \\"root_Bucket_966015A6\\": {
-        \\"bucket_prefix\\": \\"bucket-c88fdc5f-\\",
-        \\"force_destroy\\": false
+  "resource": {
+    "aws_iam_role": {
+      "Function_IamRole_678BE84C": {
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
       },
-      \\"root_Code_02F3C603\\": {
-        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
-      }
     },
-    \\"aws_s3_bucket_public_access_block\\": {
-      \\"root_Bucket_PublicAccessBlock_B0AF4CE5\\": {
-        \\"block_public_acls\\": true,
-        \\"block_public_policy\\": true,
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Bucket_966015A6.bucket}\\",
-        \\"ignore_public_acls\\": true,
-        \\"restrict_public_buckets\\": true
-      }
+    "aws_iam_role_policy": {
+      "Function_IamRolePolicy_E3B26607": {
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.Bucket.arn}\\",\\"\${aws_s3_bucket.Bucket.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
+      },
     },
-    \\"aws_s3_bucket_server_side_encryption_configuration\\": {
-      \\"root_Bucket_Encryption_BE486177\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Bucket_966015A6.bucket}\\",
-        \\"rule\\": [
+    "aws_iam_role_policy_attachment": {
+      "Function_IamRolePolicyAttachment_CACE1358": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "Function": {
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_1357ca3a": "\${aws_s3_bucket.Bucket.bucket}",
+            "WING_FUNCTION_NAME": "Function-c852aba6",
+          },
+        },
+        "function_name": "Function-c852aba6",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
+    },
+    "aws_s3_bucket": {
+      "Bucket": {
+        "bucket_prefix": "bucket-c88fdc5f-",
+        "force_destroy": false,
+      },
+      "Code": {
+        "bucket_prefix": "code-c84a50b1-",
+      },
+    },
+    "aws_s3_bucket_public_access_block": {
+      "Bucket_PublicAccessBlock_A34F3B5C": {
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "\${aws_s3_bucket.Bucket.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true,
+      },
+    },
+    "aws_s3_bucket_server_side_encryption_configuration": {
+      "Bucket_Encryption_016FDA0C": {
+        "bucket": "\${aws_s3_bucket.Bucket.bucket}",
+        "rule": [
           {
-            \\"apply_server_side_encryption_by_default\\": {
-              \\"sse_algorithm\\": \\"AES256\\"
-            }
-          }
-        ]
-      }
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256",
+            },
+          },
+        ],
+      },
     },
-    \\"aws_s3_object\\": {
-      \\"root_Function_S3Object_A62722D8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
-        \\"key\\": \\"<key>\\",
-        \\"source\\": \\"<source>\\"
-      }
-    }
-  }
-}"
+    "aws_s3_object": {
+      "Function_S3Object_C62A0C2D": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+    },
+  },
+}
 `;
 
 exports[`two functions reusing the same IFunctionHandler 1`] = `
-"{
-  \\"output\\": {
-    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
-      \\"value\\": \\"[]\\"
-    }
+{
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
-  \\"resource\\": {
-    \\"aws_iam_role\\": {
-      \\"root_Function1_IamRole_7017166A\\": {
-        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+  "resource": {
+    "aws_iam_role": {
+      "Function1_IamRole_8B9BC80D": {
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
       },
-      \\"root_Function2_IamRole_1D1C491F\\": {
-        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
-      }
-    },
-    \\"aws_iam_role_policy\\": {
-      \\"root_Function1_IamRolePolicy_2AD9115C\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function1_IamRole_7017166A.name}\\"
+      "Function2_IamRole_62EBED55": {
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
       },
-      \\"root_Function2_IamRolePolicy_66C89FF5\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function2_IamRole_1D1C491F.name}\\"
-      }
     },
-    \\"aws_iam_role_policy_attachment\\": {
-      \\"root_Function1_IamRolePolicyAttachment_8C092D66\\": {
-        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function1_IamRole_7017166A.name}\\"
+    "aws_iam_role_policy": {
+      "Function1_IamRolePolicy_C0724D18": {
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.Function1_IamRole_8B9BC80D.name}",
       },
-      \\"root_Function2_IamRolePolicyAttachment_689FE230\\": {
-        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function2_IamRole_1D1C491F.name}\\"
-      }
+      "Function2_IamRolePolicy_E46C9D6B": {
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.Function2_IamRole_62EBED55.name}",
+      },
     },
-    \\"aws_lambda_function\\": {
-      \\"root_Function1_F6563EFC\\": {
-        \\"environment\\": {
-          \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"Function1-c87c16f1\\"
-          }
+    "aws_iam_role_policy_attachment": {
+      "Function1_IamRolePolicyAttachment_0393C78B": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Function1_IamRole_8B9BC80D.name}",
+      },
+      "Function2_IamRolePolicyAttachment_1D579508": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Function2_IamRole_62EBED55.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "Function1": {
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Function1-c87c16f1",
+          },
         },
-        \\"function_name\\": \\"Function1-c87c16f1\\",
-        \\"handler\\": \\"index.handler\\",
-        \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.root_Function1_IamRole_7017166A.arn}\\",
-        \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.root_Function1_S3Object_AA76C357.key}\\",
-        \\"timeout\\": 30,
-        \\"vpc_config\\": {
-          \\"security_group_ids\\": [],
-          \\"subnet_ids\\": []
-        }
-      },
-      \\"root_Function2_A135D90B\\": {
-        \\"environment\\": {
-          \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"Function2-c827e998\\"
-          }
+        "function_name": "Function1-c87c16f1",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.Function1_IamRole_8B9BC80D.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Function1_S3Object_AFBA38E0.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
         },
-        \\"function_name\\": \\"Function2-c827e998\\",
-        \\"handler\\": \\"index.handler\\",
-        \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.root_Function2_IamRole_1D1C491F.arn}\\",
-        \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.root_Function2_S3Object_7E3557EA.key}\\",
-        \\"timeout\\": 30,
-        \\"vpc_config\\": {
-          \\"security_group_ids\\": [],
-          \\"subnet_ids\\": []
-        }
-      }
-    },
-    \\"aws_s3_bucket\\": {
-      \\"root_Code_02F3C603\\": {
-        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
-      }
-    },
-    \\"aws_s3_object\\": {
-      \\"root_Function1_S3Object_AA76C357\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
-        \\"key\\": \\"<key>\\",
-        \\"source\\": \\"<source>\\"
       },
-      \\"root_Function2_S3Object_7E3557EA\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
-        \\"key\\": \\"<key>\\",
-        \\"source\\": \\"<source>\\"
-      }
-    }
-  }
-}"
+      "Function2": {
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Function2-c827e998",
+          },
+        },
+        "function_name": "Function2-c827e998",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.Function2_IamRole_62EBED55.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Function2_S3Object_6F3ED347.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
+    },
+    "aws_s3_bucket": {
+      "Code": {
+        "bucket_prefix": "code-c84a50b1-",
+      },
+    },
+    "aws_s3_object": {
+      "Function1_S3Object_AFBA38E0": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+      "Function2_S3Object_6F3ED347": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+    },
+  },
+}
 `;

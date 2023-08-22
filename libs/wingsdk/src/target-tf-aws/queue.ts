@@ -5,10 +5,11 @@ import { LambdaEventSourceMapping } from "../.gen/providers/aws/lambda-event-sou
 import { SqsQueue } from "../.gen/providers/aws/sqs-queue";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
-import { IInflightHost, Resource } from "../std";
+import { IInflightHost } from "../std";
 
 /**
  * Queue names are limited to 80 characters.
@@ -35,33 +36,27 @@ export class Queue extends cloud.Queue {
       messageRetentionSeconds: props.retentionPeriod?.seconds,
       name: ResourceNames.generateName(this, NAME_OPTS),
     });
-
-    if ((props.initialMessages ?? []).length) {
-      throw new Error(
-        "initialMessages not supported yet for AWS target - https://github.com/winglang/wing/issues/281"
-      );
-    }
   }
 
   public setConsumer(
-    inflight: cloud.IQueueAddConsumerHandler,
-    props: cloud.QueueAddConsumerProps = {}
+    inflight: cloud.IQueueSetConsumerHandler,
+    props: cloud.QueueSetConsumerProps = {}
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
       this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-AddConsumerHandler-${hash}`,
+      `${this.node.id}-SetConsumerHandler-${hash}`,
       inflight,
       join(
         __dirname.replace("target-tf-aws", "shared-aws"),
-        "queue.addconsumer.inflight.js"
+        "queue.setconsumer.inflight.js"
       ),
-      "QueueAddConsumerHandlerClient"
+      "QueueSetConsumerHandlerClient"
     );
 
     const fn = Function._newFunction(
       this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-AddConsumer-${hash}`,
+      `${this.node.id}-SetConsumer-${hash}`,
       functionHandler,
       props
     );
@@ -71,16 +66,18 @@ export class Queue extends cloud.Queue {
       throw new Error("Queue only supports creating tfaws.Function right now");
     }
 
-    fn.addPolicyStatements({
-      actions: [
-        "sqs:ReceiveMessage",
-        "sqs:ChangeMessageVisibility",
-        "sqs:GetQueueUrl",
-        "sqs:DeleteMessage",
-        "sqs:GetQueueAttributes",
-      ],
-      resources: [this.queue.arn],
-    });
+    fn.addPolicyStatements([
+      {
+        actions: [
+          "sqs:ReceiveMessage",
+          "sqs:ChangeMessageVisibility",
+          "sqs:GetQueueUrl",
+          "sqs:DeleteMessage",
+          "sqs:GetQueueAttributes",
+        ],
+        resources: [this.queue.arn],
+      },
+    ]);
 
     new LambdaEventSourceMapping(this, "EventSourceMapping", {
       functionName: fn._functionName,
@@ -88,30 +85,29 @@ export class Queue extends cloud.Queue {
       batchSize: props.batchSize ?? 1,
     });
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "consumer",
+    Connections.of(this).add({
+      source: this,
+      target: fn,
+      name: "setConsumer()",
     });
 
     return fn;
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("queues can only be bound by tfaws.Function for now");
     }
 
     const env = this.envName();
 
-    host.addPolicyStatements(...calculateQueuePermissions(this.queue.arn, ops));
+    host.addPolicyStatements(calculateQueuePermissions(this.queue.arn, ops));
 
     // The queue url needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
     host.addEnvironment(env, this.queue.url);
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */

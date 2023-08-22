@@ -7,7 +7,8 @@ import {
   ScheduleSchema,
   ScheduleTask,
 } from "./schema-resources";
-import { IFunctionClient, IScheduleClient, TraceType } from "../cloud";
+import { IFunctionClient, IScheduleClient } from "../cloud";
+import { TraceType } from "../std";
 import { ISimulatorContext, ISimulatorResourceInstance } from "../testing";
 
 export class Schedule
@@ -20,7 +21,7 @@ export class Schedule
 
   constructor(props: ScheduleSchema["props"], context: ISimulatorContext) {
     this.context = context;
-    this.interval = parseExpression(props.cronExpression);
+    this.interval = parseExpression(props.cronExpression, { utc: true });
     this.scheduleFunction();
   }
 

@@ -15,8 +15,8 @@ m.set("a", 321);
 assert(m.get("a") == 321);
 
 // Immutable Deep Copy
-let n = MutJson.deepCopy(m);
-assert(m != n);
+let n = Json.deepCopy(m);
+assert(m == n);
 
 // Deleting keys
 let var k2 = Json.keys(m);
@@ -36,7 +36,7 @@ let tryParsed = Json.tryParse(invalidJson) ?? Json { key: "value" };
 assert(tryParsed.get("key") == "value");
 
 // Format to string
-let jj = Json {a: 123, b: {c: 456, d: 789}};
+let jj = Json {a: 123, b: {c : 456, d : 789}};
 let ss = Json.stringify(jj);
 assert(ss == "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}");
 

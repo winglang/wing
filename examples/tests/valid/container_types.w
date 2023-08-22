@@ -31,27 +31,37 @@ let arr7: Array<num> = arr4;
 assert(arr7.length == 3);
 assert(arr7.at(1) == 2);
 
+if let val = emptyArray.tryAt(0) {
+  assert(false); // Should not happen
+}
+
+if let val = arr1.tryAt(0) {
+  assert(val == 1);
+} else {
+  assert(false); // Should not happen
+}
+
 //Map tests
 let emptyMap = Map<num>{};
 assert(emptyMap.size() == 0);
 let emptyMap2 = MutMap<num>{};
 assert(emptyMap2.size() == 0);
-let m1 = {"a":1, "b":2, "c":3};
+let m1 = {"a" => 1, "b" => 2, "c" => 3};
 assert(m1.size() == 3);
 assert(m1.get("b") == 2);
-let m2: Map<num> = {"a":1, "b":2, "c":3};
+let m2: Map<num> = {"a" => 1, "b" => 2, "c" => 3};
 assert(m2.size() == 3);
 assert(m2.get("b") == 2);
-let m3 = Map<num> {"a":1, "b":2, "c":3};
+let m3 = Map<num> {"a" => 1, "b" => 2, "c" => 3};
 assert(m3.size() == 3);
 assert(m3.get("b") == 2);
-let m4: Map<num> = Map<num> {"a":1, "b":2, "c":3};
+let m4: Map<num> = Map<num> {"a" => 1, "b" => 2, "c" => 3};
 assert(m4.size() == 3);
 assert(m4.get("b") == 2);
-let m5 = {"a":bucket1, "b":bucket2, "c":bucket3};
+let m5 = {"a" => bucket1, "b" => bucket2, "c" => bucket3};
 assert(m5.size() == 3);
 assert(m5.get("b") == bucket2);
-let m6: Map<cloud.Bucket> = {"a":bucket1, "b":bucket2, "c":bucket3};
+let m6: Map<cloud.Bucket> = {"a" => bucket1, "b" => bucket2, "c" => bucket3};
 assert(m6.size() == 3);
 assert(m6.get("b") == bucket2);
 let m7: Map<num> = m1;
@@ -59,7 +69,7 @@ assert(m7.size() == 3);
 assert(m7.get("b") == 2);
 assert(m7.has("b"));
 assert(m4.has("boom") == false);
-let m8 = {"a": "a1", "b": "b1", "c": "c1"};
+let m8 = {"a" => "a1", "b" => "b1", "c" => "c1"};
 assert(m8.keys().at(0) == "a");
 assert(m8.keys().at(1) == "b");
 assert(m8.keys().at(2) == "c");
@@ -72,7 +82,7 @@ for val in m8.keys() {
 for val in m8.values() {
   assert(val.endsWith("1"));
 }
-let m9 = MutMap<str>{"a": "a1", "b": "b1", "c": "c1"};
+let m9 = MutMap<str>{"a" => "a1", "b" => "b1", "c" => "c1"};
 assert(m9.keys().at(0) == "a");
 assert(m9.keys().at(1) == "b");
 assert(m9.keys().at(2) == "c");

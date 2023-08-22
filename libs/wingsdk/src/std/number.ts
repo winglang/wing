@@ -3,6 +3,7 @@ import { Code, InflightClient } from "../core";
 
 /**
  * Number
+ * @wingType num
  */
 export class Number {
   /**
@@ -37,4 +38,6 @@ export class Number {
   public static _toInflightType(): Code {
     return InflightClient.forType(__filename, this.name);
   }
+
+  private constructor() {}
 }

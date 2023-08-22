@@ -5,9 +5,10 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
-import { IInflightHost, Resource } from "../std";
+import { IInflightHost } from "../std";
 
 /**
  * AWS Implementation of `cloud.Topic`.
@@ -23,7 +24,7 @@ export class Topic extends cloud.Topic {
   }
 
   /**
-   * topic's arn
+   * Topic's arn
    */
   public get arn(): string {
     return this.topic.topicArn;
@@ -60,28 +61,27 @@ export class Topic extends cloud.Topic {
     const subscription = new LambdaSubscription(fn._function);
     this.topic.addSubscription(subscription);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "on_message",
+    Connections.of(this).add({
+      source: this,
+      target: fn,
+      name: "onMessage()",
     });
 
     return fn;
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("topics can only be bound by awscdk.Function for now");
     }
 
     host.addPolicyStatements(
-      ...calculateTopicPermissions(this.topic.topicArn, ops)
+      calculateTopicPermissions(this.topic.topicArn, ops)
     );
 
     host.addEnvironment(this.envName(), this.topic.topicArn);
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */
@@ -92,6 +92,11 @@ export class Topic extends cloud.Topic {
       "TopicClient",
       [`process.env["${this.envName()}"]`]
     );
+  }
+
+  /** @internal */
+  public get _topic(): SNSTopic {
+    return this.topic;
   }
 
   private envName(): string {

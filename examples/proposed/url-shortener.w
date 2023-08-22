@@ -1,64 +1,35 @@
 bring cloud;
-
-let EMPTY_JSON = Json "empty";
-
-class Utils {
-  extern "./url-shortener.js" inflight makeId(): str;
-  extern "./url-shortener.js" inflight fetch(url: str, method: str, body: Json?): str;
-}
-let utils = new Utils();
+bring math;
+bring http;
 
 class UrlShortener {
-  urlLookup: cloud.Bucket;
-  idLookup: cloud.Bucket;
+  lookup: cloud.Bucket;
 
   init() {
-    // map from urls to ids
-    this.urlLookup = new cloud.Bucket() as "UrlLookup";
-
     // map from ids to urls
-    this.idLookup = new cloud.Bucket() as "IdLookup";
+    this.lookup = new cloud.Bucket() as "IdLookup";
   }
 
-  // Returns a short id for the given url. Creates a new id if one does not
-  // already exist.
-  //
-  // In the current implementation, when a new URL is shortened, two
-  // transactions are performed:
-  //
-  // 1. The url is added to the urlLookup bucket.
-  // 2. The id is added to the idLookup bucket.
-  //
-  // If the second transaction fails, the first transaction is not rolled
-  // back. This means that the urlLookup bucket may contain urls that do
-  // not have a corresponding id in the idLookup bucket. This is not a
-  // problem, since `getId` will only return a shortened ID once both
-  // transactions have completed successfully.
+  // Generates a short id for the given url.
   inflight getId(url: str): str {
-    let id = this.urlLookup.tryGet(url);
-    if let id = id {
-      // ensure that the id exists in idLookup
-      if !this.idLookup.exists(id) {
-        this.idLookup.put(id, url);
-      }
-      return id;
-    }
-  
-    let newId = utils.makeId();
-
-    // (transaction 1)
-    this.urlLookup.put(url, newId);
-
-    // (transaction 2)
-    this.idLookup.put(newId, url);
-
-    return newId;
+    let id = this._makeId();
+    this.lookup.put(id, url);
+    return id;
   }
 
-  // Get the url for the given id. Returns nil if the url does not have a
-  // corresponding id.
+  // Get the url for the given id. Returns nil if the id is invalid.
   inflight getUrl(id: str): str? {
-    return this.idLookup.tryGet(id);
+    return this.lookup.tryGet(id);
+  }
+
+  inflight _makeId(): str {
+    let ALPHANUMERIC_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let var id = "";
+    for i in 0..5 {
+      let randomIndex = math.floor(math.random() * ALPHANUMERIC_CHARS.length);
+      id = id + ALPHANUMERIC_CHARS.at(randomIndex);
+    }
+    return id;
   }
 }
 
@@ -73,15 +44,16 @@ class UrlShortenerApi {
     this.api.post("/create", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
       let var requestUrl = "";
       try {
-        // TODO: use `x ?? throw()` syntax
-        requestUrl = str.fromJson((req.body ?? EMPTY_JSON).get("url"));
+        if let body = req.body {
+          requestUrl = str.fromJson(Json.parse(body).get("url"));
+        }
       } catch e {
         log(e);
         return cloud.ApiResponse {
           status: 400,
-          body: Json {
+          body: Json.stringify(Json {
             "error": "missing url field",
-          },
+          }),
         };
       }
       log("Generating shortened URL for ${requestUrl}");
@@ -93,9 +65,9 @@ class UrlShortenerApi {
       log("Shortened URL: ${shortenedUrl}");
       return cloud.ApiResponse {
         status: 200,
-        body: Json {
+        body: Json.stringify(Json {
           "shortenedUrl": shortenedUrl,
-        },
+        }),
       };
     });
 
@@ -107,16 +79,16 @@ class UrlShortenerApi {
         return cloud.ApiResponse {
           status: 302,
           headers: Map<str>{
-            "Content-Type": "text/xml",
-            Location: fullUrl
+            "Content-Type" => "text/xml",
+            "Location" => fullUrl
           }
         };
       } else {
         return cloud.ApiResponse {
           status: 404,
-          body: Json {
+          body: Json.stringify(Json {
             "error": "url not found",
-          },
+          }),
         };
       }
     });
@@ -131,29 +103,30 @@ let urlShortenerApi = new UrlShortenerApi(urlShortener);
 let TEST_URL = "https://news.ycombinator.com/";
 
 test "shorten url" {
-  let response = utils.fetch("${urlShortenerApi.api.url}/create", "POST", Json { url: TEST_URL });
-  let newUrl = str.fromJson(Json.parse(response).get("shortenedUrl"));
+  let response = http.post("${urlShortenerApi.api.url}/create", body: Json.stringify({ url: TEST_URL }));
+  let newUrl = str.fromJson(Json.parse(response.body ?? "").get("shortenedUrl"));
   assert(newUrl.startsWith(urlShortenerApi.api.url));
 }
 
-test "shorten url twice" {
-  let response1 = utils.fetch("${urlShortenerApi.api.url}/create", "POST", Json { url: TEST_URL });
-  let newUrl1 = str.fromJson(Json.parse(response1).get("shortenedUrl"));
-
-  let response2 = utils.fetch("${urlShortenerApi.api.url}/create", "POST", Json { url: TEST_URL });
-  let newUrl2 = str.fromJson(Json.parse(response2).get("shortenedUrl"));
-  assert(newUrl1 == newUrl2);
+test "shorten same url twice" {
+  let response1 = http.post("${urlShortenerApi.api.url}/create", body: Json.stringify({ url: TEST_URL }));
+  let newUrl1 = Json.tryParse(response1.body ?? "")?.get("shortenedUrl")?.asStr();
+  let response2 = http.post("${urlShortenerApi.api.url}/create", body: Json.stringify({ url: TEST_URL }));
+  let newUrl2 = Json.tryParse(response2.body ?? "")?.get("shortenedUrl")?.asStr();
+  assert(newUrl1 != newUrl2);
 }
 
 test "redirect sends to correct page" {
-  let createResponse = utils.fetch("${urlShortenerApi.api.url}/create", "POST", Json { url: TEST_URL });
-  let newUrl = str.fromJson(Json.parse(createResponse).get("shortenedUrl"));
-
-  let redirectedResponse = utils.fetch(newUrl, "GET");
-  assert(redirectedResponse.contains("<title>Hacker News</title>"));
+  let createResponse = http.post("${urlShortenerApi.api.url}/create", body: Json.stringify({ url: TEST_URL }));
+  if let newUrl = Json.tryParse(createResponse.body ?? "")?.get("shortenedUrl")?.asStr() {
+    let redirectedResponse = http.get(newUrl);
+    assert(redirectedResponse.body?.contains("<title>Hacker News</title>") ?? false);
+  } else {
+    assert(false);
+  }
 }
 
 test "invalid short url" {
-  let response = utils.fetch("${urlShortenerApi.api.url}/u/invalid", "GET");
-  assert(response.contains("url not found"));
+  let response = http.get("${urlShortenerApi.api.url}/u/invalid");
+  assert(response.body?.contains("url not found") ?? false);
 }

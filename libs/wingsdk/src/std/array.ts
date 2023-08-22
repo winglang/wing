@@ -10,13 +10,15 @@ import { Code, InflightClient } from "../core";
  *
  * @typeparam T1
  */
-export class ImmutableArray {
+export class Array {
   /**
    * @internal
    */
   public static _toInflightType(): Code {
     return InflightClient.forType(__filename, this.name);
   }
+
+  private constructor() {}
 
   /**
    * The length of the array
@@ -37,12 +39,25 @@ export class ImmutableArray {
   }
 
   /**
+   * Get the value at the given index, returning nil if the index is out of bounds.
+   *
+   * @macro ($self$.at($args$))
+   *
+   * @param index index of the value to get
+   * @returns the value at the given index, or undefined if the index is out of bounds
+   */
+  public tryAt(index: number): T1 | undefined {
+    index;
+    throw new Error("Macro");
+  }
+
+  /**
    * Merge arr to the end of this array
    * @param arr array to merge
    *
    * @returns a new ImmutableArray with the values of this array followed by the values of arr
    */
-  public concat(arr: ImmutableArray): ImmutableArray {
+  public concat(arr: Array): Array {
     arr;
     throw new Error("Abstract");
   }
@@ -67,7 +82,7 @@ export class ImmutableArray {
    *
    * @returns a MutableArray with the same values as this array
    */
-  public copyMut(): MutableArray {
+  public copyMut(): MutArray {
     throw new Error("Macro");
   }
 
@@ -116,13 +131,15 @@ export class ImmutableArray {
  *
  * @typeparam T1
  */
-export class MutableArray {
+export class MutArray {
   /**
    * @internal
    */
   public static _toInflightType(): Code {
     return InflightClient.forType(__filename, this.name);
   }
+
+  private constructor() {}
 
   /**
    * The length of the array
@@ -148,7 +165,7 @@ export class MutableArray {
    *
    * @returns a new MutableArray with the values of this array followed by the values of arr
    */
-  public concat(arr: MutableArray): MutableArray {
+  public concat(arr: MutArray): MutArray {
     arr;
     throw new Error("Abstract");
   }
@@ -169,11 +186,11 @@ export class MutableArray {
   /**
    * Create an immutable shallow copy of this array
    *
-   * @macro Object.freeze([...($self$)])
+   * @macro [...($self$)]
    *
    * @returns an ImmutableArray with the same values as this array
    */
-  public copy(): ImmutableArray {
+  public copy(): Array {
     throw new Error("Macro");
   }
 
@@ -231,5 +248,35 @@ export class MutableArray {
    */
   public pop(): T1 {
     throw new Error("Abstract");
+  }
+
+  /**
+   * Sets a new value at the given index of an array
+   *
+   * @macro ((obj, args) => { if (args[0] < 0 || args[0] >= $self$.length) throw new Error("Index out of bounds"); obj[args[0]] = args[1]; })($self$, [$args$])
+   *
+   * @param index the index to set the value at
+   * @param value the value to set at the given index
+   * @throws index out of bounds error if the given index does not exist for the array
+   */
+  public set(index: number, value: T1): void {
+    index;
+    value;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Inserts a new value at the given index of an array
+   *
+   * @macro ((obj, args) => { if (args[0] < 0 || args[0] > $self$.length) throw new Error("Index out of bounds"); obj.splice(args[0], 0, args[1]); })($self$, [$args$])
+   *
+   * @param index the index to insert the value at
+   * @param value the value to insert at the given index
+   * @throws index out of bounds error if the given index isn't valid
+   */
+  public insert(index: number, value: T1): void {
+    index;
+    value;
+    throw new Error("Macro");
   }
 }

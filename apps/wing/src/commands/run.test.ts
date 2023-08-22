@@ -1,4 +1,5 @@
 import open from "open";
+import { createConsoleApp } from "@wingconsole/app";
 import { run } from "./run";
 import { mkdtemp } from "fs/promises";
 import { join } from "path";
@@ -9,6 +10,16 @@ import { vi, test, expect } from "vitest";
 
 vi.mock("open");
 
+vi.mock("@wingconsole/app", () => {
+  return {
+    createConsoleApp: vi.fn((options?: { requestedPort?: number }) => {
+      return {
+        port: options?.requestedPort ?? 1214,
+      };
+    }),
+  };
+});
+
 test("wing it runs the only .w file", async () => {
   const workdir = await mkdtemp(join(tmpdir(), "-wing-it-test"));
   const prevdir = process.cwd();
@@ -18,7 +29,13 @@ test("wing it runs the only .w file", async () => {
     writeFileSync("foo.w", "bring cloud;");
 
     await run();
-    expect(open).toBeCalledWith("wing-console://" + resolve("foo.w"));
+    expect(createConsoleApp).toBeCalledWith({
+      wingfile: resolve("foo.w"),
+      requestedPort: 3000,
+      hostUtils: expect.anything(),
+      requireAcceptTerms: true,
+    });
+    expect(open).toBeCalledWith("http://localhost:3000/");
   } finally {
     process.chdir(prevdir);
   }
@@ -48,7 +65,13 @@ test("wing it with a file runs", async () => {
     writeFileSync("foo.w", "bring cloud;");
 
     await run("foo.w");
-    expect(open).toBeCalledWith("wing-console://" + resolve("foo.w"));
+    expect(createConsoleApp).toBeCalledWith({
+      wingfile: resolve("foo.w"),
+      requestedPort: 3000,
+      hostUtils: expect.anything(),
+      requireAcceptTerms: true,
+    });
+    expect(open).toBeCalledWith("http://localhost:3000/");
   } finally {
     process.chdir(prevdir);
   }
@@ -66,7 +89,13 @@ test("wing it with a nested file runs", async () => {
     writeFileSync(filePath, "bring cloud;");
 
     await run(filePath);
-    expect(open).toBeCalledWith("wing-console://" + resolve(filePath));
+    expect(createConsoleApp).toBeCalledWith({
+      wingfile: resolve(filePath),
+      requestedPort: 3000,
+      hostUtils: expect.anything(),
+      requireAcceptTerms: true,
+    });
+    expect(open).toBeCalledWith("http://localhost:3000/");
   } finally {
     process.chdir(prevdir);
   }
@@ -81,6 +110,43 @@ test("wing it with an invalid file throws exception", async () => {
     writeFileSync("foo.w", "bring cloud;");
 
     await expect(run("bar.w")).rejects.toThrow("bar.w doesn't exist");
+  } finally {
+    process.chdir(prevdir);
+  }
+});
+
+test("wing it with a custom port runs", async () => {
+  const workdir = await mkdtemp(join(tmpdir(), "-wing-it-test"));
+  const prevdir = process.cwd();
+  try {
+    process.chdir(workdir);
+
+    writeFileSync("foo.w", "bring cloud;");
+
+    await run("foo.w", { port: "5000" });
+    expect(createConsoleApp).toBeCalledWith({
+      wingfile: resolve("foo.w"),
+      requestedPort: 5000,
+      hostUtils: expect.anything(),
+      requireAcceptTerms: true,
+    });
+    expect(open).toBeCalledWith("http://localhost:5000/");
+  } finally {
+    process.chdir(prevdir);
+  }
+});
+
+test("wing it throws when invalid port number is used", async () => {
+  const workdir = await mkdtemp(join(tmpdir(), "-wing-it-test"));
+  const prevdir = process.cwd();
+  try {
+    process.chdir(workdir);
+
+    writeFileSync("foo.w", "bring cloud;");
+
+    await expect(async () => {
+      await run("foo.w", { port: "not a number" });
+    }).rejects.toThrowError('"not a number" is not a number');
   } finally {
     process.chdir(prevdir);
   }

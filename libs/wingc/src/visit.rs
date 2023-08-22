@@ -1,8 +1,8 @@
 use crate::{
 	ast::{
-		ArgList, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface,
-		InterpolatedStringPart, Literal, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind,
-		UserDefinedType,
+		ArgList, BringSource, CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
+		FunctionSignature, Interface, InterpolatedStringPart, Literal, NewExpr, Reference, Scope, Stmt, StmtKind, Symbol,
+		TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -48,15 +48,8 @@ pub trait Visit<'ast> {
 	fn visit_expr(&mut self, node: &'ast Expr) {
 		visit_expr(self, node);
 	}
-	fn visit_expr_new(
-		&mut self,
-		node: &'ast Expr,
-		class: &'ast TypeAnnotation,
-		obj_id: &'ast Option<String>,
-		obj_scope: &'ast Option<Box<Expr>>,
-		arg_list: &'ast ArgList,
-	) {
-		visit_expr_new(self, node, &class, obj_id, obj_scope, arg_list);
+	fn visit_new_expr(&mut self, node: &'ast NewExpr) {
+		visit_new_expr(self, node);
 	}
 	fn visit_literal(&mut self, node: &'ast Literal) {
 		visit_literal(self, node);
@@ -101,15 +94,17 @@ where
 	V: Visit<'ast> + ?Sized,
 {
 	match &node.kind {
-		StmtKind::Bring {
-			module_name,
-			identifier,
-		} => {
-			v.visit_symbol(module_name);
+		StmtKind::Bring { source, identifier } => {
+			match &source {
+				BringSource::BuiltinModule(name) => v.visit_symbol(name),
+				BringSource::JsiiModule(name) => v.visit_symbol(name),
+				BringSource::WingFile(name) => v.visit_symbol(name),
+			}
 			if let Some(identifier) = identifier {
 				v.visit_symbol(identifier);
 			}
 		}
+		StmtKind::SuperConstructor { arg_list } => v.visit_args(arg_list),
 		StmtKind::Let {
 			reassignable: _,
 			var_name,
@@ -139,6 +134,7 @@ where
 		StmtKind::IfLet {
 			value,
 			statements,
+			reassignable: _,
 			var_name,
 			else_statements,
 		} => {
@@ -222,6 +218,7 @@ where
 				v.visit_scope(finally_statements);
 			}
 		}
+		StmtKind::CompilerDebugEnv => {}
 	}
 }
 
@@ -245,7 +242,7 @@ where
 	}
 
 	if let Some(extend) = &node.parent {
-		v.visit_user_defined_type(&extend);
+		v.visit_expr(&extend);
 	}
 
 	for implement in &node.implements {
@@ -269,19 +266,16 @@ where
 	}
 }
 
-pub fn visit_expr_new<'ast, V>(
-	v: &mut V,
-	_node: &'ast Expr,
-	class: &'ast TypeAnnotation,
-	_obj_id: &'ast Option<String>,
-	obj_scope: &'ast Option<Box<Expr>>,
-	arg_list: &'ast ArgList,
-) where
+pub fn visit_new_expr<'ast, V>(v: &mut V, node: &'ast NewExpr)
+where
 	V: Visit<'ast> + ?Sized,
 {
-	v.visit_type_annotation(class);
-	v.visit_args(arg_list);
-	if let Some(scope) = obj_scope {
+	v.visit_expr(&node.class);
+	v.visit_args(&node.arg_list);
+	if let Some(id) = &node.obj_id {
+		v.visit_expr(&id);
+	}
+	if let Some(scope) = &node.obj_scope {
 		v.visit_expr(&scope);
 	}
 }
@@ -291,13 +285,8 @@ where
 	V: Visit<'ast> + ?Sized,
 {
 	match &node.kind {
-		ExprKind::New {
-			class,
-			obj_id,
-			obj_scope,
-			arg_list,
-		} => {
-			v.visit_expr_new(node, class, obj_id, obj_scope, &arg_list);
+		ExprKind::New(new_expr) => {
+			v.visit_new_expr(new_expr);
 		}
 		ExprKind::Literal(lit) => {
 			v.visit_literal(lit);
@@ -314,7 +303,10 @@ where
 			v.visit_reference(ref_);
 		}
 		ExprKind::Call { callee, arg_list } => {
-			v.visit_expr(callee);
+			match callee {
+				CalleeKind::Expr(expr) => v.visit_expr(expr),
+				CalleeKind::SuperCall(method) => v.visit_symbol(method),
+			}
 			v.visit_args(arg_list);
 		}
 		ExprKind::Unary { op: _, exp } => {
@@ -342,11 +334,18 @@ where
 				v.visit_expr(val);
 			}
 		}
+		ExprKind::JsonMapLiteral { fields } => {
+			for (name, val) in fields.iter() {
+				v.visit_symbol(name);
+				v.visit_expr(val);
+			}
+		}
 		ExprKind::MapLiteral { type_, fields } => {
 			if let Some(type_) = type_ {
 				v.visit_type_annotation(type_);
 			}
-			for val in fields.values() {
+			for (name, val) in fields.iter() {
+				v.visit_symbol(name);
 				v.visit_expr(val);
 			}
 		}
@@ -383,7 +382,6 @@ where
 		Literal::Nil => {}
 		Literal::Boolean(_) => {}
 		Literal::Number(_) => {}
-		Literal::Duration(_) => {}
 		Literal::String(_) => {}
 	}
 }
@@ -404,8 +402,11 @@ where
 			v.visit_expr(object);
 			v.visit_symbol(property);
 		}
-		Reference::TypeMember { type_, property } => {
+		Reference::TypeReference(type_) => {
 			v.visit_user_defined_type(type_);
+		}
+		Reference::TypeMember { typeobject, property } => {
+			v.visit_expr(typeobject);
 			v.visit_symbol(property);
 		}
 	}
@@ -465,6 +466,7 @@ where
 		TypeAnnotationKind::Void => {}
 		TypeAnnotationKind::Json => {}
 		TypeAnnotationKind::MutJson => {}
+		TypeAnnotationKind::Inferred => {}
 		TypeAnnotationKind::Optional(t) => v.visit_type_annotation(t),
 		TypeAnnotationKind::Array(t) => v.visit_type_annotation(t),
 		TypeAnnotationKind::MutArray(t) => v.visit_type_annotation(t),

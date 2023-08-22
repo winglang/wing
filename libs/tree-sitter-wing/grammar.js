@@ -29,11 +29,14 @@ module.exports = grammar({
   precedences: ($) => [
     // Handle ambiguity in case of empty literal: `a = {}`
     // In this case tree-sitter doesn't know if it's a set or a map literal so just assume its a map
-    [$.map_literal, $.set_literal],
+    [$.json_map_literal, $.map_literal, $.set_literal],
     [$.json_literal, $.structured_access_expression],
   ],
 
-  conflicts: ($) => [[$._reference_identifier, $._type_identifier]],
+  conflicts: ($) => [
+    [$._reference_identifier, $._type_identifier],
+    [$.parameter_definition, $._reference_identifier]
+  ],
 
   supertypes: ($) => [$.expression, $._literal],
 
@@ -96,7 +99,7 @@ module.exports = grammar({
     _statement: ($) =>
       choice(
         $.test_statement,
-        $.short_import_statement,
+        $.import_statement,
         $.expression_statement,
         $.variable_definition_statement,
         $.variable_assignment_statement,
@@ -112,10 +115,12 @@ module.exports = grammar({
         $.if_let_statement,
         $.struct_definition,
         $.enum_definition,
-        $.try_catch_statement
+        $.try_catch_statement,
+        $.compiler_dbg_env,
+        $.super_constructor_statement
       ),
 
-    short_import_statement: ($) =>
+    import_statement: ($) =>
       seq(
         "bring",
         field("module_name", choice($.identifier, $.string)),
@@ -262,13 +267,15 @@ module.exports = grammar({
       seq("while", field("condition", $.expression), field("block", $.block)),
 
     break_statement: ($) => seq("break", $._semicolon),
+    _super: ($) => "super",
+    super_constructor_statement: ($) => seq($._super, field("args", $.argument_list), $._semicolon),
 
     continue_statement: ($) => seq("continue", $._semicolon),
 
     if_let_statement: ($) =>
       seq(
-        // TODO: support "if let var"
         "if let",
+        optional(field("reassignable", $.reassignable)),
         field("name", $.identifier),
         "=",
         field("value", $.expression),
@@ -332,10 +339,14 @@ module.exports = grammar({
 
     bool: ($) => choice("true", "false"),
 
-    duration: ($) => choice($.seconds, $.minutes, $.hours),
+    duration: ($) => choice($.milliseconds, $.seconds, $.minutes, $.hours, $.days, $.months, $.years),
+    milliseconds: ($) => seq(field("value", $.number), "ms"),
     seconds: ($) => seq(field("value", $.number), "s"),
     minutes: ($) => seq(field("value", $.number), "m"),
     hours: ($) => seq(field("value", $.number), "h"),
+    days: ($) => seq(field("value", $.number), "d"),
+    months: ($) => seq(field("value", $.number), "mo"),
+    years: ($) => seq(field("value", $.number), "y"),
     nil_value: ($) => "nil",
     string: ($) =>
       seq(
@@ -370,20 +381,15 @@ module.exports = grammar({
       prec.right(PREC.OPTIONAL_TEST, seq($.expression, "?")),
 
     compiler_dbg_panic: ($) => "😱",
-
-    _callable_expression: ($) =>
-      choice(
-        $.nested_identifier,
-        $.identifier,
-        $.call,
-        $.parenthesized_expression
-      ),
+    compiler_dbg_env: ($) => seq("🗺️", optional(";")),
 
     call: ($) =>
       prec.left(
         PREC.CALL,
-        seq(field("caller", $.expression), field("args", $.argument_list))
+        seq(field("caller", choice($.expression, $.super_call)), field("args", $.argument_list))
       ),
+
+    super_call: ($) => seq($._super, ".", field("method", $.identifier)),
 
     argument_list: ($) =>
       seq(
@@ -419,14 +425,10 @@ module.exports = grammar({
           field("class", choice($.custom_type, $.mutable_container_type)),
           // While "args" is optional in this grammar, upstream parsing will fail if it is not present
           field("args", optional($.argument_list)),
-          field("id", optional($.new_object_id)),
-          field("scope", optional($.new_object_scope))
+          optional(seq("as", field("id", $.expression))),
+          optional(seq("in", field("scope", $.expression))),
         )
       ),
-
-    new_object_id: ($) => seq("as", $.string),
-
-    new_object_scope: ($) => prec.right(seq("in", $.expression)),
 
     _type: ($) =>
       choice(
@@ -512,11 +514,14 @@ module.exports = grammar({
 
     access_modifier: ($) => choice("public", "private", "protected"),
 
+    variadic: ($) => "...",
+
     parameter_definition: ($) =>
       seq(
         optional(field("reassignable", $.reassignable)),
+        optional(field("variadic", $.variadic)),
         field("name", $.identifier),
-        $._type_annotation
+        optional($._type_annotation),
       ),
 
     parameter_list: ($) => seq("(", commaSep($.parameter_definition), ")"),
@@ -648,13 +653,19 @@ module.exports = grammar({
       ),
 
     map_literal_member: ($) =>
-      seq(choice($.identifier, $.string), ":", $.expression),
+      seq(choice($.string), "=>", $.expression),
     struct_literal_member: ($) => seq($.identifier, ":", $.expression),
     structured_access_expression: ($) =>
       prec.right(seq($.expression, "[", $.expression, "]")),
 
     json_literal: ($) =>
-      seq(field("type", $.json_container_type), field("element", $.expression)),
+      choice(
+        seq(field("type", $.json_container_type), field("element", $.expression)),
+        field("element", $.json_map_literal)
+      ),
+
+    json_map_literal: ($) => braced(commaSep(field("member", $.json_literal_member))),
+    json_literal_member: ($) => seq(choice($.identifier, $.string), ":", $.expression),
 
     json_container_type: ($) => $._json_types,
 

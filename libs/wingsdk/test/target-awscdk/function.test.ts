@@ -4,10 +4,11 @@ import { Function } from "../../src/cloud";
 import { Duration } from "../../src/std";
 import * as awscdk from "../../src/target-awscdk";
 import { Testing } from "../../src/testing";
-import { mkdtemp } from "../util";
+import { mkdtemp, awscdkSanitize } from "../util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",
+  entrypointDir: __dirname,
 };
 
 const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
@@ -29,7 +30,7 @@ test("basic function", () => {
       Timeout: 30,
     })
   );
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("basic function with environment variables", () => {
@@ -60,7 +61,7 @@ test("basic function with environment variables", () => {
       },
     })
   );
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("basic function with timeout explicitly set", () => {
@@ -82,5 +83,25 @@ test("basic function with timeout explicitly set", () => {
       Timeout: 300,
     })
   );
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
+});
+
+test("basic function with memory size specified", () => {
+  // GIVEN
+  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  Function._newFunction(app, "Function", inflight, { memory: 512 });
+  const output = app.synth();
+
+  // THEN
+  const template = Template.fromJSON(JSON.parse(output));
+  template.hasResourceProperties(
+    "AWS::Lambda::Function",
+    Match.objectLike({
+      Handler: "index.handler",
+      Runtime: "nodejs18.x",
+      MemorySize: 512,
+    })
+  );
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });

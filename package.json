@@ -1,41 +1,38 @@
 {
-  "name": "monowingo",
+  "name": "@winglang/monorepo",
+  "private": true,
   "devDependencies": {
-    "@nrwl/devkit": "15.7.2",
+    "bump-pack": "workspace:^",
     "changelogen": "^0.5.3",
-    "npm-run-all": "^4.1.5",
-    "nx": "15.7.2",
-    "semver": "^7.3.8"
+    "semver": "^7.3.8",
+    "turbo": "^1.10.12"
   },
   "scripts": {
-    "nx": "nx",
-    "build": "nx run-many --all --targets build,test,package",
-    "test": "nx run-many --all --target=test",
-    "package": "nx run-many --all --target=package",
-    "build:ci": "nx run-many --target=build --all --configuration=release --output-style=stream --verbose",
-    "test:ci": "nx run-many --exclude=hangar --target=test --all --configuration=release --output-style=stream --verbose",
-    "package:ci": "nx run-many --target=package --all --configuration=release --output-style=stream --verbose",
+    "build": "turbo compile post-compile lint eslint test package",
+    "compile": "turbo compile",
+    "test": "turbo lint eslint test",
+    "package": "turbo package",
+    "package:ci": "turbo package --color",
+    "test:ci": "turbo default --color --concurrency 1 && turbo compile post-compile lint eslint test test:playwright --color --filter=!hangar",
     "docs": "./scripts/docsite.sh",
-    "changelog": "./scripts/changelog.mjs",
-    "install:examples-valid": "npm --prefix examples/tests/valid install",
-    "install:examples-invalid": "npm --prefix examples/tests/invalid install",
-    "install:hangar": "npm --prefix tools/hangar install",
-    "install:jsii-docgen": "npm --prefix apps/jsii-docgen install",
-    "install:sdk": "npm --prefix libs/wingsdk install",
-    "install:compiler": "npm --prefix libs/wingcompiler install --ignore-scripts",
-    "install:tree-sitter-wing": "npm --prefix libs/tree-sitter-wing install --ignore-scripts",
-    "install:vscode-wing": "npm --prefix apps/vscode-wing install",
-    "install:wasi": "bash scripts/setup_wasi.sh",
-    "install:wing-api-checker": "npm --prefix apps/wing-api-checker install",
-    "install:wing-playground": "npm --prefix apps/wing-playground install",
-    "install:winglang": "npm --prefix apps/wing install --ignore-scripts",
-    "postinstall": "run-p -l --max-parallel 3 'install:*'"
+    "changelog": "bump-pack",
+    "install": "bash scripts/setup_wasi.sh",
+    "postinstall": "link-bundles",
+    "wing": "turbo compile --filter=winglang --output-logs=errors-only && ./apps/wing/bin/wing"
   },
   "volta": {
-    "node": "18.12.1",
-    "npm": "8.19.3"
+    "node": "18.16.0",
+    "pnpm": "8.6.5"
   },
-  "dependencies": {
-    "file-loader": "^6.2.0"
+  "pnpm": {
+    "patchedDependencies": {
+      "wasi-js@1.7.3": "patches/wasi-js@1.7.3.patch",
+      "@aws-sdk/is-array-buffer@3.201.0": "patches/@aws-sdk__is-array-buffer@3.201.0.patch",
+      "@aws-sdk/util-buffer-from@3.208.0": "patches/@aws-sdk__util-buffer-from@3.208.0.patch",
+      "jsii@5.0.11": "patches/jsii@5.0.11.patch",
+      "esbuild-wasm@0.18.5": "patches/esbuild-wasm@0.18.5.patch",
+      "@aws-sdk/util-utf8-node@3.259.0": "patches/@aws-sdk__util-utf8-node@3.259.0.patch",
+      "@aws-sdk/util-utf8-browser@3.259.0": "patches/@aws-sdk__util-utf8-browser@3.259.0.patch"
+    }
   }
 }

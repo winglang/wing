@@ -1,17 +1,18 @@
-use lsp_types::{Hover, HoverContents, MarkupContent, MarkupKind, Position};
-
 use crate::ast::{
-	Class, Expr, FunctionBody, FunctionDefinition, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
-	TypeAnnotationKind,
+	CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
+	TypeAnnotation, TypeAnnotationKind,
 };
 use crate::diagnostic::WingSpan;
 use crate::docs::Documented;
-use crate::lsp::sync::FILES;
+use crate::lsp::sync::PROJECT_DATA;
 use crate::type_check::symbol_env::LookupResult;
-use crate::type_check::Types;
+use crate::type_check::{resolve_super_method, ClassLike, Type, Types, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
 use crate::visit::{self, Visit};
 use crate::wasm_util::WASM_RETURN_ERROR;
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr};
+use lsp_types::{Hover, HoverContents, MarkupContent, MarkupKind, Position};
+
+use super::sync::WING_TYPES;
 
 pub struct HoverVisitor<'a> {
 	position: Position,
@@ -42,8 +43,7 @@ impl<'a> HoverVisitor<'a> {
 	/// Try to look up a full path of a symbol in the current scope and if found, render the docs
 	/// associated with the symbol kind. Returns `None` if not found.
 	fn lookup_docs(&mut self, nested_str: &str, property: Option<&Symbol>) -> Option<String> {
-		let current_env = self.current_scope.env.borrow();
-		let current_env = current_env.as_ref()?;
+		let current_env = self.types.get_scope_env(self.current_scope);
 
 		let result = current_env.lookup_nested_str(nested_str, None);
 
@@ -71,6 +71,57 @@ impl<'a> HoverVisitor<'a> {
 		f(self);
 		if self.found.is_none() {
 			self.current_scope = last_scope;
+		}
+	}
+
+	fn visit_reference_with_member(&mut self, object: &'a Expr, property: &'a Symbol) {
+		if object.span.contains(&self.position) {
+			self.visit_expr(object);
+			return;
+		}
+		let obj_type = self.types.get_expr_type(object);
+		if property.span.contains(&self.position) {
+			let new_span = self.current_expr.unwrap().span.clone();
+			match &**obj_type.maybe_unwrap_option() {
+				Type::Optional(_) | Type::Anything | Type::Void | Type::Nil | Type::Unresolved | Type::Inferred(_) => {}
+
+				Type::Array(_)
+				| Type::MutArray(_)
+				| Type::Map(_)
+				| Type::MutMap(_)
+				| Type::Set(_)
+				| Type::MutSet(_)
+				| Type::Json(_)
+				| Type::MutJson
+				| Type::Number
+				| Type::String
+				| Type::Duration
+				| Type::Boolean => {
+					if let Some((std_type, ..)) = self.types.get_std_class(&obj_type.to_string()) {
+						if let Some(c) = std_type.as_type() {
+							if let Some(c) = c.as_class() {
+								self.found = Some((new_span, docs_from_classlike_property(c, property)));
+							}
+						}
+					}
+				}
+
+				Type::Function(_) | Type::Enum(_) => {
+					self.found = Some((
+						new_span,
+						Some(self.types.get_expr_type(self.current_expr.unwrap()).render_docs()),
+					));
+				}
+				Type::Class(c) => {
+					self.found = Some((new_span, docs_from_classlike_property(c, property)));
+				}
+				Type::Interface(c) => {
+					self.found = Some((new_span, docs_from_classlike_property(c, property)));
+				}
+				Type::Struct(c) => {
+					self.found = Some((new_span, docs_from_classlike_property(c, property)));
+				}
+			}
 		}
 	}
 }
@@ -111,6 +162,22 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 				}
 				if let Some(finally_statements) = finally_statements {
 					self.visit_scope(finally_statements);
+				}
+			}
+			StmtKind::IfLet {
+				var_name,
+				value,
+				statements,
+				reassignable: _,
+				else_statements,
+			} => {
+				self.with_scope(statements, |v| {
+					v.visit_symbol(var_name);
+				});
+				self.visit_expr(value);
+				self.visit_scope(statements);
+				if let Some(else_statements) = else_statements {
+					self.visit_scope(else_statements);
 				}
 			}
 			_ => crate::visit::visit_stmt(self, node),
@@ -162,6 +229,77 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 
 		let last_expr = self.current_expr;
 		self.current_expr = Some(node);
+
+		match &node.kind {
+			ExprKind::New(new_expr) => {
+				let x = new_expr
+					.arg_list
+					.named_args
+					.iter()
+					.find(|a| a.0.span.contains(&self.position));
+				if let Some((arg_name, ..)) = x {
+					// we need to get the struct type from the class constructor
+					let class_type = self.types.get_expr_type(node);
+					let class_phase = self.types.get_expr_phase(node).unwrap();
+					let class_type = class_type.as_class().unwrap();
+					let init_info = match class_phase {
+						Phase::Inflight => class_type.get_method(&Symbol::global(CLASS_INFLIGHT_INIT_NAME)),
+						Phase::Preflight => class_type.get_method(&Symbol::global(CLASS_INIT_NAME)),
+						Phase::Independent => panic!("Cannot get hover info for independent class"),
+					};
+					if let Some(var_info) = init_info {
+						if let Some(structy) = var_info.type_.get_function_struct_arg() {
+							self.found = Some((arg_name.span.clone(), docs_from_classlike_property(structy, arg_name)));
+						}
+					}
+				}
+			}
+			ExprKind::Call { arg_list, callee } => {
+				let x = arg_list.named_args.iter().find(|a| a.0.span.contains(&self.position));
+				if let Some((arg_name, ..)) = x {
+					let env = self.types.get_scope_env(self.current_scope);
+					// we need to get the struct type from the callee
+					let callee_type = match callee {
+						CalleeKind::Expr(expr) => self.types.get_expr_type(expr),
+						CalleeKind::SuperCall(method) => resolve_super_method(method, &env, &self.types)
+							.ok()
+							.map_or(self.types.error(), |t| t.0),
+					};
+
+					if let Some(structy) = callee_type.get_function_struct_arg() {
+						self.found = Some((arg_name.span.clone(), docs_from_classlike_property(structy, arg_name)));
+					}
+				}
+			}
+			ExprKind::MapLiteral { fields, .. }
+			| ExprKind::JsonMapLiteral { fields }
+			| ExprKind::StructLiteral { fields, .. } => {
+				if let Some(f) = fields.iter().find(|f| f.0.span.contains(&self.position)) {
+					let field_name = f.0;
+					let type_ = self.types.maybe_unwrap_inference(self.types.get_expr_type(node));
+					let type_ = if let Some(type_) = self.types.get_type_from_json_cast(node.id) {
+						*type_
+					} else {
+						type_
+					};
+					if let Some(structy) = type_.maybe_unwrap_option().as_struct() {
+						self.found = Some((
+							field_name.span.clone(),
+							docs_from_classlike_property(structy, field_name),
+						));
+					} else {
+						// just use the type info
+						let inner_type = self.types.maybe_unwrap_inference(self.types.get_expr_type(f.1));
+						self.found = Some((
+							field_name.span.clone(),
+							Some(format!("```wing\n{}: {inner_type}\n```", field_name.name)),
+						));
+					}
+					return;
+				}
+			}
+			_ => {}
+		}
 
 		crate::visit::visit_expr(self, node);
 
@@ -236,45 +374,21 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 					self.found = Some((sym.span.clone(), self.lookup_docs(&sym.name, None)));
 				}
 			}
-			Reference::InstanceMember {
-				object,
-				property,
-				optional_accessor: _,
-			} => {
-				if let Some(obj_type) = self.types.get_expr_type(object) {
-					if property.span.contains(&self.position) {
-						let new_span = WingSpan {
-							start: object.span.start,
-							end: property.span.end,
-							file_id: property.span.file_id.clone(),
-						};
-
-						if let Some(c) = obj_type.as_class() {
-							if let Some(v) = c.env.lookup(property, None) {
-								let docs = v.render_docs();
-								self.found = Some((new_span, Some(docs)));
-							}
-						} else {
-							self.found = Some((
-								new_span,
-								self
-									.types
-									.get_expr_type(self.current_expr.unwrap())
-									.map(|t| t.render_docs()),
-							));
+			Reference::TypeReference(t) => {
+				if t.span.contains(&self.position) {
+					// Only lookup string up to the position
+					let mut partial_path = vec![];
+					t.full_path().iter().for_each(|p| {
+						if p.span.start <= self.position.into() {
+							partial_path.push(p.name.clone());
 						}
-					}
+					});
+					let lookup_str = partial_path.join(".");
+					self.found = Some((t.span.clone(), self.lookup_docs(&lookup_str, None)));
 				}
 			}
-			Reference::TypeMember { type_, property } => {
-				if property.span.contains(&self.position) {
-					// lookup type in environment
-					self.found = Some((
-						property.span.clone(),
-						self.lookup_docs(&type_.full_path_str(), Some(property)),
-					));
-				}
-			}
+			Reference::InstanceMember { object, property, .. } => self.visit_reference_with_member(object, property),
+			Reference::TypeMember { typeobject, property } => self.visit_reference_with_member(&typeobject, property),
 		}
 
 		visit::visit_reference(self, node);
@@ -298,36 +412,34 @@ pub unsafe extern "C" fn wingc_on_hover(ptr: u32, len: u32) -> u64 {
 	}
 }
 pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
-	FILES.with(|files| {
-		let files = files.borrow();
-		let file_data = files.get(&params.text_document_position_params.text_document.uri.clone());
-		let file_data = file_data.expect(
-			format!(
-				"Compiled data not found for \"{}\"",
-				params.text_document_position_params.text_document.uri
-			)
-			.as_str(),
-		);
+	WING_TYPES.with(|types| {
+		let types = types.borrow_mut();
+		PROJECT_DATA.with(|project_data| {
+			let project_data = project_data.borrow();
+			let uri = params.text_document_position_params.text_document.uri.clone();
+			let file = uri.to_file_path().ok().expect("LSP only works on real filesystems");
 
-		let root_scope = &file_data.scope;
+			let root_scope = &project_data.asts.get(&file).unwrap();
 
-		let mut hover_visitor = HoverVisitor::new(
-			params.text_document_position_params.position,
-			&root_scope,
-			&file_data.types,
-		);
-		if let Some((span, Some(docs))) = hover_visitor.visit() {
-			Some(Hover {
-				contents: HoverContents::Markup(MarkupContent {
-					kind: MarkupKind::Markdown,
-					value: docs,
-				}),
-				range: Some(span.clone().into()),
-			})
-		} else {
-			None
-		}
+			let mut hover_visitor = HoverVisitor::new(params.text_document_position_params.position, &root_scope, &types);
+			if let Some((span, Some(docs))) = hover_visitor.visit() {
+				Some(Hover {
+					contents: HoverContents::Markup(MarkupContent {
+						kind: MarkupKind::Markdown,
+						value: docs,
+					}),
+					range: Some(span.clone().into()),
+				})
+			} else {
+				None
+			}
+		})
 	})
+}
+
+fn docs_from_classlike_property(classlike: &impl ClassLike, property: &Symbol) -> Option<String> {
+	let property = classlike.get_env().lookup(property, None)?;
+	Some(property.render_docs())
 }
 
 #[cfg(test)]
@@ -345,9 +457,15 @@ mod tests {
 	///
 	/// Result is a [Hover] object
 	macro_rules! test_hover_list {
+		($name:ident, $code:literal) => {
+			test_hover_list!($name, $code,);
+		};
 		($name:ident, $code:literal, $($assertion:stmt)*) => {
 			#[test]
 			fn $name() {
+				// NOTE: this is needed for debugging to work regardless of where you run the test
+				std::env::set_current_dir(env!("CARGO_MANIFEST_DIR")).unwrap();
+
 				let text_document_position_params = load_file_with_contents($code);
 				let hover = on_hover(HoverParams {
 					text_document_position_params,
@@ -396,7 +514,7 @@ new cloud.
 
 		let bucket = new cloud.Bucket();
         //^
-		"#,
+"#,
 	);
 
 	test_hover_list!(
@@ -408,7 +526,8 @@ inflight () => {
   let myClass = new MyClass();
     //^
 
-}"#,
+}
+"#,
 	);
 
 	test_hover_list!(
@@ -418,14 +537,16 @@ bring cloud;
 
 let bucket = new cloud.Bucket();
 bucket.addObject
-      //^"#,
+      //^
+"#,
 	);
 
 	test_hover_list!(
 		static_stdtype_method,
 		r#"
 Json.stringify(123);
-      //^"#,
+      //^
+"#,
 	);
 
 	test_hover_list!(
@@ -466,14 +587,16 @@ class Foo {
 		r#"
 bring cloud;
 new cloud.Bucket();
-          //^"#,
+          //^
+"#
 	);
 
 	test_hover_list!(
 		user_defined_types,
 		r#"
 class Foo { };
-     //^"#,
+     //^
+"#
 	);
 
 	test_hover_list!(
@@ -484,14 +607,16 @@ class Foo {
 }
 
 Foo.my();
-  //^"#,
+  //^
+"#
 	);
 
 	test_hover_list!(
 		builtin_in_preflight,
 		r#"
 assert(true);
-//^"#,
+//^
+"#
 	);
 
 	test_hover_list!(
@@ -502,7 +627,8 @@ class Foo {
     throw("hello");
     //^
   }
-}"#,
+}
+"#
 	);
 
 	test_hover_list!(
@@ -510,7 +636,8 @@ class Foo {
 		r#"
 test "foo" {
 //^
-};"#,
+};
+"#
 	);
 
 	test_hover_list!(
@@ -518,14 +645,15 @@ test "foo" {
 		r#"
 bring cloud;
       //^
-"#,
+"#
 	);
 
 	test_hover_list!(
 		test_bring_library,
 		r#"
 bring "@winglang/sdk" as bar;
-                        //^"#,
+                        //^
+"#
 	);
 
 	test_hover_list!(
@@ -533,7 +661,8 @@ bring "@winglang/sdk" as bar;
 		r#"
 let var xoo = "hello";
 log(xoo);
-    //^"#,
+    //^
+"#
 	);
 
 	test_hover_list!(
@@ -542,7 +671,7 @@ log(xoo);
 () => {
   let var goooo = "gar";
           //^
-}"#,
+}"#
 	);
 
 	test_hover_list!(
@@ -551,16 +680,55 @@ log(xoo);
 inflight () => {
   let var goooo = "gar";
           //^
-}"#,
+}"#
 	);
 
-	// TODO: this hover doc doesn't contain the member information because a `String` is not
-	// considered a class, but rather a primitive type. We need to make all built-in types classes to
-	// remove all the special cases.
 	test_hover_list!(
 		test_builtin_instance_method,
 		r#"
 "hello".startsWith("h");
-           //^"#,
+           //^
+"#
+	);
+
+	test_hover_list!(
+		multipart_reference_hover_middle,
+		r#"
+let j = Json {};
+j.get("hello").get("world");
+ //^
+"#
+	);
+
+	test_hover_list!(
+		map_element,
+		r#"
+{ "hi" => "" }
+ //^
+"#
+	);
+
+	test_hover_list!(
+		json_element,
+		r#"
+{ hi: "cool" }
+ //^
+"#
+	);
+
+	test_hover_list!(
+		json_element_nested_top,
+		r#"
+{ hi: { inner: [1, 2, 3] } }
+ //^
+"#
+	);
+
+	test_hover_list!(
+		json_element_nested_inner,
+		r#"
+{ hi: { inner: [1, 2, 3] } }
+        //^
+"#
 	);
 }

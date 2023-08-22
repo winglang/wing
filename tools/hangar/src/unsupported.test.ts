@@ -22,28 +22,27 @@ test("unsupported resource in target", async ({ expect }) => {
     cwd: workdir,
     wingFile: entrypoint,
     args: ["compile", "--target", "tf-gcp"],
-    expectStdErr: true,
+    expectFailure: true,
     env: {
       GOOGLE_PROJECT_ID: "test-project",
       GOOGLE_STORAGE_LOCATION: "us-central1",
     },
   });
 
-  expect(sanitizeErrorMessage(result.stderr)).toMatchInlineSnapshot(`
-    "Error: ERROR: Unable to create an instance of abstract type \\"@winglang/sdk.cloud.Schedule\\" for this target
+  expect(sanitizeOutput(result.stderr)).toMatchInlineSnapshot(`
+    "ERROR: Unable to create an instance of abstract type \\"@winglang/sdk.cloud.Schedule\\" for this target
 
-    target/test.tfgcp.[REDACTED].tmp/.wing/preflight.js:9
+    target/test.tfgcp.[REDACTED].tmp/.wing/preflight.js:8
          constructor(scope, id) {
            super(scope, id);
     >>     this.node.root.newAbstract(\\"@winglang/sdk.cloud.Schedule\\",this,\\"cloud.Schedule\\");
          }
        }
-
-        at compile <PATH>"
+    "
   `);
 });
 
-function sanitizeErrorMessage(inputString: string): string {
+function sanitizeOutput(inputString: string): string {
   let sanitizedString = inputString
     // Normalize paths
     .replaceAll("\\", "/")

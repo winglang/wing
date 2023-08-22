@@ -1,17 +1,16 @@
 import { test, expect } from "vitest";
-import { listMessages, treeJsonOf } from "./util";
-import * as cloud from "../../src/cloud";
-import { ITableClient } from "../../src/cloud";
+import { listMessages } from "./util";
+import * as ex from "../../src/ex";
 import { SimApp } from "../sim-app";
 
 test("create a table", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = cloud.Table._newTable(app, "my_table", {
+  const t = ex.Table._newTable(app, "my_table", {
     name: "new_table",
     columns: {
-      name: cloud.ColumnType.STRING,
-      age: cloud.ColumnType.NUMBER,
+      name: ex.ColumnType.STRING,
+      age: ex.ColumnType.NUMBER,
     },
     primaryKey: "id",
   });
@@ -25,10 +24,11 @@ test("create a table", async () => {
     props: {
       name: "new_table",
       columns: {
-        name: cloud.ColumnType.STRING,
-        age: cloud.ColumnType.NUMBER,
+        name: ex.ColumnType.STRING,
+        age: ex.ColumnType.NUMBER,
       },
       primaryKey: "id",
+      initialRows: {},
     },
     type: "wingsdk.cloud.Table",
   });
@@ -40,16 +40,16 @@ test("create a table", async () => {
 test("insert row", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = cloud.Table._newTable(app, "my_table", {
+  const t = ex.Table._newTable(app, "my_table", {
     name: "my_insert_table",
     columns: {
-      name: cloud.ColumnType.STRING,
-      age: cloud.ColumnType.NUMBER,
+      name: ex.ColumnType.STRING,
+      age: ex.ColumnType.NUMBER,
     },
     primaryKey: "id",
   });
   const s = await app.startSimulator();
-  const client = s.getResource("/my_table") as ITableClient;
+  const client = s.getResource("/my_table") as ex.ITableClient;
 
   await client.insert("joe-id", { name: "Joe Doe", age: 50 } as any);
 
@@ -61,10 +61,11 @@ test("insert row", async () => {
     props: {
       name: "my_insert_table",
       columns: {
-        name: cloud.ColumnType.STRING,
-        age: cloud.ColumnType.NUMBER,
+        name: ex.ColumnType.STRING,
+        age: ex.ColumnType.NUMBER,
       },
       primaryKey: "id",
+      initialRows: {},
     },
     type: "wingsdk.cloud.Table",
   });
@@ -77,16 +78,16 @@ test("insert row", async () => {
 test("get row", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = cloud.Table._newTable(app, "my_table", {
+  const t = ex.Table._newTable(app, "my_table", {
     name: "my_get_table",
     columns: {
-      name: cloud.ColumnType.STRING,
-      age: cloud.ColumnType.NUMBER,
+      name: ex.ColumnType.STRING,
+      age: ex.ColumnType.NUMBER,
     },
     primaryKey: "id",
   });
   const s = await app.startSimulator();
-  const client = s.getResource("/my_table") as ITableClient;
+  const client = s.getResource("/my_table") as ex.ITableClient;
 
   await client.insert("joe-id", { name: "Joe Doe", age: 50 } as any);
   const joe = await client.get("joe-id");
@@ -100,10 +101,11 @@ test("get row", async () => {
     props: {
       name: "my_get_table",
       columns: {
-        name: cloud.ColumnType.STRING,
-        age: cloud.ColumnType.NUMBER,
+        name: ex.ColumnType.STRING,
+        age: ex.ColumnType.NUMBER,
       },
       primaryKey: "id",
+      initialRows: {},
     },
     type: "wingsdk.cloud.Table",
   });
@@ -116,16 +118,16 @@ test("get row", async () => {
 test("update row", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = cloud.Table._newTable(app, "my_table", {
+  const t = ex.Table._newTable(app, "my_table", {
     name: "my_update_table",
     columns: {
-      name: cloud.ColumnType.STRING,
-      age: cloud.ColumnType.NUMBER,
+      name: ex.ColumnType.STRING,
+      age: ex.ColumnType.NUMBER,
     },
     primaryKey: "id",
   });
   const s = await app.startSimulator();
-  const client = s.getResource("/my_table") as ITableClient;
+  const client = s.getResource("/my_table") as ex.ITableClient;
 
   await client.insert("joe-id", { name: "Joe Doe", age: 50 } as any);
   let joe = await client.get("joe-id");
@@ -142,10 +144,11 @@ test("update row", async () => {
     props: {
       name: "my_update_table",
       columns: {
-        name: cloud.ColumnType.STRING,
-        age: cloud.ColumnType.NUMBER,
+        name: ex.ColumnType.STRING,
+        age: ex.ColumnType.NUMBER,
       },
       primaryKey: "id",
+      initialRows: {},
     },
     type: "wingsdk.cloud.Table",
   });
@@ -158,16 +161,16 @@ test("update row", async () => {
 test("list table", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = cloud.Table._newTable(app, "my_table", {
+  const t = ex.Table._newTable(app, "my_table", {
     name: "my_list_table",
     columns: {
-      name: cloud.ColumnType.STRING,
-      age: cloud.ColumnType.NUMBER,
+      name: ex.ColumnType.STRING,
+      age: ex.ColumnType.NUMBER,
     },
     primaryKey: "id",
   });
   const s = await app.startSimulator();
-  const client = s.getResource("/my_table") as ITableClient;
+  const client = s.getResource("/my_table") as ex.ITableClient;
 
   await client.insert("joe-id", { name: "Joe Doe", age: 50 } as any);
   await client.insert("jane-id", { name: "Jane Doe", age: 45 } as any);
@@ -183,10 +186,11 @@ test("list table", async () => {
     props: {
       name: "my_list_table",
       columns: {
-        name: cloud.ColumnType.STRING,
-        age: cloud.ColumnType.NUMBER,
+        name: ex.ColumnType.STRING,
+        age: ex.ColumnType.NUMBER,
       },
       primaryKey: "id",
+      initialRows: {},
     },
     type: "wingsdk.cloud.Table",
   });
@@ -199,15 +203,15 @@ test("list table", async () => {
 test("inserting the same id twice", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = cloud.Table._newTable(app, "my_table", {
+  const t = ex.Table._newTable(app, "my_table", {
     name: "my_insert_twice_table",
     columns: {
-      name: cloud.ColumnType.STRING,
+      name: ex.ColumnType.STRING,
     },
     primaryKey: "id",
   });
   const s = await app.startSimulator();
-  const client = s.getResource("/my_table") as ITableClient;
+  const client = s.getResource("/my_table") as ex.ITableClient;
 
   await client.insert("joe-id", { name: "Joe Doe" } as any);
   await expect(() =>
@@ -220,15 +224,15 @@ test("inserting the same id twice", async () => {
 test("update non-existent item", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = cloud.Table._newTable(app, "my_table", {
+  const t = ex.Table._newTable(app, "my_table", {
     name: "my_update_non_existent_table",
     columns: {
-      name: cloud.ColumnType.STRING,
+      name: ex.ColumnType.STRING,
     },
     primaryKey: "id",
   });
   const s = await app.startSimulator();
-  const client = s.getResource("/my_table") as ITableClient;
+  const client = s.getResource("/my_table") as ex.ITableClient;
 
   await expect(() =>
     client.update("joe-id", { name: "Joe Doe" } as any)
@@ -240,17 +244,64 @@ test("update non-existent item", async () => {
 test("deleting non-existent item", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = cloud.Table._newTable(app, "my_table", {
+  const t = ex.Table._newTable(app, "my_table", {
     name: "my_delete_non_existent_table",
     columns: {
-      name: cloud.ColumnType.STRING,
+      name: ex.ColumnType.STRING,
     },
     primaryKey: "id",
   });
   const s = await app.startSimulator();
-  const client = s.getResource("/my_table") as ITableClient;
+  const client = s.getResource("/my_table") as ex.ITableClient;
 
   await expect(() => client.delete("joe-id")).rejects.toThrow(
     `The primary key "joe-id" not found in the "my_delete_non_existent_table" table.`
   );
+});
+
+test("can add row in preflight", async () => {
+  // GIVEN
+  const KEY = "joe-id";
+  const ROW = { name: "Joe Doe", age: 50 };
+
+  const app = new SimApp();
+  const table = ex.Table._newTable(app, "my_table", {
+    name: "my_addrow_table",
+    columns: {
+      name: ex.ColumnType.STRING,
+      age: ex.ColumnType.NUMBER,
+    },
+    primaryKey: "id",
+    initialRows: {},
+  });
+  table.addRow(KEY, ROW as any);
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_table") as ex.ITableClient;
+
+  const joe = await client.get("joe-id");
+  expect(joe).toEqual({ name: "Joe Doe", age: 50, id: KEY });
+
+  expect(s.getResourceConfig("/my_table")).toEqual({
+    attrs: {
+      handle: expect.any(String),
+    },
+    path: "root/my_table",
+    props: {
+      name: "my_addrow_table",
+      columns: {
+        name: ex.ColumnType.STRING,
+        age: ex.ColumnType.NUMBER,
+      },
+      primaryKey: "id",
+      initialRows: {
+        "joe-id": { name: "Joe Doe", age: 50, id: KEY },
+      },
+    },
+    type: "wingsdk.cloud.Table",
+  });
+  await s.stop();
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
 });

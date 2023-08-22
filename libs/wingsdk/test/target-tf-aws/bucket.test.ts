@@ -14,7 +14,7 @@ import {
 
 test("create a bucket", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   Bucket._newBucket(app, "my_bucket");
   const output = app.synth();
 
@@ -30,20 +30,23 @@ test("create a bucket", () => {
 
 test("bucket has force_destroy if App is a test environment", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), isTestEnvironment: true });
+  const app = new tfaws.App({
+    outdir: mkdtemp(),
+    isTestEnvironment: true,
+    entrypointDir: __dirname,
+  });
   Bucket._newBucket(app, "my_bucket");
   const output = app.synth();
 
   // THEN
   expect(
-    JSON.parse(output).resource.aws_s3_bucket.root_mybucket_E5DAA363
-      .force_destroy
+    JSON.parse(output).resource.aws_s3_bucket.my_bucket.force_destroy
   ).toBe(true);
 });
 
 test("bucket is public", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   Bucket._newBucket(app, "my_bucket", { public: true });
   const output = app.synth();
 
@@ -60,7 +63,7 @@ test("bucket is public", () => {
 
 test("bucket with two preflight objects", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
   bucket.addObject("file1.txt", "hello world");
   bucket.addObject("file2.txt", "boom bam");
@@ -79,9 +82,30 @@ test("bucket with two preflight objects", () => {
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
+test("bucket with two preflight files", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
+  bucket.addFile("file1.txt", "../testFiles/test1.txt");
+  bucket.addFile("file2.txt", "../testFiles/test2.txt");
+  const output = app.synth();
+
+  // THEN
+  expect(tfResourcesOf(output)).toEqual([
+    "aws_s3_bucket", // main bucket
+    "aws_s3_bucket_policy", // resource policy to grant read access to anyone
+    "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
+    "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
+    "aws_s3_object", // file1.txt
+  ]);
+  expect(tfResourcesOfCount(output, "aws_s3_object")).toEqual(2);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
 test("bucket prefix valid", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = Bucket._newBucket(app, "the-uncanny.bucket");
   const output = app.synth();
 
@@ -97,7 +121,7 @@ test("bucket prefix valid", () => {
 
 test("bucket prefix must be lowercase", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = Bucket._newBucket(app, "The-Uncanny.Bucket");
   const output = app.synth();
 
@@ -113,7 +137,7 @@ test("bucket prefix must be lowercase", () => {
 
 test("bucket prefix must begin with an alphanumeric character", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
 
   // THEN
   expect(() => Bucket._newBucket(app, "(%?#$The-Uncanny-Bucket.*!@¨)")).toThrow(
@@ -123,7 +147,7 @@ test("bucket prefix must begin with an alphanumeric character", () => {
 
 test("bucket prefix can not begining with 'xn--'", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
 
   // THEN
   expect(() => Bucket._newBucket(app, "xn--The-Uncanny-Bucket")).toThrow(
@@ -133,7 +157,7 @@ test("bucket prefix can not begining with 'xn--'", () => {
 
 test("bucket with onCreate method", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
   const inflightTest = Testing.makeHandler(app, "inflight", "null");
   bucket.onCreate(inflightTest);
@@ -172,7 +196,7 @@ test("bucket with onCreate method", () => {
 
 test("bucket with onDelete method", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
   const inflightTest = Testing.makeHandler(app, "inflight", "null");
   bucket.onDelete(inflightTest);
@@ -211,7 +235,7 @@ test("bucket with onDelete method", () => {
 
 test("bucket with onUpdate method", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
   const inflightTest = Testing.makeHandler(app, "inflight", "null");
   bucket.onUpdate(inflightTest);
@@ -250,7 +274,7 @@ test("bucket with onUpdate method", () => {
 
 test("bucket with onEvent method", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
   const inflightTest = Testing.makeHandler(app, "inflight", "null");
   bucket.onEvent(inflightTest);

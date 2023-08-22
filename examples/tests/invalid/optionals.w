@@ -2,10 +2,17 @@ let f = (x: num) => {
   // do something
 };
 
+let fOptional = (x: num?) => {
+  // do something
+};
+
 let x: num? = 1;
 
 f(x);
 //^ error: x is num? but f expects num
+
+fOptional("");
+//        ^^ error: expected num?, got str
 
 let y = true;
 if y? {
@@ -83,3 +90,7 @@ let baz: Baz = Baz {
 // Ensure that ?. returns T? rather than T
 let val: str = baz?.bar?.foo?.val;
 //             ^^^^^^^^^^^^^^^^^^ Expected type to be "str", but got "str?" instead
+
+let optionalFunction = Json.tryParse("")?.asStr;
+optionalFunction();
+//^ Cannot call optional function (unless it's part of a reference)

@@ -1,5 +1,6 @@
 use crate::ast::*;
-use crate::lsp::sync::FILES;
+use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};
+use crate::lsp::sync::PROJECT_DATA;
 use crate::visit::Visit;
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 use lsp_types::{DocumentSymbol, SymbolKind};
@@ -19,20 +20,24 @@ impl DocumentSymbolVisitor {
 impl Visit<'_> for DocumentSymbolVisitor {
 	fn visit_stmt(&mut self, statement: &Stmt) {
 		match &statement.kind {
-			StmtKind::Bring {
-				module_name,
-				identifier,
-			} => {
-				let mod_symbol = module_name;
-				self
-					.document_symbols
-					.push(create_document_symbol(mod_symbol, SymbolKind::MODULE));
-
+			StmtKind::Bring { source, identifier } => {
 				if let Some(identifier) = identifier {
 					let symbol = identifier;
 					self
 						.document_symbols
 						.push(create_document_symbol(symbol, SymbolKind::VARIABLE));
+				} else {
+					match &source {
+						BringSource::BuiltinModule(name) => {
+							self
+								.document_symbols
+								.push(create_document_symbol(name, SymbolKind::MODULE));
+						}
+						// in these cases, an alias is required (like "bring foo as bar;")
+						// so we don't need to add a symbol for the module itself
+						BringSource::JsiiModule(_) => {}
+						BringSource::WingFile(_) => {}
+					};
 				}
 			}
 			StmtKind::Let { var_name, .. } => {
@@ -85,17 +90,25 @@ pub unsafe extern "C" fn wingc_on_document_symbol(ptr: u32, len: u32) -> u64 {
 }
 
 pub fn on_document_symbols(params: lsp_types::DocumentSymbolParams) -> Vec<DocumentSymbol> {
-	FILES.with(|files| {
-		let files = files.borrow();
-		let parse_result = files.get(&params.text_document.uri);
-		let parse_result = parse_result.unwrap();
-		let scope = &parse_result.scope;
+	PROJECT_DATA.with(|project_data| {
+		let project_data = project_data.borrow();
+		let uri = params.text_document.uri;
+		let file = uri.to_file_path().ok().expect("LSP only works on real filesystems");
+		let scope = project_data.asts.get(&file).unwrap();
 
 		let mut visitor = DocumentSymbolVisitor::new();
 		visitor.visit_scope(scope);
 
-		visitor.document_symbols
+		visitor
+			.document_symbols
+			.into_iter()
+			.filter(|sym| filter_symbol(sym))
+			.collect()
 	})
+}
+
+fn filter_symbol(symbol: &DocumentSymbol) -> bool {
+	!{ symbol.name.starts_with(CLOSURE_CLASS_PREFIX) || symbol.name.starts_with(PARENT_THIS_NAME) }
 }
 
 fn create_document_symbol(symbol: &Symbol, kind: SymbolKind) -> DocumentSymbol {

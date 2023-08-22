@@ -500,9 +500,9 @@ Object {
           },
         },
       ],
-      "usage": "bring { AuthorizationToken } from \\"@aws-cdk/aws-ecr\\"
+      "usage": "bring { AuthorizationToken } from \\"@aws-cdk/aws-ecr\\";
 
-AuthorizationToken.grantRead(grantee: IGrantable)",
+AuthorizationToken.grantRead(grantee: IGrantable);",
     },
   ],
 }
@@ -527,9 +527,9 @@ Authorization token to access private ECR repositories in the current environmen
 ## \`grantRead\` <a name=\\"grantRead\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\"></a>
 
 \`\`\`wing
-bring { AuthorizationToken } from \\"@aws-cdk/aws-ecr\\"
+bring { AuthorizationToken } from \\"@aws-cdk/aws-ecr\\";
 
-AuthorizationToken.grantRead(grantee: IGrantable)
+AuthorizationToken.grantRead(grantee: IGrantable);
 \`\`\`
 
 Grant access to retrieve an authorization token.

@@ -1,6 +1,6 @@
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
-import { Resource } from "../../src/std";
+import { Connections } from "../../src/core";
 import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
 
@@ -17,10 +17,10 @@ test("create a bucket", async () => {
 
   // WHEN
   for (let i = 0; i < 5; i++) {
-    Resource.addConnection({
-      from: bucket,
-      to: fn,
-      relationship: "relationship",
+    Connections.of(app).add({
+      source: bucket,
+      target: fn,
+      name: "relationship",
     });
   }
 

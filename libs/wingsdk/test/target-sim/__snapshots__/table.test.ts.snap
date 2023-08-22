@@ -1,7 +1,22 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`create a table 1`] = `
+exports[`can add row in preflight 1`] = `
+[
+  "wingsdk.cloud.TestRunner created.",
+  "Adding initial row (key=joe-id).",
+  "wingsdk.cloud.Table created.",
+  "get row joe-id from table my_addrow_table.",
+  "wingsdk.cloud.Table deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
+]
+`;
+
+exports[`can add row in preflight 2`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -20,6 +35,87 @@ exports[`create a table 1`] = `
             "age": 1,
             "name": 0,
           },
+          "initialRows": {
+            "joe-id": {
+              "age": 50,
+              "id": "joe-id",
+              "name": "Joe Doe",
+            },
+          },
+          "name": "my_addrow_table",
+          "primaryKey": "id",
+        },
+        "type": "wingsdk.cloud.Table",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "cloud.TestRunner": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.314",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
+        "my_table": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.314",
+          },
+          "display": {
+            "description": "A cloud NoSQL database table that can be used to store and query data",
+            "title": "Table",
+          },
+          "id": "my_table",
+          "path": "root/my_table",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.1.314",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
+exports[`create a table 1`] = `
+{
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_table",
+        "props": {
+          "columns": {
+            "age": 1,
+            "name": 0,
+          },
+          "initialRows": {},
           "name": "new_table",
           "primaryKey": "id",
         },
@@ -32,12 +128,9 @@ exports[`create a table 1`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -48,12 +141,9 @@ exports[`create a table 1`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_table": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud NoSQL database table that can be used to store and query data",
@@ -65,7 +155,7 @@ exports[`create a table 1`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",
@@ -89,6 +179,10 @@ exports[`get row 1`] = `
 
 exports[`get row 2`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -107,6 +201,7 @@ exports[`get row 2`] = `
             "age": 1,
             "name": 0,
           },
+          "initialRows": {},
           "name": "my_get_table",
           "primaryKey": "id",
         },
@@ -119,12 +214,9 @@ exports[`get row 2`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -135,12 +227,9 @@ exports[`get row 2`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_table": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud NoSQL database table that can be used to store and query data",
@@ -152,7 +241,7 @@ exports[`get row 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",
@@ -175,6 +264,10 @@ exports[`insert row 1`] = `
 
 exports[`insert row 2`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -193,6 +286,7 @@ exports[`insert row 2`] = `
             "age": 1,
             "name": 0,
           },
+          "initialRows": {},
           "name": "my_insert_table",
           "primaryKey": "id",
         },
@@ -205,12 +299,9 @@ exports[`insert row 2`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -221,12 +312,9 @@ exports[`insert row 2`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_table": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud NoSQL database table that can be used to store and query data",
@@ -238,7 +326,7 @@ exports[`insert row 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",
@@ -264,6 +352,10 @@ exports[`list table 1`] = `
 
 exports[`list table 2`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -282,6 +374,7 @@ exports[`list table 2`] = `
             "age": 1,
             "name": 0,
           },
+          "initialRows": {},
           "name": "my_list_table",
           "primaryKey": "id",
         },
@@ -294,12 +387,9 @@ exports[`list table 2`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -310,12 +400,9 @@ exports[`list table 2`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_table": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud NoSQL database table that can be used to store and query data",
@@ -327,7 +414,7 @@ exports[`list table 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",
@@ -354,6 +441,10 @@ exports[`update row 1`] = `
 
 exports[`update row 2`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -372,6 +463,7 @@ exports[`update row 2`] = `
             "age": 1,
             "name": 0,
           },
+          "initialRows": {},
           "name": "my_update_table",
           "primaryKey": "id",
         },
@@ -384,12 +476,9 @@ exports[`update row 2`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -400,12 +489,9 @@ exports[`update row 2`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_table": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud NoSQL database table that can be used to store and query data",
@@ -417,7 +503,7 @@ exports[`update row 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",

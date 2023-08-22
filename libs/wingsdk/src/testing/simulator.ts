@@ -1,13 +1,15 @@
 import { existsSync } from "fs";
 import { join } from "path";
 import { Tree } from "./tree";
-import { Trace, TraceType } from "../cloud";
 import { SDK_VERSION } from "../constants";
-import { ConstructTree } from "../core";
+import { CONNECTIONS_FILE_PATH, ConstructTree, TREE_FILE_PATH } from "../core";
 import { readJsonSync } from "../shared/misc";
+import { Trace, TraceType } from "../std";
 // eslint-disable-next-line import/no-restricted-paths
 import { DefaultSimulatorFactory } from "../target-sim/factory.inflight";
 import { isToken } from "../target-sim/tokens";
+
+const START_ATTEMPT_COUNT = 10;
 
 /**
  * Props for `Simulator`.
@@ -124,12 +126,14 @@ export class Simulator {
   private _traces: Array<Trace>;
   private readonly _traceSubscribers: Array<ITraceSubscriber>;
   private _tree: Tree;
+  private _connections: ConnectionData[];
 
   constructor(props: SimulatorProps) {
     this.simdir = props.simfile;
-    const { config, treeData } = this._loadApp(props.simfile);
+    const { config, treeData, connectionData } = this._loadApp(props.simfile);
     this._config = config;
     this._tree = new Tree(treeData);
+    this._connections = connectionData;
 
     this._running = false;
     this._factory = props.factory ?? new DefaultSimulatorFactory();
@@ -141,6 +145,7 @@ export class Simulator {
   private _loadApp(simdir: string): {
     config: any;
     treeData: ConstructTree;
+    connectionData: ConnectionData[];
   } {
     const simJson = join(this.simdir, "simulator.json");
     if (!existsSync(simJson)) {
@@ -164,13 +169,23 @@ export class Simulator {
       );
     }
 
-    const treeJson = join(this.simdir, "tree.json");
+    const treeJson = join(this.simdir, TREE_FILE_PATH);
     if (!existsSync(treeJson)) {
-      throw new Error(`Invalid Wing app (${simdir}) - tree.json not found.`);
+      throw new Error(
+        `Invalid Wing app (${simdir}) - ${TREE_FILE_PATH} not found.`
+      );
     }
     const treeData = readJsonSync(treeJson);
 
-    return { config, treeData };
+    const connectionJson = join(this.simdir, CONNECTIONS_FILE_PATH);
+    if (!existsSync(connectionJson)) {
+      throw new Error(
+        `Invalid Wing app (${simdir}) - ${CONNECTIONS_FILE_PATH} not found.`
+      );
+    }
+    const connectionData = readJsonSync(connectionJson).connections;
+
+    return { config, treeData, connectionData };
   }
 
   /**
@@ -183,70 +198,34 @@ export class Simulator {
       );
     }
 
-    this._traces = [];
+    // create a copy of the resource list to be used as an init queue.
+    const initQueue: (BaseResourceSchema & { _attempts?: number })[] = [
+      ...this._config.resources,
+    ];
 
-    for (const resourceConfig of this._config.resources) {
-      const context: ISimulatorContext = {
-        simdir: this.simdir,
-        resourcePath: resourceConfig.path,
-        findInstance: (handle: string) => {
-          return this._handles.find(handle);
-        },
-        addTrace: (trace: Trace) => {
-          this._addTrace(trace);
-        },
-        withTrace: async (props: IWithTraceProps) => {
-          // TODO: log start time and end time of activity?
-          try {
-            let result = await props.activity();
-            this._addTrace({
-              data: {
-                message: props.message,
-                status: "success",
-                result: JSON.stringify(result),
-              },
-              type: TraceType.RESOURCE,
-              sourcePath: resourceConfig.path,
-              sourceType: resourceConfig.type,
-              timestamp: new Date().toISOString(),
-            });
-            return result;
-          } catch (err) {
-            this._addTrace({
-              data: { message: props.message, status: "failure", error: err },
-              type: TraceType.RESOURCE,
-              sourcePath: resourceConfig.path,
-              sourceType: resourceConfig.type,
-              timestamp: new Date().toISOString(),
-            });
-            throw err;
-          }
-        },
-        listTraces: () => {
-          return [...this._traces];
-        },
-      };
+    while (true) {
+      const next = initQueue.shift();
+      if (!next) {
+        break;
+      }
 
-      const resolvedProps = this.resolveTokens(
-        resourceConfig.props,
-        resourceConfig.path
-      );
-      const resource = this._factory.resolve(
-        resourceConfig.type,
-        resolvedProps,
-        context
-      );
-      const resourceAttrs = await resource.init();
-      const handle = this._handles.allocate(resource);
-      (resourceConfig as any).attrs = { ...resourceAttrs, handle };
-      let event: Trace = {
-        type: TraceType.RESOURCE,
-        data: { message: `${resourceConfig.type} created.` },
-        sourcePath: resourceConfig.path,
-        sourceType: resourceConfig.type,
-        timestamp: new Date().toISOString(),
-      };
-      this._addTrace(event);
+      // we couldn't start this resource yet, so decrement the retry counter and put it back in
+      // the init queue.
+      if (!(await this.tryStartResource(next))) {
+        // we couldn't start this resource yet, so decrement the attempt counter
+        next._attempts = next._attempts ?? START_ATTEMPT_COUNT;
+        next._attempts--;
+
+        // if we've tried too many times, give up (might be a dependency cycle or a bad reference)
+        if (next._attempts === 0) {
+          throw new Error(
+            `Could not start resource ${next.path} after ${START_ATTEMPT_COUNT} attempts. This could be due to a dependency cycle or an invalid attribute reference.`
+          );
+        }
+
+        // put back in the queue for another round
+        initQueue.push(next);
+      }
     }
 
     this._running = true;
@@ -269,8 +248,12 @@ export class Simulator {
           `Resource ${resourceConfig.path} could not be cleaned up, no handle for it was found.`
         );
       }
-      const resource = this._handles.deallocate(resourceConfig.attrs!.handle);
-      await resource.cleanup();
+      try {
+        const resource = this._handles.deallocate(resourceConfig.attrs!.handle);
+        await resource.cleanup();
+      } catch (err) {
+        console.warn(err);
+      }
 
       let event: Trace = {
         type: TraceType.RESOURCE,
@@ -284,8 +267,6 @@ export class Simulator {
 
     this._handles.reset();
     this._running = false;
-
-    // TODO: remove "attrs" data from tree
   }
 
   /**
@@ -295,9 +276,10 @@ export class Simulator {
   public async reload(): Promise<void> {
     await this.stop();
 
-    const { config, treeData } = this._loadApp(this.simdir);
+    const { config, treeData, connectionData } = this._loadApp(this.simdir);
     this._config = config;
     this._tree = new Tree(treeData);
+    this._connections = connectionData;
 
     await this.start();
   }
@@ -337,6 +319,7 @@ export class Simulator {
     if (!handle) {
       return undefined;
     }
+
     return this._handles.find(handle);
   }
 
@@ -374,10 +357,111 @@ export class Simulator {
   }
 
   /**
-   * Obtain information about the application's resource tree.
+   * Obtain information about the application's construct tree.
    */
   public tree(): Tree {
     return this._tree;
+  }
+
+  /**
+   * Obtain information about the application's connections.
+   */
+  public connections(): ConnectionData[] {
+    return structuredClone(this._connections);
+  }
+
+  private async tryStartResource(
+    resourceConfig: BaseResourceSchema
+  ): Promise<boolean> {
+    const context = this.createContext(resourceConfig);
+
+    const resolvedProps = this.tryResolveTokens(
+      resourceConfig.props,
+      resourceConfig.path
+    );
+    if (resolvedProps === undefined) {
+      this._addTrace({
+        type: TraceType.RESOURCE,
+        data: { message: `${resourceConfig.path} is waiting on a dependency` },
+        sourcePath: resourceConfig.path,
+        sourceType: resourceConfig.type,
+        timestamp: new Date().toISOString(),
+      });
+
+      // this means the resource has a dependency that hasn't been started yet (hopefully). return
+      // it to the init queue.
+      return false;
+    }
+
+    // create the resource based on its type
+    const resourceObject = this._factory.resolve(
+      resourceConfig.type,
+      resolvedProps,
+      context
+    );
+
+    // go ahead and initialize the resource
+    const attrs = await resourceObject.init();
+
+    // allocate a handle for the resource so others can find it
+    const handle = this._handles.allocate(resourceObject);
+
+    // update the resource configuration with new attrs returned after initialization
+    (resourceConfig as any).attrs = { ...attrs, handle };
+
+    // trace the resource creation
+    this._addTrace({
+      type: TraceType.RESOURCE,
+      data: { message: `${resourceConfig.type} created.` },
+      sourcePath: resourceConfig.path,
+      sourceType: resourceConfig.type,
+      timestamp: new Date().toISOString(),
+    });
+
+    return true;
+  }
+
+  private createContext(resourceConfig: BaseResourceSchema): ISimulatorContext {
+    return {
+      simdir: this.simdir,
+      resourcePath: resourceConfig.path,
+      findInstance: (handle: string) => {
+        return this._handles.find(handle);
+      },
+      addTrace: (trace: Trace) => {
+        this._addTrace(trace);
+      },
+      withTrace: async (props: IWithTraceProps) => {
+        // TODO: log start time and end time of activity?
+        try {
+          let result = await props.activity();
+          this._addTrace({
+            data: {
+              message: props.message,
+              status: "success",
+              result: JSON.stringify(result),
+            },
+            type: TraceType.RESOURCE,
+            sourcePath: resourceConfig.path,
+            sourceType: resourceConfig.type,
+            timestamp: new Date().toISOString(),
+          });
+          return result;
+        } catch (err) {
+          this._addTrace({
+            data: { message: props.message, status: "failure", error: err },
+            type: TraceType.RESOURCE,
+            sourcePath: resourceConfig.path,
+            sourceType: resourceConfig.type,
+            timestamp: new Date().toISOString(),
+          });
+          throw err;
+        }
+      },
+      listTraces: () => {
+        return [...this._traces];
+      },
+    };
   }
 
   private _addTrace(event: Trace) {
@@ -389,21 +473,21 @@ export class Simulator {
   }
 
   /**
-   * Return an object with all tokens in it resolved to their appropriate
-   * values.
+   * Return an object with all tokens in it resolved to their appropriate values.
    *
-   * A token can be a string like "${app/my_bucket#attrs.handle}". This token
-   * would be resolved to the "handle" attribute of the resource at path
-   * "app/my_bucket". If that attribute does not exist at the time of resolution
-   * (for example, if my_bucket is not being simulated yet), an error will be
-   * thrown.
+   * A token can be a string like "${app/my_bucket#attrs.handle}". This token would be resolved to
+   * the "handle" attribute of the resource at path "app/my_bucket". If that attribute does not
+   * exist at the time of resolution (for example, if my_bucket is not being simulated yet), an
+   * error will be thrown.
    *
    * Tokens can also be nested, like "${app/my_bucket#attrs.handle}/foo/bar".
    *
    * @param obj The object to resolve tokens in.
    * @param source The path of the resource that requested the token to be resolved.
+   * @returns `undefined` if the token could not be resolved (e.g. needs a dependency), otherwise
+   * the resolved value.
    */
-  private resolveTokens(obj: any, source: string): any {
+  private tryResolveTokens(obj: any, source: string): any {
     if (typeof obj === "string") {
       if (isToken(obj)) {
         const ref = obj.slice(2, -1);
@@ -412,10 +496,12 @@ export class Simulator {
         if (rest.startsWith("attrs.")) {
           const attrName = rest.slice(6);
           const attr = config?.attrs[attrName];
+
+          // we couldn't find the attribute. this doesn't mean it doesn't exist, it's just likely
+          // that this resource haven't been started yet. so return `undefined`, which will cause
+          // this resource to go back to the init queue.
           if (!attr) {
-            throw new Error(
-              `Tried to resolve token "${obj}" but resource ${path} has no attribute ${attrName} defined yet. Is it possible ${source} needs to take a dependency on ${path}?`
-            );
+            return undefined;
           }
           return attr;
         } else if (rest.startsWith("props.")) {
@@ -429,17 +515,31 @@ export class Simulator {
           throw new Error(`Invalid token reference: "${ref}"`);
         }
       }
+
       return obj;
     }
 
     if (Array.isArray(obj)) {
-      return obj.map((x) => this.resolveTokens(x, source));
+      const result = [];
+      for (const x of obj) {
+        const value = this.tryResolveTokens(x, source);
+        if (value === undefined) {
+          return undefined;
+        }
+        result.push(value);
+      }
+
+      return result;
     }
 
     if (typeof obj === "object") {
       const ret: any = {};
       for (const [key, value] of Object.entries(obj)) {
-        ret[key] = this.resolveTokens(value, source);
+        const resolved = this.tryResolveTokens(value, source);
+        if (resolved === undefined) {
+          return undefined;
+        }
+        ret[key] = resolved;
       }
       return ret;
     }
@@ -535,10 +635,21 @@ export interface BaseResourceSchema {
   readonly props: { [key: string]: any };
   /** The resource-specific attributes that are set after the resource is created. */
   readonly attrs: Record<string, any>;
+  // TODO: model dependencies
 }
 
 /** Schema for resource attributes */
 export interface BaseResourceAttributes {
   /** The resource's simulator-unique id. */
   readonly handle: string;
+}
+
+/** Schema for `.connections` in connections.json */
+export interface ConnectionData {
+  /** The path of the source construct. */
+  readonly source: string;
+  /** The path of the target construct. */
+  readonly target: string;
+  /** A name for the connection. */
+  readonly name: string;
 }

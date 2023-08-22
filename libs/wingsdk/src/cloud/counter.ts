@@ -9,7 +9,7 @@ import { Resource } from "../std";
 export const COUNTER_FQN = fqnForType("cloud.Counter");
 
 /**
- * Properties for `Counter`.
+ * Options for `Counter`.
  */
 export interface CounterProps {
   /**
@@ -20,7 +20,7 @@ export interface CounterProps {
 }
 
 /**
- * Represents a distributed atomic counter.
+ * A distributed atomic counter.
  * @inflight `@winglang/sdk.cloud.ICounterClient`
  */
 export abstract class Counter extends Resource {

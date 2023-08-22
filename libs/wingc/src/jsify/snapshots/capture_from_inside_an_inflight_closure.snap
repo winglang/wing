@@ -1,0 +1,87 @@
+---
+source: libs/wingc/src/jsify/tests.rs
+---
+## Code
+
+```w
+
+    bring util;
+    
+    let foo = "test";
+    
+    test "my test" {
+      let r = (): str => { return foo; };
+    }
+```
+
+## inflight.$Closure1-1.js
+
+```js
+module.exports = function({ $foo }) {
+  class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      const r = async () => {
+        return $foo;
+      }
+      ;
+    }
+  }
+  return $Closure1;
+}
+```
+
+## preflight.js
+
+```js
+const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const $wing_is_test = process.env.WING_IS_TEST === "true";
+const std = $stdlib.std;
+const util = $stdlib.util;
+class $Root extends $stdlib.std.Resource {
+  constructor(scope, id) {
+    super(scope, id);
+    class $Closure1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.$Closure1-1.js")({
+            $foo: ${context._lift(foo)},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const client = new $Closure1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("handle")) {
+          $Closure1._registerBindObject(foo, host, []);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    const foo = "test";
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:my test",new $Closure1(this,"$Closure1"));
+  }
+}
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "main", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+```
+

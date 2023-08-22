@@ -4,24 +4,36 @@ source: libs/wingc/src/lsp/completions.rs
 - label: a
   kind: 6
   detail: num
-  insertText: a
-  insertTextFormat: 2
+  documentation:
+    kind: markdown
+    value: "```wing\npreflight a: num\n```"
+  sortText: bb|a
+- label: b
+  kind: 6
+  detail: unresolved
+  documentation:
+    kind: markdown
+    value: "```wing\npreflight b: unresolved\n```"
+  sortText: bb|b
 - label: assert
   kind: 3
   detail: "(condition: bool): void"
+  documentation:
+    kind: markdown
+    value: "```wing\nassert: (condition: bool): void\n```\n---\nAsserts that a condition is true\n\n### Parameters\n- `condition` — The condition to assert"
+  sortText: cc|assert
   insertText: assert($0)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
-- label: b
-  kind: 6
-  detail: any
-  insertText: b
-  insertTextFormat: 2
 - label: log
   kind: 3
   detail: "(message: str): void"
+  documentation:
+    kind: markdown
+    value: "```wing\nlog: (message: str): void\n```\n---\nLogs a message\n\n### Parameters\n- `message` — The message to log"
+  sortText: cc|log
   insertText: log($0)
   insertTextFormat: 2
   command:
@@ -30,6 +42,10 @@ source: libs/wingc/src/lsp/completions.rs
 - label: panic
   kind: 3
   detail: "(message: str): void"
+  documentation:
+    kind: markdown
+    value: "```wing\npanic: (message: str): void\n```\n---\npanics with an error\n\n### Parameters\n- `message` — The message to panic with"
+  sortText: cc|panic
   insertText: panic($0)
   insertTextFormat: 2
   command:
@@ -38,9 +54,19 @@ source: libs/wingc/src/lsp/completions.rs
 - label: throw
   kind: 3
   detail: "(message: str): void"
+  documentation:
+    kind: markdown
+    value: "```wing\nthrow: (message: str): void\n```\n---\nthrows an error\n\n### Parameters\n- `message` — The message to throw"
+  sortText: cc|throw
   insertText: throw($0)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: "inflight () => {}"
+  kind: 15
+  sortText: "ll|inflight () => {}"
+  filterText: inflight
+  insertText: "inflight ($1) => {$2}"
+  insertTextFormat: 2
 

@@ -1,7 +1,6 @@
-import { copyFileSync, promises as fsPromise, readFileSync, cpSync } from "fs";
-import ora from "ora";
-import { basename, join, resolve } from "path";
+import { copyFileSync, promises as fsPromise } from "fs";
 import { tmpdir } from "os";
+import { join } from "path";
 
 /**
  * Normalize windows paths to be posix-like.
@@ -24,9 +23,11 @@ export async function withSpinner<T>(message: string, fn: () => Promise<T>): Pro
     return fn();
   }
 
+  const ora = await import("ora").then((m) => m.default);
+
   const spinner = ora({
     stream: process.stdout, // hangar tests currently expect stderr to be empty or else they fail
-    text: message,
+    text: `${message}\n`,
   }).start();
   try {
     const result = await fn();
@@ -53,23 +54,32 @@ export async function copyDir(src: string, dest: string) {
 /**
  * Creates a clean environment for each test by copying the example file to a temporary directory.
  */
-export async function generateTmpDir(sourcePath: string, ...additionalFiles: string[]) {
-  const sourceFile = basename(sourcePath);
-  const file = readFileSync(sourcePath, "utf-8");
-  const externs = file.match(/(?<=extern ")[.\\\/A-Za-z0-9_-]+/g) ?? [];
-  const sourceDir = await fsPromise.mkdtemp(join(tmpdir(), "-wing-compile-test"));
-  const tempWingFile = join(sourceDir, sourceFile);
-
-  cpSync(sourcePath, tempWingFile);
-
-  for (const filePath of additionalFiles) {
-    const file = basename(filePath);
-    cpSync(filePath, join(sourceDir, file));
-  }
-
-  for (const path of externs) {
-    cpSync(join(resolve(sourcePath), `../${path}`), join(sourceDir, path));
-  }
-
-  return tempWingFile;
+export async function generateTmpDir() {
+  return fsPromise.mkdtemp(join(tmpdir(), "-wing-compile-test"));
 }
+
+/**
+ * Casts a numeric string to a number.
+ *
+ * Returns `undefined` if the string is empty.
+ *
+ * @throws If the string is not a number.
+ */
+export function parseNumericString(text?: string) {
+  if (!text) {
+    return undefined;
+  }
+
+  const number = Number(text);
+  if (isNaN(number)) {
+    throw new Error(`"${text}" is not a number`);
+  }
+
+  return number;
+}
+
+export const currentPackage: {
+  name: string;
+  version: string;
+  engines: { node: string };
+} = require("../package.json");

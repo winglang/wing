@@ -18,7 +18,7 @@ describe("ApiResponseMapper", () => {
 
     const handlerResponse: ApiResponse = {
       status: 200,
-      body: { key: "value" },
+      body: JSON.stringify({ key: "value" }),
       headers: { "header-1": "value-1" },
     };
     const requestHandlerClient = new ApiOnRequestHandlerClient({
@@ -57,7 +57,7 @@ describe("ApiResponseMapper", () => {
 
     const handlerResponse: ApiResponse = {
       status: 200,
-      body: { key: "value" },
+      body: JSON.stringify({ key: "value" }),
     };
     const requestHandlerClient = new ApiOnRequestHandlerClient({
       handler: {
@@ -130,7 +130,7 @@ describe("ApiResponseMapper", () => {
 
     const handlerResponse: ApiResponse = {
       status: 200,
-      body: { key: "value" },
+      body: JSON.stringify({ key: "value" }),
       headers: {
         "Content-Type": "application/octet-stream",
       },
@@ -194,7 +194,7 @@ describe("ApiRequest", () => {
 
     // THEN
     expect(handlerMock).toHaveBeenCalledWith({
-      body: { foo: "bar" },
+      body: JSON.stringify({ foo: "bar" }),
       headers: { "header-1": "value-1" },
       method: "GET",
       path: "/",
@@ -289,7 +289,7 @@ describe("ApiRequest", () => {
 
     // THEN
     expect(handlerMock).toHaveBeenCalledWith({
-      body: { foo: "bar", bar: "baz" },
+      body: JSON.stringify({ foo: "bar", bar: "baz" }),
       headers: {
         "content-type": "application/x-www-form-urlencoded",
       },

@@ -1,8 +1,18 @@
 ---
-title: cloud.Bucket 
+title: Bucket
 id: bucket
 description: A built-in resource for handling object storage in the cloud.
-keywords: [Wing reference, Wing language, language, Wing sdk, Wing programming language, Object storage, Buckets]
+keywords:
+  [
+    Wing reference,
+    Wing language,
+    language,
+    Wing standard library,
+    Wing programming language,
+    Object storage,
+    Buckets,
+  ]
+sidebar_position: 1
 ---
 
 The `cloud.Bucket` resource represents a container for storing data in the cloud.
@@ -38,12 +48,12 @@ bucket.addObject("my-file.txt", "Hello, world!");
 
 ### Using a bucket inflight
 
-```js
+```js playground
 bring cloud;
 
 let bucket = new cloud.Bucket();
 
-inflight () => {
+let bucketFunc = inflight () => {
   bucket.put("file.txt", "Hello, world!");
   bucket.putJson("person.json", Json { name: "Alice" });
 
@@ -59,15 +69,20 @@ inflight () => {
 
   bucket.delete("file.txt");
 };
+
+new cloud.Function(bucketFunc);
 ```
 
 ### Run code on bucket events
 
 You can use the preflight methods `onCreate`, `onUpdate`, and `onDelete` to define code that should run when an object is uploaded, updated, or removed from the bucket.
+Use the `onEvent` method for responding to any event.
 
 Each method creates a new `cloud.Function` resource which will be triggered by the given event type.
 
-```js
+```js playground
+bring cloud;
+
 let store = new cloud.Bucket();
 let copies = new cloud.Bucket() as "Backup";
 
@@ -103,10 +118,3 @@ The Azure implementation of `cloud.Bucket` uses [Azure Blob Storage](https://lea
 ### GCP (`tf-gcp`)
 
 The Google Cloud implementation of `cloud.Bucket` uses [Google Cloud Storage](https://cloud.google.com/storage).
-
-## API Reference
-
-The full list of APIs for `cloud.Bucket` is available in the [API Reference](../05-reference/wingsdk-api.md).
-
-
-

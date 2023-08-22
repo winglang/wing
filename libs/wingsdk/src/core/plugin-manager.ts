@@ -8,16 +8,16 @@ import { IConstruct } from "constructs";
  */
 export interface ICompilationHook {
   /**
-   *  name of plugin can be set by plugin as export
+   *  Name of plugin can be set by plugin as export
    *
    * @default - absolute path to plugin file
    */
   name: string;
-  /** preSynth hook */
+  /** PreSynth hook */
   preSynth?(app: IConstruct): void;
-  /** postSynth hook */
+  /** PostSynth hook */
   postSynth?(config: any): any;
-  /** validate hook */
+  /** Validate hook */
   validate?(config: any): void;
 }
 
@@ -61,8 +61,16 @@ export class PluginManager {
 
     const pluginDir = dirname(pluginAbsolutePath);
 
+    const modulePaths = module.paths ?? [__dirname];
+
+    const requireResolve = (path: string) =>
+      require.resolve(path, { paths: [...modulePaths, pluginDir] });
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const pluginRequire = (path: string) => require(requireResolve(path));
+    pluginRequire.resolve = requireResolve;
+
     const context = vm.createContext({
-      require,
+      require: pluginRequire,
       console,
       exports: hooks,
       process,

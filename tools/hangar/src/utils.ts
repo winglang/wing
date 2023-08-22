@@ -8,7 +8,7 @@ export interface RunWingCommandOptions {
   cwd: string;
   wingFile: string;
   args: string[];
-  expectStdErr: boolean;
+  expectFailure: boolean;
   plugins?: string[];
   env?: Record<string, string>;
 }
@@ -17,7 +17,7 @@ export async function runWingCommand(options: RunWingCommandOptions) {
   const plugins = options.plugins ? ["--plugins", ...options.plugins] : [];
   const out = await execa(
     wingBin,
-    ["--no-update-check", ...options.args, options.wingFile, ...plugins],
+    ["--no-update-check", "--no-analytics", ...options.args, options.wingFile, ...plugins],
     {
       cwd: options.cwd,
       reject: false,
@@ -25,18 +25,19 @@ export async function runWingCommand(options: RunWingCommandOptions) {
       env: options.env,
     }
   );
-  if (options.expectStdErr) {
-    expect(out.exitCode).not.toBe(0);
-    expect(out.stderr).not.toBe("");
+
+  const output = [out.stdout, out.stderr].join("\n");
+
+  if (options.expectFailure) {
+    if (out.exitCode == 0) {
+      expect.fail(output);
+    }
   } else {
-    if (
-      // when this env var is on, we allow the on-demand-panic-char (😱), right now panic writes to stderr (will be changed in the future)
-      options?.env?.WINGC_DEBUG_PANIC !== "type-checking" &&
-      (out.exitCode !== 0 || out.stderr !== "")
-    ) {
-      expect.fail(out.stderr);
+    if (out.exitCode != 0) {
+      expect.fail(output);
     }
   }
+
   out.stderr = sanitizeOutput(out.stderr);
   out.stdout = sanitizeOutput(out.stdout);
   return out;
@@ -50,13 +51,16 @@ export function sanitize_json_paths(path: string) {
   const assetKeyRegex = /"asset\..+?"/g;
   const assetSourceRegex = /"assets\/.+?"/g;
   const sourceRegex = /(?<=\"source\"\:)\"([A-Z]:|\/|\\)[\/\\\-\w\.]+\"/g;
+  const sourceHashRegex =
+    /(?<=\"source_hash\"\:)\"\${filemd5\(\\\"([A-Z]:|\/|\\)[\/\\\-\w\.]+\\\"\)}\"/g;
   const json = JSON.parse(fs.readFileSync(path, "utf-8"));
 
   const jsonText = JSON.stringify(json);
   const sanitizedJsonText = jsonText
     .replace(assetKeyRegex, '"<ASSET_KEY>"')
     .replace(assetSourceRegex, '"<ASSET_SOURCE>"')
-    .replace(sourceRegex, '"<SOURCE>"');
+    .replace(sourceRegex, '"<SOURCE>"')
+    .replace(sourceHashRegex, '"${filemd5(<SOURCE>)}"');
   const finalObj = JSON.parse(sanitizedJsonText);
   delete finalObj.terraform;
 

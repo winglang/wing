@@ -1,8 +1,17 @@
 ---
-title: cloud.Service 
+title: Service
 id: service
 description: A built-in resource for publishing messages to subscribers.
-keywords: [Wing reference, Wing language, language, Wing sdk, Wing programming language, services]
+keywords:
+  [
+    Wing reference,
+    Wing language,
+    language,
+    Wing standard library,
+    Wing programming language,
+    services,
+  ]
+sidebar_position: 1
 ---
 
 The `cloud.Service` class represents a cloud service that has a start and optional stop lifecycle.
@@ -23,9 +32,10 @@ let service = new cloud.Service(
   }
 );
 ```
+
 ### Disable auto-start
 
-By default the service resource will start automatically, however this can be disabled by 
+By default the service resource will start automatically, however this can be disabled by
 passing `autoStart: false` to the constructor.
 
 ```js
@@ -106,7 +116,3 @@ Within the context of the simulator, services are just spawned processes ran wit
 ### GCP (`tf-gcp`)
 
 🚧 Not supported yet (tracking issue: [#1308](https://github.com/winglang/wing/issues/1308))
-
-## API Reference
-
-The full list of APIs for `cloud.Service` is available in the [API Reference](../05-reference/wingsdk-api.md).

@@ -1,15 +1,20 @@
 import { readdirSync } from "fs";
 import { extname, join, posix, resolve, sep } from "path";
 
+import { Fn } from "cdktf";
 import { Construct } from "constructs";
 import mime from "mime-types";
 import { createEncryptedBucket } from "./bucket";
 import { core } from "..";
 import { CloudfrontDistribution } from "../.gen/providers/aws/cloudfront-distribution";
+import { CloudfrontOriginAccessControl } from "../.gen/providers/aws/cloudfront-origin-access-control";
+import { DataAwsIamPolicyDocument } from "../.gen/providers/aws/data-aws-iam-policy-document";
 import { S3Bucket } from "../.gen/providers/aws/s3-bucket";
+import { S3BucketPolicy } from "../.gen/providers/aws/s3-bucket-policy";
 import { S3BucketWebsiteConfiguration } from "../.gen/providers/aws/s3-bucket-website-configuration";
 import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
+import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { Json } from "../std";
 
 const INDEX_FILE = "index.html";
@@ -26,7 +31,7 @@ export class Website extends cloud.Website {
   constructor(scope: Construct, id: string, props: cloud.WebsiteProps) {
     super(scope, id, props);
 
-    this.bucket = createEncryptedBucket(this, true, "WebsiteBucket");
+    this.bucket = createEncryptedBucket(this, false, "WebsiteBucket");
 
     new S3BucketWebsiteConfiguration(this, "BucketWebsiteConfiguration", {
       bucket: this.bucket.bucket,
@@ -34,6 +39,24 @@ export class Website extends cloud.Website {
     });
 
     this.uploadFiles(this.path);
+
+    // create a cloudfront oac
+    const OAC_NAME_OPTIONS: NameOptions = {
+      maxLen: 32,
+      disallowedRegex: /[^a-zA-Z0-9-]/,
+      suffix: "-cloudfront-oac",
+    };
+
+    const cloudfrontOac = new CloudfrontOriginAccessControl(
+      this,
+      "CloudfrontOac",
+      {
+        name: ResourceNames.generateName(this, OAC_NAME_OPTIONS),
+        originAccessControlOriginType: "s3",
+        signingBehavior: "always",
+        signingProtocol: "sigv4",
+      }
+    );
 
     // create a cloudFront distribution
     const distribution = new CloudfrontDistribution(this, "Distribution", {
@@ -43,6 +66,7 @@ export class Website extends cloud.Website {
         {
           domainName: this.bucket.bucketRegionalDomainName,
           originId: "s3Origin",
+          originAccessControlId: cloudfrontOac.id,
         },
       ],
       defaultRootObject: INDEX_FILE,
@@ -70,7 +94,40 @@ export class Website extends cloud.Website {
       viewerCertificate: { cloudfrontDefaultCertificate: true },
     });
 
-    this._url = distribution.domainName;
+    // allow cloudfront distribution to read from private s3 bucket
+    const allowDistributionReadOnly = new DataAwsIamPolicyDocument(
+      this,
+      "AllowDistributionReadOnly",
+      {
+        statement: [
+          {
+            actions: ["s3:GetObject"],
+            condition: [
+              {
+                test: "StringEquals",
+                values: [distribution.arn],
+                variable: "AWS:SourceArn",
+              },
+            ],
+            principals: [
+              {
+                identifiers: ["cloudfront.amazonaws.com"],
+                type: "Service",
+              },
+            ],
+            resources: [`${this.bucket.arn}/*`],
+          },
+        ],
+      }
+    );
+
+    // attach policy to s3 bucket
+    new S3BucketPolicy(this, "DistributionS3BucketPolicy", {
+      bucket: this.bucket.id,
+      policy: allowDistributionReadOnly.json,
+    });
+
+    this._url = `https://${distribution.domainName}`;
   }
 
   public get url(): string {
@@ -103,6 +160,7 @@ export class Website extends cloud.Website {
       key: this.formatPath(filePath.replace(this.path, "")),
       bucket: this.bucket.bucket,
       source: resolve(filePath),
+      sourceHash: Fn.filemd5(resolve(filePath)),
       contentType: mime.contentType(extname(filePath)) || undefined,
     });
   }

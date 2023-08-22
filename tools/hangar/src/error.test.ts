@@ -16,7 +16,7 @@ errorWingFiles.forEach((wingFile) => {
       cwd: tmpDir,
       wingFile: relativeWingFile,
       args,
-      expectStdErr: false,
+      expectFailure: true,
     });
 
     const stdout = out.stdout;

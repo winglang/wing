@@ -12,6 +12,7 @@ import { ApiGatewayStage } from "../.gen/providers/aws/api-gateway-stage";
 import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
+import { Connections } from "../core";
 import { Code } from "../core/inflight";
 import { convertBetweenHandlers } from "../shared/convert";
 import {
@@ -19,7 +20,7 @@ import {
   NameOptions,
   ResourceNames,
 } from "../shared/resource-names";
-import { IInflightHost, Resource } from "../std";
+import { IInflightHost } from "../std";
 
 /**
  * The stage name for the API, used in its url.
@@ -47,7 +48,7 @@ export class Api extends cloud.Api {
   }
 
   public get url(): string {
-    return this.api.stage.invokeUrl;
+    return this.api.url;
   }
 
   /**
@@ -70,10 +71,10 @@ export class Api extends cloud.Api {
     const apiSpecEndpoint = this.api.addEndpoint(path, "GET", fn);
     this._addToSpec(path, "GET", apiSpecEndpoint);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "on_get_request",
+    Connections.of(this).add({
+      source: this,
+      target: fn,
+      name: "get()",
     });
   }
 
@@ -97,10 +98,10 @@ export class Api extends cloud.Api {
     const apiSpecEndpoint = this.api.addEndpoint(path, "POST", fn);
     this._addToSpec(path, "POST", apiSpecEndpoint);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "on_post_request",
+    Connections.of(this).add({
+      source: this,
+      target: fn,
+      name: "post()",
     });
   }
 
@@ -124,10 +125,10 @@ export class Api extends cloud.Api {
     const apiSpecEndpoint = this.api.addEndpoint(path, "PUT", fn);
     this._addToSpec(path, "PUT", apiSpecEndpoint);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "on_put_request",
+    Connections.of(this).add({
+      source: this,
+      target: fn,
+      name: "put()",
     });
   }
 
@@ -151,10 +152,10 @@ export class Api extends cloud.Api {
     const apiSpecEndpoint = this.api.addEndpoint(path, "DELETE", fn);
     this._addToSpec(path, "DELETE", apiSpecEndpoint);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "on_delete_request",
+    Connections.of(this).add({
+      source: this,
+      target: fn,
+      name: "delete()",
     });
   }
 
@@ -178,10 +179,10 @@ export class Api extends cloud.Api {
     const apiSpecEndpoint = this.api.addEndpoint(path, "PATCH", fn);
     this._addToSpec(path, "PATCH", apiSpecEndpoint);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "on_patch_request",
+    Connections.of(this).add({
+      source: this,
+      target: fn,
+      name: "patch()",
     });
   }
 
@@ -205,10 +206,10 @@ export class Api extends cloud.Api {
     const apiSpecEndpoint = this.api.addEndpoint(path, "OPTIONS", fn);
     this._addToSpec(path, "OPTIONS", apiSpecEndpoint);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "on_options_request",
+    Connections.of(this).add({
+      source: this,
+      target: fn,
+      name: "options()",
     });
   }
 
@@ -232,10 +233,10 @@ export class Api extends cloud.Api {
     const apiSpecEndpoint = this.api.addEndpoint(path, "HEAD", fn);
     this._addToSpec(path, "HEAD", apiSpecEndpoint);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "on_head_request",
+    Connections.of(this).add({
+      source: this,
+      target: fn,
+      name: "head()",
     });
   }
 
@@ -259,10 +260,10 @@ export class Api extends cloud.Api {
     const apiSpecEndpoint = this.api.addEndpoint(path, "CONNECT", fn);
     this._addToSpec(path, "CONNECT", apiSpecEndpoint);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "on_connect_request",
+    Connections.of(this).add({
+      source: this,
+      target: fn,
+      name: "connect()",
     });
   }
 
@@ -334,14 +335,14 @@ export class Api extends cloud.Api {
   }
 
   /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("topics can only be bound by tfaws.Function for now");
     }
 
     host.addEnvironment(this.urlEnvName(), this.url);
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */
@@ -367,6 +368,7 @@ export class Api extends cloud.Api {
  * Encapsulates the API Gateway REST API as a abstraction for Terraform.
  */
 class WingRestApi extends Construct {
+  public readonly url: string;
   public readonly api: ApiGatewayRestApi;
   public readonly stage: ApiGatewayStage;
   private readonly deployment: ApiGatewayDeployment;
@@ -414,6 +416,9 @@ class WingRestApi extends Construct {
       stageName: STAGE_NAME,
       deploymentId: this.deployment.id,
     });
+
+    //should be exported from here, otherwise won't be mapped to the right token
+    this.url = this.stage.invokeUrl;
   }
 
   /**

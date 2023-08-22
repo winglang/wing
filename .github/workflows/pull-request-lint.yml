@@ -7,6 +7,8 @@ on:
       - synchronize
       - reopened
       - edited
+    branches-ignore:
+      - mergify/merge-queue/**
 
 jobs:
   validate:
@@ -29,6 +31,7 @@ jobs:
             tutorial
             vscode
             plugins
+            console
           types: |-
             feat
             fix

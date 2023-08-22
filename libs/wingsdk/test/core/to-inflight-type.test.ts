@@ -9,7 +9,14 @@ const skip = [
   "std.TEST_FQN",
   "std.Display",
   "std.Test",
+  "std.TestRunner",
+  "std.TestRunnerInflightMethods",
+  "std.TraceType",
+  "std.TEST_RUNNER_FQN",
   "std.Resource",
+  "util.RequestCache", // an enum
+  "util.RequestRedirect", // an enum
+  "util.HttpMethod", // an enum
 ];
 
 // checks that the class `className` in module `module` has a `_toInflightType()` method and that it

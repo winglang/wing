@@ -1,0 +1,129 @@
+---
+source: libs/wingc/src/jsify/tests.rs
+---
+## Code
+
+```w
+
+    bring cloud;
+    class YourType {
+      inflight b: str;
+      inflight init() {
+        this.b = "hello";
+      }
+    }
+
+    let y = new YourType();
+
+    test "test" {
+      log(y.b);
+    }
+    
+```
+
+## inflight.$Closure1-1.js
+
+```js
+module.exports = function({ $y }) {
+  class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      {console.log($y.b)};
+    }
+  }
+  return $Closure1;
+}
+```
+
+## inflight.YourType-1.js
+
+```js
+module.exports = function({  }) {
+  class YourType {
+    constructor({  }) {
+    }
+    async $inflight_init() {
+      this.b = "hello";
+    }
+  }
+  return YourType;
+}
+```
+
+## preflight.js
+
+```js
+const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const $wing_is_test = process.env.WING_IS_TEST === "true";
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
+class $Root extends $stdlib.std.Resource {
+  constructor(scope, id) {
+    super(scope, id);
+    class YourType extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("$inflight_init", "b");
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.YourType-1.js")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const YourTypeClient = ${YourType._toInflightType(this).text};
+            const client = new YourTypeClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+    }
+    class $Closure1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.$Closure1-1.js")({
+            $y: ${context._lift(y)},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const client = new $Closure1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("handle")) {
+          $Closure1._registerBindObject(y, host, ["b"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    const y = new YourType(this,"YourType");
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
+  }
+}
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "main", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+```
+

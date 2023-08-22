@@ -28,7 +28,7 @@ export async function compileTest(
     cwd: sourceDir,
     wingFile: filePath,
     args,
-    expectStdErr: false,
+    expectFailure: false,
     env,
   });
 
@@ -38,11 +38,11 @@ export async function compileTest(
 
   // which files to include from the .wing directory
   const dotWing = join(targetDir, ".wing");
-  const include = ["preflight.js", "inflight.", "extern/", "proc"];
+  const include = ["preflight.", "inflight.", "extern/", "proc", ".Struct.js"];
 
   for await (const dotFile of walkdir(dotWing)) {
     const subpath = relative(dotWing, dotFile).replace(/\\/g, "/");
-    if (!include.find((f) => subpath.startsWith(f))) {
+    if (!include.find((f) => subpath.includes(f))) {
       continue;
     }
     let fileContents = await fs.readFile(dotFile, "utf8");
@@ -69,12 +69,14 @@ export async function testTest(
   const testDir = join(tmpDir, `${wingFile}_sim`);
   await fs.mkdir(testDir, { recursive: true });
 
+  const relativeWingFile = relative(testDir, join(sourceDir, wingFile));
+
   const filePath = join(sourceDir, wingFile);
   const out = await runWingCommand({
     cwd: testDir,
-    wingFile: filePath,
+    wingFile: relativeWingFile,
     args,
-    expectStdErr: false,
+    expectFailure: false,
     env,
   });
 

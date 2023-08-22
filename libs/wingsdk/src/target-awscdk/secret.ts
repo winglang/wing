@@ -41,19 +41,18 @@ export class Secret extends cloud.Secret {
     return this.secret.secretArn;
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("secrets can only be bound by awscdk.Function for now");
     }
 
     host.addPolicyStatements(
-      ...calculateSecretPermissions(this.arnForPolicies, ops)
+      calculateSecretPermissions(this.arnForPolicies, ops)
     );
 
     host.addEnvironment(this.envName(), this.secret.secretArn);
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */

@@ -164,11 +164,9 @@ new A() as "b" in c;
       class: (custom_type
         object: (type_identifier))
       args: (argument_list)
-      id: (new_object_id
-        (string))
-      scope: (new_object_scope
-        (reference
-          (reference_identifier))))))
+      id: (string)
+      scope: (reference
+        (reference_identifier)))))
 
 ================================================================================
 preflight anonymous closure
@@ -208,6 +206,48 @@ inflight (): num => { return 1; };
       (block
         (return_statement
           (number))))))
+
+================================================================================
+inflight anonymous closure inferred return
+================================================================================
+
+inflight () => { return 1; };
+
+--------------------------------------------------------------------------------
+
+(source
+  (expression_statement
+    (inflight_closure
+      (inflight_specifier)
+      (parameter_list)
+      (block
+        (return_statement
+          (number))))))
+
+================================================================================
+inflight anonymous closure inferred args
+================================================================================
+
+inflight (arg1) => { log(arg1); };
+
+--------------------------------------------------------------------------------
+
+(source
+  (expression_statement
+    (inflight_closure
+      (inflight_specifier)
+      (parameter_list
+        (parameter_definition
+          (identifier)))
+      (block
+        (expression_statement
+          (call
+            (reference
+              (reference_identifier))
+            (argument_list
+              (positional_argument
+                (reference
+                  (reference_identifier))))))))))
 
 ================================================================================
 Template string
@@ -279,7 +319,7 @@ Set<num> { 1, 2, 3 };
       element: (number))))
 
 ================================================================================
-Empty Map Literal
+Empty Json Map Literal
 ================================================================================
 
 {};
@@ -288,13 +328,14 @@ Empty Map Literal
 
 (source
   (expression_statement
-    (map_literal)))
+    (json_literal
+      (json_map_literal))))
 
 ================================================================================
 Map Literal
 ================================================================================
 
-{ a: 1, "a": 2, b: 3,};
+{ "a" => 1, "b" => 2, "c" => 3,};
 
 --------------------------------------------------------------------------------
 
@@ -302,13 +343,13 @@ Map Literal
   (expression_statement
     (map_literal
       member: (map_literal_member
-        (identifier)
+        (string)
         (number))
       member: (map_literal_member
         (string)
         (number))
       member: (map_literal_member
-        (identifier)
+        (string)
         (number)))))
 
 ================================================================================
@@ -443,3 +484,48 @@ Debug panic
 (source
   (expression_statement
     (compiler_dbg_panic)))
+
+================================================================================
+Duration
+================================================================================
+
+let ms = 10ms;
+let s = 10s;
+let m = 10m;
+let h = 10h;
+let d = 10d;
+let mo = 10mo;
+
+--------------------------------------------------------------------------------
+
+(source
+  (variable_definition_statement
+    name: (identifier)
+    value: (duration
+      (milliseconds
+        value: (number))))
+  (variable_definition_statement
+    name: (identifier)
+    value: (duration
+      (seconds
+        value: (number))))
+  (variable_definition_statement
+    name: (identifier)
+    value: (duration
+      (minutes
+        value: (number))))
+  (variable_definition_statement
+    name: (identifier)
+    value: (duration
+      (hours
+        value: (number))))
+  (variable_definition_statement
+    name: (identifier)
+    value: (duration
+      (days
+        value: (number))))
+  (variable_definition_statement
+    name: (identifier)
+    value: (duration
+      (months
+        value: (number)))))

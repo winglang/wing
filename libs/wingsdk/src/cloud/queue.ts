@@ -10,7 +10,7 @@ import { Duration, IResource, Resource } from "../std";
 export const QUEUE_FQN = fqnForType("cloud.Queue");
 
 /**
- * Properties for `Queue`.
+ * Options for `Queue`.
  */
 export interface QueueProps {
   /**
@@ -24,16 +24,10 @@ export interface QueueProps {
    * @default undefined
    */
   readonly retentionPeriod?: Duration;
-
-  /**
-   * Initialize the queue with a set of messages.
-   * @default []
-   */
-  readonly initialMessages?: string[];
 }
 
 /**
- * Represents a queue.
+ * A queue.
  *
  * @inflight `@winglang/sdk.cloud.IQueueClient`
  */
@@ -70,15 +64,15 @@ export abstract class Queue extends Resource {
    * Create a function to consume messages from this queue.
    */
   public abstract setConsumer(
-    handler: IQueueAddConsumerHandler,
-    props?: QueueAddConsumerProps
+    handler: IQueueSetConsumerHandler,
+    props?: QueueSetConsumerProps
   ): Function;
 }
 
 /**
  * Options for Queue.setConsumer.
  */
-export interface QueueAddConsumerProps extends FunctionProps {
+export interface QueueSetConsumerProps extends FunctionProps {
   /**
    * The maximum number of messages to send to subscribers at once.
    * @default 1
@@ -91,11 +85,11 @@ export interface QueueAddConsumerProps extends FunctionProps {
  */
 export interface IQueueClient {
   /**
-   * Push a message to the queue.
-   * @param message Payload to send to the queue.
+   * Push one or more messages to the queue.
+   * @param messages Payload to send to the queue.
    * @inflight
    */
-  push(message: string): Promise<void>;
+  push(...messages: string[]): Promise<void>;
 
   /**
    * Purge all of the messages in the queue.
@@ -118,17 +112,17 @@ export interface IQueueClient {
 }
 
 /**
- * Represents a resource with an inflight "handle" method that can be passed to
+ * A resource with an inflight "handle" method that can be passed to
  * `Queue.setConsumer`.
  *
- * @inflight `@winglang/sdk.cloud.IQueueAddConsumerHandlerClient`
+ * @inflight `@winglang/sdk.cloud.IQueueSetConsumerHandlerClient`
  */
-export interface IQueueAddConsumerHandler extends IResource {}
+export interface IQueueSetConsumerHandler extends IResource {}
 
 /**
- * Inflight client for `IQueueAddConsumerHandler`.
+ * Inflight client for `IQueueSetConsumerHandler`.
  */
-export interface IQueueAddConsumerHandlerClient {
+export interface IQueueSetConsumerHandlerClient {
   /**
    * Function that will be called when a message is received from the queue.
    * @inflight

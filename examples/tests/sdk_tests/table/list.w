@@ -1,10 +1,11 @@
 
 bring cloud;
+bring ex;
 
-let table = new cloud.Table( 
-    name: "users", 
-    primaryKey: "name", 
-    columns: { gender: cloud.ColumnType.STRING } 
+let table = new ex.Table( 
+    name: "users",
+    primaryKey: "name",
+    columns: { "gender" => ex.ColumnType.STRING } 
 );
 
 

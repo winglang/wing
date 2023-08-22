@@ -1,13 +1,62 @@
 ---
 source: libs/wingc/src/lsp/completions.rs
 ---
-- label: Util
-  kind: 7
-  detail: independent class
+- label: base64Decode
+  kind: 2
+  detail: "(stringToDecode: str, url: bool?): str"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic base64Decode: (stringToDecode: str, url: bool?): str\n```\n---\nConverts a string from base64 to UTF-8.\n\n\n### Returns\nThe UTF-8 string."
+  sortText: ff|base64Decode
+  insertText: base64Decode($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: base64Encode
+  kind: 2
+  detail: "(stringToEncode: str, url: bool?): str"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic base64Encode: (stringToEncode: str, url: bool?): str\n```\n---\nConverts a string from UTF-8 to base64.\n\n\n### Returns\nThe base64 string."
+  sortText: ff|base64Encode
+  insertText: base64Encode($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: env
   kind: 2
   detail: "(name: str): str"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic env: (name: str): str\n```\n---\nReturns the value of an environment variable.\n\n\n### Remarks\nThrows if not found or empty."
+  sortText: ff|env
   insertText: env($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: nanoid
+  kind: 2
+  detail: "(options: NanoidOptions?): str"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic nanoid: (options: NanoidOptions?): str\n```\n---\nGenerates a unique ID using the nanoid library.\n\n\n### Remarks\n# @link https://github.com/ai/nanoid"
+  sortText: ff|nanoid
+  insertText: nanoid($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: sha256
+  kind: 2
+  detail: "(data: str): str"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic sha256: (data: str): str\n```\n---\nComputes the SHA256 hash of the given data."
+  sortText: ff|sha256
+  insertText: sha256($0)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -15,9 +64,51 @@ source: libs/wingc/src/lsp/completions.rs
 - label: tryEnv
   kind: 2
   detail: "(name: str): str?"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic tryEnv: (name: str): str?\n```\n---\nReturns the value of an environment variable.\n\n\n### Returns\nThe value of the environment variable or `nil`.\n\n### Remarks\nReturns `nil` if not found or empty."
+  sortText: ff|tryEnv
   insertText: tryEnv($0)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: uuidv4
+  kind: 2
+  detail: "(): str"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic uuidv4: (): str\n```\n---\nGenerates a version 4 UUID."
+  sortText: ff|uuidv4
+  insertText: uuidv4()
+- label: Util
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Util\n```\n---\nUtility functions."
+  sortText: gg|Util
+- label: NanoidOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct NanoidOptions\n```\n---\nOptions to generating a unique ID.\n### Fields\n- `alphabet?` — Characters that make up the alphabet to generate the ID, limited to 256 characters or fewer.\n- `size?` — Size of ID."
+  sortText: hh|NanoidOptions
+- label: WaitUntilProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct WaitUntilProps\n```\n---\nProperties for `util.waitUntil`.\n### Fields\n- `interval?` — Interval between predicate retries.\n- `timeout?` — The timeout for keep trying predicate."
+  sortText: hh|WaitUntilProps
+- label: IPredicateHandler
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IPredicateHandler extends IResource\n```\n---\nA predicate with an inflight \"handle\" method that can be passed to `util.busyWait`.\n### Methods\n- `handle` — The Predicate function that is called."
+  sortText: ii|IPredicateHandler
+- label: IPredicateHandlerClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IPredicateHandlerClient\n```\n---\nInflight client for `IPredicateHandler`.\n### Methods\n- `handle` — The Predicate function that is called."
+  sortText: ii|IPredicateHandlerClient
 

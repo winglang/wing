@@ -1,11 +1,12 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`bucket on event creates 3 topics  1`] = `
+exports[`bucket on event creates 3 topics, and sends the right event and key in the event handlers  1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Topic created.",
   "wingsdk.cloud.Topic created.",
   "wingsdk.cloud.Topic created.",
+  "wingsdk.cloud.Bucket created.",
   "wingsdk.cloud.Bucket created.",
   "wingsdk.cloud.Function created.",
   "wingsdk.sim.EventMapping created.",
@@ -13,6 +14,24 @@ exports[`bucket on event creates 3 topics  1`] = `
   "wingsdk.sim.EventMapping created.",
   "wingsdk.cloud.Function created.",
   "wingsdk.sim.EventMapping created.",
+  "Publish (message=a).",
+  "Sending message (message=a, subscriber=sim-6).",
+  "Put (key=a).",
+  "Invoke (payload=\\"a\\").",
+  "Put (key=a).",
+  "Get (key=a).",
+  "Publish (message=a).",
+  "Sending message (message=a, subscriber=sim-8).",
+  "Put (key=a).",
+  "Invoke (payload=\\"a\\").",
+  "Put (key=a).",
+  "Get (key=a).",
+  "Publish (message=a).",
+  "Sending message (message=a, subscriber=sim-10).",
+  "Put (key=a).",
+  "Invoke (payload=\\"a\\").",
+  "Delete (key=a).",
+  "Get (key=a).",
   "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.sim.EventMapping deleted.",
@@ -20,11 +39,97 @@ exports[`bucket on event creates 3 topics  1`] = `
   "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Bucket deleted.",
+  "wingsdk.cloud.Bucket deleted.",
   "wingsdk.cloud.Topic deleted.",
   "wingsdk.cloud.Topic deleted.",
   "wingsdk.cloud.Topic deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
+`;
+
+exports[`can add file in preflight 1`] = `
+[
+  "wingsdk.cloud.TestRunner created.",
+  "Adding object from preflight (key=test.txt).",
+  "wingsdk.cloud.Bucket created.",
+  "Get (key=test.txt).",
+  "Get (key=test.txt).",
+  "List (prefix=null).",
+  "wingsdk.cloud.Bucket deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
+]
+`;
+
+exports[`can add file in preflight 2`] = `
+{
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_bucket",
+        "props": {
+          "initialObjects": {
+            "test.txt": "test1",
+          },
+          "public": false,
+          "topics": {},
+        },
+        "type": "wingsdk.cloud.Bucket",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "cloud.TestRunner": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.314",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
+        "my_bucket": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.314",
+          },
+          "display": {
+            "description": "A cloud object store",
+            "title": "Bucket",
+          },
+          "id": "my_bucket",
+          "path": "root/my_bucket",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.1.314",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
 `;
 
 exports[`can add object in preflight 1`] = `
@@ -42,6 +147,10 @@ exports[`can add object in preflight 1`] = `
 
 exports[`can add object in preflight 2`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -71,12 +180,9 @@ exports[`can add object in preflight 2`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -87,12 +193,9 @@ exports[`can add object in preflight 2`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_bucket": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud object store",
@@ -104,7 +207,7 @@ exports[`can add object in preflight 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",
@@ -116,6 +219,10 @@ exports[`can add object in preflight 2`] = `
 
 exports[`create a bucket 1`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -143,12 +250,9 @@ exports[`create a bucket 1`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -159,12 +263,9 @@ exports[`create a bucket 1`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_bucket": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud object store",
@@ -176,7 +277,7 @@ exports[`create a bucket 1`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",
@@ -198,6 +299,10 @@ exports[`get invalid object throws an error 1`] = `
 
 exports[`get invalid object throws an error 2`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -225,12 +330,9 @@ exports[`get invalid object throws an error 2`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -241,12 +343,9 @@ exports[`get invalid object throws an error 2`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_bucket": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud object store",
@@ -258,7 +357,7 @@ exports[`get invalid object throws an error 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",
@@ -316,6 +415,10 @@ exports[`put and get Json object from bucket 1`] = `
 
 exports[`put and get Json object from bucket 2`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -343,12 +446,9 @@ exports[`put and get Json object from bucket 2`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -359,12 +459,9 @@ exports[`put and get Json object from bucket 2`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_bucket": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud object store",
@@ -376,7 +473,7 @@ exports[`put and get Json object from bucket 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",

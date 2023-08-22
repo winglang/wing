@@ -1,8 +1,17 @@
 ---
-title: cloud.Counter 
+title: Counter
 id: counter
 description: A built-in resource for representing an container for numbers in the cloud.
-keywords: [Wing reference, Wing language, language, Wing sdk, Wing programming language, Counter]
+keywords:
+  [
+    Wing reference,
+    Wing language,
+    language,
+    Wing standard library,
+    Wing programming language,
+    Counter,
+  ]
+sidebar_position: 1
 ---
 
 The `cloud.Counter` resource represents a stateful container for one or more numbers in the cloud.
@@ -21,21 +30,23 @@ let counter = new cloud.Counter(
 
 ### Using a counter inflight
 
-```js
+```js playground
 bring cloud;
 
 let counter = new cloud.Counter();
 
-inflight () => {
+let counterFunc = inflight () => {
   let prev = counter.inc(); // increment by 1 and return previous value
-  counter.inc(5);
+  counter.inc(5); // increment by 5
   counter.dec(); // decrement by 1
-  counter.dec(2);
+  counter.dec(2); // decrement by 2
 
   assert(counter.peek() == 3); // check the current value
 
   counter.set(100); // set to a specific value
 };
+
+new cloud.Function(counterFunc);
 ```
 
 ### Using keys to manage multiple counter values
@@ -61,10 +72,3 @@ The AWS implementation of `cloud.Counter` uses [Amazon DynamoDB](https://aws.ama
 ### GCP (`tf-gcp`)
 
 🚧 Not supported yet (tracking issue: [#628](https://github.com/winglang/wing/issues/628))
-
-## API Reference
-
-The full list of APIs for `cloud.Counter` is available in the [API Reference](../05-reference/wingsdk-api.md).
-
-
-

@@ -1,30 +1,30 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`bucket is public 1`] = `
-"{
-  \\"resource\\": {
-    \\"google_storage_bucket\\": {
-      \\"root_mybucket_E5DAA363\\": {
-        \\"location\\": \\"US\\",
-        \\"name\\": \\"my_bucket-\${random_id.root_mybucket_Id_7C344B74.hex}\\",
-        \\"public_access_prevention\\": \\"inherited\\",
-        \\"uniform_bucket_level_access\\": true
-      }
+{
+  "resource": {
+    "google_storage_bucket": {
+      "my_bucket": {
+        "location": "US",
+        "name": "my_bucket-\${random_id.my_bucket_Id_50F73A6B.hex}",
+        "public_access_prevention": "inherited",
+        "uniform_bucket_level_access": true,
+      },
     },
-    \\"google_storage_bucket_iam_member\\": {
-      \\"root_mybucket_PublicAccessIamMember_53C8A9DA\\": {
-        \\"bucket\\": \\"\${google_storage_bucket.root_mybucket_E5DAA363.name}\\",
-        \\"member\\": \\"allUsers\\",
-        \\"role\\": \\"roles/storage.objectViewer\\"
-      }
+    "google_storage_bucket_iam_member": {
+      "my_bucket_PublicAccessIamMember_F45C9FFA": {
+        "bucket": "\${google_storage_bucket.my_bucket.name}",
+        "member": "allUsers",
+        "role": "roles/storage.objectViewer",
+      },
     },
-    \\"random_id\\": {
-      \\"root_mybucket_Id_7C344B74\\": {
-        \\"byte_length\\": 4
-      }
-    }
-  }
-}"
+    "random_id": {
+      "my_bucket_Id_50F73A6B": {
+        "byte_length": 4,
+      },
+    },
+  },
+}
 `;
 
 exports[`bucket is public 2`] = `
@@ -38,20 +38,17 @@ exports[`bucket is public 2`] = `
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "google",
                 "path": "root/Default/google",
               },
               "my_bucket": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
@@ -59,7 +56,7 @@ exports[`bucket is public 2`] = `
                   "Id": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Id",
                     "path": "root/Default/my_bucket/Id",
@@ -67,7 +64,7 @@ exports[`bucket is public 2`] = `
                   "PublicAccessIamMember": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "PublicAccessIamMember",
                     "path": "root/Default/my_bucket/PublicAccessIamMember",
@@ -75,7 +72,7 @@ exports[`bucket is public 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.245",
+                  "version": "10.1.314",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -87,7 +84,7 @@ exports[`bucket is public 2`] = `
               "random": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "random",
                 "path": "root/Default/random",
@@ -95,7 +92,7 @@ exports[`bucket is public 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.245",
+              "version": "10.1.314",
             },
             "id": "Default",
             "path": "root/Default",
@@ -103,7 +100,7 @@ exports[`bucket is public 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.2",
+              "version": "0.17.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -111,7 +108,7 @@ exports[`bucket is public 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.2",
+          "version": "0.17.0",
         },
         "id": "root",
         "path": "root",
@@ -119,7 +116,145 @@ exports[`bucket is public 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.15.2",
+      "version": "0.17.0",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`bucket with two preflight files 1`] = `
+{
+  "resource": {
+    "google_storage_bucket": {
+      "my_bucket": {
+        "location": "US",
+        "name": "my_bucket-\${random_id.my_bucket_Id_50F73A6B.hex}",
+        "public_access_prevention": "enforced",
+        "uniform_bucket_level_access": true,
+      },
+    },
+    "google_storage_bucket_object": {
+      "my_bucket_Object-file1txt_F3CECCDA": {
+        "bucket": "\${google_storage_bucket.my_bucket.id}",
+        "content": "test1",
+        "name": "file1.txt",
+      },
+      "my_bucket_Object-file2txt_DA15A080": {
+        "bucket": "\${google_storage_bucket.my_bucket.id}",
+        "content": "test2",
+        "name": "file2.txt",
+      },
+    },
+    "random_id": {
+      "my_bucket_Id_50F73A6B": {
+        "byte_length": 4,
+      },
+    },
+  },
+}
+`;
+
+exports[`bucket with two preflight files 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "google": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.17.0",
+                },
+                "id": "google",
+                "path": "root/Default/google",
+              },
+              "my_bucket": {
+                "children": {
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "Default",
+                    "path": "root/Default/my_bucket/Default",
+                  },
+                  "Id": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "Id",
+                    "path": "root/Default/my_bucket/Id",
+                  },
+                  "Object-file1.txt": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "Object-file1.txt",
+                    "path": "root/Default/my_bucket/Object-file1.txt",
+                  },
+                  "Object-file2.txt": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "Object-file2.txt",
+                    "path": "root/Default/my_bucket/Object-file2.txt",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.314",
+                },
+                "display": {
+                  "description": "A cloud object store",
+                  "title": "Bucket",
+                },
+                "id": "my_bucket",
+                "path": "root/Default/my_bucket",
+              },
+              "random": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.17.0",
+                },
+                "id": "random",
+                "path": "root/Default/random",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.1.314",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.17.0",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.17.0",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.17.0",
     },
     "id": "App",
     "path": "",
@@ -129,35 +264,35 @@ exports[`bucket is public 2`] = `
 `;
 
 exports[`bucket with two preflight objects 1`] = `
-"{
-  \\"resource\\": {
-    \\"google_storage_bucket\\": {
-      \\"root_mybucket_E5DAA363\\": {
-        \\"location\\": \\"US\\",
-        \\"name\\": \\"my_bucket-\${random_id.root_mybucket_Id_7C344B74.hex}\\",
-        \\"public_access_prevention\\": \\"enforced\\",
-        \\"uniform_bucket_level_access\\": true
-      }
-    },
-    \\"google_storage_bucket_object\\": {
-      \\"root_mybucket_Objectfile1txt_0E67FB99\\": {
-        \\"bucket\\": \\"\${google_storage_bucket.root_mybucket_E5DAA363.id}\\",
-        \\"content\\": \\"hello world\\",
-        \\"name\\": \\"file1.txt\\"
+{
+  "resource": {
+    "google_storage_bucket": {
+      "my_bucket": {
+        "location": "US",
+        "name": "my_bucket-\${random_id.my_bucket_Id_50F73A6B.hex}",
+        "public_access_prevention": "enforced",
+        "uniform_bucket_level_access": true,
       },
-      \\"root_mybucket_Objectfile2txt_52FE0302\\": {
-        \\"bucket\\": \\"\${google_storage_bucket.root_mybucket_E5DAA363.id}\\",
-        \\"content\\": \\"boom bam\\",
-        \\"name\\": \\"file2.txt\\"
-      }
     },
-    \\"random_id\\": {
-      \\"root_mybucket_Id_7C344B74\\": {
-        \\"byte_length\\": 4
-      }
-    }
-  }
-}"
+    "google_storage_bucket_object": {
+      "my_bucket_Object-file1txt_F3CECCDA": {
+        "bucket": "\${google_storage_bucket.my_bucket.id}",
+        "content": "hello world",
+        "name": "file1.txt",
+      },
+      "my_bucket_Object-file2txt_DA15A080": {
+        "bucket": "\${google_storage_bucket.my_bucket.id}",
+        "content": "boom bam",
+        "name": "file2.txt",
+      },
+    },
+    "random_id": {
+      "my_bucket_Id_50F73A6B": {
+        "byte_length": 4,
+      },
+    },
+  },
+}
 `;
 
 exports[`bucket with two preflight objects 2`] = `
@@ -171,20 +306,17 @@ exports[`bucket with two preflight objects 2`] = `
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "google",
                 "path": "root/Default/google",
               },
               "my_bucket": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
@@ -192,7 +324,7 @@ exports[`bucket with two preflight objects 2`] = `
                   "Id": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Id",
                     "path": "root/Default/my_bucket/Id",
@@ -200,7 +332,7 @@ exports[`bucket with two preflight objects 2`] = `
                   "Object-file1.txt": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Object-file1.txt",
                     "path": "root/Default/my_bucket/Object-file1.txt",
@@ -208,7 +340,7 @@ exports[`bucket with two preflight objects 2`] = `
                   "Object-file2.txt": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Object-file2.txt",
                     "path": "root/Default/my_bucket/Object-file2.txt",
@@ -216,7 +348,7 @@ exports[`bucket with two preflight objects 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.245",
+                  "version": "10.1.314",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -228,7 +360,7 @@ exports[`bucket with two preflight objects 2`] = `
               "random": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "random",
                 "path": "root/Default/random",
@@ -236,7 +368,7 @@ exports[`bucket with two preflight objects 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.245",
+              "version": "10.1.314",
             },
             "id": "Default",
             "path": "root/Default",
@@ -244,7 +376,7 @@ exports[`bucket with two preflight objects 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.2",
+              "version": "0.17.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -252,7 +384,7 @@ exports[`bucket with two preflight objects 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.2",
+          "version": "0.17.0",
         },
         "id": "root",
         "path": "root",
@@ -260,7 +392,7 @@ exports[`bucket with two preflight objects 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.15.2",
+      "version": "0.17.0",
     },
     "id": "App",
     "path": "",
@@ -270,23 +402,23 @@ exports[`bucket with two preflight objects 2`] = `
 `;
 
 exports[`create a bucket 1`] = `
-"{
-  \\"resource\\": {
-    \\"google_storage_bucket\\": {
-      \\"root_mybucket_E5DAA363\\": {
-        \\"location\\": \\"US\\",
-        \\"name\\": \\"my_bucket-\${random_id.root_mybucket_Id_7C344B74.hex}\\",
-        \\"public_access_prevention\\": \\"enforced\\",
-        \\"uniform_bucket_level_access\\": true
-      }
+{
+  "resource": {
+    "google_storage_bucket": {
+      "my_bucket": {
+        "location": "US",
+        "name": "my_bucket-\${random_id.my_bucket_Id_50F73A6B.hex}",
+        "public_access_prevention": "enforced",
+        "uniform_bucket_level_access": true,
+      },
     },
-    \\"random_id\\": {
-      \\"root_mybucket_Id_7C344B74\\": {
-        \\"byte_length\\": 4
-      }
-    }
-  }
-}"
+    "random_id": {
+      "my_bucket_Id_50F73A6B": {
+        "byte_length": 4,
+      },
+    },
+  },
+}
 `;
 
 exports[`create a bucket 2`] = `
@@ -300,20 +432,17 @@ exports[`create a bucket 2`] = `
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "google",
                 "path": "root/Default/google",
               },
               "my_bucket": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
@@ -321,7 +450,7 @@ exports[`create a bucket 2`] = `
                   "Id": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Id",
                     "path": "root/Default/my_bucket/Id",
@@ -329,7 +458,7 @@ exports[`create a bucket 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.245",
+                  "version": "10.1.314",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -341,7 +470,7 @@ exports[`create a bucket 2`] = `
               "random": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "random",
                 "path": "root/Default/random",
@@ -349,7 +478,7 @@ exports[`create a bucket 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.245",
+              "version": "10.1.314",
             },
             "id": "Default",
             "path": "root/Default",
@@ -357,7 +486,7 @@ exports[`create a bucket 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.2",
+              "version": "0.17.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -365,7 +494,7 @@ exports[`create a bucket 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.2",
+          "version": "0.17.0",
         },
         "id": "root",
         "path": "root",
@@ -373,7 +502,7 @@ exports[`create a bucket 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.15.2",
+      "version": "0.17.0",
     },
     "id": "App",
     "path": "",
@@ -383,32 +512,32 @@ exports[`create a bucket 2`] = `
 `;
 
 exports[`two buckets 1`] = `
-"{
-  \\"resource\\": {
-    \\"google_storage_bucket\\": {
-      \\"root_mybucket1_3E79F0B7\\": {
-        \\"location\\": \\"US\\",
-        \\"name\\": \\"my_bucket1-\${random_id.root_mybucket1_Id_B01C2071.hex}\\",
-        \\"public_access_prevention\\": \\"enforced\\",
-        \\"uniform_bucket_level_access\\": true
+{
+  "resource": {
+    "google_storage_bucket": {
+      "my_bucket1": {
+        "location": "US",
+        "name": "my_bucket1-\${random_id.my_bucket1_Id_D79FE240.hex}",
+        "public_access_prevention": "enforced",
+        "uniform_bucket_level_access": true,
       },
-      \\"root_mybucket2_CD3A8629\\": {
-        \\"location\\": \\"US\\",
-        \\"name\\": \\"my_bucket2-\${random_id.root_mybucket2_Id_E69E8F7F.hex}\\",
-        \\"public_access_prevention\\": \\"enforced\\",
-        \\"uniform_bucket_level_access\\": true
-      }
+      "my_bucket2": {
+        "location": "US",
+        "name": "my_bucket2-\${random_id.my_bucket2_Id_0AB96F49.hex}",
+        "public_access_prevention": "enforced",
+        "uniform_bucket_level_access": true,
+      },
     },
-    \\"random_id\\": {
-      \\"root_mybucket1_Id_B01C2071\\": {
-        \\"byte_length\\": 4
+    "random_id": {
+      "my_bucket1_Id_D79FE240": {
+        "byte_length": 4,
       },
-      \\"root_mybucket2_Id_E69E8F7F\\": {
-        \\"byte_length\\": 4
-      }
-    }
-  }
-}"
+      "my_bucket2_Id_0AB96F49": {
+        "byte_length": 4,
+      },
+    },
+  },
+}
 `;
 
 exports[`two buckets 2`] = `
@@ -422,20 +551,17 @@ exports[`two buckets 2`] = `
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "google",
                 "path": "root/Default/google",
               },
               "my_bucket1": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket1/Default",
@@ -443,7 +569,7 @@ exports[`two buckets 2`] = `
                   "Id": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Id",
                     "path": "root/Default/my_bucket1/Id",
@@ -451,7 +577,7 @@ exports[`two buckets 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.245",
+                  "version": "10.1.314",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -461,14 +587,11 @@ exports[`two buckets 2`] = `
                 "path": "root/Default/my_bucket1",
               },
               "my_bucket2": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket2/Default",
@@ -476,7 +599,7 @@ exports[`two buckets 2`] = `
                   "Id": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Id",
                     "path": "root/Default/my_bucket2/Id",
@@ -484,7 +607,7 @@ exports[`two buckets 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.245",
+                  "version": "10.1.314",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -496,7 +619,7 @@ exports[`two buckets 2`] = `
               "random": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "random",
                 "path": "root/Default/random",
@@ -504,7 +627,7 @@ exports[`two buckets 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.245",
+              "version": "10.1.314",
             },
             "id": "Default",
             "path": "root/Default",
@@ -512,7 +635,7 @@ exports[`two buckets 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.2",
+              "version": "0.17.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -520,7 +643,7 @@ exports[`two buckets 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.2",
+          "version": "0.17.0",
         },
         "id": "root",
         "path": "root",
@@ -528,7 +651,7 @@ exports[`two buckets 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.15.2",
+      "version": "0.17.0",
     },
     "id": "App",
     "path": "",

@@ -7,7 +7,7 @@
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -36,37 +36,22 @@
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
+const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     const regularString = "str\n\"";
     const emptyString = "";
     const number = 1;
-    const coolString = `cool \"\${${regularString}}\" test`;
-    const reallyCoolString = `${number}${emptyString}\n${coolString}\n\${empty_string}${"string-in-string"}!`;
-    const beginingWithCoolStrings = `${regularString} ${number} <- cool`;
-    const endingWithCoolStrings = `cool -> ${regularString} ${number}`;
+    const coolString = String.raw({ raw: ["cool \"\${", "}\" test"] }, regularString);
+    const reallyCoolString = String.raw({ raw: ["", "", "\n", "\n\${empty_string}", "!"] }, number, emptyString, coolString, "string-in-string");
+    const beginingWithCoolStrings = String.raw({ raw: ["", " ", " <- cool"] }, regularString, number);
+    const endingWithCoolStrings = String.raw({ raw: ["cool -> ", " ", ""] }, regularString, number);
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "expressions_string_interpolation", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "expressions_string_interpolation", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

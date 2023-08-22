@@ -7,7 +7,8 @@ import {
   EventSubscription,
   FunctionHandle,
 } from "./schema-resources";
-import { IFunctionClient, ITopicClient, TraceType } from "../cloud";
+import { IFunctionClient, ITopicClient } from "../cloud";
+import { TraceType } from "../std";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
@@ -64,7 +65,7 @@ export class Topic
     }
   }
 
-  async addEventSubscription(
+  public async addEventSubscription(
     subscriber: FunctionHandle,
     subscriptionProps: EventSubscription
   ): Promise<void> {
@@ -75,7 +76,7 @@ export class Topic
     this.subscribers.push(s);
   }
 
-  async publish(message: string): Promise<void> {
+  public async publish(message: string): Promise<void> {
     this.context.addTrace({
       data: {
         message: `Publish (message=${message}).`,

@@ -1,0 +1,90 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "globalDependencies": ["*.json", "*.toml", ".node-version", "insta.yaml"],
+  "pipeline": {
+    "default": {
+      "inputs": ["*.json", ".projenrc.ts"]
+    },
+    "compile": {
+      "dependsOn": ["^compile"],
+      "inputs": [
+        "bin/*",
+        "*.ts",
+        "*.js",
+        "*.cjs",
+        "*.json",
+        "*.toml",
+        "*.lock",
+        "src/**"
+      ]
+    },
+    "test": {
+      "dependsOn": ["compile"],
+      "inputs": [
+        "*.ts",
+        "*.js",
+        "*.cjs",
+        "*.json",
+        "*.toml",
+        "*.lock",
+        "src/**",
+        "test/**"
+      ]
+    },
+    "test:playwright": {
+      "dependsOn": ["compile"],
+      "inputs": [
+        "*.ts",
+        "*.js",
+        "*.cjs",
+        "*.json",
+        "*.toml",
+        "*.lock",
+        "src/**",
+        "test/**"
+      ]
+    },
+    "post-compile": {
+      "dependsOn": ["compile"]
+    },
+    "lint": {
+      "inputs": [
+        "*.ts",
+        "*.js",
+        "*.cjs",
+        "*.json",
+        "*.toml",
+        "*.lock",
+        "src/**",
+        "test/**"
+      ]
+    },
+    "eslint": {
+      "inputs": [
+        "*.ts",
+        "*.js",
+        "*.cjs",
+        "*.json",
+        "*.toml",
+        "*.lock",
+        "src/**",
+        "test/**"
+      ]
+    },
+    "package": {
+      "dependsOn": ["compile", "post-compile"],
+      "env": ["PROJEN_BUMP_VERSION"]
+    },
+    "topo": {
+      "dependsOn": ["^topo"]
+    },
+    "examples-tests": {
+      "dependsOn": ["topo"],
+      "inputs": [
+        "examples/tests/**",
+        "!examples/tests/valid/**/node_modules/**",
+        "!examples/tests/valid/**/target/**"
+      ]
+    }
+  }
+}

@@ -5,6 +5,9 @@ import * as fs from "fs-extra";
 import * as glob from "glob-promise";
 import * as reflect from "jsii-reflect";
 import { TargetLanguage } from "jsii-rosetta";
+import { Npm } from "./_npm";
+import { ApiReference } from "./api-reference";
+import { Readme } from "./readme";
 import { CorruptedAssemblyError, LanguageNotSupportedError } from "../..";
 import { Json } from "../render/json";
 import { MarkdownDocument } from "../render/markdown-doc";
@@ -20,9 +23,6 @@ import { PythonTranspile } from "../transpile/python";
 import { Transpile, Language } from "../transpile/transpile";
 import { TypeScriptTranspile } from "../transpile/typescript";
 import { WingTranspile } from "../transpile/wing";
-import { Npm } from "./_npm";
-import { ApiReference } from "./api-reference";
-import { Readme } from "./readme";
 
 // https://github.com/aws/jsii/blob/main/packages/jsii-reflect/lib/assembly.ts#L175
 const NOT_FOUND_IN_ASSEMBLY_REGEX =
@@ -230,7 +230,7 @@ export class Documentation {
 
     if (!isSupported) {
       throw new LanguageNotSupportedError(
-        `Laguage ${language} is not supported for package ${this.assemblyFqn}`
+        `Language ${language} is not supported for package ${this.assemblyFqn}`
       );
     }
 
@@ -330,12 +330,54 @@ export class Documentation {
   }
 
   /**
+   * an hack for getting partial submodule, like for cloud/api or cloud/bucket
+   */
+  private findPartialSubmodule(
+    assembly: reflect.Assembly,
+    submodule: string
+  ): reflect.Submodule {
+    const parent = submodule.split("/")[0];
+    const submodules = assembly.submodules.filter((s) => s.name === parent);
+    if (submodules.length === 0) {
+      throw new Error(
+        `Submodule ${parent} not found in assembly ${assembly.name}@${assembly.version}`
+      );
+    }
+    if (submodules.length > 1) {
+      throw new Error(
+        `Found multiple submodules with name: ${parent} in assembly ${assembly.name}@${assembly.version}`
+      );
+    }
+
+    let typeMap: Map<string, reflect.Type> = new Map();
+
+    //@ts-expect-error typeMap is protected
+    submodules[0].typeMap.forEach((type: reflect.Type, key: string) => {
+      if (type?.spec.locationInModule?.filename.includes(submodule)) {
+        typeMap.set(key, type);
+      }
+    });
+
+    return new reflect.Submodule(
+      submodules[0].system,
+      submodules[0].spec,
+      submodules[0].fqn,
+      //@ts-expect-error submoduleMap is protected
+      submodules[0].submoduleMap,
+      typeMap
+    );
+  }
+
+  /**
    * Lookup a submodule by a submodule name.
    */
   private findSubmodule(
     assembly: reflect.Assembly,
     submodule: string
   ): reflect.Submodule {
+    if (submodule.includes("/")) {
+      return this.findPartialSubmodule(assembly, submodule);
+    }
     const submodules = assembly.submodules.filter((s) => s.name === submodule);
 
     if (submodules.length === 0) {

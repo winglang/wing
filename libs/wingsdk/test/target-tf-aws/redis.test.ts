@@ -1,8 +1,7 @@
-import * as cdktf from "cdktf";
 import { describe, it, expect } from "vitest";
 import { Function } from "../../src/cloud";
+import * as ex from "../../src/ex";
 import * as tfaws from "../../src/target-tf-aws";
-import * as redis from "../../src/target-tf-aws/redis";
 import { Testing } from "../../src/testing";
 import {
   mkdtemp,
@@ -18,7 +17,7 @@ describe("When creating a Redis resource", () => {
   it("should create an elasticache cluster and required vpc networking resources", () => {
     // GIVEN
     const app = new tfaws.App({ outdir: mkdtemp() });
-    redis.Redis._newRedis(app, "Redis");
+    ex.Redis._newRedis(app, "Redis");
 
     // WHEN
     const output = app.synth();
@@ -42,7 +41,7 @@ describe("When creating a Redis resource", () => {
   it("should only contain a single instance of the vpc resources", () => {
     // GIVEN
     const app = new tfaws.App({ outdir: mkdtemp() });
-    redis.Redis._newRedis(app, "Redis");
+    ex.Redis._newRedis(app, "Redis");
 
     // WHEN
     const output = app.synth();
@@ -59,10 +58,10 @@ describe("When creating a Redis resource", () => {
     it("lambda function should have access to the redis cluster", () => {
       // GIVEN
       const app = new tfaws.App({ outdir: mkdtemp() });
-      const redisCluster = redis.Redis._newRedis(app, "Redis") as redis.Redis;
+      const redisCluster = ex.Redis._newRedis(app, "Redis") as ex.Redis;
       const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
       const func = Function._newFunction(app, "Function", inflight);
-      redisCluster._bind(func, ["set", "get"]);
+      redisCluster.bind(func, ["set", "get"]);
 
       // WHEN
       const output = app.synth();
@@ -81,8 +80,8 @@ describe("When creating multiple Redis resources", () => {
   it("should only contain a single instance of the vpc resources", () => {
     // GIVEN
     const app = new tfaws.App({ outdir: mkdtemp() });
-    redis.Redis._newRedis(app, "RedisOne");
-    redis.Redis._newRedis(app, "RedisTwo");
+    ex.Redis._newRedis(app, "RedisOne");
+    ex.Redis._newRedis(app, "RedisTwo");
 
     // WHEN
     const output = app.synth();
@@ -102,15 +101,12 @@ describe("When creating multiple Redis resources", () => {
     it("the function should have access to both clusters", () => {
       // GIVEN
       const app = new tfaws.App({ outdir: mkdtemp() });
-      const redisCluster = redis.Redis._newRedis(app, "Redis") as redis.Redis;
-      const otherCluster = redis.Redis._newRedis(
-        app,
-        "OtherRedis"
-      ) as redis.Redis;
+      const redisCluster = ex.Redis._newRedis(app, "Redis") as ex.Redis;
+      const otherCluster = ex.Redis._newRedis(app, "OtherRedis") as ex.Redis;
       const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
       const func = Function._newFunction(app, "Function", inflight);
-      redisCluster._bind(func, ["set", "get"]);
-      otherCluster._bind(func, ["set", "get"]);
+      redisCluster.bind(func, ["set", "get"]);
+      otherCluster.bind(func, ["set", "get"]);
 
       // WHEN
       const output = app.synth();

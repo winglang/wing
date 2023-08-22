@@ -1,0 +1,19 @@
+@import "@ibm/plex/IBM-Plex-Sans/fonts/split/woff2/IBMPlexSans-Regular.css";
+@import "@ibm/plex/IBM-Plex-Sans/fonts/split/woff2/IBMPlexSans-Medium.css";
+@import "@ibm/plex/IBM-Plex-Sans/fonts/split/woff2/IBMPlexSans-Italic.css";
+@import "@ibm/plex/IBM-Plex-Mono/fonts/split/woff2/IBMPlexMono-Regular.css";
+@import "@ibm/plex/IBM-Plex-Mono/fonts/split/woff2/IBMPlexMono-Medium.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.draggable-frame {
+  -webkit-app-region: drag;
+}
+
+input[type="date"].appearance-none::-webkit-inner-spin-button,
+input[type="date"].appearance-none::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}

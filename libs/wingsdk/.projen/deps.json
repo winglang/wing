@@ -2,7 +2,7 @@
   "dependencies": [
     {
       "name": "@cdktf/provider-aws",
-      "version": "^12.0.1",
+      "version": "^15.0.0",
       "type": "build"
     },
     {
@@ -23,11 +23,7 @@
     },
     {
       "name": "@types/node",
-      "version": "^16",
-      "type": "build"
-    },
-    {
-      "name": "@types/tar",
+      "version": "^18",
       "type": "build"
     },
     {
@@ -45,17 +41,11 @@
       "type": "build"
     },
     {
-      "name": "@vitest/coverage-c8",
+      "name": "@vitest/coverage-v8",
       "type": "build"
     },
     {
       "name": "@winglang/jsii-docgen",
-      "version": "file:../../apps/jsii-docgen",
-      "type": "build"
-    },
-    {
-      "name": "@winglang/wing-api-checker",
-      "version": "file:../../apps/wing-api-checker",
       "type": "build"
     },
     {
@@ -67,8 +57,17 @@
       "type": "build"
     },
     {
+      "name": "bump-pack",
+      "type": "build"
+    },
+    {
       "name": "cdktf-cli",
-      "version": "0.15.2",
+      "version": "0.17.0",
+      "type": "build"
+    },
+    {
+      "name": "constructs",
+      "version": "~10.1.314",
       "type": "build"
     },
     {
@@ -114,7 +113,7 @@
     },
     {
       "name": "jsii",
-      "version": "~5.0.0",
+      "version": "5.0.11",
       "type": "build"
     },
     {
@@ -124,10 +123,6 @@
     {
       "name": "npm-check-updates",
       "version": "^16",
-      "type": "build"
-    },
-    {
-      "name": "patch-package",
       "type": "build"
     },
     {
@@ -156,63 +151,77 @@
       "type": "build"
     },
     {
+      "name": "wing-api-checker",
+      "type": "build"
+    },
+    {
       "name": "@aws-sdk/client-cloudwatch-logs",
-      "version": "3.256.0",
+      "version": "3.354.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-dynamodb",
-      "version": "3.256.0",
+      "version": "3.354.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-elasticache",
-      "version": "3.256.0",
+      "version": "3.354.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-lambda",
-      "version": "3.256.0",
+      "version": "3.354.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-s3",
-      "version": "3.256.0",
+      "version": "3.354.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-secrets-manager",
-      "version": "3.256.0",
+      "version": "3.354.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-sns",
-      "version": "3.256.0",
+      "version": "3.354.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-sqs",
-      "version": "3.256.0",
+      "version": "3.354.0",
+      "type": "bundled"
+    },
+    {
+      "name": "@aws-sdk/is-array-buffer",
+      "version": "3.201.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/types",
-      "version": "3.254.0",
+      "version": "3.347.0",
+      "type": "bundled"
+    },
+    {
+      "name": "@aws-sdk/util-buffer-from",
+      "version": "3.208.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/util-dynamodb",
-      "version": "3.256.0",
+      "version": "3.354.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/util-stream-node",
-      "version": "3.254.0",
+      "version": "3.350.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/util-utf8-node",
-      "version": "3.208.0",
+      "version": "3.259.0",
       "type": "bundled"
     },
     {
@@ -230,13 +239,17 @@
       "type": "bundled"
     },
     {
+      "name": "@types/aws-lambda",
+      "type": "bundled"
+    },
+    {
       "name": "aws-cdk-lib",
       "version": "^2.64.0",
       "type": "bundled"
     },
     {
       "name": "cdktf",
-      "version": "0.15.2",
+      "version": "0.17.0",
       "type": "bundled"
     },
     {
@@ -256,15 +269,20 @@
       "type": "bundled"
     },
     {
+      "name": "jsonschema",
+      "type": "bundled"
+    },
+    {
       "name": "mime-types",
       "type": "bundled"
     },
     {
-      "name": "safe-stable-stringify",
+      "name": "nanoid",
+      "version": "^3.3.6",
       "type": "bundled"
     },
     {
-      "name": "tar",
+      "name": "safe-stable-stringify",
       "type": "bundled"
     },
     {
@@ -273,12 +291,12 @@
     },
     {
       "name": "constructs",
-      "version": "~10.1.228",
+      "version": "~10.1.314",
       "type": "peer"
     },
     {
       "name": "constructs",
-      "version": "~10.1.228",
+      "version": "~10.1.314",
       "type": "runtime"
     }
   ],

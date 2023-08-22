@@ -1,5 +1,5 @@
 import { IWebsiteClient } from "../cloud";
 
-export class WebsiteInflight implements IWebsiteClient {
+export class WebsiteClient implements IWebsiteClient {
   public constructor() {}
 }

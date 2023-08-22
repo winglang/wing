@@ -1,8 +1,30 @@
+import { readdirSync } from "fs";
 import { JsonFile, cdk, javascript } from "projen";
-import rootPackageJson from "../../package.json";
 
-const JSII_DEPS = ["constructs@~10.1.228"];
-const CDKTF_VERSION = "0.15.2";
+const UNDOCUMENTED_CLOUD_FILES = ["index", "test-runner"];
+
+const cloudFiles = readdirSync("./src/cloud");
+
+const cloudResources: Set<string> = new Set(
+  cloudFiles.map((filename) => filename.split(".").slice(0, -1).join("."))
+);
+
+UNDOCUMENTED_CLOUD_FILES.forEach((file) => cloudResources.delete(file));
+
+const undocumentedResources = Array.from(cloudResources).filter(
+  (file) => !cloudFiles.includes(`${file}.md`)
+);
+
+if (undocumentedResources.length) {
+  throw new Error(
+    `Detected undocumented resources: ${undocumentedResources.join(
+      ", "
+    )}. Please add the corresponding .md files in ./src/cloud folder.`
+  );
+}
+
+const JSII_DEPS = ["constructs@~10.1.314"];
+const CDKTF_VERSION = "0.17.0";
 
 const CDKTF_PROVIDERS = [
   "aws@~>4.65.0",
@@ -10,6 +32,10 @@ const CDKTF_PROVIDERS = [
   "azurerm@~>3.54.0",
   "google@~>4.63.1",
 ];
+
+const PUBLIC_MODULES = ["std", "http", "util", "aws", "ex"];
+
+const CLOUD_DOCS_PREFIX = "../../docs/docs/04-standard-library/01-cloud/";
 
 // defines the list of dependencies required for each compilation target that is not built into the
 // compiler (like Terraform targets).
@@ -24,7 +50,7 @@ const sideLoad = Object.values(TARGET_DEPS).flat();
 
 const project = new cdk.JsiiProject({
   name: "@winglang/sdk",
-  author: "Monada, Inc.",
+  author: "Wing Cloud",
   authorOrganization: true,
   authorAddress: "ping@monada.co",
   repositoryUrl: "https://github.com/winglang/wing.git",
@@ -34,6 +60,11 @@ const project = new cdk.JsiiProject({
   defaultReleaseBranch: "main",
   peerDeps: [...JSII_DEPS],
   deps: [...JSII_DEPS],
+  tsconfig: {
+    compilerOptions: {
+      lib: ["es2020", "dom", "dom.iterable"],
+    },
+  },
   bundledDeps: [
     `cdktf@${CDKTF_VERSION}`,
     ...sideLoad,
@@ -43,60 +74,67 @@ const project = new cdk.JsiiProject({
     // aws client dependencies
     // (note: these should always be updated together, otherwise they will
     // conflict with each other)
-    "@aws-sdk/client-cloudwatch-logs@3.256.0",
-    "@aws-sdk/client-dynamodb@3.256.0",
-    "@aws-sdk/client-elasticache@3.256.0",
-    "@aws-sdk/util-dynamodb@3.256.0",
-    "@aws-sdk/client-lambda@3.256.0",
-    "@aws-sdk/client-s3@3.256.0",
-    "@aws-sdk/client-secrets-manager@3.256.0",
-    "@aws-sdk/client-sqs@3.256.0",
-    "@aws-sdk/client-sns@3.256.0",
-    "@aws-sdk/types@3.254.0",
-    "@aws-sdk/util-stream-node@3.254.0",
-    "@aws-sdk/util-utf8-node@3.208.0",
+    "@aws-sdk/client-cloudwatch-logs@3.354.0",
+    "@aws-sdk/client-dynamodb@3.354.0",
+    "@aws-sdk/client-elasticache@3.354.0",
+    "@aws-sdk/util-dynamodb@3.354.0",
+    "@aws-sdk/client-lambda@3.354.0",
+    "@aws-sdk/client-s3@3.354.0",
+    "@aws-sdk/client-secrets-manager@3.354.0",
+    "@aws-sdk/client-sqs@3.354.0",
+    "@aws-sdk/client-sns@3.354.0",
+    "@aws-sdk/types@3.347.0",
+    "@aws-sdk/util-stream-node@3.350.0",
+    "@aws-sdk/util-utf8-node@3.259.0",
+    "@types/aws-lambda",
+    // the following 2 deps are required by @aws-sdk/util-utf8-node
+    "@aws-sdk/util-buffer-from@3.208.0",
+    "@aws-sdk/is-array-buffer@3.201.0",
     "mime-types",
     // azure client dependencies
     "@azure/storage-blob@12.14.0",
     "@azure/identity@3.1.3",
     "@azure/core-paging",
     // simulator dependencies
-    "tar",
     "express",
     "uuid",
+    // using version 3 because starting from version 4, it no longer works with CommonJS.
+    "nanoid@^3.3.6",
     "cron-parser",
     // shared client dependencies
     "ioredis",
+    "jsonschema",
   ],
   devDeps: [
-    `@cdktf/provider-aws@^12.0.1`, // only for testing Wing plugins
-    "@winglang/wing-api-checker@file:../../apps/wing-api-checker",
+    `@cdktf/provider-aws@^15.0.0`, // only for testing Wing plugins
+    "wing-api-checker",
+    "bump-pack",
     "@types/aws-lambda",
     "@types/fs-extra",
     "@types/mime-types",
-    "@types/tar",
     "@types/express",
     "aws-sdk-client-mock",
     "aws-sdk-client-mock-jest",
     `cdktf-cli@${CDKTF_VERSION}`,
     "eslint-plugin-sort-exports",
     "fs-extra",
-    "patch-package",
     "vitest",
     "@types/uuid",
-    "@vitest/coverage-c8",
+    "@vitest/coverage-v8",
     "nanoid", // for ESM import test in target-sim/function.test.ts
+    ...JSII_DEPS,
   ],
   jest: false,
   prettier: true,
   npmignoreEnabled: false,
-  minNodeVersion: "16.16.0",
-  packageManager: javascript.NodePackageManager.NPM,
+  minNodeVersion: "18.13.0",
+  projenCommand: "pnpm exec projen",
+  packageManager: javascript.NodePackageManager.PNPM,
   codeCov: true,
   codeCovTokenSecret: "CODECOV_TOKEN",
   github: false,
   projenrcTs: true,
-  jsiiVersion: "~5.0.0",
+  jsiiVersion: "5.0.11",
 });
 
 project.eslint?.addPlugins("sort-exports");
@@ -109,7 +147,7 @@ project.eslint?.addOverride({
 
 // use fork of jsii-docgen with wing-ish support
 project.deps.removeDependency("jsii-docgen");
-project.addDevDeps("@winglang/jsii-docgen@file:../../apps/jsii-docgen");
+project.addDevDeps("@winglang/jsii-docgen");
 
 enum Zone {
   PREFLIGHT = "preflight",
@@ -165,6 +203,36 @@ project.eslint!.addRules({
       ],
     },
   ],
+  // Makes sure that all methods and properties are marked with the right member accessibility- public, protected or private
+  "@typescript-eslint/explicit-member-accessibility": [
+    "error",
+    {
+      accessibility: "explicit",
+      overrides: {
+        accessors: "off",
+        constructors: "off",
+        methods: "explicit",
+        properties: "explicit",
+        parameterProperties: "explicit",
+      },
+    },
+  ],
+  // Makes sure comments and doc strings are capitalized
+  "capitalized-comments": [
+    "error",
+    "always",
+    {
+      line: {
+        // ignore everything
+        ignorePattern: ".*",
+      },
+      block: {
+        ignoreConsecutiveComments: true,
+        ignorePattern: "pragma|ignored",
+        ignoreInlineComments: true,
+      },
+    },
+  ],
 });
 
 project.npmignore?.addPatterns(".prettierignore", ".prettierrc.json", "*.tgz");
@@ -179,32 +247,56 @@ project.postCompileTask.prependSpawn(apiCheck);
 
 project.tasks
   .tryFind("bump")!
-  .reset("npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version");
+  .reset("pnpm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version");
 
 project.tasks
   .tryFind("unbump")!
-  .reset("npm version 0.0.0 --allow-same-version");
+  .reset("pnpm version 0.0.0 --allow-same-version");
 
-project.preCompileTask.exec("patch-package");
+// --------------- docs -----------------
 
-const docsFrontMatter = `---
-title: API Reference
-id: sdk
-description: Wing SDK API Reference
+const docsPrefix = (idx: number, name: string) => {
+  const prefix = idx.toString().padStart(2, "0");
+  return `../../docs/docs/04-standard-library/${prefix}-${name}`;
+};
+const docsFrontMatter = (name: string) => `---
+title: API reference
+id: api-reference
+description: Wing standard library API reference for the ${name} module
 keywords: [Wing sdk, sdk, Wing API Reference]
+hide_title: true
+sidebar_position: 100
 ---
+
+<!-- This file is automatically generated. Do not edit manually. -->
 `;
 
-const docsPath = "../../docs/05-reference/wingsdk-api.md";
 const docgen = project.tasks.tryFind("docgen")!;
 docgen.reset();
 
-// copy resource docs from src/cloud to docs
-docgen.exec(`cp -r src/cloud/*.md ../../docs/04-resources/`);
+// copy readme docs
+docgen.exec(`cp -r src/cloud/*.md ${CLOUD_DOCS_PREFIX}`);
 
-docgen.exec(`jsii-docgen -o API.md -l wing`);
-docgen.exec(`echo '${docsFrontMatter}' > ${docsPath}`);
-docgen.exec(`cat API.md >> ${docsPath}`);
+// generate api reference for each submodule
+for (const mod of PUBLIC_MODULES) {
+  const prefix = docsPrefix(PUBLIC_MODULES.indexOf(mod) + 2, mod);
+  const docsPath = prefix + "/api-reference.md";
+  docgen.exec(`jsii-docgen -o API.md -l wing --submodule ${mod}`);
+  docgen.exec(`mkdir -p ${prefix}`);
+  docgen.exec(`echo '${docsFrontMatter(mod)}' > ${docsPath}`);
+  docgen.exec(`cat API.md >> ${docsPath}`);
+}
+
+// generate api reference for each cloud/submodule and append it to the doc file
+for (const mod of cloudResources) {
+  const docsPath = `${CLOUD_DOCS_PREFIX}${mod}.md`;
+  docgen.exec(`jsii-docgen -o API.md -l wing --submodule cloud/${mod}`);
+  docgen.exec(`cat API.md >> ${docsPath}`);
+}
+
+docgen.exec("rm API.md");
+
+// --------------- end of docs -----------------
 
 // set up vitest related config
 project.addGitIgnore("/coverage/");
@@ -215,7 +307,14 @@ testWatch.description = "Run vitest in watch mode";
 project.testTask.spawn(project.eslint?.eslintTask!);
 
 project.addFields({
-  volta: rootPackageJson.volta,
+  volta: {
+    extends: "../../package.json",
+  },
+});
+project.addFields({
+  "bump-pack": {
+    removeBundledDependencies: sideLoad.map((sideDep) => sideDep.split("@")[0]),
+  },
 });
 
 project.addFields({
@@ -238,22 +337,9 @@ project.gitignore.addPatterns("src/.gen/providers");
 
 project.preCompileTask.exec("cdktf get");
 
-const packageJsonBack = "package.json.bak";
-const removeBundledDeps = project.addTask("remove-bundled-deps");
-removeBundledDeps.exec(`cp package.json ${packageJsonBack}`);
-for (const dep of sideLoad) {
-  removeBundledDeps.exec(
-    `./scripts/remove-bundled-dep.js ${dep.split("@")[0]}`
-  );
-}
+project.package.file.addDeletionOverride("pnpm");
+project.tryRemoveFile(".npmrc");
 
-const restoreBundleDeps = project.addTask("restore-bundled-deps");
-restoreBundleDeps.exec(`mv ${packageJsonBack} package.json`);
-
-project.tasks.tryFind("bump")?.spawn(removeBundledDeps);
-project.tasks.tryFind("unbump")?.spawn(restoreBundleDeps);
-
-// We use symlinks between several projects but we do not use workspaces
-project.npmrc.addConfig("install-links", "false");
+project.packageTask.reset("bump-pack -b");
 
 project.synth();

@@ -3,6 +3,7 @@ import { Code, InflightClient } from "../core";
 
 /**
  * Boolean
+ * @wingType bool
  */
 export class Boolean {
   /**
@@ -26,4 +27,6 @@ export class Boolean {
   public static _toInflightType(): Code {
     return InflightClient.forType(__filename, this.name);
   }
+
+  private constructor() {}
 }

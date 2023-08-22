@@ -10,7 +10,7 @@ import { Duration, IResource, Resource } from "../std";
 export const SCHEDULE_FQN = fqnForType("cloud.Schedule");
 
 /**
- * Properties for `Schedule`.
+ * Options for `Schedule`.
  */
 export interface ScheduleProps {
   /**
@@ -21,7 +21,7 @@ export interface ScheduleProps {
   readonly rate?: Duration;
 
   /**
-   * Trigger events according to a cron schedule using the UNIX cron format.
+   * Trigger events according to a cron schedule using the UNIX cron format. Timezone is UTC.
    * [minute] [hour] [day of month] [month] [day of week]
    * @example "0/1 * ? * *"
    * @default undefined
@@ -30,7 +30,7 @@ export interface ScheduleProps {
 }
 
 /**
- * Represents a schedule.
+ * A schedule.
  *
  * @inflight `@winglang/sdk.cloud.IScheduleClient`
  */
@@ -92,7 +92,7 @@ export abstract class Schedule extends Resource {
 export interface ScheduleOnTickProps extends FunctionProps {}
 
 /**
- * Represents a resource with an inflight "handle" method that can be passed to
+ * A resource with an inflight "handle" method that can be passed to
  * `Schedule.on_tick`.
  *
  * @inflight `@winglang/sdk.cloud.IScheduleOnTickHandlerClient`

@@ -1,15 +1,13 @@
 # [inflight_class_modifiers.w](../../../../../examples/tests/valid/inflight_class_modifiers.w) | compile | tf-aws
 
-## inflight.C.js
+## inflight.C-1.js
 ```js
 module.exports = function({  }) {
   class C {
-     constructor()  {
-      const __parent_this = this;
-      this.field = 12;
+    async method() {
     }
-    async method()  {
-      const __parent_this = this;
+    constructor() {
+      this.field = 12;
     }
   }
   return C;
@@ -24,7 +22,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -53,22 +51,19 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
+const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class C extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("method", "field");
-        const __parent_this = this;
+        this._addInflightOps("method", "$inflight_init", "field");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.C.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.C-1.js")({
           })
         `);
       }
@@ -85,30 +80,15 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("method")) {
+          C._registerBindObject(this, host, ["field"]);
         }
         super._registerBind(host, ops);
       }
     }
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "inflight_class_modifiers", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "inflight_class_modifiers", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

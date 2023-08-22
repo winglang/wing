@@ -3,11 +3,12 @@ use indexmap::IndexMap;
 use crate::{
 	ast::{
 		ArgList, Class, ClassField, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
-		Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind,
+		UserDefinedType,
 	},
 	diagnostic::WingSpan,
 	fold::{self, Fold},
-	type_check::HANDLE_METHOD_NAME,
+	type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME, CLOSURE_CLASS_HANDLE_METHOD},
 };
 
 pub const CLOSURE_CLASS_PREFIX: &str = "$Closure";
@@ -71,28 +72,6 @@ impl Fold for ClosureTransformer {
 	fn fold_scope(&mut self, node: Scope) -> Scope {
 		let mut statements = vec![];
 
-		// If we are inside a scope with "this", add define `let __parent_this = this` which can be
-		// used by the newly-created preflight classes
-		if self.inside_scope_with_this {
-			let parent_this_name = Symbol::new(PARENT_THIS_NAME, WingSpan::default());
-			let this_name = Symbol::new("this", WingSpan::default());
-			let parent_this_def = Stmt {
-				kind: StmtKind::Let {
-					reassignable: false,
-					var_name: parent_this_name,
-					initial_value: Expr::new(
-						ExprKind::Reference(Reference::Identifier(this_name)),
-						WingSpan::default(),
-					),
-					type_: None,
-				},
-				span: WingSpan::default(),
-				idx: 0,
-			};
-
-			statements.push(parent_this_def);
-		}
-
 		for stmt in node.statements {
 			// TODO: can we remove "idx" from Stmt to avoid having to reason about this?
 			// or add a compiler step that updates statement indices after folding?
@@ -113,9 +92,9 @@ impl Fold for ClosureTransformer {
 		}
 
 		Scope {
+			id: node.id,
 			statements,
 			span: node.span,
-			env: node.env,
 		}
 	}
 
@@ -152,40 +131,56 @@ impl Fold for ClosureTransformer {
 			ExprKind::FunctionClosure(func_def) => {
 				self.closure_counter += 1;
 
+				let file_id = &expr.span.file_id;
+
 				let new_class_name = Symbol {
 					name: format!("{}{}", CLOSURE_CLASS_PREFIX, self.closure_counter),
-					span: WingSpan::default(),
+					span: WingSpan::for_file(file_id),
 				};
 				let handle_name = Symbol {
-					name: HANDLE_METHOD_NAME.to_string(),
-					span: WingSpan::default(),
+					name: CLOSURE_CLASS_HANDLE_METHOD.to_string(),
+					span: WingSpan::for_file(file_id),
+				};
+
+				let class_udt = UserDefinedType {
+					root: new_class_name.clone(),
+					fields: vec![],
+					span: WingSpan::for_file(file_id),
 				};
 
 				let class_type_annotation = TypeAnnotation {
-					kind: TypeAnnotationKind::UserDefined(UserDefinedType {
-						root: new_class_name.clone(),
-						fields: vec![],
-						span: WingSpan::default(),
-					}),
-					span: WingSpan::default(),
+					kind: TypeAnnotationKind::UserDefined(class_udt.clone()),
+					span: WingSpan::for_file(file_id),
 				};
 
 				let class_fields: Vec<ClassField> = vec![];
 				let class_init_params: Vec<FunctionParameter> = vec![];
 
-				let mut new_func_def = if self.inside_scope_with_this {
+				let new_func_def = if self.inside_scope_with_this {
 					// If we are inside a class, we transform inflight closures with an extra
-					// `let __parent_this = this;` statement before the class definition, and replace references
-					// to `this` with `__parent_this` so that they can access the parent class's fields.
-					let mut this_transform = RenameThisTransformer::default();
+					// `let __parent_this_${CLOSURE_COUNT} = this;` statement before the class definition, and replace references
+					// to `this` with `__parent_this_${CLOSURE_COUNT}` so that they can access the parent class's fields.
+					let parent_this = format!("{}_{}", PARENT_THIS_NAME, self.closure_counter);
+					let mut this_transform = RenameThisTransformer {
+						from: "this",
+						to: parent_this.as_str(),
+						inside_class: false,
+					};
 					this_transform.fold_function_definition(func_def)
 				} else {
 					func_def
 				};
 
-				// Anonymous functions are always static -- since the function code is now an instance method on a class,
-				// we need to set this to false.
-				new_func_def.is_static = false;
+				let new_func_def = FunctionDefinition {
+					name: Some(handle_name.clone()),
+					body: new_func_def.body,
+					signature: new_func_def.signature,
+					span: new_func_def.span,
+
+					// Anonymous functions are always static -- since the function code is now an instance method on a class,
+					// we need to set this to false.
+					is_static: false,
+				};
 
 				// class_init_body :=
 				// ```
@@ -198,21 +193,46 @@ impl Fold for ClosureTransformer {
 							object: Box::new(Expr::new(
 								ExprKind::Reference(Reference::InstanceMember {
 									object: Box::new(Expr::new(
-										ExprKind::Reference(Reference::Identifier(Symbol::new("this", WingSpan::default()))),
-										WingSpan::default(),
+										ExprKind::Reference(Reference::Identifier(Symbol::new("this", WingSpan::for_file(file_id)))),
+										WingSpan::for_file(file_id),
 									)),
-									property: Symbol::new("display", WingSpan::default()),
+									property: Symbol::new("display", WingSpan::for_file(file_id)),
 									optional_accessor: false,
 								}),
-								WingSpan::default(),
+								WingSpan::for_file(file_id),
 							)),
-							property: Symbol::new("hidden", WingSpan::default()),
+							property: Symbol::new("hidden", WingSpan::for_file(file_id)),
 							optional_accessor: false,
 						},
-						value: Expr::new(ExprKind::Literal(Literal::Boolean(true)), WingSpan::default()),
+
+						value: Expr::new(ExprKind::Literal(Literal::Boolean(true)), WingSpan::for_file(file_id)),
 					},
-					span: WingSpan::default(),
+					span: WingSpan::for_file(file_id),
 				}];
+
+				// If we are inside a scope with "this", add define `let __parent_this_${CLOSURE_COUNT} = this` which can be
+				// used by the newly-created preflight classes
+				if self.inside_scope_with_this {
+					let parent_this_name = Symbol::new(
+						format!("{}_{}", PARENT_THIS_NAME, self.closure_counter),
+						WingSpan::for_file(file_id),
+					);
+					let this_name = Symbol::new("this", WingSpan::for_file(file_id));
+					let parent_this_def = Stmt {
+						kind: StmtKind::Let {
+							reassignable: false,
+							var_name: parent_this_name,
+							initial_value: Expr::new(
+								ExprKind::Reference(Reference::Identifier(this_name)),
+								WingSpan::for_file(file_id),
+							),
+							type_: None,
+						},
+						span: WingSpan::for_file(file_id),
+						idx: 0,
+					};
+					self.class_statements.push(parent_this_def);
+				}
 
 				// class_def :=
 				// ```
@@ -228,35 +248,37 @@ impl Fold for ClosureTransformer {
 						name: new_class_name.clone(),
 						phase: Phase::Preflight,
 						initializer: FunctionDefinition {
+							name: Some(CLASS_INIT_NAME.into()),
 							signature: FunctionSignature {
 								parameters: class_init_params,
 								return_type: Box::new(class_type_annotation.clone()),
 								phase: Phase::Preflight,
 							},
 							is_static: true,
-							body: FunctionBody::Statements(Scope::new(class_init_body, WingSpan::default())),
-							span: WingSpan::default(),
+							body: FunctionBody::Statements(Scope::new(class_init_body, WingSpan::for_file(file_id))),
+							span: WingSpan::for_file(file_id),
 						},
 						fields: class_fields,
 						implements: vec![],
 						parent: None,
 						methods: vec![(handle_name.clone(), new_func_def)],
 						inflight_initializer: FunctionDefinition {
+							name: Some(CLASS_INFLIGHT_INIT_NAME.into()),
 							signature: FunctionSignature {
 								parameters: vec![],
 								return_type: Box::new(TypeAnnotation {
 									kind: TypeAnnotationKind::Void,
-									span: Default::default(),
+									span: WingSpan::for_file(file_id),
 								}),
 								phase: Phase::Inflight,
 							},
 							is_static: false,
-							body: FunctionBody::Statements(Scope::new(vec![], WingSpan::default())),
-							span: WingSpan::default(),
+							body: FunctionBody::Statements(Scope::new(vec![], WingSpan::for_file(file_id))),
+							span: WingSpan::for_file(file_id),
 						},
 					}),
 					idx: self.nearest_stmt_idx,
-					span: WingSpan::default(),
+					span: WingSpan::for_file(file_id),
 				};
 
 				// new_class_instance :=
@@ -264,16 +286,17 @@ impl Fold for ClosureTransformer {
 				// new <new_class_name>();
 				// ```
 				let new_class_instance = Expr::new(
-					ExprKind::New {
-						class: class_type_annotation,
+					ExprKind::New(NewExpr {
+						class: Box::new(class_udt.to_expression()),
 						arg_list: ArgList {
 							named_args: IndexMap::new(),
 							pos_args: vec![],
+							span: WingSpan::for_file(file_id),
 						},
 						obj_id: None,
 						obj_scope: None,
-					},
-					WingSpan::default(),
+					}),
+					expr.span.clone(), // <<-- span of original expression
 				);
 
 				self.class_statements.push(class_def);
@@ -325,7 +348,9 @@ impl<'a> Fold for RenameThisTransformer<'a> {
 					Reference::Identifier(ident)
 				}
 			}
-			Reference::InstanceMember { .. } | Reference::TypeMember { .. } => fold::fold_reference(self, node),
+			Reference::InstanceMember { .. } | Reference::TypeMember { .. } | Reference::TypeReference(_) => {
+				fold::fold_reference(self, node)
+			}
 		}
 	}
 }

@@ -4,6 +4,10 @@ source: libs/wingc/src/lsp/completions.rs
 - label: assert
   kind: 3
   detail: "(condition: bool): void"
+  documentation:
+    kind: markdown
+    value: "```wing\nassert: (condition: bool): void\n```\n---\nAsserts that a condition is true\n\n### Parameters\n- `condition` — The condition to assert"
+  sortText: cc|assert
   insertText: assert($0)
   insertTextFormat: 2
   command:
@@ -12,6 +16,10 @@ source: libs/wingc/src/lsp/completions.rs
 - label: log
   kind: 3
   detail: "(message: str): void"
+  documentation:
+    kind: markdown
+    value: "```wing\nlog: (message: str): void\n```\n---\nLogs a message\n\n### Parameters\n- `message` — The message to log"
+  sortText: cc|log
   insertText: log($0)
   insertTextFormat: 2
   command:
@@ -20,6 +28,10 @@ source: libs/wingc/src/lsp/completions.rs
 - label: panic
   kind: 3
   detail: "(message: str): void"
+  documentation:
+    kind: markdown
+    value: "```wing\npanic: (message: str): void\n```\n---\npanics with an error\n\n### Parameters\n- `message` — The message to panic with"
+  sortText: cc|panic
   insertText: panic($0)
   insertTextFormat: 2
   command:
@@ -28,9 +40,25 @@ source: libs/wingc/src/lsp/completions.rs
 - label: throw
   kind: 3
   detail: "(message: str): void"
+  documentation:
+    kind: markdown
+    value: "```wing\nthrow: (message: str): void\n```\n---\nthrows an error\n\n### Parameters\n- `message` — The message to throw"
+  sortText: cc|throw
   insertText: throw($0)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: "inflight () => {}"
+  kind: 15
+  sortText: "ll|inflight () => {}"
+  filterText: inflight
+  insertText: "inflight ($1) => {$2}"
+  insertTextFormat: 2
+- label: "test \"\" { }"
+  kind: 15
+  sortText: "ll|test \"\" { }"
+  filterText: test
+  insertText: "test \"$1\" {\n\t$2\n}"
+  insertTextFormat: 2
 

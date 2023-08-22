@@ -3,8 +3,8 @@ import { ISimulatorResource } from "./resource";
 import { TestRunnerSchema, TEST_RUNNER_TYPE } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
-import * as cloud from "../cloud";
 import * as core from "../core";
+import * as std from "../std";
 import { IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 
@@ -13,8 +13,8 @@ import { BaseResourceSchema } from "../testing/simulator";
  *
  * @inflight `@winglang/sdk.cloud.ITestRunnerClient`
  */
-export class TestRunner extends cloud.TestRunner implements ISimulatorResource {
-  constructor(scope: Construct, id: string, props: cloud.TestRunnerProps = {}) {
+export class TestRunner extends std.TestRunner implements ISimulatorResource {
+  constructor(scope: Construct, id: string, props: std.TestRunnerProps = {}) {
     super(scope, id, props);
   }
 
@@ -31,10 +31,9 @@ export class TestRunner extends cloud.TestRunner implements ISimulatorResource {
     return schema;
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource("test-runner", this, host);
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */

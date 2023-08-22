@@ -1,0 +1,79 @@
+---
+source: libs/wingc/src/jsify/tests.rs
+---
+## Code
+
+```w
+
+    let s = "hello";
+
+    class MyType {
+      static inflight staticMethod(): str {
+        return s;
+      }
+    }
+    
+```
+
+## inflight.MyType-1.js
+
+```js
+module.exports = function({ $s }) {
+  class MyType {
+    constructor({  }) {
+    }
+    static async staticMethod() {
+      return $s;
+    }
+  }
+  return MyType;
+}
+```
+
+## preflight.js
+
+```js
+const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const $wing_is_test = process.env.WING_IS_TEST === "true";
+const std = $stdlib.std;
+class $Root extends $stdlib.std.Resource {
+  constructor(scope, id) {
+    super(scope, id);
+    class MyType extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("staticMethod", "$inflight_init");
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.MyType-1.js")({
+            $s: ${context._lift(s)},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const MyTypeClient = ${MyType._toInflightType(this).text};
+            const client = new MyTypeClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      static _registerTypeBind(host, ops) {
+        if (ops.includes("staticMethod")) {
+          MyType._registerBindObject(s, host, []);
+        }
+        super._registerTypeBind(host, ops);
+      }
+    }
+    const s = "hello";
+  }
+}
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "main", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+```
+

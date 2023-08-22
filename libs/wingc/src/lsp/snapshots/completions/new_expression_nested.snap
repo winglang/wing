@@ -3,38 +3,123 @@ source: libs/wingc/src/lsp/completions.rs
 ---
 - label: Api
   kind: 7
-  detail: preflight class
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Api\n```\n---\nFunctionality shared between all `Api` implementations."
+  sortText: gg|Api
+  insertText: Api($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: Bucket
   kind: 7
-  detail: preflight class
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Bucket\n```\n---\nA cloud object store."
+  sortText: gg|Bucket
+  insertText: Bucket($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: Counter
   kind: 7
-  detail: preflight class
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Counter\n```\n---\nA distributed atomic counter."
+  sortText: gg|Counter
+  insertText: Counter($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: Function
   kind: 7
-  detail: preflight class
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Function impl IInflightHost\n```\n---\nA function."
+  sortText: gg|Function
+  insertText: Function($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: OnDeploy
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass OnDeploy\n```\n---\nRun code every time the app is deployed."
+  sortText: gg|OnDeploy
+  insertText: OnDeploy($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: Queue
   kind: 7
-  detail: preflight class
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Queue\n```\n---\nA queue."
+  sortText: gg|Queue
+  insertText: Queue($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: Schedule
   kind: 7
-  detail: preflight class
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Schedule\n```\n---\nA schedule."
+  sortText: gg|Schedule
+  insertText: Schedule($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: Secret
   kind: 7
-  detail: preflight class
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Secret\n```\n---\nA cloud secret."
+  sortText: gg|Secret
+  insertText: Secret($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: Service
   kind: 7
-  detail: preflight class
-- label: Table
-  kind: 7
-  detail: preflight class
-- label: TestRunner
-  kind: 7
-  detail: preflight class
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Service\n```\n---\nA long-running service."
+  sortText: gg|Service
+  insertText: Service($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: Topic
   kind: 7
-  detail: preflight class
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Topic\n```\n---\nA topic."
+  sortText: gg|Topic
+  insertText: Topic($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: Website
   kind: 7
-  detail: preflight class
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Website\n```\n---\nA cloud static website."
+  sortText: gg|Website
+  insertText: Website($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 

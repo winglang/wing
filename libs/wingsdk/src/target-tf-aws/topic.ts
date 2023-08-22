@@ -6,6 +6,7 @@ import { SnsTopicPolicy } from "../.gen/providers/aws/sns-topic-policy";
 import { SnsTopicSubscription } from "../.gen/providers/aws/sns-topic-subscription";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
@@ -28,7 +29,7 @@ const NAME_OPTS: NameOptions = {
 export class Topic extends cloud.Topic {
   private readonly topic: SnsTopic;
   /**
-   * topic's publishing permissions. can be use as a dependency of another resource.
+   * Topic's publishing permissions. can be use as a dependency of another resource.
    * (the one that got the permissions to publish)
    * */
   public permissions!: SnsTopicPolicy;
@@ -42,7 +43,7 @@ export class Topic extends cloud.Topic {
   }
 
   /**
-   * topic's arn
+   * Topic's arn
    */
   public get arn(): string {
     return this.topic.arn;
@@ -88,10 +89,10 @@ export class Topic extends cloud.Topic {
 
     fn.addPermissionToInvoke(this, "sns.amazonaws.com", this.topic.arn, {});
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "on_message",
+    Connections.of(this).add({
+      source: this,
+      target: fn,
+      name: "onMessage()",
     });
 
     return fn;
@@ -134,17 +135,16 @@ export class Topic extends cloud.Topic {
     );
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("topics can only be bound by tfaws.Function for now");
     }
 
-    host.addPolicyStatements(...calculateTopicPermissions(this.topic.arn, ops));
+    host.addPolicyStatements(calculateTopicPermissions(this.topic.arn, ops));
 
     host.addEnvironment(this.envName(), this.topic.arn);
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */

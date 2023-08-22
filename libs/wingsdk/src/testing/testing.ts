@@ -1,6 +1,6 @@
 import { IConstruct } from "constructs";
 import { InflightBindings, NodeJsCode } from "../core";
-import { serializeImmutableData } from "../core/internal";
+import { liftObject } from "../core/internal";
 import { IInflightHost, IResource, Resource } from "../std";
 
 /**
@@ -9,7 +9,7 @@ import { IInflightHost, IResource, Resource } from "../std";
  */
 export class Testing {
   /**
-   * Make an `IFunctionHandler`, `IQueueAddConsumerHandler` or any other handler
+   * Make an `IFunctionHandler`, `IQueueSetConsumerHandler` or any other handler
    * on the fly. The resource will have a single method named "handle".
    *
    * The JavaScript code passed to the handler must be in the form of
@@ -30,7 +30,7 @@ export class Testing {
     const clients: Record<string, string> = {};
 
     for (const [k, v] of Object.entries(bindings)) {
-      clients[k] = serializeImmutableData(scope, v.obj);
+      clients[k] = liftObject(scope, v.obj);
     }
 
     // implements IFunctionHandler

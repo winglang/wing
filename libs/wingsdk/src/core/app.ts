@@ -1,6 +1,7 @@
 import { Construct } from "constructs";
 import { Tokens } from "./tokens";
 import { IResource } from "../std/resource";
+import { TestRunner } from "../std/test-runner";
 
 /**
  * Props for all `App` classes.
@@ -32,10 +33,31 @@ export interface AppProps {
   readonly plugins?: string[];
 
   /**
+   * The root construct class that should be instantiated with a scope and id.
+   * If provided, then it will be instantiated on the user's behalf.
+   * When the app is synthesized with `isTestEnvironment` set to `true`, then
+   * one instance of the root construct will be created per test; otherwise,
+   * it will be created exactly once.
+   * @default - no root construct
+   */
+  readonly rootConstruct?: any;
+
+  /**
    * Whether or not this app is being synthesized into a test environment.
    * @default false
    */
   readonly isTestEnvironment?: boolean;
+
+  /**
+   *  The absolute directory location for the wing entry point file
+   */
+  readonly entrypointDir: string;
+
+  /**
+   *  The App root id
+   * @default Default
+   */
+  readonly rootId?: string;
 }
 
 /**
@@ -79,6 +101,11 @@ export abstract class App extends Construct {
   }
 
   /**
+   * Wing source files directory absolute path
+   */
+  public readonly entrypointDir: string;
+
+  /**
    * The output directory.
    */
   public abstract readonly outdir: string;
@@ -93,6 +120,11 @@ export abstract class App extends Construct {
    * @internal
    */
   public abstract readonly _tokens: Tokens;
+
+  constructor(scope: Construct, id: string, props: AppProps) {
+    super(scope, id);
+    this.entrypointDir = props.entrypointDir;
+  }
 
   /**
    * The ".wing" directory, which is where the compiler emits its output. We are taking an implicit
@@ -174,6 +206,29 @@ export abstract class App extends Construct {
     id;
     args;
     return undefined;
+  }
+
+  /**
+   * Synthesize the root construct if one was given. If this is a test environment, then
+   * we will synthesize one root construct per test. Otherwise, we will synthesize exactly
+   * one root construct.
+   *
+   * @param props The App props
+   * @param testRunner The test runner
+   */
+  protected synthRoots(props: AppProps, testRunner: TestRunner) {
+    if (props.rootConstruct) {
+      const Root = props.rootConstruct;
+      if (this.isTestEnvironment) {
+        new Root(this, "env0");
+        const tests = testRunner.findTests();
+        for (let i = 1; i < tests.length; i++) {
+          new Root(this, "env" + i);
+        }
+      } else {
+        new Root(this, "Default");
+      }
+    }
   }
 }
 

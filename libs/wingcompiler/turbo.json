@@ -1,0 +1,17 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "extends": ["//"],
+  "pipeline": {
+    "compile:copy-wingc-wasm": {
+      "dependsOn": ["^compile"],
+      "outputs": ["wingc.wasm"]
+    },
+    "compile": {
+      "dependsOn": ["compile:copy-wingc-wasm"],
+      "outputs": ["dist/**"]
+    },
+    "package": {
+      "outputs": ["../../dist/winglang-compiler-*.tgz"]
+    }
+  }
+}

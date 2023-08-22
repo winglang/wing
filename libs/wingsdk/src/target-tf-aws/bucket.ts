@@ -15,7 +15,6 @@ import { S3BucketPublicAccessBlock } from "../.gen/providers/aws/s3-bucket-publi
 import { S3BucketServerSideEncryptionConfigurationA } from "../.gen/providers/aws/s3-bucket-server-side-encryption-configuration";
 import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
-import { BucketEventType, Topic } from "../cloud";
 import * as core from "../core";
 import {
   CaseConventions,
@@ -26,9 +25,9 @@ import { calculateBucketPermissions } from "../shared-aws/permissions";
 import { IInflightHost } from "../std";
 
 const EVENTS = {
-  [BucketEventType.DELETE]: ["s3:ObjectRemoved:*"],
-  [BucketEventType.CREATE]: ["s3:ObjectCreated:Put"],
-  [BucketEventType.UPDATE]: ["s3:ObjectCreated:Post"],
+  [cloud.BucketEventType.DELETE]: ["s3:ObjectRemoved:*"],
+  [cloud.BucketEventType.CREATE]: ["s3:ObjectCreated:Put"],
+  [cloud.BucketEventType.UPDATE]: ["s3:ObjectCreated:Post"],
 };
 
 /**
@@ -78,7 +77,7 @@ export class Bucket extends cloud.Bucket {
     return join(__dirname, "bucket.onevent.inflight.js");
   }
 
-  protected createTopic(actionType: BucketEventType): Topic {
+  protected createTopic(actionType: cloud.BucketEventType): cloud.Topic {
     const handler = super.createTopic(actionType);
 
     // TODO: remove this constraint by adding generic permission APIs to cloud.Function
@@ -110,22 +109,18 @@ export class Bucket extends cloud.Bucket {
     }
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof AWSFunction)) {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }
 
-    host.addPolicyStatements(
-      ...calculateBucketPermissions(this.bucket.arn, ops)
-    );
+    host.addPolicyStatements(calculateBucketPermissions(this.bucket.arn, ops));
 
     // The bucket name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.bucket.bucket);
-    host.addEnvironment(this.isPublicEnvName(), `${this.public}`);
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */
@@ -134,15 +129,8 @@ export class Bucket extends cloud.Bucket {
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
       "BucketClient",
-      [
-        `process.env["${this.envName()}"]`,
-        `process.env["${this.isPublicEnvName()}"]`,
-      ]
+      [`process.env["${this.envName()}"]`]
     );
-  }
-
-  private isPublicEnvName(): string {
-    return `${this.envName()}_IS_PUBLIC`;
   }
 
   private envName(): string {
@@ -191,13 +179,17 @@ export function createEncryptedBucket(
   });
 
   if (isPublic) {
-    new S3BucketPublicAccessBlock(scope, "PublicAccessBlock", {
-      bucket: bucket.bucket,
-      blockPublicAcls: false,
-      blockPublicPolicy: false,
-      ignorePublicAcls: false,
-      restrictPublicBuckets: false,
-    });
+    const publicAccessBlock = new S3BucketPublicAccessBlock(
+      scope,
+      "PublicAccessBlock",
+      {
+        bucket: bucket.bucket,
+        blockPublicAcls: false,
+        blockPublicPolicy: false,
+        ignorePublicAcls: false,
+        restrictPublicBuckets: false,
+      }
+    );
     const policy = {
       Version: "2012-10-17",
       Statement: [
@@ -212,6 +204,7 @@ export function createEncryptedBucket(
     new S3BucketPolicy(scope, "PublicPolicy", {
       bucket: bucket.bucket,
       policy: JSON.stringify(policy),
+      dependsOn: [publicAccessBlock],
     });
   } else {
     new S3BucketPublicAccessBlock(scope, "PublicAccessBlock", {

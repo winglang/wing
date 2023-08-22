@@ -1,3 +1,5 @@
+import * as fs from "fs";
+import { resolve } from "path";
 import * as url from "url";
 import { vi, test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
@@ -62,15 +64,29 @@ test("update an object in bucket", async () => {
   expect(listMessages(s)).toMatchSnapshot();
 });
 
-test("bucket on event creates 3 topics ", async () => {
+test("bucket on event creates 3 topics, and sends the right event and key in the event handlers ", async () => {
   // GIVEN
   const app = new SimApp();
   const bucket = cloud.Bucket._newBucket(app, "my_bucket");
-  const testInflight = Testing.makeHandler(app, "inflight_test", "null");
+  const logBucket = cloud.Bucket._newBucket(app, "log_bucket");
+  const testInflight = Testing.makeHandler(
+    app,
+    "inflight_test",
+    `async handle(key, event) { await this.bucket.put(key, event); }`,
+    {
+      bucket: {
+        obj: logBucket,
+        ops: [cloud.BucketInflightMethods.PUT],
+      },
+    }
+  );
+
   bucket.onEvent(testInflight);
 
   const s = await app.startSimulator();
   const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+  const logClient = s.getResource("/log_bucket") as cloud.IBucketClient;
+
   expect(Object.keys((client as any).topicHandlers)).toMatchObject([
     BucketEventType.CREATE,
     BucketEventType.UPDATE,
@@ -78,6 +94,12 @@ test("bucket on event creates 3 topics ", async () => {
   ]);
 
   // THEN
+  await client.put("a", "1");
+  expect(await logClient.get("a")).toBe(BucketEventType.CREATE);
+  await client.put("a", "2");
+  expect(await logClient.get("a")).toBe(BucketEventType.UPDATE);
+  await client.delete("a");
+  expect(await logClient.get("a")).toBe(BucketEventType.DELETE);
   await s.stop();
   expect(listMessages(s)).toMatchSnapshot();
 });
@@ -475,6 +497,32 @@ test("can add object in preflight", async () => {
 
   expect(getResponse).toEqual(VALUE);
   expect(listResponse).toEqual([KEY]);
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("can add file in preflight", async () => {
+  // GIVEN
+  const FILENAME = "test.txt";
+  const PATH = resolve(__dirname, "../testFiles/test1.txt");
+
+  const app = new SimApp();
+  const bucket = cloud.Bucket._newBucket(app, "my_bucket");
+  bucket.addFile(FILENAME, PATH);
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  // WHEN
+  await client.get(FILENAME);
+  const getResponse = await client.get(FILENAME);
+  const listResponse = await client.list();
+
+  // THEN
+  await s.stop();
+
+  expect(getResponse).toEqual(fs.readFileSync(PATH, "utf8"));
+  expect(listResponse).toEqual([FILENAME]);
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 });

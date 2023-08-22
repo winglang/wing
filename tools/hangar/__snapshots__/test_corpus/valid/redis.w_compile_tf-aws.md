@@ -1,27 +1,49 @@
 # [redis.w](../../../../../examples/tests/valid/redis.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
-module.exports = function({ r, r2 }) {
+module.exports = function({ $r }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const connection = (await r.rawClient());
-      (await connection.set("wing","does redis"));
-      const value = (await connection.get("wing"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(value === "does redis")'`)})((value === "does redis"))};
-      (await r2.set("wing","does redis again"));
-      const value2 = (await r2.get("wing"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(value2 === "does redis again")'`)})((value2 === "does redis again"))};
+    async handle(message) {
+      (await $r.set("hello",message));
     }
   }
   return $Closure1;
+}
+
+```
+
+## inflight.$Closure2-1.js
+```js
+module.exports = function({ $queue, $r, $r2, $util_Util }) {
+  class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      const connection = (await $r.rawClient());
+      (await connection.set("wing","does redis"));
+      const value = (await connection.get("wing"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: value == \"does redis\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(value,"does redis")))};
+      (await $r2.set("wing","does redis again"));
+      const value2 = (await $r2.get("wing"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: value2 == \"does redis again\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(value2,"does redis again")))};
+      (await $queue.push("world!"));
+      (await $util_Util.waitUntil(async () => {
+        return (((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })((await $r.get("hello")),undefined));
+      }
+      ));
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"world!\" == \"${r.get(\"hello\")}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("world!",String.raw({ raw: ["", ""] }, (await $r.get("hello"))))))};
+    }
+  }
+  return $Closure2;
 }
 
 ```
@@ -33,7 +55,7 @@ module.exports = function({ r, r2 }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -47,7 +69,7 @@ module.exports = function({ r, r2 }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:test\",\"${aws_lambda_function.root_testtest_Handler_046C3415.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:testing Redis\",\"${aws_lambda_function.testtestingRedis_Handler_7678DD27.arn}\"]]"
     }
   },
   "provider": {
@@ -57,24 +79,43 @@ module.exports = function({ r, r2 }) {
   },
   "resource": {
     "aws_eip": {
-      "root_EIP_ED59AD4B": {
+      "EIP": {
         "//": {
           "metadata": {
             "path": "root/Default/EIP",
-            "uniqueId": "root_EIP_ED59AD4B"
+            "uniqueId": "EIP"
           }
         }
       }
     },
     "aws_elasticache_cluster": {
-      "root_r2_RedisCluster_EB1F5CD1": {
+      "exRedis_RedisCluster_3C9A5882": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/ex.Redis/RedisCluster",
+            "uniqueId": "exRedis_RedisCluster_3C9A5882"
+          }
+        },
+        "availability_zone": "${aws_subnet.PrivateSubnet.availability_zone}",
+        "cluster_id": "ex-redis-c8a27ec9",
+        "engine": "redis",
+        "engine_version": "6.2",
+        "node_type": "cache.t4g.small",
+        "num_cache_nodes": 1,
+        "parameter_group_name": "default.redis6.x",
+        "security_group_ids": [
+          "${aws_security_group.exRedis_securityGroup_3948C3F2.id}"
+        ],
+        "subnet_group_name": "${aws_elasticache_subnet_group.exRedis_RedisSubnetGroup_EE9BBE48.name}"
+      },
+      "r2_RedisCluster_C6087F40": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/r2/RedisCluster",
-            "uniqueId": "root_r2_RedisCluster_EB1F5CD1"
+            "uniqueId": "r2_RedisCluster_C6087F40"
           }
         },
-        "availability_zone": "${aws_subnet.root_PrivateSubnet_8A5D9DDE.availability_zone}",
+        "availability_zone": "${aws_subnet.PrivateSubnet.availability_zone}",
         "cluster_id": "r2-c882797c",
         "engine": "redis",
         "engine_version": "6.2",
@@ -82,162 +123,217 @@ module.exports = function({ r, r2 }) {
         "num_cache_nodes": 1,
         "parameter_group_name": "default.redis6.x",
         "security_group_ids": [
-          "${aws_security_group.root_r2_securityGroup_EC7D0A0D.id}"
+          "${aws_security_group.r2_securityGroup_35A75C2E.id}"
         ],
-        "subnet_group_name": "${aws_elasticache_subnet_group.root_r2_RedisSubnetGroup_873E9A00.name}"
-      },
-      "root_redisRedis_RedisCluster_2049056C": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/redis.Redis/RedisCluster",
-            "uniqueId": "root_redisRedis_RedisCluster_2049056C"
-          }
-        },
-        "availability_zone": "${aws_subnet.root_PrivateSubnet_8A5D9DDE.availability_zone}",
-        "cluster_id": "redis-redis-c811048b",
-        "engine": "redis",
-        "engine_version": "6.2",
-        "node_type": "cache.t4g.small",
-        "num_cache_nodes": 1,
-        "parameter_group_name": "default.redis6.x",
-        "security_group_ids": [
-          "${aws_security_group.root_redisRedis_securityGroup_C278C668.id}"
-        ],
-        "subnet_group_name": "${aws_elasticache_subnet_group.root_redisRedis_RedisSubnetGroup_6ED92583.name}"
+        "subnet_group_name": "${aws_elasticache_subnet_group.r2_RedisSubnetGroup_C415566B.name}"
       }
     },
     "aws_elasticache_subnet_group": {
-      "root_r2_RedisSubnetGroup_873E9A00": {
+      "exRedis_RedisSubnetGroup_EE9BBE48": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/ex.Redis/RedisSubnetGroup",
+            "uniqueId": "exRedis_RedisSubnetGroup_EE9BBE48"
+          }
+        },
+        "name": "ex-redis-c8a27ec9-subnetGroup",
+        "subnet_ids": [
+          "${aws_subnet.PrivateSubnet.id}"
+        ]
+      },
+      "r2_RedisSubnetGroup_C415566B": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/r2/RedisSubnetGroup",
-            "uniqueId": "root_r2_RedisSubnetGroup_873E9A00"
+            "uniqueId": "r2_RedisSubnetGroup_C415566B"
           }
         },
         "name": "r2-c882797c-subnetGroup",
         "subnet_ids": [
-          "${aws_subnet.root_PrivateSubnet_8A5D9DDE.id}"
-        ]
-      },
-      "root_redisRedis_RedisSubnetGroup_6ED92583": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/redis.Redis/RedisSubnetGroup",
-            "uniqueId": "root_redisRedis_RedisSubnetGroup_6ED92583"
-          }
-        },
-        "name": "redis-redis-c811048b-subnetGroup",
-        "subnet_ids": [
-          "${aws_subnet.root_PrivateSubnet_8A5D9DDE.id}"
+          "${aws_subnet.PrivateSubnet.id}"
         ]
       }
     },
     "aws_iam_role": {
-      "root_testtest_Handler_IamRole_6C1728D1": {
+      "cloudQueue-SetConsumer-cdafee6e_IamRole_2548D828": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRole",
-            "uniqueId": "root_testtest_Handler_IamRole_6C1728D1"
+            "path": "root/Default/Default/cloud.Queue-SetConsumer-cdafee6e/IamRole",
+            "uniqueId": "cloudQueue-SetConsumer-cdafee6e_IamRole_2548D828"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
+      "testtestingRedis_Handler_IamRole_8B9140DE": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:testing Redis/Handler/IamRole",
+            "uniqueId": "testtestingRedis_Handler_IamRole_8B9140DE"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testtest_Handler_IamRolePolicy_65A1D8BE": {
+      "cloudQueue-SetConsumer-cdafee6e_IamRolePolicy_37133937": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRolePolicy",
-            "uniqueId": "root_testtest_Handler_IamRolePolicy_65A1D8BE"
+            "path": "root/Default/Default/cloud.Queue-SetConsumer-cdafee6e/IamRolePolicy",
+            "uniqueId": "cloudQueue-SetConsumer-cdafee6e_IamRolePolicy_37133937"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"elasticache:Describe*\"],\"Resource\":[\"${aws_elasticache_cluster.root_redisRedis_RedisCluster_2049056C.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"elasticache:Describe*\"],\"Resource\":[\"${aws_elasticache_cluster.root_r2_RedisCluster_EB1F5CD1.arn}\"],\"Effect\":\"Allow\"},{\"Effect\":\"Allow\",\"Action\":[\"ec2:CreateNetworkInterface\",\"ec2:DescribeNetworkInterfaces\",\"ec2:DeleteNetworkInterface\",\"ec2:DescribeSubnets\",\"ec2:DescribeSecurityGroups\"],\"Resource\":\"*\"},{\"Effect\":\"Allow\",\"Action\":[\"ec2:CreateNetworkInterface\",\"ec2:DescribeNetworkInterfaces\",\"ec2:DeleteNetworkInterface\",\"ec2:DescribeSubnets\",\"ec2:DescribeSecurityGroups\"],\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:ReceiveMessage\",\"sqs:ChangeMessageVisibility\",\"sqs:GetQueueUrl\",\"sqs:DeleteMessage\",\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.cloudQueue.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"elasticache:Describe*\"],\"Resource\":[\"${aws_elasticache_cluster.exRedis_RedisCluster_3C9A5882.arn}\"],\"Effect\":\"Allow\"},{\"Effect\":\"Allow\",\"Action\":[\"ec2:CreateNetworkInterface\",\"ec2:DescribeNetworkInterfaces\",\"ec2:DeleteNetworkInterface\",\"ec2:DescribeSubnets\",\"ec2:DescribeSecurityGroups\"],\"Resource\":\"*\"},{\"Effect\":\"Allow\",\"Action\":[\"ec2:CreateNetworkInterface\",\"ec2:DescribeNetworkInterfaces\",\"ec2:DeleteNetworkInterface\",\"ec2:DescribeSubnets\",\"ec2:DescribeSecurityGroups\"],\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.cloudQueue-SetConsumer-cdafee6e_IamRole_2548D828.name}"
+      },
+      "testtestingRedis_Handler_IamRolePolicy_21FBAD46": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:testing Redis/Handler/IamRolePolicy",
+            "uniqueId": "testtestingRedis_Handler_IamRolePolicy_21FBAD46"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"elasticache:Describe*\"],\"Resource\":[\"${aws_elasticache_cluster.exRedis_RedisCluster_3C9A5882.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"elasticache:Describe*\"],\"Resource\":[\"${aws_elasticache_cluster.r2_RedisCluster_C6087F40.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.cloudQueue.arn}\"],\"Effect\":\"Allow\"},{\"Effect\":\"Allow\",\"Action\":[\"ec2:CreateNetworkInterface\",\"ec2:DescribeNetworkInterfaces\",\"ec2:DeleteNetworkInterface\",\"ec2:DescribeSubnets\",\"ec2:DescribeSecurityGroups\"],\"Resource\":\"*\"},{\"Effect\":\"Allow\",\"Action\":[\"ec2:CreateNetworkInterface\",\"ec2:DescribeNetworkInterfaces\",\"ec2:DeleteNetworkInterface\",\"ec2:DescribeSubnets\",\"ec2:DescribeSecurityGroups\"],\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.testtestingRedis_Handler_IamRole_8B9140DE.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testtest_Handler_IamRolePolicyAttachment_3716AC26": {
+      "cloudQueue-SetConsumer-cdafee6e_IamRolePolicyAttachment_45079F65": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testtest_Handler_IamRolePolicyAttachment_3716AC26"
+            "path": "root/Default/Default/cloud.Queue-SetConsumer-cdafee6e/IamRolePolicyAttachment",
+            "uniqueId": "cloudQueue-SetConsumer-cdafee6e_IamRolePolicyAttachment_45079F65"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
+        "role": "${aws_iam_role.cloudQueue-SetConsumer-cdafee6e_IamRole_2548D828.name}"
+      },
+      "testtestingRedis_Handler_IamRolePolicyAttachment_4A5E3F4E": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:testing Redis/Handler/IamRolePolicyAttachment",
+            "uniqueId": "testtestingRedis_Handler_IamRolePolicyAttachment_4A5E3F4E"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.testtestingRedis_Handler_IamRole_8B9140DE.name}"
       }
     },
     "aws_internet_gateway": {
-      "root_InternetGateway_8BBAF39E": {
+      "InternetGateway": {
         "//": {
           "metadata": {
             "path": "root/Default/InternetGateway",
-            "uniqueId": "root_InternetGateway_8BBAF39E"
+            "uniqueId": "InternetGateway"
           }
         },
         "tags": {
           "Name": "Default-c82bf964-internet-gateway"
         },
-        "vpc_id": "${aws_vpc.root_VPC_15726F37.id}"
+        "vpc_id": "${aws_vpc.VPC.id}"
+      }
+    },
+    "aws_lambda_event_source_mapping": {
+      "cloudQueue_EventSourceMapping_41814136": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Queue/EventSourceMapping",
+            "uniqueId": "cloudQueue_EventSourceMapping_41814136"
+          }
+        },
+        "batch_size": 1,
+        "event_source_arn": "${aws_sqs_queue.cloudQueue.arn}",
+        "function_name": "${aws_lambda_function.cloudQueue-SetConsumer-cdafee6e.function_name}"
       }
     },
     "aws_lambda_function": {
-      "root_testtest_Handler_046C3415": {
+      "cloudQueue-SetConsumer-cdafee6e": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/Default",
-            "uniqueId": "root_testtest_Handler_046C3415"
+            "path": "root/Default/Default/cloud.Queue-SetConsumer-cdafee6e/Default",
+            "uniqueId": "cloudQueue-SetConsumer-cdafee6e"
           }
         },
         "environment": {
           "variables": {
-            "REDIS_CLUSTER_ID_30c8c4ae": "${aws_elasticache_cluster.root_r2_RedisCluster_EB1F5CD1.cluster_id}",
-            "REDIS_CLUSTER_ID_5c75c5cf": "${aws_elasticache_cluster.root_redisRedis_RedisCluster_2049056C.cluster_id}",
-            "WING_FUNCTION_NAME": "Handler-c8f4f2a1",
+            "REDIS_CLUSTER_ID_89baf91f": "${aws_elasticache_cluster.exRedis_RedisCluster_3C9A5882.cluster_id}",
+            "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c8f4f2a1",
+        "function_name": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.arn}",
+        "role": "${aws_iam_role.cloudQueue-SetConsumer-cdafee6e_IamRole_2548D828.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testtest_Handler_S3Object_71CD07AC.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.cloudQueue-SetConsumer-cdafee6e_S3Object_8868B9FB.key}",
+        "timeout": 3,
+        "vpc_config": {
+          "security_group_ids": [
+            "${aws_security_group.exRedis_securityGroup_3948C3F2.id}"
+          ],
+          "subnet_ids": [
+            "${aws_subnet.PrivateSubnet.id}"
+          ]
+        }
+      },
+      "testtestingRedis_Handler_7678DD27": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:testing Redis/Handler/Default",
+            "uniqueId": "testtestingRedis_Handler_7678DD27"
+          }
+        },
+        "environment": {
+          "variables": {
+            "QUEUE_URL_31e95cbd": "${aws_sqs_queue.cloudQueue.url}",
+            "REDIS_CLUSTER_ID_30c8c4ae": "${aws_elasticache_cluster.r2_RedisCluster_C6087F40.cluster_id}",
+            "REDIS_CLUSTER_ID_89baf91f": "${aws_elasticache_cluster.exRedis_RedisCluster_3C9A5882.cluster_id}",
+            "WING_FUNCTION_NAME": "Handler-c8775e77",
+            "WING_TARGET": "tf-aws"
+          }
+        },
+        "function_name": "Handler-c8775e77",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "${aws_iam_role.testtestingRedis_Handler_IamRole_8B9140DE.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testtestingRedis_Handler_S3Object_3AE6E27A.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [
-            "${aws_security_group.root_redisRedis_securityGroup_C278C668.id}",
-            "${aws_security_group.root_r2_securityGroup_EC7D0A0D.id}"
+            "${aws_security_group.exRedis_securityGroup_3948C3F2.id}",
+            "${aws_security_group.r2_securityGroup_35A75C2E.id}"
           ],
           "subnet_ids": [
-            "${aws_subnet.root_PrivateSubnet_8A5D9DDE.id}",
-            "${aws_subnet.root_PrivateSubnet_8A5D9DDE.id}"
+            "${aws_subnet.PrivateSubnet.id}",
+            "${aws_subnet.PrivateSubnet.id}"
           ]
         }
       }
     },
     "aws_nat_gateway": {
-      "root_NATGateway_23214D12": {
+      "NATGateway": {
         "//": {
           "metadata": {
             "path": "root/Default/NATGateway",
-            "uniqueId": "root_NATGateway_23214D12"
+            "uniqueId": "NATGateway"
           }
         },
-        "allocation_id": "${aws_eip.root_EIP_ED59AD4B.id}",
-        "subnet_id": "${aws_subnet.root_PublicSubnet_C9666BAA.id}",
+        "allocation_id": "${aws_eip.EIP.id}",
+        "subnet_id": "${aws_subnet.PublicSubnet.id}",
         "tags": {
           "Name": "Default-c82bf964-nat-gateway"
         }
       }
     },
     "aws_route_table": {
-      "root_PrivateRouteTable_E7613E5F": {
+      "PrivateRouteTable": {
         "//": {
           "metadata": {
             "path": "root/Default/PrivateRouteTable",
-            "uniqueId": "root_PrivateRouteTable_E7613E5F"
+            "uniqueId": "PrivateRouteTable"
           }
         },
         "route": [
@@ -251,7 +347,7 @@ module.exports = function({ r, r2 }) {
             "instance_id": null,
             "ipv6_cidr_block": null,
             "local_gateway_id": null,
-            "nat_gateway_id": "${aws_nat_gateway.root_NATGateway_23214D12.id}",
+            "nat_gateway_id": "${aws_nat_gateway.NATGateway.id}",
             "network_interface_id": null,
             "transit_gateway_id": null,
             "vpc_endpoint_id": null,
@@ -261,13 +357,13 @@ module.exports = function({ r, r2 }) {
         "tags": {
           "Name": "Default-c82bf964-private-route-table-1"
         },
-        "vpc_id": "${aws_vpc.root_VPC_15726F37.id}"
+        "vpc_id": "${aws_vpc.VPC.id}"
       },
-      "root_PublicRouteTable_36451040": {
+      "PublicRouteTable": {
         "//": {
           "metadata": {
             "path": "root/Default/PublicRouteTable",
-            "uniqueId": "root_PublicRouteTable_36451040"
+            "uniqueId": "PublicRouteTable"
           }
         },
         "route": [
@@ -277,7 +373,7 @@ module.exports = function({ r, r2 }) {
             "core_network_arn": null,
             "destination_prefix_list_id": null,
             "egress_only_gateway_id": null,
-            "gateway_id": "${aws_internet_gateway.root_InternetGateway_8BBAF39E.id}",
+            "gateway_id": "${aws_internet_gateway.InternetGateway.id}",
             "instance_id": null,
             "ipv6_cidr_block": null,
             "local_gateway_id": null,
@@ -291,61 +387,72 @@ module.exports = function({ r, r2 }) {
         "tags": {
           "Name": "Default-c82bf964-public-route-table-1"
         },
-        "vpc_id": "${aws_vpc.root_VPC_15726F37.id}"
+        "vpc_id": "${aws_vpc.VPC.id}"
       }
     },
     "aws_route_table_association": {
-      "root_PrivateRouteTableAssociation_A90EF7F6": {
+      "PrivateRouteTableAssociation": {
         "//": {
           "metadata": {
             "path": "root/Default/PrivateRouteTableAssociation",
-            "uniqueId": "root_PrivateRouteTableAssociation_A90EF7F6"
+            "uniqueId": "PrivateRouteTableAssociation"
           }
         },
-        "route_table_id": "${aws_route_table.root_PrivateRouteTable_E7613E5F.id}",
-        "subnet_id": "${aws_subnet.root_PrivateSubnet_8A5D9DDE.id}"
+        "route_table_id": "${aws_route_table.PrivateRouteTable.id}",
+        "subnet_id": "${aws_subnet.PrivateSubnet.id}"
       },
-      "root_PublicRouteTableAssociation_22B41679": {
+      "PublicRouteTableAssociation": {
         "//": {
           "metadata": {
             "path": "root/Default/PublicRouteTableAssociation",
-            "uniqueId": "root_PublicRouteTableAssociation_22B41679"
+            "uniqueId": "PublicRouteTableAssociation"
           }
         },
-        "route_table_id": "${aws_route_table.root_PublicRouteTable_36451040.id}",
-        "subnet_id": "${aws_subnet.root_PublicSubnet_C9666BAA.id}"
+        "route_table_id": "${aws_route_table.PublicRouteTable.id}",
+        "subnet_id": "${aws_subnet.PublicSubnet.id}"
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "root_testtest_Handler_S3Object_71CD07AC": {
+      "cloudQueue-SetConsumer-cdafee6e_S3Object_8868B9FB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/S3Object",
-            "uniqueId": "root_testtest_Handler_S3Object_71CD07AC"
+            "path": "root/Default/Default/cloud.Queue-SetConsumer-cdafee6e/S3Object",
+            "uniqueId": "cloudQueue-SetConsumer-cdafee6e_S3Object_8868B9FB"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
+      },
+      "testtestingRedis_Handler_S3Object_3AE6E27A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:testing Redis/Handler/S3Object",
+            "uniqueId": "testtestingRedis_Handler_S3Object_3AE6E27A"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
     },
     "aws_security_group": {
-      "root_r2_securityGroup_EC7D0A0D": {
+      "exRedis_securityGroup_3948C3F2": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/r2/securityGroup",
-            "uniqueId": "root_r2_securityGroup_EC7D0A0D"
+            "path": "root/Default/Default/ex.Redis/securityGroup",
+            "uniqueId": "exRedis_securityGroup_3948C3F2"
           }
         },
         "egress": [
@@ -366,7 +473,47 @@ module.exports = function({ r, r2 }) {
         "ingress": [
           {
             "cidr_blocks": [
-              "${aws_subnet.root_PrivateSubnet_8A5D9DDE.cidr_block}"
+              "${aws_subnet.PrivateSubnet.cidr_block}"
+            ],
+            "description": null,
+            "from_port": 6379,
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "tcp",
+            "security_groups": null,
+            "self": true,
+            "to_port": 6379
+          }
+        ],
+        "name": "89baf91f-securityGroup",
+        "vpc_id": "${aws_vpc.VPC.id}"
+      },
+      "r2_securityGroup_35A75C2E": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/r2/securityGroup",
+            "uniqueId": "r2_securityGroup_35A75C2E"
+          }
+        },
+        "egress": [
+          {
+            "cidr_blocks": [
+              "0.0.0.0/0"
+            ],
+            "description": null,
+            "from_port": 0,
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "-1",
+            "security_groups": null,
+            "self": null,
+            "to_port": 0
+          }
+        ],
+        "ingress": [
+          {
+            "cidr_blocks": [
+              "${aws_subnet.PrivateSubnet.cidr_block}"
             ],
             "description": null,
             "from_port": 6379,
@@ -379,83 +526,54 @@ module.exports = function({ r, r2 }) {
           }
         ],
         "name": "30c8c4ae-securityGroup",
-        "vpc_id": "${aws_vpc.root_VPC_15726F37.id}"
-      },
-      "root_redisRedis_securityGroup_C278C668": {
+        "vpc_id": "${aws_vpc.VPC.id}"
+      }
+    },
+    "aws_sqs_queue": {
+      "cloudQueue": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/redis.Redis/securityGroup",
-            "uniqueId": "root_redisRedis_securityGroup_C278C668"
+            "path": "root/Default/Default/cloud.Queue/Default",
+            "uniqueId": "cloudQueue"
           }
         },
-        "egress": [
-          {
-            "cidr_blocks": [
-              "0.0.0.0/0"
-            ],
-            "description": null,
-            "from_port": 0,
-            "ipv6_cidr_blocks": null,
-            "prefix_list_ids": null,
-            "protocol": "-1",
-            "security_groups": null,
-            "self": null,
-            "to_port": 0
-          }
-        ],
-        "ingress": [
-          {
-            "cidr_blocks": [
-              "${aws_subnet.root_PrivateSubnet_8A5D9DDE.cidr_block}"
-            ],
-            "description": null,
-            "from_port": 6379,
-            "ipv6_cidr_blocks": null,
-            "prefix_list_ids": null,
-            "protocol": "tcp",
-            "security_groups": null,
-            "self": true,
-            "to_port": 6379
-          }
-        ],
-        "name": "5c75c5cf-securityGroup",
-        "vpc_id": "${aws_vpc.root_VPC_15726F37.id}"
+        "name": "cloud-Queue-c86e03d8"
       }
     },
     "aws_subnet": {
-      "root_PrivateSubnet_8A5D9DDE": {
+      "PrivateSubnet": {
         "//": {
           "metadata": {
             "path": "root/Default/PrivateSubnet",
-            "uniqueId": "root_PrivateSubnet_8A5D9DDE"
+            "uniqueId": "PrivateSubnet"
           }
         },
         "cidr_block": "10.0.4.0/22",
         "tags": {
           "Name": "Default-c82bf964-private-subnet-1"
         },
-        "vpc_id": "${aws_vpc.root_VPC_15726F37.id}"
+        "vpc_id": "${aws_vpc.VPC.id}"
       },
-      "root_PublicSubnet_C9666BAA": {
+      "PublicSubnet": {
         "//": {
           "metadata": {
             "path": "root/Default/PublicSubnet",
-            "uniqueId": "root_PublicSubnet_C9666BAA"
+            "uniqueId": "PublicSubnet"
           }
         },
         "cidr_block": "10.0.0.0/24",
         "tags": {
           "Name": "Default-c82bf964-public-subnet-1"
         },
-        "vpc_id": "${aws_vpc.root_VPC_15726F37.id}"
+        "vpc_id": "${aws_vpc.VPC.id}"
       }
     },
     "aws_vpc": {
-      "root_VPC_15726F37": {
+      "VPC": {
         "//": {
           "metadata": {
             "path": "root/Default/VPC",
-            "uniqueId": "root_VPC_15726F37"
+            "uniqueId": "VPC"
           }
         },
         "cidr_block": "10.0.0.0/16",
@@ -474,28 +592,24 @@ module.exports = function({ r, r2 }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
-const redis = require('@winglang/sdk').redis;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
+const util = $stdlib.util;
+const ex = $stdlib.ex;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const r_client = context._lift(r);
-        const r2_client = context._lift(r2);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            r: ${r_client},
-            r2: ${r2_client},
+          require("./inflight.$Closure1-1.js")({
+            $r: ${context._lift(r)},
           })
         `);
       }
@@ -511,38 +625,57 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(r, host, []);
-          $Closure1._registerBindObject(r2, host, []);
-        }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(r, host, ["rawClient"]);
-          $Closure1._registerBindObject(r2, host, ["get", "set"]);
+          $Closure1._registerBindObject(r, host, ["set"]);
         }
         super._registerBind(host, ops);
       }
     }
-    const r = this.node.root.newAbstract("@winglang/sdk.redis.Redis",this,"redis.Redis");
-    const r2 = this.node.root.newAbstract("@winglang/sdk.redis.Redis",this,"r2");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
-  }
-}
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "redis", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
+    class $Closure2 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
-    } else {
-      new $Root(this, "Default");
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.$Closure2-1.js")({
+            $queue: ${context._lift(queue)},
+            $r: ${context._lift(r)},
+            $r2: ${context._lift(r2)},
+            $util_Util: ${context._lift(util.Util)},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const client = new $Closure2Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("handle")) {
+          $Closure2._registerBindObject(queue, host, ["push"]);
+          $Closure2._registerBindObject(r, host, ["get", "rawClient"]);
+          $Closure2._registerBindObject(r2, host, ["get", "set"]);
+        }
+        super._registerBind(host, ops);
+      }
     }
+    const r = this.node.root.newAbstract("@winglang/sdk.ex.Redis",this,"ex.Redis");
+    const r2 = this.node.root.newAbstract("@winglang/sdk.ex.Redis",this,"r2");
+    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
+    (queue.setConsumer(new $Closure1(this,"$Closure1"),{ timeout: (std.Duration.fromSeconds(3)) }));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:testing Redis",new $Closure2(this,"$Closure2"));
   }
 }
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "redis", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

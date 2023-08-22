@@ -5,8 +5,8 @@ import { CloudwatchEventRule } from "../.gen/providers/aws/cloudwatch-event-rule
 import { CloudwatchEventTarget } from "../.gen/providers/aws/cloudwatch-event-target";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Resource } from "../std";
 
 /**
  * AWS implementation of `cloud.Schedule`.
@@ -78,10 +78,10 @@ export class Schedule extends cloud.Schedule {
       rule: this.rule.name,
     });
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "on_tick",
+    Connections.of(this).add({
+      source: this,
+      target: fn,
+      name: "onTick()",
     });
 
     return fn;

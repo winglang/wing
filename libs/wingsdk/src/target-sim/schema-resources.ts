@@ -1,4 +1,5 @@
-import { ApiCorsProps, ColumnType, HttpMethod, OpenApiSpec } from "../cloud";
+import { ApiCorsProps, HttpMethod, OpenApiSpec } from "../cloud";
+import { ColumnType } from "../ex";
 import { Json } from "../std";
 import {
   BaseResourceAttributes,
@@ -13,13 +14,14 @@ export const BUCKET_TYPE = "wingsdk.cloud.Bucket";
 export const TOPIC_TYPE = "wingsdk.cloud.Topic";
 export const COUNTER_TYPE = "wingsdk.cloud.Counter";
 export const SCHEDULE_TYPE = "wingsdk.cloud.Schedule";
-export const TABLE_TYPE = "wingsdk.cloud.Table";
+export const TABLE_TYPE = "wingsdk.cloud.Table"; // for backwards compat
 export const LOGGER_TYPE = "wingsdk.cloud.Logger";
 export const TEST_RUNNER_TYPE = "wingsdk.cloud.TestRunner";
-export const REDIS_TYPE = "wingsdk.redis.Redis";
+export const REDIS_TYPE = "wingsdk.redis.Redis"; // for backwards compat
 export const WEBSITE_TYPE = "wingsdk.cloud.Website";
 export const SECRET_TYPE = "wingsdk.cloud.Secret";
 export const SERVICE_TYPE = "wingsdk.cloud.Service";
+export const ON_DEPLOY_TYPE = "wingsdk.cloud.OnDeploy";
 
 export type FunctionHandle = string;
 export type PublisherHandle = string;
@@ -79,8 +81,6 @@ export interface QueueSchema extends BaseResourceSchema {
     readonly timeout: number;
     /** How long a queue retains a message, in seconds */
     readonly retentionPeriod: number;
-    /** Initial messages to be pushed to the queue. */
-    readonly initialMessages: string[];
   };
 }
 
@@ -171,6 +171,7 @@ export interface TableSchema extends BaseResourceSchema {
     readonly name: string;
     readonly columns: { [key: string]: ColumnType };
     readonly primaryKey: string;
+    readonly initialRows: Record<string, Json>;
   };
 }
 
@@ -253,3 +254,15 @@ export interface SecretSchema extends BaseResourceSchema {
 
 /** Runtime attributes for cloud.Secret */
 export interface SecretAttributes {}
+
+/** Schema for cloud.OnDeploy */
+export interface OnDeploySchema extends BaseResourceSchema {
+  readonly type: typeof ON_DEPLOY_TYPE;
+  readonly props: {
+    /** The function to run on deploy. */
+    readonly functionHandle: FunctionHandle;
+  };
+}
+
+/** Runtime attributes for cloud.OnDeploy */
+export interface OnDeployAttributes {}

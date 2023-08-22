@@ -19,11 +19,17 @@ const log = debug("wing:compile");
 export interface CompileOptions {
   readonly target: wingCompiler.Target;
   readonly plugins?: string[];
+  readonly rootId?: string;
   /**
    * Whether to run the compiler in `wing test` mode. This may create multiple
    * copies of the application resources in order to run tests in parallel.
    */
   readonly testing?: boolean;
+  /**
+   * The location to save the compilation output
+   * @default "./target"
+   */
+  readonly targetDir?: string;
 }
 
 /**
@@ -33,28 +39,19 @@ export interface CompileOptions {
  * @returns the output directory
  */
 export async function compile(entrypoint: string, options: CompileOptions): Promise<string> {
+  const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
   try {
     return await wingCompiler.compile(entrypoint, {
       ...options,
       log,
+      color: coloring,
+      targetDir: options.targetDir,
     });
   } catch (error) {
-    if (error instanceof wingCompiler.InternalError) {
-      const message = [];
-      message.push(error.causedBy);
-      message.push();
-      message.push();
-      message.push(
-        chalk.bold.red("Internal error:") +
-          " An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace."
-      );
-
-      throw new Error(message.join("\n"));
-    } else if (error instanceof wingCompiler.CompileError) {
+    if (error instanceof wingCompiler.CompileError) {
       // This is a bug in the user's code. Print the compiler diagnostics.
       const errors = error.diagnostics;
       const result = [];
-      const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
 
       for (const error of errors) {
         const { message, span } = error;
@@ -62,11 +59,11 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
         let labels: Label[] = [];
 
         // file_id might be "" if the span is synthetic (see #2521)
-        if (span !== null && span.file_id) {
+        if (span?.file_id) {
           // `span` should only be null if source file couldn't be read etc.
           const source = await fsPromise.readFile(span.file_id, "utf8");
-          const start = offsetFromLineAndColumn(source, span.start.line, span.start.col);
-          const end = offsetFromLineAndColumn(source, span.end.line, span.end.col);
+          const start = byteOffsetFromLineAndColumn(source, span.start.line, span.start.col);
+          const end = byteOffsetFromLineAndColumn(source, span.end.line, span.end.col);
           files.push({ name: span.file_id, source });
           labels.push({
             fileId: span.file_id,
@@ -77,7 +74,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
           });
         }
 
-        const diagnosticText = await emitDiagnostic(
+        const diagnosticText = emitDiagnostic(
           files,
           {
             message,
@@ -146,7 +143,9 @@ function annotatePreflightError(error: Error): Error {
       "hint: Every preflight object needs a unique identifier within its scope. You can assign one as shown:"
     );
     newMessage.push('> new cloud.Bucket() as "MyBucket";');
-    newMessage.push("For more information, see https://docs.winglang.io/concepts/resources");
+    newMessage.push(
+      "For more information, see https://www.winglang.io/docs/language-guide/language-reference#33-preflight-classes"
+    );
 
     const newError = new Error(newMessage.join("\n\n"), { cause: error });
     newError.stack = error.stack;
@@ -156,12 +155,15 @@ function annotatePreflightError(error: Error): Error {
   return error;
 }
 
-function offsetFromLineAndColumn(source: string, line: number, column: number) {
+function byteOffsetFromLineAndColumn(source: string, line: number, column: number) {
   const lines = source.split("\n");
   let offset = 0;
   for (let i = 0; i < line; i++) {
     offset += lines[i].length + 1;
   }
-  offset += column;
-  return offset;
+
+  // Convert char offset to byte offset
+  const encoder = new TextEncoder();
+  const srouce_bytes = encoder.encode(source.substring(0, offset));
+  return srouce_bytes.length + column;
 }

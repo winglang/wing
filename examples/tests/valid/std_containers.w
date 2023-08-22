@@ -32,8 +32,8 @@ assert(sSet.size == 2);
 assert(immutSet.size == 3);
 
 
-let sMap = {"one": 1, "two": 2};
-let nestedMap = {"a": {"b": {"c": "hello"}}};
+let sMap = {"one" => 1, "two" => 2};
+let nestedMap = {"a" => {"b" => {"c": "hello"}}};
 let mutMap = sMap.copyMut();
 mutMap.set("five", 5);
 let immutMap = mutMap.copy();
@@ -41,3 +41,25 @@ assert(sMap.get("one") == 1);
 assert(sMap.size() == 2);
 assert(immutMap.size() == 3);
 assert(nestedMap.get("a").get("b").get("c") == "hello");
+
+class Animal {}
+class Cat extends Animal {}
+class Dog extends Animal {}
+
+let heterogeneousArray = Array<Animal>[
+  new Cat() as "C1",
+  new Dog() as "D1",
+];
+let heterogeneousDoubleArray = Array<Array<Animal>>[
+  [new Cat() as "C2"],
+  Array<Animal>[new Cat() as "C3", new Dog() as "D2"],
+  [new Animal() as "A1"],
+];
+let heterogeneousSet = Set<Animal>{
+  new Cat() as "C4",
+  new Dog() as "D3",
+};
+let heterogeneousMap = Map<Animal>{
+  "cat" => new Cat() as "C5",
+  "dog" => new Dog() as "D4",
+};

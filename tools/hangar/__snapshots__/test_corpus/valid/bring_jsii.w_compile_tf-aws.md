@@ -1,18 +1,16 @@
 # [bring_jsii.w](../../../../../examples/tests/valid/bring_jsii.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
-module.exports = function({ greeting }) {
+module.exports = function({ $greeting }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(greeting === "Hello, wingnuts")'`)})((greeting === "Hello, wingnuts"))};
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: greeting == \"Hello, wingnuts\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($greeting,"Hello, wingnuts")))};
     }
   }
   return $Closure1;
@@ -27,7 +25,7 @@ module.exports = function({ greeting }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -41,7 +39,7 @@ module.exports = function({ greeting }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:sayHello\",\"${aws_lambda_function.root_testsayHello_Handler_11C90E2C.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:sayHello\",\"${aws_lambda_function.testsayHello_Handler_98B5E136.arn}\"]]"
     }
   },
   "provider": {
@@ -51,46 +49,46 @@ module.exports = function({ greeting }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testsayHello_Handler_IamRole_508BA144": {
+      "testsayHello_Handler_IamRole_59C2E116": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:sayHello/Handler/IamRole",
-            "uniqueId": "root_testsayHello_Handler_IamRole_508BA144"
+            "uniqueId": "testsayHello_Handler_IamRole_59C2E116"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testsayHello_Handler_IamRolePolicy_2C605E6D": {
+      "testsayHello_Handler_IamRolePolicy_A3967740": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:sayHello/Handler/IamRolePolicy",
-            "uniqueId": "root_testsayHello_Handler_IamRolePolicy_2C605E6D"
+            "uniqueId": "testsayHello_Handler_IamRolePolicy_A3967740"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testsayHello_Handler_IamRole_508BA144.name}"
+        "role": "${aws_iam_role.testsayHello_Handler_IamRole_59C2E116.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testsayHello_Handler_IamRolePolicyAttachment_A53D35FF": {
+      "testsayHello_Handler_IamRolePolicyAttachment_A8185104": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:sayHello/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testsayHello_Handler_IamRolePolicyAttachment_A53D35FF"
+            "uniqueId": "testsayHello_Handler_IamRolePolicyAttachment_A8185104"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testsayHello_Handler_IamRole_508BA144.name}"
+        "role": "${aws_iam_role.testsayHello_Handler_IamRole_59C2E116.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testsayHello_Handler_11C90E2C": {
+      "testsayHello_Handler_98B5E136": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:sayHello/Handler/Default",
-            "uniqueId": "root_testsayHello_Handler_11C90E2C"
+            "uniqueId": "testsayHello_Handler_98B5E136"
           }
         },
         "environment": {
@@ -102,10 +100,10 @@ module.exports = function({ greeting }) {
         "function_name": "Handler-c887876f",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testsayHello_Handler_IamRole_508BA144.arn}",
+        "role": "${aws_iam_role.testsayHello_Handler_IamRole_59C2E116.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testsayHello_Handler_S3Object_92DB68EF.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testsayHello_Handler_S3Object_87C49294.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -114,25 +112,25 @@ module.exports = function({ greeting }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "root_testsayHello_Handler_S3Object_92DB68EF": {
+      "testsayHello_Handler_S3Object_87C49294": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:sayHello/Handler/S3Object",
-            "uniqueId": "root_testsayHello_Handler_S3Object_92DB68EF"
+            "uniqueId": "testsayHello_Handler_S3Object_87C49294"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -145,10 +143,9 @@ module.exports = function({ greeting }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 const stuff = require("jsii-code-samples");
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
@@ -156,15 +153,13 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const greeting_client = context._lift(greeting);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            greeting: ${greeting_client},
+          require("./inflight.$Closure1-1.js")({
+            $greeting: ${context._lift(greeting)},
           })
         `);
       }
@@ -180,9 +175,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(greeting, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(greeting, host, []);
         }
@@ -194,22 +186,8 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:sayHello",new $Closure1(this,"$Closure1"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "bring_jsii", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "bring_jsii", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

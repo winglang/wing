@@ -1,18 +1,16 @@
 # [impl_interface.w](../../../../../examples/tests/valid/impl_interface.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
-module.exports = function({ x }) {
+module.exports = function({ $x }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      (await x.handle("hello world!"));
+    async handle() {
+      (await $x.handle("hello world!"));
     }
   }
   return $Closure1;
@@ -20,7 +18,7 @@ module.exports = function({ x }) {
 
 ```
 
-## inflight.A.js
+## inflight.A-1.js
 ```js
 module.exports = function({  }) {
   class A {
@@ -29,11 +27,7 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-      const __parent_this = this;
-    }
-    async handle(msg)  {
-      const __parent_this = this;
+    async handle(msg) {
       return;
     }
   }
@@ -42,17 +36,13 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Dog.js
+## inflight.Dog-1.js
 ```js
 module.exports = function({  }) {
   class Dog {
     constructor({  }) {
     }
-    async $inflight_init()  {
-      const __parent_this = this;
-    }
-    async eat()  {
-      const __parent_this = this;
+    async eat() {
       return;
     }
   }
@@ -61,17 +51,29 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.r.js
+## inflight.Terrier-1.js
+```js
+module.exports = function({ $Dog }) {
+  class Terrier extends $Dog {
+    constructor({  }) {
+      super({  });
+    }
+    async eat() {
+      return;
+    }
+  }
+  return Terrier;
+}
+
+```
+
+## inflight.r-1.js
 ```js
 module.exports = function({  }) {
   class r {
     constructor({  }) {
     }
-    async $inflight_init()  {
-      const __parent_this = this;
-    }
-    async method2(x)  {
-      const __parent_this = this;
+    async method2(x) {
       return x;
     }
   }
@@ -87,7 +89,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -116,23 +118,20 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class A extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
-        const __parent_this = this;
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.A.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.A-1.js")({
           })
         `);
       }
@@ -147,26 +146,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const x_client = context._lift(x);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            x: ${x_client},
+          require("./inflight.$Closure1-1.js")({
+            $x: ${context._lift(x)},
           })
         `);
       }
@@ -182,9 +172,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(x, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(x, host, ["handle"]);
         }
@@ -194,21 +181,17 @@ class $Root extends $stdlib.std.Resource {
     class r extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("method2");
-        const __parent_this = this;
+        this._addInflightOps("method2", "$inflight_init");
       }
-       method1(x)  {
-        const __parent_this = this;
+      method1(x) {
         return x;
       }
-       method3(x)  {
-        const __parent_this = this;
+      method3(x) {
         return x;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.r.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.r-1.js")({
           })
         `);
       }
@@ -223,24 +206,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("method2")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class Dog extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("eat");
-        const __parent_this = this;
+        this._addInflightOps("eat", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Dog.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Dog-1.js")({
           })
         `);
       }
@@ -255,35 +229,39 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("eat")) {
-        }
-        super._registerBind(host, ops);
+    }
+    class Terrier extends Dog {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("eat", "$inflight_init");
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.Terrier-1.js")({
+            $Dog: ${context._lift(Dog)},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const TerrierClient = ${Terrier._toInflightType(this).text};
+            const client = new TerrierClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
       }
     }
     const x = new A(this,"A");
     const y = new $Closure1(this,"$Closure1");
     const z = new Dog(this,"Dog");
+    const w = new Terrier(this,"Terrier");
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "impl_interface", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "impl_interface", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

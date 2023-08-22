@@ -1,8 +1,8 @@
 import { CfnOutput, Lazy } from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { Function as AwsFunction } from "./function";
-import * as cloud from "../cloud";
 import * as core from "../core";
+import * as std from "../std";
 import { IInflightHost } from "../std";
 
 const OUTPUT_TEST_RUNNER_FUNCTION_ARNS = "WingTestRunnerFunctionArns";
@@ -12,8 +12,8 @@ const OUTPUT_TEST_RUNNER_FUNCTION_ARNS = "WingTestRunnerFunctionArns";
  *
  * @inflight `@winglang/sdk.cloud.ITestRunnerClient`
  */
-export class TestRunner extends cloud.TestRunner {
-  constructor(scope: Construct, id: string, props: cloud.TestRunnerProps = {}) {
+export class TestRunner extends std.TestRunner {
+  constructor(scope: Construct, id: string, props: std.TestRunnerProps = {}) {
     super(scope, id, props);
 
     // This output is created so the CLI's `wing test` command can obtain a list
@@ -29,8 +29,7 @@ export class TestRunner extends cloud.TestRunner {
     output.overrideLogicalId(OUTPUT_TEST_RUNNER_FUNCTION_ARNS);
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof AwsFunction)) {
       throw new Error("TestRunner can only be bound by tfaws.Function for now");
     }
@@ -50,7 +49,7 @@ export class TestRunner extends cloud.TestRunner {
       JSON.stringify([...testFunctions.entries()])
     );
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */
