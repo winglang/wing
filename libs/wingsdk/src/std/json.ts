@@ -49,7 +49,6 @@ export class Json {
    * Formats Json as string
    *
    * (JSON.stringify($args$))
-
    * @macro ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$args$])
    *
    * @param json to format as string
