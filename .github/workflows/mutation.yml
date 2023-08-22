@@ -71,6 +71,21 @@ jobs:
         name: Apply downloaded pathes
         working-directory: repo
         run: |
+          # if ../patches/update.diff/update.diff exists, apply it first
+          UPDATE_PATCH_FILE="../patches/update.diff/update.diff"
+          if [ -f $UPDATE_PATCH_FILE ]; then
+            echo "Updating branch"
+            git apply --binary $UPDATE_PATCH_FILE
+            if [ $? -eq 0 ]; then
+              echo "Patch applied successfully"
+              rm $UPDATE_PATCH_FILE
+            else
+              echo "Patch failed to apply"
+              cat $UPDATE_PATCH_FILE
+              exit 1
+            fi
+          fi
+
           for f in $(find ../patches/*.diff/*.diff); do
             echo "Applying $f"
             git apply --binary $f
