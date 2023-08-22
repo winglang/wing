@@ -1,7 +1,7 @@
 import { Code, InflightClient } from "../core";
 
-interface JsonStringifyOptions {
-  indent?: number;
+export interface JsonStringifyOptions {
+  readonly indent?: number;
 }
 
 /**
