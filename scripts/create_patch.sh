@@ -13,9 +13,16 @@ if [ -z "$1" ]; then
 fi
 
 PATCH_NAME=$1
+START_SHA=$2
+END_SHA=$3
 
 git add --all
-git diff --staged --binary --patch > $1
+if [ -z "$START_SHA" ]; then
+  git diff --staged --binary --patch > $1
+else
+  git diff --staged --binary --patch $START_SHA $END_SHA > $1
+fi
+
 if [ -s $1 ]; then
   echo "Diff found, creating a patch to apply later"
   cat $1

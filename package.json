@@ -3,11 +3,7 @@
   "private": true,
   "devDependencies": {
     "bump-pack": "workspace:^",
-    "changelogen": "^0.5.3",
-    "semver": "^7.3.8",
-    "turbo": "^1.10.12",
-    "@actions/core": "^1.10.0",
-    "@actions/github": "^5.1.1"
+    "turbo": "^1.10.12"
   },
   "scripts": {
     "build": "turbo compile post-compile lint eslint test package",
@@ -17,7 +13,6 @@
     "package:ci": "turbo package --color && tar -czvf dist/docs.tgz docs/*",
     "test:ci": "turbo default --color --concurrency 1 && turbo compile post-compile lint eslint test test:playwright --color --filter=!hangar",
     "docs": "./scripts/docsite.sh",
-    "changelog": "bump-pack",
     "install": "bash scripts/setup_wasi.sh",
     "postinstall": "link-bundles",
     "wing": "turbo compile --filter=winglang --output-logs=errors-only && ./apps/wing/bin/wing"

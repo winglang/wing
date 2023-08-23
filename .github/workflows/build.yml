@@ -74,17 +74,17 @@ jobs:
 
       - name: Derive appropriate SHAs for base and head
         id: shas
-        uses: MarkMcCulloh/nx-set-shas@main
+        run: pnpm derive-shas
 
-      - name: Turbo diff
+      - name: Figure out what projects changed
         id: turbo-diff
-        run: scripts/turbo_diff.mjs --startRef ${{ steps.shas.outputs.base }} --endRef ${{ steps.shas.outputs.head }}
+        run: pnpm turbo-diff --startRef ${{ steps.shas.outputs.base }} --endRef ${{ steps.shas.outputs.head }}
 
       - name: Changelog Generation
         id: changelog
         env:
           GENERATE_VERSION: ${{ github.event_name != 'push' || github.repository != 'winglang/wing' }}
-        run: pnpm changelog
+        run: pnpm bump-pack
 
       - name: Build and Package
         run: pnpm package:ci
@@ -101,13 +101,7 @@ jobs:
       - name: Create git patch for merge
         if: github.event_name == 'pull_request'
         id: diff
-        run: |
-          git diff --binary --patch ${{ github.event.pull_request.head.sha }} ${{ github.sha }} > update.diff
-          if [ -s update.diff ]; then
-            echo "Diff found, creating a patch to apply later"
-            cat update.diff
-            echo "diff=true" >> $GITHUB_OUTPUT
-          fi
+        run: scripts/create_patch.sh update.diff ${{ github.event.pull_request.head.sha }} ${{ github.sha }}
 
       - name: Upload patch
         if: steps.diff.outputs.diff == 'true'
