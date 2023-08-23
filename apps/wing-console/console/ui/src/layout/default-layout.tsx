@@ -288,7 +288,7 @@ export const DefaultLayout = ({
                         const panelComponent = (
                           <div
                             className={classNames(
-                              "rounded-lg truncate",
+                              "rounded-lg overflow-hidden",
                               index === 0 && "flex grow",
                               index > 0 && "h-full",
                             )}
@@ -310,7 +310,7 @@ export const DefaultLayout = ({
                         return (
                           <div
                             key={index}
-                            className="flex grow rounded-lg truncate"
+                            className="flex grow rounded-lg overflow-hidden"
                           >
                             {panelComponent}
                           </div>
@@ -326,7 +326,7 @@ export const DefaultLayout = ({
                     className={classNames(
                       "flex-1 flex flex-col",
                       USE_EXTERNAL_THEME_COLOR,
-                      "rounded-lg truncate",
+                      "rounded-lg overflow-hidden",
                     )}
                     data-testid="map-view"
                   >
@@ -349,7 +349,7 @@ export const DefaultLayout = ({
                   >
                     <div
                       className={classNames(
-                        "rounded-lg truncate w-full h-full relative",
+                        "rounded-lg overflow-hidden w-full h-full relative",
                         USE_EXTERNAL_THEME_COLOR,
                         theme.bg4,
                       )}
@@ -400,7 +400,7 @@ export const DefaultLayout = ({
                     const panelComponent = (
                       <div
                         className={classNames(
-                          "rounded-lg truncate",
+                          "rounded-lg overflow-hidden",
                           index === 0 && "flex grow",
                           index > 0 && "w-full",
                         )}
