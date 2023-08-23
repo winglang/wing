@@ -32,8 +32,7 @@ export const MapView = ({
   const { mapData } = useMap({ showTests: showTests ?? false });
 
   const { theme } = useTheme();
-
-  const [hover, setHover] = useState(false);
+  const [hoverMapControls, setHoverMapControls] = useState(false);
 
   return (
     <ZoomPaneProvider>
@@ -46,16 +45,16 @@ export const MapView = ({
                   "transition-opacity",
                   "absolute inset-0 rounded-bl",
                   theme.bg4,
-                  (hover && "opacity-90") || "opacity-50",
+                  (hoverMapControls && "opacity-90") || "opacity-50",
                 )}
               />
               <div
                 className="relative group/map-controls"
                 onMouseEnter={() => {
-                  setHover(true);
+                  setHoverMapControls(true);
                 }}
                 onMouseLeave={() => {
-                  setHover(false);
+                  setHoverMapControls(false);
                 }}
               >
                 <MapControls />
