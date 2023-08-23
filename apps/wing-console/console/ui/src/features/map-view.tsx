@@ -49,35 +49,37 @@ export const MapView = ({
             </div>
           )}
 
-          <ElkMap
-            nodes={mapData?.nodes ?? []}
-            edges={mapData?.edges ?? []}
-            selectedNodeId={selectedNodeId}
-            onSelectedNodeIdChange={onSelectedNodeIdChange}
-            selectedEdgeId={selectedEdgeId}
-            onSelectedEdgeIdChange={onSelectedEdgeIdChange}
-            node={({ node, depth }) => (
-              <div className="h-full flex flex-col relative">
-                <ContainerNode
-                  nodeId={node.id}
-                  display={node.data?.display}
-                  name={node.data?.label}
-                  open={node.children && node.children?.length > 0}
-                  selected={node.id === selectedNodeId}
-                  resourceType={node.data?.type}
-                  icon={(props) => (
-                    <ResourceIcon
-                      resourceType={node.data?.type}
-                      resourcePath={node.data?.path}
-                      solid
-                      {...props}
-                    />
-                  )}
-                  depth={depth}
-                />
-              </div>
-            )}
-          />
+          <div className="absolute inset-0">
+            <ElkMap
+              nodes={mapData?.nodes ?? []}
+              edges={mapData?.edges ?? []}
+              selectedNodeId={selectedNodeId}
+              onSelectedNodeIdChange={onSelectedNodeIdChange}
+              selectedEdgeId={selectedEdgeId}
+              onSelectedEdgeIdChange={onSelectedEdgeIdChange}
+              node={({ node, depth }) => (
+                <div className="h-full flex flex-col relative">
+                  <ContainerNode
+                    nodeId={node.id}
+                    display={node.data?.display}
+                    name={node.data?.label}
+                    open={node.children && node.children?.length > 0}
+                    selected={node.id === selectedNodeId}
+                    resourceType={node.data?.type}
+                    icon={(props) => (
+                      <ResourceIcon
+                        resourceType={node.data?.type}
+                        resourcePath={node.data?.path}
+                        solid
+                        {...props}
+                      />
+                    )}
+                    depth={depth}
+                  />
+                </div>
+              )}
+            />
+          </div>
         </div>
       </div>
     </ZoomPaneProvider>
