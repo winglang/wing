@@ -275,8 +275,8 @@ export const DefaultLayout = ({
                   <RightResizableWidget
                     className={classNames(
                       USE_EXTERNAL_THEME_COLOR,
-                      theme.border3,
-                      "h-full flex flex-col w-80 min-w-[10rem] min-h-[10rem] border-r",
+                      theme.border4,
+                      "h-full flex flex-col w-80 min-w-[10rem] min-h-[10rem] border-r-2",
                     )}
                   >
                     {layout.leftPanel?.components.map(
@@ -288,8 +288,8 @@ export const DefaultLayout = ({
                             <TopResizableWidget
                               key={component.type}
                               className={classNames(
-                                theme.border3,
-                                "h-1/3 border-t",
+                                theme.border4,
+                                "h-1/3 border-t-2",
                               )}
                             >
                               {panelComponent}
@@ -325,8 +325,8 @@ export const DefaultLayout = ({
                   <LeftResizableWidget
                     className={classNames(
                       USE_EXTERNAL_THEME_COLOR,
-                      theme.border3,
-                      "flex-shrink w-80 min-w-[10rem] border-l z-10",
+                      theme.border4,
+                      "flex-shrink w-80 min-w-[10rem] border-l-2 z-10",
                       theme.bg4,
                     )}
                   >
@@ -361,8 +361,8 @@ export const DefaultLayout = ({
               <TopResizableWidget
                 className={classNames(
                   USE_EXTERNAL_THEME_COLOR,
-                  theme.border3,
-                  "border-t relative flex",
+                  theme.border4,
+                  "border-t-2 relative flex",
                   theme.bg3,
                   theme.text2,
                   "min-h-[5rem]",
@@ -382,8 +382,8 @@ export const DefaultLayout = ({
                         <RightResizableWidget
                           key={component.type}
                           className={classNames(
-                            theme.border3,
-                            "h-full w-1/4 flex flex-col min-w-[10rem] min-h-[10rem] border-r",
+                            theme.border4,
+                            "h-full w-1/4 flex flex-col min-w-[10rem] min-h-[10rem] border-r-2",
                           )}
                         >
                           {panelComponent}
@@ -404,8 +404,8 @@ export const DefaultLayout = ({
                   <div className="fixed bottom-0 max-h-[80vh] w-full z-50">
                     <TopResizableWidget
                       className={classNames(
-                        theme.border3,
-                        "border-t absolute flex",
+                        theme.border4,
+                        "border-t-2 absolute flex",
                         theme.bg3,
                         theme.text2,
                         "min-h-[5rem] h-[30rem]",
