@@ -31,10 +31,6 @@ export interface LayoutProps {
 }
 
 const defaultLayoutConfig: LayoutConfig = {
-  header: {
-    hide: false,
-    showThemeToggle: true,
-  },
   leftPanel: {
     components: [
       {
@@ -54,7 +50,7 @@ const defaultLayoutConfig: LayoutConfig = {
   },
   statusBar: {
     hide: false,
-    showThemeToggle: false,
+    showThemeToggle: true,
   },
   errorScreen: {
     position: "default",
@@ -246,15 +242,6 @@ export const DefaultLayout = ({
           showTerms && "blur-sm",
         )}
       >
-        {!layout.header?.hide && (
-          <div className={classNames(USE_EXTERNAL_THEME_COLOR)}>
-            <Header
-              title={wingfile.data ?? ""}
-              showThemeToggle={layout.header?.showThemeToggle}
-            />
-          </div>
-        )}
-
         {cloudAppState === "error" &&
           layout.errorScreen?.position === "default" && (
             <div className="flex-1 flex relative">

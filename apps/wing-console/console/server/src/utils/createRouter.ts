@@ -37,10 +37,6 @@ export interface LayoutPanel {
 }
 
 export interface LayoutConfig {
-  header?: {
-    hide?: boolean;
-    showThemeToggle?: boolean;
-  };
   leftPanel?: LayoutPanel;
   bottomPanel?: LayoutPanel;
   statusBar?: {
