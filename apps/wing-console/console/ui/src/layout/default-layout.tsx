@@ -260,7 +260,7 @@ export const DefaultLayout = ({
           )}
 
         {renderApp && (
-          <div className="w-full h-full flex flex-col grow gap-1">
+          <>
             <div className="flex-1 flex relative gap-1">
               {loading && (
                 <div
@@ -456,7 +456,7 @@ export const DefaultLayout = ({
                   </div>
                 </>
               )}
-          </div>
+          </>
         )}
 
         {!layout.statusBar?.hide && (
