@@ -17,23 +17,23 @@
       "path": "examples/tests/sdk_tests"
     },
     {
-      "name": "Wing Console",
+      "name": "Console",
       "path": "apps/wing-console"
     },
     {
-      "name": "Wing VSCode Extension",
+      "name": "VSCode",
       "path": "apps/vscode-wing"
     },
     {
-      "name": "Wing Docs",
+      "name": "Docs",
       "path": "docs/docs"
     },
     {
-      "name": "jsii-docgen",
+      "name": "API Docs Generator",
       "path": "apps/jsii-docgen"
     },
     {
-      "name": "wing-api-checker",
+      "name": "API Checker",
       "path": "apps/wing-api-checker"
     },
     {
@@ -49,7 +49,7 @@
       "path": "examples/tests/error"
     },
     {
-      "name": "Proposals",
+      "name": "Examples",
       "path": "examples/proposed"
     },
   ],
