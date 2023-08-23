@@ -83,7 +83,7 @@ jobs:
             git apply --binary $UPDATE_PATCH_FILE
             if [ $? -eq 0 ]; then
               git add --all
-              git commit -s -m "chore: self mutation (update)"
+              git commit -s -m "Merge branch 'main' into $HEAD_REF"
               echo "Patch applied successfully"
               rm $UPDATE_PATCH_FILE
             else
