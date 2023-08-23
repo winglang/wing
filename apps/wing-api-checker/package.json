@@ -28,8 +28,8 @@
     "projen": "pnpm exec projen"
   },
   "author": {
-    "name": "Monada",
-    "email": "ping@monada.co",
+    "name": "Wing Cloud",
+    "email": "ping@wing.cloud",
     "url": "https://wing.cloud",
     "organization": true
   },
