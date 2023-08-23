@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpLink, wsLink, splitLink, createWSClient } from "@trpc/client";
 import { Mode } from "@wingconsole/design-system";
 import { Trace } from "@wingconsole/server";
+import { useEffect, useMemo } from "react";
 
 import { App } from "./App.js";
 import { AppContext } from "./AppContext.js";
@@ -58,7 +59,36 @@ export const Console = ({
 
   let windowTitle = title ?? "Wing Console";
 
-  const appMode = layout === LayoutType.Default ? "local" : "remote";
+  const appMode = useMemo(() => {
+    return layout === LayoutType.Default || LayoutType.Vscode
+      ? "local"
+      : "remote";
+  }, [layout]);
+
+  useEffect(() => {
+    const vscodeCommands = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.code === "KeyC") {
+        document.execCommand("copy");
+      } else if ((event.ctrlKey || event.metaKey) && event.code === "KeyX") {
+        document.execCommand("cut");
+      } else if ((event.ctrlKey || event.metaKey) && event.code === "KeyV") {
+        document.execCommand("paste");
+      } else if (
+        (event.ctrlKey || event.metaKey) &&
+        event.code === "KeyA" &&
+        document.activeElement?.tagName !== "INPUT"
+      ) {
+        document.execCommand("selectAll");
+      }
+    };
+    if (layout === LayoutType.Vscode) {
+      window.addEventListener("keydown", vscodeCommands);
+    }
+    return () => {
+      window.removeEventListener("keydown", vscodeCommands);
+    };
+  }, [layout]);
+
   return (
     <AppContext.Provider value={{ appMode, title: windowTitle }}>
       <trpc.Provider client={trpcClient} queryClient={queryClient}>
