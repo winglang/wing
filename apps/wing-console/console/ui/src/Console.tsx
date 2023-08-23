@@ -60,7 +60,7 @@ export const Console = ({
   let windowTitle = title ?? "Wing Console";
 
   const appMode = useMemo(() => {
-    return layout === LayoutType.Default || LayoutType.Vscode
+    return layout === LayoutType.Default || layout === LayoutType.Vscode
       ? "local"
       : "remote";
   }, [layout]);
