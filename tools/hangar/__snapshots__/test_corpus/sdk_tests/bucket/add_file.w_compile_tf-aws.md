@@ -1,8 +1,8 @@
-# [try_get_json.w](../../../../../../examples/tests/sdk_tests/bucket/try_get_json.w) | compile | tf-aws
+# [add_file.w](../../../../../../examples/tests/sdk_tests/bucket/add_file.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.js
 ```js
-module.exports = function({ $b, $std_Json }) {
+module.exports = function({ $b }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -10,17 +10,9 @@ module.exports = function({ $b, $std_Json }) {
       return $obj;
     }
     async handle() {
-      const jsonObj1 = ({"key1": "value1"});
-      const jsonObj2 = ({"key2": "value2"});
-      (await $b.putJson("file1.json",jsonObj1));
-      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(b.tryGetJson(\"file1.json\")) == Json.stringify(jsonObj1)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([(await $b.tryGetJson("file1.json"))]),((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([jsonObj1]))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGetJson(\"file2.json\") == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.tryGetJson("file2.json")),undefined)))};
-      (await $b.putJson("file2.json",jsonObj2));
-      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(b.tryGetJson(\"file2.json\")) == Json.stringify(jsonObj2)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([(await $b.tryGetJson("file2.json"))]),((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([jsonObj2]))))};
-      (await $b.delete("file1.json"));
-      (await $b.delete("file2.json"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGetJson(\"file1.json\") == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.tryGetJson("file1.json")),undefined)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGetJson(\"file2.json\") == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.tryGetJson("file2.json")),undefined)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.list()).length,2)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.get(\"file1.txt\") == \"test1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.get("file1.txt")),"test1")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.get(\"file2.txt\") == \"test2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.get("file2.txt")),"test2")))};
     }
   }
   return $Closure1;
@@ -49,7 +41,7 @@ module.exports = function({ $b, $std_Json }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:tryGetJson\",\"${aws_lambda_function.testtryGetJson_Handler_A244DB7C.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:addObject\",\"${aws_lambda_function.testaddObject_Handler_44ECC49C.arn}\"]]"
     }
   },
   "provider": {
@@ -59,62 +51,62 @@ module.exports = function({ $b, $std_Json }) {
   },
   "resource": {
     "aws_iam_role": {
-      "testtryGetJson_Handler_IamRole_AA5E00E8": {
+      "testaddObject_Handler_IamRole_1A9672A7": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:tryGetJson/Handler/IamRole",
-            "uniqueId": "testtryGetJson_Handler_IamRole_AA5E00E8"
+            "path": "root/Default/Default/test:addObject/Handler/IamRole",
+            "uniqueId": "testaddObject_Handler_IamRole_1A9672A7"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "testtryGetJson_Handler_IamRolePolicy_061A4068": {
+      "testaddObject_Handler_IamRolePolicy_B5188189": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:tryGetJson/Handler/IamRolePolicy",
-            "uniqueId": "testtryGetJson_Handler_IamRolePolicy_061A4068"
+            "path": "root/Default/Default/test:addObject/Handler/IamRolePolicy",
+            "uniqueId": "testaddObject_Handler_IamRolePolicy_B5188189"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.testtryGetJson_Handler_IamRole_AA5E00E8.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.testaddObject_Handler_IamRole_1A9672A7.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "testtryGetJson_Handler_IamRolePolicyAttachment_4FC81A05": {
+      "testaddObject_Handler_IamRolePolicyAttachment_DB1EE647": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:tryGetJson/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testtryGetJson_Handler_IamRolePolicyAttachment_4FC81A05"
+            "path": "root/Default/Default/test:addObject/Handler/IamRolePolicyAttachment",
+            "uniqueId": "testaddObject_Handler_IamRolePolicyAttachment_DB1EE647"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testtryGetJson_Handler_IamRole_AA5E00E8.name}"
+        "role": "${aws_iam_role.testaddObject_Handler_IamRole_1A9672A7.name}"
       }
     },
     "aws_lambda_function": {
-      "testtryGetJson_Handler_A244DB7C": {
+      "testaddObject_Handler_44ECC49C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:tryGetJson/Handler/Default",
-            "uniqueId": "testtryGetJson_Handler_A244DB7C"
+            "path": "root/Default/Default/test:addObject/Handler/Default",
+            "uniqueId": "testaddObject_Handler_44ECC49C"
           }
         },
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
-            "WING_FUNCTION_NAME": "Handler-c8858898",
+            "WING_FUNCTION_NAME": "Handler-c89ea41b",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c8858898",
+        "function_name": "Handler-c89ea41b",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.testtryGetJson_Handler_IamRole_AA5E00E8.arn}",
+        "role": "${aws_iam_role.testaddObject_Handler_IamRole_1A9672A7.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testtryGetJson_Handler_S3Object_A843B277.key}",
+        "s3_key": "${aws_s3_object.testaddObject_Handler_S3Object_88DEF745.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -177,11 +169,33 @@ module.exports = function({ $b, $std_Json }) {
       }
     },
     "aws_s3_object": {
-      "testtryGetJson_Handler_S3Object_A843B277": {
+      "cloudBucket_S3Object-file1txt_2E641337": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:tryGetJson/Handler/S3Object",
-            "uniqueId": "testtryGetJson_Handler_S3Object_A843B277"
+            "path": "root/Default/Default/cloud.Bucket/S3Object-file1.txt",
+            "uniqueId": "cloudBucket_S3Object-file1txt_2E641337"
+          }
+        },
+        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
+        "content": "test1",
+        "key": "file1.txt"
+      },
+      "cloudBucket_S3Object-file2txt_C6672D6C": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Bucket/S3Object-file2.txt",
+            "uniqueId": "cloudBucket_S3Object-file2txt_C6672D6C"
+          }
+        },
+        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
+        "content": "test2",
+        "key": "file2.txt"
+      },
+      "testaddObject_Handler_S3Object_88DEF745": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:addObject/Handler/S3Object",
+            "uniqueId": "testaddObject_Handler_S3Object_88DEF745"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
@@ -213,7 +227,6 @@ class $Root extends $stdlib.std.Resource {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1-1.js")({
             $b: ${context._lift(b)},
-            $std_Json: ${context._lift(std.Json)},
           })
         `);
       }
@@ -230,17 +243,19 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(b, host, ["delete", "putJson", "tryGetJson"]);
+          $Closure1._registerBindObject(b, host, ["get", "list"]);
         }
         super._registerBind(host, ops);
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:tryGetJson",new $Closure1(this,"$Closure1"));
+    (b.addFile("file1.txt","testFiles/test1.txt"));
+    (b.addFile("file2.txt","testFiles/test2.txt"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:addObject",new $Closure1(this,"$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "try_get_json", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+new $App({ outdir: $outdir, name: "add_file", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

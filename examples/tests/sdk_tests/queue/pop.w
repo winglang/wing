@@ -1,20 +1,15 @@
 bring cloud;
 
-let NIL = "<<NIL>>";
-
 let q = new cloud.Queue();
 
 test "pop" {
-  let msgs = ["Foo", "Bar"];
-  for msg in msgs {
-    q.push(msg);
-  }
+  q.push("Foo", "Bar");
 
-  let first = q.pop() ?? NIL;
-  let second = q.pop() ?? NIL;
-  let third = q.pop() ?? NIL;
+  let first = q.pop();
+  let second = q.pop();
+  let third = q.pop();
 
-  assert(msgs.contains(first));
-  assert(msgs.contains(second));
-  assert(third == NIL);
+  assert(first == "Foo");
+  assert(second == "Bar");
+  assert(third == nil);
 }

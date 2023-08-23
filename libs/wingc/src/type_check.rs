@@ -2121,43 +2121,114 @@ impl<'a> TypeChecker<'a> {
 			}
 			ExprKind::ArrayLiteral { type_, items } => {
 				// Infer type based on either the explicit type or the value in one of the items
-				let container_type = if let Some(type_) = type_ {
-					self.resolve_type_annotation(type_, env)
+				let (container_type, mut element_type) = if let Some(type_) = type_ {
+					let container_type = self.resolve_type_annotation(type_, env);
+					let element_type = match *container_type {
+						Type::Array(t) | Type::MutArray(t) => t,
+						_ => {
+							self.spanned_error(
+								&type_.span,
+								format!("Expected \"Array\" or \"MutArray\", found \"{container_type}\""),
+							);
+							self.types.error()
+						}
+					};
+					(container_type, element_type)
+				} else if self.in_json > 0 {
+					let json_data = JsonData {
+						expression_id: exp.id,
+						kind: JsonDataKind::List(vec![]),
+					};
+					let inner_type = self.types.add_type(Type::Json(Some(json_data)));
+					(self.types.add_type(Type::Array(inner_type)), inner_type)
 				} else {
-					if self.in_json > 0 {
-						let json_data = JsonData {
-							expression_id: exp.id,
-							kind: JsonDataKind::List(vec![]),
-						};
-						let inner_type = self.types.add_type(Type::Json(Some(json_data)));
-						self.types.add_type(Type::Array(inner_type))
-					} else {
-						let inner_type = self.types.make_inference();
-						self.types.add_type(Type::Array(inner_type))
-					}
-				};
-
-				let mut element_type = match *container_type {
-					Type::Array(t) => t,
-					Type::MutArray(t) => t,
-					_ => {
-						self.spanned_error(exp, format!("Expected \"Array\" type, found \"{}\"", container_type));
-						self.types.error()
-					}
+					let inner_type = self.types.make_inference();
+					(self.types.add_type(Type::Array(inner_type)), inner_type)
 				};
 
 				// Verify all types are the same as the inferred type
-				for v in items.iter() {
-					let (t, _) = self.type_check_exp(v, env);
+				for item in items {
+					let (t, _) = self.type_check_exp(item, env);
+
+					// Augment the json list data with the new element type
 					if let Type::Json(Some(JsonData { ref mut kind, .. })) = &mut *element_type {
 						if let JsonDataKind::List(ref mut json_list) = kind {
 							json_list.push(SpannedTypeInfo {
 								type_: t,
-								span: v.span(),
+								span: item.span(),
 							});
 						}
 					}
-					element_type = self.check_json_serializable_or_validate_type(t, element_type, v);
+
+					if self.in_json == 0 {
+						// If we're not in a Json literal, validate the type of each element
+						self.validate_type(t, element_type, item);
+						element_type = self.types.maybe_unwrap_inference(element_type);
+					} else if self.is_in_mut_json && !t.is_json_legal_value() {
+						// if we're in a MutJson literal, we only need to check that each field is legal json
+						self.spanned_error(
+							item,
+							format!("Expected a valid Json value (https://www.json.org/json-en.html), but got \"{t}\""),
+						);
+					}
+				}
+
+				(container_type, env.phase)
+			}
+			ExprKind::MapLiteral { fields, type_ } => {
+				// Infer type based on either the explicit type or the value in one of the fields
+				let (container_type, mut element_type) = if let Some(type_) = type_ {
+					let container_type = self.resolve_type_annotation(type_, env);
+					let element_type = match *container_type {
+						Type::Map(t) | Type::MutMap(t) => t,
+						_ => {
+							self.spanned_error(
+								&type_.span,
+								format!("Expected \"Map\" or \"MutMap\", found \"{container_type}\""),
+							);
+							self.types.error()
+						}
+					};
+					(container_type, element_type)
+				} else {
+					let inner_type = self.types.make_inference();
+					(self.types.add_type(Type::Map(inner_type)), inner_type)
+				};
+
+				// Verify all types are the same as the inferred type
+				for field in fields.values() {
+					let (t, _) = self.type_check_exp(field, env);
+					self.validate_type(t, element_type, field);
+					element_type = self.types.maybe_unwrap_inference(element_type);
+				}
+
+				(container_type, env.phase)
+			}
+			ExprKind::SetLiteral { type_, items } => {
+				// Infer type based on either the explicit type or the value in one of the items
+				let (container_type, mut element_type) = if let Some(type_) = type_ {
+					let container_type = self.resolve_type_annotation(type_, env);
+					let element_type = match *container_type {
+						Type::Set(t) | Type::MutSet(t) => t,
+						_ => {
+							self.spanned_error(
+								&type_.span,
+								format!("Expected \"Set\" or \"MutSet\", found \"{container_type}\""),
+							);
+							self.types.error()
+						}
+					};
+					(container_type, element_type)
+				} else {
+					let inner_type = self.types.make_inference();
+					(self.types.add_type(Type::Set(inner_type)), inner_type)
+				};
+
+				// Verify all types are the same as the inferred type
+				for item in items {
+					let (t, _) = self.type_check_exp(item, env);
+					self.validate_type(t, element_type, item);
+					element_type = self.types.maybe_unwrap_inference(element_type);
 				}
 
 				(container_type, env.phase)
@@ -2296,58 +2367,6 @@ impl<'a> TypeChecker<'a> {
 					}))),
 					env.phase,
 				)
-			}
-			ExprKind::MapLiteral { fields, type_ } => {
-				// Infer type based on either the explicit type or the value in one of the fields
-				let container_type = if let Some(type_) = type_ {
-					self.resolve_type_annotation(type_, env)
-				} else {
-					let inner_type = self.types.make_inference();
-					self.types.add_type(Type::Map(inner_type))
-				};
-
-				let mut value_type = match *container_type {
-					Type::Map(t) => t,
-					Type::MutMap(t) => t,
-					_ => {
-						self.spanned_error(exp, format!("Expected \"Map\" type, found \"{}\"", container_type));
-						self.types.error()
-					}
-				};
-
-				// Verify all types are the same as the inferred type
-				for (_, v) in fields.iter() {
-					let (t, _) = self.type_check_exp(v, env);
-					value_type = self.validate_type(t, value_type, v);
-				}
-
-				(container_type, env.phase)
-			}
-			ExprKind::SetLiteral { type_, items } => {
-				// Infer type based on either the explicit type or the value in one of the items
-				let container_type = if let Some(type_) = type_ {
-					self.resolve_type_annotation(type_, env)
-				} else {
-					let inferred = self.types.make_inference();
-					self.types.add_type(Type::Set(inferred))
-				};
-
-				let mut element_type = match *container_type {
-					Type::Set(t) => t,
-					Type::MutSet(t) => t,
-					_ => {
-						self.spanned_error(exp, format!("Expected \"Set\" type, found \"{}\"", container_type));
-						self.types.error()
-					}
-				};
-
-				// Verify all types are the same as the inferred type
-				for v in items.iter() {
-					let (t, _) = self.type_check_exp(v, env);
-					element_type = self.validate_type(t, element_type, v);
-				}
-
-				(container_type, env.phase)
 			}
 			ExprKind::FunctionClosure(func_def) => self.type_check_closure(func_def, env),
 			ExprKind::CompilerDebugPanic => {
@@ -2574,35 +2593,6 @@ impl<'a> TypeChecker<'a> {
 					),
 				);
 			}
-		}
-	}
-
-	fn check_json_serializable_or_validate_type(
-		&mut self,
-		actual_type: TypeRef,
-		expected_type: TypeRef,
-		exp: &Expr,
-	) -> TypeRef {
-		// Skip validate if in Json
-		if self.in_json == 0 {
-			return self.validate_type(actual_type, expected_type, exp);
-		}
-
-		if self.is_in_mut_json && !actual_type.is_json_legal_value() {
-			self.spanned_error(
-				exp,
-				format!(
-					"Expected a valid Json value (https://www.json.org/json-en.html), but got \"{}\"",
-					actual_type
-				),
-			);
-			return self.types.error();
-		}
-
-		if expected_type.is_json() {
-			expected_type
-		} else {
-			actual_type
 		}
 	}
 
