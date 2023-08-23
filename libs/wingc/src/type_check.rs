@@ -2594,24 +2594,22 @@ impl<'a> TypeChecker<'a> {
 			Type::Array(inner_expected) | Type::MutArray(inner_expected),
 		) = (&*actual_type, &*expected_type)
 		{
-			return self.validate_equal_types(*inner_actual, *inner_expected, span);
-		}
-		if let (
+			self.validate_equal_types(*inner_actual, *inner_expected, span)
+		} else if let (
 			Type::Map(inner_actual) | Type::MutMap(inner_actual),
 			Type::Map(inner_expected) | Type::MutMap(inner_expected),
 		) = (&*actual_type, &*expected_type)
 		{
-			return self.validate_equal_types(*inner_actual, *inner_expected, span);
-		}
-		if let (
+			self.validate_equal_types(*inner_actual, *inner_expected, span)
+		} else if let (
 			Type::Set(inner_actual) | Type::MutSet(inner_actual),
 			Type::Set(inner_expected) | Type::MutSet(inner_expected),
 		) = (&*actual_type, &*expected_type)
 		{
-			return self.validate_equal_types(*inner_actual, *inner_expected, span);
+			self.validate_equal_types(*inner_actual, *inner_expected, span)
+		} else {
+			self.validate_type_in(actual_type, &[expected_type], span)
 		}
-
-		self.validate_type_in(actual_type, &[expected_type], span)
 	}
 
 	/// Validate that the given type is a subtype (or same) as the expected type. If not, add an error
