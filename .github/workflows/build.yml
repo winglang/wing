@@ -35,8 +35,9 @@ jobs:
       version: ${{ fromJson(steps.changelog.outputs.data).newVersion }}
       last-version: ${{ fromJson(steps.changelog.outputs.data).lastVersion }}
       changelog: ${{ fromJson(steps.changelog.outputs.data).changelog }}
-      release-vscode: ${{ fromJson(steps.turbo-diff.outputs.data)['vscode-wing#compile'].changes }}
-      run-hangar: ${{ fromJson(steps.turbo-diff.outputs.data)['hangar#test'].changes }}
+      vscode-wing-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['vscode-wing#compile'].changes }}
+      e2e-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['hangar#test'].changes }}
+      bench-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['hangar#bench'].changes }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -164,7 +165,7 @@ jobs:
 
   benchmark:
     name: Benchmark
-    if: needs.build.outputs.run-hangar == 'true' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full')
+    if: needs.build.outputs.bench-changed == 'true' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full')
     runs-on: ubuntu-latest
     needs:
       - build
@@ -210,7 +211,7 @@ jobs:
     runs-on: "${{ matrix.runner }}-latest"
     needs:
       - build
-    if: needs.build.outputs.run-hangar == 'true' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full')
+    if: needs.build.outputs.e2e-changed == 'true' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full')
     strategy:
       fail-fast: true
       matrix:
@@ -335,7 +336,7 @@ jobs:
           done
 
       - name: Publish Extension to Visual Studio Marketplace
-        if: needs.build.outputs.release-vscode == 'true'
+        if: needs.build.outputs.vscode-wing-changed == 'true'
         uses: "HaaLeo/publish-vscode-extension@v1"
         with:
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}

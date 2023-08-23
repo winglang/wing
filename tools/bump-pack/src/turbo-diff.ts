@@ -55,6 +55,7 @@ const turboArgs = [
   "compile",
   "test",
   "package",
+  "bench",
   "--dry-run=json",
 ];
 
@@ -105,4 +106,8 @@ for (const task of turboOutput.tasks) {
   }
 }
 
-setOutput("data", taskData);
+console.log(taskData);
+
+if (process.env.GITHUB_ACTIONS) {
+  setOutput("data", taskData);
+}
