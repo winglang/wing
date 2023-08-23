@@ -66,24 +66,34 @@ export const Console = ({
   }, [layout]);
 
   useEffect(() => {
+    if (layout !== LayoutType.Vscode) {
+      return;
+    }
+
     const vscodeCommands = (event: KeyboardEvent) => {
-      if ((event.ctrlKey || event.metaKey) && event.code === "KeyC") {
-        document.execCommand("copy");
-      } else if ((event.ctrlKey || event.metaKey) && event.code === "KeyX") {
-        document.execCommand("cut");
-      } else if ((event.ctrlKey || event.metaKey) && event.code === "KeyV") {
-        document.execCommand("paste");
-      } else if (
-        (event.ctrlKey || event.metaKey) &&
-        event.code === "KeyA" &&
-        document.activeElement?.tagName !== "INPUT"
-      ) {
-        document.execCommand("selectAll");
+      if (!(event.ctrlKey || event.metaKey)) {
+        return;
+      }
+      switch (event.code) {
+        case "KeyC": {
+          document.execCommand("copy");
+          break;
+        }
+        case "KeyX": {
+          document.execCommand("cut");
+          break;
+        }
+        case "KeyV": {
+          document.execCommand("paste");
+          break;
+        }
+        case "KeyA": {
+          document.execCommand("selectAll");
+        }
       }
     };
-    if (layout === LayoutType.Vscode) {
-      window.addEventListener("keydown", vscodeCommands);
-    }
+
+    window.addEventListener("keydown", vscodeCommands);
     return () => {
       window.removeEventListener("keydown", vscodeCommands);
     };
