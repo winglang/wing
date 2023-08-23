@@ -1,4 +1,5 @@
 bring cloud;
+bring util;
 
 let q = new cloud.Queue();
 
@@ -14,15 +15,21 @@ test "push" {
 
   q.push("Foo");
   
-  assert(q.approxSize() == 1);
+  assert(util.waitUntil((): bool => {
+    return q.approxSize() == 1;
+  }));
 
   q.pop();
   q.push("Bar", "Baz");
 
-  assert(q.approxSize() == 2);
+  assert(util.waitUntil((): bool => {
+    return q.approxSize() == 2;
+  }));
 
   q.purge();
   q.push("", "\r", "${obj}");
 
-  assert(q.approxSize() == 3);
+  assert(util.waitUntil((): bool => {
+    return q.approxSize() == 3;
+  }));
 }
