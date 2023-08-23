@@ -646,47 +646,6 @@ module.exports = function({  }) {
         ]
       }
     },
-    "aws_s3_bucket_public_access_block": {
-      "BigPublisher_b2_PublicAccessBlock_AB982F06": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/PublicAccessBlock",
-            "uniqueId": "BigPublisher_b2_PublicAccessBlock_AB982F06"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.BigPublisher_b2_702AC841.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      },
-      "BigPublisher_cloudBucket_PublicAccessBlock_6DB1CA1E": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "BigPublisher_cloudBucket_PublicAccessBlock_6DB1CA1E"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.BigPublisher_cloudBucket_ABF95118.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      },
-      "cloudBucket_PublicAccessBlock_5946CCE8": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "cloudBucket_PublicAccessBlock_5946CCE8"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      }
-    },
     "aws_s3_bucket_server_side_encryption_configuration": {
       "BigPublisher_b2_Encryption_24266321": {
         "//": {

@@ -488,11 +488,11 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
   |                            ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected \\"Set\\" type, found \\"Array<num>\\"
+error: Expected \\"Set\\" or \\"MutSet\\", found \\"Array<num>\\"
   --> ../../../examples/tests/invalid/container_types.w:3:12
   |
 3 | let arr2 = Array<num> {1, 2, 3};
-  |            ^^^^^^^^^^^^^^^^^^^^ Expected \\"Set\\" type, found \\"Array<num>\\"
+  |            ^^^^^^^^^^ Expected \\"Set\\" or \\"MutSet\\", found \\"Array<num>\\"
 
 
 error: Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead
@@ -551,18 +551,11 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
    |                        ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected \\"Array\\" type, found \\"Set<num>\\"
+error: Expected \\"Array\\" or \\"MutArray\\", found \\"Set<num>\\"
    --> ../../../examples/tests/invalid/container_types.w:21:10
    |
 21 | let s2 = Set<num> [1, \\"2\\", 3];
-   |          ^^^^^^^^^^^^^^^^^^^^ Expected \\"Array\\" type, found \\"Set<num>\\"
-
-
-error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/container_types.w:21:23
-   |
-21 | let s2 = Set<num> [1, \\"2\\", 3];
-   |                       ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+   |          ^^^^^^^^ Expected \\"Array\\" or \\"MutArray\\", found \\"Set<num>\\"
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -1537,11 +1530,11 @@ exports[`mut_container_types.w 1`] = `
   |                             ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected \\"Set\\" type, found \\"MutArray<num>\\"
+error: Expected \\"Set\\" or \\"MutSet\\", found \\"MutArray<num>\\"
   --> ../../../examples/tests/invalid/mut_container_types.w:3:12
   |
 3 | let arr2 = MutArray<num>{1, 2, 3};
-  |            ^^^^^^^^^^^^^^^^^^^^^^ Expected \\"Set\\" type, found \\"MutArray<num>\\"
+  |            ^^^^^^^^^^^^^ Expected \\"Set\\" or \\"MutSet\\", found \\"MutArray<num>\\"
 
 
 error: Expected type to be \\"MutArray<num>\\", but got \\"Array<num>\\" instead
@@ -1572,18 +1565,11 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
    |                         ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected \\"Array\\" type, found \\"MutSet<num>\\"
+error: Expected \\"Array\\" or \\"MutArray\\", found \\"MutSet<num>\\"
    --> ../../../examples/tests/invalid/mut_container_types.w:11:10
    |
 11 | let s2 = MutSet<num>[1, \\"2\\", 3];
-   |          ^^^^^^^^^^^^^^^^^^^^^^ Expected \\"Array\\" type, found \\"MutSet<num>\\"
-
-
-error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/mut_container_types.w:11:25
-   |
-11 | let s2 = MutSet<num>[1, \\"2\\", 3];
-   |                         ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+   |          ^^^^^^^^^^^ Expected \\"Array\\" or \\"MutArray\\", found \\"MutSet<num>\\"
 
 
 error: Expected type to be \\"MutSet<num>\\", but got \\"Set<num>\\" instead
@@ -1614,11 +1600,11 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
    |                                 ^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected \\"Array\\" type, found \\"MutMap<str>\\"
+error: Expected \\"Array\\" or \\"MutArray\\", found \\"MutMap<str>\\"
    --> ../../../examples/tests/invalid/mut_container_types.w:20:10
    |
 20 | let m2 = MutMap<str>[\\"hello\\", \\"world\\"];
-   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected \\"Array\\" type, found \\"MutMap<str>\\"
+   |          ^^^^^^^^^^^ Expected \\"Array\\" or \\"MutArray\\", found \\"MutMap<str>\\"
 
 
 error: Expected type to be \\"MutMap<num>\\", but got \\"Map<str>\\" instead

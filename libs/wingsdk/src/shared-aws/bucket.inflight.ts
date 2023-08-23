@@ -12,6 +12,7 @@ import {
   GetPublicAccessBlockCommandOutput,
   S3Client,
   GetObjectOutput,
+  NoSuchKey,
 } from "@aws-sdk/client-s3";
 import { BucketDeleteOptions, IBucketClient } from "../cloud";
 import { Duration, Json } from "../std";
@@ -70,34 +71,46 @@ export class BucketClient implements IBucketClient {
   }
 
   /**
+   * See https://github.com/aws/aws-sdk-js-v3/issues/1877
+   */
+  private async getObjectContent(key: string): Promise<string | undefined> {
+    const command = new GetObjectCommand({
+      Bucket: this.bucketName,
+      Key: key,
+    });
+
+    try {
+      const resp: GetObjectOutput = await this.s3Client.send(command);
+      const objectContent = resp.Body as Readable;
+      try {
+        return await consumers.text(objectContent);
+      } catch (e) {
+        throw new Error(
+          `Object content could not be read as text (key=${key}): ${
+            (e as Error).stack
+          })}`
+        );
+      }
+    } catch (e) {
+      if (e instanceof NoSuchKey) {
+        return undefined;
+      }
+      throw new Error((e as Error).stack);
+    }
+  }
+
+  /**
    * Get an object from the bucket
    *
    * @param key Key of the object
    * @returns content of the object
    */
   public async get(key: string): Promise<string> {
-    // See https://github.com/aws/aws-sdk-js-v3/issues/1877
-    const command = new GetObjectCommand({
-      Bucket: this.bucketName,
-      Key: key,
-    });
-    let resp: GetObjectOutput;
-    try {
-      resp = await this.s3Client.send(command);
-    } catch (e) {
-      throw new Error(
-        `Object does not exist (key=${key}): ${(e as Error).stack}`
-      );
+    const objectContent = await this.getObjectContent(key);
+    if (objectContent !== undefined) {
+      return objectContent;
     }
-    try {
-      return await consumers.text(resp.Body as Readable);
-    } catch (e) {
-      throw new Error(
-        `Object contents could not be read as text (key=${key}): ${
-          (e as Error).stack
-        })}`
-      );
-    }
+    throw new Error(`Object does not exist (key=${key}).`);
   }
 
   /**
@@ -107,11 +120,7 @@ export class BucketClient implements IBucketClient {
    * @returns content of the object
    */
   public async tryGet(key: string): Promise<string | undefined> {
-    if (await this.exists(key)) {
-      return this.get(key);
-    }
-
-    return undefined;
+    return this.getObjectContent(key);
   }
 
   /**
@@ -131,11 +140,12 @@ export class BucketClient implements IBucketClient {
    * @returns Json content of the object
    */
   public async tryGetJson(key: string): Promise<Json | undefined> {
-    if (await this.exists(key)) {
-      return this.getJson(key);
+    const objectContent = await this.tryGet(key);
+    if (objectContent !== undefined) {
+      return JSON.parse(objectContent);
+    } else {
+      return undefined;
     }
-
-    return undefined;
   }
 
   /**
@@ -158,13 +168,12 @@ export class BucketClient implements IBucketClient {
 
     try {
       await this.s3Client.send(command);
-    } catch (er) {
-      const error = er as any;
-      if (!mustExist && error.name === "NoSuchKey") {
+    } catch (e: any) {
+      if (!mustExist && e instanceof NoSuchKey) {
         return;
       }
 
-      throw new Error(`Unable to delete "${key}": ${error.message}`);
+      throw new Error(`Unable to delete "${key}": ${e.message}`);
     }
   }
 
