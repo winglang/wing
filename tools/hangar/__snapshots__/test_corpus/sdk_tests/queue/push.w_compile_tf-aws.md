@@ -2,7 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
-module.exports = function({ $q }) {
+module.exports = function({ $q, $util_Util }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,13 +12,22 @@ module.exports = function({ $q }) {
     async handle() {
       const obj = ({"k1": 1,"k2": "hello","k3": true,"k4": ({"k1": [1, "a", true, ({})]})});
       (await $q.push("Foo"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: q.approxSize() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $q.approxSize()),1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: util.waitUntil((): bool => {\n    return q.approxSize() == 1;\n  })")})((await $util_Util.waitUntil(async () => {
+        return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $q.approxSize()),1));
+      }
+      )))};
       (await $q.pop());
       (await $q.push("Bar","Baz"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: q.approxSize() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $q.approxSize()),2)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: util.waitUntil((): bool => {\n    return q.approxSize() == 2;\n  })")})((await $util_Util.waitUntil(async () => {
+        return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $q.approxSize()),2));
+      }
+      )))};
       (await $q.purge());
       (await $q.push("","\r",String.raw({ raw: ["", ""] }, ((e) => typeof e === 'string' ? e : JSON.stringify(e, null, 2))(obj))));
-      {((cond) => {if (!cond) throw new Error("assertion failed: q.approxSize() == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $q.approxSize()),3)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: util.waitUntil((): bool => {\n    return q.approxSize() == 3;\n  })")})((await $util_Util.waitUntil(async () => {
+        return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $q.approxSize()),3));
+      }
+      )))};
     }
   }
   return $Closure1;
@@ -166,6 +175,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
+const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -179,6 +189,7 @@ class $Root extends $stdlib.std.Resource {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1-1.js")({
             $q: ${context._lift(q)},
+            $util_Util: ${context._lift(util.Util)},
           })
         `);
       }
