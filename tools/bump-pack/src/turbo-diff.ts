@@ -6,9 +6,11 @@ import { join } from "node:path";
 import { execSync } from "node:child_process";
 import { parseArgs } from "node:util";
 import { setOutput } from "@actions/core";
-import { minimatch } from 'minimatch'
+import { minimatch } from "minimatch";
+import { fileURLToPath } from "node:url";
 
-const rootDir = join(__dirname, "..", "..", "..");
+const currentFile = fileURLToPath(import.meta.url);
+const rootDir = join(currentFile, "..", "..", "..", "..");
 function betterExec(command: string) {
   return execSync(command, {
     cwd: rootDir,
@@ -36,9 +38,9 @@ let relativeChangedFiles = betterExec(
 
 if (args.values.endRef === "") {
   // include untracked files
-  const OtherChangedFiles = betterExec(`git ls-files --other --exclude-standard`).split(
-    "\n"
-  );
+  const OtherChangedFiles = betterExec(
+    `git ls-files --other --exclude-standard`
+  ).split("\n");
 
   relativeChangedFiles = relativeChangedFiles.concat(OtherChangedFiles);
 }
@@ -80,7 +82,7 @@ for (const task of turboOutput.tasks) {
 }
 
 const globalDeps = Object.keys(turboOutput.globalCacheInputs.files);
-const globalPattern = `{${globalDeps.join(',')}}`
+const globalPattern = `{${globalDeps.join(",")}}`;
 for (const changedFile of relativeChangedFiles) {
   if (minimatch(changedFile, globalPattern)) {
     for (const taskId in taskData) {
