@@ -9,7 +9,7 @@
       ]
     },
     "test": {
-      "dependsOn": ["^compile", "compile", "examples-valid#topo", "examples-invalid#topo"]
+      "dependsOn": ["compile", "examples-valid#topo", "examples-invalid#topo"]
     },
     "dev": {
       "cache": false
