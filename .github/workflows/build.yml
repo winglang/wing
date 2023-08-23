@@ -102,6 +102,25 @@ jobs:
           name: dist
           path: dist/*
 
+      # Create patch to go from the PR head to the merge commit
+      - name: Create git patch for merge
+        if: github.event_name == 'pull_request'
+        id: diff
+        run: |
+          git diff --binary --patch ${{ github.event.pull_request.head.sha }} ${{ github.sha }} > update.diff
+          if [ -s update.diff ]; then
+            echo "Diff found, creating a patch to apply later"
+            cat update.diff
+            echo "diff=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload patch
+        if: steps.diff.outputs.diff == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: update.diff
+          path: update.diff
+
   test:
     name: Test
     timeout-minutes: 30
@@ -293,8 +312,11 @@ jobs:
         run: |
           PATCH_COUNT=0
           for f in $(find ./*.diff/*.diff); do
-            PATCH_COUNT=$((PATCH_COUNT + 1))
-            cat $f
+            # Exclude update.diff since we don't want to fail if the PR is just not up to date
+            if [ "$f" != "./update.diff/update.diff" ]; then
+              PATCH_COUNT=$((PATCH_COUNT + 1))
+              cat $f
+            fi
           done
           if [ $PATCH_COUNT -gt 0 ]; then
             echo "Found $PATCH_COUNT patches, build failed. A self-mutation should happen soon."
