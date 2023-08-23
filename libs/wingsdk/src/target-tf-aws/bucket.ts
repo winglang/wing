@@ -206,14 +206,6 @@ export function createEncryptedBucket(
       policy: JSON.stringify(policy),
       dependsOn: [publicAccessBlock],
     });
-  } else {
-    new S3BucketPublicAccessBlock(scope, "PublicAccessBlock", {
-      bucket: bucket.bucket,
-      blockPublicAcls: true,
-      blockPublicPolicy: true,
-      ignorePublicAcls: true,
-      restrictPublicBuckets: true,
-    });
   }
 
   return bucket;

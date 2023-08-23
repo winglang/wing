@@ -21,7 +21,6 @@ test("create a bucket", () => {
   // THEN
   expect(tfResourcesOf(output)).toEqual([
     "aws_s3_bucket", // main bucket
-    "aws_s3_bucket_public_access_block", // ensure bucket is private
     "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
   ]);
   expect(tfSanitize(output)).toMatchSnapshot();
