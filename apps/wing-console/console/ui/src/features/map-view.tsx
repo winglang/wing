@@ -33,20 +33,9 @@ export const MapView = ({
   const { theme } = useTheme();
   return (
     <ZoomPaneProvider>
-      <div className="h-full flex flex-col">
-        {showMapControls && (
-          <div className={classNames(USE_EXTERNAL_THEME_COLOR)}>
-            <MapControls />
-          </div>
-        )}
-        <div
-          className={classNames(
-            "grow relative border-t",
-            theme.bg4,
-            theme.border3,
-            "cursor-grab",
-          )}
-        >
+      <div className={classNames("h-full flex flex-col", theme.bg4)}>
+        {showMapControls && <MapControls />}
+        <div className="grow relative cursor-grab">
           <div className="absolute inset-0">
             <ElkMap
               nodes={mapData?.nodes ?? []}
