@@ -135,14 +135,6 @@ exports[`tree.json for an app with many resources 1`] = `
                             "id": "Encryption",
                             "path": "root/Default/Default/BigPublisher/b2/Encryption",
                           },
-                          "PublicAccessBlock": {
-                            "constructInfo": {
-                              "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
-                            },
-                            "id": "PublicAccessBlock",
-                            "path": "root/Default/Default/BigPublisher/b2/PublicAccessBlock",
-                          },
                           "S3BucketNotification": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
@@ -310,14 +302,6 @@ exports[`tree.json for an app with many resources 1`] = `
                             },
                             "id": "Encryption",
                             "path": "root/Default/Default/BigPublisher/cloud.Bucket/Encryption",
-                          },
-                          "PublicAccessBlock": {
-                            "constructInfo": {
-                              "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
-                            },
-                            "id": "PublicAccessBlock",
-                            "path": "root/Default/Default/BigPublisher/cloud.Bucket/PublicAccessBlock",
                           },
                         },
                         "constructInfo": {
@@ -622,14 +606,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         },
                         "id": "Encryption",
                         "path": "root/Default/Default/cloud.Bucket/Encryption",
-                      },
-                      "PublicAccessBlock": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
-                        },
-                        "id": "PublicAccessBlock",
-                        "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
                       },
                     },
                     "constructInfo": {
