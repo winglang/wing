@@ -45,7 +45,7 @@ export const MapView = ({
                   "transition-opacity",
                   "absolute inset-0 rounded-bl",
                   theme.bg4,
-                  (hoverMapControls && "opacity-90") || "opacity-50",
+                  (hoverMapControls && "opacity-80") || "opacity-60",
                 )}
               />
               <div
