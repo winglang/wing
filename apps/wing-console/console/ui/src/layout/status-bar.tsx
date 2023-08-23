@@ -33,6 +33,7 @@ export const StatusBar = ({
       className={classNames(
         theme.bg3,
         theme.text1,
+        theme.border3,
         "py-1 px-4 flex text-2xs w-full relative z-10",
       )}
     >

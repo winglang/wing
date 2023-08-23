@@ -244,6 +244,7 @@ export const DefaultLayout = ({
           "h-full flex flex-col select-none",
           theme.text2,
           showTerms && "blur-sm",
+          "gap-1 pt-1",
         )}
       >
         {cloudAppState === "error" &&
@@ -259,7 +260,7 @@ export const DefaultLayout = ({
           )}
 
         {renderApp && (
-          <div className="w-full h-full flex flex-col grow gap-1 p-1">
+          <div className="w-full h-full flex flex-col grow gap-1">
             <div className="flex-1 flex relative gap-1">
               {loading && (
                 <div
