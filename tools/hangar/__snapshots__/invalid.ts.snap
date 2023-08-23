@@ -88,18 +88,18 @@ Duration <DURATION>"
 `;
 
 exports[`bring_jsii.w 1`] = `
-"error: bring \\"jsii-code-samples\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
+"error: bring jsii-code-samples must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
   --> ../../../examples/tests/invalid/bring_jsii.w:1:1
   |
 1 | bring \\"jsii-code-samples\\";
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^ bring \\"jsii-code-samples\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^ bring jsii-code-samples must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
 
 
-error: Cannot find module \\"foobar\\" in source directory: Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid\\"
+error: Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid/bring_jsii.w\\"
   --> ../../../examples/tests/invalid/bring_jsii.w:4:1
   |
 4 | bring \\"foobar\\" as baz;
-  | ^^^^^^^^^^^^^^^^^^^^^^ Cannot find module \\"foobar\\" in source directory: Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid\\"
+  | ^^^^^^^^^^^^^^^^^^^^^^ Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid/bring_jsii.w\\"
 
 
  
