@@ -41,7 +41,8 @@
         "src/**/*.ts",
         "src/**/*.test.ts",
         "test/**"
-      ]
+      ],
+      "outputs": ["**/__snapshots__/**", "**/*.snap"]
     },
     "test:playwright": {
       "dependsOn": ["compile"],
@@ -91,22 +92,8 @@
       "env": ["PROJEN_BUMP_VERSION"],
       "inputs": [""]
     },
-    "hangar": {
-      "dependsOn": ["hangar#test"]
-    },
     "topo": {
       "dependsOn": ["^topo"]
-    },
-    "examples-tests": {
-      "dependsOn": ["topo"],
-      "inputs": [
-        "examples/tests/**",
-        "!examples/tests/valid/**/node_modules/**",
-        "!examples/tests/valid/**/target/**"
-      ]
-    },
-    "test:generate": {
-      "dependsOn": ["topo"]
     }
   }
 }

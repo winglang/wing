@@ -67,7 +67,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
         with:
           # Don't save cache here, to avoid thrashing with test job
-          save-if: "false"
+          save-if: false
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
@@ -96,6 +96,25 @@ jobs:
         with:
           name: dist
           path: dist/*
+
+      # Create patch to go from the PR head to the merge commit
+      - name: Create git patch for merge
+        if: github.event_name == 'pull_request'
+        id: diff
+        run: |
+          git diff --binary --patch ${{ github.event.pull_request.head.sha }} ${{ github.sha }} > update.diff
+          if [ -s update.diff ]; then
+            echo "Diff found, creating a patch to apply later"
+            cat update.diff
+            echo "diff=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload patch
+        if: steps.diff.outputs.diff == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: update.diff
+          path: update.diff
 
   test:
     name: Test
@@ -277,8 +296,11 @@ jobs:
         run: |
           PATCH_COUNT=0
           for f in $(find ./*.diff/*.diff); do
-            PATCH_COUNT=$((PATCH_COUNT + 1))
-            cat $f
+            # Exclude update.diff since we don't want to fail if the PR is just not up to date
+            if [ "$f" != "./update.diff/update.diff" ]; then
+              PATCH_COUNT=$((PATCH_COUNT + 1))
+              cat $f
+            fi
           done
           if [ $PATCH_COUNT -gt 0 ]; then
             echo "Found $PATCH_COUNT patches, build failed. A self-mutation should happen soon."
@@ -305,24 +327,27 @@ jobs:
           repo-token: "${{ secrets.PROJEN_GITHUB_TOKEN }}"
           tag: "v${{ needs.build.outputs.version }}"
 
+      - name: Login to NPM registry
+        run: npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
+
+      - name: Publish npm packages
+        working-directory: dist
+        env:
+          PACKAGE_VERSION: ${{ needs.build.outputs.version }}
+        run: |
+          PACKAGES=("winglang-sdk" "winglang-compiler" "wingconsole-design-system" "wingconsole-ui" "wingconsole-server" "wingconsole-app")
+          for PACKAGE in $PACKAGES; do
+            npm publish "$PACKAGE-$PACKAGE_VERSION.tgz" --access public
+          done
+
       - name: Publish Extension to Visual Studio Marketplace
         if: needs.build.outputs.release-vscode == 'true'
         uses: "HaaLeo/publish-vscode-extension@v1"
         with:
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
           registryUrl: "https://marketplace.visualstudio.com"
-          extensionFile: "vscode-wing/vscode-wing.vsix"
+          extensionFile: "dist/vscode-wing.vsix"
           dependencies: false
-
-      - name: Login to NPM registry
-        run: npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
-
-      - name: Publish npm packages
-        run: |
-          for file in *.tgz; do
-            npm publish "$file" --access public
-          done
-        working-directory: dist
 
       - name: Write Changelog
         uses: DamianReeves/write-file-action@v1.2
