@@ -22,7 +22,7 @@ const getInstallArgs = async () => {
   if (process.env.CI) {
     const tarballsDir = path.resolve(`${__dirname}/../../../dist`);
     const tarballs = (await fs.readdir(tarballsDir))
-      .filter((filename) => filename.endsWith(".tgz"))
+      .filter((filename) => /^.+-\d+\.\d+\.\d+\.tgz$/.test(filename))
       .map((tarball) => `file:${tarballsDir}/${tarball}`);
     return [
       "install",
