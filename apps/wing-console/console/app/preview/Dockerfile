@@ -8,4 +8,4 @@ COPY apps/wing-console/console/app/demo demo
 
 RUN cd dist && for i in *.tgz; do npm install "$i"; done
 
-ENTRYPOINT ["node", "preview/index.mjs"]
+ENTRYPOINT ["node", "dist/index.mjs"]
