@@ -407,34 +407,6 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
         "force_destroy": false
       }
     },
-    "aws_s3_bucket_public_access_block": {
-      "Another_First_cloudBucket_PublicAccessBlock_BB475ACE": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/Another/First/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "Another_First_cloudBucket_PublicAccessBlock_BB475ACE"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.Another_First_cloudBucket_DB822B7C.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      },
-      "cloudBucket_PublicAccessBlock_5946CCE8": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "cloudBucket_PublicAccessBlock_5946CCE8"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      }
-    },
     "aws_s3_bucket_server_side_encryption_configuration": {
       "Another_First_cloudBucket_Encryption_C22274BF": {
         "//": {
