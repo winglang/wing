@@ -13,7 +13,7 @@
       "path": "libs/wingsdk"
     },
     {
-      "name": "Wing SDK Integration Tests",
+      "name": "SDK Tests",
       "path": "examples/tests/sdk_tests"
     },
     {
