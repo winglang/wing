@@ -1,18 +1,9 @@
-name: Console Preview
+name: Delete Console Preview
 
 on:
   pull_request:
     types:
-      - opened
-      - synchronize
       - closed
-    paths-ignore:
-      - "docs/**"
-      - "logo/**"
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.head.ref || github.ref }}
-  cancel-in-progress: true
 
 env:
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
@@ -20,40 +11,10 @@ env:
   APP_NAME: wing-console-pr-${{github.event.number}}
 
 jobs:
-  create:
-    name: "Create"
-    runs-on: ubuntu-latest
-    if: ${{ github.event.pull_request.head.repo.full_name == github.repository && github.event.action != 'closed' }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Install flyctl
-        uses: superfly/flyctl-actions/setup-flyctl@master
-        with:
-          version: ${{env.FLY_VERSION}}
-      - name: Deploy to Fly.io
-        run: |
-          if ! flyctl status --app "$APP_NAME"; then
-            pushd ./apps/wing-console/console/app/preview
-            flyctl launch --no-deploy --copy-config --name "$APP_NAME" --image-label latest
-            popd
-          fi
-          flyctl deploy . --config ./apps/wing-console/console/app/preview/fly.toml --app "$APP_NAME" --image-label latest --vm-memory 512 --strategy immediate
-          flyctl scale count 1 --yes --app "$APP_NAME"
-      - name: Post preview comment
-        uses: thollander/actions-comment-pull-request@v2
-        with:
-          message: |
-            Console preview environment is available at https://${{env.APP_NAME}}.fly.dev :rocket:
-          comment_tag: Console preview environment
-          GITHUB_TOKEN: ${{secrets.PROJEN_GITHUB_TOKEN}}
   destroy:
     name: "Destroy"
     runs-on: ubuntu-latest
-    if: ${{ github.event.pull_request.head.repo.full_name == github.repository && github.event.action == 'closed' }}
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -64,6 +25,7 @@ jobs:
         uses: superfly/flyctl-actions/setup-flyctl@master
         with:
           version: ${{env.FLY_VERSION}}
+
       - name: Delete preview environment
         run: |
           if flyctl status --app "$APP_NAME"; then
