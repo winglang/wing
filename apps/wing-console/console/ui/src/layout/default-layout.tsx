@@ -57,6 +57,9 @@ const defaultLayoutConfig: LayoutConfig = {
     displayTitle: true,
     displayLinks: true,
   },
+  panels: {
+    rounded: true,
+  },
 };
 
 export const DefaultLayout = ({
@@ -108,7 +111,7 @@ export const DefaultLayout = ({
     return termsConfig.data.requireAcceptTerms && !termsConfig.data.accepted;
   }, [termsConfig.data]);
 
-  const layout = useMemo(() => {
+  const layout: LayoutConfig = useMemo(() => {
     return {
       ...defaultLayoutConfig,
       ...layoutConfig,
@@ -288,7 +291,8 @@ export const DefaultLayout = ({
                         const panelComponent = (
                           <div
                             className={classNames(
-                              "rounded-lg overflow-hidden",
+                              layout.panels?.rounded &&
+                                "rounded-lg overflow-hidden",
                               index === 0 && "flex grow",
                               index > 0 && "h-full",
                             )}
@@ -310,7 +314,11 @@ export const DefaultLayout = ({
                         return (
                           <div
                             key={index}
-                            className="flex grow rounded-lg overflow-hidden"
+                            className={classNames(
+                              "flex grow",
+                              layout.panels?.rounded &&
+                                "rounded-lg overflow-hidden",
+                            )}
                           >
                             {panelComponent}
                           </div>
@@ -326,7 +334,7 @@ export const DefaultLayout = ({
                     className={classNames(
                       "flex-1 flex flex-col",
                       USE_EXTERNAL_THEME_COLOR,
-                      "rounded-lg overflow-hidden",
+                      layout.panels?.rounded && "rounded-lg overflow-hidden",
                     )}
                     data-testid="map-view"
                   >
@@ -349,9 +357,10 @@ export const DefaultLayout = ({
                   >
                     <div
                       className={classNames(
-                        "rounded-lg overflow-hidden w-full h-full relative",
+                        "w-full h-full relative",
                         USE_EXTERNAL_THEME_COLOR,
                         theme.bg4,
+                        layout.panels?.rounded && "rounded-lg overflow-hidden",
                       )}
                     >
                       {metadata.data && (
@@ -387,7 +396,6 @@ export const DefaultLayout = ({
                 className={classNames(
                   USE_EXTERNAL_THEME_COLOR,
                   "relative flex",
-                  theme.bg3,
                   theme.text2,
                   "min-h-[5rem]",
                   "gap-1",
@@ -400,9 +408,9 @@ export const DefaultLayout = ({
                     const panelComponent = (
                       <div
                         className={classNames(
-                          "rounded-lg overflow-hidden",
-                          index === 0 && "flex grow",
-                          index > 0 && "w-full",
+                          layout.panels?.rounded &&
+                            "rounded-lg overflow-hidden",
+                          "flex grow",
                         )}
                       >
                         {renderLayoutComponent(component)}

@@ -48,6 +48,9 @@ export interface LayoutConfig {
     displayTitle?: boolean;
     displayLinks?: boolean;
   };
+  panels?: {
+    rounded?: boolean;
+  };
 }
 
 export type TestStatus = "pending" | "running" | "success" | "error";

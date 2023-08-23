@@ -78,6 +78,9 @@ export function LayoutProvider({
         statusBar: {
           hide: true,
         },
+        panels: {
+          rounded: false,
+        },
       };
       break;
     }
