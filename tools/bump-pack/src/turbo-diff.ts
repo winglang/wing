@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 import { execSync } from "node:child_process";
 import { parseArgs } from "node:util";
 import { setOutput } from "@actions/core";
+import { minimatch } from 'minimatch'
 
 const currentDir = fileURLToPath(import.meta.url);
 const rootDir = join(currentDir, "..", "..", "..");
@@ -81,7 +82,7 @@ for (const task of turboOutput.tasks) {
 
 const globalDeps = Object.keys(turboOutput.globalCacheInputs.files);
 for (const changedFile of relativeChangedFiles) {
-  if (globalDeps.includes(changedFile)) {
+  if (globalDeps.some((dep) => minimatch(changedFile, dep))) {
     for (const taskId in taskData) {
       taskData[taskId].changes = true;
     }

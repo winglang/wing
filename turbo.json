@@ -7,7 +7,9 @@
     "insta.yaml",
     ".github/workflows/build.yml",
     "scripts/*",
-    "patches/*"
+    "patches/*",
+    "tools/bump-pack/**",
+    "!tools/bump-pack/node_modules/**"
   ],
   "pipeline": {
     "default": {
@@ -94,6 +96,10 @@
     },
     "topo": {
       "dependsOn": ["^topo"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
     }
   }
 }
