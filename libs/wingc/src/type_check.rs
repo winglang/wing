@@ -2584,8 +2584,8 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	/// Validate that the given type is a subtype (or same) as the expected type, disregarding whether
-	/// the object is mutable or immutable. If not, add an error to the diagnostics.
+	/// Validate that the given type is a subtype (or same) as the expected type while allowing
+	/// collection types to have different mutability (e.g. Array and MutArray).
 	///
 	/// Returns the given type on success, otherwise returns the expected type.
 	fn validate_equal_types(&mut self, actual_type: TypeRef, expected_type: TypeRef, span: &impl Spanned) -> TypeRef {
