@@ -2,29 +2,21 @@ import { setOutput } from "@actions/core";
 import { context, getOctokit } from "@actions/github";
 import { execSync } from "node:child_process";
 
-const myExec = (/** @type {string} */ command) =>
-  execSync(command, {
-    encoding: "utf8",
-  }).trim();
-
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const baseBranchName = "main";
 
 console.log(JSON.stringify(context));
 
-const branchName = myExec(`git rev-parse --abbrev-ref HEAD`);
-const HEAD_SHA = myExec(`git rev-parse HEAD`);
+const branchName = betterExec(`git rev-parse --abbrev-ref HEAD`);
+const HEAD_SHA = betterExec(`git rev-parse HEAD`);
 
-let BASE_SHA = await findSuccessfulCommit(
-  baseBranchName,
-  branchName,
-);
+let BASE_SHA = await findSuccessfulCommit(baseBranchName, branchName);
 
 // If no successful workflow run is found, use the branching point from the base branch
 if (BASE_SHA) {
   console.log(`Found successful run for this workflow. Using it as BASE_SHA`);
 } else {
-  BASE_SHA = myExec(`git merge-base origin/${baseBranchName} ${HEAD_SHA}`);
+  BASE_SHA = betterExec(`git merge-base origin/${baseBranchName} ${HEAD_SHA}`);
   console.log(`\
 No successful run for this workflow found on the branch ${branchName}.
 Using the branching point between origin/${baseBranchName} and this branch's head ${HEAD_SHA}
@@ -34,23 +26,18 @@ BASE_SHA=${BASE_SHA}`);
 setOutput("base", BASE_SHA);
 setOutput("head", HEAD_SHA);
 
-/**
- * @param {string} baseBranchName
- * @param {string} branchName
- */
 async function findSuccessfulCommit(
-  baseBranchName,
-  branchName
+  baseBranchName: string,
+  branchName: string
 ) {
   if (GITHUB_TOKEN === undefined) return undefined;
 
-  let runId = process.env.GITHUB_RUN_ID;
+  let runId: string | number | undefined = process.env.GITHUB_RUN_ID;
   let repoName = process.env.GITHUB_REPOSITORY;
   let repoOwner = process.env.GITHUB_REPOSITORY_OWNER;
   let eventName = process.env.GITHUB_EVENT_NAME;
 
   if (runId === undefined) {
-    // @ts-ignore
     runId = context.runId;
     repoName = context.repo.repo;
     repoOwner = context.repo.owner;
@@ -80,7 +67,10 @@ async function findSuccessfulCommit(
       }
     )
     .then(({ data: { workflow_runs } }) =>
-      workflow_runs.map((/** @type {{ head_sha: any; }} */ run) => run.head_sha)
+      workflow_runs.map(
+        (/** @type {{ head_sha: any; }} */ run: { head_sha: any }) =>
+          run.head_sha
+      )
     );
 
   return await findExistingCommit(shas);
@@ -88,10 +78,8 @@ async function findSuccessfulCommit(
 
 /**
  * Get first existing commit
- * @param {string[]} shas
- * @returns {Promise<string | undefined>}
  */
-async function findExistingCommit(shas) {
+async function findExistingCommit(shas: string[]) {
   for (const commitSha of shas) {
     if (await commitExists(commitSha)) {
       return commitSha;
@@ -102,14 +90,18 @@ async function findExistingCommit(shas) {
 
 /**
  * Check if given commit is valid
- * @param {string} commitSha
- * @returns {Promise<boolean>}
  */
-async function commitExists(commitSha) {
+async function commitExists(commitSha: string) {
   try {
-    myExec(`git cat-file -e ${commitSha}`);
+    betterExec(`git cat-file -e ${commitSha}`);
     return true;
   } catch {
     return false;
   }
+}
+
+function betterExec(command: string) {
+  return execSync(command, {
+    encoding: "utf8",
+  }).trim();
 }

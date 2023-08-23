@@ -8,11 +8,11 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execSync } from "node:child_process";
 import { parseArgs } from "node:util";
-import { setOutput } from '@actions/core';
+import { setOutput } from "@actions/core";
 
 const currentDir = fileURLToPath(import.meta.url);
-const rootDir = join(currentDir, "..", "..");
-const myExec = (/** @type {string} */ command) =>
+const rootDir = join(currentDir, "..", "..", "..");
+const myExec = (command: string) =>
   execSync(command, {
     cwd: rootDir,
     encoding: "utf8",
@@ -62,7 +62,7 @@ const turboArgs = [
 
 const turboOutput = JSON.parse(myExec(turboArgs.join(" ")));
 
-const taskData = {};
+const taskData: { [key: string]: { cached: boolean; changes: boolean } } = {};
 
 for (const task of turboOutput.tasks) {
   // double check that all the changes files based on git are actually included in all these tasks
@@ -99,8 +99,7 @@ for (const task of turboOutput.tasks) {
   if (task.package === "hangar") {
     // ignore the wing console
     dependencies = dependencies.filter(
-      (/** @type {string} */ dependency) =>
-        !dependency.startsWith("@wingconsole")
+      (dependency: string) => !dependency.startsWith("@wingconsole")
     );
   }
   for (const dependency of dependencies) {
@@ -113,5 +112,5 @@ console.log(taskData);
 if (!!process.env.GITHUB_ACTIONS) {
   // we are running in a github action and we should output some useful stuff
 
-  setOutput("data", taskData)
+  setOutput("data", taskData);
 }

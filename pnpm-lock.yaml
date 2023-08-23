@@ -1268,6 +1268,9 @@ importers:
 
   tools/bump-pack:
     dependencies:
+      '@actions/core':
+        specifier: ^1.10.0
+        version: 1.10.0
       '@pnpm/find-workspace-dir':
         specifier: ^6.0.2
         version: 6.0.2
@@ -1359,7 +1362,6 @@ packages:
     dependencies:
       '@actions/http-client': 2.1.1
       uuid: 8.3.2
-    dev: true
 
   /@actions/github@5.1.1:
     resolution: {integrity: sha512-Nk59rMDoJaV+mHCOJPXuvB1zIbomlKS0dmSIqPGxd0enAXBnOfn4VWF+CGtRCwXZG9Epa54tZA7VIRlJDS8A6g==}
@@ -1376,7 +1378,6 @@ packages:
     resolution: {integrity: sha512-qhrkRMB40bbbLo7gF+0vu+X+UawOvQQqNAA/5Unx774RS8poaOhThDOG6BGmxvAnxhQnDp2BG/ZUm65xZILTpw==}
     dependencies:
       tunnel: 0.0.6
-    dev: true
 
   /@alloc/quick-lru@5.2.0:
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
@@ -12599,7 +12600,7 @@ packages:
     dependencies:
       semver: 7.5.3
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20230818
+      typescript: 5.3.0-dev.20230823
     dev: true
 
   /dset@3.1.2:
@@ -21518,8 +21519,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20230818:
-    resolution: {integrity: sha512-inkObfKw5TVieNQdO9vTAAzUIKV6i2bjqpC28j1knVWvcxaBLtNGrPgxGVnhWB/LQ5AjMLvgkCM58kkamkRObQ==}
+  /typescript@5.3.0-dev.20230823:
+    resolution: {integrity: sha512-IEFfTl67UgTTJzf+Ma4+0txDKzxzxtjNjyFjTm7c+yP5sff+atKe44mAjhCxX8wGjwRrFuhAUeHz1udmzBZ4ow==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
