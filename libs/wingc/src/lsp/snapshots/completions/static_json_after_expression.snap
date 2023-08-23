@@ -75,10 +75,10 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: stringify
   kind: 2
-  detail: "(json: any, indent: num?): str"
+  detail: "(json: any, options: JsonStringifyOptions?): str"
   documentation:
     kind: markdown
-    value: "```wing\nstatic stringify: (json: any, indent: num?): str\n```\n---\nFormats Json as string.\n\n\n### Returns\nstring representation of the Json\n\n### Remarks\n(JSON.stringify($args$))"
+    value: "```wing\nstatic stringify: (json: any, options: JsonStringifyOptions?): str\n```\n---\nFormats Json as string.\n\n\n### Returns\nstring representation of the Json"
   sortText: ff|stringify
   insertText: stringify($0)
   insertTextFormat: 2
