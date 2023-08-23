@@ -281,20 +281,27 @@ export const DefaultLayout = ({
                     className={classNames(
                       USE_EXTERNAL_THEME_COLOR,
                       "h-full flex flex-col w-80 min-w-[10rem] min-h-[10rem] gap-1",
-                      "rounded-lg truncate",
                     )}
                   >
                     {layout.leftPanel?.components.map(
                       (component: LayoutComponent, index: number) => {
-                        const panelComponent = renderLayoutComponent(component);
+                        const panelComponent = (
+                          <div
+                            className={classNames(
+                              "rounded-lg truncate",
+                              index === 0 && "flex grow",
+                              index > 0 && "h-full",
+                            )}
+                          >
+                            {renderLayoutComponent(component)}
+                          </div>
+                        );
 
                         if (index > 0) {
                           return (
                             <TopResizableWidget
                               key={component.type}
-                              className={classNames(
-                                "h-1/3 rounded-lg truncate",
-                              )}
+                              className="h-1/3"
                             >
                               {panelComponent}
                             </TopResizableWidget>
@@ -336,35 +343,40 @@ export const DefaultLayout = ({
 
                   <LeftResizableWidget
                     className={classNames(
-                      USE_EXTERNAL_THEME_COLOR,
                       theme.border4,
                       "flex-shrink w-80 min-w-[10rem] z-10",
-                      "rounded-lg truncate",
-                      theme.bg4,
                     )}
                   >
-                    {metadata.data && (
-                      <ResourceMetadata
-                        node={metadata.data.node}
-                        inbound={metadata.data.inbound}
-                        outbound={metadata.data.outbound}
-                        onConnectionNodeClick={(path) => {
-                          expand(path);
-                          setSelectedItems([path]);
-                        }}
-                      />
-                    )}
-                    {selectedEdgeId && edgeMetadata.data && (
-                      <EdgeMetadata
-                        source={edgeMetadata.data.source}
-                        target={edgeMetadata.data.target}
-                        inflights={edgeMetadata.data.inflights}
-                        onConnectionNodeClick={(path) => {
-                          expand(path);
-                          setSelectedItems([path]);
-                        }}
-                      />
-                    )}
+                    <div
+                      className={classNames(
+                        "rounded-lg truncate w-full h-full relative",
+                        USE_EXTERNAL_THEME_COLOR,
+                        theme.bg4,
+                      )}
+                    >
+                      {metadata.data && (
+                        <ResourceMetadata
+                          node={metadata.data.node}
+                          inbound={metadata.data.inbound}
+                          outbound={metadata.data.outbound}
+                          onConnectionNodeClick={(path) => {
+                            expand(path);
+                            setSelectedItems([path]);
+                          }}
+                        />
+                      )}
+                      {selectedEdgeId && edgeMetadata.data && (
+                        <EdgeMetadata
+                          source={edgeMetadata.data.source}
+                          target={edgeMetadata.data.target}
+                          inflights={edgeMetadata.data.inflights}
+                          onConnectionNodeClick={(path) => {
+                            expand(path);
+                            setSelectedItems([path]);
+                          }}
+                        />
+                      )}
+                    </div>
                   </LeftResizableWidget>
                 </div>
               </div>
@@ -378,14 +390,25 @@ export const DefaultLayout = ({
                   theme.bg3,
                   theme.text2,
                   "min-h-[5rem]",
-                  "rounded-lg truncate",
+                  "gap-1",
                   (layout.bottomPanel?.size === "small" && "h-[8rem]") ||
                     "h-[15rem]",
                 )}
               >
                 {layout.bottomPanel?.components?.map(
                   (component: LayoutComponent, index: number) => {
-                    const panelComponent = renderLayoutComponent(component);
+                    const panelComponent = (
+                      <div
+                        className={classNames(
+                          "rounded-lg truncate",
+                          index === 0 && "flex grow",
+                          index > 0 && "w-full",
+                        )}
+                      >
+                        {renderLayoutComponent(component)}
+                      </div>
+                    );
+
                     if (
                       layout.bottomPanel?.components?.length &&
                       layout.bottomPanel.components.length > 1 &&
@@ -395,7 +418,6 @@ export const DefaultLayout = ({
                         <RightResizableWidget
                           key={component.type}
                           className={classNames(
-                            theme.border4,
                             "h-full w-1/4 flex flex-col min-w-[10rem] min-h-[10rem]",
                           )}
                         >

@@ -39,7 +39,7 @@ export const MapView = ({
             <div className="right-0 absolute z-10">
               <div
                 className={classNames(
-                  "absolute inset-0 opacity-80 rounded-bl",
+                  "absolute inset-0 opacity-70 rounded-bl",
                   theme.bg4,
                 )}
               />
