@@ -1032,18 +1032,6 @@ impl TypeRef {
 		matches!(**self, Type::Array(_) | Type::Map(_) | Type::Set(_))
 	}
 
-	pub fn is_array_type(&self) -> bool {
-		matches!(**self, Type::Array(_) | Type::MutArray(_))
-	}
-
-	pub fn is_map_type(&self) -> bool {
-		matches!(**self, Type::Map(_) | Type::MutMap(_))
-	}
-
-	pub fn is_set_type(&self) -> bool {
-		matches!(**self, Type::Set(_) | Type::MutSet(_))
-	}
-
 	pub fn is_inflight_function(&self) -> bool {
 		if let Type::Function(ref sig) = **self {
 			sig.phase == Phase::Inflight
@@ -1805,7 +1793,7 @@ impl<'a> TypeChecker<'a> {
 						(self.types.number(), Phase::Independent)
 					}
 					BinaryOperator::Equal | BinaryOperator::NotEqual => {
-						self.validate_type_binary_operator(rtype, ltype, exp);
+						self.validate_equal_types(rtype, ltype, exp);
 						(self.types.bool(), Phase::Independent)
 					}
 					BinaryOperator::Less
@@ -2600,40 +2588,27 @@ impl<'a> TypeChecker<'a> {
 	/// the object is mutable or immutable. If not, add an error to the diagnostics.
 	///
 	/// Returns the given type on success, otherwise returns the expected type.
-	fn validate_type_binary_operator(
-		&mut self,
-		actual_type: TypeRef,
-		expected_type: TypeRef,
-		span: &impl Spanned,
-	) -> TypeRef {
-		if actual_type.is_array_type()
-			&& expected_type.is_array_type()
-			&& actual_type
-				.collection_item_type()
-				.unwrap()
-				.is_same_type_as(&expected_type.collection_item_type().unwrap())
+	fn validate_equal_types(&mut self, actual_type: TypeRef, expected_type: TypeRef, span: &impl Spanned) -> TypeRef {
+		if let (
+			Type::Array(inner_actual) | Type::MutArray(inner_actual),
+			Type::Array(inner_expected) | Type::MutArray(inner_expected),
+		) = (&*actual_type, &*expected_type)
 		{
-			return actual_type;
+			return self.validate_equal_types(*inner_actual, *inner_expected, span);
 		}
-
-		if actual_type.is_map_type()
-			&& expected_type.is_map_type()
-			&& actual_type
-				.collection_item_type()
-				.unwrap()
-				.is_same_type_as(&expected_type.collection_item_type().unwrap())
+		if let (
+			Type::Map(inner_actual) | Type::MutMap(inner_actual),
+			Type::Map(inner_expected) | Type::MutMap(inner_expected),
+		) = (&*actual_type, &*expected_type)
 		{
-			return actual_type;
+			return self.validate_equal_types(*inner_actual, *inner_expected, span);
 		}
-
-		if actual_type.is_set_type()
-			&& expected_type.is_set_type()
-			&& actual_type
-				.collection_item_type()
-				.unwrap()
-				.is_same_type_as(&expected_type.collection_item_type().unwrap())
+		if let (
+			Type::Set(inner_actual) | Type::MutSet(inner_actual),
+			Type::Set(inner_expected) | Type::MutSet(inner_expected),
+		) = (&*actual_type, &*expected_type)
 		{
-			return actual_type;
+			return self.validate_equal_types(*inner_actual, *inner_expected, span);
 		}
 
 		self.validate_type_in(actual_type, &[expected_type], span)
