@@ -1,0 +1,34 @@
+{
+  "name": "wing-fixture",
+  "version": "0.0.0",
+  "description": "A fake library just for testing stuff out",
+  "author": {
+    "name": "Wing Cloud",
+    "email": "ping@monada.co",
+    "url": "https://wing.cloud",
+    "organization": true
+  },
+  "files": [
+    "**/*.js",
+    "**/*.w",
+    "!/target/**"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=v18.0.0"
+  },
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/winglang/wing.git"
+  },
+  "scripts": {
+    "package": "npm pack"
+  },
+  "wing": {
+    "entrypoint": "lib.w"
+  },
+  "volta": {
+    "extends": "../../package.json"
+  }
+}

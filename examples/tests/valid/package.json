@@ -11,7 +11,8 @@
     "constructs": "^10",
     "jsii-code-samples": "1.7.0",
     "projen": "^0.71.60",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "wing-fixture": "workspace:^"
   },
   "volta": {
     "extends": "../../../package.json"
