@@ -19,7 +19,6 @@ import { EdgeMetadata } from "../ui/edge-metadata.js";
 import { Explorer } from "../ui/explorer.js";
 import { ResourceMetadata } from "../ui/resource-metadata.js";
 
-import { Header } from "./header.js";
 import { StatusBar } from "./status-bar.js";
 import { TermsAndConditionsModal } from "./terms-and-conditions-modal.js";
 import { useLayout } from "./use-layout.js";
@@ -31,10 +30,6 @@ export interface LayoutProps {
 }
 
 const defaultLayoutConfig: LayoutConfig = {
-  header: {
-    hide: false,
-    showThemeToggle: true,
-  },
   leftPanel: {
     components: [
       {
@@ -54,12 +49,15 @@ const defaultLayoutConfig: LayoutConfig = {
   },
   statusBar: {
     hide: false,
-    showThemeToggle: false,
+    showThemeToggle: true,
   },
   errorScreen: {
     position: "default",
     displayTitle: true,
     displayLinks: true,
+  },
+  panels: {
+    rounded: true,
   },
 };
 
@@ -112,7 +110,7 @@ export const DefaultLayout = ({
     return termsConfig.data.requireAcceptTerms && !termsConfig.data.accepted;
   }, [termsConfig.data]);
 
-  const layout = useMemo(() => {
+  const layout: LayoutConfig = useMemo(() => {
     return {
       ...defaultLayoutConfig,
       ...layoutConfig,
@@ -237,24 +235,20 @@ export const DefaultLayout = ({
           license={termsConfig.data?.license ?? ""}
         />
       )}
+
+      <div className={classNames(USE_EXTERNAL_THEME_COLOR, "fixed inset-0")}>
+        <div className={classNames("w-full h-full", theme.bg2)} />
+      </div>
+
       <div
         data-testid="default-layout"
         className={classNames(
           "h-full flex flex-col select-none",
-          theme.bg3,
           theme.text2,
           showTerms && "blur-sm",
+          "gap-1 pt-1",
         )}
       >
-        {!layout.header?.hide && (
-          <div className={classNames(USE_EXTERNAL_THEME_COLOR)}>
-            <Header
-              title={wingfile.data ?? ""}
-              showThemeToggle={layout.header?.showThemeToggle}
-            />
-          </div>
-        )}
-
         {cloudAppState === "error" &&
           layout.errorScreen?.position === "default" && (
             <div className="flex-1 flex relative">
@@ -269,7 +263,7 @@ export const DefaultLayout = ({
 
         {renderApp && (
           <>
-            <div className="flex-1 flex relative">
+            <div className="flex-1 flex relative gap-1">
               {loading && (
                 <div
                   className={classNames(
@@ -288,39 +282,58 @@ export const DefaultLayout = ({
                   <RightResizableWidget
                     className={classNames(
                       USE_EXTERNAL_THEME_COLOR,
-                      theme.border3,
-                      "h-full flex flex-col w-80 min-w-[10rem] min-h-[10rem] border-r",
+                      "h-full flex flex-col w-80 min-w-[10rem] min-h-[10rem] gap-1",
                     )}
                   >
                     {layout.leftPanel?.components.map(
                       (component: LayoutComponent, index: number) => {
-                        const panelComponent = renderLayoutComponent(component);
+                        const panelComponent = (
+                          <div
+                            className={classNames(
+                              layout.panels?.rounded &&
+                                "rounded-lg overflow-hidden",
+                              index === 0 && "flex grow",
+                              index > 0 && "h-full",
+                            )}
+                          >
+                            {renderLayoutComponent(component)}
+                          </div>
+                        );
 
                         if (index > 0) {
                           return (
                             <TopResizableWidget
                               key={component.type}
-                              className={classNames(
-                                theme.border3,
-                                "h-1/3 border-t",
-                              )}
+                              className="h-1/3"
                             >
                               {panelComponent}
                             </TopResizableWidget>
                           );
                         }
-                        return panelComponent;
+                        return (
+                          <div
+                            key={index}
+                            className={classNames(
+                              "flex grow",
+                              layout.panels?.rounded &&
+                                "rounded-lg overflow-hidden",
+                            )}
+                          >
+                            {panelComponent}
+                          </div>
+                        );
                       },
                     )}
                   </RightResizableWidget>
                 )}
 
               <div className="flex-1 flex flex-col">
-                <div className="flex-1 flex">
+                <div className="flex-1 flex gap-1">
                   <div
                     className={classNames(
                       "flex-1 flex flex-col",
                       USE_EXTERNAL_THEME_COLOR,
+                      layout.panels?.rounded && "rounded-lg overflow-hidden",
                     )}
                     data-testid="map-view"
                   >
@@ -337,34 +350,41 @@ export const DefaultLayout = ({
 
                   <LeftResizableWidget
                     className={classNames(
-                      USE_EXTERNAL_THEME_COLOR,
-                      theme.border3,
-                      "flex-shrink w-80 min-w-[10rem] border-l z-10",
-                      theme.bg4,
+                      theme.border4,
+                      "flex-shrink w-80 min-w-[10rem] z-10",
                     )}
                   >
-                    {metadata.data && (
-                      <ResourceMetadata
-                        node={metadata.data.node}
-                        inbound={metadata.data.inbound}
-                        outbound={metadata.data.outbound}
-                        onConnectionNodeClick={(path) => {
-                          expand(path);
-                          setSelectedItems([path]);
-                        }}
-                      />
-                    )}
-                    {selectedEdgeId && edgeMetadata.data && (
-                      <EdgeMetadata
-                        source={edgeMetadata.data.source}
-                        target={edgeMetadata.data.target}
-                        inflights={edgeMetadata.data.inflights}
-                        onConnectionNodeClick={(path) => {
-                          expand(path);
-                          setSelectedItems([path]);
-                        }}
-                      />
-                    )}
+                    <div
+                      className={classNames(
+                        "w-full h-full relative",
+                        USE_EXTERNAL_THEME_COLOR,
+                        theme.bg4,
+                        layout.panels?.rounded && "rounded-lg overflow-hidden",
+                      )}
+                    >
+                      {metadata.data && (
+                        <ResourceMetadata
+                          node={metadata.data.node}
+                          inbound={metadata.data.inbound}
+                          outbound={metadata.data.outbound}
+                          onConnectionNodeClick={(path) => {
+                            expand(path);
+                            setSelectedItems([path]);
+                          }}
+                        />
+                      )}
+                      {selectedEdgeId && edgeMetadata.data && (
+                        <EdgeMetadata
+                          source={edgeMetadata.data.source}
+                          target={edgeMetadata.data.target}
+                          inflights={edgeMetadata.data.inflights}
+                          onConnectionNodeClick={(path) => {
+                            expand(path);
+                            setSelectedItems([path]);
+                          }}
+                        />
+                      )}
+                    </div>
                   </LeftResizableWidget>
                 </div>
               </div>
@@ -374,18 +394,28 @@ export const DefaultLayout = ({
               <TopResizableWidget
                 className={classNames(
                   USE_EXTERNAL_THEME_COLOR,
-                  theme.border3,
-                  "border-t relative flex",
-                  theme.bg3,
+                  "relative flex",
                   theme.text2,
                   "min-h-[5rem]",
+                  "gap-1",
                   (layout.bottomPanel?.size === "small" && "h-[8rem]") ||
                     "h-[15rem]",
                 )}
               >
                 {layout.bottomPanel?.components?.map(
                   (component: LayoutComponent, index: number) => {
-                    const panelComponent = renderLayoutComponent(component);
+                    const panelComponent = (
+                      <div
+                        className={classNames(
+                          layout.panels?.rounded &&
+                            "rounded-lg overflow-hidden",
+                          "flex grow",
+                        )}
+                      >
+                        {renderLayoutComponent(component)}
+                      </div>
+                    );
+
                     if (
                       layout.bottomPanel?.components?.length &&
                       layout.bottomPanel.components.length > 1 &&
@@ -395,8 +425,7 @@ export const DefaultLayout = ({
                         <RightResizableWidget
                           key={component.type}
                           className={classNames(
-                            theme.border3,
-                            "h-full w-1/4 flex flex-col min-w-[10rem] min-h-[10rem] border-r",
+                            "h-full w-1/4 flex flex-col min-w-[10rem] min-h-[10rem]",
                           )}
                         >
                           {panelComponent}
@@ -417,8 +446,8 @@ export const DefaultLayout = ({
                   <div className="fixed bottom-0 max-h-[80vh] w-full z-50">
                     <TopResizableWidget
                       className={classNames(
-                        theme.border3,
-                        "border-t absolute flex",
+                        theme.border4,
+                        "absolute flex",
                         theme.bg3,
                         theme.text2,
                         "min-h-[5rem] h-[30rem]",
