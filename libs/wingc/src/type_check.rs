@@ -2588,7 +2588,7 @@ impl<'a> TypeChecker<'a> {
 	/// collection types to have different mutability (e.g. Array and MutArray).
 	///
 	/// Returns the given type on success, otherwise returns the expected type.
-	fn validate_equal_types(&mut self, actual_type: TypeRef, expected_type: TypeRef, span: &impl Spanned) -> TypeRef {
+	fn validate_type_binary_equality(&mut self, actual_type: TypeRef, expected_type: TypeRef, span: &impl Spanned) -> TypeRef {
 		if let (
 			Type::Array(inner_actual) | Type::MutArray(inner_actual),
 			Type::Array(inner_expected) | Type::MutArray(inner_expected),
