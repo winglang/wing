@@ -3,6 +3,7 @@
   "private": true,
   "devDependencies": {
     "bump-pack": "workspace:^",
+    "generate-workspace": "workspace:^",
     "changelogen": "^0.5.3",
     "semver": "^7.3.8",
     "turbo": "^1.10.12"
@@ -17,7 +18,7 @@
     "docs": "./scripts/docsite.sh",
     "changelog": "bump-pack",
     "install": "bash scripts/setup_wasi.sh",
-    "postinstall": "link-bundles",
+    "postinstall": "link-bundles && generate-workspace",
     "wing": "turbo compile --filter=winglang --output-logs=errors-only && ./apps/wing/bin/wing"
   },
   "volta": {
