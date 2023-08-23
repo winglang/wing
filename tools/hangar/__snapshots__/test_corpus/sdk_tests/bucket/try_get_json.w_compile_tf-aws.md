@@ -13,10 +13,10 @@ module.exports = function({ $b, $std_Json }) {
       const jsonObj1 = ({"key1": "value1"});
       const jsonObj2 = ({"key2": "value2"});
       (await $b.putJson("file1.json",jsonObj1));
-      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(b.tryGetJson(\"file1.json\")) == Json.stringify(jsonObj1)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return JSON.stringify(args[0], null, args[1]) })([(await $b.tryGetJson("file1.json"))]),((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj1]))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(b.tryGetJson(\"file1.json\")) == Json.stringify(jsonObj1)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([(await $b.tryGetJson("file1.json"))]),((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([jsonObj1]))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGetJson(\"file2.json\") == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.tryGetJson("file2.json")),undefined)))};
       (await $b.putJson("file2.json",jsonObj2));
-      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(b.tryGetJson(\"file2.json\")) == Json.stringify(jsonObj2)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return JSON.stringify(args[0], null, args[1]) })([(await $b.tryGetJson("file2.json"))]),((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj2]))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(b.tryGetJson(\"file2.json\")) == Json.stringify(jsonObj2)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([(await $b.tryGetJson("file2.json"))]),((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([jsonObj2]))))};
       (await $b.delete("file1.json"));
       (await $b.delete("file2.json"));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGetJson(\"file1.json\") == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.tryGetJson("file1.json")),undefined)))};
@@ -141,21 +141,6 @@ module.exports = function({ $b, $std_Json }) {
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
         "force_destroy": false
-      }
-    },
-    "aws_s3_bucket_public_access_block": {
-      "cloudBucket_PublicAccessBlock_5946CCE8": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "cloudBucket_PublicAccessBlock_5946CCE8"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {

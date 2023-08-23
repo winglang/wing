@@ -342,15 +342,6 @@ exports[`function with bucket binding > put operation 2`] = `
         "bucket_prefix": "code-c84a50b1-",
       },
     },
-    "aws_s3_bucket_public_access_block": {
-      "Bucket_PublicAccessBlock_A34F3B5C": {
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "\${aws_s3_bucket.Bucket.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true,
-      },
-    },
     "aws_s3_bucket_server_side_encryption_configuration": {
       "Bucket_Encryption_016FDA0C": {
         "bucket": "\${aws_s3_bucket.Bucket.bucket}",
