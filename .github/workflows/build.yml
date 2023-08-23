@@ -121,6 +121,191 @@ jobs:
           name: docs
           path: docs.tgz
 
+  test:
+    name: Test
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    env:
+      CARGO_TERM_COLOR: always
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          cache: "pnpm"
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ env.RUST_VERSION }}
+          targets: |
+            x86_64-unknown-linux-gnu
+            wasm32-wasi
+          components: rustfmt,clippy,rust-std
+
+      - name: Setup Cargo Cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright
+        working-directory: apps/wing-console/console/app
+        run: pnpm exec playwright install --with-deps
+
+      - name: Test
+        run: pnpm test:ci
+
+      - name: Create git patch
+        id: diff
+        run: |
+          git add --all
+          git diff --staged --binary --patch > build.diff
+          if [ -s build.diff ]; then
+            echo "Diff found, creating a patch to apply later"
+            cat build.diff
+            echo "diff=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload patch
+        if: steps.diff.outputs.diff == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: build.diff
+          path: build.diff
+
+  benchmark:
+    name: Benchmark
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download Dist Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: dist
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          cache: "pnpm"
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Dependencies
+        run: pnpm install --ignore-scripts --frozen-lockfile --filter hangar --filter examples-valid --filter examples-invalid
+
+      - name: Run E2E Benchmarks
+        run: pnpm bench
+        working-directory: tools/hangar
+
+      - name: Upload Report JSON
+        uses: actions/upload-artifact@v3
+        with:
+          name: benchmarks
+          path: tools/hangar/results/report.json
+
+      - name: Create Markdown report
+        run: node scripts/benchmark_json_to_table.mjs
+
+  e2e-test:
+    name: "E2E / ${{ matrix.runner }} + Node${{ matrix.node }} [${{ matrix.shard }}]"
+    runs-on: "${{ matrix.runner }}-latest"
+    needs:
+      - build
+    strategy:
+      fail-fast: true
+      matrix:
+        runner: [windows, macos, ubuntu]
+        node: ["18", "20"]
+        shard: ["1/2", "2/2"]
+        full_run:
+          # Do a full run on push or when the PR is labeled "pr/e2e-full"
+          - ${{ github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full') }}
+        exclude:
+          - runner: macos
+            full_run: false
+          - runner: windows
+            full_run: false
+          - runner: ubuntu
+            node: "20"
+            full_run: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          cache: "pnpm"
+          node-version: ${{ matrix.node }}
+
+      - name: Download Dist Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: dist
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts --filter hangar --filter examples-valid --filter examples-invalid
+
+      - name: Run Hangar Tests
+        working-directory: tools/hangar
+        run: |
+          pnpm test:generate
+          pnpm run test --shard=${{ matrix.shard }} --update=${{ matrix.runner == 'ubuntu' && matrix.node == '18' }}
+
+      - name: Create mutation if needed
+        # we only care about the diff in our standard dev env
+        if: matrix.runner == 'ubuntu' && matrix.node == '18'
+        id: diff
+        env:
+          RAW_SHARD: ${{ matrix.shard }}
+        run: |
+          SHARD=$(echo $RAW_SHARD | sed 's/\//of/g')
+          DIFF_NAME="e2e-$SHARD.diff"
+          git add --all
+          git diff --staged --binary --patch > $DIFF_NAME
+          if [ -s $DIFF_NAME ]; then
+            echo "diff=true" >> $GITHUB_OUTPUT
+            echo "diff_name=$DIFF_NAME" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload mutation
+        if: matrix.runner == 'ubuntu' && matrix.node == '18' && steps.diff.outputs.diff == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.diff.outputs.diff_name }}
+          path: ${{ steps.diff.outputs.diff_name }}
+
   create-console-preview:
     name: "Create console preview"
     runs-on: ubuntu-latest
@@ -130,7 +315,7 @@ jobs:
       FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       FLY_VERSION: "0.1.80"
       APP_NAME: wing-console-pr-${{github.event.number}}
-    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -166,280 +351,95 @@ jobs:
           comment_tag: Console preview environment
           GITHUB_TOKEN: ${{secrets.PROJEN_GITHUB_TOKEN}}
 
-  # test:
-  #   name: Test
-  #   timeout-minutes: 30
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     CARGO_TERM_COLOR: always
-  #     TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-  #     TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+  quality-gate:
+    name: Quality Gate
+    runs-on: ubuntu-latest
+    needs:
+      - build
+      - e2e-test
+      - benchmark
+      - test
+    steps:
+      - name: Download patches
+        uses: actions/download-artifact@v3
+      - name: Check patches
+        run: |
+          PATCH_COUNT=0
+          for f in $(find ./*.diff/*.diff); do
+            PATCH_COUNT=$((PATCH_COUNT + 1))
+            cat $f
+          done
+          if [ $PATCH_COUNT -gt 0 ]; then
+            echo "Found $PATCH_COUNT patches, build failed. A self-mutation should happen soon."
+            exit 1
+          fi
+      - name: All good
+        run: echo "Builds and tests passed! 🎉🎉🎉"
 
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-  #       with:
-  #         fetch-depth: 1
+  publish:
+    name: Publish
+    if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' && github.ref == 'refs/heads/main' }}
+    needs:
+      - quality-gate
+      - build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v3
 
-  #     - name: Setup pnpm
-  #       uses: pnpm/action-setup@v2.2.4
-  #       with:
-  #         version: ${{ env.PNPM_VERSION }}
+      - name: Tag commit
+        uses: tvdias/github-tagger@v0.0.1
+        if: ${{ needs.build.outputs.last-version != needs.build.outputs.version }}
+        with:
+          repo-token: "${{ secrets.PROJEN_GITHUB_TOKEN }}"
+          tag: "v${{ needs.build.outputs.version }}"
 
-  #     - name: Setup Node
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         cache: "pnpm"
-  #         node-version: ${{ env.NODE_VERSION }}
+      - name: Publish Extension to Visual Studio Marketplace
+        if: needs.build.outputs.vscode-wing-changed == 'true'
+        uses: "HaaLeo/publish-vscode-extension@v1"
+        with:
+          pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
+          registryUrl: "https://marketplace.visualstudio.com"
+          extensionFile: "vscode-wing/vscode-wing.vsix"
+          dependencies: false
 
-  #     - name: Install Rust
-  #       uses: dtolnay/rust-toolchain@master
-  #       with:
-  #         toolchain: ${{ env.RUST_VERSION }}
-  #         targets: |
-  #           x86_64-unknown-linux-gnu
-  #           wasm32-wasi
-  #         components: rustfmt,clippy,rust-std
+      - name: Login to NPM registry
+        run: npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
 
-  #     - name: Setup Cargo Cache
-  #       uses: Swatinem/rust-cache@v2
+      - name: Publish npm packages
+        run: |
+          for file in *.tgz; do
+            npm publish "$file" --access public
+          done
+        working-directory: dist
 
-  #     - name: Install Dependencies
-  #       run: pnpm install --frozen-lockfile
+      - name: Write Changelog
+        uses: DamianReeves/write-file-action@v1.2
+        with:
+          path: "CHANGELOG.md"
+          contents: ${{ needs.build.outputs.changelog }}
+          write-mode: overwrite
 
-  #     - name: Install Playwright
-  #       working-directory: apps/wing-console/console/app
-  #       run: pnpm exec playwright install --with-deps
+      - name: Compute Checksums
+        run: |
+          mv ./docs/*.tgz ./dist
+          mv ./*/*.vsix ./dist
+          mv ./*/*.wasm ./dist
+          mv ./benchmarks/* ./dist
+          cd dist
 
-  #     - name: Test
-  #       run: pnpm test:ci
+          echo '' >> ../CHANGELOG.md
+          echo '### SHA-1 Checksums' >> ../CHANGELOG.md
+          echo '```' >> ../CHANGELOG.md
+          sha1sum --binary * >> ../CHANGELOG.md
+          echo '```' >> ../CHANGELOG.md
+          cat ../CHANGELOG.md
 
-  #     - name: Create git patch
-  #       id: diff
-  #       run: |
-  #         git add --all
-  #         git diff --staged --binary --patch > build.diff
-  #         if [ -s build.diff ]; then
-  #           echo "Diff found, creating a patch to apply later"
-  #           cat build.diff
-  #           echo "diff=true" >> $GITHUB_OUTPUT
-  #         fi
-
-  #     - name: Upload patch
-  #       if: steps.diff.outputs.diff == 'true'
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: build.diff
-  #         path: build.diff
-
-  # benchmark:
-  #   name: Benchmark
-  #   runs-on: ubuntu-latest
-  #   needs:
-  #     - build
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-
-  #     - name: Download Dist Artifacts
-  #       uses: actions/download-artifact@v3
-  #       with:
-  #         name: dist
-  #         path: dist
-
-  #     - name: Setup pnpm
-  #       uses: pnpm/action-setup@v2.2.4
-  #       with:
-  #         version: ${{ env.PNPM_VERSION }}
-
-  #     - name: Setup Node
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         cache: "pnpm"
-  #         node-version: ${{ env.NODE_VERSION }}
-
-  #     - name: Install Dependencies
-  #       run: pnpm install --ignore-scripts --frozen-lockfile --filter hangar --filter examples-valid --filter examples-invalid
-
-  #     - name: Run E2E Benchmarks
-  #       run: pnpm bench
-  #       working-directory: tools/hangar
-
-  #     - name: Upload Report JSON
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: benchmarks
-  #         path: tools/hangar/results/report.json
-
-  #     - name: Create Markdown report
-  #       run: node scripts/benchmark_json_to_table.mjs
-
-  # e2e-test:
-  #   name: "E2E / ${{ matrix.runner }} + Node${{ matrix.node }} [${{ matrix.shard }}]"
-  #   runs-on: "${{ matrix.runner }}-latest"
-  #   needs:
-  #     - build
-  #   strategy:
-  #     fail-fast: true
-  #     matrix:
-  #       runner: [windows, macos, ubuntu]
-  #       node: ["18", "20"]
-  #       shard: ["1/2", "2/2"]
-  #       full_run:
-  #         # Do a full run on push or when the PR is labeled "pr/e2e-full"
-  #         - ${{ github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full') }}
-  #       exclude:
-  #         - runner: macos
-  #           full_run: false
-  #         - runner: windows
-  #           full_run: false
-  #         - runner: ubuntu
-  #           node: "20"
-  #           full_run: false
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-  #       with:
-  #         fetch-depth: 1
-
-  #     - name: Setup pnpm
-  #       uses: pnpm/action-setup@v2.2.4
-  #       with:
-  #         version: ${{ env.PNPM_VERSION }}
-
-  #     - name: Setup Node
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         cache: "pnpm"
-  #         node-version: ${{ matrix.node }}
-
-  #     - name: Download Dist Artifacts
-  #       uses: actions/download-artifact@v3
-  #       with:
-  #         name: dist
-  #         path: dist
-
-  #     - name: Install dependencies
-  #       run: pnpm install --frozen-lockfile --ignore-scripts --filter hangar --filter examples-valid --filter examples-invalid
-
-  #     - name: Run Hangar Tests
-  #       working-directory: tools/hangar
-  #       run: |
-  #         pnpm test:generate
-  #         pnpm run test --shard=${{ matrix.shard }} --update=${{ matrix.runner == 'ubuntu' && matrix.node == '18' }}
-
-  #     - name: Create mutation if needed
-  #       # we only care about the diff in our standard dev env
-  #       if: matrix.runner == 'ubuntu' && matrix.node == '18'
-  #       id: diff
-  #       env:
-  #         RAW_SHARD: ${{ matrix.shard }}
-  #       run: |
-  #         SHARD=$(echo $RAW_SHARD | sed 's/\//of/g')
-  #         DIFF_NAME="e2e-$SHARD.diff"
-  #         git add --all
-  #         git diff --staged --binary --patch > $DIFF_NAME
-  #         if [ -s $DIFF_NAME ]; then
-  #           echo "diff=true" >> $GITHUB_OUTPUT
-  #           echo "diff_name=$DIFF_NAME" >> $GITHUB_OUTPUT
-  #         fi
-
-  #     - name: Upload mutation
-  #       if: matrix.runner == 'ubuntu' && matrix.node == '18' && steps.diff.outputs.diff == 'true'
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: ${{ steps.diff.outputs.diff_name }}
-  #         path: ${{ steps.diff.outputs.diff_name }}
-
-  # quality-gate:
-  #   name: Quality Gate
-  #   runs-on: ubuntu-latest
-  #   needs:
-  #     - build
-  #     - e2e-test
-  #     - benchmark
-  #     - test
-  #   steps:
-  #     - name: Download patches
-  #       uses: actions/download-artifact@v3
-  #     - name: Check patches
-  #       run: |
-  #         PATCH_COUNT=0
-  #         for f in $(find ./*.diff/*.diff); do
-  #           PATCH_COUNT=$((PATCH_COUNT + 1))
-  #           cat $f
-  #         done
-  #         if [ $PATCH_COUNT -gt 0 ]; then
-  #           echo "Found $PATCH_COUNT patches, build failed. A self-mutation should happen soon."
-  #           exit 1
-  #         fi
-  #     - name: All good
-  #       run: echo "Builds and tests passed! 🎉🎉🎉"
-
-  # publish:
-  #   name: Publish
-  #   if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' && github.ref == 'refs/heads/main' }}
-  #   needs:
-  #     - quality-gate
-  #     - build
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Download Build Artifacts
-  #       uses: actions/download-artifact@v3
-
-  #     - name: Tag commit
-  #       uses: tvdias/github-tagger@v0.0.1
-  #       if: ${{ needs.build.outputs.last-version != needs.build.outputs.version }}
-  #       with:
-  #         repo-token: "${{ secrets.PROJEN_GITHUB_TOKEN }}"
-  #         tag: "v${{ needs.build.outputs.version }}"
-
-  #     - name: Publish Extension to Visual Studio Marketplace
-  #       if: needs.build.outputs.vscode-wing-changed == 'true'
-  #       uses: "HaaLeo/publish-vscode-extension@v1"
-  #       with:
-  #         pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
-  #         registryUrl: "https://marketplace.visualstudio.com"
-  #         extensionFile: "vscode-wing/vscode-wing.vsix"
-  #         dependencies: false
-
-  #     - name: Login to NPM registry
-  #       run: npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
-
-  #     - name: Publish npm packages
-  #       run: |
-  #         for file in *.tgz; do
-  #           npm publish "$file" --access public
-  #         done
-  #       working-directory: dist
-
-  #     - name: Write Changelog
-  #       uses: DamianReeves/write-file-action@v1.2
-  #       with:
-  #         path: "CHANGELOG.md"
-  #         contents: ${{ needs.build.outputs.changelog }}
-  #         write-mode: overwrite
-
-  #     - name: Compute Checksums
-  #       run: |
-  #         mv ./docs/*.tgz ./dist
-  #         mv ./*/*.vsix ./dist
-  #         mv ./*/*.wasm ./dist
-  #         mv ./benchmarks/* ./dist
-  #         cd dist
-
-  #         echo '' >> ../CHANGELOG.md
-  #         echo '### SHA-1 Checksums' >> ../CHANGELOG.md
-  #         echo '```' >> ../CHANGELOG.md
-  #         sha1sum --binary * >> ../CHANGELOG.md
-  #         echo '```' >> ../CHANGELOG.md
-  #         cat ../CHANGELOG.md
-
-  #     - name: Cut Development Release
-  #       uses: softprops/action-gh-release@v1
-  #       with:
-  #         name: "Wing ${{ needs.build.outputs.version }}"
-  #         tag_name: "v${{ needs.build.outputs.version }}"
-  #         body_path: CHANGELOG.md
-  #         files: dist/*
-  #         token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+      - name: Cut Development Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: "Wing ${{ needs.build.outputs.version }}"
+          tag_name: "v${{ needs.build.outputs.version }}"
+          body_path: CHANGELOG.md
+          files: dist/*
+          token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
