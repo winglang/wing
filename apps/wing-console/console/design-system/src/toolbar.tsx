@@ -13,16 +13,11 @@ export const Toolbar = ({
 }: PropsWithChildren<ToolbarProps>) => {
   const { theme } = useTheme();
   return (
-    <div
-      className={classNames(
-        "flex-shrink-0 flex items-center justify-between gap-2 px-2",
-        theme.bg3,
-      )}
-    >
+    <div className="flex-shrink-0 flex items-center justify-between gap-2 px-2">
       {title && (
         <div className="flex items-center min-w-0">
           <span
-            className={classNames("text-sm truncate uppercase", theme.text2)}
+            className={classNames("text-sm truncate uppercase", theme.text1)}
           >
             {title}
           </span>
