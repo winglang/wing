@@ -4,6 +4,7 @@ import {
   USE_EXTERNAL_THEME_COLOR,
 } from "@wingconsole/design-system";
 import classNames from "classnames";
+import { useState } from "react";
 
 import { useMap } from "../services/use-map.js";
 import { ContainerNode } from "../ui/elk-map-nodes.js";
@@ -31,6 +32,9 @@ export const MapView = ({
   const { mapData } = useMap({ showTests: showTests ?? false });
 
   const { theme } = useTheme();
+
+  const [hover, setHover] = useState(false);
+
   return (
     <ZoomPaneProvider>
       <div className={classNames("h-full flex flex-col", theme.bg4)}>
@@ -39,11 +43,21 @@ export const MapView = ({
             <div className="right-0 absolute z-10">
               <div
                 className={classNames(
-                  "absolute inset-0 opacity-70 rounded-bl",
+                  "transition-opacity",
+                  "absolute inset-0 rounded-bl",
                   theme.bg4,
+                  (hover && "opacity-90") || "opacity-50",
                 )}
               />
-              <div className="relative">
+              <div
+                className="relative group/map-controls"
+                onMouseEnter={() => {
+                  setHover(true);
+                }}
+                onMouseLeave={() => {
+                  setHover(false);
+                }}
+              >
                 <MapControls />
               </div>
             </div>
