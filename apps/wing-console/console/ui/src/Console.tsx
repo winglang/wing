@@ -65,6 +65,8 @@ export const Console = ({
       : "remote";
   }, [layout]);
 
+  // This is a workaround for handling copy/paste when running in VSCode
+  // There is an open issue in VSCode repo: https://github.com/microsoft/vscode/issues/129178
   useEffect(() => {
     if (layout !== LayoutType.Vscode) {
       return;
