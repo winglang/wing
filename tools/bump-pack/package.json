@@ -13,7 +13,6 @@
   "files": [
     "dist"
   ],
-  "type": "module",
   "scripts": {},
   "devDependencies": {
     "@types/fs-extra": "^11",

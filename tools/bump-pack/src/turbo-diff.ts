@@ -3,20 +3,19 @@
 // turbo does not take "inputs" into account when using `-F=[...]` git diff filtering
 
 import { join } from "node:path";
-import { fileURLToPath } from "node:url";
 import { execSync } from "node:child_process";
 import { parseArgs } from "node:util";
 import { setOutput } from "@actions/core";
 import { minimatch } from 'minimatch'
 
-const currentDir = fileURLToPath(import.meta.url);
-const rootDir = join(currentDir, "..", "..", "..");
-const myExec = (command: string) =>
-  execSync(command, {
+const rootDir = join(__dirname, "..", "..", "..");
+function betterExec(command: string) {
+  return execSync(command, {
     cwd: rootDir,
     encoding: "utf8",
     maxBuffer: 1024 * 1024 * 1024,
   }).trim();
+}
 
 const args = parseArgs({
   options: {
@@ -31,13 +30,13 @@ const args = parseArgs({
   },
 });
 
-let relativeChangedFiles = myExec(
+let relativeChangedFiles = betterExec(
   `git diff --name-only ${args.values.startRef} ${args.values.endRef}`
 ).split("\n");
 
 if (args.values.endRef === "") {
   // include untracked files
-  const OtherChangedFiles = myExec(`git ls-files -o --exclude-standard`).split(
+  const OtherChangedFiles = betterExec(`git ls-files --other --exclude-standard`).split(
     "\n"
   );
 
@@ -60,7 +59,7 @@ const turboArgs = [
   "--dry-run=json",
 ];
 
-const turboOutput = JSON.parse(myExec(turboArgs.join(" ")));
+const turboOutput = JSON.parse(betterExec(turboArgs.join(" ")));
 
 const taskData: { [key: string]: { cached: boolean; changes: boolean } } = {};
 
@@ -81,8 +80,9 @@ for (const task of turboOutput.tasks) {
 }
 
 const globalDeps = Object.keys(turboOutput.globalCacheInputs.files);
+const globalPattern = `{${globalDeps.join(',')}}`
 for (const changedFile of relativeChangedFiles) {
-  if (globalDeps.some((dep) => minimatch(changedFile, dep))) {
+  if (minimatch(changedFile, globalPattern)) {
     for (const taskId in taskData) {
       taskData[taskId].changes = true;
     }
