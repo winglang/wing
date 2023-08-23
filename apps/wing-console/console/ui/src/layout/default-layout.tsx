@@ -19,7 +19,6 @@ import { EdgeMetadata } from "../ui/edge-metadata.js";
 import { Explorer } from "../ui/explorer.js";
 import { ResourceMetadata } from "../ui/resource-metadata.js";
 
-import { Header } from "./header.js";
 import { StatusBar } from "./status-bar.js";
 import { TermsAndConditionsModal } from "./terms-and-conditions-modal.js";
 import { useLayout } from "./use-layout.js";
@@ -238,7 +237,7 @@ export const DefaultLayout = ({
       )}
 
       <div className={classNames(USE_EXTERNAL_THEME_COLOR, "fixed inset-0")}>
-        <div className={classNames("w-full h-full", theme.bg1)} />
+        <div className={classNames("w-full h-full", theme.bg2)} />
       </div>
 
       <div
