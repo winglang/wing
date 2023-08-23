@@ -12,7 +12,7 @@
     "compile": "turbo compile",
     "test": "turbo lint eslint test",
     "package": "turbo package",
-    "package:ci": "turbo package --color",
+    "package:ci": "turbo package --color && tar -czvf dist/docs.tgz docs/*",
     "test:ci": "turbo default --color --concurrency 1 && turbo compile post-compile lint eslint test test:playwright --color --filter=!hangar",
     "docs": "./scripts/docsite.sh",
     "changelog": "bump-pack",
