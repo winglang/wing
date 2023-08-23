@@ -275,9 +275,9 @@ class $Root extends $stdlib.std.Resource {
     const stringArray = [shouldBeString];
     const closureWithUnwrapping = ((optionalString) => {
       {
-        const $IF_LET_VALUE = optionalString;
-        if ($IF_LET_VALUE != undefined) {
-          const justString = $IF_LET_VALUE;
+        const $if_let_value = optionalString;
+        if ($if_let_value != undefined) {
+          const justString = $if_let_value;
           {console.log(justString)};
         }
       }

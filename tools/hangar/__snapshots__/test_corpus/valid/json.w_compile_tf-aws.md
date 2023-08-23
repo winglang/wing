@@ -368,9 +368,9 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: unestedJsonArr.getAt(0) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((unestedJsonArr)[0],1)))};
     const jsonElements = ({"strings": ({"single": "Hello","array": ["Hello", "World", "!"]}),"numbers": ({"one": 1,"two": 2,"three": 3}),"bools": ({"t": true,"f": false})});
     {
-      const $IF_LET_VALUE = ((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((jsonElements)?.["strings"])?.["single"]);
-      if ($IF_LET_VALUE != undefined) {
-        const val = $IF_LET_VALUE;
+      const $if_let_value = ((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((jsonElements)?.["strings"])?.["single"]);
+      if ($if_let_value != undefined) {
+        const val = $if_let_value;
         {((cond) => {if (!cond) throw new Error("assertion failed: val == \"Hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(val,"Hello")))};
       }
       else {
@@ -378,13 +378,13 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     {
-      const $IF_LET_VALUE = ((jsonElements)?.["strings"])?.["array"];
-      if ($IF_LET_VALUE != undefined) {
-        const vals = $IF_LET_VALUE;
+      const $if_let_value = ((jsonElements)?.["strings"])?.["array"];
+      if ($if_let_value != undefined) {
+        const vals = $if_let_value;
         {
-          const $IF_LET_VALUE = (vals)?.[0];
-          if ($IF_LET_VALUE != undefined) {
-            const hello = $IF_LET_VALUE;
+          const $if_let_value = (vals)?.[0];
+          if ($if_let_value != undefined) {
+            const hello = $if_let_value;
             {((cond) => {if (!cond) throw new Error("assertion failed: hello == \"Hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(hello,"Hello")))};
           }
           else {
@@ -397,9 +397,9 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     {
-      const $IF_LET_VALUE = ((arg) => { return (typeof arg === "number") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)?.["numbers"])?.["two"]);
-      if ($IF_LET_VALUE != undefined) {
-        const two = $IF_LET_VALUE;
+      const $if_let_value = ((arg) => { return (typeof arg === "number") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)?.["numbers"])?.["two"]);
+      if ($if_let_value != undefined) {
+        const two = $if_let_value;
         {((cond) => {if (!cond) throw new Error("assertion failed: two + 2 == 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((two + 2),4)))};
       }
       else {
@@ -407,9 +407,9 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     {
-      const $IF_LET_VALUE = ((arg) => { return (typeof arg === "boolean") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)?.["bools"])?.["t"]);
-      if ($IF_LET_VALUE != undefined) {
-        const truth = $IF_LET_VALUE;
+      const $if_let_value = ((arg) => { return (typeof arg === "boolean") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)?.["bools"])?.["t"]);
+      if ($if_let_value != undefined) {
+        const truth = $if_let_value;
         {((cond) => {if (!cond) throw new Error("assertion failed: truth")})(truth)};
       }
       else {
@@ -417,16 +417,16 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     {
-      const $IF_LET_VALUE = ((((jsonElements)?.["strings"])?.["non"])?.["existant"])?.["element"];
-      if ($IF_LET_VALUE != undefined) {
-        const val = $IF_LET_VALUE;
+      const $if_let_value = ((((jsonElements)?.["strings"])?.["non"])?.["existant"])?.["element"];
+      if ($if_let_value != undefined) {
+        const val = $if_let_value;
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
     }
     {
-      const $IF_LET_VALUE = (((jsonElements)?.["cant"])?.[1000])?.[42];
-      if ($IF_LET_VALUE != undefined) {
-        const val = $IF_LET_VALUE;
+      const $if_let_value = (((jsonElements)?.["cant"])?.[1000])?.[42];
+      if ($if_let_value != undefined) {
+        const val = $if_let_value;
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
     }
