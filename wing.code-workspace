@@ -1,0 +1,56 @@
+{
+  "folders": [
+    {
+      "name": "ROOT",
+      "path": "."
+    },
+    {
+      "name": "Wing",
+      "path": "apps/wing"
+    },
+    {
+      "name": "Wing SDK",
+      "path": "libs/wingsdk"
+    },
+    {
+      "name": "Wing SDK Integration Tests",
+      "path": "examples/tests/sdk_tests"
+    },
+    {
+      "name": "Wing Console",
+      "path": "apps/wing-console"
+    },
+    {
+      "name": "Wing VSCode Extension",
+      "path": "apps/vscode-wing"
+    },
+    {
+      "name": "Wing Docs",
+      "path": "docs/docs"
+    },
+    {
+      "name": "jsii-docgen",
+      "path": "apps/jsii-docgen"
+    },
+    {
+      "name": "wing-api-checker",
+      "path": "apps/wing-api-checker"
+    },
+    {
+      "name": "Tests: Valid",
+      "path": "examples/tests/valid"
+    },
+    {
+      "name": "Tests: Invalid",
+      "path": "examples/tests/invalid"
+    },
+    {
+      "name": "Tests: Error",
+      "path": "examples/tests/error"
+    },
+    {
+      "name": "Proposals",
+      "path": "examples/proposed"
+    },
+  ],
+}
