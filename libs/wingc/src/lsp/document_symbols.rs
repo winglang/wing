@@ -36,6 +36,7 @@ impl Visit<'_> for DocumentSymbolVisitor {
 						// in these cases, an alias is required (like "bring foo as bar;")
 						// so we don't need to add a symbol for the module itself
 						BringSource::JsiiModule(_) => {}
+						BringSource::WingModule { .. } => {}
 						BringSource::WingFile(_) => {}
 					};
 				}

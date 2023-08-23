@@ -3183,69 +3183,35 @@ impl<'a> TypeChecker<'a> {
 
 				match &source {
 					BringSource::BuiltinModule(name) => {
-						if WINGSDK_BRINGABLE_MODULES.contains(&name.name.as_str()) {
-							library_name = WINGSDK_ASSEMBLY_NAME.to_string();
-							namespace_filter = vec![name.name.clone()];
-							alias = identifier.as_ref().unwrap_or(&name);
-						} else if name.name.as_str() == WINGSDK_STD_MODULE {
+						if name.name.as_str() == WINGSDK_STD_MODULE {
 							self.spanned_error(stmt, format!("Redundant bring of \"{}\"", WINGSDK_STD_MODULE));
 							return;
-						} else {
+						}
+
+						if !WINGSDK_BRINGABLE_MODULES.contains(&name.name.as_str()) {
 							self.spanned_error(stmt, format!("\"{}\" is not a built-in module", name));
 							return;
 						}
+
+						library_name = WINGSDK_ASSEMBLY_NAME.to_string();
+						namespace_filter = vec![name.name.clone()];
+						alias = identifier.as_ref().unwrap_or(&name);
+						self.add_module_to_env(env, library_name, namespace_filter, alias, Some(&stmt));
+					}
+					BringSource::WingModule { name, root_file } => {
+						self.add_wing_file_to_env(name, &root_file, stmt, env, identifier);
 					}
 					BringSource::JsiiModule(name) => {
 						library_name = name.name.to_string();
 						// no namespace filter (we only support importing entire libraries at the moment)
 						namespace_filter = vec![];
 						alias = identifier.as_ref().unwrap();
+						self.add_module_to_env(env, library_name, namespace_filter, alias, Some(&stmt));
 					}
 					BringSource::WingFile(name) => {
-						let (brought_env, is_bringable) = match self.types.source_file_envs.get(Path::new(&name.name)) {
-							Some((env, is_bringable)) => (*env, *is_bringable),
-							None => {
-								self.spanned_error(
-									stmt,
-									format!("Could not type check \"{}\" due to cyclic bring statements", name),
-								);
-								return;
-							}
-						};
-						if !is_bringable {
-							self.spanned_error(
-								stmt,
-								format!(
-									"Cannot bring \"{}\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought",
-									name
-								),
-							);
-							return;
-						}
-						let ns = self.types.add_namespace(Namespace {
-							name: name.name.to_string(),
-							env: SymbolEnv::new(
-								Some(brought_env.get_ref()),
-								brought_env.return_type,
-								false,
-								false,
-								brought_env.phase,
-								0,
-							),
-							loaded: true,
-						});
-						if let Err(e) = env.define(
-							identifier.as_ref().unwrap(),
-							SymbolKind::Namespace(ns),
-							StatementIdx::Top,
-						) {
-							self.type_error(e);
-						}
-						return;
+						self.add_wing_file_to_env(name, &Path::new(&name.name), stmt, env, identifier);
 					}
 				}
-
-				self.add_module_to_env(env, library_name, namespace_filter, alias, Some(&stmt));
 			}
 			StmtKind::Scope(scope) => {
 				let scope_env = self.types.add_symbol_env(SymbolEnv::new(
@@ -3716,6 +3682,56 @@ impl<'a> TypeChecker<'a> {
 				self.type_check_arg_list(arg_list, env);
 			}
 		}
+	}
+
+	fn add_wing_file_to_env(
+		&mut self,
+		name: &Symbol,
+		path: &Path,
+		stmt: &Stmt,
+		env: &mut SymbolEnv,
+		identifier: &Option<Symbol>,
+	) {
+		let (brought_env, is_bringable) = match self.types.source_file_envs.get(path) {
+			Some((env, is_bringable)) => (*env, *is_bringable),
+			None => {
+				self.spanned_error(
+					stmt,
+					format!("Could not type check \"{}\" due to cyclic bring statements", name),
+				);
+				return;
+			}
+		};
+		if !is_bringable {
+			self.spanned_error(
+				stmt,
+				format!(
+					"Cannot bring \"{}\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought",
+					name
+				),
+			);
+			return;
+		}
+		let ns = self.types.add_namespace(Namespace {
+			name: name.name.to_string(),
+			env: SymbolEnv::new(
+				Some(brought_env.get_ref()),
+				brought_env.return_type,
+				false,
+				false,
+				brought_env.phase,
+				0,
+			),
+			loaded: true,
+		});
+		if let Err(e) = env.define(
+			identifier.as_ref().unwrap(),
+			SymbolKind::Namespace(ns),
+			StatementIdx::Top,
+		) {
+			self.type_error(e);
+		}
+		return;
 	}
 
 	fn type_check_super_constructor_against_parent_initializer(

@@ -680,7 +680,7 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_bring_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
-		let module_name = self.node_symbol(&statement_node.child_by_field_name("module_name").unwrap())?;
+		let module_symbol = self.node_symbol(&statement_node.child_by_field_name("module_name").unwrap())?;
 		let alias = if let Some(identifier) = statement_node.child_by_field_name("alias") {
 			Some(self.check_reserved_symbol(&identifier)?)
 		} else {
@@ -689,8 +689,8 @@ impl<'s> Parser<'s> {
 
 		// if the module name is a path ending in .w, create a new Parser to parse it as a new Scope,
 		// and create a StmtKind::Module instead
-		if module_name.name.starts_with("\"") && module_name.name.ends_with(".w\"") {
-			let module_path = Path::new(&module_name.name[1..module_name.name.len() - 1]);
+		if module_symbol.name.starts_with("\"") && module_symbol.name.ends_with(".w\"") {
+			let module_path = Path::new(&module_symbol.name[1..module_symbol.name.len() - 1]);
 			let source_path = normalize_path(module_path, Some(&Path::new(&self.source_name)));
 			if source_path == Path::new(&self.source_name) {
 				return self.with_error("Cannot bring a module into itself", statement_node);
@@ -714,7 +714,7 @@ impl<'s> Parser<'s> {
 				Ok(StmtKind::Bring {
 					source: BringSource::WingFile(Symbol {
 						name: source_path.to_string_lossy().to_string(),
-						span: module_name.span,
+						span: module_symbol.span,
 					}),
 					identifier: Some(alias),
 				})
@@ -722,7 +722,7 @@ impl<'s> Parser<'s> {
 				self.with_error::<StmtKind>(
 					format!(
 						"bring {} must be assigned to an identifier (e.g. bring \"foo\" as foo)",
-						module_name
+						module_symbol
 					),
 					statement_node,
 				)
@@ -731,12 +731,56 @@ impl<'s> Parser<'s> {
 			return module;
 		}
 
-		if module_name.name.starts_with("\"") && module_name.name.ends_with("\"") {
+		if module_symbol.name.starts_with("\"") && module_symbol.name.ends_with("\"") {
+			// we need to inspect the npm dependency to figure out if it's a JSII library or a Wing library
+			// first, find where the package.json is located
+			let module_name = module_symbol.name[1..module_symbol.name.len() - 1].to_string();
+			let module_dir = wingii::util::package_json::find_dependency_directory(&module_name, &self.source_name)
+				.ok_or_else(|| {
+					self
+						.with_error::<Node>(
+							format!(
+								"Unable to load \"{}\": Module not found in \"{}\"",
+								module_name, self.source_name
+							),
+							&statement_node,
+						)
+						.err();
+				})?;
+
+			// If the package.json has `wing.entrypoint` specified, then we treat it as a Wing library
+			if let Some(entrypoint_path) = get_wing_entrypoint(&Path::new(&module_dir)) {
+				return if let Some(alias) = alias {
+					// Record that the current file depends on the library's entrypoint file
+					self.referenced_wing_files.borrow_mut().push(entrypoint_path.clone());
+
+					Ok(StmtKind::Bring {
+						source: BringSource::WingModule {
+							name: Symbol {
+								name: module_name,
+								span: module_symbol.span,
+							},
+							root_file: entrypoint_path,
+						},
+						identifier: Some(alias),
+					})
+				} else {
+					self.with_error::<StmtKind>(
+						format!(
+							"bring {} must be assigned to an identifier (e.g. bring \"foo\" as foo)",
+							module_name
+						),
+						statement_node,
+					)
+				};
+			}
+
+			// otherwise, we treat it as a JSII library
 			return if let Some(alias) = alias {
 				Ok(StmtKind::Bring {
 					source: BringSource::JsiiModule(Symbol {
-						name: module_name.name[1..module_name.name.len() - 1].to_string(),
-						span: module_name.span,
+						name: module_name,
+						span: module_symbol.span,
 					}),
 					identifier: Some(alias),
 				})
@@ -752,7 +796,7 @@ impl<'s> Parser<'s> {
 		}
 
 		Ok(StmtKind::Bring {
-			source: BringSource::BuiltinModule(module_name),
+			source: BringSource::BuiltinModule(module_symbol),
 			identifier: alias,
 		})
 	}
@@ -2100,6 +2144,36 @@ impl<'s> Parser<'s> {
 			span,
 		)))
 	}
+}
+
+/// Get the package.json's `.wing.entrypoint` if it has one
+fn get_wing_entrypoint(module_dir: &Path) -> Option<PathBuf> {
+	let package_json_path = Path::new(module_dir).join("package.json");
+	if !package_json_path.exists() {
+		return None;
+	}
+
+	let package_json = match fs::read_to_string(package_json_path) {
+		Ok(package_json) => package_json,
+		Err(_) => return None,
+	};
+
+	let package_json: serde_json::Value = match serde_json::from_str(&package_json) {
+		Ok(package_json) => package_json,
+		Err(_) => return None,
+	};
+
+	let wing_config = match package_json.get("wing") {
+		Some(wing_config) => wing_config,
+		None => return None,
+	};
+
+	let entrypoint = match wing_config.get("entrypoint") {
+		Some(entrypoint) => entrypoint,
+		None => return None,
+	};
+
+	Some(PathBuf::from(module_dir).join(entrypoint.as_str().unwrap()))
 }
 
 // TODO: this function seems fragile

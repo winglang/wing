@@ -84,6 +84,10 @@ where
 		StmtKind::Bring { source, identifier } => StmtKind::Bring {
 			source: match source {
 				BringSource::BuiltinModule(name) => BringSource::BuiltinModule(f.fold_symbol(name)),
+				BringSource::WingModule { name, root_file } => BringSource::WingModule {
+					name: f.fold_symbol(name),
+					root_file,
+				},
 				BringSource::JsiiModule(name) => BringSource::JsiiModule(f.fold_symbol(name)),
 				BringSource::WingFile(name) => BringSource::WingFile(f.fold_symbol(name)),
 			},

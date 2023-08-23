@@ -16,7 +16,7 @@ pub mod fqn;
 pub mod jsii;
 
 pub mod node_resolve;
-mod util;
+pub mod util;
 
 pub type Result<T> = std::result::Result<T, Box<dyn Error>>;
 

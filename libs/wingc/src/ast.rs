@@ -1,5 +1,6 @@
 use std::fmt::{Debug, Display};
 use std::hash::{Hash, Hasher};
+use std::path::PathBuf;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
 use indexmap::{Equivalent, IndexMap, IndexSet};
@@ -423,6 +424,8 @@ pub struct Interface {
 #[derive(Debug)]
 pub enum BringSource {
 	BuiltinModule(Symbol),
+	// we can remove this once Wing modules are compiled to Jsii modules :)
+	WingModule { name: Symbol, root_file: PathBuf },
 	JsiiModule(Symbol),
 	WingFile(Symbol),
 }
