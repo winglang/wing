@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 // Why is all of this here?
 // See https://github.com/vercel/turbo/issues/4678
 // turbo does not take "inputs" into account when using `-F=[...]` git diff filtering
@@ -107,10 +105,4 @@ for (const task of turboOutput.tasks) {
   }
 }
 
-console.log(taskData);
-
-if (!!process.env.GITHUB_ACTIONS) {
-  // we are running in a github action and we should output some useful stuff
-
-  setOutput("data", taskData);
-}
+setOutput("data", taskData);
