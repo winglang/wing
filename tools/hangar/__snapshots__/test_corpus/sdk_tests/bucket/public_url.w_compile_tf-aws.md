@@ -175,19 +175,6 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
       }
     },
     "aws_s3_bucket_public_access_block": {
-      "privateBucket_PublicAccessBlock_BF0F9FC6": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/privateBucket/PublicAccessBlock",
-            "uniqueId": "privateBucket_PublicAccessBlock_BF0F9FC6"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.privateBucket.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      },
       "publicBucket_PublicAccessBlock_54D9EFBA": {
         "//": {
           "metadata": {
