@@ -34,7 +34,10 @@ export const TestTree = ({
   const { theme } = useTheme();
 
   return (
-    <div className="w-full h-full flex flex-col" data-testid="test-tree-menu">
+    <div
+      className={classNames("w-full h-full flex flex-col", theme.bg3)}
+      data-testid="test-tree-menu"
+    >
       <Toolbar title="Tests">
         <ToolbarButton
           onClick={() => handleRunAllTests()}

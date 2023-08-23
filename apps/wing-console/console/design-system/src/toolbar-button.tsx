@@ -19,7 +19,7 @@ export const ToolbarButton = ({
   return (
     <button
       className={classNames(
-        theme.bg2Hover,
+        theme.bg3Hover,
         theme.text1,
         theme.focusInput,
         "text-xs",
