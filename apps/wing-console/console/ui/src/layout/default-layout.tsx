@@ -233,11 +233,15 @@ export const DefaultLayout = ({
           license={termsConfig.data?.license ?? ""}
         />
       )}
+
+      <div className={classNames(USE_EXTERNAL_THEME_COLOR, "fixed inset-0")}>
+        <div className={classNames("w-full h-full", theme.bg1)} />
+      </div>
+
       <div
         data-testid="default-layout"
         className={classNames(
           "h-full flex flex-col select-none",
-          theme.bg1,
           theme.text2,
           showTerms && "blur-sm",
         )}
