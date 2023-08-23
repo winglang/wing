@@ -341,3 +341,21 @@ test "insert()" {
   assert(mutArr.length == 5);
   assert(mutArr.at(4) == 25);
 }
+
+//-----------------------------------------------------------------------------
+// removeFirst()
+
+test "removeFirst()" {
+  let mutArr = MutArray<num>[3, 6, 9, 3];
+
+  let r1 = mutArr.removeFirst(3);
+
+  assert(r1 == true);
+  assert(mutArr.length == 3);
+  assert(mutArr == MutArray<num> [6, 9, 3]);
+
+  let r2 = mutArr.removeFirst(-42);
+
+  assert(r2 == false);
+  assert(mutArr.length == 3);
+}

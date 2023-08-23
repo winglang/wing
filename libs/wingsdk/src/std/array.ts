@@ -293,4 +293,17 @@ export class MutArray {
     value;
     throw new Error("Macro");
   }
+
+  /**
+   * Removes first occurence of a given value in an array
+   *
+   * @macro ((obj, args) => { if (obj.indexOf(args[0]) !== -1) { obj.splice(obj.indexOf(args[0]), 1); return true; } return false; })($self$, [$args$])
+   *
+   * @param value the value to remove
+   * @returns true if value was removed
+   */
+  public removeFirst(value: T1): boolean {
+    value;
+    throw new Error("Macro");
+  }
 }
