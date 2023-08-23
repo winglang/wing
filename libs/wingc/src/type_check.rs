@@ -3196,7 +3196,7 @@ impl<'a> TypeChecker<'a> {
 						library_name = WINGSDK_ASSEMBLY_NAME.to_string();
 						namespace_filter = vec![name.name.clone()];
 						alias = identifier.as_ref().unwrap_or(&name);
-						self.add_module_to_env(env, library_name, namespace_filter, alias, Some(&stmt));
+						self.add_jsii_module_to_env(env, library_name, namespace_filter, alias, Some(&stmt));
 					}
 					BringSource::WingModule { name, root_file } => {
 						self.add_wing_file_to_env(name, &root_file, stmt, env, identifier);
@@ -3206,7 +3206,7 @@ impl<'a> TypeChecker<'a> {
 						// no namespace filter (we only support importing entire libraries at the moment)
 						namespace_filter = vec![];
 						alias = identifier.as_ref().unwrap();
-						self.add_module_to_env(env, library_name, namespace_filter, alias, Some(&stmt));
+						self.add_jsii_module_to_env(env, library_name, namespace_filter, alias, Some(&stmt));
 					}
 					BringSource::WingFile(name) => {
 						self.add_wing_file_to_env(name, &Path::new(&name.name), stmt, env, identifier);
@@ -3938,7 +3938,7 @@ impl<'a> TypeChecker<'a> {
 		};
 	}
 
-	pub fn add_module_to_env(
+	pub fn add_jsii_module_to_env(
 		&mut self,
 		env: &mut SymbolEnv,
 		library_name: String,

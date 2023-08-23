@@ -735,8 +735,9 @@ impl<'s> Parser<'s> {
 			// we need to inspect the npm dependency to figure out if it's a JSII library or a Wing library
 			// first, find where the package.json is located
 			let module_name = module_symbol.name[1..module_symbol.name.len() - 1].to_string();
-			let module_dir = wingii::util::package_json::find_dependency_directory(&module_name, &self.source_name)
-				.ok_or_else(|| {
+			let source_dir = Path::new(&self.source_name).parent().unwrap().to_str().unwrap();
+			let module_dir =
+				wingii::util::package_json::find_dependency_directory(&module_name, &source_dir).ok_or_else(|| {
 					self
 						.with_error::<Node>(
 							format!(
