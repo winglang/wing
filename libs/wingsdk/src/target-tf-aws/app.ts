@@ -27,6 +27,7 @@ import {
   API_FQN,
   BUCKET_FQN,
   COUNTER_FQN,
+  REACT_WEBSITE_FQN,
   FUNCTION_FQN,
   ON_DEPLOY_FQN,
   QUEUE_FQN,
@@ -40,6 +41,7 @@ import { TABLE_FQN, REDIS_FQN } from "../ex";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { CdktfApp } from "../shared-tf/app";
 import { TEST_RUNNER_FQN } from "../std";
+import { ReactWebsite } from "./react-website";
 
 /**
  * An app that knows how to synthesize constructs into a Terraform configuration
@@ -117,6 +119,9 @@ export class App extends CdktfApp {
 
       case ON_DEPLOY_FQN:
         return new OnDeploy(scope, id, args[0], args[1]);
+
+      case REACT_WEBSITE_FQN:
+        return new ReactWebsite(scope, id, args[0]);
     }
 
     return undefined;

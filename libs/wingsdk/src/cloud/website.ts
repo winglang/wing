@@ -12,13 +12,15 @@ export const WEBSITE_FQN = fqnForType("cloud.Website");
 /**
  * Options for `Website`.
  */
-export interface WebsiteProps {
+export interface WebsiteProps extends BaseWebsiteProps {
   /**
    * Local path to the website's static files, relative to the Wing source file or absolute.
    * @example "./dist"
    */
   readonly path: string;
+}
 
+export interface BaseWebsiteProps {
   /**
    * The website's custom domain name.
    * @example "example.com"

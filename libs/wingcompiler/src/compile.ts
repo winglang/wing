@@ -213,7 +213,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   });
 
   try {
-    vm.runInContext(artifact, context);
+    await vm.runInContext(artifact, context);
   } catch (error) {
     throw new PreflightError(error as any, artifactPath, artifact);
   }

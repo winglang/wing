@@ -36,6 +36,8 @@ import { preSynthesizeAllConstructs } from "../core/app";
 import { TABLE_FQN, REDIS_FQN } from "../ex";
 import { TEST_RUNNER_FQN } from "../std";
 import { WingSimulatorSchema } from "../testing/simulator";
+import { REACT_WEBSITE_FQN } from "../cloud/react-website";
+import { ReactWebsite } from "./react-website";
 
 /**
  * Path of the simulator configuration file in every .wsim tarball.
@@ -107,6 +109,9 @@ export class App extends core.App {
       case WEBSITE_FQN:
         return new Website(scope, id, args[0]);
 
+      case REACT_WEBSITE_FQN:
+        return new ReactWebsite(scope, id, args[0]);
+
       case SECRET_FQN:
         return new Secret(scope, id, args[0]);
 
@@ -127,7 +132,7 @@ export class App extends core.App {
    * Synthesize the app. This creates a tree.json file and a .wsim file in the
    * app's outdir, and returns a path to the .wsim directory.
    */
-  public synth(): string {
+  public async synth(): Promise<string> {
     if (this.synthed) {
       return this.outdir;
     }
@@ -135,7 +140,7 @@ export class App extends core.App {
     fs.mkdirSync(this.outdir, { recursive: true });
 
     // call preSynthesize() on every construct in the tree
-    preSynthesizeAllConstructs(this);
+    await preSynthesizeAllConstructs(this);
 
     // write simulator.json file into workdir
     this.synthSimulatorFile(this.outdir);

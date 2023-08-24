@@ -19,6 +19,7 @@ export const LOGGER_TYPE = "wingsdk.cloud.Logger";
 export const TEST_RUNNER_TYPE = "wingsdk.cloud.TestRunner";
 export const REDIS_TYPE = "wingsdk.redis.Redis"; // for backwards compat
 export const WEBSITE_TYPE = "wingsdk.cloud.Website";
+export const REACT_WEBSITE_TYPE = "wingsdk.cloud.ReactWebsite";
 export const SECRET_TYPE = "wingsdk.cloud.Secret";
 export const SERVICE_TYPE = "wingsdk.cloud.Service";
 export const ON_DEPLOY_TYPE = "wingsdk.cloud.OnDeploy";
@@ -239,6 +240,17 @@ export interface WebsiteSchema extends BaseResourceSchema {
     jsonRoutes: Record<string, Json>;
   };
 }
+
+export interface ReactWebsiteSchema extends BaseResourceSchema {
+  readonly type: typeof REACT_WEBSITE_TYPE;
+  readonly props: {
+    path: string;
+    startCommand: string;
+    environments: Record<string, string>;
+    isDevRun: boolean;
+  };
+}
+export interface ReactWebsiteAttributes {}
 
 export interface RedisAttributes {}
 

@@ -25,7 +25,7 @@ const INDEX_FILE = "index.html";
  * @inflight `@winglang/sdk.cloud.IWebsiteClient`
  */
 export class Website extends cloud.Website {
-  private readonly bucket: S3Bucket;
+  public readonly bucket: S3Bucket;
   private readonly _url: string;
 
   constructor(scope: Construct, id: string, props: cloud.WebsiteProps) {
