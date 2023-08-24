@@ -162,38 +162,39 @@ pub fn parse_wing_project(
 	// Update our collections of trees and ASTs and our file graph
 	tree_sitter_trees.insert(init_path.to_owned(), tree_sitter_tree);
 	asts.insert(init_path.to_owned(), ast);
-	file_graph.update_file(init_path, &dependent_wing_files);
+	let paths: Vec<PathBuf> = dependent_wing_files.iter().map(|f| &f.0).cloned().collect();
+	file_graph.update_file(init_path, &paths);
 
 	// Track which files still need parsing
 	let mut unparsed_files = dependent_wing_files;
 
 	// Parse all remaining files in the project
-	while let Some(file_path) = unparsed_files.pop() {
+	while let Some(file) = unparsed_files.pop() {
 		// Skip files that we have already seen before (they should already be parsed)
-		if files.contains_file(&file_path) {
+		if files.contains_file(&file.0) {
 			assert!(
-				tree_sitter_trees.contains_key(&file_path),
+				tree_sitter_trees.contains_key(&file.0),
 				"files is not in sync with tree_sitter_trees"
 			);
-			assert!(asts.contains_key(&file_path), "files is not in sync with asts");
+			assert!(asts.contains_key(&file.0), "files is not in sync with asts");
 			assert!(
-				file_graph.contains_file(&file_path),
+				file_graph.contains_file(&file.0),
 				"files is not in sync with file_graph"
 			);
 			continue;
 		}
 
-		let file_text = fs::read_to_string(&file_path).unwrap_or(String::new());
-		files.add_file(&file_path, file_text.clone()).unwrap();
-		files.get_file(&file_path).unwrap();
+		files.add_file(&file.0, file.1.clone()).unwrap();
+		files.get_file(&file.0).unwrap();
 
 		// Parse the file
-		let (tree_sitter_tree, ast, dependent_wing_files) = parse_wing_file(&file_path, &file_text);
+		let (tree_sitter_tree, ast, dependent_wing_files) = parse_wing_file(&file.0, &file.1);
 
 		// Update our collections of trees and ASTs and our file graph
-		tree_sitter_trees.insert(file_path.clone(), tree_sitter_tree);
-		asts.insert(file_path.clone(), ast);
-		file_graph.update_file(&file_path, &dependent_wing_files);
+		tree_sitter_trees.insert(file.0.clone(), tree_sitter_tree);
+		asts.insert(file.0.clone(), ast);
+		let paths: Vec<PathBuf> = dependent_wing_files.iter().map(|f| &f.0).cloned().collect();
+		file_graph.update_file(&file.0, &paths);
 
 		// Add the file's dependencies to the list of files to parse
 		unparsed_files.extend(dependent_wing_files);
@@ -223,7 +224,7 @@ pub fn parse_wing_project(
 	}
 }
 
-fn parse_wing_file(source_path: &Path, source_text: &str) -> (tree_sitter::Tree, Scope, Vec<PathBuf>) {
+fn parse_wing_file(source_path: &Path, source_text: &str) -> (tree_sitter::Tree, Scope, Vec<WingSourceFile>) {
 	let language = tree_sitter_wing::language();
 	let mut tree_sitter_parser = tree_sitter::Parser::new();
 	tree_sitter_parser.set_language(language).unwrap();
@@ -242,6 +243,9 @@ fn parse_wing_file(source_path: &Path, source_text: &str) -> (tree_sitter::Tree,
 	(tree_sitter_tree, scope, dependent_wing_files)
 }
 
+/// A Wing source file that has been referenced by a `bring` statement.
+pub struct WingSourceFile(PathBuf, String);
+
 /// Parses a single Wing source file.
 pub struct Parser<'a> {
 	/// Source code of the file being parsed
@@ -254,7 +258,7 @@ pub struct Parser<'a> {
 	is_in_loop: RefCell<bool>,
 	/// Track all file paths that have been found while parsing the current file
 	/// These will need to be eventually parsed (or diagnostics will be reported if they don't exist)
-	referenced_wing_files: RefCell<Vec<PathBuf>>,
+	referenced_wing_files: RefCell<Vec<WingSourceFile>>,
 }
 
 impl<'s> Parser<'s> {
@@ -274,7 +278,7 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	pub fn parse(self, root: &Node) -> (Scope, Vec<PathBuf>) {
+	pub fn parse(self, root: &Node) -> (Scope, Vec<WingSourceFile>) {
 		let scope = match root.kind() {
 			"source" => self.build_scope(&root, Phase::Preflight),
 			_ => Scope::empty(),
@@ -707,12 +711,15 @@ impl<'s> Parser<'s> {
 					statement_node,
 				);
 			}
-			self.referenced_wing_files.borrow_mut().push(source_path.clone());
+			self.referenced_wing_files.borrow_mut().push(WingSourceFile(
+				source_path.clone(),
+				fs::read_to_string(&source_path).unwrap_or(String::new()),
+			));
 
 			// parse error if no alias is provided
 			let module = if let Some(alias) = alias {
 				Ok(StmtKind::Bring {
-					source: BringSource::WingFile(Symbol {
+					source: BringSource::WingModule(Symbol {
 						name: source_path.to_string_lossy().to_string(),
 						span: module_symbol.span,
 					}),
@@ -750,18 +757,32 @@ impl<'s> Parser<'s> {
 				})?;
 
 			// If the package.json has `wing.entrypoint` specified, then we treat it as a Wing library
-			if let Some(entrypoint_path) = get_wing_entrypoint(&Path::new(&module_dir)) {
+			if is_wing_library(&Path::new(&module_dir)) {
 				return if let Some(alias) = alias {
-					// Record that the current file depends on the library's entrypoint file
-					self.referenced_wing_files.borrow_mut().push(entrypoint_path.clone());
+					let root_files = get_wing_library_root_files(&Path::new(&module_dir));
+
+					// concatenate the files' contents together
+					let mut source = String::new();
+					for file in &root_files {
+						source.push_str(&fs::read_to_string(file).unwrap_or(String::new()));
+					}
+
+					// generate a file name for their concatenation
+					let fake_path = PathBuf::from(module_dir).join("$root.w");
+
+					// Record that the current file depends on the library's entrypoint files
+					self
+						.referenced_wing_files
+						.borrow_mut()
+						.push(WingSourceFile(fake_path.clone(), source));
 
 					Ok(StmtKind::Bring {
-						source: BringSource::WingModule {
+						source: BringSource::WingLibrary {
 							name: Symbol {
 								name: module_name,
 								span: module_symbol.span,
 							},
-							root_file: entrypoint_path,
+							root_file: fake_path,
 						},
 						identifier: Some(alias),
 					})
@@ -779,7 +800,7 @@ impl<'s> Parser<'s> {
 			// otherwise, we treat it as a JSII library
 			return if let Some(alias) = alias {
 				Ok(StmtKind::Bring {
-					source: BringSource::JsiiModule(Symbol {
+					source: BringSource::JsiiLibrary(Symbol {
 						name: module_name,
 						span: module_symbol.span,
 					}),
@@ -2147,34 +2168,40 @@ impl<'s> Parser<'s> {
 	}
 }
 
-/// Get the package.json's `.wing.entrypoint` if it has one
-fn get_wing_entrypoint(module_dir: &Path) -> Option<PathBuf> {
+/// Check if the package.json in the given directory has a `wing` field
+fn is_wing_library(module_dir: &Path) -> bool {
 	let package_json_path = Path::new(module_dir).join("package.json");
 	if !package_json_path.exists() {
-		return None;
+		return false;
 	}
 
 	let package_json = match fs::read_to_string(package_json_path) {
 		Ok(package_json) => package_json,
-		Err(_) => return None,
+		Err(_) => return false,
 	};
 
 	let package_json: serde_json::Value = match serde_json::from_str(&package_json) {
 		Ok(package_json) => package_json,
-		Err(_) => return None,
+		Err(_) => return false,
 	};
 
-	let wing_config = match package_json.get("wing") {
-		Some(wing_config) => wing_config,
-		None => return None,
-	};
+	match package_json.get("wing") {
+		Some(_) => true,
+		None => false,
+	}
+}
 
-	let entrypoint = match wing_config.get("entrypoint") {
-		Some(entrypoint) => entrypoint,
-		None => return None,
-	};
-
-	Some(PathBuf::from(module_dir).join(entrypoint.as_str().unwrap()))
+/// Get a list of all immediate .w files in the given directory
+fn get_wing_library_root_files(module_dir: &Path) -> Vec<PathBuf> {
+	let mut files = Vec::new();
+	for entry in fs::read_dir(module_dir).unwrap() {
+		let entry = entry.unwrap();
+		let path = entry.path();
+		if path.is_file() && path.extension().unwrap_or_default() == "w" {
+			files.push(PathBuf::from(module_dir).join(path));
+		}
+	}
+	files
 }
 
 // TODO: this function seems fragile

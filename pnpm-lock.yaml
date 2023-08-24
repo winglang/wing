@@ -1013,7 +1013,9 @@ importers:
         version: 9.0.0
       wing-fixture:
         specifier: workspace:^
-        version: link:../../../libs/wing-fixture
+        version: link:../../wing-fixture
+
+  examples/wing-fixture: {}
 
   libs/tree-sitter-wing:
     dependencies:
@@ -1027,8 +1029,6 @@ importers:
       tree-sitter-cli:
         specifier: 0.20.6
         version: 0.20.6
-
-  libs/wing-fixture: {}
 
   libs/wingc:
     devDependencies:
@@ -10437,16 +10437,7 @@ packages:
       '@aws-cdk/asset-awscli-v1': 2.2.199
       '@aws-cdk/asset-kubectl-v20': 2.1.2
       '@aws-cdk/asset-node-proxy-agent-v5': 2.0.165
-      '@balena/dockerignore': 1.0.2
-      case: 1.6.3
       constructs: 10.2.51
-      fs-extra: 9.1.0
-      ignore: 5.2.4
-      jsonschema: 1.4.1
-      minimatch: 3.1.2
-      punycode: 2.3.0
-      semver: 7.5.3
-      yaml: 1.10.2
     dev: false
     bundledDependencies:
       - '@balena/dockerignore'
@@ -12478,7 +12469,7 @@ packages:
     dependencies:
       semver: 7.5.3
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20230823
+      typescript: 5.3.0-dev.20230824
     dev: true
 
   /dset@3.1.2:
@@ -21397,8 +21388,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20230823:
-    resolution: {integrity: sha512-IEFfTl67UgTTJzf+Ma4+0txDKzxzxtjNjyFjTm7c+yP5sff+atKe44mAjhCxX8wGjwRrFuhAUeHz1udmzBZ4ow==}
+  /typescript@5.3.0-dev.20230824:
+    resolution: {integrity: sha512-iiUWxGibzrRHEBLDJfVymsvpPKflf3cMrw0oQTMQoguFS2ikNlVlfQWAsYeHqGpRQc77nSQkzsE9rAHNHqvIjw==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

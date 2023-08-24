@@ -3231,17 +3231,17 @@ impl<'a> TypeChecker<'a> {
 						alias = identifier.as_ref().unwrap_or(&name);
 						self.add_jsii_module_to_env(env, library_name, namespace_filter, alias, Some(&stmt));
 					}
-					BringSource::WingModule { name, root_file } => {
+					BringSource::WingLibrary { name, root_file } => {
 						self.add_wing_file_to_env(name, &root_file, stmt, env, identifier);
 					}
-					BringSource::JsiiModule(name) => {
+					BringSource::JsiiLibrary(name) => {
 						library_name = name.name.to_string();
 						// no namespace filter (we only support importing entire libraries at the moment)
 						namespace_filter = vec![];
 						alias = identifier.as_ref().unwrap();
 						self.add_jsii_module_to_env(env, library_name, namespace_filter, alias, Some(&stmt));
 					}
-					BringSource::WingFile(name) => {
+					BringSource::WingModule(name) => {
 						self.add_wing_file_to_env(name, &Path::new(&name.name), stmt, env, identifier);
 					}
 				}

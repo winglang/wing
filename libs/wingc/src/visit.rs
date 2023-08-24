@@ -97,9 +97,9 @@ where
 		StmtKind::Bring { source, identifier } => {
 			match &source {
 				BringSource::BuiltinModule(name) => v.visit_symbol(name),
-				BringSource::WingModule { name, root_file: _ } => v.visit_symbol(name),
-				BringSource::JsiiModule(name) => v.visit_symbol(name),
-				BringSource::WingFile(name) => v.visit_symbol(name),
+				BringSource::WingLibrary { name, root_file: _ } => v.visit_symbol(name),
+				BringSource::JsiiLibrary(name) => v.visit_symbol(name),
+				BringSource::WingModule(name) => v.visit_symbol(name),
 			}
 			if let Some(identifier) = identifier {
 				v.visit_symbol(identifier);

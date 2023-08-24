@@ -794,13 +794,13 @@ impl<'a> JSifier<'a> {
 		match &statement.kind {
 			StmtKind::Bring { source, identifier } => match source {
 				BringSource::BuiltinModule(name) => CodeMaker::one_line(format!("const {} = {}.{};", name, STDLIB, name)),
-				BringSource::JsiiModule(name) => CodeMaker::one_line(format!(
+				BringSource::JsiiLibrary(name) => CodeMaker::one_line(format!(
 					"const {} = require(\"{}\");",
 					// checked during type checking
 					identifier.as_ref().expect("bring jsii module requires an alias"),
 					name
 				)),
-				BringSource::WingModule { name: _, root_file } => {
+				BringSource::WingLibrary { name: _, root_file } => {
 					let preflight_file_map = self.preflight_file_map.borrow();
 					let preflight_file_name = preflight_file_map
 						.get(root_file)
@@ -813,7 +813,7 @@ impl<'a> JSifier<'a> {
 						STDLIB,
 					))
 				}
-				BringSource::WingFile(name) => {
+				BringSource::WingModule(name) => {
 					let preflight_file_map = self.preflight_file_map.borrow();
 					let preflight_file_name = preflight_file_map
 						.get(Path::new(&name.name))

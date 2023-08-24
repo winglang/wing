@@ -425,13 +425,14 @@ pub struct Interface {
 pub enum BringSource {
 	BuiltinModule(Symbol),
 	/// A Wing library (containing Wing source files).
-	/// root_file is a relative path to the root file of the library (relative to the compilation entrypoint)
-	WingModule {
+	/// root_file is the name of the root file of the library. It's a fake file created by the parser
+	/// that concatenates all of the files from the root directory.
+	WingLibrary {
 		name: Symbol,
 		root_file: PathBuf,
 	},
-	JsiiModule(Symbol),
-	WingFile(Symbol),
+	JsiiLibrary(Symbol),
+	WingModule(Symbol),
 }
 
 #[derive(Debug)]
