@@ -21,7 +21,7 @@ impl FileGraph {
 	/// For example, if the current graph has file A depending on B, and
 	/// `update_file(pathA, &[pathC])` was called, then this function will remove the edge
 	/// from A to B, and add an edge from A to C.
-	pub fn update_file(&mut self, from_path: &Path, to_paths: &[PathBuf]) {
+	pub fn update_file<'a, I: IntoIterator<Item = &'a PathBuf>>(&mut self, from_path: &Path, to_paths: I) {
 		let from_node_index = self.get_or_insert_node_index(from_path);
 
 		// remove all current outcoming edges from this node

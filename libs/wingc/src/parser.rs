@@ -162,39 +162,37 @@ pub fn parse_wing_project(
 	// Update our collections of trees and ASTs and our file graph
 	tree_sitter_trees.insert(init_path.to_owned(), tree_sitter_tree);
 	asts.insert(init_path.to_owned(), ast);
-	let paths: Vec<PathBuf> = dependent_wing_files.iter().map(|f| &f.0).cloned().collect();
-	file_graph.update_file(init_path, &paths);
+	file_graph.update_file(init_path, dependent_wing_files.iter().map(|f| &f.0));
 
 	// Track which files still need parsing
 	let mut unparsed_files = dependent_wing_files;
 
 	// Parse all remaining files in the project
-	while let Some(file) = unparsed_files.pop() {
+	while let Some(WingSourceFile(file_path, file_text)) = unparsed_files.pop() {
 		// Skip files that we have already seen before (they should already be parsed)
-		if files.contains_file(&file.0) {
+		if files.contains_file(&file_path) {
 			assert!(
-				tree_sitter_trees.contains_key(&file.0),
+				tree_sitter_trees.contains_key(&file_path),
 				"files is not in sync with tree_sitter_trees"
 			);
-			assert!(asts.contains_key(&file.0), "files is not in sync with asts");
+			assert!(asts.contains_key(&file_path), "files is not in sync with asts");
 			assert!(
-				file_graph.contains_file(&file.0),
+				file_graph.contains_file(&file_path),
 				"files is not in sync with file_graph"
 			);
 			continue;
 		}
 
-		files.add_file(&file.0, file.1.clone()).unwrap();
-		files.get_file(&file.0).unwrap();
+		files.add_file(&file_path, file_text.clone()).unwrap();
+		files.get_file(&file_path).unwrap();
 
 		// Parse the file
-		let (tree_sitter_tree, ast, dependent_wing_files) = parse_wing_file(&file.0, &file.1);
+		let (tree_sitter_tree, ast, dependent_wing_files) = parse_wing_file(&file_path, &file_text);
 
 		// Update our collections of trees and ASTs and our file graph
-		tree_sitter_trees.insert(file.0.clone(), tree_sitter_tree);
-		asts.insert(file.0.clone(), ast);
-		let paths: Vec<PathBuf> = dependent_wing_files.iter().map(|f| &f.0).cloned().collect();
-		file_graph.update_file(&file.0, &paths);
+		tree_sitter_trees.insert(file_path.clone(), tree_sitter_tree);
+		asts.insert(file_path.clone(), ast);
+		file_graph.update_file(&file_path, dependent_wing_files.iter().map(|f| &f.0));
 
 		// Add the file's dependencies to the list of files to parse
 		unparsed_files.extend(dependent_wing_files);
