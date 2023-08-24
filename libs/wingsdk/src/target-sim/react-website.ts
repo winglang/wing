@@ -1,3 +1,4 @@
+import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import { ReactWebsiteSchema, REACT_WEBSITE_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
@@ -5,7 +6,6 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { IInflightHost, Resource } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
-import { Construct } from "constructs";
 
 export class ReactWebsite
   extends cloud.ReactWebsite

@@ -1,14 +1,13 @@
-import { Construct } from "constructs";
-import { core } from "..";
-
-import * as cloud from "../cloud";
-import { S3Object } from "../.gen/providers/aws/s3-object";
-import { promisify } from "util";
-import { exec } from "child_process";
-import { Resource } from "../std";
-import { Website } from "./website";
+import { execSync } from "child_process";
 import { unlinkSync } from "fs";
 import { join } from "path";
+import { Construct } from "constructs";
+import { Website } from "./website";
+import { core } from "..";
+
+import { S3Object } from "../.gen/providers/aws/s3-object";
+import * as cloud from "../cloud";
+import { Resource } from "../std";
 
 /**
  * AWS implementation of `cloud.ReactWebsite`.
@@ -20,14 +19,11 @@ export class ReactWebsite extends cloud.ReactWebsite {
     super(scope, id, props);
   }
 
-  async _preSynthesize() {
-    const { stderr } = await promisify(exec)(this._startCommand, {
+  public _preSynthesize() {
+    execSync(this._startCommand, {
       cwd: this._projectPath,
       maxBuffer: 10 * 1024 * 1024,
     });
-    if (stderr) {
-      throw new Error(stderr);
-    }
 
     unlinkSync(join(this._buildPath, "/wing.js"));
 

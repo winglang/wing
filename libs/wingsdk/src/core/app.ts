@@ -138,7 +138,7 @@ export abstract class App extends Construct {
   /**
    * Synthesize the app into an artifact.
    */
-  public abstract synth(): Promise<string>;
+  public abstract synth(): string;
 
   /**
    * Creates a new object of the given FQN.
@@ -232,12 +232,10 @@ export abstract class App extends Construct {
   }
 }
 
-export async function preSynthesizeAllConstructs(app: App): Promise<void> {
-  const promises = [];
+export function preSynthesizeAllConstructs(app: App): void {
   for (const c of app.node.findAll()) {
     if (typeof (c as IResource)._preSynthesize === "function") {
-      promises.push((c as IResource)._preSynthesize());
+      (c as IResource)._preSynthesize();
     }
   }
-  await Promise.all(promises);
 }

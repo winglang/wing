@@ -84,13 +84,13 @@ export abstract class CdktfApp extends App {
    * This method returns a cleaned snapshot of the resulting Terraform manifest
    * for unit testing.
    */
-  public async synth(): Promise<string> {
+  public synth(): string {
     if (this.synthed) {
       return this.synthedOutput!;
     }
 
     // call preSynthesize() on every construct in the tree
-    await preSynthesizeAllConstructs(this);
+    preSynthesizeAllConstructs(this);
 
     // synthesize Terraform files in `outdir/.tmp.cdktf.out/stacks/root`
     this.pluginManager.preSynth(this);

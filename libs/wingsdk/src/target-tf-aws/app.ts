@@ -5,6 +5,7 @@ import { Counter } from "./counter";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
+import { ReactWebsite } from "./react-website";
 import { Redis } from "./redis";
 import { Schedule } from "./schedule";
 import { Secret } from "./secret";
@@ -41,7 +42,6 @@ import { TABLE_FQN, REDIS_FQN } from "../ex";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { CdktfApp } from "../shared-tf/app";
 import { TEST_RUNNER_FQN } from "../std";
-import { ReactWebsite } from "./react-website";
 
 /**
  * An app that knows how to synthesize constructs into a Terraform configuration

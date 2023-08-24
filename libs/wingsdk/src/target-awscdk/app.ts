@@ -112,13 +112,13 @@ export class App extends CoreApp {
    * This method returns a cleaned snapshot of the resulting CDK template
    * for unit testing.
    */
-  public async synth(): Promise<string> {
+  public synth(): string {
     if (this.synthed) {
       return this.synthedOutput!;
     }
 
     // call preSynthesize() on every construct in the tree
-    await preSynthesizeAllConstructs(this);
+    preSynthesizeAllConstructs(this);
 
     // synthesize cdk.Stack files in `outdir/cdk.out`
     this.pluginManager.preSynth(this);

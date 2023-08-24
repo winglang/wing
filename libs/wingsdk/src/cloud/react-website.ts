@@ -1,9 +1,9 @@
 import { isAbsolute, join, resolve } from "path";
 import { Construct } from "constructs";
+import { BaseWebsiteProps, Website } from "./website";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { Resource } from "../std";
-import { BaseWebsiteProps, Website } from "./website";
 
 const DEFAULT_BUILD_FOLDER = "/build";
 const DEFAULT_START_COMMAND = "npm run start";

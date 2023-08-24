@@ -1,3 +1,7 @@
+import { exec } from "child_process";
+import { writeFileSync } from "fs";
+import { join } from "path";
+import { promisify } from "util";
 import {
   REACT_WEBSITE_TYPE,
   ReactWebsiteAttributes,
@@ -9,10 +13,6 @@ import {
   ISimulatorContext,
   ISimulatorResourceInstance,
 } from "../testing/simulator";
-import { exec } from "child_process";
-import { join } from "path";
-import { writeFileSync } from "fs";
-import { promisify } from "util";
 
 export class ReactWebsite
   implements IReactWebsiteClient, ISimulatorResourceInstance
