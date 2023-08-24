@@ -57,41 +57,31 @@ jobs:
         run: |
           git config --global core.hooksPath /dev/null
 
+      - name: Update PR Branch
+        uses: juliangruber/update-pull-request-branch-action@v1
+        if: steps.download-artifacts.outputs.found_artifact == 'true'
+        with:
+          github_token: ${{ secrets.MUTATION_TOKEN }}
+          number: ${{ github.event.workflow_run.pull_requests[0].number }}
+
       - name: Checkout Workflow Branch
         if: steps.download-artifacts.outputs.found_artifact == 'true'
         uses: actions/checkout@v3
         with:
-          token: ${{secrets.MUTATION_TOKEN}}
+          token: ${{ secrets.MUTATION_TOKEN }}
           ref: ${{ github.event.workflow_run.head_branch }}
           repository: ${{ github.event.workflow_run.head_repository.full_name }}
           path: repo
 
       - id: self_mutation
         if: steps.download-artifacts.outputs.found_artifact == 'true'
-        name: Apply downloaded pathes
+        name: Apply downloaded patches
         working-directory: repo
         env:
           HEAD_REF: ${{ github.event.workflow_run.head_branch }}
         run: |
           git config user.name "monada-bot[bot]"
           git config user.email "monabot@monada.co"
-
-          # if ../patches/update.diff/update.diff exists, apply it first
-          UPDATE_PATCH_FILE="../patches/update.diff/update.diff"
-          if [ -f $UPDATE_PATCH_FILE ]; then
-            echo "Updating branch"
-            git apply --binary $UPDATE_PATCH_FILE
-            if [ $? -eq 0 ]; then
-              git add --all
-              git commit -s -m "Merge branch 'main' into $HEAD_REF"
-              echo "Patch applied successfully"
-              rm $UPDATE_PATCH_FILE
-            else
-              echo "Patch failed to apply"
-              cat $UPDATE_PATCH_FILE
-              exit 1
-            fi
-          fi
 
           for f in $(find ../patches/*.diff/*.diff); do
             echo "Applying $f"
