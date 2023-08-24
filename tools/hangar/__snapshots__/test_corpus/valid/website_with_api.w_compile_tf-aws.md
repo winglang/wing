@@ -151,7 +151,7 @@ module.exports = function({  }) {
         },
         "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
         "triggers": {
-          "redeployment": "968b3a7209054cfcc312829735646935481807e4"
+          "redeployment": "53d34a77ebc006529cbee88240e663619396c753"
         }
       }
     },
@@ -515,21 +515,6 @@ module.exports = function({  }) {
         },
         "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.id}",
         "policy": "${data.aws_iam_policy_document.cloudWebsite_AllowDistributionReadOnly_89DC4FD0.json}"
-      }
-    },
-    "aws_s3_bucket_public_access_block": {
-      "cloudWebsite_PublicAccessBlock_18A70311": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Website/PublicAccessBlock",
-            "uniqueId": "cloudWebsite_PublicAccessBlock_18A70311"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {

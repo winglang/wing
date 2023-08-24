@@ -921,34 +921,6 @@ module.exports = function({ $b }) {
         ]
       }
     },
-    "aws_s3_bucket_public_access_block": {
-      "b_PublicAccessBlock_D351EBD6": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/b/PublicAccessBlock",
-            "uniqueId": "b_PublicAccessBlock_D351EBD6"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.b.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      },
-      "other_PublicAccessBlock_6FF8D942": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/other/PublicAccessBlock",
-            "uniqueId": "other_PublicAccessBlock_6FF8D942"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.other.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      }
-    },
     "aws_s3_bucket_server_side_encryption_configuration": {
       "b_Encryption_AF1DCBD9": {
         "//": {

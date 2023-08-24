@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpLink, wsLink, splitLink, createWSClient } from "@trpc/client";
 import { Mode } from "@wingconsole/design-system";
 import { Trace } from "@wingconsole/server";
+import { useEffect, useMemo } from "react";
 
 import { App } from "./App.js";
 import { AppContext } from "./AppContext.js";
@@ -58,7 +59,48 @@ export const Console = ({
 
   let windowTitle = title ?? "Wing Console";
 
-  const appMode = layout === LayoutType.Default ? "local" : "remote";
+  const appMode = useMemo(() => {
+    return layout === LayoutType.Default || layout === LayoutType.Vscode
+      ? "local"
+      : "remote";
+  }, [layout]);
+
+  // This is a workaround for handling copy/paste when running in VSCode
+  // There is an open issue in VSCode repo: https://github.com/microsoft/vscode/issues/129178
+  useEffect(() => {
+    if (layout !== LayoutType.Vscode) {
+      return;
+    }
+
+    const vscodeCommands = (event: KeyboardEvent) => {
+      if (!(event.ctrlKey || event.metaKey)) {
+        return;
+      }
+      switch (event.code) {
+        case "KeyC": {
+          document.execCommand("copy");
+          break;
+        }
+        case "KeyX": {
+          document.execCommand("cut");
+          break;
+        }
+        case "KeyV": {
+          document.execCommand("paste");
+          break;
+        }
+        case "KeyA": {
+          document.execCommand("selectAll");
+        }
+      }
+    };
+
+    window.addEventListener("keydown", vscodeCommands);
+    return () => {
+      window.removeEventListener("keydown", vscodeCommands);
+    };
+  }, [layout]);
+
   return (
     <AppContext.Provider value={{ appMode, title: windowTitle }}>
       <trpc.Provider client={trpcClient} queryClient={queryClient}>

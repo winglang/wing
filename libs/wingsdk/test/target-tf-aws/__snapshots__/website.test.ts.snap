@@ -106,15 +106,6 @@ exports[`default website behavior 1`] = `
         "policy": "\${data.aws_iam_policy_document.Website_AllowDistributionReadOnly_24CFF6C0.json}",
       },
     },
-    "aws_s3_bucket_public_access_block": {
-      "Website_PublicAccessBlock_C196C11D": {
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true,
-      },
-    },
     "aws_s3_bucket_server_side_encryption_configuration": {
       "Website_Encryption_5BBFE612": {
         "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
@@ -234,14 +225,6 @@ exports[`default website behavior 2`] = `
                     },
                     "id": "File--inner-folder--a.html",
                     "path": "root/Default/Website/File--inner-folder--a.html",
-                  },
-                  "PublicAccessBlock": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "PublicAccessBlock",
-                    "path": "root/Default/Website/PublicAccessBlock",
                   },
                   "WebsiteBucket": {
                     "constructInfo": {
@@ -436,15 +419,6 @@ exports[`website with add_json 1`] = `
         "policy": "\${data.aws_iam_policy_document.Website_AllowDistributionReadOnly_24CFF6C0.json}",
       },
     },
-    "aws_s3_bucket_public_access_block": {
-      "Website_PublicAccessBlock_C196C11D": {
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true,
-      },
-    },
     "aws_s3_bucket_server_side_encryption_configuration": {
       "Website_Encryption_5BBFE612": {
         "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
@@ -581,14 +555,6 @@ exports[`website with add_json 2`] = `
                     },
                     "id": "File-config.json",
                     "path": "root/Default/Website/File-config.json",
-                  },
-                  "PublicAccessBlock": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "PublicAccessBlock",
-                    "path": "root/Default/Website/PublicAccessBlock",
                   },
                   "WebsiteBucket": {
                     "constructInfo": {

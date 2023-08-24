@@ -116,7 +116,7 @@ Duration <DURATION>"
 
 exports[`struct_from_json_1.w 1`] = `
 "ERROR: unable to parse Person:
- instance.age is not of a type(s) number
+- instance.age is not of a type(s) number
 
 ../../../examples/tests/error/target/test/struct_from_json_1.wsim.[REDACTED].tmp/.wing/preflight.js:9
        const Person = require(\\"./Person.Struct.js\\")($stdlib.std.Struct);
@@ -134,7 +134,7 @@ Duration <DURATION>"
 
 exports[`struct_from_json_2.w 1`] = `
 "ERROR: unable to parse Student:
- instance.age is not of a type(s) number
+- instance.age is not of a type(s) number
 - instance requires property \\"advisor\\"
 
 ../../../examples/tests/error/target/test/struct_from_json_2.wsim.[REDACTED].tmp/.wing/preflight.js:11
@@ -153,7 +153,7 @@ Duration <DURATION>"
 
 exports[`struct_from_json_3.w 1`] = `
 "ERROR: unable to parse Student:
- instance.age is not of a type(s) number
+- instance.age is not of a type(s) number
 - instance.advisors[1].id is not of a type(s) string
 
 ../../../examples/tests/error/target/test/struct_from_json_3.wsim.[REDACTED].tmp/.wing/preflight.js:11
@@ -172,7 +172,7 @@ Duration <DURATION>"
 
 exports[`struct_from_json_4.w 1`] = `
 "ERROR: unable to parse Student:
- instance.advisors contains duplicate item
+- instance.advisors contains duplicate item
 
 ../../../examples/tests/error/target/test/struct_from_json_4.wsim.[REDACTED].tmp/.wing/preflight.js:11
        const Student = require(\\"./Student.Struct.js\\")($stdlib.std.Struct);
@@ -190,7 +190,7 @@ Duration <DURATION>"
 
 exports[`struct_from_json_5.w 1`] = `
 "ERROR: unable to parse Foo:
- instance.names.c is not of a type(s) string
+- instance.names.c is not of a type(s) string
 
 ../../../examples/tests/error/target/test/struct_from_json_5.wsim.[REDACTED].tmp/.wing/preflight.js:9
        const Foo = require(\\"./Foo.Struct.js\\")($stdlib.std.Struct);

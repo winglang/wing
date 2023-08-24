@@ -310,21 +310,6 @@ module.exports = function({  }) {
         "force_destroy": false
       }
     },
-    "aws_s3_bucket_public_access_block": {
-      "PreflightClass_cloudBucket_PublicAccessBlock_0331EFEC": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/PreflightClass/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "PreflightClass_cloudBucket_PublicAccessBlock_0331EFEC"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.PreflightClass_cloudBucket_05421049.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      }
-    },
     "aws_s3_bucket_server_side_encryption_configuration": {
       "PreflightClass_cloudBucket_Encryption_30FD2B0E": {
         "//": {

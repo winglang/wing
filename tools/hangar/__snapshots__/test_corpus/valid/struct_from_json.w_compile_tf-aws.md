@@ -227,6 +227,67 @@ module.exports = function(stdStruct) {
 
 ```
 
+## MyOtherStruct.Struct.js
+```js
+module.exports = function(stdStruct, fromInline) {
+  class MyOtherStruct {
+    static jsonSchema() {
+      return {
+        id: "/MyOtherStruct",
+        type: "object",
+        properties: {
+          data: { "$ref": "#/$defs/MyStruct" },
+        },
+        required: [
+          "data",
+        ],
+        $defs: {
+          "MyStruct": { type: "object", "properties": require("./MyStruct.Struct.js")().jsonSchema().properties },
+        }
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.jsonSchema())
+    }
+    static _toInflightType(context) {
+      return fromInline(`require("./MyOtherStruct.Struct.js")(${ context._lift(stdStruct) })`);
+    }
+  }
+  return MyOtherStruct;
+};
+
+```
+
+## MyStruct.Struct.js
+```js
+module.exports = function(stdStruct, fromInline) {
+  class MyStruct {
+    static jsonSchema() {
+      return {
+        id: "/MyStruct",
+        type: "object",
+        properties: {
+          val: { type: "number" },
+        },
+        required: [
+          "val",
+        ],
+        $defs: {
+        }
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.jsonSchema())
+    }
+    static _toInflightType(context) {
+      return fromInline(`require("./MyStruct.Struct.js")(${ context._lift(stdStruct) })`);
+    }
+  }
+  return MyStruct;
+};
+
+```
+
 ## Person.Struct.js
 ```js
 module.exports = function(stdStruct) {
@@ -561,6 +622,7 @@ const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const externalStructs = require("./preflight.structs-1.js")({ $stdlib });
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -735,10 +797,24 @@ class $Root extends $stdlib.std.Resource {
     }
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:flight school student :)",new $Closure1(this,"$Closure1"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:lifting a student",new $Closure2(this,"$Closure2"));
+    const jj1 = ({"data": ({"val": 10})});
+    const externalBar = (externalStructs.MyOtherStruct.fromJson(jj1));
+    {((cond) => {if (!cond) throw new Error("assertion failed: externalBar.data.val == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(externalBar.data.val,10)))};
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "struct_from_json", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+
+```
+
+## preflight.structs-1.js
+```js
+module.exports = function({ $stdlib }) {
+  const std = $stdlib.std;
+  const MyStruct = require("./MyStruct.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
+  const MyOtherStruct = require("./MyOtherStruct.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
+  return { MyStruct, MyOtherStruct };
+};
 
 ```
 

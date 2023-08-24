@@ -221,21 +221,6 @@ module.exports = function({  }) {
         "force_destroy": false
       }
     },
-    "aws_s3_bucket_public_access_block": {
-      "KeyValueStore_cloudBucket_PublicAccessBlock_A373F90E": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/KeyValueStore/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "KeyValueStore_cloudBucket_PublicAccessBlock_A373F90E"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      }
-    },
     "aws_s3_bucket_server_side_encryption_configuration": {
       "KeyValueStore_cloudBucket_Encryption_D3F8A987": {
         "//": {

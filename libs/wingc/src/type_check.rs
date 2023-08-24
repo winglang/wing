@@ -1793,7 +1793,7 @@ impl<'a> TypeChecker<'a> {
 						(self.types.number(), Phase::Independent)
 					}
 					BinaryOperator::Equal | BinaryOperator::NotEqual => {
-						self.validate_type(rtype, ltype, exp);
+						self.validate_type_binary_equality(rtype, ltype, exp);
 						(self.types.bool(), Phase::Independent)
 					}
 					BinaryOperator::Less
@@ -2581,6 +2581,39 @@ impl<'a> TypeChecker<'a> {
 					),
 				);
 			}
+		}
+	}
+
+	/// Validate that the given type is a subtype (or same) as the expected type while allowing
+	/// collection types to have different mutability (e.g. Array and MutArray).
+	///
+	/// Returns the given type on success, otherwise returns the expected type.
+	fn validate_type_binary_equality(
+		&mut self,
+		actual_type: TypeRef,
+		expected_type: TypeRef,
+		span: &impl Spanned,
+	) -> TypeRef {
+		if let (
+			Type::Array(inner_actual) | Type::MutArray(inner_actual),
+			Type::Array(inner_expected) | Type::MutArray(inner_expected),
+		) = (&*actual_type, &*expected_type)
+		{
+			self.validate_type_binary_equality(*inner_actual, *inner_expected, span)
+		} else if let (
+			Type::Map(inner_actual) | Type::MutMap(inner_actual),
+			Type::Map(inner_expected) | Type::MutMap(inner_expected),
+		) = (&*actual_type, &*expected_type)
+		{
+			self.validate_type_binary_equality(*inner_actual, *inner_expected, span)
+		} else if let (
+			Type::Set(inner_actual) | Type::MutSet(inner_actual),
+			Type::Set(inner_expected) | Type::MutSet(inner_expected),
+		) = (&*actual_type, &*expected_type)
+		{
+			self.validate_type_binary_equality(*inner_actual, *inner_expected, span)
+		} else {
+			self.validate_type_in(actual_type, &[expected_type], span)
 		}
 	}
 
@@ -4560,8 +4593,6 @@ impl<'a> TypeChecker<'a> {
 								}
 							}
 						}
-						let lookup = env.lookup(&s.name, None);
-						let type_ = lookup.unwrap().as_type().unwrap();
 
 						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_STRUCT, vec![type_]);
 						let v = self.get_property_from_class_like(new_class.as_class().unwrap(), property, true);

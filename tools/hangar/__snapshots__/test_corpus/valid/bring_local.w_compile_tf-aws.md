@@ -318,21 +318,6 @@ module.exports = function({  }) {
         "force_destroy": false
       }
     },
-    "aws_s3_bucket_public_access_block": {
-      "file1Store_cloudBucket_PublicAccessBlock_542A96A5": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/file1.Store/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "file1Store_cloudBucket_PublicAccessBlock_542A96A5"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.file1Store_cloudBucket_86CE87B1.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      }
-    },
     "aws_s3_bucket_server_side_encryption_configuration": {
       "file1Store_cloudBucket_Encryption_387D9114": {
         "//": {
@@ -613,7 +598,7 @@ module.exports = function({ $stdlib }) {
     })({})
   ;
   const Point = require("./Point.Struct.js")($stdlib.std.Struct);
-  return { Util, Store, Color };
+  return { Util, Store, Color, Point };
 };
 
 ```

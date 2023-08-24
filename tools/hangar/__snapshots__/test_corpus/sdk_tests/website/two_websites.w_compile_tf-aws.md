@@ -296,8 +296,8 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8683851",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_16": "${jsonencode(\"https://${aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name}\")}",
-            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_32": "${jsonencode(\"https://${aws_cloudfront_distribution.website-2_Distribution_F1FA4680.domain_name}\")}"
+            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_15": "${jsonencode(\"https://${aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name}\")}",
+            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_30": "${jsonencode(\"https://${aws_cloudfront_distribution.website-2_Distribution_F1FA4680.domain_name}\")}"
           }
         },
         "function_name": "Handler-c8683851",
@@ -365,34 +365,6 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
         },
         "bucket": "${aws_s3_bucket.website-2_WebsiteBucket_59576A0C.id}",
         "policy": "${data.aws_iam_policy_document.website-2_AllowDistributionReadOnly_994269D9.json}"
-      }
-    },
-    "aws_s3_bucket_public_access_block": {
-      "cloudWebsite_PublicAccessBlock_18A70311": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Website/PublicAccessBlock",
-            "uniqueId": "cloudWebsite_PublicAccessBlock_18A70311"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      },
-      "website-2_PublicAccessBlock_304A3A16": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/website-2/PublicAccessBlock",
-            "uniqueId": "website-2_PublicAccessBlock_304A3A16"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.website-2_WebsiteBucket_59576A0C.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
