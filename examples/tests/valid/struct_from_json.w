@@ -237,3 +237,15 @@ test "lifting a student" {
   assert(studentInflight1.dob.day == 10);
   assert(studentInflight1.dob.year == 2005);
 }
+
+// bring structs from other files
+bring "./subdir/structs.w" as externalStructs;
+
+let jj1 = {
+  data: {
+    val: 10
+  }
+};
+
+let externalBar = externalStructs.MyOtherStruct.fromJson(jj1);
+assert(externalBar.data.val == 10);
