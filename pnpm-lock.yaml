@@ -37,6 +37,9 @@ importers:
       changelogen:
         specifier: ^0.5.3
         version: 0.5.3
+      generate-workspace:
+        specifier: workspace:^
+        version: link:tools/generate-workspace
       semver:
         specifier: ^7.3.8
         version: 7.5.2
@@ -953,6 +956,8 @@ importers:
         specifier: ^5.1.3
         version: 5.1.3
 
+  docs/docs: {}
+
   examples/tests/error: {}
 
   examples/tests/invalid:
@@ -1283,6 +1288,34 @@ importers:
       semver:
         specifier: ^7.5.2
         version: 7.5.2
+      tsx:
+        specifier: ^3.12.7
+        version: 3.12.7
+    devDependencies:
+      '@types/fs-extra':
+        specifier: ^11
+        version: 11.0.1
+      '@types/node':
+        specifier: ^18.16.18
+        version: 18.16.18
+      '@types/semver':
+        specifier: ^7.5.0
+        version: 7.5.0
+      typescript:
+        specifier: ^5.1.3
+        version: 5.1.3
+
+  tools/generate-workspace:
+    dependencies:
+      '@pnpm/find-workspace-dir':
+        specifier: ^6.0.2
+        version: 6.0.2
+      '@pnpm/workspace.find-packages':
+        specifier: ^1.0.1
+        version: 1.0.1(@pnpm/logger@5.0.0)
+      npm-which:
+        specifier: ^3.0.1
+        version: 3.0.1
       tsx:
         specifier: ^3.12.7
         version: 3.12.7
