@@ -58,11 +58,16 @@ jobs:
           git config --global core.hooksPath /dev/null
 
       - name: Update PR Branch
-        uses: juliangruber/update-pull-request-branch-action@v1
-        if: steps.download-artifacts.outputs.found_artifact == 'true'
+        uses: actions/github-script@v6
+        if: github.event.workflow_run.event == 'pull_request' && steps.download-artifacts.outputs.found_artifact == 'true'
         with:
-          github_token: ${{ secrets.MUTATION_TOKEN }}
-          number: ${{ github.event.workflow_run.pull_requests[0].number }}
+          github-token: ${{ secrets.MUTATION_TOKEN }}
+          script: |
+            await github.rest.pulls.updateBranch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.workflow_run.pull_requests[0].number
+            });
 
       - name: Checkout Workflow Branch
         if: steps.download-artifacts.outputs.found_artifact == 'true'
@@ -106,13 +111,7 @@ jobs:
         with:
           github-token: ${{ secrets.MUTATION_TOKEN }}
           script: |
-            const pulls = await github.rest.pulls.list({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              head: `${context.payload.workflow_run.head_repository.full_name}:${context.payload.workflow_run.head_branch}`
-            });
-
-            const prNumber = pulls.data[0].number;
+            const prNumber = context.payload.workflow_run.pull_requests[0].number;
             const labels = ["⚠️ pr/review-mutation"];
 
             await github.rest.issues.addLabels({
