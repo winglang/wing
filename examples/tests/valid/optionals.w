@@ -66,6 +66,12 @@ if let var z = a {
   assert(z == 2);
 }
 
+// extra space between if and let
+let b: num? = 1;
+if    let z = b {
+  assert(z == 1);
+}
+
 // Nested if lets
 if let parsedName = tryParseName("Good Name") {
   assert(parsedName.first == "Good");
