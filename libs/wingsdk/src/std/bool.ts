@@ -1,5 +1,5 @@
 import { Json } from "./json";
-import { Code, InflightClient } from "../core";
+import { InflightClient } from "../core";
 
 /**
  * Boolean
@@ -24,7 +24,7 @@ export class Boolean {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
 

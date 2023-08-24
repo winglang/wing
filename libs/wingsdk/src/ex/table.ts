@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Json, Resource } from "../std";
+import { Json, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Table`.
@@ -84,8 +84,8 @@ export abstract class Table extends Resource {
   constructor(scope: Construct, id: string, props: TableProps) {
     super(scope, id);
 
-    this.display.title = "Table";
-    this.display.description =
+    Node.of(this).title = "Table";
+    Node.of(this).description =
       "A cloud NoSQL database table that can be used to store and query data";
 
     if (!props.name) {
@@ -101,14 +101,17 @@ export abstract class Table extends Resource {
       throw new Error("No column is defined");
     }
     this.columns = props.columns;
+  }
 
-    this._addInflightOps(
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [
       TableInflightMethods.INSERT,
       TableInflightMethods.UPDATE,
       TableInflightMethods.DELETE,
       TableInflightMethods.GET,
-      TableInflightMethods.LIST
-    );
+      TableInflightMethods.LIST,
+    ];
   }
 
   /**

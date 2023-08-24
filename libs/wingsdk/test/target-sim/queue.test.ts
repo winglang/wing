@@ -6,7 +6,7 @@ import {
   waitUntilTraceCount,
 } from "./util";
 import * as cloud from "../../src/cloud";
-import { Duration } from "../../src/std";
+import { Duration, Node } from "../../src/std";
 import { QUEUE_TYPE } from "../../src/target-sim/schema-resources";
 import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
@@ -274,7 +274,7 @@ test("queue has no display hidden property", async () => {
   const queue = app.node.tryFindChild("my_queue") as cloud.Queue;
 
   // THEN
-  expect(queue.display.hidden).toBeUndefined();
+  expect(Node.of(queue).hidden).toBeUndefined();
   expect(treeJson.tree.children).toBeDefined();
   expect(treeJson.tree.children).not.toMatchObject({
     my_queue: {
@@ -295,8 +295,8 @@ test("queue has display title and description properties", async () => {
   const queue = app.node.tryFindChild("my_queue") as cloud.Queue;
 
   // THEN
-  expect(queue.display.title).toBeDefined();
-  expect(queue.display.description).toBeDefined();
+  expect(Node.of(queue).title).toBeDefined();
+  expect(Node.of(queue).description).toBeDefined();
   expect(treeJson.tree.children).toMatchObject({
     my_queue: {
       display: {
