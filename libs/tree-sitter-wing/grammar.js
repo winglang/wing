@@ -286,7 +286,8 @@ module.exports = grammar({
 
     elif_let_block: ($) =>
       seq(
-        "elif let",
+        "elif",
+        "let",
         optional(field("reassignable", $.reassignable)),
         field("name", $.identifier),
         "=",
