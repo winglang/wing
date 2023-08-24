@@ -540,8 +540,9 @@ impl<'a> JSifier<'a> {
 								ExprKind::Reference(Reference::InstanceMember { object, .. }) => {
 									self.jsify_expression(&object, ctx)
 								},
-                ExprKind::Reference(Reference::TypeMember { .. }) => {
-                  expr_string.clone().split(".").next().unwrap_or("").to_string()
+                ExprKind::Reference(Reference::TypeMember { property, .. }) => {
+                  // remove the property name from the expression string
+                  expr_string.split(".").filter(|s| s != &property.name).join(".")
                 },
 								_ => expr_string,
 							}
@@ -1556,8 +1557,9 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 			}
 			// interfaces are bringable, but there's nothing to emit
 			StmtKind::Interface(_) => {}
-			// structs are bringable, but there's nothing to emit
-			StmtKind::Struct { .. } => {}
+			StmtKind::Struct { name, .. } => {
+				symbols.push(name.clone());
+			}
 			StmtKind::Enum { name, .. } => {
 				symbols.push(name.clone());
 			}
