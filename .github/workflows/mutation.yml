@@ -64,6 +64,7 @@ jobs:
           script: |
             // use API to get the PR data since we can't rely on the context across forks
             const pulls = await github.rest.pulls.list({
+              per_page: 1,
               owner: context.repo.owner,
               repo: context.repo.repo,
               head: `${context.payload.workflow_run.head_repository.full_name}:${context.payload.workflow_run.head_branch}`
@@ -146,6 +147,7 @@ jobs:
           script: |
             // use API to get the PR number since we can't rely on the context across forks
             const pulls = await github.rest.pulls.list({
+              per_page: 1,
               owner: context.repo.owner,
               repo: context.repo.repo,
               head: `${context.payload.workflow_run.head_repository.full_name}:${context.payload.workflow_run.head_branch}`
