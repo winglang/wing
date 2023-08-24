@@ -229,7 +229,7 @@ module.exports = function(stdStruct) {
 
 ## MyOtherStruct.Struct.js
 ```js
-module.exports = function(stdStruct, fromInline) {
+module.exports = function(stdStruct) {
   class MyOtherStruct {
     static jsonSchema() {
       return {
@@ -250,7 +250,7 @@ module.exports = function(stdStruct, fromInline) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return fromInline(`require("./MyOtherStruct.Struct.js")(${ context._lift(stdStruct) })`);
+      return `require("./MyOtherStruct.Struct.js")(${ context._lift(stdStruct) })`;
     }
   }
   return MyOtherStruct;
@@ -260,7 +260,7 @@ module.exports = function(stdStruct, fromInline) {
 
 ## MyStruct.Struct.js
 ```js
-module.exports = function(stdStruct, fromInline) {
+module.exports = function(stdStruct) {
   class MyStruct {
     static jsonSchema() {
       return {
@@ -280,7 +280,7 @@ module.exports = function(stdStruct, fromInline) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return fromInline(`require("./MyStruct.Struct.js")(${ context._lift(stdStruct) })`);
+      return `require("./MyStruct.Struct.js")(${ context._lift(stdStruct) })`;
     }
   }
   return MyStruct;
@@ -811,8 +811,8 @@ new $App({ outdir: $outdir, name: "struct_from_json", rootConstruct: $Root, plug
 ```js
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
-  const MyStruct = require("./MyStruct.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
-  const MyOtherStruct = require("./MyOtherStruct.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
+  const MyStruct = require("./MyStruct.Struct.js")($stdlib.std.Struct);
+  const MyOtherStruct = require("./MyOtherStruct.Struct.js")($stdlib.std.Struct);
   return { MyStruct, MyOtherStruct };
 };
 
