@@ -178,7 +178,9 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 				self.visit_expr(value);
 				self.visit_scope(statements);
 				for elif in elif_statements {
-					self.visit_symbol(&elif.var_name);
+				  self.with_scope(&elif.statements, |v| {
+				  	v.visit_symbol(&elif.var_name);
+				  });
 					self.visit_expr(&elif.value);
 					self.visit_scope(&elif.statements);
 				}
