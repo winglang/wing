@@ -274,7 +274,8 @@ module.exports = grammar({
 
     if_let_statement: ($) =>
       seq(
-        "if let",
+        "if",
+        "let",
         optional(field("reassignable", $.reassignable)),
         field("name", $.identifier),
         "=",
