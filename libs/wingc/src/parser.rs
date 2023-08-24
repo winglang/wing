@@ -754,7 +754,7 @@ impl<'s> Parser<'s> {
 						.err();
 				})?;
 
-			// If the package.json has `wing.entrypoint` specified, then we treat it as a Wing library
+			// If the package.json has a `wing` field, then we treat it as a Wing library
 			if is_wing_library(&Path::new(&module_dir)) {
 				return if let Some(alias) = alias {
 					let root_files = get_wing_library_root_files(&Path::new(&module_dir));
@@ -768,7 +768,7 @@ impl<'s> Parser<'s> {
 					// generate a file name for their concatenation
 					let fake_path = PathBuf::from(module_dir).join("$root.w");
 
-					// Record that the current file depends on the library's entrypoint files
+					// track that the current file depends on the concatenated file, so it will get parsed downstream
 					self
 						.referenced_wing_files
 						.borrow_mut()
