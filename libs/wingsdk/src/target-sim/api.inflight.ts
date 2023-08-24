@@ -60,17 +60,21 @@ export class Api
       } = cors;
       this.app.use((req, res, next) => {
         const responseHeaders: Record<string, string> = {};
-        const method = req.method && req.method.toUpperCase && req.method.toUpperCase();
+        const method =
+          req.method && req.method.toUpperCase && req.method.toUpperCase();
 
         if (origins && origins.length > 0) {
           responseHeaders["Access-Control-Allow-Origin"] = origins.join(",");
         }
         if (exposedHeaders && exposedHeaders.length > 0) {
-          responseHeaders["Access-Control-Expose-Headers"] = exposedHeaders.join(",");
+          responseHeaders["Access-Control-Expose-Headers"] =
+            exposedHeaders.join(",");
         }
-        responseHeaders["Access-Control-Allow-Credentials"] = allowCredentials ? "true" : "false";
+        responseHeaders["Access-Control-Allow-Credentials"] = allowCredentials
+          ? "true"
+          : "false";
 
-        if (method === 'OPTIONS') {
+        if (method === "OPTIONS") {
           if (headers && headers.length > 0) {
             responseHeaders["Access-Control-Allow-Headers"] = headers.join(",");
           }

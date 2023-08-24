@@ -1,3 +1,4 @@
+import { Construct } from "constructs";
 import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
@@ -9,7 +10,6 @@ import * as core from "../core";
 import { Connections } from "../core";
 import { Display, IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
-import { Construct } from "constructs";
 
 /**
  * Simulator implementation of `cloud.Api`.
@@ -24,7 +24,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   constructor(scope: Construct, id: string, props: cloud.ApiProps = {}) {
     super(scope, id, props);
 
-    this.cors = props.cors
+    this.cors = props.cors;
   }
 
   public get url(): string {
