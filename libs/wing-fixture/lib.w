@@ -1,4 +1,5 @@
 bring cloud;
+bring "./subdir/util.w" as myutil;
 
 class Store {
   data: cloud.Bucket;
@@ -7,6 +8,6 @@ class Store {
   }
 
   inflight set(message: str) {
-    this.data.put("data.txt", message);
+    this.data.put("data.txt", myutil.double(message));
   }
 }

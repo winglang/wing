@@ -1,17 +1,32 @@
 # [bring_wing_library.w](../../../../../examples/tests/valid/bring_wing_library.w) | compile | tf-aws
 
-## inflight.Store-1.js
+## inflight.Store-2.js
 ```js
-module.exports = function({  }) {
+module.exports = function({ $myutil_Util }) {
   class Store {
     constructor({ $this_data }) {
       this.$this_data = $this_data;
     }
     async set(message) {
-      (await this.$this_data.put("data.txt",message));
+      (await this.$this_data.put("data.txt",(await $myutil_Util.double(message))));
     }
   }
   return Store;
+}
+
+```
+
+## inflight.Util-1.js
+```js
+module.exports = function({  }) {
+  class Util {
+    constructor({  }) {
+    }
+    static async double(msg) {
+      return String.raw({ raw: ["", "", ""] }, msg, msg);
+    }
+  }
+  return Util;
 }
 
 ```
@@ -86,7 +101,7 @@ const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
-const fixture = require("./preflight.lib-1.js")({ $stdlib });
+const fixture = require("./preflight.lib-2.js")({ $stdlib });
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -98,11 +113,12 @@ new $App({ outdir: $outdir, name: "bring_wing_library", rootConstruct: $Root, pl
 
 ```
 
-## preflight.lib-1.js
+## preflight.lib-2.js
 ```js
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   const cloud = $stdlib.cloud;
+  const myutil = require("./preflight.util-1.js")({ $stdlib });
   class Store extends $stdlib.std.Resource {
     constructor(scope, id, ) {
       super(scope, id);
@@ -111,7 +127,8 @@ module.exports = function({ $stdlib }) {
     }
     static _toInflightType(context) {
       return $stdlib.core.NodeJsCode.fromInline(`
-        require("./inflight.Store-1.js")({
+        require("./inflight.Store-2.js")({
+          $myutil_Util: ${context._lift(myutil.Util)},
         })
       `);
     }
@@ -132,12 +149,45 @@ module.exports = function({ $stdlib }) {
         Store._registerBindObject(this.data, host, []);
       }
       if (ops.includes("set")) {
+        Store._registerBindObject(myutil.Util, host, ["double"]);
         Store._registerBindObject(this.data, host, ["put"]);
       }
       super._registerBind(host, ops);
     }
   }
   return { Store };
+};
+
+```
+
+## preflight.util-1.js
+```js
+module.exports = function({ $stdlib }) {
+  const std = $stdlib.std;
+  class Util extends $stdlib.std.Resource {
+    constructor(scope, id, ) {
+      super(scope, id);
+      this._addInflightOps("double", "$inflight_init");
+    }
+    static _toInflightType(context) {
+      return $stdlib.core.NodeJsCode.fromInline(`
+        require("./inflight.Util-1.js")({
+        })
+      `);
+    }
+    _toInflight() {
+      return $stdlib.core.NodeJsCode.fromInline(`
+        (await (async () => {
+          const UtilClient = ${Util._toInflightType(this).text};
+          const client = new UtilClient({
+          });
+          if (client.$inflight_init) { await client.$inflight_init(); }
+          return client;
+        })())
+      `);
+    }
+  }
+  return { Util };
 };
 
 ```
