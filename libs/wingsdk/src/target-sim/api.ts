@@ -81,7 +81,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   ): void {
     this._validatePath(path);
 
-    this._addToSpec(path, method, undefined);
+    this._addToSpec(path, method, undefined, this.corsOptions);
 
     const fn = this.createOrGetFunction(inflight, props, path, method);
     Connections.of(this).add({
@@ -209,7 +209,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
       path: this.node.path,
       props: {
         openApiSpec: this._getApiSpec(),
-        cors: this.corsEnabled ? this.corsOptions : undefined,
+        corsOptions: this.corsOptions,
       },
       attrs: {} as any,
     };

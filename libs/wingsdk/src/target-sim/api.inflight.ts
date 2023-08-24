@@ -38,7 +38,7 @@ export class Api
     props;
     this.routes = [];
     this.context = context;
-    const { cors } = props;
+    const { corsOptions } = props;
 
     // Set up an express server that handles the routes.
     this.app = express();
@@ -49,15 +49,14 @@ export class Api
     this.app.use(express.text({ limit: "10mb", type: "*/*" }));
 
     // Set up CORS headers for options requests.
-    if (cors) {
-      // inspired by https://github.com/expressjs/cors/blob/f038e7722838fd83935674aa8c5bf452766741fb/lib/index.js#L159-L190
+    if (corsOptions) {
       const {
-        origins = ["*"],
-        methods = ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
-        headers = ["Content-Type", "Authorization"],
+        origins = [],
+        headers = [],
+        methods = [],
         exposedHeaders = [],
         allowCredentials = false,
-      } = cors;
+      } = corsOptions;
       this.app.use((req, res, next) => {
         const responseHeaders: Record<string, string> = {};
         const method =

@@ -141,16 +141,14 @@ export abstract class Api extends Resource {
     allowCredentials: false,
   };
 
-  protected corsOptions: ApiCorsOptions;
-  protected corsEnabled: boolean;
+  protected corsOptions?: ApiCorsOptions;
 
   constructor(scope: Construct, id: string, props: ApiProps = {}) {
     super(scope, id);
 
     props;
 
-    this.corsOptions = this._cors(props.corsOptions);
-    this.corsEnabled = props.cors ?? false;
+    this.corsOptions = props.cors ? this._cors(props.corsOptions) : undefined;
     this.display.title = "Api";
     this.display.description = "A REST API endpoint";
   }
@@ -288,7 +286,8 @@ export abstract class Api extends Resource {
   public _addToSpec(
     path: string,
     method: string,
-    apiSpecExtension: OpenApiSpecExtension
+    apiSpecExtension: OpenApiSpecExtension,
+    corsOptions?: ApiCorsOptions
   ) {
     if (this.apiSpec.paths[path]?.[method.toLowerCase()]) {
       throw new Error(
@@ -320,6 +319,19 @@ export abstract class Api extends Resource {
           "200": {
             description: "200 response",
             content: {},
+            ...(corsOptions && {
+              headers: {
+                "Access-Control-Allow-Origin": `'${corsOptions.origins?.join(
+                  ","
+                )}'`,
+                "Access-Control-Allow-Methods": `'${corsOptions.methods?.join(
+                  ","
+                )}'`,
+                "Access-Control-Allow-Headers": `'${corsOptions.headers?.join(
+                  ","
+                )}'`,
+              },
+            }),
           },
         },
         parameters: pathParameters,

@@ -40,10 +40,12 @@ const NAME_OPTS: NameOptions = {
  */
 export class Api extends cloud.Api {
   private readonly api: WingRestApi;
+
   constructor(scope: Construct, id: string, props: cloud.ApiProps = {}) {
     super(scope, id, props);
     this.api = new WingRestApi(this, "api", {
       apiSpec: this._getApiSpec(),
+      cors: this.corsOptions,
     });
   }
 
@@ -69,7 +71,7 @@ export class Api extends cloud.Api {
 
     const fn = this.addHandler(inflight);
     const apiSpecEndpoint = this.api.addEndpoint(path, "GET", fn);
-    this._addToSpec(path, "GET", apiSpecEndpoint);
+    this._addToSpec(path, "GET", apiSpecEndpoint, this.corsOptions);
 
     Connections.of(this).add({
       source: this,
@@ -96,7 +98,7 @@ export class Api extends cloud.Api {
 
     const fn = this.addHandler(inflight);
     const apiSpecEndpoint = this.api.addEndpoint(path, "POST", fn);
-    this._addToSpec(path, "POST", apiSpecEndpoint);
+    this._addToSpec(path, "POST", apiSpecEndpoint, this.corsOptions);
 
     Connections.of(this).add({
       source: this,
@@ -123,7 +125,7 @@ export class Api extends cloud.Api {
 
     const fn = this.addHandler(inflight);
     const apiSpecEndpoint = this.api.addEndpoint(path, "PUT", fn);
-    this._addToSpec(path, "PUT", apiSpecEndpoint);
+    this._addToSpec(path, "PUT", apiSpecEndpoint, this.corsOptions);
 
     Connections.of(this).add({
       source: this,
@@ -150,7 +152,7 @@ export class Api extends cloud.Api {
 
     const fn = this.addHandler(inflight);
     const apiSpecEndpoint = this.api.addEndpoint(path, "DELETE", fn);
-    this._addToSpec(path, "DELETE", apiSpecEndpoint);
+    this._addToSpec(path, "DELETE", apiSpecEndpoint, this.corsOptions);
 
     Connections.of(this).add({
       source: this,
@@ -177,7 +179,7 @@ export class Api extends cloud.Api {
 
     const fn = this.addHandler(inflight);
     const apiSpecEndpoint = this.api.addEndpoint(path, "PATCH", fn);
-    this._addToSpec(path, "PATCH", apiSpecEndpoint);
+    this._addToSpec(path, "PATCH", apiSpecEndpoint, this.corsOptions);
 
     Connections.of(this).add({
       source: this,
@@ -204,7 +206,7 @@ export class Api extends cloud.Api {
 
     const fn = this.addHandler(inflight);
     const apiSpecEndpoint = this.api.addEndpoint(path, "OPTIONS", fn);
-    this._addToSpec(path, "OPTIONS", apiSpecEndpoint);
+    this._addToSpec(path, "OPTIONS", apiSpecEndpoint, this.corsOptions);
 
     Connections.of(this).add({
       source: this,
@@ -231,7 +233,7 @@ export class Api extends cloud.Api {
 
     const fn = this.addHandler(inflight);
     const apiSpecEndpoint = this.api.addEndpoint(path, "HEAD", fn);
-    this._addToSpec(path, "HEAD", apiSpecEndpoint);
+    this._addToSpec(path, "HEAD", apiSpecEndpoint, this.corsOptions);
 
     Connections.of(this).add({
       source: this,
@@ -373,15 +375,19 @@ class WingRestApi extends Construct {
   public readonly stage: ApiGatewayStage;
   private readonly deployment: ApiGatewayDeployment;
   private readonly region: string;
+  private readonly cors?: cloud.ApiCorsOptions;
+
   constructor(
     scope: Construct,
     id: string,
     props: {
       apiSpec: OpenApiSpec;
+      cors?: cloud.ApiCorsOptions;
     }
   ) {
     super(scope, id);
 
+    this.cors = props.cors;
     this.region = (App.of(this) as App).region;
     this.api = new ApiGatewayRestApi(this, "api", {
       name: ResourceNames.generateName(this, NAME_OPTS),
@@ -440,6 +446,13 @@ class WingRestApi extends Construct {
    * @returns OpenApi extension object for the endpoint and handler
    */
   private createApiSpecExtension(handler: Function) {
+    const cors = this.cors
+      ? {
+          "method.response.header.Access-Control-Allow-Origin": `'${this.cors.origins}'`,
+          "method.response.header.Access-Control-Allow-Methods": `'${this.cors.methods}'`,
+          "method.response.header.Access-Control-Allow-Headers": `'${this.cors.headers}'`,
+        }
+      : {};
     const extension = {
       "x-amazon-apigateway-integration": {
         uri: `arn:aws:apigateway:${this.region}:lambda:path/2015-03-31/functions/${handler.arn}/invocations`,
@@ -448,6 +461,7 @@ class WingRestApi extends Construct {
         responses: {
           default: {
             statusCode: "200",
+            responseParameters: cors,
           },
         },
         passthroughBehavior: "when_no_match",

@@ -12,6 +12,11 @@ exports[`api configured for cors 1`] = `
           "200": {
             "content": {},
             "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Headers": "'Content-Type,Authorization'",
+              "Access-Control-Allow-Methods": "'GET,POST,PUT,DELETE,HEAD,OPTIONS'",
+              "Access-Control-Allow-Origin": "'*'",
+            },
           },
         },
         "x-amazon-apigateway-integration": {
