@@ -424,8 +424,12 @@ pub struct Interface {
 #[derive(Debug)]
 pub enum BringSource {
 	BuiltinModule(Symbol),
-	// we can remove this once Wing modules are compiled to Jsii modules :)
-	WingModule { name: Symbol, root_file: PathBuf },
+	/// A Wing library (containing Wing source files).
+	/// root_file is a relative path to the root file of the library (relative to the compilation entrypoint)
+	WingModule {
+		name: Symbol,
+		root_file: PathBuf,
+	},
 	JsiiModule(Symbol),
 	WingFile(Symbol),
 }
