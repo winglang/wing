@@ -62,7 +62,14 @@ jobs:
         with:
           github-token: ${{ secrets.MUTATION_TOKEN }}
           script: |
-            const prContextData = context.payload.workflow_run.pull_requests[0];
+            // use API to get the PR data since we can't rely on the context across forks
+            const pulls = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              head: `${context.payload.workflow_run.head_repository.full_name}:${context.payload.workflow_run.head_branch}`
+            });
+
+            const prContextData = pulls.data[0];
             const prNumber = prContextData.number;
             const originalSha = prContextData.head.sha;
 
@@ -137,7 +144,13 @@ jobs:
         with:
           github-token: ${{ secrets.MUTATION_TOKEN }}
           script: |
-            const prNumber = context.payload.workflow_run.pull_requests[0].number;
+            // use API to get the PR number since we can't rely on the context across forks
+            const pulls = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              head: `${context.payload.workflow_run.head_repository.full_name}:${context.payload.workflow_run.head_branch}`
+            });
+            const prNumber = pulls.data[0].number;
             const labels = ["⚠️ pr/review-mutation"];
 
             await github.rest.issues.addLabels({
