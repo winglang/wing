@@ -352,7 +352,7 @@ jobs:
           PACKAGE_VERSION: ${{ needs.build.outputs.version }}
         run: |
           PACKAGES=("winglang-sdk" "winglang-compiler" "wingconsole-design-system" "wingconsole-ui" "wingconsole-server" "wingconsole-app")
-          for PACKAGE in $PACKAGES; do
+          for PACKAGE in "${PACKAGES[@]}"; do
             npm publish "$PACKAGE-$PACKAGE_VERSION.tgz" --access public
           done
 
