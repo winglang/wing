@@ -158,8 +158,8 @@ async function main() {
 
   program
     .command("pack")
-    .description("Package a Wing module as a shareable library")
-    .addOption(new Option("-o --outdir <outdir>", "Output directory").default("dist/"))
+    .description("Package a Wing module as a shareable npm library")
+    .addOption(new Option("-o --outdir <outdir>", "Output directory").default("."))
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("pack"));
 
