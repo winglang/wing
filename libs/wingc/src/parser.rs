@@ -769,7 +769,7 @@ impl<'s> Parser<'s> {
 					self.with_error::<StmtKind>(
 						format!(
 							"bring {} must be assigned to an identifier (e.g. bring \"foo\" as foo)",
-							module_name
+							module_symbol
 						),
 						statement_node,
 					)
@@ -789,7 +789,7 @@ impl<'s> Parser<'s> {
 				self.with_error::<StmtKind>(
 					format!(
 						"bring {} must be assigned to an identifier (e.g. bring \"foo\" as foo)",
-						module_name
+						module_symbol
 					),
 					statement_node,
 				)
