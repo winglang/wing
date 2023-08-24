@@ -267,34 +267,6 @@ module.exports = function({ $bucket2 }) {
         "force_destroy": false
       }
     },
-    "aws_s3_bucket_public_access_block": {
-      "MyClosure_cloudBucket_PublicAccessBlock_EFF6E688": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/MyClosure/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "MyClosure_cloudBucket_PublicAccessBlock_EFF6E688"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.MyClosure_cloudBucket_4DAD12C0.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      },
-      "cloudBucket_PublicAccessBlock_5946CCE8": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "cloudBucket_PublicAccessBlock_5946CCE8"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      }
-    },
     "aws_s3_bucket_server_side_encryption_configuration": {
       "MyClosure_cloudBucket_Encryption_31C1B5A0": {
         "//": {

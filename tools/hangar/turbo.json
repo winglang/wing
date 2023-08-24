@@ -19,7 +19,7 @@
     },
     "test": {
       "dependsOn": ["^package", "test:generate"],
-      "inputs": ["src/**", "../../examples/tests/**/*.w"]
+      "inputs": ["src/**"]
     },
     "bench": {
       "dependsOn": ["^package", "examples-valid#topo"],

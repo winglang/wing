@@ -105,7 +105,7 @@ module.exports = function({ $headers }) {
         },
         "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
         "triggers": {
-          "redeployment": "996be997492f7193f147683623ec3ca01a8e752f"
+          "redeployment": "273d559c5171243e931678d9387d60465c3b99de"
         }
       }
     },
@@ -456,19 +456,6 @@ module.exports = function({ $headers }) {
       }
     },
     "aws_s3_bucket_public_access_block": {
-      "PrivateBucket_PublicAccessBlock_BE4B4C0B": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/PrivateBucket/PublicAccessBlock",
-            "uniqueId": "PrivateBucket_PublicAccessBlock_BE4B4C0B"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.PrivateBucket.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      },
       "PublicBucket_PublicAccessBlock_4FE1A1A3": {
         "//": {
           "metadata": {
@@ -481,19 +468,6 @@ module.exports = function({ $headers }) {
         "bucket": "${aws_s3_bucket.PublicBucket.bucket}",
         "ignore_public_acls": false,
         "restrict_public_buckets": false
-      },
-      "cloudBucket_PublicAccessBlock_5946CCE8": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "cloudBucket_PublicAccessBlock_5946CCE8"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {

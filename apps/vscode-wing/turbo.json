@@ -12,7 +12,7 @@
     },
     "package": {
       "inputs": ["syntaxes/**", "resources/**"],
-      "outputs": ["vscode-wing.vsix"]
+      "outputs": ["../../dist/vscode-wing.vsix"]
     }
   }
 }
