@@ -39,6 +39,9 @@ export function LayoutProvider({
             },
           ],
         },
+        statusBar: {
+          showThemeToggle: false,
+        },
         panels: {
           rounded: false,
         },

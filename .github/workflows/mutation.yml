@@ -21,8 +21,7 @@ permissions:
 jobs:
   mutate:
     runs-on: ubuntu-latest
-    # Run if the workflow run is a pull request
-    if: github.event.workflow_run.conclusion == 'failure' && (!contains(fromJSON('["main", "dev"]'), github.event.workflow_run.head_branch) || github.event.workflow_run.head_repository.fork)
+    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'failure' && (!contains(fromJSON('["main", "dev"]'), github.event.workflow_run.head_branch) || github.event.workflow_run.head_repository.fork)
     steps:
       - name: Download artifacts
         id: download-artifacts
@@ -57,18 +56,65 @@ jobs:
         run: |
           git config --global core.hooksPath /dev/null
 
+      - name: Update PR Branch
+        uses: actions/github-script@v6
+        if: github.event.workflow_run.event == 'pull_request' && steps.download-artifacts.outputs.found_artifact == 'true'
+        with:
+          github-token: ${{ secrets.MUTATION_TOKEN }}
+          script: |
+            // use API to get the PR data since we can't rely on the context across forks
+            const pulls = await github.rest.pulls.list({
+              per_page: 1,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              head: `${context.payload.workflow_run.head_repository.full_name}:${context.payload.workflow_run.head_branch}`
+            });
+
+            const prContextData = pulls.data[0];
+            const prNumber = prContextData.number;
+            const originalSha = prContextData.head.sha;
+
+            try {
+              console.log("Updating PR branch");
+              await github.rest.pulls.updateBranch({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber
+              });
+              console.log("PR branch updated");
+
+              let updatedSha = originalSha;
+              let retries = 0;
+              const MAX_RETRIES = 10;
+              while (updatedSha == originalSha && retries++ < MAX_RETRIES) {
+                console.log(`Waiting for PR branch to update (attempt ${retries}/${MAX_RETRIES})`);
+                
+                await new Promise(r => setTimeout(r, 500));
+                const updatedPR = await github.rest.pulls.get({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: prNumber
+                });
+                updatedSha = updatedPR.data.head.sha;
+              }
+            } catch (error) {
+              // The branch is already up to date or can't otherwise be updated
+              // That's fine, we tried our best
+              console.warn(error);
+            }
+
       - name: Checkout Workflow Branch
         if: steps.download-artifacts.outputs.found_artifact == 'true'
         uses: actions/checkout@v3
         with:
-          token: ${{secrets.MUTATION_TOKEN}}
+          token: ${{ secrets.MUTATION_TOKEN }}
           ref: ${{ github.event.workflow_run.head_branch }}
           repository: ${{ github.event.workflow_run.head_repository.full_name }}
           path: repo
 
       - id: self_mutation
         if: steps.download-artifacts.outputs.found_artifact == 'true'
-        name: Apply downloaded pathes
+        name: Apply downloaded patches
         working-directory: repo
         env:
           HEAD_REF: ${{ github.event.workflow_run.head_branch }}
@@ -76,29 +122,12 @@ jobs:
           git config user.name "monada-bot[bot]"
           git config user.email "monabot@monada.co"
 
-          # if ../patches/update.diff/update.diff exists, apply it first
-          UPDATE_PATCH_FILE="../patches/update.diff/update.diff"
-          if [ -f $UPDATE_PATCH_FILE ]; then
-            echo "Updating branch"
-            git apply --binary $UPDATE_PATCH_FILE
-            if [ $? -eq 0 ]; then
-              git add --all
-              git commit -s -m "Merge branch 'main' into $HEAD_REF"
-              echo "Patch applied successfully"
-              rm $UPDATE_PATCH_FILE
-            else
-              echo "Patch failed to apply"
-              cat $UPDATE_PATCH_FILE
-              exit 1
-            fi
-          fi
-
           for f in $(find ../patches/*.diff/*.diff); do
             echo "Applying $f"
             git apply --binary $f
             if [ $? -eq 0 ]; then
               git add --all
-              git commit -s -m "chore: self mutation ($f)"
+              git commit -s -m "chore: self mutation ($(basename $f))"
               echo "Patch applied successfully"
               rm $f
             else
@@ -116,12 +145,13 @@ jobs:
         with:
           github-token: ${{ secrets.MUTATION_TOKEN }}
           script: |
+            // use API to get the PR number since we can't rely on the context across forks
             const pulls = await github.rest.pulls.list({
+              per_page: 1,
               owner: context.repo.owner,
               repo: context.repo.repo,
               head: `${context.payload.workflow_run.head_repository.full_name}:${context.payload.workflow_run.head_branch}`
             });
-
             const prNumber = pulls.data[0].number;
             const labels = ["⚠️ pr/review-mutation"];
 

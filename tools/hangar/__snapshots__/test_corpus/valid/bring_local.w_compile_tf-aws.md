@@ -586,7 +586,7 @@ module.exports = function({ $stdlib }) {
     })({})
   ;
   const Point = require("./Point.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
-  return { Util, Store, Color };
+  return { Util, Store, Color, Point };
 };
 
 ```

@@ -4593,8 +4593,6 @@ impl<'a> TypeChecker<'a> {
 								}
 							}
 						}
-						let lookup = env.lookup(&s.name, None);
-						let type_ = lookup.unwrap().as_type().unwrap();
 
 						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_STRUCT, vec![type_]);
 						let v = self.get_property_from_class_like(new_class.as_class().unwrap(), property, true);
