@@ -10,7 +10,7 @@ module.exports = function({ $jj, $std_Json }) {
       return $obj;
     }
     async handle() {
-      const ss = ((args) => { return JSON.stringify(args[0], null, args[1]) })([$jj]);
+      const ss = ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$jj]);
       {((cond) => {if (!cond) throw new Error("assertion failed: ss == \"{\\\"a\\\":123,\\\"b\\\":{\\\"c\\\":456,\\\"d\\\":789}}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(ss,"{\"a\":123,\"b\":{\"c\":456,\"d\":789}}")))};
     }
   }
@@ -302,7 +302,7 @@ class $Root extends $stdlib.std.Resource {
     ((obj, args) => { obj[args[0]] = args[1]; })(m, ["a",321]);
     {((cond) => {if (!cond) throw new Error("assertion failed: m.get(\"a\") == 321")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((m)["a"],321)))};
     const n = JSON.parse(JSON.stringify(m));
-    {((cond) => {if (!cond) throw new Error("assertion failed: m != n")})((m !== n))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m == n")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(m,n)))};
     let k2 = (Object.keys(m));
     {((cond) => {if (!cond) throw new Error("assertion failed: k2.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(k2.length,2)))};
     ((args) => { delete (args[0])[args[1]]; })([m,"b"]);
@@ -315,9 +315,9 @@ class $Root extends $stdlib.std.Resource {
     const tryParsed = (((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })(invalidJson) ?? ({"key": "value"}));
     {((cond) => {if (!cond) throw new Error("assertion failed: tryParsed.get(\"key\") == \"value\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((tryParsed)["key"],"value")))};
     const jj = ({"a": 123,"b": ({"c": 456,"d": 789})});
-    const ss = ((args) => { return JSON.stringify(args[0], null, args[1]) })([jj]);
+    const ss = ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([jj]);
     {((cond) => {if (!cond) throw new Error("assertion failed: ss == \"{\\\"a\\\":123,\\\"b\\\":{\\\"c\\\":456,\\\"d\\\":789}}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(ss,"{\"a\":123,\"b\":{\"c\":456,\"d\":789}}")))};
-    const ss2 = ((args) => { return JSON.stringify(args[0], null, args[1]) })([jj,2]);
+    const ss2 = ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([jj,{ indent: 2 }]);
     {((cond) => {if (!cond) throw new Error("assertion failed: ss2 == \"{\\n  \\\"a\\\": 123,\\n  \\\"b\\\": {\\n    \\\"c\\\": 456,\\n    \\\"d\\\": 789\\n  }\\n}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(ss2,"{\n  \"a\": 123,\n  \"b\": {\n    \"c\": 456,\n    \"d\": 789\n  }\n}")))};
     const jsonOfMany = ({"a": 123,"b": "hello","c": true});
     {((cond) => {if (!cond) throw new Error("assertion failed: str.fromJson(jsonOfMany.get(\"b\")) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((jsonOfMany)["b"]),"hello")))};

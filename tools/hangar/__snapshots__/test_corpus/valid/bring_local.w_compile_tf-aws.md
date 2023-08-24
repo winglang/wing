@@ -318,21 +318,6 @@ module.exports = function({  }) {
         "force_destroy": false
       }
     },
-    "aws_s3_bucket_public_access_block": {
-      "file1Store_cloudBucket_PublicAccessBlock_542A96A5": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/file1.Store/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "file1Store_cloudBucket_PublicAccessBlock_542A96A5"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.file1Store_cloudBucket_86CE87B1.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      }
-    },
     "aws_s3_bucket_server_side_encryption_configuration": {
       "file1Store_cloudBucket_Encryption_387D9114": {
         "//": {
@@ -486,7 +471,7 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:add data to store",new $Closure1(this,"$Closure1"));
     const s = ({"x": 1,"y": 2});
     const c = file1.Color.BLUE;
-    {((cond) => {if (!cond) throw new Error("assertion failed: c != file1.Color.RED")})((c !== file1.Color.RED))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: c != file1.Color.RED")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(c,file1.Color.RED)))};
     const t = new Triangle(this,"Triangle");
   }
 }
@@ -601,7 +586,7 @@ module.exports = function({ $stdlib }) {
     })({})
   ;
   const Point = require("./Point.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
-  return { Util, Store, Color };
+  return { Util, Store, Color, Point };
 };
 
 ```

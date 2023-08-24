@@ -14,8 +14,8 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
       (await $publicBucket.put("file1.txt","Foo"));
       (await $privateBucket.put("file2.txt","Bar"));
       const publicUrl = (await $publicBucket.publicUrl("file1.txt"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: publicUrl != \"\"")})((publicUrl !== ""))};
-      if (((await $util_Util.env("WING_TARGET")) !== "sim")) {
+      {((cond) => {if (!cond) throw new Error("assertion failed: publicUrl != \"\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(publicUrl,"")))};
+      if ((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })((await $util_Util.env("WING_TARGET")),"sim"))) {
         {((cond) => {if (!cond) throw new Error("assertion failed: http.get(publicUrl).body ==  \"Foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get(publicUrl)).body,"Foo")))};
       }
       try {
@@ -175,19 +175,6 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
       }
     },
     "aws_s3_bucket_public_access_block": {
-      "privateBucket_PublicAccessBlock_BF0F9FC6": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/privateBucket/PublicAccessBlock",
-            "uniqueId": "privateBucket_PublicAccessBlock_BF0F9FC6"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.privateBucket.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      },
       "publicBucket_PublicAccessBlock_54D9EFBA": {
         "//": {
           "metadata": {

@@ -10,6 +10,9 @@
     },
     "test": {
       "dependsOn": ["compile", "examples-valid#topo", "examples-invalid#topo"]
+    },
+    "dev": {
+      "cache": false
     }
   }
 }

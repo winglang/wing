@@ -7,6 +7,7 @@ use crate::{
 /// This visitor validates:
 /// 1. All expressions in the AST were resolved to some type.
 /// 2. If any were resolved to `Unresolved` then we should have generated some error diagnostics.
+/// 3. Any Json literal expression only has legal json values unless it is being used as a struct.
 pub struct TypeCheckAssert<'a> {
 	types: &'a Types,
 	tc_found_errors: bool,

@@ -479,7 +479,7 @@ impl<'a> JSifier<'a> {
 						.filter_map(|p| match p {
 							InterpolatedStringPart::Static(_) => None,
 							InterpolatedStringPart::Expr(e) => Some(match *self.types.get_expr_type(e) {
-								Type::Json | Type::MutJson => {
+								Type::Json(_) | Type::MutJson => {
 									format!("((e) => typeof e === 'string' ? e : JSON.stringify(e, null, 2))({})", self.jsify_expression(e, ctx))
 								}
 								_ => self.jsify_expression(e, ctx),
@@ -540,8 +540,9 @@ impl<'a> JSifier<'a> {
 								ExprKind::Reference(Reference::InstanceMember { object, .. }) => {
 									self.jsify_expression(&object, ctx)
 								},
-                ExprKind::Reference(Reference::TypeMember { .. }) => {
-                  expr_string.clone().split(".").next().unwrap_or("").to_string()
+                ExprKind::Reference(Reference::TypeMember { property, .. }) => {
+                  // remove the property name from the expression string
+                  expr_string.split(".").filter(|s| s != &property.name).join(".")
                 },
 								_ => expr_string,
 							}
@@ -601,7 +602,9 @@ impl<'a> JSifier<'a> {
 					BinaryOperator::Equal => {
 						return format!("(((a,b) => {{ try {{ return require('assert').deepStrictEqual(a,b) === undefined; }} catch {{ return false; }} }})({},{}))", js_left, js_right)
 					},
-					BinaryOperator::NotEqual => "!==",
+					BinaryOperator::NotEqual => {
+						return format!("(((a,b) => {{ try {{ return require('assert').notDeepStrictEqual(a,b) === undefined; }} catch {{ return false; }} }})({},{}))", js_left, js_right)
+					},
 					BinaryOperator::LogicalAnd => "&&",
 					BinaryOperator::LogicalOr => "||",
 					BinaryOperator::UnwrapOr => {
@@ -853,6 +856,7 @@ impl<'a> JSifier<'a> {
 			StmtKind::Break => CodeMaker::one_line("break;"),
 			StmtKind::Continue => CodeMaker::one_line("continue;"),
 			StmtKind::IfLet {
+				reassignable,
 				value,
 				statements,
 				var_name,
@@ -894,7 +898,11 @@ impl<'a> JSifier<'a> {
 					self.jsify_expression(value, ctx)
 				));
 				code.open(format!("if ({if_let_value} != undefined) {{"));
-				code.line(format!("const {} = {};", var_name, if_let_value));
+				if *reassignable {
+					code.line(format!("let {} = {};", var_name, if_let_value));
+				} else {
+					code.line(format!("const {} = {};", var_name, if_let_value));
+				}
 				code.add_code(self.jsify_scope_body(statements, ctx));
 				code.close("}");
 
@@ -1549,8 +1557,9 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 			}
 			// interfaces are bringable, but there's nothing to emit
 			StmtKind::Interface(_) => {}
-			// structs are bringable, but there's nothing to emit
-			StmtKind::Struct { .. } => {}
+			StmtKind::Struct { name, .. } => {
+				symbols.push(name.clone());
+			}
 			StmtKind::Enum { name, .. } => {
 				symbols.push(name.clone());
 			}
@@ -1560,10 +1569,6 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 	}
 
 	symbols
-}
-
-fn inflight_filename(class: &AstClass) -> String {
-	format!("./inflight.{}.js", class.name.name)
 }
 
 fn struct_filename(s: &String) -> String {

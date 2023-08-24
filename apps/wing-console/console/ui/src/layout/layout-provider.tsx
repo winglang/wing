@@ -26,9 +26,6 @@ export function LayoutProvider({
   switch (layoutType) {
     case LayoutType.Playground: {
       layoutConfig = {
-        header: {
-          hide: true,
-        },
         leftPanel: {
           hide: true,
         },
@@ -42,15 +39,18 @@ export function LayoutProvider({
             },
           ],
         },
+        statusBar: {
+          showThemeToggle: false,
+        },
+        panels: {
+          rounded: false,
+        },
       };
 
       break;
     }
     case LayoutType.Tutorial: {
       layoutConfig = {
-        header: {
-          hide: true,
-        },
         leftPanel: {
           hide: true,
         },
@@ -70,14 +70,14 @@ export function LayoutProvider({
         statusBar: {
           hide: true,
         },
+        panels: {
+          rounded: false,
+        },
       };
       break;
     }
     case LayoutType.Vscode: {
       layoutConfig = {
-        header: {
-          hide: true,
-        },
         leftPanel: {
           hide: true,
         },
@@ -86,6 +86,9 @@ export function LayoutProvider({
         },
         statusBar: {
           hide: true,
+        },
+        panels: {
+          rounded: false,
         },
       };
       break;

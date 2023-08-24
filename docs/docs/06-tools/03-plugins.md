@@ -1,7 +1,8 @@
 ---
-title: Compiler plugins
+title: "Extending The Wing Compiler: Plugin Design and Hooks"
 id: compiler-plugins
 description: Wing compiler plugins reference
+sidebar_label: Compiler Plugins
 keywords: [Wing reference, Wing language, language, Wing language spec, Wing programming language, compiler plugins]
 ---
 

@@ -1,5 +1,10 @@
-import { useTheme, ResourceIcon } from "@wingconsole/design-system";
+import {
+  useTheme,
+  ResourceIcon,
+  USE_EXTERNAL_THEME_COLOR,
+} from "@wingconsole/design-system";
 import classNames from "classnames";
+import { useState } from "react";
 
 import { useMap } from "../services/use-map.js";
 import { ContainerNode } from "../ui/elk-map-nodes.js";
@@ -27,18 +32,36 @@ export const MapView = ({
   const { mapData } = useMap({ showTests: showTests ?? false });
 
   const { theme } = useTheme();
+  const [hoverMapControls, setHoverMapControls] = useState(false);
+
   return (
     <ZoomPaneProvider>
-      <div className="h-full flex flex-col">
-        {showMapControls && <MapControls />}
-        <div
-          className={classNames(
-            "grow relative border-t",
-            theme.bg4,
-            theme.border3,
-            "cursor-grab",
+      <div className={classNames("h-full flex flex-col", theme.bg4)}>
+        <div className="grow relative cursor-grab">
+          {showMapControls && (
+            <div className="right-0 absolute z-10">
+              <div
+                className={classNames(
+                  "transition-opacity",
+                  "absolute inset-0 rounded-bl",
+                  theme.bg4,
+                  (hoverMapControls && "opacity-80") || "opacity-60",
+                )}
+              />
+              <div
+                className="relative group/map-controls"
+                onMouseEnter={() => {
+                  setHoverMapControls(true);
+                }}
+                onMouseLeave={() => {
+                  setHoverMapControls(false);
+                }}
+              >
+                <MapControls />
+              </div>
+            </div>
           )}
-        >
+
           <div className="absolute inset-0">
             <ElkMap
               nodes={mapData?.nodes ?? []}

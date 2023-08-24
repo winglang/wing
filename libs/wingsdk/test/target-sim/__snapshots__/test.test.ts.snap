@@ -19,6 +19,10 @@ async handle(event) {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -49,9 +53,6 @@ async handle(event) {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -65,9 +66,6 @@ async handle(event) {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -81,14 +79,8 @@ async handle(event) {
           "path": "root/cloud.TestRunner",
         },
         "test:my_test": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "children": {
             "Handler": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
