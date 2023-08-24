@@ -93,7 +93,7 @@ jobs:
             git apply --binary $f
             if [ $? -eq 0 ]; then
               git add --all
-              git commit -s -m "chore: self mutation ($f)"
+              git commit -s -m "chore: self mutation ($(basename $f))"
               echo "Patch applied successfully"
               rm $f
             else
