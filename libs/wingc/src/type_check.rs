@@ -4009,7 +4009,7 @@ impl<'a> TypeChecker<'a> {
 
 				assembly_name
 			} else {
-				let source_dir = self.source_path.parent().unwrap().to_str().unwrap();
+				let source_dir = self.source_path.parent().unwrap();
 				let assembly_name = match self.jsii_types.load_dep(library_name.as_str(), source_dir) {
 					Ok(name) => name,
 					Err(type_error) => {

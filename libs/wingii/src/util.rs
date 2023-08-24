@@ -76,8 +76,8 @@ pub mod package_json {
 		})
 	}
 
-	pub fn find_dependency_directory(dependency_name: &str, search_start: &str) -> Option<String> {
-		let entrypoint = resolve_from(dependency_name, Path::new(search_start));
+	pub fn find_dependency_directory(dependency_name: &str, search_start: &Path) -> Option<String> {
+		let entrypoint = resolve_from(dependency_name, search_start);
 		let entrypoint = entrypoint.ok()?;
 		let dep_pkg_json_path = find_package_json_up(dependency_name, entrypoint);
 		let dep_pkg_json_path = dep_pkg_json_path?;

@@ -178,6 +178,7 @@ pub mod type_system {
 	use crate::util::package_json;
 	use crate::Result;
 	use std::collections::HashMap;
+	use std::path::Path;
 
 	pub struct TypeSystem {
 		assemblies: HashMap<String, Assembly>,
@@ -240,10 +241,11 @@ pub mod type_system {
 			Ok(name)
 		}
 
-		pub fn load_dep(&mut self, dep: &str, search_start: &str) -> Result<AssemblyName> {
+		pub fn load_dep(&mut self, dep: &str, search_start: &Path) -> Result<AssemblyName> {
 			let module_dir = package_json::find_dependency_directory(dep, search_start).ok_or(format!(
 				"Unable to load \"{}\": Module not found in \"{}\"",
-				dep, search_start
+				dep,
+				search_start.display()
 			))?;
 			self.load_module(&module_dir)
 		}
@@ -279,7 +281,7 @@ pub mod type_system {
 			let deps = package_json::dependencies_of(&package);
 			for dep in deps {
 				if !bundled.contains(&dep) {
-					let dep_dir = package_json::find_dependency_directory(&dep, &module_directory).ok_or(format!(
+					let dep_dir = package_json::find_dependency_directory(&dep, &Path::new(&module_directory)).ok_or(format!(
 						"Unable to load \"{}\": Module not found from \"{}\"",
 						dep, module_directory
 					))?;
