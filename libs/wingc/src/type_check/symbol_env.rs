@@ -7,7 +7,7 @@ use crate::{
 	diagnostic::TypeError,
 	type_check::{SymbolKind, Type, TypeRef},
 };
-use std::{backtrace::Backtrace, fmt::Debug};
+use std::fmt::Debug;
 use std::{
 	collections::{btree_map, BTreeMap, HashSet},
 	fmt::Display,
@@ -212,10 +212,6 @@ impl SymbolEnv {
 
 	pub fn define(&mut self, symbol: &Symbol, kind: SymbolKind, pos: StatementIdx) -> Result<(), TypeError> {
 		if self.symbol_map.contains_key(&symbol.name) {
-			let bt = Backtrace::force_capture();
-
-			println!("{}", bt);
-
 			return Err(TypeError {
 				span: symbol.span.clone(),
 				message: format!("Symbol \"{}\" already defined in this scope", symbol.name),
