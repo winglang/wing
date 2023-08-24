@@ -21,8 +21,7 @@ permissions:
 jobs:
   mutate:
     runs-on: ubuntu-latest
-    # Run if the workflow run is a pull request
-    if: github.event.workflow_run.conclusion == 'failure' && (!contains(fromJSON('["main", "dev"]'), github.event.workflow_run.head_branch) || github.event.workflow_run.head_repository.fork)
+    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'failure' && (!contains(fromJSON('["main", "dev"]'), github.event.workflow_run.head_branch) || github.event.workflow_run.head_repository.fork)
     steps:
       - name: Download artifacts
         id: download-artifacts
@@ -63,11 +62,38 @@ jobs:
         with:
           github-token: ${{ secrets.MUTATION_TOKEN }}
           script: |
-            await github.rest.pulls.updateBranch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.workflow_run.pull_requests[0].number
-            });
+            const prContextData = context.payload.workflow_run.pull_requests[0];
+            const prNumber = prContextData.number;
+            const originalSha = prContextData.head.sha;
+
+            try {
+              console.log("Updating PR branch");
+              await github.rest.pulls.updateBranch({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber
+              });
+              console.log("PR branch updated");
+
+              let updatedSha = originalSha;
+              let retries = 0;
+              const MAX_RETRIES = 10;
+              while (updatedSha == originalSha && retries++ < MAX_RETRIES) {
+                console.log(`Waiting for PR branch to update (attempt ${retries}/${MAX_RETRIES})`);
+                
+                await new Promise(r => setTimeout(r, 500));
+                const updatedPR = await github.rest.pulls.get({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: prNumber
+                });
+                updatedSha = updatedPR.data.head.sha;
+              }
+            } catch (error) {
+              // The branch is already up to date or can't otherwise be updated
+              // That's fine, we tried our best
+              console.warn(error);
+            }
 
       - name: Checkout Workflow Branch
         if: steps.download-artifacts.outputs.found_artifact == 'true'
