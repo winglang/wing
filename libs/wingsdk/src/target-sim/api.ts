@@ -17,14 +17,10 @@ import { BaseResourceSchema } from "../testing/simulator";
  * @inflight `@winglang/sdk.cloud.IApiClient`
  */
 export class Api extends cloud.Api implements ISimulatorResource {
-  public readonly cors?: cloud.ApiCorsProps;
-
   private eventMappings: { [key: string]: EventMapping } = {};
 
   constructor(scope: Construct, id: string, props: cloud.ApiProps = {}) {
     super(scope, id, props);
-
-    this.cors = props.cors;
   }
 
   public get url(): string {
@@ -213,7 +209,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
       path: this.node.path,
       props: {
         openApiSpec: this._getApiSpec(),
-        cors: this.cors,
+        cors: this.corsEnabled ? this.corsOptions : undefined,
       },
       attrs: {} as any,
     };

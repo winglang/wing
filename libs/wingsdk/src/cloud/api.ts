@@ -12,7 +12,7 @@ export const API_FQN = fqnForType("cloud.Api");
 /**
  * Cors Options for `Api`.
  */
-export interface ApiCorsProps {
+export interface ApiCorsOptions {
   /**
    * The list of allowed origins.
    * @example ["https://example.com"]
@@ -56,12 +56,34 @@ export interface ApiProps {
   /**
    * Options for configuring the API's CORS behavior across all routes.
    * Options can also be overridden on a per-route basis. (not yet implemented)
-   * Can be set to to an empty Struct to enable CORS with default options.
-   * @example { origins: ["https://example.com"] }
-   * @example {}
-   * @default - CORS is disabled
+   * When enabled this will add CORS headers with default options.
+   * Can be customized by passing `corsOptions`
+   * @example true
+   * @default - false, CORS configuration is disabled
    */
-  readonly cors?: ApiCorsProps;
+  readonly cors?: boolean;
+
+  /**
+   * Options for configuring the API's CORS behavior across all routes.
+   * Options can also be overridden on a per-route basis. (not yet implemented)
+   *
+   * @example { origins: ["https://example.com"] }
+   * @default - Default CORS options are applied when `cors` is set to `true`
+   *  origins: ["*"],
+   *  methods: [
+   *   HttpMethod.GET,
+   *   HttpMethod.POST,
+   *   HttpMethod.PUT,
+   *   HttpMethod.DELETE,
+   *   HttpMethod.HEAD,
+   *   HttpMethod.OPTIONS,
+   *  ],
+   *  headers: ["Content-Type", "Authorization"],
+   *  exposedHeaders: [],
+   *  allowCredentials: false,
+   *
+   */
+  readonly corsOptions?: ApiCorsOptions;
 }
 /**
  * The OpenAPI spec.
@@ -104,11 +126,31 @@ export abstract class Api extends Resource {
     paths: {},
   };
 
+  private corsDefaultValues: ApiCorsOptions = {
+    origins: ["*"],
+    methods: [
+      HttpMethod.GET,
+      HttpMethod.POST,
+      HttpMethod.PUT,
+      HttpMethod.DELETE,
+      HttpMethod.HEAD,
+      HttpMethod.OPTIONS,
+    ],
+    headers: ["Content-Type", "Authorization"],
+    exposedHeaders: [],
+    allowCredentials: false,
+  };
+
+  protected corsOptions: ApiCorsOptions;
+  protected corsEnabled: boolean;
+
   constructor(scope: Construct, id: string, props: ApiProps = {}) {
     super(scope, id);
 
     props;
 
+    this.corsOptions = this._cors(props.corsOptions);
+    this.corsEnabled = props.cors ?? false;
     this.display.title = "Api";
     this.display.description = "A REST API endpoint";
   }
@@ -220,6 +262,19 @@ export abstract class Api extends Resource {
         `Invalid path ${path}. Url cannot contain ":", params contains only alpha-numeric chars or "_".`
       );
     }
+  }
+
+  /**
+   * Returns CORS configuration. If props are provided, they will have precedence over defaults.
+   * @param props
+   * @returns ApiCorsOptions
+   * @internal
+   */
+  protected _cors(props?: ApiCorsOptions): ApiCorsOptions {
+    return {
+      ...this.corsDefaultValues,
+      ...props,
+    };
   }
 
   /**
