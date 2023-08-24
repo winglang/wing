@@ -305,7 +305,6 @@ pub struct Stmt {
 #[derive(Debug)]
 pub enum UtilityFunctions {
 	Log,
-	Panic,
 	Throw,
 	Assert,
 }
@@ -313,12 +312,7 @@ pub enum UtilityFunctions {
 impl UtilityFunctions {
 	/// Returns all utility functions.
 	pub fn all() -> Vec<UtilityFunctions> {
-		vec![
-			UtilityFunctions::Log,
-			UtilityFunctions::Panic,
-			UtilityFunctions::Throw,
-			UtilityFunctions::Assert,
-		]
+		vec![UtilityFunctions::Log, UtilityFunctions::Throw, UtilityFunctions::Assert]
 	}
 }
 
@@ -326,7 +320,6 @@ impl Display for UtilityFunctions {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
 			UtilityFunctions::Log => write!(f, "log"),
-			UtilityFunctions::Panic => write!(f, "panic"),
 			UtilityFunctions::Throw => write!(f, "throw"),
 			UtilityFunctions::Assert => write!(f, "assert"),
 		}

@@ -29,8 +29,8 @@ import {
   App as CoreApp,
   AppProps,
   preSynthesizeAllConstructs,
-  Connections,
   synthesizeTree,
+  Connections,
 } from "../core";
 import { PluginManager } from "../core/plugin-manager";
 import { TEST_RUNNER_FQN } from "../std";

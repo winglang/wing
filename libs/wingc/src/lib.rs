@@ -141,7 +141,7 @@ pub unsafe extern "C" fn wingc_free(ptr: *mut u8, size: usize) {
 /// should be called before any other function
 #[no_mangle]
 pub unsafe extern "C" fn wingc_init() {
-	// Setup a custom panic hook to report panics as complitation diagnostics
+	// Setup a custom panic hook to report panics as compilation diagnostics
 	set_custom_panic_hook();
 }
 
@@ -256,24 +256,6 @@ pub fn type_check(
 			phase: Phase::Independent,
 			js_override: Some("{((msg) => {throw new Error(msg)})($args$)}".to_string()),
 			docs: Docs::with_summary("throws an error"),
-		}),
-		scope,
-		types,
-	);
-	add_builtin(
-		UtilityFunctions::Panic.to_string().as_str(),
-		Type::Function(FunctionSignature {
-			this_type: None,
-			parameters: vec![FunctionParameter {
-				typeref: types.string(),
-				name: "message".into(),
-				docs: Docs::with_summary("The message to panic with"),
-				variadic: false,
-			}],
-			return_type: types.void(),
-			phase: Phase::Independent,
-			js_override: Some("{((msg) => {console.error(msg, (new Error()).stack);process.exit(1)})($args$)}".to_string()),
-			docs: Docs::with_summary("panics with an error"),
 		}),
 		scope,
 		types,
