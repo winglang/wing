@@ -92,7 +92,7 @@
     "package": {
       "dependsOn": ["compile", "post-compile"],
       "env": ["PROJEN_BUMP_VERSION"],
-      "inputs": [""]
+      "inputs": ["README.md", "LICENSE"]
     },
     "topo": {
       "dependsOn": ["^topo"]
