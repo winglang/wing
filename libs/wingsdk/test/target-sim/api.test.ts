@@ -549,9 +549,9 @@ test("api with custom CORS settings", async () => {
   const api = cloud.Api._newApi(app, "my_api", {
     cors: true,
     corsOptions: {
-      origins: ["https://example.com"],
+      allowOrigin: ["https://example.com"],
       allowCredentials: true,
-      exposedHeaders: ["x-wingnuts"],
+      exposeHeaders: ["x-wingnuts"],
     },
   });
   const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE(RESPONSE));

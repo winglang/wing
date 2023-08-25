@@ -325,7 +325,11 @@ export class Api extends cloud.Api {
         __dirname.replace("target-tf-aws", "shared-aws"),
         "api.onrequest.inflight.js"
       ),
-      "ApiOnRequestHandlerClient"
+      "ApiOnRequestHandlerClient",
+      {
+        corsHeaders: this._generateCorsHeaders(this.corsOptions)
+          ?.defaultResponse,
+      }
     );
     return Function._newFunction(
       this,
@@ -373,7 +377,6 @@ class WingRestApi extends Construct {
   public readonly stage: ApiGatewayStage;
   private readonly deployment: ApiGatewayDeployment;
   private readonly region: string;
-  private readonly cors?: cloud.ApiCorsOptions;
 
   constructor(
     scope: Construct,
@@ -384,8 +387,6 @@ class WingRestApi extends Construct {
     }
   ) {
     super(scope, id);
-
-    this.cors = props.cors;
     this.region = (App.of(this) as App).region;
     this.api = new ApiGatewayRestApi(this, "api", {
       name: ResourceNames.generateName(this, NAME_OPTS),
@@ -444,13 +445,6 @@ class WingRestApi extends Construct {
    * @returns OpenApi extension object for the endpoint and handler
    */
   private createApiSpecExtension(handler: Function) {
-    const cors = this.cors
-      ? {
-          "method.response.header.Access-Control-Allow-Origin": `'${this.cors.origins}'`,
-          "method.response.header.Access-Control-Allow-Methods": `'${this.cors.methods}'`,
-          "method.response.header.Access-Control-Allow-Headers": `'${this.cors.headers}'`,
-        }
-      : {};
     const extension = {
       "x-amazon-apigateway-integration": {
         uri: `arn:aws:apigateway:${this.region}:lambda:path/2015-03-31/functions/${handler.arn}/invocations`,
@@ -459,7 +453,6 @@ class WingRestApi extends Construct {
         responses: {
           default: {
             statusCode: "200",
-            responseParameters: cors,
           },
         },
         passthroughBehavior: "when_no_match",

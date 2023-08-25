@@ -38,7 +38,7 @@ export class Api
     props;
     this.routes = [];
     this.context = context;
-    const { corsOptions } = props;
+    const { corsHeaders } = props;
 
     // Set up an express server that handles the routes.
     this.app = express();
@@ -49,44 +49,23 @@ export class Api
     this.app.use(express.text({ limit: "10mb", type: "*/*" }));
 
     // Set up CORS headers for options requests.
-    if (corsOptions) {
-      const {
-        origins = [],
-        headers = [],
-        methods = [],
-        exposedHeaders = [],
-        allowCredentials = false,
-      } = corsOptions;
+    if (corsHeaders) {
       this.app.use((req, res, next) => {
-        const responseHeaders: Record<string, string> = {};
         const method =
           req.method && req.method.toUpperCase && req.method.toUpperCase();
 
-        if (origins && origins.length > 0) {
-          responseHeaders["Access-Control-Allow-Origin"] = origins.join(",");
-        }
-        if (exposedHeaders && exposedHeaders.length > 0) {
-          responseHeaders["Access-Control-Expose-Headers"] =
-            exposedHeaders.join(",");
-        }
-        responseHeaders["Access-Control-Allow-Credentials"] = allowCredentials
-          ? "true"
-          : "false";
-
         if (method === "OPTIONS") {
-          if (headers && headers.length > 0) {
-            responseHeaders["Access-Control-Allow-Headers"] = headers.join(",");
-          }
-          if (methods && methods.length > 0) {
-            responseHeaders["Access-Control-Allow-Methods"] = methods.join(",");
-          }
-          for (const key of Object.keys(responseHeaders)) {
-            res.setHeader(key, responseHeaders[key]);
+          for (const [key, value] of Object.entries(
+            corsHeaders.optionsResponse
+          )) {
+            res.setHeader(key, value);
           }
           res.status(204).send();
         } else {
-          for (const key of Object.keys(responseHeaders)) {
-            res.setHeader(key, responseHeaders[key]);
+          for (const [key, value] of Object.entries(
+            corsHeaders.defaultResponse
+          )) {
+            res.setHeader(key, value);
           }
           next();
         }

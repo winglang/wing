@@ -14,32 +14,32 @@ export const API_FQN = fqnForType("cloud.Api");
  */
 export interface ApiCorsOptions {
   /**
-   * The list of allowed origins.
+   * The list of allowed allowOrigin.
    * @example ["https://example.com"]
    * @default - ["*"]
    */
-  readonly origins?: Array<string>;
+  readonly allowOrigin?: Array<string>;
 
   /**
    * The list of allowed methods.
    * @example [HttpMethod.GET, HttpMethod.POST]
    * @default - [HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.PATCH, HttpMethod.DELETE, HttpMethod.HEAD, HttpMethod.OPTIONS]
    */
-  readonly methods?: Array<HttpMethod>;
+  readonly allowMethods?: Array<HttpMethod>;
 
   /**
    * The list of allowed headers.
    * @example ["Content-Type"]
    * @default - ["Content-Type", "Authorization"]
    */
-  readonly headers?: Array<string>;
+  readonly allowHeaders?: Array<string>;
 
   /**
    * The list of exposed headers.
    * @example ["Content-Type"]
    * @default - []
    */
-  readonly exposedHeaders?: Array<string>;
+  readonly exposeHeaders?: Array<string>;
 
   /**
    * Whether to allow credentials.
@@ -67,10 +67,10 @@ export interface ApiProps {
    * Options for configuring the API's CORS behavior across all routes.
    * Options can also be overridden on a per-route basis. (not yet implemented)
    *
-   * @example { origins: ["https://example.com"] }
+   * @example { allowOrigin: ["https://example.com"] }
    * @default - Default CORS options are applied when `cors` is set to `true`
-   *  origins: ["*"],
-   *  methods: [
+   *  allowOrigin: ["*"],
+   *  allowMethods: [
    *   HttpMethod.GET,
    *   HttpMethod.POST,
    *   HttpMethod.PUT,
@@ -78,8 +78,8 @@ export interface ApiProps {
    *   HttpMethod.HEAD,
    *   HttpMethod.OPTIONS,
    *  ],
-   *  headers: ["Content-Type", "Authorization"],
-   *  exposedHeaders: [],
+   *  allowHeaders: ["Content-Type", "Authorization"],
+   *  exposeHeaders: [],
    *  allowCredentials: false,
    *
    */
@@ -97,6 +97,59 @@ export type OpenApiSpec = any;
  * */
 export type OpenApiSpecExtension = any;
 
+/**
+ * The OpenAPI spec for CORS headers.
+ * */
+export type OpenApiCorsHeaders = Record<string, { schema: { type: string } }>;
+
+/**
+ * Type definition for default CORS headers.
+ */
+type CorsDefaultResponseHeaders = {
+  /**
+   * Specifies the origin that is allowed to access the resource.
+   * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
+   */
+  "Access-Control-Allow-Origin": string;
+
+  /**
+   * Lists the headers that the client can access.
+   * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Expose-Headers
+   */
+  "Access-Control-Expose-Headers": string;
+
+  /**
+   * Indicates whether the response to the request can
+   * be exposed when the credentials flag is true.
+   * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
+   */
+  "Access-Control-Allow-Credentials": string;
+};
+
+/**
+ * Type definition for CORS option headers.
+ */
+type CorsOptionsResponseHeaders = {
+  /**
+   * Specifies the headers that are allowed in a request.
+   * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers
+   */
+  "Access-Control-Allow-Headers": string;
+
+  /**
+   * Specifies the methods that are allowed in a request.
+   * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Methods
+   */
+  "Access-Control-Allow-Methods": string;
+};
+
+/**
+ * Type definition for CORS headers which includes default and options headers.
+ */
+export type CorsHeaders = {
+  defaultResponse: CorsDefaultResponseHeaders; // Default CORS headers for all requests.
+  optionsResponse: CorsOptionsResponseHeaders; // CORS option headers for OPTIONS requests.
+};
 /**
  * Functionality shared between all `Api` implementations.
  * @inflight  `@winglang/sdk.cloud.IApiClient`
@@ -127,8 +180,8 @@ export abstract class Api extends Resource {
   };
 
   private corsDefaultValues: ApiCorsOptions = {
-    origins: ["*"],
-    methods: [
+    allowOrigin: ["*"],
+    allowMethods: [
       HttpMethod.GET,
       HttpMethod.POST,
       HttpMethod.PUT,
@@ -136,8 +189,8 @@ export abstract class Api extends Resource {
       HttpMethod.HEAD,
       HttpMethod.OPTIONS,
     ],
-    headers: ["Content-Type", "Authorization"],
-    exposedHeaders: [],
+    allowHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+    exposeHeaders: [],
     allowCredentials: false,
   };
 
@@ -282,6 +335,64 @@ export abstract class Api extends Resource {
   }
 
   /**
+   * Generates the OpenAPI schema for CORS headers based on the provided CORS options.
+   * @param corsOptions The CORS options to generate the schema from.
+   * @returns An object representing the OpenAPI schema for CORS headers.
+   */
+  private _corsOpenApiSchema(corsOptions?: ApiCorsOptions): OpenApiCorsHeaders {
+    const corsHeaders: OpenApiCorsHeaders = {};
+    if (corsOptions) {
+      const corsHeaderSchema = {
+        schema: {
+          type: "string",
+        },
+      };
+      corsHeaders["Access-Control-Allow-Origin"] = corsHeaderSchema;
+      corsHeaders["Access-Control-Allow-Methods"] = corsHeaderSchema;
+      corsHeaders["Access-Control-Allow-Headers"] = corsHeaderSchema;
+    }
+    return corsHeaders;
+  }
+
+  /**
+   * Generates an object containing default CORS response headers and OPTIONS response headers.
+   * @param corsOptions The CORS options to generate the headers from.
+   * @returns An object containing default CORS response headers and OPTIONS response headers.
+   * @internal
+   */
+  protected _generateCorsHeaders(
+    corsOptions?: ApiCorsOptions
+  ): CorsHeaders | undefined {
+    if (corsOptions == undefined) {
+      return;
+    }
+
+    const {
+      allowOrigin = [],
+      allowHeaders = [],
+      allowMethods = [],
+      exposeHeaders = [],
+      allowCredentials = false,
+    } = corsOptions;
+
+    const defaultHeaders: CorsDefaultResponseHeaders = {
+      "Access-Control-Allow-Origin": allowOrigin.join(",") || "",
+      "Access-Control-Expose-Headers": exposeHeaders.join(",") || "",
+      "Access-Control-Allow-Credentials": allowCredentials ? "true" : "false",
+    };
+
+    const optionsHeaders: CorsOptionsResponseHeaders = {
+      "Access-Control-Allow-Headers": allowHeaders.join(",") || "",
+      "Access-Control-Allow-Methods": allowMethods.join(",") || "",
+    };
+
+    return {
+      defaultResponse: defaultHeaders,
+      optionsResponse: optionsHeaders,
+    };
+  }
+
+  /**
    * Add a route to the api spec.
    * @param path The path to add.
    * @param method The method to add.
@@ -318,6 +429,7 @@ export abstract class Api extends Resource {
         });
       });
     }
+    const corsOpenApiSchema = this._corsOpenApiSchema(corsOptions);
     const methodSpec = {
       [method.toLowerCase()]: {
         operationId: operationId,
@@ -325,19 +437,9 @@ export abstract class Api extends Resource {
           "200": {
             description: "200 response",
             content: {},
-            ...(corsOptions && {
-              headers: {
-                "Access-Control-Allow-Origin": `'${corsOptions.origins?.join(
-                  ","
-                )}'`,
-                "Access-Control-Allow-Methods": `'${corsOptions.methods?.join(
-                  ","
-                )}'`,
-                "Access-Control-Allow-Headers": `'${corsOptions.headers?.join(
-                  ","
-                )}'`,
-              },
-            }),
+            ...(Object.keys(corsOpenApiSchema).length > 0
+              ? { headers: corsOpenApiSchema }
+              : {}),
           },
         },
         parameters: pathParameters,
