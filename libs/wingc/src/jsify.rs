@@ -43,6 +43,7 @@ const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
 
 const ENV_WING_IS_TEST: &str = "$wing_is_test";
 const OUTDIR_VAR: &str = "$outdir";
+const PLUGINS_VAR: &str = "$plugins";
 
 const ROOT_CLASS: &str = "$Root";
 const JS_CONSTRUCTOR: &str = "constructor";
@@ -140,8 +141,11 @@ impl<'a> JSifier<'a> {
 
 		if is_entrypoint_file {
 			output.line(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
+			output.line(format!(
+				"const {} = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);",
+				PLUGINS_VAR
+			));
 			output.line(format!("const {} = process.env.WING_SYNTH_DIR ?? \".\";", OUTDIR_VAR));
-			// "std" is implicitly imported
 			output.line(format!(
 				"const {} = process.env.WING_IS_TEST === \"true\";",
 				ENV_WING_IS_TEST
@@ -150,6 +154,7 @@ impl<'a> JSifier<'a> {
 			output.open(format!("module.exports = function({{ {} }}) {{", STDLIB));
 		}
 
+		// "std" is implicitly imported
 		output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
 		output.add_code(imports);
 
@@ -166,8 +171,8 @@ impl<'a> JSifier<'a> {
 			output.line("const $App = $stdlib.core.App.for(process.env.WING_TARGET);".to_string());
 			let app_name = self.entrypoint_file_path.file_stem().unwrap().to_string_lossy();
 			output.line(format!(
-				"new $App({{ outdir: {}, name: \"{}\", rootConstruct: {}, plugins: $plugins, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }}).synth();",
-				OUTDIR_VAR, app_name, ROOT_CLASS, ENV_WING_IS_TEST
+				"new $App({{ outdir: {}, name: \"{}\", rootConstruct: {}, plugins: {}, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }}).synth();",
+				OUTDIR_VAR, app_name, ROOT_CLASS, PLUGINS_VAR, ENV_WING_IS_TEST
 			));
 		} else {
 			output.add_code(js);
