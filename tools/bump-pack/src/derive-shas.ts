@@ -14,7 +14,7 @@ Expectations:
   - GITHUB_TOKEN environment variable must be set to a token with read access to workflows and PRs
   - One of the following must be true
     - This is running inside a github action
-    - The following environment variables must be set with relevant values: GITHUB_RUN_ID, GITHUB_REPOSITORY, GITHUB_REPOSITORY_OWNER, GITHUB_EVENT_NAME
+    - The following environment variables must be set with relevant values: GITHUB_RUN_ID, GITHUB_REPOSITORY_NAME, GITHUB_REPOSITORY_OWNER, GITHUB_EVENT_NAME
 
 Remarks:
   This is originally forked from https://github.com/nrwl/nx-set-shas, but now allows for pull request commits to to be used as the "base" as well.
@@ -58,17 +58,16 @@ setOutput("head_branch", branchName);
 async function findSuccessfulCommit(branchName: string) {
   if (GITHUB_TOKEN === undefined) return undefined;
 
-  let runId: string | number | undefined = process.env.GITHUB_RUN_ID;
-  let repoName = process.env.GITHUB_REPOSITORY;
-  let repoOwner = process.env.GITHUB_REPOSITORY_OWNER;
-  let eventName = process.env.GITHUB_EVENT_NAME;
+  let runId: string | number | undefined =
+    process.env.GITHUB_RUN_ID ?? context.runId;
+  let repoOwner = process.env.GITHUB_REPOSITORY_OWNER ?? context.repo.owner;
+  let repoName = process.env.GITHUB_REPOSITORY_NAME ?? context.repo.repo;
+  let eventName = process.env.GITHUB_EVENT_NAME ?? context.eventName;
 
-  if (runId === undefined) {
-    runId = context.runId;
-    repoName = context.repo.repo;
-    repoOwner = context.repo.owner;
-    eventName = context.eventName;
-  }
+  if (runId === undefined || repoName === undefined || repoOwner === undefined)
+    throw new Error(
+      `Missing required environment variables: GITHUB_RUN_ID, GITHUB_REPOSITORY_NAME, GITHUB_REPOSITORY_OWNER`
+    );
 
   runId = Number(runId);
 
@@ -76,48 +75,67 @@ async function findSuccessfulCommit(branchName: string) {
 
   const workflowId = await octokit.rest.actions
     .getWorkflowRun({
-      owner: repoOwner!,
-      repo: repoName!,
-      run_id: runId!,
+      owner: repoOwner,
+      repo: repoName,
+      run_id: runId,
       exclude_pull_requests: true,
     })
     .then(({ data: { workflow_id } }) => workflow_id);
 
-  const shas = await octokit.rest.actions
+  console.log(`Workflow ID: ${workflowId}`);
+
+  return await octokit.rest.actions
     .listWorkflowRuns({
-      owner: repoOwner!,
-      repo: repoName!,
+      owner: repoOwner,
+      repo: repoName,
       branch: branchName,
       workflow_id: workflowId,
       event: eventName,
       status: "success",
-      exclude_pull_requests: true,
     })
-    .then(({ data: { workflow_runs } }) =>
-      workflow_runs.map((run: { head_sha: any }) => run.head_sha)
-    );
+    .then(async ({ data: { workflow_runs } }) => {
+      for (const run of workflow_runs) {
+        if (eventName === "pull_request") {
+          // check if you need to fetch the merge ref
+          for (const pr of run.pull_requests ?? []) {
+            const prData = await octokit.rest.pulls.get({
+              owner: repoOwner,
+              repo: repoName,
+              pull_number: pr.number,
+            });
+            let goodSha = prData.data.merge_commit_sha;
+            if (!goodSha) {
+              console.warn(
+                `No merge commit found for PR ${pr.number} (merge conflict?)`
+              );
+              return undefined;
+            }
 
-  return await findExistingCommit(shas);
-}
+            betterExec(`git fetch origin pull/${pr.number}/merge`);
 
-/**
- * Get first existing commit
- */
-async function findExistingCommit(shas: string[]) {
-  for (const commitSha of shas) {
-    if (await commitExists(commitSha)) {
-      return commitSha;
-    }
-  }
-  return undefined;
+            if (commitExists(goodSha)) {
+              return goodSha;
+            } else {
+              throw new Error(`${goodSha} does not exist`);
+            }
+          }
+        } else {
+          if (commitExists(run.head_sha)) {
+            return run.head_sha;
+          } else {
+            throw new Error(`${run.head_sha} does not exist`);
+          }
+        }
+      }
+    });
 }
 
 /**
  * Check if given commit is valid
  */
-async function commitExists(commitSha: string) {
+function commitExists(sha: string) {
   try {
-    betterExec(`git cat-file -e ${commitSha}`);
+    betterExec(`git cat-file -e ${sha}`);
     return true;
   } catch {
     return false;
