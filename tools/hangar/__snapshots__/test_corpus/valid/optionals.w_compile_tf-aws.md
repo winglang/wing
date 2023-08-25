@@ -452,17 +452,17 @@ class $Root extends $stdlib.std.Resource {
     const Name = require("./Name.Struct.js")($stdlib.std.Struct);
     let name = ({"first": "John","last": "Doe"});
     {
-      const $IF_LET_VALUE = name;
-      if ($IF_LET_VALUE != undefined) {
-        const n = $IF_LET_VALUE;
+      const $if_let_value = name;
+      if ($if_let_value != undefined) {
+        const n = $if_let_value;
         {((cond) => {if (!cond) throw new Error("assertion failed: n.first == \"John\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(n.first,"John")))};
       }
     }
     name = undefined;
     {
-      const $IF_LET_VALUE = name;
-      if ($IF_LET_VALUE != undefined) {
-        const n = $IF_LET_VALUE;
+      const $if_let_value = name;
+      if ($if_let_value != undefined) {
+        const n = $if_let_value;
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
       else {
@@ -476,11 +476,38 @@ class $Root extends $stdlib.std.Resource {
       }
       return ({"first": (parts.at(0)),"last": (parts.at(1))});
     });
+    const json_obj = ({"ghost": "spooky"});
+    let something_else = false;
+    {
+      const $if_let_value = ((arg) => { return (typeof arg === "boolean") ? JSON.parse(JSON.stringify(arg)) : undefined })(json_obj);
+      if ($if_let_value != undefined) {
+        const y = $if_let_value;
+        {((cond) => {if (!cond) throw new Error("assertion failed: y == true || y == false")})(((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y,true)) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y,false))))};
+      }
+      else {
+        const $elif_let_value0 = ((arg) => { return (typeof arg === "number") ? JSON.parse(JSON.stringify(arg)) : undefined })(json_obj);
+        if ($elif_let_value0 != undefined) {
+          const y = $elif_let_value0;
+          {((cond) => {if (!cond) throw new Error("assertion failed: y + 0 == y")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((y + 0),y)))};
+        }
+        else {
+          const $elif_let_value1 = ((arg) => { return (typeof arg === "string") ? JSON.parse(JSON.stringify(arg)) : undefined })(json_obj);
+          if ($elif_let_value1 != undefined) {
+            const y = $elif_let_value1;
+            {((cond) => {if (!cond) throw new Error("assertion failed: y.length >= 0")})((y.length >= 0))};
+          }
+          else {
+            something_else = true;
+          }
+        }
+      }
+    }
+    {((cond) => {if (!cond) throw new Error("assertion failed: something_else")})(something_else)};
     const a = 1;
     {
-      const $IF_LET_VALUE = a;
-      if ($IF_LET_VALUE != undefined) {
-        let z = $IF_LET_VALUE;
+      const $if_let_value = a;
+      if ($if_let_value != undefined) {
+        let z = $if_let_value;
         {((cond) => {if (!cond) throw new Error("assertion failed: z == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(z,1)))};
         z = 2;
         {((cond) => {if (!cond) throw new Error("assertion failed: z == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(z,2)))};
@@ -495,14 +522,14 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     {
-      const $IF_LET_VALUE = (tryParseName("Good Name"));
-      if ($IF_LET_VALUE != undefined) {
-        const parsedName = $IF_LET_VALUE;
+      const $if_let_value = (tryParseName("Good Name"));
+      if ($if_let_value != undefined) {
+        const parsedName = $if_let_value;
         {((cond) => {if (!cond) throw new Error("assertion failed: parsedName.first == \"Good\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(parsedName.first,"Good")))};
         {
-          const $IF_LET_VALUE = parsedName.last;
-          if ($IF_LET_VALUE != undefined) {
-            const lastName = $IF_LET_VALUE;
+          const $if_let_value = parsedName.last;
+          if ($if_let_value != undefined) {
+            const lastName = $if_let_value;
             {((cond) => {if (!cond) throw new Error("assertion failed: lastName == \"Name\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(lastName,"Name")))};
           }
           else {
@@ -512,14 +539,14 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     {
-      const $IF_LET_VALUE = (tryParseName("BadName"));
-      if ($IF_LET_VALUE != undefined) {
-        const parsedName = $IF_LET_VALUE;
+      const $if_let_value = (tryParseName("BadName"));
+      if ($if_let_value != undefined) {
+        const parsedName = $if_let_value;
         {((cond) => {if (!cond) throw new Error("assertion failed: parsedName.first == \"BadName\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(parsedName.first,"BadName")))};
         {
-          const $IF_LET_VALUE = parsedName.last;
-          if ($IF_LET_VALUE != undefined) {
-            const lastName = $IF_LET_VALUE;
+          const $if_let_value = parsedName.last;
+          if ($if_let_value != undefined) {
+            const lastName = $if_let_value;
             {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
           }
         }
@@ -527,9 +554,9 @@ class $Root extends $stdlib.std.Resource {
     }
     const falsy = false;
     {
-      const $IF_LET_VALUE = falsy;
-      if ($IF_LET_VALUE != undefined) {
-        const f = $IF_LET_VALUE;
+      const $if_let_value = falsy;
+      if ($if_let_value != undefined) {
+        const f = $if_let_value;
         {((cond) => {if (!cond) throw new Error("assertion failed: f == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f,false)))};
       }
       else {
@@ -538,15 +565,15 @@ class $Root extends $stdlib.std.Resource {
     }
     const shadow = "root";
     {
-      const $IF_LET_VALUE = shadow;
-      if ($IF_LET_VALUE != undefined) {
-        const shadow = $IF_LET_VALUE;
+      const $if_let_value = shadow;
+      if ($if_let_value != undefined) {
+        const shadow = $if_let_value;
         {((cond) => {if (!cond) throw new Error("assertion failed: shadow == \"root\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(shadow,"root")))};
         const shadow1 = "nested";
         {
-          const $IF_LET_VALUE = shadow1;
-          if ($IF_LET_VALUE != undefined) {
-            const shadow1 = $IF_LET_VALUE;
+          const $if_let_value = shadow1;
+          if ($if_let_value != undefined) {
+            const shadow1 = $if_let_value;
             {((cond) => {if (!cond) throw new Error("assertion failed: shadow1 == \"nested\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(shadow1,"nested")))};
           }
           else {
@@ -557,9 +584,9 @@ class $Root extends $stdlib.std.Resource {
     }
     const fun = ((a) => {
       {
-        const $IF_LET_VALUE = a;
-        if ($IF_LET_VALUE != undefined) {
-          const y = $IF_LET_VALUE;
+        const $if_let_value = a;
+        if ($if_let_value != undefined) {
+          const y = $if_let_value;
           return y;
         }
         else {
@@ -575,9 +602,9 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: thirteen == 13")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(thirteen,13)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: notThere == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(notThere,undefined)))};
     {
-      const $IF_LET_VALUE = tree.left?.left;
-      if ($IF_LET_VALUE != undefined) {
-        const o = $IF_LET_VALUE;
+      const $if_let_value = tree.left?.left;
+      if ($if_let_value != undefined) {
+        const o = $if_let_value;
         {((cond) => {if (!cond) throw new Error("assertion failed: o.value == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(o.value,1)))};
       }
     }

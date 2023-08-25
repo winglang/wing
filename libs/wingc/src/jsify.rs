@@ -16,7 +16,7 @@ use std::{
 
 use crate::{
 	ast::{
-		ArgList, BinaryOperator, BringSource, CalleeKind, Class as AstClass, Expr, ExprKind, FunctionBody,
+		ArgList, BinaryOperator, BringSource, CalleeKind, Class as AstClass, ElifLetBlock, Expr, ExprKind, FunctionBody,
 		FunctionDefinition, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, StructField,
 		Symbol, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 	},
@@ -765,6 +765,78 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
+	// To avoid a performance penalty when evaluating assignments made in the elif statement,
+	// it was necessary to nest the if statements.
+	//
+	// Thus, this code in Wing:
+	//
+	// if let x = tryA() {
+	//  ...
+	// } elif let x = tryB() {
+	// 	 ...
+	// } elif let x = TryC() {
+	// 	 ...
+	// } else {
+	// 	...
+	// }
+	//
+	// In JavaScript, will become this:
+	//
+	// const $if_let_value = tryA();
+	// if ($if_let_value !== undefined) {
+	// 	...
+	// } else {
+	// 	let $elif_let_value0 = tryB();
+	// 	if ($elif_let_value0 !== undefined) {
+	// 		 ...
+	// 	} else {
+	// 		 let $elif_let_value1 = tryC();
+	// 		 if ($elif_let_value1 !== undefined) {
+	// 				...
+	// 		 } else {
+	// 				...
+	// 		 }
+	// 	}
+	// }
+	fn jsify_elif_statements(
+		&self,
+		code: &mut CodeMaker,
+		elif_statements: &Vec<ElifLetBlock>,
+		index: usize,
+		else_statements: &Option<Scope>,
+		ctx: &mut JSifyContext,
+	) {
+		let elif_let_value = "$elif_let_value";
+
+		let value = format!("{}{}", elif_let_value, index);
+		code.line(format!(
+			"const {} = {};",
+			value,
+			self.jsify_expression(&elif_statements.get(index).unwrap().value, ctx)
+		));
+		let value = format!("{}{}", elif_let_value, index);
+		code.open(format!("if ({value} != undefined) {{"));
+		let elif_block = elif_statements.get(index).unwrap();
+		if elif_block.reassignable {
+			code.line(format!("let {} = {};", elif_block.var_name, value));
+		} else {
+			code.line(format!("const {} = {};", elif_block.var_name, value));
+		}
+		code.add_code(self.jsify_scope_body(&elif_block.statements, ctx));
+		code.close("}");
+
+		if index < elif_statements.len() - 1 {
+			code.open("else {");
+			self.jsify_elif_statements(code, elif_statements, index + 1, else_statements, ctx);
+			code.close("}");
+		} else if let Some(else_scope) = else_statements {
+			code.open("else {");
+			code.add_code(self.jsify_scope_body(else_scope, ctx));
+			code.close("}");
+		}
+		return;
+	}
+
 	fn jsify_statement(&self, env: &SymbolEnv, statement: &Stmt, ctx: &mut JSifyContext) -> CodeMaker {
 		CompilationContext::set(CompilationPhase::Jsifying, &statement.span);
 		match &statement.kind {
@@ -836,6 +908,7 @@ impl<'a> JSifier<'a> {
 				value,
 				statements,
 				var_name,
+				elif_statements,
 				else_statements,
 			} => {
 				let mut code = CodeMaker::default();
@@ -867,12 +940,13 @@ impl<'a> JSifier<'a> {
 				// The temporary scope is created so that intermediate variables created by consecutive `if let` clauses
 				// do not interfere with each other.
 				code.open("{");
-				let if_let_value = "$IF_LET_VALUE".to_string();
+				let if_let_value = "$if_let_value".to_string();
 				code.line(format!(
 					"const {} = {};",
 					if_let_value,
 					self.jsify_expression(value, ctx)
 				));
+
 				code.open(format!("if ({if_let_value} != undefined) {{"));
 				if *reassignable {
 					code.line(format!("let {} = {};", var_name, if_let_value));
@@ -882,7 +956,11 @@ impl<'a> JSifier<'a> {
 				code.add_code(self.jsify_scope_body(statements, ctx));
 				code.close("}");
 
-				if let Some(else_scope) = else_statements {
+				if elif_statements.len() > 0 {
+					code.open("else {");
+					self.jsify_elif_statements(&mut code, elif_statements, 0, else_statements, ctx);
+					code.close("}");
+				} else if let Some(else_scope) = else_statements {
 					code.open("else {");
 					code.add_code(self.jsify_scope_body(else_scope, ctx));
 					code.close("}");
