@@ -3072,56 +3072,21 @@ impl<'a> TypeChecker<'a> {
 				statements,
 				reassignable,
 				var_name,
+				elif_statements,
 				else_statements,
 			} => {
-				let (mut cond_type, _) = self.type_check_exp(value, env);
+				self.type_check_if_let_statement(value, statements, reassignable, var_name, stmt, env);
 
-				if let Type::Inferred(n) = *cond_type {
-					// If the type is inferred and unlinked, we must make sure that the type is also optional
-					// So let's make a new inference, but this time optional
-					if self.types.get_inference_by_id(n).is_none() {
-						let new_inference = self.types.make_inference();
-						cond_type = self.types.make_option(new_inference);
-						self.types.update_inferred_type(n, cond_type, &value.span);
-					}
+				for elif_scope in elif_statements {
+					self.type_check_if_let_statement(
+						&elif_scope.value,
+						&elif_scope.statements,
+						&elif_scope.reassignable,
+						&elif_scope.var_name,
+						stmt,
+						env,
+					);
 				}
-
-				if !cond_type.is_option() {
-					report_diagnostic(Diagnostic {
-						message: format!("Expected type to be optional, but got \"{}\" instead", cond_type),
-						span: Some(value.span()),
-					});
-				}
-
-				// Technically we only allow if let statements to be used with optionals
-				// and above validate_type_is_optional method will attach a diagnostic error if it is not.
-				// However for the sake of verbose diagnostics we'll allow the code to continue if the type is not an optional
-				// and complete the type checking process for additional errors.
-				let var_type = *cond_type.maybe_unwrap_option();
-
-				let mut stmt_env = self.types.add_symbol_env(SymbolEnv::new(
-					Some(env.get_ref()),
-					env.return_type,
-					false,
-					false,
-					env.phase,
-					stmt.idx,
-				));
-
-				// Add the variable to if block scope
-				match stmt_env.define(
-					var_name,
-					SymbolKind::make_free_variable(var_name.clone(), var_type, *reassignable, env.phase),
-					StatementIdx::Top,
-				) {
-					Err(type_error) => {
-						self.type_error(type_error);
-					}
-					_ => {}
-				}
-
-				self.types.set_scope_env(statements, stmt_env);
-				self.inner_scopes.push(statements);
 
 				if let Some(else_scope) = else_statements {
 					let else_scope_env = self.types.add_symbol_env(SymbolEnv::new(
@@ -3142,34 +3107,10 @@ impl<'a> TypeChecker<'a> {
 				elif_statements,
 				else_statements,
 			} => {
-				let (cond_type, _) = self.type_check_exp(condition, env);
-				self.validate_type(cond_type, self.types.bool(), condition);
-
-				let if_scope_env = self.types.add_symbol_env(SymbolEnv::new(
-					Some(env.get_ref()),
-					env.return_type,
-					false,
-					false,
-					env.phase,
-					stmt.idx,
-				));
-				self.types.set_scope_env(statements, if_scope_env);
-				self.inner_scopes.push(statements);
+				self.type_check_if_statement(condition, statements, stmt, env);
 
 				for elif_scope in elif_statements {
-					let (cond_type, _) = self.type_check_exp(&elif_scope.condition, env);
-					self.validate_type(cond_type, self.types.bool(), condition);
-
-					let elif_scope_env = self.types.add_symbol_env(SymbolEnv::new(
-						Some(env.get_ref()),
-						env.return_type,
-						false,
-						false,
-						env.phase,
-						stmt.idx,
-					));
-					self.types.set_scope_env(&elif_scope.statements, elif_scope_env);
-					self.inner_scopes.push(&elif_scope.statements);
+					self.type_check_if_statement(&elif_scope.condition, &elif_scope.statements, stmt, env);
 				}
 
 				if let Some(else_scope) = else_statements {
@@ -3749,6 +3690,81 @@ impl<'a> TypeChecker<'a> {
 				self.type_check_arg_list(arg_list, env);
 			}
 		}
+	}
+
+	fn type_check_if_let_statement(
+		&mut self,
+		value: &Expr,
+		statements: &Scope,
+		reassignable: &bool,
+		var_name: &Symbol,
+		stmt: &Stmt,
+		env: &mut SymbolEnv,
+	) {
+		let (mut cond_type, _) = self.type_check_exp(value, env);
+
+		if let Type::Inferred(n) = *cond_type {
+			// If the type is inferred and unlinked, we must make sure that the type is also optional
+			// So let's make a new inference, but this time optional
+			if self.types.get_inference_by_id(n).is_none() {
+				let new_inference = self.types.make_inference();
+				cond_type = self.types.make_option(new_inference);
+				self.types.update_inferred_type(n, cond_type, &value.span);
+			}
+		}
+
+		if !cond_type.is_option() {
+			report_diagnostic(Diagnostic {
+				message: format!("Expected type to be optional, but got \"{}\" instead", cond_type),
+				span: Some(value.span()),
+			});
+		}
+
+		// Technically we only allow if let statements to be used with optionals
+		// and above validate_type_is_optional method will attach a diagnostic error if it is not.
+		// However for the sake of verbose diagnostics we'll allow the code to continue if the type is not an optional
+		// and complete the type checking process for additional errors.
+		let var_type = *cond_type.maybe_unwrap_option();
+
+		let mut stmt_env = self.types.add_symbol_env(SymbolEnv::new(
+			Some(env.get_ref()),
+			env.return_type,
+			false,
+			false,
+			env.phase,
+			stmt.idx,
+		));
+
+		// Add the variable to if block scope
+		match stmt_env.define(
+			var_name,
+			SymbolKind::make_free_variable(var_name.clone(), var_type, *reassignable, env.phase),
+			StatementIdx::Top,
+		) {
+			Err(type_error) => {
+				self.type_error(type_error);
+			}
+			_ => {}
+		}
+
+		self.types.set_scope_env(statements, stmt_env);
+		self.inner_scopes.push(statements);
+	}
+
+	fn type_check_if_statement(&mut self, condition: &Expr, statements: &Scope, stmt: &Stmt, env: &mut SymbolEnv) {
+		let (cond_type, _) = self.type_check_exp(condition, env);
+		self.validate_type(cond_type, self.types.bool(), condition);
+
+		let if_scope_env = self.types.add_symbol_env(SymbolEnv::new(
+			Some(env.get_ref()),
+			env.return_type,
+			false,
+			false,
+			env.phase,
+			stmt.idx,
+		));
+		self.types.set_scope_env(statements, if_scope_env);
+		self.inner_scopes.push(statements);
 	}
 
 	fn type_check_super_constructor_against_parent_initializer(
