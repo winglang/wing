@@ -1,3 +1,24 @@
+/*
+Usage: derive-shas
+
+Summary:
+  derive-shas figures out the base and head shas useful to compare in a github action.
+  A successful base is the sha of the last successful run of the current workflow on the base branch.
+  If no successful run is found, the base is the branching point between the base branch and the current branch.
+  The head is just the sha of the current commit.
+
+Output:
+  If running in an action, the "base", "head", and "head_branch" GH action outputs will be set to the calculated base and head shas respectively.
+
+Expectations:
+  - GITHUB_TOKEN environment variable must be set to a token with read access to workflows and PRs
+  - One of the following must be true
+    - This is running inside a github action
+    - The following environment variables must be set with relevant values: GITHUB_RUN_ID, GITHUB_REPOSITORY, GITHUB_REPOSITORY_OWNER, GITHUB_EVENT_NAME
+
+Options: (No options)
+*/
+
 import { setOutput } from "@actions/core";
 import { context, getOctokit } from "@actions/github";
 import { execSync } from "node:child_process";
@@ -5,9 +26,12 @@ import { execSync } from "node:child_process";
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const baseBranchName = "main";
 
-console.log(JSON.stringify(context));
+console.log(context);
 
-const branchName = betterExec(`git rev-parse --abbrev-ref HEAD`);
+const branchName =
+  context?.payload?.pull_request?.head?.ref ??
+  betterExec(`git rev-parse --abbrev-ref HEAD`);
+
 const HEAD_SHA = betterExec(`git rev-parse HEAD`);
 
 let BASE_SHA = await findSuccessfulCommit(baseBranchName, branchName);
@@ -25,6 +49,7 @@ BASE_SHA=${BASE_SHA}`);
 
 setOutput("base", BASE_SHA);
 setOutput("head", HEAD_SHA);
+setOutput("head_branch", branchName);
 
 async function findSuccessfulCommit(
   baseBranchName: string,
@@ -67,10 +92,7 @@ async function findSuccessfulCommit(
       }
     )
     .then(({ data: { workflow_runs } }) =>
-      workflow_runs.map(
-        (/** @type {{ head_sha: any; }} */ run: { head_sha: any }) =>
-          run.head_sha
-      )
+      workflow_runs.map((run: { head_sha: any }) => run.head_sha)
     );
 
   return await findExistingCommit(shas);

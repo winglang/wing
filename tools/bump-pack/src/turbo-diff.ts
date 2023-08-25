@@ -1,6 +1,35 @@
-// Why is all of this here?
-// See https://github.com/vercel/turbo/issues/4678
-// turbo does not take "inputs" into account when using `-F=[...]` git diff filtering
+/*
+Usage: turbo-diff [options]
+
+Summary:
+  turbo-diff is a tool that can be used to determine which turbo tasks changed based on a git diff.
+
+Output:
+  The output is a JSON object with the following structure:
+  {
+    "<task-id>": {
+      "cached": <boolean>,
+      "changes": <boolean>
+    }
+  }
+
+  The "cached" field indicates whether or not the task is cached based on the info that turbo has locally (or remotely if using a turbo remote cache).
+  The "changes" field indicates whether or not the task has changes based on the git diff.
+
+Expectations:
+  - The winglang monorepo this is contained in must have a enough history to covert startRef and EndRef.
+
+Remarks:
+  Why can't we just use turbo's built in diffing?
+  In turbo, you can use `-F=...[startRef..endRef]` to filter tasks based on a git diff. This method has two major issues:
+  1. See this issue: https://github.com/vercel/turbo/issues/4678. 
+     Basically, it does not actually use task inputs to determine if a task changed, it uses the entire project dir
+  2. It only tells you if a project changed, not a specific task.
+
+Options:
+  --start-ref <ref>  The start ref to use for the git diff (default: "HEAD")
+  --end-ref <ref>    The end ref to use for the git diff (default: "", current working tree)
+*/
 
 import { join } from "node:path";
 import { execSync } from "node:child_process";
@@ -99,7 +128,12 @@ for (const task of turboOutput.tasks) {
   }
   let dependencies = task.dependencies;
   if (task.package === "hangar") {
-    // ignore the wing console
+    /*
+    The wing console is a transitive dependency of hangar (hangar->winglang->@console/*).
+    Because of that, turbo knows that hangar itself also depends on it.
+    However, hangar doesn't actually interact with the console at all so it's functionally not a real dependency.
+    There is no way to denote this in turbo configuration so we have to do it manually here.
+    */
     dependencies = dependencies.filter(
       (dependency: string) => !dependency.startsWith("@wingconsole")
     );
