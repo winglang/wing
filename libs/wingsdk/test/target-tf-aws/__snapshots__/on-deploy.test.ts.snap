@@ -36,6 +36,9 @@ exports[`create an OnDeploy 1`] = `
     },
     "aws_lambda_function": {
       "my_on_deploy_Function_59669FC0": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Function-c88c90bc",
@@ -290,6 +293,9 @@ exports[`execute OnDeploy after other resources 1`] = `
     },
     "aws_lambda_function": {
       "my_on_deploy_Function_59669FC0": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Function-c88c90bc",
@@ -587,6 +593,9 @@ exports[`execute OnDeploy before other resources 1`] = `
     },
     "aws_lambda_function": {
       "my_on_deploy_Function_59669FC0": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Function-c88c90bc",

@@ -466,6 +466,9 @@ exports[`bucket with onCreate method 1`] = `
     },
     "aws_lambda_function": {
       "my_bucket_my_bucket-oncreate-OnMessage-7b961f4d_8104FB90": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "my_bucket-oncreate-OnMessage-7b961f4d-c81311dd",
@@ -885,6 +888,9 @@ exports[`bucket with onDelete method 1`] = `
     },
     "aws_lambda_function": {
       "my_bucket_my_bucket-ondelete-OnMessage-1de1a361_37C9E1F7": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "my_bucket-ondelete-OnMessage-1de1a361-c89e08bf",
@@ -1326,6 +1332,9 @@ exports[`bucket with onEvent method 1`] = `
     },
     "aws_lambda_function": {
       "my_bucket_my_bucket-oncreate-OnMessage-7b961f4d_8104FB90": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "my_bucket-oncreate-OnMessage-7b961f4d-c81311dd",
@@ -1345,6 +1354,9 @@ exports[`bucket with onEvent method 1`] = `
         },
       },
       "my_bucket_my_bucket-ondelete-OnMessage-1de1a361_37C9E1F7": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "my_bucket-ondelete-OnMessage-1de1a361-c89e08bf",
@@ -1364,6 +1376,9 @@ exports[`bucket with onEvent method 1`] = `
         },
       },
       "my_bucket_my_bucket-onupdate-OnMessage-46c07356_F3040BF9": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "my_bucket-onupdate-OnMessage-46c07356-c844b8ba",
@@ -2105,6 +2120,9 @@ exports[`bucket with onUpdate method 1`] = `
     },
     "aws_lambda_function": {
       "my_bucket_my_bucket-onupdate-OnMessage-46c07356_F3040BF9": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "my_bucket-onupdate-OnMessage-46c07356-c844b8ba",

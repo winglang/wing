@@ -44,6 +44,9 @@ exports[`inflight function uses a logger 2`] = `
     },
     "aws_lambda_function": {
       "Function": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Function-c852aba6",
