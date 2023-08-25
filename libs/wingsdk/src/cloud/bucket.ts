@@ -3,9 +3,9 @@ import { isAbsolute, resolve } from "path";
 import { Construct } from "constructs";
 import { Topic } from "./topic";
 import { fqnForType } from "../constants";
-import { App, Connections } from "../core";
+import { App } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Json, IResource, Resource } from "../std";
+import { Json, IResource, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Bucket`.
@@ -43,16 +43,19 @@ export abstract class Bucket extends Resource {
 
   /** @internal */
   protected readonly _topics = new Map<BucketEventType, Topic>();
-  private scope: Construct;
 
   constructor(scope: Construct, id: string, props: BucketProps = {}) {
     super(scope, id);
 
-    this.display.title = "Bucket";
-    this.display.description = "A cloud object store";
-    this.scope = scope;
+    Node.of(this).title = "Bucket";
+    Node.of(this).description = "A cloud object store";
 
-    this._addInflightOps(
+    props;
+  }
+
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [
       BucketInflightMethods.DELETE,
       BucketInflightMethods.GET,
       BucketInflightMethods.GET_JSON,
@@ -63,10 +66,8 @@ export abstract class Bucket extends Resource {
       BucketInflightMethods.EXISTS,
       BucketInflightMethods.TRY_GET,
       BucketInflightMethods.TRY_GET_JSON,
-      BucketInflightMethods.TRY_DELETE
-    );
-
-    props;
+      BucketInflightMethods.TRY_DELETE,
+    ];
   }
 
   /**
@@ -90,13 +91,14 @@ export abstract class Bucket extends Resource {
     path: string,
     encoding: BufferEncoding = "utf-8"
   ): void {
+    const app = App.of(this);
     if (isAbsolute(path)) {
       path = path;
     } else {
-      if (!App.of(this.scope).entrypointDir) {
+      if (!app.entrypointDir) {
         throw new Error("Missing environment variable: WING_SOURCE_DIR");
       }
-      path = resolve(App.of(this.scope).entrypointDir, path);
+      path = resolve(app.entrypointDir, path);
     }
     const data = fs.readFileSync(path, { encoding: encoding });
 
@@ -116,7 +118,7 @@ export abstract class Bucket extends Resource {
 
     this.node.addDependency(topic);
 
-    Connections.of(this).add({
+    Node.of(this).addConnection({
       source: this,
       target: topic,
       name: `${actionType}()`,
@@ -348,30 +350,22 @@ export interface IBucketClient {
 /**
  * `onCreate` event options
  */
-export interface BucketOnCreateProps {
-  /* Elided */
-}
+export interface BucketOnCreateProps {}
 
 /**
  * `onDelete` event options
  */
-export interface BucketOnDeleteProps {
-  /* Elided */
-}
+export interface BucketOnDeleteProps {}
 
 /**
  * `onUpdate` event options
  */
-export interface BucketOnUpdateProps {
-  /* Elided */
-}
+export interface BucketOnUpdateProps {}
 
 /**
  * `onEvent` options
  */
-export interface BucketOnEventProps {
-  /* Elided */
-}
+export interface BucketOnEventProps {}
 
 /**
  * A resource with an inflight "handle" method that can be passed to

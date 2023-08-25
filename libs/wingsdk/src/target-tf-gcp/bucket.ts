@@ -5,7 +5,6 @@ import { StorageBucketIamMember } from "../.gen/providers/google/storage-bucket-
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
 import { Id } from "../.gen/providers/random/id";
 import * as cloud from "../cloud";
-import * as core from "../core";
 import {
   CaseConventions,
   NameOptions,
@@ -88,7 +87,7 @@ export class Bucket extends cloud.Bucket {
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     throw new Error("Method not implemented.");
   }
 }

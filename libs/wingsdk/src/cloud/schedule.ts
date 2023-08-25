@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Duration, IResource, Resource } from "../std";
+import { Duration, IResource, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Schedule`.
@@ -50,8 +50,8 @@ export abstract class Schedule extends Resource {
   constructor(scope: Construct, id: string, props: ScheduleProps = {}) {
     super(scope, id);
 
-    this.display.title = "Schedule";
-    this.display.description =
+    Node.of(this).title = "Schedule";
+    Node.of(this).description =
       "A cloud schedule to trigger events at regular intervals";
 
     const { cron, rate } = props;
@@ -75,6 +75,11 @@ export abstract class Schedule extends Resource {
         "cannot use * in both the Day-of-month and Day-of-week fields. If you use it in one, you must use ? in the other"
       );
     }
+  }
+
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [];
   }
 
   /**

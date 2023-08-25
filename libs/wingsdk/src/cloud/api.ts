@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { IResource, Resource } from "../std/resource";
+import { IResource, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Api`.
@@ -149,9 +149,15 @@ export abstract class Api extends Resource {
     props;
 
     this.corsOptions = props.cors ? this._cors(props.corsOptions) : undefined;
-    this.display.title = "Api";
-    this.display.description = "A REST API endpoint";
+    Node.of(this).title = "Api";
+    Node.of(this).description = "A REST API endpoint";
   }
+
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [];
+  }
+
   /**
    * Add a inflight handler to the api for GET requests on the given path.
    * @param path The path to handle GET requests for.

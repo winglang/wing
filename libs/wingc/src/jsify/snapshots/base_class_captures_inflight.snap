@@ -65,25 +65,27 @@ class $Root extends $stdlib.std.Resource {
     class Base extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("bar", "$inflight_init");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.Base-1.js")({
             $x: ${context._lift(x)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const BaseClient = ${Base._toInflightType(this).text};
+            const BaseClient = ${Base._toInflightType(this)};
             const client = new BaseClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["bar", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("bar")) {
@@ -95,25 +97,27 @@ class $Root extends $stdlib.std.Resource {
     class Derived extends Base {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("foo", "$inflight_init");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.Derived-1.js")({
             $Base: ${context._lift(Base)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const DerivedClient = ${Derived._toInflightType(this).text};
+            const DerivedClient = ${Derived._toInflightType(this)};
             const client = new DerivedClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["foo", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("foo")) {
