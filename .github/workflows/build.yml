@@ -337,7 +337,11 @@ jobs:
 
       - name: Compute Checksums
         run: |
-          mv ./benchmarks/* ./dist
+          # if there is a ./benchmarks/report.json, move it to ./dist
+          if [ -f ./benchmarks/report.json ]; then
+            mv ./benchmarks/report.json ./dist
+          fi
+
           cd dist
 
           echo '' >> ../CHANGELOG.md
