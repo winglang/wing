@@ -274,6 +274,9 @@ module.exports = function({  }) {
             "uniqueId": "testcallstaticmethodofanamespacedtype_Handler_482915F1"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c808c556",
@@ -300,6 +303,9 @@ module.exports = function({  }) {
             "uniqueId": "testcallstaticmethodofaninnerinflightclass_Handler_2C5AF32C"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8d913d8",
@@ -326,6 +332,9 @@ module.exports = function({  }) {
             "uniqueId": "testcallstaticmethodofanouterinflightclass_Handler_2DD5B79F"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8dbdf1b",
@@ -352,6 +361,9 @@ module.exports = function({  }) {
             "uniqueId": "testcallstaticmethodofpreflight_Handler_8B40B9DA"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8e286c0",

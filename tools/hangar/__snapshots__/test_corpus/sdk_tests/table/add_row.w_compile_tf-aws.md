@@ -139,6 +139,9 @@ module.exports = function({ $_marioInfo___gender__, $_marioInfo___role__, $_peac
             "uniqueId": "testaddRow_Handler_2806A65E"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",

@@ -110,6 +110,9 @@ module.exports = function({ $std_Duration }) {
             "uniqueId": "testduration_Handler_50E6E252"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8eae108",

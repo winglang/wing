@@ -110,6 +110,9 @@ module.exports = function({  }) {
             "uniqueId": "testtest_Handler_295107CC"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "QUEUE_URL_6ec5b2e4": "${aws_sqs_queue.MyClosure_cloudQueue_465FD228.url}",

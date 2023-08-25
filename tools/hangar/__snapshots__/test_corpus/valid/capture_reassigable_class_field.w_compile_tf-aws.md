@@ -178,6 +178,9 @@ module.exports = function({  }) {
             "uniqueId": "testmain_Handler_242B2607"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_ce72b88b": "${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.bucket}",

@@ -196,6 +196,9 @@ module.exports = function({ $std_Json }) {
             "uniqueId": "testsetAt_Handler_51015029"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c841d86c",
@@ -222,6 +225,9 @@ module.exports = function({ $std_Json }) {
             "uniqueId": "testset_Handler_ADDF1A01"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8240bc7",
@@ -248,6 +254,9 @@ module.exports = function({ $std_Json }) {
             "uniqueId": "teststringify_Handler_2E93A8A7"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c84b217d",

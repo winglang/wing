@@ -121,6 +121,9 @@ module.exports = function({ $fn }) {
             "uniqueId": "testcaptureshadowinteraction_Handler_9B768E38"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8807c1f",

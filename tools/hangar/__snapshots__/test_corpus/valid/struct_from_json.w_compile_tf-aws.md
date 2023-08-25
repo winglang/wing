@@ -531,6 +531,9 @@ module.exports = function({ $Student, $jStudent1 }) {
             "uniqueId": "testflightschoolstudent_Handler_8BE7AA78"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c85c011b",
@@ -557,6 +560,9 @@ module.exports = function({ $Student, $jStudent1 }) {
             "uniqueId": "testliftingastudent_Handler_30A43B55"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c82f8661",

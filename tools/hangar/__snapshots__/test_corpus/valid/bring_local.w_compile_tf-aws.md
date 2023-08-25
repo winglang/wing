@@ -249,6 +249,9 @@ module.exports = function({  }) {
             "uniqueId": "file1Store_cloudOnDeploy_Function_9539541F"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_94dc4b3e": "${aws_s3_bucket.file1Store_cloudBucket_86CE87B1.bucket}",
@@ -276,6 +279,9 @@ module.exports = function({  }) {
             "uniqueId": "testadddatatostore_Handler_19066842"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_94dc4b3e": "${aws_s3_bucket.file1Store_cloudBucket_86CE87B1.bucket}",

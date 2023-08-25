@@ -109,6 +109,9 @@ module.exports = function({ $math_Util }) {
             "uniqueId": "testinflightarcsine_Handler_7B606063"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8343dcd",

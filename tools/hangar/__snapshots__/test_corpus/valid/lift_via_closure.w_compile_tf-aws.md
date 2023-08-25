@@ -187,6 +187,9 @@ module.exports = function({ $bucket2 }) {
             "uniqueId": "testcallnon-syntheticclosureasafunction_Handler_8C8F5E97"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_bbe94f63": "${aws_s3_bucket.MyClosure_cloudBucket_4DAD12C0.bucket}",
@@ -215,6 +218,9 @@ module.exports = function({ $bucket2 }) {
             "uniqueId": "testcallsyntheticclosureclassasafunction_Handler_577F53A9"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",

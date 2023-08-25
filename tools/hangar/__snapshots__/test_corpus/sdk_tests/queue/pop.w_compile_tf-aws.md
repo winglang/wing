@@ -97,6 +97,9 @@ module.exports = function({ $q }) {
             "uniqueId": "testpop_Handler_595175BF"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "QUEUE_URL_31e95cbd": "${aws_sqs_queue.cloudQueue.url}",

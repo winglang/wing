@@ -205,6 +205,9 @@ module.exports = function({  }) {
             "uniqueId": "f1"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "f1-c8545025",
@@ -231,6 +234,9 @@ module.exports = function({  }) {
             "uniqueId": "f2"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "FUNCTION_NAME_09b8c606": "${aws_lambda_function.f1.arn}",
@@ -258,6 +264,9 @@ module.exports = function({  }) {
             "uniqueId": "testlogging_Handler_2002EF98"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "FUNCTION_NAME_0300817a": "${aws_lambda_function.f2.arn}",

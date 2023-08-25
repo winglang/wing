@@ -269,6 +269,9 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
             "uniqueId": "from_cron-OnTick-cdafee6e"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_bca69a1d": "${aws_dynamodb_table.c1.name}",
@@ -296,6 +299,9 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
             "uniqueId": "from_rate-OnTick-86898773"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_7ba9f967": "${aws_dynamodb_table.c2.name}",
@@ -323,6 +329,9 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
             "uniqueId": "ontickiscalledbothforrateandcronschedules_Handler_B4B8DF58"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_7ba9f967": "${aws_dynamodb_table.c2.name}",

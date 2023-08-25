@@ -94,6 +94,9 @@ module.exports = function({ $math_Util }) {
             "uniqueId": "testTAU_Handler_FB9BAA33"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c86e3343",

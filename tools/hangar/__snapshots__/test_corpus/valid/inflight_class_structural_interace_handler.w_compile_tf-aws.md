@@ -115,6 +115,9 @@ module.exports = function({  }) {
             "uniqueId": "teststructureinterfacetypesforhandle_Handler_2DA6D9F8"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c83718d0",

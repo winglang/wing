@@ -313,6 +313,9 @@ module.exports = function(stdStruct) {
             "uniqueId": "teststructdefinitionsarephaseindependant_Handler_F8CACE9E"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8158c42",

@@ -141,6 +141,9 @@ module.exports = function({ $std_Json }) {
             "uniqueId": "testAccessJsonstaticinflight_Handler_E1606978"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8867497",
@@ -167,6 +170,9 @@ module.exports = function({ $std_Json }) {
             "uniqueId": "testhaskeyornot_Handler_3209D975"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8ecbdc2",

@@ -752,6 +752,9 @@ module.exports = function({  }) {
             "uniqueId": "testat_Handler_E4F013BC"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c858faac",
@@ -778,6 +781,9 @@ module.exports = function({  }) {
             "uniqueId": "testconcat_Handler_E184D86A"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c869963c",
@@ -804,6 +810,9 @@ module.exports = function({  }) {
             "uniqueId": "testcontains_Handler_F60865D9"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8e953a0",
@@ -830,6 +839,9 @@ module.exports = function({  }) {
             "uniqueId": "testendsWith_Handler_9BA42993"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8465c4f",
@@ -856,6 +868,9 @@ module.exports = function({  }) {
             "uniqueId": "testfromJson_Handler_CA86BEEA"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c89f3277",
@@ -882,6 +897,9 @@ module.exports = function({  }) {
             "uniqueId": "testindexOf_Handler_BD91EA6F"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c80be453",
@@ -908,6 +926,9 @@ module.exports = function({  }) {
             "uniqueId": "testlength_Handler_BFD8933F"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8e0ccbd",
@@ -934,6 +955,9 @@ module.exports = function({  }) {
             "uniqueId": "testlowercase_Handler_EAADE79D"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c86ac32a",
@@ -960,6 +984,9 @@ module.exports = function({  }) {
             "uniqueId": "testreplace_Handler_83836186"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c876baf0",
@@ -986,6 +1013,9 @@ module.exports = function({  }) {
             "uniqueId": "testsplit_Handler_4FAF6D9E"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8e87cf7",
@@ -1012,6 +1042,9 @@ module.exports = function({  }) {
             "uniqueId": "teststartsWith_Handler_C8752245"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8f6a537",
@@ -1038,6 +1071,9 @@ module.exports = function({  }) {
             "uniqueId": "testsubstring_Handler_E6617207"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c803a722",
@@ -1064,6 +1100,9 @@ module.exports = function({  }) {
             "uniqueId": "testtrim_Handler_403ED8AD"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c81cc785",
@@ -1090,6 +1129,9 @@ module.exports = function({  }) {
             "uniqueId": "testuppercase_Handler_352FFA2E"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c882dfb8",

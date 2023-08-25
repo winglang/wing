@@ -103,6 +103,9 @@ module.exports = function({ $b }) {
             "uniqueId": "testput_Handler_724F92D5"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",

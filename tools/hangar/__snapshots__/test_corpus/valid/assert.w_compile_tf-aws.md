@@ -105,6 +105,9 @@ module.exports = function({ $s1, $s2 }) {
             "uniqueId": "testassertworksinflight_Handler_915EA51A"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8a7b0b3",

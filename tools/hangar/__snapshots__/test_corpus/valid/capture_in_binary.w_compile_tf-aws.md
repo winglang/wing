@@ -93,6 +93,9 @@ module.exports = function({ $b, $x }) {
             "uniqueId": "testbinaryexpressions_Handler_BDFD91F0"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",

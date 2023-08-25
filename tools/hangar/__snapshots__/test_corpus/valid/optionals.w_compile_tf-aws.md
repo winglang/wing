@@ -208,6 +208,9 @@ module.exports = function({  }) {
             "uniqueId": "testt_Handler_FF112F5E"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_c1491ba5": "${aws_s3_bucket.orangebucket.bucket}",

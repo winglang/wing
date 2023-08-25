@@ -91,6 +91,9 @@ module.exports = function({  }) {
             "uniqueId": "testhellotest_Handler_388AC021"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8123dd7",

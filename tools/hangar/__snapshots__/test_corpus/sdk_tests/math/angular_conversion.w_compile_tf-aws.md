@@ -102,6 +102,9 @@ module.exports = function({ $math_Util }) {
             "uniqueId": "testinflightangularconversions_Handler_70CD171D"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c85ddda6",

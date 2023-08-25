@@ -109,6 +109,9 @@ module.exports = function({ $handler }) {
             "uniqueId": "testmain_Handler_242B2607"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8d10438",

@@ -232,6 +232,9 @@ module.exports = function({  }) {
             "uniqueId": "cloudTopic-OnMessage-86898773"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
@@ -259,6 +262,9 @@ module.exports = function({  }) {
             "uniqueId": "cloudTopic-OnMessage-cdafee6e"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
@@ -286,6 +292,9 @@ module.exports = function({  }) {
             "uniqueId": "testonMessage_Handler_1EC8F213"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",

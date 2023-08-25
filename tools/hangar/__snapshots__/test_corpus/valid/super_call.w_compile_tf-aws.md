@@ -261,6 +261,9 @@ module.exports = function({ $InflightA }) {
             "uniqueId": "testsupercallinflight_Handler_8BA833E3"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c83c6423",
@@ -287,6 +290,9 @@ module.exports = function({ $InflightA }) {
             "uniqueId": "testsupercallsetsbindingpermissions_Handler_094D9398"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",

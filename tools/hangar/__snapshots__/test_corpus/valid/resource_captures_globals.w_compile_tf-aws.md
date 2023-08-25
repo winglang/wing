@@ -283,6 +283,9 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
             "uniqueId": "MyResource_cloudTopic-OnMessage-f10eb240_23BCEE41"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
@@ -311,6 +314,9 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
             "uniqueId": "testaccesscloudresourcethroughstaticmethodsonly_Handler_BC0E7705"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
@@ -338,6 +344,9 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
             "uniqueId": "testtest_Handler_295107CC"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_ae5b06c6": "${aws_s3_bucket.Another_First_cloudBucket_DB822B7C.bucket}",

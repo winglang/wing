@@ -143,6 +143,9 @@ module.exports = function({ $f }) {
             "uniqueId": "cloudFunction"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1",
@@ -169,6 +172,9 @@ module.exports = function({ $f }) {
             "uniqueId": "testinvoke_Handler_A47C4946"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "FUNCTION_NAME_5bb84dfa": "${aws_lambda_function.cloudFunction.arn}",

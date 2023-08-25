@@ -292,6 +292,9 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
             "uniqueId": "testdeployingtwowebsites_Handler_DDBE7E21"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8683851",

@@ -138,6 +138,9 @@ module.exports = function({ $std_Number }) {
             "uniqueId": "testfromJson_Handler_CA86BEEA"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c89f3277",
@@ -164,6 +167,9 @@ module.exports = function({ $std_Number }) {
             "uniqueId": "testfromStr_Handler_03ACB5A8"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8fdb1d1",

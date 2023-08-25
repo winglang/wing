@@ -105,6 +105,9 @@ module.exports = function({  }) {
             "uniqueId": "Foo_cloudFunction_E4309ED7"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "cloud-Function-c8858302",

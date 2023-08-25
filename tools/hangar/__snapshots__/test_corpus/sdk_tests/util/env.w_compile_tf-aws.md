@@ -93,6 +93,9 @@ module.exports = function({ $NIL, $RANDOM, $util_Util }) {
             "uniqueId": "testuseutilfrominflight_Handler_6C871F39"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8904ffd",

@@ -91,6 +91,9 @@ module.exports = function({ $greeting }) {
             "uniqueId": "testsayHello_Handler_98B5E136"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c887876f",

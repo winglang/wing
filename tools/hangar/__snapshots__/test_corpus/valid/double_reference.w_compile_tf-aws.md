@@ -145,6 +145,9 @@ module.exports = function({ $initCount }) {
             "uniqueId": "testhello_Handler_549C38EE"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
