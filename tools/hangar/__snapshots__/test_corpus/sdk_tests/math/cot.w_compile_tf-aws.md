@@ -94,6 +94,9 @@ module.exports = function({ $math_Util }) {
             "uniqueId": "testinflightcotangent_Handler_93C199E4"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8fc3a88",

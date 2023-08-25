@@ -101,6 +101,9 @@ module.exports = function({  }) {
             "uniqueId": "testinflightclasswithoutinit_Handler_26AF0424"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8459d32",

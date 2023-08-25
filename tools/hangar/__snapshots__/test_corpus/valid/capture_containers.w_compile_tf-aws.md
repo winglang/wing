@@ -99,6 +99,9 @@ module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_a
             "uniqueId": "testcapture_containers_Handler_C1B42BA9"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c876b763",

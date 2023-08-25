@@ -110,6 +110,9 @@ module.exports = function({  }) {
             "uniqueId": "testsleep100miliseconds_Handler_F390CA22"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8e32fa2",

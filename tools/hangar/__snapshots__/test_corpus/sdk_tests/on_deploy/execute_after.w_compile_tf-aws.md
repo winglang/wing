@@ -237,6 +237,9 @@ module.exports = function({ $counter }) {
             "uniqueId": "init1_Function_9744E65A"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
@@ -264,6 +267,9 @@ module.exports = function({ $counter }) {
             "uniqueId": "init2_Function_C6177D5D"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
@@ -291,6 +297,9 @@ module.exports = function({ $counter }) {
             "uniqueId": "testcounter_Handler_9843F4E3"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",

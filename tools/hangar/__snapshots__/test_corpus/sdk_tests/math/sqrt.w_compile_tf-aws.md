@@ -103,6 +103,9 @@ module.exports = function({ $math_Util }) {
             "uniqueId": "testinflightsquareroot_Handler_2121E9F7"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c88a288d",

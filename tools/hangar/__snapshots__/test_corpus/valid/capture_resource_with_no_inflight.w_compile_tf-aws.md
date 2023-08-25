@@ -129,6 +129,9 @@ module.exports = function({  }) {
             "uniqueId": "testtest_Handler_295107CC"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_5b05aa10": "${aws_dynamodb_table.A_cloudCounter_1CAB7DAD.name}",

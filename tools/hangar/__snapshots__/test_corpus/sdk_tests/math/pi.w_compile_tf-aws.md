@@ -109,6 +109,9 @@ module.exports = function({ $circumference, $math_Util, $r }) {
             "uniqueId": "testPI_Handler_129F22B0"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8f48054",

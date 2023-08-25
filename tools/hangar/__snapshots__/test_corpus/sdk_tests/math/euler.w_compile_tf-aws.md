@@ -109,6 +109,9 @@ module.exports = function({ $compoundOneYear, $interest, $math_Util, $value }) {
             "uniqueId": "testEULER_Handler_7DE24200"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c80e7a9d",

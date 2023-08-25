@@ -92,6 +92,9 @@ module.exports = function({ $math_Util, $myArray }) {
             "uniqueId": "testinflightmin--max_Handler_7896C0CC"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c88f3f4b",

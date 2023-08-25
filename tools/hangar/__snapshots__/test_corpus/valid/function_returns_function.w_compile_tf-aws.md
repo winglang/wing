@@ -101,6 +101,9 @@ module.exports = function({  }) {
             "uniqueId": "testinflightfunctionscanreturnotherinflightfunctions_Handler_7EBEFDAA"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8801592",

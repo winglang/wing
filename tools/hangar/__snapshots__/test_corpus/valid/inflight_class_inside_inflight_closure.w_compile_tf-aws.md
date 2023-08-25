@@ -215,6 +215,9 @@ module.exports = function({  }) {
             "uniqueId": "PreflightClass_cloudFunction_9F7C6688"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_70ca4fed": "${aws_s3_bucket.PreflightClass_cloudBucket_05421049.bucket}",
@@ -242,6 +245,9 @@ module.exports = function({  }) {
             "uniqueId": "testinflightclassinsideclosurecapturesfromclosure_Handler_9491D6BF"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c866c5da",
@@ -268,6 +274,9 @@ module.exports = function({  }) {
             "uniqueId": "testitworks_Handler_FCB0C220"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "FUNCTION_NAME_31bff872": "${aws_lambda_function.PreflightClass_cloudFunction_9F7C6688.arn}",

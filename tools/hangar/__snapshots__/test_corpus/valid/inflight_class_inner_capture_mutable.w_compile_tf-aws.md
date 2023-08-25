@@ -102,6 +102,9 @@ module.exports = function({  }) {
             "uniqueId": "testinnerinflightclasscaptureimmutable_Handler_8A6A0444"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c88a8b71",

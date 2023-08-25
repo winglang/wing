@@ -101,6 +101,9 @@ module.exports = function({ $__x_, $__y_, $math_Util, $x, $y }) {
             "uniqueId": "testinflightfloor--ceil--round_Handler_90E85A3F"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8bf255a",

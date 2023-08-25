@@ -105,6 +105,9 @@ module.exports = function({ $myConst }) {
             "uniqueId": "testinflightclasscapturesconst_Handler_17207FA8"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8e53a58",

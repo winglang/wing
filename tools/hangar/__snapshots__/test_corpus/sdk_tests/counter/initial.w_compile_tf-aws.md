@@ -238,6 +238,9 @@ module.exports = function({ $counterC }) {
             "uniqueId": "testinitialdefault_Handler_CE963B96"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_220d28dd": "${aws_dynamodb_table.counterA.name}",
@@ -265,6 +268,9 @@ module.exports = function({ $counterC }) {
             "uniqueId": "testinitialnegative-value_Handler_C5E9E480"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_4795370d": "${aws_dynamodb_table.counterC.name}",
@@ -292,6 +298,9 @@ module.exports = function({ $counterC }) {
             "uniqueId": "testinitialpositive-value_Handler_473ACDB1"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_96df6c3c": "${aws_dynamodb_table.counterB.name}",

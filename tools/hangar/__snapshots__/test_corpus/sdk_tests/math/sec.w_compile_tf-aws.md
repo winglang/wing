@@ -96,6 +96,9 @@ module.exports = function({ $math_Util }) {
             "uniqueId": "testinflightsecant_Handler_72888816"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8dc1a66",

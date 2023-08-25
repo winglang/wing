@@ -104,6 +104,9 @@ module.exports = function({ $bucket }) {
             "uniqueId": "cloudQueue-SetConsumer-cdafee6e"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",

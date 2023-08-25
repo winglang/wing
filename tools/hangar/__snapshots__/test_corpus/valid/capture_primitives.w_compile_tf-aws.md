@@ -105,6 +105,9 @@ module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_second
             "uniqueId": "cloudFunction"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1",

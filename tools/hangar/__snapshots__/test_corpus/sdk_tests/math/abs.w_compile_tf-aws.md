@@ -92,6 +92,9 @@ module.exports = function({ $math_Util, $x, $y }) {
             "uniqueId": "testinflightabsolute_Handler_DB051761"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c84ad0c4",

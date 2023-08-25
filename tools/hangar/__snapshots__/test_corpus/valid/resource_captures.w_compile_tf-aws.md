@@ -235,6 +235,9 @@ module.exports = function({  }) {
             "uniqueId": "testtest_Handler_295107CC"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_51ee81c0": "${aws_s3_bucket.MyResource_cloudBucket_B5E6C951.bucket}",

@@ -138,6 +138,9 @@ module.exports = function({ $strToStr }) {
             "uniqueId": "func"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "FUNCTION_NAME_bc9a3a6d": "${aws_lambda_function.strToStr.arn}",
@@ -165,6 +168,9 @@ module.exports = function({ $strToStr }) {
             "uniqueId": "strToStr"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "strToStr-c8d5081f",

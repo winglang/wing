@@ -111,6 +111,9 @@ module.exports = function({  }) {
             "uniqueId": "cloudQueue-SetConsumer-cdafee6e"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
