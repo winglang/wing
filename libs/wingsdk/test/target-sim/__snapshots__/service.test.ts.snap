@@ -121,6 +121,7 @@ async handle(message) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
                 "title": "onStart()",
               },
               "id": "my_service-ServiceOnStartef2b13b9",
