@@ -16,6 +16,10 @@ Expectations:
     - This is running inside a github action
     - The following environment variables must be set with relevant values: GITHUB_RUN_ID, GITHUB_REPOSITORY, GITHUB_REPOSITORY_OWNER, GITHUB_EVENT_NAME
 
+Remarks:
+  This is originally forked from https://github.com/nrwl/nx-set-shas, but now allows for pull request commits to to be used as the "base" as well.
+  Also changed to be in typescript and less modular.
+
 Options: (No options)
 */
 
@@ -34,7 +38,7 @@ const branchName =
 
 const HEAD_SHA = betterExec(`git rev-parse HEAD`);
 
-let BASE_SHA = await findSuccessfulCommit(baseBranchName, branchName);
+let BASE_SHA = await findSuccessfulCommit(branchName);
 
 // If no successful workflow run is found, use the branching point from the base branch
 if (BASE_SHA) {
@@ -51,10 +55,7 @@ setOutput("base", BASE_SHA);
 setOutput("head", HEAD_SHA);
 setOutput("head_branch", branchName);
 
-async function findSuccessfulCommit(
-  baseBranchName: string,
-  branchName: string
-) {
+async function findSuccessfulCommit(branchName: string) {
   if (GITHUB_TOKEN === undefined) return undefined;
 
   let runId: string | number | undefined = process.env.GITHUB_RUN_ID;
@@ -69,28 +70,29 @@ async function findSuccessfulCommit(
     eventName = context.eventName;
   }
 
+  runId = Number(runId);
+
   const octokit = getOctokit(GITHUB_TOKEN);
-  const workflowId = await octokit
-    .request(`GET /repos/${repoOwner}/${repoName}/actions/runs/${runId}`, {
-      repoOwner,
-      repoName,
-      branch: baseBranchName,
-      runId,
+
+  const workflowId = await octokit.rest.actions
+    .getWorkflowRun({
+      owner: repoOwner!,
+      repo: repoName!,
+      run_id: runId!,
+      exclude_pull_requests: true,
     })
     .then(({ data: { workflow_id } }) => workflow_id);
 
-  const shas = await octokit
-    .request(
-      `GET /repos/${repoOwner}/${repoName}/actions/workflows/${workflowId}/runs`,
-      {
-        repoOwner,
-        repoName,
-        branch: branchName,
-        workflowId,
-        event: eventName,
-        status: "success",
-      }
-    )
+  const shas = await octokit.rest.actions
+    .listWorkflowRuns({
+      owner: repoOwner!,
+      repo: repoName!,
+      branch: branchName,
+      workflow_id: workflowId,
+      event: eventName,
+      status: "success",
+      exclude_pull_requests: true,
+    })
     .then(({ data: { workflow_runs } }) =>
       workflow_runs.map((run: { head_sha: any }) => run.head_sha)
     );
