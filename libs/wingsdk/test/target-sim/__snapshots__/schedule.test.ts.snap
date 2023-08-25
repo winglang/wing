@@ -187,6 +187,7 @@ console.log(\\"Hello from schedule!\\");
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
                 "title": "onTick()",
               },
               "id": "my_schedule-OnTick-e645076f",
@@ -358,6 +359,7 @@ console.log(\\"Hello from schedule!\\");
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
                 "title": "onTick()",
               },
               "id": "my_schedule-OnTick-e645076f",
@@ -529,6 +531,7 @@ console.log(\\"Hello from schedule!\\");
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
                 "title": "onTick()",
               },
               "id": "my_schedule-OnTick-e645076f",

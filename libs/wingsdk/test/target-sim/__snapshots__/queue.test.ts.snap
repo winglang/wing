@@ -221,6 +221,7 @@ async handle(message) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
                 "title": "setConsumer()",
               },
               "id": "my_queue-SetConsumer-e645076f",
@@ -414,6 +415,7 @@ async handle(message) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
                 "title": "setConsumer()",
               },
               "id": "my_queue-SetConsumer-e645076f",
@@ -608,6 +610,7 @@ async handle(message) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
                 "title": "setConsumer()",
               },
               "id": "my_queue-SetConsumer-e645076f",
@@ -938,6 +941,7 @@ async handle(message) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
                 "title": "setConsumer()",
               },
               "id": "my_queue-SetConsumer-e645076f",
@@ -975,6 +979,7 @@ async handle(message) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
                 "title": "Function",
               },
               "id": "Function",
@@ -1156,6 +1161,7 @@ async handle(message) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
                 "title": "setConsumer()",
               },
               "id": "my_queue-SetConsumer-e645076f",
