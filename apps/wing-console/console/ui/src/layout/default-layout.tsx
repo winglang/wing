@@ -195,7 +195,7 @@ export const DefaultLayout = ({
                     "absolute h-full w-full z-50 bg-white/70 dark:bg-slate-600/70",
                     "transition-all",
                     showLoadingOverlay && "opacity-100 z-10",
-                    !showLoadingOverlay && "opacity-0 -z-10",
+                    !showLoadingOverlay && "opacity-0 -z-50",
                     theme.text2,
                   )}
                 />
@@ -296,7 +296,7 @@ export const DefaultLayout = ({
                   "absolute h-full w-full z-50 bg-white/70 dark:bg-slate-600/70",
                   "transition-all",
                   showLoadingOverlay && "opacity-100 z-10",
-                  !showLoadingOverlay && "opacity-0 -z-10",
+                  !showLoadingOverlay && "opacity-0 -z-50",
                 )}
                 data-testid="loading-overlay"
               >
