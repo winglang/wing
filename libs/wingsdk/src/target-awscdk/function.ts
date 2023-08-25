@@ -2,6 +2,7 @@ import { resolve } from "path";
 import { Duration } from "aws-cdk-lib";
 import { PolicyStatement as CdkPolicyStatement } from "aws-cdk-lib/aws-iam";
 import {
+  Architecture,
   Function as CdkFunction,
   Code,
   IEventSource,
@@ -44,6 +45,7 @@ export class Function extends cloud.Function implements IAwsFunction {
         ? Duration.seconds(props.timeout.seconds)
         : Duration.minutes(0.5),
       memorySize: props.memory ? props.memory : undefined,
+      architecture: Architecture.ARM_64,
     });
 
     this.arn = this.function.functionArn;
