@@ -82,6 +82,9 @@ exports[`function with a table binding 2`] = `
     },
     "aws_lambda_function": {
       "Function": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_e7245baa": "\${aws_dynamodb_table.Table.name}",

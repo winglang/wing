@@ -158,6 +158,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
                 "title": "get()",
               },
               "id": "OnRequestHandler-e645076f",
@@ -346,6 +347,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
                 "title": "get()",
               },
               "id": "OnRequestHandler-e645076f",
@@ -534,6 +536,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
                 "title": "get()",
               },
               "id": "OnRequestHandler-e645076f",
@@ -722,6 +725,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
                 "title": "get()",
               },
               "id": "OnRequestHandler-e645076f",
@@ -910,6 +914,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
                 "title": "get()",
               },
               "id": "OnRequestHandler-e645076f",
@@ -1230,6 +1235,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
                 "title": "get()",
               },
               "id": "OnRequestHandler-e645076f",
@@ -1416,6 +1422,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
                 "title": "get()",
               },
               "id": "OnRequestHandler-e645076f",
@@ -1692,6 +1699,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
                 "title": "get()",
               },
               "id": "OnRequestHandler-7c48a9f0",
@@ -1704,6 +1712,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
                 "title": "post()",
               },
               "id": "OnRequestHandler-f6d90a7f",
@@ -1982,6 +1991,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
                 "title": "get()",
               },
               "id": "OnRequestHandler-7c48a9f0",
@@ -1994,6 +2004,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
                 "title": "get()",
               },
               "id": "OnRequestHandler-f6d90a7f",
@@ -2182,6 +2193,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
                 "title": "get()",
               },
               "id": "OnRequestHandler-e645076f",
@@ -2379,6 +2391,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
                 "title": "get()",
               },
               "id": "OnRequestHandler-e645076f",
@@ -2567,6 +2580,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
                 "title": "post()",
               },
               "id": "OnRequestHandler-e645076f",

@@ -136,11 +136,17 @@ where
 			statements,
 			reassignable: _,
 			var_name,
+			elif_statements,
 			else_statements,
 		} => {
 			v.visit_symbol(var_name);
 			v.visit_expr(value);
 			v.visit_scope(statements);
+			for elif in elif_statements {
+				v.visit_symbol(&elif.var_name);
+				v.visit_expr(&elif.value);
+				v.visit_scope(&elif.statements);
+			}
 			if let Some(statements) = else_statements {
 				v.visit_scope(statements);
 			}

@@ -138,6 +138,9 @@ module.exports = function({ $strToStr }) {
             "uniqueId": "func"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "FUNCTION_NAME_bc9a3a6d": "${aws_lambda_function.strToStr.arn}",
@@ -165,6 +168,9 @@ module.exports = function({ $strToStr }) {
             "uniqueId": "strToStr"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "strToStr-c8d5081f",
@@ -238,6 +244,7 @@ module.exports = function({ $strToStr }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;

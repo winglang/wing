@@ -196,6 +196,9 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
             "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-cdafee6e-c8147384",
@@ -222,6 +225,9 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
             "uniqueId": "testapishouldreturnavalidstringifiedjson_Handler_DCAABCD2"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c88c3aa2",
@@ -300,6 +306,7 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;

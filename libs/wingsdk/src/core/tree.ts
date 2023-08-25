@@ -62,6 +62,12 @@ export interface DisplayInfo {
    * @default false (visible)
    */
   readonly hidden?: boolean;
+
+  /**
+   * The source file or library where the construct was defined.
+   * @default - no source information
+   */
+  readonly sourceModule?: string;
 }
 
 /**
@@ -159,6 +165,7 @@ function synthDisplay(construct: IConstruct): DisplayInfo | undefined {
       title: display.title,
       description: display.description,
       hidden: display.hidden,
+      sourceModule: display.sourceModule,
     };
   }
   return;

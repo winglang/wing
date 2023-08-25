@@ -284,6 +284,9 @@ exports[`dec() policy statement 1`] = `
     },
     "aws_lambda_function": {
       "Function": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_6cb5a3a4": "\${aws_dynamodb_table.Counter.name}",
@@ -583,6 +586,9 @@ exports[`function with a counter binding 2`] = `
     },
     "aws_lambda_function": {
       "Function": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_6cb5a3a4": "\${aws_dynamodb_table.Counter.name}",
@@ -839,6 +845,9 @@ exports[`inc() policy statement 1`] = `
     },
     "aws_lambda_function": {
       "Function": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_6cb5a3a4": "\${aws_dynamodb_table.Counter.name}",
@@ -1095,6 +1104,9 @@ exports[`peek() policy statement 1`] = `
     },
     "aws_lambda_function": {
       "Function": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_6cb5a3a4": "\${aws_dynamodb_table.Counter.name}",
@@ -1473,6 +1485,9 @@ exports[`set() policy statement 1`] = `
     },
     "aws_lambda_function": {
       "Function": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_6cb5a3a4": "\${aws_dynamodb_table.Counter.name}",

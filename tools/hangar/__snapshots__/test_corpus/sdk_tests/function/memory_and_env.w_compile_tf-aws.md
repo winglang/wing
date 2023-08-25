@@ -209,6 +209,9 @@ module.exports = function({ $c, $f1, $f2 }) {
             "uniqueId": "envfn"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
@@ -238,6 +241,9 @@ module.exports = function({ $c, $f1, $f2 }) {
             "uniqueId": "memoryfn"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
@@ -266,6 +272,9 @@ module.exports = function({ $c, $f1, $f2 }) {
             "uniqueId": "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_BE0A518F"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
@@ -370,6 +379,7 @@ module.exports = function({ $c, $f1, $f2 }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
