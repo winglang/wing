@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { IResource, Resource } from "../std";
+import { IResource, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Service`.
@@ -50,15 +50,15 @@ export abstract class Service extends Resource {
   constructor(scope: Construct, id: string, props: ServiceProps) {
     super(scope, id);
 
-    this.display.title = "Service";
-    this.display.description = "A cloud service";
-
-    this._addInflightOps(
-      ServiceInflightMethods.START,
-      ServiceInflightMethods.STOP
-    );
+    Node.of(this).title = "Service";
+    Node.of(this).description = "A cloud service";
 
     props;
+  }
+
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [ServiceInflightMethods.START, ServiceInflightMethods.STOP];
   }
 }
 

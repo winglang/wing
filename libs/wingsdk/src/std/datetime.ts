@@ -1,4 +1,4 @@
-import { Code, InflightClient } from "../core";
+import { InflightClient } from "../core";
 
 /**
  * Interface that is used for setting Datetime date
@@ -46,7 +46,7 @@ export class Datetime {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
   /**

@@ -4,7 +4,7 @@
 
 import { Array } from "./array";
 import { T1 } from "./generics";
-import { Code, InflightClient } from "../core";
+import { InflightClient } from "../core";
 
 /**
  * Immutable Set
@@ -15,7 +15,7 @@ export class Set {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
 
@@ -71,7 +71,7 @@ export class MutSet {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
 

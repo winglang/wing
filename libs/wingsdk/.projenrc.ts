@@ -23,7 +23,7 @@ if (undocumentedResources.length) {
   );
 }
 
-const JSII_DEPS = ["constructs@~10.1.314"];
+const JSII_DEPS = ["constructs@~10.2.69"];
 const CDKTF_VERSION = "0.17.0";
 
 const CDKTF_PROVIDERS = [

@@ -246,7 +246,8 @@ export const DefaultLayout = ({
           "h-full flex flex-col select-none",
           theme.text2,
           showTerms && "blur-sm",
-          "gap-1 pt-1",
+          "gap-1",
+          layout?.panels?.rounded && "pt-1",
         )}
       >
         {cloudAppState === "error" &&

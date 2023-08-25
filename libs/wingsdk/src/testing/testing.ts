@@ -1,7 +1,7 @@
 import { IConstruct } from "constructs";
-import { InflightBindings, NodeJsCode } from "../core";
+import { InflightBindings } from "../core";
 import { liftObject } from "../core/internal";
-import { IInflightHost, IResource, Resource } from "../std";
+import { IInflightHost, IResource, Node, Resource } from "../std";
 
 /**
  * Test utilities.
@@ -43,16 +43,17 @@ export class Testing {
           (this as any)[field] = value.obj;
         }
 
-        this.display.title = "Inflight";
-        this.display.description = "An inflight resource";
-        this.display.hidden = true;
-
-        this._addInflightOps("handle");
+        Node.of(this).title = "Inflight";
+        Node.of(this).description = "An inflight resource";
+        Node.of(this).hidden = true;
       }
 
-      public _toInflight(): NodeJsCode {
-        return NodeJsCode.fromInline(
-          `new ((function(){
+      public _getInflightOps(): string[] {
+        return ["handle"];
+      }
+
+      public _toInflight(): string {
+        return `new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -65,8 +66,7 @@ return class Handler {
 ${Object.entries(clients)
   .map(([name, client]) => `${name}: ${client}`)
   .join(",\n")}
-})`
-        );
+})`;
       }
 
       public _registerBind(host: IInflightHost, ops: string[]): void {

@@ -1,7 +1,6 @@
 import { Construct } from "constructs";
 import { normalPath } from "./misc";
-import { NodeJsCode } from "../core";
-import { IInflightHost, IResource, Resource } from "../std";
+import { IInflightHost, IResource, Node, Resource } from "../std";
 
 /**
  * Convert a resource with a single method into a resource with a different
@@ -26,20 +25,21 @@ export function convertBetweenHandlers(
     constructor(theScope: Construct, theId: string, handler: IResource) {
       super(theScope, theId);
       this.handler = handler;
-      this.display.hidden = true;
-      this._addInflightOps("handle");
+      Node.of(this).hidden = true;
       this.args = args;
     }
 
-    public _toInflight(): NodeJsCode {
+    public _getInflightOps(): string[] {
+      return ["handle"];
+    }
+
+    public _toInflight(): string {
       const handlerClient = this.handler._toInflight();
-      return NodeJsCode.fromInline(
-        `new (require("${normalPath(
-          newHandlerClientPath
-        )}")).${newHandlerClientClassName}({ handler: ${
-          handlerClient.text
-        }, args: ${JSON.stringify(this.args)} })`
-      );
+      return `new (require("${normalPath(
+        newHandlerClientPath
+      )}")).${newHandlerClientClassName}({ handler: ${handlerClient}, args: ${JSON.stringify(
+        this.args
+      )} })`;
     }
 
     public _registerBind(host: IInflightHost, ops: string[]): void {

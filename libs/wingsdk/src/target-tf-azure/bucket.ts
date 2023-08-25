@@ -174,7 +174,7 @@ export class Bucket extends cloud.Bucket {
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return core.InflightClient.for(__dirname, __filename, "BucketClient", [
       `process.env["${this.envName()}"]`,
       `process.env["${this.envStorageAccountName()}"]`,

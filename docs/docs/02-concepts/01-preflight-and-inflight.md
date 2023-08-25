@@ -266,7 +266,7 @@ inflight () => {
 
 ## Phase-independent code
 
-The global functions `log`, `assert`, `throw`, and `panic` can all be used in both preflight and inflight code.
+The global functions `log`, `assert`, and `throw` can all be used in both preflight and inflight code.
 
 Issue [#435](https://github.com/winglang/wing/issues/435) is tracking support for the capability to define phase-independent functions.
 

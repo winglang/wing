@@ -98,19 +98,6 @@ jobs:
           name: dist
           path: dist/*
 
-      # Create patch to go from the PR head to the merge commit
-      - name: Create git patch for merge
-        if: github.event_name == 'pull_request'
-        id: diff
-        run: scripts/create_patch.sh update.diff ${{ github.event.pull_request.head.sha }} ${{ github.sha }}
-
-      - name: Upload patch
-        if: steps.diff.outputs.diff == 'true'
-        uses: actions/upload-artifact@v3
-        with:
-          name: update.diff
-          path: update.diff
-
   test:
     name: Test
     timeout-minutes: 30
@@ -291,11 +278,8 @@ jobs:
         run: |
           PATCH_COUNT=0
           for f in $(find ./*.diff/*.diff); do
-            # Exclude update.diff since we don't want to fail if the PR is just not up to date
-            if [ "$f" != "./update.diff/update.diff" ]; then
-              PATCH_COUNT=$((PATCH_COUNT + 1))
-              cat $f
-            fi
+            PATCH_COUNT=$((PATCH_COUNT + 1))
+            cat $f
           done
           if [ $PATCH_COUNT -gt 0 ]; then
             echo "Found $PATCH_COUNT patches, build failed. A self-mutation should happen soon."
@@ -330,8 +314,8 @@ jobs:
         env:
           PACKAGE_VERSION: ${{ needs.build.outputs.version }}
         run: |
-          PACKAGES=("winglang-sdk" "winglang-compiler" "wingconsole-design-system" "wingconsole-ui" "wingconsole-server" "wingconsole-app")
-          for PACKAGE in $PACKAGES; do
+          PACKAGES=("winglang-sdk" "winglang-compiler" "wingconsole-design-system" "wingconsole-ui" "wingconsole-server" "wingconsole-app" "winglang")
+          for PACKAGE in "${PACKAGES[@]}"; do
             npm publish "$PACKAGE-$PACKAGE_VERSION.tgz" --access public
           done
 

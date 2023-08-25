@@ -18,19 +18,19 @@ return class Handler {
 };
 })())({
 counter: (function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"COUNTER_HANDLE_4ecd8d46\\"),
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+})(\\"COUNTER_HANDLE_4ecd8d46\\"),
 bucket: (function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"BUCKET_HANDLE_5f2a41c8\\")
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+})(\\"BUCKET_HANDLE_5f2a41c8\\")
 }), args: {} })).handle(event);
 };",
   "connections.json": {
@@ -147,7 +147,7 @@ bucket: (function(env) {
             "Bucket": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "description": "A cloud object store",
@@ -159,7 +159,7 @@ bucket: (function(env) {
             "Counter": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "description": "A distributed atomic counter",
@@ -171,7 +171,7 @@ bucket: (function(env) {
             "Processor": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "description": "An inflight resource",
@@ -186,7 +186,7 @@ bucket: (function(env) {
                 "Queue-QueueEventMapping-401ee792": {
                   "constructInfo": {
                     "fqn": "constructs.Construct",
-                    "version": "10.1.314",
+                    "version": "10.2.69",
                   },
                   "display": {
                     "hidden": true,
@@ -197,11 +197,10 @@ bucket: (function(env) {
                 "Queue-SetConsumer-401ee792": {
                   "constructInfo": {
                     "fqn": "constructs.Construct",
-                    "version": "10.1.314",
+                    "version": "10.2.69",
                   },
                   "display": {
                     "description": "A cloud function (FaaS)",
-                    "sourceModule": "@winglang/sdk",
                     "title": "setConsumer()",
                   },
                   "id": "Queue-SetConsumer-401ee792",
@@ -210,7 +209,7 @@ bucket: (function(env) {
                 "Queue-SetConsumerHandler-401ee792": {
                   "constructInfo": {
                     "fqn": "constructs.Construct",
-                    "version": "10.1.314",
+                    "version": "10.2.69",
                   },
                   "display": {
                     "hidden": true,
@@ -221,7 +220,7 @@ bucket: (function(env) {
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "description": "A distributed message queue",
@@ -233,7 +232,7 @@ bucket: (function(env) {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "id": "HelloWorld",
           "path": "root/HelloWorld",
@@ -241,7 +240,7 @@ bucket: (function(env) {
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -254,7 +253,7 @@ bucket: (function(env) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.69",
       },
       "id": "root",
       "path": "root",

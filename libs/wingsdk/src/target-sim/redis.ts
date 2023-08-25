@@ -2,7 +2,6 @@ import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import { RedisSchema, REDIS_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
-import * as core from "../core";
 import * as ex from "../ex";
 import { IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
@@ -33,7 +32,7 @@ export class Redis extends ex.Redis implements ISimulatorResource {
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
   }
 }
