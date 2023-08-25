@@ -31,7 +31,6 @@ export const MapView = ({
   onSelectedEdgeIdChange,
 }: MapViewProps) => {
   const { mapData } = useMap({ showTests: showTests ?? false });
-
   const { theme } = useTheme();
   const [hoverMapControls, setHoverMapControls] = useState(false);
 
@@ -76,7 +75,7 @@ export const MapView = ({
             </div>
           </div>
 
-          <div className="absolute inset-0 z-10">
+          <div className="absolute inset-0">
             <ElkMap
               nodes={mapData?.nodes ?? []}
               edges={mapData?.edges ?? []}
