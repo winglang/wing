@@ -75,27 +75,29 @@ module.exports = function({ $stdlib }) {
   class Bar extends $stdlib.std.Resource {
     constructor(scope, id, ) {
       super(scope, id);
-      this._addInflightOps("$inflight_init");
     }
     static bar() {
       return "bar";
     }
     static _toInflightType(context) {
-      return $stdlib.core.NodeJsCode.fromInline(`
+      return `
         require("./inflight.Bar-1.js")({
         })
-      `);
+      `;
     }
     _toInflight() {
-      return $stdlib.core.NodeJsCode.fromInline(`
+      return `
         (await (async () => {
-          const BarClient = ${Bar._toInflightType(this).text};
+          const BarClient = ${Bar._toInflightType(this)};
           const client = new BarClient({
           });
           if (client.$inflight_init) { await client.$inflight_init(); }
           return client;
         })())
-      `);
+      `;
+    }
+    _getInflightOps() {
+      return ["$inflight_init"];
     }
   }
   return { Bar };
@@ -110,27 +112,29 @@ module.exports = function({ $stdlib }) {
   class Baz extends $stdlib.std.Resource {
     constructor(scope, id, ) {
       super(scope, id);
-      this._addInflightOps("$inflight_init");
     }
     static baz() {
       return "baz";
     }
     static _toInflightType(context) {
-      return $stdlib.core.NodeJsCode.fromInline(`
+      return `
         require("./inflight.Baz-2.js")({
         })
-      `);
+      `;
     }
     _toInflight() {
-      return $stdlib.core.NodeJsCode.fromInline(`
+      return `
         (await (async () => {
-          const BazClient = ${Baz._toInflightType(this).text};
+          const BazClient = ${Baz._toInflightType(this)};
           const client = new BazClient({
           });
           if (client.$inflight_init) { await client.$inflight_init(); }
           return client;
         })())
-      `);
+      `;
+    }
+    _getInflightOps() {
+      return ["$inflight_init"];
     }
   }
   return { Baz };
@@ -147,7 +151,6 @@ module.exports = function({ $stdlib }) {
   class Foo extends $stdlib.std.Resource {
     constructor(scope, id, ) {
       super(scope, id);
-      this._addInflightOps("$inflight_init");
     }
     static foo() {
       return "foo";
@@ -159,21 +162,24 @@ module.exports = function({ $stdlib }) {
       return (baz.Baz.baz());
     }
     static _toInflightType(context) {
-      return $stdlib.core.NodeJsCode.fromInline(`
+      return `
         require("./inflight.Foo-3.js")({
         })
-      `);
+      `;
     }
     _toInflight() {
-      return $stdlib.core.NodeJsCode.fromInline(`
+      return `
         (await (async () => {
-          const FooClient = ${Foo._toInflightType(this).text};
+          const FooClient = ${Foo._toInflightType(this)};
           const client = new FooClient({
           });
           if (client.$inflight_init) { await client.$inflight_init(); }
           return client;
         })())
-      `);
+      `;
+    }
+    _getInflightOps() {
+      return ["$inflight_init"];
     }
   }
   return { Foo };

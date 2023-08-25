@@ -6,11 +6,10 @@ import { SnsTopicPolicy } from "../.gen/providers/aws/sns-topic-policy";
 import { SnsTopicSubscription } from "../.gen/providers/aws/sns-topic-subscription";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
-import { IInflightHost, Resource } from "../std";
+import { IInflightHost, Node, Resource } from "../std";
 
 /**
  * Topic names are limited to 256 characters.
@@ -89,7 +88,7 @@ export class Topic extends cloud.Topic {
 
     fn.addPermissionToInvoke(this, "sns.amazonaws.com", this.topic.arn, {});
 
-    Connections.of(this).add({
+    Node.of(this).addConnection({
       source: this,
       target: fn,
       name: "onMessage()",
@@ -148,7 +147,7 @@ export class Topic extends cloud.Topic {
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return core.InflightClient.for(
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,

@@ -38,7 +38,7 @@ exports[`default queue behavior 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A distributed message queue",
@@ -68,7 +68,7 @@ exports[`default queue behavior 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -81,7 +81,7 @@ exports[`default queue behavior 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",
@@ -152,7 +152,7 @@ exports[`queue name valid 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A distributed message queue",
@@ -182,7 +182,7 @@ exports[`queue name valid 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -195,7 +195,7 @@ exports[`queue name valid 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",
@@ -324,7 +324,7 @@ exports[`queue with a consumer function 3`] = `
               "Handler": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -355,7 +355,7 @@ exports[`queue with a consumer function 3`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A distributed message queue",
@@ -417,7 +417,7 @@ exports[`queue with a consumer function 3`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -429,7 +429,7 @@ exports[`queue with a consumer function 3`] = `
               "Queue-SetConsumerHandler-c5395e41": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "hidden": true,
@@ -458,7 +458,7 @@ exports[`queue with a consumer function 3`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -471,7 +471,7 @@ exports[`queue with a consumer function 3`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",
@@ -543,7 +543,7 @@ exports[`queue with custom retention 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A distributed message queue",
@@ -573,7 +573,7 @@ exports[`queue with custom retention 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -586,7 +586,7 @@ exports[`queue with custom retention 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",
@@ -658,7 +658,7 @@ exports[`queue with custom timeout 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A distributed message queue",
@@ -688,7 +688,7 @@ exports[`queue with custom timeout 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -701,7 +701,7 @@ exports[`queue with custom timeout 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",
@@ -772,7 +772,7 @@ exports[`replace invalid character from queue name 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A distributed message queue",
@@ -802,7 +802,7 @@ exports[`replace invalid character from queue name 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -815,7 +815,7 @@ exports[`replace invalid character from queue name 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",

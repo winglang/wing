@@ -38,7 +38,7 @@ exports[`default topic behavior 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A pub/sub notification topic",
@@ -68,7 +68,7 @@ exports[`default topic behavior 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -81,7 +81,7 @@ exports[`default topic behavior 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",
@@ -152,7 +152,7 @@ exports[`replace invalid character from queue name 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A pub/sub notification topic",
@@ -182,7 +182,7 @@ exports[`replace invalid character from queue name 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -195,7 +195,7 @@ exports[`replace invalid character from queue name 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",
@@ -266,7 +266,7 @@ exports[`topic name valid 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A pub/sub notification topic",
@@ -296,7 +296,7 @@ exports[`topic name valid 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -309,7 +309,7 @@ exports[`topic name valid 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",
@@ -458,7 +458,7 @@ exports[`topic with subscriber function 3`] = `
               "Handler": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -489,7 +489,7 @@ exports[`topic with subscriber function 3`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A pub/sub notification topic",
@@ -559,7 +559,7 @@ exports[`topic with subscriber function 3`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -571,7 +571,7 @@ exports[`topic with subscriber function 3`] = `
               "Topic-OnMessageHandler-c5395e41": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "hidden": true,
@@ -600,7 +600,7 @@ exports[`topic with subscriber function 3`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -613,7 +613,7 @@ exports[`topic with subscriber function 3`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",
