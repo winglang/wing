@@ -515,9 +515,9 @@ class $Root extends $stdlib.std.Resource {
     }
     const b = 1;
     {
-      const $IF_LET_VALUE = b;
-      if ($IF_LET_VALUE != undefined) {
-        const z = $IF_LET_VALUE;
+      const $if_let_value = b;
+      if ($if_let_value != undefined) {
+        const z = $if_let_value;
         {((cond) => {if (!cond) throw new Error("assertion failed: z == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(z,1)))};
       }
     }
