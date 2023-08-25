@@ -8,7 +8,7 @@ import {
 } from "@wingconsole/design-system";
 import type { State, LayoutConfig, LayoutComponent } from "@wingconsole/server";
 import classNames from "classnames";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { ConsoleLogsFilters } from "../features/console-logs-filters.js";
 import { ConsoleLogs } from "../features/console-logs.js";
@@ -103,6 +103,29 @@ export const DefaultLayout = ({
     document.title = title;
   }, [title]);
 
+  const [showLoadingOverlay, setShowLoadingOverlay] = useState(false);
+  const [loadingTimeout, setLoadingTimeout] = useState<NodeJS.Timeout | null>();
+
+  useEffect(() => {
+    if (!loading) {
+      clearTimeout(loadingTimeout!);
+      setShowLoadingOverlay(false);
+      return;
+    }
+    if (loadingTimeout) {
+      return;
+    }
+    setLoadingTimeout(
+      setTimeout(() => {
+        setShowLoadingOverlay(loading);
+      }, 500),
+    );
+
+    return () => {
+      clearTimeout(loadingTimeout!);
+    };
+  }, [loading, loadingTimeout]);
+
   const showTerms = useMemo(() => {
     if (!termsConfig.data) {
       return false;
@@ -167,14 +190,16 @@ export const DefaultLayout = ({
               )}
             >
               <div className="relative h-full flex flex-col gap-2">
-                {loading && (
-                  <div
-                    className={classNames(
-                      "absolute h-full w-full z-50 bg-white/70 dark:bg-slate-600/70",
-                      theme.text2,
-                    )}
-                  />
-                )}
+                <div
+                  className={classNames(
+                    "absolute h-full w-full z-50 bg-white/70 dark:bg-slate-600/70",
+                    "transition-all",
+                    showLoadingOverlay && "opacity-100 z-10",
+                    !showLoadingOverlay && "opacity-0 -z-10",
+                    theme.text2,
+                  )}
+                />
+
                 <ConsoleLogsFilters
                   selectedLogTypeFilters={selectedLogTypeFilters}
                   setSelectedLogTypeFilters={setSelectedLogTypeFilters}
@@ -223,6 +248,7 @@ export const DefaultLayout = ({
       setSelectedItems,
       setExpandedItems,
       showTests,
+      showLoadingOverlay,
     ],
   );
 
@@ -265,18 +291,19 @@ export const DefaultLayout = ({
         {renderApp && (
           <>
             <div className="flex-1 flex relative gap-1">
-              {loading && (
-                <div
-                  className={classNames(
-                    "absolute h-full w-full z-50 bg-white/70 dark:bg-slate-600/70",
-                  )}
-                  data-testid="loading-overlay"
-                >
-                  <div className=" absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <SpinnerLoader data-testid="main-view-loader" />
-                  </div>
+              <div
+                className={classNames(
+                  "absolute h-full w-full z-50 bg-white/70 dark:bg-slate-600/70",
+                  "transition-all",
+                  showLoadingOverlay && "opacity-100 z-10",
+                  !showLoadingOverlay && "opacity-0 -z-10",
+                )}
+                data-testid="loading-overlay"
+              >
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                  <SpinnerLoader data-testid="main-view-loader" />
                 </div>
-              )}
+              </div>
 
               {!layout.leftPanel?.hide &&
                 layout.leftPanel?.components?.length && (

@@ -2,6 +2,7 @@ import {
   useTheme,
   ResourceIcon,
   USE_EXTERNAL_THEME_COLOR,
+  SpinnerLoader,
 } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { useState } from "react";
@@ -62,7 +63,20 @@ export const MapView = ({
             </div>
           )}
 
-          <div className="absolute inset-0">
+          <div
+            className={classNames(
+              "absolute h-full w-full bg-white/70 dark:bg-slate-600/70",
+              "transition-all",
+              !mapData && "opacity-100 z-10",
+              mapData && "opacity-0 -z-10",
+            )}
+          >
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              <SpinnerLoader data-testid="main-view-loader" />
+            </div>
+          </div>
+
+          <div className="absolute inset-0 z-10">
             <ElkMap
               nodes={mapData?.nodes ?? []}
               edges={mapData?.edges ?? []}
