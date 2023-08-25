@@ -70,9 +70,9 @@ module.exports = function({ $util_Util }) {
     }
     async handle() {
       {
-        const $IF_LET_VALUE = (await $util_Util.tryEnv("WING_TARGET"));
-        if ($IF_LET_VALUE != undefined) {
-          const target = $IF_LET_VALUE;
+        const $if_let_value = (await $util_Util.tryEnv("WING_TARGET"));
+        if ($if_let_value != undefined) {
+          const target = $if_let_value;
           {console.log(String.raw({ raw: ["WING_TARGET=", ""] }, target))};
         }
         else {
