@@ -97,6 +97,9 @@ module.exports = function({ $math_Util }) {
             "uniqueId": "testinflightprimenumbers_Handler_E7E982CC"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c80a9be6",

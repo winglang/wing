@@ -104,6 +104,9 @@ module.exports = function({ $util_Util }) {
             "uniqueId": "testinflightnanoid_Handler_154ED1B9"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c864f292",

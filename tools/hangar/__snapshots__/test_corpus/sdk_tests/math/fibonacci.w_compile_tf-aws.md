@@ -101,6 +101,9 @@ module.exports = function({ $math_Util }) {
             "uniqueId": "testinflightfibonacci_Handler_5DF5857A"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c87dfd42",

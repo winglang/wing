@@ -209,6 +209,9 @@ module.exports = function({  }) {
             "uniqueId": "testaccessfilesonthewebsite_Handler_B4D12109"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c867c4e0",

@@ -101,6 +101,9 @@ module.exports = function({ $PARSE_ERROR, $std_Boolean, $std_Json }) {
             "uniqueId": "testfromJson_Handler_ACD6C987"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8d3ce6e",

@@ -94,6 +94,9 @@ module.exports = function({ $math_Util }) {
             "uniqueId": "testinflightarctangent_Handler_85128CD1"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8657687",

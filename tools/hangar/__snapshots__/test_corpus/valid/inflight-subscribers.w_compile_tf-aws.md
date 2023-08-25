@@ -151,6 +151,9 @@ module.exports = function({  }) {
             "uniqueId": "cloudQueue-SetConsumer-86898773"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-86898773-c8cecfb3",
@@ -177,6 +180,9 @@ module.exports = function({  }) {
             "uniqueId": "cloudTopic-OnMessage-cdafee6e"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-cdafee6e-c814de3f",

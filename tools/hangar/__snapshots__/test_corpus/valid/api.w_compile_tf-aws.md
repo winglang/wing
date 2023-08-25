@@ -311,6 +311,9 @@ module.exports = function({  }) {
             "uniqueId": "A_cloudApi_cloudApi-OnRequest-73c5308f_E645B0BE"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-73c5308f-c85168bb",
@@ -338,6 +341,9 @@ module.exports = function({  }) {
             "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
@@ -365,6 +371,9 @@ module.exports = function({  }) {
             "uniqueId": "testapiurl_Handler_7D451301"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8315524",

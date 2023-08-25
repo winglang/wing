@@ -277,6 +277,9 @@ module.exports = function({ $headers }) {
             "uniqueId": "AnotherFunction"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_0c557d45": "${aws_s3_bucket.PrivateBucket.bucket}",
@@ -306,6 +309,9 @@ module.exports = function({ $headers }) {
             "uniqueId": "cloudApi_cloudApi-OnRequest-86898773_701F5CA7"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-86898773-c8ed6547",
@@ -332,6 +338,9 @@ module.exports = function({ $headers }) {
             "uniqueId": "cloudFunction"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_0c557d45": "${aws_s3_bucket.PrivateBucket.bucket}",
@@ -361,6 +370,9 @@ module.exports = function({ $headers }) {
             "uniqueId": "cloudQueue-SetConsumer-cdafee6e"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_0c557d45": "${aws_s3_bucket.PrivateBucket.bucket}",

@@ -119,6 +119,9 @@ module.exports = function({  }) {
             "uniqueId": "testinflightuuidv4_Handler_3A34A54F"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c86b3dcf",

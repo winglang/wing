@@ -164,6 +164,9 @@ module.exports = function({ $c }) {
             "uniqueId": "testkeypeek_Handler_03F3EFDE"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
@@ -191,6 +194,9 @@ module.exports = function({ $c }) {
             "uniqueId": "testpeek_Handler_70E78480"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",

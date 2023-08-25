@@ -654,6 +654,9 @@ module.exports = function({ $arrayA, $arrayB }) {
             "uniqueId": "testArraywithdifferentvalues_Handler_2422390C"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c804987d",
@@ -680,6 +683,9 @@ module.exports = function({ $arrayA, $arrayB }) {
             "uniqueId": "testArraywiththesamevalue_Handler_7A26272F"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c85bde80",
@@ -706,6 +712,9 @@ module.exports = function({ $arrayA, $arrayB }) {
             "uniqueId": "testJsonwithdifferentvalues_Handler_7CBC98A6"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c81ffded",
@@ -732,6 +741,9 @@ module.exports = function({ $arrayA, $arrayB }) {
             "uniqueId": "testJsonwiththesamevalue_Handler_0A930AF7"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8a70f75",
@@ -758,6 +770,9 @@ module.exports = function({ $arrayA, $arrayB }) {
             "uniqueId": "testMapwithdifferentvalues_Handler_E889ADD0"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8bfa9fd",
@@ -784,6 +799,9 @@ module.exports = function({ $arrayA, $arrayB }) {
             "uniqueId": "testMapwiththesamevalue_Handler_74DC4830"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8e1f849",
@@ -810,6 +828,9 @@ module.exports = function({ $arrayA, $arrayB }) {
             "uniqueId": "testPrimitivetypeswithdifferentvalues_Handler_1CD5AE77"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8339af6",
@@ -836,6 +857,9 @@ module.exports = function({ $arrayA, $arrayB }) {
             "uniqueId": "testPrimitivetypeswiththesamevalue_Handler_E7430682"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8c80713",
@@ -862,6 +886,9 @@ module.exports = function({ $arrayA, $arrayB }) {
             "uniqueId": "testSettypeswithdifferentvalues_Handler_827F38F3"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8f9b754",
@@ -888,6 +915,9 @@ module.exports = function({ $arrayA, $arrayB }) {
             "uniqueId": "testSettypeswiththesamevalue_Handler_16147212"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c80c25d8",
@@ -914,6 +944,9 @@ module.exports = function({ $arrayA, $arrayB }) {
             "uniqueId": "testStructwithdifferentvalues_Handler_A8DC5651"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8546ffd",
@@ -940,6 +973,9 @@ module.exports = function({ $arrayA, $arrayB }) {
             "uniqueId": "testStructwiththesamevalue_Handler_4436CF3A"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8c23fc1",

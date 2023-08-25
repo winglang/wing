@@ -150,6 +150,9 @@ module.exports = function({  }) {
             "uniqueId": "testcallingdifferenttypesofinflights_Handler_F0BAE661"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8f324e0",

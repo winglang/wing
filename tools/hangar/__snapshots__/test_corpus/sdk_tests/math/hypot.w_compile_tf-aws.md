@@ -94,6 +94,9 @@ module.exports = function({ $math_Util }) {
             "uniqueId": "testinflighthypot_Handler_892C5ACF"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8289cd0",

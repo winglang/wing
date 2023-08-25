@@ -106,6 +106,9 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
             "uniqueId": "testpublicUrl_Handler_E965919F"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_7c320eda": "${aws_s3_bucket.publicBucket.bucket}",

@@ -92,6 +92,9 @@ module.exports = function({ $SomeEnum, $one, $two }) {
             "uniqueId": "testinflight_Handler_93A83C5E"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c85726ab",

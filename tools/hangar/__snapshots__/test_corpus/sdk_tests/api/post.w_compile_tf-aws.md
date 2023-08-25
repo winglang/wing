@@ -204,6 +204,9 @@ module.exports = function({ $api_url, $body, $http_HttpMethod, $http_Util, $std_
             "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-cdafee6e-c8147384",
@@ -230,6 +233,9 @@ module.exports = function({ $api_url, $body, $http_HttpMethod, $http_Util, $std_
             "uniqueId": "testhttppostandhttpfetchcanpreformacalltoanapi_Handler_C4853DBD"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c88947b5",

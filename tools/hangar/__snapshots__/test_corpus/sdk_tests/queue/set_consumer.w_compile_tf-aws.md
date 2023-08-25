@@ -197,6 +197,9 @@ module.exports = function({  }) {
             "uniqueId": "cloudQueue-SetConsumer-cdafee6e"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
@@ -224,6 +227,9 @@ module.exports = function({  }) {
             "uniqueId": "testsetConsumer_Handler_A97FE23F"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",

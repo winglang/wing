@@ -112,6 +112,9 @@ module.exports = function({ $_d4_toUtc____hours, $d4_hours, $d4_timezone, $math_
             "uniqueId": "testinflightdatetime_Handler_CCA19CA1"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8211bab",

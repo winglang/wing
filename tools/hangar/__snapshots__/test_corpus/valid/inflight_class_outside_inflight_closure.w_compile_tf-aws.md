@@ -109,6 +109,9 @@ module.exports = function({  }) {
             "uniqueId": "testinflightclassoutsideinflightclosure_Handler_D7A68A3D"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8046c38",

@@ -99,6 +99,9 @@ module.exports = function({ $util_Util }) {
             "uniqueId": "testinflightbase64_Handler_31E9772F"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c853d8cf",

@@ -91,6 +91,9 @@ module.exports = function({ $math_Util, $population, $subset }) {
             "uniqueId": "testinflightcombinations_Handler_B89BE656"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8a6ff13",

@@ -93,6 +93,9 @@ module.exports = function({ $__s1_split_______at_1__, $_s1_concat_s2__, $s1_inde
             "uniqueId": "teststring_Handler_2FEE704D"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8a1f7f0",

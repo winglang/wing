@@ -296,6 +296,9 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
             "uniqueId": "cloudApi_cloudApi-OnRequest-3fc9280c_5DA20E7A"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-3fc9280c-c8d3ecf9",
@@ -322,6 +325,9 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
             "uniqueId": "cloudApi_cloudApi-OnRequest-86898773_701F5CA7"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-86898773-c8ed6547",
@@ -348,6 +354,9 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
             "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-cdafee6e-c8147384",
@@ -374,6 +383,9 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
             "uniqueId": "testhttpfetchcanpreformacalltoanapitoCONNECTHEADandOPTIONS_Handler_E8EF5111"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8f5c667",

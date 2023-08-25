@@ -168,6 +168,9 @@ module.exports = function({  }) {
             "uniqueId": "testcall_Handler_7902F7E6"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8074088",
@@ -194,6 +197,9 @@ module.exports = function({  }) {
             "uniqueId": "testconsole_Handler_057D9B4E"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8fb077d",

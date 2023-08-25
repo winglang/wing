@@ -245,6 +245,9 @@ module.exports = function({  }) {
             "uniqueId": "A_testinflightinresourceshouldcapturetherightscopedvar_Handler_B24941AC"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c83cf74f",
@@ -271,6 +274,9 @@ module.exports = function({  }) {
             "uniqueId": "testinflightnestedshouldnotcapturetheshadowedvar_Handler_B6B64A92"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c85de384",
@@ -297,6 +303,9 @@ module.exports = function({  }) {
             "uniqueId": "testinflightontopshouldcapturetop_Handler_2FA69946"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c859340a",
@@ -323,6 +332,9 @@ module.exports = function({  }) {
             "uniqueId": "testinsideInflightshouldcapturetherightscope_Handler_B6CD7A27"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c83ad462",

@@ -121,6 +121,9 @@ module.exports = function({ $std_String, $table }) {
             "uniqueId": "testlist_Handler_58856559"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
