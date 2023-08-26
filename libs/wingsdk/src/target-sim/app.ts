@@ -34,8 +34,8 @@ import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
 import { TABLE_FQN, REDIS_FQN } from "../ex";
+import { WingSimulatorSchema } from "../simulator-testing/simulator";
 import { TEST_RUNNER_FQN } from "../std";
-import { WingSimulatorSchema } from "../testing/simulator";
 
 /**
  * Path of the simulator configuration file in every .wsim tarball.

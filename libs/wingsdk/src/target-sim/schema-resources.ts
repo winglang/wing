@@ -1,10 +1,10 @@
 import { HttpMethod, OpenApiSpec } from "../cloud";
 import { ColumnType } from "../ex";
-import { Json } from "../std";
 import {
   BaseResourceAttributes,
   BaseResourceSchema,
-} from "../testing/simulator";
+} from "../simulator-testing/simulator";
+import { Json } from "../std";
 
 export const API_TYPE = "wingsdk.cloud.Api";
 export const QUEUE_TYPE = "wingsdk.cloud.Queue";

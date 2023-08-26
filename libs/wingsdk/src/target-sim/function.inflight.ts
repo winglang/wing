@@ -10,11 +10,11 @@ import {
 } from "./schema-resources";
 import { IFunctionClient } from "../cloud";
 import { Bundle, createBundle } from "../shared/bundling";
-import { TraceType } from "../std";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
-} from "../testing/simulator";
+} from "../simulator-testing/simulator";
+import { TraceType } from "../std";
 
 export class Function implements IFunctionClient, ISimulatorResourceInstance {
   private readonly filename: string;
