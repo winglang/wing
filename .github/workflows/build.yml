@@ -75,6 +75,8 @@ jobs:
 
       - name: Derive appropriate SHAs for base and head
         id: shas
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: pnpm derive-shas
 
       - name: Figure out what projects changed

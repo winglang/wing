@@ -19,6 +19,8 @@ Expectations:
 Remarks:
   This is originally forked from https://github.com/nrwl/nx-set-shas, but now allows for pull request commits to to be used as the "base" as well.
   Also changed to be in typescript and less modular.
+  ---
+  If the successful commit it from a PR and it's a merge commit, the merge commit sha will be fetch and used as the base.
 
 Options: (No options)
 */
@@ -27,7 +29,6 @@ import { setOutput } from "@actions/core";
 import { context, getOctokit } from "@actions/github";
 import { execSync } from "node:child_process";
 
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const baseBranchName = "main";
 
 console.log(context);
@@ -56,7 +57,13 @@ setOutput("head", HEAD_SHA);
 setOutput("head_branch", branchName);
 
 async function findSuccessfulCommit(branchName: string) {
-  if (GITHUB_TOKEN === undefined) return undefined;
+  const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+  if (GITHUB_TOKEN === undefined) {
+    throw new Error(
+      "GITHUB_TOKEN environment variable must be set to a token with read access to workflows and PRs"
+    );
+  }
+  const octokit = getOctokit(GITHUB_TOKEN);
 
   let runId: string | number | undefined =
     process.env.GITHUB_RUN_ID ?? context.runId;
@@ -70,8 +77,6 @@ async function findSuccessfulCommit(branchName: string) {
     );
 
   runId = Number(runId);
-
-  const octokit = getOctokit(GITHUB_TOKEN);
 
   const workflowId = await octokit.rest.actions
     .getWorkflowRun({
