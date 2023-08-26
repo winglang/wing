@@ -100,41 +100,10 @@ async function findSuccessfulCommit(branchName: string) {
   });
 
   for (const run of runs.data.workflow_runs) {
-    if (eventName === "pull_request") {
-      // get the merge commit sha
-      const relevantPr = run.pull_requests?.find(
-        (pr) => pr.number === context.payload.pull_request?.number
-      );
-      if (!relevantPr) {
-        continue;
-      }
-
-      const prData = await octokit.rest.pulls.get({
-        owner: repoOwner,
-        repo: repoName,
-        pull_number: relevantPr.number,
-      });
-      let goodSha = prData.data.merge_commit_sha;
-      if (!goodSha) {
-        console.warn(
-          `No merge commit found for PR ${relevantPr.number} (merge conflict?)`
-        );
-        return undefined;
-      }
-
-      betterExec(`git fetch origin pull/${relevantPr.number}/merge`);
-
-      if (commitExists(goodSha)) {
-        return goodSha;
-      } else {
-        throw new Error(`${goodSha} has not been fetched`);
-      }
+    if (commitExists(run.head_sha)) {
+      return run.head_sha;
     } else {
-      if (commitExists(run.head_sha)) {
-        return run.head_sha;
-      } else {
-        throw new Error(`${run.head_sha} has not been fetched`);
-      }
+      throw new Error(`${run.head_sha} has not been fetched`);
     }
   }
 }
