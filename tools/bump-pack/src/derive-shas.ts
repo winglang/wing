@@ -19,8 +19,6 @@ Expectations:
 Remarks:
   This is originally forked from https://github.com/nrwl/nx-set-shas, but now allows for pull request commits to to be used as the "base" as well.
   Also changed to be in typescript and less modular.
-  ---
-  If the successful commit it from a PR and it's a merge commit, the merge commit sha will be fetch and used as the base.
 
 Options: (No options)
 */
@@ -97,6 +95,7 @@ async function findSuccessfulCommit(branchName: string) {
     event: eventName,
     status: "success",
     per_page: 1,
+    exclude_pull_requests: true,
   });
 
   for (const run of runs.data.workflow_runs) {
