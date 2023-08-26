@@ -577,3 +577,29 @@ test("api with custom CORS settings", async () => {
     "x-wingnuts"
   );
 });
+
+test("api with CORS settings responds to OPTIONS request", async () => {
+  // GIVEN
+  const ROUTE = "/hello";
+
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api", {
+    cors: true,
+  });
+
+  // WHEN
+  const s = await app.startSimulator();
+  const apiUrl = getApiUrl(s, "/my_api");
+  const response = await fetch(apiUrl + ROUTE, { method: "OPTIONS" });
+
+  // THEN
+  await s.stop();
+
+  expect(response.status).toEqual(204);
+  expect(response.headers.get("access-control-allow-headers")).toEqual(
+    "Content-Type,Authorization,X-Requested-With"
+  );
+  expect(response.headers.get("access-control-allow-methods")).toEqual(
+    "GET,POST,PUT,DELETE,HEAD,OPTIONS"
+  );
+});

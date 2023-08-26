@@ -15,12 +15,12 @@ export class ApiOnRequestHandlerClient {
     args,
   }: {
     handler: IApiEndpointHandlerClient;
-    args: {
+    args?: {
       corsHeaders?: Record<string, string>;
     };
   }) {
     this.handler = handler;
-    this.corsHeaders = args.corsHeaders;
+    this.corsHeaders = args?.corsHeaders;
   }
   public async handle(
     request: APIGatewayProxyEvent

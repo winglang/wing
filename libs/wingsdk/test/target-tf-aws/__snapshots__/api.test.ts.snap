@@ -13,9 +13,21 @@ exports[`api configured for cors 1`] = `
             "content": {},
             "description": "200 response",
             "headers": {
-              "Access-Control-Allow-Headers": "'Content-Type,Authorization'",
-              "Access-Control-Allow-Methods": "'GET,POST,PUT,DELETE,HEAD,OPTIONS'",
-              "Access-Control-Allow-Origin": "'*'",
+              "Access-Control-Allow-Headers": {
+                "schema": {
+                  "type": "string",
+                },
+              },
+              "Access-Control-Allow-Methods": {
+                "schema": {
+                  "type": "string",
+                },
+              },
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string",
+                },
+              },
             },
           },
         },
@@ -25,11 +37,6 @@ exports[`api configured for cors 1`] = `
           "passthroughBehavior": "when_no_match",
           "responses": {
             "default": {
-              "responseParameters": {
-                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'",
-                "method.response.header.Access-Control-Allow-Methods": "'GET,POST,PUT,DELETE,HEAD,OPTIONS'",
-                "method.response.header.Access-Control-Allow-Origin": "'*'",
-              },
               "statusCode": "200",
             },
           },
@@ -62,7 +69,6 @@ exports[`api with CONNECT route 1`] = `
           "passthroughBehavior": "when_no_match",
           "responses": {
             "default": {
-              "responseParameters": {},
               "statusCode": "200",
             },
           },
@@ -95,7 +101,6 @@ exports[`api with DELETE route 1`] = `
           "passthroughBehavior": "when_no_match",
           "responses": {
             "default": {
-              "responseParameters": {},
               "statusCode": "200",
             },
           },
@@ -128,7 +133,6 @@ exports[`api with GET route at root 1`] = `
           "passthroughBehavior": "when_no_match",
           "responses": {
             "default": {
-              "responseParameters": {},
               "statusCode": "200",
             },
           },
@@ -161,7 +165,6 @@ exports[`api with GET routes with common prefix 1`] = `
           "passthroughBehavior": "when_no_match",
           "responses": {
             "default": {
-              "responseParameters": {},
               "statusCode": "200",
             },
           },
@@ -186,7 +189,6 @@ exports[`api with GET routes with common prefix 1`] = `
           "passthroughBehavior": "when_no_match",
           "responses": {
             "default": {
-              "responseParameters": {},
               "statusCode": "200",
             },
           },
@@ -219,7 +221,6 @@ exports[`api with GET routes with different prefix 1`] = `
           "passthroughBehavior": "when_no_match",
           "responses": {
             "default": {
-              "responseParameters": {},
               "statusCode": "200",
             },
           },
@@ -244,7 +245,6 @@ exports[`api with GET routes with different prefix 1`] = `
           "passthroughBehavior": "when_no_match",
           "responses": {
             "default": {
-              "responseParameters": {},
               "statusCode": "200",
             },
           },
@@ -277,7 +277,6 @@ exports[`api with HEAD route 1`] = `
           "passthroughBehavior": "when_no_match",
           "responses": {
             "default": {
-              "responseParameters": {},
               "statusCode": "200",
             },
           },
@@ -310,7 +309,6 @@ exports[`api with OPTIONS route 1`] = `
           "passthroughBehavior": "when_no_match",
           "responses": {
             "default": {
-              "responseParameters": {},
               "statusCode": "200",
             },
           },
@@ -343,7 +341,6 @@ exports[`api with PATCH route 1`] = `
           "passthroughBehavior": "when_no_match",
           "responses": {
             "default": {
-              "responseParameters": {},
               "statusCode": "200",
             },
           },
@@ -376,7 +373,6 @@ exports[`api with POST route 1`] = `
           "passthroughBehavior": "when_no_match",
           "responses": {
             "default": {
-              "responseParameters": {},
               "statusCode": "200",
             },
           },
@@ -409,7 +405,6 @@ exports[`api with PUT route 1`] = `
           "passthroughBehavior": "when_no_match",
           "responses": {
             "default": {
-              "responseParameters": {},
               "statusCode": "200",
             },
           },
@@ -442,7 +437,6 @@ exports[`api with multiple GET route and one lambda 1`] = `
           "passthroughBehavior": "when_no_match",
           "responses": {
             "default": {
-              "responseParameters": {},
               "statusCode": "200",
             },
           },
@@ -467,7 +461,6 @@ exports[`api with multiple GET route and one lambda 1`] = `
           "passthroughBehavior": "when_no_match",
           "responses": {
             "default": {
-              "responseParameters": {},
               "statusCode": "200",
             },
           },
@@ -500,7 +493,6 @@ exports[`api with multiple methods and multiple lambda 1`] = `
           "passthroughBehavior": "when_no_match",
           "responses": {
             "default": {
-              "responseParameters": {},
               "statusCode": "200",
             },
           },
@@ -525,7 +517,6 @@ exports[`api with multiple methods and multiple lambda 1`] = `
           "passthroughBehavior": "when_no_match",
           "responses": {
             "default": {
-              "responseParameters": {},
               "statusCode": "200",
             },
           },
@@ -558,7 +549,6 @@ exports[`api with multiple methods and one lambda 1`] = `
           "passthroughBehavior": "when_no_match",
           "responses": {
             "default": {
-              "responseParameters": {},
               "statusCode": "200",
             },
           },
@@ -583,7 +573,6 @@ exports[`api with multiple methods and one lambda 1`] = `
           "passthroughBehavior": "when_no_match",
           "responses": {
             "default": {
-              "responseParameters": {},
               "statusCode": "200",
             },
           },
@@ -616,7 +605,6 @@ exports[`api with multiple methods on same route 1`] = `
           "passthroughBehavior": "when_no_match",
           "responses": {
             "default": {
-              "responseParameters": {},
               "statusCode": "200",
             },
           },
@@ -639,7 +627,6 @@ exports[`api with multiple methods on same route 1`] = `
           "passthroughBehavior": "when_no_match",
           "responses": {
             "default": {
-              "responseParameters": {},
               "statusCode": "200",
             },
           },
@@ -681,7 +668,6 @@ exports[`api with path parameter 1`] = `
           "passthroughBehavior": "when_no_match",
           "responses": {
             "default": {
-              "responseParameters": {},
               "statusCode": "200",
             },
           },

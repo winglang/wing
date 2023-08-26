@@ -39,13 +39,13 @@ exports[`captures tokens 2`] = `
         },
         "rest_api_id": "\${aws_api_gateway_rest_api.Api_api_91C07D84.id}",
         "triggers": {
-          "redeployment": "0c985ec4b2e80179d31281ba3e16595d5e75a9cd",
+          "redeployment": "5c0f11f0478884e3d7859fa987b8b7ecf8f2f6bc",
         },
       },
     },
     "aws_api_gateway_rest_api": {
       "Api_api_91C07D84": {
-        "body": "{\\"openapi\\":\\"3.0.3\\",\\"paths\\":{\\"/\\":{\\"get\\":{\\"operationId\\":\\"get\\",\\"responses\\":{\\"200\\":{\\"description\\":\\"200 response\\",\\"content\\":{}}},\\"parameters\\":[],\\"x-amazon-apigateway-integration\\":{\\"uri\\":\\"arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_Api-OnRequest-c5395e41_37F21C2B.arn}/invocations\\",\\"type\\":\\"aws_proxy\\",\\"httpMethod\\":\\"POST\\",\\"responses\\":{\\"default\\":{\\"statusCode\\":\\"200\\",\\"responseParameters\\":{}}},\\"passthroughBehavior\\":\\"when_no_match\\",\\"contentHandling\\":\\"CONVERT_TO_TEXT\\"}}}}}",
+        "body": "{\\"openapi\\":\\"3.0.3\\",\\"paths\\":{\\"/\\":{\\"get\\":{\\"operationId\\":\\"get\\",\\"responses\\":{\\"200\\":{\\"description\\":\\"200 response\\",\\"content\\":{}}},\\"parameters\\":[],\\"x-amazon-apigateway-integration\\":{\\"uri\\":\\"arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_Api-OnRequest-c5395e41_37F21C2B.arn}/invocations\\",\\"type\\":\\"aws_proxy\\",\\"httpMethod\\":\\"POST\\",\\"responses\\":{\\"default\\":{\\"statusCode\\":\\"200\\"}},\\"passthroughBehavior\\":\\"when_no_match\\",\\"contentHandling\\":\\"CONVERT_TO_TEXT\\"}}}}}",
         "name": "api-c8f613f0",
       },
     },
