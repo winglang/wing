@@ -37,7 +37,7 @@ const branchName =
   context?.payload?.pull_request?.head?.ref ??
   betterExec(`git rev-parse --abbrev-ref HEAD`);
 
-const HEAD_SHA = betterExec(`git rev-parse HEAD`);
+const HEAD_SHA = context?.sha ?? betterExec(`git rev-parse HEAD`);
 
 let BASE_SHA = await findSuccessfulCommit(branchName);
 
@@ -89,50 +89,54 @@ async function findSuccessfulCommit(branchName: string) {
 
   console.log(`Workflow ID: ${workflowId}`);
 
-  return await octokit.rest.actions
-    .listWorkflowRuns({
-      owner: repoOwner,
-      repo: repoName,
-      branch: branchName,
-      workflow_id: workflowId,
-      event: eventName,
-      status: "success",
-    })
-    .then(async ({ data: { workflow_runs } }) => {
-      for (const run of workflow_runs) {
-        if (eventName === "pull_request") {
-          // check if you need to fetch the merge ref
-          for (const pr of run.pull_requests ?? []) {
-            const prData = await octokit.rest.pulls.get({
-              owner: repoOwner,
-              repo: repoName,
-              pull_number: pr.number,
-            });
-            let goodSha = prData.data.merge_commit_sha;
-            if (!goodSha) {
-              console.warn(
-                `No merge commit found for PR ${pr.number} (merge conflict?)`
-              );
-              return undefined;
-            }
+  const runs = await octokit.rest.actions.listWorkflowRuns({
+    owner: repoOwner,
+    repo: repoName,
+    branch: branchName,
+    workflow_id: workflowId,
+    event: eventName,
+    status: "success",
+    per_page: 1,
+  });
 
-            betterExec(`git fetch origin pull/${pr.number}/merge`);
-
-            if (commitExists(goodSha)) {
-              return goodSha;
-            } else {
-              throw new Error(`${goodSha} does not exist`);
-            }
-          }
-        } else {
-          if (commitExists(run.head_sha)) {
-            return run.head_sha;
-          } else {
-            throw new Error(`${run.head_sha} does not exist`);
-          }
-        }
+  for (const run of runs.data.workflow_runs) {
+    if (eventName === "pull_request") {
+      // get the merge commit sha
+      const relevantPr = run.pull_requests?.find(
+        (pr) => pr.number === context.payload.pull_request?.number
+      );
+      if (!relevantPr) {
+        continue;
       }
-    });
+
+      const prData = await octokit.rest.pulls.get({
+        owner: repoOwner,
+        repo: repoName,
+        pull_number: relevantPr.number,
+      });
+      let goodSha = prData.data.merge_commit_sha;
+      if (!goodSha) {
+        console.warn(
+          `No merge commit found for PR ${relevantPr.number} (merge conflict?)`
+        );
+        return undefined;
+      }
+
+      betterExec(`git fetch origin pull/${relevantPr.number}/merge`);
+
+      if (commitExists(goodSha)) {
+        return goodSha;
+      } else {
+        throw new Error(`${goodSha} has not been fetched`);
+      }
+    } else {
+      if (commitExists(run.head_sha)) {
+        return run.head_sha;
+      } else {
+        throw new Error(`${run.head_sha} has not been fetched`);
+      }
+    }
+  }
 }
 
 /**
