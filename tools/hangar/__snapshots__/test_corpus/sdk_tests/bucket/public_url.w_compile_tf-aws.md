@@ -106,6 +106,9 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
             "uniqueId": "testpublicUrl_Handler_E965919F"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_7c320eda": "${aws_s3_bucket.publicBucket.bucket}",
@@ -243,6 +246,7 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;

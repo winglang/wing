@@ -187,6 +187,9 @@ module.exports = function({ $bucket2 }) {
             "uniqueId": "testcallnon-syntheticclosureasafunction_Handler_8C8F5E97"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_bbe94f63": "${aws_s3_bucket.MyClosure_cloudBucket_4DAD12C0.bucket}",
@@ -215,6 +218,9 @@ module.exports = function({ $bucket2 }) {
             "uniqueId": "testcallsyntheticclosureclassasafunction_Handler_577F53A9"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
@@ -332,6 +338,7 @@ module.exports = function({ $bucket2 }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;

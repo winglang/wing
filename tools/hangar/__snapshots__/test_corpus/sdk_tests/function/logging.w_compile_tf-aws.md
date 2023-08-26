@@ -205,6 +205,9 @@ module.exports = function({  }) {
             "uniqueId": "f1"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "f1-c8545025",
@@ -231,6 +234,9 @@ module.exports = function({  }) {
             "uniqueId": "f2"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "FUNCTION_NAME_09b8c606": "${aws_lambda_function.f1.arn}",
@@ -258,6 +264,9 @@ module.exports = function({  }) {
             "uniqueId": "testlogging_Handler_2002EF98"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "FUNCTION_NAME_0300817a": "${aws_lambda_function.f2.arn}",
@@ -332,6 +341,7 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;

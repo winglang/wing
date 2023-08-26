@@ -114,6 +114,9 @@ module.exports = function({ $q, $std_Duration, $util_Util }) {
             "uniqueId": "testpurge_Handler_F7A5D0E5"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "QUEUE_URL_31e95cbd": "${aws_sqs_queue.cloudQueue.url}",
@@ -177,6 +180,7 @@ module.exports = function({ $q, $std_Duration, $util_Util }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;

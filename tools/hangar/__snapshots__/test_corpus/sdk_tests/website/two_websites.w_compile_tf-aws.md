@@ -292,6 +292,9 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
             "uniqueId": "testdeployingtwowebsites_Handler_DDBE7E21"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8683851",
@@ -511,6 +514,7 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;

@@ -112,6 +112,9 @@ module.exports = function({ $_d4_toUtc____hours, $d4_hours, $d4_timezone, $math_
             "uniqueId": "testinflightdatetime_Handler_CCA19CA1"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8211bab",
@@ -163,6 +166,7 @@ module.exports = function({ $_d4_toUtc____hours, $d4_hours, $d4_timezone, $math_
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;

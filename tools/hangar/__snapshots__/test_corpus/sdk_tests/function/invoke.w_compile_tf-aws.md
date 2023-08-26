@@ -143,6 +143,9 @@ module.exports = function({ $f }) {
             "uniqueId": "cloudFunction"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1",
@@ -169,6 +172,9 @@ module.exports = function({ $f }) {
             "uniqueId": "testinvoke_Handler_A47C4946"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "FUNCTION_NAME_5bb84dfa": "${aws_lambda_function.cloudFunction.arn}",
@@ -232,6 +238,7 @@ module.exports = function({ $f }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;

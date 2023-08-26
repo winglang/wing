@@ -75,6 +75,9 @@ exports[`captures tokens 2`] = `
     },
     "aws_lambda_function": {
       "Api_Api-OnRequest-c5395e41_37F21C2B": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Api-OnRequest-c5395e41-c8f26cae",

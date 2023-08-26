@@ -207,6 +207,9 @@ module.exports = function({  }) {
             "uniqueId": "Doubler2_cloudFunction_402CDAA3"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "cloud-Function-c8d4b6f0",
@@ -233,6 +236,9 @@ module.exports = function({  }) {
             "uniqueId": "testf28_Handler_DBBFD2BC"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "FUNCTION_NAME_f7db7b1d": "${aws_lambda_function.Doubler2_cloudFunction_402CDAA3.arn}",
@@ -296,6 +302,7 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
