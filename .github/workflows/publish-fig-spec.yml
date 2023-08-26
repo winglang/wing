@@ -1,4 +1,4 @@
-name: Puplish Fig Completion Spec
+name: Publish Fig Completion Spec
 
 on:
   pull_request_target:
