@@ -1,6 +1,6 @@
 # [inflight_class_inside_inflight_closure.w](../../../../../examples/tests/valid/inflight_class_inside_inflight_closure.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $__parent_this_1_b }) {
   class $Closure1 {
@@ -13,7 +13,7 @@ module.exports = function({ $__parent_this_1_b }) {
       (await $__parent_this_1_b.put("k","v"));
       class InflightClass {
         async method() {
-          {((cond) => {if (!cond) throw new Error("assertion failed: this.field == \"value\"")})((this.field === "value"))};
+          {((cond) => {if (!cond) throw new Error("assertion failed: this.field == \"value\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.field,"value")))};
         }
         constructor() {
           this.field = "value";
@@ -28,7 +28,7 @@ module.exports = function({ $__parent_this_1_b }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $f }) {
   class $Closure2 {
@@ -46,7 +46,7 @@ module.exports = function({ $f }) {
 
 ```
 
-## inflight.$Closure3.js
+## inflight.$Closure3-1.js
 ```js
 module.exports = function({  }) {
   class $Closure3 {
@@ -64,7 +64,7 @@ module.exports = function({  }) {
       }
       const foo = new Foo();
       const y = (await foo.getX());
-      {((cond) => {if (!cond) throw new Error("assertion failed: y == 12")})((y === 12))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: y == 12")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y,12)))};
     }
   }
   return $Closure3;
@@ -72,7 +72,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.PreflightClass.js
+## inflight.PreflightClass-1.js
 ```js
 module.exports = function({  }) {
   class PreflightClass {
@@ -215,6 +215,9 @@ module.exports = function({  }) {
             "uniqueId": "PreflightClass_cloudFunction_9F7C6688"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_70ca4fed": "${aws_s3_bucket.PreflightClass_cloudBucket_05421049.bucket}",
@@ -242,6 +245,9 @@ module.exports = function({  }) {
             "uniqueId": "testinflightclassinsideclosurecapturesfromclosure_Handler_9491D6BF"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c866c5da",
@@ -268,6 +274,9 @@ module.exports = function({  }) {
             "uniqueId": "testitworks_Handler_FCB0C220"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "FUNCTION_NAME_31bff872": "${aws_lambda_function.PreflightClass_cloudFunction_9F7C6688.arn}",
@@ -308,21 +317,6 @@ module.exports = function({  }) {
         },
         "bucket_prefix": "cloud-bucket-c8bbe938-",
         "force_destroy": false
-      }
-    },
-    "aws_s3_bucket_public_access_block": {
-      "PreflightClass_cloudBucket_PublicAccessBlock_0331EFEC": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/PreflightClass/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "PreflightClass_cloudBucket_PublicAccessBlock_0331EFEC"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.PreflightClass_cloudBucket_05421049.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
@@ -385,11 +379,11 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -397,33 +391,34 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-        this._addInflightOps("$inflight_init");
       }
       preflight_method() {
         const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
-            this.display.hidden = true;
-            this._addInflightOps("handle", "$inflight_init");
+            (std.Node.of(this)).hidden = true;
           }
           static _toInflightType(context) {
-            return $stdlib.core.NodeJsCode.fromInline(`
-              require("./inflight.$Closure1.js")({
+            return `
+              require("./inflight.$Closure1-1.js")({
                 $__parent_this_1_b: ${context._lift(__parent_this_1.b)},
               })
-            `);
+            `;
           }
           _toInflight() {
-            return $stdlib.core.NodeJsCode.fromInline(`
+            return `
               (await (async () => {
-                const $Closure1Client = ${$Closure1._toInflightType(this).text};
+                const $Closure1Client = ${$Closure1._toInflightType(this)};
                 const client = new $Closure1Client({
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
                 return client;
               })())
-            `);
+            `;
+          }
+          _getInflightOps() {
+            return ["handle", "$inflight_init"];
           }
           _registerBind(host, ops) {
             if (ops.includes("handle")) {
@@ -436,46 +431,51 @@ class $Root extends $stdlib.std.Resource {
         return this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",inflight_closure);
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.PreflightClass.js")({
+        return `
+          require("./inflight.PreflightClass-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const PreflightClassClient = ${PreflightClass._toInflightType(this).text};
+            const PreflightClassClient = ${PreflightClass._toInflightType(this)};
             const client = new PreflightClassClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["$inflight_init"];
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+        return `
+          require("./inflight.$Closure2-1.js")({
             $f: ${context._lift(f)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const $Closure2Client = ${$Closure2._toInflightType(this)};
             const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -487,25 +487,27 @@ class $Root extends $stdlib.std.Resource {
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3.js")({
+        return `
+          require("./inflight.$Closure3-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure3Client = ${$Closure3._toInflightType(this).text};
+            const $Closure3Client = ${$Closure3._toInflightType(this)};
             const client = new $Closure3Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
     }
     const p = new PreflightClass(this,"PreflightClass");
@@ -514,22 +516,8 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight class inside closure captures from closure",new $Closure3(this,"$Closure3"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "inflight_class_inside_inflight_closure", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "inflight_class_inside_inflight_closure", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

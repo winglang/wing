@@ -1,6 +1,6 @@
 # [resource_captures_globals.w](../../../../../examples/tests/valid/resource_captures_globals.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $res }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $res }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $Another }) {
   class $Closure2 {
@@ -28,7 +28,7 @@ module.exports = function({ $Another }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() == 0")})(((await $Another.myStaticMethod()) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $Another.myStaticMethod()),0)))};
     }
   }
   return $Closure2;
@@ -36,7 +36,7 @@ module.exports = function({ $Another }) {
 
 ```
 
-## inflight.Another.js
+## inflight.Another-1.js
 ```js
 module.exports = function({ $globalCounter }) {
   class Another {
@@ -50,7 +50,7 @@ module.exports = function({ $globalCounter }) {
       return (await $globalCounter.peek());
     }
     async $inflight_init() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalCounter.peek() == 0")})(((await $globalCounter.peek()) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalCounter.peek() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $globalCounter.peek()),0)))};
     }
   }
   return Another;
@@ -58,7 +58,7 @@ module.exports = function({ $globalCounter }) {
 
 ```
 
-## inflight.First.js
+## inflight.First-1.js
 ```js
 module.exports = function({  }) {
   class First {
@@ -70,7 +70,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.MyResource.js
+## inflight.MyResource-1.js
 ```js
 module.exports = function({ $Another, $_globalArrayOfStr_at_0__, $_globalMapOfNum___a__, $_globalSetOfStr_has__a___, $globalAnother, $globalAnother_first_myResource, $globalAnother_myField, $globalBool, $globalBucket, $globalNum, $globalStr }) {
   class MyResource {
@@ -80,13 +80,13 @@ module.exports = function({ $Another, $_globalArrayOfStr_at_0__, $_globalMapOfNu
     async myPut() {
       (await this.$this_localTopic.publish("hello"));
       (await $globalBucket.put("key","value"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalStr == \"hello\"")})(($globalStr === "hello"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalBool == true")})(($globalBool === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalNum == 42")})(($globalNum === 42))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalArrayOfStr.at(0) == \"hello\"")})(($_globalArrayOfStr_at_0__ === "hello"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalMapOfNum.get(\"a\") == -5")})(($_globalMapOfNum___a__ === (-5)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalStr == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($globalStr,"hello")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalBool == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($globalBool,true)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalNum == 42")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($globalNum,42)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalArrayOfStr.at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($_globalArrayOfStr_at_0__,"hello")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalMapOfNum.get(\"a\") == -5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($_globalMapOfNum___a__,(-5))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: globalSetOfStr.has(\"a\")")})($_globalSetOfStr_has__a___)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalAnother.myField == \"hello!\"")})(($globalAnother_myField === "hello!"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalAnother.myField == \"hello!\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($globalAnother_myField,"hello!")))};
       (await $globalAnother_first_myResource.put("key","value"));
       {((cond) => {if (!cond) throw new Error("assertion failed: globalAnother.myMethod() > 0")})(((await $globalAnother.myMethod()) > 0))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() > 0")})(((await $Another.myStaticMethod()) > 0))};
@@ -97,7 +97,7 @@ module.exports = function({ $Another, $_globalArrayOfStr_at_0__, $_globalMapOfNu
 
 ```
 
-## inflight.R.js
+## inflight.R-1.js
 ```js
 module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
   class R {
@@ -283,6 +283,9 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
             "uniqueId": "MyResource_cloudTopic-OnMessage-f10eb240_23BCEE41"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
@@ -311,6 +314,9 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
             "uniqueId": "testaccesscloudresourcethroughstaticmethodsonly_Handler_BC0E7705"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
@@ -338,6 +344,9 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
             "uniqueId": "testtest_Handler_295107CC"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_ae5b06c6": "${aws_s3_bucket.Another_First_cloudBucket_DB822B7C.bucket}",
@@ -405,34 +414,6 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
         "force_destroy": false
-      }
-    },
-    "aws_s3_bucket_public_access_block": {
-      "Another_First_cloudBucket_PublicAccessBlock_BB475ACE": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/Another/First/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "Another_First_cloudBucket_PublicAccessBlock_BB475ACE"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.Another_First_cloudBucket_DB822B7C.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      },
-      "cloudBucket_PublicAccessBlock_5946CCE8": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "cloudBucket_PublicAccessBlock_5946CCE8"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
@@ -535,11 +516,11 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -547,24 +528,26 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.First.js")({
+        return `
+          require("./inflight.First-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const FirstClient = ${First._toInflightType(this).text};
+            const FirstClient = ${First._toInflightType(this)};
             const client = new FirstClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["$inflight_init"];
       }
     }
     class Another extends $stdlib.std.Resource {
@@ -572,25 +555,27 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this.myField = "hello!";
         this.first = new First(this,"First");
-        this._addInflightOps("myMethod", "myStaticMethod", "$inflight_init");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Another.js")({
+        return `
+          require("./inflight.Another-1.js")({
             $globalCounter: ${context._lift(globalCounter)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const AnotherClient = ${Another._toInflightType(this).text};
+            const AnotherClient = ${Another._toInflightType(this)};
             const client = new AnotherClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["myMethod", "myStaticMethod", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -617,26 +602,28 @@ class $Root extends $stdlib.std.Resource {
         class R extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
-            this._addInflightOps("handle", "$inflight_init");
           }
           static _toInflightType(context) {
-            return $stdlib.core.NodeJsCode.fromInline(`
-              require("./inflight.R.js")({
+            return `
+              require("./inflight.R-1.js")({
                 $_parentThis_localCounter: ${context._lift($parentThis.localCounter)},
                 $globalCounter: ${context._lift(globalCounter)},
               })
-            `);
+            `;
           }
           _toInflight() {
-            return $stdlib.core.NodeJsCode.fromInline(`
+            return `
               (await (async () => {
-                const RClient = ${R._toInflightType(this).text};
+                const RClient = ${R._toInflightType(this)};
                 const client = new RClient({
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
                 return client;
               })())
-            `);
+            `;
+          }
+          _getInflightOps() {
+            return ["handle", "$inflight_init"];
           }
           _registerBind(host, ops) {
             if (ops.includes("handle")) {
@@ -647,11 +634,10 @@ class $Root extends $stdlib.std.Resource {
           }
         }
         (this.localTopic.onMessage(new R(this,"R")));
-        this._addInflightOps("myPut", "$inflight_init");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.MyResource.js")({
+        return `
+          require("./inflight.MyResource-1.js")({
             $Another: ${context._lift(Another)},
             $_globalArrayOfStr_at_0__: ${context._lift((globalArrayOfStr.at(0)))},
             $_globalMapOfNum___a__: ${context._lift((globalMapOfNum)["a"])},
@@ -664,19 +650,22 @@ class $Root extends $stdlib.std.Resource {
             $globalNum: ${context._lift(globalNum)},
             $globalStr: ${context._lift(globalStr)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const MyResourceClient = ${MyResource._toInflightType(this).text};
+            const MyResourceClient = ${MyResource._toInflightType(this)};
             const client = new MyResourceClient({
               $this_localTopic: ${this._lift(this.localTopic)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["myPut", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -702,26 +691,28 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+        return `
+          require("./inflight.$Closure1-1.js")({
             $res: ${context._lift(res)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -733,26 +724,28 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+        return `
+          require("./inflight.$Closure2-1.js")({
             $Another: ${context._lift(Another)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const $Closure2Client = ${$Closure2._toInflightType(this)};
             const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -766,31 +759,17 @@ class $Root extends $stdlib.std.Resource {
     const globalStr = "hello";
     const globalBool = true;
     const globalNum = 42;
-    const globalArrayOfStr = Object.freeze(["hello", "world"]);
-    const globalMapOfNum = Object.freeze({"a":(-5),"b":2});
-    const globalSetOfStr = Object.freeze(new Set(["a", "b"]));
+    const globalArrayOfStr = ["hello", "world"];
+    const globalMapOfNum = ({"a": (-5),"b": 2});
+    const globalSetOfStr = new Set(["a", "b"]);
     const globalAnother = new Another(this,"Another");
     const res = new MyResource(this,"MyResource");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:access cloud resource through static methods only",new $Closure2(this,"$Closure2"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "resource_captures_globals", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "resource_captures_globals", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

@@ -56,33 +56,19 @@
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const ex = require('@winglang/sdk').ex;
+const std = $stdlib.std;
+const ex = $stdlib.ex;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    const t = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "simple-table", primaryKey: "id", columns: Object.freeze({"id":ex.ColumnType.STRING,"name":ex.ColumnType.STRING,"age":ex.ColumnType.NUMBER}) });
+    const t = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "simple-table", primaryKey: "id", columns: ({"id": ex.ColumnType.STRING,"name": ex.ColumnType.STRING,"age": ex.ColumnType.NUMBER}) });
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "table", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "table", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

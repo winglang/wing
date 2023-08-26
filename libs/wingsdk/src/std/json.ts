@@ -1,4 +1,12 @@
-import { Code, InflightClient } from "../core";
+import { InflightClient } from "../core";
+
+/**
+ * Options for stringify() method.
+ */
+export interface JsonStringifyOptions {
+  /** Indentation spaces number */
+  readonly indent: number;
+}
 
 /**
  * Immutable Json
@@ -7,7 +15,7 @@ export class Json {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
 
@@ -41,23 +49,24 @@ export class Json {
   /**
    * Formats Json as string
    *
-   * (JSON.stringify($args$))
-   *
-   * @macro ((args) => { return JSON.stringify(args[0], null, args[1]) })([$args$])
+   * @macro ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$args$])
    *
    * @param json to format as string
    * @returns string representation of the Json
    */
-  public static stringify(json: Json | MutJson, indent?: number): string {
+  public static stringify(
+    json: Json | MutJson,
+    options?: JsonStringifyOptions
+  ): string {
     json;
-    indent;
+    options;
     throw new Error("Macro");
   }
 
   /**
    * Creates an immutable deep copy of the Json.
    *
-   * @macro Object.freeze(JSON.parse(JSON.stringify($args$)))
+   * @macro JSON.parse(JSON.stringify($args$))
    *
    * @param json to copy
    * @returns the immutable copy of the Json
@@ -109,12 +118,12 @@ export class Json {
   /**
    * Try to parse a string into a Json
    *
-   * @macro ((args) => { try { return JSON.parse(args); } catch (err) { return undefined; } })($args$)
+   * @macro ((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })($args$)
    *
    * @param str to parse as Json
    * @returns Json representation of the string or undefined if string is not parsable
    */
-  public static tryParse(str: string): Json | undefined {
+  public static tryParse(str?: string): Json | undefined {
     str;
     throw new Error("Macro");
   }
@@ -133,6 +142,7 @@ export class Json {
     key;
     throw new Error("Macro");
   }
+
   private constructor() {}
 
   /**
@@ -261,9 +271,10 @@ export class MutJson {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
+
   private constructor() {}
 
   /**

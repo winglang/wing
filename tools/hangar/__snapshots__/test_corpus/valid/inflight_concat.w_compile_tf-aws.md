@@ -1,6 +1,6 @@
 # [inflight_concat.w](../../../../../examples/tests/valid/inflight_concat.w) | compile | tf-aws
 
-## inflight.R.js
+## inflight.R-1.js
 ```js
 module.exports = function({  }) {
   class R {
@@ -51,11 +51,11 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -63,25 +63,27 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.s1 = "hello";
-        this._addInflightOps("foo", "$inflight_init");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.R.js")({
+        return `
+          require("./inflight.R-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const RClient = ${R._toInflightType(this).text};
+            const RClient = ${R._toInflightType(this)};
             const client = new RClient({
               $_this_s1_concat___world___: ${this._lift((this.s1.concat(" world")))},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["foo", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -96,22 +98,8 @@ class $Root extends $stdlib.std.Resource {
     const r = new R(this,"R");
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "inflight_concat", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "inflight_concat", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

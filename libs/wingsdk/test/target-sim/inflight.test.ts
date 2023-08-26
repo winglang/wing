@@ -1,6 +1,6 @@
 import { test, expect } from "vitest";
 import { treeJsonOf } from "./util";
-import { Inflight } from "../../src/core";
+import { Node } from "../../src/std";
 import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
 
@@ -17,10 +17,10 @@ test("inflight has display hidden property set to true", async () => {
 
   // WHEN
   const treeJson = treeJsonOf(app.synth());
-  const inflight = app.node.tryFindChild("Handler") as Inflight;
+  const inflight = app.node.findChild("Handler");
 
   // THEN
-  expect(inflight.display.hidden).toEqual(true);
+  expect(Node.of(inflight).hidden).toEqual(true);
   expect(treeJson.tree.children).toBeDefined();
   expect(treeJson.tree.children).toMatchObject({
     Handler: {
@@ -38,11 +38,11 @@ test("inflight has display title and description properties", async () => {
 
   // WHEN
   const treeJson = treeJsonOf(app.synth());
-  const inflight = app.node.tryFindChild("Handler") as Inflight;
+  const inflight = app.node.findChild("Handler");
 
   // THEN
-  expect(inflight.display.title).toBeDefined();
-  expect(inflight.display.description).toBeDefined();
+  expect(Node.of(inflight).title).toBeDefined();
+  expect(Node.of(inflight).description).toBeDefined();
   expect(treeJson.tree.children).toMatchObject({
     Handler: {
       display: {

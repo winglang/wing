@@ -1,7 +1,8 @@
 ---
-title: Language Reference
+title: Wing Programming Language Reference
 id: language-reference
 description: The Wing Language Reference
+sidebar_label: Language Reference
 keywords: [Wing reference, Wing language, language, Wing language spec, Wing programming language]
 ---
 
@@ -258,16 +259,27 @@ let jsonObj = Json {
 
 ##### 1.1.4.4 Assignment to native types
 
-We only allow implicit assignment from *safe* to *unsafe* types because otherwise we cannot
-guarantee safety (e.g. from `str` to `Json` but not from `Json` to `str`), so this won't work:
+If the `Json` object is statically known to structurally match a certain type, it is possible 
+to assign it to a variable of that type with no runtime cost:
 
 ```TS
 let j = Json "hello";
 let s: str = j;
+
+struct J2 { a: num; }
+let j2: J2 = { a: 2 }
+```
+
+This can only be done when the `Json` literal is present in the program. Otherwise, we cannot
+guarantee safety.
+
+```TS
+let response = http.get("/employees");
+let s: str = response;
 //           ^ cannot assign `Json` to `str`.
 ```
 
-To assign a `Json` to a strong-type variable, use the `fromJson()` static method on the target
+To dynamically assign a `Json` to a strong-type variable, use the `fromJson()` static method on the target
 type:
 
 ```TS
@@ -284,6 +296,12 @@ order to ensure type safety (at a runtime cost):
 str.fromJson(jsonNumber);      // RUNTIME ERROR: unable to parse number `123` as a string.
 num.fromJson(Json "\"hello\""); // RUNTIME ERROR: unable to parse string "hello" as a number
 ```
+
+For each `fromJson()`, there is a `tryFromJson()` method which returns an optional `T?` which
+indicates if parsing was successful or not:
+```js
+let s = str.tryFromJson(myJson) ?? "invalid string";
+``````
 
 ##### 1.1.4.6 Mutability
 
@@ -334,7 +352,31 @@ Json.delete(immutObj, "hello");
 //          ^^^^^^^^^ expected `JsonMut`
 ```
 
-##### 1.1.4.7 Serialization
+##### 1.1.4.7 Assignment to user-defined structs
+All [structs](#31-structs) also have a `fromJson()` method that can be used to parse `Json` into a
+struct:
+```js
+struct Contact {
+  first: str;
+  last: str;
+  phone: str?;
+}
+
+let j = Json { first: "Wing", last: "Lyly" };
+let myContact = Contact.fromJson(j);
+assert(myContact.first == "Wing");
+```
+When a `Json` is parsed into a struct, the schema will be validated to ensure the result is
+type-safe:
+```js
+let p = Json { first: "Wing", phone: 1234 };
+Contact.fromJson(p);
+// RUNTIME ERROR: unable to parse Contact:
+// - field "last" is required and missing
+// - field "phone" is expected to be a string, got number.
+```
+
+##### 1.1.4.8 Serialization
 
 The `Json.stringify(j: Json): str` static method can be used to serialize a `Json` as a string
 ([JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)):
@@ -359,7 +401,7 @@ let boom = num.fromJson(j.get("boom"));
 let o = Json.tryParse("xxx") ?? Json [1,2,3];
 ```
 
-##### 1.1.4.8 Logging
+##### 1.1.4.9 Logging
 
 A `Json` value can be logged using `log()`, in which case it will be pretty-formatted:
 
@@ -377,13 +419,12 @@ my object is: {
 }
 ```
 
-#### 1.1.4.9 Roadmap
+#### 1.1.4.10 Roadmap
 
 The following features are not yet implemented, but we are planning to add them in the future:
 
 * Array/Set/Map.fromJson() - see https://github.com/winglang/wing/issues/1796 to track.
 * Json.entries() - see https://github.com/winglang/wing/issues/3142 to track.
-* Schema validation and assignment to struct - see https://github.com/winglang/wing/issues/3139 to track.
 * Equality, diff and patch - see https://github.com/winglang/wing/issues/3140 to track.
 
 [`▲ top`][top]
@@ -413,11 +454,62 @@ assert(threeHours.minutes == 180);
 
 Duration objects are immutable and can be referenced across inflight context.
 
-#### 1.1.5.1 Roadmap
+#### 1.1.6 `Datetime`
 
-An additional built-in `datetime` type is planned and not yet implemented. `datetime` represents a single moment in time in a platform-independent
+The `Datetime` (alias `datetime`) type represents a single moment in time in a platform-independent
 format.
-See https://github.com/winglang/wing/issues/2102 to track.
+Datetime objects are immutable and can be referenced across inflight context.
+Here is the initial API for the Datetime type:
+
+```TS
+struct DatetimeComponents {
+  year: num;
+  month: num;
+  day: num;
+  hour: num;
+  min: num;
+  sec: num;
+  ms: num;
+  tz: num; // timezone offset in minutes from UTC
+}
+
+class Datetime {
+  static utcNow(): Datetime;             // returns the current time in UTC timezone
+  static systemNow(): Datetime;          // returns the current time in system timezone
+  static fromIso(iso: str): Datetime;    // creates an instance from an ISO-8601 string, represented in UTC timezone
+  static fromComponents(c: DatetimeComponents): Datetime;
+
+  timestamp: num;     // Date.valueOf()/1000 (non-leap seconds since epoch)
+  timestampMs: num;  // Date.valueOf() (non-leap milliseconds since epoch)
+
+  hours: num;         // Date.getHours()
+  min: num;           // Date.getMinutes()
+  sec: num;           // Date.getSeconds()
+  ms: num;            // Date.getMilliseconds()
+  dayOfMonth: num;    // Date.getDate()
+  dayOfWeek: num;     // Date.getDay()
+  month: num;         // Date.getMonth()
+  year: num;          // Date.getFullYear()
+
+  timezone: num;      // (offset in minutes from UTC)
+  utc: Datetime;      // returns the same time in UTC timezone
+
+  toIso(): str;      // returns ISO-8601 string
+}
+```
+
+A few examples:
+
+```TS
+let now = Datetime.utcNow();
+log("It is now ${now.month}/${now.dayOfMonth}/${now.year} at ${now.hours}:${now.min}:${now.sec})");
+assert(now.timezone == 0); // UTC
+
+let t1 = DateTime.fromIso("2023-02-09T06:20:17.573Z");
+log("Timezone is GMT${d.timezone() / 60}"); // output: Timezone is GMT-2
+log("UTC: ${t1.utc.toIso())}");            // output: 2023-02-09T06:21:03.000Z
+```
+
 
 ### 1.2 Utility Functions
 
@@ -425,17 +517,11 @@ See https://github.com/winglang/wing/issues/2102 to track.
 | -------- | -------------------------------------------------------- |
 | `log`    | logs str                                                 |
 | `throw`  | creates and throws an instance of an exception           |
-| `panic`  | exits with a serializable, dumps the trace + a core dump |
-| `assert` | checks a condition and _panics_ if evaluated to false    |
-
-`panic` is a fatal call by design. If the intention is error handling, panic is the
-last resort. Exceptions are non fatal and should be used instead for effectively
-communicating errors to the user.
+| `assert` | checks a condition and _throws_ if evaluated to false    |
 
 > ```TS
 > log("Hello ${name}");
 > throw("a recoverable error occurred");
-> panic("a fatal error encountered");
 > assert(x > 0);
 > ```
 
@@ -782,8 +868,8 @@ if myPerson.address == nil {
 
 #### 1.6.3 Unwrapping using `if let`
 
-The `if let` statement can be used to test if an optional is defined and *unwrap* it into a
-non-optional variable defined inside the block:
+The `if let` statement (or `if let var` for a reassignable variable) can be used to test if an 
+optional is defined and *unwrap* it into a non-optional variable defined inside the block:
 
 ```TS
 if let address = myPerson.address {
@@ -853,7 +939,7 @@ r-value refers to the right hand side of an assignment here.
 All defined symbols are immutable (constant) by default.  
 Type casting is generally not allowed unless otherwise specified.
 
-Function arguments and their return type are always required.
+Type annotations are required for method arguments and their return value but optional for anonymous closures.
 
 > ```TS
 > let i = 5;
@@ -877,12 +963,7 @@ translate to JavaScript. You can create a new exception with a `throw` call.
 In the presence of `try`, both `catch` and `finally` are optional but at least one of them must be present.
 In the presence of `catch` the variable holding the exception (`e` in the example below) is optional.
 
-`panic` is meant to be fatal error handling.  
 `throw` is meant to be recoverable error handling.
-
-An uncaught exception is considered user error but a panic call is not. Compiler
-guarantees exception safety by throwing a compile error if an exception is
-expected from a call and it is not being caught.
 
 > ```TS
 > try {
@@ -1492,11 +1573,18 @@ f(1, 2, field1: 3, field2: 4);
 // f(1, 2, field1: 3); // can't do this, partial expansion is not allowed
 ```
 
-#### 3.6.3 Roadmap
-
-The following features are not yet implemented, but we are planning to add them in the future:
-
-* Variadic arguments (`...args`) - see https://github.com/winglang/wing/issues/125 to track.
+#### 3.6.3 Variadic Arguments
+When a function signature's final parameter is denoted by `...` and annotated as an `Array` type,
+then the function accepts typed variadic arguments. 
+Inside the function, these arguments can be accessed using the designated variable name, 
+just as you would with a regular array instance.
+```TS
+let f = (x: num, ...args: Array<num>) => {
+  log("${x + args.length}");
+};
+// last arguments are expanded into their array
+f(4, 8, 15, 16, 23, 42); // logs 9
+```
 
 [`▲ top`][top]
 
@@ -1663,34 +1751,29 @@ to compile your code to JavaScript and then use `extern` against the JavaScript 
 
 ### 5.2.2 Type model
 
-The table below shows the mapping between Wing types and JavaScript types, represented with TypeScript syntax.
-When calling **extern** function, the arguments are checked against these declared types and the return type is **assumed** to be satisfied by the called function.
+The table below shows the mapping between Wing types and JavaScript values, shown with TypeScript types.
+When calling **extern** function, the parameter and return types are **assumed** to be satisfied by the called function.
 
-If [frozen](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze#description), the value is expected to be immutable and will throw an error if any attempt is made to modify it.
 
-| Built-In Wing Type     | JavaScript Type                                                       | Frozen? |
-|------------------------|-----------------------------------------------------------------------|---------|
-| `void`                 | `undefined`                                                           |         |
-| `nil`                  | `null`                                                                |         |
-| `any`                  | `any`                                                                 |         |
-| `num`                  | `number`                                                              |         |
-| `str`                  | `string`                                                              |         |
-| `bool`                 | `boolean`                                                             |         |
-| `Set<T>`               | `Set<T>`                                                              | Yes     |
-| `Map<T>`               | `{ [key: string]: T }`                                                | Yes     |
-| `Array<T>`             | `T[]`                                                                 | Yes     |
-| `MutSet<T>`            | `Set<T>`                                                              |         |
-| `MutMap<T>`            | `{ [key: string]: T }`                                                |         |
-| `MutArray<T>`          | `T[]`                                                                 |         |
-| `Json`                 | `string ⏐ number ⏐ boolean ⏐ null ⏐ json[] ⏐ { [key: string]: json }` | Yes     |
-| `MutJson`              | `string ⏐ number ⏐ boolean ⏐ null ⏐ json[] ⏐ { [key: string]: json }` |         |
+| Built-in Wing type        | TypeScript type                                                       |
+|---------------------------|-----------------------------------------------------------------------|
+| `void`                    | `undefined`                                                           |
+| `nil`                     | `null`                                                                |
+| `any`                     | `any`                                                                 |
+| `num`                     | `number`                                                              |
+| `str`                     | `string`                                                              |
+| `bool`                    | `boolean`                                                             |
+| `Set<T>`, `MutSet<T>`     | `Set<T>`                                                              |
+| `Map<T>`, `MutMap<T>`     | `{ [key: string]: T }`                                                |
+| `Array<T>`, `MutArray<T>` | `Array<T>`                                                            |
+| `Json`, `MutJson`         | `string ⏐ number ⏐ boolean ⏐ null ⏐ Json[] ⏐ { [key: string]: Json }` |
 
-| User-Defined Wing Types | JavaScript Type                                                                        | Frozen? |
-|-------------------------|----------------------------------------------------------------------------------------|---------|
-| `class`                 | `class`, only with members whose phase is compatible with the function signature       |         |
-| `interface`             | `interface`, only with members whose phase is compatible with the function signature   |         |
-| `struct`                | `interface`                                                                            | Yes     |
-| `enum`                  | `string`-based enum-like `Object`                                                      | Yes     |
+| User-defined Wing type  | TypeScript type                                                                        |
+|-------------------------|----------------------------------------------------------------------------------------|
+| `class`                 | `class`, only with members whose phase is compatible with the function signature       |
+| `interface`             | `interface`, only with members whose phase is compatible with the function signature   |
+| `struct`                | `interface`                                                                            |
+| `enum`                  | `string`-based enum-like `Object`                                                      |
 
 [`▲ top`][top]
 

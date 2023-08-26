@@ -5,7 +5,6 @@ import { StorageBucketIamMember } from "../.gen/providers/google/storage-bucket-
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
 import { Id } from "../.gen/providers/random/id";
 import * as cloud from "../cloud";
-import * as core from "../core";
 import {
   CaseConventions,
   NameOptions,
@@ -82,14 +81,13 @@ export class Bucket extends cloud.Bucket {
     });
   }
 
-  /** @internal */
-  public _bind(_inflightHost: IInflightHost, _ops: string[]): void {
+  public bind(_inflightHost: IInflightHost, _ops: string[]): void {
     // TODO: support functions once tfgcp functions are implemented
     throw new Error("Method not implemented.");
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     throw new Error("Method not implemented.");
   }
 }

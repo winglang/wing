@@ -1,6 +1,5 @@
 bring cloud;
 bring ex;
-// bring redis;
 
 let bucket = new cloud.Bucket();
 let queue = new cloud.Queue();
@@ -9,9 +8,7 @@ let api = new cloud.Api();
 api.get("/test-get", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   return cloud.ApiResponse {
     status: 200,
-    body: Json.stringify({
-      query: Json (Json req).get("query"),
-    })
+    body: Json.stringify(req.query)
   };
 });
 api.post("/test-post", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
@@ -41,12 +38,8 @@ topic.onMessage(inflight (message: str): str => {
   log("Topic subscriber #1: ${message}");
   return message;
 });
-topic.onMessage(inflight (message: str): str => {
-  log("Topic subscriber #2: ${message}");
-  return message;
-});
 
-// let r = new redis.Redis();
+// let r = new ex.Redis();
 // new cloud.Function(inflight (message :str) :str => {
 //   log("${r.url()}");
 //   r.set("wing", message);

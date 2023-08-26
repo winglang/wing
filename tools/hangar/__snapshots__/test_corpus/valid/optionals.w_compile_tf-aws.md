@@ -1,6 +1,70 @@
 # [optionals.w](../../../../../examples/tests/valid/optionals.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## Name.Struct.js
+```js
+module.exports = function(stdStruct) {
+  class Name {
+    static jsonSchema() {
+      return {
+        id: "/Name",
+        type: "object",
+        properties: {
+          first: { type: "string" },
+          last: { type: "string" },
+        },
+        required: [
+          "first",
+        ],
+        $defs: {
+        }
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.jsonSchema())
+    }
+    static _toInflightType(context) {
+      return `require("./Name.Struct.js")(${ context._lift(stdStruct) })`;
+    }
+  }
+  return Name;
+};
+
+```
+
+## Payload.Struct.js
+```js
+module.exports = function(stdStruct) {
+  class Payload {
+    static jsonSchema() {
+      return {
+        id: "/Payload",
+        type: "object",
+        properties: {
+          a: { type: "string" },
+          b: { type: "object", patternProperties: { ".*": { type: "string" } } },
+          c: { "$ref": "#/$defs/cloud" },
+        },
+        required: [
+          "a",
+        ],
+        $defs: {
+          "cloud": { type: "object", "properties": require("./cloud.Struct.js")().jsonSchema().properties },
+        }
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.jsonSchema())
+    }
+    static _toInflightType(context) {
+      return `require("./Payload.Struct.js")(${ context._lift(stdStruct) })`;
+    }
+  }
+  return Payload;
+};
+
+```
+
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutOptions_b_____null_, $payloadWithBucket_c }) {
   class $Closure1 {
@@ -10,7 +74,7 @@ module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutO
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: payloadWithoutOptions.b? == false")})(($__payloadWithoutOptions_b_____null_ === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: payloadWithoutOptions.b? == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($__payloadWithoutOptions_b_____null_,false)))};
       if ($__payloadWithBucket_c_____null_) {
         (await $payloadWithBucket_c?.put?.("x.txt","something"));
       }
@@ -21,7 +85,7 @@ module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutO
 
 ```
 
-## inflight.Node.js
+## inflight.Node-1.js
 ```js
 module.exports = function({  }) {
   class Node {
@@ -33,7 +97,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Sub.js
+## inflight.Sub-1.js
 ```js
 module.exports = function({ $Super }) {
   class Sub extends $Super {
@@ -46,7 +110,7 @@ module.exports = function({ $Super }) {
 
 ```
 
-## inflight.Sub1.js
+## inflight.Sub1-1.js
 ```js
 module.exports = function({ $Super }) {
   class Sub1 extends $Super {
@@ -59,7 +123,7 @@ module.exports = function({ $Super }) {
 
 ```
 
-## inflight.Super.js
+## inflight.Super-1.js
 ```js
 module.exports = function({  }) {
   class Super {
@@ -144,6 +208,9 @@ module.exports = function({  }) {
             "uniqueId": "testt_Handler_FF112F5E"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_c1491ba5": "${aws_s3_bucket.orangebucket.bucket}",
@@ -186,21 +253,6 @@ module.exports = function({  }) {
         "force_destroy": false
       }
     },
-    "aws_s3_bucket_public_access_block": {
-      "orangebucket_PublicAccessBlock_E0BEAC90": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/orange bucket/PublicAccessBlock",
-            "uniqueId": "orangebucket_PublicAccessBlock_E0BEAC90"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.orangebucket.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      }
-    },
     "aws_s3_bucket_server_side_encryption_configuration": {
       "orangebucket_Encryption_F338E6D4": {
         "//": {
@@ -239,11 +291,11 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -251,74 +303,80 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.name = "Super";
-        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Super.js")({
+        return `
+          require("./inflight.Super-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const SuperClient = ${Super._toInflightType(this).text};
+            const SuperClient = ${Super._toInflightType(this)};
             const client = new SuperClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["$inflight_init"];
       }
     }
     class Sub extends Super {
       constructor(scope, id, ) {
         super(scope, id);
         this.name = "Sub";
-        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Sub.js")({
+        return `
+          require("./inflight.Sub-1.js")({
             $Super: ${context._lift(Super)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const SubClient = ${Sub._toInflightType(this).text};
+            const SubClient = ${Sub._toInflightType(this)};
             const client = new SubClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["$inflight_init"];
       }
     }
     class Sub1 extends Super {
       constructor(scope, id, ) {
         super(scope, id);
         this.name = "Sub";
-        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Sub1.js")({
+        return `
+          require("./inflight.Sub1-1.js")({
             $Super: ${context._lift(Super)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const Sub1Client = ${Sub1._toInflightType(this).text};
+            const Sub1Client = ${Sub1._toInflightType(this)};
             const client = new Sub1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["$inflight_init"];
       }
     }
     class Node extends $stdlib.std.Resource {
@@ -327,51 +385,55 @@ class $Root extends $stdlib.std.Resource {
         this.value = value;
         this.left = left;
         this.right = right;
-        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Node.js")({
+        return `
+          require("./inflight.Node-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const NodeClient = ${Node._toInflightType(this).text};
+            const NodeClient = ${Node._toInflightType(this)};
             const client = new NodeClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["$inflight_init"];
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+        return `
+          require("./inflight.$Closure1-1.js")({
             $__payloadWithBucket_c_____null_: ${context._lift(((payloadWithBucket.c) != null))},
             $__payloadWithoutOptions_b_____null_: ${context._lift(((payloadWithoutOptions.b) != null))},
             $payloadWithBucket_c: ${context._lift(payloadWithBucket.c)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -383,30 +445,28 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const x = 4;
-    {((cond) => {if (!cond) throw new Error("assertion failed: x? == true")})((((x) != null) === true))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: !x? == false")})(((!((x) != null)) === false))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: x ?? 5 == 4")})(((x ?? 5) === 4))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: x? == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((x) != null),true)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: !x? == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((!((x) != null)),false)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: x ?? 5 == 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((x ?? 5),4)))};
     const y = (x ?? 5);
-    {((cond) => {if (!cond) throw new Error("assertion failed: y == 4")})((y === 4))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: y == 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y,4)))};
     const optionalSup = new Super(this,"Super");
     const s = (optionalSup ?? new Sub(this,"Sub"));
-    {((cond) => {if (!cond) throw new Error("assertion failed: s.name == \"Super\"")})((s.name === "Super"))};
-    let name = {
-    "first": "John",
-    "last": "Doe",}
-    ;
+    {((cond) => {if (!cond) throw new Error("assertion failed: s.name == \"Super\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s.name,"Super")))};
+    const Name = require("./Name.Struct.js")($stdlib.std.Struct);
+    let name = ({"first": "John","last": "Doe"});
     {
-      const $IF_LET_VALUE = name;
-      if ($IF_LET_VALUE != undefined) {
-        const n = $IF_LET_VALUE;
-        {((cond) => {if (!cond) throw new Error("assertion failed: n.first == \"John\"")})((n.first === "John"))};
+      const $if_let_value = name;
+      if ($if_let_value != undefined) {
+        const n = $if_let_value;
+        {((cond) => {if (!cond) throw new Error("assertion failed: n.first == \"John\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(n.first,"John")))};
       }
     }
     name = undefined;
     {
-      const $IF_LET_VALUE = name;
-      if ($IF_LET_VALUE != undefined) {
-        const n = $IF_LET_VALUE;
+      const $if_let_value = name;
+      if ($if_let_value != undefined) {
+        const n = $if_let_value;
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
       else {
@@ -418,21 +478,63 @@ class $Root extends $stdlib.std.Resource {
       if ((parts.length < 1)) {
         return undefined;
       }
-      return {
-      "first": (parts.at(0)),
-      "last": (parts.at(1)),}
-      ;
+      return ({"first": (parts.at(0)),"last": (parts.at(1))});
     });
+    const json_obj = ({"ghost": "spooky"});
+    let something_else = false;
     {
-      const $IF_LET_VALUE = (tryParseName("Good Name"));
-      if ($IF_LET_VALUE != undefined) {
-        const parsedName = $IF_LET_VALUE;
-        {((cond) => {if (!cond) throw new Error("assertion failed: parsedName.first == \"Good\"")})((parsedName.first === "Good"))};
+      const $if_let_value = ((arg) => { return (typeof arg === "boolean") ? JSON.parse(JSON.stringify(arg)) : undefined })(json_obj);
+      if ($if_let_value != undefined) {
+        const y = $if_let_value;
+        {((cond) => {if (!cond) throw new Error("assertion failed: y == true || y == false")})(((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y,true)) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y,false))))};
+      }
+      else {
+        const $elif_let_value0 = ((arg) => { return (typeof arg === "number") ? JSON.parse(JSON.stringify(arg)) : undefined })(json_obj);
+        if ($elif_let_value0 != undefined) {
+          const y = $elif_let_value0;
+          {((cond) => {if (!cond) throw new Error("assertion failed: y + 0 == y")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((y + 0),y)))};
+        }
+        else {
+          const $elif_let_value1 = ((arg) => { return (typeof arg === "string") ? JSON.parse(JSON.stringify(arg)) : undefined })(json_obj);
+          if ($elif_let_value1 != undefined) {
+            const y = $elif_let_value1;
+            {((cond) => {if (!cond) throw new Error("assertion failed: y.length >= 0")})((y.length >= 0))};
+          }
+          else {
+            something_else = true;
+          }
+        }
+      }
+    }
+    {((cond) => {if (!cond) throw new Error("assertion failed: something_else")})(something_else)};
+    const a = 1;
+    {
+      const $if_let_value = a;
+      if ($if_let_value != undefined) {
+        let z = $if_let_value;
+        {((cond) => {if (!cond) throw new Error("assertion failed: z == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(z,1)))};
+        z = 2;
+        {((cond) => {if (!cond) throw new Error("assertion failed: z == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(z,2)))};
+      }
+    }
+    const b = 1;
+    {
+      const $if_let_value = b;
+      if ($if_let_value != undefined) {
+        const z = $if_let_value;
+        {((cond) => {if (!cond) throw new Error("assertion failed: z == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(z,1)))};
+      }
+    }
+    {
+      const $if_let_value = (tryParseName("Good Name"));
+      if ($if_let_value != undefined) {
+        const parsedName = $if_let_value;
+        {((cond) => {if (!cond) throw new Error("assertion failed: parsedName.first == \"Good\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(parsedName.first,"Good")))};
         {
-          const $IF_LET_VALUE = parsedName.last;
-          if ($IF_LET_VALUE != undefined) {
-            const lastName = $IF_LET_VALUE;
-            {((cond) => {if (!cond) throw new Error("assertion failed: lastName == \"Name\"")})((lastName === "Name"))};
+          const $if_let_value = parsedName.last;
+          if ($if_let_value != undefined) {
+            const lastName = $if_let_value;
+            {((cond) => {if (!cond) throw new Error("assertion failed: lastName == \"Name\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(lastName,"Name")))};
           }
           else {
             {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
@@ -441,14 +543,14 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     {
-      const $IF_LET_VALUE = (tryParseName("BadName"));
-      if ($IF_LET_VALUE != undefined) {
-        const parsedName = $IF_LET_VALUE;
-        {((cond) => {if (!cond) throw new Error("assertion failed: parsedName.first == \"BadName\"")})((parsedName.first === "BadName"))};
+      const $if_let_value = (tryParseName("BadName"));
+      if ($if_let_value != undefined) {
+        const parsedName = $if_let_value;
+        {((cond) => {if (!cond) throw new Error("assertion failed: parsedName.first == \"BadName\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(parsedName.first,"BadName")))};
         {
-          const $IF_LET_VALUE = parsedName.last;
-          if ($IF_LET_VALUE != undefined) {
-            const lastName = $IF_LET_VALUE;
+          const $if_let_value = parsedName.last;
+          if ($if_let_value != undefined) {
+            const lastName = $if_let_value;
             {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
           }
         }
@@ -456,10 +558,10 @@ class $Root extends $stdlib.std.Resource {
     }
     const falsy = false;
     {
-      const $IF_LET_VALUE = falsy;
-      if ($IF_LET_VALUE != undefined) {
-        const f = $IF_LET_VALUE;
-        {((cond) => {if (!cond) throw new Error("assertion failed: f == false")})((f === false))};
+      const $if_let_value = falsy;
+      if ($if_let_value != undefined) {
+        const f = $if_let_value;
+        {((cond) => {if (!cond) throw new Error("assertion failed: f == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f,false)))};
       }
       else {
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
@@ -467,16 +569,16 @@ class $Root extends $stdlib.std.Resource {
     }
     const shadow = "root";
     {
-      const $IF_LET_VALUE = shadow;
-      if ($IF_LET_VALUE != undefined) {
-        const shadow = $IF_LET_VALUE;
-        {((cond) => {if (!cond) throw new Error("assertion failed: shadow == \"root\"")})((shadow === "root"))};
+      const $if_let_value = shadow;
+      if ($if_let_value != undefined) {
+        const shadow = $if_let_value;
+        {((cond) => {if (!cond) throw new Error("assertion failed: shadow == \"root\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(shadow,"root")))};
         const shadow1 = "nested";
         {
-          const $IF_LET_VALUE = shadow1;
-          if ($IF_LET_VALUE != undefined) {
-            const shadow1 = $IF_LET_VALUE;
-            {((cond) => {if (!cond) throw new Error("assertion failed: shadow1 == \"nested\"")})((shadow1 === "nested"))};
+          const $if_let_value = shadow1;
+          if ($if_let_value != undefined) {
+            const shadow1 = $if_let_value;
+            {((cond) => {if (!cond) throw new Error("assertion failed: shadow1 == \"nested\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(shadow1,"nested")))};
           }
           else {
             {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
@@ -486,9 +588,9 @@ class $Root extends $stdlib.std.Resource {
     }
     const fun = ((a) => {
       {
-        const $IF_LET_VALUE = a;
-        if ($IF_LET_VALUE != undefined) {
-          const y = $IF_LET_VALUE;
+        const $if_let_value = a;
+        if ($if_let_value != undefined) {
+          const y = $if_let_value;
           return y;
         }
         else {
@@ -496,46 +598,28 @@ class $Root extends $stdlib.std.Resource {
         }
       }
     });
-    {((cond) => {if (!cond) throw new Error("assertion failed: fun(\"hello\") == \"hello\"")})(((fun("hello")) === "hello"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: fun(nil) == \"default\"")})(((fun(undefined)) === "default"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: fun(\"hello\") == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fun("hello")),"hello")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: fun(nil) == \"default\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fun(undefined)),"default")))};
     const tree = new Node(this,"eight",8,new Node(this,"three",3,new Node(this,"one",1,undefined,undefined),new Node(this,"six",6,undefined,undefined)),new Node(this,"ten",10,undefined,new Node(this,"fourteen",14,new Node(this,"thirteen",13,undefined,undefined),undefined)));
     const thirteen = tree.right?.right?.left?.value;
     const notThere = tree.right?.right?.right;
-    {((cond) => {if (!cond) throw new Error("assertion failed: thirteen == 13")})((thirteen === 13))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: notThere == nil")})((notThere === undefined))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: thirteen == 13")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(thirteen,13)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: notThere == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(notThere,undefined)))};
     {
-      const $IF_LET_VALUE = tree.left?.left;
-      if ($IF_LET_VALUE != undefined) {
-        const o = $IF_LET_VALUE;
-        {((cond) => {if (!cond) throw new Error("assertion failed: o.value == 1")})((o.value === 1))};
+      const $if_let_value = tree.left?.left;
+      if ($if_let_value != undefined) {
+        const o = $if_let_value;
+        {((cond) => {if (!cond) throw new Error("assertion failed: o.value == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(o.value,1)))};
       }
     }
-    const payloadWithoutOptions = {
-    "a": "a",}
-    ;
-    const payloadWithBucket = {
-    "a": "a",
-    "c": this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"orange bucket"),}
-    ;
+    const Payload = require("./Payload.Struct.js")($stdlib.std.Struct);
+    const payloadWithoutOptions = ({"a": "a"});
+    const payloadWithBucket = ({"a": "a","c": this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"orange bucket")});
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:t",new $Closure1(this,"$Closure1"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "optionals", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "optionals", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

@@ -1,6 +1,6 @@
 # [bring_awscdk.w](../../../../../examples/tests/valid/bring_awscdk.w) | compile | tf-aws
 
-## inflight.CdkDockerImageFunction.js
+## inflight.CdkDockerImageFunction-1.js
 ```js
 module.exports = function({  }) {
   class CdkDockerImageFunction {
@@ -47,10 +47,10 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
+const std = $stdlib.std;
 const awscdk = require("aws-cdk-lib");
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
@@ -58,48 +58,34 @@ class $Root extends $stdlib.std.Resource {
     class CdkDockerImageFunction extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.function = this.node.root.new("aws-cdk-lib.aws_lambda.DockerImageFunction",awscdk.aws_lambda.DockerImageFunction,this,"DockerImageFunction",{
-        "code": (awscdk.aws_lambda.DockerImageCode.fromImageAsset("./test.ts")),}
-        );
-        this._addInflightOps("$inflight_init");
+        this.function = this.node.root.new("aws-cdk-lib.aws_lambda.DockerImageFunction",awscdk.aws_lambda.DockerImageFunction,this,"DockerImageFunction",({"code": (awscdk.aws_lambda.DockerImageCode.fromImageAsset("./test.ts"))}));
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.CdkDockerImageFunction.js")({
+        return `
+          require("./inflight.CdkDockerImageFunction-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const CdkDockerImageFunctionClient = ${CdkDockerImageFunction._toInflightType(this).text};
+            const CdkDockerImageFunctionClient = ${CdkDockerImageFunction._toInflightType(this)};
             const client = new CdkDockerImageFunctionClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["$inflight_init"];
       }
     }
     this.node.root.new("aws-cdk-lib.App",awscdk.App,);
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "bring_awscdk", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "bring_awscdk", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

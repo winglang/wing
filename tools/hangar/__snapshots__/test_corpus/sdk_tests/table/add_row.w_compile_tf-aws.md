@@ -1,6 +1,6 @@
 # [add_row.w](../../../../../../examples/tests/sdk_tests/table/add_row.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $_marioInfo___gender__, $_marioInfo___role__, $_peachInfo___gender__, $_peachInfo___role__, $table }) {
   class $Closure1 {
@@ -10,12 +10,12 @@ module.exports = function({ $_marioInfo___gender__, $_marioInfo___role__, $_peac
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: table.get(\"mario\").get(\"name\") == \"mario\"")})((((await $table.get("mario")))["name"] === "mario"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: table.get(\"mario\").get(\"role\") == marioInfo.get(\"role\")")})((((await $table.get("mario")))["role"] === $_marioInfo___role__))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: table.get(\"mario\").get(\"gender\") == marioInfo.get(\"gender\")")})((((await $table.get("mario")))["gender"] === $_marioInfo___gender__))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: table.get(\"peach\").get(\"name\") == \"peach\"")})((((await $table.get("peach")))["name"] === "peach"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: table.get(\"peach\").get(\"role\") == peachInfo.get(\"role\")")})((((await $table.get("peach")))["role"] === $_peachInfo___role__))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: table.get(\"peach\").get(\"gender\") == peachInfo.get(\"gender\")")})((((await $table.get("peach")))["gender"] === $_peachInfo___gender__))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: table.get(\"mario\").get(\"name\") == \"mario\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((await $table.get("mario")))["name"],"mario")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: table.get(\"mario\").get(\"role\") == marioInfo.get(\"role\")")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((await $table.get("mario")))["role"],$_marioInfo___role__)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: table.get(\"mario\").get(\"gender\") == marioInfo.get(\"gender\")")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((await $table.get("mario")))["gender"],$_marioInfo___gender__)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: table.get(\"peach\").get(\"name\") == \"peach\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((await $table.get("peach")))["name"],"peach")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: table.get(\"peach\").get(\"role\") == peachInfo.get(\"role\")")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((await $table.get("peach")))["role"],$_peachInfo___role__)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: table.get(\"peach\").get(\"gender\") == peachInfo.get(\"gender\")")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((await $table.get("peach")))["gender"],$_peachInfo___gender__)))};
     }
   }
   return $Closure1;
@@ -139,6 +139,9 @@ module.exports = function({ $_marioInfo___gender__, $_marioInfo___role__, $_peac
             "uniqueId": "testaddRow_Handler_2806A65E"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
@@ -193,42 +196,44 @@ module.exports = function({ $_marioInfo___gender__, $_marioInfo___role__, $_peac
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const ex = require('@winglang/sdk').ex;
-const util = require('@winglang/sdk').util;
+const std = $stdlib.std;
+const ex = $stdlib.ex;
+const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+        return `
+          require("./inflight.$Closure1-1.js")({
             $_marioInfo___gender__: ${context._lift((marioInfo)["gender"])},
             $_marioInfo___role__: ${context._lift((marioInfo)["role"])},
             $_peachInfo___gender__: ${context._lift((peachInfo)["gender"])},
             $_peachInfo___role__: ${context._lift((peachInfo)["role"])},
             $table: ${context._lift(table)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -241,30 +246,16 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const table = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "users", primaryKey: "name", columns: Object.freeze({"gender":ex.ColumnType.STRING,"role":ex.ColumnType.STRING}) });
-    const marioInfo = Object.freeze({"gender":"male","role":"plumber"});
-    const peachInfo = Object.freeze({"gender":"female","role":"princess"});
+    const table = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "users", primaryKey: "name", columns: ({"gender": ex.ColumnType.STRING,"role": ex.ColumnType.STRING}) });
+    const marioInfo = ({"gender": "male","role": "plumber"});
+    const peachInfo = ({"gender": "female","role": "princess"});
     (table.addRow("mario",marioInfo));
     (table.addRow("peach",peachInfo));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:addRow",new $Closure1(this,"$Closure1"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "add_row", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "add_row", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

@@ -1,6 +1,6 @@
 # [try_get.w](../../../../../../examples/tests/sdk_tests/bucket/try_get.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $b }) {
   class $Closure1 {
@@ -11,12 +11,12 @@ module.exports = function({ $b }) {
     }
     async handle() {
       (await $b.put("test1.txt","Foo"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGet(\"test1.txt\") == \"Foo\"")})(((await $b.tryGet("test1.txt")) === "Foo"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGet(\"test2.txt\") == nil")})(((await $b.tryGet("test2.txt")) === undefined))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGet(\"test1.txt\") == \"Foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.tryGet("test1.txt")),"Foo")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGet(\"test2.txt\") == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.tryGet("test2.txt")),undefined)))};
       (await $b.put("test2.txt","Bar"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGet(\"test2.txt\") == \"Bar\"")})(((await $b.tryGet("test2.txt")) === "Bar"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGet(\"test2.txt\") == \"Bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.tryGet("test2.txt")),"Bar")))};
       (await $b.delete("test1.txt"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGet(\"test1.txt\") == nil")})(((await $b.tryGet("test1.txt")) === undefined))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGet(\"test1.txt\") == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.tryGet("test1.txt")),undefined)))};
     }
   }
   return $Closure1;
@@ -97,6 +97,9 @@ module.exports = function({ $b }) {
             "uniqueId": "testtryGet_Handler_EE8DDBD9"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
@@ -139,21 +142,6 @@ module.exports = function({ $b }) {
         "force_destroy": false
       }
     },
-    "aws_s3_bucket_public_access_block": {
-      "cloudBucket_PublicAccessBlock_5946CCE8": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "cloudBucket_PublicAccessBlock_5946CCE8"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      }
-    },
     "aws_s3_bucket_server_side_encryption_configuration": {
       "cloudBucket_Encryption_77B6AEEF": {
         "//": {
@@ -192,37 +180,39 @@ module.exports = function({ $b }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+        return `
+          require("./inflight.$Closure1-1.js")({
             $b: ${context._lift(b)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -235,22 +225,8 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:tryGet",new $Closure1(this,"$Closure1"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "try_get", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "try_get", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

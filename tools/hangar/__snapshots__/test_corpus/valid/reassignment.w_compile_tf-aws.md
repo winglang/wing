@@ -1,6 +1,6 @@
 # [reassignment.w](../../../../../examples/tests/valid/reassignment.w) | compile | tf-aws
 
-## inflight.R.js
+## inflight.R-1.js
 ```js
 module.exports = function({  }) {
   class R {
@@ -47,10 +47,10 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
+const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -61,61 +61,49 @@ class $Root extends $stdlib.std.Resource {
           this.f = 1;
           this.f1 = 0;
         }
-        this._addInflightOps("$inflight_init");
       }
       inc() {
         this.f = (this.f + 1);
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.R.js")({
+        return `
+          require("./inflight.R-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const RClient = ${R._toInflightType(this).text};
+            const RClient = ${R._toInflightType(this)};
             const client = new RClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["$inflight_init"];
       }
     }
     let x = 5;
-    {((cond) => {if (!cond) throw new Error("assertion failed: x == 5")})((x === 5))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: x == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x,5)))};
     x = (x + 1);
-    {((cond) => {if (!cond) throw new Error("assertion failed: x == 6")})((x === 6))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: x == 6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x,6)))};
     const r = new R(this,"R");
     (r.inc());
-    {((cond) => {if (!cond) throw new Error("assertion failed: r.f == 2")})((r.f === 2))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: r.f == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(r.f,2)))};
     const f = ((arg) => {
       arg = 0;
       return arg;
     });
     const y = 1;
-    {((cond) => {if (!cond) throw new Error("assertion failed: f(y) == 0")})(((f(y)) === 0))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: y == 1")})((y === 1))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: f(y) == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((f(y)),0)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: y == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y,1)))};
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "reassignment", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "reassignment", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

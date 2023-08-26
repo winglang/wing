@@ -38,7 +38,7 @@ impl Display for SymbolEnv {
 		let mut level = 0;
 		let mut env = self;
 		loop {
-			write!(f, "level {}: {{ ", level)?;
+			write!(f, "level {}: {{ ", level.to_string().bold())?;
 			let mut items = vec![];
 			for (name, (_, kind)) in &env.symbol_map {
 				let repr = match kind {
@@ -46,7 +46,7 @@ impl Display for SymbolEnv {
 					SymbolKind::Variable(v) => format!("{}", v.type_).blue(),
 					SymbolKind::Namespace(ns) => format!("{} [namespace]", ns.name).green(),
 				};
-				items.push(format!("{} => {}", name, repr));
+				items.push(format!("{} => {}", name.bold(), repr));
 			}
 			write!(f, "{} }}", items.join(", "))?;
 

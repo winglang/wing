@@ -3,10 +3,10 @@ source: libs/wingc/src/lsp/completions.rs
 ---
 - label: delete
   kind: 2
-  detail: "(url: str, options: RequestOptions?): Response"
+  detail: "inflight (url: str, options: RequestOptions?): Response"
   documentation:
     kind: markdown
-    value: "```wing\nstatic delete: (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a DELETE request to a specified URL and provides a formatted response.\n\n\n### Returns\nthe formatted response of the call"
+    value: "```wing\nstatic inflight delete: inflight (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a DELETE request to a specified URL and provides a formatted response.\n\n\n### Returns\nthe formatted response of the call"
   sortText: ff|delete
   insertText: delete($0)
   insertTextFormat: 2
@@ -15,10 +15,10 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: fetch
   kind: 2
-  detail: "(url: str, options: RequestOptions?): Response"
+  detail: "inflight (url: str, options: RequestOptions?): Response"
   documentation:
     kind: markdown
-    value: "```wing\nstatic fetch: (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a HTTP request to a specified URL and provides a formatted response.\n\n\n### Returns\nthe formatted response of the call\n\n### Remarks\nThis method allows various HTTP methods based on the provided options.\n\n*@throws* *Only throws if there is a networking error*"
+    value: "```wing\nstatic inflight fetch: inflight (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a HTTP request to a specified URL and provides a formatted response.\n\n\n### Returns\nthe formatted response of the call\n\n### Remarks\nThis method allows various HTTP methods based on the provided options.\n\n*@throws* *Only throws if there is a networking error*"
   sortText: ff|fetch
   insertText: fetch($0)
   insertTextFormat: 2
@@ -27,10 +27,10 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: get
   kind: 2
-  detail: "(url: str, options: RequestOptions?): Response"
+  detail: "inflight (url: str, options: RequestOptions?): Response"
   documentation:
     kind: markdown
-    value: "```wing\nstatic get: (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a GET request to a specified URL and provides a formatted response.\n\n\n### Returns\nthe formatted response of the call"
+    value: "```wing\nstatic inflight get: inflight (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a GET request to a specified URL and provides a formatted response.\n\n\n### Returns\nthe formatted response of the call"
   sortText: ff|get
   insertText: get($0)
   insertTextFormat: 2
@@ -39,10 +39,10 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: patch
   kind: 2
-  detail: "(url: str, options: RequestOptions?): Response"
+  detail: "inflight (url: str, options: RequestOptions?): Response"
   documentation:
     kind: markdown
-    value: "```wing\nstatic patch: (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a PATCH request to a specified URL and provides a formatted response.\n\n\n### Returns\nthe formatted response of the call"
+    value: "```wing\nstatic inflight patch: inflight (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a PATCH request to a specified URL and provides a formatted response.\n\n\n### Returns\nthe formatted response of the call"
   sortText: ff|patch
   insertText: patch($0)
   insertTextFormat: 2
@@ -51,10 +51,10 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: post
   kind: 2
-  detail: "(url: str, options: RequestOptions?): Response"
+  detail: "inflight (url: str, options: RequestOptions?): Response"
   documentation:
     kind: markdown
-    value: "```wing\nstatic post: (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a POST request to a specified URL and provides a formatted response.\n\n\n### Returns\nthe formatted response of the call"
+    value: "```wing\nstatic inflight post: inflight (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a POST request to a specified URL and provides a formatted response.\n\n\n### Returns\nthe formatted response of the call"
   sortText: ff|post
   insertText: post($0)
   insertTextFormat: 2
@@ -63,10 +63,10 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: put
   kind: 2
-  detail: "(url: str, options: RequestOptions?): Response"
+  detail: "inflight (url: str, options: RequestOptions?): Response"
   documentation:
     kind: markdown
-    value: "```wing\nstatic put: (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a PUT request to a specified URL and provides a formatted response.\n\n\n### Returns\nthe formatted response of the call"
+    value: "```wing\nstatic inflight put: inflight (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a PUT request to a specified URL and provides a formatted response.\n\n\n### Returns\nthe formatted response of the call"
   sortText: ff|put
   insertText: put($0)
   insertTextFormat: 2
@@ -77,13 +77,13 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Util\n```\n---\nthe Http class is used for calling different HTTP methods and requesting and sending information online,  as well as testing public accessible resources."
+    value: "```wing\nclass Util\n```\n---\nThe Http class is used for calling different HTTP methods and requesting and sending information online,  as well as testing public accessible resources."
   sortText: gg|Util
 - label: RequestOptions
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct RequestOptions\n```\n---\nAn object containing any custom settings that you want to apply to the request.\n### Fields\n- `body?` — Any body that you want to add to your request.\n- `cache?` — The cache mode you want to use for the request.\n- `headers?` — Any headers you want to add to your request.\n- `method?` — The request method, e.g., GET, POST. The default is GET.\n- `redirect?` — he redirect mode to use: follow, error.\n- `referrer?` — A string specifying \"no-referrer\", client, or a URL."
+    value: "```wing\nstruct RequestOptions\n```\n---\nAn object containing any custom settings that you want to apply to the request.\n### Fields\n- `body?` — Any body that you want to add to your request.\n- `cache?` — The cache mode you want to use for the request.\n- `headers?` — Any headers you want to add to your request.\n- `method?` — The request method, e.g., GET, POST. The default is GET.\n- `redirect?` — The redirect mode to use: follow, error.\n- `referrer?` — A string specifying \"no-referrer\", client, or a URL."
   sortText: hh|RequestOptions
 - label: Response
   kind: 22

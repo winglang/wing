@@ -2,6 +2,7 @@ import { resolve } from "path";
 import { Duration } from "aws-cdk-lib";
 import { PolicyStatement as CdkPolicyStatement } from "aws-cdk-lib/aws-iam";
 import {
+  Architecture,
   Function as CdkFunction,
   Code,
   IEventSource,
@@ -11,7 +12,7 @@ import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { createBundle } from "../shared/bundling";
-import { PolicyStatement } from "../shared-aws";
+import { IAwsFunction, PolicyStatement } from "../shared-aws";
 import { IInflightHost } from "../std";
 
 /**
@@ -19,7 +20,7 @@ import { IInflightHost } from "../std";
  *
  * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
-export class Function extends cloud.Function {
+export class Function extends cloud.Function implements IAwsFunction {
   private readonly function: CdkFunction;
   /** Function ARN */
   public readonly arn: string;
@@ -43,13 +44,14 @@ export class Function extends cloud.Function {
       timeout: props.timeout
         ? Duration.seconds(props.timeout.seconds)
         : Duration.minutes(0.5),
+      memorySize: props.memory ? props.memory : undefined,
+      architecture: Architecture.ARM_64,
     });
 
     this.arn = this.function.functionArn;
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("functions can only be bound by awscdk.Function for now");
     }
@@ -67,16 +69,16 @@ export class Function extends cloud.Function {
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.function.functionArn);
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return core.InflightClient.for(
       __dirname.replace("target-awscdk", "shared-aws"),
       __filename,
       "FunctionClient",
-      [`process.env["${this.envName()}"]`]
+      [`process.env["${this.envName()}"], "${this.node.path}"`]
     );
   }
 

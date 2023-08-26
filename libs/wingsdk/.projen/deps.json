@@ -27,10 +27,6 @@
       "type": "build"
     },
     {
-      "name": "@types/tar",
-      "type": "build"
-    },
-    {
       "name": "@types/uuid",
       "type": "build"
     },
@@ -50,7 +46,6 @@
     },
     {
       "name": "@winglang/jsii-docgen",
-      "version": "workspace:^",
       "type": "build"
     },
     {
@@ -63,7 +58,6 @@
     },
     {
       "name": "bump-pack",
-      "version": "workspace:^",
       "type": "build"
     },
     {
@@ -73,7 +67,7 @@
     },
     {
       "name": "constructs",
-      "version": "~10.1.314",
+      "version": "~10.2.69",
       "type": "build"
     },
     {
@@ -158,7 +152,6 @@
     },
     {
       "name": "wing-api-checker",
-      "version": "workspace:^",
       "type": "build"
     },
     {
@@ -246,6 +239,10 @@
       "type": "bundled"
     },
     {
+      "name": "@types/aws-lambda",
+      "type": "bundled"
+    },
+    {
       "name": "aws-cdk-lib",
       "version": "^2.64.0",
       "type": "bundled"
@@ -272,15 +269,20 @@
       "type": "bundled"
     },
     {
+      "name": "jsonschema",
+      "type": "bundled"
+    },
+    {
       "name": "mime-types",
       "type": "bundled"
     },
     {
-      "name": "safe-stable-stringify",
+      "name": "nanoid",
+      "version": "^3.3.6",
       "type": "bundled"
     },
     {
-      "name": "tar",
+      "name": "safe-stable-stringify",
       "type": "bundled"
     },
     {
@@ -289,12 +291,12 @@
     },
     {
       "name": "constructs",
-      "version": "~10.1.314",
+      "version": "~10.2.69",
       "type": "peer"
     },
     {
       "name": "constructs",
-      "version": "~10.1.314",
+      "version": "~10.2.69",
       "type": "runtime"
     }
   ],

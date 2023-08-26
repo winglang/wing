@@ -37,7 +37,6 @@
     "nanoid": "^4.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-lottie-player": "^1.5.4",
     "react-popper": "^2.3.0",
     "tailwindcss": "^3.3.2"
   },
@@ -60,5 +59,8 @@
     "vite": "^4.3.9",
     "vitest": "^0.31.4",
     "webpack": "^5.86.0"
+  },
+  "volta": {
+    "extends": "../../../../package.json"
   }
 }

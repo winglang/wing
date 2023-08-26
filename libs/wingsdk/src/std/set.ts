@@ -4,7 +4,7 @@
 
 import { Array } from "./array";
 import { T1 } from "./generics";
-import { Code, InflightClient } from "../core";
+import { InflightClient } from "../core";
 
 /**
  * Immutable Set
@@ -15,7 +15,7 @@ export class Set {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
 
@@ -53,7 +53,7 @@ export class Set {
   /**
    * Create an immutable array shallow copy of this set
    *
-   * @macro Object.freeze([...($self$)])
+   * @macro [...($self$)]
    *
    * @returns an ImmutableArray with the same values as this set
    */
@@ -71,7 +71,7 @@ export class MutSet {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
 
@@ -105,7 +105,7 @@ export class MutSet {
   /**
    * Create an immutable shallow copy of this set
    *
-   * @macro Object.freeze(new Set($self$))
+   * @macro new Set($self$)
    *
    * @returns an ImmutableSet with the same values as this set
    */
@@ -136,7 +136,7 @@ export class MutSet {
   /**
    * Create an immutable array shallow copy of this set
    *
-   * @macro Object.freeze([...($self$)])
+   * @macro [...($self$)]
    *
    * @returns an ImmutableArray with the same values as this set
    */

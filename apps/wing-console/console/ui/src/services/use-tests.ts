@@ -8,20 +8,14 @@ import { trpc } from "./trpc.js";
 
 type RouterOutput = inferRouterOutputs<Router>;
 
-const getTestName = (testPath: string) => {
-  const test = testPath.split("/").pop() ?? testPath;
-  return test.replaceAll("test:", "");
-};
-
 export const useTests = () => {
   const [testList, setTestList] = useState<TestItem[]>([]);
+
   const testListQuery = trpc["test.list"].useQuery();
+
   const runAllTestsMutation = trpc["test.runAll"].useMutation({
     onMutate: () => {
       setAllTestStatus("running");
-    },
-    onSuccess: (data) => {
-      onRunTestsSuccess(data);
     },
   });
 
@@ -29,24 +23,13 @@ export const useTests = () => {
     onMutate: (data) => {
       setTestStatus(data.resourcePath, "running");
     },
-    onSuccess: (data) => {
-      onRunTestsSuccess([data]);
-    },
   });
 
   useEffect(() => {
     if (!testListQuery.data) {
       return;
     }
-    setTestList(
-      testListQuery.data.map((resourcePath) => {
-        return {
-          id: resourcePath,
-          label: getTestName(resourcePath),
-          status: "pending",
-        };
-      }),
-    );
+    setTestList(testListQuery.data);
   }, [testListQuery.data]);
 
   const runAllTests = () => {
@@ -86,16 +69,6 @@ export const useTests = () => {
         };
       });
     });
-  };
-
-  const onRunTestsSuccess = (runOutput: RouterOutput["test.run"][]) => {
-    for (const output of runOutput) {
-      setTestStatus(
-        output.path,
-        output.error ? "error" : "success",
-        output.time,
-      );
-    }
   };
 
   return {

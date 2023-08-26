@@ -7,6 +7,7 @@ import { mkdtemp } from "../util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",
+  entrypointDir: __dirname,
 };
 
 test("default secret behavior", () => {

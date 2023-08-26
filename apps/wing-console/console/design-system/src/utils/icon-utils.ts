@@ -30,7 +30,7 @@ const isTest = /(\/test$|\/test:([^/\\])+$)/;
 const isTestHandler = /(\/test$|\/test:.*\/Handler$)/;
 
 const matchTest = (path: string) => {
-  return isTest.test(path) || isTestHandler.test(path);
+  return isTest.test(path);
 };
 
 export const getResourceIconComponent = (
@@ -171,7 +171,7 @@ export const getResourceIconColors = (options: {
       return [
         "text-violet-700 dark:text-violet-400",
         options.darkenOnGroupHover &&
-        "group-hover:text-violet-700 dark:group-hover:text-violet-300",
+          "group-hover:text-violet-700 dark:group-hover:text-violet-300",
         options.forceDarken && "text-violet-700 dark:text-violet-300",
       ];
     }

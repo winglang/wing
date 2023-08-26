@@ -1,6 +1,6 @@
 # [custom_obj_id.w](../../../../../examples/tests/valid/custom_obj_id.w) | compile | tf-aws
 
-## inflight.Foo.js
+## inflight.Foo-1.js
 ```js
 module.exports = function({  }) {
   class Foo {
@@ -47,58 +47,46 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
+const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Foo.js")({
+        return `
+          require("./inflight.Foo-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const FooClient = ${Foo._toInflightType(this).text};
+            const FooClient = ${Foo._toInflightType(this)};
             const client = new FooClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["$inflight_init"];
       }
     }
     const foo1 = new Foo(this,"Foo");
     const bar2 = new Foo(this,"bar2");
-    {((cond) => {if (!cond) throw new Error("assertion failed: foo1.node.id == \"Foo\"")})((foo1.node.id === "Foo"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: bar2.node.id == \"bar2\"")})((bar2.node.id === "bar2"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: foo1.node.id == \"Foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(foo1.node.id,"Foo")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: bar2.node.id == \"bar2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(bar2.node.id,"bar2")))};
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "custom_obj_id", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "custom_obj_id", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

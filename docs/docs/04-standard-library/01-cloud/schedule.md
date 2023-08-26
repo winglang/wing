@@ -17,6 +17,7 @@ sidebar_position: 1
 
 The `cloud.Schedule` resource is used to trigger events at a regular interval.
 Schedules are useful for periodic tasks, such as running backups or sending daily reports.
+The timezone used in cron expressions is always UTC.
 
 ## Usage
 
@@ -121,7 +122,6 @@ Create a function that runs when receiving the scheduled event.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Schedule.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Schedule.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
@@ -134,18 +134,6 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
-
----
-
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.Schedule.property.display"></a>
-
-```wing
-display: Display;
-```
-
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
-
-Information on how to display a resource in the UI.
 
 ---
 
@@ -216,7 +204,7 @@ The maximum amount of time the function can run.
 
 ### ScheduleProps <a name="ScheduleProps" id="@winglang/sdk.cloud.ScheduleProps"></a>
 
-Properties for `Schedule`.
+Options for `Schedule`.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ScheduleProps.Initializer"></a>
 
@@ -246,6 +234,7 @@ cron: str;
 
 Trigger events according to a cron schedule using the UNIX cron format.
 
+Timezone is UTC.
 [minute] [hour] [day of month] [month] [day of week]
 
 ---
@@ -295,7 +284,6 @@ A resource with an inflight "handle" method that can be passed to `Schedule.on_t
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.IScheduleOnTickHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.IScheduleOnTickHandler.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
@@ -308,18 +296,6 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
-
----
-
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.IScheduleOnTickHandler.property.display"></a>
-
-```wing
-display: Display;
-```
-
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
-
-Information on how to display a resource in the UI.
 
 ---
 

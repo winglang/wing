@@ -45,6 +45,17 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: OnDeploy
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass OnDeploy\n```\n---\nRun code every time the app is deployed."
+  sortText: gg|OnDeploy
+  insertText: OnDeploy($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: Queue
   kind: 7
   documentation:
@@ -85,17 +96,6 @@ source: libs/wingc/src/lsp/completions.rs
     value: "```wing\nclass Service\n```\n---\nA long-running service."
   sortText: gg|Service
   insertText: Service($0)
-  insertTextFormat: 2
-  command:
-    title: triggerParameterHints
-    command: editor.action.triggerParameterHints
-- label: TestRunner
-  kind: 7
-  documentation:
-    kind: markdown
-    value: "```wing\nclass TestRunner\n```\n---\nA test engine."
-  sortText: gg|TestRunner
-  insertText: TestRunner($0)
   insertTextFormat: 2
   command:
     title: triggerParameterHints

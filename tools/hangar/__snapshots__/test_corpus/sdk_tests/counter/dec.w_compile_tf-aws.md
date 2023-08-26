@@ -1,6 +1,6 @@
 # [dec.w](../../../../../../examples/tests/sdk_tests/counter/dec.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $counter }) {
   class $Closure1 {
@@ -10,13 +10,13 @@ module.exports = function({ $counter }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 1")})(((await $counter.peek()) === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counter.peek()),1)))};
       const dec1 = (await $counter.dec());
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 0")})(((await $counter.peek()) === 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: dec1 == 1")})((dec1 === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counter.peek()),0)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: dec1 == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(dec1,1)))};
       const dec2 = (await $counter.dec(2));
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == -2")})(((await $counter.peek()) === (-2)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: dec2 == 0")})((dec2 === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == -2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counter.peek()),(-2))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: dec2 == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(dec2,0)))};
     }
   }
   return $Closure1;
@@ -24,7 +24,7 @@ module.exports = function({ $counter }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $counter }) {
   class $Closure2 {
@@ -35,13 +35,13 @@ module.exports = function({ $counter }) {
     }
     async handle() {
       const key = "my-key";
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 1")})(((await $counter.peek(key)) === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counter.peek(key)),1)))};
       const dec1 = (await $counter.dec(undefined,key));
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 0")})(((await $counter.peek(key)) === 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: dec1 == 1")})((dec1 === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counter.peek(key)),0)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: dec1 == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(dec1,1)))};
       const dec2 = (await $counter.dec(2,key));
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == -2")})(((await $counter.peek(key)) === (-2)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: dec2 == 0")})((dec2 === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == -2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counter.peek(key)),(-2))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: dec2 == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(dec2,0)))};
     }
   }
   return $Closure2;
@@ -170,6 +170,9 @@ module.exports = function({ $counter }) {
             "uniqueId": "testdec_Handler_BE7C58D4"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
@@ -197,6 +200,9 @@ module.exports = function({ $counter }) {
             "uniqueId": "testkeydec_Handler_4A8C3A6B"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
@@ -260,37 +266,39 @@ module.exports = function({ $counter }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+        return `
+          require("./inflight.$Closure1-1.js")({
             $counter: ${context._lift(counter)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -302,26 +310,28 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+        return `
+          require("./inflight.$Closure2-1.js")({
             $counter: ${context._lift(counter)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const $Closure2Client = ${$Closure2._toInflightType(this)};
             const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -335,22 +345,8 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:key dec",new $Closure2(this,"$Closure2"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "dec", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "dec", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

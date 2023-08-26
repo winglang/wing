@@ -6,9 +6,8 @@ import { ISimulatorResource } from "./resource";
 import { QueueSchema, QUEUE_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Duration, IInflightHost, Resource } from "../std";
+import { Duration, IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 
 /**
@@ -19,7 +18,6 @@ import { BaseResourceSchema } from "../testing/simulator";
 export class Queue extends cloud.Queue implements ISimulatorResource {
   private readonly timeout: Duration;
   private readonly retentionPeriod: Duration;
-  private readonly initialMessages: string[] = [];
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
@@ -31,8 +29,6 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
         "Retention period must be greater than or equal to timeout"
       );
     }
-
-    this.initialMessages.push(...(props.initialMessages ?? []));
   }
 
   public setConsumer(
@@ -64,7 +60,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
      * wrapper code directly?
      */
     const functionHandler = convertBetweenHandlers(
-      this.node.scope!, // ok since we're not a tree root
+      this,
       `${this.node.id}-SetConsumerHandler-${hash}`,
       inflight,
       join(__dirname, "queue.setconsumer.inflight.js"),
@@ -72,11 +68,13 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     );
 
     const fn = Function._newFunction(
-      this.node.scope!, // ok since we're not a tree root
+      this,
       `${this.node.id}-SetConsumer-${hash}`,
       functionHandler,
       props
     );
+    Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
+    Node.of(fn).title = "setConsumer()";
 
     new EventMapping(this, `${this.node.id}-QueueEventMapping-${hash}`, {
       subscriber: fn,
@@ -86,10 +84,10 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       },
     });
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "consumer",
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: "setConsumer()",
     });
 
     return fn;
@@ -102,21 +100,19 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       props: {
         timeout: this.timeout.seconds,
         retentionPeriod: this.retentionPeriod.seconds,
-        initialMessages: this.initialMessages,
       },
       attrs: {} as any,
     };
     return schema;
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
   }
 }

@@ -31,18 +31,18 @@ const FUNCTION_NAME_OPTS: NameOptions = {
  * that should be used when a function is deployed within a VPC.
  */
 export interface FunctionNetworkConfig {
-  /** list of subnets to attach on function */
+  /** List of subnets to attach on function */
   readonly subnetIds: string[];
-  /** list of security groups to place function in */
+  /** List of security groups to place function in */
   readonly securityGroupIds: string[];
 }
 
 /**
- * options for granting invoke permissions to the current function
+ * Options for granting invoke permissions to the current function
  */
 export interface FunctionPermissionsOptions {
   /**
-   * used for keeping function's versioning.
+   * Used for keeping function's versioning.
    */
   readonly qualifier?: string;
 }
@@ -208,6 +208,7 @@ export class Function extends cloud.Function implements IAwsFunction {
         ? props.timeout.seconds
         : Duration.fromMinutes(0.5).seconds,
       memorySize: props.memory ? props.memory : undefined,
+      architectures: ["arm64"],
     });
 
     this.arn = this.function.arn;
@@ -218,8 +219,11 @@ export class Function extends cloud.Function implements IAwsFunction {
     this.addEnvironment("WING_FUNCTION_NAME", name);
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public get functionName(): string {
+    return this.function.functionName;
+  }
+
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("functions can only be bound by tfaws.Function for now");
     }
@@ -237,16 +241,16 @@ export class Function extends cloud.Function implements IAwsFunction {
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.function.arn);
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return core.InflightClient.for(
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
       "FunctionClient",
-      [`process.env["${this.envName()}"]`]
+      [`process.env["${this.envName()}"], "${this.node.path}"`]
     );
   }
 

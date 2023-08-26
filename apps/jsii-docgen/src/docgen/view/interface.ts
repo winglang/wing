@@ -1,12 +1,12 @@
 import * as reflect from "jsii-reflect";
+import { InstanceMethods } from "./instance-methods";
+import { Properties } from "./properties";
 import { extractDocs, InterfaceSchema } from "../schema";
 import {
   Transpile,
   TranspiledInterface,
   TranspiledType,
 } from "../transpile/transpile";
-import { InstanceMethods } from "./instance-methods";
-import { Properties } from "./properties";
 
 export class Interface {
   public static isStruct(iface: reflect.InterfaceType): boolean {

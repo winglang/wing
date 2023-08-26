@@ -222,7 +222,6 @@ Get url of redis server.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.ex.Redis.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.ex.Redis.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
@@ -235,18 +234,6 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
-
----
-
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.ex.Redis.property.display"></a>
-
-```wing
-display: Display;
-```
-
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
-
-Information on how to display a resource in the UI.
 
 ---
 
@@ -409,7 +396,6 @@ data to be updated.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.ex.Table.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.ex.Table.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/sdk.ex.Table.property.columns">columns</a></code> | <code>MutMap&lt;<a href="#@winglang/sdk.ex.ColumnType">ColumnType</a>&gt;</code> | Table columns. |
 | <code><a href="#@winglang/sdk.ex.Table.property.name">name</a></code> | <code>str</code> | Table name. |
 | <code><a href="#@winglang/sdk.ex.Table.property.primaryKey">primaryKey</a></code> | <code>str</code> | Table primary key name. |
@@ -425,18 +411,6 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
-
----
-
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.ex.Table.property.display"></a>
-
-```wing
-display: Display;
-```
-
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
-
-Information on how to display a resource in the UI.
 
 ---
 
@@ -752,45 +726,45 @@ Table column types.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.ex.ColumnType.STRING">STRING</a></code> | string type. |
-| <code><a href="#@winglang/sdk.ex.ColumnType.NUMBER">NUMBER</a></code> | number type. |
-| <code><a href="#@winglang/sdk.ex.ColumnType.BOOLEAN">BOOLEAN</a></code> | bool type. |
-| <code><a href="#@winglang/sdk.ex.ColumnType.DATE">DATE</a></code> | date type. |
-| <code><a href="#@winglang/sdk.ex.ColumnType.JSON">JSON</a></code> | json type. |
+| <code><a href="#@winglang/sdk.ex.ColumnType.STRING">STRING</a></code> | String type. |
+| <code><a href="#@winglang/sdk.ex.ColumnType.NUMBER">NUMBER</a></code> | Number type. |
+| <code><a href="#@winglang/sdk.ex.ColumnType.BOOLEAN">BOOLEAN</a></code> | Bool type. |
+| <code><a href="#@winglang/sdk.ex.ColumnType.DATE">DATE</a></code> | Date type. |
+| <code><a href="#@winglang/sdk.ex.ColumnType.JSON">JSON</a></code> | Json type. |
 
 ---
 
 ##### `STRING` <a name="STRING" id="@winglang/sdk.ex.ColumnType.STRING"></a>
 
-string type.
+String type.
 
 ---
 
 
 ##### `NUMBER` <a name="NUMBER" id="@winglang/sdk.ex.ColumnType.NUMBER"></a>
 
-number type.
+Number type.
 
 ---
 
 
 ##### `BOOLEAN` <a name="BOOLEAN" id="@winglang/sdk.ex.ColumnType.BOOLEAN"></a>
 
-bool type.
+Bool type.
 
 ---
 
 
 ##### `DATE` <a name="DATE" id="@winglang/sdk.ex.ColumnType.DATE"></a>
 
-date type.
+Date type.
 
 ---
 
 
 ##### `JSON` <a name="JSON" id="@winglang/sdk.ex.ColumnType.JSON"></a>
 
-json type.
+Json type.
 
 ---
 

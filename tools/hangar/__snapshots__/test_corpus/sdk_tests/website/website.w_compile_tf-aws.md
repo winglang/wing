@@ -1,6 +1,6 @@
 # [website.w](../../../../../../examples/tests/sdk_tests/website/website.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $config, $http_Util, $indexFile, $otherFile, $std_Json, $w_url }) {
   class $Closure1 {
@@ -10,13 +10,9 @@ module.exports = function({ $config, $http_Util, $indexFile, $otherFile, $std_Js
       return $obj;
     }
     async handle() {
-      let url = $w_url;
-      if ((!url.startsWith("http"))) {
-        url = ("http://" + url);
-      }
-      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(url).body == indexFile")})(((await $http_Util.get(url)).body === $indexFile))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(url + \"/inner-folder/other.html\").body == otherFile")})(((await $http_Util.get((url + "/inner-folder/other.html"))).body === $otherFile))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(url + \"/config.json\").body == Json.stringify(config)")})(((await $http_Util.get((url + "/config.json"))).body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$config])))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(w.url).body == indexFile")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get($w_url)).body,$indexFile)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(w.url + \"/inner-folder/other.html\").body == otherFile")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get(($w_url + "/inner-folder/other.html"))).body,$otherFile)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(w.url + \"/config.json\").body == Json.stringify(config)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get(($w_url + "/config.json"))).body,((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$config]))))};
     }
   }
   return $Closure1;
@@ -24,7 +20,7 @@ module.exports = function({ $config, $http_Util, $indexFile, $otherFile, $std_Js
 
 ```
 
-## inflight.Util.js
+## inflight.Util-1.js
 ```js
 module.exports = function({  }) {
   class Util {
@@ -52,6 +48,45 @@ module.exports = function({  }) {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
         }
+      }
+    }
+  },
+  "data": {
+    "aws_iam_policy_document": {
+      "cloudWebsite_AllowDistributionReadOnly_89DC4FD0": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Website/AllowDistributionReadOnly",
+            "uniqueId": "cloudWebsite_AllowDistributionReadOnly_89DC4FD0"
+          }
+        },
+        "statement": [
+          {
+            "actions": [
+              "s3:GetObject"
+            ],
+            "condition": [
+              {
+                "test": "StringEquals",
+                "values": [
+                  "${aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.arn}"
+                ],
+                "variable": "AWS:SourceArn"
+              }
+            ],
+            "principals": [
+              {
+                "identifiers": [
+                  "cloudfront.amazonaws.com"
+                ],
+                "type": "Service"
+              }
+            ],
+            "resources": [
+              "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.arn}/*"
+            ]
+          }
+        ]
       }
     }
   },
@@ -101,6 +136,7 @@ module.exports = function({  }) {
         "origin": [
           {
             "domain_name": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket_regional_domain_name}",
+            "origin_access_control_id": "${aws_cloudfront_origin_access_control.cloudWebsite_CloudfrontOac_C956968B.id}",
             "origin_id": "s3Origin"
           }
         ],
@@ -114,6 +150,20 @@ module.exports = function({  }) {
         "viewer_certificate": {
           "cloudfront_default_certificate": true
         }
+      }
+    },
+    "aws_cloudfront_origin_access_control": {
+      "cloudWebsite_CloudfrontOac_C956968B": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Website/CloudfrontOac",
+            "uniqueId": "cloudWebsite_CloudfrontOac_C956968B"
+          }
+        },
+        "name": "cloud-We-c8e58765-cloudfront-oac",
+        "origin_access_control_origin_type": "s3",
+        "signing_behavior": "always",
+        "signing_protocol": "sigv4"
       }
     },
     "aws_iam_role": {
@@ -159,11 +209,14 @@ module.exports = function({  }) {
             "uniqueId": "testaccessfilesonthewebsite_Handler_B4D12109"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c867c4e0",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_11": "${jsonencode(aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name)}"
+            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_15": "${jsonencode(\"https://${aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name}\")}"
           }
         },
         "function_name": "Handler-c867c4e0",
@@ -202,30 +255,15 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket_policy": {
-      "cloudWebsite_PublicPolicy_44BB71F3": {
+      "cloudWebsite_DistributionS3BucketPolicy_32B029AE": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Website/PublicPolicy",
-            "uniqueId": "cloudWebsite_PublicPolicy_44BB71F3"
+            "path": "root/Default/Default/cloud.Website/DistributionS3BucketPolicy",
+            "uniqueId": "cloudWebsite_DistributionS3BucketPolicy_32B029AE"
           }
         },
-        "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":[\"s3:GetObject\"],\"Resource\":[\"${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.arn}/*\"]}]}"
-      }
-    },
-    "aws_s3_bucket_public_access_block": {
-      "cloudWebsite_PublicAccessBlock_18A70311": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Website/PublicAccessBlock",
-            "uniqueId": "cloudWebsite_PublicAccessBlock_18A70311"
-          }
-        },
-        "block_public_acls": false,
-        "block_public_policy": false,
-        "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
-        "ignore_public_acls": false,
-        "restrict_public_buckets": false
+        "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.id}",
+        "policy": "${data.aws_iam_policy_document.cloudWebsite_AllowDistributionReadOnly_89DC4FD0.json}"
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
@@ -274,7 +312,8 @@ module.exports = function({  }) {
           "aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355"
         ],
         "key": "/index.html",
-        "source": "<SOURCE>"
+        "source": "<SOURCE>",
+        "source_hash": "${filemd5(<SOURCE>)}"
       },
       "cloudWebsite_File--inner-folder--otherhtml_72DA631C": {
         "//": {
@@ -289,7 +328,8 @@ module.exports = function({  }) {
           "aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355"
         ],
         "key": "/inner-folder/other.html",
-        "source": "<SOURCE>"
+        "source": "<SOURCE>",
+        "source_hash": "${filemd5(<SOURCE>)}"
       },
       "cloudWebsite_File-configjson_591A81BA": {
         "//": {
@@ -325,50 +365,51 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
-const http = require('@winglang/sdk').http;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
+const http = $stdlib.http;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class Util extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
       }
       static readFile(path) {
         return (require("<ABSOLUTE_PATH>/fs.js")["readFile"])(path)
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Util.js")({
+        return `
+          require("./inflight.Util-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const UtilClient = ${Util._toInflightType(this).text};
+            const UtilClient = ${Util._toInflightType(this)};
             const client = new UtilClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["$inflight_init"];
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+        return `
+          require("./inflight.$Closure1-1.js")({
             $config: ${context._lift(config)},
             $http_Util: ${context._lift(http.Util)},
             $indexFile: ${context._lift(indexFile)},
@@ -376,31 +417,34 @@ class $Root extends $stdlib.std.Resource {
             $std_Json: ${context._lift(std.Json)},
             $w_url: ${context._lift(w.url)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(config, host, []);
           $Closure1._registerBindObject(indexFile, host, []);
           $Closure1._registerBindObject(otherFile, host, []);
-          $Closure1._registerBindObject(w.url, host, []);
+          $Closure1._registerBindObject(w.url, host, ["body"]);
         }
         super._registerBind(host, ops);
       }
     }
     const w = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this,"cloud.Website",{ path: "./website" });
-    const config = Object.freeze({"json":1});
+    const config = ({"json": 1});
     const indexFile = (Util.readFile("./website/website/index.html"));
     const otherFile = (Util.readFile("./website/website/inner-folder/other.html"));
     (w.addJson("config.json",config));
@@ -408,22 +452,8 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:access files on the website",new $Closure1(this,"$Closure1"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "website", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "website", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

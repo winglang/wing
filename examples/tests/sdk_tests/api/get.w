@@ -2,18 +2,14 @@ bring cloud;
 bring http;
 bring util;
 
-// https://github.com/winglang/wing/issues/3049
-let http_GET = http.HttpMethod.GET;
-let api_GET = cloud.HttpMethod.GET;
 
 let api = new cloud.Api();
 let body = "ok!";
 
 api.get("/path", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
-  assert(req.method == api_GET);
+  assert(req.method == cloud.HttpMethod.GET);
   assert(req.path == "/path");
-  // req.body is not a string in sim- https://github.com/winglang/wing/issues/3024
-  // assert(req.body?.length == 0);
+  assert(req.body?.length == 0);
   assert(req.headers?.get("content-type") == "application/json");
 
   return cloud.ApiResponse {
@@ -22,12 +18,11 @@ api.get("/path", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   };
 });
 
-/// https://github.com/winglang/wing/issues/3342
-if (util.env("WING_TARGET") != "tf-aws") {
-  test "http.get and http.fetch can preform a call to an api" {
+
+test "http.get and http.fetch can preform a call to an api" {
     let url = api.url + "/path";
     let getResponse: http.Response = http.get(url, headers: { "content-type" => "application/json" });
-    let fetchResponse: http.Response = http.fetch(url, method: http_GET, headers: { "content-type" => "application/json" });
+    let fetchResponse: http.Response = http.fetch(url, method: http.HttpMethod.GET, headers: { "content-type" => "application/json" });
     let fetchResponseNoMethod: http.Response = http.fetch(url,  headers: { "content-type" => "application/json" });
 
 
@@ -42,5 +37,4 @@ if (util.env("WING_TARGET") != "tf-aws") {
     assert(fetchResponseNoMethod.body == body);
     assert(fetchResponseNoMethod.status == 200);
     assert(fetchResponseNoMethod.url == url);
-  }
 }

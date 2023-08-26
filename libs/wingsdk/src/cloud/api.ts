@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { IResource, Resource } from "../std/resource";
+import { IResource, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Api`.
@@ -10,7 +10,7 @@ import { IResource, Resource } from "../std/resource";
 export const API_FQN = fqnForType("cloud.Api");
 
 /**
- * Properties for `Api`.
+ * Options for `Api`.
  */
 
 export interface ApiProps {}
@@ -60,9 +60,15 @@ export abstract class Api extends Resource {
 
     props;
 
-    this.display.title = "Api";
-    this.display.description = "A REST API endpoint";
+    Node.of(this).title = "Api";
+    Node.of(this).description = "A REST API endpoint";
   }
+
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [];
+  }
+
   /**
    * Add a inflight handler to the api for GET requests on the given path.
    * @param path The path to handle GET requests for.
@@ -159,7 +165,7 @@ export abstract class Api extends Resource {
     props?: ApiConnectProps
   ): void;
   /**
-   * validating path:
+   * Validating path:
    * if has curly brackets pairs- the part that inside the brackets is only letter, digit or _, not empty and placed before and after "/"
    * @param path
    * @throws if the path is invalid

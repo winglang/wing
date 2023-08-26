@@ -1,6 +1,6 @@
 # [api_valid_path.w](../../../../../examples/tests/valid/api_valid_path.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({  }) {
   class $Closure1 {
@@ -10,10 +10,7 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle(req) {
-      return {
-      "body": "ok",
-      "status": 200,}
-      ;
+      return ({"body": "ok","status": 200});
     }
   }
   return $Closure1;
@@ -76,7 +73,7 @@ module.exports = function({  }) {
         },
         "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
         "triggers": {
-          "redeployment": "934e9973d7d898c43f960c4bc11231cc4be43a56"
+          "redeployment": "ca397382abb9ec6fa6cdfa8a96c26d44013057ba"
         }
       }
     },
@@ -148,6 +145,9 @@ module.exports = function({  }) {
             "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-cdafee6e-c8147384",
@@ -266,36 +266,38 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+        return `
+          require("./inflight.$Closure1-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
     }
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
@@ -310,7 +312,7 @@ class $Root extends $stdlib.std.Resource {
         const e = $error_e.message;
         error = e;
       }
-      {((cond) => {if (!cond) throw new Error("assertion failed: error == expected")})((error === expected))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: error == expected")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(error,expected)))};
     });
     const testValidPath = ((path) => {
       let error = "";
@@ -321,7 +323,7 @@ class $Root extends $stdlib.std.Resource {
         const e = $error_e.message;
         error = e;
       }
-      {((cond) => {if (!cond) throw new Error("assertion failed: error == \"\"")})((error === ""))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: error == \"\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(error,"")))};
     });
     (testInvalidPath("/test/{sup:er/:annoying//path}"));
     (testInvalidPath("/test/{::another:annoying:path}"));
@@ -338,22 +340,8 @@ class $Root extends $stdlib.std.Resource {
     (testValidPath("/test/param/is/{last}"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "api_valid_path", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "api_valid_path", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

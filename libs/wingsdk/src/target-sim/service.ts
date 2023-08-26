@@ -6,9 +6,8 @@ import { SERVICE_TYPE, ServiceSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { IInflightHost, Resource } from "../std";
+import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 import { BaseResourceSchema } from "../testing";
 
 export class Service extends cloud.Service implements ISimulatorResource {
@@ -26,10 +25,10 @@ export class Service extends cloud.Service implements ISimulatorResource {
     );
     this.onStartHandlerToken = simulatorHandleToken(onStartFunction);
 
-    Resource.addConnection({
-      from: this,
-      to: onStartFunction,
-      relationship: "on_start",
+    Node.of(this).addConnection({
+      source: this,
+      target: onStartFunction,
+      name: "onStart()",
     });
 
     // On Stop Handler
@@ -40,10 +39,10 @@ export class Service extends cloud.Service implements ISimulatorResource {
       );
       this.onStopHandlerToken = simulatorHandleToken(onStopFunction);
 
-      Resource.addConnection({
-        from: this,
-        to: onStopFunction,
-        relationship: "on_stop",
+      Node.of(this).addConnection({
+        source: this,
+        target: onStopFunction,
+        name: "onStop()",
       });
     }
   }
@@ -56,7 +55,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
     const onStartHash = handler.node.addr.slice(-8);
 
     const onStartFunctionHandler = convertBetweenHandlers(
-      this.node.scope!,
+      this,
       `${this.node.id}-${id}-${onStartHash}`,
       handler,
       join(__dirname, "service.onevent.inflight.js"),
@@ -64,17 +63,19 @@ export class Service extends cloud.Service implements ISimulatorResource {
     );
 
     const fn = Function._newFunction(
-      this.node.scope!,
+      this,
       `${this.node.id}-${id}${onStartHash}`,
       onStartFunctionHandler,
       {}
     );
+    Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
+    Node.of(fn).title = "onStart()";
 
     this.node.addDependency(fn);
     return fn;
   }
 
-  toSimulator(): BaseResourceSchema {
+  public toSimulator(): BaseResourceSchema {
     const schema: ServiceSchema = {
       type: SERVICE_TYPE,
       path: this.node.path,
@@ -90,12 +91,12 @@ export class Service extends cloud.Service implements ISimulatorResource {
     return schema;
   }
 
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
   }
 }

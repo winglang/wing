@@ -1,6 +1,6 @@
 # [list.w](../../../../../../examples/tests/sdk_tests/table/list.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $std_String, $table }) {
   class $Closure1 {
@@ -10,18 +10,18 @@ module.exports = function({ $std_String, $table }) {
       return $obj;
     }
     async handle() {
-      (await $table.insert("eyal",Object.freeze({"gender":"male"})));
-      (await $table.insert("revital",Object.freeze({"gender":"female"})));
-      const unorderded = {};
+      (await $table.insert("eyal",({"gender": "male"})));
+      (await $table.insert("revital",({"gender": "female"})));
+      const unorderded = ({});
       for (const u of (await $table.list())) {
         ((obj, args) => { obj[args[0]] = args[1]; })(unorderded, [((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((u)["name"]),u]);
       }
       const revital = (unorderded)["revital"];
       const eyal = (unorderded)["eyal"];
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"eyal\" == str.fromJson(eyal.get(\"name\"))")})(("eyal" === ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((eyal)["name"])))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"male\" == str.fromJson(eyal.get(\"gender\"))")})(("male" === ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((eyal)["gender"])))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"revital\" == str.fromJson(revital.get(\"name\"))")})(("revital" === ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((revital)["name"])))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"female\" == str.fromJson(revital.get(\"gender\"))")})(("female" === ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((revital)["gender"])))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"eyal\" == str.fromJson(eyal.get(\"name\"))")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("eyal",((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((eyal)["name"]))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"male\" == str.fromJson(eyal.get(\"gender\"))")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("male",((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((eyal)["gender"]))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"revital\" == str.fromJson(revital.get(\"name\"))")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("revital",((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((revital)["name"]))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"female\" == str.fromJson(revital.get(\"gender\"))")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("female",((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((revital)["gender"]))))};
     }
   }
   return $Closure1;
@@ -121,6 +121,9 @@ module.exports = function({ $std_String, $table }) {
             "uniqueId": "testlist_Handler_58856559"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
@@ -175,39 +178,41 @@ module.exports = function({ $std_String, $table }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
-const ex = require('@winglang/sdk').ex;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
+const ex = $stdlib.ex;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+        return `
+          require("./inflight.$Closure1-1.js")({
             $std_String: ${context._lift(std.String)},
             $table: ${context._lift(table)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -216,26 +221,12 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const table = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "users", primaryKey: "name", columns: Object.freeze({"gender":ex.ColumnType.STRING}) });
+    const table = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "users", primaryKey: "name", columns: ({"gender": ex.ColumnType.STRING}) });
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:list",new $Closure1(this,"$Closure1"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "list", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "list", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

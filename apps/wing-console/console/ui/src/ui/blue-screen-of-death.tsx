@@ -1,44 +1,41 @@
 import classNames from "classnames";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { formatAbsolutePaths } from "../features/console-logs.js";
 
 export const BlueScreenOfDeath = ({
   title,
   error = "",
-  hidden = false,
   displayLinks = true,
   displayWingTitle = true,
 }: {
   title: string;
   error: string;
-  hidden?: boolean;
   displayLinks?: boolean;
   displayWingTitle?: boolean;
 }) => {
-  const errorRef = useRef<HTMLElement>(null);
+  const [formattedPathsError, setFormattedPathsError] = useState("");
 
   useEffect(() => {
-    if (errorRef.current === null) {
-      return;
-    }
     if (!displayLinks) {
-      errorRef.current.innerHTML = error;
+      setFormattedPathsError(error);
       return;
     }
-    errorRef.current.innerHTML = formatAbsolutePaths(
-      error,
-      "underline text-slate-300 hover:text-slate-400",
-      true,
+    setFormattedPathsError(
+      formatAbsolutePaths(
+        error,
+        "underline text-slate-300 hover:text-slate-400",
+        true,
+      ),
     );
-  }, [error]);
+  }, [error, displayLinks]);
 
   return (
     <div
       className={classNames(
         "absolute h-full w-full z-50 px-10 py-20 bg-[#004295] overflow-auto flex justify-center items-center",
-        hidden && "hidden",
       )}
+      data-testid="blue-screen-of-death"
     >
       <div className="h-full w-full text-md font-share-tech text-white max-w-7xl break-words space-y-4">
         {displayWingTitle && (
@@ -51,7 +48,7 @@ export const BlueScreenOfDeath = ({
           <div className="py-4">
             <span
               className="outline-none select-text whitespace-pre-wrap"
-              ref={errorRef}
+              dangerouslySetInnerHTML={{ __html: formattedPathsError }}
             />
           </div>
           {displayLinks && (

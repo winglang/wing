@@ -1,6 +1,6 @@
 # [inflight_class_structural_interace_handler.w](../../../../../examples/tests/valid/inflight_class_structural_interace_handler.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $NotGoo }) {
   class $Closure1 {
@@ -19,9 +19,9 @@ module.exports = function({ $NotGoo }) {
         }
       }
       const y = new YesGoo();
-      {((cond) => {if (!cond) throw new Error("assertion failed: y.handle() == 456")})(((await y.handle()) === 456))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: y.handle() == 456")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await y.handle()),456)))};
       const x = new $NotGoo();
-      {((cond) => {if (!cond) throw new Error("assertion failed: x.handle() == 123")})(((await x.handle()) === 123))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: x.handle() == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await x.handle()),123)))};
     }
   }
   return $Closure1;
@@ -29,7 +29,7 @@ module.exports = function({ $NotGoo }) {
 
 ```
 
-## inflight.NotGoo.js
+## inflight.NotGoo-1.js
 ```js
 module.exports = function({  }) {
   class NotGoo {
@@ -115,6 +115,9 @@ module.exports = function({  }) {
             "uniqueId": "teststructureinterfacetypesforhandle_Handler_2DA6D9F8"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c83718d0",
@@ -166,81 +169,71 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class NotGoo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.NotGoo.js")({
+        return `
+          require("./inflight.NotGoo-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const NotGooClient = ${NotGoo._toInflightType(this).text};
+            const NotGooClient = ${NotGoo._toInflightType(this)};
             const client = new NotGooClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+        return `
+          require("./inflight.$Closure1-1.js")({
             $NotGoo: ${context._lift(NotGoo)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
     }
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:structure interface types for 'handle'",new $Closure1(this,"$Closure1"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "inflight_class_structural_interace_handler", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "inflight_class_structural_interace_handler", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

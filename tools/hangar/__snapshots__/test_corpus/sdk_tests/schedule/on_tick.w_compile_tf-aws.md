@@ -1,6 +1,6 @@
 # [on_tick.w](../../../../../../examples/tests/sdk_tests/schedule/on_tick.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $c1 }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $c1 }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $c2 }) {
   class $Closure2 {
@@ -36,9 +36,9 @@ module.exports = function({ $c2 }) {
 
 ```
 
-## inflight.$Closure3.js
+## inflight.$Closure3-1.js
 ```js
-module.exports = function({ $Utils, $c1, $c2 }) {
+module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
   class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -46,29 +46,14 @@ module.exports = function({ $Utils, $c1, $c2 }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: c1.peek() == 0")})(((await $c1.peek()) === 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: c2.peek() == 0")})(((await $c2.peek()) === 0))};
-      (await $Utils.sleep(((60 * 1000) * 1.1)));
+      {((cond) => {if (!cond) throw new Error("assertion failed: c1.peek() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $c1.peek()),0)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c2.peek() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $c2.peek()),0)))};
+      (await $util_Util.sleep((await $std_Duration.fromSeconds(66))));
       {((cond) => {if (!cond) throw new Error("assertion failed: c1.peek() >= 1")})(((await $c1.peek()) >= 1))};
       {((cond) => {if (!cond) throw new Error("assertion failed: c2.peek() >= 1")})(((await $c2.peek()) >= 1))};
     }
   }
   return $Closure3;
-}
-
-```
-
-## inflight.Utils.js
-```js
-module.exports = function({  }) {
-  class Utils {
-    constructor({  }) {
-    }
-    static async sleep(milli) {
-      return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
-    }
-  }
-  return Utils;
 }
 
 ```
@@ -284,6 +269,9 @@ module.exports = function({  }) {
             "uniqueId": "from_cron-OnTick-cdafee6e"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_bca69a1d": "${aws_dynamodb_table.c1.name}",
@@ -311,6 +299,9 @@ module.exports = function({  }) {
             "uniqueId": "from_rate-OnTick-86898773"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_7ba9f967": "${aws_dynamodb_table.c2.name}",
@@ -338,6 +329,9 @@ module.exports = function({  }) {
             "uniqueId": "ontickiscalledbothforrateandcronschedules_Handler_B4B8DF58"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_7ba9f967": "${aws_dynamodb_table.c2.name}",
@@ -441,37 +435,40 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
+const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+        return `
+          require("./inflight.$Closure1-1.js")({
             $c1: ${context._lift(c1)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -483,26 +480,28 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+        return `
+          require("./inflight.$Closure2-1.js")({
             $c2: ${context._lift(c2)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const $Closure2Client = ${$Closure2._toInflightType(this)};
             const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -511,58 +510,37 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    class Utils extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        this._addInflightOps("sleep", "$inflight_init");
-      }
-      static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Utils.js")({
-          })
-        `);
-      }
-      _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          (await (async () => {
-            const UtilsClient = ${Utils._toInflightType(this).text};
-            const client = new UtilsClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `);
-      }
-    }
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3.js")({
-            $Utils: ${context._lift(Utils)},
+        return `
+          require("./inflight.$Closure3-1.js")({
             $c1: ${context._lift(c1)},
             $c2: ${context._lift(c2)},
+            $std_Duration: ${context._lift(std.Duration)},
+            $util_Util: ${context._lift(util.Util)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure3Client = ${$Closure3._toInflightType(this).text};
+            const $Closure3Client = ${$Closure3._toInflightType(this)};
             const client = new $Closure3Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure3._registerBindObject(Utils, host, ["sleep"]);
           $Closure3._registerBindObject(c1, host, ["peek"]);
           $Closure3._registerBindObject(c2, host, ["peek"]);
         }
@@ -575,27 +553,11 @@ class $Root extends $stdlib.std.Resource {
     const c2 = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"c2");
     (from_cron.onTick(new $Closure1(this,"$Closure1")));
     (from_rate.onTick(new $Closure2(this,"$Closure2")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"on tick is called both for rate and cron schedules",new $Closure3(this,"$Closure3"),{
-    "timeout": (std.Duration.fromSeconds(120)),}
-    );
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"on tick is called both for rate and cron schedules",new $Closure3(this,"$Closure3"),({"timeout": (std.Duration.fromSeconds(120))}));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "on_tick", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "on_tick", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

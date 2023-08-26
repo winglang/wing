@@ -21,6 +21,7 @@
   },
   "scripts": {
     "build": "tsc && pnpm copy-root-readme",
+    "compile": "tsc",
     "copy-root-readme": "cp ../../README.md ./README.md && pnpm copy-root-assets",
     "copy-root-assets": "cp ../../logo/demo.gif ./logo/demo.gif",
     "watch": "tsc --watch",
@@ -31,6 +32,7 @@
   "dependencies": {
     "@segment/analytics-node": "^1.0.0",
     "@wingconsole/app": "workspace:^",
+    "@wingconsole/server": "workspace:^",
     "@winglang/compiler": "workspace:^",
     "@winglang/sdk": "workspace:^",
     "chalk": "^4.1.2",
@@ -42,6 +44,7 @@
     "ora": "^5.4.1",
     "tiny-updater": "^3.4.0",
     "uuid": "^8.3.2",
+    "nanoid": "^3.3.6",
     "vscode-languageserver": "^8.0.2"
   },
   "devDependencies": {

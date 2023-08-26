@@ -125,11 +125,14 @@ exports[`dec() policy statement 2`] = `
         "FunctionServiceRole675BB04A",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "7f88ad6b39756ca47a1f62c4073b16e7d1dd718dccac91f2f477bd8b7d93979b.zip",
+          "S3Key": "<S3Key>",
         },
         "Environment": {
           "Variables": {
@@ -363,11 +366,14 @@ exports[`function with a counter binding 2`] = `
         "FunctionServiceRole675BB04A",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "eeb1a09b430750f79d2178a853df4a7c9c3da2b3cd34773230b0e09b686d118e.zip",
+          "S3Key": "<S3Key>",
         },
         "Environment": {
           "Variables": {
@@ -535,11 +541,14 @@ exports[`inc() policy statement 2`] = `
         "FunctionServiceRole675BB04A",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "eeb1a09b430750f79d2178a853df4a7c9c3da2b3cd34773230b0e09b686d118e.zip",
+          "S3Key": "<S3Key>",
         },
         "Environment": {
           "Variables": {
@@ -707,11 +716,14 @@ exports[`peek() policy statement 2`] = `
         "FunctionServiceRole675BB04A",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "c99045e525ddd3aa5e452c244ab0e15d7dccb0c992971ff69d1556a946b4f4ef.zip",
+          "S3Key": "<S3Key>",
         },
         "Environment": {
           "Variables": {
@@ -879,11 +891,14 @@ exports[`set() policy statement 2`] = `
         "FunctionServiceRole675BB04A",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "239ecd5b27a3e3d0fe03e52540218d631d1790ad7a32eb81f57677613ba2e1c7.zip",
+          "S3Key": "<S3Key>",
         },
         "Environment": {
           "Variables": {

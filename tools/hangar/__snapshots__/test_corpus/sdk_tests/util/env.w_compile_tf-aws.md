@@ -1,6 +1,6 @@
 # [env.w](../../../../../../examples/tests/sdk_tests/util/env.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $NIL, $RANDOM, $util_Util }) {
   class $Closure1 {
@@ -12,7 +12,7 @@ module.exports = function({ $NIL, $RANDOM, $util_Util }) {
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: util.env(\"WING_TARGET\").length > 0")})(((await $util_Util.env("WING_TARGET")).length > 0))};
       const noValue = ((await $util_Util.tryEnv($RANDOM)) ?? $NIL);
-      {((cond) => {if (!cond) throw new Error("assertion failed: noValue == NIL")})((noValue === $NIL))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: noValue == NIL")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(noValue,$NIL)))};
     }
   }
   return $Closure1;
@@ -93,6 +93,9 @@ module.exports = function({ $NIL, $RANDOM, $util_Util }) {
             "uniqueId": "testuseutilfrominflight_Handler_6C871F39"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8904ffd",
@@ -144,39 +147,41 @@ module.exports = function({ $NIL, $RANDOM, $util_Util }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const util = require('@winglang/sdk').util;
+const std = $stdlib.std;
+const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+        return `
+          require("./inflight.$Closure1-1.js")({
             $NIL: ${context._lift(NIL)},
             $RANDOM: ${context._lift(RANDOM)},
             $util_Util: ${context._lift(util.Util)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -189,8 +194,8 @@ class $Root extends $stdlib.std.Resource {
     const RANDOM = "RANDOM123412121212kjhkjskdjkj";
     const NIL = "<<NIL>>";
     {((cond) => {if (!cond) throw new Error("assertion failed: util.env(\"PATH\").length > 0")})(((util.Util.env("PATH")).length > 0))};
-    if (((util.Util.tryEnv("MY_VAR")) !== undefined)) {
-      {((cond) => {if (!cond) throw new Error("assertion failed: util.env(\"MY_VAR\") == \"my value\"")})(((util.Util.env("MY_VAR")) === "my value"))};
+    if ((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })((util.Util.tryEnv("MY_VAR")),undefined))) {
+      {((cond) => {if (!cond) throw new Error("assertion failed: util.env(\"MY_VAR\") == \"my value\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((util.Util.env("MY_VAR")),"my value")))};
     }
     let failed = false;
     try {
@@ -201,26 +206,12 @@ class $Root extends $stdlib.std.Resource {
     }
     {((cond) => {if (!cond) throw new Error("assertion failed: failed")})(failed)};
     const no_value = ((util.Util.tryEnv(RANDOM)) ?? NIL);
-    {((cond) => {if (!cond) throw new Error("assertion failed: no_value == NIL")})((no_value === NIL))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: no_value == NIL")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(no_value,NIL)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:use util from inflight",new $Closure1(this,"$Closure1"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "env", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "env", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

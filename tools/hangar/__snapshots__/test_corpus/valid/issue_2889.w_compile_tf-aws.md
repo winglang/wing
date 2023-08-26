@@ -1,6 +1,6 @@
 # [issue_2889.w](../../../../../examples/tests/valid/issue_2889.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $std_Json }) {
   class $Closure1 {
@@ -11,11 +11,7 @@ module.exports = function({ $std_Json }) {
     }
     async handle(req) {
       const issues = (JSON.parse("[{\"foo\": \"bar\"}, {\"foo\": \"baz\"}, {\"foo\": \"qux\"}]"));
-      return {
-      "status": 200,
-      "headers": Object.freeze({"Content-Type":"application/json"}),
-      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([issues]),}
-      ;
+      return ({"status": 200,"headers": ({"Content-Type": "application/json"}),"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([issues])});
     }
   }
   return $Closure1;
@@ -23,7 +19,7 @@ module.exports = function({ $std_Json }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $api_url, $http_Util, $std_Json }) {
   class $Closure2 {
@@ -36,7 +32,7 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
       const res = (await $http_Util.get(($api_url + "/foo")));
       const body = (JSON.parse((res.body ?? "")));
       const a1 = (body)[0];
-      {((cond) => {if (!cond) throw new Error("assertion failed: a1.get(\"foo\") == \"bar\"")})(((a1)["foo"] === "bar"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: a1.get(\"foo\") == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((a1)["foo"],"bar")))};
     }
   }
   return $Closure2;
@@ -99,7 +95,7 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
         },
         "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
         "triggers": {
-          "redeployment": "388c90ec9e86835eaf113a3e1c432f4758bfa061"
+          "redeployment": "ca2771f24c2978f810a5a1a5c3373f4ac9d7d88c"
         }
       }
     },
@@ -200,6 +196,9 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
             "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-cdafee6e-c8147384",
@@ -226,11 +225,14 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
             "uniqueId": "testapishouldreturnavalidstringifiedjson_Handler_DCAABCD2"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c88c3aa2",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
+            "WING_TOKEN_TFTOKEN_TOKEN_7": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
           }
         },
         "function_name": "Handler-c88c3aa2",
@@ -304,65 +306,69 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
-const http = require('@winglang/sdk').http;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
+const http = $stdlib.http;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+        return `
+          require("./inflight.$Closure1-1.js")({
             $std_Json: ${context._lift(std.Json)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+        return `
+          require("./inflight.$Closure2-1.js")({
             $api_url: ${context._lift(api.url)},
             $http_Util: ${context._lift(http.Util)},
             $std_Json: ${context._lift(std.Json)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const $Closure2Client = ${$Closure2._toInflightType(this)};
             const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -376,22 +382,8 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:api should return a valid stringified json",new $Closure2(this,"$Closure2"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "issue_2889", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "issue_2889", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

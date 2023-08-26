@@ -22,9 +22,9 @@ test("default website behavior", () => {
   // THEN
   expect(tfResourcesOf(output)).toEqual([
     "aws_cloudfront_distribution",
+    "aws_cloudfront_origin_access_control",
     "aws_s3_bucket",
     "aws_s3_bucket_policy",
-    "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
     "aws_s3_bucket_server_side_encryption_configuration",
     "aws_s3_bucket_website_configuration",
     "aws_s3_object",
@@ -69,9 +69,9 @@ test("website with add_json", () => {
   // THEN
   expect(tfResourcesOf(output)).toEqual([
     "aws_cloudfront_distribution",
+    "aws_cloudfront_origin_access_control",
     "aws_s3_bucket",
     "aws_s3_bucket_policy",
-    "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
     "aws_s3_bucket_server_side_encryption_configuration",
     "aws_s3_bucket_website_configuration",
     "aws_s3_object",

@@ -1,8 +1,9 @@
 use crate::{
 	ast::{
-		ArgList, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
-		FunctionParameter, FunctionSignature, Interface, InterpolatedString, InterpolatedStringPart, Literal, Reference,
-		Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		ArgList, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Expr, ExprKind,
+		FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface, InterpolatedString,
+		InterpolatedStringPart, Literal, NewExpr, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation,
+		TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -31,6 +32,9 @@ pub trait Fold {
 	}
 	fn fold_expr(&mut self, node: Expr) -> Expr {
 		fold_expr(self, node)
+	}
+	fn fold_new_expr(&mut self, node: NewExpr) -> NewExpr {
+		fold_new_expr(self, node)
 	}
 	fn fold_literal(&mut self, node: Literal) -> Literal {
 		fold_literal(self, node)
@@ -66,9 +70,9 @@ where
 	F: Fold + ?Sized,
 {
 	Scope {
+		id: node.id,
 		statements: node.statements.into_iter().map(|stmt| f.fold_stmt(stmt)).collect(),
 		span: node.span,
-		env: node.env,
 	}
 }
 
@@ -77,11 +81,12 @@ where
 	F: Fold + ?Sized,
 {
 	let kind = match node.kind {
-		StmtKind::Bring {
-			module_name,
-			identifier,
-		} => StmtKind::Bring {
-			module_name: f.fold_symbol(module_name),
+		StmtKind::Bring { source, identifier } => StmtKind::Bring {
+			source: match source {
+				BringSource::BuiltinModule(name) => BringSource::BuiltinModule(f.fold_symbol(name)),
+				BringSource::JsiiModule(name) => BringSource::JsiiModule(f.fold_symbol(name)),
+				BringSource::WingFile(name) => BringSource::WingFile(f.fold_symbol(name)),
+			},
 			identifier: identifier.map(|id| f.fold_symbol(id)),
 		},
 		StmtKind::Let {
@@ -111,12 +116,24 @@ where
 		StmtKind::IfLet {
 			value,
 			statements,
+			reassignable,
 			var_name,
+			elif_statements,
 			else_statements,
 		} => StmtKind::IfLet {
 			value: f.fold_expr(value),
 			statements: f.fold_scope(statements),
+			reassignable,
 			var_name: f.fold_symbol(var_name),
+			elif_statements: elif_statements
+				.into_iter()
+				.map(|elif_let_block| ElifLetBlock {
+					reassignable: elif_let_block.reassignable,
+					statements: f.fold_scope(elif_let_block.statements),
+					value: f.fold_expr(elif_let_block.value),
+					var_name: f.fold_symbol(elif_let_block.var_name),
+				})
+				.collect(),
 			else_statements: else_statements.map(|statements| f.fold_scope(statements)),
 		},
 		StmtKind::If {
@@ -141,7 +158,7 @@ where
 		StmtKind::Return(value) => StmtKind::Return(value.map(|value| f.fold_expr(value))),
 		StmtKind::Expression(expr) => StmtKind::Expression(f.fold_expr(expr)),
 		StmtKind::Assignment { variable, value } => StmtKind::Assignment {
-			variable: f.fold_expr(variable),
+			variable: f.fold_reference(variable),
 			value: f.fold_expr(value),
 		},
 		StmtKind::Scope(scope) => StmtKind::Scope(f.fold_scope(scope)),
@@ -251,17 +268,7 @@ where
 	F: Fold + ?Sized,
 {
 	let kind = match node.kind {
-		ExprKind::New {
-			class,
-			obj_id,
-			obj_scope,
-			arg_list,
-		} => ExprKind::New {
-			class: Box::new(f.fold_expr(*class)),
-			obj_id,
-			obj_scope: obj_scope.map(|scope| Box::new(f.fold_expr(*scope))),
-			arg_list: f.fold_args(arg_list),
-		},
+		ExprKind::New(new_expr) => ExprKind::New(f.fold_new_expr(new_expr)),
 		ExprKind::Literal(literal) => ExprKind::Literal(f.fold_literal(literal)),
 		ExprKind::Range { start, inclusive, end } => ExprKind::Range {
 			start: Box::new(f.fold_expr(*start)),
@@ -270,7 +277,10 @@ where
 		},
 		ExprKind::Reference(reference) => ExprKind::Reference(f.fold_reference(reference)),
 		ExprKind::Call { callee, arg_list } => ExprKind::Call {
-			callee: Box::new(f.fold_expr(*callee)),
+			callee: match callee {
+				CalleeKind::Expr(expr) => CalleeKind::Expr(Box::new(f.fold_expr(*expr))),
+				CalleeKind::SuperCall(method) => CalleeKind::SuperCall(f.fold_symbol(method)),
+			},
 			arg_list: f.fold_args(arg_list),
 		},
 		ExprKind::Unary { op, exp } => ExprKind::Unary {
@@ -324,6 +334,18 @@ where
 		id: node.id,
 		kind,
 		span: node.span,
+	}
+}
+
+pub fn fold_new_expr<F>(f: &mut F, node: NewExpr) -> NewExpr
+where
+	F: Fold + ?Sized,
+{
+	NewExpr {
+		class: Box::new(f.fold_expr(*node.class)),
+		obj_id: node.obj_id,
+		arg_list: f.fold_args(node.arg_list),
+		obj_scope: node.obj_scope,
 	}
 }
 
@@ -411,6 +433,7 @@ where
 		name: f.fold_symbol(node.name),
 		type_annotation: f.fold_type_annotation(node.type_annotation),
 		reassignable: node.reassignable,
+		variadic: node.variadic,
 	}
 }
 
@@ -454,6 +477,7 @@ where
 			phase: t.phase,
 		}),
 		TypeAnnotationKind::UserDefined(t) => TypeAnnotationKind::UserDefined(f.fold_user_defined_type(t)),
+		TypeAnnotationKind::Inferred => TypeAnnotationKind::Inferred,
 	};
 
 	TypeAnnotation { kind, span: node.span }

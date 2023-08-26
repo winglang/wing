@@ -1,6 +1,6 @@
 # [capture_containers.w](../../../../../examples/tests/valid/capture_containers.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_at_0____, $__world__in__myMap__, $_arr_at_0__, $_arr_at_1__, $_j___b__, $_mySet_has__my___, $arr_length, $mySet_size }) {
   class $Closure1 {
@@ -10,15 +10,15 @@ module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_a
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: arr.at(0) == \"hello\"")})(($_arr_at_0__ === "hello"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: arr.at(1) == \"world\"")})(($_arr_at_1__ === "world"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: arr.length == 2")})(($arr_length === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: arr.at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($_arr_at_0__,"hello")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: arr.at(1) == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($_arr_at_1__,"world")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: arr.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($arr_length,2)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: mySet.has(\"my\")")})($_mySet_has__my___)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: mySet.size == 2")})(($mySet_size === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mySet.size == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($mySet_size,2)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: myMap.has(\"world\")")})($__world__in__myMap__)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: myMap.size() == 2")})(($Object_keys_myMap__length === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: myMap.size() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($Object_keys_myMap__length,2)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: arrOfMap.at(0).has(\"bang\")")})($__bang__in___arrOfMap_at_0____)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: j.get(\"b\") == \"world\"")})(($_j___b__ === "world"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: j.get(\"b\") == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($_j___b__,"world")))};
     }
   }
   return $Closure1;
@@ -99,6 +99,9 @@ module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_a
             "uniqueId": "testcapture_containers_Handler_C1B42BA9"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c876b763",
@@ -150,23 +153,22 @@ module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_a
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+        return `
+          require("./inflight.$Closure1-1.js")({
             $Object_keys_myMap__length: ${context._lift(Object.keys(myMap).length)},
             $__bang__in___arrOfMap_at_0____: ${context._lift(("bang" in ((arrOfMap.at(0)))))},
             $__world__in__myMap__: ${context._lift(("world" in (myMap)))},
@@ -177,18 +179,21 @@ class $Root extends $stdlib.std.Resource {
             $arr_length: ${context._lift(arr.length)},
             $mySet_size: ${context._lift(mySet.size)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -205,30 +210,16 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const arr = Object.freeze(["hello", "world"]);
-    const mySet = Object.freeze(new Set(["my", "my", "set"]));
-    const myMap = Object.freeze({"hello":123,"world":999});
-    const arrOfMap = Object.freeze([Object.freeze({"bang":123})]);
-    const j = Object.freeze({"a":"hello","b":"world"});
+    const arr = ["hello", "world"];
+    const mySet = new Set(["my", "my", "set"]);
+    const myMap = ({"hello": 123,"world": 999});
+    const arrOfMap = [({"bang": 123})];
+    const j = ({"a": "hello","b": "world"});
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:capture_containers",new $Closure1(this,"$Closure1"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "capture_containers", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "capture_containers", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

@@ -6,8 +6,8 @@ import {
   SecretAttributes,
   SecretSchema,
 } from "./schema-resources";
-import { ISecretClient, TraceType } from "../cloud";
-import { Json } from "../std";
+import { ISecretClient } from "../cloud";
+import { Json, TraceType } from "../std";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,

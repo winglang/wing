@@ -3,7 +3,7 @@
 // TODO: This should be an interface, currently Wing does not support interface JSII imports
 
 import { Json } from "./json";
-import { Code, InflightClient } from "../core";
+import { InflightClient } from "../core";
 
 /**
  * String
@@ -13,7 +13,7 @@ export class String {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
 
@@ -147,6 +147,21 @@ export class String {
   public substring(indexStart: number, indexEnd?: number): string {
     indexStart;
     indexEnd;
+    throw new Error("Abstract");
+  }
+
+  /**
+   * Replaces occurrences of a substring within a string.
+   *
+   * @macro $self$.replace($args$)
+   *
+   * @param searchString The substring to search for.
+   * @param replaceString The replacement substring.
+   * @returns The modified string after replacement.
+   */
+  public replace(searchString: string, replaceString: string): string {
+    searchString;
+    replaceString;
     throw new Error("Abstract");
   }
 

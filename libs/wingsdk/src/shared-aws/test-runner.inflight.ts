@@ -1,5 +1,5 @@
 import { FunctionClient } from "./function.inflight";
-import { ITestRunnerClient, TestResult } from "../cloud";
+import { ITestRunnerClient, TestResult, Trace } from "../std";
 
 export class TestRunnerClient implements ITestRunnerClient {
   // A map from test names to their corresponding function ARNs.
@@ -24,11 +24,14 @@ export class TestRunnerClient implements ITestRunnerClient {
     if (!functionArn) {
       throw new Error(`No test found with path "${path}"`);
     }
-    const client = new FunctionClient(functionArn);
+    const client = new FunctionClient(functionArn, path);
+    let traces: Trace[] = [];
     let pass = false;
     let error: string | undefined;
+
     try {
-      await client.invoke("");
+      const [_, functionTraces] = await client.invokeWithLogs("");
+      traces.push(...functionTraces);
       pass = true;
     } catch (e) {
       error = (e as any).stack;
@@ -37,7 +40,7 @@ export class TestRunnerClient implements ITestRunnerClient {
       path,
       pass,
       error,
-      traces: [], // TODO: https://github.com/winglang/wing/issues/1973
+      traces,
     };
   }
 }

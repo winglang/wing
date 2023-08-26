@@ -25,6 +25,12 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nclass Function impl IInflightHost\n```\n---\nA function."
   sortText: gg|Function
+- label: OnDeploy
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass OnDeploy\n```\n---\nRun code every time the app is deployed."
+  sortText: gg|OnDeploy
 - label: Queue
   kind: 7
   documentation:
@@ -49,12 +55,6 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nclass Service\n```\n---\nA long-running service."
   sortText: gg|Service
-- label: TestRunner
-  kind: 7
-  documentation:
-    kind: markdown
-    value: "```wing\nclass TestRunner\n```\n---\nA test engine."
-  sortText: gg|TestRunner
 - label: Topic
   kind: 7
   documentation:
@@ -113,7 +113,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ApiProps\n```\n---\nProperties for `Api`."
+    value: "```wing\nstruct ApiProps\n```\n---\nOptions for `Api`."
   sortText: hh|ApiProps
 - label: ApiPutProps
   kind: 22
@@ -143,49 +143,49 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct BucketEvent\n```\n---\non_event notification payload- will be in use after solving issue: https://github.com/winglang/wing/issues/1927.\n### Fields\n- `key` — the bucket key that triggered the event.\n- `type` — type of event."
+    value: "```wing\nstruct BucketEvent\n```\n---\nOn_event notification payload- will be in use after solving issue: https://github.com/winglang/wing/issues/1927.\n### Fields\n- `key` — The bucket key that triggered the event.\n- `type` — Type of event."
   sortText: hh|BucketEvent
 - label: BucketOnCreateProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct BucketOnCreateProps\n```\n---\non create event options."
+    value: "```wing\nstruct BucketOnCreateProps\n```\n---\n`onCreate` event options."
   sortText: hh|BucketOnCreateProps
 - label: BucketOnDeleteProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct BucketOnDeleteProps\n```\n---\non delete event options."
+    value: "```wing\nstruct BucketOnDeleteProps\n```\n---\n`onDelete` event options."
   sortText: hh|BucketOnDeleteProps
 - label: BucketOnEventProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct BucketOnEventProps\n```\n---\non any event options."
+    value: "```wing\nstruct BucketOnEventProps\n```\n---\n`onEvent` options."
   sortText: hh|BucketOnEventProps
 - label: BucketOnUpdateProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct BucketOnUpdateProps\n```\n---\non update event options."
+    value: "```wing\nstruct BucketOnUpdateProps\n```\n---\n`onUpdate` event options."
   sortText: hh|BucketOnUpdateProps
 - label: BucketProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct BucketProps\n```\n---\nProperties for `Bucket`.\n### Fields\n- `public?` — Whether the bucket's objects should be publicly accessible."
+    value: "```wing\nstruct BucketProps\n```\n---\nOptions for `Bucket`.\n### Fields\n- `public?` — Whether the bucket's objects should be publicly accessible."
   sortText: hh|BucketProps
 - label: CounterProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct CounterProps\n```\n---\nProperties for `Counter`.\n### Fields\n- `initial?` — The initial value of the counter."
+    value: "```wing\nstruct CounterProps\n```\n---\nOptions for `Counter`.\n### Fields\n- `initial?` — The initial value of the counter."
   sortText: hh|CounterProps
 - label: FunctionProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct FunctionProps\n```\n---\nProperties for `Function`.\n### Fields\n- `env?` — Environment variables to pass to the function.\n- `memory?` — The amount of memory to allocate to the function, in MB.\n- `timeout?` — The maximum amount of time the function can run.\n\n### Remarks\nThis is the type users see when constructing a cloud.Function instance."
+    value: "```wing\nstruct FunctionProps\n```\n---\nOptions for `Function`.\n### Fields\n- `env?` — Environment variables to pass to the function.\n- `memory?` — The amount of memory to allocate to the function, in MB.\n- `timeout?` — The maximum amount of time the function can run."
   sortText: hh|FunctionProps
 - label: GetSecretValueOptions
   kind: 22
@@ -193,11 +193,17 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstruct GetSecretValueOptions\n```\n---\nOptions when getting a secret value.\n### Fields\n- `cache?` — Whether to cache the value."
   sortText: hh|GetSecretValueOptions
+- label: OnDeployProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct OnDeployProps extends FunctionProps\n```\n---\nOptions for `OnDeploy`.\n### Fields\n- `env?` — Map<str>?\n- `executeAfter?` — Execute this trigger only after these resources have been provisioned.\n- `executeBefore?` — Adds this trigger as a dependency on other constructs.\n- `memory?` — num?\n- `timeout?` — duration?"
+  sortText: hh|OnDeployProps
 - label: QueueProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct QueueProps\n```\n---\nProperties for `Queue`.\n### Fields\n- `initialMessages?` — Initialize the queue with a set of messages.\n- `retentionPeriod?` — How long a queue retains a message.\n- `timeout?` — How long a queue's consumers have to process a message."
+    value: "```wing\nstruct QueueProps\n```\n---\nOptions for `Queue`.\n### Fields\n- `retentionPeriod?` — How long a queue retains a message.\n- `timeout?` — How long a queue's consumers have to process a message."
   sortText: hh|QueueProps
 - label: QueueSetConsumerProps
   kind: 22
@@ -215,13 +221,13 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ScheduleProps\n```\n---\nProperties for `Schedule`.\n### Fields\n- `cron?` — Trigger events according to a cron schedule using the UNIX cron format.\n- `rate?` — Trigger events at a periodic rate."
+    value: "```wing\nstruct ScheduleProps\n```\n---\nOptions for `Schedule`.\n### Fields\n- `cron?` — Trigger events according to a cron schedule using the UNIX cron format.\n- `rate?` — Trigger events at a periodic rate."
   sortText: hh|ScheduleProps
 - label: SecretProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct SecretProps\n```\n---\nProperties for `Secret`.\n### Fields\n- `name?` — The secret's name."
+    value: "```wing\nstruct SecretProps\n```\n---\nOptions for `Secret`.\n### Fields\n- `name?` — The secret's name."
   sortText: hh|SecretProps
 - label: ServiceOnStartProps
   kind: 22
@@ -233,20 +239,8 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ServiceProps\n```\n---\nProperties for `Service`.\n### Fields\n- `autoStart?` — Whether the service should start automatically.\n- `onStart` — Handler to run with the service starts.\n- `onStop?` — Handler to run with the service stops."
+    value: "```wing\nstruct ServiceProps\n```\n---\nOptions for `Service`.\n### Fields\n- `autoStart?` — Whether the service should start automatically.\n- `onStart` — Handler to run with the service starts.\n- `onStop?` — Handler to run with the service stops."
   sortText: hh|ServiceProps
-- label: TestResult
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nstruct TestResult\n```\n---\nA result of a single test.\n### Fields\n- `error?` — The error message if the test failed.\n- `pass` — Whether the test passed.\n- `path` — The path of the test.\n- `traces` — List of traces emitted during the test."
-  sortText: hh|TestResult
-- label: TestRunnerProps
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nstruct TestRunnerProps\n```\n---\nProperties for `TestRunner`."
-  sortText: hh|TestRunnerProps
 - label: TopicOnMessageProps
   kind: 22
   documentation:
@@ -257,19 +251,13 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct TopicProps\n```\n---\nProperties for `Topic`."
+    value: "```wing\nstruct TopicProps\n```\n---\nOptions for `Topic`."
   sortText: hh|TopicProps
-- label: Trace
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nstruct Trace\n```\n---\nA trace emitted during simulation.\n### Fields\n- `data` — A JSON blob with structured data.\n- `sourcePath` — The path of the resource that emitted the trace.\n- `sourceType` — The type of the source that emitted the trace.\n- `timestamp` — The timestamp of the event, in ISO 8601 format.\n- `type` — The type of a trace."
-  sortText: hh|Trace
 - label: WebsiteProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct WebsiteProps\n```\n---\nwebsite props.\n### Fields\n- `domain?` — The website's custom domain name.\n- `path` — Local path to the website's static files, relative to the Wing source file or absolute."
+    value: "```wing\nstruct WebsiteProps\n```\n---\nOptions for `Website`.\n### Fields\n- `domain?` — The website's custom domain name.\n- `path` — Local path to the website's static files, relative to the Wing source file or absolute."
   sortText: hh|WebsiteProps
 - label: IApiClient
   kind: 8
@@ -331,11 +319,29 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\ninterface IFunctionHandlerClient\n```\n---\nInflight client for `IFunctionHandler`.\n### Methods\n- `handle` — Entrypoint function that will be called when the cloud function is invoked."
   sortText: ii|IFunctionHandlerClient
+- label: IOnDeployClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IOnDeployClient\n```\n---\nInflight interface for `OnDeploy`."
+  sortText: ii|IOnDeployClient
+- label: IOnDeployHandler
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IOnDeployHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be used by `cloud.OnDeploy`.\n### Methods\n- `handle` — Entrypoint function that will be called when the app is deployed."
+  sortText: ii|IOnDeployHandler
+- label: IOnDeployHandlerClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IOnDeployHandlerClient\n```\n---\nInflight client for `IOnDeployHandler`.\n### Methods\n- `handle` — Entrypoint function that will be called when the app is deployed."
+  sortText: ii|IOnDeployHandlerClient
 - label: IQueueClient
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IQueueClient\n```\n---\nInflight interface for `Queue`.\n### Methods\n- `approxSize` — Retrieve the approximate number of messages in the queue.\n- `pop` — Pop a message from the queue.\n- `purge` — Purge all of the messages in the queue.\n- `push` — Push a message to the queue."
+    value: "```wing\ninterface IQueueClient\n```\n---\nInflight interface for `Queue`.\n### Methods\n- `approxSize` — Retrieve the approximate number of messages in the queue.\n- `pop` — Pop a message from the queue.\n- `purge` — Purge all of the messages in the queue.\n- `push` — Push one or more messages to the queue."
   sortText: ii|IQueueClient
 - label: IQueueSetConsumerHandler
   kind: 8
@@ -391,12 +397,6 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\ninterface IServiceOnEventHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `ServiceProps.on_start` || `ServiceProps.on_stop`.\n### Methods\n- `handle` — Function that will be called for service events."
   sortText: ii|IServiceOnEventHandler
-- label: ITestRunnerClient
-  kind: 8
-  documentation:
-    kind: markdown
-    value: "```wing\ninterface ITestRunnerClient\n```\n---\nInflight interface for `TestRunner`.\n### Methods\n- `listTests` — List all tests available for this test engine.\n- `runTest` — Run a test with a given path and return the result."
-  sortText: ii|ITestRunnerClient
 - label: ITopicClient
   kind: 8
   documentation:
@@ -425,7 +425,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 13
   documentation:
     kind: markdown
-    value: "```wing\nenum BucketEventType\n```\n---\nbucket events to subscribe to.\n- `CREATE`\n- `DELETE`\n- `UPDATE`"
+    value: "```wing\nenum BucketEventType\n```\n---\nBucket events to subscribe to.\n- `CREATE`\n- `DELETE`\n- `UPDATE`"
   sortText: jj|BucketEventType
 - label: HttpMethod
   kind: 13
@@ -433,10 +433,4 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nenum HttpMethod\n```\n---\nAllowed HTTP methods for a endpoint.\n- `GET`\n- `HEAD`\n- `POST`\n- `PUT`\n- `DELETE`\n- `CONNECT`\n- `OPTIONS`\n- `PATCH`"
   sortText: jj|HttpMethod
-- label: TraceType
-  kind: 13
-  documentation:
-    kind: markdown
-    value: "```wing\nenum TraceType\n```\n---\nThe type of a trace.\n- `RESOURCE`\n- `LOG`"
-  sortText: jj|TraceType
 

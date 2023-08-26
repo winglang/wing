@@ -1,6 +1,6 @@
 # [angular_conversion.w](../../../../../../examples/tests/sdk_tests/math/angular_conversion.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
@@ -10,18 +10,18 @@ module.exports = function({ $math_Util }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(360) == math.TAU")})(((await $math_Util.degreesToRadians(360)) === $math_Util.TAU))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(180) == math.PI")})(((await $math_Util.degreesToRadians(180)) === $math_Util.PI))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(90) == math.PI / 2")})(((await $math_Util.degreesToRadians(90)) === ($math_Util.PI / 2)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(60) == math.PI / 3")})(((await $math_Util.degreesToRadians(60)) === ($math_Util.PI / 3)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(45) == math.PI / 4")})(((await $math_Util.degreesToRadians(45)) === ($math_Util.PI / 4)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(30) == math.PI / 6")})(((await $math_Util.degreesToRadians(30)) === ($math_Util.PI / 6)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.radiansToDegrees(math.TAU) == 360")})(((await $math_Util.radiansToDegrees($math_Util.TAU)) === 360))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.radiansToDegrees(math.PI) == 180")})(((await $math_Util.radiansToDegrees($math_Util.PI)) === 180))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.radiansToDegrees(math.PI / 2) == 90")})(((await $math_Util.radiansToDegrees(($math_Util.PI / 2))) === 90))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.radiansToDegrees(math.PI / 3)) == 60")})(((await $math_Util.round((await $math_Util.radiansToDegrees(($math_Util.PI / 3))))) === 60))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.radiansToDegrees(math.PI / 4) == 45")})(((await $math_Util.radiansToDegrees(($math_Util.PI / 4))) === 45))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.radiansToDegrees(math.PI / 6)) == 30")})(((await $math_Util.round((await $math_Util.radiansToDegrees(($math_Util.PI / 6))))) === 30))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(360) == math.TAU")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.degreesToRadians(360)),$math_Util.TAU)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(180) == math.PI")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.degreesToRadians(180)),$math_Util.PI)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(90) == math.PI / 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.degreesToRadians(90)),($math_Util.PI / 2))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(60) == math.PI / 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.degreesToRadians(60)),($math_Util.PI / 3))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(45) == math.PI / 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.degreesToRadians(45)),($math_Util.PI / 4))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(30) == math.PI / 6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.degreesToRadians(30)),($math_Util.PI / 6))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.radiansToDegrees(math.TAU) == 360")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.radiansToDegrees($math_Util.TAU)),360)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.radiansToDegrees(math.PI) == 180")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.radiansToDegrees($math_Util.PI)),180)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.radiansToDegrees(math.PI / 2) == 90")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.radiansToDegrees(($math_Util.PI / 2))),90)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.radiansToDegrees(math.PI / 3)) == 60")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round((await $math_Util.radiansToDegrees(($math_Util.PI / 3))))),60)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.radiansToDegrees(math.PI / 4) == 45")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.radiansToDegrees(($math_Util.PI / 4))),45)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.radiansToDegrees(math.PI / 6)) == 30")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round((await $math_Util.radiansToDegrees(($math_Util.PI / 6))))),30)))};
     }
   }
   return $Closure1;
@@ -102,6 +102,9 @@ module.exports = function({ $math_Util }) {
             "uniqueId": "testinflightangularconversions_Handler_70CD171D"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c85ddda6",
@@ -153,70 +156,58 @@ module.exports = function({ $math_Util }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const math = require('@winglang/sdk').math;
+const std = $stdlib.std;
+const math = $stdlib.math;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+        return `
+          require("./inflight.$Closure1-1.js")({
             $math_Util: ${context._lift(math.Util)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(360) == math.TAU")})(((math.Util.degreesToRadians(360)) === math.Util.TAU))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(180) == math.PI")})(((math.Util.degreesToRadians(180)) === math.Util.PI))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(90) == math.PI / 2")})(((math.Util.degreesToRadians(90)) === (math.Util.PI / 2)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(60) == math.PI / 3")})(((math.Util.degreesToRadians(60)) === (math.Util.PI / 3)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(45) == math.PI / 4")})(((math.Util.degreesToRadians(45)) === (math.Util.PI / 4)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(30) == math.PI / 6")})(((math.Util.degreesToRadians(30)) === (math.Util.PI / 6)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.radiansToDegrees(math.TAU) == 360")})(((math.Util.radiansToDegrees(math.Util.TAU)) === 360))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.radiansToDegrees(math.PI) == 180")})(((math.Util.radiansToDegrees(math.Util.PI)) === 180))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.radiansToDegrees(math.PI / 2) == 90")})(((math.Util.radiansToDegrees((math.Util.PI / 2))) === 90))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.radiansToDegrees(math.PI / 3)) == 60")})(((math.Util.round((math.Util.radiansToDegrees((math.Util.PI / 3))))) === 60))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.radiansToDegrees(math.PI / 4) == 45")})(((math.Util.radiansToDegrees((math.Util.PI / 4))) === 45))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.radiansToDegrees(math.PI / 6)) == 30")})(((math.Util.round((math.Util.radiansToDegrees((math.Util.PI / 6))))) === 30))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(360) == math.TAU")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.degreesToRadians(360)),math.Util.TAU)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(180) == math.PI")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.degreesToRadians(180)),math.Util.PI)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(90) == math.PI / 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.degreesToRadians(90)),(math.Util.PI / 2))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(60) == math.PI / 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.degreesToRadians(60)),(math.Util.PI / 3))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(45) == math.PI / 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.degreesToRadians(45)),(math.Util.PI / 4))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(30) == math.PI / 6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.degreesToRadians(30)),(math.Util.PI / 6))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.radiansToDegrees(math.TAU) == 360")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.radiansToDegrees(math.Util.TAU)),360)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.radiansToDegrees(math.PI) == 180")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.radiansToDegrees(math.Util.PI)),180)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.radiansToDegrees(math.PI / 2) == 90")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.radiansToDegrees((math.Util.PI / 2))),90)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.radiansToDegrees(math.PI / 3)) == 60")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round((math.Util.radiansToDegrees((math.Util.PI / 3))))),60)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.radiansToDegrees(math.PI / 4) == 45")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.radiansToDegrees((math.Util.PI / 4))),45)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.radiansToDegrees(math.PI / 6)) == 30")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round((math.Util.radiansToDegrees((math.Util.PI / 6))))),30)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight angular conversions",new $Closure1(this,"$Closure1"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "angular_conversion", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "angular_conversion", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

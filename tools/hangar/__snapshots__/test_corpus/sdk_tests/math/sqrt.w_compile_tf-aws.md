@@ -1,6 +1,6 @@
 # [sqrt.w](../../../../../../examples/tests/sdk_tests/math/sqrt.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
@@ -15,14 +15,14 @@ module.exports = function({ $math_Util }) {
       }
       catch ($error_e) {
         const e = $error_e.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be greater than or equal to 0.\"")})((e === "Input value must be greater than or equal to 0."))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be greater than or equal to 0.\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"Input value must be greater than or equal to 0.")))};
       }
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(-0) == -0")})(((await $math_Util.sqrt((-0))) === (-0)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(0) == 0")})(((await $math_Util.sqrt(0)) === 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(1) == 1")})(((await $math_Util.sqrt(1)) === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(2) == 1.4142135623730951")})(((await $math_Util.sqrt(2)) === 1.4142135623730951))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(9) == 3")})(((await $math_Util.sqrt(9)) === 3))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(math.INF) == math.INF")})(((await $math_Util.sqrt($math_Util.INF)) === $math_Util.INF))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(-0) == -0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.sqrt((-0))),(-0))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(0) == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.sqrt(0)),0)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(1) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.sqrt(1)),1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(2) == 1.4142135623730951")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.sqrt(2)),1.4142135623730951)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(9) == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.sqrt(9)),3)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(math.INF) == math.INF")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.sqrt($math_Util.INF)),$math_Util.INF)))};
     }
   }
   return $Closure1;
@@ -103,6 +103,9 @@ module.exports = function({ $math_Util }) {
             "uniqueId": "testinflightsquareroot_Handler_2121E9F7"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c88a288d",
@@ -154,37 +157,39 @@ module.exports = function({ $math_Util }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const math = require('@winglang/sdk').math;
+const std = $stdlib.std;
+const math = $stdlib.math;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+        return `
+          require("./inflight.$Closure1-1.js")({
             $math_Util: ${context._lift(math.Util)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
     }
     try {
@@ -192,33 +197,19 @@ class $Root extends $stdlib.std.Resource {
     }
     catch ($error_e) {
       const e = $error_e.message;
-      {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be greater than or equal to 0.\"")})((e === "Input value must be greater than or equal to 0."))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be greater than or equal to 0.\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"Input value must be greater than or equal to 0.")))};
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(-0) == -0")})(((math.Util.sqrt((-0))) === (-0)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(0) == 0")})(((math.Util.sqrt(0)) === 0))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(1) == 1")})(((math.Util.sqrt(1)) === 1))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(2) == 1.4142135623730951")})(((math.Util.sqrt(2)) === 1.4142135623730951))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(9) == 3")})(((math.Util.sqrt(9)) === 3))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(math.INF) == math.INF")})(((math.Util.sqrt(math.Util.INF)) === math.Util.INF))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(-0) == -0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.sqrt((-0))),(-0))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(0) == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.sqrt(0)),0)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(1) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.sqrt(1)),1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(2) == 1.4142135623730951")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.sqrt(2)),1.4142135623730951)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(9) == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.sqrt(9)),3)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(math.INF) == math.INF")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.sqrt(math.Util.INF)),math.Util.INF)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight square root",new $Closure1(this,"$Closure1"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "sqrt", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "sqrt", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

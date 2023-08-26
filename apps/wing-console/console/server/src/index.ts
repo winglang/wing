@@ -1,5 +1,4 @@
 import type { inferRouterInputs } from "@trpc/server";
-import type { Trace } from "@winglang/sdk/lib/cloud/test-runner.js";
 import Emittery from "emittery";
 import type { Application as ExpressApplication } from "express";
 
@@ -8,17 +7,27 @@ import { type ConsoleLogger, createConsoleLogger } from "./consoleLogger.js";
 import { createExpressServer } from "./expressServer.js";
 import type { HostUtils } from "./hostUtils.js";
 import type { Router } from "./router/index.js";
+import type { Trace } from "./types.js";
 import type { State } from "./types.js";
 import type { Updater } from "./updater.js";
 import { createCompiler } from "./utils/compiler.js";
+import {
+  LayoutConfig,
+  TestItem,
+  TestsStateManager,
+} from "./utils/createRouter.js";
 import type { LogInterface } from "./utils/LogInterface.js";
 import { createSimulator } from "./utils/simulator.js";
 
-export type { Trace } from "@winglang/sdk/lib/cloud/test-runner.js";
+export type {
+  TestsStateManager,
+  TestStatus,
+  TestItem,
+} from "./utils/createRouter.js";
+export type { Trace, State } from "./types.js";
 export type { LogInterface } from "./utils/LogInterface.js";
 export type { LogEntry, LogLevel } from "./consoleLogger.js";
 export type { ExplorerItem } from "./router/app.js";
-export type { State } from "./types.js";
 export type { WingSimulatorSchema, BaseResourceSchema } from "./wingsdk.js";
 export type { Updater, UpdaterStatus } from "./updater.js";
 export type { Config } from "./config.js";
@@ -29,6 +38,11 @@ export type { MapNode, MapEdge } from "./router/app.js";
 export type { InternalTestResult } from "./router/test.js";
 export type { Column } from "./router/table.js";
 export type { NodeDisplay } from "./utils/constructTreeNodeMap.js";
+export type {
+  LayoutConfig,
+  LayoutComponent,
+  LayoutComponentType,
+} from "./utils/createRouter.js";
 
 export type RouteNames = keyof inferRouterInputs<Router> | undefined;
 
@@ -44,6 +58,7 @@ export interface CreateConsoleServerOptions {
   onTrace?: (trace: Trace) => void;
   onExpressCreated?: (app: ExpressApplication) => void;
   requireAcceptTerms?: boolean;
+  layoutConfig?: LayoutConfig;
 }
 
 export const createConsoleServer = async ({
@@ -56,6 +71,7 @@ export const createConsoleServer = async ({
   onTrace,
   onExpressCreated,
   requireAcceptTerms,
+  layoutConfig,
 }: CreateConsoleServerOptions) => {
   const emitter = new Emittery<{
     invalidateQuery: RouteNames;
@@ -84,15 +100,43 @@ export const createConsoleServer = async ({
   });
 
   const compiler = createCompiler(wingfile);
+  let isStarting = false;
+  let isStopping = false;
+
   const simulator = createSimulator();
   if (onTrace) {
     simulator.on("trace", onTrace);
   }
   compiler.on("compiled", ({ simfile }) => {
-    simulator.start(simfile);
+    if (!isStarting) {
+      simulator.start(simfile);
+      isStarting = true;
+    }
   });
 
   let lastErrorMessage = "";
+  let selectedNode = "";
+  let tests: TestItem[] = [];
+
+  const testsStateManager = (): TestsStateManager => {
+    return {
+      getTests: () => {
+        return tests;
+      },
+      setTests: (newTests: TestItem[]) => {
+        tests = newTests;
+      },
+      setTest: (test: TestItem) => {
+        const index = tests.findIndex((t) => t.id === test.id);
+        if (index === -1) {
+          tests.push(test);
+        } else {
+          tests[index] = test;
+        }
+      },
+    };
+  };
+
   let appState: State = "compiling";
   compiler.on("compiling", () => {
     lastErrorMessage = "";
@@ -113,6 +157,7 @@ export const createConsoleServer = async ({
   simulator.on("started", () => {
     appState = "success";
     invalidateQuery(undefined);
+    isStarting = false;
   });
   simulator.on("error", (error) => {
     lastErrorMessage = error.message;
@@ -181,10 +226,22 @@ export const createConsoleServer = async ({
     onExpressCreated,
     wingfile,
     requireAcceptTerms,
+    layoutConfig,
+    getSelectedNode: () => {
+      return selectedNode;
+    },
+    setSelectedNode: (node: string) => {
+      selectedNode = node;
+    },
+    testsStateManager,
   });
 
-  const close = async () => {
+  const close = async (callback?: () => void) => {
+    if (isStopping) {
+      return;
+    }
     try {
+      isStopping = true;
       updater?.removeEventListener("status-change", invalidateUpdaterStatus);
       config?.removeEventListener("config-change", invalidateConfig);
       await Promise.allSettled([
@@ -194,8 +251,12 @@ export const createConsoleServer = async ({
       ]);
     } catch (error) {
       log.error(error);
+    } finally {
+      if (typeof callback === "function") callback();
     }
   };
+
+  process.on("SIGINT", () => close(() => process.exit(0)));
 
   return {
     port,

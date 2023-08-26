@@ -1,0 +1,9 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "extends": ["//"],
+  "pipeline": {
+    "compile": {
+      "outputs": ["../../target/wasm32-wasi/release/libwingii.*"]
+    }
+  }
+}

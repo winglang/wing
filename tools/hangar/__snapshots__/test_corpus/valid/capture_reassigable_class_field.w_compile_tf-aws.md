@@ -1,6 +1,6 @@
 # [capture_reassigable_class_field.w](../../../../../examples/tests/valid/capture_reassigable_class_field.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({  }) {
   class $Closure1 {
@@ -17,7 +17,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $counter }) {
   class $Closure2 {
@@ -35,7 +35,7 @@ module.exports = function({ $counter }) {
 
 ```
 
-## inflight.$Closure3.js
+## inflight.$Closure3-1.js
 ```js
 module.exports = function({ $counter, $kv, $util_Util }) {
   class $Closure3 {
@@ -45,17 +45,17 @@ module.exports = function({ $counter, $kv, $util_Util }) {
       return $obj;
     }
     async handle() {
-      (await $kv.set("k",Object.freeze({"value":"v"})));
-      (await $kv.set("k2",Object.freeze({"value":"v"})));
+      (await $kv.set("k",({"value": "v"})));
+      (await $kv.set("k2",({"value": "v"})));
       (await $kv.get("k"));
       (await $kv.get("k"));
       (await $kv.get("k2"));
       {((cond) => {if (!cond) throw new Error("assertion failed: util.waitUntil((): bool => {\n    return counter.peek(\"k\") == 2;\n  })")})((await $util_Util.waitUntil(async () => {
-        return ((await $counter.peek("k")) === 2);
+        return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counter.peek("k")),2));
       }
       )))};
       {((cond) => {if (!cond) throw new Error("assertion failed: util.waitUntil((): bool => {\n    return counter.peek(\"k2\") == 1;\n  })")})((await $util_Util.waitUntil(async () => {
-        return ((await $counter.peek("k2")) === 1);
+        return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counter.peek("k2")),1));
       }
       )))};
     }
@@ -65,7 +65,7 @@ module.exports = function({ $counter, $kv, $util_Util }) {
 
 ```
 
-## inflight.KeyValueStore.js
+## inflight.KeyValueStore-1.js
 ```js
 module.exports = function({  }) {
   class KeyValueStore {
@@ -178,6 +178,9 @@ module.exports = function({  }) {
             "uniqueId": "testmain_Handler_242B2607"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_ce72b88b": "${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.bucket}",
@@ -221,21 +224,6 @@ module.exports = function({  }) {
         "force_destroy": false
       }
     },
-    "aws_s3_bucket_public_access_block": {
-      "KeyValueStore_cloudBucket_PublicAccessBlock_A373F90E": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/KeyValueStore/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "KeyValueStore_cloudBucket_PublicAccessBlock_A373F90E"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      }
-    },
     "aws_s3_bucket_server_side_encryption_configuration": {
       "KeyValueStore_cloudBucket_Encryption_D3F8A987": {
         "//": {
@@ -274,12 +262,12 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
-const util = require('@winglang/sdk').util;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
+const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -291,43 +279,44 @@ class $Root extends $stdlib.std.Resource {
         class $Closure1 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
-            this.display.hidden = true;
-            this._addInflightOps("handle", "$inflight_init");
+            (std.Node.of(this)).hidden = true;
           }
           static _toInflightType(context) {
-            return $stdlib.core.NodeJsCode.fromInline(`
-              require("./inflight.$Closure1.js")({
+            return `
+              require("./inflight.$Closure1-1.js")({
               })
-            `);
+            `;
           }
           _toInflight() {
-            return $stdlib.core.NodeJsCode.fromInline(`
+            return `
               (await (async () => {
-                const $Closure1Client = ${$Closure1._toInflightType(this).text};
+                const $Closure1Client = ${$Closure1._toInflightType(this)};
                 const client = new $Closure1Client({
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
                 return client;
               })())
-            `);
+            `;
+          }
+          _getInflightOps() {
+            return ["handle", "$inflight_init"];
           }
         }
         this.onUpdateCallback = new $Closure1(this,"$Closure1");
-        this._addInflightOps("get", "set", "$inflight_init");
       }
       onUpdate(fn) {
         this.onUpdateCallback = fn;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.KeyValueStore.js")({
+        return `
+          require("./inflight.KeyValueStore-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const KeyValueStoreClient = ${KeyValueStore._toInflightType(this).text};
+            const KeyValueStoreClient = ${KeyValueStore._toInflightType(this)};
             const client = new KeyValueStoreClient({
               $this_bucket: ${this._lift(this.bucket)},
               $this_onUpdateCallback: ${this._lift(this.onUpdateCallback)},
@@ -335,7 +324,10 @@ class $Root extends $stdlib.std.Resource {
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["get", "set", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -355,26 +347,28 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+        return `
+          require("./inflight.$Closure2-1.js")({
             $counter: ${context._lift(counter)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const $Closure2Client = ${$Closure2._toInflightType(this)};
             const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -386,28 +380,30 @@ class $Root extends $stdlib.std.Resource {
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3.js")({
+        return `
+          require("./inflight.$Closure3-1.js")({
             $counter: ${context._lift(counter)},
             $kv: ${context._lift(kv)},
             $util_Util: ${context._lift(util.Util)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure3Client = ${$Closure3._toInflightType(this).text};
+            const $Closure3Client = ${$Closure3._toInflightType(this)};
             const client = new $Closure3Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -423,22 +419,8 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:main",new $Closure3(this,"$Closure3"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "capture_reassigable_class_field", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "capture_reassigable_class_field", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

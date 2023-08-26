@@ -1,5 +1,5 @@
-import { Documentation, Language } from "../../../src";
 import * as path from "path";
+import { Documentation, Language } from "../../../src";
 
 jest.setTimeout(30 * 1000);
 

@@ -422,7 +422,6 @@ Options for the route.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Api.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Api.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/sdk.cloud.Api.property.url">url</a></code> | <code>str</code> | The base URL of the API endpoint. |
 
 ---
@@ -436,18 +435,6 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
-
----
-
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.Api.property.display"></a>
-
-```wing
-display: Display;
-```
-
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
-
-Information on how to display a resource in the UI.
 
 ---
 
@@ -560,7 +547,7 @@ let ApiPostProps = cloud.ApiPostProps{ ... };
 
 ### ApiProps <a name="ApiProps" id="@winglang/sdk.cloud.ApiProps"></a>
 
-Properties for `Api`.
+Options for `Api`.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiProps.Initializer"></a>
 
@@ -757,7 +744,6 @@ A resource with an inflight "handle" method that can be passed to one of the `Ap
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.IApiEndpointHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.IApiEndpointHandler.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
@@ -770,18 +756,6 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
-
----
-
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.IApiEndpointHandler.property.display"></a>
-
-```wing
-display: Display;
-```
-
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
-
-Information on how to display a resource in the UI.
 
 ---
 

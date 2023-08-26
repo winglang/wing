@@ -6,7 +6,6 @@ edition = "2021"
 [dependencies]
 tree-sitter = "0.20.9"
 tree-sitter-traversal = "0.1.2"
-base16ct = { version = "0.2.0", features = ["alloc"] }
 derivative = "2.2.0"
 tree-sitter-wing = { path = "../tree-sitter-wing" }
 wingii = { path = "../wingii" }
@@ -16,7 +15,6 @@ colored = "2.0"
 lazy_static = "1.4.0"
 globset = "0.4.9"
 itertools = "0.10"
-inflections = "1.1.1"
 phf = { version = "0.11", features = ["macros"] }
 indexmap = "1.9.1"
 aho-corasick = "0.7.20"
@@ -25,6 +23,7 @@ indoc = "2.0.0"
 const_format = "0.2.30"
 duplicate = "1.0.0"
 strum = { version = "0.24", features = ["derive"] }
+petgraph = "0.6.3"
 
 [lib]
 crate-type = ["rlib", "cdylib"]

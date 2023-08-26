@@ -73,17 +73,17 @@ A function.
 ```wing
 bring cloud;
 
-new cloud.Function(inflight: IFunctionHandler, props?: FunctionProps);
+new cloud.Function(handler: IFunctionHandler, props?: FunctionProps);
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Function.Initializer.parameter.inflight">inflight</a></code> | <code><a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a></code> | *No description.* |
+| <code><a href="#@winglang/sdk.cloud.Function.Initializer.parameter.handler">handler</a></code> | <code><a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a></code> | *No description.* |
 | <code><a href="#@winglang/sdk.cloud.Function.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.FunctionProps">FunctionProps</a></code> | *No description.* |
 
 ---
 
-##### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Function.Initializer.parameter.inflight"></a>
+##### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.cloud.Function.Initializer.parameter.handler"></a>
 
 - *Type:* <a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a>
 
@@ -151,7 +151,6 @@ Invoke the function asynchronously with a given payload.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Function.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Function.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/sdk.cloud.Function.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Returns the set of environment variables for this function. |
 
 ---
@@ -165,18 +164,6 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
-
----
-
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.Function.property.display"></a>
-
-```wing
-display: Display;
-```
-
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
-
-Information on how to display a resource in the UI.
 
 ---
 
@@ -198,9 +185,7 @@ Returns the set of environment variables for this function.
 
 ### FunctionProps <a name="FunctionProps" id="@winglang/sdk.cloud.FunctionProps"></a>
 
-Properties for `Function`.
-
-This is the type users see when constructing a cloud.Function instance.
+Options for `Function`.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.FunctionProps.Initializer"></a>
 
@@ -277,7 +262,6 @@ A resource with an inflight "handle" method that can be used to create a `cloud.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.IFunctionHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.IFunctionHandler.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
@@ -290,18 +274,6 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
-
----
-
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.IFunctionHandler.property.display"></a>
-
-```wing
-display: Display;
-```
-
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
-
-Information on how to display a resource in the UI.
 
 ---
 

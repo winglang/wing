@@ -2,12 +2,12 @@ import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { IResource, Resource } from "../std";
+import { IResource, Node, Resource } from "../std";
 
 export const TOPIC_FQN = fqnForType("cloud.Topic");
 
 /**
- * Properties for `Topic`.
+ * Options for `Topic`.
  */
 export interface TopicProps {}
 
@@ -32,12 +32,15 @@ export abstract class Topic extends Resource {
   constructor(scope: Construct, id: string, props: TopicProps = {}) {
     super(scope, id);
 
-    this.display.title = "Topic";
-    this.display.description = "A pub/sub notification topic";
-
-    this._addInflightOps(TopicInflightMethods.PUBLISH);
+    Node.of(this).title = "Topic";
+    Node.of(this).description = "A pub/sub notification topic";
 
     props;
+  }
+
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [TopicInflightMethods.PUBLISH];
   }
 
   /**

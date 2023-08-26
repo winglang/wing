@@ -14,6 +14,7 @@ import {
   EVENT_MAPPING_TYPE,
   SCHEDULE_TYPE,
   SERVICE_TYPE,
+  ON_DEPLOY_TYPE,
 } from "./schema-resources";
 import type {
   ISimulatorFactory,
@@ -78,6 +79,9 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
       case SERVICE_TYPE:
         const Service = require("./service.inflight").Service;
         return new Service(props, context);
+      case ON_DEPLOY_TYPE:
+        const OnDeploy = require("./on-deploy.inflight").OnDeploy;
+        return new OnDeploy(props, context);
       default:
         throw new Error(`Type ${type} not implemented by the simulator.`);
     }

@@ -21,13 +21,13 @@
   "scripts": {
     "test": "tree-sitter test",
     "test:update": "tree-sitter test --update",
-    "test:watch": "nodemon --watch grammar.js --watch src/scanner.c --exec \"pnpm test\"",
-    "build": "tree-sitter generate",
-    "build:watch": "nodemon --watch grammar.js --watch src/scanner.c --exec \"pnpm build\"",
-    "build:wasm": "pnpm build && tree-sitter build-wasm --docker",
-    "playground": "pnpm build:wasm && tree-sitter playground",
-    "playground:quiet": "pnpm build:wasm && tree-sitter playground -q",
-    "playground:watch": "nodemon --watch grammar.js --watch src/scanner.c --exec \"pnpm playground:quiet\""
+    "test:watch": "nodemon --watch grammar.js --watch src/scanner.c --exec \"turbo test\"",
+    "build:generate": "tree-sitter generate",
+    "build:wasm": "tree-sitter build-wasm --docker",
+    "build:watch": "nodemon --watch grammar.js --watch src/scanner.c --exec \"turbo compile\"",
+    "playground": "tree-sitter playground",
+    "playground:quiet": "tree-sitter playground -q",
+    "playground:watch": "nodemon --watch grammar.js --watch src/scanner.c --exec \"turbo playground:quiet\""
   },
   "volta": {
     "extends": "../../package.json"

@@ -1,6 +1,6 @@
 # [memory_and_env.w](../../../../../../examples/tests/sdk_tests/function/memory_and_env.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $c }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $c }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $c, $util_Util }) {
   class $Closure2 {
@@ -29,7 +29,7 @@ module.exports = function({ $c, $util_Util }) {
     }
     async handle() {
       (await $c.inc());
-      {((cond) => {if (!cond) throw new Error("assertion failed: util.env(\"catName\") == \"Tion\"")})(((await $util_Util.env("catName")) === "Tion"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: util.env(\"catName\") == \"Tion\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $util_Util.env("catName")),"Tion")))};
     }
   }
   return $Closure2;
@@ -37,7 +37,7 @@ module.exports = function({ $c, $util_Util }) {
 
 ```
 
-## inflight.$Closure3.js
+## inflight.$Closure3-1.js
 ```js
 module.exports = function({ $c, $f1, $f2 }) {
   class $Closure3 {
@@ -47,11 +47,11 @@ module.exports = function({ $c, $f1, $f2 }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 0")})(((await $c.peek()) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $c.peek()),0)))};
       (await $f1.invoke(""));
-      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 1")})(((await $c.peek()) === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $c.peek()),1)))};
       (await $f2.invoke(""));
-      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 2")})(((await $c.peek()) === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $c.peek()),2)))};
     }
   }
   return $Closure3;
@@ -209,6 +209,9 @@ module.exports = function({ $c, $f1, $f2 }) {
             "uniqueId": "envfn"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
@@ -238,6 +241,9 @@ module.exports = function({ $c, $f1, $f2 }) {
             "uniqueId": "memoryfn"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
@@ -266,6 +272,9 @@ module.exports = function({ $c, $f1, $f2 }) {
             "uniqueId": "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_BE0A518F"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
@@ -308,21 +317,6 @@ module.exports = function({ $c, $f1, $f2 }) {
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
         "force_destroy": false
-      }
-    },
-    "aws_s3_bucket_public_access_block": {
-      "cloudBucket_PublicAccessBlock_5946CCE8": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "cloudBucket_PublicAccessBlock_5946CCE8"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
@@ -385,38 +379,40 @@ module.exports = function({ $c, $f1, $f2 }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
-const util = require('@winglang/sdk').util;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
+const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+        return `
+          require("./inflight.$Closure1-1.js")({
             $c: ${context._lift(c)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -428,27 +424,29 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+        return `
+          require("./inflight.$Closure2-1.js")({
             $c: ${context._lift(c)},
             $util_Util: ${context._lift(util.Util)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const $Closure2Client = ${$Closure2._toInflightType(this)};
             const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -460,28 +458,30 @@ class $Root extends $stdlib.std.Resource {
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3.js")({
+        return `
+          require("./inflight.$Closure3-1.js")({
             $c: ${context._lift(c)},
             $f1: ${context._lift(f1)},
             $f2: ${context._lift(f2)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure3Client = ${$Closure3._toInflightType(this).text};
+            const $Closure3Client = ${$Closure3._toInflightType(this)};
             const client = new $Closure3Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -494,32 +494,16 @@ class $Root extends $stdlib.std.Resource {
     }
     const c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    const f1 = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"memory fn",new $Closure1(this,"$Closure1"),{
-    "memory": 128,}
-    );
-    const f2 = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"env fn",new $Closure2(this,"$Closure2"),{ env: Object.freeze({"catName":"Tion"}) });
+    const f1 = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"memory fn",new $Closure1(this,"$Closure1"),({"memory": 128}));
+    const f2 = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"env fn",new $Closure2(this,"$Closure2"),{ env: ({"catName": "Tion"}) });
     (f2.addEnvironment("catAge","2"));
-    {((cond) => {if (!cond) throw new Error("assertion failed: f2.env.get(\"catAge\") == \"2\"")})(((f2.env)["catAge"] === "2"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: f2.env.get(\"catName\") == \"Tion\"")})(((f2.env)["catName"] === "Tion"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: f2.env.get(\"catAge\") == \"2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((f2.env)["catAge"],"2")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: f2.env.get(\"catName\") == \"Tion\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((f2.env)["catName"],"Tion")))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:function with memory and function with env can be invoked",new $Closure3(this,"$Closure3"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "memory_and_env", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "memory_and_env", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

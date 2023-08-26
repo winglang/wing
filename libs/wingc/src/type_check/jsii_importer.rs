@@ -1,3 +1,5 @@
+use std::collections::BTreeMap;
+
 use crate::{
 	ast::{Phase, Symbol},
 	debug,
@@ -90,7 +92,7 @@ impl<'a> JsiiImporter<'a> {
 				PrimitiveType::Boolean => self.wing_types.bool(),
 				PrimitiveType::Any => self.wing_types.anything(),
 				PrimitiveType::Json => self.wing_types.json(),
-				PrimitiveType::Date => self.wing_types.anything(), // TODO: https://github.com/winglang/wing/issues/2102
+				PrimitiveType::Date => self.wing_types.anything(), // TODO: https://github.com/winglang/wing/issues/3569
 			},
 			TypeReference::NamedTypeReference(named_ref) => {
 				let type_fqn = &named_ref.fqn;
@@ -441,25 +443,21 @@ impl<'a> JsiiImporter<'a> {
 					self.wing_types.void()
 				};
 
+				// Check if there's an explicit inflight phase override on this method
+				let member_phase = extract_docstring_tag(&m.docs, "inflight")
+					.map(|_| Phase::Inflight)
+					.unwrap_or(member_phase);
+
 				let mut fn_params = vec![];
 
 				// Define the rest of the arguments and create the method signature
 				if let Some(params) = &m.parameters {
-					if self.has_variadic_parameters(params) {
-						// TODO: support variadic parameters
-						// or TODO: emit compiler warning https://github.com/winglang/wing/issues/1475
-						debug!(
-							"Skipping method {} with variadic parameters (see https://github.com/winglang/wing/issues/397)",
-							m.name
-						);
-						continue;
-					}
-
 					for param in params {
 						fn_params.push(FunctionParameter {
 							name: param.name.clone(),
 							typeref: self.parameter_to_wing_type(&param),
 							docs: Docs::from(&param.docs),
+							variadic: param.variadic.unwrap_or(false),
 						});
 					}
 				}
@@ -719,6 +717,7 @@ impl<'a> JsiiImporter<'a> {
 						name: param.name.clone(),
 						typeref: self.parameter_to_wing_type(&param),
 						docs: Docs::from(&param.docs),
+						variadic: param.variadic.unwrap_or(false),
 					});
 				}
 			}
@@ -795,10 +794,6 @@ impl<'a> JsiiImporter<'a> {
 		} else {
 			base_type
 		}
-	}
-
-	fn has_variadic_parameters(&self, parameters: &Vec<jsii::Parameter>) -> bool {
-		parameters.iter().any(|p| p.variadic.unwrap_or(false))
 	}
 
 	fn parameter_to_wing_type(&mut self, parameter: &jsii::Parameter) -> TypeRef {
@@ -1017,18 +1012,16 @@ impl From<&Option<jsii::Docs>> for Docs {
 			return Docs::default()
 		};
 
-		let docs = docs.clone();
-
 		Docs {
-			custom: docs.custom.unwrap_or_default(),
-			remarks: docs.remarks,
-			summary: docs.summary,
-			default: docs.default,
-			deprecated: docs.deprecated,
-			example: docs.example,
-			see: docs.see,
-			returns: docs.returns,
-			stability: docs.stability,
+			custom: docs.custom.as_ref().unwrap_or(&BTreeMap::default()).clone(),
+			remarks: docs.remarks.clone(),
+			summary: docs.summary.clone(),
+			default: docs.default.clone(),
+			deprecated: docs.deprecated.clone(),
+			example: docs.example.clone(),
+			see: docs.see.clone(),
+			returns: docs.returns.clone(),
+			stability: docs.stability.clone(),
 			subclassable: docs.subclassable,
 		}
 	}

@@ -109,8 +109,7 @@ export class Bucket extends cloud.Bucket {
     }
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof AWSFunction)) {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }
@@ -121,11 +120,11 @@ export class Bucket extends cloud.Bucket {
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.bucket.bucket);
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return core.InflightClient.for(
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
@@ -180,13 +179,17 @@ export function createEncryptedBucket(
   });
 
   if (isPublic) {
-    new S3BucketPublicAccessBlock(scope, "PublicAccessBlock", {
-      bucket: bucket.bucket,
-      blockPublicAcls: false,
-      blockPublicPolicy: false,
-      ignorePublicAcls: false,
-      restrictPublicBuckets: false,
-    });
+    const publicAccessBlock = new S3BucketPublicAccessBlock(
+      scope,
+      "PublicAccessBlock",
+      {
+        bucket: bucket.bucket,
+        blockPublicAcls: false,
+        blockPublicPolicy: false,
+        ignorePublicAcls: false,
+        restrictPublicBuckets: false,
+      }
+    );
     const policy = {
       Version: "2012-10-17",
       Statement: [
@@ -201,14 +204,7 @@ export function createEncryptedBucket(
     new S3BucketPolicy(scope, "PublicPolicy", {
       bucket: bucket.bucket,
       policy: JSON.stringify(policy),
-    });
-  } else {
-    new S3BucketPublicAccessBlock(scope, "PublicAccessBlock", {
-      bucket: bucket.bucket,
-      blockPublicAcls: true,
-      blockPublicPolicy: true,
-      ignorePublicAcls: true,
-      restrictPublicBuckets: true,
+      dependsOn: [publicAccessBlock],
     });
   }
 

@@ -1,8 +1,8 @@
 use crate::{
 	ast::{
-		ArgList, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface,
-		InterpolatedStringPart, Literal, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind,
-		UserDefinedType,
+		ArgList, BringSource, CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
+		FunctionSignature, Interface, InterpolatedStringPart, Literal, NewExpr, Reference, Scope, Stmt, StmtKind, Symbol,
+		TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -48,15 +48,8 @@ pub trait Visit<'ast> {
 	fn visit_expr(&mut self, node: &'ast Expr) {
 		visit_expr(self, node);
 	}
-	fn visit_expr_new(
-		&mut self,
-		node: &'ast Expr,
-		class: &'ast Expr,
-		obj_id: &'ast Option<Box<Expr>>,
-		obj_scope: &'ast Option<Box<Expr>>,
-		arg_list: &'ast ArgList,
-	) {
-		visit_expr_new(self, node, &class, obj_id, obj_scope, arg_list);
+	fn visit_new_expr(&mut self, node: &'ast NewExpr) {
+		visit_new_expr(self, node);
 	}
 	fn visit_literal(&mut self, node: &'ast Literal) {
 		visit_literal(self, node);
@@ -101,16 +94,17 @@ where
 	V: Visit<'ast> + ?Sized,
 {
 	match &node.kind {
-		StmtKind::SuperConstructor { arg_list } => v.visit_args(arg_list),
-		StmtKind::Bring {
-			module_name,
-			identifier,
-		} => {
-			v.visit_symbol(module_name);
+		StmtKind::Bring { source, identifier } => {
+			match &source {
+				BringSource::BuiltinModule(name) => v.visit_symbol(name),
+				BringSource::JsiiModule(name) => v.visit_symbol(name),
+				BringSource::WingFile(name) => v.visit_symbol(name),
+			}
 			if let Some(identifier) = identifier {
 				v.visit_symbol(identifier);
 			}
 		}
+		StmtKind::SuperConstructor { arg_list } => v.visit_args(arg_list),
 		StmtKind::Let {
 			reassignable: _,
 			var_name,
@@ -140,12 +134,19 @@ where
 		StmtKind::IfLet {
 			value,
 			statements,
+			reassignable: _,
 			var_name,
+			elif_statements,
 			else_statements,
 		} => {
 			v.visit_symbol(var_name);
 			v.visit_expr(value);
 			v.visit_scope(statements);
+			for elif in elif_statements {
+				v.visit_symbol(&elif.var_name);
+				v.visit_expr(&elif.value);
+				v.visit_scope(&elif.statements);
+			}
 			if let Some(statements) = else_statements {
 				v.visit_scope(statements);
 			}
@@ -170,7 +171,7 @@ where
 			v.visit_expr(&expr);
 		}
 		StmtKind::Assignment { variable, value } => {
-			v.visit_expr(variable);
+			v.visit_reference(variable);
 			v.visit_expr(value);
 		}
 		StmtKind::Return(expr) => {
@@ -271,22 +272,16 @@ where
 	}
 }
 
-pub fn visit_expr_new<'ast, V>(
-	v: &mut V,
-	_node: &'ast Expr,
-	class: &'ast Expr,
-	obj_id: &'ast Option<Box<Expr>>,
-	obj_scope: &'ast Option<Box<Expr>>,
-	arg_list: &'ast ArgList,
-) where
+pub fn visit_new_expr<'ast, V>(v: &mut V, node: &'ast NewExpr)
+where
 	V: Visit<'ast> + ?Sized,
 {
-	v.visit_expr(class);
-	v.visit_args(arg_list);
-	if let Some(id) = obj_id {
+	v.visit_expr(&node.class);
+	v.visit_args(&node.arg_list);
+	if let Some(id) = &node.obj_id {
 		v.visit_expr(&id);
 	}
-	if let Some(scope) = obj_scope {
+	if let Some(scope) = &node.obj_scope {
 		v.visit_expr(&scope);
 	}
 }
@@ -296,13 +291,8 @@ where
 	V: Visit<'ast> + ?Sized,
 {
 	match &node.kind {
-		ExprKind::New {
-			class,
-			obj_id,
-			obj_scope,
-			arg_list,
-		} => {
-			v.visit_expr_new(node, class, obj_id, obj_scope, &arg_list);
+		ExprKind::New(new_expr) => {
+			v.visit_new_expr(new_expr);
 		}
 		ExprKind::Literal(lit) => {
 			v.visit_literal(lit);
@@ -319,7 +309,10 @@ where
 			v.visit_reference(ref_);
 		}
 		ExprKind::Call { callee, arg_list } => {
-			v.visit_expr(callee);
+			match callee {
+				CalleeKind::Expr(expr) => v.visit_expr(expr),
+				CalleeKind::SuperCall(method) => v.visit_symbol(method),
+			}
 			v.visit_args(arg_list);
 		}
 		ExprKind::Unary { op: _, exp } => {
@@ -348,7 +341,8 @@ where
 			}
 		}
 		ExprKind::JsonMapLiteral { fields } => {
-			for val in fields.values() {
+			for (name, val) in fields.iter() {
+				v.visit_symbol(name);
 				v.visit_expr(val);
 			}
 		}
@@ -356,7 +350,8 @@ where
 			if let Some(type_) = type_ {
 				v.visit_type_annotation(type_);
 			}
-			for val in fields.values() {
+			for (name, val) in fields.iter() {
+				v.visit_symbol(name);
 				v.visit_expr(val);
 			}
 		}
@@ -477,6 +472,7 @@ where
 		TypeAnnotationKind::Void => {}
 		TypeAnnotationKind::Json => {}
 		TypeAnnotationKind::MutJson => {}
+		TypeAnnotationKind::Inferred => {}
 		TypeAnnotationKind::Optional(t) => v.visit_type_annotation(t),
 		TypeAnnotationKind::Array(t) => v.visit_type_annotation(t),
 		TypeAnnotationKind::MutArray(t) => v.visit_type_annotation(t),

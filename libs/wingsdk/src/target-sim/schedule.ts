@@ -10,9 +10,8 @@ import {
   convertDurationToCronExpression,
 } from "./util";
 import * as cloud from "../cloud";
-import { Code } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { IInflightHost, Resource } from "../std";
+import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 import { BaseResourceSchema } from "../testing";
 
 /**
@@ -36,7 +35,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
-      this.node.scope!,
+      this,
       `${this.node.id}OnTickHandler${hash}`,
       inflight,
       join(__dirname, "schedule.ontick.inflight.js"),
@@ -44,11 +43,13 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
     );
 
     const fn = Function._newFunction(
-      this.node.scope!,
+      this,
       `${this.node.id}-OnTick-${hash}`,
       functionHandler,
       props
     );
+    Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
+    Node.of(fn).title = "onTick()";
 
     new EventMapping(this, `${this.node.id}-OnTickMapping-${hash}`, {
       subscriber: fn,
@@ -56,10 +57,10 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
       subscriptionProps: {},
     });
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "on_tick",
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: "onTick()",
     });
 
     return fn;
@@ -78,13 +79,12 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
   }
 
   /** @internal */
-  public _toInflight(): Code {
+  public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 }

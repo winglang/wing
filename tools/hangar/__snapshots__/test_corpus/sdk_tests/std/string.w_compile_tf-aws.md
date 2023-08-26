@@ -1,6 +1,6 @@
 # [string.w](../../../../../../examples/tests/sdk_tests/std/string.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $PARSE_ERROR, $std_String }) {
   class $Closure1 {
@@ -10,13 +10,13 @@ module.exports = function({ $PARSE_ERROR, $std_String }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: str.fromJson(Json \"World\") == \"World\"")})((((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })("World") === "World"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: str.fromJson(Json \"World\") == \"World\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })("World"),"World")))};
       try {
         ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })(123);
       }
       catch ($error_s) {
         const s = $error_s.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: s == PARSE_ERROR")})((s === $PARSE_ERROR))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: s == PARSE_ERROR")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s,$PARSE_ERROR)))};
       }
     }
   }
@@ -25,7 +25,7 @@ module.exports = function({ $PARSE_ERROR, $std_String }) {
 
 ```
 
-## inflight.$Closure10.js
+## inflight.$Closure10-1.js
 ```js
 module.exports = function({  }) {
   class $Closure10 {
@@ -45,7 +45,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure11.js
+## inflight.$Closure11-1.js
 ```js
 module.exports = function({  }) {
   class $Closure11 {
@@ -55,8 +55,8 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".substring(0, 5) == \"hello\"")})(((await "hello wing".substring(0,5)) === "hello"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".substring(0, 100) == \"hello wing\"")})(((await "hello wing".substring(0,100)) === "hello wing"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".substring(0, 5) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await "hello wing".substring(0,5)),"hello")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".substring(0, 100) == \"hello wing\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await "hello wing".substring(0,100)),"hello wing")))};
     }
   }
   return $Closure11;
@@ -64,7 +64,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure12.js
+## inflight.$Closure12-1.js
 ```js
 module.exports = function({  }) {
   class $Closure12 {
@@ -74,10 +74,10 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing         \".trim() == \"hello wing\"")})(((await "hello wing         ".trim()) === "hello wing"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".trim() == \"hello wing\"")})(((await "hello wing".trim()) === "hello wing"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"\".trim() == \"\"")})(((await "".trim()) === ""))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"\\thello wing\\n\".trim() == \"hello wing\"")})(((await "\thello wing\n".trim()) === "hello wing"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing         \".trim() == \"hello wing\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await "hello wing         ".trim()),"hello wing")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".trim() == \"hello wing\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await "hello wing".trim()),"hello wing")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"\".trim() == \"\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await "".trim()),"")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"\\thello wing\\n\".trim() == \"hello wing\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await "\thello wing\n".trim()),"hello wing")))};
     }
   }
   return $Closure12;
@@ -85,7 +85,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure13.js
+## inflight.$Closure13-1.js
 ```js
 module.exports = function({  }) {
   class $Closure13 {
@@ -105,7 +105,29 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure14-1.js
+```js
+module.exports = function({  }) {
+  class $Closure14 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello world\".replace(\"world\", \"wing\") == \"hello wing\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("hello world".replace("world","wing"),"hello wing")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"pʅɹoʍ oʅʅǝɥ\".replace(\"pʅɹoʍ\", \"ɓuᴉʍ\") == \"ɓuᴉʍ oʅʅǝɥ\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("pʅɹoʍ oʅʅǝɥ".replace("pʅɹoʍ","ɓuᴉʍ"),"ɓuᴉʍ oʅʅǝɥ")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello world\".replace(\"wing\", \"☁\") == \"hello world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("hello world".replace("wing","☁"),"hello world")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello world\".replace(\" \", \"-\") == \"hello-world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("hello world".replace(" ","-"),"hello-world")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"\".replace(\"\", \"hello world\") == \"hello world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("".replace("","hello world"),"hello world")))};
+    }
+  }
+  return $Closure14;
+}
+
+```
+
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({  }) {
   class $Closure2 {
@@ -115,8 +137,8 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello\".length == 5")})(("hello".length === 5))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"\".length == 0")})(("".length === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello\".length == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("hello".length,5)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"\".length == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("".length,0)))};
     }
   }
   return $Closure2;
@@ -124,7 +146,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure3.js
+## inflight.$Closure3-1.js
 ```js
 module.exports = function({ $INDEX_OUT_OF_BOUNDS_ERROR }) {
   class $Closure3 {
@@ -134,22 +156,22 @@ module.exports = function({ $INDEX_OUT_OF_BOUNDS_ERROR }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".at(0) == \"b\"")})((((args) => { if (0 >= "boom".length || 0 + "boom".length < 0) {throw new Error("index out of bounds")}; return "boom".at(0) })(0) === "b"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".at(-4) == \"b\"")})((((args) => { if ((-4) >= "boom".length || (-4) + "boom".length < 0) {throw new Error("index out of bounds")}; return "boom".at((-4)) })((-4)) === "b"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".at(-1) == \"m\"")})((((args) => { if ((-1) >= "boom".length || (-1) + "boom".length < 0) {throw new Error("index out of bounds")}; return "boom".at((-1)) })((-1)) === "m"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".at(0) == \"b\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if (0 >= "boom".length || 0 + "boom".length < 0) {throw new Error("index out of bounds")}; return "boom".at(0) })(0),"b")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".at(-4) == \"b\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if ((-4) >= "boom".length || (-4) + "boom".length < 0) {throw new Error("index out of bounds")}; return "boom".at((-4)) })((-4)),"b")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".at(-1) == \"m\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if ((-1) >= "boom".length || (-1) + "boom".length < 0) {throw new Error("index out of bounds")}; return "boom".at((-1)) })((-1)),"m")))};
       try {
         ((args) => { if (4 >= "boom".length || 4 + "boom".length < 0) {throw new Error("index out of bounds")}; return "boom".at(4) })(4);
       }
       catch ($error_s) {
         const s = $error_s.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: s == INDEX_OUT_OF_BOUNDS_ERROR ")})((s === $INDEX_OUT_OF_BOUNDS_ERROR))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: s == INDEX_OUT_OF_BOUNDS_ERROR ")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s,$INDEX_OUT_OF_BOUNDS_ERROR)))};
       }
       try {
         ((args) => { if ((-5) >= "boom".length || (-5) + "boom".length < 0) {throw new Error("index out of bounds")}; return "boom".at((-5)) })((-5));
       }
       catch ($error_s) {
         const s = $error_s.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: s == INDEX_OUT_OF_BOUNDS_ERROR ")})((s === $INDEX_OUT_OF_BOUNDS_ERROR))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: s == INDEX_OUT_OF_BOUNDS_ERROR ")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s,$INDEX_OUT_OF_BOUNDS_ERROR)))};
       }
     }
   }
@@ -158,7 +180,7 @@ module.exports = function({ $INDEX_OUT_OF_BOUNDS_ERROR }) {
 
 ```
 
-## inflight.$Closure4.js
+## inflight.$Closure4-1.js
 ```js
 module.exports = function({  }) {
   class $Closure4 {
@@ -168,7 +190,7 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".concat(\"boom\") == \"boomboom\"")})(((await "boom".concat("boom")) === "boomboom"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".concat(\"boom\") == \"boomboom\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await "boom".concat("boom")),"boomboom")))};
     }
   }
   return $Closure4;
@@ -176,7 +198,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure5.js
+## inflight.$Closure5-1.js
 ```js
 module.exports = function({  }) {
   class $Closure5 {
@@ -195,7 +217,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure6.js
+## inflight.$Closure6-1.js
 ```js
 module.exports = function({  }) {
   class $Closure6 {
@@ -205,8 +227,8 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".indexOf(\"m\") == 3")})(("boom".indexOf("m") === 3))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".indexOf(\"a\") == -1")})(("boom".indexOf("a") === (-1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".indexOf(\"m\") == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("boom".indexOf("m"),3)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".indexOf(\"a\") == -1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("boom".indexOf("a"),(-1))))};
     }
   }
   return $Closure6;
@@ -214,7 +236,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure7.js
+## inflight.$Closure7-1.js
 ```js
 module.exports = function({  }) {
   class $Closure7 {
@@ -224,10 +246,10 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"BOOM\".lowercase() == \"boom\"")})(("BOOM".toLocaleLowerCase() === "boom"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"BooM\".lowercase() == \"boom\"")})(("BooM".toLocaleLowerCase() === "boom"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".lowercase() == \"boom\"")})(("boom".toLocaleLowerCase() === "boom"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"123#@\".lowercase() == \"123#@\"")})(("123#@".toLocaleLowerCase() === "123#@"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"BOOM\".lowercase() == \"boom\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("BOOM".toLocaleLowerCase(),"boom")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"BooM\".lowercase() == \"boom\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("BooM".toLocaleLowerCase(),"boom")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".lowercase() == \"boom\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("boom".toLocaleLowerCase(),"boom")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"123#@\".lowercase() == \"123#@\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("123#@".toLocaleLowerCase(),"123#@")))};
     }
   }
   return $Closure7;
@@ -235,7 +257,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure8.js
+## inflight.$Closure8-1.js
 ```js
 module.exports = function({  }) {
   class $Closure8 {
@@ -245,10 +267,10 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"BOOM\".uppercase() == \"BOOM\"")})(("BOOM".toLocaleUpperCase() === "BOOM"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"BooM\".uppercase() == \"BOOM\"")})(("BooM".toLocaleUpperCase() === "BOOM"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".uppercase() == \"BOOM\"")})(("boom".toLocaleUpperCase() === "BOOM"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"123#@\".uppercase() == \"123#@\"")})(("123#@".toLocaleUpperCase() === "123#@"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"BOOM\".uppercase() == \"BOOM\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("BOOM".toLocaleUpperCase(),"BOOM")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"BooM\".uppercase() == \"BOOM\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("BooM".toLocaleUpperCase(),"BOOM")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".uppercase() == \"BOOM\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("boom".toLocaleUpperCase(),"BOOM")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"123#@\".uppercase() == \"123#@\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("123#@".toLocaleUpperCase(),"123#@")))};
     }
   }
   return $Closure8;
@@ -256,7 +278,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure9.js
+## inflight.$Closure9-1.js
 ```js
 module.exports = function({  }) {
   class $Closure9 {
@@ -266,13 +288,13 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello;wing\".split(\";\").at(0) == \"hello\"")})(((await (await "hello;wing".split(";")).at(0)) === "hello"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello;wing\".split(\";\").at(1) == \"wing\"")})(((await (await "hello;wing".split(";")).at(1)) === "wing"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\" \").at(0) == \"hello\"")})(((await (await "hello wing".split(" ")).at(0)) === "hello"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello;wing\".split(\";\").at(1) == \"wing\"")})(((await (await "hello;wing".split(";")).at(1)) === "wing"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\"\").length == 10")})(((await "hello wing".split("")).length === 10))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\"\").at(0) == \"h\"")})(((await (await "hello wing".split("")).at(0)) === "h"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\"\").at(1) == \"e\"")})(((await (await "hello wing".split("")).at(1)) === "e"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello;wing\".split(\";\").at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await (await "hello;wing".split(";")).at(0)),"hello")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello;wing\".split(\";\").at(1) == \"wing\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await (await "hello;wing".split(";")).at(1)),"wing")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\" \").at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await (await "hello wing".split(" ")).at(0)),"hello")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello;wing\".split(\";\").at(1) == \"wing\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await (await "hello;wing".split(";")).at(1)),"wing")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\"\").length == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await "hello wing".split("")).length,10)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\"\").at(0) == \"h\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await (await "hello wing".split("")).at(0)),"h")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\"\").at(1) == \"e\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await (await "hello wing".split("")).at(1)),"e")))};
     }
   }
   return $Closure9;
@@ -301,7 +323,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:fromJson\",\"${aws_lambda_function.testfromJson_Handler_CA86BEEA.arn}\"],[\"root/Default/Default/test:length\",\"${aws_lambda_function.testlength_Handler_BFD8933F.arn}\"],[\"root/Default/Default/test:at()\",\"${aws_lambda_function.testat_Handler_E4F013BC.arn}\"],[\"root/Default/Default/test:concat()\",\"${aws_lambda_function.testconcat_Handler_E184D86A.arn}\"],[\"root/Default/Default/test:endsWith()\",\"${aws_lambda_function.testendsWith_Handler_9BA42993.arn}\"],[\"root/Default/Default/test:indexOf()\",\"${aws_lambda_function.testindexOf_Handler_BD91EA6F.arn}\"],[\"root/Default/Default/test:lowercase()\",\"${aws_lambda_function.testlowercase_Handler_EAADE79D.arn}\"],[\"root/Default/Default/test:uppercase()\",\"${aws_lambda_function.testuppercase_Handler_352FFA2E.arn}\"],[\"root/Default/Default/test:split()\",\"${aws_lambda_function.testsplit_Handler_4FAF6D9E.arn}\"],[\"root/Default/Default/test:startsWith()\",\"${aws_lambda_function.teststartsWith_Handler_C8752245.arn}\"],[\"root/Default/Default/test:substring()\",\"${aws_lambda_function.testsubstring_Handler_E6617207.arn}\"],[\"root/Default/Default/test:trim()\",\"${aws_lambda_function.testtrim_Handler_403ED8AD.arn}\"],[\"root/Default/Default/test:contains()\",\"${aws_lambda_function.testcontains_Handler_F60865D9.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:fromJson\",\"${aws_lambda_function.testfromJson_Handler_CA86BEEA.arn}\"],[\"root/Default/Default/test:length\",\"${aws_lambda_function.testlength_Handler_BFD8933F.arn}\"],[\"root/Default/Default/test:at()\",\"${aws_lambda_function.testat_Handler_E4F013BC.arn}\"],[\"root/Default/Default/test:concat()\",\"${aws_lambda_function.testconcat_Handler_E184D86A.arn}\"],[\"root/Default/Default/test:endsWith()\",\"${aws_lambda_function.testendsWith_Handler_9BA42993.arn}\"],[\"root/Default/Default/test:indexOf()\",\"${aws_lambda_function.testindexOf_Handler_BD91EA6F.arn}\"],[\"root/Default/Default/test:lowercase()\",\"${aws_lambda_function.testlowercase_Handler_EAADE79D.arn}\"],[\"root/Default/Default/test:uppercase()\",\"${aws_lambda_function.testuppercase_Handler_352FFA2E.arn}\"],[\"root/Default/Default/test:split()\",\"${aws_lambda_function.testsplit_Handler_4FAF6D9E.arn}\"],[\"root/Default/Default/test:startsWith()\",\"${aws_lambda_function.teststartsWith_Handler_C8752245.arn}\"],[\"root/Default/Default/test:substring()\",\"${aws_lambda_function.testsubstring_Handler_E6617207.arn}\"],[\"root/Default/Default/test:trim()\",\"${aws_lambda_function.testtrim_Handler_403ED8AD.arn}\"],[\"root/Default/Default/test:contains()\",\"${aws_lambda_function.testcontains_Handler_F60865D9.arn}\"],[\"root/Default/Default/test:replace()\",\"${aws_lambda_function.testreplace_Handler_83836186.arn}\"]]"
     }
   },
   "provider": {
@@ -379,6 +401,15 @@ module.exports = function({  }) {
           "metadata": {
             "path": "root/Default/Default/test:lowercase()/Handler/IamRole",
             "uniqueId": "testlowercase_Handler_IamRole_AD4BFFD1"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
+      "testreplace_Handler_IamRole_8269B4F2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:replace()/Handler/IamRole",
+            "uniqueId": "testreplace_Handler_IamRole_8269B4F2"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -509,6 +540,16 @@ module.exports = function({  }) {
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.testlowercase_Handler_IamRole_AD4BFFD1.name}"
+      },
+      "testreplace_Handler_IamRolePolicy_B1BDF250": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:replace()/Handler/IamRolePolicy",
+            "uniqueId": "testreplace_Handler_IamRolePolicy_B1BDF250"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.testreplace_Handler_IamRole_8269B4F2.name}"
       },
       "testsplit_Handler_IamRolePolicy_2CBFEABE": {
         "//": {
@@ -642,6 +683,16 @@ module.exports = function({  }) {
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.testlowercase_Handler_IamRole_AD4BFFD1.name}"
       },
+      "testreplace_Handler_IamRolePolicyAttachment_3A28D781": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:replace()/Handler/IamRolePolicyAttachment",
+            "uniqueId": "testreplace_Handler_IamRolePolicyAttachment_3A28D781"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.testreplace_Handler_IamRole_8269B4F2.name}"
+      },
       "testsplit_Handler_IamRolePolicyAttachment_50460D67": {
         "//": {
           "metadata": {
@@ -701,6 +752,9 @@ module.exports = function({  }) {
             "uniqueId": "testat_Handler_E4F013BC"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c858faac",
@@ -727,6 +781,9 @@ module.exports = function({  }) {
             "uniqueId": "testconcat_Handler_E184D86A"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c869963c",
@@ -753,6 +810,9 @@ module.exports = function({  }) {
             "uniqueId": "testcontains_Handler_F60865D9"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8e953a0",
@@ -779,6 +839,9 @@ module.exports = function({  }) {
             "uniqueId": "testendsWith_Handler_9BA42993"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8465c4f",
@@ -805,6 +868,9 @@ module.exports = function({  }) {
             "uniqueId": "testfromJson_Handler_CA86BEEA"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c89f3277",
@@ -831,6 +897,9 @@ module.exports = function({  }) {
             "uniqueId": "testindexOf_Handler_BD91EA6F"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c80be453",
@@ -857,6 +926,9 @@ module.exports = function({  }) {
             "uniqueId": "testlength_Handler_BFD8933F"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8e0ccbd",
@@ -883,6 +955,9 @@ module.exports = function({  }) {
             "uniqueId": "testlowercase_Handler_EAADE79D"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c86ac32a",
@@ -902,6 +977,35 @@ module.exports = function({  }) {
           "subnet_ids": []
         }
       },
+      "testreplace_Handler_83836186": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:replace()/Handler/Default",
+            "uniqueId": "testreplace_Handler_83836186"
+          }
+        },
+        "architectures": [
+          "arm64"
+        ],
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Handler-c876baf0",
+            "WING_TARGET": "tf-aws"
+          }
+        },
+        "function_name": "Handler-c876baf0",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "${aws_iam_role.testreplace_Handler_IamRole_8269B4F2.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testreplace_Handler_S3Object_20DF2856.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
+      },
       "testsplit_Handler_4FAF6D9E": {
         "//": {
           "metadata": {
@@ -909,6 +1013,9 @@ module.exports = function({  }) {
             "uniqueId": "testsplit_Handler_4FAF6D9E"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8e87cf7",
@@ -935,6 +1042,9 @@ module.exports = function({  }) {
             "uniqueId": "teststartsWith_Handler_C8752245"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8f6a537",
@@ -961,6 +1071,9 @@ module.exports = function({  }) {
             "uniqueId": "testsubstring_Handler_E6617207"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c803a722",
@@ -987,6 +1100,9 @@ module.exports = function({  }) {
             "uniqueId": "testtrim_Handler_403ED8AD"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c81cc785",
@@ -1013,6 +1129,9 @@ module.exports = function({  }) {
             "uniqueId": "testuppercase_Handler_352FFA2E"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c882dfb8",
@@ -1133,6 +1252,17 @@ module.exports = function({  }) {
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
+      "testreplace_Handler_S3Object_20DF2856": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:replace()/Handler/S3Object",
+            "uniqueId": "testreplace_Handler_S3Object_20DF2856"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
+      },
       "testsplit_Handler_S3Object_08906E51": {
         "//": {
           "metadata": {
@@ -1196,37 +1326,39 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
+const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+        return `
+          require("./inflight.$Closure1-1.js")({
             $PARSE_ERROR: ${context._lift(PARSE_ERROR)},
             $std_String: ${context._lift(std.String)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -1238,50 +1370,54 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+        return `
+          require("./inflight.$Closure2-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const $Closure2Client = ${$Closure2._toInflightType(this)};
             const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3.js")({
+        return `
+          require("./inflight.$Closure3-1.js")({
             $INDEX_OUT_OF_BOUNDS_ERROR: ${context._lift(INDEX_OUT_OF_BOUNDS_ERROR)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure3Client = ${$Closure3._toInflightType(this).text};
+            const $Closure3Client = ${$Closure3._toInflightType(this)};
             const client = new $Closure3Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -1293,241 +1429,287 @@ class $Root extends $stdlib.std.Resource {
     class $Closure4 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure4.js")({
+        return `
+          require("./inflight.$Closure4-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure4Client = ${$Closure4._toInflightType(this).text};
+            const $Closure4Client = ${$Closure4._toInflightType(this)};
             const client = new $Closure4Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
     }
     class $Closure5 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure5.js")({
+        return `
+          require("./inflight.$Closure5-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure5Client = ${$Closure5._toInflightType(this).text};
+            const $Closure5Client = ${$Closure5._toInflightType(this)};
             const client = new $Closure5Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
     }
     class $Closure6 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure6.js")({
+        return `
+          require("./inflight.$Closure6-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure6Client = ${$Closure6._toInflightType(this).text};
+            const $Closure6Client = ${$Closure6._toInflightType(this)};
             const client = new $Closure6Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
     }
     class $Closure7 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure7.js")({
+        return `
+          require("./inflight.$Closure7-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure7Client = ${$Closure7._toInflightType(this).text};
+            const $Closure7Client = ${$Closure7._toInflightType(this)};
             const client = new $Closure7Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
     }
     class $Closure8 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure8.js")({
+        return `
+          require("./inflight.$Closure8-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure8Client = ${$Closure8._toInflightType(this).text};
+            const $Closure8Client = ${$Closure8._toInflightType(this)};
             const client = new $Closure8Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
     }
     class $Closure9 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure9.js")({
+        return `
+          require("./inflight.$Closure9-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure9Client = ${$Closure9._toInflightType(this).text};
+            const $Closure9Client = ${$Closure9._toInflightType(this)};
             const client = new $Closure9Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
     }
     class $Closure10 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure10.js")({
+        return `
+          require("./inflight.$Closure10-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure10Client = ${$Closure10._toInflightType(this).text};
+            const $Closure10Client = ${$Closure10._toInflightType(this)};
             const client = new $Closure10Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
     }
     class $Closure11 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure11.js")({
+        return `
+          require("./inflight.$Closure11-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure11Client = ${$Closure11._toInflightType(this).text};
+            const $Closure11Client = ${$Closure11._toInflightType(this)};
             const client = new $Closure11Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
     }
     class $Closure12 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure12.js")({
+        return `
+          require("./inflight.$Closure12-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure12Client = ${$Closure12._toInflightType(this).text};
+            const $Closure12Client = ${$Closure12._toInflightType(this)};
             const client = new $Closure12Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
     }
     class $Closure13 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure13.js")({
+        return `
+          require("./inflight.$Closure13-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure13Client = ${$Closure13._toInflightType(this).text};
+            const $Closure13Client = ${$Closure13._toInflightType(this)};
             const client = new $Closure13Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
+      }
+    }
+    class $Closure14 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        (std.Node.of(this)).hidden = true;
+      }
+      static _toInflightType(context) {
+        return `
+          require("./inflight.$Closure14-1.js")({
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure14Client = ${$Closure14._toInflightType(this)};
+            const client = new $Closure14Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
     }
     const assertThrows = ((expected, block) => {
@@ -1537,24 +1719,24 @@ class $Root extends $stdlib.std.Resource {
       }
       catch ($error_actual) {
         const actual = $error_actual.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: actual == expected")})((actual === expected))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: actual == expected")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(actual,expected)))};
         error = true;
       }
       {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
     });
     const PARSE_ERROR = "unable to parse number 123 as a string";
-    {((cond) => {if (!cond) throw new Error("assertion failed: str.fromJson(Json \"Hello\") == \"Hello\"")})((((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })("Hello") === "Hello"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: str.fromJson(Json \"Hello\") == \"Hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })("Hello"),"Hello")))};
     (assertThrows(PARSE_ERROR,(() => {
       ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })(123);
     })));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:fromJson",new $Closure1(this,"$Closure1"));
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello\".length == 5")})(("hello".length === 5))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"\".length == 0")})(("".length === 0))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello\".length == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("hello".length,5)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"\".length == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("".length,0)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:length",new $Closure2(this,"$Closure2"));
     const INDEX_OUT_OF_BOUNDS_ERROR = "index out of bounds";
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".at(2) == \"o\"")})((((args) => { if (2 >= "boom".length || 2 + "boom".length < 0) {throw new Error("index out of bounds")}; return "boom".at(2) })(2) === "o"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".at(-4) == \"b\"")})((((args) => { if ((-4) >= "boom".length || (-4) + "boom".length < 0) {throw new Error("index out of bounds")}; return "boom".at((-4)) })((-4)) === "b"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".at(-1) == \"m\"")})((((args) => { if ((-1) >= "boom".length || (-1) + "boom".length < 0) {throw new Error("index out of bounds")}; return "boom".at((-1)) })((-1)) === "m"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".at(2) == \"o\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if (2 >= "boom".length || 2 + "boom".length < 0) {throw new Error("index out of bounds")}; return "boom".at(2) })(2),"o")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".at(-4) == \"b\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if ((-4) >= "boom".length || (-4) + "boom".length < 0) {throw new Error("index out of bounds")}; return "boom".at((-4)) })((-4)),"b")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".at(-1) == \"m\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if ((-1) >= "boom".length || (-1) + "boom".length < 0) {throw new Error("index out of bounds")}; return "boom".at((-1)) })((-1)),"m")))};
     (assertThrows(INDEX_OUT_OF_BOUNDS_ERROR,(() => {
       ((args) => { if (4 >= "boom".length || 4 + "boom".length < 0) {throw new Error("index out of bounds")}; return "boom".at(4) })(4);
     })));
@@ -1562,66 +1744,58 @@ class $Root extends $stdlib.std.Resource {
       ((args) => { if ((-5) >= "boom".length || (-5) + "boom".length < 0) {throw new Error("index out of bounds")}; return "boom".at((-5)) })((-5));
     })));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:at()",new $Closure3(this,"$Closure3"));
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".concat(\"boom\") == \"boomboom\"")})((("boom".concat("boom")) === "boomboom"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".concat(\"boom\") == \"boomboom\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("boom".concat("boom")),"boomboom")))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:concat()",new $Closure4(this,"$Closure4"));
     {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".endsWith(\"m\")")})("boom".endsWith("m"))};
     {((cond) => {if (!cond) throw new Error("assertion failed: !\"boom\".endsWith(\"b\")")})((!"boom".endsWith("b")))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:endsWith()",new $Closure5(this,"$Closure5"));
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".indexOf(\"m\") == 3")})(("boom".indexOf("m") === 3))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".indexOf(\"a\") == -1")})(("boom".indexOf("a") === (-1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".indexOf(\"m\") == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("boom".indexOf("m"),3)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".indexOf(\"a\") == -1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("boom".indexOf("a"),(-1))))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:indexOf()",new $Closure6(this,"$Closure6"));
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"BOOM\".lowercase() == \"boom\"")})(("BOOM".toLocaleLowerCase() === "boom"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"BooM\".lowercase() == \"boom\"")})(("BooM".toLocaleLowerCase() === "boom"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".lowercase() == \"boom\"")})(("boom".toLocaleLowerCase() === "boom"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"123#@\".lowercase() == \"123#@\"")})(("123#@".toLocaleLowerCase() === "123#@"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"BOOM\".lowercase() == \"boom\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("BOOM".toLocaleLowerCase(),"boom")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"BooM\".lowercase() == \"boom\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("BooM".toLocaleLowerCase(),"boom")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".lowercase() == \"boom\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("boom".toLocaleLowerCase(),"boom")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"123#@\".lowercase() == \"123#@\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("123#@".toLocaleLowerCase(),"123#@")))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:lowercase()",new $Closure7(this,"$Closure7"));
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"BOOM\".uppercase() == \"BOOM\"")})(("BOOM".toLocaleUpperCase() === "BOOM"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"BooM\".uppercase() == \"BOOM\"")})(("BooM".toLocaleUpperCase() === "BOOM"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".uppercase() == \"BOOM\"")})(("boom".toLocaleUpperCase() === "BOOM"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"123#@\".uppercase() == \"123#@\"")})(("123#@".toLocaleUpperCase() === "123#@"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"BOOM\".uppercase() == \"BOOM\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("BOOM".toLocaleUpperCase(),"BOOM")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"BooM\".uppercase() == \"BOOM\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("BooM".toLocaleUpperCase(),"BOOM")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".uppercase() == \"BOOM\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("boom".toLocaleUpperCase(),"BOOM")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"123#@\".uppercase() == \"123#@\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("123#@".toLocaleUpperCase(),"123#@")))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:uppercase()",new $Closure8(this,"$Closure8"));
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello;wing\".split(\";\").at(0) == \"hello\"")})(((("hello;wing".split(";")).at(0)) === "hello"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello;wing\".split(\";\").at(1) == \"wing\"")})(((("hello;wing".split(";")).at(1)) === "wing"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\" \").at(0) == \"hello\"")})(((("hello wing".split(" ")).at(0)) === "hello"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello;wing\".split(\";\").at(1) == \"wing\"")})(((("hello;wing".split(";")).at(1)) === "wing"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\"\").length == 10")})((("hello wing".split("")).length === 10))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\"\").at(0) == \"h\"")})(((("hello wing".split("")).at(0)) === "h"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\"\").at(1) == \"e\"")})(((("hello wing".split("")).at(1)) === "e"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello;wing\".split(\";\").at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((("hello;wing".split(";")).at(0)),"hello")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello;wing\".split(\";\").at(1) == \"wing\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((("hello;wing".split(";")).at(1)),"wing")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\" \").at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((("hello wing".split(" ")).at(0)),"hello")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello;wing\".split(\";\").at(1) == \"wing\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((("hello;wing".split(";")).at(1)),"wing")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\"\").length == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("hello wing".split("")).length,10)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\"\").at(0) == \"h\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((("hello wing".split("")).at(0)),"h")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\"\").at(1) == \"e\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((("hello wing".split("")).at(1)),"e")))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:split()",new $Closure9(this,"$Closure9"));
     {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".startsWith(\"h\")")})("hello wing".startsWith("h"))};
     {((cond) => {if (!cond) throw new Error("assertion failed: !\"hello wing\".startsWith(\"H\")")})((!"hello wing".startsWith("H")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: !\"hello wing\".startsWith(\"w\")")})((!"hello wing".startsWith("w")))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:startsWith()",new $Closure10(this,"$Closure10"));
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".substring(0, 5) == \"hello\"")})((("hello wing".substring(0,5)) === "hello"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".substring(0, 100) == \"hello wing\"")})((("hello wing".substring(0,100)) === "hello wing"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".substring(0, 5) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("hello wing".substring(0,5)),"hello")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".substring(0, 100) == \"hello wing\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("hello wing".substring(0,100)),"hello wing")))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:substring()",new $Closure11(this,"$Closure11"));
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing         \".trim() == \"hello wing\"")})((("hello wing         ".trim()) === "hello wing"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".trim() == \"hello wing\"")})((("hello wing".trim()) === "hello wing"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"\".trim() == \"\"")})((("".trim()) === ""))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"\\thello wing\\n\".trim() == \"hello wing\"")})((("\thello wing\n".trim()) === "hello wing"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing         \".trim() == \"hello wing\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("hello wing         ".trim()),"hello wing")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".trim() == \"hello wing\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("hello wing".trim()),"hello wing")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"\".trim() == \"\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("".trim()),"")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"\\thello wing\\n\".trim() == \"hello wing\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("\thello wing\n".trim()),"hello wing")))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:trim()",new $Closure12(this,"$Closure12"));
     {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".contains(\"hello\")")})("hello wing".includes("hello"))};
     {((cond) => {if (!cond) throw new Error("assertion failed: !\"hello wing\".contains(\"Hello\")")})((!"hello wing".includes("Hello")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".contains(\"w\")")})("hello wing".includes("w"))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:contains()",new $Closure13(this,"$Closure13"));
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello world\".replace(\"world\", \"wing\") == \"hello wing\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("hello world".replace("world","wing"),"hello wing")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"pʅɹoʍ oʅʅǝɥ\".replace(\"pʅɹoʍ\", \"ɓuᴉʍ\") == \"ɓuᴉʍ oʅʅǝɥ\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("pʅɹoʍ oʅʅǝɥ".replace("pʅɹoʍ","ɓuᴉʍ"),"ɓuᴉʍ oʅʅǝɥ")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello world\".replace(\"wing\", \"☁\") == \"hello world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("hello world".replace("wing","☁"),"hello world")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello world\".replace(\" \", \"-\") == \"hello-world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("hello world".replace(" ","-"),"hello-world")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"\".replace(\"\", \"hello world\") == \"hello world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("".replace("","hello world"),"hello world")))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:replace()",new $Closure14(this,"$Closure14"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "string", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "string", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

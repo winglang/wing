@@ -1,6 +1,6 @@
 # [json_static.w](../../../../../examples/tests/valid/json_static.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $jj, $std_Json }) {
   class $Closure1 {
@@ -10,8 +10,8 @@ module.exports = function({ $jj, $std_Json }) {
       return $obj;
     }
     async handle() {
-      const ss = ((args) => { return JSON.stringify(args[0], null, args[1]) })([$jj]);
-      {((cond) => {if (!cond) throw new Error("assertion failed: ss == \"{\\\"a\\\":123,\\\"b\\\":{\\\"c\\\":456,\\\"d\\\":789}}\"")})((ss === "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}"))};
+      const ss = ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$jj]);
+      {((cond) => {if (!cond) throw new Error("assertion failed: ss == \"{\\\"a\\\":123,\\\"b\\\":{\\\"c\\\":456,\\\"d\\\":789}}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(ss,"{\"a\":123,\"b\":{\"c\":456,\"d\":789}}")))};
     }
   }
   return $Closure1;
@@ -19,7 +19,7 @@ module.exports = function({ $jj, $std_Json }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $std_Json }) {
   class $Closure2 {
@@ -29,9 +29,9 @@ module.exports = function({ $std_Json }) {
       return $obj;
     }
     async handle() {
-      const hasCheck = Object.freeze({"a":"hello","b":"wing"});
-      {((cond) => {if (!cond) throw new Error("assertion failed: Json.has(hasCheck, \"a\") == true")})((((args) => { return args[0].hasOwnProperty(args[1]); })([hasCheck,"a"]) === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: Json.has(hasCheck, \"c\") == false")})((((args) => { return args[0].hasOwnProperty(args[1]); })([hasCheck,"c"]) === false))};
+      const hasCheck = ({"a": "hello","b": "wing"});
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.has(hasCheck, \"a\") == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return args[0].hasOwnProperty(args[1]); })([hasCheck,"a"]),true)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.has(hasCheck, \"c\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return args[0].hasOwnProperty(args[1]); })([hasCheck,"c"]),false)))};
     }
   }
   return $Closure2;
@@ -141,6 +141,9 @@ module.exports = function({ $std_Json }) {
             "uniqueId": "testAccessJsonstaticinflight_Handler_E1606978"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8867497",
@@ -167,6 +170,9 @@ module.exports = function({ $std_Json }) {
             "uniqueId": "testhaskeyornot_Handler_3209D975"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8ecbdc2",
@@ -229,38 +235,40 @@ module.exports = function({ $std_Json }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+        return `
+          require("./inflight.$Closure1-1.js")({
             $jj: ${context._lift(jj)},
             $std_Json: ${context._lift(std.Json)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -272,78 +280,66 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+        return `
+          require("./inflight.$Closure2-1.js")({
             $std_Json: ${context._lift(std.Json)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const $Closure2Client = ${$Closure2._toInflightType(this)};
             const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
     }
-    const x = Object.freeze({"a":123,"b":Object.freeze({"c":456,"d":789})});
+    const x = ({"a": 123,"b": ({"c": 456,"d": 789})});
     const k = (Object.keys(x));
-    {((cond) => {if (!cond) throw new Error("assertion failed: k.length == 2")})((k.length === 2))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: k.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(k.length,2)))};
     const v = (Object.values(x));
-    {((cond) => {if (!cond) throw new Error("assertion failed: v.at(0) == 123")})(((v.at(0)) === 123))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: v.at(0) == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((v.at(0)),123)))};
     const m = (JSON.parse(JSON.stringify(x)));
     ((obj, args) => { obj[args[0]] = args[1]; })(m, ["a",321]);
-    {((cond) => {if (!cond) throw new Error("assertion failed: m.get(\"a\") == 321")})(((m)["a"] === 321))};
-    const n = Object.freeze(JSON.parse(JSON.stringify(m)));
-    {((cond) => {if (!cond) throw new Error("assertion failed: m != n")})((m !== n))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m.get(\"a\") == 321")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((m)["a"],321)))};
+    const n = JSON.parse(JSON.stringify(m));
+    {((cond) => {if (!cond) throw new Error("assertion failed: m == n")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(m,n)))};
     let k2 = (Object.keys(m));
-    {((cond) => {if (!cond) throw new Error("assertion failed: k2.length == 2")})((k2.length === 2))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: k2.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(k2.length,2)))};
     ((args) => { delete (args[0])[args[1]]; })([m,"b"]);
     k2 = (Object.keys(m));
-    {((cond) => {if (!cond) throw new Error("assertion failed: k2.length == 1")})((k2.length === 1))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: k2.length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(k2.length,1)))};
     const s = "{\"a\": 123, \"b\": {\"c\": 456, \"d\": 789}}";
     const j = (JSON.parse(s));
-    {((cond) => {if (!cond) throw new Error("assertion failed: Json.keys(j).length == 2")})(((Object.keys(j)).length === 2))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: Json.keys(j).length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((Object.keys(j)).length,2)))};
     const invalidJson = "invalid";
-    const tryParsed = (((args) => { try { return JSON.parse(args); } catch (err) { return undefined; } })(invalidJson) ?? Object.freeze({"key":"value"}));
-    {((cond) => {if (!cond) throw new Error("assertion failed: tryParsed.get(\"key\") == \"value\"")})(((tryParsed)["key"] === "value"))};
-    const jj = Object.freeze({"a":123,"b":Object.freeze({"c":456,"d":789})});
-    const ss = ((args) => { return JSON.stringify(args[0], null, args[1]) })([jj]);
-    {((cond) => {if (!cond) throw new Error("assertion failed: ss == \"{\\\"a\\\":123,\\\"b\\\":{\\\"c\\\":456,\\\"d\\\":789}}\"")})((ss === "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}"))};
-    const ss2 = ((args) => { return JSON.stringify(args[0], null, args[1]) })([jj,2]);
-    {((cond) => {if (!cond) throw new Error("assertion failed: ss2 == \"{\\n  \\\"a\\\": 123,\\n  \\\"b\\\": {\\n    \\\"c\\\": 456,\\n    \\\"d\\\": 789\\n  }\\n}\"")})((ss2 === "{\n  \"a\": 123,\n  \"b\": {\n    \"c\": 456,\n    \"d\": 789\n  }\n}"))};
-    const jsonOfMany = Object.freeze({"a":123,"b":"hello","c":true});
-    {((cond) => {if (!cond) throw new Error("assertion failed: str.fromJson(jsonOfMany.get(\"b\")) == \"hello\"")})((((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((jsonOfMany)["b"]) === "hello"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: num.fromJson(jsonOfMany.get(\"a\")) == 123")})((((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })((jsonOfMany)["a"]) === 123))};
+    const tryParsed = (((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })(invalidJson) ?? ({"key": "value"}));
+    {((cond) => {if (!cond) throw new Error("assertion failed: tryParsed.get(\"key\") == \"value\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((tryParsed)["key"],"value")))};
+    const jj = ({"a": 123,"b": ({"c": 456,"d": 789})});
+    const ss = ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([jj]);
+    {((cond) => {if (!cond) throw new Error("assertion failed: ss == \"{\\\"a\\\":123,\\\"b\\\":{\\\"c\\\":456,\\\"d\\\":789}}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(ss,"{\"a\":123,\"b\":{\"c\":456,\"d\":789}}")))};
+    const ss2 = ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([jj,{ indent: 2 }]);
+    {((cond) => {if (!cond) throw new Error("assertion failed: ss2 == \"{\\n  \\\"a\\\": 123,\\n  \\\"b\\\": {\\n    \\\"c\\\": 456,\\n    \\\"d\\\": 789\\n  }\\n}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(ss2,"{\n  \"a\": 123,\n  \"b\": {\n    \"c\": 456,\n    \"d\": 789\n  }\n}")))};
+    const jsonOfMany = ({"a": 123,"b": "hello","c": true});
+    {((cond) => {if (!cond) throw new Error("assertion failed: str.fromJson(jsonOfMany.get(\"b\")) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((jsonOfMany)["b"]),"hello")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: num.fromJson(jsonOfMany.get(\"a\")) == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })((jsonOfMany)["a"]),123)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: bool.fromJson(jsonOfMany.get(\"c\"))")})((std.Boolean.fromJson((jsonOfMany)["c"])))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Access Json static inflight",new $Closure1(this,"$Closure1"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:has key or not",new $Closure2(this,"$Closure2"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "json_static", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "json_static", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

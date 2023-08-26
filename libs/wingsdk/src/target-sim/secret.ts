@@ -3,7 +3,6 @@ import { ISimulatorResource } from "./resource";
 import { SECRET_TYPE, SecretSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import * as core from "../core";
 import { ResourceNames } from "../shared/resource-names";
 import { IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
@@ -23,14 +22,13 @@ export class Secret extends cloud.Secret implements ISimulatorResource {
       ResourceNames.generateName(this, { disallowedRegex: /[^\w]/g });
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
   }
 

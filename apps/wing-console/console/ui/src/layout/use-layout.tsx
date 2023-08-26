@@ -1,7 +1,14 @@
 import { useTheme } from "@wingconsole/design-system";
-import { LogEntry, LogLevel, State } from "@wingconsole/server";
+import type { LogEntry, LogLevel, State } from "@wingconsole/server";
 import { useLoading } from "@wingconsole/use-loading";
-import { useEffect, useState, useContext, useRef, useMemo } from "react";
+import {
+  useEffect,
+  useState,
+  useContext,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
 
 import { trpc } from "../services/trpc.js";
 import { useExplorer } from "../services/use-explorer.js";
@@ -37,6 +44,18 @@ export const useLayout = ({
   const [searchText, setSearchText] = useState("");
 
   const [logsTimeFilter, setLogsTimeFilter] = useState(0);
+
+  const [selectedEdgeId, setSelectedEdgeId] = useState<string | undefined>();
+
+  const onSelectedItemsChange = useCallback((items: string[]) => {
+    setSelectedEdgeId(undefined);
+    setSelectedItems(items);
+  }, []);
+
+  const onSelectedEdgeIdChange = useCallback((edgeId: string | undefined) => {
+    onSelectedItemsChange([]);
+    setSelectedEdgeId(edgeId);
+  }, []);
 
   const wingfile = trpc["app.wingfile"].useQuery();
   const title = useMemo(() => {
@@ -89,6 +108,16 @@ export const useLayout = ({
     },
   );
 
+  const edgeMetadata = trpc["app.edgeMetadata"].useQuery(
+    {
+      edgeId: selectedEdgeId || "",
+      showTests,
+    },
+    {
+      enabled: !!selectedEdgeId,
+    },
+  );
+
   const { loading, setLoading } = useLoading({
     duration: 400,
   });
@@ -112,7 +141,7 @@ export const useLayout = ({
   return {
     items,
     selectedItems,
-    setSelectedItems,
+    setSelectedItems: onSelectedItemsChange,
     expandedItems,
     setExpandedItems,
     expand,
@@ -122,6 +151,9 @@ export const useLayout = ({
     errorMessage,
     loading,
     metadata,
+    selectedEdgeId,
+    setSelectedEdgeId: onSelectedEdgeIdChange,
+    edgeMetadata,
     setSearchText,
     selectedLogTypeFilters,
     setSelectedLogTypeFilters,

@@ -51,8 +51,7 @@ export class Table extends ex.Table {
     });
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("tables can only be bound by tfaws.Function for now");
     }
@@ -105,11 +104,11 @@ export class Table extends ex.Table {
     host.addEnvironment(this.primaryKeyEnvName(), this.primaryKey);
     host.addEnvironment(this.columnsEnvName(), JSON.stringify(this.columns));
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return core.InflightClient.for(
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,

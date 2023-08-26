@@ -6,9 +6,8 @@ import { ISimulatorResource } from "./resource";
 import { TopicSchema, TOPIC_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { IInflightHost, Resource } from "../std";
+import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 
 /**
@@ -27,7 +26,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
-      this.node.scope!, // ok since we're not a tree root
+      this,
       `${this.node.id}-OnMessageHandler-${hash}`,
       inflight,
       join(__dirname, "topic.onmessage.inflight.js"),
@@ -35,11 +34,13 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
     );
 
     const fn = Function._newFunction(
-      this.node.scope!, // ok since we're not a tree root
+      this,
       `${this.node.id}-OnMessage-${hash}`,
       functionHandler,
       props
     );
+    Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
+    Node.of(fn).title = "onMessage()";
 
     new EventMapping(this, `${this.node.id}-TopicEventMapping-${hash}`, {
       subscriber: fn,
@@ -47,23 +48,22 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
       subscriptionProps: {},
     });
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "on_message",
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: "onMessage()",
     });
 
     return fn;
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
   }
 

@@ -1,17 +1,16 @@
-use std::cell::RefCell;
 use std::fmt::{Debug, Display};
 use std::hash::{Hash, Hasher};
 use std::sync::atomic::{AtomicUsize, Ordering};
 
-use derivative::Derivative;
 use indexmap::{Equivalent, IndexMap, IndexSet};
 use itertools::Itertools;
 
 use crate::diagnostic::WingSpan;
-use crate::type_check::symbol_env::SymbolEnv;
+
 use crate::type_check::CLOSURE_CLASS_HANDLE_METHOD;
 
 static EXPR_COUNTER: AtomicUsize = AtomicUsize::new(0);
+static SCOPE_COUNTER: AtomicUsize = AtomicUsize::new(0);
 
 #[derive(Debug, Eq, Clone)]
 pub struct Symbol {
@@ -128,6 +127,7 @@ pub struct TypeAnnotation {
 
 #[derive(Debug, Clone)]
 pub enum TypeAnnotationKind {
+	Inferred,
 	Number,
 	String,
 	Bool,
@@ -196,6 +196,7 @@ impl Display for UserDefinedType {
 impl Display for TypeAnnotationKind {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
+			TypeAnnotationKind::Inferred => write!(f, "inferred"),
 			TypeAnnotationKind::Number => write!(f, "num"),
 			TypeAnnotationKind::String => write!(f, "str"),
 			TypeAnnotationKind::Bool => write!(f, "bool"),
@@ -269,6 +270,7 @@ pub struct FunctionParameter {
 	pub name: Symbol,
 	pub type_annotation: TypeAnnotation,
 	pub reassignable: bool,
+	pub variadic: bool,
 }
 
 #[derive(Debug)]
@@ -302,7 +304,6 @@ pub struct Stmt {
 #[derive(Debug)]
 pub enum UtilityFunctions {
 	Log,
-	Panic,
 	Throw,
 	Assert,
 }
@@ -310,12 +311,7 @@ pub enum UtilityFunctions {
 impl UtilityFunctions {
 	/// Returns all utility functions.
 	pub fn all() -> Vec<UtilityFunctions> {
-		vec![
-			UtilityFunctions::Log,
-			UtilityFunctions::Panic,
-			UtilityFunctions::Throw,
-			UtilityFunctions::Assert,
-		]
+		vec![UtilityFunctions::Log, UtilityFunctions::Throw, UtilityFunctions::Assert]
 	}
 }
 
@@ -323,7 +319,6 @@ impl Display for UtilityFunctions {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
 			UtilityFunctions::Log => write!(f, "log"),
-			UtilityFunctions::Panic => write!(f, "panic"),
 			UtilityFunctions::Throw => write!(f, "throw"),
 			UtilityFunctions::Assert => write!(f, "assert"),
 		}
@@ -333,6 +328,14 @@ impl Display for UtilityFunctions {
 #[derive(Debug)]
 pub struct ElifBlock {
 	pub condition: Expr,
+	pub statements: Scope,
+}
+
+#[derive(Debug)]
+pub struct ElifLetBlock {
+	pub reassignable: bool,
+	pub var_name: Symbol,
+	pub value: Expr,
 	pub statements: Scope,
 }
 
@@ -419,9 +422,16 @@ pub struct Interface {
 }
 
 #[derive(Debug)]
+pub enum BringSource {
+	BuiltinModule(Symbol),
+	JsiiModule(Symbol),
+	WingFile(Symbol),
+}
+
+#[derive(Debug)]
 pub enum StmtKind {
 	Bring {
-		module_name: Symbol, // Reference?
+		source: BringSource,
 		identifier: Option<Symbol>,
 	},
 	SuperConstructor {
@@ -443,9 +453,11 @@ pub enum StmtKind {
 		statements: Scope,
 	},
 	IfLet {
+		reassignable: bool,
 		var_name: Symbol,
 		value: Expr,
 		statements: Scope,
+		elif_statements: Vec<ElifLetBlock>,
 		else_statements: Option<Scope>,
 	},
 	If {
@@ -459,7 +471,7 @@ pub enum StmtKind {
 	Return(Option<Expr>),
 	Expression(Expr),
 	Assignment {
-		variable: Expr,
+		variable: Reference,
 		value: Expr,
 	},
 	Scope(Scope),
@@ -505,12 +517,7 @@ pub struct StructField {
 
 #[derive(Debug)]
 pub enum ExprKind {
-	New {
-		class: Box<Expr>, // expression must be a reference to a user defined type
-		obj_id: Option<Box<Expr>>,
-		obj_scope: Option<Box<Expr>>,
-		arg_list: ArgList,
-	},
+	New(NewExpr),
 	Literal(Literal),
 	Range {
 		start: Box<Expr>,
@@ -519,7 +526,7 @@ pub enum ExprKind {
 	},
 	Reference(Reference),
 	Call {
-		callee: Box<Expr>,
+		callee: CalleeKind,
 		arg_list: ArgList,
 	},
 	Unary {
@@ -543,12 +550,12 @@ pub enum ExprKind {
 		fields: IndexMap<Symbol, Expr>,
 	},
 	JsonMapLiteral {
-		fields: IndexMap<String, Expr>,
+		fields: IndexMap<Symbol, Expr>,
 	},
 	MapLiteral {
 		type_: Option<TypeAnnotation>,
 		// We're using a map implementation with reliable iteration to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
-		fields: IndexMap<String, Expr>,
+		fields: IndexMap<Symbol, Expr>,
 	},
 	SetLiteral {
 		type_: Option<TypeAnnotation>,
@@ -563,9 +570,31 @@ pub enum ExprKind {
 }
 
 #[derive(Debug)]
+pub enum CalleeKind {
+	/// The callee is any expression
+	Expr(Box<Expr>),
+	/// The callee is a method in our super class
+	SuperCall(Symbol),
+}
+
+impl Spanned for CalleeKind {
+	fn span(&self) -> WingSpan {
+		match self {
+			CalleeKind::Expr(e) => e.span.clone(),
+			CalleeKind::SuperCall(method) => method.span(),
+		}
+	}
+}
+
+/// File-unique identifier for each expression. This is an index of the Types.expr_types vec.
+/// After type checking, each expression will have a type in that vec.
+pub type ExprId = usize;
+
+// do not derive Default, we want to be explicit about generating ids
+#[derive(Debug)]
 pub struct Expr {
 	/// An identifier that is unique among all expressions in the AST.
-	pub id: usize,
+	pub id: ExprId,
 	/// The kind of expression.
 	pub kind: ExprKind,
 	/// The span of the expression.
@@ -575,17 +604,24 @@ pub struct Expr {
 impl Expr {
 	pub fn new(kind: ExprKind, span: WingSpan) -> Self {
 		let id = EXPR_COUNTER.fetch_add(1, Ordering::SeqCst);
-
 		Self { id, kind, span }
 	}
 
-	/// Returns true if the expression is a reference to a type.
+	/// Returns the user defined type if the expression is a reference to a type.
 	pub fn as_type_reference(&self) -> Option<&UserDefinedType> {
 		match &self.kind {
 			ExprKind::Reference(Reference::TypeReference(t)) => Some(t),
 			_ => None,
 		}
 	}
+}
+
+#[derive(Debug)]
+pub struct NewExpr {
+	pub class: Box<Expr>, // expression must be a reference to a user defined type
+	pub obj_id: Option<Box<Expr>>,
+	pub obj_scope: Option<Box<Expr>>,
+	pub arg_list: ArgList,
 }
 
 #[derive(Debug)]
@@ -625,28 +661,29 @@ pub enum InterpolatedStringPart {
 	Expr(Expr),
 }
 
-#[derive(Derivative)]
-#[derivative(Debug)]
+pub type ScopeId = usize;
+
+// do not derive Default, as we want to explicitly generate IDs
+#[derive(Debug)]
 pub struct Scope {
+	/// An identifier that is unique among all scopes in the AST.
+	pub id: ScopeId,
 	pub statements: Vec<Stmt>,
 	pub span: WingSpan,
-	#[derivative(Debug = "ignore")]
-	pub env: RefCell<Option<SymbolEnv>>, // None after parsing, set to Some during type checking phase
 }
 
 impl Scope {
-	pub fn new(statements: Vec<Stmt>, span: WingSpan) -> Self {
+	pub fn empty() -> Self {
 		Self {
-			statements,
-			span,
-			env: RefCell::new(None),
+			id: SCOPE_COUNTER.fetch_add(1, Ordering::SeqCst),
+			statements: vec![],
+			span: WingSpan::default(),
 		}
 	}
 
-	pub fn set_env(&self, new_env: SymbolEnv) {
-		let mut env = self.env.borrow_mut();
-		assert!((*env).is_none());
-		*env = Some(new_env);
+	pub fn new(statements: Vec<Stmt>, span: WingSpan) -> Self {
+		let id = SCOPE_COUNTER.fetch_add(1, Ordering::SeqCst);
+		Self { id, statements, span }
 	}
 }
 
@@ -691,6 +728,21 @@ pub enum Reference {
 	TypeReference(UserDefinedType),
 	/// A reference to a member inside a type: `MyType.x` or `MyEnum.A`
 	TypeMember { typeobject: Box<Expr>, property: Symbol },
+}
+
+impl Spanned for Reference {
+	fn span(&self) -> WingSpan {
+		match self {
+			Reference::Identifier(symb) => symb.span(),
+			Reference::InstanceMember {
+				object,
+				property,
+				optional_accessor: _,
+			} => object.span().merge(&property.span()),
+			Reference::TypeReference(type_) => type_.span(),
+			Reference::TypeMember { typeobject, property } => typeobject.span().merge(&property.span()),
+		}
+	}
 }
 
 impl Display for Reference {

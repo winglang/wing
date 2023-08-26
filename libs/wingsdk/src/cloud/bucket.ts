@@ -1,9 +1,11 @@
+import * as fs from "fs";
+import { isAbsolute, resolve } from "path";
 import { Construct } from "constructs";
 import { Topic } from "./topic";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Json, IResource, Resource } from "../std";
+import { Json, IResource, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Bucket`.
@@ -11,7 +13,7 @@ import { Json, IResource, Resource } from "../std";
 export const BUCKET_FQN = fqnForType("cloud.Bucket");
 
 /**
- * Properties for `Bucket`.
+ * Options for `Bucket`.
  */
 export interface BucketProps {
   /**
@@ -45,10 +47,15 @@ export abstract class Bucket extends Resource {
   constructor(scope: Construct, id: string, props: BucketProps = {}) {
     super(scope, id);
 
-    this.display.title = "Bucket";
-    this.display.description = "A cloud object store";
+    Node.of(this).title = "Bucket";
+    Node.of(this).description = "A cloud object store";
 
-    this._addInflightOps(
+    props;
+  }
+
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [
       BucketInflightMethods.DELETE,
       BucketInflightMethods.GET,
       BucketInflightMethods.GET_JSON,
@@ -59,10 +66,8 @@ export abstract class Bucket extends Resource {
       BucketInflightMethods.EXISTS,
       BucketInflightMethods.TRY_GET,
       BucketInflightMethods.TRY_GET_JSON,
-      BucketInflightMethods.TRY_DELETE
-    );
-
-    props;
+      BucketInflightMethods.TRY_DELETE,
+    ];
   }
 
   /**
@@ -74,29 +79,56 @@ export abstract class Bucket extends Resource {
   public abstract addObject(key: string, body: string): void;
 
   /**
-   * creates a topic for subscribing to notification events
+   * Add a file to the bucket from system folder
+   *
+   * @param {string} key - The key or name to associate with the file.
+   * @param {string} path - The path to the file on the local system.
+   * @param {BufferEncoding} encoding - The encoding to use when reading the file. Defaults to "utf-8".
+   */
+
+  public addFile(
+    key: string,
+    path: string,
+    encoding: BufferEncoding = "utf-8"
+  ): void {
+    const app = App.of(this);
+    if (isAbsolute(path)) {
+      path = path;
+    } else {
+      if (!app.entrypointDir) {
+        throw new Error("Missing environment variable: WING_SOURCE_DIR");
+      }
+      path = resolve(app.entrypointDir, path);
+    }
+    const data = fs.readFileSync(path, { encoding: encoding });
+
+    this.addObject(key, data);
+  }
+
+  /**
+   * Creates a topic for subscribing to notification events
    * @param actionType
    * @returns the created topi
    */
   protected createTopic(actionType: BucketEventType): Topic {
     const topic = Topic._newTopic(
       this,
-      `${this.node.id}-on_${actionType.toLowerCase()}`
+      `${this.node.id}-${actionType.toLowerCase()}`
     );
 
     this.node.addDependency(topic);
 
-    Resource.addConnection({
-      from: this,
-      to: topic,
-      relationship: actionType,
+    Node.of(this).addConnection({
+      source: this,
+      target: topic,
+      name: `${actionType}()`,
     });
 
     return topic;
   }
 
   /**
-   * gets topic form the topics map, or creates if not exists
+   * Gets topic form the topics map, or creates if not exists
    * @param actionType
    * @returns
    */
@@ -108,7 +140,7 @@ export abstract class Bucket extends Resource {
   }
 
   /**
-   * resolves the path to the bucket.onevent.inflight file
+   * Resolves the path to the bucket.onevent.inflight file
    */
   protected eventHandlerLocation(): string {
     throw new Error(
@@ -117,7 +149,7 @@ export abstract class Bucket extends Resource {
   }
 
   /**
-   * creates an inflight handler from inflight code
+   * Creates an inflight handler from inflight code
    * @param eventType
    * @param inflight
    * @returns
@@ -128,7 +160,7 @@ export abstract class Bucket extends Resource {
   ): IResource {
     const hash = inflight.node.addr.slice(-8);
     return convertBetweenHandlers(
-      this.node.scope!, // ok since we're not a tree root
+      this,
       `${this.getTopic(eventType).node.id}-eventHandler-${hash}`,
       inflight,
       // since uses __dirname should be specified under the target directory
@@ -139,7 +171,7 @@ export abstract class Bucket extends Resource {
   }
 
   /**
-   * creates a bucket event notifier
+   * Creates a bucket event notifier
    * @param eventNames the events to subscribe the inflight function to
    * @param inflight the code to run upon event
    * @param opts
@@ -316,32 +348,24 @@ export interface IBucketClient {
 }
 
 /**
- * on create event options
+ * `onCreate` event options
  */
-export interface BucketOnCreateProps {
-  /* elided */
-}
+export interface BucketOnCreateProps {}
 
 /**
- * on delete event options
+ * `onDelete` event options
  */
-export interface BucketOnDeleteProps {
-  /* elided */
-}
+export interface BucketOnDeleteProps {}
 
 /**
- * on update event options
+ * `onUpdate` event options
  */
-export interface BucketOnUpdateProps {
-  /* elided */
-}
+export interface BucketOnUpdateProps {}
 
 /**
- * on any event options
+ * `onEvent` options
  */
-export interface BucketOnEventProps {
-  /* elided */
-}
+export interface BucketOnEventProps {}
 
 /**
  * A resource with an inflight "handle" method that can be passed to
@@ -365,35 +389,35 @@ export interface IBucketEventHandlerClient {
 }
 
 /**
- * on_event notification payload- will be in use after solving issue: https://github.com/winglang/wing/issues/1927
+ * On_event notification payload- will be in use after solving issue: https://github.com/winglang/wing/issues/1927
  */
 export interface BucketEvent {
   /**
-   * the bucket key that triggered the event
+   * The bucket key that triggered the event
    */
   readonly key: string;
   /**
-   * type of event
+   * Type of event
    */
   readonly type: BucketEventType;
 }
 
 /**
- * bucket events to subscribe to
+ * Bucket events to subscribe to
  */
 export enum BucketEventType {
   /**
-   * create
+   * Create
    */
-  CREATE = "CREATE",
+  CREATE = "onCreate",
   /**
-   * delete
+   * Delete
    */
-  DELETE = "DELETE",
+  DELETE = "onDelete",
   /**
-   * update
+   * Update
    */
-  UPDATE = "UPDATE",
+  UPDATE = "onUpdate",
 }
 
 /**

@@ -1,4 +1,4 @@
-import { mergeRouters } from "../utils/createRouter.js";
+import { mergeRouters, middleware } from "../utils/createRouter.js";
 
 import { createApiRouter } from "./api.js";
 import { createAppRouter } from "./app.js";
@@ -11,8 +11,8 @@ import { createRedisRouter } from "./redis.js";
 import { createTableRouter } from "./table.js";
 import { createTestRouter } from "./test.js";
 import { createTopicRouter } from "./topic.js";
-import { createWebsiteRouter } from "./website.js";
 import { createUpdaterRouter } from "./updater.js";
+import { createWebsiteRouter } from "./website.js";
 
 export const mergeAllRouters = () => {
   const app = createAppRouter();

@@ -1,0 +1,136 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`create an OnDeploy 1`] = `
+{
+  ".wing/function_c83fbf14.js": "exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle() { console.log(\\"super duper success\\"); }
+};
+})())({
+
+})).handle(event);
+};",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_on_deploy/Function",
+        "props": {
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/function_c83fbf14.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "wingsdk.cloud.Function",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_on_deploy",
+        "props": {
+          "functionHandle": "\${root/my_on_deploy/Function#attrs.handle}",
+        },
+        "type": "wingsdk.cloud.OnDeploy",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "Handler": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.2.69",
+          },
+          "display": {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
+          "id": "Handler",
+          "path": "root/Handler",
+        },
+        "cloud.TestRunner": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.2.69",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
+        "my_on_deploy": {
+          "children": {
+            "Function": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.2.69",
+              },
+              "display": {
+                "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
+                "title": "Function",
+              },
+              "id": "Function",
+              "path": "root/my_on_deploy/Function",
+            },
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.2.69",
+          },
+          "display": {
+            "description": "Run code during the app's deployment.",
+            "title": "OnDeploy",
+          },
+          "id": "my_on_deploy",
+          "path": "root/my_on_deploy",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.2.69",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
+exports[`create an OnDeploy 2`] = `
+[
+  "wingsdk.cloud.TestRunner created.",
+  "wingsdk.cloud.Function created.",
+  "super duper success",
+  "Invoke (payload=\\"\\").",
+  "OnDeploy invoked.",
+  "wingsdk.cloud.OnDeploy created.",
+  "wingsdk.cloud.OnDeploy deleted.",
+  "wingsdk.cloud.Function deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
+]
+`;

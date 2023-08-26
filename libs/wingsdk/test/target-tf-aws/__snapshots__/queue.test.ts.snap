@@ -1,20 +1,20 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`default queue behavior 1`] = `
-"{
-  \\"output\\": {
-    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
-      \\"value\\": \\"[]\\"
-    }
+{
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
-  \\"resource\\": {
-    \\"aws_sqs_queue\\": {
-      \\"Queue\\": {
-        \\"name\\": \\"Queue-c822c726\\"
-      }
-    }
-  }
-}"
+  "resource": {
+    "aws_sqs_queue": {
+      "Queue": {
+        "name": "Queue-c822c726",
+      },
+    },
+  },
+}
 `;
 
 exports[`default queue behavior 2`] = `
@@ -26,9 +26,6 @@ exports[`default queue behavior 2`] = `
           "Default": {
             "children": {
               "Queue": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -41,7 +38,7 @@ exports[`default queue behavior 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A distributed message queue",
@@ -59,9 +56,6 @@ exports[`default queue behavior 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -74,7 +68,7 @@ exports[`default queue behavior 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -87,7 +81,7 @@ exports[`default queue behavior 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",
@@ -121,20 +115,20 @@ exports[`default queue behavior 2`] = `
 `;
 
 exports[`queue name valid 1`] = `
-"{
-  \\"output\\": {
-    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
-      \\"value\\": \\"[]\\"
-    }
+{
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
-  \\"resource\\": {
-    \\"aws_sqs_queue\\": {
-      \\"The-Incredible_Queue-01\\": {
-        \\"name\\": \\"The-Incredible_Queue-01-c8d1a14d\\"
-      }
-    }
-  }
-}"
+  "resource": {
+    "aws_sqs_queue": {
+      "The-Incredible_Queue-01": {
+        "name": "The-Incredible_Queue-01-c8d1a14d",
+      },
+    },
+  },
+}
 `;
 
 exports[`queue name valid 2`] = `
@@ -146,9 +140,6 @@ exports[`queue name valid 2`] = `
           "Default": {
             "children": {
               "The-Incredible_Queue-01": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -161,7 +152,7 @@ exports[`queue name valid 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A distributed message queue",
@@ -179,9 +170,6 @@ exports[`queue name valid 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -194,7 +182,7 @@ exports[`queue name valid 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -207,7 +195,7 @@ exports[`queue name valid 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",
@@ -240,81 +228,84 @@ exports[`queue name valid 2`] = `
 }
 `;
 
-exports[`queue with a consumer function 1`] = `"new (require(\\"[REDACTED]/wingsdk/src/shared-aws/function.inflight\\")).FunctionClient(process.env[\\"FUNCTION_NAME_75ee4dfb\\"])"`;
+exports[`queue with a consumer function 1`] = `"new (require(\\"[REDACTED]/wingsdk/src/shared-aws/function.inflight\\")).FunctionClient(process.env[\\"FUNCTION_NAME_75ee4dfb\\"], \\"root/Default/Queue-SetConsumer-c5395e41\\")"`;
 
 exports[`queue with a consumer function 2`] = `
-"{
-  \\"output\\": {
-    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
-      \\"value\\": \\"[]\\"
-    }
+{
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
-  \\"resource\\": {
-    \\"aws_iam_role\\": {
-      \\"Queue-SetConsumer-c5395e41_IamRole_75E61A87\\": {
-        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
-      }
+  "resource": {
+    "aws_iam_role": {
+      "Queue-SetConsumer-c5395e41_IamRole_75E61A87": {
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
     },
-    \\"aws_iam_role_policy\\": {
-      \\"Queue-SetConsumer-c5395e41_IamRolePolicy_489AB5A9\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"sqs:ReceiveMessage\\\\\\",\\\\\\"sqs:ChangeMessageVisibility\\\\\\",\\\\\\"sqs:GetQueueUrl\\\\\\",\\\\\\"sqs:DeleteMessage\\\\\\",\\\\\\"sqs:GetQueueAttributes\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_sqs_queue.Queue.arn}\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.Queue-SetConsumer-c5395e41_IamRole_75E61A87.name}\\"
-      }
+    "aws_iam_role_policy": {
+      "Queue-SetConsumer-c5395e41_IamRolePolicy_489AB5A9": {
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":[\\"\${aws_sqs_queue.Queue.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.Queue-SetConsumer-c5395e41_IamRole_75E61A87.name}",
+      },
     },
-    \\"aws_iam_role_policy_attachment\\": {
-      \\"Queue-SetConsumer-c5395e41_IamRolePolicyAttachment_FD666537\\": {
-        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.Queue-SetConsumer-c5395e41_IamRole_75E61A87.name}\\"
-      }
+    "aws_iam_role_policy_attachment": {
+      "Queue-SetConsumer-c5395e41_IamRolePolicyAttachment_FD666537": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Queue-SetConsumer-c5395e41_IamRole_75E61A87.name}",
+      },
     },
-    \\"aws_lambda_event_source_mapping\\": {
-      \\"Queue_EventSourceMapping_8332F7DC\\": {
-        \\"batch_size\\": 1,
-        \\"event_source_arn\\": \\"\${aws_sqs_queue.Queue.arn}\\",
-        \\"function_name\\": \\"\${aws_lambda_function.Queue-SetConsumer-c5395e41.function_name}\\"
-      }
+    "aws_lambda_event_source_mapping": {
+      "Queue_EventSourceMapping_8332F7DC": {
+        "batch_size": 1,
+        "event_source_arn": "\${aws_sqs_queue.Queue.arn}",
+        "function_name": "\${aws_lambda_function.Queue-SetConsumer-c5395e41.function_name}",
+      },
     },
-    \\"aws_lambda_function\\": {
-      \\"Queue-SetConsumer-c5395e41\\": {
-        \\"environment\\": {
-          \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"Queue-SetConsumer-c5395e41-c80c3bf7\\"
-          }
+    "aws_lambda_function": {
+      "Queue-SetConsumer-c5395e41": {
+        "architectures": [
+          "arm64",
+        ],
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Queue-SetConsumer-c5395e41-c80c3bf7",
+          },
         },
-        \\"function_name\\": \\"Queue-SetConsumer-c5395e41-c80c3bf7\\",
-        \\"handler\\": \\"index.handler\\",
-        \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.Queue-SetConsumer-c5395e41_IamRole_75E61A87.arn}\\",
-        \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.Queue-SetConsumer-c5395e41_S3Object_D8D7B631.key}\\",
-        \\"timeout\\": 30,
-        \\"vpc_config\\": {
-          \\"security_group_ids\\": [],
-          \\"subnet_ids\\": []
-        }
-      }
+        "function_name": "Queue-SetConsumer-c5395e41-c80c3bf7",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.Queue-SetConsumer-c5395e41_IamRole_75E61A87.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Queue-SetConsumer-c5395e41_S3Object_D8D7B631.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
     },
-    \\"aws_s3_bucket\\": {
-      \\"Code\\": {
-        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
-      }
+    "aws_s3_bucket": {
+      "Code": {
+        "bucket_prefix": "code-c84a50b1-",
+      },
     },
-    \\"aws_s3_object\\": {
-      \\"Queue-SetConsumer-c5395e41_S3Object_D8D7B631\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"key\\": \\"<key>\\",
-        \\"source\\": \\"<source>\\"
-      }
+    "aws_s3_object": {
+      "Queue-SetConsumer-c5395e41_S3Object_D8D7B631": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
     },
-    \\"aws_sqs_queue\\": {
-      \\"Queue\\": {
-        \\"name\\": \\"Queue-c822c726\\",
-        \\"visibility_timeout_seconds\\": 30
-      }
-    }
-  }
-}"
+    "aws_sqs_queue": {
+      "Queue": {
+        "name": "Queue-c822c726",
+        "visibility_timeout_seconds": 30,
+      },
+    },
+  },
+}
 `;
 
 exports[`queue with a consumer function 3`] = `
@@ -334,25 +325,9 @@ exports[`queue with a consumer function 3`] = `
                 "path": "root/Default/Code",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "handle",
-                      "resource": "root/Default/Queue-SetConsumer-c5395e41",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init",
-                      "resource": "root/Default/Queue-SetConsumer-c5395e41",
-                    },
-                  ],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -363,16 +338,6 @@ exports[`queue with a consumer function 3`] = `
                 "path": "root/Default/Handler",
               },
               "Queue": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "consumer",
-                      "resource": "root/Default/Queue-SetConsumer-c5395e41",
-                    },
-                  ],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -393,7 +358,7 @@ exports[`queue with a consumer function 3`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A distributed message queue",
@@ -403,28 +368,6 @@ exports[`queue with a consumer function 3`] = `
                 "path": "root/Default/Queue",
               },
               "Queue-SetConsumer-c5395e41": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "handle",
-                      "resource": "root/Default/Handler",
-                    },
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init",
-                      "resource": "root/Default/Handler",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "consumer",
-                      "resource": "root/Default/Queue",
-                    },
-                  ],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -477,7 +420,7 @@ exports[`queue with a consumer function 3`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -487,12 +430,9 @@ exports[`queue with a consumer function 3`] = `
                 "path": "root/Default/Queue-SetConsumer-c5395e41",
               },
               "Queue-SetConsumerHandler-c5395e41": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "hidden": true,
@@ -509,9 +449,6 @@ exports[`queue with a consumer function 3`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -524,7 +461,7 @@ exports[`queue with a consumer function 3`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -537,7 +474,7 @@ exports[`queue with a consumer function 3`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",
@@ -571,21 +508,21 @@ exports[`queue with a consumer function 3`] = `
 `;
 
 exports[`queue with custom retention 1`] = `
-"{
-  \\"output\\": {
-    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
-      \\"value\\": \\"[]\\"
-    }
+{
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
-  \\"resource\\": {
-    \\"aws_sqs_queue\\": {
-      \\"Queue\\": {
-        \\"message_retention_seconds\\": 1800,
-        \\"name\\": \\"Queue-c822c726\\"
-      }
-    }
-  }
-}"
+  "resource": {
+    "aws_sqs_queue": {
+      "Queue": {
+        "message_retention_seconds": 1800,
+        "name": "Queue-c822c726",
+      },
+    },
+  },
+}
 `;
 
 exports[`queue with custom retention 2`] = `
@@ -597,9 +534,6 @@ exports[`queue with custom retention 2`] = `
           "Default": {
             "children": {
               "Queue": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -612,7 +546,7 @@ exports[`queue with custom retention 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A distributed message queue",
@@ -630,9 +564,6 @@ exports[`queue with custom retention 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -645,7 +576,7 @@ exports[`queue with custom retention 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -658,7 +589,7 @@ exports[`queue with custom retention 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",
@@ -692,21 +623,21 @@ exports[`queue with custom retention 2`] = `
 `;
 
 exports[`queue with custom timeout 1`] = `
-"{
-  \\"output\\": {
-    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
-      \\"value\\": \\"[]\\"
-    }
+{
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
-  \\"resource\\": {
-    \\"aws_sqs_queue\\": {
-      \\"Queue\\": {
-        \\"name\\": \\"Queue-c822c726\\",
-        \\"visibility_timeout_seconds\\": 30
-      }
-    }
-  }
-}"
+  "resource": {
+    "aws_sqs_queue": {
+      "Queue": {
+        "name": "Queue-c822c726",
+        "visibility_timeout_seconds": 30,
+      },
+    },
+  },
+}
 `;
 
 exports[`queue with custom timeout 2`] = `
@@ -718,9 +649,6 @@ exports[`queue with custom timeout 2`] = `
           "Default": {
             "children": {
               "Queue": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -733,7 +661,7 @@ exports[`queue with custom timeout 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A distributed message queue",
@@ -751,9 +679,6 @@ exports[`queue with custom timeout 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -766,7 +691,7 @@ exports[`queue with custom timeout 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -779,7 +704,7 @@ exports[`queue with custom timeout 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",
@@ -813,20 +738,20 @@ exports[`queue with custom timeout 2`] = `
 `;
 
 exports[`replace invalid character from queue name 1`] = `
-"{
-  \\"output\\": {
-    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
-      \\"value\\": \\"[]\\"
-    }
+{
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
-  \\"resource\\": {
-    \\"aws_sqs_queue\\": {
-      \\"TheIncredibleQueue\\": {
-        \\"name\\": \\"The-Incredible-Queue-c8305287\\"
-      }
-    }
-  }
-}"
+  "resource": {
+    "aws_sqs_queue": {
+      "TheIncredibleQueue": {
+        "name": "The-Incredible-Queue-c8305287",
+      },
+    },
+  },
+}
 `;
 
 exports[`replace invalid character from queue name 2`] = `
@@ -838,9 +763,6 @@ exports[`replace invalid character from queue name 2`] = `
           "Default": {
             "children": {
               "The*Incredible$Queue": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -853,7 +775,7 @@ exports[`replace invalid character from queue name 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A distributed message queue",
@@ -871,9 +793,6 @@ exports[`replace invalid character from queue name 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -886,7 +805,7 @@ exports[`replace invalid character from queue name 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -899,7 +818,7 @@ exports[`replace invalid character from queue name 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",

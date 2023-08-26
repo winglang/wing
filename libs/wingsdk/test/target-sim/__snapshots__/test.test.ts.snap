@@ -19,6 +19,10 @@ async handle(event) {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -49,12 +53,9 @@ async handle(event) {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "An inflight resource",
@@ -65,12 +66,9 @@ async handle(event) {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -81,17 +79,11 @@ async handle(event) {
           "path": "root/cloud.TestRunner",
         },
         "test:my_test": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "children": {
             "Handler": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -103,7 +95,7 @@ async handle(event) {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "A cloud unit test.",
@@ -115,7 +107,7 @@ async handle(event) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.69",
       },
       "id": "root",
       "path": "root",

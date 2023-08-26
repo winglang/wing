@@ -1,6 +1,6 @@
 # [resource.w](../../../../../examples/tests/valid/resource.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $bucket, $res, $res_foo }) {
   class $Closure1 {
@@ -12,9 +12,9 @@ module.exports = function({ $bucket, $res, $res_foo }) {
     async handle() {
       const s = (await $res.myMethod());
       {console.log(s)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: s == \"counter is: 201\"")})((s === "counter is: 201"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: bucket.list().length == 1")})(((await $bucket.list()).length === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: res.foo.inflightField == 123")})(($res_foo.inflightField === 123))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: s == \"counter is: 201\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s,"counter is: 201")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: bucket.list().length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $bucket.list()).length,1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: res.foo.inflightField == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($res_foo.inflightField,123)))};
       (await $res.testTypeAccess());
     }
   }
@@ -23,7 +23,7 @@ module.exports = function({ $bucket, $res, $res_foo }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $__parent_this_2_b }) {
   class $Closure2 {
@@ -41,7 +41,7 @@ module.exports = function({ $__parent_this_2_b }) {
 
 ```
 
-## inflight.$Closure3.js
+## inflight.$Closure3-1.js
 ```js
 module.exports = function({ $__parent_this_3_b }) {
   class $Closure3 {
@@ -59,7 +59,7 @@ module.exports = function({ $__parent_this_3_b }) {
 
 ```
 
-## inflight.$Closure4.js
+## inflight.$Closure4-1.js
 ```js
 module.exports = function({ $__parent_this_4_q }) {
   class $Closure4 {
@@ -77,7 +77,7 @@ module.exports = function({ $__parent_this_4_q }) {
 
 ```
 
-## inflight.$Closure5.js
+## inflight.$Closure5-1.js
 ```js
 module.exports = function({ $bigOlPublisher }) {
   class $Closure5 {
@@ -96,7 +96,7 @@ module.exports = function({ $bigOlPublisher }) {
 
 ```
 
-## inflight.Bar.js
+## inflight.Bar-1.js
 ```js
 module.exports = function({ $Foo, $MyEnum }) {
   class Bar {
@@ -116,9 +116,9 @@ module.exports = function({ $Foo, $MyEnum }) {
     }
     async testTypeAccess() {
       if (true) {
-        {((cond) => {if (!cond) throw new Error("assertion failed: Bar.barStatic() == \"bar static\"")})(((await Bar.barStatic()) === "bar static"))};
-        {((cond) => {if (!cond) throw new Error("assertion failed: Foo.fooStatic() == \"foo static\"")})(((await $Foo.fooStatic()) === "foo static"))};
-        {((cond) => {if (!cond) throw new Error("assertion failed: this.e == MyEnum.B")})((this.$this_e === $MyEnum.B))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: Bar.barStatic() == \"bar static\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await Bar.barStatic()),"bar static")))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: Foo.fooStatic() == \"foo static\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $Foo.fooStatic()),"foo static")))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: this.e == MyEnum.B")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.$this_e,$MyEnum.B)))};
       }
     }
   }
@@ -127,7 +127,7 @@ module.exports = function({ $Foo, $MyEnum }) {
 
 ```
 
-## inflight.BigPublisher.js
+## inflight.BigPublisher-1.js
 ```js
 module.exports = function({  }) {
   class BigPublisher {
@@ -151,7 +151,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Dummy.js
+## inflight.Dummy-1.js
 ```js
 module.exports = function({  }) {
   class Dummy {
@@ -163,7 +163,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Foo.js
+## inflight.Foo-1.js
 ```js
 module.exports = function({  }) {
   class Foo {
@@ -190,7 +190,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.ScopeAndIdTestClass.js
+## inflight.ScopeAndIdTestClass-1.js
 ```js
 module.exports = function({  }) {
   class ScopeAndIdTestClass {
@@ -252,11 +252,11 @@ module.exports = function({  }) {
       }
     },
     "aws_iam_role": {
-      "BigPublisher_b2_b2-on_create-OnMessage-a6a70fca_IamRole_ADCAC8AB": {
+      "BigPublisher_b2_b2-oncreate-OnMessage-59543b60_IamRole_C27B12C3": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca/IamRole",
-            "uniqueId": "BigPublisher_b2_b2-on_create-OnMessage-a6a70fca_IamRole_ADCAC8AB"
+            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/IamRole",
+            "uniqueId": "BigPublisher_b2_b2-oncreate-OnMessage-59543b60_IamRole_C27B12C3"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -299,15 +299,15 @@ module.exports = function({  }) {
       }
     },
     "aws_iam_role_policy": {
-      "BigPublisher_b2_b2-on_create-OnMessage-a6a70fca_IamRolePolicy_46BA1064": {
+      "BigPublisher_b2_b2-oncreate-OnMessage-59543b60_IamRolePolicy_6657EAFB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca/IamRolePolicy",
-            "uniqueId": "BigPublisher_b2_b2-on_create-OnMessage-a6a70fca_IamRolePolicy_46BA1064"
+            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/IamRolePolicy",
+            "uniqueId": "BigPublisher_b2_b2-oncreate-OnMessage-59543b60_IamRolePolicy_6657EAFB"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.BigPublisher_cloudQueue_2EE8871A.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.BigPublisher_b2_b2-on_create-OnMessage-a6a70fca_IamRole_ADCAC8AB.name}"
+        "role": "${aws_iam_role.BigPublisher_b2_b2-oncreate-OnMessage-59543b60_IamRole_C27B12C3.name}"
       },
       "BigPublisher_cloudQueue-SetConsumer-c50bc9ef_IamRolePolicy_6AF2C97F": {
         "//": {
@@ -351,15 +351,15 @@ module.exports = function({  }) {
       }
     },
     "aws_iam_role_policy_attachment": {
-      "BigPublisher_b2_b2-on_create-OnMessage-a6a70fca_IamRolePolicyAttachment_03D41CF4": {
+      "BigPublisher_b2_b2-oncreate-OnMessage-59543b60_IamRolePolicyAttachment_53F63590": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca/IamRolePolicyAttachment",
-            "uniqueId": "BigPublisher_b2_b2-on_create-OnMessage-a6a70fca_IamRolePolicyAttachment_03D41CF4"
+            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/IamRolePolicyAttachment",
+            "uniqueId": "BigPublisher_b2_b2-oncreate-OnMessage-59543b60_IamRolePolicyAttachment_53F63590"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.BigPublisher_b2_b2-on_create-OnMessage-a6a70fca_IamRole_ADCAC8AB.name}"
+        "role": "${aws_iam_role.BigPublisher_b2_b2-oncreate-OnMessage-59543b60_IamRole_C27B12C3.name}"
       },
       "BigPublisher_cloudQueue-SetConsumer-c50bc9ef_IamRolePolicyAttachment_FF25AF25": {
         "//": {
@@ -416,27 +416,30 @@ module.exports = function({  }) {
       }
     },
     "aws_lambda_function": {
-      "BigPublisher_b2_b2-on_create-OnMessage-a6a70fca_923E0E37": {
+      "BigPublisher_b2_b2-oncreate-OnMessage-59543b60_93D04CBC": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca/Default",
-            "uniqueId": "BigPublisher_b2_b2-on_create-OnMessage-a6a70fca_923E0E37"
+            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/Default",
+            "uniqueId": "BigPublisher_b2_b2-oncreate-OnMessage-59543b60_93D04CBC"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "QUEUE_URL_b0ba884c": "${aws_sqs_queue.BigPublisher_cloudQueue_2EE8871A.url}",
-            "WING_FUNCTION_NAME": "b2-on_create-OnMessage-a6a70fca-c87e0778",
+            "WING_FUNCTION_NAME": "b2-oncreate-OnMessage-59543b60-c807494b",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "b2-on_create-OnMessage-a6a70fca-c87e0778",
+        "function_name": "b2-oncreate-OnMessage-59543b60-c807494b",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.BigPublisher_b2_b2-on_create-OnMessage-a6a70fca_IamRole_ADCAC8AB.arn}",
+        "role": "${aws_iam_role.BigPublisher_b2_b2-oncreate-OnMessage-59543b60_IamRole_C27B12C3.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.BigPublisher_b2_b2-on_create-OnMessage-a6a70fca_S3Object_0C652C61.key}",
+        "s3_key": "${aws_s3_object.BigPublisher_b2_b2-oncreate-OnMessage-59543b60_S3Object_759B056E.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -450,6 +453,9 @@ module.exports = function({  }) {
             "uniqueId": "BigPublisher_cloudQueue-SetConsumer-c50bc9ef_67ECF75E"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_7ef741f5": "${aws_s3_bucket.BigPublisher_cloudBucket_ABF95118.bucket}",
@@ -477,6 +483,9 @@ module.exports = function({  }) {
             "uniqueId": "BigPublisher_cloudTopic-OnMessage-113c9059_12D15502"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_7ef741f5": "${aws_s3_bucket.BigPublisher_cloudBucket_ABF95118.bucket}",
@@ -504,6 +513,9 @@ module.exports = function({  }) {
             "uniqueId": "testdependencycycles_Handler_2DD0D3F7"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_584271ad": "${aws_s3_bucket.BigPublisher_b2_702AC841.bucket}",
@@ -534,6 +546,9 @@ module.exports = function({  }) {
             "uniqueId": "testtest_Handler_295107CC"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
@@ -557,17 +572,17 @@ module.exports = function({  }) {
       }
     },
     "aws_lambda_permission": {
-      "BigPublisher_b2_b2-on_create-OnMessage-a6a70fca_InvokePermission-c8c6cd46b3f874f3b457086bc49850e7b4b9316bc8_A3CAB3D3": {
+      "BigPublisher_b2_b2-oncreate-OnMessage-59543b60_InvokePermission-c85dfafbf5013871aa3434b4c0d215d292753b3141_40279100": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca/InvokePermission-c8c6cd46b3f874f3b457086bc49850e7b4b9316bc8",
-            "uniqueId": "BigPublisher_b2_b2-on_create-OnMessage-a6a70fca_InvokePermission-c8c6cd46b3f874f3b457086bc49850e7b4b9316bc8_A3CAB3D3"
+            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/InvokePermission-c85dfafbf5013871aa3434b4c0d215d292753b3141",
+            "uniqueId": "BigPublisher_b2_b2-oncreate-OnMessage-59543b60_InvokePermission-c85dfafbf5013871aa3434b4c0d215d292753b3141_40279100"
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.BigPublisher_b2_b2-on_create-OnMessage-a6a70fca_923E0E37.function_name}",
+        "function_name": "${aws_lambda_function.BigPublisher_b2_b2-oncreate-OnMessage-59543b60_93D04CBC.function_name}",
         "principal": "sns.amazonaws.com",
-        "source_arn": "${aws_sns_topic.BigPublisher_b2_b2-on_create_842E953B.arn}"
+        "source_arn": "${aws_sns_topic.BigPublisher_b2_b2-oncreate_B37DE1E1.arn}"
       },
       "BigPublisher_cloudTopic-OnMessage-113c9059_InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec_BE523D68": {
         "//": {
@@ -633,58 +648,17 @@ module.exports = function({  }) {
         },
         "bucket": "${aws_s3_bucket.BigPublisher_b2_702AC841.id}",
         "depends_on": [
-          "aws_sns_topic_policy.BigPublisher_b2_b2-on_create_PublishPermission-c851683a81379a8ef8351c83fe31924055584271ad_BCEFDC74"
+          "aws_sns_topic_policy.BigPublisher_b2_b2-oncreate_PublishPermission-c851683a81379a8ef8351c83fe31924055584271ad_19647381"
         ],
         "topic": [
           {
             "events": [
               "s3:ObjectCreated:Put"
             ],
-            "id": "on-create-notification",
-            "topic_arn": "${aws_sns_topic.BigPublisher_b2_b2-on_create_842E953B.arn}"
+            "id": "on-oncreate-notification",
+            "topic_arn": "${aws_sns_topic.BigPublisher_b2_b2-oncreate_B37DE1E1.arn}"
           }
         ]
-      }
-    },
-    "aws_s3_bucket_public_access_block": {
-      "BigPublisher_b2_PublicAccessBlock_AB982F06": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/PublicAccessBlock",
-            "uniqueId": "BigPublisher_b2_PublicAccessBlock_AB982F06"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.BigPublisher_b2_702AC841.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      },
-      "BigPublisher_cloudBucket_PublicAccessBlock_6DB1CA1E": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "BigPublisher_cloudBucket_PublicAccessBlock_6DB1CA1E"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.BigPublisher_cloudBucket_ABF95118.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      },
-      "cloudBucket_PublicAccessBlock_5946CCE8": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "cloudBucket_PublicAccessBlock_5946CCE8"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
@@ -738,11 +712,11 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_object": {
-      "BigPublisher_b2_b2-on_create-OnMessage-a6a70fca_S3Object_0C652C61": {
+      "BigPublisher_b2_b2-oncreate-OnMessage-59543b60_S3Object_759B056E": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca/S3Object",
-            "uniqueId": "BigPublisher_b2_b2-on_create-OnMessage-a6a70fca_S3Object_0C652C61"
+            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/S3Object",
+            "uniqueId": "BigPublisher_b2_b2-oncreate-OnMessage-59543b60_S3Object_759B056E"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
@@ -795,14 +769,14 @@ module.exports = function({  }) {
       }
     },
     "aws_sns_topic": {
-      "BigPublisher_b2_b2-on_create_842E953B": {
+      "BigPublisher_b2_b2-oncreate_B37DE1E1": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/b2-on_create/Default",
-            "uniqueId": "BigPublisher_b2_b2-on_create_842E953B"
+            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate/Default",
+            "uniqueId": "BigPublisher_b2_b2-oncreate_B37DE1E1"
           }
         },
-        "name": "b2-on_create-c8c6cd46"
+        "name": "b2-oncreate-c85dfafb"
       },
       "BigPublisher_cloudTopic_61DC7B63": {
         "//": {
@@ -815,28 +789,28 @@ module.exports = function({  }) {
       }
     },
     "aws_sns_topic_policy": {
-      "BigPublisher_b2_b2-on_create_PublishPermission-c851683a81379a8ef8351c83fe31924055584271ad_BCEFDC74": {
+      "BigPublisher_b2_b2-oncreate_PublishPermission-c851683a81379a8ef8351c83fe31924055584271ad_19647381": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/b2-on_create/PublishPermission-c851683a81379a8ef8351c83fe31924055584271ad",
-            "uniqueId": "BigPublisher_b2_b2-on_create_PublishPermission-c851683a81379a8ef8351c83fe31924055584271ad_BCEFDC74"
+            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate/PublishPermission-c851683a81379a8ef8351c83fe31924055584271ad",
+            "uniqueId": "BigPublisher_b2_b2-oncreate_PublishPermission-c851683a81379a8ef8351c83fe31924055584271ad_19647381"
           }
         },
-        "arn": "${aws_sns_topic.BigPublisher_b2_b2-on_create_842E953B.arn}",
-        "policy": "{\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"s3.amazonaws.com\"},\"Action\":\"sns:Publish\",\"Resource\":\"${aws_sns_topic.BigPublisher_b2_b2-on_create_842E953B.arn}\",\"Condition\":{\"ArnEquals\":{\"aws:SourceArn\":\"${aws_s3_bucket.BigPublisher_b2_702AC841.arn}\"}}}]}"
+        "arn": "${aws_sns_topic.BigPublisher_b2_b2-oncreate_B37DE1E1.arn}",
+        "policy": "{\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"s3.amazonaws.com\"},\"Action\":\"sns:Publish\",\"Resource\":\"${aws_sns_topic.BigPublisher_b2_b2-oncreate_B37DE1E1.arn}\",\"Condition\":{\"ArnEquals\":{\"aws:SourceArn\":\"${aws_s3_bucket.BigPublisher_b2_702AC841.arn}\"}}}]}"
       }
     },
     "aws_sns_topic_subscription": {
-      "BigPublisher_b2_b2-on_create_b2-on_create-TopicSubscription-a6a70fca_D0234945": {
+      "BigPublisher_b2_b2-oncreate_b2-oncreate-TopicSubscription-59543b60_9824C8F9": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/b2-on_create/b2-on_create-TopicSubscription-a6a70fca",
-            "uniqueId": "BigPublisher_b2_b2-on_create_b2-on_create-TopicSubscription-a6a70fca_D0234945"
+            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate/b2-oncreate-TopicSubscription-59543b60",
+            "uniqueId": "BigPublisher_b2_b2-oncreate_b2-oncreate-TopicSubscription-59543b60_9824C8F9"
           }
         },
-        "endpoint": "${aws_lambda_function.BigPublisher_b2_b2-on_create-OnMessage-a6a70fca_923E0E37.arn}",
+        "endpoint": "${aws_lambda_function.BigPublisher_b2_b2-oncreate-OnMessage-59543b60_93D04CBC.arn}",
         "protocol": "lambda",
-        "topic_arn": "${aws_sns_topic.BigPublisher_b2_b2-on_create_842E953B.arn}"
+        "topic_arn": "${aws_sns_topic.BigPublisher_b2_b2-oncreate_B37DE1E1.arn}"
       },
       "BigPublisher_cloudTopic_cloudTopic-TopicSubscription-113c9059_D8CEACCD": {
         "//": {
@@ -868,11 +842,11 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -880,25 +854,27 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
-        this._addInflightOps("fooInc", "fooGet", "fooStatic", "$inflight_init", "inflightField");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Foo.js")({
+        return `
+          require("./inflight.Foo-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const FooClient = ${Foo._toInflightType(this).text};
+            const FooClient = ${Foo._toInflightType(this)};
             const client = new FooClient({
               $this_c: ${this._lift(this.c)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["inflightField", "fooInc", "fooGet", "fooStatic", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -920,20 +896,19 @@ class $Root extends $stdlib.std.Resource {
         this.b = b;
         this.foo = new Foo(this,"Foo");
         this.e = e;
-        this._addInflightOps("barStatic", "myMethod", "testTypeAccess", "$inflight_init");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Bar.js")({
+        return `
+          require("./inflight.Bar-1.js")({
             $Foo: ${context._lift(Foo)},
             $MyEnum: ${context._lift(MyEnum)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const BarClient = ${Bar._toInflightType(this).text};
+            const BarClient = ${Bar._toInflightType(this)};
             const client = new BarClient({
               $this_b: ${this._lift(this.b)},
               $this_e: ${this._lift(this.e)},
@@ -942,7 +917,10 @@ class $Root extends $stdlib.std.Resource {
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["barStatic", "myMethod", "testTypeAccess", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -965,28 +943,30 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+        return `
+          require("./inflight.$Closure1-1.js")({
             $bucket: ${context._lift(bucket)},
             $res: ${context._lift(res)},
             $res_foo: ${context._lift(res.foo)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -1008,26 +988,28 @@ class $Root extends $stdlib.std.Resource {
         class $Closure2 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
-            this.display.hidden = true;
-            this._addInflightOps("handle", "$inflight_init");
+            (std.Node.of(this)).hidden = true;
           }
           static _toInflightType(context) {
-            return $stdlib.core.NodeJsCode.fromInline(`
-              require("./inflight.$Closure2.js")({
+            return `
+              require("./inflight.$Closure2-1.js")({
                 $__parent_this_2_b: ${context._lift(__parent_this_2.b)},
               })
-            `);
+            `;
           }
           _toInflight() {
-            return $stdlib.core.NodeJsCode.fromInline(`
+            return `
               (await (async () => {
-                const $Closure2Client = ${$Closure2._toInflightType(this).text};
+                const $Closure2Client = ${$Closure2._toInflightType(this)};
                 const client = new $Closure2Client({
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
                 return client;
               })())
-            `);
+            `;
+          }
+          _getInflightOps() {
+            return ["handle", "$inflight_init"];
           }
           _registerBind(host, ops) {
             if (ops.includes("handle")) {
@@ -1041,26 +1023,28 @@ class $Root extends $stdlib.std.Resource {
         class $Closure3 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
-            this.display.hidden = true;
-            this._addInflightOps("handle", "$inflight_init");
+            (std.Node.of(this)).hidden = true;
           }
           static _toInflightType(context) {
-            return $stdlib.core.NodeJsCode.fromInline(`
-              require("./inflight.$Closure3.js")({
+            return `
+              require("./inflight.$Closure3-1.js")({
                 $__parent_this_3_b: ${context._lift(__parent_this_3.b)},
               })
-            `);
+            `;
           }
           _toInflight() {
-            return $stdlib.core.NodeJsCode.fromInline(`
+            return `
               (await (async () => {
-                const $Closure3Client = ${$Closure3._toInflightType(this).text};
+                const $Closure3Client = ${$Closure3._toInflightType(this)};
                 const client = new $Closure3Client({
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
                 return client;
               })())
-            `);
+            `;
+          }
+          _getInflightOps() {
+            return ["handle", "$inflight_init"];
           }
           _registerBind(host, ops) {
             if (ops.includes("handle")) {
@@ -1074,26 +1058,28 @@ class $Root extends $stdlib.std.Resource {
         class $Closure4 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
-            this.display.hidden = true;
-            this._addInflightOps("handle", "$inflight_init");
+            (std.Node.of(this)).hidden = true;
           }
           static _toInflightType(context) {
-            return $stdlib.core.NodeJsCode.fromInline(`
-              require("./inflight.$Closure4.js")({
+            return `
+              require("./inflight.$Closure4-1.js")({
                 $__parent_this_4_q: ${context._lift(__parent_this_4.q)},
               })
-            `);
+            `;
           }
           _toInflight() {
-            return $stdlib.core.NodeJsCode.fromInline(`
+            return `
               (await (async () => {
-                const $Closure4Client = ${$Closure4._toInflightType(this).text};
+                const $Closure4Client = ${$Closure4._toInflightType(this)};
                 const client = new $Closure4Client({
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
                 return client;
               })())
-            `);
+            `;
+          }
+          _getInflightOps() {
+            return ["handle", "$inflight_init"];
           }
           _registerBind(host, ops) {
             if (ops.includes("handle")) {
@@ -1103,18 +1089,17 @@ class $Root extends $stdlib.std.Resource {
           }
         }
         (this.b2.onCreate(new $Closure4(this,"$Closure4")));
-        this._addInflightOps("publish", "getObjectCount", "$inflight_init");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.BigPublisher.js")({
+        return `
+          require("./inflight.BigPublisher-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const BigPublisherClient = ${BigPublisher._toInflightType(this).text};
+            const BigPublisherClient = ${BigPublisher._toInflightType(this)};
             const client = new BigPublisherClient({
               $this_b: ${this._lift(this.b)},
               $this_b2: ${this._lift(this.b2)},
@@ -1124,7 +1109,10 @@ class $Root extends $stdlib.std.Resource {
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["publish", "getObjectCount", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -1147,26 +1135,28 @@ class $Root extends $stdlib.std.Resource {
     class $Closure5 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure5.js")({
+        return `
+          require("./inflight.$Closure5-1.js")({
             $bigOlPublisher: ${context._lift(bigOlPublisher)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure5Client = ${$Closure5._toInflightType(this).text};
+            const $Closure5Client = ${$Closure5._toInflightType(this)};
             const client = new $Closure5Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -1178,24 +1168,26 @@ class $Root extends $stdlib.std.Resource {
     class Dummy extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Dummy.js")({
+        return `
+          require("./inflight.Dummy-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const DummyClient = ${Dummy._toInflightType(this).text};
+            const DummyClient = ${Dummy._toInflightType(this)};
             const client = new DummyClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["$inflight_init"];
       }
     }
     class ScopeAndIdTestClass extends $stdlib.std.Resource {
@@ -1210,33 +1202,35 @@ class $Root extends $stdlib.std.Resource {
           const expected_path = String.raw({ raw: ["/ScopeAndIdTestClass/tc", ""] }, i);
           {((cond) => {if (!cond) throw new Error("assertion failed: x.node.path.endsWith(expected_path)")})(x.node.path.endsWith(expected_path))};
         }
-        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.ScopeAndIdTestClass.js")({
+        return `
+          require("./inflight.ScopeAndIdTestClass-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const ScopeAndIdTestClassClient = ${ScopeAndIdTestClass._toInflightType(this).text};
+            const ScopeAndIdTestClassClient = ${ScopeAndIdTestClass._toInflightType(this)};
             const client = new ScopeAndIdTestClassClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["$inflight_init"];
       }
     }
-    const MyEnum = 
-      Object.freeze((function (tmp) {
+    const MyEnum =
+      (function (tmp) {
         tmp[tmp["A"] = 0] = "A";
         tmp[tmp["B"] = 1] = "B";
         tmp[tmp["C"] = 2] = "C";
         return tmp;
-      })({}))
+      })({})
     ;
     const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const res = new Bar(this,"Bar","Arr",bucket,MyEnum.B);
@@ -1246,22 +1240,8 @@ class $Root extends $stdlib.std.Resource {
     new ScopeAndIdTestClass(this,"ScopeAndIdTestClass");
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "resource", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "resource", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

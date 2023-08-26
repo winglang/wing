@@ -1,6 +1,6 @@
 # [cot.w](../../../../../../examples/tests/sdk_tests/math/cot.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
@@ -10,10 +10,10 @@ module.exports = function({ $math_Util }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.cot(0) == math.INF")})(((await $math_Util.cot(0)) === $math_Util.INF))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.cot(math.PI / 4)) == 1")})(((await $math_Util.round((await $math_Util.cot(($math_Util.PI / 4))))) === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.cot(math.PI * 3 / 4)) == -1")})(((await $math_Util.round((await $math_Util.cot((($math_Util.PI * 3) / 4))))) === (-1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.cot(-0) == -math.INF")})(((await $math_Util.cot((-0))) === (-$math_Util.INF)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.cot(0) == math.INF")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.cot(0)),$math_Util.INF)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.cot(math.PI / 4)) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round((await $math_Util.cot(($math_Util.PI / 4))))),1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.cot(math.PI * 3 / 4)) == -1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round((await $math_Util.cot((($math_Util.PI * 3) / 4))))),(-1))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.cot(-0) == -math.INF")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.cot((-0))),(-$math_Util.INF))))};
     }
   }
   return $Closure1;
@@ -94,6 +94,9 @@ module.exports = function({ $math_Util }) {
             "uniqueId": "testinflightcotangent_Handler_93C199E4"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8fc3a88",
@@ -145,62 +148,50 @@ module.exports = function({ $math_Util }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const math = require('@winglang/sdk').math;
+const std = $stdlib.std;
+const math = $stdlib.math;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+        return `
+          require("./inflight.$Closure1-1.js")({
             $math_Util: ${context._lift(math.Util)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.cot(0) == math.INF")})(((math.Util.cot(0)) === math.Util.INF))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.cot(math.PI / 4)) == 1")})(((math.Util.round((math.Util.cot((math.Util.PI / 4))))) === 1))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.cot(math.PI * 3 / 4)) == -1")})(((math.Util.round((math.Util.cot(((math.Util.PI * 3) / 4))))) === (-1)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.cot(-0) == -math.INF")})(((math.Util.cot((-0))) === (-math.Util.INF)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.cot(0) == math.INF")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.cot(0)),math.Util.INF)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.cot(math.PI / 4)) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round((math.Util.cot((math.Util.PI / 4))))),1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.cot(math.PI * 3 / 4)) == -1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round((math.Util.cot(((math.Util.PI * 3) / 4))))),(-1))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.cot(-0) == -math.INF")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.cot((-0))),(-math.Util.INF))))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight cotangent",new $Closure1(this,"$Closure1"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "cot", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "cot", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

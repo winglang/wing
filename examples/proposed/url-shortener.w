@@ -1,61 +1,35 @@
 bring cloud;
+bring math;
 bring http;
 
-class Extern {
-  extern "./url-shortener.js" static inflight makeId(): str;
-}
-
 class UrlShortener {
-  urlLookup: cloud.Bucket;
-  idLookup: cloud.Bucket;
+  lookup: cloud.Bucket;
 
   init() {
-    // map from urls to ids
-    this.urlLookup = new cloud.Bucket() as "UrlLookup";
-
     // map from ids to urls
-    this.idLookup = new cloud.Bucket() as "IdLookup";
+    this.lookup = new cloud.Bucket() as "IdLookup";
   }
 
-  // Returns a short id for the given url. Creates a new id if one does not
-  // already exist.
-  //
-  // In the current implementation, when a new URL is shortened, two
-  // transactions are performed:
-  //
-  // 1. The url is added to the urlLookup bucket.
-  // 2. The id is added to the idLookup bucket.
-  //
-  // If the second transaction fails, the first transaction is not rolled
-  // back. This means that the urlLookup bucket may contain urls that do
-  // not have a corresponding id in the idLookup bucket. This is not a
-  // problem, since `getId` will only return a shortened ID once both
-  // transactions have completed successfully.
+  // Generates a short id for the given url.
   inflight getId(url: str): str {
-    let id = this.urlLookup.tryGet(url);
-    if let id = id {
-      // ensure that the id exists in idLookup
-      if !this.idLookup.exists(id) {
-        this.idLookup.put(id, url);
-      }
-      return id;
-    }
-  
-    let newId = Extern.makeId();
-
-    // (transaction 1)
-    this.urlLookup.put(url, newId);
-
-    // (transaction 2)
-    this.idLookup.put(newId, url);
-
-    return newId;
+    let id = this._makeId();
+    this.lookup.put(id, url);
+    return id;
   }
 
-  // Get the url for the given id. Returns nil if the url does not have a
-  // corresponding id.
+  // Get the url for the given id. Returns nil if the id is invalid.
   inflight getUrl(id: str): str? {
-    return this.idLookup.tryGet(id);
+    return this.lookup.tryGet(id);
+  }
+
+  inflight _makeId(): str {
+    let ALPHANUMERIC_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let var id = "";
+    for i in 0..5 {
+      let randomIndex = math.floor(math.random() * ALPHANUMERIC_CHARS.length);
+      id = id + ALPHANUMERIC_CHARS.at(randomIndex);
+    }
+    return id;
   }
 }
 
@@ -134,12 +108,12 @@ test "shorten url" {
   assert(newUrl.startsWith(urlShortenerApi.api.url));
 }
 
-test "shorten url twice" {
+test "shorten same url twice" {
   let response1 = http.post("${urlShortenerApi.api.url}/create", body: Json.stringify({ url: TEST_URL }));
   let newUrl1 = Json.tryParse(response1.body ?? "")?.get("shortenedUrl")?.asStr();
   let response2 = http.post("${urlShortenerApi.api.url}/create", body: Json.stringify({ url: TEST_URL }));
   let newUrl2 = Json.tryParse(response2.body ?? "")?.get("shortenedUrl")?.asStr();
-  assert(newUrl1 == newUrl2);
+  assert(newUrl1 != newUrl2);
 }
 
 test "redirect sends to correct page" {

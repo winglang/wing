@@ -58,6 +58,32 @@ let tryParseName = (fullName: str): Name? => {
   };
 };
 
+let json_obj = Json { ghost: "spooky" };
+let var something_else = false;
+if let y = json_obj.tryAsBool() {
+  assert(y == true || y == false);
+} elif let y = json_obj.tryAsNum() {
+  assert(y + 0 == y);
+} elif let y = json_obj.tryAsStr() {
+  assert(y.length >= 0);
+} else {
+  something_else = true;
+}
+assert(something_else);
+
+// if lets reassignable
+let a: num? = 1;
+if let var z = a {
+  assert(z == 1);
+  z = 2;
+  assert(z == 2);
+}
+
+// extra space between if and let
+let b: num? = 1;
+if    let z = b {
+  assert(z == 1);
+}
 
 // Nested if lets
 if let parsedName = tryParseName("Good Name") {

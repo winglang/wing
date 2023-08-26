@@ -1,6 +1,3 @@
-// for WebAssembly typings:
-/// <reference lib="dom" />
-
 import { addCompletionSpecCommand } from "./commands";
 import { satisfies } from "compare-versions";
 
@@ -32,7 +29,7 @@ function runSubCommand(subCommand: string) {
         process.exit(1);
       }
     } catch (err) {
-      console.error(err);
+      console.error((err as any)?.message ?? err);
       process.exit(1);
     }
   };
@@ -137,6 +134,7 @@ async function main() {
         .default("sim")
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
+    .option("-r, --rootId <rootId>", "App root id")
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("compile"));
@@ -153,6 +151,8 @@ async function main() {
         .default("sim")
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
+    .option("-r, --rootId <rootId>", "App root id")
+    .option("--no-clean", "Keep build output")
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("test"));

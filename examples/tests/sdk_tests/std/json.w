@@ -33,6 +33,12 @@ test "setAt()" {
   assert(d.get("c") == 3);
 }
 
+//-----------------------------------------------------------------------------
+// tryParse()
+assert(Json.tryParse(nil) == nil);
+assert(Json.tryParse("boom") == nil);
+assert(Json.tryParse("") == nil);
+
 /*
 Will add test later:
 test "setWithNonMutJsonObject()" {
@@ -48,3 +54,16 @@ try {
  assert(error == "");
 }
 */
+
+//-----------------------------------------------------------------------------
+// stringify()
+
+test "stringify()" {
+  let obj = Json { a: 1, b: 2 };
+
+  let stringified = Json.stringify(obj);
+  let stringifiedIndent = Json.stringify(obj, indent: 2);
+
+  assert(stringified == "{\"a\":1,\"b\":2}");
+  assert(stringifiedIndent == "{\n  \"a\": 1,\n  \"b\": 2\n}");
+}

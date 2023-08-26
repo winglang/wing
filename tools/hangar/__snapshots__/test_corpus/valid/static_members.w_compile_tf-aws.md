@@ -1,6 +1,6 @@
 # [static_members.w](../../../../../examples/tests/valid/static_members.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({  }) {
   class $Closure1 {
@@ -19,8 +19,8 @@ module.exports = function({  }) {
         }
       }
       const inflightClass = new InflightClass();
-      {((cond) => {if (!cond) throw new Error("assertion failed: inflightClass.inflightMethod() == \"Inflight method\"")})(((await inflightClass.inflightMethod()) === "Inflight method"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: InflightClass.staticInflightMethod() == \"Static inflight method\"")})(((await InflightClass.staticInflightMethod()) === "Static inflight method"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: inflightClass.inflightMethod() == \"Inflight method\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await inflightClass.inflightMethod()),"Inflight method")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: InflightClass.staticInflightMethod() == \"Static inflight method\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await InflightClass.staticInflightMethod()),"Static inflight method")))};
     }
   }
   return $Closure1;
@@ -28,7 +28,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Foo.js
+## inflight.Foo-1.js
 ```js
 module.exports = function({  }) {
   class Foo {
@@ -116,6 +116,9 @@ module.exports = function({  }) {
             "uniqueId": "testtest_Handler_295107CC"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8f4f2a1",
@@ -167,11 +170,11 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -179,75 +182,65 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.instanceField = 100;
-        this._addInflightOps("get123", "$inflight_init");
       }
       static m() {
         return 99;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Foo.js")({
+        return `
+          require("./inflight.Foo-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const FooClient = ${Foo._toInflightType(this).text};
+            const FooClient = ${Foo._toInflightType(this)};
             const client = new FooClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["get123", "$inflight_init"];
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+        return `
+          require("./inflight.$Closure1-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
     }
     const foo = new Foo(this,"Foo");
-    {((cond) => {if (!cond) throw new Error("assertion failed: foo.instanceField == 100")})((foo.instanceField === 100))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: Foo.m() == 99")})(((Foo.m()) === 99))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: foo.instanceField == 100")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(foo.instanceField,100)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: Foo.m() == 99")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((Foo.m()),99)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "static_members", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "static_members", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

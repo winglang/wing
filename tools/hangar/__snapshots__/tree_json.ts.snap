@@ -17,14 +17,8 @@ exports[`tree.json for an app with many resources 1`] = `
                 "path": "root/Default/Code",
               },
               "Default": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "$Closure1": {
-                    "attributes": {
-                      "wing:resource:connections": [],
-                    },
                     "constructInfo": {
                       "fqn": "@winglang/sdk.std.Resource",
                       "version": "0.0.0",
@@ -36,9 +30,6 @@ exports[`tree.json for an app with many resources 1`] = `
                     "path": "root/Default/Default/$Closure1",
                   },
                   "$Closure5": {
-                    "attributes": {
-                      "wing:resource:connections": [],
-                    },
                     "constructInfo": {
                       "fqn": "@winglang/sdk.std.Resource",
                       "version": "0.0.0",
@@ -50,88 +41,10 @@ exports[`tree.json for an app with many resources 1`] = `
                     "path": "root/Default/Default/$Closure5",
                   },
                   "Bar": {
-                    "attributes": {
-                      "wing:resource:connections": [
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "myMethod",
-                          "resource": "root/Default/Default/test:test/Handler",
-                        },
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "testTypeAccess",
-                          "resource": "root/Default/Default/test:test/Handler",
-                        },
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "$inflight_init",
-                          "resource": "root/Default/Default/test:test/Handler",
-                        },
-                      ],
-                    },
                     "children": {
                       "Foo": {
-                        "attributes": {
-                          "wing:resource:connections": [
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "fooGet",
-                              "resource": "root/Default/Default/test:test/Handler",
-                            },
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "fooInc",
-                              "resource": "root/Default/Default/test:test/Handler",
-                            },
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "$inflight_init",
-                              "resource": "root/Default/Default/test:test/Handler",
-                            },
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "inflightField",
-                              "resource": "root/Default/Default/test:test/Handler",
-                            },
-                          ],
-                        },
                         "children": {
                           "cloud.Counter": {
-                            "attributes": {
-                              "wing:resource:connections": [
-                                {
-                                  "direction": "inbound",
-                                  "implicit": false,
-                                  "relationship": "peek",
-                                  "resource": "root/Default/Default/test:test/Handler",
-                                },
-                                {
-                                  "direction": "inbound",
-                                  "implicit": false,
-                                  "relationship": "$inflight_init",
-                                  "resource": "root/Default/Default/test:test/Handler",
-                                },
-                                {
-                                  "direction": "inbound",
-                                  "implicit": false,
-                                  "relationship": "inc",
-                                  "resource": "root/Default/Default/test:test/Handler",
-                                },
-                                {
-                                  "direction": "inbound",
-                                  "implicit": false,
-                                  "relationship": "dec",
-                                  "resource": "root/Default/Default/test:test/Handler",
-                                },
-                              ],
-                            },
                             "children": {
                               "Default": {
                                 "constructInfo": {
@@ -170,46 +83,8 @@ exports[`tree.json for an app with many resources 1`] = `
                     "path": "root/Default/Default/Bar",
                   },
                   "BigPublisher": {
-                    "attributes": {
-                      "wing:resource:connections": [
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "getObjectCount",
-                          "resource": "root/Default/Default/test:dependency cycles/Handler",
-                        },
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "publish",
-                          "resource": "root/Default/Default/test:dependency cycles/Handler",
-                        },
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "$inflight_init",
-                          "resource": "root/Default/Default/test:dependency cycles/Handler",
-                        },
-                      ],
-                    },
                     "children": {
                       "$Closure2": {
-                        "attributes": {
-                          "wing:resource:connections": [
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "handle",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059",
-                            },
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "$inflight_init",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059",
-                            },
-                          ],
-                        },
                         "constructInfo": {
                           "fqn": "@winglang/sdk.std.Resource",
                           "version": "0.0.0",
@@ -221,22 +96,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         "path": "root/Default/Default/BigPublisher/$Closure2",
                       },
                       "$Closure3": {
-                        "attributes": {
-                          "wing:resource:connections": [
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "handle",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef",
-                            },
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "$inflight_init",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef",
-                            },
-                          ],
-                        },
                         "constructInfo": {
                           "fqn": "@winglang/sdk.std.Resource",
                           "version": "0.0.0",
@@ -248,22 +107,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         "path": "root/Default/Default/BigPublisher/$Closure3",
                       },
                       "$Closure4": {
-                        "attributes": {
-                          "wing:resource:connections": [
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "handle",
-                              "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca",
-                            },
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "$inflight_init",
-                              "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca",
-                            },
-                          ],
-                        },
                         "constructInfo": {
                           "fqn": "@winglang/sdk.std.Resource",
                           "version": "0.0.0",
@@ -275,28 +118,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         "path": "root/Default/Default/BigPublisher/$Closure4",
                       },
                       "b2": {
-                        "attributes": {
-                          "wing:resource:connections": [
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "CREATE",
-                              "resource": "root/Default/Default/BigPublisher/b2/b2-on_create",
-                            },
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "put",
-                              "resource": "root/Default/Default/test:dependency cycles/Handler",
-                            },
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "$inflight_init",
-                              "resource": "root/Default/Default/test:dependency cycles/Handler",
-                            },
-                          ],
-                        },
                         "children": {
                           "Default": {
                             "constructInfo": {
@@ -314,14 +135,6 @@ exports[`tree.json for an app with many resources 1`] = `
                             "id": "Encryption",
                             "path": "root/Default/Default/BigPublisher/b2/Encryption",
                           },
-                          "PublicAccessBlock": {
-                            "constructInfo": {
-                              "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
-                            },
-                            "id": "PublicAccessBlock",
-                            "path": "root/Default/Default/BigPublisher/b2/PublicAccessBlock",
-                          },
                           "S3BucketNotification": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
@@ -330,23 +143,7 @@ exports[`tree.json for an app with many resources 1`] = `
                             "id": "S3BucketNotification",
                             "path": "root/Default/Default/BigPublisher/b2/S3BucketNotification",
                           },
-                          "b2-on_create": {
-                            "attributes": {
-                              "wing:resource:connections": [
-                                {
-                                  "direction": "inbound",
-                                  "implicit": false,
-                                  "relationship": "CREATE",
-                                  "resource": "root/Default/Default/BigPublisher/b2",
-                                },
-                                {
-                                  "direction": "outbound",
-                                  "implicit": false,
-                                  "relationship": "on_message",
-                                  "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca",
-                                },
-                              ],
-                            },
+                          "b2-oncreate": {
                             "children": {
                               "Default": {
                                 "constructInfo": {
@@ -354,7 +151,7 @@ exports[`tree.json for an app with many resources 1`] = `
                                   "version": "0.17.0",
                                 },
                                 "id": "Default",
-                                "path": "root/Default/Default/BigPublisher/b2/b2-on_create/Default",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate/Default",
                               },
                               "PublishPermission-c851683a81379a8ef8351c83fe31924055584271ad": {
                                 "constructInfo": {
@@ -362,15 +159,15 @@ exports[`tree.json for an app with many resources 1`] = `
                                   "version": "0.17.0",
                                 },
                                 "id": "PublishPermission-c851683a81379a8ef8351c83fe31924055584271ad",
-                                "path": "root/Default/Default/BigPublisher/b2/b2-on_create/PublishPermission-c851683a81379a8ef8351c83fe31924055584271ad",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate/PublishPermission-c851683a81379a8ef8351c83fe31924055584271ad",
                               },
-                              "b2-on_create-TopicSubscription-a6a70fca": {
+                              "b2-oncreate-TopicSubscription-59543b60": {
                                 "constructInfo": {
                                   "fqn": "cdktf.TerraformResource",
                                   "version": "0.17.0",
                                 },
-                                "id": "b2-on_create-TopicSubscription-a6a70fca",
-                                "path": "root/Default/Default/BigPublisher/b2/b2-on_create/b2-on_create-TopicSubscription-a6a70fca",
+                                "id": "b2-oncreate-TopicSubscription-59543b60",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate/b2-oncreate-TopicSubscription-59543b60",
                               },
                             },
                             "constructInfo": {
@@ -381,56 +178,10 @@ exports[`tree.json for an app with many resources 1`] = `
                               "description": "A pub/sub notification topic",
                               "title": "Topic",
                             },
-                            "id": "b2-on_create",
-                            "path": "root/Default/Default/BigPublisher/b2/b2-on_create",
+                            "id": "b2-oncreate",
+                            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate",
                           },
-                          "b2-on_create-OnMessage-a6a70fca": {
-                            "attributes": {
-                              "wing:resource:connections": [
-                                {
-                                  "direction": "outbound",
-                                  "implicit": false,
-                                  "relationship": "push",
-                                  "resource": "root/Default/Default/BigPublisher/cloud.Queue",
-                                },
-                                {
-                                  "direction": "outbound",
-                                  "implicit": false,
-                                  "relationship": "$inflight_init",
-                                  "resource": "root/Default/Default/BigPublisher/cloud.Queue",
-                                },
-                                {
-                                  "direction": "outbound",
-                                  "implicit": false,
-                                  "relationship": "handle",
-                                  "resource": "root/Default/Default/BigPublisher/$Closure4",
-                                },
-                                {
-                                  "direction": "outbound",
-                                  "implicit": false,
-                                  "relationship": "$inflight_init",
-                                  "resource": "root/Default/Default/BigPublisher/$Closure4",
-                                },
-                                {
-                                  "direction": "outbound",
-                                  "implicit": false,
-                                  "relationship": "handle",
-                                  "resource": "root/Default/Default/BigPublisher/b2-on_create-eventHandler-fe70cb1e",
-                                },
-                                {
-                                  "direction": "outbound",
-                                  "implicit": false,
-                                  "relationship": "$inflight_init",
-                                  "resource": "root/Default/Default/BigPublisher/b2-on_create-eventHandler-fe70cb1e",
-                                },
-                                {
-                                  "direction": "inbound",
-                                  "implicit": false,
-                                  "relationship": "on_message",
-                                  "resource": "root/Default/Default/BigPublisher/b2/b2-on_create",
-                                },
-                              ],
-                            },
+                          "b2-oncreate-OnMessage-59543b60": {
                             "children": {
                               "Asset": {
                                 "constructInfo": {
@@ -438,7 +189,7 @@ exports[`tree.json for an app with many resources 1`] = `
                                   "version": "0.17.0",
                                 },
                                 "id": "Asset",
-                                "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca/Asset",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/Asset",
                               },
                               "Default": {
                                 "constructInfo": {
@@ -446,7 +197,7 @@ exports[`tree.json for an app with many resources 1`] = `
                                   "version": "0.17.0",
                                 },
                                 "id": "Default",
-                                "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca/Default",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/Default",
                               },
                               "IamRole": {
                                 "constructInfo": {
@@ -454,7 +205,7 @@ exports[`tree.json for an app with many resources 1`] = `
                                   "version": "0.17.0",
                                 },
                                 "id": "IamRole",
-                                "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca/IamRole",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/IamRole",
                               },
                               "IamRolePolicy": {
                                 "constructInfo": {
@@ -462,7 +213,7 @@ exports[`tree.json for an app with many resources 1`] = `
                                   "version": "0.17.0",
                                 },
                                 "id": "IamRolePolicy",
-                                "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca/IamRolePolicy",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/IamRolePolicy",
                               },
                               "IamRolePolicyAttachment": {
                                 "constructInfo": {
@@ -470,15 +221,15 @@ exports[`tree.json for an app with many resources 1`] = `
                                   "version": "0.17.0",
                                 },
                                 "id": "IamRolePolicyAttachment",
-                                "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca/IamRolePolicyAttachment",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/IamRolePolicyAttachment",
                               },
-                              "InvokePermission-c8c6cd46b3f874f3b457086bc49850e7b4b9316bc8": {
+                              "InvokePermission-c85dfafbf5013871aa3434b4c0d215d292753b3141": {
                                 "constructInfo": {
                                   "fqn": "cdktf.TerraformResource",
                                   "version": "0.17.0",
                                 },
-                                "id": "InvokePermission-c8c6cd46b3f874f3b457086bc49850e7b4b9316bc8",
-                                "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca/InvokePermission-c8c6cd46b3f874f3b457086bc49850e7b4b9316bc8",
+                                "id": "InvokePermission-c85dfafbf5013871aa3434b4c0d215d292753b3141",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/InvokePermission-c85dfafbf5013871aa3434b4c0d215d292753b3141",
                               },
                               "S3Object": {
                                 "constructInfo": {
@@ -486,7 +237,7 @@ exports[`tree.json for an app with many resources 1`] = `
                                   "version": "0.17.0",
                                 },
                                 "id": "S3Object",
-                                "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca/S3Object",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/S3Object",
                               },
                             },
                             "constructInfo": {
@@ -497,13 +248,10 @@ exports[`tree.json for an app with many resources 1`] = `
                               "description": "A cloud function (FaaS)",
                               "title": "Function",
                             },
-                            "id": "b2-on_create-OnMessage-a6a70fca",
-                            "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca",
+                            "id": "b2-oncreate-OnMessage-59543b60",
+                            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60",
                           },
-                          "b2-on_create-OnMessageHandler-a6a70fca": {
-                            "attributes": {
-                              "wing:resource:connections": [],
-                            },
+                          "b2-oncreate-OnMessageHandler-59543b60": {
                             "constructInfo": {
                               "fqn": "@winglang/sdk.std.Resource",
                               "version": "0.0.0",
@@ -511,8 +259,19 @@ exports[`tree.json for an app with many resources 1`] = `
                             "display": {
                               "hidden": true,
                             },
-                            "id": "b2-on_create-OnMessageHandler-a6a70fca",
-                            "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessageHandler-a6a70fca",
+                            "id": "b2-oncreate-OnMessageHandler-59543b60",
+                            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessageHandler-59543b60",
+                          },
+                          "b2-oncreate-eventHandler-fe70cb1e": {
+                            "constructInfo": {
+                              "fqn": "@winglang/sdk.std.Resource",
+                              "version": "0.0.0",
+                            },
+                            "display": {
+                              "hidden": true,
+                            },
+                            "id": "b2-oncreate-eventHandler-fe70cb1e",
+                            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-eventHandler-fe70cb1e",
                           },
                         },
                         "constructInfo": {
@@ -526,74 +285,7 @@ exports[`tree.json for an app with many resources 1`] = `
                         "id": "b2",
                         "path": "root/Default/Default/BigPublisher/b2",
                       },
-                      "b2-on_create-eventHandler-fe70cb1e": {
-                        "attributes": {
-                          "wing:resource:connections": [
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "handle",
-                              "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca",
-                            },
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "$inflight_init",
-                              "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca",
-                            },
-                          ],
-                        },
-                        "constructInfo": {
-                          "fqn": "@winglang/sdk.std.Resource",
-                          "version": "0.0.0",
-                        },
-                        "display": {
-                          "hidden": true,
-                        },
-                        "id": "b2-on_create-eventHandler-fe70cb1e",
-                        "path": "root/Default/Default/BigPublisher/b2-on_create-eventHandler-fe70cb1e",
-                      },
                       "cloud.Bucket": {
-                        "attributes": {
-                          "wing:resource:connections": [
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "put",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059",
-                            },
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "$inflight_init",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059",
-                            },
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "put",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef",
-                            },
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "$inflight_init",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef",
-                            },
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "list",
-                              "resource": "root/Default/Default/test:dependency cycles/Handler",
-                            },
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "$inflight_init",
-                              "resource": "root/Default/Default/test:dependency cycles/Handler",
-                            },
-                          ],
-                        },
                         "children": {
                           "Default": {
                             "constructInfo": {
@@ -611,14 +303,6 @@ exports[`tree.json for an app with many resources 1`] = `
                             "id": "Encryption",
                             "path": "root/Default/Default/BigPublisher/cloud.Bucket/Encryption",
                           },
-                          "PublicAccessBlock": {
-                            "constructInfo": {
-                              "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
-                            },
-                            "id": "PublicAccessBlock",
-                            "path": "root/Default/Default/BigPublisher/cloud.Bucket/PublicAccessBlock",
-                          },
                         },
                         "constructInfo": {
                           "fqn": "@winglang/sdk.cloud.Bucket",
@@ -632,40 +316,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         "path": "root/Default/Default/BigPublisher/cloud.Bucket",
                       },
                       "cloud.Queue": {
-                        "attributes": {
-                          "wing:resource:connections": [
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "consumer",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef",
-                            },
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "push",
-                              "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca",
-                            },
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "$inflight_init",
-                              "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca",
-                            },
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "push",
-                              "resource": "root/Default/Default/test:dependency cycles/Handler",
-                            },
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "$inflight_init",
-                              "resource": "root/Default/Default/test:dependency cycles/Handler",
-                            },
-                          ],
-                        },
                         "children": {
                           "Default": {
                             "constructInfo": {
@@ -696,40 +346,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         "path": "root/Default/Default/BigPublisher/cloud.Queue",
                       },
                       "cloud.Queue-SetConsumer-c50bc9ef": {
-                        "attributes": {
-                          "wing:resource:connections": [
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "put",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Bucket",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "$inflight_init",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Bucket",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "handle",
-                              "resource": "root/Default/Default/BigPublisher/$Closure3",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "$inflight_init",
-                              "resource": "root/Default/Default/BigPublisher/$Closure3",
-                            },
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "consumer",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Queue",
-                            },
-                          ],
-                        },
                         "children": {
                           "Asset": {
                             "constructInfo": {
@@ -792,9 +408,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef",
                       },
                       "cloud.Queue-SetConsumerHandler-c50bc9ef": {
-                        "attributes": {
-                          "wing:resource:connections": [],
-                        },
                         "constructInfo": {
                           "fqn": "@winglang/sdk.std.Resource",
                           "version": "0.0.0",
@@ -806,28 +419,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumerHandler-c50bc9ef",
                       },
                       "cloud.Topic": {
-                        "attributes": {
-                          "wing:resource:connections": [
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "on_message",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059",
-                            },
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "publish",
-                              "resource": "root/Default/Default/test:dependency cycles/Handler",
-                            },
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "$inflight_init",
-                              "resource": "root/Default/Default/test:dependency cycles/Handler",
-                            },
-                          ],
-                        },
                         "children": {
                           "Default": {
                             "constructInfo": {
@@ -858,40 +449,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         "path": "root/Default/Default/BigPublisher/cloud.Topic",
                       },
                       "cloud.Topic-OnMessage-113c9059": {
-                        "attributes": {
-                          "wing:resource:connections": [
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "put",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Bucket",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "$inflight_init",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Bucket",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "handle",
-                              "resource": "root/Default/Default/BigPublisher/$Closure2",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "$inflight_init",
-                              "resource": "root/Default/Default/BigPublisher/$Closure2",
-                            },
-                            {
-                              "direction": "inbound",
-                              "implicit": false,
-                              "relationship": "on_message",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Topic",
-                            },
-                          ],
-                        },
                         "children": {
                           "Asset": {
                             "constructInfo": {
@@ -962,9 +519,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059",
                       },
                       "cloud.Topic-OnMessageHandler-113c9059": {
-                        "attributes": {
-                          "wing:resource:connections": [],
-                        },
                         "constructInfo": {
                           "fqn": "@winglang/sdk.std.Resource",
                           "version": "0.0.0",
@@ -984,19 +538,10 @@ exports[`tree.json for an app with many resources 1`] = `
                     "path": "root/Default/Default/BigPublisher",
                   },
                   "ScopeAndIdTestClass": {
-                    "attributes": {
-                      "wing:resource:connections": [],
-                    },
                     "children": {
                       "Dummy": {
-                        "attributes": {
-                          "wing:resource:connections": [],
-                        },
                         "children": {
                           "Dummy": {
-                            "attributes": {
-                              "wing:resource:connections": [],
-                            },
                             "constructInfo": {
                               "fqn": "@winglang/sdk.std.Resource",
                               "version": "0.0.0",
@@ -1013,9 +558,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         "path": "root/Default/Default/ScopeAndIdTestClass/Dummy",
                       },
                       "tc0": {
-                        "attributes": {
-                          "wing:resource:connections": [],
-                        },
                         "constructInfo": {
                           "fqn": "@winglang/sdk.std.Resource",
                           "version": "0.0.0",
@@ -1024,9 +566,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         "path": "root/Default/Default/ScopeAndIdTestClass/tc0",
                       },
                       "tc1": {
-                        "attributes": {
-                          "wing:resource:connections": [],
-                        },
                         "constructInfo": {
                           "fqn": "@winglang/sdk.std.Resource",
                           "version": "0.0.0",
@@ -1035,9 +574,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         "path": "root/Default/Default/ScopeAndIdTestClass/tc1",
                       },
                       "tc2": {
-                        "attributes": {
-                          "wing:resource:connections": [],
-                        },
                         "constructInfo": {
                           "fqn": "@winglang/sdk.std.Resource",
                           "version": "0.0.0",
@@ -1054,34 +590,6 @@ exports[`tree.json for an app with many resources 1`] = `
                     "path": "root/Default/Default/ScopeAndIdTestClass",
                   },
                   "cloud.Bucket": {
-                    "attributes": {
-                      "wing:resource:connections": [
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "list",
-                          "resource": "root/Default/Default/test:test/Handler",
-                        },
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "$inflight_init",
-                          "resource": "root/Default/Default/test:test/Handler",
-                        },
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "get",
-                          "resource": "root/Default/Default/test:test/Handler",
-                        },
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "put",
-                          "resource": "root/Default/Default/test:test/Handler",
-                        },
-                      ],
-                    },
                     "children": {
                       "Default": {
                         "constructInfo": {
@@ -1099,14 +607,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         "id": "Encryption",
                         "path": "root/Default/Default/cloud.Bucket/Encryption",
                       },
-                      "PublicAccessBlock": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
-                        },
-                        "id": "PublicAccessBlock",
-                        "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
-                      },
                     },
                     "constructInfo": {
                       "fqn": "@winglang/sdk.cloud.Bucket",
@@ -1120,81 +620,8 @@ exports[`tree.json for an app with many resources 1`] = `
                     "path": "root/Default/Default/cloud.Bucket",
                   },
                   "test:dependency cycles": {
-                    "attributes": {
-                      "wing:resource:connections": [],
-                    },
                     "children": {
                       "Handler": {
-                        "attributes": {
-                          "wing:resource:connections": [
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "list",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Bucket",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "$inflight_init",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Bucket",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "getObjectCount",
-                              "resource": "root/Default/Default/BigPublisher",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "put",
-                              "resource": "root/Default/Default/BigPublisher/b2",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "$inflight_init",
-                              "resource": "root/Default/Default/BigPublisher/b2",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "push",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Queue",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "$inflight_init",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Queue",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "publish",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Topic",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "$inflight_init",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Topic",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "publish",
-                              "resource": "root/Default/Default/BigPublisher",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "$inflight_init",
-                              "resource": "root/Default/Default/BigPublisher",
-                            },
-                          ],
-                        },
                         "children": {
                           "Asset": {
                             "constructInfo": {
@@ -1269,105 +696,8 @@ exports[`tree.json for an app with many resources 1`] = `
                     "path": "root/Default/Default/test:dependency cycles",
                   },
                   "test:test": {
-                    "attributes": {
-                      "wing:resource:connections": [],
-                    },
                     "children": {
                       "Handler": {
-                        "attributes": {
-                          "wing:resource:connections": [
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "list",
-                              "resource": "root/Default/Default/cloud.Bucket",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "$inflight_init",
-                              "resource": "root/Default/Default/cloud.Bucket",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "get",
-                              "resource": "root/Default/Default/cloud.Bucket",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "put",
-                              "resource": "root/Default/Default/cloud.Bucket",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "peek",
-                              "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "$inflight_init",
-                              "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "fooGet",
-                              "resource": "root/Default/Default/Bar/Foo",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "inc",
-                              "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "fooInc",
-                              "resource": "root/Default/Default/Bar/Foo",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "dec",
-                              "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "$inflight_init",
-                              "resource": "root/Default/Default/Bar/Foo",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "myMethod",
-                              "resource": "root/Default/Default/Bar",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "testTypeAccess",
-                              "resource": "root/Default/Default/Bar",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "$inflight_init",
-                              "resource": "root/Default/Default/Bar",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "inflightField",
-                              "resource": "root/Default/Default/Bar/Foo",
-                            },
-                          ],
-                        },
                         "children": {
                           "Asset": {
                             "constructInfo": {
@@ -1458,9 +788,6 @@ exports[`tree.json for an app with many resources 1`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -1472,7 +799,7 @@ exports[`tree.json for an app with many resources 1`] = `
                   },
                 },
                 "constructInfo": {
-                  "fqn": "@winglang/sdk.cloud.TestRunner",
+                  "fqn": "@winglang/sdk.std.TestRunner",
                   "version": "0.0.0",
                 },
                 "display": {

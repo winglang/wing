@@ -1,6 +1,6 @@
 # [try_delete.w](../../../../../../examples/tests/sdk_tests/bucket/try_delete.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $b }) {
   class $Closure1 {
@@ -10,17 +10,17 @@ module.exports = function({ $b }) {
       return $obj;
     }
     async handle() {
-      const jsonObj2 = Object.freeze({"key2":"value2"});
+      const jsonObj2 = ({"key2": "value2"});
       (await $b.put("file1.txt","Foo"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file1.txt\") == true")})(((await $b.tryDelete("file1.txt")) === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file1.txt\") == false")})(((await $b.tryDelete("file1.txt")) === false))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"random\") == false")})(((await $b.tryDelete("random")) === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file1.txt\") == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.tryDelete("file1.txt")),true)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file1.txt\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.tryDelete("file1.txt")),false)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"random\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.tryDelete("random")),false)))};
       (await $b.put("file2.txt","Bar"));
       (await $b.putJson("file2.json",jsonObj2));
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.txt\") == true")})(((await $b.tryDelete("file2.txt")) === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.json\") == true")})(((await $b.tryDelete("file2.json")) === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.txt\") == false")})(((await $b.tryDelete("file2.txt")) === false))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.json\") == false")})(((await $b.tryDelete("file2.json")) === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.txt\") == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.tryDelete("file2.txt")),true)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.json\") == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.tryDelete("file2.json")),true)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.txt\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.tryDelete("file2.txt")),false)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.json\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.tryDelete("file2.json")),false)))};
     }
   }
   return $Closure1;
@@ -77,7 +77,7 @@ module.exports = function({ $b }) {
             "uniqueId": "testtryDelete_Handler_IamRolePolicy_1DEE72C3"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.testtryDelete_Handler_IamRole_9139123D.name}"
       }
     },
@@ -101,6 +101,9 @@ module.exports = function({ $b }) {
             "uniqueId": "testtryDelete_Handler_C4052A94"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
@@ -143,21 +146,6 @@ module.exports = function({ $b }) {
         "force_destroy": false
       }
     },
-    "aws_s3_bucket_public_access_block": {
-      "cloudBucket_PublicAccessBlock_5946CCE8": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "cloudBucket_PublicAccessBlock_5946CCE8"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      }
-    },
     "aws_s3_bucket_server_side_encryption_configuration": {
       "cloudBucket_Encryption_77B6AEEF": {
         "//": {
@@ -196,37 +184,39 @@ module.exports = function({ $b }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+        return `
+          require("./inflight.$Closure1-1.js")({
             $b: ${context._lift(b)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -239,22 +229,8 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:tryDelete",new $Closure1(this,"$Closure1"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "try_delete", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "try_delete", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

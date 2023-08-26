@@ -1,6 +1,6 @@
 # [std_string.w](../../../../../examples/tests/valid/std_string.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $__s1_split_______at_1__, $_s1_concat_s2__, $s1_indexOf__s__ }) {
   class $Closure1 {
@@ -93,6 +93,9 @@ module.exports = function({ $__s1_split_______at_1__, $_s1_concat_s2__, $s1_inde
             "uniqueId": "teststring_Handler_2FEE704D"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8a1f7f0",
@@ -144,38 +147,40 @@ module.exports = function({ $__s1_split_______at_1__, $_s1_concat_s2__, $s1_inde
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
+const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+        return `
+          require("./inflight.$Closure1-1.js")({
             $__s1_split_______at_1__: ${context._lift(((s1.split(" ")).at(1)))},
             $_s1_concat_s2__: ${context._lift((s1.concat(s2)))},
             $s1_indexOf__s__: ${context._lift(s1.indexOf("s"))},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -188,41 +193,27 @@ class $Root extends $stdlib.std.Resource {
     }
     const s1 = "some string";
     const s2 = "s are immutable";
-    {((cond) => {if (!cond) throw new Error("assertion failed: s1.length == 11")})((s1.length === 11))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: s1.at(7) == \"r\"")})((((args) => { if (7 >= s1.length || 7 + s1.length < 0) {throw new Error("index out of bounds")}; return s1.at(7) })(7) === "r"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: s1.concat(s2) == \"some strings are immutable\"")})(((s1.concat(s2)) === "some strings are immutable"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s1.length == 11")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s1.length,11)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s1.at(7) == \"r\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if (7 >= s1.length || 7 + s1.length < 0) {throw new Error("index out of bounds")}; return s1.at(7) })(7),"r")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s1.concat(s2) == \"some strings are immutable\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((s1.concat(s2)),"some strings are immutable")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: s1.contains(\"some\")")})(s1.includes("some"))};
     {((cond) => {if (!cond) throw new Error("assertion failed: !\"some\".contains(s1)")})((!"some".includes(s1)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: s1.endsWith(\"string\")")})(s1.endsWith("string"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: s1.indexOf(\"s\") == 0")})((s1.indexOf("s") === 0))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"Some String\".lowercase() == \"some string\"")})(("Some String".toLocaleLowerCase() === "some string"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: s1.split(\" \").at(0) == \"some\"")})((((s1.split(" ")).at(0)) === "some"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s1.indexOf(\"s\") == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s1.indexOf("s"),0)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"Some String\".lowercase() == \"some string\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("Some String".toLocaleLowerCase(),"some string")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s1.split(\" \").at(0) == \"some\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((s1.split(" ")).at(0)),"some")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: s1.startsWith(\"some\")")})(s1.startsWith("some"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: s1.substring(5) == \"string\"")})(((s1.substring(5)) === "string"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: s1.substring(5, 7) == \"st\"")})(((s1.substring(5,7)) === "st"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"   some string   \".trim() == \"some string\"")})((("   some string   ".trim()) === "some string"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"Some String\".uppercase() == \"SOME STRING\"")})(("Some String".toLocaleUpperCase() === "SOME STRING"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello\" + \" world\" == \"hello world\"")})((("hello" + " world") === "hello world"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \n\"hello ${\"funky\"}\n world\" == \"hello funky\\n world\"")})((String.raw({ raw: ["hello ", "\n world"] }, "funky") === "hello funky\n world"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s1.substring(5) == \"string\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((s1.substring(5)),"string")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s1.substring(5, 7) == \"st\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((s1.substring(5,7)),"st")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"   some string   \".trim() == \"some string\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("   some string   ".trim()),"some string")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"Some String\".uppercase() == \"SOME STRING\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("Some String".toLocaleUpperCase(),"SOME STRING")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello\" + \" world\" == \"hello world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("hello" + " world"),"hello world")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \n\"hello ${\"funky\"}\n world\" == \"hello funky\\n world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["hello ", "\n world"] }, "funky"),"hello funky\n world")))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:string",new $Closure1(this,"$Closure1"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "std_string", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "std_string", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

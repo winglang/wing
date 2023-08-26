@@ -49,8 +49,7 @@ export class Secret extends cloud.Secret {
     return this.secret.arn;
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("secrets can only be bound by tfaws.Function for now");
     }
@@ -59,11 +58,11 @@ export class Secret extends cloud.Secret {
 
     host.addEnvironment(this.envName(), this.secret.arn);
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return core.InflightClient.for(
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,

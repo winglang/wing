@@ -12,38 +12,19 @@ import { ZoomPane, useZoomPaneContext } from "./zoom-pane.js";
 
 const durationClass = "duration-500";
 
+// For more configuration options, refer to: https://eclipse.dev/elk/reference/options.html
 const layoutOptions: LayoutOptions = {
   "elk.hierarchyHandling": "INCLUDE_CHILDREN",
-  "elk.algorithm": "org.eclipse.elk.layered",
-  "elk.layered.layering.strategy": "INTERACTIVE",
-  "elk.layered.cycleBreaking.strategy": "INTERACTIVE",
-  "elk.edgeRouting": "ORTHOGONAL",
-  // "elk.edgeRouting": "POLYLINE",
-  // "elk.edgeRouting": "SPLINES",
-  // "elk.layered.edgeRouting.splines.mode": "CONSERVATIVE",
-  "elk.layered.nodePlacement.strategy": "INTERACTIVE",
-  "elk.layered.layering.nodePromotion.strategy": "DUMMYNODE_PERCENTAGE",
-  // "elk.layered.nodePlacement.bk.fixedAlignment": "BALANCED",
-  // "elk.layered.unnecessaryBendpoints": "false",
-  // "elk.separateConnectedComponents": "true",
-  // "elk.spacing.componentComponent": "40",
   "elk.direction": "RIGHT",
-  // "elk.direction": "UP",
-  // "elk.direction": "LEFT",
-  // "elk.layered.spacing.baseValue": "40",
+  "elk.alignment": "CENTER",
+  "elk.algorithm": "org.eclipse.elk.layered",
+  "elk.layered.layering.strategy": "MIN_WIDTH",
+  "elk.layered.layering.nodePromotion.strategy": "DUMMYNODE_PERCENTAGE",
+  "elk.layered.nodePlacement.strategy": "INTERACTIVE",
+  "elk.layered.crossingMinimization.strategy": "LAYER_SWEEP",
+  "elk.nodeSize.constraints": "USE_MINIMUM_SIZE",
   "elk.layered.spacing.baseValue": "32",
-  // "elk.portAlignment.basic": "BEGIN",
-  // "elk.spacing.portPort": "40",
-  // "elk.spacing.individual": "40",
-  // "elk.spacing.edgeNode": "40",
-  // "elk.layered.spacing.edgeEdgeBetweenLayers": "40",
-  // "elk.spacing.portsSurrounding": "[top=37.5,left=10,bottom=10,right=10]",
-  // "elk.layered.considerModelOrder.strategy": "NONE",
-  // "elk.layered.considerModelOrder.strategy": "NODES_AND_EDGES",
-  // "elk.layered.mergeEdges": "true",
-  // "elk.spacing.portsSurrounding": "[top=30,left=30,bottom=30,right=30]",
-  // "elk.padding": "[top=50,left=20,bottom=20,right=20]",
-  // "elk.padding": "[top=60,left=30,bottom=30,right=30]",
+  "elk.edgeRouting": "ORTHOGONAL",
   "elk.padding": "[top=52,left=20,bottom=20,right=20]",
 };
 
@@ -123,6 +104,8 @@ export interface ElkMapProps<T> {
   node: FC<NodeItemProps<T>>;
   selectedNodeId?: string;
   onSelectedNodeIdChange?: (id: string) => void;
+  selectedEdgeId?: string;
+  onSelectedEdgeIdChange?: (id: string) => void;
 }
 
 export const ElkMap = <T extends unknown = undefined>({
@@ -131,6 +114,8 @@ export const ElkMap = <T extends unknown = undefined>({
   node: NodeItem,
   selectedNodeId,
   onSelectedNodeIdChange,
+  selectedEdgeId,
+  onSelectedEdgeIdChange,
 }: ElkMapProps<T>) => {
   const { nodeRecord } = useNodeStaticData({
     nodes,
@@ -248,7 +233,10 @@ export const ElkMap = <T extends unknown = undefined>({
             height: node.height ?? 0,
             offset,
             depth,
-            edges: edges ?? [],
+            edges:
+              edges?.filter(
+                (edge) => edge.source === node.id || edge.target === node.id,
+              ) ?? [],
             data,
           });
         }
@@ -267,25 +255,35 @@ export const ElkMap = <T extends unknown = undefined>({
 
   const { zoomToFit } = useZoomPaneContext() ?? {};
   const zoomToNode = useCallback(
-    (nodeId: string | undefined) => {
+    (nodeId: string | undefined, skipAnimation?: boolean) => {
       const node = nodeList.find((node) => node.id === nodeId ?? "root");
       if (!node) {
         return;
       }
 
-      zoomToFit({
-        x: node.offset.x,
-        y: node.offset.y,
-        width: node.width,
-        height: node.height,
-      });
+      zoomToFit(
+        {
+          x: node.offset.x,
+          y: node.offset.y,
+          width: node.width,
+          height: node.height,
+        },
+        skipAnimation,
+      );
     },
     [nodeList, zoomToFit],
   );
 
   // Zoom to fit when map changes
+  const previousNodeList = useRef<NodeData[] | undefined>();
   useEffect(() => {
-    zoomToNode("root");
+    // Skip animation if there was no previous node list (eg, first render)
+    const skipAnimation =
+      !previousNodeList.current || previousNodeList.current.length === 0;
+
+    zoomToNode("root", skipAnimation);
+
+    previousNodeList.current = nodeList;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nodeList]);
 
@@ -300,6 +298,34 @@ export const ElkMap = <T extends unknown = undefined>({
     [highlighted],
   );
 
+  const zoomPane = useRef<HTMLDivElement>(null);
+  const rootElement = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!zoomPane.current || !rootElement.current) {
+      console.error("No zoom pane or root element");
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) {
+            zoomToNode("root");
+            return;
+          }
+        }
+      },
+      {
+        root: zoomPane.current,
+        rootMargin: "-20px",
+      },
+    );
+    observer.observe(rootElement.current);
+    return () => {
+      observer.disconnect();
+    };
+  }, [zoomToNode]);
+
   return (
     <>
       <InvisibleNodeSizeCalculator
@@ -308,134 +334,153 @@ export const ElkMap = <T extends unknown = undefined>({
         onSizesChange={setMinimumSizes}
       />
 
-      <ZoomPane className="w-full h-full" data-testid="map-pane">
-        {graph && (
-          <div
-            className={classNames("relative transition-all", durationClass)}
-            style={{
-              width: graph.width,
-              height: graph.height,
-            }}
-          >
-            <AnimatePresence>
-              {nodeList.map((node) => (
-                <motion.div
-                  key={node.id}
-                  className={classNames(
-                    "absolute origin-top",
-                    "transition-all",
-                    durationClass,
-                  )}
-                  style={{
-                    translateX: node.offset.x,
-                    translateY: node.offset.y,
-                    width: `${node.width}px`,
-                    height: `${node.height}px`,
-                  }}
-                  initial={{
-                    opacity: 0,
-                  }}
-                  animate={{
-                    opacity:
-                      isHighlighted(node.id) || hasHighlightedEdge(node)
-                        ? 1
-                        : 0.35,
-                  }}
-                  transition={{ ease: "easeOut", duration: 0.15 }}
-                  exit={{
-                    opacity: 0,
-                  }}
-                  onClick={() => onSelectedNodeIdChange?.(node.id)}
-                  onMouseEnter={() => setHighlighted(node.id)}
-                  onMouseLeave={() => setHighlighted(undefined)}
+      <ZoomPane ref={zoomPane} className="w-full h-full" data-testid="map-pane">
+        <div ref={rootElement}>
+          {graph && (
+            <div
+              className={classNames(
+                "relative",
+                "transition-all",
+                durationClass,
+              )}
+              style={{
+                width: graph.width,
+                height: graph.height,
+              }}
+            >
+              <AnimatePresence>
+                {nodeList.map((node, nodeIndex) => (
+                  <motion.div
+                    key={node.id}
+                    // ref={nodeIndex === 0 ? rootElement : undefined}
+                    className={classNames(
+                      "absolute origin-top",
+                      "transition-all",
+                      durationClass,
+                    )}
+                    style={{
+                      translateX: node.offset.x,
+                      translateY: node.offset.y,
+                      width: `${node.width}px`,
+                      height: `${node.height}px`,
+                    }}
+                    initial={{
+                      opacity: 0,
+                    }}
+                    animate={{
+                      opacity:
+                        isHighlighted(node.id) || hasHighlightedEdge(node)
+                          ? 1
+                          : 0.35,
+                    }}
+                    transition={{ ease: "easeOut", duration: 0.15 }}
+                    exit={{
+                      opacity: 0,
+                    }}
+                    onClick={() => onSelectedNodeIdChange?.(node.id)}
+                    onMouseEnter={() => setHighlighted(node.id)}
+                    onMouseLeave={() => setHighlighted(undefined)}
+                  >
+                    <NodeItem node={node.data} depth={node.depth} />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+
+              <AnimatePresence>
+                <svg
+                  className="absolute inset-0 pointer-events-none"
+                  width={graph?.width}
+                  height={graph?.height}
                 >
-                  <NodeItem node={node.data} depth={node.depth} />
-                </motion.div>
-              ))}
-            </AnimatePresence>
+                  <defs>
+                    <marker
+                      className="stroke-none fill-slate-500 dark:fill-slate-800"
+                      markerWidth="6"
+                      markerHeight="4"
+                      orient="auto"
+                      id="arrow-head"
+                      refX="4"
+                      refY="2"
+                    >
+                      <path d="M0 0 v4 l5 -2 z" />
+                    </marker>
 
-            <AnimatePresence>
-              <svg
-                className="absolute inset-0 pointer-events-none"
-                width={graph?.width}
-                height={graph?.height}
-              >
-                <defs>
-                  <marker
-                    className="stroke-none fill-slate-500 dark:fill-slate-800"
-                    markerWidth="6"
-                    markerHeight="4"
-                    orient="auto"
-                    id="arrow-head"
-                    refX="4"
-                    refY="2"
-                  >
-                    <path d="M0 0 v4 l5 -2 z" />
-                  </marker>
+                    <marker
+                      className="stroke-none fill-sky-500"
+                      markerHeight="6"
+                      markerWidth="4"
+                      orient="auto"
+                      id="arrow-head-selected"
+                      refX="4"
+                      refY="2"
+                    >
+                      <path d="M0 0 v4 l5 -2 z" />
+                    </marker>
 
-                  <marker
-                    className="stroke-none fill-sky-500"
-                    markerHeight="6"
-                    markerWidth="4"
-                    orient="auto"
-                    id="arrow-head-selected"
-                    refX="4"
-                    refY="2"
-                  >
-                    <path d="M0 0 v4 l5 -2 z" />
-                  </marker>
+                    <marker
+                      className="stroke-slate-500 dark:stroke-slate-800 fill-slate-500 dark:fill-slate-800"
+                      markerHeight="6"
+                      markerWidth="6"
+                      orient="auto"
+                      id="tee"
+                      refX="5"
+                      refY="3"
+                    >
+                      <path d="M5 0V6H6V0z" />
+                    </marker>
 
-                  <marker
-                    className="stroke-slate-500 dark:stroke-slate-800 fill-slate-500 dark:fill-slate-800"
-                    markerHeight="6"
-                    markerWidth="6"
-                    orient="auto"
-                    id="tee"
-                    refX="5"
-                    refY="3"
-                  >
-                    <path d="M5 0V6H6V0z" />
-                  </marker>
+                    <marker
+                      className="stroke-sky-500 fill-sky-500"
+                      markerHeight="6"
+                      markerWidth="6"
+                      orient="auto"
+                      id="tee-selected"
+                      refX="5"
+                      refY="3"
+                    >
+                      <path d="M5 0V6H6V0z" />
+                    </marker>
+                  </defs>
 
-                  <marker
-                    className="stroke-sky-500 fill-sky-500"
-                    markerHeight="6"
-                    markerWidth="6"
-                    orient="auto"
-                    id="tee-selected"
-                    refX="5"
-                    refY="3"
-                  >
-                    <path d="M5 0V6H6V0z" />
-                  </marker>
-                </defs>
+                  {graph?.edges?.map((edge) => {
+                    const isNodeHighlighted =
+                      isHighlighted(edge.sources[0]!) ||
+                      isHighlighted(edge.targets[0]!);
+                    const isEdgeHighlighted =
+                      edge.sources[0] === selectedNodeId ||
+                      edge.targets[0] === selectedNodeId;
+                    const visible = !highlighted || isNodeHighlighted;
+                    const selected = edge.id === selectedEdgeId;
 
-                {graph?.edges?.map((edge) => {
-                  const isNodeHighlighted =
-                    isHighlighted(edge.sources[0]!) ||
-                    isHighlighted(edge.targets[0]!);
-                  const isSelected =
-                    edge.sources[0] === selectedNodeId ||
-                    edge.targets[0] === selectedNodeId;
-                  const visible = !highlighted || isNodeHighlighted;
-                  return (
-                    <EdgeItem
-                      key={edge.id}
-                      edge={edge}
-                      offset={offsets?.get((edge as any).container)}
-                      highlighted={isSelected}
-                      fade={!visible}
-                      markerStart={isSelected ? "tee-selected" : "tee"}
-                      markerEnd={
-                        isSelected ? "arrow-head-selected" : "arrow-head"
-                      }
-                    />
-                  );
-                })}
-              </svg>
-            </AnimatePresence>
-          </div>
-        )}
+                    return (
+                      <EdgeItem
+                        key={edge.id}
+                        edge={edge}
+                        offset={offsets?.get((edge as any).container)}
+                        highlighted={isEdgeHighlighted}
+                        selected={selected}
+                        fade={!visible}
+                        markerStart={
+                          isEdgeHighlighted || selected ? "tee-selected" : "tee"
+                        }
+                        markerEnd={
+                          isEdgeHighlighted || selected
+                            ? "arrow-head-selected"
+                            : "arrow-head"
+                        }
+                        onMouseEnter={() => {
+                          setHighlighted(edge.sources[0] ?? edge.targets[0]);
+                        }}
+                        onMouseLeave={() => setHighlighted(undefined)}
+                        onClick={onSelectedEdgeIdChange}
+                      />
+                    );
+                  })}
+                </svg>
+              </AnimatePresence>
+            </div>
+          )}
+        </div>
       </ZoomPane>
     </>
   );

@@ -6,7 +6,7 @@ import { CloudwatchEventTarget } from "../.gen/providers/aws/cloudwatch-event-ta
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Resource } from "../std";
+import { Node } from "../std";
 
 /**
  * AWS implementation of `cloud.Schedule`.
@@ -78,17 +78,17 @@ export class Schedule extends cloud.Schedule {
       rule: this.rule.name,
     });
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "on_tick",
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: "onTick()",
     });
 
     return fn;
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return core.InflightClient.for(
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,

@@ -1,9 +1,9 @@
 import * as reflect from "jsii-reflect";
-import { ConstructSchema } from "../schema";
-import { Transpile } from "../transpile/transpile";
 import { Class } from "./class";
 import { Construct } from "./construct";
 import { Interface } from "./interface";
+import { ConstructSchema } from "../schema";
+import { Transpile } from "../transpile/transpile";
 
 export type WingClassType = reflect.ClassType & { inflightFqn?: string };
 
@@ -17,6 +17,11 @@ export class Constructs {
     this.constructs = classes
       .filter((c) => Class.isConstruct(c))
       .map((c) => {
+        if (c.inflightFqn && !interfaces[c.inflightFqn]) {
+          throw new Error(
+            `Inflight interface "${c.inflightFqn}" not found for class "${c.fqn}"`
+          );
+        }
         return new Construct(
           transpile,
           c,

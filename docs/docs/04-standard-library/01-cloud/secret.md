@@ -154,7 +154,6 @@ Retrieve the Json value of the secret.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Secret.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Secret.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
@@ -167,18 +166,6 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
-
----
-
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.Secret.property.display"></a>
-
-```wing
-display: Display;
-```
-
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
-
-Information on how to display a resource in the UI.
 
 ---
 
@@ -221,7 +208,7 @@ Whether to cache the value.
 
 ### SecretProps <a name="SecretProps" id="@winglang/sdk.cloud.SecretProps"></a>
 
-Properties for `Secret`.
+Options for `Secret`.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.SecretProps.Initializer"></a>
 

@@ -63,3 +63,11 @@ struct Showtime extends Razzle, Dazzle {}
 let s = Showtime {
   a: "Boom baby"
 };
+
+test "struct definitions are phase independant" {
+  let s2 = Showtime {
+    a: "foo"
+  };
+
+  assert(s2.a == "foo");
+}

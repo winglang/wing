@@ -29,8 +29,8 @@ test("unsupported resource in target", async ({ expect }) => {
     },
   });
 
-  expect(sanitizeErrorMessage(result.stderr)).toMatchInlineSnapshot(`
-    "Error: ERROR: Unable to create an instance of abstract type \\"@winglang/sdk.cloud.Schedule\\" for this target
+  expect(sanitizeOutput(result.stderr)).toMatchInlineSnapshot(`
+    "ERROR: Unable to create an instance of abstract type \\"@winglang/sdk.cloud.Schedule\\" for this target
 
     target/test.tfgcp.[REDACTED].tmp/.wing/preflight.js:9
          constructor(scope, id) {
@@ -38,13 +38,11 @@ test("unsupported resource in target", async ({ expect }) => {
     >>     this.node.root.newAbstract(\\"@winglang/sdk.cloud.Schedule\\",this,\\"cloud.Schedule\\");
          }
        }
-
-        at Object.compile <PATH>
-        at async Command.<anonymous> <PATH>"
+    "
   `);
 });
 
-function sanitizeErrorMessage(inputString: string): string {
+function sanitizeOutput(inputString: string): string {
   let sanitizedString = inputString
     // Normalize paths
     .replaceAll("\\", "/")

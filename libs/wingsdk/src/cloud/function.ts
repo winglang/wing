@@ -2,10 +2,9 @@ import { mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App } from "../core/app";
+import { App } from "../core";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
-import { Duration } from "../std/duration";
-import { IInflightHost, IResource, Resource } from "../std/resource";
+import { Duration, IInflightHost, IResource, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Function`.
@@ -13,9 +12,7 @@ import { IInflightHost, IResource, Resource } from "../std/resource";
 export const FUNCTION_FQN = fqnForType("cloud.Function");
 
 /**
- * Properties for `Function`.
- *
- * This is the type users see when constructing a cloud.Function instance.
+ * Options for `Function`.
  */
 export interface FunctionProps {
   /**
@@ -50,10 +47,10 @@ export abstract class Function extends Resource implements IInflightHost {
   public static _newFunction(
     scope: Construct,
     id: string,
-    inflight: IFunctionHandler,
+    handler: IFunctionHandler,
     props: FunctionProps = {}
   ): Function {
-    return App.of(scope).newAbstract(FUNCTION_FQN, scope, id, inflight, props);
+    return App.of(scope).newAbstract(FUNCTION_FQN, scope, id, handler, props);
   }
 
   private readonly _env: Record<string, string> = {};
@@ -66,15 +63,13 @@ export abstract class Function extends Resource implements IInflightHost {
   constructor(
     scope: Construct,
     id: string,
-    inflight: IFunctionHandler,
+    handler: IFunctionHandler,
     props: FunctionProps = {}
   ) {
     super(scope, id);
 
-    this.display.title = "Function";
-    this.display.description = "A cloud function (FaaS)";
-
-    this._addInflightOps(FunctionInflightMethods.INVOKE);
+    Node.of(this).title = "Function";
+    Node.of(this).description = "A cloud function (FaaS)";
 
     for (const [key, value] of Object.entries(props.env ?? {})) {
       this.addEnvironment(key, value);
@@ -82,13 +77,13 @@ export abstract class Function extends Resource implements IInflightHost {
 
     // indicates that we are calling the inflight constructor and the
     // inflight "handle" method on the handler resource.
-    inflight._registerBind(this, ["handle", "$inflight_init"]);
+    handler._registerBind(this, ["handle", "$inflight_init"]);
 
-    const inflightClient = inflight._toInflight();
+    const inflightClient = handler._toInflight();
     const lines = new Array<string>();
 
     lines.push("exports.handler = async function(event) {");
-    lines.push(`  return await (${inflightClient.text}).handle(event);`);
+    lines.push(`  return await (${inflightClient}).handle(event);`);
     lines.push("};");
 
     const assetName = ResourceNames.generateName(this, {
@@ -110,6 +105,11 @@ export abstract class Function extends Resource implements IInflightHost {
     if (process.env.WING_TARGET) {
       this.addEnvironment("WING_TARGET", process.env.WING_TARGET);
     }
+  }
+
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [FunctionInflightMethods.INVOKE];
   }
 
   /**

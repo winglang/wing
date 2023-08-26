@@ -7,7 +7,7 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
-import { IInflightHost, Resource } from "../std";
+import { IInflightHost, Node } from "../std";
 
 /**
  * AWS Implementation of `cloud.Topic`.
@@ -23,7 +23,7 @@ export class Topic extends cloud.Topic {
   }
 
   /**
-   * topic's arn
+   * Topic's arn
    */
   public get arn(): string {
     return this.topic.topicArn;
@@ -60,17 +60,16 @@ export class Topic extends cloud.Topic {
     const subscription = new LambdaSubscription(fn._function);
     this.topic.addSubscription(subscription);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "on_message",
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: "onMessage()",
     });
 
     return fn;
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("topics can only be bound by awscdk.Function for now");
     }
@@ -81,11 +80,11 @@ export class Topic extends cloud.Topic {
 
     host.addEnvironment(this.envName(), this.topic.topicArn);
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return core.InflightClient.for(
       __dirname.replace("target-awscdk", "shared-aws"),
       __filename,

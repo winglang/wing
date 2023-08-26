@@ -1,6 +1,6 @@
 # [bring_cdktf.w](../../../../../examples/tests/valid/bring_cdktf.w) | compile | tf-aws
 
-## inflight.Foo.js
+## inflight.Foo-1.js
 ```js
 module.exports = function({  }) {
   class Foo {
@@ -64,10 +64,10 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
+const std = $stdlib.std;
 const aws = require("@cdktf/provider-aws");
 const cdktf = require("cdktf");
 class $Root extends $stdlib.std.Resource {
@@ -76,52 +76,34 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.node.root.new("cdktf.S3Backend",cdktf.S3Backend,this,{
-        "bucket": "foo",
-        "key": "bar",}
-        );
-        this._addInflightOps("$inflight_init");
+        this.node.root.new("cdktf.S3Backend",cdktf.S3Backend,this,({"bucket": "foo","key": "bar"}));
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Foo.js")({
+        return `
+          require("./inflight.Foo-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const FooClient = ${Foo._toInflightType(this).text};
+            const FooClient = ${Foo._toInflightType(this)};
             const client = new FooClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["$inflight_init"];
       }
     }
-    this.node.root.new("@cdktf/provider-aws.s3Bucket.S3Bucket",aws.s3Bucket.S3Bucket,this,"Bucket",{ bucketPrefix: "hello", versioning: {
-    "enabled": true,
-    "mfaDelete": true,}
-     });
+    this.node.root.new("@cdktf/provider-aws.s3Bucket.S3Bucket",aws.s3Bucket.S3Bucket,this,"Bucket",{ bucketPrefix: "hello", versioning: ({"enabled": true,"mfaDelete": true}) });
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "bring_cdktf", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "bring_cdktf", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

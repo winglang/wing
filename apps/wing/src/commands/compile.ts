@@ -19,11 +19,17 @@ const log = debug("wing:compile");
 export interface CompileOptions {
   readonly target: wingCompiler.Target;
   readonly plugins?: string[];
+  readonly rootId?: string;
   /**
    * Whether to run the compiler in `wing test` mode. This may create multiple
    * copies of the application resources in order to run tests in parallel.
    */
   readonly testing?: boolean;
+  /**
+   * The location to save the compilation output
+   * @default "./target"
+   */
+  readonly targetDir?: string;
 }
 
 /**
@@ -33,17 +39,19 @@ export interface CompileOptions {
  * @returns the output directory
  */
 export async function compile(entrypoint: string, options: CompileOptions): Promise<string> {
+  const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
   try {
     return await wingCompiler.compile(entrypoint, {
       ...options,
       log,
+      color: coloring,
+      targetDir: options.targetDir,
     });
   } catch (error) {
     if (error instanceof wingCompiler.CompileError) {
       // This is a bug in the user's code. Print the compiler diagnostics.
       const errors = error.diagnostics;
       const result = [];
-      const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
 
       for (const error of errors) {
         const { message, span } = error;
@@ -135,7 +143,9 @@ function annotatePreflightError(error: Error): Error {
       "hint: Every preflight object needs a unique identifier within its scope. You can assign one as shown:"
     );
     newMessage.push('> new cloud.Bucket() as "MyBucket";');
-    newMessage.push("For more information, see https://www.winglang.io/docs/language-guide/language-reference#33-preflight-classes");
+    newMessage.push(
+      "For more information, see https://www.winglang.io/docs/language-guide/language-reference#33-preflight-classes"
+    );
 
     const newError = new Error(newMessage.join("\n\n"), { cause: error });
     newError.stack = error.stack;

@@ -3,6 +3,7 @@ import { Api } from "./api";
 import { BUCKET_PREFIX_OPTS, Bucket } from "./bucket";
 import { Counter } from "./counter";
 import { Function } from "./function";
+import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
 import { Redis } from "./redis";
 import { Schedule } from "./schedule";
@@ -27,10 +28,10 @@ import {
   BUCKET_FQN,
   COUNTER_FQN,
   FUNCTION_FQN,
+  ON_DEPLOY_FQN,
   QUEUE_FQN,
   SCHEDULE_FQN,
   SECRET_FQN,
-  TEST_RUNNER_FQN,
   TOPIC_FQN,
   WEBSITE_FQN,
 } from "../cloud";
@@ -38,6 +39,7 @@ import { AppProps } from "../core";
 import { TABLE_FQN, REDIS_FQN } from "../ex";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { CdktfApp } from "../shared-tf/app";
+import { TEST_RUNNER_FQN } from "../std";
 
 /**
  * An app that knows how to synthesize constructs into a Terraform configuration
@@ -57,12 +59,14 @@ export class App extends CdktfApp {
   /** Subnets shared across app */
   public subnets: { [key: string]: Subnet };
 
-  constructor(props: AppProps = {}) {
+  constructor(props: AppProps) {
     super(props);
     new AwsProvider(this, "aws", {});
 
     this.testRunner = new TestRunner(this, "cloud.TestRunner");
     this.subnets = {};
+
+    this.synthRoots(props, this.testRunner);
   }
 
   protected tryNew(
@@ -110,6 +114,9 @@ export class App extends CdktfApp {
 
       case SECRET_FQN:
         return new Secret(scope, id, args[0]);
+
+      case ON_DEPLOY_FQN:
+        return new OnDeploy(scope, id, args[0], args[1]);
     }
 
     return undefined;

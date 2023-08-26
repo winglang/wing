@@ -7,11 +7,12 @@ import {
   HostUtils,
   Trace,
   isTermsAccepted,
+  LayoutConfig,
 } from "@wingconsole/server";
 import express from "express";
 
 import { createAnalytics } from "./analytics.js";
-import {AnalyticsStorage} from "./storage.js";
+import { AnalyticsStorage } from "./storage.js";
 
 export type {
   LogInterface,
@@ -34,6 +35,7 @@ export interface CreateConsoleAppOptions {
   onTrace?: (trace: Trace) => void;
   onExpressCreated?: CreateConsoleServerOptions["onExpressCreated"];
   requireAcceptTerms?: boolean;
+  layoutConfig?: LayoutConfig;
 }
 
 const staticDir = `${__dirname}/vite`;
@@ -83,25 +85,31 @@ export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
       );
 
       const properties = {
-        message: trace?.data?.message?.substring(0, MAX_ANALYTICS_STRING_LENGTH) || '',
-        status: trace?.data?.status?.substring(0, MAX_ANALYTICS_STRING_LENGTH) || 'unknown',
-        result: trace?.data?.result?.substring(0, MAX_ANALYTICS_STRING_LENGTH) || 'unknown',
-      }
+        message:
+          trace?.data?.message?.slice(
+            0,
+            Math.max(0, MAX_ANALYTICS_STRING_LENGTH),
+          ) || "",
+        status:
+          trace?.data?.status?.slice(
+            0,
+            Math.max(0, MAX_ANALYTICS_STRING_LENGTH),
+          ) || "unknown",
+        result:
+          trace?.data?.result?.slice(
+            0,
+            Math.max(0, MAX_ANALYTICS_STRING_LENGTH),
+          ) || "unknown",
+      };
 
       // general interaction event
-      analytics.track(
-        'console_resource_interact',
-          {
-            resource: resourceName,
-            action,
-            ...properties
-          }
-      );
+      analytics.track("console_resource_interact", {
+        resource: resourceName,
+        action,
+        ...properties,
+      });
       // resrouce specific event
-      analytics.track(
-        `console_${resourceName}_${action}`,
-          properties
-      );
+      analytics.track(`console_${resourceName}_${action}`, properties);
     },
     log: options.log ?? {
       info() {},

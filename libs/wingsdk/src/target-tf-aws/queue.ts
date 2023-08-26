@@ -8,7 +8,7 @@ import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
-import { IInflightHost, Resource } from "../std";
+import { IInflightHost, Node } from "../std";
 
 /**
  * Queue names are limited to 80 characters.
@@ -35,12 +35,6 @@ export class Queue extends cloud.Queue {
       messageRetentionSeconds: props.retentionPeriod?.seconds,
       name: ResourceNames.generateName(this, NAME_OPTS),
     });
-
-    if ((props.initialMessages ?? []).length) {
-      throw new Error(
-        "initialMessages not supported yet for AWS target - https://github.com/winglang/wing/issues/281"
-      );
-    }
   }
 
   public setConsumer(
@@ -90,17 +84,16 @@ export class Queue extends cloud.Queue {
       batchSize: props.batchSize ?? 1,
     });
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "consumer",
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: "setConsumer()",
     });
 
     return fn;
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("queues can only be bound by tfaws.Function for now");
     }
@@ -113,11 +106,11 @@ export class Queue extends cloud.Queue {
     // it may not be resolved until deployment time.
     host.addEnvironment(env, this.queue.url);
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return core.InflightClient.for(
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,

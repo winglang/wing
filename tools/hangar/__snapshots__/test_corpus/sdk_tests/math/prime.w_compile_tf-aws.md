@@ -1,6 +1,6 @@
 # [prime.w](../../../../../../examples/tests/sdk_tests/math/prime.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
@@ -10,13 +10,13 @@ module.exports = function({ $math_Util }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(1) == false")})(((await $math_Util.isPrime(1)) === false))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(2) == true")})(((await $math_Util.isPrime(2)) === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(3) == true")})(((await $math_Util.isPrime(3)) === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(4) == false")})(((await $math_Util.isPrime(4)) === false))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(10) == false")})(((await $math_Util.isPrime(10)) === false))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(11) == true")})(((await $math_Util.isPrime(11)) === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(12) == false")})(((await $math_Util.isPrime(12)) === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(1) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.isPrime(1)),false)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(2) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.isPrime(2)),true)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(3) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.isPrime(3)),true)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(4) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.isPrime(4)),false)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(10) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.isPrime(10)),false)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(11) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.isPrime(11)),true)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(12) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.isPrime(12)),false)))};
     }
   }
   return $Closure1;
@@ -97,6 +97,9 @@ module.exports = function({ $math_Util }) {
             "uniqueId": "testinflightprimenumbers_Handler_E7E982CC"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c80a9be6",
@@ -148,65 +151,53 @@ module.exports = function({ $math_Util }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const math = require('@winglang/sdk').math;
+const std = $stdlib.std;
+const math = $stdlib.math;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+        return `
+          require("./inflight.$Closure1-1.js")({
             $math_Util: ${context._lift(math.Util)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(1) == false")})(((math.Util.isPrime(1)) === false))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(2) == true")})(((math.Util.isPrime(2)) === true))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(3) == true")})(((math.Util.isPrime(3)) === true))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(4) == false")})(((math.Util.isPrime(4)) === false))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(10) == false")})(((math.Util.isPrime(10)) === false))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(11) == true")})(((math.Util.isPrime(11)) === true))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(12) == false")})(((math.Util.isPrime(12)) === false))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(1) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.isPrime(1)),false)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(2) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.isPrime(2)),true)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(3) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.isPrime(3)),true)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(4) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.isPrime(4)),false)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(10) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.isPrime(10)),false)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(11) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.isPrime(11)),true)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(12) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.isPrime(12)),false)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight prime numbers",new $Closure1(this,"$Closure1"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "prime", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "prime", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

@@ -33,7 +33,10 @@ module.exports = grammar({
     [$.json_literal, $.structured_access_expression],
   ],
 
-  conflicts: ($) => [[$._reference_identifier, $._type_identifier]],
+  conflicts: ($) => [
+    [$._reference_identifier, $._type_identifier],
+    [$.parameter_definition, $._reference_identifier]
+  ],
 
   supertypes: ($) => [$.expression, $._literal],
 
@@ -96,7 +99,7 @@ module.exports = grammar({
     _statement: ($) =>
       choice(
         $.test_statement,
-        $.short_import_statement,
+        $.import_statement,
         $.expression_statement,
         $.variable_definition_statement,
         $.variable_assignment_statement,
@@ -117,7 +120,7 @@ module.exports = grammar({
         $.super_constructor_statement
       ),
 
-    short_import_statement: ($) =>
+    import_statement: ($) =>
       seq(
         "bring",
         field("module_name", choice($.identifier, $.string)),
@@ -271,13 +274,26 @@ module.exports = grammar({
 
     if_let_statement: ($) =>
       seq(
-        // TODO: support "if let var"
-        "if let",
+        "if",
+        "let",
+        optional(field("reassignable", $.reassignable)),
         field("name", $.identifier),
         "=",
         field("value", $.expression),
         field("block", $.block),
+        repeat(field("elif_let_block", $.elif_let_block)),
         optional(seq("else", field("else_block", $.block)))
+      ),
+
+    elif_let_block: ($) =>
+      seq(
+        "elif",
+        "let",
+        optional(field("reassignable", $.reassignable)),
+        field("name", $.identifier),
+        "=",
+        field("value", $.expression),
+        field("block", $.block)
       ),
 
     if_statement: ($) =>
@@ -380,19 +396,13 @@ module.exports = grammar({
     compiler_dbg_panic: ($) => "😱",
     compiler_dbg_env: ($) => seq("🗺️", optional(";")),
 
-    _callable_expression: ($) =>
-      choice(
-        $.nested_identifier,
-        $.identifier,
-        $.call,
-        $.parenthesized_expression
-      ),
-
     call: ($) =>
       prec.left(
         PREC.CALL,
-        seq(field("caller", $.expression), field("args", $.argument_list))
+        seq(field("caller", choice($.expression, $.super_call)), field("args", $.argument_list))
       ),
+
+    super_call: ($) => seq($._super, ".", field("method", $.identifier)),
 
     argument_list: ($) =>
       seq(
@@ -517,11 +527,14 @@ module.exports = grammar({
 
     access_modifier: ($) => choice("public", "private", "protected"),
 
+    variadic: ($) => "...",
+
     parameter_definition: ($) =>
       seq(
         optional(field("reassignable", $.reassignable)),
+        optional(field("variadic", $.variadic)),
         field("name", $.identifier),
-        $._type_annotation
+        optional($._type_annotation),
       ),
 
     parameter_list: ($) => seq("(", commaSep($.parameter_definition), ")"),
