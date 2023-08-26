@@ -384,9 +384,10 @@ const DEFAULT_404_RESPONSE = {
             statusCode: "404",
             responseParameters: {
               "method.response.header.Content-Type": "'application/json'",
-              responseTemplates: {
-                "application/json": "",
-              },
+            },
+            responseTemplates: {
+              "application/json":
+                '{"statusCode: 404, "message": "Error: Resource not found"}',
             },
           },
         },
@@ -451,8 +452,15 @@ class WingRestApi extends Construct {
         // Trigger redeployment when the api spec changes
         redeployment: Lazy.stringValue({
           produce: () => {
+            const injectGreedy404Handler = (openApiSpec: OpenApiSpec) => {
+              openApiSpec.paths = {
+                ...openApiSpec.paths,
+                ...DEFAULT_404_RESPONSE,
+              };
+              return openApiSpec;
+            };
             const value = createHash("sha1")
-              .update(JSON.stringify(props.apiSpec))
+              .update(JSON.stringify(injectGreedy404Handler(props.apiSpec)))
               .digest("hex");
             return value;
           },

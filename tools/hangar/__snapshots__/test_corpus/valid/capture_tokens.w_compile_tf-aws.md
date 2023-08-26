@@ -113,7 +113,7 @@ module.exports = function({  }) {
         },
         "rest_api_id": "${aws_api_gateway_rest_api.MyResource_cloudApi_api_4CB9B8E3.id}",
         "triggers": {
-          "redeployment": "6eb5a41974a89ebc5d63af9e7fe3ce6e1d6619c7"
+          "redeployment": "d24aca57cebdb15fd9808350259d32eed37d09b4"
         }
       },
       "cloudApi_api_deployment_545514BF": {
@@ -128,7 +128,7 @@ module.exports = function({  }) {
         },
         "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
         "triggers": {
-          "redeployment": "6eb5a41974a89ebc5d63af9e7fe3ce6e1d6619c7"
+          "redeployment": "d24aca57cebdb15fd9808350259d32eed37d09b4"
         }
       }
     },
@@ -140,7 +140,7 @@ module.exports = function({  }) {
             "uniqueId": "MyResource_cloudApi_api_4CB9B8E3"
           }
         },
-        "body": "{\"openapi\":\"3.0.3\",\"paths\":{}}",
+        "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"consumes\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404}\"},\"responses\":{\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode: 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
         "name": "api-c8ef4b64"
       },
       "cloudApi_api_2B334D75": {
@@ -150,7 +150,7 @@ module.exports = function({  }) {
             "uniqueId": "cloudApi_api_2B334D75"
           }
         },
-        "body": "{\"openapi\":\"3.0.3\",\"paths\":{}}",
+        "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"consumes\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404}\"},\"responses\":{\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode: 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
         "name": "api-c895068c"
       }
     },
