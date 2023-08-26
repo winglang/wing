@@ -292,9 +292,6 @@ importers:
       ora:
         specifier: ^5.4.1
         version: 5.4.1
-      prettier:
-        specifier: ^2.8.8
-        version: 2.8.8
       tiny-updater:
         specifier: ^3.4.0
         version: 3.4.0
@@ -314,9 +311,6 @@ importers:
       '@types/node-persist':
         specifier: ^3.1.3
         version: 3.1.3
-      '@types/prettier':
-        specifier: ^2.7.3
-        version: 2.7.3
       '@types/semver-utils':
         specifier: ^1.1.1
         version: 1.1.1
@@ -9259,10 +9253,6 @@ packages:
     resolution: {integrity: sha512-G/AdOadiZhnJp0jXCaBQU449W2h716OW/EoXeYkCytxKL06X1WCXB4DZpp8TpZ8eyIJVS1cw4lrlkkSYU21cDw==}
     dev: true
 
-  /@types/prettier@2.7.3:
-    resolution: {integrity: sha512-+68kP9yzs4LMp7VNh8gdzMSPZFL44MLGqiHWvttYJe+6qnuVr4Ek9wSBQoveqY/r+LwjCcU29kNVkidwim+kYA==}
-    dev: true
-
   /@types/pretty-hrtime@1.0.1:
     resolution: {integrity: sha512-VjID5MJb1eGKthz2qUerWT8+R4b9N+CHvGCzg9fn4kWZgaF9AhdYikQio3R7wV8YY1NsQKPaCwKz1Yff+aHNUQ==}
     dev: true
@@ -16144,7 +16134,7 @@ packages:
       '@jest/transform': 27.5.1
       '@jest/types': 27.5.1
       '@types/babel__traverse': 7.20.1
-      '@types/prettier': 2.7.3
+      '@types/prettier': 2.6.0
       babel-preset-current-node-syntax: 1.0.1(@babel/core@7.22.5)
       chalk: 4.1.2
       expect: 27.5.1
@@ -16176,7 +16166,7 @@ packages:
       '@jest/transform': 29.5.0
       '@jest/types': 29.5.0
       '@types/babel__traverse': 7.20.1
-      '@types/prettier': 2.7.3
+      '@types/prettier': 2.6.0
       babel-preset-current-node-syntax: 1.0.1(@babel/core@7.22.5)
       chalk: 4.1.2
       expect: 29.5.0
