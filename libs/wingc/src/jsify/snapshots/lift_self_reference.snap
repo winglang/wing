@@ -1,0 +1,82 @@
+---
+source: libs/wingc/src/jsify/tests.rs
+---
+## Code
+
+```w
+
+    class Foo {
+      static inflight static_method() {}
+
+      inflight bar() {
+        Foo.static_method();
+      }
+    }
+    
+```
+
+## inflight.Foo-1.js
+
+```js
+module.exports = function({  }) {
+  class Foo {
+    constructor({  }) {
+    }
+    static async static_method() {
+    }
+    async bar() {
+      (await Foo.static_method());
+    }
+  }
+  return Foo;
+}
+```
+
+## preflight.js
+
+```js
+const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
+const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const $wing_is_test = process.env.WING_IS_TEST === "true";
+const std = $stdlib.std;
+class $Root extends $stdlib.std.Resource {
+  constructor(scope, id) {
+    super(scope, id);
+    class Foo extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+      }
+      static _toInflightType(context) {
+        return `
+          require("./inflight.Foo-1.js")({
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const FooClient = ${Foo._toInflightType(this)};
+            const client = new FooClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      _getInflightOps() {
+        return ["static_method", "bar", "$inflight_init"];
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("bar")) {
+          Foo._registerBindObject(Foo, host, ["static_method"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+  }
+}
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "main", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+```
+

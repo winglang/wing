@@ -300,6 +300,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["regexInflight", "getUuid", "getData", "print", "call", "$inflight_init"];
       }
+      _registerBind(host, ops) {
+        if (ops.includes("call")) {
+          Foo._registerBindObject(Foo, host, ["getData", "getUuid", "regexInflight"]);
+        }
+        super._registerBind(host, ops);
+      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {

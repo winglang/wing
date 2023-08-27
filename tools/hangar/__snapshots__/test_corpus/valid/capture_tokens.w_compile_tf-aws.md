@@ -388,6 +388,7 @@ class $Root extends $stdlib.std.Resource {
           MyResource._registerBindObject(this.url, host, []);
         }
         if (ops.includes("foo")) {
+          MyResource._registerBindObject(MyResource, host, ["isValidUrl"]);
           MyResource._registerBindObject(this.api.url, host, []);
           MyResource._registerBindObject(this.url, host, []);
         }
