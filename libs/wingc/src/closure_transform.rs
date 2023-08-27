@@ -190,14 +190,11 @@ impl Fold for ClosureTransformer {
 					ExprKind::Call {
 						callee: CalleeKind::Expr(Box::new(Expr::new(
 							ExprKind::Reference(Reference::TypeMember {
-								typeobject: Box::new(Expr::new(
-									ExprKind::Reference(Reference::TypeReference(UserDefinedType {
-										root: Symbol::new("std", WingSpan::for_file(file_id)),
-										fields: vec![Symbol::new("Node", WingSpan::for_file(file_id))],
-										span: WingSpan::for_file(file_id),
-									})),
-									WingSpan::for_file(file_id),
-								)),
+								type_name: UserDefinedType {
+									root: Symbol::new("std", WingSpan::for_file(file_id)),
+									fields: vec![Symbol::new("Node", WingSpan::for_file(file_id))],
+									span: WingSpan::for_file(file_id),
+								},
 								property: Symbol::new("of", WingSpan::for_file(file_id)),
 							}),
 							WingSpan::for_file(file_id),
