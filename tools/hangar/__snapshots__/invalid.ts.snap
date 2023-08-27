@@ -2591,20 +2591,6 @@ error: Symbol \\"x\\" used before being defined
   |          ^ Symbol \\"x\\" used before being defined
 
 
-error: Cannot access \\"y\\" because it is shadowed by another symbol with the same name
-  --> ../../../examples/tests/invalid/use_before_defined.w:1:8
-  |
-1 | log(\\"\${y}\\"); // Access y before it's defined
-  |        ^ Cannot access \\"y\\" because it is shadowed by another symbol with the same name
-
-
-error: Cannot access \\"x\\" because it is shadowed by another symbol with the same name
-  --> ../../../examples/tests/invalid/use_before_defined.w:5:10
-  |
-5 |   log(\\"\${x}\\");
-  |          ^ Cannot access \\"x\\" because it is shadowed by another symbol with the same name
-
-
  
  
 Tests 1 failed (1)
