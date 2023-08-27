@@ -1,5 +1,5 @@
 ---
-title: What are the main differences between Wing and AWS-CDK?
+title: AWS-CDK vs. Wing [Main differences]
 sidebar_label: AWS-CDK
 id: differences-from-awscdk
 keywords: [faq, winglang, Wing programming language, Wing language, CDK, AWS-CDK, IAC]

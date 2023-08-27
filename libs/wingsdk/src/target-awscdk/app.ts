@@ -7,6 +7,7 @@ import stringify from "safe-stable-stringify";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
 import { Function } from "./function";
+import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
 import { Schedule } from "./schedule";
 import { Secret } from "./secret";
@@ -18,12 +19,19 @@ import {
   BUCKET_FQN,
   COUNTER_FQN,
   FUNCTION_FQN,
+  ON_DEPLOY_FQN,
   QUEUE_FQN,
   SECRET_FQN,
   TOPIC_FQN,
   SCHEDULE_FQN,
 } from "../cloud";
-import { App as CoreApp, AppProps, preSynthesizeAllConstructs } from "../core";
+import {
+  App as CoreApp,
+  AppProps,
+  preSynthesizeAllConstructs,
+  Connections,
+  synthesizeTree,
+} from "../core";
 import { PluginManager } from "../core/plugin-manager";
 import { TEST_RUNNER_FQN } from "../std";
 
@@ -124,6 +132,12 @@ export class App extends CoreApp {
     this.pluginManager.preSynth(this);
     this.cdkApp.synth();
 
+    // write `outdir/tree.json`
+    synthesizeTree(this, this.outdir);
+
+    // write `outdir/connections.json`
+    Connections.of(this).synth(this.outdir);
+
     const template = Template.fromStack(this.cdkStack);
 
     this.synthed = true;
@@ -161,6 +175,9 @@ export class App extends CoreApp {
 
       case SECRET_FQN:
         return new Secret(scope, id, args[0]);
+
+      case ON_DEPLOY_FQN:
+        return new OnDeploy(scope, id, args[0], args[1]);
     }
     return undefined;
   }

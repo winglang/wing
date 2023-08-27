@@ -250,21 +250,6 @@ module.exports = function({  }) {
         "force_destroy": false
       }
     },
-    "aws_s3_bucket_public_access_block": {
-      "orangebucket_PublicAccessBlock_E0BEAC90": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/orange bucket/PublicAccessBlock",
-            "uniqueId": "orangebucket_PublicAccessBlock_E0BEAC90"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.orangebucket.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      }
-    },
     "aws_s3_bucket_server_side_encryption_configuration": {
       "orangebucket_Encryption_F338E6D4": {
         "//": {
@@ -481,6 +466,16 @@ class $Root extends $stdlib.std.Resource {
       }
       return ({"first": (parts.at(0)),"last": (parts.at(1))});
     });
+    const a = 1;
+    {
+      const $IF_LET_VALUE = a;
+      if ($IF_LET_VALUE != undefined) {
+        let z = $IF_LET_VALUE;
+        {((cond) => {if (!cond) throw new Error("assertion failed: z == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(z,1)))};
+        z = 2;
+        {((cond) => {if (!cond) throw new Error("assertion failed: z == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(z,2)))};
+      }
+    }
     {
       const $IF_LET_VALUE = (tryParseName("Good Name"));
       if ($IF_LET_VALUE != undefined) {

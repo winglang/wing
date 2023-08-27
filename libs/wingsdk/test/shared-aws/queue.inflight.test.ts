@@ -4,10 +4,12 @@ import {
   GetQueueAttributesCommand,
   SQSClient,
   ReceiveMessageCommand,
+  InvalidMessageContents,
 } from "@aws-sdk/client-sqs";
 import { mockClient } from "aws-sdk-client-mock";
 import { test, expect, beforeEach } from "vitest";
 import { QueueClient } from "../../src/shared-aws/queue.inflight";
+import "aws-sdk-client-mock-jest";
 
 const sqsMock = mockClient(SQSClient);
 
@@ -33,6 +35,78 @@ test("push - happy path", async () => {
 
   // THEN
   expect(response).toEqual(undefined);
+});
+
+test("push batch - happy path", async () => {
+  // GIVEN
+  const QUEUE_URL = "QUEUE_URL";
+  const MESSAGES = ["MESSAGE1", "MESSAGE2", "MESSAGE3"];
+  const RESPONSE = {
+    MessageId: "MESSAGE_ID",
+  };
+
+  sqsMock.on(SendMessageCommand).resolves(RESPONSE);
+
+  // WHEN
+  const client = new QueueClient(QUEUE_URL);
+  const response = await client.push(...MESSAGES);
+
+  // THEN
+  expect(response).toEqual(undefined);
+  expect(sqsMock).toHaveReceivedCommandTimes(SendMessageCommand, 3);
+  expect(sqsMock).toHaveReceivedNthCommandWith(1, SendMessageCommand, {
+    QueueUrl: QUEUE_URL,
+    MessageBody: MESSAGES[0],
+  });
+  expect(sqsMock).toHaveReceivedNthCommandWith(2, SendMessageCommand, {
+    QueueUrl: QUEUE_URL,
+    MessageBody: MESSAGES[1],
+  });
+  expect(sqsMock).toHaveReceivedNthCommandWith(3, SendMessageCommand, {
+    QueueUrl: QUEUE_URL,
+    MessageBody: MESSAGES[2],
+  });
+});
+
+test("push - sad path invalid message", async () => {
+  // GIVEN
+  const QUEUE_URL = "QUEUE_URL";
+  const MESSAGE = "INVALID_MESSAGE";
+
+  sqsMock
+    .on(SendMessageCommand, { QueueUrl: QUEUE_URL, MessageBody: MESSAGE })
+    .rejects(
+      new InvalidMessageContents({
+        message: "InvalidMessageContents error",
+        $metadata: {},
+      })
+    );
+
+  // WHEN
+  const client = new QueueClient(QUEUE_URL);
+
+  // THEN
+  await expect(() => client.push(MESSAGE)).rejects.toThrowError(
+    /The message contains characters outside the allowed set/
+  );
+});
+
+test("push - sad path unknown error", async () => {
+  // GIVEN
+  const QUEUE_URL = "QUEUE_URL";
+  const MESSAGE = "MESSAGE";
+
+  sqsMock
+    .on(SendMessageCommand, { QueueUrl: QUEUE_URL, MessageBody: MESSAGE })
+    .rejects(new Error("unknown error"));
+
+  // WHEN
+  const client = new QueueClient(QUEUE_URL);
+
+  // THEN
+  await expect(() => client.push(MESSAGE)).rejects.toThrowError(
+    /unknown error/
+  );
 });
 
 test("purge - happy path", async () => {

@@ -11,7 +11,7 @@
       "outputs": ["lib/**", ".jsii"]
     },
     "post-compile": {
-      "dependsOn": ["compile"],
+      "dependsOn": ["^compile", "compile"],
       "inputs": [".jsii", "src/**/*.md"],
       "outputs": ["../../docs/docs/04-standard-library/*/*.md"]
     },

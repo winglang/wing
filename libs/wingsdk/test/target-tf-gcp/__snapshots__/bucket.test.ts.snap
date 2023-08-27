@@ -1,30 +1,30 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`bucket is public 1`] = `
-"{
-  \\"resource\\": {
-    \\"google_storage_bucket\\": {
-      \\"my_bucket\\": {
-        \\"location\\": \\"US\\",
-        \\"name\\": \\"my_bucket-\${random_id.my_bucket_Id_50F73A6B.hex}\\",
-        \\"public_access_prevention\\": \\"inherited\\",
-        \\"uniform_bucket_level_access\\": true
-      }
+{
+  "resource": {
+    "google_storage_bucket": {
+      "my_bucket": {
+        "location": "US",
+        "name": "my_bucket-\${random_id.my_bucket_Id_50F73A6B.hex}",
+        "public_access_prevention": "inherited",
+        "uniform_bucket_level_access": true,
+      },
     },
-    \\"google_storage_bucket_iam_member\\": {
-      \\"my_bucket_PublicAccessIamMember_F45C9FFA\\": {
-        \\"bucket\\": \\"\${google_storage_bucket.my_bucket.name}\\",
-        \\"member\\": \\"allUsers\\",
-        \\"role\\": \\"roles/storage.objectViewer\\"
-      }
+    "google_storage_bucket_iam_member": {
+      "my_bucket_PublicAccessIamMember_F45C9FFA": {
+        "bucket": "\${google_storage_bucket.my_bucket.name}",
+        "member": "allUsers",
+        "role": "roles/storage.objectViewer",
+      },
     },
-    \\"random_id\\": {
-      \\"my_bucket_Id_50F73A6B\\": {
-        \\"byte_length\\": 4
-      }
-    }
-  }
-}"
+    "random_id": {
+      "my_bucket_Id_50F73A6B": {
+        "byte_length": 4,
+      },
+    },
+  },
+}
 `;
 
 exports[`bucket is public 2`] = `
@@ -44,9 +44,6 @@ exports[`bucket is public 2`] = `
                 "path": "root/Default/google",
               },
               "my_bucket": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -128,36 +125,174 @@ exports[`bucket is public 2`] = `
 }
 `;
 
-exports[`bucket with two preflight objects 1`] = `
-"{
-  \\"resource\\": {
-    \\"google_storage_bucket\\": {
-      \\"my_bucket\\": {
-        \\"location\\": \\"US\\",
-        \\"name\\": \\"my_bucket-\${random_id.my_bucket_Id_50F73A6B.hex}\\",
-        \\"public_access_prevention\\": \\"enforced\\",
-        \\"uniform_bucket_level_access\\": true
-      }
-    },
-    \\"google_storage_bucket_object\\": {
-      \\"my_bucket_Object-file1txt_F3CECCDA\\": {
-        \\"bucket\\": \\"\${google_storage_bucket.my_bucket.id}\\",
-        \\"content\\": \\"hello world\\",
-        \\"name\\": \\"file1.txt\\"
+exports[`bucket with two preflight files 1`] = `
+{
+  "resource": {
+    "google_storage_bucket": {
+      "my_bucket": {
+        "location": "US",
+        "name": "my_bucket-\${random_id.my_bucket_Id_50F73A6B.hex}",
+        "public_access_prevention": "enforced",
+        "uniform_bucket_level_access": true,
       },
-      \\"my_bucket_Object-file2txt_DA15A080\\": {
-        \\"bucket\\": \\"\${google_storage_bucket.my_bucket.id}\\",
-        \\"content\\": \\"boom bam\\",
-        \\"name\\": \\"file2.txt\\"
-      }
     },
-    \\"random_id\\": {
-      \\"my_bucket_Id_50F73A6B\\": {
-        \\"byte_length\\": 4
-      }
-    }
-  }
-}"
+    "google_storage_bucket_object": {
+      "my_bucket_Object-file1txt_F3CECCDA": {
+        "bucket": "\${google_storage_bucket.my_bucket.id}",
+        "content": "test1",
+        "name": "file1.txt",
+      },
+      "my_bucket_Object-file2txt_DA15A080": {
+        "bucket": "\${google_storage_bucket.my_bucket.id}",
+        "content": "test2",
+        "name": "file2.txt",
+      },
+    },
+    "random_id": {
+      "my_bucket_Id_50F73A6B": {
+        "byte_length": 4,
+      },
+    },
+  },
+}
+`;
+
+exports[`bucket with two preflight files 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "google": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.17.0",
+                },
+                "id": "google",
+                "path": "root/Default/google",
+              },
+              "my_bucket": {
+                "children": {
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "Default",
+                    "path": "root/Default/my_bucket/Default",
+                  },
+                  "Id": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "Id",
+                    "path": "root/Default/my_bucket/Id",
+                  },
+                  "Object-file1.txt": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "Object-file1.txt",
+                    "path": "root/Default/my_bucket/Object-file1.txt",
+                  },
+                  "Object-file2.txt": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "Object-file2.txt",
+                    "path": "root/Default/my_bucket/Object-file2.txt",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.314",
+                },
+                "display": {
+                  "description": "A cloud object store",
+                  "title": "Bucket",
+                },
+                "id": "my_bucket",
+                "path": "root/Default/my_bucket",
+              },
+              "random": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.17.0",
+                },
+                "id": "random",
+                "path": "root/Default/random",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.1.314",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.17.0",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.17.0",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.17.0",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`bucket with two preflight objects 1`] = `
+{
+  "resource": {
+    "google_storage_bucket": {
+      "my_bucket": {
+        "location": "US",
+        "name": "my_bucket-\${random_id.my_bucket_Id_50F73A6B.hex}",
+        "public_access_prevention": "enforced",
+        "uniform_bucket_level_access": true,
+      },
+    },
+    "google_storage_bucket_object": {
+      "my_bucket_Object-file1txt_F3CECCDA": {
+        "bucket": "\${google_storage_bucket.my_bucket.id}",
+        "content": "hello world",
+        "name": "file1.txt",
+      },
+      "my_bucket_Object-file2txt_DA15A080": {
+        "bucket": "\${google_storage_bucket.my_bucket.id}",
+        "content": "boom bam",
+        "name": "file2.txt",
+      },
+    },
+    "random_id": {
+      "my_bucket_Id_50F73A6B": {
+        "byte_length": 4,
+      },
+    },
+  },
+}
 `;
 
 exports[`bucket with two preflight objects 2`] = `
@@ -177,9 +312,6 @@ exports[`bucket with two preflight objects 2`] = `
                 "path": "root/Default/google",
               },
               "my_bucket": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -270,23 +402,23 @@ exports[`bucket with two preflight objects 2`] = `
 `;
 
 exports[`create a bucket 1`] = `
-"{
-  \\"resource\\": {
-    \\"google_storage_bucket\\": {
-      \\"my_bucket\\": {
-        \\"location\\": \\"US\\",
-        \\"name\\": \\"my_bucket-\${random_id.my_bucket_Id_50F73A6B.hex}\\",
-        \\"public_access_prevention\\": \\"enforced\\",
-        \\"uniform_bucket_level_access\\": true
-      }
+{
+  "resource": {
+    "google_storage_bucket": {
+      "my_bucket": {
+        "location": "US",
+        "name": "my_bucket-\${random_id.my_bucket_Id_50F73A6B.hex}",
+        "public_access_prevention": "enforced",
+        "uniform_bucket_level_access": true,
+      },
     },
-    \\"random_id\\": {
-      \\"my_bucket_Id_50F73A6B\\": {
-        \\"byte_length\\": 4
-      }
-    }
-  }
-}"
+    "random_id": {
+      "my_bucket_Id_50F73A6B": {
+        "byte_length": 4,
+      },
+    },
+  },
+}
 `;
 
 exports[`create a bucket 2`] = `
@@ -306,9 +438,6 @@ exports[`create a bucket 2`] = `
                 "path": "root/Default/google",
               },
               "my_bucket": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -383,32 +512,32 @@ exports[`create a bucket 2`] = `
 `;
 
 exports[`two buckets 1`] = `
-"{
-  \\"resource\\": {
-    \\"google_storage_bucket\\": {
-      \\"my_bucket1\\": {
-        \\"location\\": \\"US\\",
-        \\"name\\": \\"my_bucket1-\${random_id.my_bucket1_Id_D79FE240.hex}\\",
-        \\"public_access_prevention\\": \\"enforced\\",
-        \\"uniform_bucket_level_access\\": true
+{
+  "resource": {
+    "google_storage_bucket": {
+      "my_bucket1": {
+        "location": "US",
+        "name": "my_bucket1-\${random_id.my_bucket1_Id_D79FE240.hex}",
+        "public_access_prevention": "enforced",
+        "uniform_bucket_level_access": true,
       },
-      \\"my_bucket2\\": {
-        \\"location\\": \\"US\\",
-        \\"name\\": \\"my_bucket2-\${random_id.my_bucket2_Id_0AB96F49.hex}\\",
-        \\"public_access_prevention\\": \\"enforced\\",
-        \\"uniform_bucket_level_access\\": true
-      }
+      "my_bucket2": {
+        "location": "US",
+        "name": "my_bucket2-\${random_id.my_bucket2_Id_0AB96F49.hex}",
+        "public_access_prevention": "enforced",
+        "uniform_bucket_level_access": true,
+      },
     },
-    \\"random_id\\": {
-      \\"my_bucket1_Id_D79FE240\\": {
-        \\"byte_length\\": 4
+    "random_id": {
+      "my_bucket1_Id_D79FE240": {
+        "byte_length": 4,
       },
-      \\"my_bucket2_Id_0AB96F49\\": {
-        \\"byte_length\\": 4
-      }
-    }
-  }
-}"
+      "my_bucket2_Id_0AB96F49": {
+        "byte_length": 4,
+      },
+    },
+  },
+}
 `;
 
 exports[`two buckets 2`] = `
@@ -428,9 +557,6 @@ exports[`two buckets 2`] = `
                 "path": "root/Default/google",
               },
               "my_bucket1": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -461,9 +587,6 @@ exports[`two buckets 2`] = `
                 "path": "root/Default/my_bucket1",
               },
               "my_bucket2": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {

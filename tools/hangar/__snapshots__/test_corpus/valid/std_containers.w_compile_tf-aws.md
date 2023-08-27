@@ -1,5 +1,43 @@
 # [std_containers.w](../../../../../examples/tests/valid/std_containers.w) | compile | tf-aws
 
+## inflight.Animal-1.js
+```js
+module.exports = function({  }) {
+  class Animal {
+    constructor({  }) {
+    }
+  }
+  return Animal;
+}
+
+```
+
+## inflight.Cat-1.js
+```js
+module.exports = function({ $Animal }) {
+  class Cat extends $Animal {
+    constructor({  }) {
+      super({  });
+    }
+  }
+  return Cat;
+}
+
+```
+
+## inflight.Dog-1.js
+```js
+module.exports = function({ $Animal }) {
+  class Dog extends $Animal {
+    constructor({  }) {
+      super({  });
+    }
+  }
+  return Dog;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -41,6 +79,77 @@ const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class Animal extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("$inflight_init");
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.Animal-1.js")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const AnimalClient = ${Animal._toInflightType(this).text};
+            const client = new AnimalClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+    }
+    class Cat extends Animal {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("$inflight_init");
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.Cat-1.js")({
+            $Animal: ${context._lift(Animal)},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const CatClient = ${Cat._toInflightType(this).text};
+            const client = new CatClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+    }
+    class Dog extends Animal {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("$inflight_init");
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.Dog-1.js")({
+            $Animal: ${context._lift(Animal)},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const DogClient = ${Dog._toInflightType(this).text};
+            const client = new DogClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+    }
     const sArray = ["one", "two"];
     const mutArray = [...(sArray)];
     (mutArray.push("three"));
@@ -81,6 +190,10 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: sMap.size() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(sMap).length,2)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: immutMap.size() == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(immutMap).length,3)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: nestedMap.get(\"a\").get(\"b\").get(\"c\") == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((((nestedMap)["a"])["b"])["c"],"hello")))};
+    const heterogeneousArray = [new Cat(this,"C1"), new Dog(this,"D1")];
+    const heterogeneousDoubleArray = [[new Cat(this,"C2")], [new Cat(this,"C3"), new Dog(this,"D2")], [new Animal(this,"A1")]];
+    const heterogeneousSet = new Set([new Cat(this,"C4"), new Dog(this,"D3")]);
+    const heterogeneousMap = ({"cat": new Cat(this,"C5"),"dog": new Dog(this,"D4")});
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

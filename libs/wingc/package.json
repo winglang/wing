@@ -11,5 +11,8 @@
     "@winglang/tree-sitter-wing": "workspace:^",
     "@winglang/wingii": "workspace:^",
     "@winglang/sdk": "workspace:^"
+  },
+  "volta": {
+    "extends": "../../package.json"
   }
 }

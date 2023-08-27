@@ -1,6 +1,7 @@
 ---
-title: CLI user manual
+title: "CLI User Manual: Compile, Test, and Run Wing Programs"
 id: cli
+sidebar_label: CLI User Manual
 description: Wing CLI reference
 keywords: [Wing reference, Wing language, language, Wing language spec, Wing programming language, cli]
 ---
