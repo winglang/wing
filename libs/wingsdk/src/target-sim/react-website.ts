@@ -4,7 +4,7 @@ import { ReactWebsiteSchema, REACT_WEBSITE_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { IInflightHost, Resource } from "../std";
+import { IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 
 export class ReactWebsite
@@ -25,10 +25,10 @@ export class ReactWebsite
       );
 
       this.node.addDependency(this._websiteHost);
-      Resource.addConnection({
-        from: this._websiteHost,
-        to: this,
-        relationship: `website content`,
+      core.Connections.of(this).add({
+        source: this,
+        target: this._websiteHost,
+        name: `host`,
       });
     }
   }

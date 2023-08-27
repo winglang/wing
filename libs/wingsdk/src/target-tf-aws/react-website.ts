@@ -7,7 +7,7 @@ import { core } from "..";
 
 import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
-import { Resource } from "../std";
+import { Connections } from "../core";
 
 /**
  * AWS implementation of `cloud.ReactWebsite`.
@@ -37,10 +37,10 @@ export class ReactWebsite extends cloud.ReactWebsite {
     );
 
     this.node.addDependency(this._websiteHost);
-    Resource.addConnection({
-      from: this,
-      to: this._websiteHost,
-      relationship: `host`,
+    Connections.of(this).add({
+      source: this,
+      target: this._websiteHost,
+      name: `host`,
     });
 
     const env = Object.fromEntries(this._environments.entries());
