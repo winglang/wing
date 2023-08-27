@@ -8,8 +8,8 @@ use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
-	ArgList, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind,
-	FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface, InterpolatedString,
+	ArgList, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Expr,
+	ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface, InterpolatedString,
 	InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, StructField, Symbol,
 	TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
@@ -571,6 +571,22 @@ impl<'s> Parser<'s> {
 		let reassignable = statement_node.child_by_field_name("reassignable").is_some();
 		let value = self.build_expression(&statement_node.child_by_field_name("value").unwrap(), phase)?;
 		let name = self.check_reserved_symbol(&statement_node.child_by_field_name("name").unwrap())?;
+
+		let mut elif_vec = vec![];
+		let mut cursor = statement_node.walk();
+		for node in statement_node.children_by_field_name("elif_let_block", &mut cursor) {
+			let statements = self.build_scope(&node.child_by_field_name("block").unwrap(), phase);
+			let value = self.build_expression(&node.child_by_field_name("value").unwrap(), phase)?;
+			let name = self.check_reserved_symbol(&statement_node.child_by_field_name("name").unwrap())?;
+			let elif = ElifLetBlock {
+				reassignable: node.child_by_field_name("reassignable").is_some(),
+				statements: statements,
+				value: value,
+				var_name: name,
+			};
+			elif_vec.push(elif);
+		}
+
 		let else_block = if let Some(else_block) = statement_node.child_by_field_name("else_block") {
 			Some(self.build_scope(&else_block, phase))
 		} else {
@@ -581,6 +597,7 @@ impl<'s> Parser<'s> {
 			reassignable,
 			value,
 			statements: if_block,
+			elif_statements: elif_vec,
 			else_statements: else_block,
 		})
 	}

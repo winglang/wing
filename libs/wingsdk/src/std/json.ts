@@ -1,4 +1,12 @@
-import { Code, InflightClient } from "../core";
+import { InflightClient } from "../core";
+
+/**
+ * Options for stringify() method.
+ */
+export interface JsonStringifyOptions {
+  /** Indentation spaces number */
+  readonly indent: number;
+}
 
 /**
  * Immutable Json
@@ -7,7 +15,7 @@ export class Json {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
 
@@ -41,16 +49,17 @@ export class Json {
   /**
    * Formats Json as string
    *
-   * (JSON.stringify($args$))
-   *
-   * @macro ((args) => { return JSON.stringify(args[0], null, args[1]) })([$args$])
+   * @macro ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$args$])
    *
    * @param json to format as string
    * @returns string representation of the Json
    */
-  public static stringify(json: Json | MutJson, indent?: number): string {
+  public static stringify(
+    json: Json | MutJson,
+    options?: JsonStringifyOptions
+  ): string {
     json;
-    indent;
+    options;
     throw new Error("Macro");
   }
 
@@ -262,7 +271,7 @@ export class MutJson {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
 

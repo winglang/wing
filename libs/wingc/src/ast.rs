@@ -310,7 +310,6 @@ pub struct Stmt {
 #[derive(Debug)]
 pub enum UtilityFunctions {
 	Log,
-	Panic,
 	Throw,
 	Assert,
 }
@@ -318,12 +317,7 @@ pub enum UtilityFunctions {
 impl UtilityFunctions {
 	/// Returns all utility functions.
 	pub fn all() -> Vec<UtilityFunctions> {
-		vec![
-			UtilityFunctions::Log,
-			UtilityFunctions::Panic,
-			UtilityFunctions::Throw,
-			UtilityFunctions::Assert,
-		]
+		vec![UtilityFunctions::Log, UtilityFunctions::Throw, UtilityFunctions::Assert]
 	}
 }
 
@@ -331,7 +325,6 @@ impl Display for UtilityFunctions {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
 			UtilityFunctions::Log => write!(f, "log"),
-			UtilityFunctions::Panic => write!(f, "panic"),
 			UtilityFunctions::Throw => write!(f, "throw"),
 			UtilityFunctions::Assert => write!(f, "assert"),
 		}
@@ -341,6 +334,14 @@ impl Display for UtilityFunctions {
 #[derive(Debug)]
 pub struct ElifBlock {
 	pub condition: Expr,
+	pub statements: Scope,
+}
+
+#[derive(Debug)]
+pub struct ElifLetBlock {
+	pub reassignable: bool,
+	pub var_name: Symbol,
+	pub value: Expr,
 	pub statements: Scope,
 }
 
@@ -453,6 +454,7 @@ pub enum StmtKind {
 		var_name: Symbol,
 		value: Expr,
 		statements: Scope,
+		elif_statements: Vec<ElifLetBlock>,
 		else_statements: Option<Scope>,
 	},
 	If {

@@ -15,7 +15,7 @@ use std::{
 
 use crate::{
 	ast::{
-		ArgList, BinaryOperator, BringSource, CalleeKind, Class as AstClass, Expr, ExprKind, FunctionBody,
+		ArgList, BinaryOperator, BringSource, CalleeKind, Class as AstClass, ElifLetBlock, Expr, ExprKind, FunctionBody,
 		FunctionDefinition, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, StructField,
 		Symbol, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 	},
@@ -44,6 +44,7 @@ const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
 
 const ENV_WING_IS_TEST: &str = "$wing_is_test";
 const OUTDIR_VAR: &str = "$outdir";
+const PLUGINS_VAR: &str = "$plugins";
 
 const ROOT_CLASS: &str = "$Root";
 const JS_CONSTRUCTOR: &str = "constructor";
@@ -141,8 +142,11 @@ impl<'a> JSifier<'a> {
 
 		if is_entrypoint_file {
 			output.line(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
+			output.line(format!(
+				"const {} = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);",
+				PLUGINS_VAR
+			));
 			output.line(format!("const {} = process.env.WING_SYNTH_DIR ?? \".\";", OUTDIR_VAR));
-			// "std" is implicitly imported
 			output.line(format!(
 				"const {} = process.env.WING_IS_TEST === \"true\";",
 				ENV_WING_IS_TEST
@@ -151,6 +155,7 @@ impl<'a> JSifier<'a> {
 			output.open(format!("module.exports = function({{ {} }}) {{", STDLIB));
 		}
 
+		// "std" is implicitly imported
 		output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
 		output.add_code(imports);
 
@@ -167,8 +172,8 @@ impl<'a> JSifier<'a> {
 			output.line("const $App = $stdlib.core.App.for(process.env.WING_TARGET);".to_string());
 			let app_name = self.entrypoint_file_path.file_stem().unwrap().to_string_lossy();
 			output.line(format!(
-				"new $App({{ outdir: {}, name: \"{}\", rootConstruct: {}, plugins: $plugins, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }}).synth();",
-				OUTDIR_VAR, app_name, ROOT_CLASS, ENV_WING_IS_TEST
+				"new $App({{ outdir: {}, name: \"{}\", rootConstruct: {}, plugins: {}, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }}).synth();",
+				OUTDIR_VAR, app_name, ROOT_CLASS, PLUGINS_VAR, ENV_WING_IS_TEST
 			));
 		} else {
 			output.add_code(js);
@@ -304,30 +309,6 @@ impl<'a> JSifier<'a> {
 				}
 			}
 			_ => None,
-		}
-	}
-
-	// This helper determines what requirement and dependency to add to the struct schema based
-	// on the type annotation of the field.
-	// I.E. if a struct has a field named "foo" with a type "OtherStruct", then we want to add
-	// the field "foo" as a required  and the struct "OtherStruct" as a dependency. so the result is
-	// a tuple (required, dependency)
-	fn extract_struct_field_schema_dependency(
-		&self,
-		typ: &TypeAnnotationKind,
-		field_name: &String,
-	) -> (Option<String>, Option<String>) {
-		match typ {
-			TypeAnnotationKind::UserDefined(udt) => (Some(field_name.clone()), Some(udt.root.name.clone())),
-			TypeAnnotationKind::Array(t) | TypeAnnotationKind::Set(t) | TypeAnnotationKind::Map(t) => {
-				self.extract_struct_field_schema_dependency(&t.kind, field_name)
-			}
-			TypeAnnotationKind::Optional(t) => {
-				let deps = self.extract_struct_field_schema_dependency(&t.kind, field_name);
-				// We never want to add an optional to the required block
-				(None, deps.1)
-			}
-			_ => (Some(field_name.clone()), None),
 		}
 	}
 
@@ -547,8 +528,9 @@ impl<'a> JSifier<'a> {
 								ExprKind::Reference(Reference::InstanceMember { object, .. }) => {
 									self.jsify_expression(&object, ctx)
 								},
-                ExprKind::Reference(Reference::TypeMember { .. }) => {
-                  expr_string.clone().split(".").next().unwrap_or("").to_string()
+                ExprKind::Reference(Reference::TypeMember { property, .. }) => {
+                  // remove the property name from the expression string
+                  expr_string.split(".").filter(|s| s != &property.name).join(".")
                 },
 								_ => expr_string,
 							}
@@ -718,7 +700,7 @@ impl<'a> JSifier<'a> {
 		// getValidator method that will create a json schema validator.
 		let mut code = CodeMaker::default();
 
-		code.open("module.exports = function(stdStruct, fromInline) {".to_string());
+		code.open("module.exports = function(stdStruct) {".to_string());
 		code.open(format!("class {} {{", name));
 
 		// create schema
@@ -736,7 +718,7 @@ impl<'a> JSifier<'a> {
 
 		// determine which fields are required, and which schemas need to be added to validator
 		for field in fields {
-			let dep = self.extract_struct_field_schema_dependency(&field.member_type.kind, &field.name.name);
+			let dep = extract_struct_field_schema_dependency(&field.member_type.kind, &field.name.name);
 			if let Some(req) = dep.0 {
 				required.push(req);
 			}
@@ -790,7 +772,7 @@ impl<'a> JSifier<'a> {
 		// create _toInflightType function that just requires the generated struct file
 		code.open("static _toInflightType(context) {".to_string());
 		code.line(format!(
-			"return fromInline(`require(\"{}\")(${{ context._lift(stdStruct) }})`);",
+			"return `require(\"{}\")(${{ context._lift(stdStruct) }})`;",
 			struct_filename(&name.name)
 		));
 		code.close("}");
@@ -799,6 +781,78 @@ impl<'a> JSifier<'a> {
 		code.close("};");
 
 		code
+	}
+
+	// To avoid a performance penalty when evaluating assignments made in the elif statement,
+	// it was necessary to nest the if statements.
+	//
+	// Thus, this code in Wing:
+	//
+	// if let x = tryA() {
+	//  ...
+	// } elif let x = tryB() {
+	// 	 ...
+	// } elif let x = TryC() {
+	// 	 ...
+	// } else {
+	// 	...
+	// }
+	//
+	// In JavaScript, will become this:
+	//
+	// const $if_let_value = tryA();
+	// if ($if_let_value !== undefined) {
+	// 	...
+	// } else {
+	// 	let $elif_let_value0 = tryB();
+	// 	if ($elif_let_value0 !== undefined) {
+	// 		 ...
+	// 	} else {
+	// 		 let $elif_let_value1 = tryC();
+	// 		 if ($elif_let_value1 !== undefined) {
+	// 				...
+	// 		 } else {
+	// 				...
+	// 		 }
+	// 	}
+	// }
+	fn jsify_elif_statements(
+		&self,
+		code: &mut CodeMaker,
+		elif_statements: &Vec<ElifLetBlock>,
+		index: usize,
+		else_statements: &Option<Scope>,
+		ctx: &mut JSifyContext,
+	) {
+		let elif_let_value = "$elif_let_value";
+
+		let value = format!("{}{}", elif_let_value, index);
+		code.line(format!(
+			"const {} = {};",
+			value,
+			self.jsify_expression(&elif_statements.get(index).unwrap().value, ctx)
+		));
+		let value = format!("{}{}", elif_let_value, index);
+		code.open(format!("if ({value} != undefined) {{"));
+		let elif_block = elif_statements.get(index).unwrap();
+		if elif_block.reassignable {
+			code.line(format!("let {} = {};", elif_block.var_name, value));
+		} else {
+			code.line(format!("const {} = {};", elif_block.var_name, value));
+		}
+		code.add_code(self.jsify_scope_body(&elif_block.statements, ctx));
+		code.close("}");
+
+		if index < elif_statements.len() - 1 {
+			code.open("else {");
+			self.jsify_elif_statements(code, elif_statements, index + 1, else_statements, ctx);
+			code.close("}");
+		} else if let Some(else_scope) = else_statements {
+			code.open("else {");
+			code.add_code(self.jsify_scope_body(else_scope, ctx));
+			code.close("}");
+		}
+		return;
 	}
 
 	fn jsify_statement(&self, env: &SymbolEnv, statement: &Stmt, ctx: &mut JSifyContext) -> CodeMaker {
@@ -873,6 +927,7 @@ impl<'a> JSifier<'a> {
 				value,
 				statements,
 				var_name,
+				elif_statements,
 				else_statements,
 			} => {
 				let mut code = CodeMaker::default();
@@ -904,12 +959,13 @@ impl<'a> JSifier<'a> {
 				// The temporary scope is created so that intermediate variables created by consecutive `if let` clauses
 				// do not interfere with each other.
 				code.open("{");
-				let if_let_value = "$IF_LET_VALUE".to_string();
+				let if_let_value = "$if_let_value".to_string();
 				code.line(format!(
 					"const {} = {};",
 					if_let_value,
 					self.jsify_expression(value, ctx)
 				));
+
 				code.open(format!("if ({if_let_value} != undefined) {{"));
 				if *reassignable {
 					code.line(format!("let {} = {};", var_name, if_let_value));
@@ -919,7 +975,11 @@ impl<'a> JSifier<'a> {
 				code.add_code(self.jsify_scope_body(statements, ctx));
 				code.close("}");
 
-				if let Some(else_scope) = else_statements {
+				if elif_statements.len() > 0 {
+					code.open("else {");
+					self.jsify_elif_statements(&mut code, elif_statements, 0, else_statements, ctx);
+					code.close("}");
+				} else if let Some(else_scope) = else_statements {
 					code.open("else {");
 					code.add_code(self.jsify_scope_body(else_scope, ctx));
 					code.close("}");
@@ -992,10 +1052,9 @@ impl<'a> JSifier<'a> {
 				// Reset the code maker for code to be inserted in preflight.js
 				code = CodeMaker::default();
 				code.line(format!(
-					"const {} = require(\"{}\")({}.std.Struct, {}.core.NodeJsCode.fromInline);",
+					"const {} = require(\"{}\")({}.std.Struct);",
 					name,
 					struct_filename(&name.name),
-					STDLIB,
 					STDLIB
 				));
 				code
@@ -1212,6 +1271,7 @@ impl<'a> JSifier<'a> {
 		// `_liftType`).
 		code.add_code(self.jsify_to_inflight_type_method(&class, ctx));
 		code.add_code(self.jsify_to_inflight_method(&class.name, ctx));
+		code.add_code(self.jsify_get_inflight_ops_method(&class));
 
 		// emit `_registerBindObject` to register bindings (for type & instance binds)
 		code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Instance, ctx));
@@ -1256,29 +1316,26 @@ impl<'a> JSifier<'a> {
 		}
 		body_code.add_code(self.jsify_scope_body(&init_statements, ctx));
 
-		let inflight_fields = class.inflight_fields();
-		let inflight_methods = class.inflight_methods(true);
-
-		if inflight_fields.len() + inflight_methods.len() > 0 {
-			let inflight_method_names = inflight_methods
-				.iter()
-				.filter_map(|m| m.name.clone())
-				.map(|s| s.name)
-				.collect_vec();
-
-			let inflight_field_names = inflight_fields.iter().map(|f| f.name.name.clone()).collect_vec();
-			let inflight_ops_string = inflight_method_names
-				.iter()
-				.chain(inflight_field_names.iter())
-				.map(|name| format!("\"{}\"", name))
-				.join(", ");
-
-			// insert as the first statement after the super() call
-			body_code.insert_line(1, format!("this._addInflightOps({inflight_ops_string});"));
-		}
-
 		code.add_code(body_code);
 
+		code.close("}");
+		code
+	}
+
+	fn jsify_get_inflight_ops_method(&self, class: &AstClass) -> CodeMaker {
+		let mut code = CodeMaker::default();
+
+		code.open("_getInflightOps() {");
+
+		let mut ops = vec![];
+		for field in class.inflight_fields() {
+			ops.push(format!("\"{}\"", field.name.name));
+		}
+		for method in class.inflight_methods(true) {
+			ops.push(format!("\"{}\"", method.name.as_ref().unwrap().name));
+		}
+
+		code.line(format!("return [{}];", ops.join(", ")));
 		code.close("}");
 		code
 	}
@@ -1290,7 +1347,7 @@ impl<'a> JSifier<'a> {
 
 		code.open("static _toInflightType(context) {"); // TODO: consider removing the context and making _lift a static method
 
-		code.open(format!("return {STDLIB}.core.NodeJsCode.fromInline(`"));
+		code.open("return `");
 
 		code.open(format!("require(\"{client_path}\")({{"));
 
@@ -1303,7 +1360,7 @@ impl<'a> JSifier<'a> {
 
 		code.close("})");
 
-		code.close("`);");
+		code.close("`;");
 
 		code.close("}");
 		code
@@ -1314,12 +1371,12 @@ impl<'a> JSifier<'a> {
 
 		code.open("_toInflight() {");
 
-		code.open(format!("return {STDLIB}.core.NodeJsCode.fromInline(`"));
+		code.open("return `");
 
 		code.open("(await (async () => {");
 
 		code.line(format!(
-			"const {}Client = ${{{}._toInflightType(this).text}};",
+			"const {}Client = ${{{}._toInflightType(this)}};",
 			resource_name.name, resource_name.name,
 		));
 
@@ -1340,7 +1397,7 @@ impl<'a> JSifier<'a> {
 
 		code.close("})())");
 
-		code.close("`);");
+		code.close("`;");
 
 		code.close("}");
 		code
@@ -1554,6 +1611,29 @@ impl<'a> JSifier<'a> {
 	}
 }
 
+// This helper determines what requirement and dependency to add to the struct schema based
+// on the type annotation of the field.
+// I.E. if a struct has a field named "foo" with a type "OtherStruct", then we want to add
+// the field "foo" as a required  and the struct "OtherStruct" as a dependency. so the result is
+// a tuple (required, dependency)
+fn extract_struct_field_schema_dependency(
+	typ: &TypeAnnotationKind,
+	field_name: &String,
+) -> (Option<String>, Option<String>) {
+	match typ {
+		TypeAnnotationKind::UserDefined(udt) => (Some(field_name.clone()), Some(udt.root.name.clone())),
+		TypeAnnotationKind::Array(t) | TypeAnnotationKind::Set(t) | TypeAnnotationKind::Map(t) => {
+			extract_struct_field_schema_dependency(&t.kind, field_name)
+		}
+		TypeAnnotationKind::Optional(t) => {
+			let deps = extract_struct_field_schema_dependency(&t.kind, field_name);
+			// We never want to add an optional to the required block
+			(None, deps.1)
+		}
+		_ => (Some(field_name.clone()), None),
+	}
+}
+
 fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 	let mut symbols = Vec::new();
 
@@ -1577,8 +1657,9 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 			}
 			// interfaces are bringable, but there's nothing to emit
 			StmtKind::Interface(_) => {}
-			// structs are bringable, but there's nothing to emit
-			StmtKind::Struct { .. } => {}
+			StmtKind::Struct { name, .. } => {
+				symbols.push(name.clone());
+			}
 			StmtKind::Enum { name, .. } => {
 				symbols.push(name.clone());
 			}

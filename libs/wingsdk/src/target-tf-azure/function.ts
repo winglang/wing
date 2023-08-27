@@ -10,7 +10,6 @@ import { ServicePlan } from "../.gen/providers/azurerm/service-plan";
 import { StorageAccount } from "../.gen/providers/azurerm/storage-account";
 import { StorageBlob } from "../.gen/providers/azurerm/storage-blob";
 import * as cloud from "../cloud";
-import * as core from "../core";
 import { createBundle } from "../shared/bundling";
 import {
   CaseConventions,
@@ -229,7 +228,7 @@ export class Function extends cloud.Function {
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     // TODO: support inflight https://github.com/winglang/wing/issues/1371
     throw new Error(
       "cloud.Function cannot be used as an Inflight resource on Azure yet"

@@ -1,13 +1,6 @@
 ---
 source: libs/wingc/src/lsp/completions.rs
 ---
-- label: display
-  kind: 5
-  detail: Display
-  documentation:
-    kind: markdown
-    value: "```wing\npreflight display: Display\n```\n---\nInformation on how to display a resource in the UI."
-  sortText: ab|display
 - label: node
   kind: 5
   detail: Node

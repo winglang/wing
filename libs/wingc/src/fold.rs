@@ -1,9 +1,9 @@
 use crate::{
 	ast::{
-		ArgList, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody,
-		FunctionDefinition, FunctionParameter, FunctionSignature, Interface, InterpolatedString, InterpolatedStringPart,
-		Literal, NewExpr, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind,
-		UserDefinedType,
+		ArgList, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Expr, ExprKind,
+		FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface, InterpolatedString,
+		InterpolatedStringPart, Literal, NewExpr, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation,
+		TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -118,12 +118,22 @@ where
 			statements,
 			reassignable,
 			var_name,
+			elif_statements,
 			else_statements,
 		} => StmtKind::IfLet {
 			value: f.fold_expr(value),
 			statements: f.fold_scope(statements),
 			reassignable,
 			var_name: f.fold_symbol(var_name),
+			elif_statements: elif_statements
+				.into_iter()
+				.map(|elif_let_block| ElifLetBlock {
+					reassignable: elif_let_block.reassignable,
+					statements: f.fold_scope(elif_let_block.statements),
+					value: f.fold_expr(elif_let_block.value),
+					var_name: f.fold_symbol(elif_let_block.var_name),
+				})
+				.collect(),
 			else_statements: else_statements.map(|statements| f.fold_scope(statements)),
 		},
 		StmtKind::If {

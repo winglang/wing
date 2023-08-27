@@ -3,7 +3,7 @@
 // TODO: These should be interfaces, currently Wing does not support interface JSII imports
 
 import { T1 } from "./generics";
-import { Code, InflightClient } from "../core";
+import { InflightClient } from "../core";
 
 /**
  * Immutable Array
@@ -14,7 +14,7 @@ export class Array {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
 
@@ -135,7 +135,7 @@ export class MutArray {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
 
@@ -260,6 +260,21 @@ export class MutArray {
    * @throws index out of bounds error if the given index does not exist for the array
    */
   public set(index: number, value: T1): void {
+    index;
+    value;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Inserts a new value at the given index of an array
+   *
+   * @macro ((obj, args) => { if (args[0] < 0 || args[0] > $self$.length) throw new Error("Index out of bounds"); obj.splice(args[0], 0, args[1]); })($self$, [$args$])
+   *
+   * @param index the index to insert the value at
+   * @param value the value to insert at the given index
+   * @throws index out of bounds error if the given index isn't valid
+   */
+  public insert(index: number, value: T1): void {
     index;
     value;
     throw new Error("Macro");

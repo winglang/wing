@@ -1,4 +1,4 @@
-import { Code, InflightClient } from "../core";
+import { InflightClient } from "../core";
 
 /**
  * The cache mode of the request.
@@ -165,7 +165,7 @@ export class Util {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
   /**

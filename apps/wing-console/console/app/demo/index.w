@@ -8,9 +8,7 @@ let api = new cloud.Api();
 api.get("/test-get", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   return cloud.ApiResponse {
     status: 200,
-    body: Json.stringify({
-      query: Json (Json req).get("query"),
-    })
+    body: Json.stringify(req.query)
   };
 });
 api.post("/test-post", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
