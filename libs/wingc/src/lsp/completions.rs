@@ -309,10 +309,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 						},
 						arg_list,
 					)),
-					ExprKind::New(new_expr) => {
-						// TODO: I think `e` is enough here because a new expression's type is the same as the class type. Is this good enough?
-						Some((types.get_expr_type(&e), &new_expr.arg_list))
-					}
+					ExprKind::New(new_expr) => Some((types.get_expr_type(&e), &new_expr.arg_list)),
 					_ => None,
 				}) {
 					let mut completions =
