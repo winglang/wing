@@ -1,5 +1,5 @@
 use crate::{
-	ast::{Phase, Symbol, UserDefinedType},
+	ast::{ExprId, Phase, Symbol, UserDefinedType},
 	type_check::symbol_env::SymbolEnvRef,
 };
 
@@ -13,6 +13,7 @@ pub struct VisitContext {
 	statement: Vec<usize>,
 	in_json: Vec<bool>,
 	in_type_annotation: Vec<bool>,
+	expression: Vec<ExprId>,
 }
 
 impl VisitContext {
@@ -27,6 +28,7 @@ impl VisitContext {
 			method: vec![],
 			in_json: vec![],
 			in_type_annotation: vec![],
+			expression: vec![],
 		}
 	}
 }
@@ -56,6 +58,20 @@ impl VisitContext {
 
 	pub fn current_stmt_idx(&self) -> usize {
 		*self.statement.last().unwrap_or(&0)
+	}
+
+	// --
+
+	fn push_expr(&mut self, expr: ExprId) {
+		self.expression.push(expr);
+	}
+
+	fn pop_expr(&mut self) {
+		self.expression.pop();
+	}
+
+	pub fn current_expr(&self) -> Option<ExprId> {
+		self.expression.last().map(|id| *id)
 	}
 
 	// --
@@ -157,5 +173,15 @@ impl VisitContext {
 
 	pub fn pop_phase(&mut self) {
 		self.phase.pop();
+	}
+}
+
+pub trait VisitorWithContext {
+	fn ctx(&mut self) -> &mut VisitContext;
+
+	fn with_expr(&mut self, expr: usize, f: impl FnOnce(&mut Self)) {
+		self.ctx().push_expr(expr);
+		f(self);
+		self.ctx().pop_expr();
 	}
 }

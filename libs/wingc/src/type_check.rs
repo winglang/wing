@@ -1504,8 +1504,13 @@ impl Types {
 
 	/// Obtain the type of a given expression node. Will panic if the expression has not been type checked yet.
 	pub fn get_expr_type(&self, expr: &Expr) -> TypeRef {
+		self.get_expr_id_type(expr.id)
+	}
+
+	/// Obtain the type of a given expression id. Will panic if the expression has not been type checked yet.
+	pub fn get_expr_id_type(&self, expr_id: ExprId) -> TypeRef {
 		self
-			.try_get_expr_type(expr)
+			.try_get_expr_type(expr_id)
 			.expect("All expressions should have a type")
 	}
 
@@ -1532,12 +1537,12 @@ impl Types {
 		}
 	}
 
-	/// Obtain the type of a given expression node. Returns None if the expression has not been type checked yet. If
+	/// Obtain the type of a given expression id. Returns None if the expression has not been type checked yet. If
 	/// this is called after type checking, it should always return Some.
-	pub fn try_get_expr_type(&self, expr: &Expr) -> Option<TypeRef> {
+	pub fn try_get_expr_type(&self, expr_id: ExprId) -> Option<TypeRef> {
 		self
 			.type_for_expr
-			.get(expr.id)
+			.get(expr_id)
 			.and_then(|t| t.as_ref().map(|t| t.type_))
 	}
 
