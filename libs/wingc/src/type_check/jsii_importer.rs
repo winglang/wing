@@ -349,16 +349,15 @@ impl<'a> JsiiImporter<'a> {
 
 		self.register_jsii_type(&jsii_interface_fqn, &new_type_symbol, wing_type);
 
-		match *wing_type {
-			Type::Struct(Struct { ref mut extends, .. }) | Type::Interface(Interface { ref mut extends, .. }) => {
-				if let Some(interfaces) = &jsii_interface.interfaces {
-					*extends = interfaces
-						.iter()
-						.map(|fqn| self.lookup_or_create_type(&FQN::from(fqn.as_str())))
-						.collect::<Vec<_>>()
-				}
+		if let Some(interfaces) = &jsii_interface.interfaces {
+			if let Type::Struct(Struct { ref mut extends, .. }) | Type::Interface(Interface { ref mut extends, .. }) =
+				*wing_type
+			{
+				*extends = interfaces
+					.iter()
+					.map(|fqn| self.lookup_or_create_type(&FQN::from(fqn.as_str())))
+					.collect::<Vec<_>>()
 			}
-			_ => {}
 		};
 
 		self.add_members_to_class_env(
@@ -372,7 +371,7 @@ impl<'a> JsiiImporter<'a> {
 		// Add properties from our parents to the new structs env
 		if is_struct {
 			type_check::add_parent_members_to_struct_env(
-				&wing_type.as_struct().unwrap().extends,
+				&wing_type.as_struct().expect("Expected struct").extends,
 				&new_type_symbol,
 				&mut iface_env,
 			)
@@ -387,7 +386,7 @@ impl<'a> JsiiImporter<'a> {
 		// that contains all of the inflight methods of a bucket.
 		else {
 			type_check::add_parent_members_to_iface_env(
-				&wing_type.as_interface().unwrap().extends,
+				&wing_type.as_interface().expect("Expected interface").extends,
 				&new_type_symbol,
 				&mut iface_env,
 			)
