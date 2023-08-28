@@ -1,7 +1,7 @@
 import { createHash } from "crypto";
 import { join } from "path";
 
-import { Lazy } from "cdktf/lib/tokens";
+import { Fn, Lazy } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
@@ -450,21 +450,7 @@ class WingRestApi extends Construct {
       },
       triggers: {
         // Trigger redeployment when the api spec changes
-        redeployment: Lazy.stringValue({
-          produce: () => {
-            const injectGreedy404Handler = (openApiSpec: OpenApiSpec) => {
-              openApiSpec.paths = {
-                ...openApiSpec.paths,
-                ...DEFAULT_404_RESPONSE,
-              };
-              return openApiSpec;
-            };
-            const value = createHash("sha1")
-              .update(JSON.stringify(injectGreedy404Handler(props.apiSpec)))
-              .digest("hex");
-            return value;
-          },
-        }),
+        redeployment: Fn.sha256(this.api.body),
       },
     });
 

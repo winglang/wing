@@ -190,14 +190,11 @@ impl Fold for ClosureTransformer {
 					ExprKind::Call {
 						callee: CalleeKind::Expr(Box::new(Expr::new(
 							ExprKind::Reference(Reference::TypeMember {
-								typeobject: Box::new(Expr::new(
-									ExprKind::Reference(Reference::TypeReference(UserDefinedType {
-										root: Symbol::new("std", WingSpan::for_file(file_id)),
-										fields: vec![Symbol::new("Node", WingSpan::for_file(file_id))],
-										span: WingSpan::for_file(file_id),
-									})),
-									WingSpan::for_file(file_id),
-								)),
+								type_name: UserDefinedType {
+									root: Symbol::new("std", WingSpan::for_file(file_id)),
+									fields: vec![Symbol::new("Node", WingSpan::for_file(file_id))],
+									span: WingSpan::for_file(file_id),
+								},
 								property: Symbol::new("of", WingSpan::for_file(file_id)),
 							}),
 							WingSpan::for_file(file_id),
@@ -304,7 +301,7 @@ impl Fold for ClosureTransformer {
 				// ```
 				let new_class_instance = Expr::new(
 					ExprKind::New(NewExpr {
-						class: Box::new(class_udt.to_expression()),
+						class: class_udt,
 						arg_list: ArgList {
 							named_args: IndexMap::new(),
 							pos_args: vec![],
@@ -365,9 +362,7 @@ impl<'a> Fold for RenameThisTransformer<'a> {
 					Reference::Identifier(ident)
 				}
 			}
-			Reference::InstanceMember { .. } | Reference::TypeMember { .. } | Reference::TypeReference(_) => {
-				fold::fold_reference(self, node)
-			}
+			Reference::InstanceMember { .. } | Reference::TypeMember { .. } => fold::fold_reference(self, node),
 		}
 	}
 }

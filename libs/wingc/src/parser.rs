@@ -1015,10 +1015,7 @@ impl<'s> Parser<'s> {
 		let parent = if let Some(parent_node) = statement_node.child_by_field_name("parent") {
 			let parent_type = self.build_type_annotation(Some(parent_node), class_phase)?;
 			match parent_type.kind {
-				TypeAnnotationKind::UserDefined(parent_type) => Some(Expr::new(
-					ExprKind::Reference(Reference::TypeReference(parent_type)),
-					self.node_span(&parent_node),
-				)),
+				TypeAnnotationKind::UserDefined(parent_type) => Some(parent_type),
 				_ => {
 					self.with_error::<Node>(
 						format!("Parent type must be a user defined type, found {}", parent_type),
@@ -1411,37 +1408,34 @@ impl<'s> Parser<'s> {
 		let object_expr = self.get_child_field(nested_node, "object")?;
 
 		if let Some(property) = nested_node.child_by_field_name("property") {
-			let object_expr = if object_expr.kind() == "json_container_type" {
-				Expr::new(
+			if object_expr.kind() == "json_container_type" {
+				Ok(Expr::new(
 					ExprKind::Reference(Reference::TypeMember {
-						typeobject: Box::new(
-							UserDefinedType {
-								root: Symbol::global(WINGSDK_STD_MODULE),
-								fields: vec![self.node_symbol(&object_expr)?],
-								span: self.node_span(&object_expr),
-							}
-							.to_expression(),
-						),
+						type_name: UserDefinedType {
+							root: Symbol::global(WINGSDK_STD_MODULE),
+							fields: vec![self.node_symbol(&object_expr)?],
+							span: self.node_span(&object_expr),
+						},
 						property: self.node_symbol(&property)?,
 					}),
 					self.node_span(&object_expr),
-				)
+				))
 			} else {
-				self.build_expression(&object_expr, phase)?
-			};
-			let accessor_sym = self.node_symbol(&self.get_child_field(nested_node, "accessor_type")?)?;
-			let optional_accessor = match accessor_sym.name.as_str() {
-				"?." => true,
-				_ => false,
-			};
-			Ok(Expr::new(
-				ExprKind::Reference(Reference::InstanceMember {
-					object: Box::new(object_expr),
-					property: self.node_symbol(&property)?,
-					optional_accessor,
-				}),
-				self.node_span(&nested_node),
-			))
+				let object_expr = self.build_expression(&object_expr, phase)?;
+				let accessor_sym = self.node_symbol(&self.get_child_field(nested_node, "accessor_type")?)?;
+				let optional_accessor = match accessor_sym.name.as_str() {
+					"?." => true,
+					_ => false,
+				};
+				Ok(Expr::new(
+					ExprKind::Reference(Reference::InstanceMember {
+						object: Box::new(object_expr),
+						property: self.node_symbol(&property)?,
+						optional_accessor,
+					}),
+					self.node_span(&nested_node),
+				))
+			}
 		} else {
 			// we are missing the last property, but we can still parse the rest of the expression
 			self.add_error(
@@ -1544,10 +1538,6 @@ impl<'s> Parser<'s> {
 		match expression_node.kind() {
 			"new_expression" => {
 				let class_udt = self.build_udt(&expression_node.child_by_field_name("class").unwrap())?;
-				let class_udt_exp = Expr::new(
-					ExprKind::Reference(Reference::TypeReference(class_udt)),
-					expression_span.clone(),
-				);
 
 				let arg_list = if let Ok(args_node) = self.get_child_field(expression_node, "args") {
 					self.build_arg_list(&args_node, phase)
@@ -1568,7 +1558,7 @@ impl<'s> Parser<'s> {
 
 				Ok(Expr::new(
 					ExprKind::New(NewExpr {
-						class: Box::new(class_udt_exp),
+						class: class_udt,
 						obj_id,
 						arg_list: arg_list?,
 						obj_scope,
@@ -2098,14 +2088,11 @@ impl<'s> Parser<'s> {
 		let type_span = self.node_span(&statement_node.child(0).unwrap());
 		Ok(StmtKind::Expression(Expr::new(
 			ExprKind::New(NewExpr {
-				class: Box::new(Expr::new(
-					ExprKind::Reference(Reference::TypeReference(UserDefinedType {
-						root: Symbol::global(WINGSDK_STD_MODULE),
-						fields: vec![Symbol::global(WINGSDK_TEST_CLASS_NAME)],
-						span: type_span.clone(),
-					})),
-					type_span.clone(),
-				)),
+				class: UserDefinedType {
+					root: Symbol::global(WINGSDK_STD_MODULE),
+					fields: vec![Symbol::global(WINGSDK_TEST_CLASS_NAME)],
+					span: type_span.clone(),
+				},
 				obj_id: Some(test_id),
 				obj_scope: None,
 				arg_list: ArgList {

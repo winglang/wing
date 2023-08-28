@@ -934,6 +934,7 @@ class $Root extends $stdlib.std.Resource {
           Bar._registerBindObject(this.foo, host, ["fooGet", "fooInc"]);
         }
         if (ops.includes("testTypeAccess")) {
+          Bar._registerBindObject(Bar, host, ["barStatic"]);
           Bar._registerBindObject(Foo, host, ["fooStatic"]);
           Bar._registerBindObject(this.e, host, []);
         }
