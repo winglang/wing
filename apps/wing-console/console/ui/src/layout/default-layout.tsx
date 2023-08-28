@@ -8,7 +8,7 @@ import {
 } from "@wingconsole/design-system";
 import type { State, LayoutConfig, LayoutComponent } from "@wingconsole/server";
 import classNames from "classnames";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { ConsoleLogsFilters } from "../features/console-logs-filters.js";
 import { ConsoleLogs } from "../features/console-logs.js";
@@ -226,6 +226,43 @@ export const DefaultLayout = ({
     ],
   );
 
+  const [metadataInstances, setMetadataInstances] = useState<
+    { id: string; data: any }[]
+  >([]);
+
+  useEffect(() => {
+    if (!metadata.data) {
+      return;
+    }
+    const currentNode = selectedItems[0];
+    if (!currentNode) {
+      return;
+    }
+    if (metadataInstances.some((instance) => instance.id === currentNode)) {
+      setMetadataInstances(
+        metadataInstances.map((instance) => {
+          if (instance.id === currentNode) {
+            return {
+              id: currentNode,
+              data: metadata.data,
+            };
+          }
+          return instance;
+        }),
+      );
+    }
+    // else update it
+    else {
+      setMetadataInstances([
+        ...metadataInstances,
+        {
+          id: currentNode,
+          data: metadata.data,
+        },
+      ]);
+    }
+  }, [metadata.data, selectedItems]);
+
   return (
     <>
       {showTerms && (
@@ -359,21 +396,30 @@ export const DefaultLayout = ({
                       className={classNames(
                         "w-full h-full relative",
                         USE_EXTERNAL_THEME_COLOR,
-                        theme.bg4,
+                        theme.bg3,
                         layout.panels?.rounded && "rounded-lg overflow-hidden",
                       )}
                     >
-                      {metadata.data && (
-                        <ResourceMetadata
-                          node={metadata.data.node}
-                          inbound={metadata.data.inbound}
-                          outbound={metadata.data.outbound}
-                          onConnectionNodeClick={(path) => {
-                            expand(path);
-                            setSelectedItems([path]);
-                          }}
-                        />
-                      )}
+                      {metadataInstances.map((instance) => (
+                        <div
+                          key={instance.id}
+                          className={classNames(
+                            "transition-all",
+                            instance.id !== selectedItems[0] && "hidden",
+                          )}
+                        >
+                          <ResourceMetadata
+                            node={instance.data.node}
+                            inbound={instance.data.inbound}
+                            outbound={instance.data.outbound}
+                            onConnectionNodeClick={(path) => {
+                              expand(path);
+                              setSelectedItems([path]);
+                            }}
+                          />
+                        </div>
+                      ))}
+
                       {selectedEdgeId && edgeMetadata.data && (
                         <EdgeMetadata
                           source={edgeMetadata.data.source}
@@ -407,6 +453,7 @@ export const DefaultLayout = ({
                   (component: LayoutComponent, index: number) => {
                     const panelComponent = (
                       <div
+                        key={index}
                         className={classNames(
                           layout.panels?.rounded &&
                             "rounded-lg overflow-hidden",
