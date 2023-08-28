@@ -1125,13 +1125,13 @@ importers:
         version: 8.10.109
       aws-cdk-lib:
         specifier: ^2.64.0
-        version: 2.64.0(constructs@10.1.314)
+        version: 2.64.0(constructs@10.2.69)
       cdktf:
         specifier: 0.17.0
-        version: 0.17.0(constructs@10.1.314)
+        version: 0.17.0(constructs@10.2.69)
       constructs:
-        specifier: ~10.1.314
-        version: 10.1.314
+        specifier: ~10.2.69
+        version: 10.2.69
       cron-parser:
         specifier: ^4.8.1
         version: 4.8.1
@@ -1162,7 +1162,7 @@ importers:
     devDependencies:
       '@cdktf/provider-aws':
         specifier: ^15.0.0
-        version: 15.0.0(cdktf@0.17.0)(constructs@10.1.314)
+        version: 15.0.0(cdktf@0.17.0)(constructs@10.2.69)
       '@types/express':
         specifier: ^4.17.17
         version: 4.17.17
@@ -1322,7 +1322,7 @@ importers:
         version: link:../../libs/wingsdk
       cdktf:
         specifier: ^0.17.0
-        version: 0.17.0(constructs@10.2.51)
+        version: 0.17.0(constructs@10.2.69)
       execa:
         specifier: ^7.1.1
         version: 7.1.1
@@ -5382,12 +5382,12 @@ packages:
       '@cdktf/node-pty-prebuilt-multiarch': 0.10.1-pre.10
       '@sentry/node': 6.19.7
       archiver: 5.3.1
-      cdktf: 0.17.0(constructs@10.2.51)
+      cdktf: 0.17.0(constructs@10.2.69)
       chalk: 4.1.2
       chokidar: 3.5.3
       cli-spinners: 2.7.0
       codemaker: 1.84.0
-      constructs: 10.2.51
+      constructs: 10.2.69
       cross-fetch: 3.1.6
       cross-spawn: 7.0.3
       detect-port: 1.5.1
@@ -5438,9 +5438,9 @@ packages:
     dependencies:
       '@npmcli/ci-detect': 1.4.0
       '@sentry/node': 6.19.7
-      cdktf: 0.17.0(constructs@10.2.51)
+      cdktf: 0.17.0(constructs@10.2.69)
       codemaker: 1.84.0
-      constructs: 10.2.51
+      constructs: 10.2.69
       cross-spawn: 7.0.3
       follow-redirects: 1.15.2
       fs-extra: 8.1.0
@@ -5489,17 +5489,6 @@ packages:
       prebuild-install: 7.1.1
     dev: true
 
-  /@cdktf/provider-aws@15.0.0(cdktf@0.17.0)(constructs@10.1.314):
-    resolution: {integrity: sha512-GeXpsU8+TsXhFFowjos+7bYv2CDAMHjOlKxXTx6aaqEO7BTlyqXBM/Qetw6y/6MxwIcyEf5siduBeT6T3lg3Dg==}
-    engines: {node: '>= 16.14.0'}
-    peerDependencies:
-      cdktf: ^0.17.0
-      constructs: ^10.0.0
-    dependencies:
-      cdktf: 0.17.0(constructs@10.1.314)
-      constructs: 10.1.314
-    dev: true
-
   /@cdktf/provider-aws@15.0.0(cdktf@0.17.0)(constructs@10.2.51):
     resolution: {integrity: sha512-GeXpsU8+TsXhFFowjos+7bYv2CDAMHjOlKxXTx6aaqEO7BTlyqXBM/Qetw6y/6MxwIcyEf5siduBeT6T3lg3Dg==}
     engines: {node: '>= 16.14.0'}
@@ -5510,6 +5499,17 @@ packages:
       cdktf: 0.17.0(constructs@10.2.51)
       constructs: 10.2.51
     dev: false
+
+  /@cdktf/provider-aws@15.0.0(cdktf@0.17.0)(constructs@10.2.69):
+    resolution: {integrity: sha512-GeXpsU8+TsXhFFowjos+7bYv2CDAMHjOlKxXTx6aaqEO7BTlyqXBM/Qetw6y/6MxwIcyEf5siduBeT6T3lg3Dg==}
+    engines: {node: '>= 16.14.0'}
+    peerDependencies:
+      cdktf: ^0.17.0
+      constructs: ^10.0.0
+    dependencies:
+      cdktf: 0.17.0(constructs@10.2.69)
+      constructs: 10.2.69
+    dev: true
 
   /@cdktf/provider-generator@0.17.0:
     resolution: {integrity: sha512-/Ei9uVuLT6xjJIn6hvGepmS7tOjOAYsUplpc3J2jS1US85aO7oMASgjjgISvDC7saddLqhYCfysSWrYU5zUp0g==}
@@ -10392,7 +10392,7 @@ packages:
     resolution: {integrity: sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==}
     engines: {node: '>= 0.4'}
 
-  /aws-cdk-lib@2.64.0(constructs@10.1.314):
+  /aws-cdk-lib@2.64.0(constructs@10.2.51):
     resolution: {integrity: sha512-IrgL7thb6TeOyHgyR/qKWTdA9FBb9lv7Z9QPDzCNJlkKI+0ANjYHy3RYV8Gd+1+kc6l8DG9Z1elij40YCr/Ptg==}
     engines: {node: '>= 14.15.0'}
     peerDependencies:
@@ -10403,7 +10403,7 @@ packages:
       '@aws-cdk/asset-node-proxy-agent-v5': 2.0.165
       '@balena/dockerignore': 1.0.2
       case: 1.6.3
-      constructs: 10.1.314
+      constructs: 10.2.51
       fs-extra: 9.1.0
       ignore: 5.2.4
       jsonschema: 1.4.1
@@ -10423,7 +10423,7 @@ packages:
       - semver
       - yaml
 
-  /aws-cdk-lib@2.64.0(constructs@10.2.51):
+  /aws-cdk-lib@2.64.0(constructs@10.2.69):
     resolution: {integrity: sha512-IrgL7thb6TeOyHgyR/qKWTdA9FBb9lv7Z9QPDzCNJlkKI+0ANjYHy3RYV8Gd+1+kc6l8DG9Z1elij40YCr/Ptg==}
     engines: {node: '>= 14.15.0'}
     peerDependencies:
@@ -10434,7 +10434,7 @@ packages:
       '@aws-cdk/asset-node-proxy-agent-v5': 2.0.165
       '@balena/dockerignore': 1.0.2
       case: 1.6.3
-      constructs: 10.2.51
+      constructs: 10.2.69
       fs-extra: 9.1.0
       ignore: 5.2.4
       jsonschema: 1.4.1
@@ -11093,9 +11093,9 @@ packages:
       '@cdktf/hcl2json': 0.17.0
       '@inquirer/prompts': 2.2.0
       '@sentry/node': 6.19.7
-      cdktf: 0.17.0(constructs@10.2.51)
+      cdktf: 0.17.0(constructs@10.2.69)
       codemaker: 1.84.0
-      constructs: 10.2.51
+      constructs: 10.2.69
       cross-spawn: 7.0.3
       https-proxy-agent: 5.0.1
       ink-select-input: 4.2.2(ink@3.2.0)(react@17.0.2)
@@ -11122,20 +11122,6 @@ packages:
       - utf-8-validate
     dev: true
 
-  /cdktf@0.17.0(constructs@10.1.314):
-    resolution: {integrity: sha512-4R57uBLBqeb8NgfKZdn/az8UE3yXxGHyzH6Xjsz1Oo9kNvSkPibX7YqNLUpuCgdYNVgU2fdaNoHj9h4LXc6iCw==}
-    peerDependencies:
-      constructs: ^10.0.25
-    dependencies:
-      archiver: 5.3.1
-      constructs: 10.1.314
-      json-stable-stringify: 1.0.2
-      semver: 7.5.3
-    bundledDependencies:
-      - archiver
-      - json-stable-stringify
-      - semver
-
   /cdktf@0.17.0(constructs@10.2.51):
     resolution: {integrity: sha512-4R57uBLBqeb8NgfKZdn/az8UE3yXxGHyzH6Xjsz1Oo9kNvSkPibX7YqNLUpuCgdYNVgU2fdaNoHj9h4LXc6iCw==}
     peerDependencies:
@@ -11143,6 +11129,21 @@ packages:
     dependencies:
       archiver: 5.3.1
       constructs: 10.2.51
+      json-stable-stringify: 1.0.2
+      semver: 7.5.3
+    dev: false
+    bundledDependencies:
+      - archiver
+      - json-stable-stringify
+      - semver
+
+  /cdktf@0.17.0(constructs@10.2.69):
+    resolution: {integrity: sha512-4R57uBLBqeb8NgfKZdn/az8UE3yXxGHyzH6Xjsz1Oo9kNvSkPibX7YqNLUpuCgdYNVgU2fdaNoHj9h4LXc6iCw==}
+    peerDependencies:
+      constructs: ^10.0.25
+    dependencies:
+      archiver: 5.3.1
+      constructs: 10.2.69
       json-stable-stringify: 1.0.2
       semver: 7.5.3
     bundledDependencies:
@@ -11649,12 +11650,12 @@ packages:
     resolution: {integrity: sha512-ty/fTekppD2fIwRvnZAVdeOiGd1c7YXEixbgJTNzqcxJWKQnjJ/V1bNEEE6hygpM3WjwHFUVK6HTjWSzV4a8sQ==}
     dev: true
 
-  /constructs@10.1.314:
-    resolution: {integrity: sha512-wqQn0tuwYmj7tl/nSfnlw/1uaBcFDhjSe6UMVvxwGwXyAg/ZUqpiWFbrojxPqDOAQPCNEj8LjL7IH1SPioa6kg==}
-    engines: {node: '>= 14.17.0'}
-
   /constructs@10.2.51:
     resolution: {integrity: sha512-vB96JQJzno7k0e+dX7Y9UmV4NDxqdr+2qnD5izDi552u7uFSpRF88GAEJjtv2eAWHG4WCDNu9+lV59Z3fYHlRQ==}
+    engines: {node: '>= 16.14.0'}
+
+  /constructs@10.2.69:
+    resolution: {integrity: sha512-0AiM/uQe5Uk6JVe/62oolmSN2MjbFQkOlYrM3fFGZLKuT+g7xlAI10EebFhyCcZwI2JAcWuWCmmCAyCothxjuw==}
     engines: {node: '>= 16.14.0'}
 
   /constructs@3.3.69:
@@ -12473,7 +12474,7 @@ packages:
     dependencies:
       semver: 7.5.3
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20230823
+      typescript: 5.3.0-dev.20230824
     dev: true
 
   /dset@3.1.2:
@@ -21392,8 +21393,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20230823:
-    resolution: {integrity: sha512-IEFfTl67UgTTJzf+Ma4+0txDKzxzxtjNjyFjTm7c+yP5sff+atKe44mAjhCxX8wGjwRrFuhAUeHz1udmzBZ4ow==}
+  /typescript@5.3.0-dev.20230824:
+    resolution: {integrity: sha512-iiUWxGibzrRHEBLDJfVymsvpPKflf3cMrw0oQTMQoguFS2ikNlVlfQWAsYeHqGpRQc77nSQkzsE9rAHNHqvIjw==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

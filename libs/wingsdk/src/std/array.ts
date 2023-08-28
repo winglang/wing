@@ -3,7 +3,7 @@
 // TODO: These should be interfaces, currently Wing does not support interface JSII imports
 
 import { T1 } from "./generics";
-import { Code, InflightClient } from "../core";
+import { InflightClient } from "../core";
 
 /**
  * Immutable Array
@@ -14,7 +14,7 @@ export class Array {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
 
@@ -135,7 +135,7 @@ export class MutArray {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
 

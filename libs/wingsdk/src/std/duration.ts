@@ -1,4 +1,4 @@
-import { Code, InflightClient } from "../core";
+import { InflightClient } from "../core";
 
 /**
  * Represents a length of time.
@@ -8,7 +8,7 @@ export class Duration {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
 
