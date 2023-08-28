@@ -88,7 +88,7 @@ async function findSuccessfulCommit(branchName: string) {
       try {
         betterExec(`git rebase --quit`);
       } catch {}
-      betterExec(`git switch -c ${branchName}`);
+      betterExec(`git switch ${branchName}`);
     }
   }
 
