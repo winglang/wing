@@ -367,6 +367,9 @@ def submit_response(event: dict, context, response_status: str, error_message: s
         "mybucketOnCreatec185c7e3ServiceRoleE5FE1BDD",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
@@ -718,6 +721,9 @@ def submit_response(event: dict, context, response_status: str, error_message: s
         "mybucketOnDeletec185c7e3ServiceRole113BE170",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
@@ -1091,6 +1097,9 @@ def submit_response(event: dict, context, response_status: str, error_message: s
         "mybucketOnEventc185c7e3ServiceRole3C4A0154",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
@@ -1442,6 +1451,9 @@ def submit_response(event: dict, context, response_status: str, error_message: s
         "mybucketOnUpdatec185c7e3ServiceRoleA530B9CD",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",

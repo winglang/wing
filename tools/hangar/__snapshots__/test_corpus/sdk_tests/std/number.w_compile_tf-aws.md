@@ -138,6 +138,9 @@ module.exports = function({ $std_Number }) {
             "uniqueId": "testfromJson_Handler_CA86BEEA"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c89f3277",
@@ -164,6 +167,9 @@ module.exports = function({ $std_Number }) {
             "uniqueId": "testfromStr_Handler_03ACB5A8"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8fdb1d1",
@@ -226,6 +232,7 @@ module.exports = function({ $std_Number }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;

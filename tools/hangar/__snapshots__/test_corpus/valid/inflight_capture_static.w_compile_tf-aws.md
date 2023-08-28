@@ -70,9 +70,9 @@ module.exports = function({ $util_Util }) {
     }
     async handle() {
       {
-        const $IF_LET_VALUE = (await $util_Util.tryEnv("WING_TARGET"));
-        if ($IF_LET_VALUE != undefined) {
-          const target = $IF_LET_VALUE;
+        const $if_let_value = (await $util_Util.tryEnv("WING_TARGET"));
+        if ($if_let_value != undefined) {
+          const target = $if_let_value;
           {console.log(String.raw({ raw: ["WING_TARGET=", ""] }, target))};
         }
         else {
@@ -274,6 +274,9 @@ module.exports = function({  }) {
             "uniqueId": "testcallstaticmethodofanamespacedtype_Handler_482915F1"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c808c556",
@@ -300,6 +303,9 @@ module.exports = function({  }) {
             "uniqueId": "testcallstaticmethodofaninnerinflightclass_Handler_2C5AF32C"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8d913d8",
@@ -326,6 +332,9 @@ module.exports = function({  }) {
             "uniqueId": "testcallstaticmethodofanouterinflightclass_Handler_2DD5B79F"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8dbdf1b",
@@ -352,6 +361,9 @@ module.exports = function({  }) {
             "uniqueId": "testcallstaticmethodofpreflight_Handler_8B40B9DA"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8e286c0",
@@ -436,6 +448,7 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;

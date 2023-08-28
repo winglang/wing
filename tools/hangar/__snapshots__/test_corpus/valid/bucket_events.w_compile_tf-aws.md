@@ -446,6 +446,9 @@ module.exports = function({ $b }) {
             "uniqueId": "b_b-oncreate-OnMessage-1d3b2039_20E46F00"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "b-oncreate-OnMessage-1d3b2039-c8a821e7",
@@ -472,6 +475,9 @@ module.exports = function({ $b }) {
             "uniqueId": "b_b-oncreate-OnMessage-a729fee3_49378F05"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_73fd1ead": "${aws_s3_bucket.other.bucket}",
@@ -499,6 +505,9 @@ module.exports = function({ $b }) {
             "uniqueId": "b_b-ondelete-OnMessage-4b2cd998_0DD64A53"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_73fd1ead": "${aws_s3_bucket.other.bucket}",
@@ -526,6 +535,9 @@ module.exports = function({ $b }) {
             "uniqueId": "b_b-ondelete-OnMessage-b83da9f8_75B42E31"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "b-ondelete-OnMessage-b83da9f8-c80fdb5a",
@@ -552,6 +564,9 @@ module.exports = function({ $b }) {
             "uniqueId": "b_b-onupdate-OnMessage-2dce4026_5DC58D89"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "b-onupdate-OnMessage-2dce4026-c8164eef",
@@ -578,6 +593,9 @@ module.exports = function({ $b }) {
             "uniqueId": "b_b-onupdate-OnMessage-b03e6c67_09F5FCDD"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_73fd1ead": "${aws_s3_bucket.other.bucket}",
@@ -605,6 +623,9 @@ module.exports = function({ $b }) {
             "uniqueId": "other_other-oncreate-OnMessage-2b1e14fd_9EE2200F"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "other-oncreate-OnMessage-2b1e14fd-c8a9cff0",
@@ -631,6 +652,9 @@ module.exports = function({ $b }) {
             "uniqueId": "other_other-ondelete-OnMessage-9bef38d2_7F9E1372"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "other-ondelete-OnMessage-9bef38d2-c8c0555a",
@@ -657,6 +681,9 @@ module.exports = function({ $b }) {
             "uniqueId": "other_other-onupdate-OnMessage-bffa2a20_0A9CE94D"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "other-onupdate-OnMessage-bffa2a20-c85595aa",
@@ -683,6 +710,9 @@ module.exports = function({ $b }) {
             "uniqueId": "testputtinganddeletingfromabuckettotriggerbucketevents_Handler_31F6B48C"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_34279ead": "${aws_s3_bucket.b.bucket}",
@@ -1293,6 +1323,7 @@ module.exports = function({ $b }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;

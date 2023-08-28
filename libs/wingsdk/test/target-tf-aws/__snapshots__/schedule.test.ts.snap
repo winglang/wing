@@ -39,6 +39,9 @@ exports[`schedule behavior with cron 1`] = `
     },
     "aws_lambda_function": {
       "Schedule-OnTick-c5395e41": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Schedule-OnTick-c5395e41-c861b8f8",
@@ -329,6 +332,9 @@ exports[`schedule behavior with rate 1`] = `
     },
     "aws_lambda_function": {
       "Schedule-OnTick-c5395e41": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Schedule-OnTick-c5395e41-c861b8f8",
@@ -634,6 +640,9 @@ exports[`schedule with two functions 1`] = `
     },
     "aws_lambda_function": {
       "Schedule-OnTick-0a615500": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Schedule-OnTick-0a615500-c8fd8480",
@@ -653,6 +662,9 @@ exports[`schedule with two functions 1`] = `
         },
       },
       "Schedule-OnTick-7b33bcba": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Schedule-OnTick-7b33bcba-c86000d7",

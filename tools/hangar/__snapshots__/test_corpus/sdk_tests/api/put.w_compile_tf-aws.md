@@ -108,7 +108,7 @@ module.exports = function({ $_id, $api_url, $body, $http_HttpMethod, $http_Util,
         },
         "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
         "triggers": {
-          "redeployment": "4c47cf4383648e8878b273255efa16fb8e65ec18"
+          "redeployment": "${sha256(aws_api_gateway_rest_api.cloudApi_api_2B334D75.body)}"
         }
       }
     },
@@ -209,6 +209,9 @@ module.exports = function({ $_id, $api_url, $body, $http_HttpMethod, $http_Util,
             "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-cdafee6e-c8147384",
@@ -235,11 +238,14 @@ module.exports = function({ $_id, $api_url, $body, $http_HttpMethod, $http_Util,
             "uniqueId": "testhttpputandhttpfetchcanpreformacalltoanapi_Handler_2B7157C1"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8e4b12f",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_7": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
+            "WING_TOKEN_TFTOKEN_TOKEN_8": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
           }
         },
         "function_name": "Handler-c8e4b12f",
@@ -313,6 +319,7 @@ module.exports = function({ $_id, $api_url, $body, $http_HttpMethod, $http_Util,
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;

@@ -99,6 +99,9 @@ module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_a
             "uniqueId": "testcapture_containers_Handler_C1B42BA9"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c876b763",
@@ -150,6 +153,7 @@ module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_a
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -193,13 +197,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(Object.keys(myMap).length, host, []);
           $Closure1._registerBindObject(("bang" in ((arrOfMap.at(0)))), host, []);
           $Closure1._registerBindObject(("world" in (myMap)), host, []);
           $Closure1._registerBindObject((arr.at(0)), host, []);
           $Closure1._registerBindObject((arr.at(1)), host, []);
           $Closure1._registerBindObject((j)["b"], host, []);
           $Closure1._registerBindObject((mySet.has("my")), host, []);
+          $Closure1._registerBindObject(Object.keys(myMap).length, host, []);
           $Closure1._registerBindObject(arr.length, host, []);
           $Closure1._registerBindObject(mySet.size, host, []);
         }

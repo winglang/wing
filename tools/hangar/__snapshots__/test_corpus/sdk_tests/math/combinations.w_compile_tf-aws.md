@@ -91,6 +91,9 @@ module.exports = function({ $math_Util, $population, $subset }) {
             "uniqueId": "testinflightcombinations_Handler_B89BE656"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8a6ff13",
@@ -142,6 +145,7 @@ module.exports = function({ $math_Util, $population, $subset }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;

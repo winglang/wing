@@ -264,6 +264,9 @@ exports[`queue with a consumer function 2`] = `
     },
     "aws_lambda_function": {
       "Queue-SetConsumer-c5395e41": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Queue-SetConsumer-c5395e41-c80c3bf7",

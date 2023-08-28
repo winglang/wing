@@ -385,9 +385,9 @@ module.exports = function({ $Student }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: studentInflight1.dob.day == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(studentInflight1.dob.day,1)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: studentInflight1.dob.year == 1999")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(studentInflight1.dob.year,1999)))};
       {
-        const $IF_LET_VALUE = studentInflight1.coursesTaken;
-        if ($IF_LET_VALUE != undefined) {
-          const coursesTaken = $IF_LET_VALUE;
+        const $if_let_value = studentInflight1.coursesTaken;
+        if ($if_let_value != undefined) {
+          const coursesTaken = $if_let_value;
           const course1 = (await coursesTaken.at(0));
           const course2 = (await coursesTaken.at(1));
           {((cond) => {if (!cond) throw new Error("assertion failed: course1.grade == \"B\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(course1.grade,"B")))};
@@ -531,6 +531,9 @@ module.exports = function({ $Student, $jStudent1 }) {
             "uniqueId": "testflightschoolstudent_Handler_8BE7AA78"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c85c011b",
@@ -557,6 +560,9 @@ module.exports = function({ $Student, $jStudent1 }) {
             "uniqueId": "testliftingastudent_Handler_30A43B55"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c82f8661",
@@ -619,6 +625,7 @@ module.exports = function({ $Student, $jStudent1 }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -694,16 +701,16 @@ class $Root extends $stdlib.std.Resource {
     const jFoosible = ({});
     const jFoosible2 = ({"f": "bar"});
     {
-      const $IF_LET_VALUE = (Foosible.fromJson(jFoosible)).f;
-      if ($IF_LET_VALUE != undefined) {
-        const f = $IF_LET_VALUE;
+      const $if_let_value = (Foosible.fromJson(jFoosible)).f;
+      if ($if_let_value != undefined) {
+        const f = $if_let_value;
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
     }
     {
-      const $IF_LET_VALUE = (Foosible.fromJson(jFoosible2)).f;
-      if ($IF_LET_VALUE != undefined) {
-        const f = $IF_LET_VALUE;
+      const $if_let_value = (Foosible.fromJson(jFoosible2)).f;
+      if ($if_let_value != undefined) {
+        const f = $if_let_value;
         {((cond) => {if (!cond) throw new Error("assertion failed: f == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f,"bar")))};
       }
       else {
@@ -740,9 +747,9 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: student2.dob.day == 31")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student2.dob.day,31)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: student2.dob.year == 1987")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student2.dob.year,1987)))};
     {
-      const $IF_LET_VALUE = student2.enrolledCourses;
-      if ($IF_LET_VALUE != undefined) {
-        const enrolledCourses = $IF_LET_VALUE;
+      const $if_let_value = student2.enrolledCourses;
+      if ($if_let_value != undefined) {
+        const enrolledCourses = $if_let_value;
         const courses = [...(enrolledCourses)];
         const s2Course1 = (courses.at(0));
         const s2Course2 = (courses.at(1));
@@ -758,9 +765,9 @@ class $Root extends $stdlib.std.Resource {
     const jStudent3 = ({"enrolled": false,"schoolId": "w/e","firstName": student2.firstName,"lastName": student2.lastName,"dob": ({"month": 1,"day": 1,"year": 1959}),"additionalData": ({"notes": "wow such notes","legacy": false,"emergencyContactsNumbers": ["123-345-9928"]})});
     const student3 = (Student.fromJson(jStudent3));
     {
-      const $IF_LET_VALUE = student3.additionalData;
-      if ($IF_LET_VALUE != undefined) {
-        const additionalData = $IF_LET_VALUE;
+      const $if_let_value = student3.additionalData;
+      if ($if_let_value != undefined) {
+        const additionalData = $if_let_value;
         const notes = (additionalData)["notes"];
         {((cond) => {if (!cond) throw new Error("assertion failed: notes == \"wow such notes\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(notes,"wow such notes")))};
       }
@@ -770,9 +777,9 @@ class $Root extends $stdlib.std.Resource {
     }
     const invalidStudent = ({"firstName": "I dont have","lastName": "Any other info"});
     {
-      const $IF_LET_VALUE = (() => { try { return Student.fromJson(invalidStudent); } catch { return undefined; }})();;
-      if ($IF_LET_VALUE != undefined) {
-        const student = $IF_LET_VALUE;
+      const $if_let_value = (() => { try { return Student.fromJson(invalidStudent); } catch { return undefined; }})();;
+      if ($if_let_value != undefined) {
+        const student = $if_let_value;
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
       else {
@@ -780,9 +787,9 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     {
-      const $IF_LET_VALUE = (() => { try { return Student.fromJson(jStudent2); } catch { return undefined; }})();;
-      if ($IF_LET_VALUE != undefined) {
-        const student = $IF_LET_VALUE;
+      const $if_let_value = (() => { try { return Student.fromJson(jStudent2); } catch { return undefined; }})();;
+      if ($if_let_value != undefined) {
+        const student = $if_let_value;
         {((cond) => {if (!cond) throw new Error("assertion failed: student.firstName == \"Sally\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student.firstName,"Sally")))};
         {((cond) => {if (!cond) throw new Error("assertion failed: student.lastName == \"Reynolds\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student.lastName,"Reynolds")))};
         {((cond) => {if (!cond) throw new Error("assertion failed: !student.enrolled")})((!student.enrolled))};

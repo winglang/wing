@@ -150,6 +150,9 @@ module.exports = function({  }) {
             "uniqueId": "testcallingdifferenttypesofinflights_Handler_F0BAE661"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8f324e0",
@@ -201,6 +204,7 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -262,19 +266,19 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject(this.inflight1, host, []);
           Foo._registerBindObject(this, host, ["inflight2"]);
+          Foo._registerBindObject(this.inflight1, host, []);
         }
         if (ops.includes("callFn")) {
           Foo._registerBindObject(this, host, ["makeFn"]);
         }
         if (ops.includes("callFn2")) {
-          Foo._registerBindObject(this.inflight1, host, ["handle"]);
           Foo._registerBindObject(this, host, ["inflight2"]);
+          Foo._registerBindObject(this.inflight1, host, ["handle"]);
         }
         if (ops.includes("makeFn")) {
-          Foo._registerBindObject(this.inflight1, host, ["handle"]);
           Foo._registerBindObject(this, host, ["inflight2"]);
+          Foo._registerBindObject(this.inflight1, host, ["handle"]);
         }
         super._registerBind(host, ops);
       }
