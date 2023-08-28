@@ -4,6 +4,11 @@ primary_region = "lhr"
   dockerfile = "Dockerfile"
   ignorefile = ".dockerignore"
 
+[services.concurrency]
+    hard_limit = 250
+    soft_limit = 200
+    type = "connections"
+
 [[services]]
   protocol = "tcp"
   internal_port = 3000
