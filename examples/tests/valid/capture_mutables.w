@@ -4,7 +4,7 @@ let m = MutMap<bool>{"hello" => true};
 
 let aCloned = (Array<str>["hello"]).copyMut();
 
-let handler = inflight () => {
+let handler = inflight fn() {
   assert(a.length == 1);
   assert(s.size == 1);
   assert(m.size() == 1);

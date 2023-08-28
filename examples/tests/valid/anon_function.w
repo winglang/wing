@@ -1,5 +1,5 @@
 // Define a function and assign it to a variable
-let myfunc = (var x: num) => {
+let myfunc = fn(var x: num) {
   log("${x}");
   x = x + 1;
   if (x > 3.14) {
@@ -13,6 +13,6 @@ let myfunc = (var x: num) => {
 myfunc(1);
 
 // Immediately invoked function expression
-((var x: num) => {
+(fn(var x: num) {
   assert(x == 1);
 })(1);

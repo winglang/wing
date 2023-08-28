@@ -3,23 +3,23 @@ bring cloud;
 let other = new cloud.Bucket() as "other";
 let b = new cloud.Bucket() as "b";
 
-b.onDelete(inflight (key: str) => {
+b.onDelete(inflight fn(key: str) {
     log("deleted ${key}");
 });
 
-b.onUpdate(inflight (key: str) => {
+b.onUpdate(inflight fn(key: str) {
     log("updated ${key}");
 });
 
-b.onCreate(inflight (key:str) => {
+b.onCreate(inflight fn(key:str) {
     log("created ${key}");
 });
 
-b.onEvent(inflight (key: str, event: cloud.BucketEventType) => {   
+b.onEvent(inflight fn(key: str, event: cloud.BucketEventType) {
     other.put("last_${event}_key", key); 
 });
 
-other.onEvent(inflight (key: str) => {
+other.onEvent(inflight fn(key: str) {
     log("other bucket event called!");
 });
 

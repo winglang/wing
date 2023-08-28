@@ -60,19 +60,19 @@ class DynamoTable {
     }
   }
 
-  extern "./dynamo.js" inflight _putItem(tableName: str, item: Json): void;
+  extern "./dynamo.js" inflight _putItem(tableName: str, item: Json) -> void;
   inflight putItem(item: Map<Attribute>) {
     let json = this._itemToJson(item);
     this._putItem(this.tableName, json);
   }
 
-  extern "./dynamo.js" inflight _getItem(tableName: str, key: Json): Json;
-  inflight getItem(key: Map<Attribute>): Json {
+  extern "./dynamo.js" inflight _getItem(tableName: str, key: Json) -> Json;
+  inflight getItem(key: Map<Attribute>) -> Json {
     let json = this._itemToJson(key);
     return this._getItem(this.tableName, json);
   }
 
-  inflight _itemToJson(item: Map<Attribute>): Json {
+  inflight _itemToJson(item: Map<Attribute>) -> Json {
     let json = MutJson {};
     for key in item.keys() {
       let attribute = item.get(key);
@@ -85,7 +85,7 @@ class DynamoTable {
     return json;
   }
 
-  inflight _attributeTypeToString(type: AttributeType): str {
+  inflight _attributeTypeToString(type: AttributeType) -> str {
     if type == AttributeType.String {
       return "S";
     } elif type == AttributeType.Number {

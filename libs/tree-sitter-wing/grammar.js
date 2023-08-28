@@ -459,8 +459,9 @@ module.exports = grammar({
       prec.right(
         seq(
           optional(field("inflight", $.inflight_specifier)),
+          "fn",
           field("parameter_types", $.parameter_type_list),
-          optional(seq(":", field("return_type", $._type)))
+          optional(seq("->", field("return_type", $._type)))
         )
       ),
 
@@ -479,7 +480,8 @@ module.exports = grammar({
 
     extern_modifier: ($) => seq("extern", $.string),
 
-    _return_type: ($) => $._type_annotation,
+    // _return_type: ($) => $._type_annotation,
+    _return_type: ($) => seq("->", field("type", $._type)),
 
     method_signature: ($) =>
       seq(
@@ -621,18 +623,18 @@ module.exports = grammar({
 
     preflight_closure: ($) =>
       seq(
+        "fn",
         field("parameter_list", $.parameter_list),
         optional($._return_type),
-        "=>",
         field("block", $.block)
       ),
 
     inflight_closure: ($) =>
       seq(
         $.inflight_specifier,
+        "fn",
         field("parameter_list", $.parameter_list),
         optional($._return_type),
-        "=>",
         field("block", $.block)
       ),
 

@@ -1,8 +1,8 @@
 bring cloud;
 
-let preflightClosure = (nice) => { log(nice); return true; };
+let preflightClosure = fn(nice) { log(nice); return true; };
 
-let recursiveClosure = (nice) => {
+let recursiveClosure = fn(nice) {
   if false {
     return recursiveClosure(nice);
   }
@@ -24,7 +24,7 @@ let clonedSet = emptySet.copyMut();
 clonedSet.add(4);
 
 let api = new cloud.Api();
-let func = inflight (request) => {
+let func = inflight fn(request) {
   return cloud.ApiResponse {
     body: request.body,
     status: 200,
@@ -35,14 +35,14 @@ if true {
   api.get("/hello/world", func);
 }
 
-let returnsString = () => {
+let returnsString = fn() {
   return "hi";
 };
 let shouldBeString = returnsString();
 
 let stringArray = [shouldBeString];
 
-let closureWithUnwrapping = (optionalString) => {
+let closureWithUnwrapping = fn(optionalString) {
   if let justString = optionalString {
     log(justString);
   }

@@ -6,12 +6,12 @@ let bucket3 = new cloud.Bucket() as "bucket3";
 // can use variadic methods from the jsii world
 bucket3.node.addDependency(bucket1, bucket2);
 
-let funcBucket = (...buckets: Array<cloud.Bucket>) => {
+let funcBucket = fn(...buckets: Array<cloud.Bucket>) {
   assert(buckets.length == 2);
 };
 funcBucket(bucket1, bucket2);
 
-let func1 = (var x: num, y: str?, var ...args: MutArray<num>) => {
+let func1 = fn(var x: num, y: str?, var ...args: MutArray<num>) {
   assert(x == 1);
   assert(y == "something" || y == nil);
   assert(args.length == 4);
@@ -24,7 +24,7 @@ let func1 = (var x: num, y: str?, var ...args: MutArray<num>) => {
 func1(1, "something", 1, 2, 3, 4);
 func1(1, nil, 1, 2, 3, 4);
 
-let addNums = (...nums: MutArray<num>):num => {
+let addNums = fn(...nums: MutArray<num>) -> num {
   let var total = 0;
   for n in nums {
     total = total + n;

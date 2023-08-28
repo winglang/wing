@@ -1,12 +1,12 @@
 inflight class Foo {
-  get(): num { return 42; }
+  get() -> num { return 42; }
 }
 
 struct Bar {
   foo: Foo;
 }
 
-let getBar = inflight (): Bar => {
+let getBar = inflight fn() -> Bar {
   return Bar {
     foo: new Foo()
   };

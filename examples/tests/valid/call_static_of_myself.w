@@ -1,17 +1,17 @@
 class Foo {
-  static inflight foo(): num { return 1; }
-  static inflight bar(): num { return Foo.foo(); }
+  static inflight foo() -> num { return 1; }
+  static inflight bar() -> num { return Foo.foo(); }
 
-  inflight callThis(): num {
+  inflight callThis() -> num {
     return Foo.bar();
   }
 
 }
 
 inflight class Bar {
-  static bar(): num { return 2; }
+  static bar() -> num { return 2; }
 
-  callThis(): num {
+  callThis() -> num {
     return Bar.bar();
   }
 }
@@ -20,7 +20,7 @@ let foo = new Foo();
 
 test "test" {
   class Zoo {
-    static zoo(): num { return 3; }
+    static zoo() -> num { return 3; }
   }
 
   let bar = new Bar();

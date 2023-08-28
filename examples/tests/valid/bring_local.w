@@ -23,7 +23,7 @@ assert(c != file1.Color.RED);
 
 // interfaces from other files can be used
 class Triangle impl file1.Shape {
-  area(): num {
+  area() -> num {
     return 1;
   }
 }

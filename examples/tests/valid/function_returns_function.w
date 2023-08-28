@@ -1,20 +1,20 @@
 
 bring cloud;
 
-let fn = (s: str): (): bool => {
-    return (): bool => { return s == "wing"; };
+let f = fn(s: str) -> fn() -> bool {
+    return fn() -> bool { return s == "wing"; };
 };
 
-let wingFn = fn("wing");
-let dingFn = fn("ding");
+let wingFn = f("wing");
+let dingFn = f("ding");
 
 
 assert(wingFn());
 assert(!dingFn());
 
 test "inflight functions can return other inflight functions" {
-    let iFn = inflight (s: str): inflight (): bool => {
-        return inflight (): bool => { return s == "wing"; };
+    let iFn = inflight fn(s: str) -> inflight fn() -> bool {
+        return inflight fn() -> bool { return s == "wing"; };
     };
     
     let wingInflightFn = iFn("wing");

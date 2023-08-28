@@ -3,7 +3,7 @@ bring cloud;
 let myConst = "bang bang";
 
 inflight class Foo {
-  getValue(): str {
+  getValue() -> str {
     return myConst;
   }
 }

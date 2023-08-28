@@ -1,16 +1,16 @@
 class MyClosure {
-  inflight another(): str {
+  inflight another() -> str {
     return "hello";
   }
 
-  inflight handle(): num {
+  inflight handle() -> num {
     return 42;
   }
 }
 
-let fn = new MyClosure();
+let f = new MyClosure();
 
 test "test" {
-  assert(fn() == 42);
-  assert(fn.another() == "hello");
+  assert(f() == 42);
+  assert(f.another() == "hello");
 }

@@ -1,18 +1,18 @@
 class A {
-  foo(): str { return "a1"; }
-  inflight goo(): str { return "a2"; }
+  foo() -> str { return "a1"; }
+  inflight goo() -> str { return "a2"; }
 }
 
 let a = new A();
 assert(a.foo() == "a1");
 
 inflight class B {
-  foo(): str { return "b1"; }
+  foo() -> str { return "b1"; }
 }
 
-let fn = inflight () => {
+let f = inflight fn() {
   inflight class C {
-    foo(): str { return "c1"; }
+    foo() -> str { return "c1"; }
   }
 
   let c = new C();
@@ -20,30 +20,30 @@ let fn = inflight () => {
 };
 
 class D {
-  inner: inflight (): str;
+  inner: inflight fn() -> str;
 
   init() {
     class E {
-      foo(): str { return "e1"; }
+      foo() -> str { return "e1"; }
     }
 
     let pb = new E();
     assert(pb.foo() == "e1");
 
     inflight class F {
-      foo(): str { return "f1"; }
+      foo() -> str { return "f1"; }
     }
 
-    this.inner = inflight (): str => {
+    this.inner = inflight fn() -> str {
       return new F().foo();
     };
   }
 
-  getInner(): inflight (): str {
+  getInner() -> inflight fn() -> str {
     return this.inner;
   }
 
-  inflight callInner(): str {
+  inflight callInner() -> str {
     return this.inner();
   }
 }
@@ -57,7 +57,7 @@ test "test" {
   let b = new B();
   assert(b.foo() == "b1");
 
-  fn();
+  f();
 
   assert(d.callInner() == "f1");
   assert(innerD() == "f1");
