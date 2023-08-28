@@ -20,9 +20,9 @@ This document describes an MVP for the first Wing Cloud product - Wing Cloud Pre
 
 Wing Cloud users can build and deploy Wing applications to an ephemeral environment that uses the Wing Simulator platform, and use the Wing Console UI to interact with it.
 Once a preview environment is created, tests will be executed automatically and the results will be available in the preview environment dedicated comment in GitHub.
-Each preview environment will have a unique URL based which enable developers to work together and share with external customers as needed.
+Each preview environment will have a unique URL which enable developers to work together and share with external customers as needed.
 
-Wing Cloud will be integrated with GitHub and will be available as a GitHub application.
+Wing Cloud will be integrated with GitHub.
 
 ### User Experience
 
@@ -30,7 +30,31 @@ Wing Cloud will be integrated with GitHub and will be available as a GitHub appl
 
 1. On https://wing.cloud website click on sign in.
 2. Authenticate using your GitHub account.
-3. If you were already signed in you will the Wing Cloud view for signed-in users automatically.
+3. If you were already signed in, you will see the Wing Cloud dashboard (under https://wing.cloud directly).
+
+#### Create a new personal Project
+
+1. To create a new project, click on "New Project" under "Personal Account".
+2. Choose between the GitHub repositories that you have access to.
+3. Define your secret values.
+4. Make sure there's a `main.w` file in the root of the repository.
+5. Click on "Deploy".
+6. You'll be redirected to your new project's page (https://wing.cloud/-user/-project).
+
+#### Create a new Team
+
+1. Click on "New Team".
+2. Write a team name.
+3. Optionally, invite other Wing Cloud users to the team (by GitHub user ID).
+
+#### Create a new team Project
+
+1. Click on "New Project" under the team of your choice.
+2. Choose between the GitHub repositories that you have access to.
+3. Define your secret values.
+4. Make sure there's a `main.w` file in the root of the repository.
+5. Click on "Deploy".
+6. You'll be redirected to your new project's page (https://wing.cloud/-team/-project).
 
 #### Redirect to sign-in process from a Preview Environment URL
 
