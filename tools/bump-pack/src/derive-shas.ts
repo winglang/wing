@@ -86,6 +86,9 @@ async function findSuccessfulCommit(branchName: string) {
       return undefined;
     } finally {
       // switch back to what we were on before
+      try {
+        betterExec(`git rebase --quit`);
+      } catch {}
       betterExec(`git switch -c ${originalHeadSha}`);
     }
   }
