@@ -36,8 +36,6 @@ export const describe = (wingfile: string, callback: () => void) => {
 
     await page.goto(`http://localhost:${server.port}/`);
 
-    await page.getByTestId("loading-overlay").waitFor({ state: "hidden" });
-
     await page.waitForLoadState("domcontentloaded");
   });
 
