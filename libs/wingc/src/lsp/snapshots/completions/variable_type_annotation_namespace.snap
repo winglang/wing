@@ -269,7 +269,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IApiEndpointHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to one of the `Api` request preflight methods.\n### Methods\n- `handle` — Inflight that will be called when a request is made to the endpoint."
+    value: "```wing\ninterface IApiEndpointHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to one of the `Api` request preflight methods.\n### Methods\n- `bind` — `preflight (host: IInflightHost, ops: Array<str>): void`\n- `handle` — Inflight that will be called when a request is made to the endpoint.\n- `node` — `Node`"
   sortText: ii|IApiEndpointHandler
 - label: IApiEndpointHandlerClient
   kind: 8
@@ -287,7 +287,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IBucketEventHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to the bucket events.\n### Methods\n- `handle` — Function that will be called when an event notification is fired."
+    value: "```wing\ninterface IBucketEventHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to the bucket events.\n### Methods\n- `bind` — `preflight (host: IInflightHost, ops: Array<str>): void`\n- `handle` — Function that will be called when an event notification is fired.\n- `node` — `Node`"
   sortText: ii|IBucketEventHandler
 - label: IBucketEventHandlerClient
   kind: 8
@@ -311,7 +311,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IFunctionHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be used to create a `cloud.Function`.\n### Methods\n- `handle` — Entrypoint function that will be called when the cloud function is invoked."
+    value: "```wing\ninterface IFunctionHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be used to create a `cloud.Function`.\n### Methods\n- `bind` — `preflight (host: IInflightHost, ops: Array<str>): void`\n- `handle` — Entrypoint function that will be called when the cloud function is invoked.\n- `node` — `Node`"
   sortText: ii|IFunctionHandler
 - label: IFunctionHandlerClient
   kind: 8
@@ -329,7 +329,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IOnDeployHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be used by `cloud.OnDeploy`.\n### Methods\n- `handle` — Entrypoint function that will be called when the app is deployed."
+    value: "```wing\ninterface IOnDeployHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be used by `cloud.OnDeploy`.\n### Methods\n- `bind` — `preflight (host: IInflightHost, ops: Array<str>): void`\n- `handle` — Entrypoint function that will be called when the app is deployed.\n- `node` — `Node`"
   sortText: ii|IOnDeployHandler
 - label: IOnDeployHandlerClient
   kind: 8
@@ -347,7 +347,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IQueueSetConsumerHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Queue.setConsumer`.\n### Methods\n- `handle` — Function that will be called when a message is received from the queue."
+    value: "```wing\ninterface IQueueSetConsumerHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Queue.setConsumer`.\n### Methods\n- `bind` — `preflight (host: IInflightHost, ops: Array<str>): void`\n- `handle` — Function that will be called when a message is received from the queue.\n- `node` — `Node`"
   sortText: ii|IQueueSetConsumerHandler
 - label: IQueueSetConsumerHandlerClient
   kind: 8
@@ -365,7 +365,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IScheduleOnTickHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Schedule.on_tick`.\n### Methods\n- `handle` — Function that will be called when a message is received from the schedule."
+    value: "```wing\ninterface IScheduleOnTickHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Schedule.on_tick`.\n### Methods\n- `bind` — `preflight (host: IInflightHost, ops: Array<str>): void`\n- `handle` — Function that will be called when a message is received from the schedule.\n- `node` — `Node`"
   sortText: ii|IScheduleOnTickHandler
 - label: IScheduleOnTickHandlerClient
   kind: 8
@@ -395,7 +395,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IServiceOnEventHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `ServiceProps.on_start` || `ServiceProps.on_stop`.\n### Methods\n- `handle` — Function that will be called for service events."
+    value: "```wing\ninterface IServiceOnEventHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `ServiceProps.on_start` || `ServiceProps.on_stop`.\n### Methods\n- `bind` — `preflight (host: IInflightHost, ops: Array<str>): void`\n- `handle` — Function that will be called for service events.\n- `node` — `Node`"
   sortText: ii|IServiceOnEventHandler
 - label: ITopicClient
   kind: 8
@@ -407,7 +407,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface ITopicOnMessageHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Topic.on_message`.\n### Methods\n- `handle` — Function that will be called when a message is received from the topic."
+    value: "```wing\ninterface ITopicOnMessageHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Topic.on_message`.\n### Methods\n- `bind` — `preflight (host: IInflightHost, ops: Array<str>): void`\n- `handle` — Function that will be called when a message is received from the topic.\n- `node` — `Node`"
   sortText: ii|ITopicOnMessageHandler
 - label: ITopicOnMessageHandlerClient
   kind: 8
