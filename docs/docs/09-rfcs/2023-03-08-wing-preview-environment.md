@@ -229,14 +229,6 @@ Notes:
 - Only an owner can delete a team
 - The billing details will be visible to all members but will be mangled (ex, only the last 4 digits of the credit card will be visible)
 
-### User Flows
-
-> started to describe user flows that can might help us here... need to be completed
-
-`./preview-draft.drawio` can be opened with https://app.diagrams.net/ to edit the diagram.
-
-![user flow](user flow.png)
-
 ### Technology
 
 - https://winglang.io for the infrastructure
