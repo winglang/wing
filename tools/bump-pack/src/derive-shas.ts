@@ -19,6 +19,8 @@ Expectations:
 Remarks:
   This is originally forked from https://github.com/nrwl/nx-set-shas, but now allows for pull request commits to to be used as the "base" as well.
   Also changed to be in typescript and less modular.
+  ---
+  PRs will instead be rebased locally onto the base branch, and the base sha will be the branching point between the base branch and the rebased PR branch.
 
 Options: (No options)
 */
@@ -35,7 +37,8 @@ const branchName =
   context?.payload?.pull_request?.head?.ref ??
   betterExec(`git rev-parse --abbrev-ref HEAD`);
 
-const HEAD_SHA = context?.sha ?? betterExec(`git rev-parse HEAD`);
+let HEAD_SHA = context?.sha ?? betterExec(`git rev-parse HEAD`);
+const originalHeadSha = HEAD_SHA;
 
 let BASE_SHA = await findSuccessfulCommit(branchName);
 
@@ -55,6 +58,38 @@ setOutput("head", HEAD_SHA);
 setOutput("head_branch", branchName);
 
 async function findSuccessfulCommit(branchName: string) {
+  let runId: string | number | undefined =
+    process.env.GITHUB_RUN_ID ?? context.runId;
+  let repoOwner = process.env.GITHUB_REPOSITORY_OWNER ?? context.repo.owner;
+  let repoName = process.env.GITHUB_REPOSITORY_NAME ?? context.repo.repo;
+  let eventName = process.env.GITHUB_EVENT_NAME ?? context.eventName;
+
+  if (eventName === "pull_request") {
+    try {
+      // create a new branch locally to rebase onto main
+      const tmpBranchName = `tmp-pr-diff-${HEAD_SHA}`;
+      try {
+        betterExec(`git branch -D --force ${tmpBranchName}`);
+      } catch {}
+      betterExec(`git checkout -b ${tmpBranchName} ${branchName}`);
+      betterExec(`git rebase ${baseBranchName}`);
+
+      const returnBase = betterExec(
+        `git merge-base ${baseBranchName} ${HEAD_SHA}`
+      );
+      HEAD_SHA = betterExec(`git rev-parse HEAD`);
+      return returnBase;
+    } catch (err) {
+      console.log(`Failed to rebase onto ${baseBranchName}`);
+      console.log(err);
+
+      return undefined;
+    } finally {
+      // switch back to what we were on before
+      betterExec(`git switch -c ${originalHeadSha}`);
+    }
+  }
+
   const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
   if (GITHUB_TOKEN === undefined) {
     throw new Error(
@@ -62,12 +97,6 @@ async function findSuccessfulCommit(branchName: string) {
     );
   }
   const octokit = getOctokit(GITHUB_TOKEN);
-
-  let runId: string | number | undefined =
-    process.env.GITHUB_RUN_ID ?? context.runId;
-  let repoOwner = process.env.GITHUB_REPOSITORY_OWNER ?? context.repo.owner;
-  let repoName = process.env.GITHUB_REPOSITORY_NAME ?? context.repo.repo;
-  let eventName = process.env.GITHUB_EVENT_NAME ?? context.eventName;
 
   if (runId === undefined || repoName === undefined || repoOwner === undefined)
     throw new Error(
@@ -99,10 +128,11 @@ async function findSuccessfulCommit(branchName: string) {
   });
 
   for (const run of runs.data.workflow_runs) {
-    if (commitExists(run.head_sha)) {
-      return run.head_sha;
+    const runSHA = run.head_sha;
+    if (commitExists(runSHA)) {
+      return runSHA;
     } else {
-      throw new Error(`${run.head_sha} has not been fetched`);
+      throw new Error(`${runSHA} has not been fetched`);
     }
   }
 }
