@@ -1,4 +1,4 @@
-import { exec } from "child_process";
+import { ChildProcess, exec } from "child_process";
 import { writeFileSync } from "fs";
 import { join } from "path";
 import { promisify } from "util";
@@ -22,6 +22,7 @@ export class ReactWebsite
   private readonly path: string;
   private readonly environments: Record<string, string>;
   private readonly isDevRun: boolean;
+  private childProcess?: ChildProcess;
 
   constructor(props: ReactWebsiteSchema["props"], context: ISimulatorContext) {
     this.context = context;
@@ -48,14 +49,18 @@ window.wingEnv = ${JSON.stringify(this.environments, null, 2)};`
     if (this.isDevRun) {
       // react usually offer hot reloading-
       // we're waiting for execution ending since it's ending only when manually terminating the process
-      exec(this.startCommand, options, (_, stdout, stderr) => {
-        if (stderr) {
-          throw new Error(stderr);
+      this.childProcess = exec(
+        this.startCommand,
+        options,
+        (_, stdout, stderr) => {
+          if (stderr) {
+            throw new Error(stderr);
+          }
+          if (stdout) {
+            this.addTrace(stdout);
+          }
         }
-        if (stdout) {
-          this.addTrace(stdout);
-        }
-      });
+      );
     } else {
       // when we build before deployment, the waiting is necessary
       const { stderr, stdout } = await promisify(exec)(
@@ -74,7 +79,9 @@ window.wingEnv = ${JSON.stringify(this.environments, null, 2)};`
     return {};
   }
 
-  public async cleanup(): Promise<void> {}
+  public async cleanup(): Promise<void> {
+    this.childProcess?.kill("SIGINT");
+  }
 
   private addTrace(message: string): void {
     this.context.addTrace({
