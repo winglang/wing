@@ -7,6 +7,7 @@ import {
   USE_EXTERNAL_THEME_COLOR,
 } from "@wingconsole/design-system";
 import type { State, LayoutConfig, LayoutComponent } from "@wingconsole/server";
+import { useLoading } from "@wingconsole/use-loading";
 import classNames from "classnames";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
@@ -14,7 +15,6 @@ import { ConsoleLogsFilters } from "../features/console-logs-filters.js";
 import { ConsoleLogs } from "../features/console-logs.js";
 import { MapView } from "../features/map-view.js";
 import { TestsTreeView } from "../features/tests-tree-view.js";
-import { useDeferredLoading } from "../shared/use-deferred-loading.js";
 import { BlueScreenOfDeath } from "../ui/blue-screen-of-death.js";
 import { EdgeMetadata } from "../ui/edge-metadata.js";
 import { Explorer } from "../ui/explorer.js";
@@ -104,7 +104,14 @@ export const DefaultLayout = ({
     document.title = title;
   }, [title]);
 
-  const { deferredLoading } = useDeferredLoading(loading);
+  const { loading: deferredLoading, setLoading: setDeferredLoading } =
+    useLoading({
+      delay: 500,
+      duration: 300,
+    });
+  useEffect(() => {
+    setDeferredLoading(loading);
+  }, [loading, setDeferredLoading]);
 
   const showTerms = useMemo(() => {
     if (!termsConfig.data) {
