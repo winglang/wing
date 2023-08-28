@@ -14,6 +14,7 @@ import { ConsoleLogsFilters } from "../features/console-logs-filters.js";
 import { ConsoleLogs } from "../features/console-logs.js";
 import { MapView } from "../features/map-view.js";
 import { TestsTreeView } from "../features/tests-tree-view.js";
+import { useDeferredLoading } from "../shared/use-deferred-loading.js";
 import { BlueScreenOfDeath } from "../ui/blue-screen-of-death.js";
 import { EdgeMetadata } from "../ui/edge-metadata.js";
 import { Explorer } from "../ui/explorer.js";
@@ -103,28 +104,7 @@ export const DefaultLayout = ({
     document.title = title;
   }, [title]);
 
-  const [showLoadingOverlay, setShowLoadingOverlay] = useState(false);
-  const [loadingTimeout, setLoadingTimeout] = useState<NodeJS.Timeout | null>();
-
-  useEffect(() => {
-    if (!loading) {
-      clearTimeout(loadingTimeout!);
-      setShowLoadingOverlay(false);
-      return;
-    }
-    if (loadingTimeout) {
-      return;
-    }
-    setLoadingTimeout(
-      setTimeout(() => {
-        setShowLoadingOverlay(loading);
-      }, 500),
-    );
-
-    return () => {
-      clearTimeout(loadingTimeout!);
-    };
-  }, [loading, loadingTimeout]);
+  const { deferredLoading } = useDeferredLoading(loading);
 
   const showTerms = useMemo(() => {
     if (!termsConfig.data) {
@@ -194,8 +174,8 @@ export const DefaultLayout = ({
                   className={classNames(
                     "absolute h-full w-full bg-white/70 dark:bg-slate-600/70",
                     "transition-all",
-                    showLoadingOverlay && "opacity-100 z-50",
-                    !showLoadingOverlay && "opacity-0 -z-10",
+                    deferredLoading && "opacity-100 z-50",
+                    !deferredLoading && "opacity-0 -z-10",
                     theme.text2,
                   )}
                 />
@@ -248,7 +228,7 @@ export const DefaultLayout = ({
       setSelectedItems,
       setExpandedItems,
       showTests,
-      showLoadingOverlay,
+      deferredLoading,
     ],
   );
 
@@ -295,8 +275,8 @@ export const DefaultLayout = ({
                 className={classNames(
                   "absolute h-full w-full bg-white/70 dark:bg-slate-600/70",
                   "transition-all",
-                  showLoadingOverlay && "opacity-100 z-50",
-                  !showLoadingOverlay && "opacity-100 -z-10",
+                  deferredLoading && "opacity-100 z-50",
+                  !deferredLoading && "opacity-100 -z-10",
                 )}
                 data-testid="loading-overlay"
               >
