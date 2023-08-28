@@ -45,17 +45,7 @@ Wing Cloud will be integrated with GitHub.
 4. You will see all preview environments associated with your personal account and teams you are member in.
 5. In order to see a preview environment, just click on the preview environment URL from the list of all your preview environments.
 
-#### Install Wing Cloud GitHub application (#4)
-
-In order to use Wing Cloud Preview environments feature in your repository, you should sign in to Wing Cloud and install the Wing Cloud application in your GitHub account and repository.
-The installation process is straightforward using a GitHub application:
-
-1. After signing-in to https://wing.cloud, click on "Install Wing Cloud"
-2. Complete GitHub application authentication and installation.
-3. You are now ready to use Wing Cloud.
-4. A welcome email will be sent to you with additional information and links to documentation.
-
-#### Create a new personal Project (#5)
+#### Create a new personal Project (#4)
 
 1. To create a new project, click on "New Project" under "Personal Account".
 2. Choose between the GitHub repositories that you have access to.
@@ -64,13 +54,13 @@ The installation process is straightforward using a GitHub application:
 5. Click on "Deploy".
 6. You'll be redirected to your new project's page (https://wing.cloud/-user/-project).
 
-#### Create a new Team (#6)
+#### Create a new Team (#5)
 
 1. Click on "New Team".
 2. Write a team name.
 3. Optionally, invite other Wing Cloud users to the team (by GitHub user ID).
 
-#### Create a new team Project (#7)
+#### Create a new team Project (#6)
 
 1. Click on "New Project" under the team of your choice.
 2. Choose between the GitHub repositories that you have access to.
@@ -79,14 +69,14 @@ The installation process is straightforward using a GitHub application:
 5. Click on "Deploy".
 6. You'll be redirected to your new project's page (https://wing.cloud/-team/-project).
 
-#### Preview Environment for production branch (#8)
+#### Preview Environment for production branch (#7)
 
 For the repository production branch, there is a single preview environment that will constantly be up-to-date with the latest code committed.
 A link to the preview environment is available in the repository main page ("About" section).
 Production branch environment url structure is: `https://wing.cloud/-account/-project/-branch`
 Once the installation of the Wing Cloud application is completed, an initial preview environment will be created and will be available in the repository main page.
 
-#### Preview Environments for Pull Requests (#9)
+#### Preview Environments for Pull Requests (#8)
 
 Upon each creation of a pull request an automatic comment will be added to the PR and will guide the developer to a dedicated preview environment.
 Provide a streamlined process for updating a pull request preview environment, each code changes in a PR will redeploy the preview environment and will also:
@@ -105,29 +95,29 @@ PR comment example (only one entry point will be supported):
 | building.main.w | 🔄 Building ([logs](https://wing.cloud/-account/-project/-branch/logs/build/))   |                                                               |                                                                                                                                                        | Jul 31, 2023 8:01am |
 | stale.main.w    | ⏸️ Stale ([lean more](https://wing.cloud/-account/-project/-branch/logs/build/)) |                                                               |                                                                                                                                                        | Jul 31, 2023 8:01am |
 
-#### Preview Environment Environment Variables (Secrets) (#10)
+#### Preview Environment Environment Variables (Secrets) (#9)
 
 The project management dashboard will include a section to manage the secrets of the project. These secrets will be available during the Wing compilation.
 
-#### Run Tests Automatically Upon PR Creation and Code Changes (#11)
+#### Run Tests Automatically Upon PR Creation and Code Changes (#10)
 
 Upon PR creation and code changes, Wing Cloud Preview Environments will automatically run all tests defined for the entry point.
 For each test run, a new simulator will be created and will be destroyed upon test completion.
 The test results will be available in the PR comment with links to the tests logs (`https://wing.cloud/-account/-project/-branch/logs/tests/<test-name>`)
 
-#### Running Tests Manually From Wing Console (#12)
+#### Running Tests Manually From Wing Console (#11)
 
 Running tests on your environment is easy using the Wing Console tests UI.
 Each test will reload the simulator to create a clean environment.
 
 Once the test is over it will **not** clean up the simulator data, so you can debug the environment and share outputs with your teammates.
 
-#### User-Controlled Environments termination (#13)
+#### User-Controlled Environments termination (#12)
 
 Closing a PR will terminate the corresponding preview environments.
 The PR comment will indicate the termination of each preview environment and the URLs won't be valid anymore.
 
-#### Self-Cleaning Environments Mechanism (#14)
+#### Self-Cleaning Environments Mechanism (#13)
 
 To ensure efficient resource utilization:
 
@@ -135,7 +125,7 @@ To ensure efficient resource utilization:
 2. The PR's preview environment comment will indicate its inactive status.
 3. Changes in code will trigger redeployment for all related preview environments in this PR.
 
-### Analytics and Logs (#15)
+### Analytics and Logs (#14)
 
 To improve the product we are collecting data and monitoring the system.
 
@@ -143,7 +133,7 @@ To improve the product we are collecting data and monitoring the system.
 2. OpenTelemetry is used for collecting metrics, logs, traces.
 3. Datadog is used for monitoring the system.
 
-### Documentation (#16)
+### Documentation (#15)
 
 Developers reading our docs can easily sign up to Wing Cloud and start using its Preview Environments feature in their repository.
 In our docs we have the following information:
@@ -154,7 +144,7 @@ In our docs we have the following information:
 4. Populate environment with initial data
 5. Running tests
 
-### Security (#17)
+### Security (#16)
 
 1. Preview environments shouldn’t be able to access files from other preview environments.
 2. Only Wing Cloud signed up developers with access to the repository can view preview environments created for this repository.
@@ -243,20 +233,14 @@ Notes:
 - A GitHub app
 - A Cloud.Function that will be triggered by GitHub events, such as `pull_request.synchronize` or `pull_request.closed`
 - A fly.io account to deploy the preview environments
-- A Cloud.Table to store different data:
-  - The registered users
-    - GH access token
-    - User ID
-  - The fly.io projects, machines and relations to their preview environments URLs
-- Deployment and tests logs can be saved in the preview environment server and can be served
+- A Cloud.Table to store different data
+- A Cloud.Bucket to store the deployment logs and test logs
 - A Cloud.Scheduler to run the self-cleaning mechanism
-- Wing Cloud web app will serve the console web application and use console servers run on fly.io machines
+- Wing Cloud web app will serve the console web application and use console servers run on fly.io machine
 
 ### Wing Cloud website
 
-https://wing.cloud website should still be a webflow site until user sign in.
-For signed-in users https://wing.cloud web app is a React app.
-need to use a reverse proxy as we have in our playground/learn/docs sites.
+The wesbite will be a React app. Astro can be used on top of it to provide the static parts of the web.
 
 ### Authentication
 
@@ -268,8 +252,11 @@ need to use a reverse proxy as we have in our playground/learn/docs sites.
 ### Authorization
 
 1. Only signed in users will be available to navigate to preview environments. Wing Cloud will check the user permissions to the project and will allow access only to users that are members of the project.
-2. Developers will be able to install Wing Cloud application in a GitHub repository only if they have the needed GitHub permissions
-3. Preview environments will be created automatically for all developers that can create a PR in a repository
+
+### Authentication for Preview Environment Server
+
+1. When a user visits https://wing.cloud/-user/-project/-branch, a JWT will be generated from the backend of Wing Cloud
+2. The JWT will hold project ID, and the Preview Environment Server will check this token for a match in project ID
 
 ### Sign Up and Sign In
 
@@ -286,14 +273,6 @@ sequenceDiagram
 ```
 
 > **Important Note:** Since we don't ask for information during the sign-up process, both the sign-up and sign in flows are the same.
-
-### Wing Cloud Web Application
-
-1. get user repositories from GitHub by using the GitHub API and the user's access token we have in our DB
-2. filter repositories that have Wing Cloud application installed.
-3. for each repository, get all preview environments URLs.
-4. we will need to have repository -> preview environments mapping in our DB.
-5. there is no need to store user -> repositories mapping in our DB, we can get it from GitHub API.
 
 ### Processing GitHub Events
 
@@ -332,15 +311,16 @@ The probot npm package will take care of ensuring the events received are legiti
 
 ### Creating Preview Environments
 
-When a GitHub event `pull_request.opened` is received, we will look for `main.w` file and create a preview environment. We will use the Flyio API to create a new project(s) and deploy the code to it (the Flyio specifics may change).
-Before building the project we will have to inject environment variables set by the user (need to be taken from our DB).
-Each preview environment will have a dedicated route (path) in wing.cloud:
+When a GitHub event `pull_request.opened` is received, we will look for all of the projects that use the GitHub repository mentioned in the event. For every project, we will create a new Preview Environment.
 
-https://wing.cloud/-account/-project/-branch
+- We will use the Flyio API to create new project/container(s) and deploy the app code (the Flyio specifics may change)
+- Project secrets will be retrieved and passed to the Flyio container
 
-During this process, we will create new entries in the Cloud.Table to store the Flyio project ID, fly.io server, the GitHub PR ID, preview environment path , the entry points and whatever unique IDs we generate for every environment. This data is necessary to later resolve the subdomains to the Flyio projects, to update them later, and to delete them.
+Each preview environment will have a dedicated route (path) in wing.cloud: https://wing.cloud/-account/-project/-branch.
 
-A special comment will be added to the PR with the list of preview environments and their status. The comment will be updated as the preview environments are created.
+During this process, we will create new entries in the Cloud.Table that represent our Preview Environment entities. They'll contain the Flyio project ID and URL, the GitHub PR ID or branch, and whatever unique IDs we generate for every environment.
+
+A special comment will be added to the PR with the list of preview environments and their status. The comment will be updated as the preview environments are created and updated.
 
 ### Preview Environment Environment Variables (Secrets)
 
@@ -352,11 +332,7 @@ In the future, we could detect which secrets are necessary for the app to work.
 
 ### Updating Preview Environments
 
-When a GitHub event `pull_request.synchronize` is received, we will look again for `*.main.w` files. We will then update the Flyio project(s) with the new code.
-
-New entrypoints will require new preview environments to be created. We will use the same process as the one described in the previous section.
-
-Entrypoints that aren't there anymore will require the preview environment to be deleted. We will use the same process as the one described in the next section.
+When a GitHub event `pull_request.synchronize` is received, we will look for all of the projects will use the GitHub repository mentioned in the event.
 
 The entries in the Cloud.Table will be updated to update the last time the preview environment was updated.
 
@@ -380,3 +356,9 @@ graph LR
     scheduler -- On Tick --> fn
     fn -- Delete Preview Environment --> flyio
 ```
+
+### Updating the status of a Preview Environment
+
+The Flyio containers that hold the user apps may take some time to spin up. A few seconds may pass before the console app is even running. If that's the case, we'll need a mechanism to store these different statuses.
+
+A simple solution would be to enable the Flyio containers to ping Wing Cloud (using a simple JWT). These pings may contain the current status information (ex, status=loading, status=live).
