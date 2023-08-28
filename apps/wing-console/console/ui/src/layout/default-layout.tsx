@@ -107,7 +107,7 @@ export const DefaultLayout = ({
   const { loading: deferredLoading, setLoading: setDeferredLoading } =
     useLoading({
       delay: 500,
-      duration: 300,
+      duration: 100,
     });
   useEffect(() => {
     setDeferredLoading(loading);
