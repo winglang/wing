@@ -197,13 +197,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(Object.keys(myMap).length, host, []);
           $Closure1._registerBindObject(("bang" in ((arrOfMap.at(0)))), host, []);
           $Closure1._registerBindObject(("world" in (myMap)), host, []);
           $Closure1._registerBindObject((arr.at(0)), host, []);
           $Closure1._registerBindObject((arr.at(1)), host, []);
           $Closure1._registerBindObject((j)["b"], host, []);
           $Closure1._registerBindObject((mySet.has("my")), host, []);
+          $Closure1._registerBindObject(Object.keys(myMap).length, host, []);
           $Closure1._registerBindObject(arr.length, host, []);
           $Closure1._registerBindObject(mySet.size, host, []);
         }
