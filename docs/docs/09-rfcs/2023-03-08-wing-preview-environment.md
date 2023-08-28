@@ -24,13 +24,36 @@ Each preview environment will have a unique URL which enable developers to work 
 
 Wing Cloud will be integrated with GitHub.
 
-### User Experience
+### Wing Cloud User Experience
 
 #### Sign-In to Wing Cloud
 
 1. On https://wing.cloud website click on sign in.
 2. Authenticate using your GitHub account.
 3. If you were already signed in, you will see the Wing Cloud dashboard (under https://wing.cloud directly).
+
+#### Redirect to sign-in process from a Preview Environment URL
+
+1. If you try to access a preview environment URL while you are not signed in to Wing Cloud (from the PR comment for example), you will be temporarily redirected to the Wing Cloud sign-in flow.
+2. Once singed in, you will be redirected to the preview environment URL.
+
+#### Wing Cloud Dashboard for Signed-In Users
+
+1. Once signed in, you will automatically see Wing Cloud for signed-in users (under https://wing.cloud directly).
+2. You can install Wing Cloud GitHub application in your GitHub acocunt.
+3. You can see and manage all your projects and teams.
+4. You will see all preview environments assosiated with your personal account and teams you are member in.
+5. In order to see a preview environment, just click on the preview environment URL from the list of all your preview environments.
+
+#### Install Wing Cloud GitHub application
+
+In order to use Wing Cloud Preview environments feature in your repository, you should sign in to Wing Cloud and install the Wing Cloud application in your GitHub account and repository.
+The installation process is straightforward using a GitHub application:
+
+1. After signing-in to https://wing.cloud, click on "Install Wing Cloud"
+2. Complete GitHub application authentication and installation.
+3. You are now ready to use Wing Cloud.
+4. A welcome email will be sent to you with additional information and links to documentation.
 
 #### Create a new personal Project
 
@@ -55,39 +78,6 @@ Wing Cloud will be integrated with GitHub.
 4. Make sure there's a `main.w` file in the root of the repository.
 5. Click on "Deploy".
 6. You'll be redirected to your new project's page (https://wing.cloud/-team/-project).
-
-#### Redirect to sign-in process from a Preview Environment URL
-
-1. If you try to access a preview environment url while you are not signed in to Wing Cloud (from the PR comment for example), you will be temporarily redirected to the Wing Cloud sign in flow.
-2. Once singed in, you will be redirected to the preview environment url.
-
-#### Authentication and Authorization
-
-1. Wing Cloud will use GitHub for authentication and authorization.
-2. Developers will be able to install Wing Cloud application in a GitHub repository only if they have the needed GitHub permissions.
-3. Preview environments will be created automatically for all developers that can create a PR in a repository.
-4. Only developers that are **signed-in to Wing Cloud** and **have access to the preview environment's repository** can view preview environment created for that repository.
-5. If an unsigned user attempts to access a preview environment, they will be directed to the Wing Cloud sign-in page in order to complete the sign-in process before proceeding.
-6. If a Wing Cloud signed-in user that doesn't have access to the preview environment's repository attempts to access a preview environment, they will be directed to the Wing Cloud dashboard page and will be notified that they don't have access to the preview environment's repository.
-
-#### Wing Cloud View for Signed-In Users
-
-1. Once signed in, you will automatically see Wing Cloud page for signed-in users.
-2. You can install Wing Cloud application on any of your repositories.
-3. Signed-in users see a list of all the repositories that have Wing Cloud application installed.
-4. For each repository, there is a list of all the preview environments.
-5. In order to see a preview environment, click on the preview environment url.
-
-#### Installation of Wing Cloud application
-
-In order to use Wing Cloud, you should sign in to Wing Cloud and install the Wing Cloud application in your GitHub account and repository.
-The installation process is straightforward using GitHub application:
-
-1. Goto https://wing.cloud and sign in if you are not already signed in.
-2. In https://wing.cloud, Click on "Deploy with Wing Cloud"
-3. Complete GitHub application authentication and installation.
-4. You are now ready to use Wing Cloud.
-5. A welcome email will be sent to you with additional information and links to documentation.
 
 #### Preview Environment for production branch
 
@@ -117,13 +107,13 @@ PR comment example (only one entry point will be supported):
 
 #### Preview Environment Environment Variables (Secrets)
 
-The project dashboard will include a section to manage the secrets of the project. These secrets will be available during the Wing Compilation.
+The project management dashboard will include a section to manage the secrets of the project. These secrets will be available during the Wing compilation.
 
 #### Run Tests Automatically Upon PR Creation and Code Changes
 
-Upon PR creation and code changes, Wing Cloud Preview Environments will automatically run all tests defined for each entry point.
+Upon PR creation and code changes, Wing Cloud Preview Environments will automatically run all tests defined for the entry point.
 For each test run, a new simulator will be created and will be destroyed upon test completion.
-The test results will be available in the PR comment for each entry point with links to the tests logs (`https://wing.cloud/-account/-project/-branch/logs/tests/<test-name>`)
+The test results will be available in the PR comment with links to the tests logs (`https://wing.cloud/-account/-project/-branch/logs/tests/<test-name>`)
 
 #### Running Tests Manually From Wing Console
 
@@ -135,7 +125,7 @@ Once the test is over it will **not** clean up the simulator data, so you can de
 #### User-Controlled Environments termination
 
 Closing a PR will terminate the corresponding preview environments.
-The PR comment will indicate the termination of each preview environment and the urls won't be valid anymore.
+The PR comment will indicate the termination of each preview environment and the URLs won't be valid anymore.
 
 #### Self-Cleaning Environments Mechanism
 
@@ -174,17 +164,10 @@ In our docs we have the following information:
 1. password protected preview environments.
 2. wing configuration file support. (for stating a specific wing version, entry points, etc.)
 3. update PR comment with tests results triggered from the console.
-4. User management
-   - each singed in user has an account in wing cloud
-   - each account can create a team and invite other users (accounts) to the team
-   - each account can have multiple repositories
-   - each team can have multiple repositories
-   - each account in a team has access to all the team repositories
-   - dashboard and user management ui
-5. enable preview environments viewers to add comments in the environment.
-6. populate Environment with Initial Data
-7. Allow users to define specific environment machine type / configuration (cpu, memory, etc.)
-8. Support multiple entry points in a single PR:
+4. enable preview environments viewers to add comments in the environment.
+5. populate Environment with Initial Data
+6. Allow users to define specific environment machine type / configuration (cpu, memory, etc.)
+7. Support multiple entry points in a single PR:
 
    There is a support for multiple entry points in a single PR.
    Every `*.main.w` file in the repository will be considered as an entry point and will have a dedicated preview environment.
@@ -292,7 +275,9 @@ need to use a reverse proxy as we have in our playground/learn/docs sites.
 
 ### Authorization
 
-Only signed in users will be available to navigate to preview environments. Wing Cloud will check the user permissions to the project and will allow access only to users that are members of the project.
+1. Only signed in users will be available to navigate to preview environments. Wing Cloud will check the user permissions to the project and will allow access only to users that are members of the project.
+2. Developers will be able to install Wing Cloud application in a GitHub repository only if they have the needed GitHub permissions
+3. Preview environments will be created automatically for all developers that can create a PR in a repository
 
 ### Sign Up and Sign In
 
