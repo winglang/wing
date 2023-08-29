@@ -5,8 +5,7 @@
   "bin": {
     "bump-pack": "./bin/bump-pack.cjs",
     "link-bundles": "./bin/link-bundles.cjs",
-    "turbo-diff": "./bin/turbo-diff.cjs",
-    "derive-shas": "./bin/derive-shas.cjs"
+    "turbo-diff": "./bin/turbo-diff.cjs"
   },
   "exports": null,
   "sideEffects": false,
