@@ -74,8 +74,10 @@ async function findSuccessfulCommit(branchName: string) {
       try {
         betterExec(`git branch -D --force ${tmpBranchName}`);
       } catch {}
-      betterExec(`git fetch origin ${branchName}`);
-      betterExec(`git branch ${tmpBranchName} ${actualPRHeadSha}`);
+      betterExec(`git switch -c ${branchName}`);
+      betterExec(`git reset --hard ${actualPRHeadSha}`);
+
+      betterExec(`git switch -C ${tmpBranchName} ${actualPRHeadSha}`);
       betterExec(
         `git rebase --onto ${baseBranchName} ${branchName} ${tmpBranchName}`
       );
@@ -95,6 +97,8 @@ async function findSuccessfulCommit(branchName: string) {
       try {
         betterExec(`git rebase --quit`);
       } catch {}
+
+      betterExec(`git switch ${originalHEAD_SHA}`);
     }
   }
 
