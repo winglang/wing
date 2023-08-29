@@ -45,27 +45,15 @@ jobs:
       - name: Setup Node.js v18
         uses: actions/setup-node@v3
         with:
+          cache: "pnpm"
           node-version: ${{ env.NODE_VERSION }}
       ########################### install a local wing version ###############
-      - name: Setup pnpm
+      - name: Download Dist Artifacts
         if: ${{github.event_name != 'release'}}
-        uses: pnpm/action-setup@v2.2.4
+        uses: actions/download-artifact@v3
         with:
-          version: ${{ env.PNPM_VERSION }}
-
-      - name: Install Rust
-        if: ${{github.event_name != 'release'}}
-        uses: dtolnay/rust-toolchain@master
-        with:
-          toolchain: ${{ env.RUST_VERSION }}
-          targets: |
-            x86_64-unknown-linux-gnu
-            wasm32-wasi
-          components: rustfmt,clippy,rust-std
-
-      - name: Setup Cargo Cache
-        if: ${{github.event_name != 'release'}}
-        uses: Swatinem/rust-cache@v2
+          name: dist
+          path: dist
 
       - name: Install Dependencies
         if: ${{github.event_name != 'release'}}

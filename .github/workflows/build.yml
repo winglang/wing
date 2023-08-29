@@ -12,6 +12,7 @@ on:
     branches:
       - main
       - dev
+      - tsuf/sdk-spec-tests-prior-to-build
   workflow_dispatch: {}
 
 concurrency:
