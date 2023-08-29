@@ -6,6 +6,6 @@ COPY dist dist
 COPY apps/wing-console/console/app/preview/index.mjs dist/
 COPY apps/wing-console/console/app/demo demo
 
-RUN cd dist && for i in *.tgz; do npm install "$i"; done
+RUN npm init -y && npm install --no-package-lock ./dist/*-[0-9]*.[0-9]*.[0-9]*.tgz
 
 ENTRYPOINT ["node", "dist/index.mjs"]
