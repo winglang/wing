@@ -673,7 +673,7 @@ assert(true);
 		r#"
 class Foo {
   inflight bar() {
-    throw("hello");
+    assert(true);
     //^
   }
 }

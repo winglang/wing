@@ -3235,6 +3235,10 @@ impl<'a> TypeChecker<'a> {
 				self.types.set_scope_env(scope, scope_env);
 				self.inner_scopes.push(scope)
 			}
+			StmtKind::Throw(exp) => {
+				let (exp_type, _) = self.type_check_exp(exp, env);
+				self.validate_type(exp_type, self.types.string(), exp);
+			}
 			StmtKind::Return(exp) => {
 				let return_type_inferred = self.update_known_inferences(&mut env.return_type, &stmt.span);
 				if let Some(return_expression) = exp {
@@ -5109,6 +5113,7 @@ fn check_is_bringable(scope: &Scope) -> bool {
 		StmtKind::Break => false,
 		StmtKind::Continue => false,
 		StmtKind::Return(_) => false,
+		StmtKind::Throw(_) => false,
 		StmtKind::Expression(_) => false,
 		StmtKind::Assignment { .. } => false,
 		StmtKind::Scope(_) => false,

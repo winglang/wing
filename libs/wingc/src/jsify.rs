@@ -1039,6 +1039,7 @@ impl<'a> JSifier<'a> {
 					CodeMaker::one_line("return;")
 				}
 			}
+			StmtKind::Throw(exp) => CodeMaker::one_line(format!("throw new Error({});", self.jsify_expression(exp, ctx))),
 			StmtKind::Class(class) => self.jsify_class(env, class, ctx),
 			StmtKind::Interface { .. } => {
 				// This is a no-op in JS
@@ -1649,6 +1650,7 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 			StmtKind::Break => {}
 			StmtKind::Continue => {}
 			StmtKind::Return(_) => {}
+			StmtKind::Throw(_) => {}
 			StmtKind::Expression(_) => {}
 			StmtKind::Assignment { .. } => {}
 			StmtKind::Scope(_) => {}

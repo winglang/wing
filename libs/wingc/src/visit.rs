@@ -179,6 +179,9 @@ where
 				v.visit_expr(expr);
 			}
 		}
+		StmtKind::Throw(expr) => {
+			v.visit_expr(expr);
+		}
 		StmtKind::Scope(scope) => {
 			v.visit_scope(scope);
 		}

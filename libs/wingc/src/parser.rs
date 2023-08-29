@@ -454,6 +454,7 @@ impl<'s> Parser<'s> {
 			"break_statement" => self.build_break_statement(statement_node)?,
 			"continue_statement" => self.build_continue_statement(statement_node)?,
 			"return_statement" => self.build_return_statement(statement_node, phase)?,
+			"throw_statement" => self.build_throw_statement(statement_node, phase)?,
 			"class_definition" => self.build_class_statement(statement_node, Phase::Inflight)?, // `inflight class` is always "inflight"
 			"resource_definition" => self.build_class_statement(statement_node, phase)?, // `class` without a modifier inherits from scope
 			"interface_definition" => self.build_interface_statement(statement_node, phase)?,
@@ -518,6 +519,11 @@ impl<'s> Parser<'s> {
 				None
 			},
 		))
+	}
+
+	fn build_throw_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
+		let expr = self.build_expression(&statement_node.child_by_field_name("expression").unwrap(), phase)?;
+		Ok(StmtKind::Throw(expr))
 	}
 
 	/// Builds scope statements for a loop (while/for), and maintains the is_in_loop flag
