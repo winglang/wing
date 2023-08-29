@@ -334,7 +334,7 @@ jobs:
           version: ${{env.FLY_VERSION}}
 
       - name: Deploy to Fly.io
-        id: deploy
+        id: deploy-fly
         run: |
           if ! flyctl status --app "$APP_NAME"; then
             pushd ./apps/wing-console/console/app/preview
@@ -350,7 +350,8 @@ jobs:
         with:
           message: |
             Console preview environment is available at https://${{env.APP_NAME}}.fly.dev :rocket:
-            *Updated (UTC): ${{steps.deploy.outputs.deploytime }}*
+            
+            *Updated (UTC): ${{steps.deploy-fly.outputs.deploytime }}*
           comment_tag: Console preview environment
           GITHUB_TOKEN: ${{secrets.PROJEN_GITHUB_TOKEN}}
 
