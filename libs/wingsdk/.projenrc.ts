@@ -6,7 +6,7 @@ const UNDOCUMENTED_CLOUD_FILES = ["index", "test-runner"];
 const cloudFiles = readdirSync("./src/cloud");
 
 const cloudResources: Set<string> = new Set(
-  cloudFiles.map((filename) => filename.split(".").slice(0, -1).join("."))
+  cloudFiles.map((filename) => filename.split(".")[0])
 );
 
 UNDOCUMENTED_CLOUD_FILES.forEach((file) => cloudResources.delete(file));

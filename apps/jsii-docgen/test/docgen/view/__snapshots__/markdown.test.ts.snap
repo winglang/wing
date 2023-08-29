@@ -87,7 +87,7 @@ account for data recovery and cleanup later (\`RemovalPolicy.RETAIN\`).
 ##### \`addEventNotification\` <a name=\\"addEventNotification\\" id=\\"GreeterBucket.addEventNotification\\"></a>
 
 \`\`\`wing
-addEventNotification(event: EventType, dest: IBucketNotificationDestination, filters: NotificationKeyFilter): void
+addEventNotification(event: EventType, dest: IBucketNotificationDestination, ...filters: Array<NotificationKeyFilter>): void
 \`\`\`
 
 Adds a bucket notification event destination.
@@ -132,7 +132,7 @@ for details about allowed filter rules.
 ##### \`addObjectCreatedNotification\` <a name=\\"addObjectCreatedNotification\\" id=\\"GreeterBucket.addObjectCreatedNotification\\"></a>
 
 \`\`\`wing
-addObjectCreatedNotification(dest: IBucketNotificationDestination, filters: NotificationKeyFilter): void
+addObjectCreatedNotification(dest: IBucketNotificationDestination, ...filters: Array<NotificationKeyFilter>): void
 \`\`\`
 
 Subscribes a destination to receive notifications when an object is created in the bucket.
@@ -159,7 +159,7 @@ Filters (see onEvent).
 ##### \`addObjectRemovedNotification\` <a name=\\"addObjectRemovedNotification\\" id=\\"GreeterBucket.addObjectRemovedNotification\\"></a>
 
 \`\`\`wing
-addObjectRemovedNotification(dest: IBucketNotificationDestination, filters: NotificationKeyFilter): void
+addObjectRemovedNotification(dest: IBucketNotificationDestination, ...filters: Array<NotificationKeyFilter>): void
 \`\`\`
 
 Subscribes a destination to receive notifications when an object is removed from the bucket.
@@ -244,7 +244,7 @@ Restrict the permission to a certain key pattern (default '*').
 ##### \`grantPublicAccess\` <a name=\\"grantPublicAccess\\" id=\\"GreeterBucket.grantPublicAccess\\"></a>
 
 \`\`\`wing
-grantPublicAccess(allowedActions: str, keyPrefix?: str): Grant
+grantPublicAccess(...allowedActions: Array<str>, keyPrefix?: str): Grant
 \`\`\`
 
 Allows unrestricted access to objects from this bucket.
@@ -1010,7 +1010,7 @@ account for data recovery and cleanup later (\`RemovalPolicy.RETAIN\`).
 ##### \`addEventNotification\` <a name=\\"addEventNotification\\" id=\\"construct-library.GreeterBucket.addEventNotification\\"></a>
 
 \`\`\`wing
-addEventNotification(event: EventType, dest: IBucketNotificationDestination, filters: NotificationKeyFilter): void
+addEventNotification(event: EventType, dest: IBucketNotificationDestination, ...filters: Array<NotificationKeyFilter>): void
 \`\`\`
 
 Adds a bucket notification event destination.
@@ -1055,7 +1055,7 @@ for details about allowed filter rules.
 ##### \`addObjectCreatedNotification\` <a name=\\"addObjectCreatedNotification\\" id=\\"construct-library.GreeterBucket.addObjectCreatedNotification\\"></a>
 
 \`\`\`wing
-addObjectCreatedNotification(dest: IBucketNotificationDestination, filters: NotificationKeyFilter): void
+addObjectCreatedNotification(dest: IBucketNotificationDestination, ...filters: Array<NotificationKeyFilter>): void
 \`\`\`
 
 Subscribes a destination to receive notifications when an object is created in the bucket.
@@ -1082,7 +1082,7 @@ Filters (see onEvent).
 ##### \`addObjectRemovedNotification\` <a name=\\"addObjectRemovedNotification\\" id=\\"construct-library.GreeterBucket.addObjectRemovedNotification\\"></a>
 
 \`\`\`wing
-addObjectRemovedNotification(dest: IBucketNotificationDestination, filters: NotificationKeyFilter): void
+addObjectRemovedNotification(dest: IBucketNotificationDestination, ...filters: Array<NotificationKeyFilter>): void
 \`\`\`
 
 Subscribes a destination to receive notifications when an object is removed from the bucket.
@@ -1167,7 +1167,7 @@ Restrict the permission to a certain key pattern (default '*').
 ##### \`grantPublicAccess\` <a name=\\"grantPublicAccess\\" id=\\"construct-library.GreeterBucket.grantPublicAccess\\"></a>
 
 \`\`\`wing
-grantPublicAccess(allowedActions: str, keyPrefix?: str): Grant
+grantPublicAccess(...allowedActions: Array<str>, keyPrefix?: str): Grant
 \`\`\`
 
 Allows unrestricted access to objects from this bucket.
