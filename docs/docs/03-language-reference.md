@@ -1186,9 +1186,10 @@ The **while** statement evaluates a condition, and if it is true, a set of state
 
 ### 2.8 throw
 
-The **throw** statement throws a user-defined exception.
+The **throw** statement raises a user-defined exception, which must be a string expression.
 Execution of the current function will stop (the statements after throw won't be executed), and control will be passed to the first catch block in the call stack.
 If no catch block exists among caller functions, the program will terminate.
+(An uncaught exception in preflight causes a compilation error, while an uncaught exception in inflight causes a runtime error.)
 
 > ```TS
 > // Wing program:
