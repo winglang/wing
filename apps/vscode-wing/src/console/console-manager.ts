@@ -157,7 +157,7 @@ export const createConsoleManager = (
       },
     });
 
-    instance.client.openFileInEditorSub({
+    instance.client.onOpenFileInEditor({
       onData: async (link) => {
         logger.appendLine(`Opening link: ${link}`);
         logger.appendLine(

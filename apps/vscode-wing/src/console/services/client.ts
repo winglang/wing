@@ -25,7 +25,7 @@ export interface Client {
   runAllTests: () => Promise<any>;
   listResources: () => Promise<ExplorerItem>;
   onInvalidateQuery: (options: SubscriptionOptions) => void;
-  openFileInEditorSub: (options: SubscriptionOptions) => void;
+  onOpenFileInEditor: (options: SubscriptionOptions) => void;
   close: () => void;
 }
 
@@ -99,7 +99,7 @@ export const createClient = (host: string): Client => {
     return client["app.invalidateQuery"].subscribe(undefined, options);
   };
 
-  const openFileInEditorSub = (options: SubscriptionOptions) => {
+  const onOpenFileInEditor = (options: SubscriptionOptions) => {
     return client["app.openFileInEditorSub"].subscribe(undefined, options);
   };
 
@@ -117,7 +117,7 @@ export const createClient = (host: string): Client => {
     runAllTests,
     listResources,
     onInvalidateQuery,
-    openFileInEditorSub,
+    onOpenFileInEditor,
     close,
   };
 };

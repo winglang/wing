@@ -12,7 +12,11 @@ import {
   NodeConnection,
   ConstructTreeNodeMap,
 } from "../utils/constructTreeNodeMap.js";
-import { createProcedure, createRouter } from "../utils/createRouter.js";
+import {
+  EditorLink,
+  createProcedure,
+  createRouter,
+} from "../utils/createRouter.js";
 import {
   isTermsAccepted,
   acceptTerms,
@@ -565,16 +569,22 @@ export const createAppRouter = () => {
       .input(
         z.object({
           link: z.string(),
+          row: z.number().optional(),
+          column: z.number().optional(),
         }),
       )
       .mutation(async ({ ctx, input }) => {
-        ctx.emitter.emit("openVSCodeLink", input.link);
+        ctx.emitter.emit("openFileInEditor", {
+          link: input.link,
+          row: input.row,
+          column: input.column,
+        });
       }),
     "app.openFileInEditorSub": createProcedure.subscription(({ ctx }) => {
-      return observable<string>((emit) => {
-        ctx.emitter.on("openVSCodeLink", emit.next);
+      return observable<EditorLink>((emit) => {
+        ctx.emitter.on("openFileInEditor", emit.next);
         return () => {
-          ctx.emitter.off("openVSCodeLink", emit.next);
+          ctx.emitter.off("openFileInEditor", emit.next);
         };
       });
     }),
