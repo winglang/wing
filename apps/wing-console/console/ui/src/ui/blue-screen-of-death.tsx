@@ -1,7 +1,10 @@
 import classNames from "classnames";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
-import { formatAbsolutePaths } from "../features/console-logs.js";
+import {
+  VsCodeLinkWrapper,
+  useVSCodeLinks,
+} from "../shared/use-vscode-links.js";
 
 export const BlueScreenOfDeath = ({
   title,
@@ -16,13 +19,15 @@ export const BlueScreenOfDeath = ({
 }) => {
   const [formattedPathsError, setFormattedPathsError] = useState("");
 
+  const { createHtmlLink, onClick } = useVSCodeLinks();
+
   useEffect(() => {
     if (!displayLinks) {
       setFormattedPathsError(error);
       return;
     }
     setFormattedPathsError(
-      formatAbsolutePaths(
+      createHtmlLink(
         error,
         "underline text-slate-300 hover:text-slate-400",
         true,
@@ -46,10 +51,12 @@ export const BlueScreenOfDeath = ({
         <div className="space-y-4">
           <div>{title}</div>
           <div className="py-4">
-            <span
-              className="outline-none select-text whitespace-pre-wrap"
-              dangerouslySetInnerHTML={{ __html: formattedPathsError }}
-            />
+            <VsCodeLinkWrapper>
+              <span
+                className="outline-none select-text whitespace-pre-wrap"
+                dangerouslySetInnerHTML={{ __html: formattedPathsError }}
+              />
+            </VsCodeLinkWrapper>
           </div>
           {displayLinks && (
             <div className="w-full text-center py-4">

@@ -9,6 +9,11 @@ import classNames from "classnames";
 import throttle from "lodash.throttle";
 import { Fragment, useEffect, useRef, useState } from "react";
 
+import {
+  VsCodeLinkWrapper,
+  useVSCodeLinks,
+} from "../shared/use-vscode-links.js";
+
 const dateTimeFormat = new Intl.DateTimeFormat(undefined, {
   hour: "2-digit",
   minute: "2-digit",
@@ -23,21 +28,6 @@ interface LogEntryProps {
   showIcons?: boolean;
 }
 
-export const formatAbsolutePaths = (
-  error: string,
-  className: string,
-  expanded: boolean = false,
-) => {
-  return error
-    .replaceAll(
-      /\B((?:[a-z]:)?[/\\]\S+):(\d+):(\d+)/gi,
-      (match, path, line, column) => {
-        return `<a class="${className}" onclick="event.stopPropagation()" href="vscode://file/${path}:${line}:${column}">${match}</a>`;
-      },
-    )
-    .replaceAll(/(\r\n|\n|\r)/gm, expanded ? "<br />" : "\n");
-};
-
 const LogEntryRow = ({
   log,
   showIcons = true,
@@ -45,6 +35,8 @@ const LogEntryRow = ({
   onResourceClick,
 }: LogEntryProps) => {
   const { theme } = useTheme();
+
+  const { createHtmlLink } = useVSCodeLinks();
 
   const [expanded, setExpanded] = useState(false);
   const expandableRef = useRef<HTMLElement>(null);
@@ -77,7 +69,7 @@ const LogEntryRow = ({
     if (expandableRef.current === null) {
       return;
     }
-    const html = formatAbsolutePaths(
+    const html = createHtmlLink(
       log.message,
       "text-sky-500 underline hover:text-sky-800",
       expanded,
@@ -154,20 +146,22 @@ const LogEntryRow = ({
               />
             </button>
           )}
-          <span
-            className={classNames(
-              log.ctx?.messageType === "info" && theme.text2,
-              log.ctx?.messageType === "title" && theme.text1,
-              log.ctx?.messageType === "success" &&
-                "text-green-700 dark:text-green-500",
-              log.ctx?.messageType === "fail" && "text-red-500",
-              log.ctx?.messageType === "summary" && [
-                "font-medium",
-                theme.text1,
-              ],
-            )}
-            ref={expandableRef}
-          />
+          <VsCodeLinkWrapper>
+            <span
+              className={classNames(
+                log.ctx?.messageType === "info" && theme.text2,
+                log.ctx?.messageType === "title" && theme.text1,
+                log.ctx?.messageType === "success" &&
+                  "text-green-700 dark:text-green-500",
+                log.ctx?.messageType === "fail" && "text-red-500",
+                log.ctx?.messageType === "summary" && [
+                  "font-medium",
+                  theme.text1,
+                ],
+              )}
+              ref={expandableRef}
+            />
+          </VsCodeLinkWrapper>
         </div>
 
         {onResourceClick && (

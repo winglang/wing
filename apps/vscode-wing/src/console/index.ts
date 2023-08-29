@@ -22,6 +22,13 @@ export class WingConsoleManager {
 
     window.onDidChangeActiveTextEditor(async (editor) => {
       const instanceId = editor?.document.uri.fsPath;
+
+      if (instanceId) {
+        this.logger.appendLine(`onDidChangeActiveTextEditor: ${instanceId}`);
+        const document = await workspace.openTextDocument(instanceId);
+        await window.showTextDocument(document);
+      }
+
       if (
         this.consoleManager.activeInstances() &&
         this.consoleManager.getActiveInstanceId() !== instanceId

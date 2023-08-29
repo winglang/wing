@@ -561,6 +561,23 @@ export const createAppRouter = () => {
       .mutation(async ({ ctx, input }) => {
         await ctx.hostUtils?.openExternal(input.url);
       }),
+    "app.openVSCodeLink": createProcedure
+      .input(
+        z.object({
+          link: z.string(),
+        }),
+      )
+      .mutation(async ({ ctx, input }) => {
+        ctx.emitter.emit("openVSCodeLink", input.link);
+      }),
+    "app.openVSCodeLinkSub": createProcedure.subscription(({ ctx }) => {
+      return observable<string>((emit) => {
+        ctx.emitter.on("openVSCodeLink", emit.next);
+        return () => {
+          ctx.emitter.off("openVSCodeLink", emit.next);
+        };
+      });
+    }),
   });
 
   return { router };

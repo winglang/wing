@@ -77,6 +77,7 @@ export interface RouterContext {
   emitter: Emittery<{
     invalidateQuery: string | undefined;
     trace: Trace;
+    openVSCodeLink: string;
   }>;
   appState(): State;
   logger: ConsoleLogger;

@@ -156,6 +156,16 @@ export const createConsoleManager = (
         logger.appendLine(err);
       },
     });
+
+    instance.client.onOpenVSCodeLink({
+      onData: async (link) => {
+        await commands.executeCommand("vscode.open", Uri.parse(link));
+      },
+      onError: (err) => {
+        logger.appendLine(err);
+      },
+    });
+
     instances[instance.id] = instance;
 
     await setActiveInstance(instance.id);
