@@ -157,8 +157,20 @@ export const createConsoleManager = (
       },
     });
 
-    instance.client.onOpenVSCodeLink({
+    instance.client.openFileInEditorSub({
       onData: async (link) => {
+        logger.appendLine(`Opening link: ${link}`);
+        logger.appendLine(
+          `Visible editors: ${window.visibleTextEditors
+            .map((editor) => editor.document.uri.fsPath)
+            .join(",")}`
+        );
+        const openEditor = window.visibleTextEditors.find((editor) =>
+          link.includes(editor.document.uri.fsPath)
+        );
+        if (openEditor) {
+          await window.showTextDocument(openEditor.document);
+        }
         await commands.executeCommand("vscode.open", Uri.parse(link));
       },
       onError: (err) => {

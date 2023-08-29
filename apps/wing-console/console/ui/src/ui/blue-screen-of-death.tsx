@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { useEffect, useState } from "react";
 
 import {
-  VsCodeLinkWrapper,
+  OpenFileInEditorButton,
   useVSCodeLinks,
 } from "../shared/use-vscode-links.js";
 
@@ -51,12 +51,12 @@ export const BlueScreenOfDeath = ({
         <div className="space-y-4">
           <div>{title}</div>
           <div className="py-4">
-            <VsCodeLinkWrapper>
+            <OpenFileInEditorButton>
               <span
                 className="outline-none select-text whitespace-pre-wrap"
                 dangerouslySetInnerHTML={{ __html: formattedPathsError }}
               />
-            </VsCodeLinkWrapper>
+            </OpenFileInEditorButton>
           </div>
           {displayLinks && (
             <div className="w-full text-center py-4">

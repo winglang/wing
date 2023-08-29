@@ -25,7 +25,7 @@ export interface Client {
   runAllTests: () => Promise<any>;
   listResources: () => Promise<ExplorerItem>;
   onInvalidateQuery: (options: SubscriptionOptions) => void;
-  onOpenVSCodeLink: (options: SubscriptionOptions) => void;
+  openFileInEditorSub: (options: SubscriptionOptions) => void;
   close: () => void;
 }
 
@@ -99,8 +99,8 @@ export const createClient = (host: string): Client => {
     return client["app.invalidateQuery"].subscribe(undefined, options);
   };
 
-  const onOpenVSCodeLink = (options: SubscriptionOptions) => {
-    return client["app.openVSCodeLinkSub"].subscribe(undefined, options);
+  const openFileInEditorSub = (options: SubscriptionOptions) => {
+    return client["app.openFileInEditorSub"].subscribe(undefined, options);
   };
 
   const close = () => {
@@ -117,7 +117,7 @@ export const createClient = (host: string): Client => {
     runAllTests,
     listResources,
     onInvalidateQuery,
-    onOpenVSCodeLink,
+    openFileInEditorSub,
     close,
   };
 };

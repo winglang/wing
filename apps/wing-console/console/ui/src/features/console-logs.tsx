@@ -10,7 +10,7 @@ import throttle from "lodash.throttle";
 import { Fragment, useEffect, useRef, useState } from "react";
 
 import {
-  VsCodeLinkWrapper,
+  OpenFileInEditorButton,
   useVSCodeLinks,
 } from "../shared/use-vscode-links.js";
 
@@ -146,7 +146,7 @@ const LogEntryRow = ({
               />
             </button>
           )}
-          <VsCodeLinkWrapper>
+          <OpenFileInEditorButton>
             <span
               className={classNames(
                 log.ctx?.messageType === "info" && theme.text2,
@@ -161,7 +161,7 @@ const LogEntryRow = ({
               )}
               ref={expandableRef}
             />
-          </VsCodeLinkWrapper>
+          </OpenFileInEditorButton>
         </div>
 
         {onResourceClick && (

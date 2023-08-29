@@ -24,14 +24,8 @@ export const useVSCodeLinks = () => {
   };
 };
 
-export const VsCodeLinkWrapper = ({ children }: PropsWithChildren<{}>) => {
-  const openVSCodeLink = trpc["app.openVSCodeLink"].useMutation();
-
-  const onClick = async (link: string) => {
-    openVSCodeLink.mutate({
-      link,
-    });
-  };
+export const OpenFileInEditorButton = ({ children }: PropsWithChildren<{}>) => {
+  const openFileInEditor = trpc["app.openFileInEditor"].useMutation();
 
   return (
     <button
@@ -39,7 +33,9 @@ export const VsCodeLinkWrapper = ({ children }: PropsWithChildren<{}>) => {
       onClick={(event) => {
         const target = event.target as HTMLElement;
         if (target.tagName === "A") {
-          onClick(target.getAttribute("href")!);
+          openFileInEditor.mutate({
+            link: target.getAttribute("href")!.replace("vscode://file/", ""),
+          });
         }
       }}
     >
