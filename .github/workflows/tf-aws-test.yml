@@ -42,6 +42,13 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.2.4
+        if: ${{github.event_name != 'release'}}
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
       - name: Setup Node.js v18
         uses: actions/setup-node@v3
         with:
