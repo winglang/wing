@@ -280,6 +280,8 @@ jobs:
           path: ${{ steps.diff.outputs.diff_name }}
 
   sdk-spec-test:
+    needs:
+      - build
     if: github.event_name == 'push'
     uses: ./.github/workflows/tf-aws-test.yml
     secrets: inherit
