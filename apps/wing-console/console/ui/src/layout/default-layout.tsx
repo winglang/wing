@@ -7,8 +7,9 @@ import {
   USE_EXTERNAL_THEME_COLOR,
 } from "@wingconsole/design-system";
 import type { State, LayoutConfig, LayoutComponent } from "@wingconsole/server";
+import { useLoading } from "@wingconsole/use-loading";
 import classNames from "classnames";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { ConsoleLogsFilters } from "../features/console-logs-filters.js";
 import { ConsoleLogs } from "../features/console-logs.js";
@@ -57,7 +58,7 @@ const defaultLayoutConfig: LayoutConfig = {
     displayLinks: true,
   },
   panels: {
-    rounded: true,
+    rounded: false,
   },
 };
 
@@ -102,6 +103,15 @@ export const DefaultLayout = ({
   useEffect(() => {
     document.title = title;
   }, [title]);
+
+  const { loading: deferredLoading, setLoading: setDeferredLoading } =
+    useLoading({
+      delay: 500,
+      duration: 100,
+    });
+  useEffect(() => {
+    setDeferredLoading(loading);
+  }, [loading, setDeferredLoading]);
 
   const showTerms = useMemo(() => {
     if (!termsConfig.data) {
@@ -167,14 +177,16 @@ export const DefaultLayout = ({
               )}
             >
               <div className="relative h-full flex flex-col gap-2">
-                {loading && (
-                  <div
-                    className={classNames(
-                      "absolute h-full w-full z-50 bg-white/70 dark:bg-slate-600/70",
-                      theme.text2,
-                    )}
-                  />
-                )}
+                <div
+                  className={classNames(
+                    "absolute h-full w-full bg-white/70 dark:bg-slate-600/70",
+                    "transition-all",
+                    deferredLoading && "opacity-100 z-50",
+                    !deferredLoading && "opacity-0 -z-10",
+                    theme.text2,
+                  )}
+                />
+
                 <ConsoleLogsFilters
                   selectedLogTypeFilters={selectedLogTypeFilters}
                   setSelectedLogTypeFilters={setSelectedLogTypeFilters}
@@ -223,6 +235,7 @@ export const DefaultLayout = ({
       setSelectedItems,
       setExpandedItems,
       showTests,
+      deferredLoading,
     ],
   );
 
@@ -237,7 +250,7 @@ export const DefaultLayout = ({
       )}
 
       <div className={classNames(USE_EXTERNAL_THEME_COLOR, "fixed inset-0")}>
-        <div className={classNames("w-full h-full", theme.bg2)} />
+        <div className={classNames("w-full h-full", theme.bg1)} />
       </div>
 
       <div
@@ -246,7 +259,7 @@ export const DefaultLayout = ({
           "h-full flex flex-col select-none",
           theme.text2,
           showTerms && "blur-sm",
-          "gap-1",
+          "gap-0.5",
           layout?.panels?.rounded && "pt-1",
         )}
       >
@@ -264,26 +277,27 @@ export const DefaultLayout = ({
 
         {renderApp && (
           <>
-            <div className="flex-1 flex relative gap-1">
-              {loading && (
-                <div
-                  className={classNames(
-                    "absolute h-full w-full z-50 bg-white/70 dark:bg-slate-600/70",
-                  )}
-                  data-testid="loading-overlay"
-                >
-                  <div className=" absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <SpinnerLoader data-testid="main-view-loader" />
-                  </div>
+            <div className="flex-1 flex relative gap-0.5">
+              <div
+                className={classNames(
+                  "absolute h-full w-full bg-white/70 dark:bg-slate-600/70",
+                  "transition-all",
+                  deferredLoading && "opacity-100 z-50",
+                  !deferredLoading && "opacity-100 -z-10",
+                )}
+                data-testid="loading-overlay"
+              >
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                  <SpinnerLoader data-testid="main-view-loader" />
                 </div>
-              )}
+              </div>
 
               {!layout.leftPanel?.hide &&
                 layout.leftPanel?.components?.length && (
                   <RightResizableWidget
                     className={classNames(
                       USE_EXTERNAL_THEME_COLOR,
-                      "h-full flex flex-col w-80 min-w-[10rem] min-h-[10rem] gap-1",
+                      "h-full flex flex-col w-80 min-w-[10rem] min-h-[10rem] gap-0.5",
                     )}
                   >
                     {layout.leftPanel?.components.map(
@@ -329,7 +343,7 @@ export const DefaultLayout = ({
                 )}
 
               <div className="flex-1 flex flex-col">
-                <div className="flex-1 flex gap-1">
+                <div className="flex-1 flex gap-0.5">
                   <div
                     className={classNames(
                       "flex-1 flex flex-col",
@@ -398,7 +412,7 @@ export const DefaultLayout = ({
                   "relative flex",
                   theme.text2,
                   "min-h-[5rem]",
-                  "gap-1",
+                  "gap-0.5",
                   (layout.bottomPanel?.size === "small" && "h-[8rem]") ||
                     "h-[15rem]",
                 )}
