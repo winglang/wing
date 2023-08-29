@@ -64,15 +64,21 @@ async function findSuccessfulCommit(branchName: string) {
   let eventName = process.env.GITHUB_EVENT_NAME ?? context.eventName;
 
   if (eventName === "pull_request") {
+    const actualPRHeadSha =
+      process.env.GITHUB_PR_HEAD ?? context.payload?.pull_request?.head?.sha;
+
     try {
       // create a new branch locally to rebase onto main
       const tmpBranchName = `tmp-pr-diff-${HEAD_SHA}`;
       try {
         betterExec(`git branch -D --force ${tmpBranchName}`);
       } catch {}
-      betterExec(`git branch ${tmpBranchName} ${branchName}`);
+      betterExec(`git fetch ${branchName}`);
+      betterExec(`git branch ${tmpBranchName} ${actualPRHeadSha}`);
       betterExec(`git switch ${tmpBranchName}`);
-      betterExec(`git rebase --onto ${baseBranchName} ${branchName} ${tmpBranchName}`);
+      betterExec(
+        `git rebase --onto ${baseBranchName} ${branchName} ${tmpBranchName}`
+      );
 
       const returnBase = betterExec(
         `git merge-base ${baseBranchName} ${tmpBranchName}`
