@@ -38,7 +38,6 @@ const branchName =
   betterExec(`git rev-parse --abbrev-ref HEAD`);
 
 let HEAD_SHA = context?.sha ?? betterExec(`git rev-parse HEAD`);
-const originalHEAD_SHA = HEAD_SHA;
 
 let BASE_SHA = await findSuccessfulCommit(branchName);
 
@@ -65,7 +64,7 @@ async function findSuccessfulCommit(branchName: string) {
   let eventName = process.env.GITHUB_EVENT_NAME ?? context.eventName;
 
   if (eventName === "pull_request") {
-    return baseBranchName;
+    return betterExec(`git merge-base origin/${baseBranchName} HEAD`);
   }
 
   const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
