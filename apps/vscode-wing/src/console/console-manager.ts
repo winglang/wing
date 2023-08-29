@@ -159,24 +159,20 @@ export const createConsoleManager = (
 
     instance.client.onOpenFileInEditor({
       onData: async (data) => {
-        const link = data?.link;
-        const row = data?.row;
-        const column = data?.column;
+        const path = data?.path;
+        const row = data?.row || 0;
+        const column = data?.column || 0;
 
-        logger.appendLine(`Opening link: ${link}`);
-        logger.appendLine(
-          `Visible editors: ${window.visibleTextEditors
-            .map((editor) => editor.document.uri.fsPath)
-            .join(",")}`
+        logger.appendLine(`Opening link: ${path}`);
+
+        const openEditor = window.visibleTextEditors.find(
+          (editor) => path === editor.document.uri.fsPath
         );
 
-        const openEditor = window.visibleTextEditors.find((editor) =>
-          link.includes(editor.document.uri.fsPath)
+        await commands.executeCommand(
+          "vscode.open",
+          Uri.parse(`file/${path}:${row}:${column}`)
         );
-        if (openEditor) {
-          await window.showTextDocument(openEditor.document);
-        }
-        await commands.executeCommand("vscode.open", Uri.parse(link));
       },
       onError: (err) => {
         logger.appendLine(err);

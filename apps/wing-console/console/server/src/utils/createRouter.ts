@@ -69,7 +69,7 @@ export interface TestsStateManager {
 }
 
 export interface EditorLink {
-  link: string;
+  path: string;
   row?: number;
   column?: number;
 }

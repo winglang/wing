@@ -33,12 +33,12 @@ export const OpenFileInEditorButton = ({ children }: PropsWithChildren<{}>) => {
       onClick={(event) => {
         const target = event.target as HTMLElement;
         if (target.tagName === "A") {
-          const [link, row, column] = target
+          const [path, row, column] = target
             .getAttribute("href")!
             .replace("vscode://file/", "")
             .split(":");
           openFileInEditor.mutate({
-            link,
+            path,
             row: row && Number.parseInt(row),
             column: column && Number.parseInt(column),
           });

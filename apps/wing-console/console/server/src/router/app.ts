@@ -568,14 +568,14 @@ export const createAppRouter = () => {
     "app.openFileInEditor": createProcedure
       .input(
         z.object({
-          link: z.string(),
+          path: z.string(),
           row: z.number().optional(),
           column: z.number().optional(),
         }),
       )
       .mutation(async ({ ctx, input }) => {
         ctx.emitter.emit("openFileInEditor", {
-          link: input.link,
+          path: input.path,
           row: input.row,
           column: input.column,
         });
