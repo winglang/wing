@@ -79,6 +79,8 @@ const absoluteChangedFiles = relativeChangedFiles.map((file) =>
   join(rootDir, file)
 );
 
+console.log()
+
 const turboArgs = [
   "pnpm",
   "turbo",

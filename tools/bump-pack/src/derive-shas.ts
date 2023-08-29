@@ -84,11 +84,8 @@ async function findSuccessfulCommit(branchName: string) {
         `git rebase --onto ${baseBranchName} ${branchName} ${tmpBranchName}`
       );
 
-      const returnBase = betterExec(
-        `git merge-base ${baseBranchName} ${tmpBranchName}`
-      );
       HEAD_SHA = tmpBranchName;
-      return returnBase;
+      return baseBranchName;
     } catch (err) {
       console.log(`Failed to rebase onto ${baseBranchName}`);
       console.log(err);
