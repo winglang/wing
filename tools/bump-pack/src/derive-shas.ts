@@ -70,7 +70,8 @@ async function findSuccessfulCommit(branchName: string) {
       try {
         betterExec(`git branch -D --force ${tmpBranchName}`);
       } catch {}
-      betterExec(`git checkout -b ${tmpBranchName} ${branchName}`);
+      betterExec(`git branch ${tmpBranchName} ${branchName}`);
+      betterExec(`git switch ${tmpBranchName}`);
       betterExec(`git rebase --onto ${baseBranchName} ${branchName} ${tmpBranchName}`);
 
       const returnBase = betterExec(
