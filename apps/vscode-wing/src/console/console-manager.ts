@@ -158,13 +158,18 @@ export const createConsoleManager = (
     });
 
     instance.client.onOpenFileInEditor({
-      onData: async (link) => {
+      onData: async (data) => {
+        const link = data?.link;
+        const row = data?.row;
+        const column = data?.column;
+
         logger.appendLine(`Opening link: ${link}`);
         logger.appendLine(
           `Visible editors: ${window.visibleTextEditors
             .map((editor) => editor.document.uri.fsPath)
             .join(",")}`
         );
+
         const openEditor = window.visibleTextEditors.find((editor) =>
           link.includes(editor.document.uri.fsPath)
         );
