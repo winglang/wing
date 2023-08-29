@@ -73,7 +73,7 @@ async function findSuccessfulCommit(branchName: string) {
       try {
         betterExec(`git branch -D --force ${tmpBranchName}`);
       } catch {}
-      betterExec(`git fetch ${branchName}`);
+      betterExec(`git fetch origin ${branchName}`);
       betterExec(`git branch ${tmpBranchName} ${actualPRHeadSha}`);
       betterExec(`git switch ${tmpBranchName}`);
       betterExec(
