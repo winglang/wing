@@ -103,7 +103,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IPredicateHandler extends IResource\n```\n---\nA predicate with an inflight \"handle\" method that can be passed to `util.busyWait`.\n### Methods\n- `handle` — The Predicate function that is called."
+    value: "```wing\ninterface IPredicateHandler extends IResource\n```\n---\nA predicate with an inflight \"handle\" method that can be passed to `util.busyWait`.\n### Methods\n- `bind` — `preflight (host: IInflightHost, ops: Array<str>): void`\n- `handle` — The Predicate function that is called.\n- `node` — `Node`"
   sortText: ii|IPredicateHandler
 - label: IPredicateHandlerClient
   kind: 8
