@@ -40,10 +40,10 @@ Wing Cloud will be integrated with GitHub.
 #### Wing Cloud Dashboard for Signed-In Users (#3)
 
 1. Once signed in, you will automatically see Wing Cloud for signed-in users (under https://wing.cloud directly).
-2. You can install Wing Cloud GitHub application in your GitHub acocunt.
-3. You can see and manage all your projects and teams.
-4. You will see all preview environments associated with your personal account and teams you are member in.
-5. In order to see a preview environment, just click on the preview environment URL from the list of all your preview environments.
+2. You can see and manage all your projects and teams.
+3. You will see all preview environments associated with your personal account and teams you are member in.
+4. In order to see a preview environment, just click on the preview environment URL from the list of all your preview environments.
+5. For each preview environment, you can see the deployment logs and the test results and logs.
 
 #### Create a new personal Project (#4)
 
