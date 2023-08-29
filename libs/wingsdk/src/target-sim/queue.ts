@@ -6,9 +6,8 @@ import { ISimulatorResource } from "./resource";
 import { QueueSchema, QUEUE_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Display, Duration, IInflightHost, Resource } from "../std";
+import { Duration, IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 
 /**
@@ -74,8 +73,8 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       functionHandler,
       props
     );
-    fn.display.sourceModule = Display.SDK_SOURCE_MODULE;
-    fn.display.title = "setConsumer()";
+    Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
+    Node.of(fn).title = "setConsumer()";
 
     new EventMapping(this, `${this.node.id}-QueueEventMapping-${hash}`, {
       subscriber: fn,
@@ -85,10 +84,10 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       },
     });
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "setConsumer()",
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: "setConsumer()",
     });
 
     return fn;
@@ -113,7 +112,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
   }
 }

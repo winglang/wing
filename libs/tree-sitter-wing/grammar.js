@@ -274,13 +274,26 @@ module.exports = grammar({
 
     if_let_statement: ($) =>
       seq(
-        // TODO: support "if let var"
-        "if let",
+        "if",
+        "let",
+        optional(field("reassignable", $.reassignable)),
         field("name", $.identifier),
         "=",
         field("value", $.expression),
         field("block", $.block),
+        repeat(field("elif_let_block", $.elif_let_block)),
         optional(seq("else", field("else_block", $.block)))
+      ),
+
+    elif_let_block: ($) =>
+      seq(
+        "elif",
+        "let",
+        optional(field("reassignable", $.reassignable)),
+        field("name", $.identifier),
+        "=",
+        field("value", $.expression),
+        field("block", $.block)
       ),
 
     if_statement: ($) =>

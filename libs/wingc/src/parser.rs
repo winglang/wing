@@ -8,8 +8,8 @@ use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
-	ArgList, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind,
-	FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface, InterpolatedString,
+	ArgList, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Expr,
+	ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface, InterpolatedString,
 	InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, StructField, Symbol,
 	TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
@@ -568,8 +568,25 @@ impl<'s> Parser<'s> {
 
 	fn build_if_let_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
 		let if_block = self.build_scope(&statement_node.child_by_field_name("block").unwrap(), phase);
+		let reassignable = statement_node.child_by_field_name("reassignable").is_some();
 		let value = self.build_expression(&statement_node.child_by_field_name("value").unwrap(), phase)?;
 		let name = self.check_reserved_symbol(&statement_node.child_by_field_name("name").unwrap())?;
+
+		let mut elif_vec = vec![];
+		let mut cursor = statement_node.walk();
+		for node in statement_node.children_by_field_name("elif_let_block", &mut cursor) {
+			let statements = self.build_scope(&node.child_by_field_name("block").unwrap(), phase);
+			let value = self.build_expression(&node.child_by_field_name("value").unwrap(), phase)?;
+			let name = self.check_reserved_symbol(&statement_node.child_by_field_name("name").unwrap())?;
+			let elif = ElifLetBlock {
+				reassignable: node.child_by_field_name("reassignable").is_some(),
+				statements: statements,
+				value: value,
+				var_name: name,
+			};
+			elif_vec.push(elif);
+		}
+
 		let else_block = if let Some(else_block) = statement_node.child_by_field_name("else_block") {
 			Some(self.build_scope(&else_block, phase))
 		} else {
@@ -577,8 +594,10 @@ impl<'s> Parser<'s> {
 		};
 		Ok(StmtKind::IfLet {
 			var_name: name,
+			reassignable,
 			value,
 			statements: if_block,
+			elif_statements: elif_vec,
 			else_statements: else_block,
 		})
 	}
@@ -996,10 +1015,7 @@ impl<'s> Parser<'s> {
 		let parent = if let Some(parent_node) = statement_node.child_by_field_name("parent") {
 			let parent_type = self.build_type_annotation(Some(parent_node), class_phase)?;
 			match parent_type.kind {
-				TypeAnnotationKind::UserDefined(parent_type) => Some(Expr::new(
-					ExprKind::Reference(Reference::TypeReference(parent_type)),
-					self.node_span(&parent_node),
-				)),
+				TypeAnnotationKind::UserDefined(parent_type) => Some(parent_type),
 				_ => {
 					self.with_error::<Node>(
 						format!("Parent type must be a user defined type, found {}", parent_type),
@@ -1392,37 +1408,34 @@ impl<'s> Parser<'s> {
 		let object_expr = self.get_child_field(nested_node, "object")?;
 
 		if let Some(property) = nested_node.child_by_field_name("property") {
-			let object_expr = if object_expr.kind() == "json_container_type" {
-				Expr::new(
+			if object_expr.kind() == "json_container_type" {
+				Ok(Expr::new(
 					ExprKind::Reference(Reference::TypeMember {
-						typeobject: Box::new(
-							UserDefinedType {
-								root: Symbol::global(WINGSDK_STD_MODULE),
-								fields: vec![self.node_symbol(&object_expr)?],
-								span: self.node_span(&object_expr),
-							}
-							.to_expression(),
-						),
+						type_name: UserDefinedType {
+							root: Symbol::global(WINGSDK_STD_MODULE),
+							fields: vec![self.node_symbol(&object_expr)?],
+							span: self.node_span(&object_expr),
+						},
 						property: self.node_symbol(&property)?,
 					}),
 					self.node_span(&object_expr),
-				)
+				))
 			} else {
-				self.build_expression(&object_expr, phase)?
-			};
-			let accessor_sym = self.node_symbol(&self.get_child_field(nested_node, "accessor_type")?)?;
-			let optional_accessor = match accessor_sym.name.as_str() {
-				"?." => true,
-				_ => false,
-			};
-			Ok(Expr::new(
-				ExprKind::Reference(Reference::InstanceMember {
-					object: Box::new(object_expr),
-					property: self.node_symbol(&property)?,
-					optional_accessor,
-				}),
-				self.node_span(&nested_node),
-			))
+				let object_expr = self.build_expression(&object_expr, phase)?;
+				let accessor_sym = self.node_symbol(&self.get_child_field(nested_node, "accessor_type")?)?;
+				let optional_accessor = match accessor_sym.name.as_str() {
+					"?." => true,
+					_ => false,
+				};
+				Ok(Expr::new(
+					ExprKind::Reference(Reference::InstanceMember {
+						object: Box::new(object_expr),
+						property: self.node_symbol(&property)?,
+						optional_accessor,
+					}),
+					self.node_span(&nested_node),
+				))
+			}
 		} else {
 			// we are missing the last property, but we can still parse the rest of the expression
 			self.add_error(
@@ -1525,10 +1538,6 @@ impl<'s> Parser<'s> {
 		match expression_node.kind() {
 			"new_expression" => {
 				let class_udt = self.build_udt(&expression_node.child_by_field_name("class").unwrap())?;
-				let class_udt_exp = Expr::new(
-					ExprKind::Reference(Reference::TypeReference(class_udt)),
-					expression_span.clone(),
-				);
 
 				let arg_list = if let Ok(args_node) = self.get_child_field(expression_node, "args") {
 					self.build_arg_list(&args_node, phase)
@@ -1549,7 +1558,7 @@ impl<'s> Parser<'s> {
 
 				Ok(Expr::new(
 					ExprKind::New(NewExpr {
-						class: Box::new(class_udt_exp),
+						class: class_udt,
 						obj_id,
 						arg_list: arg_list?,
 						obj_scope,
@@ -1805,8 +1814,6 @@ impl<'s> Parser<'s> {
 					self.build_expression(&element_node, phase)?
 				};
 
-				let element = Box::new(exp);
-
 				*self.in_json.borrow_mut() -= 1;
 
 				// Only set mutability back to false if we are no longer parsing nested json
@@ -1814,6 +1821,12 @@ impl<'s> Parser<'s> {
 					*self.is_in_mut_json.borrow_mut() = false;
 				}
 
+				// avoid unnecessary wrapping of json elements
+				if matches!(exp.kind, ExprKind::JsonLiteral { .. }) {
+					return Ok(exp);
+				}
+
+				let element = Box::new(exp);
 				Ok(Expr::new(ExprKind::JsonLiteral { is_mut, element }, expression_span))
 			}
 			"set_literal" => self.build_set_literal(expression_node, phase),
@@ -1860,7 +1873,7 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn build_map_fields(&self, expression_node: &Node<'_>, phase: Phase) -> Result<IndexMap<String, Expr>, ()> {
+	fn build_map_fields(&self, expression_node: &Node<'_>, phase: Phase) -> Result<IndexMap<Symbol, Expr>, ()> {
 		let mut fields = IndexMap::new();
 		let mut cursor = expression_node.walk();
 		for field_node in expression_node.children_by_field_name("member", &mut cursor) {
@@ -1872,9 +1885,10 @@ impl<'s> Parser<'s> {
 				"string" => {
 					let s = self.node_text(&key_node);
 					// Remove quotes, we assume this is a valid key for a map
-					s[1..s.len() - 1].to_string()
+					let s = s[1..s.len() - 1].to_string();
+					Symbol::new(s, self.node_span(&key_node))
 				}
-				"identifier" => self.node_text(&key_node).to_string(),
+				"identifier" => self.node_symbol(&key_node)?,
 				other => panic!("Unexpected map key type {} at {:?}", other, key_node),
 			};
 			let value_node = field_node.named_child(1).unwrap();
@@ -2074,14 +2088,11 @@ impl<'s> Parser<'s> {
 		let type_span = self.node_span(&statement_node.child(0).unwrap());
 		Ok(StmtKind::Expression(Expr::new(
 			ExprKind::New(NewExpr {
-				class: Box::new(Expr::new(
-					ExprKind::Reference(Reference::TypeReference(UserDefinedType {
-						root: Symbol::global(WINGSDK_STD_MODULE),
-						fields: vec![Symbol::global(WINGSDK_TEST_CLASS_NAME)],
-						span: type_span.clone(),
-					})),
-					type_span.clone(),
-				)),
+				class: UserDefinedType {
+					root: Symbol::global(WINGSDK_STD_MODULE),
+					fields: vec![Symbol::global(WINGSDK_TEST_CLASS_NAME)],
+					span: type_span.clone(),
+				},
 				obj_id: Some(test_id),
 				obj_scope: None,
 				arg_list: ArgList {

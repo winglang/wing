@@ -16,7 +16,7 @@ use crate::lsp::sync::{JSII_TYPES, PROJECT_DATA, WING_TYPES};
 use crate::type_check::symbol_env::{LookupResult, StatementIdx};
 use crate::type_check::{
 	fully_qualify_std_type, import_udt_from_jsii, resolve_super_method, resolve_user_defined_type, ClassLike, Namespace,
-	Struct, SymbolKind, Type, Types, UnsafeRef, VariableKind, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
+	Struct, SymbolKind, Type, TypeRef, Types, UnsafeRef, VariableKind, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
 };
 use crate::visit::{visit_expr, visit_type_annotation, Visit};
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
@@ -59,7 +59,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 						&s[..params.text_document_position.position.character as usize].trim_end()
 					} else {
 						s
-				}
+					}
 				})
 				.join("\n");
 			let last_char_is_colon = preceding_text.ends_with(':');
@@ -106,12 +106,14 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			// references have a complicated hierarchy, so it's useful to know the nearest non-reference parent
 			let mut nearest_non_reference_parent = node_to_complete.parent();
 			while let Some(parent) = nearest_non_reference_parent {
-				if parent.kind() == "reference" || parent.kind() == "reference_identifier" {
+				let parent_kind = parent.kind();
+				if parent.is_error() || matches!(parent_kind, "identifier" | "reference" | "reference_identifier") {
 					nearest_non_reference_parent = parent.parent();
 				} else {
 					break;
 				}
 			}
+			let nearest_non_reference_parent = nearest_non_reference_parent.unwrap_or(root_ts_node);
 
 			if node_to_complete_kind == "." || node_to_complete_kind == "?." || node_to_complete_kind == "member_identifier" {
 				let parent = node_to_complete.parent().expect("A dot must have a parent");
@@ -252,41 +254,66 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 				}
 
 				return vec![];
-			} else if node_to_complete_kind == "struct_literal"
-				|| matches!(nearest_non_reference_parent, Some(p) if p.kind() == "struct_literal" || p.kind() == "struct_literal_member")
-			{
+			} else if matches!(node_to_complete_kind, "struct_literal" | "json_map_literal")
+				|| matches!(
+					nearest_non_reference_parent.kind(),
+					"struct_literal" | "struct_literal_member" | "json_map_literal" | "set_literal"
+				) {
 				// check to see if ":" is the last character of the same line up to the cursor
 				// if it is, we want an expression instead of struct completions
 				if !last_char_is_colon {
-					if let Some(expr) = scope_visitor.expression_trail.iter().last() {
-						let type_ = types.get_expr_type(expr);
-						if let Some(t) = type_.maybe_unwrap_option().as_struct() {
-							if let ExprKind::StructLiteral { fields, .. } = &expr.kind {
-								return get_inner_struct_completions(
-									t,
-									&fields.keys().map(|f| f.name.clone()).collect(),
-								);
-							}
+					if let Some(mut expr) = scope_visitor.expression_trail.iter().last() {
+						if let ExprKind::Reference { .. } = &expr.kind {
+							// if the nearest expressions is a reference, go to the next one instead
+							// This covers cases where a field is partially entered like the following:
+							// {
+							//   field1: "good",
+							//   f
+							//  //^
+							// }
+							expr = scope_visitor.expression_trail.iter().nth_back(1).unwrap();
 						}
+
+						let (fields, structy) = if let ExprKind::StructLiteral { fields, .. } = &expr.kind {
+							(fields, types.get_expr_type(expr))
+						} else if let ExprKind::JsonMapLiteral { fields, .. } = &expr.kind {
+							if let Some(structy) = types.get_type_from_json_cast(expr.id) {
+								(fields, *structy)
+							} else {
+								return vec![];
+							}
+						} else {
+							return vec![];
+						};
+
+						return if let Some(structy) = structy.maybe_unwrap_option().as_struct() {
+							get_inner_struct_completions(structy, &fields.keys().map(|f| f.name.clone()).collect())
+						} else {
+							vec![]
+						};
 					}
 				}
 			} else if !last_char_is_colon
 				&& (node_to_complete_kind == "argument_list"
-					|| matches!(nearest_non_reference_parent, Some(p) if p.kind() == "argument_list" || p.kind() == "positional_argument"))
-			{
+					|| matches!(
+						nearest_non_reference_parent.kind(),
+						"argument_list" | "positional_argument"
+					)) {
 				if let Some(callish_expr) = scope_visitor.expression_trail.iter().rev().find_map(|e| match &e.kind {
 					ExprKind::Call { arg_list, callee } => Some((
 						match callee {
 							CalleeKind::Expr(expr) => types.get_expr_type(expr),
-							CalleeKind::SuperCall(method) => resolve_super_method(method, &found_env, &types).map_or(types.error(), |(t,_)| t),
-						}
-						, arg_list)),
-					ExprKind::New(new_expr) => {
-						Some((types.get_expr_type(&new_expr.class), &new_expr.arg_list))
-					}
+							CalleeKind::SuperCall(method) => {
+								resolve_super_method(method, &found_env, &types).map_or(types.error(), |(t, _)| t)
+							}
+						},
+						arg_list,
+					)),
+					ExprKind::New(new_expr) => Some((types.get_expr_type(&e), &new_expr.arg_list)),
 					_ => None,
 				}) {
-					let mut completions = get_current_scope_completions(&types, &scope_visitor, &node_to_complete, &preceding_text);
+					let mut completions =
+						get_current_scope_completions(&types, &scope_visitor, &node_to_complete, &preceding_text);
 
 					let arg_list_strings = &callish_expr
 						.1
@@ -298,7 +325,13 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 					// if we're in a function, get the struct expansion
 					if let Some(structy) = callish_expr.0.get_function_struct_arg() {
 						let func = callish_expr.0.maybe_unwrap_option().as_function_sig().unwrap();
-						if callish_expr.1.pos_args.iter().filter(|a| !types.get_expr_type(a).is_unresolved()).count() == func.parameters.len() - 1 {
+						if callish_expr
+							.1
+							.pos_args
+							.iter()
+							.filter(|a| !types.get_expr_type(a).is_unresolved())
+							.count() == func.parameters.len() - 1
+						{
 							completions.extend(get_inner_struct_completions(structy, arg_list_strings));
 						}
 					}
@@ -313,7 +346,13 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 						};
 						if let Some(init_method) = init_method {
 							let func = init_method.type_.maybe_unwrap_option().as_function_sig().unwrap();
-							if callish_expr.1.pos_args.iter().filter(|a| !types.get_expr_type(a).is_unresolved()).count() == func.parameters.len() - 1 {
+							if callish_expr
+								.1
+								.pos_args
+								.iter()
+								.filter(|a| !types.get_expr_type(a).is_unresolved())
+								.count() == func.parameters.len() - 1
+							{
 								if let Some(structy) = init_method.type_.get_function_struct_arg() {
 									completions.extend(get_inner_struct_completions(structy, arg_list_strings));
 								}
@@ -583,9 +622,15 @@ fn get_inner_struct_completions(struct_: &Struct, existing_fields: &Vec<String>)
 	for field_data in struct_.env.iter(true) {
 		if !existing_fields.contains(&field_data.0) {
 			if let Some(mut base_completion) = format_symbol_kind_as_completion(&field_data.0, &field_data.1) {
+				let v = field_data.1.as_variable().unwrap();
+				if v.type_.maybe_unwrap_option().is_struct() {
+					base_completion.insert_text = Some(format!("{}: {{\n$1\n}}", field_data.0));
+				} else {
+					base_completion.insert_text = Some(format!("{}: $1", field_data.0));
+				}
+
 				base_completion.label = format!("{}:", base_completion.label);
 				base_completion.kind = Some(CompletionItemKind::FIELD);
-				base_completion.insert_text = Some(format!("{}: $1", field_data.0));
 				base_completion.insert_text_format = Some(InsertTextFormat::SNIPPET);
 				base_completion.command = Some(Command {
 					title: "triggerCompletion".to_string(),
@@ -601,12 +646,13 @@ fn get_inner_struct_completions(struct_: &Struct, existing_fields: &Vec<String>)
 
 /// Gets accessible properties on a type as a list of CompletionItems
 fn get_completions_from_type(
-	type_: &UnsafeRef<Type>,
+	type_: &TypeRef,
 	types: &Types,
 	current_phase: Option<Phase>,
 	is_instance: bool,
 ) -> Vec<CompletionItem> {
-	let type_ = &**type_.maybe_unwrap_option();
+	let type_ = *type_.maybe_unwrap_option();
+	let type_ = &*types.maybe_unwrap_inference(type_);
 	match type_ {
 		Type::Class(c) => get_completions_from_class(c, current_phase, is_instance),
 		Type::Interface(i) => get_completions_from_class(i, current_phase, is_instance),
@@ -629,7 +675,7 @@ fn get_completions_from_type(
 		| Type::String
 		| Type::Duration
 		| Type::Boolean
-		| Type::Json
+		| Type::Json(_)
 		| Type::MutJson
 		| Type::Nil
 		| Type::Array(_)
@@ -772,7 +818,7 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 				| Type::Duration
 				| Type::Boolean
 				| Type::Void
-				| Type::Json
+				| Type::Json(_)
 				| Type::MutJson
 				| Type::Nil
 				| Type::Unresolved
@@ -931,6 +977,13 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 		// (we will still visit sibling expressions, just in case)
 		if set_node {
 			self.nearest_expr = Some(node);
+			// special case, we still want to visit the children of a json literal
+			if matches!(
+				node.kind,
+				ExprKind::JsonLiteral { .. } | ExprKind::JsonMapLiteral { .. }
+			) {
+				visit_expr(self, node);
+			}
 		} else {
 			visit_expr(self, node);
 		}
@@ -1408,6 +1461,33 @@ struct Outer {
 
 let x = Outer { bThing: Inner {  } };
                               //^
+"#
+	);
+
+	test_completion_list!(
+		json_literal_cast_inner,
+		r#"
+struct Inner {
+	durationThing: duration;
+}
+
+let x: Inner = {  }
+               //^
+"#
+	);
+
+	test_completion_list!(
+		nested_json_literal_cast_inner,
+		r#"
+struct Inner {
+	durationThing: duration;
+}
+struct Outer {
+	bThing: Inner;
+}
+
+let x: Outer = { bThing: {   } }
+                         //^
 "#
 	);
 }

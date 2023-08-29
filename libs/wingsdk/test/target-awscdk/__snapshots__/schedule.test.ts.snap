@@ -57,11 +57,14 @@ exports[`schedule behavior with cron 1`] = `
         "ScheduleSetConsumerc185c7e3ServiceRoleAA894847",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "99cc55258c346f62db746a74a3b335f909d0326a46c142758fdf8f8d189b2678.zip",
+          "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
         "Role": {
@@ -194,11 +197,14 @@ exports[`schedule behavior with rate 1`] = `
         "ScheduleSetConsumerc185c7e3ServiceRoleAA894847",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "99cc55258c346f62db746a74a3b335f909d0326a46c142758fdf8f8d189b2678.zip",
+          "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
         "Role": {
@@ -359,11 +365,14 @@ exports[`schedule with two functions 1`] = `
         "ScheduleSetConsumer6e1b4252ServiceRole88F787AF",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "99cc55258c346f62db746a74a3b335f909d0326a46c142758fdf8f8d189b2678.zip",
+          "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
         "Role": {
@@ -413,11 +422,14 @@ exports[`schedule with two functions 1`] = `
         "ScheduleSetConsumerc185c7e3ServiceRoleAA894847",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "99cc55258c346f62db746a74a3b335f909d0326a46c142758fdf8f8d189b2678.zip",
+          "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
         "Role": {

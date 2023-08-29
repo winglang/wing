@@ -5,7 +5,7 @@ exports[`access_hidden_namespace.w 1`] = `
   --> ../../../examples/tests/invalid/access_hidden_namespace.w:7:5
   |
 7 | new core.NodeJsCode(\\"/tmp/test.txt\\"); // This should fail even though \`fs.TextFile\` extends \`core.FileBase\` because we didn't bring in \`core\` explicitly.
-  |     ^^^^^^^^^^^^^^^ Unknown symbol \\"core\\"
+  |     ^^^^ Unknown symbol \\"core\\"
 
 
  
@@ -150,7 +150,7 @@ error: Unknown symbol \\"stuff\\"
   --> ../../../examples/tests/invalid/bring_local_variables.w:3:5
   |
 3 | new stuff.Bar();
-  |     ^^^^^^^^^ Unknown symbol \\"stuff\\"
+  |     ^^^^^ Unknown symbol \\"stuff\\"
 
 
  
@@ -212,11 +212,25 @@ Duration <DURATION>"
 `;
 
 exports[`capture_redefinition.w 1`] = `
-"error: Cannot capture symbol \\"y\\" because it is shadowed by another symbol with the same name
+"error: Cannot access \\"y\\" because it is shadowed by another symbol with the same name
+  --> ../../../examples/tests/invalid/capture_redefinition.w:5:7
+  |
+5 |   log(y);
+  |       ^ Cannot access \\"y\\" because it is shadowed by another symbol with the same name
+
+
+error: Cannot access \\"y\\" because it is shadowed by another symbol with the same name
    --> ../../../examples/tests/invalid/capture_redefinition.w:14:9
    |
 14 |     log(y);
-   |         ^ Cannot capture symbol \\"y\\" because it is shadowed by another symbol with the same name
+   |         ^ Cannot access \\"y\\" because it is shadowed by another symbol with the same name
+
+
+error: Cannot access \\"x\\" because it is shadowed by another symbol with the same name
+   --> ../../../examples/tests/invalid/capture_redefinition.w:22:7
+   |
+22 |   log(x);
+   |       ^ Cannot access \\"x\\" because it is shadowed by another symbol with the same name
 
 
  
@@ -488,11 +502,11 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
   |                            ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected \\"Set\\" type, found \\"Array<num>\\"
+error: Expected \\"Set\\" or \\"MutSet\\", found \\"Array<num>\\"
   --> ../../../examples/tests/invalid/container_types.w:3:12
   |
 3 | let arr2 = Array<num> {1, 2, 3};
-  |            ^^^^^^^^^^^^^^^^^^^^ Expected \\"Set\\" type, found \\"Array<num>\\"
+  |            ^^^^^^^^^^ Expected \\"Set\\" or \\"MutSet\\", found \\"Array<num>\\"
 
 
 error: Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead
@@ -551,18 +565,11 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
    |                        ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected \\"Array\\" type, found \\"Set<num>\\"
+error: Expected \\"Array\\" or \\"MutArray\\", found \\"Set<num>\\"
    --> ../../../examples/tests/invalid/container_types.w:21:10
    |
 21 | let s2 = Set<num> [1, \\"2\\", 3];
-   |          ^^^^^^^^^^^^^^^^^^^^ Expected \\"Array\\" type, found \\"Set<num>\\"
-
-
-error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/container_types.w:21:23
-   |
-21 | let s2 = Set<num> [1, \\"2\\", 3];
-   |                       ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+   |          ^^^^^^^^ Expected \\"Array\\" or \\"MutArray\\", found \\"Set<num>\\"
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -933,9 +940,9 @@ Duration <DURATION>"
 
 exports[`inference.w 1`] = `
 "error: Missing required type annotation for method signature
-   --> ../../../examples/tests/invalid/inference.w:79:8
+   --> ../../../examples/tests/invalid/inference.w:78:8
    |
-79 |   args(nice) {
+78 |   args(nice) {
    |        ^^^^ Missing required type annotation for method signature
 
 
@@ -981,24 +988,28 @@ error: Expected type to be \\"inflight (key: str, type: BucketEventType): void\\
    |                               ^^^^ Expected type to be \\"inflight (key: str, type: BucketEventType): void\\", but got \\"inflight (request: ApiRequest): ApiResponse\\" instead
 
 
-error: Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Array<unknown>\\" which is not a Json value
-   --> ../../../examples/tests/invalid/inference.w:71:14
-   |
-71 | Json { cool: anotherEmptyArray };
-   |              ^^^^^^^^^^^^^^^^^ Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Array<unknown>\\" which is not a Json value
-
-
 error: Expected type to be \\"inflight (str): void\\", but got \\"inflight (arg1: num): unknown\\" instead
-   --> ../../../examples/tests/invalid/inference.w:85:37
+   --> ../../../examples/tests/invalid/inference.w:84:37
    |
-85 | let badFunc: inflight (str): void = inflight (arg1: num) => {};
+84 | let badFunc: inflight (str): void = inflight (arg1: num) => {};
    |                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"inflight (str): void\\", but got \\"inflight (arg1: num): unknown\\" instead
 
 
+error: Inferred type Array<str> conflicts with already inferred type Array<num>
+   --> ../../../examples/tests/invalid/inference.w:92:33
+   |  
+92 |     let jsonDoubleInference: SS = {
+   | /---------------------------------^
+93 | |     a: a,
+94 | |     b: a,
+95 | |   };
+   | \\\\---^ Inferred type Array<str> conflicts with already inferred type Array<num>
+
+
 error: Unexpected return value from void function. Return type annotations are required for methods.
-   --> ../../../examples/tests/invalid/inference.w:76:5
+   --> ../../../examples/tests/invalid/inference.w:75:5
    |
-76 |     return true;
+75 |     return true;
    |     ^^^^^^^^^^^^ Unexpected return value from void function. Return type annotations are required for methods.
 
 
@@ -1115,11 +1126,11 @@ error: Cannot create inflight class \\"Foo\\" in preflight phase
   |     ^^^^^^^^^ Cannot create inflight class \\"Foo\\" in preflight phase
 
 
-error: Cannot qualify access to a lifted object of type \\"PreflightClass\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:19:3
+error: Cannot qualify access to a lifted type \\"PreflightClass\\" (see https://github.com/winglang/wing/issues/76 for more details)
+   --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:19:7
    |
 19 |   new PreflightClass();
-   |   ^^^^^^^^^^^^^^^^^^^^ Cannot qualify access to a lifted object of type \\"PreflightClass\\" (see https://github.com/winglang/wing/issues/76 for more details)
+   |       ^^^^^^^^^^^^^^ Cannot qualify access to a lifted type \\"PreflightClass\\" (see https://github.com/winglang/wing/issues/76 for more details)
 
 
  
@@ -1338,94 +1349,140 @@ Duration <DURATION>"
 
 exports[`json.w 1`] = `
 "error: Json literal must have an element
-   --> ../../../examples/tests/invalid/json.w:30:26
+   --> ../../../examples/tests/invalid/json.w:29:26
    |
-30 | let jsonIncomplete = Json;
+29 | let jsonIncomplete = Json;
    |                          ^ Json literal must have an element
 
 
-error: Expected type to be \\"str\\", but got \\"Json\\" instead
-  --> ../../../examples/tests/invalid/json.w:5:14
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+  --> ../../../examples/tests/invalid/json.w:6:14
   |
-5 | let s: str = j;
-  |              ^ Expected type to be \\"str\\", but got \\"Json\\" instead
+6 | let n: num = j;
+  |              ^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected type to be \\"num\\", but got \\"Json\\" instead
-  --> ../../../examples/tests/invalid/json.w:7:14
+error: Expected type to be \\"bool\\", but got \\"str\\" instead
+  --> ../../../examples/tests/invalid/json.w:8:15
   |
-7 | let n: num = j;
-  |              ^ Expected type to be \\"num\\", but got \\"Json\\" instead
+8 | let b: bool = j;
+  |               ^ Expected type to be \\"bool\\", but got \\"str\\" instead
 
 
-error: Expected type to be \\"bool\\", but got \\"Json\\" instead
-  --> ../../../examples/tests/invalid/json.w:9:15
-  |
-9 | let b: bool = j;
-  |               ^ Expected type to be \\"bool\\", but got \\"Json\\" instead
-
-
-error: Expected type to be \\"Map<str>\\", but got \\"Json\\" instead
-   --> ../../../examples/tests/invalid/json.w:11:19
+error: Expected type to be \\"Map<str>\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/json.w:10:19
    |
-11 | let m: Map<str> = j;
-   |                   ^ Expected type to be \\"Map<str>\\", but got \\"Json\\" instead
+10 | let m: Map<str> = j;
+   |                   ^ Expected type to be \\"Map<str>\\", but got \\"str\\" instead
 
 
-error: Expected type to be \\"Set<str>\\", but got \\"Json\\" instead
-   --> ../../../examples/tests/invalid/json.w:13:20
+error: Expected type to be \\"Set<str>\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/json.w:12:20
    |
-13 | let s2: Set<str> = j;
-   |                    ^ Expected type to be \\"Set<str>\\", but got \\"Json\\" instead
+12 | let s2: Set<str> = j;
+   |                    ^ Expected type to be \\"Set<str>\\", but got \\"str\\" instead
 
 
-error: Expected type to be \\"Array<str>\\", but got \\"Json\\" instead
-   --> ../../../examples/tests/invalid/json.w:15:21
+error: Expected type to be \\"Array<str>\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/json.w:14:21
    |
-15 | let a: Array<str> = j;
-   |                     ^ Expected type to be \\"Array<str>\\", but got \\"Json\\" instead
+14 | let a: Array<str> = j;
+   |                     ^ Expected type to be \\"Array<str>\\", but got \\"str\\" instead
 
 
 error: Unknown symbol \\"set\\"
-   --> ../../../examples/tests/invalid/json.w:20:13
+   --> ../../../examples/tests/invalid/json.w:19:13
    |
-20 | foreverJson.set(\\"a\\", \\"world!\\");
+19 | foreverJson.set(\\"a\\", \\"world!\\");
    |             ^^^ Unknown symbol \\"set\\"
 
 
-error: Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not a Json value
-   --> ../../../examples/tests/invalid/json.w:24:18
-   |
-24 | let jArr = Json [bkt];
-   |                  ^^^ Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not a Json value
-
-
-error: Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not a Json value
-   --> ../../../examples/tests/invalid/json.w:27:28
-   |
-27 | let jsonObj = Json { boom: bkt };
-   |                            ^^^ Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not a Json value
-
-
 error: Expected type to be \\"num?\\", but got \\"str?\\" instead
-   --> ../../../examples/tests/invalid/json.w:33:20
+   --> ../../../examples/tests/invalid/json.w:32:20
    |
-33 | let tryNum: num? = j.tryAsStr();
+32 | let tryNum: num? = j.tryAsStr();
    |                    ^^^^^^^^^^^^ Expected type to be \\"num?\\", but got \\"str?\\" instead
 
 
 error: Expected type to be \\"str?\\", but got \\"bool?\\" instead
-   --> ../../../examples/tests/invalid/json.w:36:20
+   --> ../../../examples/tests/invalid/json.w:35:20
    |
-36 | let tryStr: str? = j.tryAsBool();
+35 | let tryStr: str? = j.tryAsBool();
    |                    ^^^^^^^^^^^^^ Expected type to be \\"str?\\", but got \\"bool?\\" instead
 
 
 error: Expected type to be \\"bool?\\", but got \\"num?\\" instead
-   --> ../../../examples/tests/invalid/json.w:39:22
+   --> ../../../examples/tests/invalid/json.w:38:22
    |
-39 | let tryBool: bool? = j.tryAsNum();
+38 | let tryBool: bool? = j.tryAsNum();
    |                      ^^^^^^^^^^^^ Expected type to be \\"bool?\\", but got \\"num?\\" instead
+
+
+error: Missing required field \\"maybe\\" from \\"StructyJson\\"
+   --> ../../../examples/tests/invalid/json.w:55:40
+   |  
+55 |   let notJsonMissingField: StructyJson = {
+   | /----------------------------------------^
+56 | |   foo: \\"bar\\",
+57 | |   stuff: [],
+58 | | };
+   | \\\\-^ Missing required field \\"maybe\\" from \\"StructyJson\\"
+
+
+error: Expected type to be \\"bool\\", but got \\"num\\" instead
+   --> ../../../examples/tests/invalid/json.w:65:11
+   |
+65 |     good: 2,
+   |           ^ Expected type to be \\"bool\\", but got \\"num\\" instead
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/json.w:72:14
+   |
+72 |   stuff: [1, \\"hi\\", 3],
+   |              ^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/json.w:83:8
+   |
+83 |     b: \\"\\",
+   |        ^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Expected type to be \\"StructyJson\\", but got \\"Json\\" instead (hint: use StructyJson.fromJson() to convert dynamic Json)
+   --> ../../../examples/tests/invalid/json.w:96:38
+   |
+96 | let mutableJsonStruct: StructyJson = mutableJson;
+   |                                      ^^^^^^^^^^^ Expected type to be \\"StructyJson\\", but got \\"Json\\" instead (hint: use StructyJson.fromJson() to convert dynamic Json)
+
+
+error: \\"Array<Json>\\" is not a legal JSON value
+   --> ../../../examples/tests/invalid/json.w:23:17
+   |
+23 | let jArr = Json [bkt];
+   |                 ^^^^^ \\"Array<Json>\\" is not a legal JSON value
+
+
+error: \\"Bucket\\" is not a legal JSON value
+   --> ../../../examples/tests/invalid/json.w:26:28
+   |
+26 | let jsonObj = Json { boom: bkt };
+   |                            ^^^ \\"Bucket\\" is not a legal JSON value
+
+
+error: \\"Bucket\\" is not a legal JSON value
+    --> ../../../examples/tests/invalid/json.w:100:6
+    |
+100 |   b: new cloud.Bucket()
+    |      ^^^^^^^^^^^^^^^^^^ \\"Bucket\\" is not a legal JSON value
+
+
+error: \\"Bucket\\" is not a legal JSON value
+    --> ../../../examples/tests/invalid/json.w:104:21
+    |
+104 | let isBucket = Json new cloud.Bucket();
+    |                     ^^^^^^^^^^^^^^^^^^ \\"Bucket\\" is not a legal JSON value
 
 
  
@@ -1487,11 +1544,11 @@ exports[`mut_container_types.w 1`] = `
   |                             ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected \\"Set\\" type, found \\"MutArray<num>\\"
+error: Expected \\"Set\\" or \\"MutSet\\", found \\"MutArray<num>\\"
   --> ../../../examples/tests/invalid/mut_container_types.w:3:12
   |
 3 | let arr2 = MutArray<num>{1, 2, 3};
-  |            ^^^^^^^^^^^^^^^^^^^^^^ Expected \\"Set\\" type, found \\"MutArray<num>\\"
+  |            ^^^^^^^^^^^^^ Expected \\"Set\\" or \\"MutSet\\", found \\"MutArray<num>\\"
 
 
 error: Expected type to be \\"MutArray<num>\\", but got \\"Array<num>\\" instead
@@ -1522,18 +1579,11 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
    |                         ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected \\"Array\\" type, found \\"MutSet<num>\\"
+error: Expected \\"Array\\" or \\"MutArray\\", found \\"MutSet<num>\\"
    --> ../../../examples/tests/invalid/mut_container_types.w:11:10
    |
 11 | let s2 = MutSet<num>[1, \\"2\\", 3];
-   |          ^^^^^^^^^^^^^^^^^^^^^^ Expected \\"Array\\" type, found \\"MutSet<num>\\"
-
-
-error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/mut_container_types.w:11:25
-   |
-11 | let s2 = MutSet<num>[1, \\"2\\", 3];
-   |                         ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+   |          ^^^^^^^^^^^ Expected \\"Array\\" or \\"MutArray\\", found \\"MutSet<num>\\"
 
 
 error: Expected type to be \\"MutSet<num>\\", but got \\"Set<num>\\" instead
@@ -1564,11 +1614,11 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
    |                                 ^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected \\"Array\\" type, found \\"MutMap<str>\\"
+error: Expected \\"Array\\" or \\"MutArray\\", found \\"MutMap<str>\\"
    --> ../../../examples/tests/invalid/mut_container_types.w:20:10
    |
 20 | let m2 = MutMap<str>[\\"hello\\", \\"world\\"];
-   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected \\"Array\\" type, found \\"MutMap<str>\\"
+   |          ^^^^^^^^^^^ Expected \\"Array\\" or \\"MutArray\\", found \\"MutMap<str>\\"
 
 
 error: Expected type to be \\"MutMap<num>\\", but got \\"Map<str>\\" instead
@@ -1883,11 +1933,11 @@ exports[`resource_inflight.w 1`] = `
   |   ^^^^^^^^^^^^^^^^^^ Cannot create preflight class \\"Bucket\\" in inflight phase
 
 
-error: Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
-  --> ../../../examples/tests/invalid/resource_inflight.w:4:3
+error: Cannot qualify access to a lifted type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
+  --> ../../../examples/tests/invalid/resource_inflight.w:4:7
   |
 4 |   new cloud.Bucket(); // Should fail because we can't create resources inflight
-  |   ^^^^^^^^^^^^^^^^^^ Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
+  |       ^^^^^^^^^^^^ Cannot qualify access to a lifted type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
 
 
  
@@ -2273,10 +2323,10 @@ error: Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting
 
 
 error: Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.
-   --> ../../../examples/tests/invalid/structs.w:47:9
+   --> ../../../examples/tests/invalid/structs.w:47:13
    |
 47 | let x = new cloud.BucketProps(1);
-   |         ^^^^^^^^^^^^^^^^^^^^^^^^ Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.
+   |             ^^^^^^^^^^^^^^^^^ Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.
 
 
  
@@ -2467,14 +2517,14 @@ error: Unknown symbol \\"clod\\"
   --> ../../../examples/tests/invalid/unknown_symbol.w:3:18
   |
 3 | let bucket = new clod.Bucket();
-  |                  ^^^^^^^^^^^ Unknown symbol \\"clod\\"
+  |                  ^^^^ Unknown symbol \\"clod\\"
 
 
 error: Unknown symbol \\"cloudy\\"
   --> ../../../examples/tests/invalid/unknown_symbol.w:6:17
   |
 6 | let funky = new cloudy.Funktion(inflight () => { });
-  |                 ^^^^^^^^^^^^^^^ Unknown symbol \\"cloudy\\"
+  |                 ^^^^^^ Unknown symbol \\"cloudy\\"
 
 
 error: Unknown symbol \\"y\\"

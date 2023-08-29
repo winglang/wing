@@ -38,6 +38,8 @@ export type Mode = "dark" | "light" | "auto";
 
 const localStorageThemeKey = "console-theme";
 
+export const USE_EXTERNAL_THEME_COLOR = "use-external-theme-color";
+
 export const DefaultTheme: Theme = {
   bg1: "bg-slate-300 dark:bg-slate-800",
   bg2: "bg-slate-200 dark:bg-slate-800",
@@ -67,6 +69,144 @@ export const DefaultTheme: Theme = {
     "focus-within:ring-2 focus-within:ring-sky-500/50 focus-within:border-sky-500 outline-none",
   scrollbar:
     "scrollbar hover:scrollbar-bg-slate-500/10 hover:scrollbar-thumb-slate-700/30 scrollbar-thumb-hover-slate-700/40 scrollbar-thumb-active-slate-700/60 dark:hover:scrollbar-bg-slate-400/10 dark:hover:scrollbar-thumb-slate-400/30 dark:scrollbar-thumb-hover-slate-400/40 dark:scrollbar-thumb-active-slate-400/60",
+};
+
+const adjustChannel = (value: number, factor: number): number => {
+  return Math.max(Math.round(value + (255 - value) * (1 - factor)), 0);
+};
+
+const computeColor = (color: string, level: number = 1): string => {
+  const hexColor = color.replace("#", "");
+
+  if (level === 1) {
+    return `#${hexColor}`;
+  }
+
+  const oldR = Number.parseInt(hexColor.slice(0, 2), 16);
+  const oldG = Number.parseInt(hexColor.slice(2, 4), 16);
+  const oldB = Number.parseInt(hexColor.slice(4, 6), 16);
+
+  const newR = adjustChannel(oldR, level);
+  const newG = adjustChannel(oldG, level);
+  const newB = adjustChannel(oldB, level);
+
+  const newColor = `${newR.toString(16).padStart(2, "0")}${newG
+    .toString(16)
+    .padStart(2, "0")}${newB.toString(16).padStart(2, "0")}`;
+
+  return `#${newColor}`;
+};
+
+const applyThemeStyle = (newTheme: Theme) => {
+  const colorRegex = /bg-|\[|]|dark:|hover:/g;
+  const keyRegex = /[#:[\\\]]/g;
+
+  let styles = {};
+  Object.keys(newTheme).map((key) => {
+    const colorClasses = newTheme[key as keyof Theme];
+    if (colorClasses === DefaultTheme[key as keyof Theme]) {
+      return;
+    }
+    const [lightClass, darkClass] = colorClasses.split(" ");
+    if (!lightClass) {
+      return;
+    }
+    const lightColor = lightClass.replaceAll(colorRegex, "");
+    const lightKey = lightClass.replaceAll(keyRegex, "\\$&");
+
+    const hover = lightClass.includes("hover:");
+
+    styles = {
+      ...styles,
+      [`.${USE_EXTERNAL_THEME_COLOR} .${lightKey}${
+        hover ? ":hover" : ""
+      }`]: `{ background-color: ${lightColor} !important;}`,
+    };
+
+    if (!darkClass) {
+      return;
+    }
+    const darkColor = darkClass.replaceAll(colorRegex, "");
+    const darkKey = darkClass.replaceAll(keyRegex, "\\$&");
+    styles = {
+      ...styles,
+      [`.dark .${USE_EXTERNAL_THEME_COLOR} .${darkKey}${
+        hover ? ":hover" : ""
+      }`]: `{ background-color: ${darkColor} !important;}`,
+    };
+  });
+
+  const stylesText = Object.keys(styles)
+    .map((property) => `${property} ${styles[property as keyof typeof styles]}`)
+    .join("\n");
+
+  let styleElement = document.querySelector("#style-theme");
+  if (styleElement) {
+    styleElement.remove();
+  }
+  styleElement = document.createElement("style");
+  styleElement.setAttribute("id", "style-theme");
+  styleElement.innerHTML = stylesText;
+  document.head.append(styleElement);
+};
+
+export const buildTheme = (color?: string): Theme => {
+  if (!color) {
+    return DefaultTheme;
+  }
+  const theme: Theme = {
+    ...DefaultTheme,
+    bg1: `bg-[${computeColor(color, 1.2)}] dark:bg-[${computeColor(
+      color,
+      1.2,
+    )}]`,
+
+    bg2: `bg-[${computeColor(color, 1.1)}] dark:bg-[${computeColor(
+      color,
+      1.1,
+    )}]`,
+    bg3: `bg-[${computeColor(color)}] dark:bg-[${computeColor(color)}]`,
+    bg4: `bg-[${computeColor(color, 0.8)}] dark:bg-[${computeColor(
+      color,
+      0.8,
+    )}]`,
+    bg3Hover: `hover:bg-[${computeColor(
+      color,
+      1.02,
+    )}] dark:hover:bg-[${computeColor(color, 0.98)}]`,
+    bg2Hover: `hover:bg-[${computeColor(
+      color,
+      1.12,
+    )}] dark:hover:bg-[${computeColor(color, 1.08)}]`,
+
+    bg4Hover: `hover:bg-[${computeColor(
+      color,
+      0.82,
+    )}] dark:hover:bg-[${computeColor(color, 0.78)}]`,
+
+    bgInput: `bg-[${computeColor(color, 0.8)}] dark:bg-[${computeColor(
+      color,
+      1.13,
+    )}]`,
+  };
+
+  applyThemeStyle(theme);
+
+  let mergedTheme: Theme = DefaultTheme;
+  Object.keys(DefaultTheme).map((key) => {
+    const themeProperty = key as keyof Theme;
+
+    const changed = theme[themeProperty] !== DefaultTheme[themeProperty];
+    if (!changed) {
+      return;
+    }
+    mergedTheme = {
+      ...mergedTheme,
+      [themeProperty]: `${DefaultTheme[themeProperty]} ${theme[themeProperty]}`,
+    };
+  });
+
+  return mergedTheme;
 };
 
 export interface ThemeProviderProps {

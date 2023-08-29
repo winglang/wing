@@ -7,7 +7,7 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
-import { IInflightHost, Resource } from "../std";
+import { IInflightHost, Node } from "../std";
 
 /**
  * AWS Implementation of `cloud.Topic`.
@@ -60,10 +60,10 @@ export class Topic extends cloud.Topic {
     const subscription = new LambdaSubscription(fn._function);
     this.topic.addSubscription(subscription);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "onMessage()",
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: "onMessage()",
     });
 
     return fn;
@@ -84,7 +84,7 @@ export class Topic extends cloud.Topic {
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return core.InflightClient.for(
       __dirname.replace("target-awscdk", "shared-aws"),
       __filename,

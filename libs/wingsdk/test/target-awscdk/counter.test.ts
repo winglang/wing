@@ -3,10 +3,11 @@ import { test, expect } from "vitest";
 import { Counter, Function, CounterInflightMethods } from "../../src/cloud";
 import * as awscdk from "../../src/target-awscdk";
 import { Testing } from "../../src/testing";
-import { sanitizeCode, mkdtemp } from "../util";
+import { sanitizeCode, mkdtemp, awscdkSanitize } from "../util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",
+  entrypointDir: __dirname,
 };
 
 test("default counter behavior", () => {
@@ -23,7 +24,7 @@ test("default counter behavior", () => {
       BillingMode: "PAY_PER_REQUEST",
     })
   );
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("counter with initial value", () => {
@@ -42,7 +43,7 @@ test("counter with initial value", () => {
       BillingMode: "PAY_PER_REQUEST",
     })
   );
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("function with a counter binding", () => {
@@ -71,7 +72,7 @@ test("function with a counter binding", () => {
   template.resourceCountIs("AWS::IAM::Role", 1);
   template.resourceCountIs("AWS::IAM::Policy", 1);
   template.resourceCountIs("AWS::Lambda::Function", 1);
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("inc() policy statement", () => {
@@ -106,7 +107,7 @@ test("inc() policy statement", () => {
       ]),
     },
   });
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("dec() policy statement", () => {
@@ -141,7 +142,7 @@ test("dec() policy statement", () => {
       ]),
     },
   });
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("peek() policy statement", () => {
@@ -176,7 +177,7 @@ test("peek() policy statement", () => {
       ]),
     },
   });
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("set() policy statement", () => {
@@ -211,5 +212,5 @@ test("set() policy statement", () => {
       ]),
     },
   });
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });

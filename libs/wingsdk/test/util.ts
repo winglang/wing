@@ -1,7 +1,8 @@
 import { mkdtempSync, readFileSync, readdirSync, statSync } from "fs";
 import { tmpdir } from "os";
 import { extname, isAbsolute, join } from "path";
-import { App, Code } from "../src/core";
+import { Template } from "aws-cdk-lib/assertions";
+import { App } from "../src/core";
 
 export function treeJsonOf(outdir: string): any {
   return JSON.parse(readFileSync(join(outdir, "tree.json"), "utf8"));
@@ -85,39 +86,46 @@ export function getTfDataSource(
   return dataSources[key];
 }
 
-export function tfSanitize(templateStr: string): string {
-  const template = JSON.parse(templateStr);
+export function awscdkSanitize(template: Template): any {
+  let json = template.toJSON();
 
-  // remove names of assets whose hashes are sensitive to changes based
-  // on the file system layout
-  return JSON.stringify(
-    template,
-    (key, value) => {
-      if (
-        key === "key" &&
-        typeof value === "string" &&
-        value.match(/^asset\..*\.zip$/)
-      ) {
-        return "<key>";
-      }
-      if (
-        key === "source" &&
-        typeof value === "string" &&
-        (value.match(/^assets\/.*\/archive.zip$/) || isAbsolute(value))
-      ) {
-        return "<source>";
-      }
-      if (
-        key === "source_hash" &&
-        typeof value === "string" &&
-        value.startsWith("${filemd5")
-      ) {
-        return "${filemd5(<source>)}";
+  return JSON.parse(
+    JSON.stringify(json, (key, value) => {
+      if (key === "S3Key" && value.endsWith(".zip")) {
+        return "<S3Key>";
       }
       return value;
-    },
-    2
+    })
   );
+}
+
+export function tfSanitize(templateStr: string): any {
+  // remove names of assets whose hashes are sensitive to changes based
+  // on the file system layout
+  return JSON.parse(templateStr, (key, value) => {
+    if (
+      key === "key" &&
+      typeof value === "string" &&
+      value.match(/^asset\..*\.zip$/)
+    ) {
+      return "<key>";
+    }
+    if (
+      key === "source" &&
+      typeof value === "string" &&
+      (value.match(/^assets\/.*\/archive.zip$/) || isAbsolute(value))
+    ) {
+      return "<source>";
+    }
+    if (
+      key === "source_hash" &&
+      typeof value === "string" &&
+      value.startsWith("${filemd5")
+    ) {
+      return "${filemd5(<source>)}";
+    }
+    return value;
+  });
 }
 
 export function appSnapshot(app: App): Record<string, any> {
@@ -149,7 +157,7 @@ export function directorySnapshot(initialRoot: string) {
 
           case ".js":
             const code = readFileSync(abspath, "utf-8");
-            snapshot[key] = sanitizeCodeText(code);
+            snapshot[key] = sanitizeCode(code);
             break;
 
           default:
@@ -167,7 +175,7 @@ export function directorySnapshot(initialRoot: string) {
 /**
  * Sanitize the text of a code bundle to remove path references that are system-specific.
  */
-export function sanitizeCodeText(code: string): string {
+export function sanitizeCode(code: string): string {
   function removeAbsolutePaths(text: string) {
     const regex = /".+\/libs\/wingsdk\/(.+)"/g;
 
@@ -176,10 +184,6 @@ export function sanitizeCodeText(code: string): string {
   }
 
   return removeAbsolutePaths(code);
-}
-
-export function sanitizeCode(code: Code): string {
-  return sanitizeCodeText(code.text);
 }
 
 export function mkdtemp() {

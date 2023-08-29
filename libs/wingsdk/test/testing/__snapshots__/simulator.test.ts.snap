@@ -5,12 +5,9 @@ exports[`provides raw tree data 1`] = `
   "tree": {
     "children": {
       "cloud.TestRunner": {
-        "attributes": {
-          "wing:resource:connections": [],
-        },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.314",
+          "version": "10.2.69",
         },
         "display": {
           "description": "A suite of APIs for running tests and collecting results.",
@@ -21,17 +18,11 @@ exports[`provides raw tree data 1`] = `
         "path": "root/cloud.TestRunner",
       },
       "test": {
-        "attributes": {
-          "wing:resource:connections": [],
-        },
         "children": {
           "Handler": {
-            "attributes": {
-              "wing:resource:connections": [],
-            },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "display": {
               "description": "A cloud function (FaaS)",
@@ -43,7 +34,7 @@ exports[`provides raw tree data 1`] = `
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.314",
+          "version": "10.2.69",
         },
         "display": {
           "description": "A cloud unit test.",
@@ -53,12 +44,9 @@ exports[`provides raw tree data 1`] = `
         "path": "root/test",
       },
       "test.handler": {
-        "attributes": {
-          "wing:resource:connections": [],
-        },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.314",
+          "version": "10.2.69",
         },
         "display": {
           "description": "An inflight resource",
@@ -71,7 +59,7 @@ exports[`provides raw tree data 1`] = `
     },
     "constructInfo": {
       "fqn": "constructs.Construct",
-      "version": "10.1.314",
+      "version": "10.2.69",
     },
     "id": "root",
     "path": "root",

@@ -1,86 +1,89 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`schedule behavior with cron 1`] = `
-"{
-  \\"output\\": {
-    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
-      \\"value\\": \\"[]\\"
-    }
+{
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
-  \\"resource\\": {
-    \\"aws_cloudwatch_event_rule\\": {
-      \\"Schedule_15669BF1\\": {
-        \\"is_enabled\\": true,
-        \\"schedule_expression\\": \\"cron(0/1 * ? * * *)\\"
-      }
+  "resource": {
+    "aws_cloudwatch_event_rule": {
+      "Schedule_15669BF1": {
+        "is_enabled": true,
+        "schedule_expression": "cron(0/1 * ? * * *)",
+      },
     },
-    \\"aws_cloudwatch_event_target\\": {
-      \\"Schedule_ScheduleTarget-c5395e41_BF97AE46\\": {
-        \\"arn\\": \\"\${aws_lambda_function.Schedule-OnTick-c5395e41.qualified_arn}\\",
-        \\"rule\\": \\"\${aws_cloudwatch_event_rule.Schedule_15669BF1.name}\\"
-      }
+    "aws_cloudwatch_event_target": {
+      "Schedule_ScheduleTarget-c5395e41_BF97AE46": {
+        "arn": "\${aws_lambda_function.Schedule-OnTick-c5395e41.qualified_arn}",
+        "rule": "\${aws_cloudwatch_event_rule.Schedule_15669BF1.name}",
+      },
     },
-    \\"aws_iam_role\\": {
-      \\"Schedule-OnTick-c5395e41_IamRole_014E0D2D\\": {
-        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
-      }
+    "aws_iam_role": {
+      "Schedule-OnTick-c5395e41_IamRole_014E0D2D": {
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
     },
-    \\"aws_iam_role_policy\\": {
-      \\"Schedule-OnTick-c5395e41_IamRolePolicy_8E955645\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.Schedule-OnTick-c5395e41_IamRole_014E0D2D.name}\\"
-      }
+    "aws_iam_role_policy": {
+      "Schedule-OnTick-c5395e41_IamRolePolicy_8E955645": {
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.Schedule-OnTick-c5395e41_IamRole_014E0D2D.name}",
+      },
     },
-    \\"aws_iam_role_policy_attachment\\": {
-      \\"Schedule-OnTick-c5395e41_IamRolePolicyAttachment_55B6C17D\\": {
-        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.Schedule-OnTick-c5395e41_IamRole_014E0D2D.name}\\"
-      }
+    "aws_iam_role_policy_attachment": {
+      "Schedule-OnTick-c5395e41_IamRolePolicyAttachment_55B6C17D": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Schedule-OnTick-c5395e41_IamRole_014E0D2D.name}",
+      },
     },
-    \\"aws_lambda_function\\": {
-      \\"Schedule-OnTick-c5395e41\\": {
-        \\"environment\\": {
-          \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"Schedule-OnTick-c5395e41-c861b8f8\\"
-          }
+    "aws_lambda_function": {
+      "Schedule-OnTick-c5395e41": {
+        "architectures": [
+          "arm64",
+        ],
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Schedule-OnTick-c5395e41-c861b8f8",
+          },
         },
-        \\"function_name\\": \\"Schedule-OnTick-c5395e41-c861b8f8\\",
-        \\"handler\\": \\"index.handler\\",
-        \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.Schedule-OnTick-c5395e41_IamRole_014E0D2D.arn}\\",
-        \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.Schedule-OnTick-c5395e41_S3Object_70645C21.key}\\",
-        \\"timeout\\": 30,
-        \\"vpc_config\\": {
-          \\"security_group_ids\\": [],
-          \\"subnet_ids\\": []
-        }
-      }
+        "function_name": "Schedule-OnTick-c5395e41-c861b8f8",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.Schedule-OnTick-c5395e41_IamRole_014E0D2D.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Schedule-OnTick-c5395e41_S3Object_70645C21.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
     },
-    \\"aws_lambda_permission\\": {
-      \\"Schedule-OnTick-c5395e41_InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3_BC18A455\\": {
-        \\"action\\": \\"lambda:InvokeFunction\\",
-        \\"function_name\\": \\"\${aws_lambda_function.Schedule-OnTick-c5395e41.function_name}\\",
-        \\"principal\\": \\"events.amazonaws.com\\",
-        \\"qualifier\\": \\"\${aws_lambda_function.Schedule-OnTick-c5395e41.version}\\",
-        \\"source_arn\\": \\"\${aws_cloudwatch_event_rule.Schedule_15669BF1.arn}\\"
-      }
+    "aws_lambda_permission": {
+      "Schedule-OnTick-c5395e41_InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3_BC18A455": {
+        "action": "lambda:InvokeFunction",
+        "function_name": "\${aws_lambda_function.Schedule-OnTick-c5395e41.function_name}",
+        "principal": "events.amazonaws.com",
+        "qualifier": "\${aws_lambda_function.Schedule-OnTick-c5395e41.version}",
+        "source_arn": "\${aws_cloudwatch_event_rule.Schedule_15669BF1.arn}",
+      },
     },
-    \\"aws_s3_bucket\\": {
-      \\"Code\\": {
-        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
-      }
+    "aws_s3_bucket": {
+      "Code": {
+        "bucket_prefix": "code-c84a50b1-",
+      },
     },
-    \\"aws_s3_object\\": {
-      \\"Schedule-OnTick-c5395e41_S3Object_70645C21\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"key\\": \\"<key>\\",
-        \\"source\\": \\"<source>\\"
-      }
-    }
-  }
-}"
+    "aws_s3_object": {
+      "Schedule-OnTick-c5395e41_S3Object_70645C21": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+    },
+  },
+}
 `;
 
 exports[`schedule behavior with cron 2`] = `
@@ -100,25 +103,9 @@ exports[`schedule behavior with cron 2`] = `
                 "path": "root/Default/Code",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "handle()",
-                      "resource": "root/Default/Schedule-OnTick-c5395e41",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/Schedule-OnTick-c5395e41",
-                    },
-                  ],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -129,16 +116,6 @@ exports[`schedule behavior with cron 2`] = `
                 "path": "root/Default/Handler",
               },
               "Schedule": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "onTick()",
-                      "resource": "root/Default/Schedule-OnTick-c5395e41",
-                    },
-                  ],
-                },
                 "children": {
                   "Schedule": {
                     "constructInfo": {
@@ -159,7 +136,7 @@ exports[`schedule behavior with cron 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A cloud schedule to trigger events at regular intervals",
@@ -169,28 +146,6 @@ exports[`schedule behavior with cron 2`] = `
                 "path": "root/Default/Schedule",
               },
               "Schedule-OnTick-c5395e41": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "handle()",
-                      "resource": "root/Default/Handler",
-                    },
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/Handler",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "onTick()",
-                      "resource": "root/Default/Schedule",
-                    },
-                  ],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -251,7 +206,7 @@ exports[`schedule behavior with cron 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -261,12 +216,9 @@ exports[`schedule behavior with cron 2`] = `
                 "path": "root/Default/Schedule-OnTick-c5395e41",
               },
               "Schedule-OnTickHandler-c5395e41": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "hidden": true,
@@ -283,9 +235,6 @@ exports[`schedule behavior with cron 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -298,7 +247,7 @@ exports[`schedule behavior with cron 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -311,7 +260,7 @@ exports[`schedule behavior with cron 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",
@@ -345,86 +294,89 @@ exports[`schedule behavior with cron 2`] = `
 `;
 
 exports[`schedule behavior with rate 1`] = `
-"{
-  \\"output\\": {
-    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
-      \\"value\\": \\"[]\\"
-    }
+{
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
-  \\"resource\\": {
-    \\"aws_cloudwatch_event_rule\\": {
-      \\"Schedule_15669BF1\\": {
-        \\"is_enabled\\": true,
-        \\"schedule_expression\\": \\"rate(2 minutes)\\"
-      }
+  "resource": {
+    "aws_cloudwatch_event_rule": {
+      "Schedule_15669BF1": {
+        "is_enabled": true,
+        "schedule_expression": "rate(2 minutes)",
+      },
     },
-    \\"aws_cloudwatch_event_target\\": {
-      \\"Schedule_ScheduleTarget-c5395e41_BF97AE46\\": {
-        \\"arn\\": \\"\${aws_lambda_function.Schedule-OnTick-c5395e41.qualified_arn}\\",
-        \\"rule\\": \\"\${aws_cloudwatch_event_rule.Schedule_15669BF1.name}\\"
-      }
+    "aws_cloudwatch_event_target": {
+      "Schedule_ScheduleTarget-c5395e41_BF97AE46": {
+        "arn": "\${aws_lambda_function.Schedule-OnTick-c5395e41.qualified_arn}",
+        "rule": "\${aws_cloudwatch_event_rule.Schedule_15669BF1.name}",
+      },
     },
-    \\"aws_iam_role\\": {
-      \\"Schedule-OnTick-c5395e41_IamRole_014E0D2D\\": {
-        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
-      }
+    "aws_iam_role": {
+      "Schedule-OnTick-c5395e41_IamRole_014E0D2D": {
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
     },
-    \\"aws_iam_role_policy\\": {
-      \\"Schedule-OnTick-c5395e41_IamRolePolicy_8E955645\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.Schedule-OnTick-c5395e41_IamRole_014E0D2D.name}\\"
-      }
+    "aws_iam_role_policy": {
+      "Schedule-OnTick-c5395e41_IamRolePolicy_8E955645": {
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.Schedule-OnTick-c5395e41_IamRole_014E0D2D.name}",
+      },
     },
-    \\"aws_iam_role_policy_attachment\\": {
-      \\"Schedule-OnTick-c5395e41_IamRolePolicyAttachment_55B6C17D\\": {
-        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.Schedule-OnTick-c5395e41_IamRole_014E0D2D.name}\\"
-      }
+    "aws_iam_role_policy_attachment": {
+      "Schedule-OnTick-c5395e41_IamRolePolicyAttachment_55B6C17D": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Schedule-OnTick-c5395e41_IamRole_014E0D2D.name}",
+      },
     },
-    \\"aws_lambda_function\\": {
-      \\"Schedule-OnTick-c5395e41\\": {
-        \\"environment\\": {
-          \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"Schedule-OnTick-c5395e41-c861b8f8\\"
-          }
+    "aws_lambda_function": {
+      "Schedule-OnTick-c5395e41": {
+        "architectures": [
+          "arm64",
+        ],
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Schedule-OnTick-c5395e41-c861b8f8",
+          },
         },
-        \\"function_name\\": \\"Schedule-OnTick-c5395e41-c861b8f8\\",
-        \\"handler\\": \\"index.handler\\",
-        \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.Schedule-OnTick-c5395e41_IamRole_014E0D2D.arn}\\",
-        \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.Schedule-OnTick-c5395e41_S3Object_70645C21.key}\\",
-        \\"timeout\\": 30,
-        \\"vpc_config\\": {
-          \\"security_group_ids\\": [],
-          \\"subnet_ids\\": []
-        }
-      }
+        "function_name": "Schedule-OnTick-c5395e41-c861b8f8",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.Schedule-OnTick-c5395e41_IamRole_014E0D2D.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Schedule-OnTick-c5395e41_S3Object_70645C21.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
     },
-    \\"aws_lambda_permission\\": {
-      \\"Schedule-OnTick-c5395e41_InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3_BC18A455\\": {
-        \\"action\\": \\"lambda:InvokeFunction\\",
-        \\"function_name\\": \\"\${aws_lambda_function.Schedule-OnTick-c5395e41.function_name}\\",
-        \\"principal\\": \\"events.amazonaws.com\\",
-        \\"qualifier\\": \\"\${aws_lambda_function.Schedule-OnTick-c5395e41.version}\\",
-        \\"source_arn\\": \\"\${aws_cloudwatch_event_rule.Schedule_15669BF1.arn}\\"
-      }
+    "aws_lambda_permission": {
+      "Schedule-OnTick-c5395e41_InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3_BC18A455": {
+        "action": "lambda:InvokeFunction",
+        "function_name": "\${aws_lambda_function.Schedule-OnTick-c5395e41.function_name}",
+        "principal": "events.amazonaws.com",
+        "qualifier": "\${aws_lambda_function.Schedule-OnTick-c5395e41.version}",
+        "source_arn": "\${aws_cloudwatch_event_rule.Schedule_15669BF1.arn}",
+      },
     },
-    \\"aws_s3_bucket\\": {
-      \\"Code\\": {
-        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
-      }
+    "aws_s3_bucket": {
+      "Code": {
+        "bucket_prefix": "code-c84a50b1-",
+      },
     },
-    \\"aws_s3_object\\": {
-      \\"Schedule-OnTick-c5395e41_S3Object_70645C21\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"key\\": \\"<key>\\",
-        \\"source\\": \\"<source>\\"
-      }
-    }
-  }
-}"
+    "aws_s3_object": {
+      "Schedule-OnTick-c5395e41_S3Object_70645C21": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+    },
+  },
+}
 `;
 
 exports[`schedule behavior with rate 2`] = `
@@ -444,25 +396,9 @@ exports[`schedule behavior with rate 2`] = `
                 "path": "root/Default/Code",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "handle()",
-                      "resource": "root/Default/Schedule-OnTick-c5395e41",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/Schedule-OnTick-c5395e41",
-                    },
-                  ],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -473,16 +409,6 @@ exports[`schedule behavior with rate 2`] = `
                 "path": "root/Default/Handler",
               },
               "Schedule": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "onTick()",
-                      "resource": "root/Default/Schedule-OnTick-c5395e41",
-                    },
-                  ],
-                },
                 "children": {
                   "Schedule": {
                     "constructInfo": {
@@ -503,7 +429,7 @@ exports[`schedule behavior with rate 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A cloud schedule to trigger events at regular intervals",
@@ -513,28 +439,6 @@ exports[`schedule behavior with rate 2`] = `
                 "path": "root/Default/Schedule",
               },
               "Schedule-OnTick-c5395e41": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "handle()",
-                      "resource": "root/Default/Handler",
-                    },
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/Handler",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "onTick()",
-                      "resource": "root/Default/Schedule",
-                    },
-                  ],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -595,7 +499,7 @@ exports[`schedule behavior with rate 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -605,12 +509,9 @@ exports[`schedule behavior with rate 2`] = `
                 "path": "root/Default/Schedule-OnTick-c5395e41",
               },
               "Schedule-OnTickHandler-c5395e41": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "hidden": true,
@@ -627,9 +528,6 @@ exports[`schedule behavior with rate 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -642,7 +540,7 @@ exports[`schedule behavior with rate 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -655,7 +553,7 @@ exports[`schedule behavior with rate 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",
@@ -689,132 +587,138 @@ exports[`schedule behavior with rate 2`] = `
 `;
 
 exports[`schedule with two functions 1`] = `
-"{
-  \\"output\\": {
-    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
-      \\"value\\": \\"[]\\"
-    }
+{
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
-  \\"resource\\": {
-    \\"aws_cloudwatch_event_rule\\": {
-      \\"Schedule_15669BF1\\": {
-        \\"is_enabled\\": true,
-        \\"schedule_expression\\": \\"cron(0/1 * ? * * *)\\"
-      }
-    },
-    \\"aws_cloudwatch_event_target\\": {
-      \\"Schedule_ScheduleTarget-0a615500_52695350\\": {
-        \\"arn\\": \\"\${aws_lambda_function.Schedule-OnTick-0a615500.qualified_arn}\\",
-        \\"rule\\": \\"\${aws_cloudwatch_event_rule.Schedule_15669BF1.name}\\"
+  "resource": {
+    "aws_cloudwatch_event_rule": {
+      "Schedule_15669BF1": {
+        "is_enabled": true,
+        "schedule_expression": "cron(0/1 * ? * * *)",
       },
-      \\"Schedule_ScheduleTarget-7b33bcba_A92DF656\\": {
-        \\"arn\\": \\"\${aws_lambda_function.Schedule-OnTick-7b33bcba.qualified_arn}\\",
-        \\"rule\\": \\"\${aws_cloudwatch_event_rule.Schedule_15669BF1.name}\\"
-      }
     },
-    \\"aws_iam_role\\": {
-      \\"Schedule-OnTick-0a615500_IamRole_92CE809F\\": {
-        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+    "aws_cloudwatch_event_target": {
+      "Schedule_ScheduleTarget-0a615500_52695350": {
+        "arn": "\${aws_lambda_function.Schedule-OnTick-0a615500.qualified_arn}",
+        "rule": "\${aws_cloudwatch_event_rule.Schedule_15669BF1.name}",
       },
-      \\"Schedule-OnTick-7b33bcba_IamRole_C04DD603\\": {
-        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
-      }
-    },
-    \\"aws_iam_role_policy\\": {
-      \\"Schedule-OnTick-0a615500_IamRolePolicy_E8D3C496\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.Schedule-OnTick-0a615500_IamRole_92CE809F.name}\\"
+      "Schedule_ScheduleTarget-7b33bcba_A92DF656": {
+        "arn": "\${aws_lambda_function.Schedule-OnTick-7b33bcba.qualified_arn}",
+        "rule": "\${aws_cloudwatch_event_rule.Schedule_15669BF1.name}",
       },
-      \\"Schedule-OnTick-7b33bcba_IamRolePolicy_D2C8C96D\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.Schedule-OnTick-7b33bcba_IamRole_C04DD603.name}\\"
-      }
     },
-    \\"aws_iam_role_policy_attachment\\": {
-      \\"Schedule-OnTick-0a615500_IamRolePolicyAttachment_00C5D4B2\\": {
-        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.Schedule-OnTick-0a615500_IamRole_92CE809F.name}\\"
+    "aws_iam_role": {
+      "Schedule-OnTick-0a615500_IamRole_92CE809F": {
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
       },
-      \\"Schedule-OnTick-7b33bcba_IamRolePolicyAttachment_7CE94FAE\\": {
-        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.Schedule-OnTick-7b33bcba_IamRole_C04DD603.name}\\"
-      }
+      "Schedule-OnTick-7b33bcba_IamRole_C04DD603": {
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
     },
-    \\"aws_lambda_function\\": {
-      \\"Schedule-OnTick-0a615500\\": {
-        \\"environment\\": {
-          \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"Schedule-OnTick-0a615500-c8fd8480\\"
-          }
+    "aws_iam_role_policy": {
+      "Schedule-OnTick-0a615500_IamRolePolicy_E8D3C496": {
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.Schedule-OnTick-0a615500_IamRole_92CE809F.name}",
+      },
+      "Schedule-OnTick-7b33bcba_IamRolePolicy_D2C8C96D": {
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.Schedule-OnTick-7b33bcba_IamRole_C04DD603.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "Schedule-OnTick-0a615500_IamRolePolicyAttachment_00C5D4B2": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Schedule-OnTick-0a615500_IamRole_92CE809F.name}",
+      },
+      "Schedule-OnTick-7b33bcba_IamRolePolicyAttachment_7CE94FAE": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Schedule-OnTick-7b33bcba_IamRole_C04DD603.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "Schedule-OnTick-0a615500": {
+        "architectures": [
+          "arm64",
+        ],
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Schedule-OnTick-0a615500-c8fd8480",
+          },
         },
-        \\"function_name\\": \\"Schedule-OnTick-0a615500-c8fd8480\\",
-        \\"handler\\": \\"index.handler\\",
-        \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.Schedule-OnTick-0a615500_IamRole_92CE809F.arn}\\",
-        \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.Schedule-OnTick-0a615500_S3Object_587833FB.key}\\",
-        \\"timeout\\": 30,
-        \\"vpc_config\\": {
-          \\"security_group_ids\\": [],
-          \\"subnet_ids\\": []
-        }
-      },
-      \\"Schedule-OnTick-7b33bcba\\": {
-        \\"environment\\": {
-          \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"Schedule-OnTick-7b33bcba-c86000d7\\"
-          }
+        "function_name": "Schedule-OnTick-0a615500-c8fd8480",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.Schedule-OnTick-0a615500_IamRole_92CE809F.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Schedule-OnTick-0a615500_S3Object_587833FB.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
         },
-        \\"function_name\\": \\"Schedule-OnTick-7b33bcba-c86000d7\\",
-        \\"handler\\": \\"index.handler\\",
-        \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.Schedule-OnTick-7b33bcba_IamRole_C04DD603.arn}\\",
-        \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.Schedule-OnTick-7b33bcba_S3Object_4D57889B.key}\\",
-        \\"timeout\\": 30,
-        \\"vpc_config\\": {
-          \\"security_group_ids\\": [],
-          \\"subnet_ids\\": []
-        }
-      }
-    },
-    \\"aws_lambda_permission\\": {
-      \\"Schedule-OnTick-0a615500_InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3_67BEC9AD\\": {
-        \\"action\\": \\"lambda:InvokeFunction\\",
-        \\"function_name\\": \\"\${aws_lambda_function.Schedule-OnTick-0a615500.function_name}\\",
-        \\"principal\\": \\"events.amazonaws.com\\",
-        \\"qualifier\\": \\"\${aws_lambda_function.Schedule-OnTick-0a615500.version}\\",
-        \\"source_arn\\": \\"\${aws_cloudwatch_event_rule.Schedule_15669BF1.arn}\\"
       },
-      \\"Schedule-OnTick-7b33bcba_InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3_D6BACA03\\": {
-        \\"action\\": \\"lambda:InvokeFunction\\",
-        \\"function_name\\": \\"\${aws_lambda_function.Schedule-OnTick-7b33bcba.function_name}\\",
-        \\"principal\\": \\"events.amazonaws.com\\",
-        \\"qualifier\\": \\"\${aws_lambda_function.Schedule-OnTick-7b33bcba.version}\\",
-        \\"source_arn\\": \\"\${aws_cloudwatch_event_rule.Schedule_15669BF1.arn}\\"
-      }
-    },
-    \\"aws_s3_bucket\\": {
-      \\"Code\\": {
-        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
-      }
-    },
-    \\"aws_s3_object\\": {
-      \\"Schedule-OnTick-0a615500_S3Object_587833FB\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"key\\": \\"<key>\\",
-        \\"source\\": \\"<source>\\"
+      "Schedule-OnTick-7b33bcba": {
+        "architectures": [
+          "arm64",
+        ],
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Schedule-OnTick-7b33bcba-c86000d7",
+          },
+        },
+        "function_name": "Schedule-OnTick-7b33bcba-c86000d7",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.Schedule-OnTick-7b33bcba_IamRole_C04DD603.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Schedule-OnTick-7b33bcba_S3Object_4D57889B.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
-      \\"Schedule-OnTick-7b33bcba_S3Object_4D57889B\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"key\\": \\"<key>\\",
-        \\"source\\": \\"<source>\\"
-      }
-    }
-  }
-}"
+    },
+    "aws_lambda_permission": {
+      "Schedule-OnTick-0a615500_InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3_67BEC9AD": {
+        "action": "lambda:InvokeFunction",
+        "function_name": "\${aws_lambda_function.Schedule-OnTick-0a615500.function_name}",
+        "principal": "events.amazonaws.com",
+        "qualifier": "\${aws_lambda_function.Schedule-OnTick-0a615500.version}",
+        "source_arn": "\${aws_cloudwatch_event_rule.Schedule_15669BF1.arn}",
+      },
+      "Schedule-OnTick-7b33bcba_InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3_D6BACA03": {
+        "action": "lambda:InvokeFunction",
+        "function_name": "\${aws_lambda_function.Schedule-OnTick-7b33bcba.function_name}",
+        "principal": "events.amazonaws.com",
+        "qualifier": "\${aws_lambda_function.Schedule-OnTick-7b33bcba.version}",
+        "source_arn": "\${aws_cloudwatch_event_rule.Schedule_15669BF1.arn}",
+      },
+    },
+    "aws_s3_bucket": {
+      "Code": {
+        "bucket_prefix": "code-c84a50b1-",
+      },
+    },
+    "aws_s3_object": {
+      "Schedule-OnTick-0a615500_S3Object_587833FB": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+      "Schedule-OnTick-7b33bcba_S3Object_4D57889B": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+    },
+  },
+}
 `;
 
 exports[`schedule with two functions 2`] = `
@@ -834,25 +738,9 @@ exports[`schedule with two functions 2`] = `
                 "path": "root/Default/Code",
               },
               "Handler1": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "handle()",
-                      "resource": "root/Default/Schedule-OnTick-7b33bcba",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/Schedule-OnTick-7b33bcba",
-                    },
-                  ],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -863,25 +751,9 @@ exports[`schedule with two functions 2`] = `
                 "path": "root/Default/Handler1",
               },
               "Handler2": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "handle()",
-                      "resource": "root/Default/Schedule-OnTick-0a615500",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/Schedule-OnTick-0a615500",
-                    },
-                  ],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -892,22 +764,6 @@ exports[`schedule with two functions 2`] = `
                 "path": "root/Default/Handler2",
               },
               "Schedule": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "onTick()",
-                      "resource": "root/Default/Schedule-OnTick-7b33bcba",
-                    },
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "onTick()",
-                      "resource": "root/Default/Schedule-OnTick-0a615500",
-                    },
-                  ],
-                },
                 "children": {
                   "Schedule": {
                     "constructInfo": {
@@ -936,7 +792,7 @@ exports[`schedule with two functions 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A cloud schedule to trigger events at regular intervals",
@@ -946,28 +802,6 @@ exports[`schedule with two functions 2`] = `
                 "path": "root/Default/Schedule",
               },
               "Schedule-OnTick-0a615500": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "handle()",
-                      "resource": "root/Default/Handler2",
-                    },
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/Handler2",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "onTick()",
-                      "resource": "root/Default/Schedule",
-                    },
-                  ],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -1028,7 +862,7 @@ exports[`schedule with two functions 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -1038,28 +872,6 @@ exports[`schedule with two functions 2`] = `
                 "path": "root/Default/Schedule-OnTick-0a615500",
               },
               "Schedule-OnTick-7b33bcba": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "handle()",
-                      "resource": "root/Default/Handler1",
-                    },
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/Handler1",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "onTick()",
-                      "resource": "root/Default/Schedule",
-                    },
-                  ],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -1120,7 +932,7 @@ exports[`schedule with two functions 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -1130,12 +942,9 @@ exports[`schedule with two functions 2`] = `
                 "path": "root/Default/Schedule-OnTick-7b33bcba",
               },
               "Schedule-OnTickHandler-0a615500": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "hidden": true,
@@ -1144,12 +953,9 @@ exports[`schedule with two functions 2`] = `
                 "path": "root/Default/Schedule-OnTickHandler-0a615500",
               },
               "Schedule-OnTickHandler-7b33bcba": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "hidden": true,
@@ -1166,9 +972,6 @@ exports[`schedule with two functions 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -1181,7 +984,7 @@ exports[`schedule with two functions 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -1194,7 +997,7 @@ exports[`schedule with two functions 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",

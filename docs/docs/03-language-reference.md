@@ -259,16 +259,27 @@ let jsonObj = Json {
 
 ##### 1.1.4.4 Assignment to native types
 
-We only allow implicit assignment from *safe* to *unsafe* types because otherwise we cannot
-guarantee safety (e.g. from `str` to `Json` but not from `Json` to `str`), so this won't work:
+If the `Json` object is statically known to structurally match a certain type, it is possible 
+to assign it to a variable of that type with no runtime cost:
 
 ```TS
 let j = Json "hello";
 let s: str = j;
+
+struct J2 { a: num; }
+let j2: J2 = { a: 2 }
+```
+
+This can only be done when the `Json` literal is present in the program. Otherwise, we cannot
+guarantee safety.
+
+```TS
+let response = http.get("/employees");
+let s: str = response;
 //           ^ cannot assign `Json` to `str`.
 ```
 
-To assign a `Json` to a strong-type variable, use the `fromJson()` static method on the target
+To dynamically assign a `Json` to a strong-type variable, use the `fromJson()` static method on the target
 type:
 
 ```TS
@@ -506,17 +517,11 @@ log("UTC: ${t1.utc.toIso())}");            // output: 2023-02-09T06:21:03.000Z
 | -------- | -------------------------------------------------------- |
 | `log`    | logs str                                                 |
 | `throw`  | creates and throws an instance of an exception           |
-| `panic`  | exits with a serializable, dumps the trace + a core dump |
-| `assert` | checks a condition and _panics_ if evaluated to false    |
-
-`panic` is a fatal call by design. If the intention is error handling, panic is the
-last resort. Exceptions are non fatal and should be used instead for effectively
-communicating errors to the user.
+| `assert` | checks a condition and _throws_ if evaluated to false    |
 
 > ```TS
 > log("Hello ${name}");
 > throw("a recoverable error occurred");
-> panic("a fatal error encountered");
 > assert(x > 0);
 > ```
 
@@ -863,8 +868,8 @@ if myPerson.address == nil {
 
 #### 1.6.3 Unwrapping using `if let`
 
-The `if let` statement can be used to test if an optional is defined and *unwrap* it into a
-non-optional variable defined inside the block:
+The `if let` statement (or `if let var` for a reassignable variable) can be used to test if an 
+optional is defined and *unwrap* it into a non-optional variable defined inside the block:
 
 ```TS
 if let address = myPerson.address {
@@ -958,12 +963,7 @@ translate to JavaScript. You can create a new exception with a `throw` call.
 In the presence of `try`, both `catch` and `finally` are optional but at least one of them must be present.
 In the presence of `catch` the variable holding the exception (`e` in the example below) is optional.
 
-`panic` is meant to be fatal error handling.  
 `throw` is meant to be recoverable error handling.
-
-An uncaught exception is considered user error but a panic call is not. Compiler
-guarantees exception safety by throwing a compile error if an exception is
-expected from a call and it is not being caught.
 
 > ```TS
 > try {

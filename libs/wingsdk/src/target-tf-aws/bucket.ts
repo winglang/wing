@@ -124,7 +124,7 @@ export class Bucket extends cloud.Bucket {
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return core.InflightClient.for(
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
@@ -205,14 +205,6 @@ export function createEncryptedBucket(
       bucket: bucket.bucket,
       policy: JSON.stringify(policy),
       dependsOn: [publicAccessBlock],
-    });
-  } else {
-    new S3BucketPublicAccessBlock(scope, "PublicAccessBlock", {
-      bucket: bucket.bucket,
-      blockPublicAcls: true,
-      blockPublicPolicy: true,
-      ignorePublicAcls: true,
-      restrictPublicBuckets: true,
     });
   }
 

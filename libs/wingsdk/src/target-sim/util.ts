@@ -4,7 +4,6 @@ import { promisify } from "util";
 import { IConstruct } from "constructs";
 import { Function } from "./function";
 import { simulatorHandleToken } from "./tokens";
-import { NodeJsCode } from "../core";
 import { Duration, IInflightHost, Resource } from "../std";
 
 /**
@@ -51,15 +50,13 @@ export function bindSimulatorResource(
 export function makeSimulatorJsClient(filename: string, resource: Resource) {
   const type = basename(filename).split(".")[0];
   const env = makeEnvVarName(type, resource);
-  return NodeJsCode.fromInline(
-    `(function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error("Missing environment variable: " + env);
-        }
-        return $simulator.findInstance(handle);
-      })("${env}")`
-  );
+  return `(function(env) {
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error("Missing environment variable: " + env);
+  }
+  return $simulator.findInstance(handle);
+})("${env}")`;
 }
 
 // helper function to convert duration to a cron string

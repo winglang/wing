@@ -23,7 +23,7 @@ if (undocumentedResources.length) {
   );
 }
 
-const JSII_DEPS = ["constructs@~10.1.314"];
+const JSII_DEPS = ["constructs@~10.2.69"];
 const CDKTF_VERSION = "0.17.0";
 
 const CDKTF_PROVIDERS = [
@@ -50,7 +50,7 @@ const sideLoad = Object.values(TARGET_DEPS).flat();
 
 const project = new cdk.JsiiProject({
   name: "@winglang/sdk",
-  author: "Monada, Inc.",
+  author: "Wing Cloud",
   authorOrganization: true,
   authorAddress: "ping@monada.co",
   repositoryUrl: "https://github.com/winglang/wing.git",

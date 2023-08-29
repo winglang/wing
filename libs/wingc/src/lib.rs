@@ -22,6 +22,7 @@ use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
 use type_check_assert::TypeCheckAssert;
+use valid_json_visitor::ValidJsonVisitor;
 use visit::Visit;
 use wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 use wingii::type_system::TypeSystem;
@@ -55,6 +56,7 @@ pub mod lsp;
 pub mod parser;
 pub mod type_check;
 mod type_check_assert;
+mod valid_json_visitor;
 pub mod visit;
 mod visit_context;
 mod visit_types;
@@ -139,7 +141,7 @@ pub unsafe extern "C" fn wingc_free(ptr: *mut u8, size: usize) {
 /// should be called before any other function
 #[no_mangle]
 pub unsafe extern "C" fn wingc_init() {
-	// Setup a custom panic hook to report panics as complitation diagnostics
+	// Setup a custom panic hook to report panics as compilation diagnostics
 	set_custom_panic_hook();
 }
 
@@ -258,24 +260,6 @@ pub fn type_check(
 		scope,
 		types,
 	);
-	add_builtin(
-		UtilityFunctions::Panic.to_string().as_str(),
-		Type::Function(FunctionSignature {
-			this_type: None,
-			parameters: vec![FunctionParameter {
-				typeref: types.string(),
-				name: "message".into(),
-				docs: Docs::with_summary("The message to panic with"),
-				variadic: false,
-			}],
-			return_type: types.void(),
-			phase: Phase::Independent,
-			js_override: Some("{((msg) => {console.error(msg, (new Error()).stack);process.exit(1)})($args$)}".to_string()),
-			docs: Docs::with_summary("panics with an error"),
-		}),
-		scope,
-		types,
-	);
 
 	let mut scope_env = types.get_scope_env(&scope);
 	let mut tc = TypeChecker::new(types, file_path, jsii_types, jsii_imports);
@@ -357,6 +341,10 @@ pub fn compile(
 		// Validate the type checker didn't miss anything - see `TypeCheckAssert` for details
 		let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
 		tc_assert.check(&scope);
+
+		// Validate all Json literals to make sure their values are legal
+		let mut json_checker = ValidJsonVisitor::new(&types);
+		json_checker.check(&scope);
 	}
 
 	let project_dir = absolute_project_root

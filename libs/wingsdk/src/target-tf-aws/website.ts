@@ -127,7 +127,7 @@ export class Website extends cloud.Website {
       policy: allowDistributionReadOnly.json,
     });
 
-    this._url = distribution.domainName;
+    this._url = `https://${distribution.domainName}`;
   }
 
   public get url(): string {
@@ -182,7 +182,7 @@ export class Website extends cloud.Website {
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return core.InflightClient.for(
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
