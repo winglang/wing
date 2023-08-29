@@ -38,6 +38,7 @@ const branchName =
   betterExec(`git rev-parse --abbrev-ref HEAD`);
 
 let HEAD_SHA = context?.sha ?? betterExec(`git rev-parse HEAD`);
+const originalHEAD_SHA = HEAD_SHA;
 
 let BASE_SHA = await findSuccessfulCommit(branchName);
 
@@ -75,7 +76,6 @@ async function findSuccessfulCommit(branchName: string) {
       } catch {}
       betterExec(`git fetch origin ${branchName}`);
       betterExec(`git branch ${tmpBranchName} ${actualPRHeadSha}`);
-      betterExec(`git switch ${tmpBranchName}`);
       betterExec(
         `git rebase --onto ${baseBranchName} ${branchName} ${tmpBranchName}`
       );
@@ -95,7 +95,6 @@ async function findSuccessfulCommit(branchName: string) {
       try {
         betterExec(`git rebase --quit`);
       } catch {}
-      betterExec(`git switch ${branchName}`);
     }
   }
 
