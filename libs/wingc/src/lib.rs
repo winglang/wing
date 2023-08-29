@@ -242,24 +242,6 @@ pub fn type_check(
 		scope,
 		types,
 	);
-	add_builtin(
-		UtilityFunctions::Throw.to_string().as_str(),
-		Type::Function(FunctionSignature {
-			this_type: None,
-			parameters: vec![FunctionParameter {
-				typeref: types.string(),
-				name: "message".into(),
-				docs: Docs::with_summary("The message to throw"),
-				variadic: false,
-			}],
-			return_type: types.void(),
-			phase: Phase::Independent,
-			js_override: Some("{((msg) => {throw new Error(msg)})($args$)}".to_string()),
-			docs: Docs::with_summary("throws an error"),
-		}),
-		scope,
-		types,
-	);
 
 	let mut scope_env = types.get_scope_env(&scope);
 	let mut tc = TypeChecker::new(types, file_path, jsii_types, jsii_imports);

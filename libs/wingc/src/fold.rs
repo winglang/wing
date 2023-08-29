@@ -156,6 +156,7 @@ where
 		StmtKind::Break => StmtKind::Break,
 		StmtKind::Continue => StmtKind::Continue,
 		StmtKind::Return(value) => StmtKind::Return(value.map(|value| f.fold_expr(value))),
+		StmtKind::Throw(value) => StmtKind::Throw(f.fold_expr(value)),
 		StmtKind::Expression(expr) => StmtKind::Expression(f.fold_expr(expr)),
 		StmtKind::Assignment { variable, value } => StmtKind::Assignment {
 			variable: f.fold_reference(variable),
