@@ -71,6 +71,7 @@ async function findSuccessfulCommit(branchName: string) {
     try {
       // create a new branch locally to rebase onto main
       const tmpBranchName = `tmp-pr-diff-${HEAD_SHA}`;
+
       try {
         betterExec(`git branch -D --force ${tmpBranchName}`);
       } catch {}
@@ -99,7 +100,8 @@ async function findSuccessfulCommit(branchName: string) {
         betterExec(`git rebase --quit`);
       } catch {}
 
-      betterExec(`git switch ${originalHEAD_SHA}`);
+      // regardless of whether we succeeded or not, switch back to the original commit
+      betterExec(`git reset --hard ${originalHEAD_SHA}`);
     }
   }
 
