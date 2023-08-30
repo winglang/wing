@@ -214,7 +214,7 @@ exports[`utilities.w 1`] = `
        super(scope, id);
 >>     {((cond) => {if (!cond) throw new Error(\\"assertion failed: false\\")})(false)};
        {console.log(\\"W\\")};
-       {((msg) => {throw new Error(msg)})(\\"me\\")};
+       throw new Error(\\"me\\");
 
  
  

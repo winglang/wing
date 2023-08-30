@@ -466,6 +466,7 @@ pub enum StmtKind {
 	Break,
 	Continue,
 	Return(Option<Expr>),
+	Throw(Expr),
 	Expression(Expr),
 	Assignment {
 		variable: Reference,

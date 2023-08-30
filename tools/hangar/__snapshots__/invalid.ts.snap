@@ -2386,6 +2386,21 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`throw_non_string.w 1`] = `
+"error: Expected type to be \\"str\\", but got \\"num\\" instead
+  --> ../../../examples/tests/invalid/throw_non_string.w:1:7
+  |
+1 | throw 42;
+  |       ^^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`try_no_catch_or_finally.w 1`] = `
 "error: Missing \`catch\` or \`finally\` blocks for this try statement
   --> ../../../examples/tests/invalid/try_no_catch_or_finally.w:1:1
