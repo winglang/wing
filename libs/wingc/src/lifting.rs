@@ -1,3 +1,5 @@
+use std::borrow::BorrowMut;
+
 use crate::{
 	ast::{
 		Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, Symbol, UserDefinedType,
@@ -8,8 +10,8 @@ use crate::{
 	type_check::{
 		lifts::{Liftable, Lifts},
 		resolve_user_defined_type,
-		symbol_env::LookupResult,
-		ClassLike, TypeRef, CLOSURE_CLASS_HANDLE_METHOD,
+		symbol_env::{LookupResult, SymbolEnv},
+		ClassLike, TypeRef, CLOSURE_CLASS_HANDLE_METHOD, SymbolKind, Struct,
 	},
 	visit::{self, Visit},
 	visit_context::{VisitContext, VisitorWithContext},
@@ -109,7 +111,7 @@ impl<'a> LiftVisitor<'a> {
 		return true;
 	}
 
-	fn jsify_expr(&mut self, node: &Expr) -> String {
+	fn jsify_expr(&mut self, node: &Expr, env: &SymbolEnv) -> String {
 		self.ctx.push_phase(Phase::Preflight);
 		let res = self.jsify.jsify_expression(
 			&node,
@@ -117,10 +119,22 @@ impl<'a> LiftVisitor<'a> {
 				lifts: None,
 				visit_ctx: &mut self.ctx,
 			},
+      env
 		);
 		self.ctx.pop_phase();
 		res
 	}
+
+  fn jsify_struct(&self, struct_: &Struct) -> String {
+    let res = self.jsify.jsify_struct(
+      struct_,
+      &mut JSifyContext {
+        lifts: None,
+        visit_ctx: &mut VisitContext::new(),
+      },
+    );
+    res.to_string()
+  }
 
 	fn jsify_udt(&mut self, node: &UserDefinedType) -> String {
 		let res = self.jsify.jsify_user_defined_type(
@@ -142,7 +156,21 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 				visit::visit_reference(self, &node);
 				self.ctx.pop_property();
 			}
-			Reference::TypeMember { property, .. } => {
+			Reference::TypeMember { property, type_name } => {
+        match self.ctx.current_env().unwrap().lookup_nested_str(&type_name.full_path_str(), None) {
+          LookupResult::Found(kind, symbol_info) => {
+            match kind {
+              SymbolKind::Type(type_) => {
+                if let Some(s) = type_.as_struct() {
+                  let struct_code = self.jsify_struct(s);
+                }
+              }
+              _ => {}
+            }
+          }
+          _ => {}
+        }
+        
 				self.ctx.push_property(property);
 				visit::visit_reference(self, &node);
 				self.ctx.pop_property();
@@ -181,8 +209,10 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			//---------------
 			// LIFT
 			if expr_phase == Phase::Preflight {
+        let env = &v.ctx.current_env().expect("an env").clone();
+
 				// jsify the expression so we can get the preflight code
-				let code = v.jsify_expr(&node);
+				let code = v.jsify_expr(&node, &env);
 
 				let property = if let Some(property) = v.ctx.current_property() {
 					Some(property)

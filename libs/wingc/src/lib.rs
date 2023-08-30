@@ -19,6 +19,7 @@ use indexmap::IndexMap;
 use jsify::JSifier;
 use lifting::LiftVisitor;
 use parser::parse_wing_project;
+use struct_schema::ReferenceVisitor;
 use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
@@ -61,6 +62,7 @@ pub mod visit;
 mod visit_context;
 mod visit_types;
 mod wasm_util;
+pub mod struct_schema;
 
 const WINGSDK_ASSEMBLY_NAME: &'static str = "@winglang/sdk";
 
@@ -350,6 +352,8 @@ pub fn compile(
 		.map(|(path, scope)| {
 			let mut lift = LiftVisitor::new(&jsifier);
 			lift.visit_scope(&scope);
+      let mut reference_visitor = ReferenceVisitor::new(&jsifier);
+      reference_visitor.visit_scope(&scope);
 			(path, scope)
 		})
 		.collect::<IndexMap<Utf8PathBuf, Scope>>();
