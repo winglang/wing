@@ -1099,7 +1099,9 @@ Mutable Array.
 | <code><a href="#@winglang/sdk.std.MutArray.join">join</a></code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
 | <code><a href="#@winglang/sdk.std.MutArray.lastIndexOf">lastIndexOf</a></code> | Returns the index of the last occurrence of searchElement found. |
 | <code><a href="#@winglang/sdk.std.MutArray.pop">pop</a></code> | Remove value from end of array. |
+| <code><a href="#@winglang/sdk.std.MutArray.popAt">popAt</a></code> | Removes value from the given index of an array. |
 | <code><a href="#@winglang/sdk.std.MutArray.push">push</a></code> | Add value to end of array. |
+| <code><a href="#@winglang/sdk.std.MutArray.removeFirst">removeFirst</a></code> | Removes first occurence of a given value in an array. |
 | <code><a href="#@winglang/sdk.std.MutArray.set">set</a></code> | Sets a new value at the given index of an array. |
 
 ---
@@ -1241,6 +1243,22 @@ pop(): <T>
 
 Remove value from end of array.
 
+##### `popAt` <a name="popAt" id="@winglang/sdk.std.MutArray.popAt"></a>
+
+```wing
+popAt(index: num): <T>
+```
+
+Removes value from the given index of an array.
+
+###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.MutArray.popAt.parameter.index"></a>
+
+- *Type:* num
+
+the index to remove the value at.
+
+---
+
 ##### `push` <a name="push" id="@winglang/sdk.std.MutArray.push"></a>
 
 ```wing
@@ -1254,6 +1272,22 @@ Add value to end of array.
 - *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
 
 value to add.
+
+---
+
+##### `removeFirst` <a name="removeFirst" id="@winglang/sdk.std.MutArray.removeFirst"></a>
+
+```wing
+removeFirst(value: <T>): bool
+```
+
+Removes first occurence of a given value in an array.
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutArray.removeFirst.parameter.value"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
+
+the value to remove.
 
 ---
 
