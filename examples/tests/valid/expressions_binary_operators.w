@@ -19,3 +19,6 @@ assert(xynfj == 5);
 let xyas = 5;
 xyas += 10;
 assert(xyas == 15);
+let xyss = 5;
+xyss -= 10;
+assert(xyss == -5);
