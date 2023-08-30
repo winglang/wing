@@ -329,7 +329,7 @@ jobs:
           path: dist
 
       - name: Install flyctl
-        uses: superfly/flyctl-actions/setup-flyctl@master
+        uses: superfly/flyctl-actions/setup-flyctl@1.4
         with:
           version: ${{env.FLY_VERSION}}
 
