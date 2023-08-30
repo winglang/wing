@@ -282,11 +282,6 @@ export const createConsoleManager = (
     });
 
     context.subscriptions.push(webviewPanel, explorerView, testsExplorerView);
-
-    const node = await resourcesExplorer.getChildren();
-    if (node[0]?.id) {
-      await explorerView?.reveal(new ResourceItem(node[0].id));
-    }
     activeInstanceId = instanceId;
   };
 
