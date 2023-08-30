@@ -5,6 +5,7 @@ export * from "./duration";
 export * from "./generics";
 export * from "./json";
 export * from "./map";
+export * from "./node";
 export * from "./number";
 export * from "./range";
 export * from "./resource";

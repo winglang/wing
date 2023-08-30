@@ -106,6 +106,9 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
             "uniqueId": "testpublicUrl_Handler_E965919F"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_7c320eda": "${aws_s3_bucket.publicBucket.bucket}",
@@ -175,19 +178,6 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
       }
     },
     "aws_s3_bucket_public_access_block": {
-      "privateBucket_PublicAccessBlock_BF0F9FC6": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/privateBucket/PublicAccessBlock",
-            "uniqueId": "privateBucket_PublicAccessBlock_BF0F9FC6"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.privateBucket.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      },
       "publicBucket_PublicAccessBlock_54D9EFBA": {
         "//": {
           "metadata": {
@@ -256,6 +246,7 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -268,29 +259,31 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure1-1.js")({
             $http_Util: ${context._lift(http.Util)},
             $privateBucket: ${context._lift(privateBucket)},
             $publicBucket: ${context._lift(publicBucket)},
             $util_Util: ${context._lift(util.Util)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {

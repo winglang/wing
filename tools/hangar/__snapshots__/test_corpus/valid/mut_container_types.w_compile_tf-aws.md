@@ -62,47 +62,6 @@
         "force_destroy": false
       }
     },
-    "aws_s3_bucket_public_access_block": {
-      "bucket1_PublicAccessBlock_01FA69AD": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/bucket1/PublicAccessBlock",
-            "uniqueId": "bucket1_PublicAccessBlock_01FA69AD"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.bucket1.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      },
-      "bucket2_PublicAccessBlock_063D91B9": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/bucket2/PublicAccessBlock",
-            "uniqueId": "bucket2_PublicAccessBlock_063D91B9"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.bucket2.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      },
-      "bucket3_PublicAccessBlock_D66B79BF": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/bucket3/PublicAccessBlock",
-            "uniqueId": "bucket3_PublicAccessBlock_D66B79BF"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.bucket3.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      }
-    },
     "aws_s3_bucket_server_side_encryption_configuration": {
       "bucket1_Encryption_4417F366": {
         "//": {
@@ -160,6 +119,7 @@
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;

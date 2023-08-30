@@ -1992,3 +1992,18 @@ fn implicit_lift_inflight_init() {
     "#
 	);
 }
+
+#[test]
+fn lift_self_reference() {
+	assert_compile_ok!(
+		r#"
+    class Foo {
+      static inflight static_method() {}
+
+      inflight bar() {
+        Foo.static_method();
+      }
+    }
+    "#
+	);
+}

@@ -16,11 +16,13 @@ use crate::lsp::sync::{JSII_TYPES, PROJECT_DATA, WING_TYPES};
 use crate::type_check::symbol_env::{LookupResult, StatementIdx};
 use crate::type_check::{
 	fully_qualify_std_type, import_udt_from_jsii, resolve_super_method, resolve_user_defined_type, ClassLike, Namespace,
-	Struct, SymbolKind, Type, Types, UnsafeRef, VariableKind, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
+	Struct, SymbolKind, Type, TypeRef, Types, UnsafeRef, VariableKind, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
 };
 use crate::visit::{visit_expr, visit_type_annotation, Visit};
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 use crate::{WINGSDK_ASSEMBLY_NAME, WINGSDK_STD_MODULE};
+
+use super::sync::check_utf8;
 
 #[no_mangle]
 pub unsafe extern "C" fn wingc_on_completion(ptr: u32, len: u32) -> u64 {
@@ -42,8 +44,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		let mut final_completions = PROJECT_DATA.with(|project_data| {
 			let project_data = project_data.borrow();
 			let uri = params.text_document_position.text_document.uri;
-			let file = uri.to_file_path().ok().expect("LSP only works on real filesystems");
-			let file_id = file.to_str().expect("File path must be valid utf8");
+			let file = check_utf8(uri.to_file_path().expect("LSP only works on real filesystems"));
 			let root_ts_node = project_data.trees.get(&file).expect("tree not found").root_node();
 			let root_scope = project_data.asts.get(&file).expect("ast not found");
 			let root_env = types.get_scope_env(root_scope);
@@ -89,12 +90,12 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 				node_to_complete.parent().map(|parent| WingSpan {
 					start: parent.start_position().into(),
 					end: parent.end_position().into(),
-					file_id: file_id.to_string(),
+					file_id: file.to_string(),
 				}),
 				WingSpan {
 					start: node_to_complete.start_position().into(),
 					end: node_to_complete.end_position().into(),
-					file_id: file_id.to_string(),
+					file_id: file.to_string(),
 				},
 				params.text_document_position.position.into(),
 				&root_scope,
@@ -309,7 +310,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 						},
 						arg_list,
 					)),
-					ExprKind::New(new_expr) => Some((types.get_expr_type(&new_expr.class), &new_expr.arg_list)),
+					ExprKind::New(new_expr) => Some((types.get_expr_type(&e), &new_expr.arg_list)),
 					_ => None,
 				}) {
 					let mut completions =
@@ -646,7 +647,7 @@ fn get_inner_struct_completions(struct_: &Struct, existing_fields: &Vec<String>)
 
 /// Gets accessible properties on a type as a list of CompletionItems
 fn get_completions_from_type(
-	type_: &UnsafeRef<Type>,
+	type_: &TypeRef,
 	types: &Types,
 	current_phase: Option<Phase>,
 	is_instance: bool,

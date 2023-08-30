@@ -8,7 +8,7 @@ on:
       - reopened
       - edited
     branches-ignore:
-      - mergify/merge-queue/**
+      - "mergify/merge-queue/*"
 
 jobs:
   validate:

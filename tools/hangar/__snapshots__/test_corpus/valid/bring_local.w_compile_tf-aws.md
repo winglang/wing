@@ -2,7 +2,7 @@
 
 ## Point.Struct.js
 ```js
-module.exports = function(stdStruct, fromInline) {
+module.exports = function(stdStruct) {
   class Point {
     static jsonSchema() {
       return {
@@ -24,7 +24,7 @@ module.exports = function(stdStruct, fromInline) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return fromInline(`require("./Point.Struct.js")(${ context._lift(stdStruct) })`);
+      return `require("./Point.Struct.js")(${ context._lift(stdStruct) })`;
     }
   }
   return Point;
@@ -249,6 +249,9 @@ module.exports = function({  }) {
             "uniqueId": "file1Store_cloudOnDeploy_Function_9539541F"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_94dc4b3e": "${aws_s3_bucket.file1Store_cloudBucket_86CE87B1.bucket}",
@@ -276,6 +279,9 @@ module.exports = function({  }) {
             "uniqueId": "testadddatatostore_Handler_19066842"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_94dc4b3e": "${aws_s3_bucket.file1Store_cloudBucket_86CE87B1.bucket}",
@@ -316,21 +322,6 @@ module.exports = function({  }) {
         },
         "bucket_prefix": "cloud-bucket-c8b6ef02-",
         "force_destroy": false
-      }
-    },
-    "aws_s3_bucket_public_access_block": {
-      "file1Store_cloudBucket_PublicAccessBlock_542A96A5": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/file1.Store/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "file1Store_cloudBucket_PublicAccessBlock_542A96A5"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.file1Store_cloudBucket_86CE87B1.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
@@ -391,6 +382,7 @@ module.exports = function({ $stdlib }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -404,26 +396,28 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure1-3.js")({
             $store: ${context._lift(store)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -435,50 +429,54 @@ class $Root extends $stdlib.std.Resource {
     class Triangle extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
       }
       area() {
         return 1;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.Triangle-3.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const TriangleClient = ${Triangle._toInflightType(this).text};
+            const TriangleClient = ${Triangle._toInflightType(this)};
             const client = new TriangleClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["$inflight_init"];
       }
     }
     class Util extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.Util-3.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const UtilClient = ${Util._toInflightType(this).text};
+            const UtilClient = ${Util._toInflightType(this)};
             const client = new UtilClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["$inflight_init"];
       }
     }
     const store = new file1.Store(this,"file1.Store");
@@ -505,55 +503,58 @@ module.exports = function({ $stdlib }) {
   class Util extends $stdlib.std.Resource {
     constructor(scope, id, ) {
       super(scope, id);
-      this._addInflightOps("$inflight_init");
     }
     static _toInflightType(context) {
-      return $stdlib.core.NodeJsCode.fromInline(`
+      return `
         require("./inflight.Util-1.js")({
         })
-      `);
+      `;
     }
     _toInflight() {
-      return $stdlib.core.NodeJsCode.fromInline(`
+      return `
         (await (async () => {
-          const UtilClient = ${Util._toInflightType(this).text};
+          const UtilClient = ${Util._toInflightType(this)};
           const client = new UtilClient({
           });
           if (client.$inflight_init) { await client.$inflight_init(); }
           return client;
         })())
-      `);
+      `;
+    }
+    _getInflightOps() {
+      return ["$inflight_init"];
     }
   }
   class Store extends $stdlib.std.Resource {
     constructor(scope, id, ) {
       super(scope, id);
-      this._addInflightOps("store", "$inflight_init");
       this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
       const __parent_this_1 = this;
       class $Closure1 extends $stdlib.std.Resource {
         constructor(scope, id, ) {
           super(scope, id);
-          this._addInflightOps("handle", "$inflight_init");
-          this.display.hidden = true;
+          (std.Node.of(this)).hidden = true;
         }
         static _toInflightType(context) {
-          return $stdlib.core.NodeJsCode.fromInline(`
+          return `
             require("./inflight.$Closure1-1.js")({
               $__parent_this_1_b: ${context._lift(__parent_this_1.b)},
             })
-          `);
+          `;
         }
         _toInflight() {
-          return $stdlib.core.NodeJsCode.fromInline(`
+          return `
             (await (async () => {
-              const $Closure1Client = ${$Closure1._toInflightType(this).text};
+              const $Closure1Client = ${$Closure1._toInflightType(this)};
               const client = new $Closure1Client({
               });
               if (client.$inflight_init) { await client.$inflight_init(); }
               return client;
             })())
-          `);
+          `;
+        }
+        _getInflightOps() {
+          return ["handle", "$inflight_init"];
         }
         _registerBind(host, ops) {
           if (ops.includes("handle")) {
@@ -565,22 +566,25 @@ module.exports = function({ $stdlib }) {
       const prefill = this.node.root.newAbstract("@winglang/sdk.cloud.OnDeploy",this,"cloud.OnDeploy",new $Closure1(this,"$Closure1"));
     }
     static _toInflightType(context) {
-      return $stdlib.core.NodeJsCode.fromInline(`
+      return `
         require("./inflight.Store-1.js")({
         })
-      `);
+      `;
     }
     _toInflight() {
-      return $stdlib.core.NodeJsCode.fromInline(`
+      return `
         (await (async () => {
-          const StoreClient = ${Store._toInflightType(this).text};
+          const StoreClient = ${Store._toInflightType(this)};
           const client = new StoreClient({
             $this_b: ${this._lift(this.b)},
           });
           if (client.$inflight_init) { await client.$inflight_init(); }
           return client;
         })())
-      `);
+      `;
+    }
+    _getInflightOps() {
+      return ["store", "$inflight_init"];
     }
     _registerBind(host, ops) {
       if (ops.includes("$inflight_init")) {
@@ -600,8 +604,8 @@ module.exports = function({ $stdlib }) {
       return tmp;
     })({})
   ;
-  const Point = require("./Point.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
-  return { Util, Store, Color };
+  const Point = require("./Point.Struct.js")($stdlib.std.Struct);
+  return { Util, Store, Color, Point };
 };
 
 ```
@@ -614,24 +618,26 @@ module.exports = function({ $stdlib }) {
   class Q extends $stdlib.std.Resource {
     constructor(scope, id, ) {
       super(scope, id);
-      this._addInflightOps("$inflight_init");
     }
     static _toInflightType(context) {
-      return $stdlib.core.NodeJsCode.fromInline(`
+      return `
         require("./inflight.Q-2.js")({
         })
-      `);
+      `;
     }
     _toInflight() {
-      return $stdlib.core.NodeJsCode.fromInline(`
+      return `
         (await (async () => {
-          const QClient = ${Q._toInflightType(this).text};
+          const QClient = ${Q._toInflightType(this)};
           const client = new QClient({
           });
           if (client.$inflight_init) { await client.$inflight_init(); }
           return client;
         })())
-      `);
+      `;
+    }
+    _getInflightOps() {
+      return ["$inflight_init"];
     }
   }
   return { Q };

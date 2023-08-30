@@ -1,7 +1,7 @@
 import { Validator } from "jsonschema";
 import { T1 } from "./generics";
 import { Json } from "./json";
-import { Code, InflightClient } from "../core";
+import { InflightClient } from "../core";
 
 /**
  * Shared behavior for all structs
@@ -12,7 +12,7 @@ export class Struct {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
 
@@ -51,7 +51,7 @@ export class Struct {
     const result = validator.validate(obj, schema);
     if (result.errors.length > 0) {
       throw new Error(
-        `unable to parse ${schema.id.replace("/", "")}:\n ${result.errors.join(
+        `unable to parse ${schema.id.replace("/", "")}:\n- ${result.errors.join(
           "\n- "
         )}`
       );

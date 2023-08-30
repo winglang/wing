@@ -5,10 +5,9 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
-import { IInflightHost } from "../std";
+import { IInflightHost, Node } from "../std";
 
 /**
  * AWS Implementation of `cloud.Topic`.
@@ -61,7 +60,7 @@ export class Topic extends cloud.Topic {
     const subscription = new LambdaSubscription(fn._function);
     this.topic.addSubscription(subscription);
 
-    Connections.of(this).add({
+    Node.of(this).addConnection({
       source: this,
       target: fn,
       name: "onMessage()",
@@ -85,7 +84,7 @@ export class Topic extends cloud.Topic {
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return core.InflightClient.for(
       __dirname.replace("target-awscdk", "shared-aws"),
       __filename,

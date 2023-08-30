@@ -5,6 +5,8 @@ use crate::visit::Visit;
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 use lsp_types::{DocumentSymbol, SymbolKind};
 
+use super::sync::check_utf8;
+
 pub struct DocumentSymbolVisitor {
 	pub document_symbols: Vec<DocumentSymbol>,
 }
@@ -93,7 +95,7 @@ pub fn on_document_symbols(params: lsp_types::DocumentSymbolParams) -> Vec<Docum
 	PROJECT_DATA.with(|project_data| {
 		let project_data = project_data.borrow();
 		let uri = params.text_document.uri;
-		let file = uri.to_file_path().ok().expect("LSP only works on real filesystems");
+		let file = check_utf8(uri.to_file_path().expect("LSP only works on real filesystems"));
 		let scope = project_data.asts.get(&file).unwrap();
 
 		let mut visitor = DocumentSymbolVisitor::new();

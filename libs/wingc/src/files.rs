@@ -4,21 +4,22 @@ use std::{
 	fmt::{self, Display},
 	fs::{self, File},
 	io::Write,
-	path::{Path, PathBuf},
 };
+
+use camino::{Utf8Path, Utf8PathBuf};
 
 use crate::diagnostic::Diagnostic;
 
 #[derive(Debug)]
 pub enum FilesError {
-	DuplicateFile(PathBuf),
+	DuplicateFile(Utf8PathBuf),
 	IoError(std::io::Error),
 }
 
 impl Display for FilesError {
 	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
 		match self {
-			FilesError::DuplicateFile(path) => write!(f, "Cannot add two files with the same name: {}", path.display()),
+			FilesError::DuplicateFile(path) => write!(f, "Cannot add two files with the same name: {}", path),
 			FilesError::IoError(err) => write!(f, "I/O error: {}", err),
 		}
 	}
@@ -37,7 +38,7 @@ impl Error for FilesError {}
 
 #[derive(Default)]
 pub struct Files {
-	data: HashMap<PathBuf, String>,
+	data: HashMap<Utf8PathBuf, String>,
 }
 
 impl Files {
@@ -46,7 +47,7 @@ impl Files {
 	}
 
 	/// Add a file, returning an error if a file with the same name already exists.
-	pub fn add_file<S: Into<PathBuf>>(&mut self, path: S, content: String) -> Result<(), FilesError> {
+	pub fn add_file<S: Into<Utf8PathBuf>>(&mut self, path: S, content: String) -> Result<(), FilesError> {
 		let path = path.into();
 		if self.data.contains_key(&path) {
 			return Err(FilesError::DuplicateFile(path));
@@ -56,23 +57,23 @@ impl Files {
 	}
 
 	/// Update a file, overwriting the previous contents if it already exists.
-	pub fn update_file<S: Into<PathBuf>>(&mut self, path: S, content: String) {
+	pub fn update_file<S: Into<Utf8PathBuf>>(&mut self, path: S, content: String) {
 		let path = path.into();
 		self.data.insert(path, content);
 	}
 
 	/// Get a file's contents, if it exists.
-	pub fn get_file<S: AsRef<Path>>(&self, path: S) -> Option<&String> {
+	pub fn get_file<S: AsRef<Utf8Path>>(&self, path: S) -> Option<&String> {
 		self.data.get(path.as_ref())
 	}
 
 	/// Check if a file exists.
-	pub fn contains_file<S: AsRef<Path>>(&self, path: S) -> bool {
+	pub fn contains_file<S: AsRef<Utf8Path>>(&self, path: S) -> bool {
 		self.data.contains_key(path.as_ref())
 	}
 
 	/// Write all files to the given directory.
-	pub fn emit_files(&self, out_dir: &Path) -> Result<(), FilesError> {
+	pub fn emit_files(&self, out_dir: &Utf8Path) -> Result<(), FilesError> {
 		for (path, content) in &self.data {
 			let full_path = out_dir.join(path);
 
@@ -119,7 +120,7 @@ mod tests {
 	#[test]
 	fn test_emit_files() {
 		let temp_dir = tempfile::tempdir().expect("Failed to create temporary directory");
-		let out_dir = temp_dir.path();
+		let out_dir = Utf8Path::from_path(temp_dir.path()).expect("invalid unicode path");
 
 		let mut files = Files::new();
 		files
@@ -146,7 +147,7 @@ mod tests {
 	#[test]
 	fn test_emit_files_creates_intermediate_directories() {
 		let temp_dir = tempfile::tempdir().expect("Failed to create temporary directory");
-		let out_dir = temp_dir.path();
+		let out_dir = Utf8Path::from_path(temp_dir.path()).expect("invalid unicode path");
 
 		let mut files = Files::new();
 		files

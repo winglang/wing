@@ -3,3 +3,4 @@ source: libs/wingc/src/jsify/tests.rs
 ---
 ## Errors
 Class "Derived" is an inflight class and cannot extend preflight class "Base" 2:35
+Cannot qualify access to a lifted type "Base" (see https://github.com/winglang/wing/issues/76 for more details) 2:35

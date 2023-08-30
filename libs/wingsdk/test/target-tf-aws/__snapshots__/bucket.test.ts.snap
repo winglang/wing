@@ -77,7 +77,7 @@ exports[`bucket is public 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -124,7 +124,7 @@ exports[`bucket is public 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -136,7 +136,7 @@ exports[`bucket is public 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",
@@ -183,15 +183,6 @@ exports[`bucket prefix must be lowercase 1`] = `
         "force_destroy": false,
       },
     },
-    "aws_s3_bucket_public_access_block": {
-      "The-UncannyBucket_PublicAccessBlock_88AA9BF7": {
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "\${aws_s3_bucket.The-UncannyBucket.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true,
-      },
-    },
     "aws_s3_bucket_server_side_encryption_configuration": {
       "The-UncannyBucket_Encryption_4CFC1E98": {
         "bucket": "\${aws_s3_bucket.The-UncannyBucket.bucket}",
@@ -234,18 +225,10 @@ exports[`bucket prefix must be lowercase 2`] = `
                     "id": "Encryption",
                     "path": "root/Default/The-Uncanny.Bucket/Encryption",
                   },
-                  "PublicAccessBlock": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "PublicAccessBlock",
-                    "path": "root/Default/The-Uncanny.Bucket/PublicAccessBlock",
-                  },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -275,7 +258,7 @@ exports[`bucket prefix must be lowercase 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -288,7 +271,7 @@ exports[`bucket prefix must be lowercase 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",
@@ -333,15 +316,6 @@ exports[`bucket prefix valid 1`] = `
       "the-uncannybucket": {
         "bucket_prefix": "the-uncanny-bucket-c8e2755c-",
         "force_destroy": false,
-      },
-    },
-    "aws_s3_bucket_public_access_block": {
-      "the-uncannybucket_PublicAccessBlock_AC5BC68C": {
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "\${aws_s3_bucket.the-uncannybucket.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true,
       },
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
@@ -389,7 +363,7 @@ exports[`bucket prefix valid 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -417,18 +391,10 @@ exports[`bucket prefix valid 2`] = `
                     "id": "Encryption",
                     "path": "root/Default/the-uncanny.bucket/Encryption",
                   },
-                  "PublicAccessBlock": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "PublicAccessBlock",
-                    "path": "root/Default/the-uncanny.bucket/PublicAccessBlock",
-                  },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -440,7 +406,7 @@ exports[`bucket prefix valid 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",
@@ -500,6 +466,9 @@ exports[`bucket with onCreate method 1`] = `
     },
     "aws_lambda_function": {
       "my_bucket_my_bucket-oncreate-OnMessage-7b961f4d_8104FB90": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "my_bucket-oncreate-OnMessage-7b961f4d-c81311dd",
@@ -649,7 +618,7 @@ exports[`bucket with onCreate method 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -662,7 +631,7 @@ exports[`bucket with onCreate method 2`] = `
               "inflight": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -743,7 +712,7 @@ exports[`bucket with onCreate method 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.69",
                     },
                     "display": {
                       "description": "A pub/sub notification topic",
@@ -813,7 +782,7 @@ exports[`bucket with onCreate method 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.69",
                     },
                     "display": {
                       "description": "A cloud function (FaaS)",
@@ -825,7 +794,7 @@ exports[`bucket with onCreate method 2`] = `
                   "my_bucket-oncreate-OnMessageHandler-7b961f4d": {
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.69",
                     },
                     "display": {
                       "hidden": true,
@@ -836,7 +805,7 @@ exports[`bucket with onCreate method 2`] = `
                   "my_bucket-oncreate-eventHandler-9eade8f6": {
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.69",
                     },
                     "display": {
                       "hidden": true,
@@ -847,7 +816,7 @@ exports[`bucket with onCreate method 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -859,7 +828,7 @@ exports[`bucket with onCreate method 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",
@@ -919,6 +888,9 @@ exports[`bucket with onDelete method 1`] = `
     },
     "aws_lambda_function": {
       "my_bucket_my_bucket-ondelete-OnMessage-1de1a361_37C9E1F7": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "my_bucket-ondelete-OnMessage-1de1a361-c89e08bf",
@@ -1068,7 +1040,7 @@ exports[`bucket with onDelete method 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -1081,7 +1053,7 @@ exports[`bucket with onDelete method 2`] = `
               "inflight": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -1162,7 +1134,7 @@ exports[`bucket with onDelete method 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.69",
                     },
                     "display": {
                       "description": "A pub/sub notification topic",
@@ -1232,7 +1204,7 @@ exports[`bucket with onDelete method 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.69",
                     },
                     "display": {
                       "description": "A cloud function (FaaS)",
@@ -1244,7 +1216,7 @@ exports[`bucket with onDelete method 2`] = `
                   "my_bucket-ondelete-OnMessageHandler-1de1a361": {
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.69",
                     },
                     "display": {
                       "hidden": true,
@@ -1255,7 +1227,7 @@ exports[`bucket with onDelete method 2`] = `
                   "my_bucket-ondelete-eventHandler-9eade8f6": {
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.69",
                     },
                     "display": {
                       "hidden": true,
@@ -1266,7 +1238,7 @@ exports[`bucket with onDelete method 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -1278,7 +1250,7 @@ exports[`bucket with onDelete method 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",
@@ -1360,6 +1332,9 @@ exports[`bucket with onEvent method 1`] = `
     },
     "aws_lambda_function": {
       "my_bucket_my_bucket-oncreate-OnMessage-7b961f4d_8104FB90": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "my_bucket-oncreate-OnMessage-7b961f4d-c81311dd",
@@ -1379,6 +1354,9 @@ exports[`bucket with onEvent method 1`] = `
         },
       },
       "my_bucket_my_bucket-ondelete-OnMessage-1de1a361_37C9E1F7": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "my_bucket-ondelete-OnMessage-1de1a361-c89e08bf",
@@ -1398,6 +1376,9 @@ exports[`bucket with onEvent method 1`] = `
         },
       },
       "my_bucket_my_bucket-onupdate-OnMessage-46c07356_F3040BF9": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "my_bucket-onupdate-OnMessage-46c07356-c844b8ba",
@@ -1609,7 +1590,7 @@ exports[`bucket with onEvent method 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -1622,7 +1603,7 @@ exports[`bucket with onEvent method 2`] = `
               "inflight": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -1703,7 +1684,7 @@ exports[`bucket with onEvent method 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.69",
                     },
                     "display": {
                       "description": "A pub/sub notification topic",
@@ -1773,7 +1754,7 @@ exports[`bucket with onEvent method 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.69",
                     },
                     "display": {
                       "description": "A cloud function (FaaS)",
@@ -1785,7 +1766,7 @@ exports[`bucket with onEvent method 2`] = `
                   "my_bucket-oncreate-OnMessageHandler-7b961f4d": {
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.69",
                     },
                     "display": {
                       "hidden": true,
@@ -1796,7 +1777,7 @@ exports[`bucket with onEvent method 2`] = `
                   "my_bucket-oncreate-eventHandler-9eade8f6": {
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.69",
                     },
                     "display": {
                       "hidden": true,
@@ -1833,7 +1814,7 @@ exports[`bucket with onEvent method 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.69",
                     },
                     "display": {
                       "description": "A pub/sub notification topic",
@@ -1903,7 +1884,7 @@ exports[`bucket with onEvent method 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.69",
                     },
                     "display": {
                       "description": "A cloud function (FaaS)",
@@ -1915,7 +1896,7 @@ exports[`bucket with onEvent method 2`] = `
                   "my_bucket-ondelete-OnMessageHandler-1de1a361": {
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.69",
                     },
                     "display": {
                       "hidden": true,
@@ -1926,7 +1907,7 @@ exports[`bucket with onEvent method 2`] = `
                   "my_bucket-ondelete-eventHandler-9eade8f6": {
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.69",
                     },
                     "display": {
                       "hidden": true,
@@ -1963,7 +1944,7 @@ exports[`bucket with onEvent method 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.69",
                     },
                     "display": {
                       "description": "A pub/sub notification topic",
@@ -2033,7 +2014,7 @@ exports[`bucket with onEvent method 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.69",
                     },
                     "display": {
                       "description": "A cloud function (FaaS)",
@@ -2045,7 +2026,7 @@ exports[`bucket with onEvent method 2`] = `
                   "my_bucket-onupdate-OnMessageHandler-46c07356": {
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.69",
                     },
                     "display": {
                       "hidden": true,
@@ -2056,7 +2037,7 @@ exports[`bucket with onEvent method 2`] = `
                   "my_bucket-onupdate-eventHandler-9eade8f6": {
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.69",
                     },
                     "display": {
                       "hidden": true,
@@ -2067,7 +2048,7 @@ exports[`bucket with onEvent method 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -2079,7 +2060,7 @@ exports[`bucket with onEvent method 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",
@@ -2139,6 +2120,9 @@ exports[`bucket with onUpdate method 1`] = `
     },
     "aws_lambda_function": {
       "my_bucket_my_bucket-onupdate-OnMessage-46c07356_F3040BF9": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "my_bucket-onupdate-OnMessage-46c07356-c844b8ba",
@@ -2288,7 +2272,7 @@ exports[`bucket with onUpdate method 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -2301,7 +2285,7 @@ exports[`bucket with onUpdate method 2`] = `
               "inflight": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -2382,7 +2366,7 @@ exports[`bucket with onUpdate method 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.69",
                     },
                     "display": {
                       "description": "A pub/sub notification topic",
@@ -2452,7 +2436,7 @@ exports[`bucket with onUpdate method 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.69",
                     },
                     "display": {
                       "description": "A cloud function (FaaS)",
@@ -2464,7 +2448,7 @@ exports[`bucket with onUpdate method 2`] = `
                   "my_bucket-onupdate-OnMessageHandler-46c07356": {
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.69",
                     },
                     "display": {
                       "hidden": true,
@@ -2475,7 +2459,7 @@ exports[`bucket with onUpdate method 2`] = `
                   "my_bucket-onupdate-eventHandler-9eade8f6": {
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.69",
                     },
                     "display": {
                       "hidden": true,
@@ -2486,7 +2470,7 @@ exports[`bucket with onUpdate method 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -2498,7 +2482,7 @@ exports[`bucket with onUpdate method 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",
@@ -2620,7 +2604,7 @@ exports[`bucket with two preflight files 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -2683,7 +2667,7 @@ exports[`bucket with two preflight files 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -2695,7 +2679,7 @@ exports[`bucket with two preflight files 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",
@@ -2817,7 +2801,7 @@ exports[`bucket with two preflight objects 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -2880,7 +2864,7 @@ exports[`bucket with two preflight objects 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -2892,7 +2876,7 @@ exports[`bucket with two preflight objects 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",
@@ -2937,15 +2921,6 @@ exports[`create a bucket 1`] = `
       "my_bucket": {
         "bucket_prefix": "my-bucket-c8045fcc-",
         "force_destroy": false,
-      },
-    },
-    "aws_s3_bucket_public_access_block": {
-      "my_bucket_PublicAccessBlock_538547C0": {
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "\${aws_s3_bucket.my_bucket.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true,
       },
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
@@ -2993,7 +2968,7 @@ exports[`create a bucket 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -3021,18 +2996,10 @@ exports[`create a bucket 2`] = `
                     "id": "Encryption",
                     "path": "root/Default/my_bucket/Encryption",
                   },
-                  "PublicAccessBlock": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "PublicAccessBlock",
-                    "path": "root/Default/my_bucket/PublicAccessBlock",
-                  },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -3044,7 +3011,7 @@ exports[`create a bucket 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",

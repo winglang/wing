@@ -1,4 +1,4 @@
-import { Code, InflightClient } from "../core";
+import { InflightClient } from "../core";
 
 /**
  * Options for stringify() method.
@@ -15,7 +15,7 @@ export class Json {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
 
@@ -271,7 +271,7 @@ export class MutJson {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
 

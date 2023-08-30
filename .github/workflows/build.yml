@@ -22,16 +22,15 @@ env:
   RUST_VERSION: "1.67.1"
   NODE_VERSION: "18.16.0"
   PNPM_VERSION: "8.6.3"
+  CARGO_TERM_COLOR: always
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 
 jobs:
   build:
     name: "Build"
     timeout-minutes: 30
     runs-on: ubuntu-latest
-    env:
-      CARGO_TERM_COLOR: always
-      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
     outputs:
       version: ${{ fromJson(steps.changelog.outputs.data).newVersion }}
       last-version: ${{ fromJson(steps.changelog.outputs.data).lastVersion }}
@@ -66,6 +65,9 @@ jobs:
 
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
+        with:
+          # Don't save cache here, to avoid thrashing with test job
+          save-if: false
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
@@ -81,18 +83,6 @@ jobs:
         env:
           SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
 
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: dist
-          path: dist/*.tgz
-
-      - name: Upload WingC WASM
-        uses: actions/upload-artifact@v3
-        with:
-          name: wingc
-          path: libs/wingcompiler/wingc.wasm
-
       - name: Derive appropriate SHAs for base and head
         id: setSHAs
         uses: nrwl/nx-set-shas@v3
@@ -106,35 +96,19 @@ jobs:
             echo "diff=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Upload Extension
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: vscode-wing
-          path: apps/vscode-wing/vscode-wing.vsix
-
-      - name: Compress Docs
-        run: tar -czvf docs.tgz docs/*
-
-      - name: Upload Docs
-        uses: actions/upload-artifact@v3
-        with:
-          name: docs
-          path: docs.tgz
+          name: dist
+          path: dist/*
 
   test:
     name: Test
-    timeout-minutes: 30
+    timeout-minutes: 60
     runs-on: ubuntu-latest
-    env:
-      CARGO_TERM_COLOR: always
-      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 1
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2.2.4
@@ -227,7 +201,7 @@ jobs:
           path: tools/hangar/results/report.json
 
       - name: Create Markdown report
-        run: node scripts/benchmark_json_to_table.mjs
+        run: scripts/benchmark_json_to_table.mjs
 
   e2e-test:
     name: "E2E / ${{ matrix.runner }} + Node${{ matrix.node }} [${{ matrix.shard }}]"
@@ -254,8 +228,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 1
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2.2.4
@@ -306,6 +278,55 @@ jobs:
           name: ${{ steps.diff.outputs.diff_name }}
           path: ${{ steps.diff.outputs.diff_name }}
 
+  console-preview:
+    name: "Console Preview"
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    env:
+      FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      FLY_VERSION: "0.1.80"
+      APP_NAME: wing-console-pr-${{github.event.number}}
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && !startsWith(github.head_ref, 'mergify/merge-queue/') }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - name: Download Dist Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: dist
+
+      - name: Install flyctl
+        uses: superfly/flyctl-actions/setup-flyctl@1.4
+        with:
+          version: ${{env.FLY_VERSION}}
+
+      - name: Deploy to Fly.io
+        id: deploy-fly
+        run: |
+          if ! flyctl status --app "$APP_NAME"; then
+            pushd ./apps/wing-console/console/app/preview
+            flyctl launch --no-deploy --copy-config --name "$APP_NAME" --image-label latest
+            popd
+          fi
+          flyctl deploy . --config ./apps/wing-console/console/app/preview/fly.toml --app "$APP_NAME" --image-label latest --vm-memory 512 --strategy immediate
+          flyctl scale count 1 --yes --app "$APP_NAME"
+          echo "deploytime=$(TZ=UTC date +'%Y-%m-%d %H:%M')" >> $GITHUB_OUTPUT
+        
+      - name: Post preview comment
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            Console preview environment is available at https://${{env.APP_NAME}}.fly.dev :rocket:
+            
+            *Updated (UTC): ${{steps.deploy-fly.outputs.deploytime }}*
+          comment_tag: Console preview environment
+          GITHUB_TOKEN: ${{secrets.PROJEN_GITHUB_TOKEN}}
+
   quality-gate:
     name: Quality Gate
     runs-on: ubuntu-latest
@@ -349,24 +370,27 @@ jobs:
           repo-token: "${{ secrets.PROJEN_GITHUB_TOKEN }}"
           tag: "v${{ needs.build.outputs.version }}"
 
+      - name: Login to NPM registry
+        run: npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
+
+      - name: Publish npm packages
+        working-directory: dist
+        env:
+          PACKAGE_VERSION: ${{ needs.build.outputs.version }}
+        run: |
+          PACKAGES=("winglang-sdk" "winglang-compiler" "wingconsole-design-system" "wingconsole-ui" "wingconsole-server" "wingconsole-app" "winglang")
+          for PACKAGE in "${PACKAGES[@]}"; do
+            npm publish "$PACKAGE-$PACKAGE_VERSION.tgz" --access public
+          done
+
       - name: Publish Extension to Visual Studio Marketplace
         if: needs.build.outputs.vscode-wing-changed == 'true'
         uses: "HaaLeo/publish-vscode-extension@v1"
         with:
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
           registryUrl: "https://marketplace.visualstudio.com"
-          extensionFile: "vscode-wing/vscode-wing.vsix"
+          extensionFile: "dist/vscode-wing.vsix"
           dependencies: false
-
-      - name: Login to NPM registry
-        run: npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
-
-      - name: Publish npm packages
-        run: |
-          for file in *.tgz; do
-            npm publish "$file" --access public
-          done
-        working-directory: dist
 
       - name: Write Changelog
         uses: DamianReeves/write-file-action@v1.2
@@ -377,9 +401,6 @@ jobs:
 
       - name: Compute Checksums
         run: |
-          mv ./docs/*.tgz ./dist
-          mv ./*/*.vsix ./dist
-          mv ./*/*.wasm ./dist
           mv ./benchmarks/* ./dist
           cd dist
 

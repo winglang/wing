@@ -2,7 +2,8 @@ import { Construct } from "constructs";
 import { Resource } from "./resource";
 import { Test } from "./test";
 import { fqnForType } from "../constants";
-import { App } from "../core/app";
+import { App } from "../core";
+import { Node } from "../std";
 
 /**
  * Global identifier for `TestRunner`.
@@ -37,12 +38,20 @@ export abstract class TestRunner extends Resource {
   constructor(scope: Construct, id: string, props: TestRunnerProps = {}) {
     super(scope, id);
 
-    this.display.hidden = true;
-    this.display.title = "TestRunner";
-    this.display.description =
+    Node.of(this).hidden = true;
+    Node.of(this).title = "TestRunner";
+    Node.of(this).description =
       "A suite of APIs for running tests and collecting results.";
 
     props;
+  }
+
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [
+      TestRunnerInflightMethods.LIST_TESTS,
+      TestRunnerInflightMethods.RUN_TEST,
+    ];
   }
 
   /**
