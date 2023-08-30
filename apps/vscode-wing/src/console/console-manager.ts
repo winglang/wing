@@ -165,30 +165,29 @@ export const createConsoleManager = (
         const row = data?.row - 1 || 0;
         const column = data?.column || 0;
 
-        window.visibleTextEditors.forEach(async (editor) => {
-          if (editor.document.uri.fsPath === path) {
-            await commands.executeCommand(
-              "workbench.action.focusFirstEditorGroup"
-            );
-            const groupId = (editor.viewColumn || 1) - 1;
-
-            for (let i = 0; i < groupId; i++) {
-              await commands.executeCommand("workbench.action.focusNextGroup");
-            }
-            await window.showTextDocument(editor.document, {
-              selection: new Range(
-                new Position(row, column),
-                new Position(row, column)
-              ),
-            });
-            return;
-          }
+        const openEditor = window.visibleTextEditors.find((editor) => {
+          return editor.document.uri.fsPath === path;
         });
-        await commands.executeCommand(
-          "vscode.open",
-          Uri.file(path),
-          new Position(row, column)
-        );
+
+        if (!openEditor || !openEditor.viewColumn) {
+          await commands.executeCommand(
+            "vscode.open",
+            Uri.file(path),
+            new Position(row, column)
+          );
+          return;
+        }
+
+        await commands.executeCommand("workbench.action.focusFirstEditorGroup");
+        for (let i = 0; i < openEditor.viewColumn - 1; i++) {
+          await commands.executeCommand("workbench.action.focusNextGroup");
+        }
+        await window.showTextDocument(openEditor.document, {
+          selection: new Range(
+            new Position(row, column),
+            new Position(row, column)
+          ),
+        });
       },
       onError: (err) => {
         logger.appendLine(err);
