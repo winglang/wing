@@ -314,12 +314,16 @@ jobs:
   quality-gate:
     name: Quality Gate
     runs-on: ubuntu-latest
+    if: ${{ !cancelled() }}
     needs:
       - build
       - e2e-test
       - benchmark
       - test
     steps:
+      - name: Check failure
+        if: failure()
+        run: exit 1
       - name: Download patches
         uses: actions/download-artifact@v3
       - name: Check patches
