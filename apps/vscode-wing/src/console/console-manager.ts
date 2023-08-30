@@ -7,6 +7,8 @@ import {
   ViewColumn,
   Uri,
   ExtensionContext,
+  Position,
+  Range,
 } from "vscode";
 
 import {
@@ -160,18 +162,38 @@ export const createConsoleManager = (
     instance.client.onOpenFileInEditor({
       onData: async (data) => {
         const path = data?.path;
-        const row = data?.row || 0;
+        const row = data?.row - 1 || 0;
         const column = data?.column || 0;
 
-        logger.appendLine(`Opening link: ${path}`);
+        const editors = window.visibleTextEditors.length;
 
-        const openEditor = window.visibleTextEditors.find(
-          (editor) => path === editor.document.uri.fsPath
-        );
+        for (let groupId = 0; groupId < editors; groupId++) {
+          const editorsInGroup = window.visibleTextEditors.filter(
+            (editor) =>
+              editor.viewColumn === groupId + 1 &&
+              editor.document.uri.fsPath === path
+          );
 
+          if (editorsInGroup[0]) {
+            await commands.executeCommand(
+              "workbench.action.focusFirstEditorGroup"
+            );
+            for (let i = 0; i < groupId; i++) {
+              await commands.executeCommand("workbench.action.focusNextGroup");
+            }
+            await window.showTextDocument(editorsInGroup[0].document, {
+              selection: new Range(
+                new Position(row, column),
+                new Position(row, column)
+              ),
+            });
+            return;
+          }
+        }
         await commands.executeCommand(
           "vscode.open",
-          Uri.parse(`file/${path}:${row}:${column}`)
+          Uri.file(path),
+          new Position(row, column)
         );
       },
       onError: (err) => {
