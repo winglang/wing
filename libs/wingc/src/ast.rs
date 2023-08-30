@@ -702,6 +702,8 @@ pub enum BinaryOperator {
 	LogicalAnd,
 	LogicalOr,
 	UnwrapOr,
+	SubtractAssignment,
+	AddAssignment,
 }
 
 #[derive(Debug)]

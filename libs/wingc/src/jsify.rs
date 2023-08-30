@@ -593,7 +593,9 @@ impl<'a> JSifier<'a> {
 						// Use JS nullish coalescing operator which treats undefined and null the same
 						// this is inline with how wing jsifies optionals
 						"??"
-					}
+					},
+					BinaryOperator::AddAssignment => "+=",
+					BinaryOperator::SubtractAssignment => "-=",
 				};
 				format!("({} {} {})", js_left, js_op, js_right)
 			}

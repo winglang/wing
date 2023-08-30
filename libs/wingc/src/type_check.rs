@@ -1826,6 +1826,16 @@ impl<'a> TypeChecker<'a> {
 							(inner_type, ltype_phase)
 						}
 					}
+					BinaryOperator::SubtractAssignment => {
+						self.validate_type(ltype, self.types.number(), left);
+						self.validate_type(rtype, self.types.number(), right);
+						(self.types.number(), Phase::Independent)
+					}
+					BinaryOperator::AddAssignment => {
+						self.validate_type(ltype, self.types.number(), left);
+						self.validate_type(rtype, self.types.number(), right);
+						(self.types.number(), Phase::Independent)
+					}
 				}
 			}
 			ExprKind::Unary { op, exp: unary_exp } => {

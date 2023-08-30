@@ -8,13 +8,15 @@ const PREC = {
   RELATIONAL: 70,
   UNWRAP_OR: 80,
   SHIFT: 90,
-  ADD: 100,
-  MULTIPLY: 110,
-  UNARY: 120,
-  OPTIONAL_TEST: 130,
-  POWER: 140,
-  MEMBER: 150,
-  CALL: 160,
+  ADD_ASSIGNMENT: 100,
+  SUBTRACT_ASSIGNMENT: 110,
+  ADD: 120,
+  MULTIPLY: 130,
+  UNARY: 140,
+  OPTIONAL_TEST: 150,
+  POWER: 160,
+  MEMBER: 170,
+  CALL: 180,
 };
 
 module.exports = grammar({
@@ -607,6 +609,8 @@ module.exports = grammar({
         //['>>', PREC.SHIFT],
         //['>>>', PREC.SHIFT],
         ["??", PREC.UNWRAP_OR],
+        ["+=", PREC.ADD_ASSIGNMENT],
+        ["-=", PREC.SUBTRACT_ASSIGNMENT],
       ];
 
       return choice(

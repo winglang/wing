@@ -2035,15 +2035,17 @@ Ternary or conditional operators are not supported.
 
 #### 6.4.3 Mathematics Operators
 
-| Operator | Description    | Example  |
-| -------- | -------------- | -------- |
-| `*`      | Multiplication | `a * b`  |
-| `/`      | Division       | `a / b`  |
-| `\`      | Floor Division | `a \ b`  |
-| `%`      | Modulus        | `a % b`  |
-| `+`      | Addition       | `a + b`  |
-| `-`      | Subtraction    | `a - b`  |
-| `**`     | Power          | `a ** b` |
+| Operator | Description            | Example  |
+| -------- | ---------------------- | -------- |
+| `*`      | Multiplication         | `a * b`  |
+| `/`      | Division               | `a / b`  |
+| `\`      | Floor Division         | `a \ b`  |
+| `%`      | Modulus                | `a % b`  |
+| `+`      | Addition               | `a + b`  |
+| `-`      | Subtraction            | `a - b`  |
+| `**`     | Power                  | `a ** b` |
+| `-=`     | Subtraction Assignment | `a -= b` |
+| `+=`     | Addition Assignment    | `a += b` |
 
 [`▲ top`][top]
 

@@ -16,3 +16,6 @@ let xyznfj = 501.9 \ (-99.1 - 0.91);
 assert(xyznfj == -5);
 let xynfj = -501.9 \ (-99.1 - 0.91);
 assert(xynfj == 5);
+let xyas = 5;
+xyas += 10;
+assert(xyas == 15);
