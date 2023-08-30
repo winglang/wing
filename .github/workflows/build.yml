@@ -36,6 +36,7 @@ jobs:
       last-version: ${{ fromJson(steps.changelog.outputs.data).lastVersion }}
       changelog: ${{ fromJson(steps.changelog.outputs.data).changelog }}
       vscode-wing-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['vscode-wing#compile'].changes }}
+      console-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['@wingconsole/app#preview:fly'].changes }}
       e2e-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['hangar#test'].changes }}
       bench-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['hangar#bench'].changes }}
     steps:
@@ -272,12 +273,10 @@ jobs:
       FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       FLY_VERSION: "0.1.80"
       APP_NAME: wing-console-pr-${{github.event.number}}
-    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && !startsWith(github.head_ref, 'mergify/merge-queue/') }}
+    if: ${{ needs.build.outputs.console-changed == 'true' && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && !startsWith(github.head_ref, 'mergify/merge-queue/') }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 1
 
       - name: Download Dist Artifacts
         uses: actions/download-artifact@v3
@@ -288,7 +287,7 @@ jobs:
       - name: Install flyctl
         uses: superfly/flyctl-actions/setup-flyctl@1.4
         with:
-          version: ${{env.FLY_VERSION}}
+          version: ${{ env.FLY_VERSION }}
 
       - name: Deploy to Fly.io
         id: deploy-fly
