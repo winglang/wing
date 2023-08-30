@@ -580,14 +580,16 @@ export const createAppRouter = () => {
           column: input.column,
         });
       }),
-    "app.openFileInEditorSub": createProcedure.subscription(({ ctx }) => {
-      return observable<EditorLink>((emit) => {
-        ctx.emitter.on("openFileInEditor", emit.next);
-        return () => {
-          ctx.emitter.off("openFileInEditor", emit.next);
-        };
-      });
-    }),
+    "app.openFileInEditorSubscription": createProcedure.subscription(
+      ({ ctx }) => {
+        return observable<EditorLink>((emit) => {
+          ctx.emitter.on("openFileInEditor", emit.next);
+          return () => {
+            ctx.emitter.off("openFileInEditor", emit.next);
+          };
+        });
+      },
+    ),
   });
 
   return { router };
