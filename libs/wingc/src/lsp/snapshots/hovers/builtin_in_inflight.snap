@@ -3,12 +3,12 @@ source: libs/wingc/src/lsp/hover.rs
 ---
 contents:
   kind: markdown
-  value: "```wing\nthrow: (message: str): void\n```\n---\nthrows an error\n\n### Parameters\n- `message` — The message to throw"
+  value: "```wing\nassert: (condition: bool): void\n```\n---\nAsserts that a condition is true\n\n### Parameters\n- `condition` — The condition to assert"
 range:
   start:
     line: 3
     character: 4
   end:
     line: 3
-    character: 9
+    character: 10
 

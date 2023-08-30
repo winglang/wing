@@ -1,3 +1,3 @@
 assert(false);
 log("W");
-throw("me");
+throw "me";

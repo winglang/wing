@@ -1,8 +1,6 @@
-use std::{
-	fmt::Display,
-	path::{Path, PathBuf},
-};
+use std::fmt::Display;
 
+use camino::{Utf8Path, Utf8PathBuf};
 use indexmap::IndexMap;
 use petgraph::visit::EdgeRef;
 
@@ -11,8 +9,8 @@ use petgraph::visit::EdgeRef;
 /// TODO: support removing files from the graph
 #[derive(Default)]
 pub struct FileGraph {
-	graph: petgraph::stable_graph::StableDiGraph<PathBuf, ()>,
-	path_to_node_index: IndexMap<PathBuf, petgraph::graph::NodeIndex>,
+	graph: petgraph::stable_graph::StableDiGraph<Utf8PathBuf, ()>,
+	path_to_node_index: IndexMap<Utf8PathBuf, petgraph::graph::NodeIndex>,
 }
 
 impl FileGraph {
@@ -21,7 +19,7 @@ impl FileGraph {
 	/// For example, if the current graph has file A depending on B, and
 	/// `update_file(pathA, &[pathC])` was called, then this function will remove the edge
 	/// from A to B, and add an edge from A to C.
-	pub fn update_file(&mut self, from_path: &Path, to_paths: &[PathBuf]) {
+	pub fn update_file(&mut self, from_path: &Utf8Path, to_paths: &[Utf8PathBuf]) {
 		let from_node_index = self.get_or_insert_node_index(from_path);
 
 		// remove all current outcoming edges from this node
@@ -42,13 +40,13 @@ impl FileGraph {
 	}
 
 	/// Returns true if the given file is in the graph
-	pub fn contains_file(&mut self, path: &Path) -> bool {
+	pub fn contains_file(&mut self, path: &Utf8Path) -> bool {
 		self.path_to_node_index.contains_key(path)
 	}
 
 	/// Returns a list of files in the order they should be compiled
 	/// Or a list of files that are part of a cycle, if one exists
-	pub fn toposort(&self) -> Result<Vec<PathBuf>, Vec<PathBuf>> {
+	pub fn toposort(&self) -> Result<Vec<Utf8PathBuf>, Vec<Utf8PathBuf>> {
 		match petgraph::algo::toposort(&self.graph, None) {
 			Ok(indices) => Ok(
 				indices
@@ -73,7 +71,7 @@ impl FileGraph {
 		}
 	}
 
-	fn get_or_insert_node_index(&mut self, path: &Path) -> petgraph::graph::NodeIndex {
+	fn get_or_insert_node_index(&mut self, path: &Utf8Path) -> petgraph::graph::NodeIndex {
 		if let Some(node_index) = self.path_to_node_index.get(path) {
 			return *node_index;
 		}
@@ -88,10 +86,10 @@ impl Display for FileGraph {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		for node_index in self.graph.node_indices() {
 			let node = &self.graph[node_index];
-			write!(f, "{{{} -> [", node.display())?;
+			write!(f, "{{{} -> [", node)?;
 			for edge in self.graph.edges(node_index) {
 				let target = &self.graph[edge.target()];
-				write!(f, "{} ", target.display())?;
+				write!(f, "{} ", target)?;
 			}
 			writeln!(f, "]}}")?;
 		}
@@ -107,139 +105,110 @@ mod tests {
 	fn toposort_simple() {
 		// graph with two nodes, A and B, where A depends on B
 		let mut graph = FileGraph::default();
-		graph.update_file(Path::new("a"), &[PathBuf::from("b")]);
-		graph.update_file(Path::new("b"), &[]);
-		assert_eq!(graph.toposort().unwrap(), vec![PathBuf::from("b"), PathBuf::from("a")]);
+		graph.update_file("a".into(), &["b".into()]);
+		graph.update_file("b".into(), &[]);
+		assert_eq!(graph.toposort().unwrap(), make_paths(&["b", "a"]));
 	}
 
 	#[test]
 	fn toposort_complex() {
 		// graph with 5 nodes, A, B, C, D, and E, where A depends on B and C, B depends on C and D, C depends on D, and D depends on E
 		let mut graph = FileGraph::default();
-		graph.update_file(Path::new("a"), &[PathBuf::from("b"), PathBuf::from("c")]);
-		graph.update_file(Path::new("b"), &[PathBuf::from("c"), PathBuf::from("d")]);
-		graph.update_file(Path::new("c"), &[PathBuf::from("d")]);
-		graph.update_file(Path::new("d"), &[PathBuf::from("e")]);
-		graph.update_file(Path::new("e"), &[]);
-		assert_eq!(
-			graph.toposort().unwrap(),
-			vec![
-				PathBuf::from("e"),
-				PathBuf::from("d"),
-				PathBuf::from("c"),
-				PathBuf::from("b"),
-				PathBuf::from("a")
-			]
-		);
+		graph.update_file("a".into(), &["b".into(), "c".into()]);
+		graph.update_file("b".into(), &["c".into(), "d".into()]);
+		graph.update_file("c".into(), &["d".into()]);
+		graph.update_file("d".into(), &["e".into()]);
+		graph.update_file("e".into(), &[]);
+		assert_eq!(graph.toposort().unwrap(), make_paths(&["e", "d", "c", "b", "a"]));
 
 		// create the same graph in a different order as a sanity check
 		let mut graph = FileGraph::default();
-		graph.update_file(Path::new("e"), &[]);
-		graph.update_file(Path::new("d"), &[PathBuf::from("e")]);
-		graph.update_file(Path::new("c"), &[PathBuf::from("d")]);
-		graph.update_file(Path::new("b"), &[PathBuf::from("c"), PathBuf::from("d")]);
-		graph.update_file(Path::new("a"), &[PathBuf::from("b"), PathBuf::from("c")]);
-		assert_eq!(
-			graph.toposort().unwrap(),
-			vec![
-				PathBuf::from("e"),
-				PathBuf::from("d"),
-				PathBuf::from("c"),
-				PathBuf::from("b"),
-				PathBuf::from("a")
-			]
-		);
+		graph.update_file("e".into(), &[]);
+		graph.update_file("d".into(), &["e".into()]);
+		graph.update_file("c".into(), &["d".into()]);
+		graph.update_file("b".into(), &["c".into(), "d".into()]);
+		graph.update_file("a".into(), &["b".into(), "c".into()]);
+		assert_eq!(graph.toposort().unwrap(), make_paths(&["e", "d", "c", "b", "a"]));
 	}
 
 	#[test]
 	fn toposort_cycle() {
 		// graph with 3 nodes, A, B, and C, where A depends on B, B depends on C, and C depends on A
 		let mut graph = FileGraph::default();
-		graph.update_file(Path::new("a"), &[PathBuf::from("b")]);
-		graph.update_file(Path::new("b"), &[PathBuf::from("c")]);
-		graph.update_file(Path::new("c"), &[PathBuf::from("a")]);
+		graph.update_file("a".into(), &["b".into()]);
+		graph.update_file("b".into(), &["c".into()]);
+		graph.update_file("c".into(), &["a".into()]);
 
 		let mut err = graph.toposort().unwrap_err();
 		err.sort();
-		assert_eq!(err, vec![PathBuf::from("a"), PathBuf::from("b"), PathBuf::from("c")]);
+		assert_eq!(err, make_paths(&["a", "b", "c"]));
 	}
 
 	#[test]
 	fn toposort_two_cycles_with_shared_node() {
 		// graph where A is part of two cycles, {A,B,C} and {A,X,Y}
 		let mut graph = FileGraph::default();
-		graph.update_file(Path::new("a"), &[PathBuf::from("b"), PathBuf::from("x")]);
-		graph.update_file(Path::new("b"), &[PathBuf::from("c")]);
-		graph.update_file(Path::new("c"), &[PathBuf::from("a")]);
-		graph.update_file(Path::new("x"), &[PathBuf::from("y")]);
-		graph.update_file(Path::new("y"), &[PathBuf::from("a")]);
+		graph.update_file("a".into(), &["b".into(), "x".into()]);
+		graph.update_file("b".into(), &["c".into()]);
+		graph.update_file("c".into(), &["a".into()]);
+		graph.update_file("x".into(), &["y".into()]);
+		graph.update_file("y".into(), &["a".into()]);
 
 		let mut err = graph.toposort().unwrap_err();
 		err.sort();
-		assert_eq!(
-			err,
-			vec![
-				PathBuf::from("a"),
-				PathBuf::from("b"),
-				PathBuf::from("c"),
-				PathBuf::from("x"),
-				PathBuf::from("y")
-			]
-		);
+		assert_eq!(err, make_paths(&["a", "b", "c", "x", "y"]));
 	}
 
 	#[test]
 	fn toposort_two_distinct_cycles() {
 		// graph with six nodes, where {A,B,C} form a cycle and {D,E,F} form a cycle
 		let mut graph = FileGraph::default();
-		graph.update_file(Path::new("a"), &[PathBuf::from("b")]);
-		graph.update_file(Path::new("b"), &[PathBuf::from("c")]);
-		graph.update_file(Path::new("c"), &[PathBuf::from("a")]);
-		graph.update_file(Path::new("d"), &[PathBuf::from("e")]);
-		graph.update_file(Path::new("e"), &[PathBuf::from("f")]);
-		graph.update_file(Path::new("f"), &[PathBuf::from("d")]);
+		graph.update_file("a".into(), &["b".into()]);
+		graph.update_file("b".into(), &["c".into()]);
+		graph.update_file("c".into(), &["a".into()]);
+		graph.update_file("d".into(), &["e".into()]);
+		graph.update_file("e".into(), &["f".into()]);
+		graph.update_file("f".into(), &["d".into()]);
 
 		let mut err = graph.toposort().unwrap_err();
 		err.sort();
 
 		// note: if we returned the cycle {D,E,F} that would also be valid
-		assert_eq!(err, vec![PathBuf::from("a"), PathBuf::from("b"), PathBuf::from("c"),]);
+		assert_eq!(err, make_paths(&["a", "b", "c"]));
 	}
 
 	#[test]
 	fn toposort_cycle_and_unrelated_component() {
 		// graph with 5 nodes, where A depends on B, and {C,D,E} form a cycle
 		let mut graph = FileGraph::default();
-		graph.update_file(Path::new("a"), &[PathBuf::from("b")]);
-		graph.update_file(Path::new("b"), &[]);
-		graph.update_file(Path::new("c"), &[PathBuf::from("d")]);
-		graph.update_file(Path::new("d"), &[PathBuf::from("e")]);
-		graph.update_file(Path::new("e"), &[PathBuf::from("c")]);
+		graph.update_file("a".into(), &["b".into()]);
+		graph.update_file("b".into(), &[]);
+		graph.update_file("c".into(), &["d".into()]);
+		graph.update_file("d".into(), &["e".into()]);
+		graph.update_file("e".into(), &["c".into()]);
 
 		// we don't care about where the cycle starts, so we sort the list
 		let mut err = graph.toposort().unwrap_err();
 		err.sort();
-		assert_eq!(err, vec![PathBuf::from("c"), PathBuf::from("d"), PathBuf::from("e")]);
+		assert_eq!(err, make_paths(&["c", "d", "e"]));
 	}
 
 	#[test]
 	fn toposort_update_edges() {
 		// graph with 3 nodes, A, B, and C, where A depends on B and C, and B depends on C
 		let mut graph = FileGraph::default();
-		graph.update_file(Path::new("a"), &[PathBuf::from("b"), PathBuf::from("c")]);
-		graph.update_file(Path::new("b"), &[PathBuf::from("c")]);
-		graph.update_file(Path::new("c"), &[]);
-		assert_eq!(
-			graph.toposort().unwrap(),
-			vec![PathBuf::from("c"), PathBuf::from("b"), PathBuf::from("a")]
-		);
+		graph.update_file("a".into(), &["b".into(), "c".into()]);
+		graph.update_file("b".into(), &["c".into()]);
+		graph.update_file("c".into(), &[]);
+		assert_eq!(graph.toposort().unwrap(), ["c", "b", "a"]);
 
 		// update the edges so that A depends on C and B depends on A
-		graph.update_file(Path::new("a"), &[PathBuf::from("c")]);
-		graph.update_file(Path::new("b"), &[PathBuf::from("a")]);
-		assert_eq!(
-			graph.toposort().unwrap(),
-			vec![PathBuf::from("c"), PathBuf::from("a"), PathBuf::from("b")]
-		);
+		graph.update_file("a".into(), &["c".into()]);
+		graph.update_file("b".into(), &["a".into()]);
+		assert_eq!(graph.toposort().unwrap(), make_paths(&["c", "a", "b"]));
+	}
+
+	fn make_paths(paths: &[&str]) -> Vec<Utf8PathBuf> {
+		paths.iter().map(|p| p.into()).collect::<Vec<Utf8PathBuf>>()
 	}
 }
