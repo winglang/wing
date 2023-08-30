@@ -1,17 +1,12 @@
 pub mod codemaker;
 mod tests;
 use aho_corasick::AhoCorasick;
+use camino::{Utf8Path, Utf8PathBuf};
 use const_format::formatcp;
 use indexmap::{IndexMap, IndexSet};
 use itertools::Itertools;
 
-use std::{
-	borrow::Borrow,
-	cell::RefCell,
-	cmp::Ordering,
-	path::{Path, PathBuf},
-	vec,
-};
+use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, vec};
 
 use crate::{
 	ast::{
@@ -68,12 +63,12 @@ pub struct JSifier<'a> {
 
 	/// Map from source file paths to the JS file names they are emitted to.
 	/// e.g. "bucket.w" -> "preflight.bucket-1.js"
-	preflight_file_map: RefCell<IndexMap<PathBuf, String>>,
+	preflight_file_map: RefCell<IndexMap<Utf8PathBuf, String>>,
 	source_files: &'a Files,
 	/// Root of the project, used for resolving extern modules
-	absolute_project_root: &'a Path,
+	absolute_project_root: &'a Utf8Path,
 	/// The entrypoint file of the Wing application.
-	entrypoint_file_path: &'a Path,
+	entrypoint_file_path: &'a Utf8Path,
 }
 
 /// Preflight classes have two types of host binding methods:
@@ -88,8 +83,8 @@ impl<'a> JSifier<'a> {
 	pub fn new(
 		types: &'a mut Types,
 		source_files: &'a Files,
-		entrypoint_file_path: &'a Path,
-		absolute_project_root: &'a Path,
+		entrypoint_file_path: &'a Utf8Path,
+		absolute_project_root: &'a Utf8Path,
 	) -> Self {
 		let output_files = Files::default();
 		Self {
@@ -105,7 +100,7 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	pub fn jsify(&mut self, source_path: &Path, scope: &Scope) {
+	pub fn jsify(&mut self, source_path: &Utf8Path, scope: &Scope) {
 		CompilationContext::set(CompilationPhase::Jsifying, &scope.span);
 		let mut js = CodeMaker::default();
 		let mut imports = CodeMaker::default();
@@ -170,7 +165,7 @@ impl<'a> JSifier<'a> {
 
 			output.add_code(root_class);
 			output.line("const $App = $stdlib.core.App.for(process.env.WING_TARGET);".to_string());
-			let app_name = self.entrypoint_file_path.file_stem().unwrap().to_string_lossy();
+			let app_name = self.entrypoint_file_path.file_stem().unwrap();
 			output.line(format!(
 				"new $App({{ outdir: {}, name: \"{}\", rootConstruct: {}, plugins: {}, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }}).synth();",
 				OUTDIR_VAR, app_name, ROOT_CLASS, PLUGINS_VAR, ENV_WING_IS_TEST
@@ -193,7 +188,6 @@ impl<'a> JSifier<'a> {
 			let sanitized_name = source_path
 				.file_stem()
 				.unwrap()
-				.to_string_lossy()
 				.chars()
 				.filter(|c| c.is_alphanumeric())
 				.collect::<String>();
@@ -869,7 +863,7 @@ impl<'a> JSifier<'a> {
 				)),
 				BringSource::WingFile(name) => {
 					let preflight_file_map = self.preflight_file_map.borrow();
-					let preflight_file_name = preflight_file_map.get(Path::new(&name.name)).unwrap();
+					let preflight_file_name = preflight_file_map.get(Utf8Path::new(&name.name)).unwrap();
 					CodeMaker::one_line(format!(
 						"const {} = require(\"./{}\")({{ {} }});",
 						// checked during type checking
@@ -1165,15 +1159,11 @@ impl<'a> JSifier<'a> {
 			FunctionBody::External(external_spec) => {
 				debug!(
 					"Resolving extern \"{}\" from \"{}\"",
-					external_spec,
-					self.absolute_project_root.display()
+					external_spec, self.absolute_project_root
 				);
 				let resolved_path =
-					match wingii::node_resolve::resolve_from(&external_spec, Path::new(&self.absolute_project_root)) {
-						Ok(resolved_path) => resolved_path
-							.to_str()
-							.expect("Converting extern path to string")
-							.replace("\\", "/"),
+					match wingii::node_resolve::resolve_from(&external_spec, Utf8Path::new(&self.absolute_project_root)) {
+						Ok(resolved_path) => resolved_path.to_string().replace("\\", "/"),
 						Err(err) => {
 							report_diagnostic(Diagnostic {
 								message: format!("Failed to resolve extern \"{external_spec}\": {err}"),
