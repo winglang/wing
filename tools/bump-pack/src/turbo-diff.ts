@@ -89,6 +89,7 @@ const turboArgs = [
   "test",
   "package",
   "bench",
+  "preview:fly",
   "--dry-run=json",
 ];
 
