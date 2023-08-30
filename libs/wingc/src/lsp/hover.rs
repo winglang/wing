@@ -15,7 +15,7 @@ use crate::wasm_util::WASM_RETURN_ERROR;
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr};
 use lsp_types::{Hover, HoverContents, MarkupContent, MarkupKind, Position};
 
-use super::sync::WING_TYPES;
+use super::sync::{check_utf8, WING_TYPES};
 
 pub struct HoverVisitor<'a> {
 	position: Position,
@@ -435,8 +435,7 @@ pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
 		PROJECT_DATA.with(|project_data| {
 			let project_data = project_data.borrow();
 			let uri = params.text_document_position_params.text_document.uri.clone();
-			let file = uri.to_file_path().ok().expect("LSP only works on real filesystems");
-
+			let file = check_utf8(uri.to_file_path().expect("LSP only works on real filesystems"));
 			let root_scope = &project_data.asts.get(&file).unwrap();
 
 			let mut hover_visitor = HoverVisitor::new(params.text_document_position_params.position, &root_scope, &types);
