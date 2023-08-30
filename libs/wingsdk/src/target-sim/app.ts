@@ -143,6 +143,9 @@ export class App extends core.App {
     // write tree.json file into workdir
     core.synthesizeTree(this, this.outdir);
 
+    // write `outdir/connections.json`
+    core.Connections.of(this).synth(this.outdir);
+
     this.synthed = true;
 
     return this.outdir;

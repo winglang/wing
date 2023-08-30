@@ -6,9 +6,9 @@
 use std::{
 	error::Error,
 	fs::{self},
-	path::{Path, PathBuf},
 };
 
+use camino::{Utf8Path, Utf8PathBuf};
 use serde_json::Value;
 
 static ROOT: &str = "/";
@@ -52,17 +52,17 @@ static NODE_BUILTINS: [&str; 33] = [
 
 /// Resolve a node.js module path relative to `basedir`.
 /// Returns the path to the module, or an error.
-pub fn resolve_from(target: &str, basedir: &Path) -> Result<PathBuf, Box<dyn Error>> {
+pub fn resolve_from(target: &str, basedir: &Utf8Path) -> Result<Utf8PathBuf, Box<dyn Error>> {
 	// 1. If X is a core module
 	if is_core_module(target) {
 		// 1.a. Return the core module
-		return Ok(PathBuf::from(target));
+		return Ok(Utf8PathBuf::from(target));
 	}
 
 	// 2. If X begins with '/'
-	let basedir: &Path = if target.starts_with('/') {
+	let basedir: &Utf8Path = if target.starts_with('/') {
 		// 2.a. Set Y to be the filesystem root
-		Path::new(ROOT)
+		Utf8Path::new(ROOT)
 	} else {
 		basedir
 	};
@@ -78,7 +78,7 @@ pub fn resolve_from(target: &str, basedir: &Path) -> Result<PathBuf, Box<dyn Err
 
 /// Resolve a path as a file. If `path` refers to a file, it is returned;
 /// otherwise the `path` + each extension is tried.
-fn resolve_as_file(path: &Path) -> Result<PathBuf, Box<dyn Error>> {
+fn resolve_as_file(path: &Utf8Path) -> Result<Utf8PathBuf, Box<dyn Error>> {
 	// 1. If X is a file, load X as JavaScript text.
 	if path.is_file() {
 		return Ok(path.to_path_buf());
@@ -88,7 +88,7 @@ fn resolve_as_file(path: &Path) -> Result<PathBuf, Box<dyn Error>> {
 	// 2. If X.json is a file, parse X.json to a JavaScript object.
 	// 3. If X.node is a file, load X.node as binary addon.
 	let mut ext_path = path.to_path_buf();
-	if let Some(file_name) = ext_path.file_name().and_then(|name| name.to_str()).map(String::from) {
+	if let Some(file_name) = ext_path.file_name().map(String::from) {
 		for ext in NODE_EXTENSIONS {
 			ext_path.set_file_name(format!("{}{}", file_name, ext));
 			if ext_path.is_file() {
@@ -101,7 +101,7 @@ fn resolve_as_file(path: &Path) -> Result<PathBuf, Box<dyn Error>> {
 }
 
 /// Resolve by walking up node_modules folders.
-fn resolve_node_modules(target: &str, basedir: &Path) -> Result<PathBuf, Box<dyn Error>> {
+fn resolve_node_modules(target: &str, basedir: &Utf8Path) -> Result<Utf8PathBuf, Box<dyn Error>> {
 	let node_modules = basedir.join("node_modules");
 	if node_modules.is_dir() {
 		let path = node_modules.join(target);
@@ -119,7 +119,7 @@ fn resolve_node_modules(target: &str, basedir: &Path) -> Result<PathBuf, Box<dyn
 
 /// Resolve a path as a directory, using the "main" key from a package.json file if it
 /// exists, or resolving to the index.EXT file if it exists.
-fn resolve_as_directory(path: &Path) -> Result<PathBuf, Box<dyn Error>> {
+fn resolve_as_directory(path: &Utf8Path) -> Result<Utf8PathBuf, Box<dyn Error>> {
 	if !path.is_dir() {
 		return Err(String::from("Not Found").into());
 	}
@@ -138,8 +138,8 @@ fn resolve_as_directory(path: &Path) -> Result<PathBuf, Box<dyn Error>> {
 }
 
 /// Resolve using the package.json "main" key.
-fn resolve_package_main(pkg_path: &Path) -> Result<PathBuf, Box<dyn Error>> {
-	let pkg_dir = pkg_path.parent().unwrap_or_else(|| Path::new(ROOT));
+fn resolve_package_main(pkg_path: &Utf8Path) -> Result<Utf8PathBuf, Box<dyn Error>> {
+	let pkg_dir = pkg_path.parent().unwrap_or_else(|| Utf8Path::new(ROOT));
 	let pkg: Value = serde_json::from_slice(&fs::read(pkg_path)?)?;
 	if !pkg.is_object() {
 		return Err(String::from("package.json is not an object").into());
@@ -159,7 +159,7 @@ fn resolve_package_main(pkg_path: &Path) -> Result<PathBuf, Box<dyn Error>> {
 }
 
 /// Resolve a directory to its index.EXT.
-fn resolve_index(path: &Path) -> Result<PathBuf, Box<dyn Error>> {
+fn resolve_index(path: &Utf8Path) -> Result<Utf8PathBuf, Box<dyn Error>> {
 	// 1. If X/index.js is a file, load X/index.js as JavaScript text.
 	// 2. If X/index.json is a file, parse X/index.json to a JavaScript object.
 	// 3. If X/index.node is a file, load X/index.node as binary addon.

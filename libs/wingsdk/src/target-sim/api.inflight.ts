@@ -155,6 +155,7 @@ export class Api
   public async cleanup(): Promise<void> {
     this.addTrace(`Closing server on ${this.url}`);
     this.server?.close();
+    this.server?.closeAllConnections();
   }
 
   private addTrace(message: string): void {
@@ -179,7 +180,7 @@ function isApiResponse(response: unknown): response is ApiResponse {
 function transformRequest(req: express.Request): ApiRequest {
   return {
     headers: sanitizeParamLikeObject(req.headers),
-    body: req.body,
+    body: Object.keys(req.body).length > 0 ? req.body : "",
     method: parseHttpMethod(req.method),
     path: req.path,
     query: sanitizeParamLikeObject(req.query as any),

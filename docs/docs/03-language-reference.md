@@ -259,16 +259,27 @@ let jsonObj = Json {
 
 ##### 1.1.4.4 Assignment to native types
 
-We only allow implicit assignment from *safe* to *unsafe* types because otherwise we cannot
-guarantee safety (e.g. from `str` to `Json` but not from `Json` to `str`), so this won't work:
+If the `Json` object is statically known to structurally match a certain type, it is possible 
+to assign it to a variable of that type with no runtime cost:
 
 ```TS
 let j = Json "hello";
 let s: str = j;
+
+struct J2 { a: num; }
+let j2: J2 = { a: 2 }
+```
+
+This can only be done when the `Json` literal is present in the program. Otherwise, we cannot
+guarantee safety.
+
+```TS
+let response = http.get("/employees");
+let s: str = response;
 //           ^ cannot assign `Json` to `str`.
 ```
 
-To assign a `Json` to a strong-type variable, use the `fromJson()` static method on the target
+To dynamically assign a `Json` to a strong-type variable, use the `fromJson()` static method on the target
 type:
 
 ```TS
@@ -285,6 +296,12 @@ order to ensure type safety (at a runtime cost):
 str.fromJson(jsonNumber);      // RUNTIME ERROR: unable to parse number `123` as a string.
 num.fromJson(Json "\"hello\""); // RUNTIME ERROR: unable to parse string "hello" as a number
 ```
+
+For each `fromJson()`, there is a `tryFromJson()` method which returns an optional `T?` which
+indicates if parsing was successful or not:
+```js
+let s = str.tryFromJson(myJson) ?? "invalid string";
+``````
 
 ##### 1.1.4.6 Mutability
 
@@ -335,7 +352,31 @@ Json.delete(immutObj, "hello");
 //          ^^^^^^^^^ expected `JsonMut`
 ```
 
-##### 1.1.4.7 Serialization
+##### 1.1.4.7 Assignment to user-defined structs
+All [structs](#31-structs) also have a `fromJson()` method that can be used to parse `Json` into a
+struct:
+```js
+struct Contact {
+  first: str;
+  last: str;
+  phone: str?;
+}
+
+let j = Json { first: "Wing", last: "Lyly" };
+let myContact = Contact.fromJson(j);
+assert(myContact.first == "Wing");
+```
+When a `Json` is parsed into a struct, the schema will be validated to ensure the result is
+type-safe:
+```js
+let p = Json { first: "Wing", phone: 1234 };
+Contact.fromJson(p);
+// RUNTIME ERROR: unable to parse Contact:
+// - field "last" is required and missing
+// - field "phone" is expected to be a string, got number.
+```
+
+##### 1.1.4.8 Serialization
 
 The `Json.stringify(j: Json): str` static method can be used to serialize a `Json` as a string
 ([JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)):
@@ -360,7 +401,7 @@ let boom = num.fromJson(j.get("boom"));
 let o = Json.tryParse("xxx") ?? Json [1,2,3];
 ```
 
-##### 1.1.4.8 Logging
+##### 1.1.4.9 Logging
 
 A `Json` value can be logged using `log()`, in which case it will be pretty-formatted:
 
@@ -378,13 +419,12 @@ my object is: {
 }
 ```
 
-#### 1.1.4.9 Roadmap
+#### 1.1.4.10 Roadmap
 
 The following features are not yet implemented, but we are planning to add them in the future:
 
 * Array/Set/Map.fromJson() - see https://github.com/winglang/wing/issues/1796 to track.
 * Json.entries() - see https://github.com/winglang/wing/issues/3142 to track.
-* Schema validation and assignment to struct - see https://github.com/winglang/wing/issues/3139 to track.
 * Equality, diff and patch - see https://github.com/winglang/wing/issues/3140 to track.
 
 [`▲ top`][top]
@@ -476,18 +516,10 @@ log("UTC: ${t1.utc.toIso())}");            // output: 2023-02-09T06:21:03.000Z
 | Name     | Extra information                                        |
 | -------- | -------------------------------------------------------- |
 | `log`    | logs str                                                 |
-| `throw`  | creates and throws an instance of an exception           |
-| `panic`  | exits with a serializable, dumps the trace + a core dump |
-| `assert` | checks a condition and _panics_ if evaluated to false    |
-
-`panic` is a fatal call by design. If the intention is error handling, panic is the
-last resort. Exceptions are non fatal and should be used instead for effectively
-communicating errors to the user.
+| `assert` | checks a condition and _throws_ if evaluated to false    |
 
 > ```TS
 > log("Hello ${name}");
-> throw("a recoverable error occurred");
-> panic("a fatal error encountered");
 > assert(x > 0);
 > ```
 
@@ -834,8 +866,8 @@ if myPerson.address == nil {
 
 #### 1.6.3 Unwrapping using `if let`
 
-The `if let` statement can be used to test if an optional is defined and *unwrap* it into a
-non-optional variable defined inside the block:
+The `if let` statement (or `if let var` for a reassignable variable) can be used to test if an 
+optional is defined and *unwrap* it into a non-optional variable defined inside the block:
 
 ```TS
 if let address = myPerson.address {
@@ -929,12 +961,7 @@ translate to JavaScript. You can create a new exception with a `throw` call.
 In the presence of `try`, both `catch` and `finally` are optional but at least one of them must be present.
 In the presence of `catch` the variable holding the exception (`e` in the example below) is optional.
 
-`panic` is meant to be fatal error handling.  
 `throw` is meant to be recoverable error handling.
-
-An uncaught exception is considered user error but a panic call is not. Compiler
-guarantees exception safety by throwing a compile error if an exception is
-expected from a call and it is not being caught.
 
 > ```TS
 > try {
@@ -1144,7 +1171,7 @@ The loop invariant in for loops is implicitly re-assignable (`var`).
 
 ### 2.7 while
 
-**while** statement is used to execute a block of code while a condition is true.  
+The **while** statement evaluates a condition, and if it is true, a set of statements is repeated until the condition is false.
 
 > ```TS
 > // Wing program:
@@ -1156,6 +1183,20 @@ The loop invariant in for loops is implicitly re-assignable (`var`).
 [`▲ top`][top]
 
 ---
+
+### 2.8 throw
+
+The **throw** statement raises a user-defined exception, which must be a string expression.
+Execution of the current function will stop (the statements after throw won't be executed), and control will be passed to the first catch block in the call stack.
+If no catch block exists among caller functions, the program will terminate.
+(An uncaught exception in preflight causes a compilation error, while an uncaught exception in inflight causes a runtime error.)
+
+> ```TS
+> // Wing program:
+> throw "Username must be at least 3 characters long.";
+> ```
+
+[`▲ top`][top]
 
 ## 3. Declarations
 

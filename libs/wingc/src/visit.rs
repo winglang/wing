@@ -134,12 +134,19 @@ where
 		StmtKind::IfLet {
 			value,
 			statements,
+			reassignable: _,
 			var_name,
+			elif_statements,
 			else_statements,
 		} => {
 			v.visit_symbol(var_name);
 			v.visit_expr(value);
 			v.visit_scope(statements);
+			for elif in elif_statements {
+				v.visit_symbol(&elif.var_name);
+				v.visit_expr(&elif.value);
+				v.visit_scope(&elif.statements);
+			}
 			if let Some(statements) = else_statements {
 				v.visit_scope(statements);
 			}
@@ -171,6 +178,9 @@ where
 			if let Some(expr) = expr {
 				v.visit_expr(expr);
 			}
+		}
+		StmtKind::Throw(expr) => {
+			v.visit_expr(expr);
 		}
 		StmtKind::Scope(scope) => {
 			v.visit_scope(scope);
@@ -241,7 +251,7 @@ where
 	}
 
 	if let Some(extend) = &node.parent {
-		v.visit_expr(&extend);
+		v.visit_user_defined_type(extend);
 	}
 
 	for implement in &node.implements {
@@ -269,7 +279,7 @@ pub fn visit_new_expr<'ast, V>(v: &mut V, node: &'ast NewExpr)
 where
 	V: Visit<'ast> + ?Sized,
 {
-	v.visit_expr(&node.class);
+	v.visit_user_defined_type(&node.class);
 	v.visit_args(&node.arg_list);
 	if let Some(id) = &node.obj_id {
 		v.visit_expr(&id);
@@ -334,7 +344,8 @@ where
 			}
 		}
 		ExprKind::JsonMapLiteral { fields } => {
-			for val in fields.values() {
+			for (name, val) in fields.iter() {
+				v.visit_symbol(name);
 				v.visit_expr(val);
 			}
 		}
@@ -342,7 +353,8 @@ where
 			if let Some(type_) = type_ {
 				v.visit_type_annotation(type_);
 			}
-			for val in fields.values() {
+			for (name, val) in fields.iter() {
+				v.visit_symbol(name);
 				v.visit_expr(val);
 			}
 		}
@@ -399,11 +411,8 @@ where
 			v.visit_expr(object);
 			v.visit_symbol(property);
 		}
-		Reference::TypeReference(type_) => {
-			v.visit_user_defined_type(type_);
-		}
-		Reference::TypeMember { typeobject, property } => {
-			v.visit_expr(typeobject);
+		Reference::TypeMember { type_name, property } => {
+			v.visit_user_defined_type(type_name);
 			v.visit_symbol(property);
 		}
 	}
@@ -478,12 +487,7 @@ where
 			}
 			v.visit_type_annotation(&f.return_type);
 		}
-		TypeAnnotationKind::UserDefined(t) => {
-			v.visit_symbol(&t.root);
-			for field in &t.fields {
-				v.visit_symbol(field);
-			}
-		}
+		TypeAnnotationKind::UserDefined(t) => v.visit_user_defined_type(t),
 	}
 }
 

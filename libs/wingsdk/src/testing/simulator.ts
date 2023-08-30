@@ -2,9 +2,9 @@ import { existsSync } from "fs";
 import { join } from "path";
 import { Tree } from "./tree";
 import { SDK_VERSION } from "../constants";
-import { ConstructTree } from "../core";
+import { ConstructTree, TREE_FILE_PATH } from "../core";
 import { readJsonSync } from "../shared/misc";
-import { Trace, TraceType } from "../std";
+import { CONNECTIONS_FILE_PATH, Trace, TraceType } from "../std";
 // eslint-disable-next-line import/no-restricted-paths
 import { DefaultSimulatorFactory } from "../target-sim/factory.inflight";
 import { isToken } from "../target-sim/tokens";
@@ -126,12 +126,14 @@ export class Simulator {
   private _traces: Array<Trace>;
   private readonly _traceSubscribers: Array<ITraceSubscriber>;
   private _tree: Tree;
+  private _connections: ConnectionData[];
 
   constructor(props: SimulatorProps) {
     this.simdir = props.simfile;
-    const { config, treeData } = this._loadApp(props.simfile);
+    const { config, treeData, connectionData } = this._loadApp(props.simfile);
     this._config = config;
     this._tree = new Tree(treeData);
+    this._connections = connectionData;
 
     this._running = false;
     this._factory = props.factory ?? new DefaultSimulatorFactory();
@@ -143,6 +145,7 @@ export class Simulator {
   private _loadApp(simdir: string): {
     config: any;
     treeData: ConstructTree;
+    connectionData: ConnectionData[];
   } {
     const simJson = join(this.simdir, "simulator.json");
     if (!existsSync(simJson)) {
@@ -166,13 +169,23 @@ export class Simulator {
       );
     }
 
-    const treeJson = join(this.simdir, "tree.json");
+    const treeJson = join(this.simdir, TREE_FILE_PATH);
     if (!existsSync(treeJson)) {
-      throw new Error(`Invalid Wing app (${simdir}) - tree.json not found.`);
+      throw new Error(
+        `Invalid Wing app (${simdir}) - ${TREE_FILE_PATH} not found.`
+      );
     }
     const treeData = readJsonSync(treeJson);
 
-    return { config, treeData };
+    const connectionJson = join(this.simdir, CONNECTIONS_FILE_PATH);
+    if (!existsSync(connectionJson)) {
+      throw new Error(
+        `Invalid Wing app (${simdir}) - ${CONNECTIONS_FILE_PATH} not found.`
+      );
+    }
+    const connectionData = readJsonSync(connectionJson).connections;
+
+    return { config, treeData, connectionData };
   }
 
   /**
@@ -235,8 +248,12 @@ export class Simulator {
           `Resource ${resourceConfig.path} could not be cleaned up, no handle for it was found.`
         );
       }
-      const resource = this._handles.deallocate(resourceConfig.attrs!.handle);
-      await resource.cleanup();
+      try {
+        const resource = this._handles.deallocate(resourceConfig.attrs!.handle);
+        await resource.cleanup();
+      } catch (err) {
+        console.warn(err);
+      }
 
       let event: Trace = {
         type: TraceType.RESOURCE,
@@ -259,9 +276,10 @@ export class Simulator {
   public async reload(): Promise<void> {
     await this.stop();
 
-    const { config, treeData } = this._loadApp(this.simdir);
+    const { config, treeData, connectionData } = this._loadApp(this.simdir);
     this._config = config;
     this._tree = new Tree(treeData);
+    this._connections = connectionData;
 
     await this.start();
   }
@@ -339,10 +357,17 @@ export class Simulator {
   }
 
   /**
-   * Obtain information about the application's resource tree.
+   * Obtain information about the application's construct tree.
    */
   public tree(): Tree {
     return this._tree;
+  }
+
+  /**
+   * Obtain information about the application's connections.
+   */
+  public connections(): ConnectionData[] {
+    return structuredClone(this._connections);
   }
 
   private async tryStartResource(
@@ -617,4 +642,14 @@ export interface BaseResourceSchema {
 export interface BaseResourceAttributes {
   /** The resource's simulator-unique id. */
   readonly handle: string;
+}
+
+/** Schema for `.connections` in connections.json */
+export interface ConnectionData {
+  /** The path of the source construct. */
+  readonly source: string;
+  /** The path of the target construct. */
+  readonly target: string;
+  /** A name for the connection. */
+  readonly name: string;
 }

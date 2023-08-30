@@ -2,7 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
-module.exports = function({ $NIL, $q }) {
+module.exports = function({ $q }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -10,16 +10,13 @@ module.exports = function({ $NIL, $q }) {
       return $obj;
     }
     async handle() {
-      const msgs = ["Foo", "Bar"];
-      for (const msg of msgs) {
-        (await $q.push(msg));
-      }
-      const first = ((await $q.pop()) ?? $NIL);
-      const second = ((await $q.pop()) ?? $NIL);
-      const third = ((await $q.pop()) ?? $NIL);
-      {((cond) => {if (!cond) throw new Error("assertion failed: msgs.contains(first)")})(msgs.includes(first))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: msgs.contains(second)")})(msgs.includes(second))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: third == NIL")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(third,$NIL)))};
+      (await $q.push("Foo","Bar"));
+      const first = (await $q.pop());
+      const second = (await $q.pop());
+      const third = (await $q.pop());
+      {((cond) => {if (!cond) throw new Error("assertion failed: first == \"Foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(first,"Foo")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: second == \"Bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(second,"Bar")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: third == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(third,undefined)))};
     }
   }
   return $Closure1;
@@ -100,6 +97,9 @@ module.exports = function({ $NIL, $q }) {
             "uniqueId": "testpop_Handler_595175BF"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "QUEUE_URL_31e95cbd": "${aws_sqs_queue.cloudQueue.url}",
@@ -163,6 +163,7 @@ module.exports = function({ $NIL, $q }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -173,37 +174,36 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure1-1.js")({
-            $NIL: ${context._lift(NIL)},
             $q: ${context._lift(q)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(NIL, host, []);
           $Closure1._registerBindObject(q, host, ["pop", "push"]);
         }
         super._registerBind(host, ops);
       }
     }
-    const NIL = "<<NIL>>";
     const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:pop",new $Closure1(this,"$Closure1"));
   }

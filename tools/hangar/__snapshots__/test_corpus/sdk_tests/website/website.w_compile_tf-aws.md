@@ -10,13 +10,9 @@ module.exports = function({ $config, $http_Util, $indexFile, $otherFile, $std_Js
       return $obj;
     }
     async handle() {
-      let url = $w_url;
-      if ((!url.startsWith("http"))) {
-        url = ("http://" + url);
-      }
-      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(url).body == indexFile")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get(url)).body,$indexFile)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(url + \"/inner-folder/other.html\").body == otherFile")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get((url + "/inner-folder/other.html"))).body,$otherFile)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(url + \"/config.json\").body == Json.stringify(config)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get((url + "/config.json"))).body,((args) => { return JSON.stringify(args[0], null, args[1]) })([$config]))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(w.url).body == indexFile")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get($w_url)).body,$indexFile)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(w.url + \"/inner-folder/other.html\").body == otherFile")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get(($w_url + "/inner-folder/other.html"))).body,$otherFile)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(w.url + \"/config.json\").body == Json.stringify(config)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get(($w_url + "/config.json"))).body,((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$config]))))};
     }
   }
   return $Closure1;
@@ -213,11 +209,14 @@ module.exports = function({  }) {
             "uniqueId": "testaccessfilesonthewebsite_Handler_B4D12109"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c867c4e0",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_16": "${jsonencode(aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name)}"
+            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_15": "${jsonencode(\"https://${aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name}\")}"
           }
         },
         "function_name": "Handler-c867c4e0",
@@ -265,21 +264,6 @@ module.exports = function({  }) {
         },
         "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.id}",
         "policy": "${data.aws_iam_policy_document.cloudWebsite_AllowDistributionReadOnly_89DC4FD0.json}"
-      }
-    },
-    "aws_s3_bucket_public_access_block": {
-      "cloudWebsite_PublicAccessBlock_18A70311": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Website/PublicAccessBlock",
-            "uniqueId": "cloudWebsite_PublicAccessBlock_18A70311"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
@@ -381,6 +365,7 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -392,37 +377,38 @@ class $Root extends $stdlib.std.Resource {
     class Util extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
       }
       static readFile(path) {
         return (require("<ABSOLUTE_PATH>/fs.js")["readFile"])(path)
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.Util-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const UtilClient = ${Util._toInflightType(this).text};
+            const UtilClient = ${Util._toInflightType(this)};
             const client = new UtilClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["$inflight_init"];
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure1-1.js")({
             $config: ${context._lift(config)},
             $http_Util: ${context._lift(http.Util)},
@@ -431,25 +417,28 @@ class $Root extends $stdlib.std.Resource {
             $std_Json: ${context._lift(std.Json)},
             $w_url: ${context._lift(w.url)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(config, host, []);
           $Closure1._registerBindObject(indexFile, host, []);
           $Closure1._registerBindObject(otherFile, host, []);
-          $Closure1._registerBindObject(w.url, host, []);
+          $Closure1._registerBindObject(w.url, host, ["body"]);
         }
         super._registerBind(host, ops);
       }

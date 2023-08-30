@@ -1,7 +1,7 @@
 import { createHash } from "crypto";
 import { join } from "path";
 
-import { Lazy } from "cdktf/lib/tokens";
+import { Fn, Lazy } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
@@ -12,14 +12,13 @@ import { ApiGatewayStage } from "../.gen/providers/aws/api-gateway-stage";
 import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
-import { Code } from "../core/inflight";
 import { convertBetweenHandlers } from "../shared/convert";
 import {
   CaseConventions,
   NameOptions,
   ResourceNames,
 } from "../shared/resource-names";
-import { IInflightHost, Resource } from "../std";
+import { IInflightHost, Node } from "../std";
 
 /**
  * The stage name for the API, used in its url.
@@ -47,7 +46,7 @@ export class Api extends cloud.Api {
   }
 
   public get url(): string {
-    return this.api.stage.invokeUrl;
+    return this.api.url;
   }
 
   /**
@@ -70,10 +69,10 @@ export class Api extends cloud.Api {
     const apiSpecEndpoint = this.api.addEndpoint(path, "GET", fn);
     this._addToSpec(path, "GET", apiSpecEndpoint);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "get()",
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: "get()",
     });
   }
 
@@ -97,10 +96,10 @@ export class Api extends cloud.Api {
     const apiSpecEndpoint = this.api.addEndpoint(path, "POST", fn);
     this._addToSpec(path, "POST", apiSpecEndpoint);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "post()",
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: "post()",
     });
   }
 
@@ -124,10 +123,10 @@ export class Api extends cloud.Api {
     const apiSpecEndpoint = this.api.addEndpoint(path, "PUT", fn);
     this._addToSpec(path, "PUT", apiSpecEndpoint);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "put()",
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: "put()",
     });
   }
 
@@ -151,10 +150,10 @@ export class Api extends cloud.Api {
     const apiSpecEndpoint = this.api.addEndpoint(path, "DELETE", fn);
     this._addToSpec(path, "DELETE", apiSpecEndpoint);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "delete()",
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: "delete()",
     });
   }
 
@@ -178,10 +177,10 @@ export class Api extends cloud.Api {
     const apiSpecEndpoint = this.api.addEndpoint(path, "PATCH", fn);
     this._addToSpec(path, "PATCH", apiSpecEndpoint);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "patch()",
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: "patch()",
     });
   }
 
@@ -205,10 +204,10 @@ export class Api extends cloud.Api {
     const apiSpecEndpoint = this.api.addEndpoint(path, "OPTIONS", fn);
     this._addToSpec(path, "OPTIONS", apiSpecEndpoint);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "options()",
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: "options()",
     });
   }
 
@@ -232,10 +231,10 @@ export class Api extends cloud.Api {
     const apiSpecEndpoint = this.api.addEndpoint(path, "HEAD", fn);
     this._addToSpec(path, "HEAD", apiSpecEndpoint);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "head()",
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: "head()",
     });
   }
 
@@ -259,10 +258,10 @@ export class Api extends cloud.Api {
     const apiSpecEndpoint = this.api.addEndpoint(path, "CONNECT", fn);
     this._addToSpec(path, "CONNECT", apiSpecEndpoint);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "connect()",
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: "connect()",
     });
   }
 
@@ -345,7 +344,7 @@ export class Api extends cloud.Api {
   }
 
   /** @internal */
-  public _toInflight(): Code {
+  public _toInflight(): string {
     return core.InflightClient.for(
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
@@ -364,9 +363,54 @@ export class Api extends cloud.Api {
 }
 
 /**
+ * DEFAULT_404_RESPONSE is a constant that defines the default response when a 404 error occurs.
+ * It is used to handle all requests that do not match any defined routes in the API Gateway.
+ * The response is a mock integration type, which means it returns a mocked response without
+ * forwarding the request to any backend. The response status code is set to 404 and the
+ * Content-Type header is set to 'application/json'.
+ */
+const DEFAULT_404_RESPONSE = {
+  "/{proxy+}": {
+    "x-amazon-apigateway-any-method": {
+      produces: ["application/json"],
+      consumes: ["application/json"],
+      "x-amazon-apigateway-integration": {
+        type: "mock",
+        requestTemplates: {
+          "application/json": '{"statusCode": 404}',
+        },
+        responses: {
+          default: {
+            statusCode: "404",
+            responseParameters: {
+              "method.response.header.Content-Type": "'application/json'",
+            },
+            responseTemplates: {
+              "application/json":
+                '{"statusCode: 404, "message": "Error: Resource not found"}',
+            },
+          },
+        },
+      },
+      responses: {
+        404: {
+          description: "404 response",
+          headers: {
+            "Content-Type": {
+              type: "string",
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
+/**
  * Encapsulates the API Gateway REST API as a abstraction for Terraform.
  */
 class WingRestApi extends Construct {
+  public readonly url: string;
   public readonly api: ApiGatewayRestApi;
   public readonly stage: ApiGatewayStage;
   private readonly deployment: ApiGatewayDeployment;
@@ -381,12 +425,20 @@ class WingRestApi extends Construct {
     super(scope, id);
 
     this.region = (App.of(this) as App).region;
+
     this.api = new ApiGatewayRestApi(this, "api", {
       name: ResourceNames.generateName(this, NAME_OPTS),
       // Lazy generation of the api spec because routes can be added after the API is created
       body: Lazy.stringValue({
         produce: () => {
-          return JSON.stringify(props.apiSpec);
+          const injectGreedy404Handler = (openApiSpec: OpenApiSpec) => {
+            openApiSpec.paths = {
+              ...openApiSpec.paths,
+              ...DEFAULT_404_RESPONSE,
+            };
+            return openApiSpec;
+          };
+          return JSON.stringify(injectGreedy404Handler(props.apiSpec));
         },
       }),
     });
@@ -398,14 +450,7 @@ class WingRestApi extends Construct {
       },
       triggers: {
         // Trigger redeployment when the api spec changes
-        redeployment: Lazy.stringValue({
-          produce: () => {
-            const value = createHash("sha1")
-              .update(JSON.stringify(props.apiSpec))
-              .digest("hex");
-            return value;
-          },
-        }),
+        redeployment: Fn.sha256(this.api.body),
       },
     });
 
@@ -414,6 +459,9 @@ class WingRestApi extends Construct {
       stageName: STAGE_NAME,
       deploymentId: this.deployment.id,
     });
+
+    //should be exported from here, otherwise won't be mapped to the right token
+    this.url = this.stage.invokeUrl;
   }
 
   /**

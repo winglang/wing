@@ -1,4 +1,4 @@
-Copyright (c) 2022-present Monada, Inc.
+Copyright (c) 2022-present Wing Cloud, Inc.
 
 Portions of this software are licensed as follows:
 

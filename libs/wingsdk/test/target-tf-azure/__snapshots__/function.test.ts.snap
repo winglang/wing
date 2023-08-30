@@ -1,80 +1,80 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`basic function 1`] = `
-"{
-  \\"resource\\": {
-    \\"azurerm_linux_function_app\\": {
-      \\"Function_042596DC\\": {
-        \\"app_settings\\": {
-          \\"FUNCTIONS_WORKER_RUNTIME\\": \\"node\\",
-          \\"WEBSITE_RUN_FROM_PACKAGE\\": \\"https://\${azurerm_storage_account.StorageAccount.name}.blob.core.windows.net/\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}/\${azurerm_storage_blob.Function_CodeBlob_8A9705C9.name}\\"
+{
+  "resource": {
+    "azurerm_linux_function_app": {
+      "Function_042596DC": {
+        "app_settings": {
+          "FUNCTIONS_WORKER_RUNTIME": "node",
+          "WEBSITE_RUN_FROM_PACKAGE": "https://\${azurerm_storage_account.StorageAccount.name}.blob.core.windows.net/\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}/\${azurerm_storage_blob.Function_CodeBlob_8A9705C9.name}",
         },
-        \\"https_only\\": true,
-        \\"identity\\": {
-          \\"type\\": \\"SystemAssigned\\"
+        "https_only": true,
+        "identity": {
+          "type": "SystemAssigned",
         },
-        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
-        \\"name\\": \\"function-c852aba6\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\",
-        \\"service_plan_id\\": \\"\${azurerm_service_plan.ServicePlan.id}\\",
-        \\"site_config\\": {
-          \\"application_stack\\": {
-            \\"node_version\\": \\"16\\"
-          }
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "function-c852aba6",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "service_plan_id": "\${azurerm_service_plan.ServicePlan.id}",
+        "site_config": {
+          "application_stack": {
+            "node_version": "16",
+          },
         },
-        \\"storage_account_access_key\\": \\"\${azurerm_storage_account.StorageAccount.primary_access_key}\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\"
-      }
+        "storage_account_access_key": "\${azurerm_storage_account.StorageAccount.primary_access_key}",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
     },
-    \\"azurerm_resource_group\\": {
-      \\"ResourceGroup\\": {
-        \\"location\\": \\"East US\\",
-        \\"name\\": \\"Default-c82bf964\\"
-      }
+    "azurerm_resource_group": {
+      "ResourceGroup": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+      },
     },
-    \\"azurerm_role_assignment\\": {
-      \\"Function_ReadLambdaCodeAssignment_75049D5E\\": {
-        \\"principal_id\\": \\"\${azurerm_linux_function_app.Function_042596DC.identity[0].principal_id}\\",
-        \\"role_definition_name\\": \\"Storage Blob Data Reader\\",
-        \\"scope\\": \\"\${azurerm_storage_account.StorageAccount.id}\\"
-      }
+    "azurerm_role_assignment": {
+      "Function_ReadLambdaCodeAssignment_75049D5E": {
+        "principal_id": "\${azurerm_linux_function_app.Function_042596DC.identity[0].principal_id}",
+        "role_definition_name": "Storage Blob Data Reader",
+        "scope": "\${azurerm_storage_account.StorageAccount.id}",
+      },
     },
-    \\"azurerm_service_plan\\": {
-      \\"ServicePlan\\": {
-        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
-        \\"name\\": \\"Default-c82bf964\\",
-        \\"os_type\\": \\"Linux\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\",
-        \\"sku_name\\": \\"Y1\\"
-      }
+    "azurerm_service_plan": {
+      "ServicePlan": {
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "Default-c82bf964",
+        "os_type": "Linux",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "sku_name": "Y1",
+      },
     },
-    \\"azurerm_storage_account\\": {
-      \\"StorageAccount\\": {
-        \\"account_replication_type\\": \\"LRS\\",
-        \\"account_tier\\": \\"Standard\\",
-        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
-        \\"name\\": \\"defaultc82bf964\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\"
-      }
+    "azurerm_storage_account": {
+      "StorageAccount": {
+        "account_replication_type": "LRS",
+        "account_tier": "Standard",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "defaultc82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
     },
-    \\"azurerm_storage_blob\\": {
-      \\"Function_CodeBlob_8A9705C9\\": {
-        \\"name\\": \\"function-c852aba6.zip\\",
-        \\"source\\": \\"<source>\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\",
-        \\"storage_container_name\\": \\"\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}\\",
-        \\"type\\": \\"Block\\"
-      }
+    "azurerm_storage_blob": {
+      "Function_CodeBlob_8A9705C9": {
+        "name": "function-c852aba6.zip",
+        "source": "<source>",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+        "storage_container_name": "\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}",
+        "type": "Block",
+      },
     },
-    \\"azurerm_storage_container\\": {
-      \\"Function_FunctionBucket_0F705EF9\\": {
-        \\"container_access_type\\": \\"private\\",
-        \\"name\\": \\"functionbucket-c8ccf7e8\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\"
-      }
-    }
-  }
-}"
+    "azurerm_storage_container": {
+      "Function_FunctionBucket_0F705EF9": {
+        "container_access_type": "private",
+        "name": "functionbucket-c8ccf7e8",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+  },
+}
 `;
 
 exports[`basic function 2`] = `
@@ -86,9 +86,6 @@ exports[`basic function 2`] = `
           "Default": {
             "children": {
               "Function": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -115,9 +112,6 @@ exports[`basic function 2`] = `
                     "path": "root/Default/Function/Function",
                   },
                   "FunctionBucket": {
-                    "attributes": {
-                      "wing:resource:connections": [],
-                    },
                     "children": {
                       "Bucket": {
                         "constructInfo": {
@@ -130,7 +124,7 @@ exports[`basic function 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.69",
                     },
                     "display": {
                       "description": "A cloud object store",
@@ -150,7 +144,7 @@ exports[`basic function 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -160,12 +154,9 @@ exports[`basic function 2`] = `
                 "path": "root/Default/Function",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -210,7 +201,7 @@ exports[`basic function 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",
@@ -244,82 +235,82 @@ exports[`basic function 2`] = `
 `;
 
 exports[`basic function with environment variables 1`] = `
-"{
-  \\"resource\\": {
-    \\"azurerm_linux_function_app\\": {
-      \\"Function_042596DC\\": {
-        \\"app_settings\\": {
-          \\"BOOM\\": \\"BAM\\",
-          \\"FOO\\": \\"BAR\\",
-          \\"FUNCTIONS_WORKER_RUNTIME\\": \\"node\\",
-          \\"WEBSITE_RUN_FROM_PACKAGE\\": \\"https://\${azurerm_storage_account.StorageAccount.name}.blob.core.windows.net/\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}/\${azurerm_storage_blob.Function_CodeBlob_8A9705C9.name}\\"
+{
+  "resource": {
+    "azurerm_linux_function_app": {
+      "Function_042596DC": {
+        "app_settings": {
+          "BOOM": "BAM",
+          "FOO": "BAR",
+          "FUNCTIONS_WORKER_RUNTIME": "node",
+          "WEBSITE_RUN_FROM_PACKAGE": "https://\${azurerm_storage_account.StorageAccount.name}.blob.core.windows.net/\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}/\${azurerm_storage_blob.Function_CodeBlob_8A9705C9.name}",
         },
-        \\"https_only\\": true,
-        \\"identity\\": {
-          \\"type\\": \\"SystemAssigned\\"
+        "https_only": true,
+        "identity": {
+          "type": "SystemAssigned",
         },
-        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
-        \\"name\\": \\"function-c852aba6\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\",
-        \\"service_plan_id\\": \\"\${azurerm_service_plan.ServicePlan.id}\\",
-        \\"site_config\\": {
-          \\"application_stack\\": {
-            \\"node_version\\": \\"16\\"
-          }
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "function-c852aba6",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "service_plan_id": "\${azurerm_service_plan.ServicePlan.id}",
+        "site_config": {
+          "application_stack": {
+            "node_version": "16",
+          },
         },
-        \\"storage_account_access_key\\": \\"\${azurerm_storage_account.StorageAccount.primary_access_key}\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\"
-      }
+        "storage_account_access_key": "\${azurerm_storage_account.StorageAccount.primary_access_key}",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
     },
-    \\"azurerm_resource_group\\": {
-      \\"ResourceGroup\\": {
-        \\"location\\": \\"East US\\",
-        \\"name\\": \\"Default-c82bf964\\"
-      }
+    "azurerm_resource_group": {
+      "ResourceGroup": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+      },
     },
-    \\"azurerm_role_assignment\\": {
-      \\"Function_ReadLambdaCodeAssignment_75049D5E\\": {
-        \\"principal_id\\": \\"\${azurerm_linux_function_app.Function_042596DC.identity[0].principal_id}\\",
-        \\"role_definition_name\\": \\"Storage Blob Data Reader\\",
-        \\"scope\\": \\"\${azurerm_storage_account.StorageAccount.id}\\"
-      }
+    "azurerm_role_assignment": {
+      "Function_ReadLambdaCodeAssignment_75049D5E": {
+        "principal_id": "\${azurerm_linux_function_app.Function_042596DC.identity[0].principal_id}",
+        "role_definition_name": "Storage Blob Data Reader",
+        "scope": "\${azurerm_storage_account.StorageAccount.id}",
+      },
     },
-    \\"azurerm_service_plan\\": {
-      \\"ServicePlan\\": {
-        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
-        \\"name\\": \\"Default-c82bf964\\",
-        \\"os_type\\": \\"Linux\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\",
-        \\"sku_name\\": \\"Y1\\"
-      }
+    "azurerm_service_plan": {
+      "ServicePlan": {
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "Default-c82bf964",
+        "os_type": "Linux",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "sku_name": "Y1",
+      },
     },
-    \\"azurerm_storage_account\\": {
-      \\"StorageAccount\\": {
-        \\"account_replication_type\\": \\"LRS\\",
-        \\"account_tier\\": \\"Standard\\",
-        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
-        \\"name\\": \\"defaultc82bf964\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\"
-      }
+    "azurerm_storage_account": {
+      "StorageAccount": {
+        "account_replication_type": "LRS",
+        "account_tier": "Standard",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "defaultc82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
     },
-    \\"azurerm_storage_blob\\": {
-      \\"Function_CodeBlob_8A9705C9\\": {
-        \\"name\\": \\"function-c852aba6.zip\\",
-        \\"source\\": \\"<source>\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\",
-        \\"storage_container_name\\": \\"\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}\\",
-        \\"type\\": \\"Block\\"
-      }
+    "azurerm_storage_blob": {
+      "Function_CodeBlob_8A9705C9": {
+        "name": "function-c852aba6.zip",
+        "source": "<source>",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+        "storage_container_name": "\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}",
+        "type": "Block",
+      },
     },
-    \\"azurerm_storage_container\\": {
-      \\"Function_FunctionBucket_0F705EF9\\": {
-        \\"container_access_type\\": \\"private\\",
-        \\"name\\": \\"functionbucket-c8ccf7e8\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\"
-      }
-    }
-  }
-}"
+    "azurerm_storage_container": {
+      "Function_FunctionBucket_0F705EF9": {
+        "container_access_type": "private",
+        "name": "functionbucket-c8ccf7e8",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+  },
+}
 `;
 
 exports[`basic function with environment variables 2`] = `
@@ -331,9 +322,6 @@ exports[`basic function with environment variables 2`] = `
           "Default": {
             "children": {
               "Function": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -360,9 +348,6 @@ exports[`basic function with environment variables 2`] = `
                     "path": "root/Default/Function/Function",
                   },
                   "FunctionBucket": {
-                    "attributes": {
-                      "wing:resource:connections": [],
-                    },
                     "children": {
                       "Bucket": {
                         "constructInfo": {
@@ -375,7 +360,7 @@ exports[`basic function with environment variables 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.69",
                     },
                     "display": {
                       "description": "A cloud object store",
@@ -395,7 +380,7 @@ exports[`basic function with environment variables 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -405,12 +390,9 @@ exports[`basic function with environment variables 2`] = `
                 "path": "root/Default/Function",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -455,7 +437,7 @@ exports[`basic function with environment variables 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",
@@ -489,80 +471,80 @@ exports[`basic function with environment variables 2`] = `
 `;
 
 exports[`replace invalid character from function name 1`] = `
-"{
-  \\"resource\\": {
-    \\"azurerm_linux_function_app\\": {
-      \\"someFunction01_Function_83CF4008\\": {
-        \\"app_settings\\": {
-          \\"FUNCTIONS_WORKER_RUNTIME\\": \\"node\\",
-          \\"WEBSITE_RUN_FROM_PACKAGE\\": \\"https://\${azurerm_storage_account.StorageAccount.name}.blob.core.windows.net/\${azurerm_storage_container.someFunction01_FunctionBucket_BDC04946.name}/\${azurerm_storage_blob.someFunction01_CodeBlob_D6CD3DCE.name}\\"
+{
+  "resource": {
+    "azurerm_linux_function_app": {
+      "someFunction01_Function_83CF4008": {
+        "app_settings": {
+          "FUNCTIONS_WORKER_RUNTIME": "node",
+          "WEBSITE_RUN_FROM_PACKAGE": "https://\${azurerm_storage_account.StorageAccount.name}.blob.core.windows.net/\${azurerm_storage_container.someFunction01_FunctionBucket_BDC04946.name}/\${azurerm_storage_blob.someFunction01_CodeBlob_D6CD3DCE.name}",
         },
-        \\"https_only\\": true,
-        \\"identity\\": {
-          \\"type\\": \\"SystemAssigned\\"
+        "https_only": true,
+        "identity": {
+          "type": "SystemAssigned",
         },
-        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
-        \\"name\\": \\"somefunction01-c8eb4882\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\",
-        \\"service_plan_id\\": \\"\${azurerm_service_plan.ServicePlan.id}\\",
-        \\"site_config\\": {
-          \\"application_stack\\": {
-            \\"node_version\\": \\"16\\"
-          }
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "somefunction01-c8eb4882",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "service_plan_id": "\${azurerm_service_plan.ServicePlan.id}",
+        "site_config": {
+          "application_stack": {
+            "node_version": "16",
+          },
         },
-        \\"storage_account_access_key\\": \\"\${azurerm_storage_account.StorageAccount.primary_access_key}\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\"
-      }
+        "storage_account_access_key": "\${azurerm_storage_account.StorageAccount.primary_access_key}",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
     },
-    \\"azurerm_resource_group\\": {
-      \\"ResourceGroup\\": {
-        \\"location\\": \\"East US\\",
-        \\"name\\": \\"Default-c82bf964\\"
-      }
+    "azurerm_resource_group": {
+      "ResourceGroup": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+      },
     },
-    \\"azurerm_role_assignment\\": {
-      \\"someFunction01_ReadLambdaCodeAssignment_639B8FD1\\": {
-        \\"principal_id\\": \\"\${azurerm_linux_function_app.someFunction01_Function_83CF4008.identity[0].principal_id}\\",
-        \\"role_definition_name\\": \\"Storage Blob Data Reader\\",
-        \\"scope\\": \\"\${azurerm_storage_account.StorageAccount.id}\\"
-      }
+    "azurerm_role_assignment": {
+      "someFunction01_ReadLambdaCodeAssignment_639B8FD1": {
+        "principal_id": "\${azurerm_linux_function_app.someFunction01_Function_83CF4008.identity[0].principal_id}",
+        "role_definition_name": "Storage Blob Data Reader",
+        "scope": "\${azurerm_storage_account.StorageAccount.id}",
+      },
     },
-    \\"azurerm_service_plan\\": {
-      \\"ServicePlan\\": {
-        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
-        \\"name\\": \\"Default-c82bf964\\",
-        \\"os_type\\": \\"Linux\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\",
-        \\"sku_name\\": \\"Y1\\"
-      }
+    "azurerm_service_plan": {
+      "ServicePlan": {
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "Default-c82bf964",
+        "os_type": "Linux",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "sku_name": "Y1",
+      },
     },
-    \\"azurerm_storage_account\\": {
-      \\"StorageAccount\\": {
-        \\"account_replication_type\\": \\"LRS\\",
-        \\"account_tier\\": \\"Standard\\",
-        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
-        \\"name\\": \\"defaultc82bf964\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\"
-      }
+    "azurerm_storage_account": {
+      "StorageAccount": {
+        "account_replication_type": "LRS",
+        "account_tier": "Standard",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "defaultc82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
     },
-    \\"azurerm_storage_blob\\": {
-      \\"someFunction01_CodeBlob_D6CD3DCE\\": {
-        \\"name\\": \\"somefunction01-c8eb4882.zip\\",
-        \\"source\\": \\"<source>\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\",
-        \\"storage_container_name\\": \\"\${azurerm_storage_container.someFunction01_FunctionBucket_BDC04946.name}\\",
-        \\"type\\": \\"Block\\"
-      }
+    "azurerm_storage_blob": {
+      "someFunction01_CodeBlob_D6CD3DCE": {
+        "name": "somefunction01-c8eb4882.zip",
+        "source": "<source>",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+        "storage_container_name": "\${azurerm_storage_container.someFunction01_FunctionBucket_BDC04946.name}",
+        "type": "Block",
+      },
     },
-    \\"azurerm_storage_container\\": {
-      \\"someFunction01_FunctionBucket_BDC04946\\": {
-        \\"container_access_type\\": \\"private\\",
-        \\"name\\": \\"functionbucket-c84280f4\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\"
-      }
-    }
-  }
-}"
+    "azurerm_storage_container": {
+      "someFunction01_FunctionBucket_BDC04946": {
+        "container_access_type": "private",
+        "name": "functionbucket-c84280f4",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+  },
+}
 `;
 
 exports[`replace invalid character from function name 2`] = `
@@ -574,12 +556,9 @@ exports[`replace invalid character from function name 2`] = `
           "Default": {
             "children": {
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -622,9 +601,6 @@ exports[`replace invalid character from function name 2`] = `
                 "path": "root/Default/azure",
               },
               "someFunction01": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -651,9 +627,6 @@ exports[`replace invalid character from function name 2`] = `
                     "path": "root/Default/someFunction01/Function",
                   },
                   "FunctionBucket": {
-                    "attributes": {
-                      "wing:resource:connections": [],
-                    },
                     "children": {
                       "Bucket": {
                         "constructInfo": {
@@ -666,7 +639,7 @@ exports[`replace invalid character from function name 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.69",
                     },
                     "display": {
                       "description": "A cloud object store",
@@ -686,7 +659,7 @@ exports[`replace invalid character from function name 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.69",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -698,7 +671,7 @@ exports[`replace invalid character from function name 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.69",
             },
             "id": "Default",
             "path": "root/Default",

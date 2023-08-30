@@ -10,9 +10,8 @@ import {
   convertDurationToCronExpression,
 } from "./util";
 import * as cloud from "../cloud";
-import { Code } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Display, IInflightHost, Resource } from "../std";
+import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 import { BaseResourceSchema } from "../testing";
 
 /**
@@ -49,8 +48,8 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
       functionHandler,
       props
     );
-    fn.display.sourceModule = Display.SDK_SOURCE_MODULE;
-    fn.display.title = "onTick()";
+    Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
+    Node.of(fn).title = "onTick()";
 
     new EventMapping(this, `${this.node.id}-OnTickMapping-${hash}`, {
       subscriber: fn,
@@ -58,10 +57,10 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
       subscriptionProps: {},
     });
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "onTick()",
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: "onTick()",
     });
 
     return fn;
@@ -80,7 +79,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
   }
 
   /** @internal */
-  public _toInflight(): Code {
+  public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
   }
 

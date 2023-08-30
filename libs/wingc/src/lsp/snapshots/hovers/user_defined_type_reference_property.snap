@@ -1,0 +1,14 @@
+---
+source: libs/wingc/src/lsp/hover.rs
+---
+contents:
+  kind: markdown
+  value: "```wing\nstatic preflight static_method: preflight (): void\n```"
+range:
+  start:
+    line: 4
+    character: 0
+  end:
+    line: 4
+    character: 17
+

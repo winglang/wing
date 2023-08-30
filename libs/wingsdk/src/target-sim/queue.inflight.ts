@@ -25,14 +25,6 @@ export class Queue
   private readonly retentionPeriod: number;
 
   constructor(props: QueueSchema["props"], context: ISimulatorContext) {
-    if (props.initialMessages) {
-      this.messages.push(
-        ...props.initialMessages.map(
-          (message) => new QueueMessage(this.retentionPeriod, message)
-        )
-      );
-    }
-
     this.timeout = props.timeout;
     this.retentionPeriod = props.retentionPeriod;
     this.intervalId = setInterval(() => this.processMessages(), 100); // every 0.1 seconds
@@ -58,12 +50,14 @@ export class Queue
     this.subscribers.push(s);
   }
 
-  public async push(message: string): Promise<void> {
-    // TODO: enforce maximum queue message size?
+  // TODO: enforce maximum queue message size?
+  public async push(...messages: string[]): Promise<void> {
     return this.context.withTrace({
-      message: `Push (message=${message}).`,
+      message: `Push (messages=${messages}).`,
       activity: async () => {
-        this.messages.push(new QueueMessage(this.retentionPeriod, message));
+        for (const message of messages) {
+          this.messages.push(new QueueMessage(this.retentionPeriod, message));
+        }
       },
     });
   }

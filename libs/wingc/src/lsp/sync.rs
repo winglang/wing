@@ -1,3 +1,4 @@
+use camino::{Utf8Path, Utf8PathBuf};
 use indexmap::IndexMap;
 use lsp_types::{DidChangeTextDocumentParams, DidOpenTextDocumentParams};
 use wingii::type_system::TypeSystem;
@@ -17,6 +18,7 @@ use crate::parser::parse_wing_project;
 use crate::type_check;
 use crate::type_check::jsii_importer::JsiiImportSpec;
 use crate::type_check_assert::TypeCheckAssert;
+use crate::valid_json_visitor::ValidJsonVisitor;
 use crate::visit::Visit;
 use crate::{ast::Scope, type_check::Types, wasm_util::ptr_to_string};
 
@@ -27,9 +29,9 @@ pub struct ProjectData {
 	/// A graph that tracks the dependencies between files
 	pub file_graph: FileGraph,
 	/// tree-sitter trees
-	pub trees: IndexMap<PathBuf, Tree>,
+	pub trees: IndexMap<Utf8PathBuf, Tree>,
 	/// AST for each file
-	pub asts: IndexMap<PathBuf, Scope>,
+	pub asts: IndexMap<Utf8PathBuf, Scope>,
 	/// The JSII imports for the file. This is saved so we can load JSII types (for autocompletion for example)
 	/// which don't exist explicitly in the source.
 	pub jsii_imports: Vec<JsiiImportSpec>,
@@ -133,6 +135,8 @@ fn partial_compile(
 	// Reset diagnostics before new compilation (`partial_compile` can be called multiple times)
 	reset_diagnostics();
 
+	let source_path = Utf8Path::from_path(source_path).expect("invalid unicide path");
+
 	let topo_sorted_files = parse_wing_project(
 		&source_path,
 		source_text,
@@ -168,6 +172,10 @@ fn partial_compile(
 		// Validate the type checker didn't miss anything - see `TypeCheckAssert` for details
 		let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
 		tc_assert.check(&scope);
+
+		// Validate all Json literals to make sure their values are legal
+		let mut json_checker = ValidJsonVisitor::new(&types);
+		json_checker.check(&scope);
 	}
 
 	// -- LIFTING PHASE --
@@ -184,6 +192,10 @@ fn partial_compile(
 	}
 
 	// no need to JSify in the LSP
+}
+
+pub fn check_utf8(path: PathBuf) -> Utf8PathBuf {
+	path.try_into().expect("invalid unicode path")
 }
 
 #[cfg(test)]

@@ -449,8 +449,9 @@ test("api response returns default Content-Type header", async () => {
   await s.stop();
 
   expect(response.status).toEqual(200);
+  // the default for no body requests
   expect(response.headers.get("Content-Type")).toEqual(
-    "application/json; charset=utf-8"
+    "text/html; charset=utf-8"
   );
 
   expect(listMessages(s)).toMatchSnapshot();
@@ -511,4 +512,32 @@ test("no response body", async () => {
 
   expect(response.status).toEqual(200);
   expect(response.bodyUsed).toBeFalsy();
+});
+
+test("404 handler", async () => {
+  const RESPONSE = "boom";
+  // GIVEN
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "Api");
+  api.post(
+    "/test",
+    Testing.makeHandler(app, "Handler", INFLIGHT_CODE(RESPONSE))
+  );
+
+  // WHEN
+  const s = await app.startSimulator();
+
+  const apiUrl = getApiUrl(s, "/Api");
+  const response = await fetch(apiUrl + "/does-not-exist", {
+    method: "POST",
+    body: "hello world, this is a string",
+  });
+
+  // THEN
+  await s.stop();
+
+  const body = await response.text();
+
+  expect(response.status).toEqual(404);
+  expect(body).toContain("Error");
 });

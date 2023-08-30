@@ -2,6 +2,10 @@
 
 exports[`create a schedule 1`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -27,12 +31,9 @@ exports[`create a schedule 1`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -43,12 +44,9 @@ exports[`create a schedule 1`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_schedule": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "A cloud schedule to trigger events at regular intervals",
@@ -60,7 +58,7 @@ exports[`create a schedule 1`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.69",
       },
       "id": "root",
       "path": "root",
@@ -89,6 +87,26 @@ console.log(\\"Hello from schedule!\\");
 
 }), args: {} })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "name": "handle()",
+        "source": "root/my_schedule/my_schedule-OnTick-e645076f",
+        "target": "root/Handler",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_schedule/my_schedule-OnTick-e645076f",
+        "target": "root/Handler",
+      },
+      {
+        "name": "onTick()",
+        "source": "root/my_schedule",
+        "target": "root/my_schedule/my_schedule-OnTick-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -135,25 +153,9 @@ console.log(\\"Hello from schedule!\\");
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "handle()",
-                "resource": "root/my_schedule/my_schedule-OnTick-e645076f",
-              },
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "$inflight_init()",
-                "resource": "root/my_schedule/my_schedule-OnTick-e645076f",
-              },
-            ],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "An inflight resource",
@@ -164,12 +166,9 @@ console.log(\\"Hello from schedule!\\");
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -180,43 +179,11 @@ console.log(\\"Hello from schedule!\\");
           "path": "root/cloud.TestRunner",
         },
         "my_schedule": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "onTick()",
-                "resource": "root/my_schedule/my_schedule-OnTick-e645076f",
-              },
-            ],
-          },
           "children": {
             "my_schedule-OnTick-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "handle()",
-                    "resource": "root/Handler",
-                  },
-                  {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "$inflight_init()",
-                    "resource": "root/Handler",
-                  },
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "onTick()",
-                    "resource": "root/my_schedule",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -227,12 +194,9 @@ console.log(\\"Hello from schedule!\\");
               "path": "root/my_schedule/my_schedule-OnTick-e645076f",
             },
             "my_schedule-OnTickMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "hidden": true,
@@ -241,12 +205,9 @@ console.log(\\"Hello from schedule!\\");
               "path": "root/my_schedule/my_schedule-OnTickMapping-e645076f",
             },
             "my_scheduleOnTickHandlere645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "hidden": true,
@@ -257,7 +218,7 @@ console.log(\\"Hello from schedule!\\");
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "A cloud schedule to trigger events at regular intervals",
@@ -269,7 +230,7 @@ console.log(\\"Hello from schedule!\\");
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.69",
       },
       "id": "root",
       "path": "root",
@@ -298,6 +259,26 @@ console.log(\\"Hello from schedule!\\");
 
 }), args: {} })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "name": "handle()",
+        "source": "root/my_schedule/my_schedule-OnTick-e645076f",
+        "target": "root/Handler",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_schedule/my_schedule-OnTick-e645076f",
+        "target": "root/Handler",
+      },
+      {
+        "name": "onTick()",
+        "source": "root/my_schedule",
+        "target": "root/my_schedule/my_schedule-OnTick-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -344,25 +325,9 @@ console.log(\\"Hello from schedule!\\");
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "handle()",
-                "resource": "root/my_schedule/my_schedule-OnTick-e645076f",
-              },
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "$inflight_init()",
-                "resource": "root/my_schedule/my_schedule-OnTick-e645076f",
-              },
-            ],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "An inflight resource",
@@ -373,12 +338,9 @@ console.log(\\"Hello from schedule!\\");
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -389,43 +351,11 @@ console.log(\\"Hello from schedule!\\");
           "path": "root/cloud.TestRunner",
         },
         "my_schedule": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "onTick()",
-                "resource": "root/my_schedule/my_schedule-OnTick-e645076f",
-              },
-            ],
-          },
           "children": {
             "my_schedule-OnTick-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "handle()",
-                    "resource": "root/Handler",
-                  },
-                  {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "$inflight_init()",
-                    "resource": "root/Handler",
-                  },
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "onTick()",
-                    "resource": "root/my_schedule",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -436,12 +366,9 @@ console.log(\\"Hello from schedule!\\");
               "path": "root/my_schedule/my_schedule-OnTick-e645076f",
             },
             "my_schedule-OnTickMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "hidden": true,
@@ -450,12 +377,9 @@ console.log(\\"Hello from schedule!\\");
               "path": "root/my_schedule/my_schedule-OnTickMapping-e645076f",
             },
             "my_scheduleOnTickHandlere645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "hidden": true,
@@ -466,7 +390,7 @@ console.log(\\"Hello from schedule!\\");
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "A cloud schedule to trigger events at regular intervals",
@@ -478,7 +402,7 @@ console.log(\\"Hello from schedule!\\");
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.69",
       },
       "id": "root",
       "path": "root",
@@ -507,6 +431,26 @@ console.log(\\"Hello from schedule!\\");
 
 }), args: {} })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "name": "handle()",
+        "source": "root/my_schedule/my_schedule-OnTick-e645076f",
+        "target": "root/Handler",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_schedule/my_schedule-OnTick-e645076f",
+        "target": "root/Handler",
+      },
+      {
+        "name": "onTick()",
+        "source": "root/my_schedule",
+        "target": "root/my_schedule/my_schedule-OnTick-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -553,25 +497,9 @@ console.log(\\"Hello from schedule!\\");
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "handle()",
-                "resource": "root/my_schedule/my_schedule-OnTick-e645076f",
-              },
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "$inflight_init()",
-                "resource": "root/my_schedule/my_schedule-OnTick-e645076f",
-              },
-            ],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "An inflight resource",
@@ -582,12 +510,9 @@ console.log(\\"Hello from schedule!\\");
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -598,43 +523,11 @@ console.log(\\"Hello from schedule!\\");
           "path": "root/cloud.TestRunner",
         },
         "my_schedule": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "onTick()",
-                "resource": "root/my_schedule/my_schedule-OnTick-e645076f",
-              },
-            ],
-          },
           "children": {
             "my_schedule-OnTick-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "handle()",
-                    "resource": "root/Handler",
-                  },
-                  {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "$inflight_init()",
-                    "resource": "root/Handler",
-                  },
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "onTick()",
-                    "resource": "root/my_schedule",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -645,12 +538,9 @@ console.log(\\"Hello from schedule!\\");
               "path": "root/my_schedule/my_schedule-OnTick-e645076f",
             },
             "my_schedule-OnTickMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "hidden": true,
@@ -659,12 +549,9 @@ console.log(\\"Hello from schedule!\\");
               "path": "root/my_schedule/my_schedule-OnTickMapping-e645076f",
             },
             "my_scheduleOnTickHandlere645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "hidden": true,
@@ -675,7 +562,7 @@ console.log(\\"Hello from schedule!\\");
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "A cloud schedule to trigger events at regular intervals",
@@ -687,7 +574,7 @@ console.log(\\"Hello from schedule!\\");
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.69",
       },
       "id": "root",
       "path": "root",

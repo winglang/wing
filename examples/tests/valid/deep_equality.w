@@ -36,6 +36,7 @@ test "Json with the same value" {
 
 test "Json with different values" {
   assert(jsonA != jsonC);
+  assert(!(jsonA != jsonB));
 }
 
 //-----------------------------------------------------------------------------
@@ -47,12 +48,12 @@ let setC = { 4,5,6 };
 
 test "Set types with the same value" {
   assert(setA == setA);
-  // TODO https://github.com/winglang/wing/issues/2867
-  assert(setA == setB.copy());
+  assert(setA == setB);
 }
 
 test "Set types with different values" {
   assert(setA != setC);
+  assert(!(setA != setB));
 }
 
 //-----------------------------------------------------------------------------
@@ -64,11 +65,12 @@ let mapC = { "c" => 10, "b" => 2 };
 
 test "Map with the same value" {
   assert(mapA == mapA);
-  assert(mapA == mapB.copy());
+  assert(mapA == mapB);
 }
 
 test "Map with different values" {
   assert(mapA != mapC);
+  assert(!(mapA != mapB));
 }
 
 //-----------------------------------------------------------------------------
@@ -80,11 +82,12 @@ let arrayC: Array<num> = [4,5,6];
 
 test "Array with the same value" {
   assert(arrayA == arrayA);
-  assert(arrayA == arrayB.copy());
+  assert(arrayA == arrayB);
 }
 
 test "Array with different values" {
   assert(arrayA != arrayC);
+  assert(!(arrayA != arrayB));
 }
 
 //-----------------------------------------------------------------------------
@@ -106,4 +109,5 @@ test "Struct with the same value" {
 
 test "Struct with different values" {
   assert(cat1 != cat3);
+  assert(!(cat1 != cat2));
 }
