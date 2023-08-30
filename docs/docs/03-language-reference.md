@@ -1755,6 +1755,8 @@ exports.makeId = function () {
 Given a method of name X, the compiler will map the method to the JavaScript export with the 
 matching name (without any case conversion).
 
+Extern methods do not currently support access to class's members through `this`, so they must be declared `static`.
+
 ### 5.2.1 TypeScript
 
 It is possible to use TypeScript to write helpers, but at the moment this is not
