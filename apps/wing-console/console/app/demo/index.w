@@ -16,7 +16,7 @@ api.post("/test-post", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
     status: 200,
     body: "Hello, POST!"
   };
-})
+});
 
 let handler = inflight (message: str): str => {
   bucket.put("hello.txt", "Hello, ${message}!");
