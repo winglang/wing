@@ -162,10 +162,11 @@ export class Json {
   /**
    * Returns a specified element at a given index from Json Array
    *
-   * @macro ($self$)[$args$]
+   * @macro ((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })($self$, $args$)
    *
    * @param index The index of the element in the Json Array to return
-   * @returns The element at given index in Json Array, or undefined if index is not valid
+   * @returns The element at given index in Json Array
+   * @throws index out of bounds error if the given index does not exist for the Json Array
    */
   public getAt(index: number): Json {
     index;
@@ -295,10 +296,11 @@ export class MutJson {
   /**
    * Returns a specified element at a given index from MutJson Array
    *
-   * @macro ($self$)[$args$]
+   * @macro ((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })($self$, $args$)
    *
    * @param index The index of the element in the MutJson Array to return
-   * @returns The element at given index in MutJson Array, or undefined if index is not valid
+   * @returns The element at given index in MutJson Array
+   * @throws index out of bounds error if the given index does not exist for the MutJson Array
    */
   public getAt(index: number): MutJson {
     index;
