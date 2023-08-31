@@ -2,7 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
-module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_at_0____, $__world__in__myMap__, $_arr_at_0__, $_arr_at_1__, $_j___b__, $_mySet_has__my___, $arr_length, $mySet_size }) {
+module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_at_0____, $__obj__args_______if__obj_args______undefined__throw_new_Error__Json_property_does_not_exist____return_obj_args_____j___b__, $__world__in__myMap__, $_arr_at_0__, $_arr_at_1__, $_mySet_has__my___, $arr_length, $mySet_size }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -18,7 +18,7 @@ module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_a
       {((cond) => {if (!cond) throw new Error("assertion failed: myMap.has(\"world\")")})($__world__in__myMap__)};
       {((cond) => {if (!cond) throw new Error("assertion failed: myMap.size() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($Object_keys_myMap__length,2)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: arrOfMap.at(0).has(\"bang\")")})($__bang__in___arrOfMap_at_0____)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: j.get(\"b\") == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($_j___b__,"world")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: j.get(\"b\") == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($__obj__args_______if__obj_args______undefined__throw_new_Error__Json_property_does_not_exist____return_obj_args_____j___b__,"world")))};
     }
   }
   return $Closure1;
@@ -171,10 +171,10 @@ class $Root extends $stdlib.std.Resource {
           require("./inflight.$Closure1-1.js")({
             $Object_keys_myMap__length: ${context._lift(Object.keys(myMap).length)},
             $__bang__in___arrOfMap_at_0____: ${context._lift(("bang" in ((arrOfMap.at(0)))))},
+            $__obj__args_______if__obj_args______undefined__throw_new_Error__Json_property_does_not_exist____return_obj_args_____j___b__: ${context._lift(((obj, args) => { if (obj[args] === undefined) throw new Error("Json property does not exist"); return obj[args] })(j, "b"))},
             $__world__in__myMap__: ${context._lift(("world" in (myMap)))},
             $_arr_at_0__: ${context._lift((arr.at(0)))},
             $_arr_at_1__: ${context._lift((arr.at(1)))},
-            $_j___b__: ${context._lift((j)["b"])},
             $_mySet_has__my___: ${context._lift((mySet.has("my")))},
             $arr_length: ${context._lift(arr.length)},
             $mySet_size: ${context._lift(mySet.size)},
@@ -199,9 +199,9 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(("bang" in ((arrOfMap.at(0)))), host, []);
           $Closure1._registerBindObject(("world" in (myMap)), host, []);
+          $Closure1._registerBindObject(((obj, args) => { if (obj[args] === undefined) throw new Error("Json property does not exist"); return obj[args] })(j, "b"), host, []);
           $Closure1._registerBindObject((arr.at(0)), host, []);
           $Closure1._registerBindObject((arr.at(1)), host, []);
-          $Closure1._registerBindObject((j)["b"], host, []);
           $Closure1._registerBindObject((mySet.has("my")), host, []);
           $Closure1._registerBindObject(Object.keys(myMap).length, host, []);
           $Closure1._registerBindObject(arr.length, host, []);
