@@ -736,33 +736,11 @@ Duration <DURATION>"
 `;
 
 exports[`extern.w 1`] = `
-"error: Failed to resolve extern \\"./sad.js\\": Not Found
-  --> ../../../examples/tests/invalid/extern.w:2:3
-  |
-2 |   extern \\"./sad.js\\" static getNum(): num;
-  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Failed to resolve extern \\"./sad.js\\": Not Found
-
-
-error: Failed to resolve extern \\"not-installed\\": Not Found
-  --> ../../../examples/tests/invalid/extern.w:4:3
-  |
-4 |   extern \\"not-installed\\" static tooBad(): bool;
-  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Failed to resolve extern \\"not-installed\\": Not Found
-
-
- 
- 
-Tests 1 failed (1)
-Test Files 1 failed (1)
-Duration <DURATION>"
-`;
-
-exports[`extern_static.w 1`] = `
 "error: Extern methods must be declared \\"static\\" (they cannot access instance members)
-  --> ../../../examples/tests/invalid/extern_static.w:2:39
+  --> ../../../examples/tests/invalid/extern.w:6:22
   |
-2 |   extern \\"../external_js.js\\" inflight getGreeting(name: str): str;
-  |                                       ^^^^^^^^^^^ Extern methods must be declared \\"static\\" (they cannot access instance members)
+6 |   extern \\"./util.js\\" greet(): str;
+  |                      ^^^^^ Extern methods must be declared \\"static\\" (they cannot access instance members)
 
 
  
