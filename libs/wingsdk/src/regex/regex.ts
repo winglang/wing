@@ -2,18 +2,17 @@ import { InflightClient } from "../core";
 
 /**
  * Regex utilities and functions
- *
  */
 export class Util {
   /**
-   * regex pattern matching 
+   * Check if a regex pattern is matched by a given string
    * @param pattern - regex pattern 
-   * @param userString - given input string 
-   * @returns boolean value true or false;
+   * @param text - given input string 
+   * @returns true if it matches the pattern, false otherwise
    */
-  public static match(pattern: string , userString: string ): boolean {
+  public static match(pattern: string, text: string ): boolean {
     const regex = new RegExp(pattern);
-    if (userString.match(regex) == null ) {
+    if (text.match(regex) === null ) {
         return false;  
     }
     return true;
