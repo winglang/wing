@@ -16,11 +16,11 @@ import {
 } from "@aws-sdk/client-s3";
 import { BucketDeleteOptions, IBucketClient } from "../cloud";
 import { Duration, Json } from "../std";
-
+import { getSignedUrl ,S3RequestPresigner} from "@aws-sdk/s3-request-presigner";
 export class BucketClient implements IBucketClient {
   constructor(
     private readonly bucketName: string,
-    private readonly s3Client = new S3Client({})
+    private readonly s3Client :any = new S3Client({}),
   ) {}
 
   /**
@@ -263,17 +263,27 @@ export class BucketClient implements IBucketClient {
     );
   }
 
-  /**
-   * Returns a signed url to the given file. This URL can be used by anyone to
-   * access the file until the link expires (defaults to 24 hours).
-   * @param key The key to reach
-   * @param duration Time until expires
+  
+ /**
+   * Returns a signed url to the given file.
+   * @Throws if object does not exist.
+   * @inflight
    */
-  public async signed_url(key: string, duration?: Duration): Promise<string> {
-    // for signed_url take a look here: https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/s3-example-creating-buckets.html#s3-create-presigendurl-get
-    throw new Error(
-      `signed_url is not implemented yet (key=${key}, duration=${duration})`
-    );
+
+
+  public async signedUrl(key: string, duration?: Duration): Promise<string> {
+    if (!(await this.exists(key))) {
+      throw new Error(
+        `Cannot provide signed url for a non-existent key (key=${key})`
+      );
+    }
+    const expiryTimeInSeconds:number= duration?.seconds|| 86400;
+    const command: any = new GetObjectCommand({
+    Bucket: this.bucketName,
+    Key: key
+   });
+   return await getSignedUrl(this.s3Client,command,{expiresIn:expiryTimeInSeconds});
+
   }
 
   private async getLocation(): Promise<string> {

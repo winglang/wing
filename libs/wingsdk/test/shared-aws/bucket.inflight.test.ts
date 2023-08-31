@@ -199,6 +199,8 @@ test("delete non-existent object from the bucket with mustExist option", async (
   ).rejects.toThrowError("Object does not exist (key=KEY).");
 });
 
+
+
 test("Given a non public bucket when reaching to a key public url it should throw an error", async () => {
   // GIVEN
   let error;
@@ -534,4 +536,76 @@ test("tryDelete a non-existent object from the bucket", async () => {
 
   // THEN
   expect(objectTryDelete).toEqual(false);
+});
+
+test("Given a bucket when reaching to a non existent key, signed url it should throw an error", async () => {
+  // GIVEN
+  let error;
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+
+  s3Mock.on(GetPublicAccessBlockCommand, { Bucket: BUCKET_NAME }).resolves({
+    PublicAccessBlockConfiguration: {
+      BlockPublicAcls: false,
+      BlockPublicPolicy: false,
+      RestrictPublicBuckets: false,
+      IgnorePublicAcls: false,
+    },
+  });
+  s3Mock
+    .on(GetBucketLocationCommand, { Bucket: BUCKET_NAME })
+    .resolves({ LocationConstraint: "us-east-2" });
+  s3Mock
+    .on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .rejects({ name: "NotFound" });
+
+  //WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  try {
+    await client.signedUrl(KEY);
+  } catch (err) {
+    error = err;
+  }
+  // THEN
+  expect(error?.message).toBe(
+    "Cannot provide signed url for a non-existent key (key=KEY)"
+  );
+});
+
+test("Given a bucket, when giving one of its keys, we should get its signed url", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const REGION = "us-east-2";
+
+  s3Mock.on(GetPublicAccessBlockCommand, { Bucket: BUCKET_NAME }).resolves({
+    PublicAccessBlockConfiguration: {
+      BlockPublicAcls: false,
+      BlockPublicPolicy: false,
+      RestrictPublicBuckets: false,
+      IgnorePublicAcls: false,
+    },
+  });
+  s3Mock
+    .on(GetBucketLocationCommand, { Bucket: BUCKET_NAME })
+    .resolves({ LocationConstraint: REGION });
+  s3Mock.on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({
+    AcceptRanges: "bytes",
+    ContentLength: 3191,
+    ContentType: "image/jpeg",
+    ETag: "6805f2cfc46c0f04559748bb039d69ae",
+    LastModified: new Date("Thu, 15 Dec 2016 01:19:41 GMT"),
+    Metadata: {},
+    VersionId: "null",
+  });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const response = await client.signedUrl(KEY);
+
+  // THEN
+  expect(response).contains(
+    'https://s3.amazonaws.com'
+  );
+
 });

@@ -3,14 +3,14 @@ import * as fs from "fs";
 import * as os from "os";
 import { dirname, join } from "path";
 import * as url from "url";
-import { BucketAttributes, BucketSchema } from "./schema-resources";
+import { BucketAttributes, BucketSchema } from "./schema-resources"
 import {
   BucketDeleteOptions,
   BucketEventType,
   IBucketClient,
   ITopicClient,
 } from "../cloud";
-import { Json } from "../std";
+import { Json , Duration } from "../std";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
@@ -207,6 +207,28 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       },
     });
   }
+
+public async signedUrl(key: string, duration?: Duration){
+  const expiryTimeInSeconds:string= String((duration?.seconds|| 86400));
+  return this.context.withTrace({
+    message: `Signed URL (key=${key})`,
+    activity: async () =>{
+    const filePath = join(this._fileDir, key);
+    if(!this.objectKeys.has(key)){
+        throw new Error(
+          `Cannot provide signed url for an non-existent key (key=${key})`
+        ); 
+    }
+    /**
+     * Generating a mock signed url response
+     */
+
+    return url.pathToFileURL(filePath).searchParams.append("Expires",expiryTimeInSeconds);
+
+    }
+  });
+}
+
 
   private async addFile(key: string, value: string): Promise<void> {
     const actionType: BucketEventType = this.objectKeys.has(key)

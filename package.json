@@ -31,5 +31,11 @@
       "@aws-sdk/util-utf8-node@3.259.0": "patches/@aws-sdk__util-utf8-node@3.259.0.patch",
       "@aws-sdk/util-utf8-browser@3.259.0": "patches/@aws-sdk__util-utf8-browser@3.259.0.patch"
     }
+  },
+  "dependencies": {
+    "@aws-sdk/s3-request-presigner": "^3.395.0",
+    "@types/node": "^20.5.1",
+    "aws-sdk": "^2.1440.0",
+    "sshkeygen": "^0.0.1"
   }
 }
