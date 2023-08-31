@@ -6,7 +6,7 @@ exports[`bool_from_json.w 1`] = `
 ../../../examples/tests/error/target/test/bool_from_json.wsim.[REDACTED].tmp/.wing/preflight.js:9
        super(scope, id);
        const j = ({\\"a\\": 123});
->>     const a = (std.Boolean.fromJson((j)[\\"a\\"]));
+>>     const a = (std.Boolean.fromJson(((obj, args) => { if (obj[args] === undefined) throw new Error(\\"Json property does not exist\\"); return obj[args] })(j, \\"a\\")));
      }
    }
 
@@ -40,7 +40,7 @@ exports[`number_from_json.w 1`] = `
 ../../../examples/tests/error/target/test/number_from_json.wsim.[REDACTED].tmp/.wing/preflight.js:9
        super(scope, id);
        const j = ({\\"a\\": \\"apples\\"});
->>     const a = ((args) => { if (typeof args !== \\"number\\") {throw new Error(\\"unable to parse \\" + typeof args + \\" \\" + args + \\" as a number\\")}; return JSON.parse(JSON.stringify(args)) })((j)[\\"a\\"]);
+>>     const a = ((args) => { if (typeof args !== \\"number\\") {throw new Error(\\"unable to parse \\" + typeof args + \\" \\" + args + \\" as a number\\")}; return JSON.parse(JSON.stringify(args)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(\\"Json property does not exist\\"); return obj[args] })(j, \\"a\\"));
      }
    }
 
@@ -103,7 +103,7 @@ exports[`string_from_json.w 1`] = `
 ../../../examples/tests/error/target/test/string_from_json.wsim.[REDACTED].tmp/.wing/preflight.js:9
        super(scope, id);
        const j = ({\\"a\\": 123});
->>     const a = ((args) => { if (typeof args !== \\"string\\") {throw new Error(\\"unable to parse \\" + typeof args + \\" \\" + args + \\" as a string\\")}; return JSON.parse(JSON.stringify(args)) })((j)[\\"a\\"]);
+>>     const a = ((args) => { if (typeof args !== \\"string\\") {throw new Error(\\"unable to parse \\" + typeof args + \\" \\" + args + \\" as a string\\")}; return JSON.parse(JSON.stringify(args)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(\\"Json property does not exist\\"); return obj[args] })(j, \\"a\\"));
      }
    }
 
