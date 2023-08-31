@@ -98,6 +98,7 @@ jobs:
           command: |
             if ${{github.event_name == 'push'}}
             then
+              npm install --no-package-lock ./dist/*-[0-9]*.[0-9]*.[0-9]*.tgz &&
               ./node_modules/.bin/wing test -t tf-aws ${{ matrix.test.directory }}/*.w
             else
               wing test -t tf-aws ${{ matrix.test.directory }}/*.w
