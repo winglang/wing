@@ -1964,7 +1964,7 @@ assert(cat1 != dog); // compile time error (can't compare different types)
 
 ### 6.2 Strings
 
-String reference doc is available [here](https://www.winglang.io/docs/language-guide/language-reference#61-strings).
+String reference doc is available [here](https://www.winglang.io/docs/standard-library/std/api-reference#string-).
 Type of string is UTF-16 internally.  
 All string declaration variants are multi-line.  
 
