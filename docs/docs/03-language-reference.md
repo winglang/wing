@@ -978,7 +978,96 @@ In the presence of `catch` the variable holding the exception (`e` in the exampl
 
 ---
 
-### 1.9 Recommended Formatting
+### 1.9 Iterators
+
+The language supports iteration through the built-in `Iterator<T>` type.
+An iterator represents a sequence of elements of type `T` that may be lazily evaluated.
+Iterators are handy for working with large sequences of data without having to store the entire sequence in memory.
+
+Every iterator must satisfy the following interface:
+
+```TS
+interface Iterator<T> {
+  next(): T;
+  hasNext(): bool;
+}
+```
+
+The `next()` method returns the next element in the sequence. The `hasNext()` method returns `true`
+if there are more elements in the sequence, `false` otherwise.
+
+```TS
+let it: Iterator<num> = // iterator with elements 1, 2
+assert(it.hasNext() == true);
+assert(it.next() == 1);
+assert(it.hasNext() == true);
+assert(it.next() == 2)
+assert(it.hasNext() == false);
+```
+
+If `next()` is called when `hasNext()` returns `false`, then a runtime error will be thrown.
+
+Many types in Wing implement the `Iterator<T>` interface.
+For example, the `Map<T>` type has a method named `keys()` that returns an `Iterator<T>`:
+
+```TS
+let map = Map<num> { a => 1, b => 2, c => 3 };
+let it = map.keys(); // Iterator<num>
+```
+
+The `for` statement can be used to iterate over an iterator:
+
+```TS
+for x in it {
+  log(x);
+}
+```
+
+If an object has a method named `iter()` that returns an `Iterator<T>`, then it will automatically be used by the `for` statement.
+For example, the `Array<T>` type has an `iter()` method that returns an `Iterator<T>`:
+
+```TS
+let arr = Array<num> [1, 2, 3];
+
+for x in arr {
+  log(x);
+}
+// equivalent to
+for x in arr.iter() {
+  log(x);
+}
+```
+
+> Note: `Array<T>` does not implement the `Iterator<T>` interface directly
+> since doing so would mean an array could not be iterated over more than once.
+
+Custom iterators can be defined by implementing the `Iterator<T>` interface:
+
+```TS
+class MyIterator implements Iterator<num> {
+  private i: num = 0;
+
+  next(): num {
+    this.i = this.i + 1;
+    return this.i;
+  }
+
+  hasNext(): bool {
+    return this.i < 10;
+  }
+}
+
+let it = new MyIterator();
+for x in it {
+  log(x); // prints 1 through 10
+}
+```
+
+[`▲ top`][top]
+
+---
+
+### 1.10 Recommended Formatting
 
 Wing recommends the following formatting and naming conventions:
 
@@ -994,7 +1083,7 @@ Wing recommends the following formatting and naming conventions:
 
 ---
 
-### 1.10 Memory Management
+### 1.11 Memory Management
 
 There is no implicit memory de-allocation function, dynamic memory is managed by
 Wing and is garbage collected (relying on JSII target GC for the meantime).
@@ -1003,7 +1092,7 @@ Wing and is garbage collected (relying on JSII target GC for the meantime).
 
 ---
 
-### 1.11 Execution Model
+### 1.12 Execution Model
 
 Execution model currently is delegated to the JSII target. This means if you are
 targeting JSII with Node, Wing will use the event based loop that Node offers.
@@ -1032,7 +1121,7 @@ AWS CDK or `TerraformApp` in case of CDK for Terraform target.
 
 ---
 
-### 1.12 Asynchronous Model
+### 1.13 Asynchronous Model
 
 Wing builds upon the asynchronous model of JavaScript currently and expands upon
 it with new keywords and concepts. The `async` keyword of JavaScript is replaced
@@ -1045,14 +1134,14 @@ Main concepts to understand:
 
 Contrary to JavaScript, any call to an async function is implicitly awaited in Wing.
 
-#### 1.12.1 Roadmap
+#### 1.13.1 Roadmap
 
 The following features are not yet implemented, but we are planning to add them in the future:
 
 * `await`/`defer` statements - see https://github.com/winglang/wing/issues/116 to track.
 * Promise function type - see https://github.com/winglang/wing/issues/1004 to track.
 
-### 1.13 Roadmap
+### 1.14 Roadmap
 
 Access modifiers (`private`/`public`/`internal`/`protected`) are not yet implemented.
 See https://github.com/winglang/wing/issues/108 to track.
