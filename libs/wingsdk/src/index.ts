@@ -8,3 +8,4 @@ export * as aws from "./shared-aws";
 export * as std from "./std";
 export * as testing from "./testing";
 export * as util from "./util";
+export * as regex from "./regex";
