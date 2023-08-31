@@ -127,7 +127,7 @@ module.exports = function({ $invokeCounter, $util_Util }) {
       try {
         (await $util_Util.waitUntil(async () => {
           (await $invokeCounter.inc());
-          {((msg) => {throw new Error(msg)})("ERROR")};
+          throw new Error("ERROR");
         }
         ));
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};

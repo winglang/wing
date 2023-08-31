@@ -2,7 +2,7 @@ let var x = "";
 
 // Verify throw works and both catch and finally are executed.
 try {
-  throw("hello");
+  throw "hello";
   x = "no way I got here";
 } catch e {
   assert(e == "hello");
@@ -27,7 +27,7 @@ assert(x == "finally");
 // Verify that finally is executed even if there's no catch block.
 try {
   try {
-    throw("hello");
+    throw "hello";
   } finally {
     x = "finally with no catch";
   }
@@ -46,6 +46,6 @@ assert(x == "finally with no catch and no exception");
 // Verify we can return from a closure in a finally block.
 assert((():num => { try {} finally {return 1;}})() == 1);
 // Verify we can return from a closure in a catch block.
-assert((():num => { try {throw("");} catch {return 2;}})() == 2);
+assert((():num => { try {throw "";} catch {return 2;}})() == 2);
 // Verify we can return from a closure in a try block.
 assert((():num => { try {return 3;} finally {}})() == 3);

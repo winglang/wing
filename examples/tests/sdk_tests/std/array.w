@@ -60,6 +60,39 @@ test "pushAndPop()" {
 }
 
 //-----------------------------------------------------------------------------
+// popAt()
+
+test "popAt()" {
+  let assertThrows = (expected: str, block: (): void) => {
+    let var error = false;
+    try {
+      block();
+    } catch actual {
+      assert(actual == expected);
+      error = true;
+    }
+    assert(error);
+  };
+
+  let INDEX_OUT_OF_BOUNDS_ERROR = "Index out of bounds";
+  let mutArr = MutArray<str>["hello", "world"];
+
+  let item = mutArr.popAt(0);
+
+  assert(item == "hello");
+  assert(mutArr.length == 1);
+  assert(mutArr.at(0) == "world");
+
+  assertThrows(INDEX_OUT_OF_BOUNDS_ERROR, () => {
+    mutArr.popAt(-3);
+  });
+
+  assertThrows(INDEX_OUT_OF_BOUNDS_ERROR, () => {
+    mutArr.popAt(3);
+  });
+}
+
+//-----------------------------------------------------------------------------
 // concat()
 let array = Array<str>["hello"];
 assert(array.length == 1);
@@ -307,4 +340,22 @@ test "insert()" {
 
   assert(mutArr.length == 5);
   assert(mutArr.at(4) == 25);
+}
+
+//-----------------------------------------------------------------------------
+// removeFirst()
+
+test "removeFirst()" {
+  let mutArr = MutArray<num>[3, 6, 9, 3];
+
+  let r1 = mutArr.removeFirst(3);
+
+  assert(r1 == true);
+  assert(mutArr.length == 3);
+  assert(mutArr == MutArray<num> [6, 9, 3]);
+
+  let r2 = mutArr.removeFirst(-42);
+
+  assert(r2 == false);
+  assert(mutArr.length == 3);
 }

@@ -37,18 +37,6 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
-- label: throw
-  kind: 3
-  detail: "(message: str): void"
-  documentation:
-    kind: markdown
-    value: "```wing\nthrow: (message: str): void\n```\n---\nthrows an error\n\n### Parameters\n- `message` — The message to throw"
-  sortText: cc|throw
-  insertText: throw($0)
-  insertTextFormat: 2
-  command:
-    title: triggerParameterHints
-    command: editor.action.triggerParameterHints
 - label: x
   kind: 3
   detail: "preflight (arg1: A): void"
