@@ -1523,10 +1523,17 @@ let [var] <name>[: <type>] = [<type>] <value>;
 Assignment operator is `=`.  
 Assignment declaration keyword is `let`.  
 Type annotation is optional if a default value is given.  
+`var` keyword after `let` makes a variable mutable.
 
 > ```TS
 > let n = 10;
 > let s: str = "hello";
+> s = "world"; // error: Variable is not reassignable
+> ```
+
+> ```TS
+> let var s = "hello";
+> s = "hello world"; // compiles
 > ```
 
 [`▲ top`][top]
@@ -1957,7 +1964,7 @@ assert(cat1 != dog); // compile time error (can't compare different types)
 
 ### 6.2 Strings
 
-String reference doc is available [here](https://www.winglang.io/docs/language-guide/language-reference#61-strings).
+String reference doc is available [here](https://www.winglang.io/docs/standard-library/std/api-reference#string-).
 Type of string is UTF-16 internally.  
 All string declaration variants are multi-line.  
 
