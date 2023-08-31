@@ -1,8 +1,8 @@
+use camino::{Utf8Component, Utf8Path, Utf8PathBuf};
 use indexmap::{IndexMap, IndexSet};
 use phf::{phf_map, phf_set};
 use std::cell::RefCell;
 use std::collections::HashSet;
-use std::path::{Component as PathComponent, Path, PathBuf};
 use std::{fs, str, vec};
 use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
@@ -144,13 +144,13 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 /// Returns a topological ordering of all known Wing files, where each file only depends on
 /// files that come before it in the ordering.
 pub fn parse_wing_project(
-	init_path: &Path,
+	init_path: &Utf8Path,
 	init_text: String,
 	files: &mut Files,
 	file_graph: &mut FileGraph,
-	tree_sitter_trees: &mut IndexMap<PathBuf, tree_sitter::Tree>,
-	asts: &mut IndexMap<PathBuf, Scope>,
-) -> Vec<PathBuf> {
+	tree_sitter_trees: &mut IndexMap<Utf8PathBuf, tree_sitter::Tree>,
+	asts: &mut IndexMap<Utf8PathBuf, Scope>,
+) -> Vec<Utf8PathBuf> {
 	// Parse the initial file (even if we have already seen it before)
 	let (tree_sitter_tree, ast, dependent_wing_files) = parse_wing_file(init_path, &init_text);
 
@@ -203,15 +203,12 @@ pub fn parse_wing_project(
 	match file_graph.toposort() {
 		Ok(files) => files,
 		Err(cycle) => {
-			let formatted_cycle = cycle
-				.iter()
-				.map(|path| format!("- {}\n", path.to_str().unwrap()))
-				.collect::<String>();
+			let formatted_cycle = cycle.iter().map(|path| format!("- {}\n", path)).collect::<String>();
 
 			report_diagnostic(Diagnostic {
 				message: format!(
 					"Could not compile \"{}\" due to cyclic bring statements:\n{}",
-					init_path.display(),
+					init_path,
 					formatted_cycle.trim_end()
 				),
 				span: None,
@@ -223,7 +220,7 @@ pub fn parse_wing_project(
 	}
 }
 
-fn parse_wing_file(source_path: &Path, source_text: &str) -> (tree_sitter::Tree, Scope, Vec<PathBuf>) {
+fn parse_wing_file(source_path: &Utf8Path, source_text: &str) -> (tree_sitter::Tree, Scope, Vec<Utf8PathBuf>) {
 	let language = tree_sitter_wing::language();
 	let mut tree_sitter_parser = tree_sitter::Parser::new();
 	tree_sitter_parser.set_language(language).unwrap();
@@ -231,13 +228,13 @@ fn parse_wing_file(source_path: &Path, source_text: &str) -> (tree_sitter::Tree,
 	let tree_sitter_tree = match tree_sitter_parser.parse(&source_text.as_bytes(), None) {
 		Some(tree) => tree,
 		None => {
-			panic!("Error parsing source file with tree-sitter: {}", source_path.display());
+			panic!("Error parsing source file with tree-sitter: {}", source_path);
 		}
 	};
 
 	let tree_sitter_root = tree_sitter_tree.root_node();
 
-	let parser = Parser::new(&source_text.as_bytes(), source_path.to_string_lossy().to_string());
+	let parser = Parser::new(&source_text.as_bytes(), source_path.to_string());
 	let (scope, dependent_wing_files) = parser.parse(&tree_sitter_root);
 	(tree_sitter_tree, scope, dependent_wing_files)
 }
@@ -254,7 +251,7 @@ pub struct Parser<'a> {
 	is_in_loop: RefCell<bool>,
 	/// Track all file paths that have been found while parsing the current file
 	/// These will need to be eventually parsed (or diagnostics will be reported if they don't exist)
-	referenced_wing_files: RefCell<Vec<PathBuf>>,
+	referenced_wing_files: RefCell<Vec<Utf8PathBuf>>,
 }
 
 impl<'s> Parser<'s> {
@@ -274,7 +271,7 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	pub fn parse(self, root: &Node) -> (Scope, Vec<PathBuf>) {
+	pub fn parse(self, root: &Node) -> (Scope, Vec<Utf8PathBuf>) {
 		let scope = match root.kind() {
 			"source" => self.build_scope(&root, Phase::Preflight),
 			_ => Scope::empty(),
@@ -416,7 +413,7 @@ impl<'s> Parser<'s> {
 		WingSpan {
 			start: node_range.start_point.into(),
 			end: node_range.end_point.into(),
-			file_id: self.source_name.to_string(),
+			file_id: self.source_name.clone(),
 		}
 	}
 
@@ -454,6 +451,7 @@ impl<'s> Parser<'s> {
 			"break_statement" => self.build_break_statement(statement_node)?,
 			"continue_statement" => self.build_continue_statement(statement_node)?,
 			"return_statement" => self.build_return_statement(statement_node, phase)?,
+			"throw_statement" => self.build_throw_statement(statement_node, phase)?,
 			"class_definition" => self.build_class_statement(statement_node, Phase::Inflight)?, // `inflight class` is always "inflight"
 			"resource_definition" => self.build_class_statement(statement_node, phase)?, // `class` without a modifier inherits from scope
 			"interface_definition" => self.build_interface_statement(statement_node, phase)?,
@@ -518,6 +516,11 @@ impl<'s> Parser<'s> {
 				None
 			},
 		))
+	}
+
+	fn build_throw_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
+		let expr = self.build_expression(&statement_node.child_by_field_name("expression").unwrap(), phase)?;
+		Ok(StmtKind::Throw(expr))
 	}
 
 	/// Builds scope statements for a loop (while/for), and maintains the is_in_loop flag
@@ -707,20 +710,17 @@ impl<'s> Parser<'s> {
 		// if the module name is a path ending in .w, create a new Parser to parse it as a new Scope,
 		// and create a StmtKind::Module instead
 		if module_name.name.starts_with("\"") && module_name.name.ends_with(".w\"") {
-			let module_path = Path::new(&module_name.name[1..module_name.name.len() - 1]);
-			let source_path = normalize_path(module_path, Some(&Path::new(&self.source_name)));
-			if source_path == Path::new(&self.source_name) {
+			let module_path = Utf8Path::new(&module_name.name[1..module_name.name.len() - 1]);
+			let source_path = normalize_path(module_path, Some(&Utf8Path::new(&self.source_name)));
+			if source_path == Utf8Path::new(&self.source_name) {
 				return self.with_error("Cannot bring a module into itself", statement_node);
 			}
 			if !source_path.exists() {
-				return self.with_error(
-					format!("Cannot find module \"{}\"", source_path.display()),
-					statement_node,
-				);
+				return self.with_error(format!("Cannot find module \"{}\"", source_path), statement_node);
 			}
 			if !source_path.is_file() {
 				return self.with_error(
-					format!("Cannot bring module \"{}\": not a file", source_path.display()),
+					format!("Cannot bring module \"{}\": not a file", source_path),
 					statement_node,
 				);
 			}
@@ -730,7 +730,7 @@ impl<'s> Parser<'s> {
 			let module = if let Some(alias) = alias {
 				Ok(StmtKind::Bring {
 					source: BringSource::WingFile(Symbol {
-						name: source_path.to_string_lossy().to_string(),
+						name: source_path.to_string(),
 						span: module_name.span,
 					}),
 					identifier: Some(alias),
@@ -1015,10 +1015,7 @@ impl<'s> Parser<'s> {
 		let parent = if let Some(parent_node) = statement_node.child_by_field_name("parent") {
 			let parent_type = self.build_type_annotation(Some(parent_node), class_phase)?;
 			match parent_type.kind {
-				TypeAnnotationKind::UserDefined(parent_type) => Some(Expr::new(
-					ExprKind::Reference(Reference::TypeReference(parent_type)),
-					self.node_span(&parent_node),
-				)),
+				TypeAnnotationKind::UserDefined(parent_type) => Some(parent_type),
 				_ => {
 					self.with_error::<Node>(
 						format!("Parent type must be a user defined type, found {}", parent_type),
@@ -1411,37 +1408,34 @@ impl<'s> Parser<'s> {
 		let object_expr = self.get_child_field(nested_node, "object")?;
 
 		if let Some(property) = nested_node.child_by_field_name("property") {
-			let object_expr = if object_expr.kind() == "json_container_type" {
-				Expr::new(
+			if object_expr.kind() == "json_container_type" {
+				Ok(Expr::new(
 					ExprKind::Reference(Reference::TypeMember {
-						typeobject: Box::new(
-							UserDefinedType {
-								root: Symbol::global(WINGSDK_STD_MODULE),
-								fields: vec![self.node_symbol(&object_expr)?],
-								span: self.node_span(&object_expr),
-							}
-							.to_expression(),
-						),
+						type_name: UserDefinedType {
+							root: Symbol::global(WINGSDK_STD_MODULE),
+							fields: vec![self.node_symbol(&object_expr)?],
+							span: self.node_span(&object_expr),
+						},
 						property: self.node_symbol(&property)?,
 					}),
 					self.node_span(&object_expr),
-				)
+				))
 			} else {
-				self.build_expression(&object_expr, phase)?
-			};
-			let accessor_sym = self.node_symbol(&self.get_child_field(nested_node, "accessor_type")?)?;
-			let optional_accessor = match accessor_sym.name.as_str() {
-				"?." => true,
-				_ => false,
-			};
-			Ok(Expr::new(
-				ExprKind::Reference(Reference::InstanceMember {
-					object: Box::new(object_expr),
-					property: self.node_symbol(&property)?,
-					optional_accessor,
-				}),
-				self.node_span(&nested_node),
-			))
+				let object_expr = self.build_expression(&object_expr, phase)?;
+				let accessor_sym = self.node_symbol(&self.get_child_field(nested_node, "accessor_type")?)?;
+				let optional_accessor = match accessor_sym.name.as_str() {
+					"?." => true,
+					_ => false,
+				};
+				Ok(Expr::new(
+					ExprKind::Reference(Reference::InstanceMember {
+						object: Box::new(object_expr),
+						property: self.node_symbol(&property)?,
+						optional_accessor,
+					}),
+					self.node_span(&nested_node),
+				))
+			}
 		} else {
 			// we are missing the last property, but we can still parse the rest of the expression
 			self.add_error(
@@ -1544,10 +1538,6 @@ impl<'s> Parser<'s> {
 		match expression_node.kind() {
 			"new_expression" => {
 				let class_udt = self.build_udt(&expression_node.child_by_field_name("class").unwrap())?;
-				let class_udt_exp = Expr::new(
-					ExprKind::Reference(Reference::TypeReference(class_udt)),
-					expression_span.clone(),
-				);
 
 				let arg_list = if let Ok(args_node) = self.get_child_field(expression_node, "args") {
 					self.build_arg_list(&args_node, phase)
@@ -1568,7 +1558,7 @@ impl<'s> Parser<'s> {
 
 				Ok(Expr::new(
 					ExprKind::New(NewExpr {
-						class: Box::new(class_udt_exp),
+						class: class_udt,
 						obj_id,
 						arg_list: arg_list?,
 						obj_scope,
@@ -2098,14 +2088,11 @@ impl<'s> Parser<'s> {
 		let type_span = self.node_span(&statement_node.child(0).unwrap());
 		Ok(StmtKind::Expression(Expr::new(
 			ExprKind::New(NewExpr {
-				class: Box::new(Expr::new(
-					ExprKind::Reference(Reference::TypeReference(UserDefinedType {
-						root: Symbol::global(WINGSDK_STD_MODULE),
-						fields: vec![Symbol::global(WINGSDK_TEST_CLASS_NAME)],
-						span: type_span.clone(),
-					})),
-					type_span.clone(),
-				)),
+				class: UserDefinedType {
+					root: Symbol::global(WINGSDK_STD_MODULE),
+					fields: vec![Symbol::global(WINGSDK_TEST_CLASS_NAME)],
+					span: type_span.clone(),
+				},
 				obj_id: Some(test_id),
 				obj_scope: None,
 				arg_list: ArgList {
@@ -2121,13 +2108,13 @@ impl<'s> Parser<'s> {
 
 // TODO: this function seems fragile
 // use inodes as source of truth instead https://github.com/winglang/wing/issues/3627
-pub fn normalize_path(path: &Path, relative_to: Option<&Path>) -> PathBuf {
+pub fn normalize_path(path: &Utf8Path, relative_to: Option<&Utf8Path>) -> Utf8PathBuf {
 	let path = if path.is_absolute() {
 		// if the path is absolute, we ignore "relative_to"
 		path.to_path_buf()
 	} else {
 		relative_to
-			.map(|p| p.parent().unwrap_or_else(|| Path::new(".")).join(path))
+			.map(|p| p.parent().unwrap_or_else(|| Utf8Path::new(".")).join(path))
 			.unwrap_or_else(|| path.to_path_buf())
 	};
 
@@ -2135,29 +2122,29 @@ pub fn normalize_path(path: &Path, relative_to: Option<&Path>) -> PathBuf {
 	// This is tricky because ".." usually means we pop the last component
 	// but if a path starts with ".." or looks like "a/../../b" we need to track
 	// how many components we've popped and add them later.
-	let mut normalized = PathBuf::new();
-	let mut extra_pops = PathBuf::new();
+	let mut normalized = Utf8PathBuf::new();
+	let mut extra_pops = Utf8PathBuf::new();
 	for part in path.components() {
 		match part {
-			PathComponent::Prefix(ref prefix) => {
-				normalized.push(prefix.as_os_str());
+			Utf8Component::Prefix(ref prefix) => {
+				normalized.push(prefix.as_str());
 			}
-			PathComponent::RootDir => {
+			Utf8Component::RootDir => {
 				normalized.push("/");
 			}
-			PathComponent::ParentDir => {
+			Utf8Component::ParentDir => {
 				let popped = normalized.pop();
 				if !popped {
 					extra_pops.push("..");
 				}
 			}
-			PathComponent::CurDir => {
+			Utf8Component::CurDir => {
 				// Nothing
 			}
-			PathComponent::Normal(name) => {
+			Utf8Component::Normal(name) => {
 				if extra_pops.components().next().is_some() {
 					normalized = extra_pops;
-					extra_pops = PathBuf::new();
+					extra_pops = Utf8PathBuf::new();
 					normalized.push(name);
 				} else {
 					normalized.push(name);
@@ -2175,57 +2162,57 @@ mod tests {
 
 	#[test]
 	fn normalize_path_relative_to_nothing() {
-		let file_path = Path::new("/a/b/c/d/e.f");
+		let file_path = Utf8Path::new("/a/b/c/d/e.f");
 		assert_eq!(normalize_path(file_path, None), file_path);
 
-		let file_path = Path::new("/a/b/./c/../d/e.f");
-		assert_eq!(normalize_path(file_path, None), Path::new("/a/b/d/e.f"));
+		let file_path = Utf8Path::new("/a/b/./c/../d/e.f");
+		assert_eq!(normalize_path(file_path, None), Utf8Path::new("/a/b/d/e.f"));
 
-		let file_path = Path::new("a/b/c/d/e.f");
-		assert_eq!(normalize_path(file_path, None), Path::new("a/b/c/d/e.f"));
+		let file_path = Utf8Path::new("a/b/c/d/e.f");
+		assert_eq!(normalize_path(file_path, None), Utf8Path::new("a/b/c/d/e.f"));
 
-		let file_path = Path::new("a/b/./c/../d/e.f");
-		assert_eq!(normalize_path(file_path, None), Path::new("a/b/d/e.f"));
+		let file_path = Utf8Path::new("a/b/./c/../d/e.f");
+		assert_eq!(normalize_path(file_path, None), Utf8Path::new("a/b/d/e.f"));
 
-		let file_path = Path::new("a/../e.f");
-		assert_eq!(normalize_path(file_path, None), Path::new("e.f"));
+		let file_path = Utf8Path::new("a/../e.f");
+		assert_eq!(normalize_path(file_path, None), Utf8Path::new("e.f"));
 
-		let file_path = Path::new("a/../../../e.f");
-		assert_eq!(normalize_path(file_path, None), Path::new("../../e.f"));
+		let file_path = Utf8Path::new("a/../../../e.f");
+		assert_eq!(normalize_path(file_path, None), Utf8Path::new("../../e.f"));
 
-		let file_path = Path::new("./e.f");
-		assert_eq!(normalize_path(file_path, None), Path::new("e.f"));
+		let file_path = Utf8Path::new("./e.f");
+		assert_eq!(normalize_path(file_path, None), Utf8Path::new("e.f"));
 
-		let file_path = Path::new("../e.f");
-		assert_eq!(normalize_path(file_path, None), Path::new("../e.f"));
+		let file_path = Utf8Path::new("../e.f");
+		assert_eq!(normalize_path(file_path, None), Utf8Path::new("../e.f"));
 
-		let file_path = Path::new("../foo/.././e.f");
-		assert_eq!(normalize_path(file_path, None), Path::new("../e.f"));
+		let file_path = Utf8Path::new("../foo/.././e.f");
+		assert_eq!(normalize_path(file_path, None), Utf8Path::new("../e.f"));
 	}
 
 	#[test]
 	fn normalize_path_relative_to_something() {
 		// If the path is absolute, we ignore "relative_to"
-		let file_path = Path::new("/a/b/c/d/e.f");
-		let relative_to = Path::new("/g/h/i");
+		let file_path = Utf8Path::new("/a/b/c/d/e.f");
+		let relative_to = Utf8Path::new("/g/h/i");
 		assert_eq!(normalize_path(file_path, Some(relative_to)), file_path);
 
-		let file_path = Path::new("a/b/c/d/e.f");
-		let relative_to = Path::new("/g/h/i");
+		let file_path = Utf8Path::new("a/b/c/d/e.f");
+		let relative_to = Utf8Path::new("/g/h/i");
 		assert_eq!(
 			normalize_path(file_path, Some(relative_to)),
-			Path::new("/g/h/a/b/c/d/e.f")
+			Utf8Path::new("/g/h/a/b/c/d/e.f")
 		);
 
-		let file_path = Path::new("a/b/c/d/e.f");
-		let relative_to = Path::new("g/h/i");
+		let file_path = Utf8Path::new("a/b/c/d/e.f");
+		let relative_to = Utf8Path::new("g/h/i");
 		assert_eq!(
 			normalize_path(file_path, Some(relative_to)),
-			Path::new("g/h/a/b/c/d/e.f")
+			Utf8Path::new("g/h/a/b/c/d/e.f")
 		);
 
-		let file_path = Path::new("../foo.w");
-		let relative_to = Path::new("subdir/bar.w");
-		assert_eq!(normalize_path(file_path, Some(relative_to)), Path::new("foo.w"));
+		let file_path = Utf8Path::new("../foo.w");
+		let relative_to = Utf8Path::new("subdir/bar.w");
+		assert_eq!(normalize_path(file_path, Some(relative_to)), Utf8Path::new("foo.w"));
 	}
 }

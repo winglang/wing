@@ -672,10 +672,10 @@ class $Root extends $stdlib.std.Resource {
           MyResource._registerBindObject(this.localTopic, host, []);
         }
         if (ops.includes("myPut")) {
-          MyResource._registerBindObject(Another, host, ["myStaticMethod"]);
           MyResource._registerBindObject((globalArrayOfStr.at(0)), host, []);
           MyResource._registerBindObject((globalMapOfNum)["a"], host, []);
           MyResource._registerBindObject((globalSetOfStr.has("a")), host, []);
+          MyResource._registerBindObject(Another, host, ["myStaticMethod"]);
           MyResource._registerBindObject(globalAnother, host, ["myMethod"]);
           MyResource._registerBindObject(globalAnother.first.myResource, host, ["put"]);
           MyResource._registerBindObject(globalAnother.myField, host, []);

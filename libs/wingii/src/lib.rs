@@ -21,25 +21,24 @@ mod util;
 pub type Result<T> = std::result::Result<T, Box<dyn Error>>;
 
 pub mod spec {
+	use camino::{Utf8Path, Utf8PathBuf};
 	use flate2::read::GzDecoder;
 	use speedy::{Readable, Writable};
+	use std::fs;
 	use std::io::Read;
-	use std::path::PathBuf;
 	use std::time::SystemTime;
 
 	use crate::jsii::{Assembly, JsiiFile};
 	use crate::Result;
-	use std::fs;
-	use std::path::Path;
 
 	pub const SPEC_FILE_NAME: &str = ".jsii";
 	pub const REDIRECT_FIELD: &str = "jsii/file-redirect";
 	pub(crate) const CACHE_FILE_EXT: &str = ".jsii.speedy";
 
-	pub fn find_assembly_file(directory: &str) -> Result<String> {
-		let dot_jsii_file = Path::new(directory).join(SPEC_FILE_NAME);
+	pub fn find_assembly_file(directory: &Utf8Path) -> Result<Utf8PathBuf> {
+		let dot_jsii_file = Utf8Path::new(directory).join(SPEC_FILE_NAME);
 		if dot_jsii_file.exists() {
-			Ok(dot_jsii_file.to_str().unwrap().to_string())
+			Ok(dot_jsii_file)
 		} else {
 			Err(
 				format!(
@@ -51,7 +50,7 @@ pub mod spec {
 		}
 	}
 
-	pub(crate) fn get_cache_file_path(manifest_path: &Path, hash: &str) -> PathBuf {
+	pub(crate) fn get_cache_file_path(manifest_path: &Utf8Path, hash: &str) -> Utf8PathBuf {
 		manifest_path
 			.parent()
 			.unwrap()
@@ -59,7 +58,7 @@ pub mod spec {
 			.join(format!("{hash}{CACHE_FILE_EXT}"))
 	}
 
-	pub(crate) fn try_load_from_cache(manifest_path: &Path, hash: &str) -> Option<Assembly> {
+	pub(crate) fn try_load_from_cache(manifest_path: &Utf8Path, hash: &str) -> Option<Assembly> {
 		let path = get_cache_file_path(manifest_path, hash);
 		let data = fs::read(path).ok()?;
 		let asm = Assembly::read_from_buffer(&data).ok()?;
@@ -68,12 +67,10 @@ pub mod spec {
 
 	pub fn load_assembly_from_file(
 		name: &str,
-		path_to_file: &str,
+		assembly_path: &Utf8Path,
 		compression: Option<&str>,
 		module_version: &Option<String>,
 	) -> Result<Assembly> {
-		let assembly_path = Path::new(path_to_file);
-
 		// First try loading the manifest from the cache
 		let fingerprint = get_manifest_fingerprint(name, assembly_path, module_version);
 		let maybe_manifest = fingerprint
@@ -111,19 +108,14 @@ pub mod spec {
 					.parent()
 					.expect("Assembly path has no parent")
 					.join(&asm_redirect.filename);
-				load_assembly_from_file(
-					name,
-					path.to_str().expect("JSII redirect path invalid"),
-					Some(&asm_redirect.compression),
-					module_version,
-				)
+				load_assembly_from_file(name, &path, Some(&asm_redirect.compression), module_version)
 			}
 		}
 	}
 
 	pub(crate) fn get_manifest_fingerprint(
 		name: &str,
-		assembly_path: &Path,
+		assembly_path: &Utf8Path,
 		module_version: &Option<String>,
 	) -> Option<String> {
 		let module_version = module_version.as_ref()?;
@@ -142,7 +134,7 @@ pub mod spec {
 		Some(blake3::hash(&fp_raw_str.as_bytes()).to_string())
 	}
 
-	fn cache_manifest(manifest_path: &Path, manifest: &Assembly, hash: &str) -> Result<()> {
+	fn cache_manifest(manifest_path: &Utf8Path, manifest: &Assembly, hash: &str) -> Result<()> {
 		let cache_file_dir = manifest_path.parent().unwrap().to_path_buf();
 		let cache_file_name = format!("{hash}{CACHE_FILE_EXT}");
 
@@ -169,6 +161,7 @@ pub mod spec {
 pub mod type_system {
 	type AssemblyName = String;
 
+	use camino::Utf8Path;
 	use serde_json::Value;
 
 	use crate::fqn::FQN;
@@ -240,7 +233,7 @@ pub mod type_system {
 			Ok(name)
 		}
 
-		pub fn load_dep(&mut self, dep: &str, search_start: &str) -> Result<AssemblyName> {
+		pub fn load_dep(&mut self, dep: &str, search_start: &Utf8Path) -> Result<AssemblyName> {
 			let module_dir = package_json::find_dependency_directory(dep, search_start).ok_or(format!(
 				"Unable to load \"{}\": Module not found in \"{}\"",
 				dep, search_start
@@ -248,8 +241,8 @@ pub mod type_system {
 			self.load_module(&module_dir)
 		}
 
-		pub fn load_module(&mut self, module_directory: &str) -> Result<AssemblyName> {
-			let file_path = std::path::Path::new(module_directory).join("package.json");
+		pub fn load_module(&mut self, module_directory: &Utf8Path) -> Result<AssemblyName> {
+			let file_path = Utf8Path::new(module_directory).join("package.json");
 			let package_json = std::fs::read_to_string(file_path)?;
 			let package: serde_json::Value = serde_json::from_str(&package_json)?;
 			let _ = package

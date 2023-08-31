@@ -62,6 +62,7 @@ export class Website implements IWebsiteClient, ISimulatorResourceInstance {
   public async cleanup(): Promise<void> {
     this.addTrace(`Closing server on ${this.url}`);
     this.server?.close();
+    this.server?.closeAllConnections();
   }
 
   private addTrace(message: string): void {

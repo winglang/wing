@@ -179,6 +179,9 @@ where
 				v.visit_expr(expr);
 			}
 		}
+		StmtKind::Throw(expr) => {
+			v.visit_expr(expr);
+		}
 		StmtKind::Scope(scope) => {
 			v.visit_scope(scope);
 		}
@@ -248,7 +251,7 @@ where
 	}
 
 	if let Some(extend) = &node.parent {
-		v.visit_expr(&extend);
+		v.visit_user_defined_type(extend);
 	}
 
 	for implement in &node.implements {
@@ -276,7 +279,7 @@ pub fn visit_new_expr<'ast, V>(v: &mut V, node: &'ast NewExpr)
 where
 	V: Visit<'ast> + ?Sized,
 {
-	v.visit_expr(&node.class);
+	v.visit_user_defined_type(&node.class);
 	v.visit_args(&node.arg_list);
 	if let Some(id) = &node.obj_id {
 		v.visit_expr(&id);
@@ -408,11 +411,8 @@ where
 			v.visit_expr(object);
 			v.visit_symbol(property);
 		}
-		Reference::TypeReference(type_) => {
-			v.visit_user_defined_type(type_);
-		}
-		Reference::TypeMember { typeobject, property } => {
-			v.visit_expr(typeobject);
+		Reference::TypeMember { type_name, property } => {
+			v.visit_user_defined_type(type_name);
 			v.visit_symbol(property);
 		}
 	}
@@ -487,12 +487,7 @@ where
 			}
 			v.visit_type_annotation(&f.return_type);
 		}
-		TypeAnnotationKind::UserDefined(t) => {
-			v.visit_symbol(&t.root);
-			for field in &t.fields {
-				v.visit_symbol(field);
-			}
-		}
+		TypeAnnotationKind::UserDefined(t) => v.visit_user_defined_type(t),
 	}
 }
 

@@ -156,6 +156,7 @@ where
 		StmtKind::Break => StmtKind::Break,
 		StmtKind::Continue => StmtKind::Continue,
 		StmtKind::Return(value) => StmtKind::Return(value.map(|value| f.fold_expr(value))),
+		StmtKind::Throw(value) => StmtKind::Throw(f.fold_expr(value)),
 		StmtKind::Expression(expr) => StmtKind::Expression(f.fold_expr(expr)),
 		StmtKind::Assignment { variable, value } => StmtKind::Assignment {
 			variable: f.fold_reference(variable),
@@ -210,7 +211,7 @@ where
 			.map(|(name, def)| (f.fold_symbol(name), f.fold_function_definition(def)))
 			.collect(),
 		initializer: f.fold_function_definition(node.initializer),
-		parent: node.parent.map(|parent| f.fold_expr(parent)),
+		parent: node.parent.map(|parent| f.fold_user_defined_type(parent)),
 		implements: node
 			.implements
 			.into_iter()
@@ -342,7 +343,7 @@ where
 	F: Fold + ?Sized,
 {
 	NewExpr {
-		class: Box::new(f.fold_expr(*node.class)),
+		class: f.fold_user_defined_type(node.class),
 		obj_id: node.obj_id,
 		arg_list: f.fold_args(node.arg_list),
 		obj_scope: node.obj_scope,
@@ -386,9 +387,8 @@ where
 			property: f.fold_symbol(property),
 			optional_accessor,
 		},
-		Reference::TypeReference(udt) => Reference::TypeReference(f.fold_user_defined_type(udt)),
-		Reference::TypeMember { typeobject, property } => Reference::TypeMember {
-			typeobject: Box::new(f.fold_expr(*typeobject)),
+		Reference::TypeMember { type_name, property } => Reference::TypeMember {
+			type_name: f.fold_user_defined_type(type_name),
 			property: f.fold_symbol(property),
 		},
 	}

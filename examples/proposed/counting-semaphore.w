@@ -59,13 +59,13 @@ queue.add_consumer(inflight (message: str) => {
   let is_resource_1_acquired = resource_1.try_acquire();
   if !is_resource_1_acquired {
     // brutally error out to re-enqueue
-    throw("Failed to acquire resource 1");
+    throw "Failed to acquire resource 1";
   }
   let is_resource_2_acquired = resource_2.try_acquire();
   if !is_resource_2_acquired {
     resource_1.release();
     // brutally error out to re-enqueue
-    throw("Failed to acquire resource 2");
+    throw "Failed to acquire resource 2";
   }
 
   // real work

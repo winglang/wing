@@ -301,15 +301,6 @@ impl<'a> JsiiImporter<'a> {
 			_ => false,
 		};
 
-		let extends = if let Some(interfaces) = &jsii_interface.interfaces {
-			interfaces
-				.iter()
-				.map(|fqn| self.lookup_or_create_type(&FQN::from(fqn.as_str())))
-				.collect::<Vec<_>>()
-		} else {
-			vec![]
-		};
-
 		let mut iface_env = SymbolEnv::new(
 			None,
 			self.wing_types.void(),
@@ -326,8 +317,10 @@ impl<'a> JsiiImporter<'a> {
 		let mut wing_type = match is_struct {
 			true => self.wing_types.add_type(Type::Struct(Struct {
 				name: new_type_symbol.clone(),
-				extends: extends.clone(),
+				// Will be replaced below
+				extends: vec![],
 				docs: Docs::from(&jsii_interface.docs),
+				// Will be replaced below
 				env: SymbolEnv::new(
 					None,
 					self.wing_types.void(),
@@ -335,12 +328,14 @@ impl<'a> JsiiImporter<'a> {
 					false,
 					Phase::Independent, // structs are phase-independent
 					self.jsii_spec.import_statement_idx,
-				), // Dummy env, will be replaced below
+				),
 			})),
 			false => self.wing_types.add_type(Type::Interface(Interface {
 				name: new_type_symbol.clone(),
-				extends: extends.clone(),
+				// Will be replaced below
+				extends: vec![],
 				docs: Docs::from(&jsii_interface.docs),
+				// Will be replaced below
 				env: SymbolEnv::new(
 					None,
 					self.wing_types.void(),
@@ -348,11 +343,22 @@ impl<'a> JsiiImporter<'a> {
 					false,
 					iface_env.phase,
 					self.jsii_spec.import_statement_idx,
-				), // Dummy env, will be replaced below
+				),
 			})),
 		};
 
 		self.register_jsii_type(&jsii_interface_fqn, &new_type_symbol, wing_type);
+
+		if let Some(interfaces) = &jsii_interface.interfaces {
+			if let Type::Struct(Struct { ref mut extends, .. }) | Type::Interface(Interface { ref mut extends, .. }) =
+				*wing_type
+			{
+				*extends = interfaces
+					.iter()
+					.map(|fqn| self.lookup_or_create_type(&FQN::from(fqn.as_str())))
+					.collect::<Vec<_>>()
+			}
+		};
 
 		self.add_members_to_class_env(
 			jsii_interface,
@@ -364,17 +370,31 @@ impl<'a> JsiiImporter<'a> {
 
 		// Add properties from our parents to the new structs env
 		if is_struct {
-			type_check::add_parent_members_to_struct_env(&extends, &new_type_symbol, &mut iface_env).expect(&format!(
+			type_check::add_parent_members_to_struct_env(
+				&wing_type.as_struct().expect("Expected struct").extends,
+				&new_type_symbol,
+				&mut iface_env,
+			)
+			.expect(&format!(
 				"Invalid JSII library: failed to add parent members to struct {}",
 				type_name
 			));
 		}
-
 		// Add inflight methods from any docstring-linked interfaces to the new interface's env
 		// For example, `IBucket` could contain all of the preflight methods of a bucket, and
 		// contain docstring tag of "@inflight IBucketClient" where `IBucketClient` is an interface
 		// that contains all of the inflight methods of a bucket.
-		if !is_struct {
+		else {
+			type_check::add_parent_members_to_iface_env(
+				&wing_type.as_interface().expect("Expected interface").extends,
+				&new_type_symbol,
+				&mut iface_env,
+			)
+			.expect(&format!(
+				"Invalid JSII library: failed to add parent members to struct {}",
+				type_name
+			));
+
 			// Look for a client interface for this resource
 			let inflight_tag: Option<&str> = extract_docstring_tag(&jsii_interface.docs, "inflight");
 
@@ -647,24 +667,13 @@ impl<'a> JsiiImporter<'a> {
 			})
 		});
 
-		let implements = if let Some(interface_fqns) = &jsii_class.interfaces {
-			interface_fqns
-				.iter()
-				.map(|i| {
-					let fqn = FQN::from(i.as_str());
-					self.lookup_or_create_type(&fqn)
-				})
-				.collect::<Vec<_>>()
-		} else {
-			vec![]
-		};
-
 		let class_spec = Class {
 			name: new_type_symbol.clone(),
 			env: dummy_env,
 			fqn: Some(jsii_class_fqn.to_string()),
 			parent: base_class_type,
-			implements,
+			// Will be replaced below
+			implements: vec![],
 			is_abstract: jsii_class.abstract_.unwrap_or(false),
 			type_parameters: type_params,
 			phase: class_phase,
@@ -674,6 +683,18 @@ impl<'a> JsiiImporter<'a> {
 		};
 		let mut new_type = self.wing_types.add_type(Type::Class(class_spec));
 		self.register_jsii_type(&jsii_class_fqn, &new_type_symbol, new_type);
+
+		if let Some(interface_fqns) = &jsii_class.interfaces {
+			// mutate the class's implements field to point to the actual interfaces
+			let mut_type = new_type.as_class_mut().unwrap();
+			mut_type.implements = interface_fqns
+				.iter()
+				.map(|i| {
+					let fqn = FQN::from(i.as_str());
+					self.lookup_or_create_type(&fqn)
+				})
+				.collect::<Vec<_>>()
+		};
 
 		// Create class's actual environment before we add properties and methods to it
 		let mut class_env = SymbolEnv::new(base_class_env, self.wing_types.void(), false, false, class_phase, 0);

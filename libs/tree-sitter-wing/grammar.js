@@ -117,7 +117,8 @@ module.exports = grammar({
         $.enum_definition,
         $.try_catch_statement,
         $.compiler_dbg_env,
-        $.super_constructor_statement
+        $.super_constructor_statement,
+        $.throw_statement,
       ),
 
     import_statement: ($) =>
@@ -147,6 +148,9 @@ module.exports = grammar({
 
     return_statement: ($) =>
       seq("return", optional(field("expression", $.expression)), $._semicolon),
+
+    throw_statement: ($) =>
+      seq("throw", optional(field("expression", $.expression)), $._semicolon),
 
     variable_assignment_statement: ($) =>
       seq(

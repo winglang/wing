@@ -8,6 +8,10 @@
     },
     "package": {
       "outputs": ["../../../../dist/wingconsole-app-*.tgz"]
+    },
+    "preview:fly": {
+      "dependsOn": ["compile"],
+      "inputs": ["demo/*", "preview/*"]
     }
   }
 }

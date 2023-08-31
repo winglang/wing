@@ -155,6 +155,7 @@ export class Api
   public async cleanup(): Promise<void> {
     this.addTrace(`Closing server on ${this.url}`);
     this.server?.close();
+    this.server?.closeAllConnections();
   }
 
   private addTrace(message: string): void {
