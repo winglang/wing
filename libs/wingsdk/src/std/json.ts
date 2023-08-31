@@ -146,12 +146,13 @@ export class Json {
   private constructor() {}
 
   /**
-   * Returns a specified element from the Json.
+   * Returns the value associated with the specified Json key
    *
-   * @macro ($self$)[$args$]
+   * @macro ((obj, args) => { if (obj[args] === undefined) throw new Error("Json property does not exist"); return obj[args] })($self$, $args$)
    *
-   * @param key The key of the element to return
-   * @returns The element associated with the specified key, or undefined if the key can't be found
+   * @param key The key of the Json property
+   * @returns The value associated with the specified Json key
+   * @throws Json property does not exist if the given key is not part of an existing property
    */
   public get(key: string): Json {
     key;
@@ -278,12 +279,13 @@ export class MutJson {
   private constructor() {}
 
   /**
-   * Returns a specified element from the Json.
+   * Returns the value associated with the specified Json key
    *
-   * @macro ($self$)[$args$]
+   * @macro ((obj, args) => { if (obj[args] === undefined) throw new Error("Json property does not exist"); return obj[args] })($self$, $args$)
    *
-   * @param key The key of the element to return
-   * @returns The element associated with the specified key, or undefined if the key can't be found
+   * @param key The key of the Json property
+   * @returns The value associated with the specified Json key
+   * @throws Json property does not exist if the given key is not part of an existing property
    */
   public get(key: string): MutJson {
     key;

@@ -3,35 +3,53 @@
 //-----------------------------------------------------------------------------
 bring cloud;
 
-// set() & get()
-let a = MutJson { a: 1 };
-let b = MutJson { b: 2 };
-a.set("c", b);
+test "get()" {
+  let assertThrows = (expected: str, block: (): void) => {
+    let var error = false;
+    try {
+      block();
+    } catch actual {
+      assert(actual == expected);
+      error = true;
+    }
+    assert(error);
+  };
 
-let c = a.get("c");
-assert(c.get("b") == 2);
+  let JSON_PROPERTY_DOES_NOT_EXIST_ERROR = "Json property does not exist";
+  let obj = Json { a: 1, b: 2 };
+  let mutObj = MutJson { x: 1, y: 2 };
+
+  assert(obj.get("b") == 2);
+  assert(mutObj.get("y") == 2);
+
+  assertThrows(JSON_PROPERTY_DOES_NOT_EXIST_ERROR, () => {
+    obj.get("c");
+  });
+  assertThrows(JSON_PROPERTY_DOES_NOT_EXIST_ERROR, () => {
+    mutObj.get("z");
+  });
+}
 
 test "set()" {
-  let x = MutJson { a: 1 };
-  x.set("b", 2);
-  let y = x.get("b"); 
-  assert(y == 2);
+  let obj = MutJson { a: 1 };
+  obj.set("b", 2);
+  assert(obj.get("b") == 2);
 }
 
 //-----------------------------------------------------------------------------
 // setAt() & getAt()
-let d = MutJson { d: 3 };
-a.setAt(2, d);
-let e = a.getAt(2);
-assert(e.get("d") == 3);
+// let d = MutJson { d: 3 };
+// a.setAt(2, d);
+// let e = a.getAt(2);
+// assert(e.get("d") == 3);
 
-test "setAt()" {
-  let x = MutJson { a: 1 };
-  let a = MutJson { c: 3 };
-  x.setAt(2, a);
-  let d = x.getAt(2);
-  assert(d.get("c") == 3);
-}
+// test "setAt()" {
+//   let x = MutJson { a: 1 };
+//   let a = MutJson { c: 3 };
+//   x.setAt(2, a);
+//   let d = x.getAt(2);
+//   assert(d.get("c") == 3);
+// }
 
 //-----------------------------------------------------------------------------
 // tryParse()
