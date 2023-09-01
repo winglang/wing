@@ -64,6 +64,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
           const source = await fsPromise.readFile(span.file_id, "utf8");
           const start = byteOffsetFromLineAndColumn(source, span.start.line, span.start.col);
           const end = byteOffsetFromLineAndColumn(source, span.end.line, span.end.col);
+          // display the file path relative to the current working directory
           const filePath = relative(process.cwd(), span.file_id);
           files.push({ name: filePath, source });
           labels.push({
