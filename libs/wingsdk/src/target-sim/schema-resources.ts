@@ -22,6 +22,7 @@ export const WEBSITE_TYPE = "wingsdk.cloud.Website";
 export const SECRET_TYPE = "wingsdk.cloud.Secret";
 export const SERVICE_TYPE = "wingsdk.cloud.Service";
 export const ON_DEPLOY_TYPE = "wingsdk.cloud.OnDeploy";
+export const ASTRO_TYPE = "wingsdk.ex.Astro";
 
 export type FunctionHandle = string;
 export type PublisherHandle = string;
@@ -237,6 +238,15 @@ export interface WebsiteSchema extends BaseResourceSchema {
     staticFilesPath: string;
     /** Map of `.json` file paths to dynamic content inserted from preflight */
     jsonRoutes: Record<string, Json>;
+  };
+}
+
+/** Schema for ex.Astro */
+export interface AstroSchema extends BaseResourceSchema {
+  readonly type: typeof ASTRO_TYPE;
+  readonly props: {
+    /** Path to the Astro project root directory */
+    root: string;
   };
 }
 

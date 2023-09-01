@@ -1,5 +1,6 @@
 export * from "./api";
 export * from "./app";
+export * from "./astro";
 export * from "./bucket";
 export * from "./counter";
 export * from "./function";

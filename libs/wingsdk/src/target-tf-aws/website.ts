@@ -92,6 +92,13 @@ export class Website extends cloud.Website {
       },
       priceClass: "PriceClass_100",
       viewerCertificate: { cloudfrontDefaultCertificate: true },
+      orderedCacheBehavior: [
+        // {
+        //   allowedMethods: ["GET", "PUT", "POST", "HEAD"],
+        //   cachedMethods: [],
+        //   targetOriginId: "apiGatewayOrigin",
+        // }
+      ],
     });
 
     // allow cloudfront distribution to read from private s3 bucket

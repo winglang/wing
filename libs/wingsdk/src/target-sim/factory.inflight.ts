@@ -15,6 +15,7 @@ import {
   SCHEDULE_TYPE,
   SERVICE_TYPE,
   ON_DEPLOY_TYPE,
+  ASTRO_TYPE,
 } from "./schema-resources";
 import type {
   ISimulatorFactory,
@@ -67,6 +68,9 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
       case WEBSITE_TYPE:
         const Website = require("./website.inflight").Website;
         return new Website(props, context);
+      case ASTRO_TYPE:
+        const Astro = require("./astro.inflight").Astro;
+        return new Astro(props, context);
       case SECRET_TYPE:
         const Secret = require("./secret.inflight").Secret;
         return new Secret(props, context);

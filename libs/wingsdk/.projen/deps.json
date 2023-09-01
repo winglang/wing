@@ -243,6 +243,10 @@
       "type": "bundled"
     },
     {
+      "name": "astro",
+      "type": "bundled"
+    },
+    {
       "name": "aws-cdk-lib",
       "version": "^2.64.0",
       "type": "bundled"
