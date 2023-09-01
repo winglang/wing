@@ -43,10 +43,14 @@ class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     const obj = ({"strValue": "test","numValue": 1});
-    const notStringifyStrValue = String.raw({ raw: ["string: ", ""] }, ((e) => typeof e === 'string' ? e : JSON.stringify(e, null, 2))((obj)["strValue"]));
-    {((cond) => {if (!cond) throw new Error("assertion failed: notStringifyStrValue == \"string: test\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(notStringifyStrValue,"string: test")))};
-    const stringifyNumValue = String.raw({ raw: ["number: ", ""] }, ((e) => typeof e === 'string' ? e : JSON.stringify(e, null, 2))((obj)["numValue"]));
+    const notStringifyStrValue = String.raw({ raw: ["string: ", ""] }, JSON.stringify((obj)["strValue"]));
+    {((cond) => {if (!cond) throw new Error("assertion failed: notStringifyStrValue == \"string: \\\"test\\\"\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(notStringifyStrValue,"string: \"test\"")))};
+    const stringifyNumValue = String.raw({ raw: ["number: ", ""] }, JSON.stringify((obj)["numValue"]));
     {((cond) => {if (!cond) throw new Error("assertion failed: stringifyNumValue == \"number: 1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(stringifyNumValue,"number: 1")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"${obj}\" == Json.stringify(obj)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", ""] }, JSON.stringify(obj)),((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([obj]))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"${obj.get(\"strValue\")}\" == Json.stringify(obj.get(\"strValue\"))")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", ""] }, JSON.stringify((obj)["strValue"])),((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([(obj)["strValue"]]))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: obj.get(\"strValue\") == Json.parse(Json.stringify(obj.get(\"strValue\")))")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((obj)["strValue"],(JSON.parse(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([(obj)["strValue"]]))))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: obj.get(\"strValue\") == Json.parse(\"${obj.get(\"strValue\")}\")")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((obj)["strValue"],(JSON.parse(String.raw({ raw: ["", ""] }, JSON.stringify((obj)["strValue"])))))))};
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
