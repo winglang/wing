@@ -1,5 +1,3 @@
-use std::borrow::BorrowMut;
-
 use crate::{
 	ast::{
 		Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, Symbol, UserDefinedType,
@@ -11,7 +9,7 @@ use crate::{
 		lifts::{Liftable, Lifts},
 		resolve_user_defined_type,
 		symbol_env::{LookupResult, SymbolEnv},
-		ClassLike, TypeRef, CLOSURE_CLASS_HANDLE_METHOD, SymbolKind, Struct,
+		ClassLike, TypeRef, CLOSURE_CLASS_HANDLE_METHOD,
 	},
 	visit::{self, Visit},
 	visit_context::{VisitContext, VisitorWithContext},
@@ -119,30 +117,21 @@ impl<'a> LiftVisitor<'a> {
 				lifts: None,
 				visit_ctx: &mut self.ctx,
 			},
-      env
+			env,
 		);
 		self.ctx.pop_phase();
 		res
 	}
 
-  fn jsify_struct(&self, struct_: &Struct) -> String {
-    let res = self.jsify.jsify_struct(
-      struct_,
-      &mut JSifyContext {
-        lifts: None,
-        visit_ctx: &mut VisitContext::new(),
-      },
-    );
-    res.to_string()
-  }
-
-	fn jsify_udt(&mut self, node: &UserDefinedType) -> String {
+	fn jsify_udt(&self, node: &UserDefinedType) -> String {
+    let ctx = &self.ctx;
 		let res = self.jsify.jsify_user_defined_type(
 			&node,
 			&mut JSifyContext {
 				lifts: None,
-				visit_ctx: &mut self.ctx,
+				visit_ctx: &mut VisitContext::new(),
 			},
+      ctx.current_env().unwrap()
 		);
 		res
 	}
@@ -156,21 +145,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 				visit::visit_reference(self, &node);
 				self.ctx.pop_property();
 			}
-			Reference::TypeMember { property, type_name } => {
-        match self.ctx.current_env().unwrap().lookup_nested_str(&type_name.full_path_str(), None) {
-          LookupResult::Found(kind, symbol_info) => {
-            match kind {
-              SymbolKind::Type(type_) => {
-                if let Some(s) = type_.as_struct() {
-                  let struct_code = self.jsify_struct(s);
-                }
-              }
-              _ => {}
-            }
-          }
-          _ => {}
-        }
-        
+			Reference::TypeMember { property, .. } => {
 				self.ctx.push_property(property);
 				visit::visit_reference(self, &node);
 				self.ctx.pop_property();

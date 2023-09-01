@@ -16,7 +16,7 @@ use crate::ast::{
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan};
 use crate::file_graph::FileGraph;
-use crate::files::Files;
+use crate::files::{FileData, Files};
 use crate::type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
 use crate::{dbg_panic, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
 
@@ -184,7 +184,7 @@ pub fn parse_wing_project(
 		}
 
 		let file_text = fs::read_to_string(&file_path).unwrap_or(String::new());
-		files.add_file(&file_path, file_text.clone()).unwrap();
+		files.add_file(&file_path, FileData::new(file_text.clone())).unwrap();
 		files.get_file(&file_path).unwrap();
 
 		// Parse the file

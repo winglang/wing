@@ -19,7 +19,7 @@ use indexmap::IndexMap;
 use jsify::JSifier;
 use lifting::LiftVisitor;
 use parser::parse_wing_project;
-use struct_schema::ReferenceVisitor;
+use struct_schema::StructSchemaVisitor;
 use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
@@ -55,6 +55,7 @@ pub mod jsify;
 mod lifting;
 pub mod lsp;
 pub mod parser;
+pub mod struct_schema;
 pub mod type_check;
 mod type_check_assert;
 mod valid_json_visitor;
@@ -62,7 +63,6 @@ pub mod visit;
 mod visit_context;
 mod visit_types;
 mod wasm_util;
-pub mod struct_schema;
 
 const WINGSDK_ASSEMBLY_NAME: &'static str = "@winglang/sdk";
 
@@ -352,8 +352,6 @@ pub fn compile(
 		.map(|(path, scope)| {
 			let mut lift = LiftVisitor::new(&jsifier);
 			lift.visit_scope(&scope);
-      let mut reference_visitor = ReferenceVisitor::new(&jsifier);
-      reference_visitor.visit_scope(&scope);
 			(path, scope)
 		})
 		.collect::<IndexMap<Utf8PathBuf, Scope>>();
@@ -362,6 +360,16 @@ pub fn compile(
 	if found_errors() {
 		return Err(());
 	}
+
+	// -- PRE-EMIT PHASE --
+	asts = asts
+		.into_iter()
+		.map(|(path, scope)| {
+			let mut reference_visitor = StructSchemaVisitor::new(&jsifier);
+			reference_visitor.visit_scope(&scope);
+			(path, scope)
+		})
+		.collect::<IndexMap<PathBuf, Scope>>();
 
 	// -- JSIFICATION PHASE --
 
