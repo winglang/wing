@@ -1,7 +1,6 @@
-// TODO: https://github.com/winglang/wing/issues/3792
-// bring cloud;
-// let j = { public: false };
-// let x = cloud.BucketProps.fromJson(j);
+bring cloud;
+let j = { public: false };
+let x = cloud.BucketProps.fromJson(j);
 
 // simple case
 struct Foo {
