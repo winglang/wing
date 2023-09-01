@@ -385,12 +385,12 @@ const externalStructs = require("./preflight.structs-1.js")({ $stdlib });
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    const BucketProps = require("./BucketProps.Struct.js")($stdlib.std.Struct);
-    const Student = require("./Student.Struct.js")($stdlib.std.Struct);
     const Foosible = require("./Foosible.Struct.js")($stdlib.std.Struct);
+    const Student = require("./Student.Struct.js")($stdlib.std.Struct);
     const Foo = require("./Foo.Struct.js")($stdlib.std.Struct);
-    const Bar = require("./Bar.Struct.js")($stdlib.std.Struct);
+    const BucketProps = require("./BucketProps.Struct.js")($stdlib.std.Struct);
     const MyOtherStruct = require("./MyOtherStruct.Struct.js")($stdlib.std.Struct);
+    const Bar = require("./Bar.Struct.js")($stdlib.std.Struct);
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
