@@ -31,7 +31,7 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
       const username = "tsuf";
       const res = (await $http_Util.get(String.raw({ raw: ["", "/users/", ""] }, $api_url, username)));
       {((cond) => {if (!cond) throw new Error("assertion failed: res.status == 200")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(res.status,200)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: Json.parse(res.body ?? \"\").get(\"user\") == username")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error("Json property does not exist"); return obj[args] })((JSON.parse((res.body ?? ""))), "user"),username)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.parse(res.body ?? \"\").get(\"user\") == username")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })((JSON.parse((res.body ?? ""))), "user"),username)))};
     }
   }
   return $Closure2;
