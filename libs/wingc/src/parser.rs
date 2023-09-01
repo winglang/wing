@@ -716,11 +716,11 @@ impl<'s> Parser<'s> {
 				return self.with_error("Cannot bring a module into itself", statement_node);
 			}
 			if !source_path.exists() {
-				return self.with_error(format!("Cannot find module \"{}\"", source_path), statement_node);
+				return self.with_error(format!("Cannot find module \"{}\"", module_path), statement_node);
 			}
 			if !source_path.is_file() {
 				return self.with_error(
-					format!("Cannot bring module \"{}\": not a file", source_path),
+					format!("Cannot bring module \"{}\": not a file", module_path),
 					statement_node,
 				);
 			}
@@ -1188,8 +1188,12 @@ impl<'s> Parser<'s> {
 		let signature = self.build_function_signature(func_def_node, phase)?;
 		let statements = if let Some(external) = func_def_node.child_by_field_name("extern_modifier") {
 			let node_text = self.node_text(&external.named_child(0).unwrap());
-			let node_text = &node_text[1..node_text.len() - 1];
-			FunctionBody::External(node_text.to_string())
+			let file_path = Utf8Path::new(&node_text[1..node_text.len() - 1]);
+			let file_path = normalize_path(file_path, Some(&Utf8Path::new(&self.source_name)));
+			if !file_path.exists() {
+				self.add_error(format!("File not found: {}", node_text), &external);
+			}
+			FunctionBody::External(file_path.to_string())
 		} else {
 			FunctionBody::Statements(self.build_scope(&self.get_child_field(func_def_node, "block")?, phase))
 		};

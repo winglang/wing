@@ -74,6 +74,9 @@ module.exports = function({  }) {
   class Q {
     constructor({  }) {
     }
+    static async greet(name) {
+      return (require("<ABSOLUTE_PATH>/util.js")["greet"])(name)
+    }
   }
   return Q;
 }
@@ -637,7 +640,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _getInflightOps() {
-      return ["$inflight_init"];
+      return ["greet", "$inflight_init"];
     }
   }
   return { Q };

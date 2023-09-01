@@ -151,8 +151,11 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 
 	let split = args.split(";").collect::<Vec<&str>>();
 	let source_file = Utf8Path::new(split[0]);
-	let output_dir = split.get(1).map(|s| Utf8Path::new(s));
-	let absolute_project_dir = split.get(2).map(|s| Utf8Path::new(s));
+	let output_dir = split.get(1).map(|s| Utf8Path::new(s)).expect("output dir not provided");
+	let project_dir = split
+		.get(2)
+		.map(|s| Utf8Path::new(s))
+		.expect("project dir not provided");
 
 	if !source_file.exists() {
 		report_diagnostic(Diagnostic {
@@ -181,7 +184,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 		}
 	};
 
-	let results = compile(source_file, source_text, output_dir, absolute_project_dir);
+	let results = compile(project_dir, source_file, source_text, output_dir);
 	if results.is_err() {
 		WASM_RETURN_ERROR
 	} else {
@@ -267,14 +270,14 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 }
 
 pub fn compile(
+	project_dir: &Utf8Path,
 	source_path: &Utf8Path,
 	source_text: String,
-	out_dir: Option<&Utf8Path>,
-	absolute_project_root: Option<&Utf8Path>,
+	out_dir: &Utf8Path,
 ) -> Result<CompilerOutput, ()> {
-	let file_name = source_path.file_name().unwrap();
-	let default_out_dir = Utf8PathBuf::from(format!("{}.out", file_name));
-	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
+	assert!(project_dir.is_absolute());
+	assert!(source_path.is_absolute());
+	assert!(out_dir.is_absolute());
 
 	// -- PARSING PHASE --
 	let mut files = Files::new();
@@ -326,20 +329,7 @@ pub fn compile(
 		json_checker.check(&scope);
 	}
 
-	let project_dir = absolute_project_root
-		.unwrap_or(source_path.parent().unwrap())
-		.to_path_buf();
-
-	// Verify that the project dir is absolute
-	if !is_project_dir_absolute(&project_dir) {
-		report_diagnostic(Diagnostic {
-			message: format!("Project directory must be absolute: {}", project_dir),
-			span: None,
-		});
-		return Err(());
-	}
-
-	let mut jsifier = JSifier::new(&mut types, &files, &source_path, &project_dir);
+	let mut jsifier = JSifier::new(&mut types, &files, &source_path);
 
 	// -- LIFTING PHASE --
 
@@ -377,44 +367,29 @@ pub fn compile(
 	return Ok(CompilerOutput {});
 }
 
-fn is_project_dir_absolute(project_dir: &Utf8PathBuf) -> bool {
-	if project_dir.starts_with("/") {
-		return true;
-	}
-
-	let project_dir = project_dir.as_str();
-	// Check if this is a Windows path instead by checking if the second char is a colon
-	// Note: Cannot use Utf8Path::is_absolute() because it doesn't work with Windows paths on WASI
-	if project_dir.len() < 2 || project_dir.chars().nth(1).expect("Project dir has second character") != ':' {
-		return false;
-	}
-
-	return true;
-}
-
 #[cfg(test)]
 mod sanity {
-	use camino::Utf8PathBuf;
+	use camino::{Utf8Path, Utf8PathBuf};
 
 	use crate::{compile, diagnostic::assert_no_panics};
-	use std::{fs, path::Path};
+	use std::fs;
 
 	fn get_wing_files<P>(dir: P) -> impl Iterator<Item = Utf8PathBuf>
 	where
-		P: AsRef<Path>,
+		P: AsRef<Utf8Path>,
 	{
-		fs::read_dir(dir)
+		fs::read_dir(dir.as_ref())
 			.unwrap()
 			.map(|entry| Utf8PathBuf::from_path_buf(entry.unwrap().path()).expect("invalid unicode path"))
 			.filter(|path| path.is_file() && path.extension().map(|ext| ext == "w").unwrap_or(false))
 	}
 
 	fn compile_test(test_dir: &str, expect_failure: bool) {
-		for test_file in get_wing_files(test_dir) {
+		let test_dir = Utf8Path::new(test_dir).canonicalize_utf8().unwrap();
+		for test_file in get_wing_files(&test_dir) {
 			println!("\n=== {} ===\n", test_file);
 
-			let mut out_dir = test_file.parent().unwrap().to_path_buf();
-			out_dir.push(format!("target/wingc/{}.out", test_file.file_name().unwrap()));
+			let out_dir = test_dir.join(format!("target/wingc/{}.out", test_file.file_name().unwrap()));
 
 			// reset out_dir
 			if out_dir.exists() {
@@ -423,12 +398,7 @@ mod sanity {
 
 			let test_text = fs::read_to_string(&test_file).expect("read test file");
 
-			let result = compile(
-				&test_file,
-				test_text,
-				Some(&out_dir),
-				Some(test_file.canonicalize_utf8().unwrap().parent().unwrap()),
-			);
+			let result = compile(&test_dir, &test_file, test_text, &out_dir);
 
 			if result.is_err() {
 				assert!(

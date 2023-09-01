@@ -4,7 +4,7 @@ exports[`access_hidden_namespace.w 1`] = `
 "error: Unknown symbol \\"core\\"
   --> ../../../examples/tests/invalid/access_hidden_namespace.w:7:5
   |
-7 | new core.NodeJsCode(\\"/tmp/test.txt\\"); // This should fail even though \`fs.TextFile\` extends \`core.FileBase\` because we didn't bring in \`core\` explicitly.
+7 | new core.NodeJsCode(\\"<ABSOLUTE_PATH>/test.txt\\"); // This should fail even though \`fs.TextFile\` extends \`core.FileBase\` because we didn't bring in \`core\` explicitly.
   |     ^^^^ Unknown symbol \\"core\\"
 
 
@@ -95,11 +95,11 @@ exports[`bring_jsii.w 1`] = `
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^ bring \\"jsii-code-samples\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
 
 
-error: Cannot find module \\"foobar\\" in source directory: Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid\\"
+error: Cannot find module \\"foobar\\" in source directory: Unable to load \\"foobar\\": Module not found in \\"<ABSOLUTE_PATH>/invalid\\"
   --> ../../../examples/tests/invalid/bring_jsii.w:4:1
   |
 4 | bring \\"foobar\\" as baz;
-  | ^^^^^^^^^^^^^^^^^^^^^^ Cannot find module \\"foobar\\" in source directory: Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid\\"
+  | ^^^^^^^^^^^^^^^^^^^^^^ Cannot find module \\"foobar\\" in source directory: Unable to load \\"foobar\\": Module not found in \\"<ABSOLUTE_PATH>/invalid\\"
 
 
  
@@ -117,11 +117,11 @@ exports[`bring_local_self.w 1`] = `
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot bring a module into itself
 
 
-error: Cannot find module \\"../../../examples/tests/invalid/non-existent.w\\"
+error: Cannot find module \\"./non-existent.w\\"
   --> ../../../examples/tests/invalid/bring_local_self.w:4:1
   |
 4 | bring \\"./non-existent.w\\" as bar;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot find module \\"../../../examples/tests/invalid/non-existent.w\\"
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot find module \\"./non-existent.w\\"
 
 
  
@@ -139,11 +139,11 @@ exports[`bring_local_variables.w 1`] = `
    |   ^ Preflight field \\"x\\" is not initialized
 
 
-error: Cannot bring \\"../../../examples/tests/invalid/file_with_variables.w\\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought
+error: Cannot bring \\"<ABSOLUTE_PATH>/file_with_variables.w\\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought
   --> ../../../examples/tests/invalid/bring_local_variables.w:1:1
   |
 1 | bring \\"./file_with_variables.w\\" as stuff;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot bring \\"../../../examples/tests/invalid/file_with_variables.w\\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot bring \\"<ABSOLUTE_PATH>/file_with_variables.w\\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought
 
 
 error: Unknown symbol \\"stuff\\"
@@ -297,11 +297,11 @@ error: Expected 0 arguments but got 1
   | ^^^^^^^^^ Expected 0 arguments but got 1
 
 
-error: Expected 0 named arguments for func at ../../../examples/tests/invalid/class.w:13:1
+error: Expected 0 named arguments but got 1
    --> ../../../examples/tests/invalid/class.w:13:1
    |
 13 | new C9(token: \\"1\\");
-   | ^^^^^^^^^^^^^^^^^^ Expected 0 named arguments for func at ../../../examples/tests/invalid/class.w:13:1
+   | ^^^^^^^^^^^^^^^^^^ Expected 0 named arguments but got 1
 
 
 error: Expected 1 positional argument(s) but got 0
@@ -615,24 +615,24 @@ Duration <DURATION>"
 `;
 
 exports[`cyclic_bring1.w 1`] = `
-"error: Could not compile \\"../../../examples/tests/invalid/cyclic_bring1.w\\" due to cyclic bring statements:
-- ../../../examples/tests/invalid/cyclic_bring3.w
-- ../../../examples/tests/invalid/cyclic_bring2.w
-- ../../../examples/tests/invalid/cyclic_bring1.w
+"error: Could not compile \\"<ABSOLUTE_PATH>/cyclic_bring1.w\\" due to cyclic bring statements:
+- <ABSOLUTE_PATH>/cyclic_bring3.w
+- <ABSOLUTE_PATH>/cyclic_bring2.w
+- <ABSOLUTE_PATH>/cyclic_bring1.w
 
 
-error: Could not type check \\"../../../examples/tests/invalid/cyclic_bring2.w\\" due to cyclic bring statements
+error: Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring2.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring1.w:1:1
   |
 1 | bring \\"./cyclic_bring2.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"../../../examples/tests/invalid/cyclic_bring2.w\\" due to cyclic bring statements
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring2.w\\" due to cyclic bring statements
 
 
-error: Could not type check \\"../../../examples/tests/invalid/cyclic_bring3.w\\" due to cyclic bring statements
+error: Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring3.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring2.w:1:1
   |
 1 | bring \\"./cyclic_bring3.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"../../../examples/tests/invalid/cyclic_bring3.w\\" due to cyclic bring statements
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring3.w\\" due to cyclic bring statements
 
 
  
@@ -643,24 +643,24 @@ Duration <DURATION>"
 `;
 
 exports[`cyclic_bring2.w 1`] = `
-"error: Could not compile \\"../../../examples/tests/invalid/cyclic_bring2.w\\" due to cyclic bring statements:
-- ../../../examples/tests/invalid/cyclic_bring1.w
-- ../../../examples/tests/invalid/cyclic_bring3.w
-- ../../../examples/tests/invalid/cyclic_bring2.w
+"error: Could not compile \\"<ABSOLUTE_PATH>/cyclic_bring2.w\\" due to cyclic bring statements:
+- <ABSOLUTE_PATH>/cyclic_bring1.w
+- <ABSOLUTE_PATH>/cyclic_bring3.w
+- <ABSOLUTE_PATH>/cyclic_bring2.w
 
 
-error: Could not type check \\"../../../examples/tests/invalid/cyclic_bring3.w\\" due to cyclic bring statements
+error: Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring3.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring2.w:1:1
   |
 1 | bring \\"./cyclic_bring3.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"../../../examples/tests/invalid/cyclic_bring3.w\\" due to cyclic bring statements
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring3.w\\" due to cyclic bring statements
 
 
-error: Could not type check \\"../../../examples/tests/invalid/cyclic_bring1.w\\" due to cyclic bring statements
+error: Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring1.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring3.w:1:1
   |
 1 | bring \\"./cyclic_bring1.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"../../../examples/tests/invalid/cyclic_bring1.w\\" due to cyclic bring statements
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring1.w\\" due to cyclic bring statements
 
 
  
@@ -671,24 +671,24 @@ Duration <DURATION>"
 `;
 
 exports[`cyclic_bring3.w 1`] = `
-"error: Could not compile \\"../../../examples/tests/invalid/cyclic_bring3.w\\" due to cyclic bring statements:
-- ../../../examples/tests/invalid/cyclic_bring2.w
-- ../../../examples/tests/invalid/cyclic_bring1.w
-- ../../../examples/tests/invalid/cyclic_bring3.w
+"error: Could not compile \\"<ABSOLUTE_PATH>/cyclic_bring3.w\\" due to cyclic bring statements:
+- <ABSOLUTE_PATH>/cyclic_bring2.w
+- <ABSOLUTE_PATH>/cyclic_bring1.w
+- <ABSOLUTE_PATH>/cyclic_bring3.w
 
 
-error: Could not type check \\"../../../examples/tests/invalid/cyclic_bring1.w\\" due to cyclic bring statements
+error: Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring1.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring3.w:1:1
   |
 1 | bring \\"./cyclic_bring1.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"../../../examples/tests/invalid/cyclic_bring1.w\\" due to cyclic bring statements
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring1.w\\" due to cyclic bring statements
 
 
-error: Could not type check \\"../../../examples/tests/invalid/cyclic_bring2.w\\" due to cyclic bring statements
+error: Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring2.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring1.w:1:1
   |
 1 | bring \\"./cyclic_bring2.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"../../../examples/tests/invalid/cyclic_bring2.w\\" due to cyclic bring statements
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring2.w\\" due to cyclic bring statements
 
 
  
@@ -736,18 +736,11 @@ Duration <DURATION>"
 `;
 
 exports[`extern.w 1`] = `
-"error: Failed to resolve extern \\"./sad.js\\": Not Found
+"error: File not found: \\"./sad.js\\"
   --> ../../../examples/tests/invalid/extern.w:2:3
   |
 2 |   extern \\"./sad.js\\" static getNum(): num;
-  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Failed to resolve extern \\"./sad.js\\": Not Found
-
-
-error: Failed to resolve extern \\"not-installed\\": Not Found
-  --> ../../../examples/tests/invalid/extern.w:4:3
-  |
-4 |   extern \\"not-installed\\" static tooBad(): bool;
-  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Failed to resolve extern \\"not-installed\\": Not Found
+  |   ^^^^^^^^^^^^^^^^^ File not found: \\"./sad.js\\"
 
 
  

@@ -16,12 +16,7 @@ pub fn main() {
 	let source_text = fs::read_to_string(&source_path).unwrap();
 	let target_dir: Utf8PathBuf = env::current_dir().unwrap().join("target").try_into().unwrap();
 
-	let results = compile(
-		&source_path,
-		source_text,
-		Some(&target_dir),
-		Some(source_path.parent().unwrap()),
-	);
+	let results = compile(source_path.parent().unwrap(), &source_path, source_text, &target_dir);
 	if results.is_err() {
 		let mut diags = get_diagnostics();
 		// Sort error messages by line number (ascending)

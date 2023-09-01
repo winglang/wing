@@ -2077,7 +2077,10 @@ impl<'a> TypeChecker<'a> {
 				if let CalleeKind::Expr(call_expr) = callee {
 					if let ExprKind::Reference(Reference::Identifier(ident)) = &call_expr.kind {
 						if ident.name == "wingc_env" {
-							println!("[symbol environment at {}]", exp.span().to_string());
+							println!(
+								"[symbol environment at {}]",
+								Utf8Path::new(&exp.span().file_id).file_name().unwrap(),
+							);
 							println!("{}", env.to_string());
 						}
 					}
@@ -2402,7 +2405,7 @@ impl<'a> TypeChecker<'a> {
 				None => {
 					self.spanned_error(
 						exp,
-						format!("Expected 0 named arguments for func at {}", exp.span().to_string()),
+						format!("Expected 0 named arguments but got {}", arg_list.named_args.len()),
 					);
 					return Some(self.types.error());
 				}
