@@ -1,7 +1,7 @@
 use crate::{
 	ast::{Reference, Scope},
 	jsify::{JSifier, JSifyContext},
-	type_check::{Struct, is_udt_struct_type, resolve_user_defined_type},
+	type_check::{is_udt_struct_type, resolve_user_defined_type, Struct},
 	visit::{self, Visit},
 	visit_context::VisitContext,
 };
@@ -40,11 +40,11 @@ impl<'a> Visit<'a> for StructSchemaVisitor<'a> {
 				visit::visit_reference(self, node);
 			}
 			Reference::TypeMember { type_name, .. } => {
-        if is_udt_struct_type(type_name, self.ctx.current_env().unwrap()) {
-          let type_ = resolve_user_defined_type(type_name, self.ctx.current_env().unwrap(), 0);
-          self.jsify_struct(type_.unwrap().as_struct().unwrap());
-        }
-        visit::visit_reference(self, node);
+				if is_udt_struct_type(type_name, self.ctx.current_env().unwrap()) {
+					let type_ = resolve_user_defined_type(type_name, self.ctx.current_env().unwrap(), 0);
+					self.jsify_struct(type_.unwrap().as_struct().unwrap());
+				}
+				visit::visit_reference(self, node);
 			}
 			Reference::Identifier(_) => {
 				visit::visit_reference(self, node);

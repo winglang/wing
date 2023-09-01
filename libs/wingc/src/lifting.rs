@@ -124,14 +124,14 @@ impl<'a> LiftVisitor<'a> {
 	}
 
 	fn jsify_udt(&self, node: &UserDefinedType) -> String {
-    let ctx = &self.ctx;
+		let ctx = &self.ctx;
 		let res = self.jsify.jsify_user_defined_type(
 			&node,
 			&mut JSifyContext {
 				lifts: None,
 				visit_ctx: &mut VisitContext::new(),
 			},
-      ctx.current_env().unwrap()
+			ctx.current_env().unwrap(),
 		);
 		res
 	}

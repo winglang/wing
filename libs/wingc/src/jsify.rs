@@ -338,9 +338,15 @@ impl<'a> JSifier<'a> {
 				}
 			}
 		}
-    if is_udt_struct_type(udt, env) {
-      return resolve_user_defined_type(udt, env, 0).unwrap().as_struct().unwrap().name.name.clone();
-    }
+		if is_udt_struct_type(udt, env) {
+			return resolve_user_defined_type(udt, env, 0)
+				.unwrap()
+				.as_struct()
+				.unwrap()
+				.name
+				.name
+				.clone();
+		}
 		udt.full_path_str()
 	}
 
@@ -650,33 +656,6 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	pub fn jsify_struct_properties(
-		&self,
-		fields: &Vec<StructField>,
-		extends: &Vec<UserDefinedType>,
-		ctx: &mut JSifyContext,
-	) -> CodeMaker {
-		let mut code = CodeMaker::default();
-
-		// Any parents we need to get their properties
-		for e in extends {
-			code.line(format!(
-				"...require(\"{}\")().jsonSchema().properties,",
-				struct_filename(&e.root.name)
-			))
-		}
-
-		for field in fields {
-			code.line(format!(
-				"{}: {{ {} }},",
-				field.name.name,
-				field.name.name // self.jsify_struct_field_to_json_schema_type(&field.member_type.kind, ctx)
-			));
-		}
-
-		code
-	}
-
 	pub fn jsify_struct_env_properties(&self, env: &SymbolEnv, ctx: &mut JSifyContext) -> CodeMaker {
 		let mut code = CodeMaker::default();
 		for (field_name, (.., kind)) in env.symbol_map.iter() {
@@ -722,10 +701,10 @@ impl<'a> JSifier<'a> {
 				code.open("{");
 
 				code.line("type: \"array\",");
-        
-        if matches!(**typ, Type::Set(_)) {
-          code.line("uniqueItems: true,");
-        }
+
+				if matches!(**typ, Type::Set(_)) {
+					code.line("uniqueItems: true,");
+				}
 
 				code.line(format!("items: {}", self.jsify_struct_schema_field(t, ctx)));
 
@@ -746,7 +725,7 @@ impl<'a> JSifier<'a> {
 				code.to_string().strip_suffix("\n").unwrap().to_string()
 			}
 			Type::Optional(t) => self.jsify_struct_schema_field(&t, ctx),
-      Type::Json(_) => "{ type: \"object\" }".to_string(),
+			Type::Json(_) => "{ type: \"object\" }".to_string(),
 			_ => "{ type: \"null\" }".to_string(),
 		}
 	}
@@ -1068,14 +1047,16 @@ impl<'a> JSifier<'a> {
 					CodeMaker::one_line("return;")
 				}
 			}
-			StmtKind::Throw(exp) => CodeMaker::one_line(format!("throw new Error({});", self.jsify_expression(exp, ctx, env))),
+			StmtKind::Throw(exp) => {
+				CodeMaker::one_line(format!("throw new Error({});", self.jsify_expression(exp, ctx, env)))
+			}
 			StmtKind::Class(class) => self.jsify_class(env, class, ctx),
 			StmtKind::Interface { .. } => {
 				// This is a no-op in JS
 				CodeMaker::default()
 			}
 			StmtKind::Struct { .. } => {
-        // Struct schemas are emitted before jsification phase
+				// Struct schemas are emitted before jsification phase
 				CodeMaker::default()
 			}
 			StmtKind::Enum { name, values } => {
@@ -1284,7 +1265,7 @@ impl<'a> JSifier<'a> {
 
 		// emit the `_toInflight` and `_toInflightType` methods (TODO: renamed to `_liftObject` and
 		// `_liftType`).
-		code.add_code(self.jsify_to_inflight_type_method(&class, ctx, env));
+		code.add_code(self.jsify_to_inflight_type_method(&class, ctx));
 		code.add_code(self.jsify_to_inflight_method(&class.name, ctx));
 		code.add_code(self.jsify_get_inflight_ops_method(&class));
 
@@ -1355,7 +1336,7 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_to_inflight_type_method(&self, class: &AstClass, ctx: &JSifyContext, env: &SymbolEnv) -> CodeMaker {
+	fn jsify_to_inflight_type_method(&self, class: &AstClass, ctx: &JSifyContext) -> CodeMaker {
 		let client_path = self.inflight_filename(class);
 
 		let mut code = CodeMaker::default();
@@ -1458,12 +1439,12 @@ impl<'a> JSifier<'a> {
 	pub fn emit_struct_file(&self, name: &String, struct_code: CodeMaker) {
 		let file_name = struct_filename(&name);
 
-    if self.output_files.borrow().contains_file(&file_name) {
-      // only emit struct schema once
-      return;
-    }
-		
-    let mut code = CodeMaker::default();
+		if self.output_files.borrow().contains_file(&file_name) {
+			// only emit struct schema once
+			return;
+		}
+
+		let mut code = CodeMaker::default();
 		code.add_code(struct_code);
 		match self
 			.output_files
