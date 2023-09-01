@@ -223,7 +223,7 @@ impl<'a> JSifier<'a> {
 			if data.borrow().is_struct_schema {
 				let struct_name = struct_name_from_filename(&path.to_str().unwrap().to_string());
 				code.line(format!(
-					"const {} = require(\"{}\")($stdlib.std.Struct)",
+					"const {} = require(\"{}\")($stdlib.std.Struct);",
 					struct_name,
 					path.to_str().unwrap().to_string()
 				));
@@ -689,10 +689,10 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	pub fn jsify_struct_required_fields(&self, env: &SymbolEnv, ctx: &mut JSifyContext) -> CodeMaker {
+	pub fn jsify_struct_required_fields(&self, env: &SymbolEnv) -> CodeMaker {
 		let mut code = CodeMaker::default();
 		code.open("required: [");
-		for (field_name, (stmt_idx, kind)) in env.symbol_map.iter() {
+		for (field_name, (_stmt_idx, kind)) in env.symbol_map.iter() {
 			if !matches!(*kind.as_variable().unwrap().type_, Type::Optional(_)) {
 				code.line(format!("\"{}\",", field_name));
 			}
@@ -713,15 +713,20 @@ impl<'a> JSifier<'a> {
 				code.open("properties: {");
 				code.add_code(self.jsify_struct_env_properties(&s.env, ctx));
 				code.close("},");
-				code.add_code(self.jsify_struct_required_fields(&s.env, ctx));
+				code.add_code(self.jsify_struct_required_fields(&s.env));
 				code.close("}");
 				code.to_string().strip_suffix("\n").unwrap().to_string()
 			}
-			Type::Array(ref t) => {
+			Type::Array(ref t) | Type::Set(ref t) => {
 				let mut code = CodeMaker::default();
 				code.open("{");
 
 				code.line("type: \"array\",");
+        
+        if matches!(**typ, Type::Set(_)) {
+          code.line("uniqueItems: true,");
+        }
+
 				code.line(format!("items: {}", self.jsify_real_field(t, ctx)));
 
 				code.close("}");
@@ -741,7 +746,8 @@ impl<'a> JSifier<'a> {
 				code.to_string().strip_suffix("\n").unwrap().to_string()
 			}
 			Type::Optional(t) => self.jsify_real_field(&t, ctx),
-			_ => "{{ type: \"null\" }}".to_string(),
+      Type::Json(_) => "{ type: \"object\" }".to_string(),
+			_ => "{ type: \"null\" }".to_string(),
 		}
 	}
 
@@ -764,7 +770,7 @@ impl<'a> JSifier<'a> {
 		//close properties
 		code.close("},");
 
-		code.add_code(self.jsify_struct_required_fields(&struct_.env, ctx));
+		code.add_code(self.jsify_struct_required_fields(&struct_.env));
 
 		// close return
 		code.close("}");
@@ -791,14 +797,6 @@ impl<'a> JSifier<'a> {
 
 		code.line(format!("return {};", struct_.name.name));
 		code.close("};");
-
-		if !self
-			.output_files
-			.borrow()
-			.contains_file(struct_filename(&struct_.name.name))
-		{
-			// self.emit_struct_file(&struct_.name.name, code);
-		}
 
 		code
 	}
@@ -1077,7 +1075,8 @@ impl<'a> JSifier<'a> {
 				CodeMaker::default()
 			}
 			StmtKind::Struct { .. } => {
-        CodeMaker::default()
+        // Struct schemas are emitted before jsification phase
+				CodeMaker::default()
 			}
 			StmtKind::Enum { name, values } => {
 				let mut code = CodeMaker::default();
@@ -1457,9 +1456,15 @@ impl<'a> JSifier<'a> {
 	}
 
 	pub fn emit_struct_file(&self, name: &String, struct_code: CodeMaker) {
-		let mut code = CodeMaker::default();
-		code.add_code(struct_code);
 		let file_name = struct_filename(&name);
+
+    if self.output_files.borrow().contains_file(&file_name) {
+      // only emit struct schema once
+      return;
+    }
+		
+    let mut code = CodeMaker::default();
+		code.add_code(struct_code);
 		match self
 			.output_files
 			.borrow_mut()

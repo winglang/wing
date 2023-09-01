@@ -137,7 +137,7 @@ exports[`struct_from_json_2.w 1`] = `
 - instance.age is not of a type(s) number
 - instance requires property \\"advisor\\"
 
-../../../examples/tests/error/target/test/struct_from_json_2.wsim.[REDACTED].tmp/.wing/preflight.js:12
+../../../examples/tests/error/target/test/struct_from_json_2.wsim.[REDACTED].tmp/.wing/preflight.js:10
        const Student = require(\\"./Student.Struct.js\\")($stdlib.std.Struct);
        const missingAdvisor = ({\\"name\\": \\"cool\\",\\"age\\": \\"not a number\\"});
 >>     (Student.fromJson(missingAdvisor));
@@ -153,10 +153,10 @@ Duration <DURATION>"
 
 exports[`struct_from_json_3.w 1`] = `
 "ERROR: unable to parse Student:
-- instance.age is not of a type(s) number
 - instance.advisors[1].id is not of a type(s) string
+- instance.age is not of a type(s) number
 
-../../../examples/tests/error/target/test/struct_from_json_3.wsim.[REDACTED].tmp/.wing/preflight.js:12
+../../../examples/tests/error/target/test/struct_from_json_3.wsim.[REDACTED].tmp/.wing/preflight.js:10
        const Student = require(\\"./Student.Struct.js\\")($stdlib.std.Struct);
        const invalidAdvisorInArray = ({\\"name\\": \\"cool\\",\\"age\\": \\"not a number\\",\\"advisors\\": [({\\"id\\": \\"advisor1\\",\\"name\\": \\"Bob\\",\\"age\\": 34}), ({\\"id\\": 10,\\"name\\": \\"Jacob\\",\\"age\\": 45})]});
 >>     (Student.fromJson(invalidAdvisorInArray));
@@ -174,7 +174,7 @@ exports[`struct_from_json_4.w 1`] = `
 "ERROR: unable to parse Student:
 - instance.advisors contains duplicate item
 
-../../../examples/tests/error/target/test/struct_from_json_4.wsim.[REDACTED].tmp/.wing/preflight.js:12
+../../../examples/tests/error/target/test/struct_from_json_4.wsim.[REDACTED].tmp/.wing/preflight.js:10
        const Student = require(\\"./Student.Struct.js\\")($stdlib.std.Struct);
        const invalidAdvisorInArray = ({\\"name\\": \\"cool\\",\\"age\\": 22,\\"advisors\\": [({\\"id\\": \\"advisor1\\",\\"name\\": \\"Bob\\",\\"age\\": 34}), ({\\"id\\": \\"advisor1\\",\\"name\\": \\"Bob\\",\\"age\\": 34})]});
 >>     (Student.fromJson(invalidAdvisorInArray));
