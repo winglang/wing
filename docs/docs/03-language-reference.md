@@ -1041,29 +1041,14 @@ for x in arr.iter() {
 > Note: `Array<T>` does not implement the `Iterator<T>` interface directly
 > since doing so would mean an array could not be iterated over more than once.
 
-Custom iterators can be defined by implementing the `Iterator<T>` interface:
-
-```TS
-class MyIterator implements Iterator<num> {
-  private i: num = 0;
-
-  next(): num {
-    this.i = this.i + 1;
-    return this.i;
-  }
-
-  hasNext(): bool {
-    return this.i < 10;
-  }
-}
-
-let it = new MyIterator();
-for x in it {
-  log(x); // prints 1 through 10
-}
-```
-
 [`▲ top`][top]
+
+#### 1.9.1 Roadmap
+
+The following features are not yet implemented, but we are planning to add them in the future:
+
+* generator functions, which return `Iterator<T>` - see issue #XYZ (TODO)
+* custom iterator implementations (e.g. `class MyIterator implements Iterator<num>`) - see issue #XYZ (TODO)
 
 ---
 
