@@ -3944,6 +3944,15 @@ impl<'a> TypeChecker<'a> {
 			self.types.set_scope_env(scope, method_env);
 			self.inner_scopes.push(scope);
 		}
+
+		if let FunctionBody::External(_) = &method_def.body {
+			if !method_def.is_static {
+				self.spanned_error(
+					method_name,
+					"Extern methods must be declared \"static\" (they cannot access instance members)",
+				);
+			}
+		}
 	}
 
 	fn add_method_to_class_env(

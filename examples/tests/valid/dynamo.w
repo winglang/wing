@@ -54,11 +54,11 @@ class DynamoTable {
     }
   }
 
-  extern "./dynamo.js" inflight _putItem(tableName: str, item: Json): void;
+  extern "./dynamo.js" static inflight _putItem(tableName: str, item: Json): void;
 
   inflight putItem(item: Map<Attribute>) {
     let json = this._itemToJson(item);
-    this._putItem(this.tableName, json);
+    DynamoTable._putItem(this.tableName, json);
   }
 
   inflight _itemToJson(item: Map<Attribute>): Json {

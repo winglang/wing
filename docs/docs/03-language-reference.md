@@ -1762,6 +1762,8 @@ exports.makeId = function () {
 Given a method of name X, the compiler will map the method to the JavaScript export with the 
 matching name (without any case conversion).
 
+Extern methods do not support access to class's members through `this`, so they must be declared `static`.
+
 ### 5.2.1 TypeScript
 
 It is possible to use TypeScript to write helpers, but at the moment this is not
@@ -1964,7 +1966,7 @@ assert(cat1 != dog); // compile time error (can't compare different types)
 
 ### 6.2 Strings
 
-String reference doc is available [here](https://www.winglang.io/docs/language-guide/language-reference#61-strings).
+String reference doc is available [here](https://www.winglang.io/docs/standard-library/std/api-reference#string-).
 Type of string is UTF-16 internally.  
 All string declaration variants are multi-line.  
 
