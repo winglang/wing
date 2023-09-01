@@ -221,11 +221,11 @@ impl<'a> JSifier<'a> {
 		let mut code = CodeMaker::default();
 		for (path, data) in self.output_files.borrow().data.iter() {
 			if data.borrow().is_struct_schema {
-				let struct_name = struct_name_from_filename(&path.to_str().unwrap().to_string());
+				let struct_name = struct_name_from_filename(&path.to_string());
 				code.line(format!(
 					"const {} = require(\"{}\")($stdlib.std.Struct);",
 					struct_name,
-					path.to_str().unwrap().to_string()
+					path.to_string()
 				));
 			}
 		}
@@ -679,17 +679,17 @@ impl<'a> JSifier<'a> {
 
 	pub fn jsify_struct_env_properties(&self, env: &SymbolEnv, ctx: &mut JSifyContext) -> CodeMaker {
 		let mut code = CodeMaker::default();
-		for (field_name, (stmt_idx, kind)) in env.symbol_map.iter() {
+		for (field_name, (.., kind)) in env.symbol_map.iter() {
 			code.line(format!(
 				"{}: {},",
 				field_name,
-				self.jsify_real_field(&kind.as_variable().unwrap().type_, ctx)
+				self.jsify_struct_schema_field(&kind.as_variable().unwrap().type_, ctx)
 			));
 		}
 		code
 	}
 
-	pub fn jsify_struct_required_fields(&self, env: &SymbolEnv) -> CodeMaker {
+	pub fn jsify_struct_schema_required_fields(&self, env: &SymbolEnv) -> CodeMaker {
 		let mut code = CodeMaker::default();
 		code.open("required: [");
 		for (field_name, (_stmt_idx, kind)) in env.symbol_map.iter() {
@@ -701,7 +701,7 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	pub fn jsify_real_field(&self, typ: &UnsafeRef<Type>, ctx: &mut JSifyContext) -> String {
+	pub fn jsify_struct_schema_field(&self, typ: &UnsafeRef<Type>, ctx: &mut JSifyContext) -> String {
 		match **typ {
 			Type::String | Type::Number | Type::Boolean => {
 				format!("{{ type: \"{}\" }}", self.jsify_type(typ, ctx).unwrap())
@@ -713,7 +713,7 @@ impl<'a> JSifier<'a> {
 				code.open("properties: {");
 				code.add_code(self.jsify_struct_env_properties(&s.env, ctx));
 				code.close("},");
-				code.add_code(self.jsify_struct_required_fields(&s.env));
+				code.add_code(self.jsify_struct_schema_required_fields(&s.env));
 				code.close("}");
 				code.to_string().strip_suffix("\n").unwrap().to_string()
 			}
@@ -727,7 +727,7 @@ impl<'a> JSifier<'a> {
           code.line("uniqueItems: true,");
         }
 
-				code.line(format!("items: {}", self.jsify_real_field(t, ctx)));
+				code.line(format!("items: {}", self.jsify_struct_schema_field(t, ctx)));
 
 				code.close("}");
 				code.to_string().strip_suffix("\n").unwrap().to_string()
@@ -739,13 +739,13 @@ impl<'a> JSifier<'a> {
 				code.line("type: \"object\",");
 				code.line(format!(
 					"patternProperties: {{ \".*\": {} }}",
-					self.jsify_real_field(t, ctx)
+					self.jsify_struct_schema_field(t, ctx)
 				));
 
 				code.close("}");
 				code.to_string().strip_suffix("\n").unwrap().to_string()
 			}
-			Type::Optional(t) => self.jsify_real_field(&t, ctx),
+			Type::Optional(t) => self.jsify_struct_schema_field(&t, ctx),
       Type::Json(_) => "{ type: \"object\" }".to_string(),
 			_ => "{ type: \"null\" }".to_string(),
 		}
@@ -770,7 +770,7 @@ impl<'a> JSifier<'a> {
 		//close properties
 		code.close("},");
 
-		code.add_code(self.jsify_struct_required_fields(&struct_.env));
+		code.add_code(self.jsify_struct_schema_required_fields(&struct_.env));
 
 		// close return
 		code.close("}");

@@ -30,6 +30,33 @@ module.exports = function(stdStruct) {
 
 ```
 
+## BucketProps.Struct.js
+```js
+module.exports = function(stdStruct) {
+  class BucketProps {
+    static jsonSchema() {
+      return {
+        id: "/BucketProps",
+        type: "object",
+        properties: {
+          public: { type: "boolean" },
+        },
+        required: [
+        ]
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.jsonSchema())
+    }
+    static _toInflightType(context) {
+      return `require("./BucketProps.Struct.js")(${ context._lift(stdStruct) })`;
+    }
+  }
+  return BucketProps;
+};
+
+```
+
 ## Foo.Struct.js
 ```js
 module.exports = function(stdStruct) {
@@ -353,15 +380,17 @@ const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 const externalStructs = require("./preflight.structs-1.js")({ $stdlib });
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    const Foo = require("./Foo.Struct.js")($stdlib.std.Struct);
-    const Bar = require("./Bar.Struct.js")($stdlib.std.Struct);
-    const Foosible = require("./Foosible.Struct.js")($stdlib.std.Struct);
-    const Student = require("./Student.Struct.js")($stdlib.std.Struct);
     const MyOtherStruct = require("./MyOtherStruct.Struct.js")($stdlib.std.Struct);
+    const BucketProps = require("./BucketProps.Struct.js")($stdlib.std.Struct);
+    const Bar = require("./Bar.Struct.js")($stdlib.std.Struct);
+    const Foo = require("./Foo.Struct.js")($stdlib.std.Struct);
+    const Student = require("./Student.Struct.js")($stdlib.std.Struct);
+    const Foosible = require("./Foosible.Struct.js")($stdlib.std.Struct);
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
@@ -423,6 +452,8 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    const j = ({"public": false});
+    const x = (BucketProps.fromJson(j));
     const jFoo = ({"f": "bar"});
     {((cond) => {if (!cond) throw new Error("assertion failed: Foo.fromJson(jFoo).f == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((Foo.fromJson(jFoo)).f,"bar")))};
     const jFoosible = ({});

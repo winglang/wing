@@ -369,7 +369,7 @@ pub fn compile(
 			reference_visitor.visit_scope(&scope);
 			(path, scope)
 		})
-		.collect::<IndexMap<PathBuf, Scope>>();
+		.collect::<IndexMap<Utf8PathBuf, Scope>>();
 
 	// -- JSIFICATION PHASE --
 
