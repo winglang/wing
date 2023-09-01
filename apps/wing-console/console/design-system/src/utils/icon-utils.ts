@@ -25,6 +25,7 @@ import {
 } from "@heroicons/react/24/solid";
 
 import { RedisIcon } from "../icons/redis-icon.js";
+import { AstroIcon } from "../icons/astro-icon.js";
 
 const isTest = /(\/test$|\/test:([^/\\])+$)/;
 const isTestHandler = /(\/test$|\/test:.*\/Handler$)/;
@@ -74,6 +75,9 @@ export const getResourceIconComponent = (
     }
     case "wingsdk.cloud.Test": {
       return solid ? SolidBeakerIcon : BeakerIcon;
+    }
+    case "wingsdk.ex.Astro": {
+      return AstroIcon;
     }
     default: {
       return CubeIcon;

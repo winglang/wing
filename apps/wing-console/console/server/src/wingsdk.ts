@@ -24,4 +24,5 @@ export type {
   ApiSchema,
   TableSchema,
   WebsiteSchema,
+  AstroSchema,
 } from "@winglang/sdk/lib/target-sim/schema-resources.js";

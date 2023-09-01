@@ -1,4 +1,5 @@
 import { ApiInteractionView } from "./api-interaction-view.js";
+import { AstroInteractionView } from "./astro-interaction-view.js";
 import { BucketInteractionView } from "./bucket-interaction-view.js";
 import { CounterInteractionView } from "./counter-interaction-view.js";
 import { FunctionInteractionView } from "./function-interaction-view.js";
@@ -19,6 +20,7 @@ export const ResourceInteractionView = ({
   resourcePath,
 }: ResourceViewProps) => {
   const getResourceView = () => {
+    console.log({ resourceType });
     switch (resourceType) {
       case "wingsdk.cloud.Queue": {
         return <QueueInteractionView resourcePath={resourcePath} />;
@@ -49,6 +51,9 @@ export const ResourceInteractionView = ({
       }
       case "wingsdk.cloud.Website": {
         return <WebsiteInteractionView resourcePath={resourcePath} />;
+      }
+      case "wingsdk.ex.Astro": {
+        return <AstroInteractionView resourcePath={resourcePath} />;
       }
       default: {
         return <UnsupportedInteractionView resourceType={resourceType} />;

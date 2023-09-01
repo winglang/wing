@@ -2,6 +2,7 @@ import { mergeRouters, middleware } from "../utils/createRouter.js";
 
 import { createApiRouter } from "./api.js";
 import { createAppRouter } from "./app.js";
+import { createAstroRouter } from "./astro.js";
 import { createBucketRouter } from "./bucket.js";
 import { createConfigRouter } from "./config.js";
 import { createCounterRouter } from "./counter.js";
@@ -30,6 +31,7 @@ export const mergeAllRouters = () => {
     createUpdaterRouter(),
     createRedisRouter(),
     createWebsiteRouter(),
+    createAstroRouter(),
     createConfigRouter(),
   );
 

@@ -6,6 +6,8 @@ import {
   ISimulatorResourceInstance,
 } from "../testing/simulator";
 
+const LOCALHOST_ADDRESS = "127.0.0.1";
+
 export class Astro implements IAstroClient, ISimulatorResourceInstance {
   private readonly root: string;
   private readonly context: ISimulatorContext;
@@ -23,6 +25,9 @@ export class Astro implements IAstroClient, ISimulatorResourceInstance {
     const { dev } = (await eval('import("astro")')) as typeof import("astro");
     const server = await dev({
       root: this.root,
+      server: {
+        host: LOCALHOST_ADDRESS,
+      },
     });
     this.server = { stop: server.stop };
 

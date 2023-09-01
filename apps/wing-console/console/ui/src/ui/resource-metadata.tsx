@@ -160,6 +160,14 @@ export const ResourceMetadata = ({
 
           break;
         }
+        case "wingsdk.ex.Astro": {
+          resourceGroup = {
+            groupName: "Astro",
+            icon,
+          };
+
+          break;
+        }
       }
     }
 
@@ -338,7 +346,8 @@ export const ResourceMetadata = ({
           )}
 
           {(node.type.startsWith("wingsdk.cloud") ||
-            node.type.startsWith("wingsdk.redis")) && (
+            node.type.startsWith("wingsdk.redis") ||
+            node.type.startsWith("wingsdk.ex")) && (
             <>
               <InspectorSection
                 text={resourceGroup?.groupName || "Interact"}
