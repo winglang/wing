@@ -277,9 +277,9 @@ pub fn compile(
 	source_text: String,
 	out_dir: &Utf8Path,
 ) -> Result<CompilerOutput, ()> {
-	assert!(project_dir.is_absolute());
-	assert!(source_path.is_absolute());
-	assert!(out_dir.is_absolute());
+	assert!(is_absolute(&project_dir));
+	assert!(is_absolute(&source_path));
+	assert!(is_absolute(&out_dir));
 
 	// -- PARSING PHASE --
 	let mut files = Files::new();
@@ -367,6 +367,21 @@ pub fn compile(
 	}
 
 	return Ok(CompilerOutput {});
+}
+
+fn is_absolute(path: &Utf8Path) -> bool {
+	if path.starts_with("/") {
+		return true;
+	}
+
+	let path = path.as_str();
+	// Check if this is a Windows path instead by checking if the second char is a colon
+	// Note: Cannot use Utf8Path::is_absolute() because it doesn't work with Windows paths on WASI
+	if path.len() < 2 || path.chars().nth(1).expect("path has second character") != ':' {
+		return false;
+	}
+
+	return true;
 }
 
 #[cfg(test)]
