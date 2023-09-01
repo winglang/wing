@@ -148,7 +148,7 @@ export class Json {
   /**
    * Returns the value associated with the specified Json key
    *
-   * @macro ((obj, args) => { if (obj[args] === undefined) throw new Error("Json property does not exist"); return obj[args] })($self$, $args$)
+   * @macro ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })($self$, $args$)
    *
    * @param key The key of the Json property
    * @returns The value associated with the specified Json key
@@ -282,7 +282,7 @@ export class MutJson {
   /**
    * Returns the value associated with the specified Json key
    *
-   * @macro ((obj, args) => { if (obj[args] === undefined) throw new Error("Json property does not exist"); return obj[args] })($self$, $args$)
+   * @macro ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })($self$, $args$)
    *
    * @param key The key of the Json property
    * @returns The value associated with the specified Json key

@@ -15,18 +15,18 @@ test "get()" {
     assert(error);
   };
 
-  let JSON_PROPERTY_DOES_NOT_EXIST_ERROR = "Json property does not exist";
+  let JSON_PROPERTY_DOES_NOT_EXIST_ERROR = "Json property \"c\" does not exist";
   let obj = Json { a: 1, b: 2 };
-  let mutObj = MutJson { x: 1, y: 2 };
+  let mutObj = MutJson { a: 1, b: 2 };
 
   assert(obj.get("b") == 2);
-  assert(mutObj.get("y") == 2);
+  assert(mutObj.get("b") == 2);
 
   assertThrows(JSON_PROPERTY_DOES_NOT_EXIST_ERROR, () => {
     obj.get("c");
   });
   assertThrows(JSON_PROPERTY_DOES_NOT_EXIST_ERROR, () => {
-    mutObj.get("z");
+    mutObj.get("c");
   });
 }
 
