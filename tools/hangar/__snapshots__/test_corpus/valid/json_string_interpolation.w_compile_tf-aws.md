@@ -43,9 +43,9 @@ class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     const obj = ({"strValue": "test","numValue": 1});
-    const notStringifyStrValue = String.raw({ raw: ["string: ", ""] }, ((e) => typeof e === 'string' ? e : JSON.stringify(e, null, 2))(((obj, args) => { if (obj[args] === undefined) throw new Error("Json property does not exist"); return obj[args] })(obj, "strValue")));
+    const notStringifyStrValue = String.raw({ raw: ["string: ", ""] }, ((e) => typeof e === 'string' ? e : JSON.stringify(e, null, 2))(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(obj, "strValue")));
     {((cond) => {if (!cond) throw new Error("assertion failed: notStringifyStrValue == \"string: test\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(notStringifyStrValue,"string: test")))};
-    const stringifyNumValue = String.raw({ raw: ["number: ", ""] }, ((e) => typeof e === 'string' ? e : JSON.stringify(e, null, 2))(((obj, args) => { if (obj[args] === undefined) throw new Error("Json property does not exist"); return obj[args] })(obj, "numValue")));
+    const stringifyNumValue = String.raw({ raw: ["number: ", ""] }, ((e) => typeof e === 'string' ? e : JSON.stringify(e, null, 2))(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(obj, "numValue")));
     {((cond) => {if (!cond) throw new Error("assertion failed: stringifyNumValue == \"number: 1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(stringifyNumValue,"number: 1")))};
   }
 }

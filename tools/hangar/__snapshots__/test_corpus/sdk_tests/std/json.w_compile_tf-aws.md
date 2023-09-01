@@ -23,17 +23,17 @@ module.exports = function({  }) {
         {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
       }
       ;
-      const JSON_PROPERTY_DOES_NOT_EXIST_ERROR = "Json property does not exist";
+      const JSON_PROPERTY_DOES_NOT_EXIST_ERROR = "Json property \"c\" does not exist";
       const obj = ({"a": 1,"b": 2});
-      const mutObj = ({"x": 1,"y": 2});
-      {((cond) => {if (!cond) throw new Error("assertion failed: obj.get(\"b\") == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error("Json property does not exist"); return obj[args] })(obj, "b"),2)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: mutObj.get(\"y\") == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error("Json property does not exist"); return obj[args] })(mutObj, "y"),2)))};
+      const mutObj = ({"a": 1,"b": 2});
+      {((cond) => {if (!cond) throw new Error("assertion failed: obj.get(\"b\") == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(obj, "b"),2)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mutObj.get(\"b\") == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(mutObj, "b"),2)))};
       (await assertThrows(JSON_PROPERTY_DOES_NOT_EXIST_ERROR,async () => {
-        ((obj, args) => { if (obj[args] === undefined) throw new Error("Json property does not exist"); return obj[args] })(obj, "c");
+        ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(obj, "c");
       }
       ));
       (await assertThrows(JSON_PROPERTY_DOES_NOT_EXIST_ERROR,async () => {
-        ((obj, args) => { if (obj[args] === undefined) throw new Error("Json property does not exist"); return obj[args] })(mutObj, "z");
+        ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(mutObj, "c");
       }
       ));
     }
@@ -96,8 +96,8 @@ module.exports = function({  }) {
       const mutObj = ({"x": 1,"y": 2});
       ((obj, args) => { obj[args[0]] = args[1]; })(mutObj, ["x",(-1)]);
       ((obj, args) => { obj[args[0]] = args[1]; })(mutObj, ["z",3]);
-      {((cond) => {if (!cond) throw new Error("assertion failed: mutObj.get(\"x\") == -1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error("Json property does not exist"); return obj[args] })(mutObj, "x"),(-1))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: mutObj.get(\"z\") == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error("Json property does not exist"); return obj[args] })(mutObj, "z"),3)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mutObj.get(\"x\") == -1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(mutObj, "x"),(-1))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mutObj.get(\"z\") == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(mutObj, "z"),3)))};
     }
   }
   return $Closure3;
