@@ -751,7 +751,14 @@ Duration <DURATION>"
 `;
 
 exports[`extern_static.w 1`] = `
-"error: Extern methods must be declared \\"static\\" (they cannot access instance members)
+"error: File not found: \\"../external_js.js\\"
+  --> ../../../examples/tests/invalid/extern_static.w:2:3
+  |
+2 |   extern \\"../external_js.js\\" inflight getGreeting(name: str): str;
+  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^ File not found: \\"../external_js.js\\"
+
+
+error: Extern methods must be declared \\"static\\" (they cannot access instance members)
   --> ../../../examples/tests/invalid/extern_static.w:2:39
   |
 2 |   extern \\"../external_js.js\\" inflight getGreeting(name: str): str;
