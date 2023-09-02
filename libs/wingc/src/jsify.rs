@@ -255,9 +255,7 @@ impl<'a> JSifier<'a> {
 				object,
 				property,
 				optional_accessor,
-			} => {
-				self.jsify_expression(object, ctx) + (if *optional_accessor { "?." } else { "." }) + &property.to_string()
-			}
+			} => self.jsify_expression(object, ctx) + (if *optional_accessor { "?." } else { "." }) + &property.to_string(),
 			Reference::TypeMember { type_name, property } => {
 				let typename = self.jsify_user_defined_type(type_name, ctx);
 				typename + "." + &property.to_string()
@@ -288,11 +286,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		for arg in arg_list.named_args.iter() {
-			structure_args.push(format!(
-				"{}: {}",
-				arg.0.name.clone(),
-				self.jsify_expression(arg.1, ctx)
-			));
+			structure_args.push(format!("{}: {}", arg.0.name.clone(), self.jsify_expression(arg.1, ctx)));
 		}
 
 		if !structure_args.is_empty() {
@@ -692,7 +686,6 @@ impl<'a> JSifier<'a> {
 		index: usize,
 		else_statements: &Option<Scope>,
 		ctx: &mut JSifyContext,
-		env: &SymbolEnv,
 	) {
 		let elif_let_value = "$elif_let_value";
 
@@ -715,7 +708,7 @@ impl<'a> JSifier<'a> {
 
 		if index < elif_statements.len() - 1 {
 			code.open("else {");
-			self.jsify_elif_statements(code, elif_statements, index + 1, else_statements, ctx, env);
+			self.jsify_elif_statements(code, elif_statements, index + 1, else_statements, ctx);
 			code.close("}");
 		} else if let Some(else_scope) = else_statements {
 			code.open("else {");
@@ -847,7 +840,7 @@ impl<'a> JSifier<'a> {
 
 				if elif_statements.len() > 0 {
 					code.open("else {");
-					self.jsify_elif_statements(&mut code, elif_statements, 0, else_statements, ctx, env);
+					self.jsify_elif_statements(&mut code, elif_statements, 0, else_statements, ctx);
 					code.close("}");
 				} else if let Some(else_scope) = else_statements {
 					code.open("else {");
@@ -919,9 +912,7 @@ impl<'a> JSifier<'a> {
 					CodeMaker::one_line("return;")
 				}
 			}
-			StmtKind::Throw(exp) => {
-				CodeMaker::one_line(format!("throw new Error({});", self.jsify_expression(exp, ctx)))
-			}
+			StmtKind::Throw(exp) => CodeMaker::one_line(format!("throw new Error({});", self.jsify_expression(exp, ctx))),
 			StmtKind::Class(class) => self.jsify_class(env, class, ctx),
 			StmtKind::Interface { .. } => {
 				// This is a no-op in JS
@@ -1103,7 +1094,7 @@ impl<'a> JSifier<'a> {
 		};
 
 		// emit the inflight side of the class into a separate file
-		let inflight_class_code = self.jsify_class_inflight(&class, ctx, env);
+		let inflight_class_code = self.jsify_class_inflight(&class, ctx);
 
 		// if this is inflight/independent, class, just emit the inflight class code inline and move on
 		// with your life.
@@ -1272,7 +1263,7 @@ impl<'a> JSifier<'a> {
 	}
 
 	// Write a class's inflight to a file
-	fn jsify_class_inflight(&self, class: &AstClass, mut ctx: &mut JSifyContext, env: &SymbolEnv) -> CodeMaker {
+	fn jsify_class_inflight(&self, class: &AstClass, mut ctx: &mut JSifyContext) -> CodeMaker {
 		ctx.visit_ctx.push_phase(Phase::Inflight);
 
 		let mut class_code = CodeMaker::default();

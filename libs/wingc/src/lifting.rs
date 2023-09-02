@@ -126,9 +126,9 @@ impl<'a> LiftVisitor<'a> {
 		let res = self.jsify.jsify_user_defined_type(
 			&node,
 			&mut JSifyContext {
-        lifts: None,
-        visit_ctx: &mut self.ctx,
-    } ,
+				lifts: None,
+				visit_ctx: &mut self.ctx,
+			},
 		);
 		res
 	}
@@ -356,7 +356,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 
 		self.lifts_stack.push(Lifts::new());
 
-    let env = self.ctx.current_env().unwrap();
+		let env = self.ctx.current_env().unwrap();
 
 		if let Some(parent) = &node.parent {
 			let mut lifts = self.lifts_stack.pop().unwrap();
