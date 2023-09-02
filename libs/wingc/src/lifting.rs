@@ -8,7 +8,7 @@ use crate::{
 	type_check::{
 		lifts::{Liftable, Lifts},
 		resolve_user_defined_type,
-		symbol_env::{LookupResult, SymbolEnv},
+		symbol_env::{LookupResult},
 		ClassLike, TypeRef, CLOSURE_CLASS_HANDLE_METHOD,
 	},
 	visit::{self, Visit},
@@ -356,7 +356,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 
 		self.lifts_stack.push(Lifts::new());
 
-		let env = self.ctx.current_env().unwrap();
+		let _env = self.ctx.current_env().unwrap();
 
 		if let Some(parent) = &node.parent {
 			let mut lifts = self.lifts_stack.pop().unwrap();
