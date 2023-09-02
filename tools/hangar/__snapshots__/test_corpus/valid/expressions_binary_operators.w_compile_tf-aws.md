@@ -59,12 +59,6 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: xyznfj == -5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(xyznfj,(-5))))};
     const xynfj = Math.trunc((-501.9) / ((-99.1) - 0.91));
     {((cond) => {if (!cond) throw new Error("assertion failed: xynfj == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(xynfj,5)))};
-    let xyas = 5;
-    (xyas += 10);
-    {((cond) => {if (!cond) throw new Error("assertion failed: xyas == 15")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(xyas,15)))};
-    let xyss = 5;
-    (xyss -= 10);
-    {((cond) => {if (!cond) throw new Error("assertion failed: xyss == -5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(xyss,(-5))))};
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
