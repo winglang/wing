@@ -639,7 +639,6 @@ impl<'s> Parser<'s> {
 		})
 	}
 
-	// TODO(wiktor.zajac) HANDLE OTHER ASSIGNMENT KINDS
 	fn build_assignment_statement(
 		&self,
 		statement_node: &Node,
@@ -647,6 +646,7 @@ impl<'s> Parser<'s> {
 		kind: AssignmentKind,
 	) -> DiagnosticResult<StmtKind> {
 		let reference = self.build_reference(&statement_node.child_by_field_name("name").unwrap(), phase)?;
+
 		if let ExprKind::Reference(r) = reference.kind {
 			Ok(StmtKind::Assignment {
 				kind: kind,
