@@ -462,7 +462,7 @@ impl<'a> JSifier<'a> {
 							InterpolatedStringPart::Static(_) => None,
 							InterpolatedStringPart::Expr(e) => Some(match *self.types.get_expr_type(e) {
 								Type::Json(_) | Type::MutJson => {
-									format!("((e) => typeof e === 'string' ? e : JSON.stringify(e, null, 2))({})", self.jsify_expression(e, ctx))
+									format!("JSON.stringify({})", self.jsify_expression(e, ctx))
 								}
 								_ => self.jsify_expression(e, ctx),
 							})
