@@ -1,3 +1,3 @@
 struct MyStruct {
-  data: str;
+  val: str;
 }

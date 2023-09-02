@@ -265,10 +265,10 @@ let jMyStruct = {
     val: 10
   },
   m2: {
-    data: "10"
+    val: "10"
   }
 };
 
 let myStruct = MyStruct.fromJson(jMyStruct);
 assert(myStruct.m1.val == 10);
-assert(myStruct.m2.data == "10");
+assert(myStruct.m2.val == "10");

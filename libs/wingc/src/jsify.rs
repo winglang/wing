@@ -23,7 +23,7 @@ use crate::{
 		lifts::{Liftable, Lifts},
 		resolve_super_method, resolve_user_defined_type,
 		symbol_env::SymbolEnv,
-		ClassLike, Struct, Type, TypeRef, Types, UnsafeRef, VariableKind, CLASS_INFLIGHT_INIT_NAME,
+		ClassLike, Type, TypeRef, Types, VariableKind, CLASS_INFLIGHT_INIT_NAME,
 	},
 	visit_context::VisitContext,
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
@@ -307,21 +307,21 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_type(&self, typ: &Type, ctx: &mut JSifyContext) -> Option<String> {
+	pub fn jsify_type(&self, typ: &Type) -> Option<String> {
 		match typ {
 			Type::Struct(t) => Some(t.name.name.clone()),
 			Type::String => Some("string".to_string()),
 			Type::Number => Some("number".to_string()),
 			Type::Boolean => Some("boolean".to_string()),
 			Type::Array(t) => {
-				if let Some(inner) = self.jsify_type(&t, ctx) {
+				if let Some(inner) = self.jsify_type(&t) {
 					Some(format!("{}[]", inner))
 				} else {
 					None
 				}
 			}
 			Type::Optional(t) => {
-				if let Some(inner) = self.jsify_type(&t, ctx) {
+				if let Some(inner) = self.jsify_type(&t) {
 					Some(format!("{}?", inner))
 				} else {
 					None
@@ -651,127 +651,6 @@ impl<'a> JSifier<'a> {
 				"".to_string()
 			},
 		}
-	}
-
-	pub fn jsify_struct_env_properties(&self, env: &SymbolEnv, ctx: &mut JSifyContext) -> CodeMaker {
-		let mut code = CodeMaker::default();
-		for (field_name, (.., kind)) in env.symbol_map.iter() {
-			code.line(format!(
-				"{}: {},",
-				field_name,
-				self.jsify_struct_schema_field(&kind.as_variable().unwrap().type_, ctx)
-			));
-		}
-		code
-	}
-
-	pub fn jsify_struct_schema_required_fields(&self, env: &SymbolEnv) -> CodeMaker {
-		let mut code = CodeMaker::default();
-		code.open("required: [");
-		for (field_name, (_stmt_idx, kind)) in env.symbol_map.iter() {
-			if !matches!(*kind.as_variable().unwrap().type_, Type::Optional(_)) {
-				code.line(format!("\"{}\",", field_name));
-			}
-		}
-		code.close("]");
-		code
-	}
-
-	pub fn jsify_struct_schema_field(&self, typ: &UnsafeRef<Type>, ctx: &mut JSifyContext) -> String {
-		match **typ {
-			Type::String | Type::Number | Type::Boolean => {
-				format!("{{ type: \"{}\" }}", self.jsify_type(typ, ctx).unwrap())
-			}
-			Type::Struct(ref s) => {
-				let mut code = CodeMaker::default();
-				code.open("{");
-				code.line("type: \"object\",");
-				code.open("properties: {");
-				code.add_code(self.jsify_struct_env_properties(&s.env, ctx));
-				code.close("},");
-				code.add_code(self.jsify_struct_schema_required_fields(&s.env));
-				code.close("}");
-				code.to_string().strip_suffix("\n").unwrap().to_string()
-			}
-			Type::Array(ref t) | Type::Set(ref t) => {
-				let mut code = CodeMaker::default();
-				code.open("{");
-
-				code.line("type: \"array\",");
-
-				if matches!(**typ, Type::Set(_)) {
-					code.line("uniqueItems: true,");
-				}
-
-				code.line(format!("items: {}", self.jsify_struct_schema_field(t, ctx)));
-
-				code.close("}");
-				code.to_string().strip_suffix("\n").unwrap().to_string()
-			}
-			Type::Map(ref t) => {
-				let mut code = CodeMaker::default();
-				code.open("{");
-
-				code.line("type: \"object\",");
-				code.line(format!(
-					"patternProperties: {{ \".*\": {} }}",
-					self.jsify_struct_schema_field(t, ctx)
-				));
-
-				code.close("}");
-				code.to_string().strip_suffix("\n").unwrap().to_string()
-			}
-			Type::Optional(t) => self.jsify_struct_schema_field(&t, ctx),
-			Type::Json(_) => "{ type: \"object\" }".to_string(),
-			_ => "{ type: \"null\" }".to_string(),
-		}
-	}
-
-	pub fn jsify_struct(&self, struct_: &Struct, ctx: &mut JSifyContext) -> CodeMaker {
-		let mut code = CodeMaker::default();
-
-		code.open("module.exports = function(stdStruct) {".to_string());
-		code.open(format!("class {} {{", struct_.name));
-
-		code.open("static jsonSchema() {".to_string());
-		code.open("return {");
-
-		code.line(format!("id: \"/{}\",", struct_.name));
-		code.line("type: \"object\",".to_string());
-
-		code.open("properties: {");
-
-		code.add_code(self.jsify_struct_env_properties(&struct_.env, ctx));
-
-		//close properties
-		code.close("},");
-
-		code.add_code(self.jsify_struct_schema_required_fields(&struct_.env));
-
-		// close return
-		code.close("}");
-
-		// close schema
-		code.close("}");
-
-		// create _validate() function
-		code.open("static fromJson(obj) {");
-		code.line("return stdStruct._validate(obj, this.jsonSchema())");
-		code.close("}");
-
-		// create _toInflightType function that just requires the generated struct file
-		code.open("static _toInflightType(context) {".to_string());
-		code.line("return `require(\"./${require('path').basename(__filename)}\")(${ context._lift(stdStruct) })`;".to_string());
-		code.close("}");
-
-		// close class
-		code.close("}");
-		// close module.exports
-
-		code.line(format!("return {};", struct_.name.name));
-		code.close("};");
-
-		code
 	}
 
 	// To avoid a performance penalty when evaluating assignments made in the elif statement,
