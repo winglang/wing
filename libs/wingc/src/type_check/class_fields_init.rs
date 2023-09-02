@@ -20,7 +20,11 @@ impl VisitClassInit {
 impl Visit<'_> for VisitClassInit {
 	fn visit_stmt(&mut self, node: &Stmt) {
 		match &node.kind {
-			StmtKind::Assignment { variable, value: _ } => match variable {
+			StmtKind::Assignment {
+				kind: _,
+				variable,
+				value: _,
+			} => match variable {
 				Reference::InstanceMember {
 					property,
 					object: _,

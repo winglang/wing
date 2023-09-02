@@ -8,10 +8,10 @@ use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
-	ArgList, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Expr,
-	ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface, InterpolatedString,
-	InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, StructField, Symbol,
-	TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
+	ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock,
+	ElifLetBlock, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface,
+	InterpolatedString, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, StructField,
+	Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan};
@@ -631,10 +631,12 @@ impl<'s> Parser<'s> {
 		})
 	}
 
+	// TODO(wiktor.zajac) HANDLE OTHER ASSIGNMENT KINDS
 	fn build_assignment_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
 		let reference = self.build_reference(&statement_node.child_by_field_name("name").unwrap(), phase)?;
 		if let ExprKind::Reference(r) = reference.kind {
 			Ok(StmtKind::Assignment {
+				kind: AssignmentKind::Assign,
 				variable: r,
 				value: self.build_expression(&statement_node.child_by_field_name("value").unwrap(), phase)?,
 			})
@@ -1587,8 +1589,6 @@ impl<'s> Parser<'s> {
 						"\\" => BinaryOperator::FloorDiv,
 						"**" => BinaryOperator::Power,
 						"??" => BinaryOperator::UnwrapOr,
-						"-=" => BinaryOperator::SubtractAssignment,
-						"+=" => BinaryOperator::AddAssignment,
 						"ERROR" => self.with_error::<BinaryOperator>("Expected binary operator", expression_node)?,
 						other => return self.report_unimplemented_grammar(other, "binary operator", expression_node),
 					},

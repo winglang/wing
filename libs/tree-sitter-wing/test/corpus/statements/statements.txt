@@ -72,6 +72,10 @@ Variable assignment
 let x: num = 1;
 x = 2;
 
+let var z = 1;
+z += 2;
+z -= 1;
+
 let var y = "hello";
 
 --------------------------------------------------------------------------------
@@ -82,6 +86,18 @@ let var y = "hello";
     type: (builtin_type)
     value: (number))
   (variable_assignment_statement
+    name: (lvalue
+      (reference_identifier))
+    value: (number))
+  (variable_definition_statement
+    reassignable: (reassignable)
+    name: (identifier)
+    value: (number))
+  (variable_assignment_incr_statement
+    name: (lvalue
+      (reference_identifier))
+    value: (number))
+  (variable_assignment_decr_statement
     name: (lvalue
       (reference_identifier))
     value: (number))

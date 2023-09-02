@@ -657,6 +657,15 @@ for item in [1,2,3] {
 }
 ```
 
+To modify a numeric value, it is also possible to use `+=` and `-=` operators.
+
+```TS
+// wing
+let var sum = 0;
+sum += 5; // sum = 5
+sum -= 10; // sum = -5
+```
+
 Re-assignment to class fields is allowed if field is marked with `var`.
 Examples in the class section below.
 
@@ -2044,8 +2053,6 @@ Ternary or conditional operators are not supported.
 | `+`      | Addition               | `a + b`  |
 | `-`      | Subtraction            | `a - b`  |
 | `**`     | Power                  | `a ** b` |
-| `-=`     | Subtraction Assignment | `a -= b` |
-| `+=`     | Addition Assignment    | `a += b` |
 
 [`▲ top`][top]
 

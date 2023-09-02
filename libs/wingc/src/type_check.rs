@@ -4,7 +4,9 @@ pub(crate) mod jsii_importer;
 pub mod lifts;
 pub mod symbol_env;
 
-use crate::ast::{self, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition, NewExpr, TypeAnnotationKind};
+use crate::ast::{
+	self, AssignmentKind, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition, NewExpr, TypeAnnotationKind,
+};
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter as AstFunctionParameter,
 	Interface as AstInterface, InterpolatedStringPart, Literal, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Symbol,
@@ -1826,16 +1828,6 @@ impl<'a> TypeChecker<'a> {
 							(inner_type, ltype_phase)
 						}
 					}
-					BinaryOperator::SubtractAssignment => {
-						self.validate_type(ltype, self.types.number(), left);
-						self.validate_type(rtype, self.types.number(), right);
-						(self.types.number(), Phase::Independent)
-					}
-					BinaryOperator::AddAssignment => {
-						self.validate_type(ltype, self.types.number(), left);
-						self.validate_type(rtype, self.types.number(), right);
-						(self.types.number(), Phase::Independent)
-					}
 				}
 			}
 			ExprKind::Unary { op, exp: unary_exp } => {
@@ -3141,7 +3133,7 @@ impl<'a> TypeChecker<'a> {
 			StmtKind::Expression(e) => {
 				self.type_check_exp(e, env);
 			}
-			StmtKind::Assignment { variable, value } => {
+			StmtKind::Assignment { kind, variable, value } => {
 				let (exp_type, _) = self.type_check_exp(value, env);
 
 				// TODO: we need to verify that if this variable is defined in a parent environment (i.e.
@@ -3155,7 +3147,18 @@ impl<'a> TypeChecker<'a> {
 					self.spanned_error(stmt, "Variable cannot be reassigned from inflight".to_string());
 				}
 
-				self.validate_type(exp_type, var.type_, value);
+				match &kind {
+					AssignmentKind::Assign => {
+						self.validate_type(exp_type, var.type_, value);
+					}
+					AssignmentKind::AssignIncr => {
+						self.validate_type(exp_type, self.types.number(), value);
+						self.validate_type(var.type_, self.types.number(), variable);
+					}
+					AssignmentKind::AssignDecr => {
+						self.validate_type(exp_type, var.type_, value);
+					}
+				}
 			}
 			StmtKind::Bring { source, identifier } => {
 				// library_name is the name of the library we are importing from the JSII world

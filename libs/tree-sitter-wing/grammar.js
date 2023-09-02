@@ -8,15 +8,13 @@ const PREC = {
   RELATIONAL: 70,
   UNWRAP_OR: 80,
   SHIFT: 90,
-  ADD_ASSIGNMENT: 100,
-  SUBTRACT_ASSIGNMENT: 110,
-  ADD: 120,
-  MULTIPLY: 130,
-  UNARY: 140,
-  OPTIONAL_TEST: 150,
-  POWER: 160,
-  MEMBER: 170,
-  CALL: 180,
+  ADD: 100,
+  MULTIPLY: 110,
+  UNARY: 120,
+  OPTIONAL_TEST: 130,
+  POWER: 140,
+  MEMBER: 150,
+  CALL: 160,
 };
 
 module.exports = grammar({
@@ -105,6 +103,8 @@ module.exports = grammar({
         $.expression_statement,
         $.variable_definition_statement,
         $.variable_assignment_statement,
+        $.variable_assignment_incr_statement,
+        $.variable_assignment_decr_statement,
         $.return_statement,
         $.class_definition,
         $.resource_definition,
@@ -158,6 +158,22 @@ module.exports = grammar({
       seq(
         field("name", alias($.reference, $.lvalue)),
         "=",
+        field("value", $.expression),
+        $._semicolon
+      ),
+
+    variable_assignment_incr_statement: ($) =>
+      seq(
+        field("name", alias($.reference, $.lvalue)),
+        "+=",
+        field("value", $.expression),
+        $._semicolon
+      ),
+
+    variable_assignment_decr_statement: ($) =>
+      seq(
+        field("name", alias($.reference, $.lvalue)),
+        "-=",
         field("value", $.expression),
         $._semicolon
       ),
@@ -609,8 +625,6 @@ module.exports = grammar({
         //['>>', PREC.SHIFT],
         //['>>>', PREC.SHIFT],
         ["??", PREC.UNWRAP_OR],
-        ["+=", PREC.ADD_ASSIGNMENT],
-        ["-=", PREC.SUBTRACT_ASSIGNMENT],
       ];
 
       return choice(
