@@ -1532,10 +1532,17 @@ let [var] <name>[: <type>] = [<type>] <value>;
 Assignment operator is `=`.  
 Assignment declaration keyword is `let`.  
 Type annotation is optional if a default value is given.  
+`var` keyword after `let` makes a variable mutable.
 
 > ```TS
 > let n = 10;
 > let s: str = "hello";
+> s = "world"; // error: Variable is not reassignable
+> ```
+
+> ```TS
+> let var s = "hello";
+> s = "hello world"; // compiles
 > ```
 
 [`▲ top`][top]
@@ -1764,6 +1771,8 @@ exports.makeId = function () {
 Given a method of name X, the compiler will map the method to the JavaScript export with the 
 matching name (without any case conversion).
 
+Extern methods do not support access to class's members through `this`, so they must be declared `static`.
+
 ### 5.2.1 TypeScript
 
 It is possible to use TypeScript to write helpers, but at the moment this is not
@@ -1966,7 +1975,7 @@ assert(cat1 != dog); // compile time error (can't compare different types)
 
 ### 6.2 Strings
 
-String reference doc is available [here](https://www.winglang.io/docs/language-guide/language-reference#61-strings).
+String reference doc is available [here](https://www.winglang.io/docs/standard-library/std/api-reference#string-).
 Type of string is UTF-16 internally.  
 All string declaration variants are multi-line.  
 

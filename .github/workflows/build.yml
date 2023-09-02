@@ -35,8 +35,10 @@ jobs:
       version: ${{ fromJson(steps.changelog.outputs.data).newVersion }}
       last-version: ${{ fromJson(steps.changelog.outputs.data).lastVersion }}
       changelog: ${{ fromJson(steps.changelog.outputs.data).changelog }}
-      vscode-wing-changed: ${{ steps.git-diff-vscode-wing.outputs.diff }}
-
+      vscode-wing-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['vscode-wing#compile'].changes }}
+      console-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['@wingconsole/app#preview:fly'].changes }}
+      e2e-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['hangar#test'].changes }}
+      bench-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['hangar#bench'].changes }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -72,29 +74,24 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Derive appropriate SHAs for base and head
+        id: shas
+        uses: nrwl/nx-set-shas@v3
+
+      - name: Figure out what projects changed
+        id: turbo-diff
+        run: pnpm turbo-diff --startRef ${{ steps.shas.outputs.base }} --endRef ${{ steps.shas.outputs.head }}
+
       - name: Changelog Generation
         id: changelog
         env:
           GENERATE_VERSION: ${{ github.event_name != 'push' || github.repository != 'winglang/wing' }}
-        run: pnpm changelog
+        run: pnpm bump-pack
 
       - name: Build and Package
         run: pnpm package:ci
         env:
           SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
-
-      - name: Derive appropriate SHAs for base and head
-        id: setSHAs
-        uses: nrwl/nx-set-shas@v3
-
-      - name: Check git diff of VSCode Extension
-        id: git-diff-vscode-wing
-        run: |
-          if git diff --quiet ${{ steps.setSHAs.outputs.base }} ${{ github.sha }} -- apps/vscode-wing; then
-            echo "diff=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "diff=true" >> "$GITHUB_OUTPUT"
-          fi
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
@@ -145,14 +142,7 @@ jobs:
 
       - name: Create git patch
         id: diff
-        run: |
-          git add --all
-          git diff --staged --binary --patch > build.diff
-          if [ -s build.diff ]; then
-            echo "Diff found, creating a patch to apply later"
-            cat build.diff
-            echo "diff=true" >> $GITHUB_OUTPUT
-          fi
+        run: scripts/create_patch.sh build.diff
 
       - name: Upload patch
         if: steps.diff.outputs.diff == 'true'
@@ -163,6 +153,7 @@ jobs:
 
   benchmark:
     name: Benchmark
+    if: needs.build.outputs.bench-changed == 'true' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full')
     runs-on: ubuntu-latest
     needs:
       - build
@@ -208,6 +199,7 @@ jobs:
     runs-on: "${{ matrix.runner }}-latest"
     needs:
       - build
+    if: needs.build.outputs.e2e-changed == 'true' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full')
     strategy:
       fail-fast: true
       matrix:
@@ -263,13 +255,7 @@ jobs:
           RAW_SHARD: ${{ matrix.shard }}
         run: |
           SHARD=$(echo $RAW_SHARD | sed 's/\//of/g')
-          DIFF_NAME="e2e-$SHARD.diff"
-          git add --all
-          git diff --staged --binary --patch > $DIFF_NAME
-          if [ -s $DIFF_NAME ]; then
-            echo "diff=true" >> $GITHUB_OUTPUT
-            echo "diff_name=$DIFF_NAME" >> $GITHUB_OUTPUT
-          fi
+          scripts/create_patch.sh "e2e-$SHARD.diff"
 
       - name: Upload mutation
         if: matrix.runner == 'ubuntu' && matrix.node == '18' && steps.diff.outputs.diff == 'true'
@@ -287,12 +273,10 @@ jobs:
       FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       FLY_VERSION: "0.1.80"
       APP_NAME: wing-console-pr-${{github.event.number}}
-    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && !startsWith(github.head_ref, 'mergify/merge-queue/') }}
+    if: ${{ needs.build.outputs.console-changed == 'true' && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && !startsWith(github.head_ref, 'mergify/merge-queue/') }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 1
 
       - name: Download Dist Artifacts
         uses: actions/download-artifact@v3
@@ -303,7 +287,7 @@ jobs:
       - name: Install flyctl
         uses: superfly/flyctl-actions/setup-flyctl@1.4
         with:
-          version: ${{env.FLY_VERSION}}
+          version: ${{ env.FLY_VERSION }}
 
       - name: Deploy to Fly.io
         id: deploy-fly
@@ -330,12 +314,16 @@ jobs:
   quality-gate:
     name: Quality Gate
     runs-on: ubuntu-latest
+    if: ${{ !cancelled() }}
     needs:
       - build
       - e2e-test
       - benchmark
       - test
     steps:
+      - name: Check failure
+        if: needs.build.result == 'failure' || needs.e2e-test.result == 'failure' || needs.benchmark.result == 'failure' || needs.test.result == 'failure'
+        run: exit 1
       - name: Download patches
         uses: actions/download-artifact@v3
       - name: Check patches
@@ -401,7 +389,11 @@ jobs:
 
       - name: Compute Checksums
         run: |
-          mv ./benchmarks/* ./dist
+          # if there is a ./benchmarks/report.json, move it to ./dist
+          if [ -f ./benchmarks/report.json ]; then
+            mv ./benchmarks/report.json ./dist
+          fi
+
           cd dist
 
           echo '' >> ../CHANGELOG.md
