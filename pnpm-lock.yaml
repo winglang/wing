@@ -978,9 +978,9 @@ importers:
       '@aws-cdk/asset-kubectl-v20':
         specifier: ^2.1.2
         version: 2.1.2
-      '@aws-cdk/asset-node-proxy-agent-v5':
-        specifier: ^2.0.166
-        version: 2.0.166
+      '@aws-cdk/asset-node-proxy-agent-v6':
+        specifier: ^2.0.1
+        version: 2.0.1
       '@aws-sdk/client-dynamodb':
         specifier: ^3.405.0
         version: 3.405.0
@@ -1395,10 +1395,6 @@ packages:
 
   /@aws-cdk/asset-kubectl-v20@2.1.2:
     resolution: {integrity: sha512-3M2tELJOxQv0apCIiuKQ4pAbncz9GuLwnKFqxifWfe77wuMxyTRPmxssYHs42ePqzap1LT6GDcPygGs+hHstLg==}
-    dev: false
-
-  /@aws-cdk/asset-node-proxy-agent-v5@2.0.166:
-    resolution: {integrity: sha512-j0xnccpUQHXJKPgCwQcGGNu4lRiC1PptYfdxBIH1L4dRK91iBxtSQHESRQX+yB47oGLaF/WfNN/aF3WXwlhikg==}
     dev: false
 
   /@aws-cdk/asset-node-proxy-agent-v6@2.0.1:
