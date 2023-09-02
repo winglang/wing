@@ -109,7 +109,7 @@ impl<'a> LiftVisitor<'a> {
 		return true;
 	}
 
-	fn jsify_expr(&mut self, node: &Expr, env: &SymbolEnv) -> String {
+	fn jsify_expr(&mut self, node: &Expr) -> String {
 		self.ctx.push_phase(Phase::Preflight);
 		let res = self.jsify.jsify_expression(
 			&node,
@@ -117,21 +117,18 @@ impl<'a> LiftVisitor<'a> {
 				lifts: None,
 				visit_ctx: &mut self.ctx,
 			},
-			env,
 		);
 		self.ctx.pop_phase();
 		res
 	}
 
-	fn jsify_udt(&self, node: &UserDefinedType) -> String {
-		let ctx = &self.ctx;
+	fn jsify_udt(&mut self, node: &UserDefinedType) -> String {
 		let res = self.jsify.jsify_user_defined_type(
 			&node,
 			&mut JSifyContext {
-				lifts: None,
-				visit_ctx: &mut VisitContext::new(),
-			},
-			ctx.current_env().unwrap(),
+        lifts: None,
+        visit_ctx: &mut self.ctx,
+    } ,
 		);
 		res
 	}
@@ -184,10 +181,9 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			//---------------
 			// LIFT
 			if expr_phase == Phase::Preflight {
-        let env = &v.ctx.current_env().expect("an env").clone();
 
 				// jsify the expression so we can get the preflight code
-				let code = v.jsify_expr(&node, &env);
+				let code = v.jsify_expr(&node);
 
 				let property = if let Some(property) = v.ctx.current_property() {
 					Some(property)
@@ -359,6 +355,8 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 		self.ctx.push_class(udt.clone(), &node.phase, init_env);
 
 		self.lifts_stack.push(Lifts::new());
+
+    let env = self.ctx.current_env().unwrap();
 
 		if let Some(parent) = &node.parent {
 			let mut lifts = self.lifts_stack.pop().unwrap();

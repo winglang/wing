@@ -161,9 +161,8 @@ impl<'a> Visit<'a> for StructSchemaVisitor<'a> {
 							type_name,
 							&mut JSifyContext {
 								lifts: None,
-								visit_ctx: &mut VisitContext::new(),
+								visit_ctx: &mut self.ctx,
 							},
-							self.ctx.current_env().unwrap(),
 						),
 						struct_code,
 					);
