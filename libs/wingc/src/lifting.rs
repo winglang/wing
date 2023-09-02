@@ -181,7 +181,6 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			//---------------
 			// LIFT
 			if expr_phase == Phase::Preflight {
-
 				// jsify the expression so we can get the preflight code
 				let code = v.jsify_expr(&node);
 
@@ -355,8 +354,6 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 		self.ctx.push_class(udt.clone(), &node.phase, init_env);
 
 		self.lifts_stack.push(Lifts::new());
-
-		let _env = self.ctx.current_env().unwrap();
 
 		if let Some(parent) = &node.parent {
 			let mut lifts = self.lifts_stack.pop().unwrap();
