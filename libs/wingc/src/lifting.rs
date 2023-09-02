@@ -8,7 +8,7 @@ use crate::{
 	type_check::{
 		lifts::{Liftable, Lifts},
 		resolve_user_defined_type,
-		symbol_env::{LookupResult},
+		symbol_env::LookupResult,
 		ClassLike, TypeRef, CLOSURE_CLASS_HANDLE_METHOD,
 	},
 	visit::{self, Visit},
