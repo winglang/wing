@@ -97,7 +97,7 @@ impl<'a> StructSchemaVisitor<'a> {
 		code
 	}
 
-	fn jsify_struct_schema(&self, struct_: &Struct, env: &SymbolEnv) -> CodeMaker {
+	fn jsify_struct_schema(&self, struct_: &Struct, _env: &SymbolEnv) -> CodeMaker {
 		let mut code = CodeMaker::default();
 
 		code.open("module.exports = function(stdStruct) {".to_string());
@@ -131,9 +131,7 @@ impl<'a> StructSchemaVisitor<'a> {
 
 		// create _toInflightType function that just requires the generated struct file
 		code.open("static _toInflightType(context) {".to_string());
-		code.line(format!(
-			"return `require(\"./${{require('path').basename(__filename)}}\")(${{ context._lift(stdStruct) }})`;",
-		));
+		code.line("return `require(\"./${require('path').basename(__filename)}\")(${ context._lift(stdStruct) })`;".to_string());
 		code.close("}");
 
 		// close class
