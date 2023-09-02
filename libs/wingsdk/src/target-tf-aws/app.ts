@@ -12,6 +12,7 @@ import { Table } from "./table";
 import { TestRunner } from "./test-runner";
 import { Topic } from "./topic";
 import { Website } from "./website";
+import { Domain } from "../shared-aws/domain";
 import { DataAwsCallerIdentity } from "../.gen/providers/aws/data-aws-caller-identity";
 import { DataAwsRegion } from "../.gen/providers/aws/data-aws-region";
 import { Eip } from "../.gen/providers/aws/eip";
@@ -27,6 +28,7 @@ import {
   API_FQN,
   BUCKET_FQN,
   COUNTER_FQN,
+  DOMAIN_FQN,
   FUNCTION_FQN,
   ON_DEPLOY_FQN,
   QUEUE_FQN,
@@ -117,6 +119,9 @@ export class App extends CdktfApp {
 
       case ON_DEPLOY_FQN:
         return new OnDeploy(scope, id, args[0], args[1]);
+
+      case DOMAIN_FQN:
+        return new Domain(scope, id, args[0]);
     }
 
     return undefined;
