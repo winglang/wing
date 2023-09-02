@@ -1,7 +1,7 @@
 use crate::{
 	ast::{Reference, Scope},
 	jsify::{codemaker::CodeMaker, JSifier, JSifyContext},
-	type_check::{is_udt_struct_type, resolve_user_defined_type, Struct, symbol_env::SymbolEnv, Type, UnsafeRef},
+	type_check::{is_udt_struct_type, resolve_user_defined_type, symbol_env::SymbolEnv, Struct, Type, UnsafeRef},
 	visit::{self, Visit},
 	visit_context::VisitContext,
 };
@@ -23,8 +23,8 @@ impl<'a> StructSchemaVisitor<'a> {
 		self.jsify_struct_schema(struct_, self.ctx.current_env().unwrap())
 	}
 
-  fn jsify_struct_schema_required_fields(&self, env: &SymbolEnv) -> CodeMaker {
-    let mut code = CodeMaker::default();
+	fn jsify_struct_schema_required_fields(&self, env: &SymbolEnv) -> CodeMaker {
+		let mut code = CodeMaker::default();
 		code.open("required: [");
 		for (field_name, (_stmt_idx, kind)) in env.symbol_map.iter() {
 			if !matches!(*kind.as_variable().unwrap().type_, Type::Optional(_)) {
@@ -33,10 +33,10 @@ impl<'a> StructSchemaVisitor<'a> {
 		}
 		code.close("]");
 		code
-  }
+	}
 
-  fn jsify_struct_schema_field(&self, typ: &UnsafeRef<Type>, env: &SymbolEnv) -> String {
-    match **typ {
+	fn jsify_struct_schema_field(&self, typ: &UnsafeRef<Type>, env: &SymbolEnv) -> String {
+		match **typ {
 			Type::String | Type::Number | Type::Boolean => {
 				format!("{{ type: \"{}\" }}", self.jsify.jsify_type(typ).unwrap())
 			}
@@ -83,10 +83,10 @@ impl<'a> StructSchemaVisitor<'a> {
 			Type::Json(_) => "{ type: \"object\" }".to_string(),
 			_ => "{ type: \"null\" }".to_string(),
 		}
-  }
+	}
 
-  fn jsify_struct_env_properties(&self, env: &SymbolEnv) -> CodeMaker {
-    let mut code = CodeMaker::default();
+	fn jsify_struct_env_properties(&self, env: &SymbolEnv) -> CodeMaker {
+		let mut code = CodeMaker::default();
 		for (field_name, (.., kind)) in env.symbol_map.iter() {
 			code.line(format!(
 				"{}: {},",
@@ -95,10 +95,10 @@ impl<'a> StructSchemaVisitor<'a> {
 			));
 		}
 		code
-  }
+	}
 
-  fn jsify_struct_schema(&self, struct_: &Struct, env: &SymbolEnv) -> CodeMaker {
-    let mut code = CodeMaker::default();
+	fn jsify_struct_schema(&self, struct_: &Struct, env: &SymbolEnv) -> CodeMaker {
+		let mut code = CodeMaker::default();
 
 		code.open("module.exports = function(stdStruct) {".to_string());
 		code.open(format!("class {} {{", struct_.name));
@@ -144,7 +144,7 @@ impl<'a> StructSchemaVisitor<'a> {
 		code.close("};");
 
 		code
-  }
+	}
 }
 
 // Looks for any references to a struct type, and emits a struct schema file for it.
@@ -157,9 +157,7 @@ impl<'a> Visit<'a> for StructSchemaVisitor<'a> {
 			Reference::TypeMember { type_name, .. } => {
 				if is_udt_struct_type(type_name, self.ctx.current_env().unwrap()) {
 					let type_ = resolve_user_defined_type(type_name, self.ctx.current_env().unwrap(), 0);
-					let struct_code = self.jsify_struct(
-            type_.unwrap().as_struct().unwrap()
-          );
+					let struct_code = self.jsify_struct(type_.unwrap().as_struct().unwrap());
 					self.jsify.emit_struct_file(
 						&self.jsify.jsify_user_defined_type(
 							type_name,
