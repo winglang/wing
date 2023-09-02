@@ -106,10 +106,10 @@ module.exports = function(stdStruct) {
           m2: {
             type: "object",
             properties: {
-              data: { type: "string" },
+              val: { type: "string" },
             },
             required: [
-              "data",
+              "val",
             ]
           },
         },
@@ -607,10 +607,10 @@ class $Root extends $stdlib.std.Resource {
     const jj1 = ({"data": ({"val": 10})});
     const externalBar = (externalStructs_MyOtherStruct.fromJson(jj1));
     {((cond) => {if (!cond) throw new Error("assertion failed: externalBar.data.val == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(externalBar.data.val,10)))};
-    const jMyStruct = ({"m1": ({"val": 10}),"m2": ({"data": "10"})});
+    const jMyStruct = ({"m1": ({"val": 10}),"m2": ({"val": "10"})});
     const myStruct = (MyStruct.fromJson(jMyStruct));
     {((cond) => {if (!cond) throw new Error("assertion failed: myStruct.m1.val == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(myStruct.m1.val,10)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: myStruct.m2.data == \"10\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(myStruct.m2.data,"10")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: myStruct.m2.val == \"10\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(myStruct.m2.val,"10")))};
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
