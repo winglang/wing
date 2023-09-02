@@ -1,6 +1,6 @@
 use crate::{
 	ast::{Reference, Scope},
-	jsify::{JSifier, JSifyContext},
+	jsify::{codemaker::CodeMaker, JSifier, JSifyContext},
 	type_check::{is_udt_struct_type, resolve_user_defined_type, Struct},
 	visit::{self, Visit},
 	visit_context::VisitContext,
@@ -19,16 +19,14 @@ impl<'a> StructSchemaVisitor<'a> {
 		}
 	}
 
-	fn jsify_struct(&self, struct_: &Struct) {
-		let res = self.jsify.jsify_struct(
+	fn jsify_struct(&self, struct_: &Struct) -> CodeMaker {
+		self.jsify.jsify_struct(
 			struct_,
 			&mut JSifyContext {
 				lifts: None,
 				visit_ctx: &mut VisitContext::new(),
 			},
-		);
-
-		self.jsify.emit_struct_file(&struct_.name.name, res);
+		)
 	}
 }
 
@@ -42,7 +40,18 @@ impl<'a> Visit<'a> for StructSchemaVisitor<'a> {
 			Reference::TypeMember { type_name, .. } => {
 				if is_udt_struct_type(type_name, self.ctx.current_env().unwrap()) {
 					let type_ = resolve_user_defined_type(type_name, self.ctx.current_env().unwrap(), 0);
-					self.jsify_struct(type_.unwrap().as_struct().unwrap());
+					let struct_code = self.jsify_struct(type_.unwrap().as_struct().unwrap());
+					self.jsify.emit_struct_file(
+						&self.jsify.jsify_user_defined_type(
+							type_name,
+							&mut JSifyContext {
+								lifts: None,
+								visit_ctx: &mut VisitContext::new(),
+							},
+							self.ctx.current_env().unwrap(),
+						),
+						struct_code,
+					);
 				}
 				visit::visit_reference(self, node);
 			}

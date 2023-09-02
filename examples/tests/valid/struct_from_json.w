@@ -1,6 +1,9 @@
 bring cloud;
+
+// JSII structs
 let j = { public: false };
 let x = cloud.BucketProps.fromJson(j);
+assert(x.public == false);
 
 // simple case
 struct Foo {
@@ -248,3 +251,24 @@ let jj1 = {
 
 let externalBar = externalStructs.MyOtherStruct.fromJson(jj1);
 assert(externalBar.data.val == 10);
+
+// test namespaced struct collisions dont occur
+bring "./subdir/structs_2.w" as otherExternalStructs;
+
+struct MyStruct {
+  m1: externalStructs.MyStruct;
+  m2: otherExternalStructs.MyStruct;
+}
+
+let jMyStruct = {
+  m1: {
+    val: 10
+  },
+  m2: {
+    data: "10"
+  }
+};
+
+let myStruct = MyStruct.fromJson(jMyStruct);
+assert(myStruct.m1.val == 10);
+assert(myStruct.m2.data == "10");

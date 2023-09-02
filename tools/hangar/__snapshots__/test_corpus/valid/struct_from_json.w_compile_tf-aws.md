@@ -22,37 +22,10 @@ module.exports = function(stdStruct) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return `require("./Bar.Struct.js")(${ context._lift(stdStruct) })`;
+      return `require("./${require('path').basename(__filename)}")(${ context._lift(stdStruct) })`;
     }
   }
   return Bar;
-};
-
-```
-
-## BucketProps.Struct.js
-```js
-module.exports = function(stdStruct) {
-  class BucketProps {
-    static jsonSchema() {
-      return {
-        id: "/BucketProps",
-        type: "object",
-        properties: {
-          public: { type: "boolean" },
-        },
-        required: [
-        ]
-      }
-    }
-    static fromJson(obj) {
-      return stdStruct._validate(obj, this.jsonSchema())
-    }
-    static _toInflightType(context) {
-      return `require("./BucketProps.Struct.js")(${ context._lift(stdStruct) })`;
-    }
-  }
-  return BucketProps;
 };
 
 ```
@@ -77,7 +50,7 @@ module.exports = function(stdStruct) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return `require("./Foo.Struct.js")(${ context._lift(stdStruct) })`;
+      return `require("./${require('path').basename(__filename)}")(${ context._lift(stdStruct) })`;
     }
   }
   return Foo;
@@ -104,7 +77,7 @@ module.exports = function(stdStruct) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return `require("./Foosible.Struct.js")(${ context._lift(stdStruct) })`;
+      return `require("./${require('path').basename(__filename)}")(${ context._lift(stdStruct) })`;
     }
   }
   return Foosible;
@@ -112,16 +85,16 @@ module.exports = function(stdStruct) {
 
 ```
 
-## MyOtherStruct.Struct.js
+## MyStruct.Struct.js
 ```js
 module.exports = function(stdStruct) {
-  class MyOtherStruct {
+  class MyStruct {
     static jsonSchema() {
       return {
-        id: "/MyOtherStruct",
+        id: "/MyStruct",
         type: "object",
         properties: {
-          data: {
+          m1: {
             type: "object",
             properties: {
               val: { type: "number" },
@@ -130,9 +103,19 @@ module.exports = function(stdStruct) {
               "val",
             ]
           },
+          m2: {
+            type: "object",
+            properties: {
+              data: { type: "string" },
+            },
+            required: [
+              "data",
+            ]
+          },
         },
         required: [
-          "data",
+          "m1",
+          "m2",
         ]
       }
     }
@@ -140,10 +123,10 @@ module.exports = function(stdStruct) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return `require("./MyOtherStruct.Struct.js")(${ context._lift(stdStruct) })`;
+      return `require("./${require('path').basename(__filename)}")(${ context._lift(stdStruct) })`;
     }
   }
-  return MyOtherStruct;
+  return MyStruct;
 };
 
 ```
@@ -269,10 +252,73 @@ module.exports = function(stdStruct) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return `require("./Student.Struct.js")(${ context._lift(stdStruct) })`;
+      return `require("./${require('path').basename(__filename)}")(${ context._lift(stdStruct) })`;
     }
   }
   return Student;
+};
+
+```
+
+## cloud_BucketProps.Struct.js
+```js
+module.exports = function(stdStruct) {
+  class BucketProps {
+    static jsonSchema() {
+      return {
+        id: "/BucketProps",
+        type: "object",
+        properties: {
+          public: { type: "boolean" },
+        },
+        required: [
+        ]
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.jsonSchema())
+    }
+    static _toInflightType(context) {
+      return `require("./${require('path').basename(__filename)}")(${ context._lift(stdStruct) })`;
+    }
+  }
+  return BucketProps;
+};
+
+```
+
+## externalStructs_MyOtherStruct.Struct.js
+```js
+module.exports = function(stdStruct) {
+  class MyOtherStruct {
+    static jsonSchema() {
+      return {
+        id: "/MyOtherStruct",
+        type: "object",
+        properties: {
+          data: {
+            type: "object",
+            properties: {
+              val: { type: "number" },
+            },
+            required: [
+              "val",
+            ]
+          },
+        },
+        required: [
+          "data",
+        ]
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.jsonSchema())
+    }
+    static _toInflightType(context) {
+      return `require("./${require('path').basename(__filename)}")(${ context._lift(stdStruct) })`;
+    }
+  }
+  return MyOtherStruct;
 };
 
 ```
@@ -382,15 +428,17 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 const externalStructs = require("./preflight.structs-1.js")({ $stdlib });
+const otherExternalStructs = require("./preflight.structs2-2.js")({ $stdlib });
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    const Foo = require("./Foo.Struct.js")($stdlib.std.Struct);
     const Bar = require("./Bar.Struct.js")($stdlib.std.Struct);
-    const BucketProps = require("./BucketProps.Struct.js")($stdlib.std.Struct);
-    const Student = require("./Student.Struct.js")($stdlib.std.Struct);
-    const MyOtherStruct = require("./MyOtherStruct.Struct.js")($stdlib.std.Struct);
+    const Foo = require("./Foo.Struct.js")($stdlib.std.Struct);
     const Foosible = require("./Foosible.Struct.js")($stdlib.std.Struct);
+    const MyStruct = require("./MyStruct.Struct.js")($stdlib.std.Struct);
+    const Student = require("./Student.Struct.js")($stdlib.std.Struct);
+    const cloud_BucketProps = require("./cloud_BucketProps.Struct.js")($stdlib.std.Struct);
+    const externalStructs_MyOtherStruct = require("./externalStructs_MyOtherStruct.Struct.js")($stdlib.std.Struct);
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
@@ -453,7 +501,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const j = ({"public": false});
-    const x = (BucketProps.fromJson(j));
+    const x = (cloud_BucketProps.fromJson(j));
+    {((cond) => {if (!cond) throw new Error("assertion failed: x.public == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x.public,false)))};
     const jFoo = ({"f": "bar"});
     {((cond) => {if (!cond) throw new Error("assertion failed: Foo.fromJson(jFoo).f == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((Foo.fromJson(jFoo)).f,"bar")))};
     const jFoosible = ({});
@@ -556,8 +605,12 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:flight school student :)",new $Closure1(this,"$Closure1"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:lifting a student",new $Closure2(this,"$Closure2"));
     const jj1 = ({"data": ({"val": 10})});
-    const externalBar = (MyOtherStruct.fromJson(jj1));
+    const externalBar = (externalStructs_MyOtherStruct.fromJson(jj1));
     {((cond) => {if (!cond) throw new Error("assertion failed: externalBar.data.val == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(externalBar.data.val,10)))};
+    const jMyStruct = ({"m1": ({"val": 10}),"m2": ({"data": "10"})});
+    const myStruct = (MyStruct.fromJson(jMyStruct));
+    {((cond) => {if (!cond) throw new Error("assertion failed: myStruct.m1.val == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(myStruct.m1.val,10)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: myStruct.m2.data == \"10\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(myStruct.m2.data,"10")))};
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
@@ -566,6 +619,15 @@ new $App({ outdir: $outdir, name: "struct_from_json", rootConstruct: $Root, plug
 ```
 
 ## preflight.structs-1.js
+```js
+module.exports = function({ $stdlib }) {
+  const std = $stdlib.std;
+  return {  };
+};
+
+```
+
+## preflight.structs2-2.js
 ```js
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;

@@ -1,5 +1,5 @@
 use std::{
-	collections::HashMap,
+	collections::BTreeMap,
 	error::Error,
 	fmt::{self, Display},
 	fs::{self, File},
@@ -38,12 +38,12 @@ impl Error for FilesError {}
 
 #[derive(Default)]
 pub struct Files {
-	pub data: HashMap<Utf8PathBuf, FileData>,
+	data: BTreeMap<Utf8PathBuf, FileData>,
 }
 
 pub struct FileData {
-	pub content: String,
-	pub is_struct_schema: bool,
+	content: String,
+	is_struct_schema: bool,
 }
 
 impl FileData {
@@ -64,7 +64,7 @@ impl FileData {
 
 impl Files {
 	pub fn new() -> Self {
-		Self { data: HashMap::new() }
+		Self { data: BTreeMap::new() }
 	}
 
 	/// Add a file, returning an error if a file with the same name already exists.
@@ -87,6 +87,21 @@ impl Files {
 	pub fn get_file<S: AsRef<Utf8Path>>(&self, path: S) -> Option<&String> {
 		if let Some(file) = self.data.get(path.as_ref()) {
 			Some(&file.content)
+		} else {
+			None
+		}
+	}
+
+	/// Get all files that are struct schemas.
+	pub fn get_struct_files(&self) -> Option<BTreeMap<&Utf8PathBuf, &FileData>> {
+		let mut files: BTreeMap<&Utf8PathBuf, &FileData> = BTreeMap::new();
+		for (path, data) in self.data.iter() {
+			if data.is_struct_schema {
+				files.insert(path, data);
+			}
+		}
+		if files.len() > 0 {
+			Some(files)
 		} else {
 			None
 		}

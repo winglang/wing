@@ -1,0 +1,3 @@
+struct MyStruct {
+  data: str;
+}

@@ -219,9 +219,10 @@ impl<'a> JSifier<'a> {
 
 	fn jsify_struct_schema_constants(&self) -> CodeMaker {
 		let mut code = CodeMaker::default();
-		for (path, data) in self.output_files.borrow().data.iter() {
-			if data.borrow().is_struct_schema {
+		if let Some(struct_files) = self.output_files.borrow().get_struct_files() {
+			for (path, _data) in struct_files {
 				let struct_name = struct_name_from_filename(&path.to_string());
+
 				code.line(format!(
 					"const {} = require(\"{}\")($stdlib.std.Struct);",
 					struct_name,
@@ -338,14 +339,10 @@ impl<'a> JSifier<'a> {
 				}
 			}
 		}
+
 		if is_udt_struct_type(udt, env) {
-			return resolve_user_defined_type(udt, env, 0)
-				.unwrap()
-				.as_struct()
-				.unwrap()
-				.name
-				.name
-				.clone();
+			// For struct type, we emit the name as a flattened string. I.E. mylib.MyStruct becomes mylib_MyStruct
+			return udt.full_path_str().replace(".", "_");
 		}
 		udt.full_path_str()
 	}
@@ -765,8 +762,7 @@ impl<'a> JSifier<'a> {
 		// create _toInflightType function that just requires the generated struct file
 		code.open("static _toInflightType(context) {".to_string());
 		code.line(format!(
-			"return `require(\"{}\")(${{ context._lift(stdStruct) }})`;",
-			struct_filename(&struct_.name.name)
+			"return `require(\"./${{require('path').basename(__filename)}}\")(${{ context._lift(stdStruct) }})`;",
 		));
 		code.close("}");
 
