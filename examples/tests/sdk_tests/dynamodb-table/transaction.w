@@ -36,14 +36,13 @@ test "transactWriteItems" {
   ]);
 
   let var r = t1.getItem("key1");
-  log("${r}");
   assert(r.get("k1").asStr() == "key1");
-  // assert(r.get("k2").asStr() == "not-value1");
+  assert(r.get("k2").asStr() == "not-value1");
 
   // r = t1.getItem("key2");
   // assert(r.get("k1").tryAsStr() == nil);
 
-  // r = t1.getItem("key3");
-  // assert(r.get("k1").asStr() == "key3");
-  // assert(r.get("k2").asStr() == "value3");
+  r = t1.getItem("key3");
+  assert(r.get("k1").asStr() == "key3");
+  assert(r.get("k2").asStr() == "value3");
 }
