@@ -768,7 +768,7 @@ class $Root extends $stdlib.std.Resource {
       const $if_let_value = student3.additionalData;
       if ($if_let_value != undefined) {
         const additionalData = $if_let_value;
-        const notes = (additionalData)["notes"];
+        const notes = ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(additionalData, "notes");
         {((cond) => {if (!cond) throw new Error("assertion failed: notes == \"wow such notes\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(notes,"wow such notes")))};
       }
       else {
