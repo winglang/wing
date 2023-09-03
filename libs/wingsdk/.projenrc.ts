@@ -104,6 +104,7 @@ const project = new cdk.JsiiProject({
     // shared client dependencies
     "ioredis",
     "jsonschema",
+    "@aws-sdk/s3-request-presigner",
   ],
   devDeps: [
     `@cdktf/provider-aws@^15.0.0`, // only for testing Wing plugins

@@ -6,6 +6,7 @@ import { fqnForType } from "../constants";
 import { App } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { Json, IResource, Node, Resource } from "../std";
+import { Duration } from "../std";
 
 /**
  * Global identifier for `Bucket`.
@@ -345,6 +346,13 @@ export interface IBucketClient {
    * @inflight
    */
   publicUrl(key: string): Promise<string>;
+
+  /**
+   * Returns a signed url to the given file.
+   * @Throws if object does not exist.
+   * @inflight
+   */
+  signedUrl(key: string, duration?: Duration): Promise<string>;
 }
 
 /**
@@ -447,4 +455,6 @@ export enum BucketInflightMethods {
   TRY_GET_JSON = "tryGetJson",
   /** `Bucket.tryDelete` */
   TRY_DELETE = "tryDelete",
+
+  SIGNED_URL = "signedUrl"
 }
