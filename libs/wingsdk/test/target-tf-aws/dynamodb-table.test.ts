@@ -34,11 +34,15 @@ test("function with a table binding", () => {
     "Handler",
     `async handle(event) {
   await this.my_table.putItem({ id: "test" });
+  await this.my_table.scan();
 }`,
     {
       my_table: {
         obj: table,
-        ops: [ex.DynamodbTableInflightMethods.PUT_ITEM],
+        ops: [
+          ex.DynamodbTableInflightMethods.PUT_ITEM,
+          ex.DynamodbTableInflightMethods.SCAN,
+        ],
       },
     }
   );

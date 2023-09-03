@@ -204,11 +204,32 @@ test("delete item", async () => {
   await s.stop();
 });
 
+test("scan", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const t = ex.DynamodbTable._newDynamodbTable(app, "scan_table", {
+    name: "scan_table",
+    primaryKey: "id",
+  });
+  const s = await app.startSimulator();
+  const client = s.getResource("/scan_table") as ex.IDynamodbTableClient;
+
+  await client.putItem({ id: "1", age: 50 } as any);
+  await client.putItem({ id: "2", loc: "US" } as any);
+  const items = await client.scan();
+  expect(items).toEqual([
+    { id: "1", age: 50 },
+    { id: "2", loc: "US" },
+  ]);
+
+  await s.stop();
+});
+
 test("write transaction", async () => {
   // GIVEN
   const app = new SimApp();
   const t = ex.DynamodbTable._newDynamodbTable(app, "write_transact_table", {
-    name: "my_delete_non_existent_table",
+    name: "write_transact_table",
     primaryKey: "id",
   });
   const s = await app.startSimulator();

@@ -46,6 +46,7 @@ new ex.DynamodbTable(props: DynamodbTableProps);
 | <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.deleteItem">deleteItem</a></code> | Delete an item from the table. |
 | <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.getItem">getItem</a></code> | Get an item from the table. |
 | <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.putItem">putItem</a></code> | Put an item into the table. |
+| <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.scan">scan</a></code> | Get the table. |
 | <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.transactWriteItems">transactWriteItems</a></code> | Perform a synchronous write operation that groups up to 100 action requests. |
 | <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.updateItem">updateItem</a></code> | Get an item from the table. |
 
@@ -106,6 +107,14 @@ data to be inserted.
 dynamodb PutItem props.
 
 ---
+
+##### `scan` <a name="scan" id="@winglang/sdk.ex.IDynamodbTableClient.scan"></a>
+
+```wing
+inflight scan(): MutArray<Json>
+```
+
+Get the table.
 
 ##### `transactWriteItems` <a name="transactWriteItems" id="@winglang/sdk.ex.IDynamodbTableClient.transactWriteItems"></a>
 
@@ -679,6 +688,7 @@ the table primary key.
 | <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.deleteItem">deleteItem</a></code> | Delete an item from the table. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.getItem">getItem</a></code> | Get an item from the table. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.putItem">putItem</a></code> | Put an item into the table. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.scan">scan</a></code> | Get the table. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.transactWriteItems">transactWriteItems</a></code> | Perform a synchronous write operation that groups up to 100 action requests. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.updateItem">updateItem</a></code> | Get an item from the table. |
 
@@ -731,6 +741,14 @@ Put an item into the table.
 - *Type:* <a href="#@winglang/sdk.ex.DynamodbTablePutItemProps">DynamodbTablePutItemProps</a>
 
 ---
+
+##### `scan` <a name="scan" id="@winglang/sdk.ex.DynamodbTableClientBase.scan"></a>
+
+```wing
+scan(): MutArray<Json>
+```
+
+Get the table.
 
 ##### `transactWriteItems` <a name="transactWriteItems" id="@winglang/sdk.ex.DynamodbTableClientBase.transactWriteItems"></a>
 

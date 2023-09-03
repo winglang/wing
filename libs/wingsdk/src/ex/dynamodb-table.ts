@@ -1,7 +1,9 @@
 import {
   DeleteItemCommand,
+  DynamoDBClient,
   GetItemCommand,
   PutItemCommand,
+  ScanCommand,
   TransactWriteItemsCommand,
   UpdateItemCommand,
 } from "@aws-sdk/client-dynamodb";
@@ -82,6 +84,7 @@ export abstract class DynamodbTable extends Resource {
       DynamodbTableInflightMethods.UPDATE_ITEM,
       DynamodbTableInflightMethods.DELETE_ITEM,
       DynamodbTableInflightMethods.GET_ITEM,
+      DynamodbTableInflightMethods.SCAN,
       DynamodbTableInflightMethods.TRANSACT_WRITE_ITEMS,
     ];
   }
@@ -223,6 +226,12 @@ export interface IDynamodbTableClient {
   getItem(key: string): Promise<Json>;
 
   /**
+   * Get the table.
+   * @inflight
+   */
+  scan(): Promise<Array<Json>>;
+
+  /**
    * Perform a synchronous write operation that groups up to 100 action requests.
    * @param props properties for the transact write items operation.
    * @inflight
@@ -243,6 +252,8 @@ export enum DynamodbTableInflightMethods {
   DELETE_ITEM = "deleteItem",
   /** `DynamodbTable.getItem` */
   GET_ITEM = "getItem",
+  /** `DynamodbTable.scan` */
+  SCAN = "scan",
   /** `DynamodbTable.transactWriteItems` */
   TRANSACT_WRITE_ITEMS = "transactWriteItems",
 }
@@ -261,7 +272,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
    * Dynamodb table client.
    * @internal
    */
-  public abstract _rawClient(): Promise<any>;
+  public abstract _rawClient(): Promise<DynamoDBClient>;
 
   public async putItem(
     item: Json,
@@ -320,6 +331,22 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
       return unmarshall(result.Item) as Json;
     }
     return {} as Json;
+  }
+
+  public async scan(): Promise<Array<Json>> {
+    const client = await this._rawClient();
+    const result = await client.send(
+      new ScanCommand({
+        TableName: this.tableName,
+      })
+    );
+    const response = [];
+    if (result.Items) {
+      for (const item of result.Items) {
+        response.push(unmarshall(item) as Json);
+      }
+    }
+    return response;
   }
 
   public async transactWriteItems(

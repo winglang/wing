@@ -70,7 +70,7 @@ export class DynamodbTable
     await runCommand("docker", ["rm", "-f", `${this.container_name}`]);
   }
 
-  public async _rawClient(): Promise<any> {
+  public async _rawClient(): Promise<DynamoDBClient> {
     if (this.client) {
       return this.client;
     }

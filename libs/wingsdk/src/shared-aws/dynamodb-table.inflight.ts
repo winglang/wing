@@ -10,7 +10,7 @@ export class DynamodbTableClient extends DynamodbTableClientBase {
     super(tableName, primaryKey);
   }
 
-  public async _rawClient(): Promise<any> {
+  public async _rawClient(): Promise<DynamoDBClient> {
     return this._client;
   }
 }
