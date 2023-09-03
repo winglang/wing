@@ -179,9 +179,15 @@ impl VisitContext {
 pub trait VisitorWithContext {
 	fn ctx(&mut self) -> &mut VisitContext;
 
-	fn with_expr(&mut self, expr: usize, f: impl FnOnce(&mut Self)) {
+	fn with_expr(&mut self, expr: ExprId, f: impl FnOnce(&mut Self)) {
 		self.ctx().push_expr(expr);
 		f(self);
 		self.ctx().pop_expr();
+	}
+
+	fn with_stmt(&mut self, stmt: usize, f: impl FnOnce(&mut Self)) {
+		self.ctx().push_stmt(stmt);
+		f(self);
+		self.ctx().pop_stmt();
 	}
 }

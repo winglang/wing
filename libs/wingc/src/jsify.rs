@@ -11,8 +11,8 @@ use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, vec};
 use crate::{
 	ast::{
 		ArgList, BinaryOperator, BringSource, CalleeKind, Class as AstClass, ElifLetBlock, Expr, ExprKind, FunctionBody,
-		FunctionDefinition, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, StructField,
-		Symbol, TypeAnnotationKind, UnaryOperator, UserDefinedType,
+		FunctionDefinition, IfLet, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind,
+		StructField, Symbol, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic, debug,
@@ -916,14 +916,14 @@ impl<'a> JSifier<'a> {
 			}
 			StmtKind::Break => CodeMaker::one_line("break;"),
 			StmtKind::Continue => CodeMaker::one_line("continue;"),
-			StmtKind::IfLet {
+			StmtKind::IfLet(IfLet {
 				reassignable,
 				value,
 				statements,
 				var_name,
 				elif_statements,
 				else_statements,
-			} => {
+			}) => {
 				let mut code = CodeMaker::default();
 				// To enable shadowing variables in if let statements, the following does some scope trickery
 				// take for example the following wing code:
@@ -1635,7 +1635,7 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 			StmtKind::Let { .. } => {}
 			StmtKind::ForLoop { .. } => {}
 			StmtKind::While { .. } => {}
-			StmtKind::IfLet { .. } => {}
+			StmtKind::IfLet(IfLet { .. }) => {}
 			StmtKind::If { .. } => {}
 			StmtKind::Break => {}
 			StmtKind::Continue => {}

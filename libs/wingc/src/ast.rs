@@ -297,6 +297,8 @@ pub struct FunctionDefinition {
 	pub signature: FunctionSignature,
 	/// Whether this function is static or not. In case of a closure, this is always true.
 	pub is_static: bool,
+	/// Function's access modifier. In case of a closure, this is always public.
+	pub access_modifier: AccessModifier,
 	pub span: WingSpan,
 }
 
@@ -426,6 +428,16 @@ pub enum BringSource {
 }
 
 #[derive(Debug)]
+pub struct IfLet {
+	pub reassignable: bool,
+	pub var_name: Symbol,
+	pub value: Expr,
+	pub statements: Scope,
+	pub elif_statements: Vec<ElifLetBlock>,
+	pub else_statements: Option<Scope>,
+}
+
+#[derive(Debug)]
 pub enum StmtKind {
 	Bring {
 		source: BringSource,
@@ -449,14 +461,7 @@ pub enum StmtKind {
 		condition: Expr,
 		statements: Scope,
 	},
-	IfLet {
-		reassignable: bool,
-		var_name: Symbol,
-		value: Expr,
-		statements: Scope,
-		elif_statements: Vec<ElifLetBlock>,
-		else_statements: Option<Scope>,
-	},
+	IfLet(IfLet),
 	If {
 		condition: Expr,
 		statements: Scope,
@@ -505,6 +510,14 @@ pub struct ClassField {
 	pub reassignable: bool,
 	pub phase: Phase,
 	pub is_static: bool,
+	pub access_modifier: AccessModifier,
+}
+
+#[derive(Debug)]
+pub enum AccessModifier {
+	Private,
+	Public,
+	Protected,
 }
 
 #[derive(Debug)]
