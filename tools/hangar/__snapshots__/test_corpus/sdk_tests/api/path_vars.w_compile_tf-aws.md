@@ -1,4 +1,4 @@
-# [api_path_vars.w](../../../../../examples/tests/valid/api_path_vars.w) | compile | tf-aws
+# [path_vars.w](../../../../../../examples/tests/sdk_tests/api/path_vars.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.js
 ```js
@@ -923,7 +923,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "api_path_vars", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+new $App({ outdir: $outdir, name: "path_vars", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 
