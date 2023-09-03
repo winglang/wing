@@ -39,8 +39,8 @@ test "transactWriteItems" {
   assert(r.get("k1").asStr() == "key1");
   assert(r.get("k2").asStr() == "not-value1");
 
-  // r = t1.getItem("key2");
-  // assert(r.get("k1").tryAsStr() == nil);
+  r = t1.getItem("key2");
+  assert(r.tryGet("k1") == nil);
 
   r = t1.getItem("key3");
   assert(r.get("k1").asStr() == "key3");
