@@ -59,8 +59,6 @@ let table = new ex.Table(
   },
 );
 
-new ex.DynamodbTable(name: "dynamodb-table", primaryKey: "id");
-
 let rateSchedule = new cloud.Schedule(cloud.ScheduleProps{
   rate: 5m
 }) as "Rate Schedule";
