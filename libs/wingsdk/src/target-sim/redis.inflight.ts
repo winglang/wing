@@ -2,7 +2,7 @@ import IoRedis from "ioredis";
 import { v4 as uuidv4 } from "uuid";
 import { RedisAttributes, RedisSchema } from "./schema-resources";
 import { RedisClientBase } from "../ex";
-import { runCommand } from "../shared/misc";
+import { runCommand, runDockerImage } from "../shared/misc";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
@@ -33,27 +33,11 @@ export class Redis
 
   public async init(): Promise<RedisAttributes> {
     try {
-      // Pull docker image
-      await runCommand("docker", ["pull", `${this.WING_REDIS_IMAGE}`]);
-
-      // Run the container and allow docker to assign a host port dynamically
-      await runCommand("docker", [
-        "run",
-        "--detach",
-        "--name",
-        `${this.container_name}`,
-        "-p",
-        "6379",
-        `${this.WING_REDIS_IMAGE}`,
-      ]);
-
-      // Inspect the container to get the host port
-      const out = await runCommand("docker", [
-        "inspect",
-        `${this.container_name}`,
-      ]);
-      const hostPort =
-        JSON.parse(out)[0].NetworkSettings.Ports["6379/tcp"][0].HostPort;
+      const { hostPort } = await runDockerImage({
+        imageName: this.WING_REDIS_IMAGE,
+        containerName: this.container_name,
+        containerPort: "6379",
+      });
 
       // redis url based on host port
       this.connection_url = `redis://0.0.0.0:${hostPort}`;
