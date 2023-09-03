@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use crate::{
-	ast::{Phase, Symbol},
+	ast::{AccessModifier, Phase, Symbol},
 	debug,
 	diagnostic::{WingLocation, WingSpan},
 	docs::Docs,
@@ -495,6 +495,11 @@ impl<'a> JsiiImporter<'a> {
 						.flatten(),
 				}));
 				let sym = Self::jsii_name_to_symbol(&m.name, &m.location_in_module);
+				let access_modifier = if matches!(m.protected, Some(true)) {
+					AccessModifier::Protected
+				} else {
+					AccessModifier::Public
+				};
 				class_env
 					.define(
 						&sym,
@@ -504,6 +509,7 @@ impl<'a> JsiiImporter<'a> {
 							false,
 							is_static,
 							member_phase,
+							access_modifier,
 							Some(Docs::from(&m.docs)),
 						),
 						StatementIdx::Top,
@@ -533,6 +539,11 @@ impl<'a> JsiiImporter<'a> {
 				};
 
 				let sym = Self::jsii_name_to_symbol(&p.name, &p.location_in_module);
+				let access_modifier = if matches!(p.protected, Some(true)) {
+					AccessModifier::Protected
+				} else {
+					AccessModifier::Public
+				};
 				class_env
 					.define(
 						&sym,
@@ -542,6 +553,7 @@ impl<'a> JsiiImporter<'a> {
 							!matches!(p.immutable, Some(true)),
 							is_static,
 							member_phase,
+							access_modifier,
 							Some(Docs::from(&p.docs)),
 						),
 						StatementIdx::Top,
@@ -751,6 +763,11 @@ impl<'a> JsiiImporter<'a> {
 				docs: Docs::from(&initializer.docs),
 			}));
 			let sym = Self::jsii_name_to_symbol(CLASS_INIT_NAME, &initializer.location_in_module);
+			let access_modifier = if matches!(initializer.protected, Some(true)) {
+				AccessModifier::Protected
+			} else {
+				AccessModifier::Public
+			};
 			if let Err(e) = class_env.define(
 				&sym,
 				SymbolKind::make_member_variable(
@@ -759,6 +776,7 @@ impl<'a> JsiiImporter<'a> {
 					false,
 					true,
 					member_phase,
+					access_modifier,
 					Some(Docs::from(&initializer.docs)),
 				),
 				StatementIdx::Top,

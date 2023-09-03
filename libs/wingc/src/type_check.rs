@@ -5,7 +5,8 @@ pub mod lifts;
 pub mod symbol_env;
 
 use crate::ast::{
-	self, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition, IfLet, NewExpr, TypeAnnotationKind,
+	self, AccessModifier, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition, IfLet, NewExpr,
+	TypeAnnotationKind,
 };
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter as AstFunctionParameter,
@@ -111,6 +112,8 @@ pub struct VariableInfo {
 	pub phase: Phase,
 	/// The kind of variable
 	pub kind: VariableKind,
+	/// Access rules for this variable (only applies to methods and fields)
+	pub access_modifier: AccessModifier,
 
 	pub docs: Option<Docs>,
 }
@@ -122,6 +125,7 @@ impl SymbolKind {
 		reassignable: bool,
 		is_static: bool,
 		phase: Phase,
+		access_modifier: AccessModifier,
 		docs: Option<Docs>,
 	) -> Self {
 		SymbolKind::Variable(VariableInfo {
@@ -134,6 +138,7 @@ impl SymbolKind {
 			} else {
 				VariableKind::InstanceMember
 			},
+			access_modifier,
 			docs,
 		})
 	}
@@ -145,6 +150,7 @@ impl SymbolKind {
 			reassignable,
 			phase,
 			kind: VariableKind::Free,
+			access_modifier: AccessModifier::Public,
 			docs: None,
 		})
 	}
@@ -1719,6 +1725,7 @@ impl<'a> TypeChecker<'a> {
 			reassignable: false,
 			phase: Phase::Independent,
 			kind: VariableKind::Error,
+			access_modifier: AccessModifier::Public,
 			docs: None,
 		}
 	}
@@ -3133,7 +3140,15 @@ impl<'a> TypeChecker<'a> {
 			}
 			match struct_env.define(
 				&field.name,
-				SymbolKind::make_member_variable(field.name.clone(), field_type, false, false, Phase::Independent, None),
+				SymbolKind::make_member_variable(
+					field.name.clone(),
+					field_type,
+					false,
+					false,
+					Phase::Independent,
+					AccessModifier::Public,
+					None,
+				),
 				StatementIdx::Top,
 			) {
 				Err(type_error) => {
@@ -3238,7 +3253,15 @@ impl<'a> TypeChecker<'a> {
 
 			match interface_env.define(
 				method_name,
-				SymbolKind::make_member_variable(method_name.clone(), method_type, false, false, sig.phase, None),
+				SymbolKind::make_member_variable(
+					method_name.clone(),
+					method_type,
+					false,
+					false,
+					sig.phase,
+					AccessModifier::Public,
+					None,
+				),
 				StatementIdx::Top,
 			) {
 				Err(type_error) => {
@@ -3258,6 +3281,10 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn type_check_class(&mut self, env: &mut SymbolEnv, stmt: &Stmt, ast_class: &AstClass) {
+		self
+			.ctx
+			.push_class(UserDefinedType::for_class(ast_class), &env.phase, None);
+
 		// preflight classes cannot be declared inside an inflight scope
 		// (the other way is okay)
 		if env.phase == Phase::Inflight && ast_class.phase == Phase::Preflight {
@@ -3325,6 +3352,7 @@ impl<'a> TypeChecker<'a> {
 					field.reassignable,
 					field.is_static,
 					field.phase,
+					field.access_modifier,
 					None,
 				),
 				StatementIdx::Top,
@@ -3342,6 +3370,7 @@ impl<'a> TypeChecker<'a> {
 				&method_def.signature,
 				env,
 				if method_def.is_static { None } else { Some(class_type) },
+				method_def.access_modifier,
 				&mut class_env,
 				method_name,
 			);
@@ -3353,7 +3382,14 @@ impl<'a> TypeChecker<'a> {
 			span: ast_class.initializer.span.clone(),
 		};
 
-		self.add_method_to_class_env(&ast_class.initializer.signature, env, None, &mut class_env, &init_symb);
+		self.add_method_to_class_env(
+			&ast_class.initializer.signature,
+			env,
+			None,
+			ast_class.initializer.access_modifier,
+			&mut class_env,
+			&init_symb,
+		);
 
 		let inflight_init_symb = Symbol {
 			name: CLASS_INFLIGHT_INIT_NAME.into(),
@@ -3365,6 +3401,7 @@ impl<'a> TypeChecker<'a> {
 			&ast_class.inflight_initializer.signature,
 			env,
 			Some(class_type),
+			ast_class.inflight_initializer.access_modifier,
 			&mut class_env,
 			&inflight_init_symb,
 		);
@@ -3474,6 +3511,7 @@ impl<'a> TypeChecker<'a> {
 				}
 			}
 		}
+		self.ctx.pop_class();
 	}
 
 	fn type_check_return(&mut self, env: &mut SymbolEnv, stmt: &Stmt, exp: &Option<Expr>) {
@@ -4052,6 +4090,7 @@ impl<'a> TypeChecker<'a> {
 		method_sig: &ast::FunctionSignature,
 		env: &mut SymbolEnv,
 		instance_type: Option<TypeRef>,
+		access_modifier: AccessModifier,
 		class_env: &mut SymbolEnv,
 		method_name: &Symbol,
 	) {
@@ -4070,6 +4109,7 @@ impl<'a> TypeChecker<'a> {
 				false,
 				instance_type.is_none(),
 				method_sig.phase,
+				access_modifier,
 				None,
 			),
 			StatementIdx::Top,
@@ -4281,6 +4321,7 @@ impl<'a> TypeChecker<'a> {
 					reassignable,
 					phase: flight,
 					kind,
+					access_modifier,
 					docs: _,
 				}) => {
 					// Replace type params in function signatures
@@ -4322,6 +4363,7 @@ impl<'a> TypeChecker<'a> {
 								*reassignable,
 								matches!(kind, VariableKind::StaticMember),
 								*flight,
+								*access_modifier,
 								None,
 							),
 							StatementIdx::Top,
@@ -4343,6 +4385,7 @@ impl<'a> TypeChecker<'a> {
 								*reassignable,
 								matches!(kind, VariableKind::StaticMember),
 								*flight,
+								*access_modifier,
 								None,
 							),
 							StatementIdx::Top,
@@ -4608,6 +4651,8 @@ impl<'a> TypeChecker<'a> {
 
 				let mut property_variable = self.resolve_variable_from_instance_type(instance_type, property, env, object);
 
+				// TODO: Here we can get the access_modifier of the property and check it based on the current class
+
 				// if the object is `this`, then use the property's phase instead of the object phase
 				let property_phase = if property_variable.phase == Phase::Independent {
 					instance_phase
@@ -4653,6 +4698,7 @@ impl<'a> TypeChecker<'a> {
 									type_,
 									reassignable: false,
 									phase: Phase::Independent,
+									access_modifier: AccessModifier::Public,
 									docs: None,
 								},
 								Phase::Independent,
@@ -4731,6 +4777,7 @@ impl<'a> TypeChecker<'a> {
 				reassignable: false,
 				phase: env.phase,
 				kind: VariableKind::InstanceMember,
+				access_modifier: AccessModifier::Public,
 				docs: None,
 			},
 
@@ -4977,7 +5024,15 @@ fn add_parent_members_to_struct_env(
 				};
 				struct_env.define(
 					&sym,
-					SymbolKind::make_member_variable(sym.clone(), member_type, false, false, struct_env.phase, None),
+					SymbolKind::make_member_variable(
+						sym.clone(),
+						member_type,
+						false,
+						false,
+						struct_env.phase,
+						AccessModifier::Public,
+						None,
+					),
 					StatementIdx::Top,
 				)?;
 			}
@@ -5032,7 +5087,15 @@ fn add_parent_members_to_iface_env(
 				};
 				iface_env.define(
 					&sym,
-					SymbolKind::make_member_variable(sym.clone(), member_type, false, true, iface_env.phase, None),
+					SymbolKind::make_member_variable(
+						sym.clone(),
+						member_type,
+						false,
+						true,
+						iface_env.phase,
+						AccessModifier::Public,
+						None,
+					),
 					StatementIdx::Top,
 				)?;
 			}
