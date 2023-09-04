@@ -10,7 +10,7 @@ module.exports = function({  }) {
       }
       catch ($error_e) {
         const e = $error_e.message;
-        {((msg) => {throw new Error(msg)})(String.raw({ raw: ["expected: ", " got: ", ""] }, b, a))};
+        throw new Error(String.raw({ raw: ["expected: ", " got: ", ""] }, b, a));
       }
     }
     static async isNil(a) {
@@ -20,7 +20,7 @@ module.exports = function({  }) {
       catch ($error_e) {
         const e = $error_e.message;
         {console.log(e)};
-        {((msg) => {throw new Error(msg)})(String.raw({ raw: ["expected '", "' to be nil"] }, a))};
+        throw new Error(String.raw({ raw: ["expected '", "' to be nil"] }, a));
       }
     }
     static async equalNum(a, b) {
@@ -30,7 +30,7 @@ module.exports = function({  }) {
       catch ($error_e) {
         const e = $error_e.message;
         {console.log(e)};
-        {((msg) => {throw new Error(msg)})(String.raw({ raw: ["expected: ", " got: ", ""] }, b, a))};
+        throw new Error(String.raw({ raw: ["expected: ", " got: ", ""] }, b, a));
       }
     }
   }
@@ -74,6 +74,7 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -83,24 +84,26 @@ class $Root extends $stdlib.std.Resource {
     class Assert extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("equalStr", "isNil", "equalNum", "$inflight_init");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.Assert-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const AssertClient = ${Assert._toInflightType(this).text};
+            const AssertClient = ${Assert._toInflightType(this)};
             const client = new AssertClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["equalStr", "isNil", "equalNum", "$inflight_init"];
       }
     }
   }

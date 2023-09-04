@@ -467,31 +467,31 @@ let ApiConnectProps = cloud.ApiConnectProps{ ... };
 ```
 
 
-### ApiCorsProps <a name="ApiCorsProps" id="@winglang/sdk.cloud.ApiCorsProps"></a>
+### ApiCorsOptions <a name="ApiCorsOptions" id="@winglang/sdk.cloud.ApiCorsOptions"></a>
 
 Cors Options for `Api`.
 
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiCorsProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiCorsOptions.Initializer"></a>
 
 ```wing
 bring cloud;
 
-let ApiCorsProps = cloud.ApiCorsProps{ ... };
+let ApiCorsOptions = cloud.ApiCorsOptions{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ApiCorsProps.property.allowCredentials">allowCredentials</a></code> | <code>bool</code> | Whether to allow credentials. |
-| <code><a href="#@winglang/sdk.cloud.ApiCorsProps.property.exposedHeaders">exposedHeaders</a></code> | <code>MutArray&lt;str&gt;</code> | The list of exposed headers. |
-| <code><a href="#@winglang/sdk.cloud.ApiCorsProps.property.headers">headers</a></code> | <code>MutArray&lt;str&gt;</code> | The list of allowed headers. |
-| <code><a href="#@winglang/sdk.cloud.ApiCorsProps.property.methods">methods</a></code> | <code>MutArray&lt;<a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a>&gt;</code> | The list of allowed methods. |
-| <code><a href="#@winglang/sdk.cloud.ApiCorsProps.property.origins">origins</a></code> | <code>MutArray&lt;str&gt;</code> | The list of allowed origins. |
+| <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.allowCredentials">allowCredentials</a></code> | <code>bool</code> | Whether to allow credentials. |
+| <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.allowHeaders">allowHeaders</a></code> | <code>MutArray&lt;str&gt;</code> | The list of allowed headers. |
+| <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.allowMethods">allowMethods</a></code> | <code>MutArray&lt;<a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a>&gt;</code> | The list of allowed methods. |
+| <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.allowOrigin">allowOrigin</a></code> | <code>MutArray&lt;str&gt;</code> | The list of allowed allowOrigin. |
+| <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.exposeHeaders">exposeHeaders</a></code> | <code>MutArray&lt;str&gt;</code> | The list of exposed headers. |
 
 ---
 
-##### `allowCredentials`<sup>Optional</sup> <a name="allowCredentials" id="@winglang/sdk.cloud.ApiCorsProps.property.allowCredentials"></a>
+##### `allowCredentials`<sup>Optional</sup> <a name="allowCredentials" id="@winglang/sdk.cloud.ApiCorsOptions.property.allowCredentials"></a>
 
 ```wing
 allowCredentials: bool;
@@ -504,30 +504,10 @@ Whether to allow credentials.
 
 ---
 
-##### `exposedHeaders`<sup>Optional</sup> <a name="exposedHeaders" id="@winglang/sdk.cloud.ApiCorsProps.property.exposedHeaders"></a>
+##### `allowHeaders`<sup>Optional</sup> <a name="allowHeaders" id="@winglang/sdk.cloud.ApiCorsOptions.property.allowHeaders"></a>
 
 ```wing
-exposedHeaders: MutArray<str>;
-```
-
-- *Type:* MutArray&lt;str&gt;
-- *Default:* []
-
-The list of exposed headers.
-
----
-
-*Example*
-
-```wing
-["Content-Type"]
-```
-
-
-##### `headers`<sup>Optional</sup> <a name="headers" id="@winglang/sdk.cloud.ApiCorsProps.property.headers"></a>
-
-```wing
-headers: MutArray<str>;
+allowHeaders: MutArray<str>;
 ```
 
 - *Type:* MutArray&lt;str&gt;
@@ -544,10 +524,10 @@ The list of allowed headers.
 ```
 
 
-##### `methods`<sup>Optional</sup> <a name="methods" id="@winglang/sdk.cloud.ApiCorsProps.property.methods"></a>
+##### `allowMethods`<sup>Optional</sup> <a name="allowMethods" id="@winglang/sdk.cloud.ApiCorsOptions.property.allowMethods"></a>
 
 ```wing
-methods: MutArray<HttpMethod>;
+allowMethods: MutArray<HttpMethod>;
 ```
 
 - *Type:* MutArray&lt;<a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a>&gt;
@@ -564,16 +544,16 @@ The list of allowed methods.
 ```
 
 
-##### `origins`<sup>Optional</sup> <a name="origins" id="@winglang/sdk.cloud.ApiCorsProps.property.origins"></a>
+##### `allowOrigin`<sup>Optional</sup> <a name="allowOrigin" id="@winglang/sdk.cloud.ApiCorsOptions.property.allowOrigin"></a>
 
 ```wing
-origins: MutArray<str>;
+allowOrigin: MutArray<str>;
 ```
 
 - *Type:* MutArray&lt;str&gt;
 - *Default:* ["*"]
 
-The list of allowed origins.
+The list of allowed allowOrigin.
 
 ---
 
@@ -581,6 +561,26 @@ The list of allowed origins.
 
 ```wing
 ["https://example.com"]
+```
+
+
+##### `exposeHeaders`<sup>Optional</sup> <a name="exposeHeaders" id="@winglang/sdk.cloud.ApiCorsOptions.property.exposeHeaders"></a>
+
+```wing
+exposeHeaders: MutArray<str>;
+```
+
+- *Type:* MutArray&lt;str&gt;
+- *Default:* []
+
+The list of exposed headers.
+
+---
+
+*Example*
+
+```wing
+["Content-Type"]
 ```
 
 
@@ -678,30 +678,54 @@ let ApiProps = cloud.ApiProps{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ApiProps.property.cors">cors</a></code> | <code><a href="#@winglang/sdk.cloud.ApiCorsProps">ApiCorsProps</a></code> | Options for configuring the API's CORS behavior across all routes. |
+| <code><a href="#@winglang/sdk.cloud.ApiProps.property.cors">cors</a></code> | <code>bool</code> | Options for configuring the API's CORS behavior across all routes. |
+| <code><a href="#@winglang/sdk.cloud.ApiProps.property.corsOptions">corsOptions</a></code> | <code><a href="#@winglang/sdk.cloud.ApiCorsOptions">ApiCorsOptions</a></code> | Options for configuring the API's CORS behavior across all routes. |
 
 ---
 
 ##### `cors`<sup>Optional</sup> <a name="cors" id="@winglang/sdk.cloud.ApiProps.property.cors"></a>
 
 ```wing
-cors: ApiCorsProps;
+cors: bool;
 ```
 
-- *Type:* <a href="#@winglang/sdk.cloud.ApiCorsProps">ApiCorsProps</a>
-- *Default:* CORS is disabled
+- *Type:* bool
+- *Default:* false, CORS configuration is disabled
 
 Options for configuring the API's CORS behavior across all routes.
 
 Options can also be overridden on a per-route basis. (not yet implemented)
-Can be set to to an empty Struct to enable CORS with default options.
+When enabled this will add CORS headers with default options.
+Can be customized by passing `corsOptions`
 
 ---
 
 *Example*
 
 ```wing
-{}
+true
+```
+
+
+##### `corsOptions`<sup>Optional</sup> <a name="corsOptions" id="@winglang/sdk.cloud.ApiProps.property.corsOptions"></a>
+
+```wing
+corsOptions: ApiCorsOptions;
+```
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiCorsOptions">ApiCorsOptions</a>
+- *Default:* Default CORS options are applied when `cors` is set to `true` allowOrigin: ["*"], allowMethods: [ HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.HEAD, HttpMethod.OPTIONS, ], allowHeaders: ["Content-Type", "Authorization"], exposeHeaders: [], allowCredentials: false,
+
+Options for configuring the API's CORS behavior across all routes.
+
+Options can also be overridden on a per-route basis. (not yet implemented)
+
+---
+
+*Example*
+
+```wing
+{ allowOrigin: ["https://example.com"] }
 ```
 
 

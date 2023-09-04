@@ -194,6 +194,9 @@ export abstract class Api extends Resource {
     allowCredentials: false,
   };
 
+  /**
+   * CORS options for api
+   */
   protected corsOptions?: ApiCorsOptions;
 
   constructor(scope: Construct, id: string, props: ApiProps = {}) {

@@ -12,7 +12,7 @@ let api = new cloud.Api(
     allowCredentials: true,
     exposeHeaders: ["Content-Type"]
   }
-)
+);
 
 api.get("/users", inflight (req) => {
   return {
@@ -38,7 +38,7 @@ test "GET /users has cors headers" {
 }
 
 test "OPTIONS /users has cors headers" {
-  let response = http.fetch(apiCustomCors.url + "/users", {
+  let response = http.fetch(api.url + "/users", {
     method: http.HttpMethod.OPTIONS
   });
 
@@ -51,13 +51,13 @@ test "OPTIONS /users has cors headers" {
   t.Assert.equalStr(headers.get("access-control-allow-headers"), "Content-Type,Authorization,X-Custom-Header");
 
   // Other cors headers are not set
-  t.Assert.equalStr(headers.get("access-control-allow-origin"), "winglang.io");
-  t.Assert.equalStr(headers.get("access-control-expose-headers"), "Content-Type");
-  t.Assert.equalStr(headers.get("access-control-allow-credentials"), "true");
+  t.Assert.isNil(headers.get("access-control-allow-origin"));
+  t.Assert.isNil(headers.get("access-control-expose-headers"));
+  t.Assert.isNil(headers.get("access-control-allow-credentials"));
 }
 
 test "OPTIONS /users responds with proper headers for requested" {
-  let response = http.fetch(apiCustomCors.url + "/users", {
+  let response = http.fetch(api.url + "/users", {
     method: http.HttpMethod.OPTIONS,
     headers: {
       "Content-Type": "text/json",

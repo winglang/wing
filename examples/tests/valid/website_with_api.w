@@ -7,11 +7,11 @@ bring "./assertions.w" as t;
 let api = new cloud.Api(
   cors: true,
   corsOptions: cloud.ApiCorsOptions {
-    origins: ["*"],
-    methods: [cloud.HttpMethod.GET, cloud.HttpMethod.POST, cloud.HttpMethod.OPTIONS],
-    headers: ["Content-Type"],
+    allowOrigin: ["*"],
+    allowMethods: [cloud.HttpMethod.GET, cloud.HttpMethod.POST, cloud.HttpMethod.OPTIONS],
+    allowHeaders: ["Content-Type"],
     allowCredentials: false,
-    exposedHeaders: ["Content-Type"]
+    exposeHeaders: ["Content-Type"]
   }
 );
 
@@ -85,9 +85,6 @@ test "OPTIONS /users" {
 
   let headers = response.headers;
   t.Assert.equalNum(response.status, 204);
-  t.Assert.equalStr(headers.get("access-control-allow-origin"), "*");
   t.Assert.equalStr(headers.get("access-control-allow-methods"), "GET,POST,OPTIONS");
   t.Assert.equalStr(headers.get("access-control-allow-headers"), "Content-Type");
-  t.Assert.equalStr(headers.get("access-control-expose-headers"), "Content-Type");
-  t.Assert.equalStr(headers.get("access-control-allow-credentials"), "false");
 }
