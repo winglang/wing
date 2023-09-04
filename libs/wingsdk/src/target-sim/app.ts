@@ -4,6 +4,7 @@ import { Construct } from "constructs";
 import { Api } from "./api";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
+import { Domain } from "./domain";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
@@ -21,6 +22,7 @@ import {
   API_FQN,
   BUCKET_FQN,
   COUNTER_FQN,
+  DOMAIN_FQN,
   FUNCTION_FQN,
   ON_DEPLOY_FQN,
   QUEUE_FQN,
@@ -118,6 +120,9 @@ export class App extends core.App {
 
       case ON_DEPLOY_FQN:
         return new OnDeploy(scope, id, args[0], args[1]);
+
+      case DOMAIN_FQN:
+        return new Domain(scope, id, args[0]);
     }
 
     return undefined;

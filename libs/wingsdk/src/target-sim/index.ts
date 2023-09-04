@@ -2,6 +2,7 @@ export * from "./api";
 export * from "./app";
 export * from "./bucket";
 export * from "./counter";
+export * from "./domain";
 export * from "./function";
 export * from "./queue";
 export * from "./resource";

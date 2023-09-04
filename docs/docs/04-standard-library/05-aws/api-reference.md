@@ -15,25 +15,25 @@ sidebar_position: 100
 
 ### Domain <a name="Domain" id="@winglang/sdk.aws.Domain"></a>
 
-Simulator implementation of `cloud.Domain`.
+AWS implementation of `cloud.Domain`.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.aws.Domain.Initializer"></a>
 
 ```wing
 bring aws;
 
-new aws.Domain(props: AwsDomain);
+new aws.Domain(props: DomainProps);
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.aws.Domain.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.aws.AwsDomain">AwsDomain</a></code> | *No description.* |
+| <code><a href="#@winglang/sdk.aws.Domain.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.DomainProps">DomainProps</a></code> | *No description.* |
 
 ---
 
 ##### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.aws.Domain.Initializer.parameter.props"></a>
 
-- *Type:* <a href="#@winglang/sdk.aws.AwsDomain">AwsDomain</a>
+- *Type:* <a href="#@winglang/sdk.cloud.DomainProps">DomainProps</a>
 
 ---
 
@@ -45,9 +45,8 @@ new aws.Domain(props: AwsDomain);
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.aws.Domain.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.aws.Domain.property.domainName">domainName</a></code> | <code>str</code> | The domain value. |
-| <code><a href="#@winglang/sdk.aws.Domain.property.subDomainName">subDomainName</a></code> | <code>str</code> | The sub domain value. |
-| <code><a href="#@winglang/sdk.aws.Domain.property.hostedZoneId">hostedZoneId</a></code> | <code>str</code> | The hosted zone id value. |
 | <code><a href="#@winglang/sdk.aws.Domain.property.acmCertificateArn">acmCertificateArn</a></code> | <code>str</code> | The AWS Certificate Manager (ACM) certificate arn value. |
+| <code><a href="#@winglang/sdk.aws.Domain.property.hostedZoneId">hostedZoneId</a></code> | <code>str</code> | The hosted zone id value. |
 | <code><a href="#@winglang/sdk.aws.Domain.property.iamCertificate">iamCertificate</a></code> | <code>str</code> | The IAM certificate identifier value. |
 
 ---
@@ -76,30 +75,6 @@ The domain value.
 
 ---
 
-##### `subDomainName`<sup>Optional</sup> <a name="subDomainName" id="@winglang/sdk.aws.Domain.property.subDomainName"></a>
-
-```wing
-subDomainName: str;
-```
-
-- *Type:* str
-
-The sub domain value.
-
----
-
-##### `hostedZoneId`<sup>Required</sup> <a name="hostedZoneId" id="@winglang/sdk.aws.Domain.property.hostedZoneId"></a>
-
-```wing
-hostedZoneId: str;
-```
-
-- *Type:* str
-
-The hosted zone id value.
-
----
-
 ##### `acmCertificateArn`<sup>Optional</sup> <a name="acmCertificateArn" id="@winglang/sdk.aws.Domain.property.acmCertificateArn"></a>
 
 ```wing
@@ -109,6 +84,18 @@ acmCertificateArn: str;
 - *Type:* str
 
 The AWS Certificate Manager (ACM) certificate arn value.
+
+---
+
+##### `hostedZoneId`<sup>Optional</sup> <a name="hostedZoneId" id="@winglang/sdk.aws.Domain.property.hostedZoneId"></a>
+
+```wing
+hostedZoneId: str;
+```
+
+- *Type:* str
+
+The hosted zone id value.
 
 ---
 
@@ -175,106 +162,56 @@ The inflight host.
 
 ## Structs <a name="Structs" id="Structs"></a>
 
-### AwsDomain <a name="AwsDomain" id="@winglang/sdk.aws.AwsDomain"></a>
+### AwsWebsiteProps <a name="AwsWebsiteProps" id="@winglang/sdk.aws.AwsWebsiteProps"></a>
 
-Options for AWS `Domain`.
+Options for AWS `Website`.
 
-#### Initializer <a name="Initializer" id="@winglang/sdk.aws.AwsDomain.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.aws.AwsWebsiteProps.Initializer"></a>
 
 ```wing
 bring aws;
 
-let AwsDomain = aws.AwsDomain{ ... };
+let AwsWebsiteProps = aws.AwsWebsiteProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.aws.AwsDomain.property.domain">domain</a></code> | <code>str</code> | The website's custom domain name. |
-| <code><a href="#@winglang/sdk.aws.AwsDomain.property.subDomain">subDomain</a></code> | <code>str</code> | The website's sub domain name. |
-| <code><a href="#@winglang/sdk.aws.AwsDomain.property.acmCertificateArn">acmCertificateArn</a></code> | <code>str</code> | AWS Certificate Manager (ACM) certificate arn. |
-| <code><a href="#@winglang/sdk.aws.AwsDomain.property.hostedZoneId">hostedZoneId</a></code> | <code>str</code> | Id of the Route 53 hosted zone. |
-| <code><a href="#@winglang/sdk.aws.AwsDomain.property.iamCertificate">iamCertificate</a></code> | <code>str</code> | IAM certificate identifier. |
+| <code><a href="#@winglang/sdk.aws.AwsWebsiteProps.property.path">path</a></code> | <code>str</code> | Local path to the website's static files, relative to the Wing source file or absolute. |
+| <code><a href="#@winglang/sdk.aws.AwsWebsiteProps.property.domain">domain</a></code> | <code><a href="#@winglang/sdk.aws.Domain">Domain</a></code> | The website's custom domain object. |
 
 ---
 
-##### `domain`<sup>Optional</sup> <a name="domain" id="@winglang/sdk.aws.AwsDomain.property.domain"></a>
+##### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.aws.AwsWebsiteProps.property.path"></a>
 
 ```wing
-domain: str;
+path: str;
 ```
 
 - *Type:* str
-- *Default:* a domain is generated by the cloud provider
 
-The website's custom domain name.
+Local path to the website's static files, relative to the Wing source file or absolute.
 
 ---
 
 *Example*
 
 ```wing
-"example.com"
+"./dist"
 ```
 
 
-##### `subDomain`<sup>Optional</sup> <a name="subDomain" id="@winglang/sdk.aws.AwsDomain.property.subDomain"></a>
+##### `domain`<sup>Optional</sup> <a name="domain" id="@winglang/sdk.aws.AwsWebsiteProps.property.domain"></a>
 
 ```wing
-subDomain: str;
+domain: Domain;
 ```
 
-- *Type:* str
+- *Type:* <a href="#@winglang/sdk.aws.Domain">Domain</a>
 - *Default:* undefined
 
-The website's sub domain name.
-
----
-
-*Example*
-
-```wing
-"www"
-```
-
-
-##### `acmCertificateArn`<sup>Optional</sup> <a name="acmCertificateArn" id="@winglang/sdk.aws.AwsDomain.property.acmCertificateArn"></a>
-
-```wing
-acmCertificateArn: str;
-```
-
-- *Type:* str
-- *Default:* undefined
-
-AWS Certificate Manager (ACM) certificate arn.
-
----
-
-##### `hostedZoneId`<sup>Optional</sup> <a name="hostedZoneId" id="@winglang/sdk.aws.AwsDomain.property.hostedZoneId"></a>
-
-```wing
-hostedZoneId: str;
-```
-
-- *Type:* str
-- *Default:* undefined
-
-Id of the Route 53 hosted zone.
-
----
-
-##### `iamCertificate`<sup>Optional</sup> <a name="iamCertificate" id="@winglang/sdk.aws.AwsDomain.property.iamCertificate"></a>
-
-```wing
-iamCertificate: str;
-```
-
-- *Type:* str
-- *Default:* undefined
-
-IAM certificate identifier.
+The website's custom domain object.
 
 ---
 

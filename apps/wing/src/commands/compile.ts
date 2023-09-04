@@ -20,6 +20,7 @@ export interface CompileOptions {
   readonly target: wingCompiler.Target;
   readonly plugins?: string[];
   readonly rootId?: string;
+  readonly values?: string;
   /**
    * Whether to run the compiler in `wing test` mode. This may create multiple
    * copies of the application resources in order to run tests in parallel.

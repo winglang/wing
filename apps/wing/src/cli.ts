@@ -105,6 +105,12 @@ async function main() {
     }
   }
 
+
+  function addValue(value: string, previous: string[]) {
+    previous.push(value);
+    return previous;
+  }
+
   program.hook("preAction", updateHook);
 
   program
@@ -134,6 +140,7 @@ async function main() {
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .option("-r, --rootId <rootId>", "App root id")
+    .option("-v, --values <value>", "Platform-specific values", addValue, [])
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("compile"));

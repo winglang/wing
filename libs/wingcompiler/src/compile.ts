@@ -34,6 +34,7 @@ export interface CompileOptions {
   readonly target: Target;
   readonly plugins?: string[];
   readonly rootId?: string;
+  readonly values?: string;
   /**
    * Whether to run the compiler in `wing test` mode. This may create multiple
    * copies of the application resources in order to run tests in parallel.
@@ -100,6 +101,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   // TODO: couldn't be moved to the context's since used in utils.env(...)
   // in the future we may look for a unified approach
   process.env["WING_TARGET"] = options.target;
+  process.env["WING_VALUES"] = options.values;
   process.env["WING_IS_TEST"] = testing.toString();
   process.env["WING_PLUGIN_PATHS"] = resolvePluginPaths(options.plugins ?? []);
 
