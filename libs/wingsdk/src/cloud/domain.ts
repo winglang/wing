@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { Node, Resource } from "../std";
 import { App } from "../core";
+import { Node, Resource } from "../std";
 
 /**
  * Global identifier for `Domain`.
@@ -28,14 +28,14 @@ export interface DomainProps {
 
 /**
  * A cloud Domain
- * 
+ *
  * @inflight - `@winglang/sdk.cloud.IDomainClient`
  */
 export abstract class Domain extends Resource {
   /**
-     * Create a new website.
-     * @internal
-     */
+   * Create a new website.
+   * @internal
+   */
   public static _newDomain(
     scope: Construct,
     id: string,
@@ -67,14 +67,14 @@ export abstract class Domain extends Resource {
   /**
    * The domain value.
    */
-  public get domain(): string | undefined {
+  public get domainName(): string | undefined {
     return this._domain;
   }
 
   /**
- * The sub domain value.
- */
-  public get subDomain(): string | undefined {
+   * The sub domain value.
+   */
+  public get subDomainName(): string | undefined {
     return this._subDomain;
   }
 }

@@ -1,11 +1,11 @@
 import { Construct } from "constructs";
-import * as cloud from "../cloud";
 import { core } from "..";
+import * as cloud from "../cloud";
 
 /**
  * Options for AWS `Domain`.
  */
-export interface AwsDomain extends cloud.Domain {
+export interface AwsDomain extends cloud.DomainProps {
   /**
    * AWS Certificate Manager (ACM) certificate arn
    * @default undefined
@@ -25,12 +25,13 @@ export interface AwsDomain extends cloud.Domain {
 
 /**
  * Simulator implementation of `cloud.Domain`
- * 
- * @inflight `@winglang/sdk.cloud.IDomainClient`
  */
 export class Domain extends cloud.Domain {
+  /** @internal */
   protected _hostedZoneId: string;
+  /** @internal */
   protected _iamCertificate?: string;
+  /** @internal */
   protected _acmCertificateArn?: string;
 
   constructor(scope: Construct, id: string, props: AwsDomain) {
@@ -43,7 +44,9 @@ export class Domain extends cloud.Domain {
     }
 
     if (!props.iamCertificate && !props.acmCertificateArn) {
-      throw new Error(`ERROR: 'iamCertificate' or 'acmCertificateArn' is missing from ${id}`);
+      throw new Error(
+        `ERROR: 'iamCertificate' or 'acmCertificateArn' is missing from ${id}`
+      );
     } else if (props.iamCertificate) {
       this._iamCertificate = props.iamCertificate;
     } else if (props.acmCertificateArn) {
@@ -74,11 +77,6 @@ export class Domain extends cloud.Domain {
 
   /** @internal */
   public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname,
-      __filename,
-      "DomainClient",
-      []
-    );
+    return core.InflightClient.for(__dirname, __filename, "DomainClient", []);
   }
 }
