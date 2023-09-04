@@ -1398,7 +1398,7 @@ return class Handler {
         "Handler": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -1411,7 +1411,7 @@ return class Handler {
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -1426,7 +1426,7 @@ return class Handler {
             "ApiEventMapping-e645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.69",
+                "version": "10.2.70",
               },
               "display": {
                 "hidden": true,
@@ -1437,7 +1437,7 @@ return class Handler {
             "OnRequestHandler-e645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.69",
+                "version": "10.2.70",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -1450,7 +1450,7 @@ return class Handler {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A REST API endpoint",
@@ -1462,7 +1462,7 @@ return class Handler {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.69",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -1596,7 +1596,7 @@ return class Handler {
         "Handler": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -1609,7 +1609,7 @@ return class Handler {
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -1624,7 +1624,7 @@ return class Handler {
             "ApiEventMapping-e645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.69",
+                "version": "10.2.70",
               },
               "display": {
                 "hidden": true,
@@ -1635,7 +1635,7 @@ return class Handler {
             "OnRequestHandler-e645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.69",
+                "version": "10.2.70",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -1648,7 +1648,7 @@ return class Handler {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A REST API endpoint",
@@ -1660,7 +1660,7 @@ return class Handler {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.69",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
