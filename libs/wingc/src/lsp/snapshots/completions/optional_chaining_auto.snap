@@ -57,7 +57,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(key: str): Json"
   documentation:
     kind: markdown
-    value: "```wing\nget: (key: str): Json\n```\n---\nReturns a specified element from the Json.\n\n\n### Returns\nThe element associated with the specified key, or undefined if the key can't be found"
+    value: "```wing\nget: (key: str): Json\n```\n---\nReturns the value associated with the specified Json key.\n\n\n### Returns\nThe value associated with the specified Json key\n\n*@throws* *Json property does not exist if the given key is not part of an existing property*"
   sortText: ff|get
   insertText: get($0)
   insertTextFormat: 2
@@ -78,7 +78,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(index: num): Json"
   documentation:
     kind: markdown
-    value: "```wing\ngetAt: (index: num): Json\n```\n---\nReturns a specified element at a given index from Json Array.\n\n\n### Returns\nThe element at given index in Json Array, or undefined if index is not valid"
+    value: "```wing\ngetAt: (index: num): Json\n```\n---\nReturns a specified element at a given index from Json Array.\n\n\n### Returns\nThe element at given index in Json Array\n\n*@throws* *index out of bounds error if the given index does not exist for the Json Array*"
   sortText: ff|getAt
   insertText: getAt($0)
   insertTextFormat: 2

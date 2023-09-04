@@ -1266,6 +1266,410 @@ return class Handler {
 }
 `;
 
+exports[`api with 'name' & 'age' parameter 1`] = `
+[
+  "wingsdk.cloud.TestRunner created.",
+  "wingsdk.cloud.Function created.",
+  "Server listening on http://127.0.0.1:<port>",
+  "wingsdk.cloud.Api created.",
+  "wingsdk.sim.EventMapping created.",
+  "Processing \\"GET /{name}/{age}\\" params={\\"name\\":\\"akhil\\",\\"age\\":\\"23\\"}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/akhil/23\\",\\"query\\":{},\\"vars\\":{\\"name\\":\\"akhil\\",\\"age\\":\\"23\\"}}).",
+  "GET /{name}/{age} - 200.",
+  "wingsdk.sim.EventMapping deleted.",
+  "Closing server on http://127.0.0.1:<port>",
+  "wingsdk.cloud.Api deleted.",
+  "wingsdk.cloud.Function deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
+]
+`;
+
+exports[`api with 'name' & 'age' parameter 2`] = `
+{
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle(req) { return { status: 200, body: req.vars ?? {} }; }
+};
+})())({
+
+})).handle(event);
+};",
+  "connections.json": {
+    "connections": [
+      {
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler-e645076f",
+        "props": {
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler-e645076f_c887c38c.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "wingsdk.cloud.Function",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api",
+        "props": {
+          "openApiSpec": {
+            "openapi": "3.0.3",
+            "paths": {
+              "/{name}/{age}": {
+                "get": {
+                  "operationId": "get-{name}/{age}",
+                  "parameters": [
+                    {
+                      "in": "path",
+                      "name": "name",
+                      "required": true,
+                      "schema": {
+                        "type": "string",
+                      },
+                    },
+                    {
+                      "in": "path",
+                      "name": "age",
+                      "required": true,
+                      "schema": {
+                        "type": "string",
+                      },
+                    },
+                  ],
+                  "responses": {
+                    "200": {
+                      "content": {},
+                      "description": "200 response",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        "type": "wingsdk.cloud.Api",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/ApiEventMapping-e645076f",
+        "props": {
+          "publisher": "\${root/my_api#attrs.handle}",
+          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "subscriptionProps": {
+            "routes": [
+              {
+                "method": "GET",
+                "path": "/{name}/{age}",
+              },
+            ],
+          },
+        },
+        "type": "wingsdk.sim.EventMapping",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "Handler": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.2.69",
+          },
+          "display": {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
+          "id": "Handler",
+          "path": "root/Handler",
+        },
+        "cloud.TestRunner": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.2.69",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
+        "my_api": {
+          "children": {
+            "ApiEventMapping-e645076f": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.2.69",
+              },
+              "display": {
+                "hidden": true,
+              },
+              "id": "ApiEventMapping-e645076f",
+              "path": "root/my_api/ApiEventMapping-e645076f",
+            },
+            "OnRequestHandler-e645076f": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.2.69",
+              },
+              "display": {
+                "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
+                "title": "get()",
+              },
+              "id": "OnRequestHandler-e645076f",
+              "path": "root/my_api/OnRequestHandler-e645076f",
+            },
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.2.69",
+          },
+          "display": {
+            "description": "A REST API endpoint",
+            "title": "Api",
+          },
+          "id": "my_api",
+          "path": "root/my_api",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.2.69",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
+exports[`api with 'name' parameter 1`] = `
+[
+  "wingsdk.cloud.TestRunner created.",
+  "wingsdk.cloud.Function created.",
+  "Server listening on http://127.0.0.1:<port>",
+  "wingsdk.cloud.Api created.",
+  "wingsdk.sim.EventMapping created.",
+  "Processing \\"GET /{name}\\" params={\\"name\\":\\"akhil\\"}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/akhil\\",\\"query\\":{},\\"vars\\":{\\"name\\":\\"akhil\\"}}).",
+  "GET /{name} - 200.",
+  "wingsdk.sim.EventMapping deleted.",
+  "Closing server on http://127.0.0.1:<port>",
+  "wingsdk.cloud.Api deleted.",
+  "wingsdk.cloud.Function deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
+]
+`;
+
+exports[`api with 'name' parameter 2`] = `
+{
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle(req) { return { status: 200, body: req.vars ?? {} }; }
+};
+})())({
+
+})).handle(event);
+};",
+  "connections.json": {
+    "connections": [
+      {
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler-e645076f",
+        "props": {
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler-e645076f_c887c38c.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "wingsdk.cloud.Function",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api",
+        "props": {
+          "openApiSpec": {
+            "openapi": "3.0.3",
+            "paths": {
+              "/{name}": {
+                "get": {
+                  "operationId": "get-{name}",
+                  "parameters": [
+                    {
+                      "in": "path",
+                      "name": "name",
+                      "required": true,
+                      "schema": {
+                        "type": "string",
+                      },
+                    },
+                  ],
+                  "responses": {
+                    "200": {
+                      "content": {},
+                      "description": "200 response",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        "type": "wingsdk.cloud.Api",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/ApiEventMapping-e645076f",
+        "props": {
+          "publisher": "\${root/my_api#attrs.handle}",
+          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "subscriptionProps": {
+            "routes": [
+              {
+                "method": "GET",
+                "path": "/{name}",
+              },
+            ],
+          },
+        },
+        "type": "wingsdk.sim.EventMapping",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "Handler": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.2.69",
+          },
+          "display": {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
+          "id": "Handler",
+          "path": "root/Handler",
+        },
+        "cloud.TestRunner": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.2.69",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
+        "my_api": {
+          "children": {
+            "ApiEventMapping-e645076f": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.2.69",
+              },
+              "display": {
+                "hidden": true,
+              },
+              "id": "ApiEventMapping-e645076f",
+              "path": "root/my_api/ApiEventMapping-e645076f",
+            },
+            "OnRequestHandler-e645076f": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.2.69",
+              },
+              "display": {
+                "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
+                "title": "get()",
+              },
+              "id": "OnRequestHandler-e645076f",
+              "path": "root/my_api/OnRequestHandler-e645076f",
+            },
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.2.69",
+          },
+          "display": {
+            "description": "A REST API endpoint",
+            "title": "Api",
+          },
+          "id": "my_api",
+          "path": "root/my_api",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.2.69",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
 exports[`api with multiple GET routes and one lambda 1`] = `
 {
   ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
