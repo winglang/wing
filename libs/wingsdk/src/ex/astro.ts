@@ -29,7 +29,7 @@ export interface AstroProps {
 /**
  * A cloud static website.
  *
- * @inflight `@winglang/sdk.cloud.IAstroClient`
+ * @inflight `@winglang/sdk.ex.IAstroClient`
  */
 export abstract class Astro extends Resource {
   /**
