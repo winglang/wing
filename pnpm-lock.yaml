@@ -442,8 +442,8 @@ importers:
         specifier: ^1.37.1
         version: 1.37.1
       '@tailwindcss/forms':
-        specifier: ^0.5.6
-        version: 0.5.6(tailwindcss@3.3.3)
+        specifier: ^0.5.3
+        version: 0.5.3(tailwindcss@3.3.3)
       '@types/express':
         specifier: ^4.17.17
         version: 4.17.17
@@ -520,8 +520,8 @@ importers:
         specifier: ^2.11.8
         version: 2.11.8
       '@tailwindcss/forms':
-        specifier: ^0.5.6
-        version: 0.5.6(tailwindcss@3.3.3)
+        specifier: ^0.5.3
+        version: 0.5.3(tailwindcss@3.3.3)
       classnames:
         specifier: ^2.3.2
         version: 2.3.2
@@ -8490,8 +8490,8 @@ packages:
       defer-to-connect: 2.0.1
     dev: true
 
-  /@tailwindcss/forms@0.5.6(tailwindcss@3.3.3):
-    resolution: {integrity: sha512-Fw+2BJ0tmAwK/w01tEFL5TiaJBX1NLT1/YbWgvm7ws3Qcn11kiXxzNTEQDMs5V3mQemhB56l3u0i9dwdzSQldA==}
+  /@tailwindcss/forms@0.5.3(tailwindcss@3.3.3):
+    resolution: {integrity: sha512-y5mb86JUoiUgBjY/o6FJSFZSEttfb3Q5gllE4xoKjAAD+vBrnIhE4dViwUuow3va8mpH4s9jyUbUbrRGoRdc2Q==}
     peerDependencies:
       tailwindcss: '>=3.0.0 || >= 3.0.0-alpha.1'
     dependencies:
@@ -12369,7 +12369,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20230902
+      typescript: 5.3.0-dev.20230904
     dev: true
 
   /dset@3.1.2:
@@ -21391,8 +21391,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20230902:
-    resolution: {integrity: sha512-Ip28siJUrn+uiMBdppvNJrsuVs7yVJY4t//Vtn91JTaGvtqgrqYP14pxyL93HHfnXsKlPHyQLG6hC8oYLDEN6g==}
+  /typescript@5.3.0-dev.20230904:
+    resolution: {integrity: sha512-07NPNxXTmtOd0G5DnbDHee7Yh7VT6R8HzBiBkzx/PsyDIiD2/a14pbmex5xiDRvoLyUNJvNG1S6p48f+Qk0FMQ==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
