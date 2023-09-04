@@ -2,8 +2,7 @@
 
 ## stdout.log
 ```log
-pass ┌ website_with_api.wsim » root/env0/test:GET --users    
-     └ {"access-control-allow-credentials":"false","access-control-allow-origin":"*","access-control-expose-headers":"Content-Type","connection":"keep-alive","content-length":"12","content-type":"text/html; charset=utf-8","date":"Mon, 04 Sep 2023 13:33:12 GMT","etag":"W/\"c-1bl/ybs8pYaLwWPVCd0mBRAdBaY\"","keep-alive":"timeout=5","x-powered-by":"Express"}
+pass ─ website_with_api.wsim » root/env0/test:GET --users    
 pass ─ website_with_api.wsim » root/env1/test:OPTIONS --users
  
  

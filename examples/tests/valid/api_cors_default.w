@@ -39,7 +39,7 @@ test "OPTIONS /users has default cors headers" {
   t.Assert.equalNum(response.status, 204);
 
   // OPTIONS cors headers are set
-  t.Assert.equalStr(headers.get("access-control-allow-headers"), "Content-Type,Authorization");
+  t.Assert.equalStr(headers.get("access-control-allow-headers"), "Content-Type,Authorization,X-Requested-With");
   t.Assert.equalStr(headers.get("access-control-allow-methods"), "GET,POST,PUT,DELETE,HEAD,OPTIONS");
 
   // Other headers are not set

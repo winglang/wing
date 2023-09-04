@@ -56,7 +56,7 @@ module.exports = function({ $apiDefaultCors_url, $http_HttpMethod, $http_Util, $
       const response = (await $http_Util.fetch(($apiDefaultCors_url + "/users"),({"method": $http_HttpMethod.OPTIONS})));
       const headers = response.headers;
       (await $t_Assert.equalNum(response.status,204));
-      (await $t_Assert.equalStr((headers)["access-control-allow-headers"],"Content-Type,Authorization"));
+      (await $t_Assert.equalStr((headers)["access-control-allow-headers"],"Content-Type,Authorization,X-Requested-With"));
       (await $t_Assert.equalStr((headers)["access-control-allow-methods"],"GET,POST,PUT,DELETE,HEAD,OPTIONS"));
       (await $t_Assert.isNil((headers)["access-control-allow-origin"]));
       (await $t_Assert.isNil((headers)["access-control-allow-credentials"]));

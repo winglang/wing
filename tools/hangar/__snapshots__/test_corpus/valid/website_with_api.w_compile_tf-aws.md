@@ -43,7 +43,7 @@ module.exports = function({ $std_Json, $usersTable }) {
 
 ## inflight.$Closure3-2.js
 ```js
-module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $std_Json, $t_Assert }) {
+module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert }) {
   class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -54,7 +54,6 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $std_Json, $
       const response = (await $http_Util.fetch(($api_url + "/users"),({"method": $http_HttpMethod.GET,"headers": ({"Content-Type": "text/json"})})));
       const headers = response.headers;
       (await $t_Assert.equalNum(response.status,200));
-      {console.log(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([headers]))};
       (await $t_Assert.equalStr((headers)["access-control-allow-origin"],"*"));
       (await $t_Assert.equalStr((headers)["access-control-expose-headers"],"Content-Type"));
       (await $t_Assert.equalStr((headers)["access-control-allow-credentials"],"false"));
@@ -882,7 +881,6 @@ class $Root extends $stdlib.std.Resource {
             $api_url: ${context._lift(api.url)},
             $http_HttpMethod: ${context._lift(http.HttpMethod)},
             $http_Util: ${context._lift(http.Util)},
-            $std_Json: ${context._lift(std.Json)},
             $t_Assert: ${context._lift(t.Assert)},
           })
         `;
