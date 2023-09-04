@@ -354,7 +354,6 @@ export const ApiInteraction = ({
                             onEditItem={editPathVariable}
                             disabled={isLoading}
                             keyDisabled={true}
-                            initialValue={initialValue}
                           />
                         </div>
                       )}
