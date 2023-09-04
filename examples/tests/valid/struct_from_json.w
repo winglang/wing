@@ -272,3 +272,11 @@ let jMyStruct = {
 let myStruct = MyStruct.fromJson(jMyStruct);
 assert(myStruct.m1.val == 10);
 assert(myStruct.m2.val == "10");
+
+// Test using schema object
+let schema = MyStruct.schema();
+schema.validate(jMyStruct); // Should not throw exception
+
+let expectedSchema = {"id":"/MyStruct","type":"object","properties":{"m1":{"type":"object","properties":{"val":{"type":"number"}},"required":["val"]},"m2":{"type":"object","properties":{"val":{"type":"string"}},"required":["val"]}},"required":["m1","m2"]};
+
+assert(schema.asStr() == Json.stringify(expectedSchema));

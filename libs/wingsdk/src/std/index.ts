@@ -12,5 +12,6 @@ export * from "./resource";
 export * from "./set";
 export * from "./string";
 export * from "./struct";
+export * from "./struct_schema";
 export * from "./test";
 export * from "./test-runner";

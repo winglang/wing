@@ -119,9 +119,9 @@ exports[`struct_from_json_1.w 1`] = `
 - instance.age is not of a type(s) number
 
 ../../../examples/tests/error/target/test/struct_from_json_1.wsim.[REDACTED].tmp/.wing/preflight.js:10
-       const Person = require(\\"./Person.Struct.js\\")($stdlib.std.Struct);
+       const Person = $stdlib.std.Struct._createStructSchema({id:\\"/Person\\",type:\\"object\\",properties:{age:{type:\\"number\\"},name:{type:\\"string\\"},},required:[\\"age\\",\\"name\\",]});
        const j = ({\\"name\\": \\"cool\\",\\"age\\": \\"not a number\\"});
->>     (Person.fromJson(j));
+>>     (Person._fromJson(j));
      }
    }
 
@@ -138,9 +138,9 @@ exports[`struct_from_json_2.w 1`] = `
 - instance requires property \\"advisor\\"
 
 ../../../examples/tests/error/target/test/struct_from_json_2.wsim.[REDACTED].tmp/.wing/preflight.js:10
-       const Student = require(\\"./Student.Struct.js\\")($stdlib.std.Struct);
+       const Student = $stdlib.std.Struct._createStructSchema({id:\\"/Student\\",type:\\"object\\",properties:{advisor:{type:\\"object\\",properties:{age:{type:\\"number\\"},id:{type:\\"string\\"},name:{type:\\"string\\"},},required:[\\"age\\",\\"id\\",\\"name\\",]},age:{type:\\"number\\"},name:{type:\\"string\\"},},required:[\\"advisor\\",\\"age\\",\\"name\\",]});
        const missingAdvisor = ({\\"name\\": \\"cool\\",\\"age\\": \\"not a number\\"});
->>     (Student.fromJson(missingAdvisor));
+>>     (Student._fromJson(missingAdvisor));
      }
    }
 
@@ -157,9 +157,9 @@ exports[`struct_from_json_3.w 1`] = `
 - instance.age is not of a type(s) number
 
 ../../../examples/tests/error/target/test/struct_from_json_3.wsim.[REDACTED].tmp/.wing/preflight.js:10
-       const Student = require(\\"./Student.Struct.js\\")($stdlib.std.Struct);
+       const Student = $stdlib.std.Struct._createStructSchema({id:\\"/Student\\",type:\\"object\\",properties:{advisors:{type:\\"array\\",items:{type:\\"object\\",properties:{age:{type:\\"number\\"},id:{type:\\"string\\"},name:{type:\\"string\\"},},required:[\\"age\\",\\"id\\",\\"name\\",]}},age:{type:\\"number\\"},name:{type:\\"string\\"},},required:[\\"advisors\\",\\"age\\",\\"name\\",]});
        const invalidAdvisorInArray = ({\\"name\\": \\"cool\\",\\"age\\": \\"not a number\\",\\"advisors\\": [({\\"id\\": \\"advisor1\\",\\"name\\": \\"Bob\\",\\"age\\": 34}), ({\\"id\\": 10,\\"name\\": \\"Jacob\\",\\"age\\": 45})]});
->>     (Student.fromJson(invalidAdvisorInArray));
+>>     (Student._fromJson(invalidAdvisorInArray));
      }
    }
 
@@ -175,9 +175,9 @@ exports[`struct_from_json_4.w 1`] = `
 - instance.advisors contains duplicate item
 
 ../../../examples/tests/error/target/test/struct_from_json_4.wsim.[REDACTED].tmp/.wing/preflight.js:10
-       const Student = require(\\"./Student.Struct.js\\")($stdlib.std.Struct);
+       const Student = $stdlib.std.Struct._createStructSchema({id:\\"/Student\\",type:\\"object\\",properties:{advisors:{type:\\"array\\",uniqueItems:true,items:{type:\\"object\\",properties:{age:{type:\\"number\\"},id:{type:\\"string\\"},name:{type:\\"string\\"},},required:[\\"age\\",\\"id\\",\\"name\\",]}},age:{type:\\"number\\"},name:{type:\\"string\\"},},required:[\\"advisors\\",\\"age\\",\\"name\\",]});
        const invalidAdvisorInArray = ({\\"name\\": \\"cool\\",\\"age\\": 22,\\"advisors\\": [({\\"id\\": \\"advisor1\\",\\"name\\": \\"Bob\\",\\"age\\": 34}), ({\\"id\\": \\"advisor1\\",\\"name\\": \\"Bob\\",\\"age\\": 34})]});
->>     (Student.fromJson(invalidAdvisorInArray));
+>>     (Student._fromJson(invalidAdvisorInArray));
      }
    }
 
@@ -193,9 +193,9 @@ exports[`struct_from_json_5.w 1`] = `
 - instance.names.c is not of a type(s) string
 
 ../../../examples/tests/error/target/test/struct_from_json_5.wsim.[REDACTED].tmp/.wing/preflight.js:10
-       const Foo = require(\\"./Foo.Struct.js\\")($stdlib.std.Struct);
+       const Foo = $stdlib.std.Struct._createStructSchema({id:\\"/Foo\\",type:\\"object\\",properties:{names:{type:\\"object\\",patternProperties:{\\".*\\":{type:\\"string\\"}}},},required:[\\"names\\",]});
        const jFoo = ({\\"names\\": ({\\"a\\": \\"Amanda\\",\\"b\\": \\"Barry\\",\\"c\\": 10})});
->>     (Foo.fromJson(jFoo));
+>>     (Foo._fromJson(jFoo));
      }
    }
 
