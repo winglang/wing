@@ -36,8 +36,9 @@ export const createPersistentState = (prefix: string) => {
           "usePersistentState must be used within a PersistentStateProvider",
         );
       }
-
       const currentIndex = useRef(index++);
+
+      const valueRef = useRef<T>() as MutableRefObject<T>;
 
       const [value, setValue] = useState(() => {
         const values = state.current.get(prefix) ?? [];
@@ -46,14 +47,17 @@ export const createPersistentState = (prefix: string) => {
         }
         return initialValue;
       });
+      useEffect(() => {
+        valueRef.current = value;
+      }, [value]);
 
       useEffect(() => {
         return () => {
           const storedData = state.current.get(prefix) ?? [];
-          storedData[currentIndex.current] = value;
+          storedData[currentIndex.current] = valueRef.current;
           state.current.set(prefix, storedData);
         };
-      }, [value]);
+      }, []);
 
       return [value, setValue];
     },
