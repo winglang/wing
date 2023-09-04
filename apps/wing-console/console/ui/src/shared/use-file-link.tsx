@@ -27,14 +27,18 @@ export const OpenFileInEditorButton = ({ children }: PropsWithChildren) => {
       onClick={(event) => {
         const target = event.target as HTMLElement;
         if (target.tagName === "A") {
-          const path = target.getAttribute("href")!;
-          const line = target.getAttribute("line");
-          const column = target.getAttribute("column");
+          const path = target.getAttribute("path")!;
+          const line = target.getAttribute("line")!;
+          const column = target.getAttribute("column")!;
+
+          if (!path || !line || !column) {
+            return;
+          }
 
           openFileInEditor.mutate({
             path,
-            line: line && Number.parseInt(line),
-            column: column && Number.parseInt(column),
+            line: Number.parseInt(line),
+            column: Number.parseInt(column),
           });
         }
       }}
