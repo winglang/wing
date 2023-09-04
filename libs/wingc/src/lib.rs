@@ -361,7 +361,8 @@ pub fn compile(
 		return Err(());
 	}
 
-	// -- PRE-EMIT PHASE --
+	// -- STRUCT SCHEMA GENERATION PHASE --
+  // Need to do this before jsification so that we know what struct schemas need to be generated
 	asts = asts
 		.into_iter()
 		.map(|(path, scope)| {

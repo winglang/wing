@@ -38,28 +38,7 @@ impl Error for FilesError {}
 
 #[derive(Default)]
 pub struct Files {
-	data: BTreeMap<Utf8PathBuf, FileData>,
-}
-
-pub struct FileData {
-	content: String,
-	is_struct_schema: bool,
-}
-
-impl FileData {
-	pub fn new(content: String) -> Self {
-		Self {
-			content,
-			is_struct_schema: false,
-		}
-	}
-
-	pub fn new_struct_schema(content: String) -> Self {
-		Self {
-			content,
-			is_struct_schema: true,
-		}
-	}
+	data: BTreeMap<Utf8PathBuf, String>,
 }
 
 impl Files {
@@ -68,40 +47,25 @@ impl Files {
 	}
 
 	/// Add a file, returning an error if a file with the same name already exists.
-	pub fn add_file<S: Into<Utf8PathBuf>>(&mut self, path: S, file_data: FileData) -> Result<(), FilesError> {
+	pub fn add_file<S: Into<Utf8PathBuf>>(&mut self, path: S, content: String) -> Result<(), FilesError> {
 		let path = path.into();
 		if self.data.contains_key(&path) {
 			return Err(FilesError::DuplicateFile(path));
 		}
-		self.data.insert(path, file_data);
+		self.data.insert(path, content);
 		Ok(())
 	}
 
 	/// Update a file, overwriting the previous contents if it already exists.
 	pub fn update_file<S: Into<Utf8PathBuf>>(&mut self, path: S, content: String) {
 		let path = path.into();
-		self.data.insert(path, FileData::new(content));
+		self.data.insert(path, content);
 	}
 
 	/// Get a file's contents, if it exists.
 	pub fn get_file<S: AsRef<Utf8Path>>(&self, path: S) -> Option<&String> {
 		if let Some(file) = self.data.get(path.as_ref()) {
-			Some(&file.content)
-		} else {
-			None
-		}
-	}
-
-	/// Get all files that are struct schemas.
-	pub fn get_struct_files(&self) -> Option<BTreeMap<&Utf8PathBuf, &FileData>> {
-		let mut files: BTreeMap<&Utf8PathBuf, &FileData> = BTreeMap::new();
-		for (path, data) in self.data.iter() {
-			if data.is_struct_schema {
-				files.insert(path, data);
-			}
-		}
-		if files.len() > 0 {
-			Some(files)
+			Some(&file)
 		} else {
 			None
 		}
@@ -124,7 +88,7 @@ impl Files {
 
 			let mut file = File::create(full_path).map_err(FilesError::IoError)?;
 			file
-				.write_all(file_data.content.as_bytes())
+				.write_all(file_data.as_bytes())
 				.map_err(FilesError::IoError)?;
 			file.flush().map_err(FilesError::IoError)?;
 		}
@@ -139,20 +103,20 @@ mod tests {
 	#[test]
 	fn test_add_file() {
 		let mut files = Files::new();
-		assert!(files.add_file("file1", FileData::new("content1".to_owned())).is_ok());
-		assert!(files.add_file("file2", FileData::new("content2".to_owned())).is_ok());
+		assert!(files.add_file("file1", "content1".to_owned()).is_ok());
+		assert!(files.add_file("file2", "content2".to_owned()).is_ok());
 		// Adding a file with the same name should return an error
-		assert!(files.add_file("file1", FileData::new("content3".to_owned())).is_err());
+		assert!(files.add_file("file1", "content3".to_owned()).is_err());
 	}
 
 	#[test]
 	fn test_contains_file() {
 		let mut files = Files::new();
 		files
-			.add_file("file1", FileData::new("content1".to_owned()))
+			.add_file("file1", "content1".to_owned())
 			.expect("Failed to add file");
 		files
-			.add_file("file2", FileData::new("content2".to_owned()))
+			.add_file("file2", "content2".to_owned())
 			.expect("Failed to add file");
 		assert!(files.contains_file("file1"));
 		assert!(files.contains_file("file2"));
@@ -166,10 +130,10 @@ mod tests {
 
 		let mut files = Files::new();
 		files
-			.add_file("file1", FileData::new("content1".to_owned()))
+			.add_file("file1", "content1".to_owned())
 			.expect("Failed to add file");
 		files
-			.add_file("file2", FileData::new("content2".to_owned()))
+			.add_file("file2", "content2".to_owned())
 			.expect("Failed to add file");
 
 		assert!(files.emit_files(out_dir).is_ok());
@@ -193,7 +157,7 @@ mod tests {
 
 		let mut files = Files::new();
 		files
-			.add_file("subdir/file1", FileData::new("content1".to_owned()))
+			.add_file("subdir/file1", "content1".to_owned())
 			.expect("Failed to add file");
 
 		assert!(files.emit_files(out_dir).is_ok());

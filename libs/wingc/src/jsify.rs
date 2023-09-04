@@ -6,7 +6,7 @@ use const_format::formatcp;
 use indexmap::{IndexMap, IndexSet};
 use itertools::Itertools;
 
-use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, vec};
+use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, vec, collections::BTreeMap};
 
 use crate::{
 	ast::{
@@ -17,7 +17,7 @@ use crate::{
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic, debug,
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
-	files::{FileData, Files},
+	files::Files,
 	type_check::{
 		is_udt_struct_type,
 		lifts::{Liftable, Lifts},
@@ -54,6 +54,8 @@ pub struct JSifier<'a> {
 	pub types: &'a mut Types,
 	/// Store the output files here.
 	pub output_files: RefCell<Files>,
+  /// Set of struct schemas that must be emitted in the preflight phase.
+  pub referenced_struct_schemas: RefCell<BTreeMap<String, CodeMaker>>,
 	/// Counter for generating unique preflight file names.
 	preflight_file_counter: RefCell<usize>,
 
@@ -93,6 +95,7 @@ impl<'a> JSifier<'a> {
 			source_files,
 			entrypoint_file_path,
 			absolute_project_root,
+      referenced_struct_schemas: RefCell::new(BTreeMap::new()),
 			inflight_file_counter: RefCell::new(0),
 			inflight_file_map: RefCell::new(IndexMap::new()),
 			preflight_file_counter: RefCell::new(0),
@@ -160,7 +163,7 @@ impl<'a> JSifier<'a> {
 			root_class.open(format!("class {} extends {} {{", ROOT_CLASS, STDLIB_CORE_RESOURCE));
 			root_class.open(format!("{JS_CONSTRUCTOR}(scope, id) {{"));
 			root_class.line("super(scope, id);");
-			root_class.add_code(self.jsify_struct_schema_constants());
+			root_class.add_code(self.jsify_struct_schemas());
 			root_class.add_code(js);
 			root_class.close("}");
 			root_class.close("}");
@@ -210,26 +213,52 @@ impl<'a> JSifier<'a> {
 		match self
 			.output_files
 			.borrow_mut()
-			.add_file(preflight_file_name, FileData::new(output.to_string()))
+			.add_file(preflight_file_name, output.to_string())
 		{
 			Ok(()) => {}
 			Err(err) => report_diagnostic(err.into()),
 		}
 	}
 
-	fn jsify_struct_schema_constants(&self) -> CodeMaker {
+	fn jsify_struct_schemas(&self) -> CodeMaker {
+    // For each struct schema that is referenced in the code 
+    // (this is determined by the StructSchemaVisitor before jsification starts)
+    // We need to emit a file with the exported schema object, and then also 
+    // inline the require() call to that file in the preflight root class.
 		let mut code = CodeMaker::default();
-		if let Some(struct_files) = self.output_files.borrow().get_struct_files() {
-			for (path, _data) in struct_files {
-				let struct_name = struct_name_from_filename(&path.to_string());
+    for (name, schema_code) in self.referenced_struct_schemas.borrow().iter() {
+      let flat_name = name.replace(".", "_");
 
-				code.line(format!(
-					"const {} = require(\"{}\")($stdlib.std.Struct);",
-					struct_name,
-					path.to_string()
-				));
-			}
-		}
+      let mut schema_file_code = CodeMaker::default();
+
+      schema_file_code.open("module.exports = function(stdStruct) {".to_string());
+      schema_file_code.open(format!("class {} {{", flat_name));
+
+      schema_file_code.open("static jsonSchema() {".to_string());
+      schema_file_code.line(format!("return {}", schema_code.to_string()));
+
+      schema_file_code.close("}");
+
+      // create _validate() function
+      schema_file_code.open("static fromJson(obj) {");
+      schema_file_code.line("return stdStruct._validate(obj, this.jsonSchema())");
+      schema_file_code.close("}");
+
+      // create _toInflightType function that just requires the generated struct file
+      schema_file_code.open("static _toInflightType(context) {".to_string());
+      schema_file_code.line(
+        "return `require(\"./${require('path').basename(__filename)}\")(${ context._lift(stdStruct) })`;".to_string(),
+      );
+      schema_file_code.close("}");
+
+
+      schema_file_code.close("}");
+      schema_file_code.line(format!("return {flat_name};"));
+      schema_file_code.close("}");
+
+      self.emit_struct_file(&flat_name, &schema_file_code);
+      code.line(format!("const {flat_name} = require(\"{}\")($stdlib.std.Struct);", struct_filename(&flat_name)));
+    }
 		code
 	}
 
@@ -1299,7 +1328,12 @@ impl<'a> JSifier<'a> {
 		class_code
 	}
 
-	pub fn emit_struct_file(&self, name: &String, struct_code: CodeMaker) {
+  pub fn add_referenced_struct_schema(&self, struct_name: String, schema: CodeMaker) {
+    let mut struct_schemas = self.referenced_struct_schemas.borrow_mut();
+    struct_schemas.insert(struct_name, schema);
+  }
+
+	pub fn emit_struct_file(&self, name: &String, struct_code: &CodeMaker) {
 		let file_name = struct_filename(&name);
 
 		if self.output_files.borrow().contains_file(&file_name) {
@@ -1307,12 +1341,10 @@ impl<'a> JSifier<'a> {
 			return;
 		}
 
-		let mut code = CodeMaker::default();
-		code.add_code(struct_code);
 		match self
 			.output_files
 			.borrow_mut()
-			.add_file(file_name, FileData::new_struct_schema(code.to_string()))
+			.add_file(file_name, struct_code.to_string())
 		{
 			Ok(()) => {}
 			Err(err) => report_diagnostic(err.into()),
@@ -1342,7 +1374,7 @@ impl<'a> JSifier<'a> {
 		match self
 			.output_files
 			.borrow_mut()
-			.add_file(self.inflight_filename(class), FileData::new(code.to_string()))
+			.add_file(self.inflight_filename(class), code.to_string())
 		{
 			Ok(()) => {}
 			Err(err) => report_diagnostic(err.into()),
@@ -1515,10 +1547,6 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 
 fn struct_filename(s: &String) -> String {
 	format!("./{}.Struct.js", s)
-}
-
-fn struct_name_from_filename(s: &String) -> String {
-	s.replace("./", "").replace(".Struct.js", "")
 }
 
 fn lookup_span(span: &WingSpan, files: &Files) -> String {

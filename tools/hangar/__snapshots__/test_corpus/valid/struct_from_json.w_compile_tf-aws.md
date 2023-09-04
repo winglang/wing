@@ -26,7 +26,7 @@ module.exports = function(stdStruct) {
     }
   }
   return Bar;
-};
+}
 
 ```
 
@@ -54,7 +54,7 @@ module.exports = function(stdStruct) {
     }
   }
   return Foo;
-};
+}
 
 ```
 
@@ -81,7 +81,7 @@ module.exports = function(stdStruct) {
     }
   }
   return Foosible;
-};
+}
 
 ```
 
@@ -127,7 +127,7 @@ module.exports = function(stdStruct) {
     }
   }
   return MyStruct;
-};
+}
 
 ```
 
@@ -256,14 +256,14 @@ module.exports = function(stdStruct) {
     }
   }
   return Student;
-};
+}
 
 ```
 
 ## cloud_BucketProps.Struct.js
 ```js
 module.exports = function(stdStruct) {
-  class BucketProps {
+  class cloud_BucketProps {
     static jsonSchema() {
       return {
         id: "/BucketProps",
@@ -282,15 +282,15 @@ module.exports = function(stdStruct) {
       return `require("./${require('path').basename(__filename)}")(${ context._lift(stdStruct) })`;
     }
   }
-  return BucketProps;
-};
+  return cloud_BucketProps;
+}
 
 ```
 
 ## externalStructs_MyOtherStruct.Struct.js
 ```js
 module.exports = function(stdStruct) {
-  class MyOtherStruct {
+  class externalStructs_MyOtherStruct {
     static jsonSchema() {
       return {
         id: "/MyOtherStruct",
@@ -318,8 +318,8 @@ module.exports = function(stdStruct) {
       return `require("./${require('path').basename(__filename)}")(${ context._lift(stdStruct) })`;
     }
   }
-  return MyOtherStruct;
-};
+  return externalStructs_MyOtherStruct;
+}
 
 ```
 
