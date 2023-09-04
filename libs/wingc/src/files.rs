@@ -1,5 +1,5 @@
 use std::{
-	collections::BTreeMap,
+	collections::HashMap,
 	error::Error,
 	fmt::{self, Display},
 	fs::{self, File},
@@ -38,12 +38,12 @@ impl Error for FilesError {}
 
 #[derive(Default)]
 pub struct Files {
-	data: BTreeMap<Utf8PathBuf, String>,
+	data: HashMap<Utf8PathBuf, String>,
 }
 
 impl Files {
 	pub fn new() -> Self {
-		Self { data: BTreeMap::new() }
+		Self { data: HashMap::new() }
 	}
 
 	/// Add a file, returning an error if a file with the same name already exists.
@@ -64,11 +64,7 @@ impl Files {
 
 	/// Get a file's contents, if it exists.
 	pub fn get_file<S: AsRef<Utf8Path>>(&self, path: S) -> Option<&String> {
-		if let Some(file) = self.data.get(path.as_ref()) {
-			Some(&file)
-		} else {
-			None
-		}
+    self.data.get(path.as_ref())
 	}
 
 	/// Check if a file exists.
@@ -78,7 +74,7 @@ impl Files {
 
 	/// Write all files to the given directory.
 	pub fn emit_files(&self, out_dir: &Utf8Path) -> Result<(), FilesError> {
-		for (path, file_data) in &self.data {
+		for (path, content) in &self.data {
 			let full_path = out_dir.join(path);
 
 			// create parent directories if they don't exist
@@ -87,9 +83,7 @@ impl Files {
 			}
 
 			let mut file = File::create(full_path).map_err(FilesError::IoError)?;
-			file
-				.write_all(file_data.as_bytes())
-				.map_err(FilesError::IoError)?;
+			file.write_all(content.as_bytes()).map_err(FilesError::IoError)?;
 			file.flush().map_err(FilesError::IoError)?;
 		}
 		Ok(())
