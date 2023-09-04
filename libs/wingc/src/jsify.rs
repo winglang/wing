@@ -54,7 +54,7 @@ pub struct JSifier<'a> {
 	pub types: &'a mut Types,
 	/// Store the output files here.
 	pub output_files: RefCell<Files>,
-	/// Set of struct schemas that must be emitted in the preflight phase.
+	/// Stored struct schemas that are referenced in the code.
 	pub referenced_struct_schemas: RefCell<BTreeMap<String, CodeMaker>>,
 	/// Counter for generating unique preflight file names.
 	preflight_file_counter: RefCell<usize>,
