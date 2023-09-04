@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import {
   OpenFileInEditorButton,
-  useFileLink,
+  createHtmlLink,
 } from "../shared/use-file-link.js";
 
 export const BlueScreenOfDeath = ({
@@ -18,8 +18,6 @@ export const BlueScreenOfDeath = ({
   displayWingTitle?: boolean;
 }) => {
   const [formattedPathsError, setFormattedPathsError] = useState("");
-
-  const { createHtmlLink, onClick } = useFileLink();
 
   useEffect(() => {
     if (!displayLinks) {
