@@ -1,5 +1,5 @@
 use crate::{
-	ast::{Reference, Stmt, StmtKind, Symbol},
+	ast::{Reference, Stmt, StmtKind, Symbol, AssignmentKind},
 	visit::{self, Visit},
 };
 
@@ -21,7 +21,7 @@ impl Visit<'_> for VisitClassInit {
 	fn visit_stmt(&mut self, node: &Stmt) {
 		match &node.kind {
 			StmtKind::Assignment {
-				kind: _,
+				kind: AssignmentKind::Assign,
 				variable,
 				value: _,
 			} => match variable {

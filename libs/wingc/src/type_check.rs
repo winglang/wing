@@ -3147,18 +3147,12 @@ impl<'a> TypeChecker<'a> {
 					self.spanned_error(stmt, "Variable cannot be reassigned from inflight".to_string());
 				}
 
-				match &kind {
-					AssignmentKind::Assign => {
-						self.validate_type(exp_type, var.type_, value);
-					}
-					AssignmentKind::AssignIncr => {
-						self.validate_type(exp_type, self.types.number(), value);
-						self.validate_type(var.type_, self.types.number(), variable);
-					}
-					AssignmentKind::AssignDecr => {
-						self.validate_type(exp_type, var.type_, value);
-					}
+				if matches!(&kind, AssignmentKind::AssignIncr | AssignmentKind::AssignDecr) {
+					self.validate_type(exp_type, self.types.number(), value);
+					self.validate_type(var.type_, self.types.number(), variable);
 				}
+
+				self.validate_type(exp_type, var.type_, value);
 			}
 			StmtKind::Bring { source, identifier } => {
 				// library_name is the name of the library we are importing from the JSII world
