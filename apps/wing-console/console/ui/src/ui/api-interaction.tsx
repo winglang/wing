@@ -2,7 +2,6 @@ import {
   Attribute,
   Button,
   Combobox,
-  KeyValueItem,
   KeyValueList,
   Select,
   Tabs,
@@ -10,10 +9,7 @@ import {
   useKeyValueList,
   useTheme,
 } from "@wingconsole/design-system";
-import {
-  createPersistentState,
-  PersistentWrapper,
-} from "@wingconsole/use-persistent-state";
+import { createPersistentState } from "@wingconsole/use-persistent-state";
 import classNames from "classnames";
 import { useCallback, useEffect, useId, useState } from "react";
 
@@ -69,24 +65,16 @@ export const ApiInteraction = ({
   const [currentResponseTab, setCurrentResponseTab] =
     usePersistentState("body");
 
-  const [headersState, setHeadersState] = usePersistentState<KeyValueItem[]>(
-    [],
-  );
   const {
     items: headers,
     addItem: addHeader,
     removeItem: removeHeader,
     editItem: editHeader,
     removeAll: removeAllHeaders,
-  } = useKeyValueList(headersState);
+  } = useKeyValueList({
+    useExternalState: usePersistentState,
+  });
 
-  useEffect(() => {
-    setHeadersState(headers);
-  }, [headers, setHeadersState]);
-
-  const [queryParametersState, setQueryParametersState] = usePersistentState<
-    KeyValueItem[]
-  >([]);
   const {
     items: queryParameters,
     addItem: addQueryParameter,
@@ -94,23 +82,18 @@ export const ApiInteraction = ({
     editItem: editQueryParameter,
     setItems: setQueryParameters,
     removeAll: removeAllQueryParameters,
-  } = useKeyValueList(queryParametersState);
-  useEffect(() => {
-    setQueryParametersState(queryParameters);
-  }, [queryParameters, setQueryParametersState]);
+  } = useKeyValueList({
+    useExternalState: usePersistentState,
+  });
 
-  const [pathVariablesState, setPathVariablesState] = usePersistentState<
-    KeyValueItem[]
-  >([]);
   const {
     items: pathVariables,
     editItem: editPathVariable,
     setItems: setPathVariables,
     removeAll: removeAllPathVariables,
-  } = useKeyValueList(pathVariablesState);
-  useEffect(() => {
-    setPathVariablesState(pathVariables);
-  }, [pathVariables, setPathVariablesState]);
+  } = useKeyValueList({
+    useExternalState: usePersistentState,
+  });
 
   const resetApiState = () => {
     setCurrentRoute("");

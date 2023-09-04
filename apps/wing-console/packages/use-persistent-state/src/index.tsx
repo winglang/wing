@@ -27,9 +27,9 @@ export const createPersistentState = (prefix: string) => {
   let index = 0;
 
   return {
-    usePersistentState: function <T>(
-      initialValue?: T | (() => T),
-    ): [T, Dispatch<SetStateAction<T>>] {
+    usePersistentState: function <S>(
+      initialValue?: S | (() => S),
+    ): [S, Dispatch<SetStateAction<S>>] {
       const { state } = useContext(PersistentStateContext);
       if (!state) {
         throw new Error(
@@ -38,15 +38,16 @@ export const createPersistentState = (prefix: string) => {
       }
       const currentIndex = useRef(index++);
 
-      const valueRef = useRef<T>() as MutableRefObject<T>;
+      const valueRef = useRef<S>() as MutableRefObject<S>;
 
       const [value, setValue] = useState(() => {
         const values = state.current.get(prefix) ?? [];
         if (values.length > currentIndex.current) {
           return values[currentIndex.current];
         }
-        return initialValue;
+        return initialValue instanceof Function ? initialValue() : initialValue;
       });
+
       useEffect(() => {
         valueRef.current = value;
       }, [value]);

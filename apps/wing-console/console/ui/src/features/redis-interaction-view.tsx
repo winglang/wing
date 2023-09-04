@@ -16,14 +16,6 @@ const REDIS_HELP_URL = "https://redis.io/commands";
 export const RedisInteractionView = ({ resourcePath }: RedisViewProps) => {
   const { usePersistentState } = createPersistentState(resourcePath);
 
-  const [commandHistoryState, setCommandHistoryState] = usePersistentState<
-    string[]
-  >([]);
-
-  const [terminalHistoryState, setTerminalHistoryState] = usePersistentState<
-    TerminalHistoryItem[]
-  >([]);
-
   const [command, setCommand] = usePersistentState("");
   const {
     commandHistory,
@@ -34,17 +26,8 @@ export const RedisInteractionView = ({ resourcePath }: RedisViewProps) => {
     updateCommandHistory,
     clearTerminalHistory,
   } = useTerminalHistory({
-    initialCommandHistory: commandHistoryState,
-    initialTerminalHistory: terminalHistoryState,
+    useExternalState: usePersistentState,
   });
-
-  useEffect(() => {
-    setCommandHistoryState(commandHistory);
-  }, [commandHistory, setCommandHistoryState]);
-
-  useEffect(() => {
-    setTerminalHistoryState(terminalHistory);
-  }, [terminalHistory, setTerminalHistoryState]);
 
   const { open } = useOpenExternal();
   const { isLoading, redisUrl, execCommand } = useRedis({ resourcePath });
