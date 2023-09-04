@@ -64,7 +64,7 @@ impl Files {
 
 	/// Get a file's contents, if it exists.
 	pub fn get_file<S: AsRef<Utf8Path>>(&self, path: S) -> Option<&String> {
-    self.data.get(path.as_ref())
+		self.data.get(path.as_ref())
 	}
 
 	/// Check if a file exists.

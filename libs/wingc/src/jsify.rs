@@ -6,7 +6,7 @@ use const_format::formatcp;
 use indexmap::{IndexMap, IndexSet};
 use itertools::Itertools;
 
-use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, vec, collections::BTreeMap};
+use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, collections::BTreeMap, vec};
 
 use crate::{
 	ast::{
@@ -54,8 +54,8 @@ pub struct JSifier<'a> {
 	pub types: &'a mut Types,
 	/// Store the output files here.
 	pub output_files: RefCell<Files>,
-  /// Set of struct schemas that must be emitted in the preflight phase.
-  pub referenced_struct_schemas: RefCell<BTreeMap<String, CodeMaker>>,
+	/// Set of struct schemas that must be emitted in the preflight phase.
+	pub referenced_struct_schemas: RefCell<BTreeMap<String, CodeMaker>>,
 	/// Counter for generating unique preflight file names.
 	preflight_file_counter: RefCell<usize>,
 
@@ -95,7 +95,7 @@ impl<'a> JSifier<'a> {
 			source_files,
 			entrypoint_file_path,
 			absolute_project_root,
-      referenced_struct_schemas: RefCell::new(BTreeMap::new()),
+			referenced_struct_schemas: RefCell::new(BTreeMap::new()),
 			inflight_file_counter: RefCell::new(0),
 			inflight_file_map: RefCell::new(IndexMap::new()),
 			preflight_file_counter: RefCell::new(0),
@@ -221,44 +221,46 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_struct_schemas(&self) -> CodeMaker {
-    // For each struct schema that is referenced in the code 
-    // (this is determined by the StructSchemaVisitor before jsification starts)
-    // We need to emit a file with the exported schema object, and then also 
-    // inline the require() call to that file in the preflight root class.
+		// For each struct schema that is referenced in the code
+		// (this is determined by the StructSchemaVisitor before jsification starts)
+		// We need to emit a file with the exported schema object, and then also
+		// inline the require() call to that file in the preflight root class.
 		let mut code = CodeMaker::default();
-    for (name, schema_code) in self.referenced_struct_schemas.borrow().iter() {
-      let flat_name = name.replace(".", "_");
+		for (name, schema_code) in self.referenced_struct_schemas.borrow().iter() {
+			let flat_name = name.replace(".", "_");
 
-      let mut schema_file_code = CodeMaker::default();
+			let mut schema_file_code = CodeMaker::default();
 
-      schema_file_code.open("module.exports = function(stdStruct) {".to_string());
-      schema_file_code.open(format!("class {} {{", flat_name));
+			schema_file_code.open("module.exports = function(stdStruct) {".to_string());
+			schema_file_code.open(format!("class {} {{", flat_name));
 
-      schema_file_code.open("static jsonSchema() {".to_string());
-      schema_file_code.line(format!("return {}", schema_code.to_string()));
+			schema_file_code.open("static jsonSchema() {".to_string());
+			schema_file_code.line(format!("return {}", schema_code.to_string()));
 
-      schema_file_code.close("}");
+			schema_file_code.close("}");
 
-      // create _validate() function
-      schema_file_code.open("static fromJson(obj) {");
-      schema_file_code.line("return stdStruct._validate(obj, this.jsonSchema())");
-      schema_file_code.close("}");
+			// create _validate() function
+			schema_file_code.open("static fromJson(obj) {");
+			schema_file_code.line("return stdStruct._validate(obj, this.jsonSchema())");
+			schema_file_code.close("}");
 
-      // create _toInflightType function that just requires the generated struct file
-      schema_file_code.open("static _toInflightType(context) {".to_string());
-      schema_file_code.line(
-        "return `require(\"./${require('path').basename(__filename)}\")(${ context._lift(stdStruct) })`;".to_string(),
-      );
-      schema_file_code.close("}");
+			// create _toInflightType function that just requires the generated struct file
+			schema_file_code.open("static _toInflightType(context) {".to_string());
+			schema_file_code.line(
+				"return `require(\"./${require('path').basename(__filename)}\")(${ context._lift(stdStruct) })`;".to_string(),
+			);
+			schema_file_code.close("}");
 
+			schema_file_code.close("}");
+			schema_file_code.line(format!("return {flat_name};"));
+			schema_file_code.close("}");
 
-      schema_file_code.close("}");
-      schema_file_code.line(format!("return {flat_name};"));
-      schema_file_code.close("}");
-
-      self.emit_struct_file(&flat_name, &schema_file_code);
-      code.line(format!("const {flat_name} = require(\"{}\")($stdlib.std.Struct);", struct_filename(&flat_name)));
-    }
+			self.emit_struct_file(&flat_name, &schema_file_code);
+			code.line(format!(
+				"const {flat_name} = require(\"{}\")($stdlib.std.Struct);",
+				struct_filename(&flat_name)
+			));
+		}
 		code
 	}
 
@@ -1328,10 +1330,10 @@ impl<'a> JSifier<'a> {
 		class_code
 	}
 
-  pub fn add_referenced_struct_schema(&self, struct_name: String, schema: CodeMaker) {
-    let mut struct_schemas = self.referenced_struct_schemas.borrow_mut();
-    struct_schemas.insert(struct_name, schema);
-  }
+	pub fn add_referenced_struct_schema(&self, struct_name: String, schema: CodeMaker) {
+		let mut struct_schemas = self.referenced_struct_schemas.borrow_mut();
+		struct_schemas.insert(struct_name, schema);
+	}
 
 	pub fn emit_struct_file(&self, name: &String, struct_code: &CodeMaker) {
 		let file_name = struct_filename(&name);

@@ -96,7 +96,7 @@ impl<'a> StructSchemaVisitor<'a> {
 	fn get_struct_schema(&self, struct_: &Struct) -> CodeMaker {
 		let mut code = CodeMaker::default();
 
-    code.open("{");
+		code.open("{");
 		code.line(format!("id: \"/{}\",", struct_.name));
 		code.line("type: \"object\",".to_string());
 
@@ -109,7 +109,7 @@ impl<'a> StructSchemaVisitor<'a> {
 
 		code.add_code(self.get_struct_schema_required_fields(&struct_.env));
 
-    // close schema
+		// close schema
 		code.close("}");
 		code
 	}
@@ -125,12 +125,12 @@ impl<'a> Visit<'a> for StructSchemaVisitor<'a> {
 			Reference::TypeMember { type_name, .. } => {
 				if is_udt_struct_type(type_name, self.ctx.current_env().unwrap()) {
 					let type_ = resolve_user_defined_type(type_name, self.ctx.current_env().unwrap(), 0);
-					let struct_code = self.get_struct_schema(
-            type_.unwrap().as_struct().unwrap()
-          );
+					let struct_code = self.get_struct_schema(type_.unwrap().as_struct().unwrap());
 
-          // add the schema to the jsifier's referenced struct schemas
-          self.jsify.add_referenced_struct_schema(type_name.clone().to_string(), struct_code);
+					// add the schema to the jsifier's referenced struct schemas
+					self
+						.jsify
+						.add_referenced_struct_schema(type_name.clone().to_string(), struct_code);
 				}
 				visit::visit_reference(self, node);
 			}

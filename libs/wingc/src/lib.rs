@@ -362,7 +362,7 @@ pub fn compile(
 	}
 
 	// -- STRUCT SCHEMA GENERATION PHASE --
-  // Need to do this before jsification so that we know what struct schemas need to be generated
+	// Need to do this before jsification so that we know what struct schemas need to be generated
 	asts = asts
 		.into_iter()
 		.map(|(path, scope)| {
