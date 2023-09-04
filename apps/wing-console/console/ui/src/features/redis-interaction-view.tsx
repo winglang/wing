@@ -1,7 +1,9 @@
-import { useCallback, useState } from "react";
+import { createPersistentState } from "@wingconsole/use-persistent-state";
+import { useCallback, useEffect, useState } from "react";
 
 import { useOpenExternal } from "../services/use-open-external.js";
 import { useRedis } from "../services/use-redis.js";
+import { TerminalHistoryItem } from "../shared/ternimal.js";
 import { useTerminalHistory } from "../shared/use-terminal-history.js";
 import { RedisInteraction } from "../ui/redis-interaction.js";
 
@@ -12,7 +14,17 @@ export interface RedisViewProps {
 const REDIS_HELP_URL = "https://redis.io/commands";
 
 export const RedisInteractionView = ({ resourcePath }: RedisViewProps) => {
-  const [command, setCommand] = useState("");
+  const { usePersistentState } = createPersistentState(resourcePath);
+
+  const [commandHistoryState, setCommandHistoryState] = usePersistentState<
+    string[]
+  >([]);
+
+  const [terminalHistoryState, setTerminalHistoryState] = usePersistentState<
+    TerminalHistoryItem[]
+  >([]);
+
+  const [command, setCommand] = usePersistentState("");
   const {
     commandHistory,
     terminalHistory,
@@ -21,7 +33,18 @@ export const RedisInteractionView = ({ resourcePath }: RedisViewProps) => {
     updateTerminalHistory,
     updateCommandHistory,
     clearTerminalHistory,
-  } = useTerminalHistory();
+  } = useTerminalHistory({
+    initialCommandHistory: commandHistoryState,
+    initialTerminalHistory: terminalHistoryState,
+  });
+
+  useEffect(() => {
+    setCommandHistoryState(commandHistory);
+  }, [commandHistory, setCommandHistoryState]);
+
+  useEffect(() => {
+    setTerminalHistoryState(terminalHistory);
+  }, [terminalHistory, setTerminalHistoryState]);
 
   const { open } = useOpenExternal();
   const { isLoading, redisUrl, execCommand } = useRedis({ resourcePath });
@@ -103,6 +126,7 @@ export const RedisInteractionView = ({ resourcePath }: RedisViewProps) => {
 
   return (
     <RedisInteraction
+      resourceId={resourcePath}
       isLoading={isLoading}
       url={redisUrl}
       currentCommand={command}
