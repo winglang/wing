@@ -9,7 +9,7 @@ let body = "ok!";
 
 api.get("/path", inflight (req) => {
   return {
-    status: 200
+    status: 200,
     body: body
   };
 });
