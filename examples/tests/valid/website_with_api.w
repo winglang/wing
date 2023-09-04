@@ -65,8 +65,6 @@ test "GET /users" {
 let headers = response.headers;
   t.Assert.equalNum(response.status, 200);
 
-  log(Json.stringify(headers));
-
   t.Assert.equalStr(headers.get("access-control-allow-origin"), "*");
   t.Assert.equalStr(headers.get("access-control-expose-headers"), "Content-Type");
   t.Assert.equalStr(headers.get("access-control-allow-credentials"), "false");
