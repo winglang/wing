@@ -660,9 +660,9 @@ for item in [1,2,3] {
 To modify a numeric value, it is also possible to use `+=` and `-=` operators.
 ```TS
 // wing
-let var sum = 0;
-sum += 5; // sum = 5
-sum -= 10; // sum = -5
+let var x = 0;
+x += 5; // x == 5
+x -= 10; // x == -5
 ```
 
 Re-assignment to class fields is allowed if field is marked with `var`.
