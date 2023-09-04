@@ -72,7 +72,7 @@ export const ApiInteraction = ({
     editItem: editHeader,
     removeAll: removeAllHeaders,
   } = useKeyValueList({
-    useExternalState: usePersistentState,
+    useState: usePersistentState,
   });
 
   const {
@@ -83,7 +83,7 @@ export const ApiInteraction = ({
     setItems: setQueryParameters,
     removeAll: removeAllQueryParameters,
   } = useKeyValueList({
-    useExternalState: usePersistentState,
+    useState: usePersistentState,
   });
 
   const {
@@ -92,7 +92,7 @@ export const ApiInteraction = ({
     setItems: setPathVariables,
     removeAll: removeAllPathVariables,
   } = useKeyValueList({
-    useExternalState: usePersistentState,
+    useState: usePersistentState,
   });
 
   const resetApiState = () => {

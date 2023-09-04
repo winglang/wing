@@ -57,17 +57,23 @@ export const useExplorer = () => {
   );
 
   useEffect(() => {
-    if (!tree.data || !nodeIds.data) {
+    if (!tree.data) {
       return;
     }
     setItems([createTreeMenuItemFromExplorerTreeItem(tree.data)]);
+  }, [tree.data, setItems]);
+
+  useEffect(() => {
+    if (!nodeIds.data) {
+      return;
+    }
 
     if (!selectedNode.data || !nodeIds.data?.includes(selectedNode.data)) {
       setSelectedNode.mutate({
         resourcePath: "root",
       });
     }
-  }, [tree.data, setItems, nodeIds.data]);
+  }, [selectedNode.data, nodeIds.data]);
 
   useEffect(() => {
     if (!selectedNode.data) {

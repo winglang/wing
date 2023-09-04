@@ -1,19 +1,19 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState as useReactState } from "react";
 
 import { TerminalHistoryItem } from "./ternimal.js";
 
 export interface UseTerminalHistoryOptions {
-  useExternalState?: typeof useState;
+  useState?: typeof useReactState;
 }
 
 export const useTerminalHistory = ({
-  useExternalState = useState,
+  useState = useReactState,
 }: UseTerminalHistoryOptions) => {
-  const [terminalHistory, setTerminalHistory] = useExternalState<
-    TerminalHistoryItem[]
-  >([]);
-  const [commandHistory, setCommandHistory] = useExternalState<string[]>([]);
-  const [cmdIndex, setCmdIndex] = useExternalState(0);
+  const [terminalHistory, setTerminalHistory] = useState<TerminalHistoryItem[]>(
+    [],
+  );
+  const [commandHistory, setCommandHistory] = useState<string[]>([]);
+  const [cmdIndex, setCmdIndex] = useState(0);
 
   const updateCommandHistory = useCallback(
     (command: string, newItem: boolean = false) => {

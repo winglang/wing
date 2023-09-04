@@ -10,9 +10,22 @@ import {
   useState,
 } from "react";
 
-const PersistentStateContext = createContext<{
-  state: MutableRefObject<Map<string, any[]>>;
-}>(undefined!);
+const PersistentStateContext = createContext<
+  | {
+      state: MutableRefObject<Map<string, any[]>>;
+    }
+  | undefined
+>(undefined);
+
+export const usePersistentStateContext = () => {
+  const context = useContext(PersistentStateContext);
+  if (!context?.state) {
+    throw new Error(
+      "usePersistentState must be used within a PersistentStateProvider",
+    );
+  }
+  return context.state;
+};
 
 export const PersistentStateProvider = (props: PropsWithChildren) => {
   const state = useRef(new Map<string, any[]>());
@@ -30,15 +43,10 @@ export const createPersistentState = (prefix: string) => {
     usePersistentState: function <S>(
       initialValue?: S | (() => S),
     ): [S, Dispatch<SetStateAction<S>>] {
-      const { state } = useContext(PersistentStateContext);
-      if (!state) {
-        throw new Error(
-          "usePersistentState must be used within a PersistentStateProvider",
-        );
-      }
       const currentIndex = useRef(index++);
 
       const valueRef = useRef<S>() as MutableRefObject<S>;
+      const state = usePersistentStateContext();
 
       const [value, setValue] = useState(() => {
         const values = state.current.get(prefix) ?? [];

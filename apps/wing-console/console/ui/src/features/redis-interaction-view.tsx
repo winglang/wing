@@ -26,7 +26,7 @@ export const RedisInteractionView = ({ resourcePath }: RedisViewProps) => {
     updateCommandHistory,
     clearTerminalHistory,
   } = useTerminalHistory({
-    useExternalState: usePersistentState,
+    useState: usePersistentState,
   });
 
   const { open } = useOpenExternal();
