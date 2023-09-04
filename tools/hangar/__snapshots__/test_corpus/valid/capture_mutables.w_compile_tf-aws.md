@@ -205,8 +205,8 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(Object.keys(m).length, host, []);
-          $Closure1._registerBindObject(aCloned.length, host, []);
           $Closure1._registerBindObject(a.length, host, []);
+          $Closure1._registerBindObject(aCloned.length, host, []);
           $Closure1._registerBindObject(s.size, host, []);
         }
         super._registerBind(host, ops);

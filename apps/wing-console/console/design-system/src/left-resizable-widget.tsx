@@ -17,7 +17,7 @@ export function LeftResizableWidget(props: LeftResizableWidgetProps) {
     <div className={classNames("relative", className)} ref={resizeTarget}>
       <div
         className={classNames(
-          "absolute inset-y-0 -left-0.5 w-1 cursor-col-resize transition-colors ease-in-out hover:bg-sky-500 z-20",
+          "absolute inset-y-0 -left-[2.5px] w-1 cursor-col-resize transition-colors ease-in-out hover:bg-sky-500 z-20",
           "cursor-col-resize",
         )}
         onPointerDown={(event) => {

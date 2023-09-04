@@ -266,19 +266,19 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject(this.inflight1, host, []);
           Foo._registerBindObject(this, host, ["inflight2"]);
+          Foo._registerBindObject(this.inflight1, host, []);
         }
         if (ops.includes("callFn")) {
           Foo._registerBindObject(this, host, ["makeFn"]);
         }
         if (ops.includes("callFn2")) {
-          Foo._registerBindObject(this.inflight1, host, ["handle"]);
           Foo._registerBindObject(this, host, ["inflight2"]);
+          Foo._registerBindObject(this.inflight1, host, ["handle"]);
         }
         if (ops.includes("makeFn")) {
-          Foo._registerBindObject(this.inflight1, host, ["handle"]);
           Foo._registerBindObject(this, host, ["inflight2"]);
+          Foo._registerBindObject(this.inflight1, host, ["handle"]);
         }
         super._registerBind(host, ops);
       }

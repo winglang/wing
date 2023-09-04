@@ -8,6 +8,7 @@
 extern crate lazy_static;
 
 use ast::{Scope, Symbol, UtilityFunctions};
+use camino::{Utf8Path, Utf8PathBuf};
 use closure_transform::ClosureTransformer;
 use comp_ctx::set_custom_panic_hook;
 use diagnostic::{found_errors, report_diagnostic, Diagnostic};
@@ -30,7 +31,6 @@ use wingii::type_system::TypeSystem;
 use crate::docs::Docs;
 use std::alloc::{alloc, dealloc, Layout};
 
-use std::path::{Path, PathBuf};
 use std::{fs, mem};
 
 use crate::ast::Phase;
@@ -71,14 +71,16 @@ const WINGSDK_HTTP_MODULE: &'static str = "http";
 const WINGSDK_MATH_MODULE: &'static str = "math";
 const WINGSDK_AWS_MODULE: &'static str = "aws";
 const WINGSDK_EX_MODULE: &'static str = "ex";
+const WINGSDK_REGEX_MODULE: &'static str = "regex";
 
-const WINGSDK_BRINGABLE_MODULES: [&'static str; 6] = [
+const WINGSDK_BRINGABLE_MODULES: [&'static str; 7] = [
 	WINGSDK_CLOUD_MODULE,
 	WINGSDK_UTIL_MODULE,
 	WINGSDK_HTTP_MODULE,
 	WINGSDK_MATH_MODULE,
 	WINGSDK_AWS_MODULE,
 	WINGSDK_EX_MODULE,
+	WINGSDK_REGEX_MODULE,
 ];
 
 const WINGSDK_DURATION: &'static str = "std.Duration";
@@ -150,13 +152,13 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	let args = ptr_to_string(ptr, len);
 
 	let split = args.split(";").collect::<Vec<&str>>();
-	let source_file = Path::new(split[0]);
-	let output_dir = split.get(1).map(|s| Path::new(s));
-	let absolute_project_dir = split.get(2).map(|s| Path::new(s));
+	let source_file = Utf8Path::new(split[0]);
+	let output_dir = split.get(1).map(|s| Utf8Path::new(s));
+	let absolute_project_dir = split.get(2).map(|s| Utf8Path::new(s));
 
 	if !source_file.exists() {
 		report_diagnostic(Diagnostic {
-			message: format!("Source file cannot be found: {}", source_file.display()),
+			message: format!("Source file cannot be found: {}", source_file),
 			span: None,
 		});
 		return WASM_RETURN_ERROR;
@@ -164,10 +166,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 
 	if source_file.is_dir() {
 		report_diagnostic(Diagnostic {
-			message: format!(
-				"Source path must be a file (not a directory): {}",
-				source_file.display()
-			),
+			message: format!("Source path must be a file (not a directory): {}", source_file),
 			span: None,
 		});
 		return WASM_RETURN_ERROR;
@@ -177,7 +176,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 		Ok(text) => text,
 		Err(e) => {
 			report_diagnostic(Diagnostic {
-				message: format!("Could not read file \"{}\": {}", source_file.display(), e),
+				message: format!("Could not read file \"{}\": {}", source_file, e),
 				span: None,
 			});
 			return WASM_RETURN_ERROR;
@@ -195,7 +194,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 pub fn type_check(
 	scope: &mut Scope,
 	types: &mut Types,
-	file_path: &Path,
+	file_path: &Utf8Path,
 	jsii_types: &mut TypeSystem,
 	jsii_imports: &mut Vec<JsiiImportSpec>,
 ) {
@@ -242,24 +241,6 @@ pub fn type_check(
 		scope,
 		types,
 	);
-	add_builtin(
-		UtilityFunctions::Throw.to_string().as_str(),
-		Type::Function(FunctionSignature {
-			this_type: None,
-			parameters: vec![FunctionParameter {
-				typeref: types.string(),
-				name: "message".into(),
-				docs: Docs::with_summary("The message to throw"),
-				variadic: false,
-			}],
-			return_type: types.void(),
-			phase: Phase::Independent,
-			js_override: Some("{((msg) => {throw new Error(msg)})($args$)}".to_string()),
-			docs: Docs::with_summary("throws an error"),
-		}),
-		scope,
-		types,
-	);
 
 	let mut scope_env = types.get_scope_env(&scope);
 	let mut tc = TypeChecker::new(types, file_path, jsii_types, jsii_imports);
@@ -288,13 +269,13 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 }
 
 pub fn compile(
-	source_path: &Path,
+	source_path: &Utf8Path,
 	source_text: String,
-	out_dir: Option<&Path>,
-	absolute_project_root: Option<&Path>,
+	out_dir: Option<&Utf8Path>,
+	absolute_project_root: Option<&Utf8Path>,
 ) -> Result<CompilerOutput, ()> {
-	let file_name = source_path.file_name().unwrap().to_str().unwrap();
-	let default_out_dir = PathBuf::from(format!("{}.out", file_name));
+	let file_name = source_path.file_name().unwrap();
+	let default_out_dir = Utf8PathBuf::from(format!("{}.out", file_name));
 	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
 
 	// -- PARSING PHASE --
@@ -321,7 +302,7 @@ pub fn compile(
 			let scope = inflight_transformer.fold_scope(scope);
 			(path, scope)
 		})
-		.collect::<IndexMap<PathBuf, Scope>>();
+		.collect::<IndexMap<Utf8PathBuf, Scope>>();
 
 	// -- TYPECHECKING PHASE --
 
@@ -354,7 +335,7 @@ pub fn compile(
 	// Verify that the project dir is absolute
 	if !is_project_dir_absolute(&project_dir) {
 		report_diagnostic(Diagnostic {
-			message: format!("Project directory must be absolute: {}", project_dir.display()),
+			message: format!("Project directory must be absolute: {}", project_dir),
 			span: None,
 		});
 		return Err(());
@@ -371,7 +352,7 @@ pub fn compile(
 			lift.visit_scope(&scope);
 			(path, scope)
 		})
-		.collect::<IndexMap<PathBuf, Scope>>();
+		.collect::<IndexMap<Utf8PathBuf, Scope>>();
 
 	// bail out now (before jsification) if there are errors (no point in jsifying)
 	if found_errors() {
@@ -398,15 +379,15 @@ pub fn compile(
 	return Ok(CompilerOutput {});
 }
 
-fn is_project_dir_absolute(project_dir: &PathBuf) -> bool {
+fn is_project_dir_absolute(project_dir: &Utf8PathBuf) -> bool {
 	if project_dir.starts_with("/") {
 		return true;
 	}
 
-	let dir_str = project_dir.to_str().expect("Project dir is valid UTF-8");
+	let project_dir = project_dir.as_str();
 	// Check if this is a Windows path instead by checking if the second char is a colon
-	// Note: Cannot use Path::is_absolute() because it doesn't work with Windows paths on WASI
-	if dir_str.len() < 2 || dir_str.chars().nth(1).expect("Project dir has second character") != ':' {
+	// Note: Cannot use Utf8Path::is_absolute() because it doesn't work with Windows paths on WASI
+	if project_dir.len() < 2 || project_dir.chars().nth(1).expect("Project dir has second character") != ':' {
 		return false;
 	}
 
@@ -415,31 +396,27 @@ fn is_project_dir_absolute(project_dir: &PathBuf) -> bool {
 
 #[cfg(test)]
 mod sanity {
-	use crate::{compile, diagnostic::assert_no_panics};
-	use std::{
-		fs,
-		path::{Path, PathBuf},
-	};
+	use camino::Utf8PathBuf;
 
-	fn get_wing_files<P>(dir: P) -> impl Iterator<Item = PathBuf>
+	use crate::{compile, diagnostic::assert_no_panics};
+	use std::{fs, path::Path};
+
+	fn get_wing_files<P>(dir: P) -> impl Iterator<Item = Utf8PathBuf>
 	where
 		P: AsRef<Path>,
 	{
 		fs::read_dir(dir)
 			.unwrap()
-			.map(|entry| entry.unwrap().path())
+			.map(|entry| Utf8PathBuf::from_path_buf(entry.unwrap().path()).expect("invalid unicode path"))
 			.filter(|path| path.is_file() && path.extension().map(|ext| ext == "w").unwrap_or(false))
 	}
 
 	fn compile_test(test_dir: &str, expect_failure: bool) {
 		for test_file in get_wing_files(test_dir) {
-			println!("\n=== {} ===\n", test_file.display());
+			println!("\n=== {} ===\n", test_file);
 
 			let mut out_dir = test_file.parent().unwrap().to_path_buf();
-			out_dir.push(format!(
-				"target/wingc/{}.out",
-				test_file.file_name().unwrap().to_str().unwrap()
-			));
+			out_dir.push(format!("target/wingc/{}.out", test_file.file_name().unwrap()));
 
 			// reset out_dir
 			if out_dir.exists() {
@@ -452,14 +429,14 @@ mod sanity {
 				&test_file,
 				test_text,
 				Some(&out_dir),
-				Some(test_file.canonicalize().unwrap().parent().unwrap()),
+				Some(test_file.canonicalize_utf8().unwrap().parent().unwrap()),
 			);
 
 			if result.is_err() {
 				assert!(
 					expect_failure,
 					"{}: Expected compilation success, but failed: {:#?}",
-					test_file.display(),
+					test_file,
 					result.err().unwrap()
 				);
 
@@ -469,7 +446,7 @@ mod sanity {
 				assert!(
 					!expect_failure,
 					"{}: Expected compilation failure, but succeeded",
-					test_file.display()
+					test_file,
 				);
 			}
 		}

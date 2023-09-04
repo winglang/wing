@@ -223,6 +223,18 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["foo", "bar", "callThis", "$inflight_init"];
       }
+      _registerBind(host, ops) {
+        if (ops.includes("callThis")) {
+          Foo._registerBindObject(Foo, host, ["bar"]);
+        }
+        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        if (ops.includes("bar")) {
+          Foo._registerBindObject(Foo, host, ["foo"]);
+        }
+        super._registerTypeBind(host, ops);
+      }
     }
     class Bar extends $stdlib.std.Resource {
       constructor(scope, id, ) {

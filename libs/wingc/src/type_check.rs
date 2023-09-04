@@ -19,6 +19,7 @@ use crate::{
 	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_RESOURCE, WINGSDK_SET,
 	WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
 };
+use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
 use duplicate::duplicate_item;
 use indexmap::{IndexMap, IndexSet};
@@ -28,7 +29,6 @@ use jsii_importer::JsiiImporter;
 use std::collections::HashMap;
 use std::fmt::{Debug, Display};
 use std::iter::FilterMap;
-use std::path::{Path, PathBuf};
 use symbol_env::{StatementIdx, SymbolEnv};
 use wingii::fqn::FQN;
 use wingii::type_system::TypeSystem;
@@ -90,12 +90,6 @@ pub enum VariableKind {
 
 	/// a class member (or an enum member)
 	StaticMember,
-
-	/// a type (e.g. `std.Json`)
-	Type,
-
-	/// a namespace (e.g. `cloud`)
-	Namespace,
 
 	/// an error placeholder
 	Error,
@@ -388,7 +382,7 @@ pub trait ClassLike {
 			.0
 			.as_variable()
 			.expect("class env should only contain variables");
-		if v.type_.as_function_sig().is_some() {
+		if v.type_.is_closure() {
 			Some(v)
 		} else {
 			None
@@ -396,7 +390,18 @@ pub trait ClassLike {
 	}
 
 	fn get_field(&self, name: &Symbol) -> Option<&VariableInfo> {
-		self.get_env().lookup_ext(name, None).ok()?.0.as_variable()
+		let v = self
+			.get_env()
+			.lookup_ext(name, None)
+			.ok()?
+			.0
+			.as_variable()
+			.expect("class env should only contain variables");
+		if !v.type_.is_closure() {
+			Some(v)
+		} else {
+			None
+		}
 	}
 }
 
@@ -1229,7 +1234,7 @@ pub struct Types {
 	namespaces: Vec<Box<Namespace>>,
 	symbol_envs: Vec<Box<SymbolEnv>>,
 	/// A map from source file name to the symbol environment for that file (and whether that file is safe to bring)
-	source_file_envs: IndexMap<PathBuf, (SymbolEnvRef, bool)>,
+	source_file_envs: IndexMap<Utf8PathBuf, (SymbolEnvRef, bool)>,
 	pub libraries: SymbolEnv,
 	numeric_idx: usize,
 	string_idx: usize,
@@ -1499,8 +1504,13 @@ impl Types {
 
 	/// Obtain the type of a given expression node. Will panic if the expression has not been type checked yet.
 	pub fn get_expr_type(&self, expr: &Expr) -> TypeRef {
+		self.get_expr_id_type(expr.id)
+	}
+
+	/// Obtain the type of a given expression id. Will panic if the expression has not been type checked yet.
+	pub fn get_expr_id_type(&self, expr_id: ExprId) -> TypeRef {
 		self
-			.try_get_expr_type(expr)
+			.try_get_expr_type(expr_id)
 			.expect("All expressions should have a type")
 	}
 
@@ -1527,12 +1537,12 @@ impl Types {
 		}
 	}
 
-	/// Obtain the type of a given expression node. Returns None if the expression has not been type checked yet. If
+	/// Obtain the type of a given expression id. Returns None if the expression has not been type checked yet. If
 	/// this is called after type checking, it should always return Some.
-	pub fn try_get_expr_type(&self, expr: &Expr) -> Option<TypeRef> {
+	pub fn try_get_expr_type(&self, expr_id: ExprId) -> Option<TypeRef> {
 		self
 			.type_for_expr
-			.get(expr.id)
+			.get(expr_id)
 			.and_then(|t| t.as_ref().map(|t| t.type_))
 	}
 
@@ -1585,7 +1595,7 @@ pub struct TypeChecker<'a> {
 	inner_scopes: Vec<*const Scope>,
 
 	/// The path to the source file being type checked.
-	source_path: &'a Path,
+	source_path: &'a Utf8Path,
 
 	/// JSII Manifest descriptions to be imported.
 	/// May be reused between compilations
@@ -1606,7 +1616,7 @@ pub struct TypeChecker<'a> {
 impl<'a> TypeChecker<'a> {
 	pub fn new(
 		types: &'a mut Types,
-		source_path: &'a Path,
+		source_path: &'a Utf8Path,
 		jsii_types: &'a mut TypeSystem,
 		jsii_imports: &'a mut Vec<JsiiImportSpec>,
 	) -> Self {
@@ -1856,20 +1866,12 @@ impl<'a> TypeChecker<'a> {
 					obj_scope,
 				} = new_expr;
 				// Type check everything
-				let class_type = self.type_check_exp(&class, env).0;
+				let class_type = self
+					.resolve_user_defined_type(class, env, self.statement_idx)
+					.unwrap_or_else(|e| self.type_error(e));
 				let obj_scope_type = obj_scope.as_ref().map(|x| self.type_check_exp(x, env).0);
 				let obj_id_type = obj_id.as_ref().map(|x| self.type_check_exp(x, env).0);
 				let arg_list_types = self.type_check_arg_list(arg_list, env);
-
-				let ExprKind::Reference(ref r) = class.kind else {
-					self.spanned_error(exp,"Must be a reference to a class");
-						return (self.types.error(), Phase::Independent);
-					};
-
-				let Reference::TypeReference(_) = r else {
-						self.spanned_error(exp,"Must be a type reference to a class");
-						return (self.types.error(), Phase::Independent);
-					};
 
 				// Lookup the class's type in the env
 				let (class_env, class_symbol) = match *class_type {
@@ -2371,7 +2373,7 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn resolved_error(&mut self) -> (UnsafeRef<Type>, Phase) {
+	fn resolved_error(&mut self) -> (TypeRef, Phase) {
 		(self.types.error(), Phase::Independent)
 	}
 
@@ -2381,7 +2383,7 @@ impl<'a> TypeChecker<'a> {
 		func_sig: &FunctionSignature,
 		exp: &impl Spanned,
 		arg_list_types: ArgListTypes,
-	) -> Option<UnsafeRef<Type>> {
+	) -> Option<TypeRef> {
 		// Verify arity
 		let pos_args_count = arg_list.pos_args.len();
 		let min_args = func_sig.min_parameters();
@@ -2491,7 +2493,7 @@ impl<'a> TypeChecker<'a> {
 		None
 	}
 
-	fn type_check_closure(&mut self, func_def: &ast::FunctionDefinition, env: &SymbolEnv) -> (UnsafeRef<Type>, Phase) {
+	fn type_check_closure(&mut self, func_def: &ast::FunctionDefinition, env: &SymbolEnv) -> (TypeRef, Phase) {
 		// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
 		// https://github.com/winglang/wing/issues/457
 		// Create a type_checker function signature from the AST function definition
@@ -2768,7 +2770,7 @@ impl<'a> TypeChecker<'a> {
 		first_expected_type
 	}
 
-	pub fn type_check_file(&mut self, source_path: &Path, scope: &Scope) {
+	pub fn type_check_file(&mut self, source_path: &Utf8Path, scope: &Scope) {
 		CompilationContext::set(CompilationPhase::TypeChecking, &scope.span);
 		self.type_check_scope(scope);
 
@@ -3176,7 +3178,7 @@ impl<'a> TypeChecker<'a> {
 						alias = identifier.as_ref().unwrap();
 					}
 					BringSource::WingFile(name) => {
-						let (brought_env, is_bringable) = match self.types.source_file_envs.get(Path::new(&name.name)) {
+						let (brought_env, is_bringable) = match self.types.source_file_envs.get(Utf8Path::new(&name.name)) {
 							Some((env, is_bringable)) => (*env, *is_bringable),
 							None => {
 								self.spanned_error(
@@ -3232,6 +3234,10 @@ impl<'a> TypeChecker<'a> {
 				));
 				self.types.set_scope_env(scope, scope_env);
 				self.inner_scopes.push(scope)
+			}
+			StmtKind::Throw(exp) => {
+				let (exp_type, _) = self.type_check_exp(exp, env);
+				self.validate_type(exp_type, self.types.string(), exp);
 			}
 			StmtKind::Return(exp) => {
 				let return_type_inferred = self.update_known_inferences(&mut env.return_type, &stmt.span);
@@ -3770,7 +3776,7 @@ impl<'a> TypeChecker<'a> {
 	fn type_check_super_constructor_against_parent_initializer(
 		&mut self,
 		scope: &Scope,
-		class_type: UnsafeRef<Type>,
+		class_type: TypeRef,
 		class_env: &mut SymbolEnv,
 		init_name: &str,
 	) {
@@ -3935,6 +3941,15 @@ impl<'a> TypeChecker<'a> {
 			self.types.set_scope_env(scope, method_env);
 			self.inner_scopes.push(scope);
 		}
+
+		if let FunctionBody::External(_) = &method_def.body {
+			if !method_def.is_static {
+				self.spanned_error(
+					method_name,
+					"Extern methods must be declared \"static\" (they cannot access instance members)",
+				);
+			}
+		}
 	}
 
 	fn add_method_to_class_env(
@@ -3993,7 +4008,7 @@ impl<'a> TypeChecker<'a> {
 			let assembly_name = if library_name == WINGSDK_ASSEMBLY_NAME {
 				// in runtime, if "WINGSDK_MANIFEST_ROOT" env var is set, read it. otherwise set to "../wingsdk" for dev
 				let manifest_root = std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../wingsdk".to_string());
-				let assembly_name = match self.jsii_types.load_module(manifest_root.as_str()) {
+				let assembly_name = match self.jsii_types.load_module(&Utf8Path::new(&manifest_root)) {
 					Ok(name) => name,
 					Err(type_error) => {
 						self.spanned_error(
@@ -4009,7 +4024,7 @@ impl<'a> TypeChecker<'a> {
 
 				assembly_name
 			} else {
-				let source_dir = self.source_path.parent().unwrap().to_str().unwrap();
+				let source_dir = self.source_path.parent().unwrap();
 				let assembly_name = match self.jsii_types.load_dep(library_name.as_str(), source_dir) {
 					Ok(name) => name,
 					Err(type_error) => {
@@ -4361,15 +4376,11 @@ impl<'a> TypeChecker<'a> {
 						_ => return None,
 					}
 				}
-				Reference::TypeReference(type_) => {
-					return Some(type_.clone());
-				}
-				Reference::TypeMember { typeobject, property } => {
+				Reference::TypeMember { type_name, property } => {
 					path.push(property.clone());
-					current_reference = match &typeobject.kind {
-						ExprKind::Reference(r) => r,
-						_ => return None,
-					}
+					type_name.fields.iter().rev().for_each(|f| path.push(f.clone()));
+					path.push(type_name.root.clone());
+					break;
 				}
 			}
 		}
@@ -4466,7 +4477,7 @@ impl<'a> TypeChecker<'a> {
 					// We can't get here twice, we can safely assume that if we're here the `object` part of the reference doesn't have and evaluated type yet.
 					// Create a type reference out of this nested reference and call ourselves again
 					let new_ref = Reference::TypeMember {
-						typeobject: Box::new(user_type_annotation.to_expression()),
+						type_name: user_type_annotation,
 						property: property.clone(),
 					};
 					// Replace the reference with the new one, this is unsafe because `reference` isn't mutable and theoretically someone may
@@ -4533,42 +4544,10 @@ impl<'a> TypeChecker<'a> {
 
 				(property_variable, property_phase)
 			}
-			Reference::TypeReference(udt) => {
-				let result = self.resolve_user_defined_type(udt, env, self.statement_idx);
-				let t = match result {
-					Err(e) => return self.spanned_error_with_var(udt, e.message),
-					Ok(t) => t,
-				};
-
-				let phase = if let Some(c) = t.as_class() {
-					c.phase
-				} else {
-					Phase::Independent
-				};
-
-				(
-					VariableInfo {
-						name: Symbol::global(udt.full_path_str()),
-						type_: t,
-						reassignable: false,
-						phase,
-						kind: VariableKind::Type,
-						docs: None,
-					},
-					phase,
-				)
-			}
-			Reference::TypeMember { typeobject, property } => {
-				let (type_, _) = self.type_check_exp(typeobject, env);
-
-				let ExprKind::Reference(typeref) = &typeobject.kind else {
-					return self.spanned_error_with_var(typeobject, "Expecting a reference");
-				};
-
-				let Reference::TypeReference(_) = typeref else {
-					return self.spanned_error_with_var(typeobject, "Expecting a reference to a type");
-				};
-
+			Reference::TypeMember { type_name, property } => {
+				let type_ = self
+					.resolve_user_defined_type(type_name, env, self.statement_idx)
+					.unwrap_or_else(|e| self.type_error(e));
 				match *type_ {
 					Type::Enum(ref e) => {
 						if e.values.contains(property) {
@@ -4641,7 +4620,7 @@ impl<'a> TypeChecker<'a> {
 
 	fn resolve_variable_from_instance_type(
 		&mut self,
-		instance_type: UnsafeRef<Type>,
+		instance_type: TypeRef,
 		property: &Symbol,
 		env: &SymbolEnv,
 		// only used for recursion
@@ -4796,12 +4775,12 @@ impl<'a> TypeChecker<'a> {
 
 	fn extract_parent_class(
 		&mut self,
-		parent_expr: Option<&Expr>,
+		parent: Option<&UserDefinedType>,
 		phase: Phase,
 		name: &Symbol,
 		env: &mut SymbolEnv,
 	) -> (Option<TypeRef>, Option<SymbolEnvRef>) {
-		let Some(parent_expr) = parent_expr else  {
+		let Some(parent) = parent else  {
 			if phase == Phase::Preflight {
 				// if this is a preflight and we don't have a parent, then we implicitly set it to `std.Resource`
 				let t = self.types.resource_base_type();
@@ -4812,19 +4791,20 @@ impl<'a> TypeChecker<'a> {
 			}
 		};
 
-		let (parent_type, _) = self.type_check_exp(&parent_expr, env);
+		let parent_type = self
+			.resolve_user_defined_type(parent, env, self.statement_idx)
+			.unwrap_or_else(|e| {
+				self.type_error(e);
+				self.types.error()
+			});
 
 		// bail out if we could not resolve the parent type
 		if parent_type.is_unresolved() {
 			return (None, None);
 		}
 
-		// Safety: we return from the function above so parent_udt cannot be None
-		let parent_udt = parent_expr.as_type_reference().unwrap();
-
-		if &parent_udt.root == name && parent_udt.fields.is_empty() {
-			self.spanned_error(parent_udt, "Class cannot extend itself".to_string());
-			self.types.assign_type_to_expr(parent_expr, self.types.error(), phase);
+		if &parent.root == name && parent.fields.is_empty() {
+			self.spanned_error(parent, "Class cannot extend itself".to_string());
 			return (None, None);
 		}
 
@@ -4837,17 +4817,15 @@ impl<'a> TypeChecker<'a> {
 						"Class \"{}\" is an {} class and cannot extend {} class \"{}\"",
 						name, phase, parent_class.phase, parent_class.name
 					),
-					span: Some(parent_expr.span.clone()),
+					span: Some(parent.span.clone()),
 				});
-				self.types.assign_type_to_expr(parent_expr, self.types.error(), phase);
 				(None, None)
 			}
 		} else {
 			report_diagnostic(Diagnostic {
-				message: format!("Expected \"{}\" to be a class", parent_udt),
-				span: Some(parent_expr.span.clone()),
+				message: format!("Expected \"{}\" to be a class", parent),
+				span: Some(parent.span.clone()),
 			});
-			self.types.assign_type_to_expr(parent_expr, self.types.error(), phase);
 			(None, None)
 		}
 	}
@@ -5144,6 +5122,7 @@ fn check_is_bringable(scope: &Scope) -> bool {
 		StmtKind::Break => false,
 		StmtKind::Continue => false,
 		StmtKind::Return(_) => false,
+		StmtKind::Throw(_) => false,
 		StmtKind::Expression(_) => false,
 		StmtKind::Assignment { .. } => false,
 		StmtKind::Scope(_) => false,

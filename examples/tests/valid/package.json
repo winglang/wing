@@ -7,6 +7,8 @@
     "@aws-sdk/client-dynamodb": "^3.344.0",
     "@cdktf/provider-aws": "^15.0.0",
     "aws-cdk-lib": "^2.64.0",
+    "cdk8s": "^2.60.0",
+    "cdk8s-plus-27": "^2.7.0",
     "cdktf": "0.17.0",
     "constructs": "^10",
     "jsii-code-samples": "1.7.0",

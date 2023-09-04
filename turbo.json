@@ -7,7 +7,9 @@
     "insta.yaml",
     ".github/workflows/build.yml",
     "scripts/*",
-    "patches/*"
+    "patches/*",
+    "tools/bump-pack/**",
+    "!tools/bump-pack/node_modules/**"
   ],
   "pipeline": {
     "default": {
@@ -90,10 +92,14 @@
     "package": {
       "dependsOn": ["compile", "post-compile"],
       "env": ["PROJEN_BUMP_VERSION"],
-      "inputs": [""]
+      "inputs": ["*.md", "LICENSE"]
     },
     "topo": {
       "dependsOn": ["^topo"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
     }
   }
 }

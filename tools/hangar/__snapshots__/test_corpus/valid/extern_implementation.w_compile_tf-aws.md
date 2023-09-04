@@ -20,7 +20,7 @@ module.exports = function({ $f }) {
 
 ## inflight.$Closure2-1.js
 ```js
-module.exports = function({ $f }) {
+module.exports = function({ $Foo }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -28,7 +28,7 @@ module.exports = function({ $f }) {
       return $obj;
     }
     async handle() {
-      (await $f.print("hey there"));
+      (await $Foo.print("hey there"));
     }
   }
   return $Closure2;
@@ -51,7 +51,7 @@ module.exports = function({  }) {
     static async getData() {
       return (require("<ABSOLUTE_PATH>/external_js.js")["getData"])()
     }
-    async print(msg) {
+    static async print(msg) {
       return (require("<ABSOLUTE_PATH>/external_js.js")["print"])(msg)
     }
     async call() {
@@ -300,6 +300,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["regexInflight", "getUuid", "getData", "print", "call", "$inflight_init"];
       }
+      _registerBind(host, ops) {
+        if (ops.includes("call")) {
+          Foo._registerBindObject(Foo, host, ["getData", "getUuid", "regexInflight"]);
+        }
+        super._registerBind(host, ops);
+      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
@@ -342,7 +348,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure2-1.js")({
-            $f: ${context._lift(f)},
+            $Foo: ${context._lift(Foo)},
           })
         `;
       }
@@ -362,7 +368,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(f, host, ["print"]);
+          $Closure2._registerBindObject(Foo, host, ["print"]);
         }
         super._registerBind(host, ops);
       }

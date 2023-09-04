@@ -148,11 +148,24 @@ pub enum TypeAnnotationKind {
 
 // In the future this may be an enum for type-alias, class, etc. For now its just a nested name.
 // Also this root,fields thing isn't really useful, should just turn in to a Vec<Symbol>.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq)]
 pub struct UserDefinedType {
 	pub root: Symbol,
 	pub fields: Vec<Symbol>,
 	pub span: WingSpan,
+}
+
+impl Hash for UserDefinedType {
+	fn hash<H: Hasher>(&self, state: &mut H) {
+		self.root.hash(state);
+		self.fields.hash(state);
+	}
+}
+
+impl PartialEq for UserDefinedType {
+	fn eq(&self, other: &Self) -> bool {
+		self.root == other.root && self.fields == other.fields
+	}
 }
 
 impl UserDefinedType {
@@ -172,13 +185,6 @@ impl UserDefinedType {
 
 	pub fn full_path_str(&self) -> String {
 		self.full_path().iter().join(".")
-	}
-
-	pub fn to_expression(&self) -> Expr {
-		Expr::new(
-			ExprKind::Reference(Reference::TypeReference(self.clone())),
-			self.span.clone(),
-		)
 	}
 }
 
@@ -346,21 +352,12 @@ pub struct Class {
 	pub methods: Vec<(Symbol, FunctionDefinition)>,
 	pub initializer: FunctionDefinition,
 	pub inflight_initializer: FunctionDefinition,
-	pub parent: Option<Expr>, // base class (the expression is a reference to a user defined type)
+	pub parent: Option<UserDefinedType>, // base class (the expression is a reference to a user defined type)
 	pub implements: Vec<UserDefinedType>,
 	pub phase: Phase,
 }
 
 impl Class {
-	/// Returns the `UserDefinedType` of the parent class, if any.
-	pub fn parent_udt(&self) -> Option<&UserDefinedType> {
-		let Some(expr) = &self.parent else {
-			return None;
-		};
-
-		expr.as_type_reference()
-	}
-
 	/// Returns all methods, including the initializer and inflight initializer.
 	pub fn all_methods(&self, include_initializers: bool) -> Vec<&FunctionDefinition> {
 		let mut methods: Vec<&FunctionDefinition> = vec![];
@@ -469,6 +466,7 @@ pub enum StmtKind {
 	Break,
 	Continue,
 	Return(Option<Expr>),
+	Throw(Expr),
 	Expression(Expr),
 	Assignment {
 		variable: Reference,
@@ -606,19 +604,11 @@ impl Expr {
 		let id = EXPR_COUNTER.fetch_add(1, Ordering::SeqCst);
 		Self { id, kind, span }
 	}
-
-	/// Returns the user defined type if the expression is a reference to a type.
-	pub fn as_type_reference(&self) -> Option<&UserDefinedType> {
-		match &self.kind {
-			ExprKind::Reference(Reference::TypeReference(t)) => Some(t),
-			_ => None,
-		}
-	}
 }
 
 #[derive(Debug)]
 pub struct NewExpr {
-	pub class: Box<Expr>, // expression must be a reference to a user defined type
+	pub class: UserDefinedType, // expression must be a reference to a user defined type
 	pub obj_id: Option<Box<Expr>>,
 	pub obj_scope: Option<Box<Expr>>,
 	pub arg_list: ArgList,
@@ -724,10 +714,11 @@ pub enum Reference {
 		property: Symbol,
 		optional_accessor: bool,
 	},
-	/// A reference to a type (e.g. `std.Json` or `MyResource` or `aws.s3.Bucket`)
-	TypeReference(UserDefinedType),
 	/// A reference to a member inside a type: `MyType.x` or `MyEnum.A`
-	TypeMember { typeobject: Box<Expr>, property: Symbol },
+	TypeMember {
+		type_name: UserDefinedType,
+		property: Symbol,
+	},
 }
 
 impl Spanned for Reference {
@@ -739,8 +730,7 @@ impl Spanned for Reference {
 				property,
 				optional_accessor: _,
 			} => object.span().merge(&property.span()),
-			Reference::TypeReference(type_) => type_.span(),
-			Reference::TypeMember { typeobject, property } => typeobject.span().merge(&property.span()),
+			Reference::TypeMember { type_name, property } => type_name.span().merge(&property.span()),
 		}
 	}
 }
@@ -760,13 +750,8 @@ impl Display for Reference {
 				};
 				write!(f, "{}.{}", obj_str, property.name)
 			}
-			Reference::TypeReference(type_) => write!(f, "{}", type_),
-			Reference::TypeMember { typeobject, property } => {
-				let ExprKind::Reference(ref r) = typeobject.kind else {
-					return write!(f, "<?>.{}", property.name);
-				};
-
-				write!(f, "{}.{}", r, property.name)
+			Reference::TypeMember { type_name, property } => {
+				write!(f, "{}.{}", type_name, property.name)
 			}
 		}
 	}
