@@ -11,11 +11,13 @@ export interface KeyValueItem {
   value: string;
 }
 
+export interface UseKeyValueListOptions {
+  useExternalState?: typeof useState;
+}
+
 export const useKeyValueList = ({
   useExternalState = useState,
-}: {
-  useExternalState: typeof useState;
-}) => {
+}: UseKeyValueListOptions) => {
   const [items, setItems] = useExternalState<KeyValueItem[]>([]);
 
   const addItem = useCallback((item: KeyValueItem) => {
