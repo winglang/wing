@@ -68,9 +68,9 @@ export interface TestsStateManager {
   setTest: (test: TestItem) => void;
 }
 
-export interface EditorLink {
+export interface FileLink {
   path: string;
-  row?: number;
+  line?: number;
   column?: number;
 }
 
@@ -83,7 +83,7 @@ export interface RouterContext {
   emitter: Emittery<{
     invalidateQuery: string | undefined;
     trace: Trace;
-    openFileInEditor: EditorLink;
+    openFileInEditor: FileLink;
   }>;
   appState(): State;
   logger: ConsoleLogger;

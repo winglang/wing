@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 
 import {
   OpenFileInEditorButton,
-  useVSCodeLinks,
-} from "../shared/use-vscode-links.js";
+  useFileLink,
+} from "../shared/use-file-link.js";
 
 export const BlueScreenOfDeath = ({
   title,
@@ -19,7 +19,7 @@ export const BlueScreenOfDeath = ({
 }) => {
   const [formattedPathsError, setFormattedPathsError] = useState("");
 
-  const { createHtmlLink, onClick } = useVSCodeLinks();
+  const { createHtmlLink, onClick } = useFileLink();
 
   useEffect(() => {
     if (!displayLinks) {

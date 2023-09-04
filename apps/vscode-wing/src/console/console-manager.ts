@@ -162,7 +162,7 @@ export const createConsoleManager = (
     instance.client.onOpenFileInEditor({
       onData: async (data) => {
         const path = data?.path;
-        const row = data?.row - 1 || 0;
+        const line = data?.line - 1 || 0;
         const column = data?.column || 0;
 
         const openEditor = window.visibleTextEditors.find((editor) => {
@@ -173,7 +173,7 @@ export const createConsoleManager = (
           await commands.executeCommand(
             "vscode.open",
             Uri.file(path),
-            new Position(row, column)
+            new Position(line, column)
           );
           return;
         }
@@ -184,8 +184,8 @@ export const createConsoleManager = (
         }
         await window.showTextDocument(openEditor.document, {
           selection: new Range(
-            new Position(row, column),
-            new Position(row, column)
+            new Position(line, column),
+            new Position(line, column)
           ),
         });
       },

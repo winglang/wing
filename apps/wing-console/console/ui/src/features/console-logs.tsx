@@ -11,8 +11,9 @@ import { Fragment, useEffect, useRef, useState } from "react";
 
 import {
   OpenFileInEditorButton,
-  useVSCodeLinks,
-} from "../shared/use-vscode-links.js";
+  useFileLink,
+} from "../shared/use-file-link.js";
+import { createHtmlLink } from "../shared/use-file-link.js";
 
 const dateTimeFormat = new Intl.DateTimeFormat(undefined, {
   hour: "2-digit",
@@ -35,8 +36,6 @@ const LogEntryRow = ({
   onResourceClick,
 }: LogEntryProps) => {
   const { theme } = useTheme();
-
-  const { createHtmlLink } = useVSCodeLinks();
 
   const [expanded, setExpanded] = useState(false);
   const expandableRef = useRef<HTMLElement>(null);

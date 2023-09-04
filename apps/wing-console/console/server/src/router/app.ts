@@ -13,7 +13,7 @@ import {
   ConstructTreeNodeMap,
 } from "../utils/constructTreeNodeMap.js";
 import {
-  EditorLink,
+  FileLink,
   createProcedure,
   createRouter,
 } from "../utils/createRouter.js";
@@ -569,20 +569,20 @@ export const createAppRouter = () => {
       .input(
         z.object({
           path: z.string(),
-          row: z.number().optional(),
+          line: z.number().optional(),
           column: z.number().optional(),
         }),
       )
       .mutation(async ({ ctx, input }) => {
         ctx.emitter.emit("openFileInEditor", {
           path: input.path,
-          row: input.row,
+          line: input.line,
           column: input.column,
         });
       }),
     "app.openFileInEditorSubscription": createProcedure.subscription(
       ({ ctx }) => {
-        return observable<EditorLink>((emit) => {
+        return observable<FileLink>((emit) => {
           ctx.emitter.on("openFileInEditor", emit.next);
           return () => {
             ctx.emitter.off("openFileInEditor", emit.next);
