@@ -13,6 +13,7 @@ import {
 import { trpc } from "../services/trpc.js";
 import { useExplorer } from "../services/use-explorer.js";
 import { TestsContext } from "../tests-context.js";
+import { TreeMenuItem } from "../ui/use-tree-menu-items.js";
 
 export interface UseLayoutProps {
   cloudAppState: State;

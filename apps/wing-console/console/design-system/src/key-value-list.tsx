@@ -11,8 +11,8 @@ export interface KeyValueItem {
   value: string;
 }
 
-export const useKeyValueList = () => {
-  const [items, setItems] = useState<KeyValueItem[]>([]);
+export const useKeyValueList = (initialValue: KeyValueItem[] = []) => {
+  const [items, setItems] = useState<KeyValueItem[]>(initialValue);
 
   const addItem = useCallback((item: KeyValueItem) => {
     setItems((items) => [...items, item]);
