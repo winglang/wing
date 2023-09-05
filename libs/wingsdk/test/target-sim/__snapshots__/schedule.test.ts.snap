@@ -33,7 +33,7 @@ exports[`create a schedule 1`] = `
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -46,7 +46,7 @@ exports[`create a schedule 1`] = `
         "my_schedule": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud schedule to trigger events at regular intervals",
@@ -58,7 +58,7 @@ exports[`create a schedule 1`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.69",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -155,7 +155,7 @@ console.log(\\"Hello from schedule!\\");
         "Handler": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -168,7 +168,7 @@ console.log(\\"Hello from schedule!\\");
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -183,7 +183,7 @@ console.log(\\"Hello from schedule!\\");
             "my_schedule-OnTick-e645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.69",
+                "version": "10.2.70",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -196,7 +196,7 @@ console.log(\\"Hello from schedule!\\");
             "my_schedule-OnTickMapping-e645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.69",
+                "version": "10.2.70",
               },
               "display": {
                 "hidden": true,
@@ -207,7 +207,7 @@ console.log(\\"Hello from schedule!\\");
             "my_scheduleOnTickHandlere645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.69",
+                "version": "10.2.70",
               },
               "display": {
                 "hidden": true,
@@ -218,7 +218,7 @@ console.log(\\"Hello from schedule!\\");
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud schedule to trigger events at regular intervals",
@@ -230,7 +230,7 @@ console.log(\\"Hello from schedule!\\");
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.69",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -327,7 +327,7 @@ console.log(\\"Hello from schedule!\\");
         "Handler": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -340,7 +340,7 @@ console.log(\\"Hello from schedule!\\");
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -355,7 +355,7 @@ console.log(\\"Hello from schedule!\\");
             "my_schedule-OnTick-e645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.69",
+                "version": "10.2.70",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -368,7 +368,7 @@ console.log(\\"Hello from schedule!\\");
             "my_schedule-OnTickMapping-e645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.69",
+                "version": "10.2.70",
               },
               "display": {
                 "hidden": true,
@@ -379,7 +379,7 @@ console.log(\\"Hello from schedule!\\");
             "my_scheduleOnTickHandlere645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.69",
+                "version": "10.2.70",
               },
               "display": {
                 "hidden": true,
@@ -390,7 +390,7 @@ console.log(\\"Hello from schedule!\\");
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud schedule to trigger events at regular intervals",
@@ -402,7 +402,7 @@ console.log(\\"Hello from schedule!\\");
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.69",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -499,7 +499,7 @@ console.log(\\"Hello from schedule!\\");
         "Handler": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -512,7 +512,7 @@ console.log(\\"Hello from schedule!\\");
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -527,7 +527,7 @@ console.log(\\"Hello from schedule!\\");
             "my_schedule-OnTick-e645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.69",
+                "version": "10.2.70",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -540,7 +540,7 @@ console.log(\\"Hello from schedule!\\");
             "my_schedule-OnTickMapping-e645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.69",
+                "version": "10.2.70",
               },
               "display": {
                 "hidden": true,
@@ -551,7 +551,7 @@ console.log(\\"Hello from schedule!\\");
             "my_scheduleOnTickHandlere645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.69",
+                "version": "10.2.70",
               },
               "display": {
                 "hidden": true,
@@ -562,7 +562,7 @@ console.log(\\"Hello from schedule!\\");
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud schedule to trigger events at regular intervals",
@@ -574,7 +574,7 @@ console.log(\\"Hello from schedule!\\");
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.69",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
