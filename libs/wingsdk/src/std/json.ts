@@ -33,6 +33,32 @@ export class Json {
   }
 
   /**
+   * Returns the values from the Json.
+   *
+   * @macro (Object.values($args$))
+   *
+   * @param json to get values from
+   * @returns the values from the Json as array of Json
+   */
+  public static values(json: Json): Json[] {
+    json;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Returns the entries from the Json.
+   *
+   * @macro (Object.entries($args$))
+   *
+   * @param json to get values from
+   * @returns the entries from the Json as array of Json
+   */
+  public static entries(json: Json): Json[] {
+    json;
+    throw new Error("Macro");
+  }
+
+  /**
    * Deletes a key in a given Json
    *
    * @macro ((args) => { delete (args[0])[args[1]]; })([$args$])
@@ -85,19 +111,6 @@ export class Json {
    * @returns the mutable copy of the Json
    */
   public static deepCopyMut(json: Json): MutJson {
-    json;
-    throw new Error("Macro");
-  }
-
-  /**
-   * Returns the values from the Json.
-   *
-   * @macro (Object.values($args$))
-   *
-   * @param json to get values from
-   * @returns the values from the Json as array of Json
-   */
-  public static values(json: Json): Json[] {
     json;
     throw new Error("Macro");
   }
