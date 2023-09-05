@@ -58,7 +58,7 @@ return class Handler {
         "Handler": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -71,7 +71,7 @@ return class Handler {
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -86,7 +86,7 @@ return class Handler {
             "Function": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.69",
+                "version": "10.2.70",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -99,7 +99,7 @@ return class Handler {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "Run code during the app's deployment.",
@@ -111,7 +111,7 @@ return class Handler {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.69",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
