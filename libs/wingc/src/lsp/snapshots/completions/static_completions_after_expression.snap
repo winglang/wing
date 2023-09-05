@@ -37,6 +37,18 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: entries
+  kind: 2
+  detail: "(json: Json): Array<Json>"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic entries: (json: Json): Array<Json>\n```\n---\nReturns the entries from the Json.\n\n\n### Returns\nthe entries from the Json as array of Json"
+  sortText: ff|entries
+  insertText: entries($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: has
   kind: 2
   detail: "(json: Json, key: str): bool"
