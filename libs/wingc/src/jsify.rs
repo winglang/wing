@@ -10,9 +10,9 @@ use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, vec};
 
 use crate::{
 	ast::{
-		ArgList, BinaryOperator, BringSource, CalleeKind, Class as AstClass, ElifLetBlock, Expr, ExprKind, FunctionBody,
-		FunctionDefinition, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, StructField,
-		Symbol, TypeAnnotationKind, UnaryOperator, UserDefinedType,
+		ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, ElifLetBlock, Expr, ExprKind,
+		FunctionBody, FunctionDefinition, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt,
+		StmtKind, StructField, Symbol, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic, debug,
@@ -1012,11 +1012,21 @@ impl<'a> JSifier<'a> {
 				code
 			}
 			StmtKind::Expression(e) => CodeMaker::one_line(format!("{};", self.jsify_expression(e, ctx))),
-			StmtKind::Assignment { variable, value } => CodeMaker::one_line(format!(
-				"{} = {};",
-				self.jsify_reference(variable, ctx),
-				self.jsify_expression(value, ctx)
-			)),
+
+			StmtKind::Assignment { kind, variable, value } => {
+				let operator = match kind {
+					AssignmentKind::Assign => "=",
+					AssignmentKind::AssignIncr => "+=",
+					AssignmentKind::AssignDecr => "-=",
+				};
+
+				CodeMaker::one_line(format!(
+					"{} {} {};",
+					self.jsify_reference(variable, ctx),
+					operator,
+					self.jsify_expression(value, ctx)
+				))
+			}
 			StmtKind::Scope(scope) => {
 				let mut code = CodeMaker::default();
 				if !scope.statements.is_empty() {

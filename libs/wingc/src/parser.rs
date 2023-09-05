@@ -8,10 +8,10 @@ use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
-	ArgList, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Expr,
-	ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface, InterpolatedString,
-	InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, StructField, Symbol,
-	TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
+	ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock,
+	ElifLetBlock, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface,
+	InterpolatedString, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, StructField,
+	Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan};
@@ -438,8 +438,16 @@ impl<'s> Parser<'s> {
 			"import_statement" => self.build_bring_statement(statement_node)?,
 
 			"variable_definition_statement" => self.build_variable_def_statement(statement_node, phase)?,
-			"variable_assignment_statement" => self.build_assignment_statement(statement_node, phase)?,
+			"variable_assignment_statement" => {
+				let kind = match self.node_text(&statement_node.child_by_field_name("operator").unwrap()) {
+					"=" => AssignmentKind::Assign,
+					"+=" => AssignmentKind::AssignIncr,
+					"-=" => AssignmentKind::AssignDecr,
+					other => return self.report_unimplemented_grammar(other, "assignment operator", statement_node),
+				};
 
+				self.build_assignment_statement(statement_node, phase, kind)?
+			}
 			"expression_statement" => {
 				StmtKind::Expression(self.build_expression(&statement_node.named_child(0).unwrap(), phase)?)
 			}
@@ -631,10 +639,17 @@ impl<'s> Parser<'s> {
 		})
 	}
 
-	fn build_assignment_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
+	fn build_assignment_statement(
+		&self,
+		statement_node: &Node,
+		phase: Phase,
+		kind: AssignmentKind,
+	) -> DiagnosticResult<StmtKind> {
 		let reference = self.build_reference(&statement_node.child_by_field_name("name").unwrap(), phase)?;
+
 		if let ExprKind::Reference(r) = reference.kind {
 			Ok(StmtKind::Assignment {
+				kind: kind,
 				variable: r,
 				value: self.build_expression(&statement_node.child_by_field_name("value").unwrap(), phase)?,
 			})
