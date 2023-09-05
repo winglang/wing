@@ -1,12 +1,17 @@
 bring ex;
 
-new ex.Astro(root: "../../astro");
+let astro = new ex.Astro(root: "../../astro");
 
 bring cloud;
 
 new cloud.Website(path: "");
 
 let bucket = new cloud.Bucket();
+
+astro.defineVirtualModule("test", {
+  "bucket" => bucket,
+});
+
 let queue = new cloud.Queue();
 let api = new cloud.Api();
 

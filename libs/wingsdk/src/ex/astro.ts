@@ -67,6 +67,12 @@ export abstract class Astro extends Resource {
     this._domain = props.domain;
   }
 
+  // TODO: how do we annotate that the map is <string, any preflight value>?
+  public abstract defineVirtualModule(
+    name: string,
+    values: Record<string, any>
+  ): void;
+
   /** @internal */
   public _getInflightOps(): string[] {
     return [];
