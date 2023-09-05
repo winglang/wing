@@ -1308,24 +1308,6 @@ impl<'a> JSifier<'a> {
 		struct_schemas.insert(struct_name, schema);
 	}
 
-	pub fn emit_struct_file(&self, name: &String, struct_code: &CodeMaker) {
-		let file_name = struct_filename(&name);
-
-		if self.output_files.borrow().contains_file(&file_name) {
-			// only emit struct schema once
-			return;
-		}
-
-		match self
-			.output_files
-			.borrow_mut()
-			.add_file(file_name, struct_code.to_string())
-		{
-			Ok(()) => {}
-			Err(err) => report_diagnostic(err.into()),
-		}
-	}
-
 	fn emit_inflight_file(&self, class: &AstClass, inflight_class_code: CodeMaker, ctx: &mut JSifyContext) {
 		let name = &class.name.name;
 		let mut code = CodeMaker::default();

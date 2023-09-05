@@ -5,6 +5,11 @@ let j = { public: false };
 let x = cloud.BucketProps.fromJson(j);
 assert(x.public == false);
 
+test "inflight jsii struct conversion" {
+  let x = cloud.BucketProps.fromJson(j);
+  assert(x.public == false);
+}
+
 // simple case
 struct Foo {
   f: str;
@@ -280,3 +285,9 @@ schema.validate(jMyStruct); // Should not throw exception
 let expectedSchema = {"id":"/MyStruct","type":"object","properties":{"m1":{"type":"object","properties":{"val":{"type":"number"}},"required":["val"]},"m2":{"type":"object","properties":{"val":{"type":"string"}},"required":["val"]}},"required":["m1","m2"]};
 
 assert(schema.asStr() == Json.stringify(expectedSchema));
+
+test "inflight schema usage" {
+  let s = MyStruct.schema();
+  s.validate(jMyStruct);
+  assert(schema.asStr() == Json.stringify(expectedSchema));
+}

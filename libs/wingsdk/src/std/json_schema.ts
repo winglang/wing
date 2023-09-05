@@ -5,11 +5,11 @@ import { InflightClient } from "../core";
 /**
  * Struct Schema
  */
-export class StructSchema {
+export class JsonSchema {
   /**
    * @internal
    */
-  public static _toInflightType(schema: any) {
+  public static _toInflightType(schema: Json) {
     return InflightClient.forType(
       __filename,
       `${this.name}._createStructSchema(${JSON.stringify(schema)})`
@@ -21,14 +21,14 @@ export class StructSchema {
    *
    * @internal
    */
-  public static _createStructSchema(schema: any): StructSchema {
-    return new StructSchema(schema);
+  public static _createJsonSchema(schema: Json): JsonSchema {
+    return new JsonSchema(schema);
   }
 
   private jsonSchema: any;
   private validator: Validator;
 
-  constructor(schema: any) {
+  constructor(schema: Json) {
     this.jsonSchema = schema;
     this.validator = new Validator();
   }
@@ -36,7 +36,7 @@ export class StructSchema {
   /**
    * Attempt to validate a json object against the schema
    *
-   * @param obj the json object to validate
+   * @param obj the Json object to validate
    * @throws an error if the json object is not valid
    */
   public validate(obj: Json) {
@@ -77,6 +77,6 @@ export class StructSchema {
 
   /** @internal */
   public _toInflightType() {
-    return StructSchema._toInflightType(this.jsonSchema);
+    return JsonSchema._toInflightType(this.jsonSchema);
   }
 }

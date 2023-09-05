@@ -1,6 +1,6 @@
 import { T1 } from "./generics";
 import { Json } from "./json";
-import { StructSchema } from "./struct_schema";
+import { JsonSchema } from "./json_schema";
 import { InflightClient } from "../core";
 
 /**
@@ -41,17 +41,17 @@ export class Struct {
    *
    * @macro ($self$)
    */
-  public static schema(): StructSchema {
+  public static schema(): JsonSchema {
     throw new Error("Macro");
   }
 
   /**
-   * Create an instance of a StructSchema from a json schema
+   * Create an instance of a StructSchema from a JsonSchema
    *
    * @internal
    */
-  public static _createStructSchema(schema: any): StructSchema {
-    return new StructSchema(schema);
+  public static _createJsonSchema(schema: Json): JsonSchema {
+    return new JsonSchema(schema);
   }
 
   private constructor() {}
