@@ -24,6 +24,7 @@ export const ApiInteractionView = ({ resourcePath }: ApiViewProps) => {
 
   return (
     <ApiInteraction
+      resourceId={resourcePath}
       appMode={appMode}
       schemaData={schemaData}
       callFetch={callFetch}
