@@ -229,7 +229,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(eslint-config-prettier@8.10.0)(eslint@8.48.0)(prettier@2.8.8)
       node-fetch:
-        specifier: '2'
+        specifier: ^2.6.7
         version: 2.7.0
       npm-check-updates:
         specifier: ^16
@@ -12402,7 +12402,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20230904
+      typescript: 5.3.0-dev.20230905
     dev: true
 
   /dset@3.1.2:
@@ -21443,8 +21443,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20230904:
-    resolution: {integrity: sha512-07NPNxXTmtOd0G5DnbDHee7Yh7VT6R8HzBiBkzx/PsyDIiD2/a14pbmex5xiDRvoLyUNJvNG1S6p48f+Qk0FMQ==}
+  /typescript@5.3.0-dev.20230905:
+    resolution: {integrity: sha512-Nl9MoKWN0YYlCvQnw850L4ZgqdmqwVGCi9cAoQDw4PsqRGaWAi9HKizS9xu0q4qgKKsEKetWCZHT8dBtJTGaMg==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
