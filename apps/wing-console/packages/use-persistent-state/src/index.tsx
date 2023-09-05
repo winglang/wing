@@ -36,7 +36,7 @@ export const PersistentStateProvider = (props: PropsWithChildren) => {
   );
 };
 
-export const createPersistentState = (prefix: string) => {
+export const createPersistentState = (stateId: string) => {
   let index = 0;
 
   return {
@@ -49,7 +49,7 @@ export const createPersistentState = (prefix: string) => {
       const state = usePersistentStateContext();
 
       const [value, setValue] = useState(() => {
-        const values = state.current.get(prefix) ?? [];
+        const values = state.current.get(stateId) ?? [];
         if (values.length > currentIndex.current) {
           return values[currentIndex.current];
         }
@@ -64,9 +64,9 @@ export const createPersistentState = (prefix: string) => {
         const currentState = state.current;
         const index = currentIndex.current;
         return () => {
-          const storedData = currentState.get(prefix) ?? [];
+          const storedData = currentState.get(stateId) ?? [];
           storedData[index] = valueRef.current;
-          currentState.set(prefix, storedData);
+          currentState.set(stateId, storedData);
         };
       }, []);
 
