@@ -1,6 +1,11 @@
 import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
-import { useCallback, useEffect, useState as useReactState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState as useReactState,
+  useState,
+} from "react";
 
 import { Button } from "./button.js";
 import { Combobox } from "./combobox.js";
@@ -84,7 +89,7 @@ export const KeyValueList = ({
 }: KeyValueListProps) => {
   const { theme } = useTheme();
 
-  const [editItems, setEditItems] = useReactState<KeyValueItem[]>([]);
+  const [editItems, setEditItems] = useState<KeyValueItem[]>([]);
 
   useEffect(() => {
     if (readonly || !onAddItem) {
