@@ -2,9 +2,9 @@ use indexmap::IndexMap;
 
 use crate::{
 	ast::{
-		ArgList, CalleeKind, Class, ClassField, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
-		FunctionSignature, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
-		TypeAnnotationKind, UserDefinedType,
+		ArgList, AssignmentKind, CalleeKind, Class, ClassField, Expr, ExprKind, FunctionBody, FunctionDefinition,
+		FunctionParameter, FunctionSignature, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
+		TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	diagnostic::WingSpan,
 	fold::{self, Fold},
@@ -213,6 +213,7 @@ impl Fold for ClosureTransformer {
 				let class_init_body = vec![Stmt {
 					idx: 0,
 					kind: StmtKind::Assignment {
+						kind: AssignmentKind::Assign,
 						variable: Reference::InstanceMember {
 							object: Box::new(std_display_of_this),
 							property: Symbol::new("hidden", WingSpan::for_file(file_id)),
