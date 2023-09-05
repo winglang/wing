@@ -61,10 +61,12 @@ export const createPersistentState = (prefix: string) => {
       }, [value]);
 
       useEffect(() => {
+        const currentState = state.current;
+        const index = currentIndex.current;
         return () => {
-          const storedData = state.current.get(prefix) ?? [];
-          storedData[currentIndex.current] = valueRef.current;
-          state.current.set(prefix, storedData);
+          const storedData = currentState.get(prefix) ?? [];
+          storedData[index] = valueRef.current;
+          currentState.set(prefix, storedData);
         };
       }, []);
 

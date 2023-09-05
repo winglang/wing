@@ -97,7 +97,7 @@ export const KeyValueList = ({
       return;
     }
     setEditItems([...items, { key: "", value: "" }]);
-  }, [readonly, items]);
+  }, [readonly, items, onAddItem]);
 
   const onItemChange = (index: number, item: KeyValueItem) => {
     if (index === items.length) {
