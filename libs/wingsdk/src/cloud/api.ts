@@ -172,7 +172,11 @@ export abstract class Api extends Resource {
    * @internal
    */
   protected _validatePath(path: string) {
-    if (!/^([^\{\}\:\n]|.+\/\{\w+\}(\/|$))*$/g.test(path)) {
+    if (
+      !/^(\/[a-zA-Z0-9_\-]+(\/\{[a-zA-Z0-9_\-]+\}|\/[a-zA-Z0-9_\-]+)*(?:\?[^#]*)?)?$|^(\/\{[a-zA-Z0-9_\-]+\})*\/?$/g.test(
+        path
+      )
+    ) {
       throw new Error(
         `Invalid path ${path}. Url cannot contain ":", params contains only alpha-numeric chars or "_".`
       );

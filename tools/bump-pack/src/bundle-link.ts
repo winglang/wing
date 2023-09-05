@@ -1,5 +1,3 @@
-#!/usr/bin/env tsx
-
 // Based on logic found here:
 // https://github.com/aws/aws-prototyping-sdk/blob/63a5a3127ad69fc0dfca7173dc1f877ea98cc072/packages/nx-monorepo/scripts/pnpm/link-bundled-transitive-deps.ts
 
