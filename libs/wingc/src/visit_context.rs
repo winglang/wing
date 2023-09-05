@@ -3,6 +3,7 @@ use crate::{
 	type_check::symbol_env::SymbolEnvRef,
 };
 
+#[derive(Clone)]
 pub struct VisitContext {
 	phase: Vec<Phase>,
 	env: Vec<SymbolEnvRef>,

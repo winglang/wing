@@ -1601,7 +1601,7 @@ pub struct TypeChecker<'a> {
 	/// makes it a lot simpler. Ideally we should avoid returning anything here and have some way
 	/// to iterate over the inner scopes given the outer scope. For this we need to model our AST
 	/// so all nodes implement some basic "tree" interface. For now this is good enough.
-	inner_scopes: Vec<*const Scope>,
+	inner_scopes: Vec<(*const Scope, VisitContext)>,
 
 	/// The path to the source file being type checked.
 	source_path: &'a Utf8Path,
@@ -2520,7 +2520,7 @@ impl<'a> TypeChecker<'a> {
 		if let FunctionBody::Statements(scope) = &func_def.body {
 			self.types.set_scope_env(scope, function_env);
 
-			self.inner_scopes.push(scope);
+			self.inner_scopes.push((scope, self.ctx.clone()));
 
 			(function_type, sig.phase)
 		} else {
@@ -2799,8 +2799,9 @@ impl<'a> TypeChecker<'a> {
 		// reverse list to type check later scopes first
 		// Why? To improve the inference algorithm. Earlier inner_scopes for closures may need to infer types from later inner_scopes
 		let inner_scopes = self.inner_scopes.drain(..).rev().collect::<Vec<_>>();
-		for inner_scope in inner_scopes {
+		for (inner_scope, ctx) in inner_scopes {
 			let scope = unsafe { &*inner_scope };
+			self.ctx = ctx;
 			self.type_check_scope(scope);
 		}
 		if env.is_function {
@@ -3002,7 +3003,7 @@ impl<'a> TypeChecker<'a> {
 					stmt.idx,
 				));
 				tc.types.set_scope_env(scope, scope_env);
-				tc.inner_scopes.push(scope)
+				tc.inner_scopes.push((scope, tc.ctx.clone()));
 			}
 			StmtKind::Throw(exp) => {
 				tc.type_check_throw(exp, env);
@@ -3057,7 +3058,7 @@ impl<'a> TypeChecker<'a> {
 			stmt.idx,
 		));
 		self.types.set_scope_env(try_statements, try_env);
-		self.inner_scopes.push(try_statements);
+		self.inner_scopes.push((try_statements, self.ctx.clone()));
 
 		// Create a new environment for the catch block
 		if let Some(catch_block) = catch_block {
@@ -3084,7 +3085,7 @@ impl<'a> TypeChecker<'a> {
 				}
 			}
 			self.types.set_scope_env(&catch_block.statements, catch_env);
-			self.inner_scopes.push(&catch_block.statements);
+			self.inner_scopes.push((&catch_block.statements, self.ctx.clone()));
 		}
 
 		// Create a new environment for the finally block
@@ -3098,7 +3099,7 @@ impl<'a> TypeChecker<'a> {
 				stmt.idx,
 			));
 			self.types.set_scope_env(finally_statements, finally_env);
-			self.inner_scopes.push(finally_statements);
+			self.inner_scopes.push((finally_statements, self.ctx.clone()));
 		}
 	}
 
@@ -3666,7 +3667,7 @@ impl<'a> TypeChecker<'a> {
 				stmt.idx,
 			));
 			self.types.set_scope_env(else_scope, else_scope_env);
-			self.inner_scopes.push(else_scope);
+			self.inner_scopes.push((else_scope, self.ctx.clone()));
 		}
 	}
 
@@ -3701,7 +3702,7 @@ impl<'a> TypeChecker<'a> {
 				stmt.idx,
 			));
 			self.types.set_scope_env(else_scope, else_scope_env);
-			self.inner_scopes.push(else_scope);
+			self.inner_scopes.push((else_scope, self.ctx.clone()));
 		}
 	}
 
@@ -3719,7 +3720,7 @@ impl<'a> TypeChecker<'a> {
 		));
 		self.types.set_scope_env(statements, scope_env);
 
-		self.inner_scopes.push(statements);
+		self.inner_scopes.push((statements, self.ctx.clone()));
 	}
 
 	fn type_check_for_loop(
@@ -3767,7 +3768,7 @@ impl<'a> TypeChecker<'a> {
 		};
 		self.types.set_scope_env(statements, scope_env);
 
-		self.inner_scopes.push(statements);
+		self.inner_scopes.push((statements, self.ctx.clone()));
 	}
 
 	fn type_check_let(
@@ -3887,7 +3888,7 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		self.types.set_scope_env(statements, stmt_env);
-		self.inner_scopes.push(statements);
+		self.inner_scopes.push((statements, self.ctx.clone()));
 	}
 
 	fn type_check_if_statement(&mut self, condition: &Expr, statements: &Scope, stmt: &Stmt, env: &mut SymbolEnv) {
@@ -3903,7 +3904,7 @@ impl<'a> TypeChecker<'a> {
 			stmt.idx,
 		));
 		self.types.set_scope_env(statements, if_scope_env);
-		self.inner_scopes.push(statements);
+		self.inner_scopes.push((statements, self.ctx.clone()));
 	}
 
 	fn type_check_super_constructor_against_parent_initializer(
@@ -4072,7 +4073,7 @@ impl<'a> TypeChecker<'a> {
 
 		if let FunctionBody::Statements(scope) = &method_def.body {
 			self.types.set_scope_env(scope, method_env);
-			self.inner_scopes.push(scope);
+			self.inner_scopes.push((scope, self.ctx.clone()));
 		}
 
 		if let FunctionBody::External(_) = &method_def.body {
@@ -4658,6 +4659,7 @@ impl<'a> TypeChecker<'a> {
 					let current_class_type = self
 						.resolve_user_defined_type(&current_class, env, self.ctx.current_stmt_idx())
 						.unwrap();
+					// TODO: instance type is wrong here we type where property is defined (might be a super class)
 					private_access = current_class_type.is_same_type_as(&instance_type);
 					protected_access = private_access || current_class_type.is_strict_subtype_of(&instance_type);
 				}
