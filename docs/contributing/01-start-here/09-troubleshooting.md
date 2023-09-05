@@ -20,12 +20,6 @@ pnpm store prune
 pnpm config set registry https://registry.npmjs.org/
 ```
 
-#### Missing files @winglang/sdk: `error TS2307: Cannot find module '../.gen/providers/[XYZ]' or its corresponding type declarations.`
-```sh
-cd libs/wingsdk
-pnpm pre-compile-force
-```
-
 ## `pnpm test`
 
 `Error: Failed to bundle function: assertion failed [block != nullptr]: BasicBlock requested for unrecognized address (BuilderBase.h:550 block_for_offset)`

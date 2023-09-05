@@ -23,7 +23,6 @@
     "post-compile": "pnpm exec projen post-compile",
     "post-upgrade": "pnpm exec projen post-upgrade",
     "pre-compile": "pnpm exec projen pre-compile",
-    "pre-compile-force": "pnpm exec projen pre-compile-force",
     "release": "pnpm exec projen release",
     "test": "pnpm exec projen test",
     "test:watch": "pnpm exec projen test:watch",
