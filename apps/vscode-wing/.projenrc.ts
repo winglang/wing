@@ -60,7 +60,7 @@ const project = new TypeScriptAppProject({
     "@trpc/client",
     "ws",
     "open",
-    "node-fetch@2",
+    "node-fetch@^2.6.7",
     "@types/node",
     "@types/which",
     "@vscode/vsce",
