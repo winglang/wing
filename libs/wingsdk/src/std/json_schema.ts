@@ -12,7 +12,7 @@ export class JsonSchema {
   public static _toInflightType(schema: Json) {
     return InflightClient.forType(
       __filename,
-      `${this.name}._createStructSchema(${JSON.stringify(schema)})`
+      `${this.name}._createJsonSchema(${JSON.stringify(schema)})`
     );
   }
 

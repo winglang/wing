@@ -6,7 +6,7 @@ import * as util from "../../src/util";
 const skip = [
   "std.Direction",
   "std.T1",
-  "std.StructSchema",
+  "std.JsonSchema",
   "std.TEST_FQN",
   "std.Display",
   "std.Test",

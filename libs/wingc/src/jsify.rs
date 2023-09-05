@@ -12,7 +12,7 @@ use crate::{
 	ast::{
 		ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, ElifLetBlock, Expr, ExprKind,
 		FunctionBody, FunctionDefinition, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt,
-		StmtKind, StructField, Symbol, TypeAnnotationKind, UnaryOperator, UserDefinedType,
+		StmtKind, Symbol, UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic, debug,
@@ -230,7 +230,7 @@ impl<'a> JSifier<'a> {
 			let flat_name = name.replace(".", "_");
 
 			code.line(format!(
-				"const {flat_name} = $stdlib.std.Struct._createStructSchema({});",
+				"const {flat_name} = $stdlib.std.Struct._createJsonSchema({});",
 				schema_code.to_string().replace("\n", "").replace(" ", "")
 			));
 		}
