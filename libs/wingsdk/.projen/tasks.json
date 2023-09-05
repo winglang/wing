@@ -345,6 +345,15 @@
         }
       ]
     },
+    "pre-compile-force": {
+      "name": "pre-compile-force",
+      "description": "Prepare the project for compilation, force every file to be regenerated",
+      "steps": [
+        {
+          "exec": "cdktf get --force"
+        }
+      ]
+    },
     "release": {
       "name": "release",
       "description": "Prepare a release from \"main\" branch",
