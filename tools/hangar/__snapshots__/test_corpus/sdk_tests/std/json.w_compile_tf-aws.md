@@ -149,6 +149,31 @@ module.exports = function({ $std_Json }) {
 
 ```
 
+## inflight.$Closure6-1.js
+```js
+module.exports = function({ $std_Json }) {
+  class $Closure6 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      const obj = ({"a": 1,"b": [3, 7, 9],"c": ({"foo": "bar"})});
+      const entries = (Object.entries(obj));
+      const keys = (Object.keys(obj));
+      const values = (Object.values(obj));
+      for (const i of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,entries.length,false)) {
+        {((cond) => {if (!cond) throw new Error("assertion failed: entries.at(i).getAt(0) == keys.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })((await entries.at(i)), 0),(await keys.at(i)))))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: entries.at(i).getAt(1) == values.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })((await entries.at(i)), 1),(await values.at(i)))))};
+      }
+    }
+  }
+  return $Closure6;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -170,7 +195,7 @@ module.exports = function({ $std_Json }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:get()\",\"${aws_lambda_function.testget_Handler_A37EBFC3.arn}\"],[\"root/Default/Default/test:getAt()\",\"${aws_lambda_function.testgetAt_Handler_44D7BE7A.arn}\"],[\"root/Default/Default/test:set()\",\"${aws_lambda_function.testset_Handler_ADDF1A01.arn}\"],[\"root/Default/Default/test:setAt()\",\"${aws_lambda_function.testsetAt_Handler_51015029.arn}\"],[\"root/Default/Default/test:stringify()\",\"${aws_lambda_function.teststringify_Handler_2E93A8A7.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:get()\",\"${aws_lambda_function.testget_Handler_A37EBFC3.arn}\"],[\"root/Default/Default/test:getAt()\",\"${aws_lambda_function.testgetAt_Handler_44D7BE7A.arn}\"],[\"root/Default/Default/test:set()\",\"${aws_lambda_function.testset_Handler_ADDF1A01.arn}\"],[\"root/Default/Default/test:setAt()\",\"${aws_lambda_function.testsetAt_Handler_51015029.arn}\"],[\"root/Default/Default/test:stringify()\",\"${aws_lambda_function.teststringify_Handler_2E93A8A7.arn}\"],[\"root/Default/Default/test:entries()\",\"${aws_lambda_function.testentries_Handler_92CEFE0A.arn}\"]]"
     }
   },
   "provider": {
@@ -180,6 +205,15 @@ module.exports = function({ $std_Json }) {
   },
   "resource": {
     "aws_iam_role": {
+      "testentries_Handler_IamRole_F89CDEB3": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:entries()/Handler/IamRole",
+            "uniqueId": "testentries_Handler_IamRole_F89CDEB3"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
       "testgetAt_Handler_IamRole_915EA920": {
         "//": {
           "metadata": {
@@ -227,6 +261,16 @@ module.exports = function({ $std_Json }) {
       }
     },
     "aws_iam_role_policy": {
+      "testentries_Handler_IamRolePolicy_5CB72CE2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:entries()/Handler/IamRolePolicy",
+            "uniqueId": "testentries_Handler_IamRolePolicy_5CB72CE2"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.testentries_Handler_IamRole_F89CDEB3.name}"
+      },
       "testgetAt_Handler_IamRolePolicy_0F6A0772": {
         "//": {
           "metadata": {
@@ -279,6 +323,16 @@ module.exports = function({ $std_Json }) {
       }
     },
     "aws_iam_role_policy_attachment": {
+      "testentries_Handler_IamRolePolicyAttachment_5199FB85": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:entries()/Handler/IamRolePolicyAttachment",
+            "uniqueId": "testentries_Handler_IamRolePolicyAttachment_5199FB85"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.testentries_Handler_IamRole_F89CDEB3.name}"
+      },
       "testgetAt_Handler_IamRolePolicyAttachment_4D020DB9": {
         "//": {
           "metadata": {
@@ -331,6 +385,35 @@ module.exports = function({ $std_Json }) {
       }
     },
     "aws_lambda_function": {
+      "testentries_Handler_92CEFE0A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:entries()/Handler/Default",
+            "uniqueId": "testentries_Handler_92CEFE0A"
+          }
+        },
+        "architectures": [
+          "arm64"
+        ],
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Handler-c8527704",
+            "WING_TARGET": "tf-aws"
+          }
+        },
+        "function_name": "Handler-c8527704",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "${aws_iam_role.testentries_Handler_IamRole_F89CDEB3.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testentries_Handler_S3Object_EF4F8490.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
+      },
       "testgetAt_Handler_44D7BE7A": {
         "//": {
           "metadata": {
@@ -489,6 +572,17 @@ module.exports = function({ $std_Json }) {
       }
     },
     "aws_s3_object": {
+      "testentries_Handler_S3Object_EF4F8490": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:entries()/Handler/S3Object",
+            "uniqueId": "testentries_Handler_S3Object_EF4F8490"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
+      },
       "testgetAt_Handler_S3Object_AE45FDF0": {
         "//": {
           "metadata": {
@@ -691,11 +785,39 @@ class $Root extends $stdlib.std.Resource {
         return ["handle", "$inflight_init"];
       }
     }
+    class $Closure6 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        (std.Node.of(this)).hidden = true;
+      }
+      static _toInflightType(context) {
+        return `
+          require("./inflight.$Closure6-1.js")({
+            $std_Json: ${context._lift(std.Json)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure6Client = ${$Closure6._toInflightType(this)};
+            const client = new $Closure6Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
+      }
+    }
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:get()",new $Closure1(this,"$Closure1"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:getAt()",new $Closure2(this,"$Closure2"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:set()",new $Closure3(this,"$Closure3"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:setAt()",new $Closure4(this,"$Closure4"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:stringify()",new $Closure5(this,"$Closure5"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:entries()",new $Closure6(this,"$Closure6"));
     {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(nil) == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })(undefined),undefined)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(\"boom\") == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })("boom"),undefined)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(\"\") == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })(""),undefined)))};
