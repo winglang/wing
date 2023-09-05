@@ -74,6 +74,7 @@
     "@wingconsole/server": "workspace:^",
     "@wingconsole/tsconfig": "workspace:^",
     "@wingconsole/use-loading": "workspace:^",
+    "@wingconsole/use-persistent-state": "workspace:^",
     "autoprefixer": "^10.4.15",
     "bump-pack": "workspace:^",
     "eslint": "^8.48.0",
