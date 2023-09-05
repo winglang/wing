@@ -461,10 +461,43 @@ class WingRestApi extends Construct {
       },
     });
 
+    const logGroup = new CloudwatchLogGroup(this, "api-log-group", {
+      name: `API-Gateway-Execution-Logs_${this.api.id}/${STAGE_NAME}`,
+      retentionInDays: 7,
+    });
+
     this.stage = new ApiGatewayStage(this, "stage", {
       restApiId: this.api.id,
       stageName: STAGE_NAME,
       deploymentId: this.deployment.id,
+
+      accessLogSettings: {
+        destinationArn: logGroup.arn,
+        format: JSON.stringify({
+          requestId: "$context.requestId",
+          ip: "$context.identity.sourceIp",
+          caller: "$context.identity.caller",
+          user: "$context.identity.user",
+          requestTime: "$context.requestTime",
+          httpMethod: "$context.httpMethod",
+          resourcePath: "$context.resourcePath",
+          status: "$context.status",
+          protocol: "$context.protocol",
+          responseLength: "$context.responseLength",
+        }),
+      },
+      dependsOn: [logGroup],
+    });
+
+    new ApiGatewayMethodSettings(this, "method-settings", {
+      restApiId: this.api.id,
+      stageName: this.stage.stageName,
+      methodPath: "*/*",
+      settings: {
+        metricsEnabled: true,
+        loggingLevel: "INFO",
+        dataTraceEnabled: true,
+      },
     });
 
     //should be exported from here, otherwise won't be mapped to the right token
