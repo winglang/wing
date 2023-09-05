@@ -574,14 +574,16 @@ export const createAppRouter = () => {
         }),
       )
       .mutation(async ({ ctx, input }) => {
+        if (ctx.emitter.listenerCount("openFileInEditor") > 0) {
+          ctx.emitter.emit("openFileInEditor", {
+            path: input.path,
+            line: input.line,
+            column: input.column,
+          });
+          return;
+        }
         const launch = require("launch-editor");
         launch(`${input.path}:${input.line}:${input.column}`);
-
-        ctx.emitter.emit("openFileInEditor", {
-          path: input.path,
-          line: input.line,
-          column: input.column,
-        });
       }),
     "app.openFileInEditorSubscription": createProcedure.subscription(
       ({ ctx }) => {
