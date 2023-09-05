@@ -4652,6 +4652,34 @@ impl<'a> TypeChecker<'a> {
 				let mut property_variable = self.resolve_variable_from_instance_type(instance_type, property, env, object);
 
 				// TODO: Here we can get the access_modifier of the property and check it based on the current class
+				let mut private_access = false;
+				let mut protected_access = false;
+				if let Some(current_class) = self.ctx.current_class().map(|udt| udt.clone()) {
+					let current_class_type = self
+						.resolve_user_defined_type(&current_class, env, self.ctx.current_stmt_idx())
+						.unwrap();
+					private_access = current_class_type.is_same_type_as(&instance_type);
+					protected_access = private_access || current_class_type.is_strict_subtype_of(&instance_type);
+				}
+				match property_variable.access_modifier {
+					AccessModifier::Private => {
+						if !private_access {
+							self.spanned_error(
+								property,
+								format!("Cannot access private member {property} of {instance_type}"),
+							);
+						}
+					}
+					AccessModifier::Protected => {
+						if !protected_access {
+							self.spanned_error(
+								property,
+								format!("Cannot access protected member {property} of {instance_type}"),
+							);
+						}
+					}
+					AccessModifier::Public => {} // keep this here to make sure we don't add a new access modifier without handling it here
+				}
 
 				// if the object is `this`, then use the property's phase instead of the object phase
 				let property_phase = if property_variable.phase == Phase::Independent {
