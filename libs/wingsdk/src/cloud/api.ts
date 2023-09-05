@@ -131,6 +131,12 @@ type CorsDefaultResponseHeaders = {
  */
 type CorsOptionsResponseHeaders = {
   /**
+   * Specifies the origin that is allowed to access the resource.
+   * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
+   */
+  "Access-Control-Allow-Origin": string;
+
+  /**
    * Specifies the headers that are allowed in a request.
    * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers
    */
@@ -389,6 +395,7 @@ export abstract class Api extends Resource {
     };
 
     const optionsHeaders: CorsOptionsResponseHeaders = {
+      "Access-Control-Allow-Origin": allowOrigin.join(",") || "",
       "Access-Control-Allow-Headers": allowHeaders.join(",") || "",
       "Access-Control-Allow-Methods": allowMethods.join(",") || "",
     };

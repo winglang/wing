@@ -49,9 +49,9 @@ test "OPTIONS /users has cors headers" {
   // OPTIONS cors headers are set
   t.Assert.equalStr(headers.get("access-control-allow-methods"), "GET,POST,OPTIONS");
   t.Assert.equalStr(headers.get("access-control-allow-headers"), "Content-Type,Authorization,X-Custom-Header");
+  t.Assert.equalStr(headers.get("access-control-allow-origin"), "winglang.io");
 
   // Other cors headers are not set
-  t.Assert.isNil(headers.get("access-control-allow-origin"));
   t.Assert.isNil(headers.get("access-control-expose-headers"));
   t.Assert.isNil(headers.get("access-control-allow-credentials"));
 }
@@ -60,9 +60,8 @@ test "OPTIONS /users responds with proper headers for requested" {
   let response = http.fetch(api.url + "/users", {
     method: http.HttpMethod.OPTIONS,
     headers: {
-      "Content-Type": "text/json",
       "Access-Control-Request-Method": "PUT",
-      "Access-Control-Request-Headers": "Content-Type,Authorization,X-Custom-Foo"
+      "Access-Control-Request-Headers": "Content-Type,Authorization,X-Custom-Foo",
     }
   });
 
@@ -70,4 +69,5 @@ test "OPTIONS /users responds with proper headers for requested" {
   t.Assert.equalNum(response.status, 204);
   t.Assert.equalStr(headers.get("access-control-allow-methods"), "GET,POST,OPTIONS");
   t.Assert.equalStr(headers.get("access-control-allow-headers"), "Content-Type,Authorization,X-Custom-Header");
+  t.Assert.equalStr(headers.get("access-control-allow-origin"), "winglang.io");
 }

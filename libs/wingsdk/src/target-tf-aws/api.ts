@@ -3,6 +3,7 @@ import { join } from "path";
 
 import { Fn, Lazy } from "cdktf";
 import { Construct } from "constructs";
+import { API_CORS_DEFAULT_RESPONSE } from "./api.cors";
 import { App } from "./app";
 import { Function } from "./function";
 import { core } from "..";
@@ -369,50 +370,6 @@ export class Api extends cloud.Api {
 }
 
 /**
- * DEFAULT_404_RESPONSE is a constant that defines the default response when a 404 error occurs.
- * It is used to handle all requests that do not match any defined routes in the API Gateway.
- * The response is a mock integration type, which means it returns a mocked response without
- * forwarding the request to any backend. The response status code is set to 404 and the
- * Content-Type header is set to 'application/json'.
- */
-const DEFAULT_404_RESPONSE = {
-  "/{proxy+}": {
-    "x-amazon-apigateway-any-method": {
-      produces: ["application/json"],
-      consumes: ["application/json"],
-      "x-amazon-apigateway-integration": {
-        type: "mock",
-        requestTemplates: {
-          "application/json": '{"statusCode": 404}',
-        },
-        responses: {
-          default: {
-            statusCode: "404",
-            responseParameters: {
-              "method.response.header.Content-Type": "'application/json'",
-            },
-            responseTemplates: {
-              "application/json":
-                '{"statusCode: 404, "message": "Error: Resource not found"}',
-            },
-          },
-        },
-      },
-      responses: {
-        404: {
-          description: "404 response",
-          headers: {
-            "Content-Type": {
-              type: "string",
-            },
-          },
-        },
-      },
-    },
-  },
-};
-
-/**
  * Encapsulates the API Gateway REST API as a abstraction for Terraform.
  */
 class WingRestApi extends Construct {
@@ -433,6 +390,8 @@ class WingRestApi extends Construct {
     super(scope, id);
     this.region = (App.of(this) as App).region;
 
+    const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
+
     this.api = new ApiGatewayRestApi(this, "api", {
       name: ResourceNames.generateName(this, NAME_OPTS),
       // Lazy generation of the api spec because routes can be added after the API is created
@@ -441,7 +400,7 @@ class WingRestApi extends Construct {
           const injectGreedy404Handler = (openApiSpec: OpenApiSpec) => {
             openApiSpec.paths = {
               ...openApiSpec.paths,
-              ...DEFAULT_404_RESPONSE,
+              ...defaultResponse,
             };
             return openApiSpec;
           };
