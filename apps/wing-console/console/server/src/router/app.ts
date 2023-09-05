@@ -577,11 +577,11 @@ export const createAppRouter = () => {
         const launch = require("launch-editor");
         launch(`${input.path}:${input.line}:${input.column}`);
 
-        // ctx.emitter.emit("openFileInEditor", {
-        //   path: input.path,
-        //   line: input.line,
-        //   column: input.column,
-        // });
+        ctx.emitter.emit("openFileInEditor", {
+          path: input.path,
+          line: input.line,
+          column: input.column,
+        });
       }),
     "app.openFileInEditorSubscription": createProcedure.subscription(
       ({ ctx }) => {
