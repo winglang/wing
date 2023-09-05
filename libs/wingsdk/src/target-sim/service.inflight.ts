@@ -55,7 +55,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       sourceType: SERVICE_TYPE,
       timestamp: new Date().toISOString(),
     });
-    await fnClient.invoke("");
+    fnClient.invoke("");
     this.running = true;
   }
 
