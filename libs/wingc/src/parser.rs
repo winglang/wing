@@ -439,15 +439,15 @@ impl<'s> Parser<'s> {
 
 			"variable_definition_statement" => self.build_variable_def_statement(statement_node, phase)?,
 			"variable_assignment_statement" => {
-				self.build_assignment_statement(statement_node, phase, AssignmentKind::Assign)?
-			}
-			"variable_assignment_incr_statement" => {
-				self.build_assignment_statement(statement_node, phase, AssignmentKind::AssignIncr)?
-			}
-			"variable_assignment_decr_statement" => {
-				self.build_assignment_statement(statement_node, phase, AssignmentKind::AssignDecr)?
-			}
+				let kind = match self.node_text(&statement_node.child_by_field_name("operator").unwrap()) {
+					"=" => AssignmentKind::Assign,
+					"+=" => AssignmentKind::AssignIncr,
+					"-=" => AssignmentKind::AssignDecr,
+					other => return self.report_unimplemented_grammar(other, "assignment operator", statement_node),
+				};
 
+				self.build_assignment_statement(statement_node, phase, kind)?
+			}
 			"expression_statement" => {
 				StmtKind::Expression(self.build_expression(&statement_node.named_child(0).unwrap(), phase)?)
 			}

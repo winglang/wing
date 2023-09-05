@@ -88,18 +88,21 @@ let var y = "hello";
   (variable_assignment_statement
     name: (lvalue
       (reference_identifier))
+    operator: (assignment_operator)
     value: (number))
   (variable_definition_statement
     reassignable: (reassignable)
     name: (identifier)
     value: (number))
-  (variable_assignment_incr_statement
+  (variable_assignment_statement
     name: (lvalue
       (reference_identifier))
+    operator: (assignment_operator)
     value: (number))
-  (variable_assignment_decr_statement
+  (variable_assignment_statement
     name: (lvalue
       (reference_identifier))
+    operator: (assignment_operator)
     value: (number))
   (variable_definition_statement
     reassignable: (reassignable)
