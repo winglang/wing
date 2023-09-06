@@ -36,13 +36,10 @@ async function guidedWingInstallation() {
   );
 }
 
-export async function updateStatusBar(wingBin: string, args?: string[]) {
-  let clean_args = args ? [...args] : [];
-  clean_args.push("-V");
-
+export async function updateStatusBar(wingBin: string) {
   let version = "not found";
   try {
-    version = await executeCommand(`"${wingBin}" ${clean_args.join(" ")}`);
+    version = await executeCommand(`"${wingBin}" -V --no-update-check`);
   } catch (e) {
     Loggers.default.appendLine(
       `Failed to get wing version from ${wingBin}: ${e}`
