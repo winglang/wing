@@ -18,11 +18,11 @@ queue.setConsumer(inflight (message: str) => {
 }, timeout: 3s);
 
 test "testing Redis" {
-  // Using raw client
-  let connection = r.rawClient();
-  connection.set("wing", "does redis");
-  let value = connection.get("wing");
-  assert(value == "does redis");
+  // // Using raw client
+  // let connection = r.rawClient();
+  // connection.set("wing", "does redis");
+  // let value = connection.get("wing");
+  // assert(value == "does redis");
   
   // Using API
   r2.set("wing", "does redis again");
