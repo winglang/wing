@@ -2,8 +2,8 @@ import { Construct } from "constructs";
 import { IInflightHost, IResource, Resource } from "./resource";
 import { Function, FUNCTION_FQN, FunctionProps } from "../cloud/function";
 import { fqnForType } from "../constants";
-import { App } from "../core/app";
-import { Code } from "../core/inflight";
+import { App } from "../core";
+import { Node } from "../std";
 
 /**
  * Global identifier for `Test`.
@@ -49,8 +49,8 @@ export class Test extends Resource implements IInflightHost {
   ) {
     super(scope, id);
 
-    this.display.title = "Test";
-    this.display.description = "A cloud unit test.";
+    Node.of(this).title = "Test";
+    Node.of(this).description = "A cloud unit test.";
 
     this._fn = App.of(scope).newAbstract(
       FUNCTION_FQN,
@@ -62,7 +62,12 @@ export class Test extends Resource implements IInflightHost {
   }
 
   /** @internal */
-  public _toInflight(): Code {
+  public _getInflightOps(): string[] {
+    return [];
+  }
+
+  /** @internal */
+  public _toInflight(): string {
     throw new Error("unimplemented");
   }
 }

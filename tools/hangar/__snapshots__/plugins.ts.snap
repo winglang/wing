@@ -86,6 +86,9 @@ exports[`Plugin examples > AWS target plugins > permission-boundary.js 1`] = `
             "uniqueId": "cloudQueue-SetConsumer-cdafee6e",
           },
         },
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.cloudBucket.bucket}",
@@ -329,6 +332,9 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
             "uniqueId": "cloudQueue-SetConsumer-cdafee6e",
           },
         },
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.cloudBucket.bucket}",
@@ -620,6 +626,9 @@ exports[`Plugin examples > AWS target plugins > tf-backend.js > azurerm backend 
             "uniqueId": "cloudQueue-SetConsumer-cdafee6e",
           },
         },
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.cloudBucket.bucket}",
@@ -793,6 +802,9 @@ exports[`Plugin examples > AWS target plugins > tf-backend.js > gcp backend 1`] 
             "uniqueId": "cloudQueue-SetConsumer-cdafee6e",
           },
         },
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.cloudBucket.bucket}",
@@ -966,6 +978,9 @@ exports[`Plugin examples > AWS target plugins > tf-backend.js > s3 backend 1`] =
             "uniqueId": "cloudQueue-SetConsumer-cdafee6e",
           },
         },
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.cloudBucket.bucket}",

@@ -35,6 +35,7 @@
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -43,7 +44,7 @@ class $Root extends $stdlib.std.Resource {
     super(scope, id);
     let x = "";
     try {
-      {((msg) => {throw new Error(msg)})("hello")};
+      throw new Error("hello");
       x = "no way I got here";
     }
     catch ($error_e) {
@@ -70,7 +71,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: x == \"finally\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x,"finally")))};
     try {
       try {
-        {((msg) => {throw new Error(msg)})("hello")};
+        throw new Error("hello");
       }
       finally {
         x = "finally with no catch";
@@ -92,9 +93,9 @@ class $Root extends $stdlib.std.Resource {
         return 1;
       }
     })()),1)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: (():num => { try {throw(\"\");} catch {return 2;}})() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((() => {
+    {((cond) => {if (!cond) throw new Error("assertion failed: (():num => { try {throw \"\";} catch {return 2;}})() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((() => {
       try {
-        {((msg) => {throw new Error(msg)})("")};
+        throw new Error("");
       }
       catch {
         return 2;

@@ -10,7 +10,20 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
       return $obj;
     }
     async handle() {
-      let error = "";
+      const assertThrows = async (expected, block) => {
+        let error = false;
+        try {
+          (await block());
+        }
+        catch ($error_actual) {
+          const actual = $error_actual.message;
+          {((cond) => {if (!cond) throw new Error("assertion failed: actual == expected")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(actual,expected)))};
+          error = true;
+        }
+        {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
+      }
+      ;
+      const BUCKET_NOT_PUBLIC_ERROR = "Cannot provide public url for a non-public bucket";
       (await $publicBucket.put("file1.txt","Foo"));
       (await $privateBucket.put("file2.txt","Bar"));
       const publicUrl = (await $publicBucket.publicUrl("file1.txt"));
@@ -18,14 +31,10 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
       if ((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })((await $util_Util.env("WING_TARGET")),"sim"))) {
         {((cond) => {if (!cond) throw new Error("assertion failed: http.get(publicUrl).body ==  \"Foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get(publicUrl)).body,"Foo")))};
       }
-      try {
+      (await assertThrows(BUCKET_NOT_PUBLIC_ERROR,async () => {
         (await $privateBucket.publicUrl("file2.txt"));
       }
-      catch ($error_e) {
-        const e = $error_e.message;
-        error = e;
-      }
-      {((cond) => {if (!cond) throw new Error("assertion failed: error == \"Cannot provide public url for a non-public bucket\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(error,"Cannot provide public url for a non-public bucket")))};
+      ));
     }
   }
   return $Closure1;
@@ -106,6 +115,9 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
             "uniqueId": "testpublicUrl_Handler_E965919F"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_7c320eda": "${aws_s3_bucket.publicBucket.bucket}",
@@ -243,6 +255,7 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -255,29 +268,31 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure1-1.js")({
             $http_Util: ${context._lift(http.Util)},
             $privateBucket: ${context._lift(privateBucket)},
             $publicBucket: ${context._lift(publicBucket)},
             $util_Util: ${context._lift(util.Util)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {

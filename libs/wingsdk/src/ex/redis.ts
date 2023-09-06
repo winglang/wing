@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Resource } from "../std";
+import { Node, Resource } from "../std";
 
 /**
  * Global identifier for `Bucket`.
@@ -25,10 +25,13 @@ export abstract class Redis extends Resource {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    this.display.title = "Redis";
-    this.display.description = "A Redis server";
+    Node.of(this).title = "Redis";
+    Node.of(this).description = "A Redis server";
+  }
 
-    this._addInflightOps(
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [
       RedisInflightMethods.RAW_CLIENT,
       RedisInflightMethods.URL,
       RedisInflightMethods.SET,
@@ -37,8 +40,8 @@ export abstract class Redis extends Resource {
       RedisInflightMethods.HGET,
       RedisInflightMethods.SADD,
       RedisInflightMethods.SMEMBERS,
-      RedisInflightMethods.DEL
-    );
+      RedisInflightMethods.DEL,
+    ];
   }
 }
 

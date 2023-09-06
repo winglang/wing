@@ -36,6 +36,9 @@ exports[`create an OnDeploy 1`] = `
     },
     "aws_lambda_function": {
       "my_on_deploy_Function_59669FC0": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Function-c88c90bc",
@@ -90,7 +93,7 @@ exports[`create an OnDeploy 2`] = `
               "Handler": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -121,7 +124,7 @@ exports[`create an OnDeploy 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -186,7 +189,7 @@ exports[`create an OnDeploy 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.70",
                     },
                     "display": {
                       "description": "A cloud function (FaaS)",
@@ -206,7 +209,7 @@ exports[`create an OnDeploy 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "Run code during the app's deployment.",
@@ -218,7 +221,7 @@ exports[`create an OnDeploy 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.70",
             },
             "id": "Default",
             "path": "root/Default",
@@ -290,6 +293,9 @@ exports[`execute OnDeploy after other resources 1`] = `
     },
     "aws_lambda_function": {
       "my_on_deploy_Function_59669FC0": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Function-c88c90bc",
@@ -360,7 +366,7 @@ exports[`execute OnDeploy after other resources 2`] = `
               "Handler": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -391,7 +397,7 @@ exports[`execute OnDeploy after other resources 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -422,7 +428,7 @@ exports[`execute OnDeploy after other resources 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -486,7 +492,7 @@ exports[`execute OnDeploy after other resources 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.70",
                     },
                     "display": {
                       "description": "A cloud function (FaaS)",
@@ -506,7 +512,7 @@ exports[`execute OnDeploy after other resources 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "Run code during the app's deployment.",
@@ -518,7 +524,7 @@ exports[`execute OnDeploy after other resources 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.70",
             },
             "id": "Default",
             "path": "root/Default",
@@ -587,6 +593,9 @@ exports[`execute OnDeploy before other resources 1`] = `
     },
     "aws_lambda_function": {
       "my_on_deploy_Function_59669FC0": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Function-c88c90bc",
@@ -663,7 +672,7 @@ exports[`execute OnDeploy before other resources 2`] = `
               "Handler": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -694,7 +703,7 @@ exports[`execute OnDeploy before other resources 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -725,7 +734,7 @@ exports[`execute OnDeploy before other resources 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -789,7 +798,7 @@ exports[`execute OnDeploy before other resources 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.70",
                     },
                     "display": {
                       "description": "A cloud function (FaaS)",
@@ -809,7 +818,7 @@ exports[`execute OnDeploy before other resources 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "Run code during the app's deployment.",
@@ -821,7 +830,7 @@ exports[`execute OnDeploy before other resources 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.70",
             },
             "id": "Default",
             "path": "root/Default",

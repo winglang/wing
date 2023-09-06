@@ -10,21 +10,30 @@ module.exports = function({ $b }) {
       return $obj;
     }
     async handle() {
-      let error = "";
+      const assertThrows = async (expected, block) => {
+        let error = false;
+        try {
+          (await block());
+        }
+        catch ($error_actual) {
+          const actual = $error_actual.message;
+          {((cond) => {if (!cond) throw new Error("assertion failed: actual == expected")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(actual,expected)))};
+          error = true;
+        }
+        {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
+      }
+      ;
+      const OBJECT_DOES_NOT_EXIST_ERROR = "Object does not exist (key=file1.json).";
       const jsonObj1 = ({"key1": "value1"});
       (await $b.putJson("file1.json",jsonObj1));
       (await $b.delete("file1.txt"));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file1.json\")")})((await $b.exists("file1.json")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file2.txt\")")})((await $b.exists("file2.txt")))};
       (await $b.delete("file1.json",{ mustExist: true }));
-      try {
+      (await assertThrows(OBJECT_DOES_NOT_EXIST_ERROR,async () => {
         (await $b.delete("file1.json",{ mustExist: true }));
       }
-      catch ($error_e) {
-        const e = $error_e.message;
-        error = e;
-      }
-      {((cond) => {if (!cond) throw new Error("assertion failed: error == \"Object does not exist (key=file1.json).\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(error,"Object does not exist (key=file1.json).")))};
+      ));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file2.txt\")")})((await $b.exists("file2.txt")))};
       (await $b.delete("file2.txt"));
       {((cond) => {if (!cond) throw new Error("assertion failed: !b.exists(\"file2.txt\")")})((!(await $b.exists("file2.txt"))))};
@@ -108,6 +117,9 @@ module.exports = function({ $b }) {
             "uniqueId": "testdelete_Handler_3DFCE06A"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
@@ -199,6 +211,7 @@ module.exports = function({ $b }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -209,26 +222,28 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure1-1.js")({
             $b: ${context._lift(b)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {

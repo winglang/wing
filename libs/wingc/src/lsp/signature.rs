@@ -14,6 +14,8 @@ use crate::type_check::{resolve_super_method, resolve_user_defined_type, Types, 
 use crate::visit::{visit_expr, visit_scope, Visit};
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 
+use super::sync::check_utf8;
+
 #[no_mangle]
 pub unsafe extern "C" fn wingc_on_signature_help(ptr: u32, len: u32) -> u64 {
 	let parse_string = ptr_to_string(ptr, len);
@@ -34,7 +36,7 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 		PROJECT_DATA.with(|project_data| {
 			let project_data = project_data.borrow();
 			let uri = params.text_document_position_params.text_document.uri;
-			let file = uri.to_file_path().ok().expect("LSP only works on real filesystems");
+			let file = check_utf8(uri.to_file_path().ok().expect("LSP only works on real filesystems"));
 			let root_scope = &project_data.asts.get(&file).unwrap();
 
 			let mut scope_visitor = ScopeVisitor::new(&types, params.text_document_position_params.position);
@@ -48,11 +50,8 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 			) = match &expr.kind {
 				ExprKind::New(new_expr) => {
 					let NewExpr { class, arg_list, .. } = new_expr;
-					let Some(udt) = class.as_type_reference() else {
-						return None;
-					};
 
-					let Some(t) = resolve_user_defined_type(&udt, &types.get_scope_env(&root_scope), 0).ok() else {
+					let Some(t) = resolve_user_defined_type(class, &types.get_scope_env(&root_scope), 0).ok() else {
 						return None;
 					};
 

@@ -2,6 +2,7 @@ import { resolve } from "path";
 import { Duration } from "aws-cdk-lib";
 import { PolicyStatement as CdkPolicyStatement } from "aws-cdk-lib/aws-iam";
 import {
+  Architecture,
   Function as CdkFunction,
   Code,
   IEventSource,
@@ -44,6 +45,7 @@ export class Function extends cloud.Function implements IAwsFunction {
         ? Duration.seconds(props.timeout.seconds)
         : Duration.minutes(0.5),
       memorySize: props.memory ? props.memory : undefined,
+      architecture: Architecture.ARM_64,
     });
 
     this.arn = this.function.functionArn;
@@ -71,7 +73,7 @@ export class Function extends cloud.Function implements IAwsFunction {
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return core.InflightClient.for(
       __dirname.replace("target-awscdk", "shared-aws"),
       __filename,

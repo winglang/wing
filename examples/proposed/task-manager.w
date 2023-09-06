@@ -54,7 +54,7 @@ resource TaskManager {
     try {
       return this.bucket.get("${id}/status");
     } catch e {
-      throw("no such key: ${id}");
+      throw "no such key: ${id}";
     }
   }
 
@@ -65,7 +65,7 @@ resource TaskManager {
     try {
       return this.bucket.get("${id}/result");
     } catch e {
-      throw("no such id: ${id}");
+      throw "no such id: ${id}";
     }
   }
 

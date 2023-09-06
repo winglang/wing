@@ -1,4 +1,4 @@
-import { Code, InflightClient } from "../core";
+import { InflightClient } from "../core";
 
 /**
  * Options for stringify() method.
@@ -15,7 +15,7 @@ export class Json {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
 
@@ -146,12 +146,13 @@ export class Json {
   private constructor() {}
 
   /**
-   * Returns a specified element from the Json.
+   * Returns the value associated with the specified Json key
    *
-   * @macro ($self$)[$args$]
+   * @macro ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })($self$, $args$)
    *
-   * @param key The key of the element to return
-   * @returns The element associated with the specified key, or undefined if the key can't be found
+   * @param key The key of the Json property
+   * @returns The value associated with the specified Json key
+   * @throws Json property does not exist if the given key is not part of an existing property
    */
   public get(key: string): Json {
     key;
@@ -161,10 +162,11 @@ export class Json {
   /**
    * Returns a specified element at a given index from Json Array
    *
-   * @macro ($self$)[$args$]
+   * @macro ((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })($self$, $args$)
    *
    * @param index The index of the element in the Json Array to return
-   * @returns The element at given index in Json Array, or undefined if index is not valid
+   * @returns The element at given index in Json Array
+   * @throws index out of bounds error if the given index does not exist for the Json Array
    */
   public getAt(index: number): Json {
     index;
@@ -271,19 +273,20 @@ export class MutJson {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
 
   private constructor() {}
 
   /**
-   * Returns a specified element from the Json.
+   * Returns the value associated with the specified Json key
    *
-   * @macro ($self$)[$args$]
+   * @macro ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })($self$, $args$)
    *
-   * @param key The key of the element to return
-   * @returns The element associated with the specified key, or undefined if the key can't be found
+   * @param key The key of the Json property
+   * @returns The value associated with the specified Json key
+   * @throws Json property does not exist if the given key is not part of an existing property
    */
   public get(key: string): MutJson {
     key;
@@ -293,10 +296,11 @@ export class MutJson {
   /**
    * Returns a specified element at a given index from MutJson Array
    *
-   * @macro ($self$)[$args$]
+   * @macro ((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })($self$, $args$)
    *
    * @param index The index of the element in the MutJson Array to return
-   * @returns The element at given index in MutJson Array, or undefined if index is not valid
+   * @returns The element at given index in MutJson Array
+   * @throws index out of bounds error if the given index does not exist for the MutJson Array
    */
   public getAt(index: number): MutJson {
     index;

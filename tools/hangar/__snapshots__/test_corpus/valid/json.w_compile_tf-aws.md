@@ -2,7 +2,7 @@
 
 ## Base.Struct.js
 ```js
-module.exports = function(stdStruct, fromInline) {
+module.exports = function(stdStruct) {
   class Base {
     static jsonSchema() {
       return {
@@ -22,7 +22,7 @@ module.exports = function(stdStruct, fromInline) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return fromInline(`require("./Base.Struct.js")(${ context._lift(stdStruct) })`);
+      return `require("./Base.Struct.js")(${ context._lift(stdStruct) })`;
     }
   }
   return Base;
@@ -32,7 +32,7 @@ module.exports = function(stdStruct, fromInline) {
 
 ## HasBucket.Struct.js
 ```js
-module.exports = function(stdStruct, fromInline) {
+module.exports = function(stdStruct) {
   class HasBucket {
     static jsonSchema() {
       return {
@@ -53,7 +53,7 @@ module.exports = function(stdStruct, fromInline) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return fromInline(`require("./HasBucket.Struct.js")(${ context._lift(stdStruct) })`);
+      return `require("./HasBucket.Struct.js")(${ context._lift(stdStruct) })`;
     }
   }
   return HasBucket;
@@ -63,7 +63,7 @@ module.exports = function(stdStruct, fromInline) {
 
 ## HasInnerBucket.Struct.js
 ```js
-module.exports = function(stdStruct, fromInline) {
+module.exports = function(stdStruct) {
   class HasInnerBucket {
     static jsonSchema() {
       return {
@@ -84,7 +84,7 @@ module.exports = function(stdStruct, fromInline) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return fromInline(`require("./HasInnerBucket.Struct.js")(${ context._lift(stdStruct) })`);
+      return `require("./HasInnerBucket.Struct.js")(${ context._lift(stdStruct) })`;
     }
   }
   return HasInnerBucket;
@@ -94,7 +94,7 @@ module.exports = function(stdStruct, fromInline) {
 
 ## InnerStructyJson.Struct.js
 ```js
-module.exports = function(stdStruct, fromInline) {
+module.exports = function(stdStruct) {
   class InnerStructyJson {
     static jsonSchema() {
       return {
@@ -117,7 +117,7 @@ module.exports = function(stdStruct, fromInline) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return fromInline(`require("./InnerStructyJson.Struct.js")(${ context._lift(stdStruct) })`);
+      return `require("./InnerStructyJson.Struct.js")(${ context._lift(stdStruct) })`;
     }
   }
   return InnerStructyJson;
@@ -127,7 +127,7 @@ module.exports = function(stdStruct, fromInline) {
 
 ## LastOne.Struct.js
 ```js
-module.exports = function(stdStruct, fromInline) {
+module.exports = function(stdStruct) {
   class LastOne {
     static jsonSchema() {
       return {
@@ -150,7 +150,7 @@ module.exports = function(stdStruct, fromInline) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return fromInline(`require("./LastOne.Struct.js")(${ context._lift(stdStruct) })`);
+      return `require("./LastOne.Struct.js")(${ context._lift(stdStruct) })`;
     }
   }
   return LastOne;
@@ -160,7 +160,7 @@ module.exports = function(stdStruct, fromInline) {
 
 ## StructyJson.Struct.js
 ```js
-module.exports = function(stdStruct, fromInline) {
+module.exports = function(stdStruct) {
   class StructyJson {
     static jsonSchema() {
       return {
@@ -184,7 +184,7 @@ module.exports = function(stdStruct, fromInline) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return fromInline(`require("./StructyJson.Struct.js")(${ context._lift(stdStruct) })`);
+      return `require("./StructyJson.Struct.js")(${ context._lift(stdStruct) })`;
     }
   }
   return StructyJson;
@@ -271,6 +271,7 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -281,25 +282,27 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
         this.SumStr = "wow!";
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.Foo-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const FooClient = ${Foo._toInflightType(this).text};
+            const FooClient = ${Foo._toInflightType(this)};
             const client = new FooClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["$inflight_init"];
       }
     }
     const jsonNumber = 123;
@@ -309,7 +312,7 @@ class $Root extends $stdlib.std.Resource {
     const jsonMutObj = ({"hello": 123,"world": [1, "cat", 3],"boom boom": ({"hello": 1233})});
     const message = "Coolness";
     ((obj, args) => { obj[args[0]] = args[1]; })(jsonMutObj, ["hello",message]);
-    {((cond) => {if (!cond) throw new Error("assertion failed: jsonMutObj.get(\"hello\") == message")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((jsonMutObj)["hello"],message)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: jsonMutObj.get(\"hello\") == message")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(jsonMutObj, "hello"),message)))};
     const someNumber = 999;
     const jj = someNumber;
     const jj1 = ({"foo": someNumber});
@@ -323,39 +326,39 @@ class $Root extends $stdlib.std.Resource {
     const jj4 = f.SumStr;
     {((cond) => {if (!cond) throw new Error("assertion failed: jj4 == Json \"wow!\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(jj4,"wow!")))};
     const someJson = ({"x": someNumber});
-    {((cond) => {if (!cond) throw new Error("assertion failed: someJson.get(\"x\") == someNumber")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((someJson)["x"],someNumber)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: someJson.get(\"x\") == someNumber")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(someJson, "x"),someNumber)))};
     ((obj, args) => { obj[args[0]] = args[1]; })(someJson, ["x",111]);
-    {((cond) => {if (!cond) throw new Error("assertion failed: someJson.get(\"x\") == 111")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((someJson)["x"],111)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: someJson.get(\"x\") == 111")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(someJson, "x"),111)))};
     const x = ({"cool": "beans"});
     const nestedJson = ({"a": "hello","b": ({"c": "world","d": ({"foo": "foo","bar": 123})})});
-    ((obj, args) => { obj[args[0]] = args[1]; })(((nestedJson)["b"])["d"], ["foo","tastic"]);
-    {((cond) => {if (!cond) throw new Error("assertion failed: nestedJson.get(\"b\").get(\"d\").get(\"foo\") == \"tastic\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((((nestedJson)["b"])["d"])["foo"],"tastic")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: nestedJson.get(\"b\").get(\"d\").get(\"bar\") == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((((nestedJson)["b"])["d"])["bar"],123)))};
+    ((obj, args) => { obj[args[0]] = args[1]; })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(nestedJson, "b"), "d"), ["foo","tastic"]);
+    {((cond) => {if (!cond) throw new Error("assertion failed: nestedJson.get(\"b\").get(\"d\").get(\"foo\") == \"tastic\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(nestedJson, "b"), "d"), "foo"),"tastic")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: nestedJson.get(\"b\").get(\"d\").get(\"bar\") == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(nestedJson, "b"), "d"), "bar"),123)))};
     const b = "buckle";
     const arr = [1, 2, b, "my", "shoe", 3, 4, ["shut", "the", "door"]];
-    {((cond) => {if (!cond) throw new Error("assertion failed: arr.getAt(0) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((arr)[0],1)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: arr.getAt(2) == b")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((arr)[2],b)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: arr.getAt(7).getAt(0) == \"shut\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr)[7])[0],"shut")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: arr.getAt(0) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(arr, 0),1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: arr.getAt(2) == b")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(arr, 2),b)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: arr.getAt(7).getAt(0) == \"shut\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(arr, 7), 0),"shut")))};
     ({"a": [1, 2, "world"],"b": [1, 2, "world"]});
     const emptyJson = ({});
     const emptyJsonArr = [];
     const emptyMutJson = ({});
     const emptyMutJsonArr = [];
     ((obj, args) => { obj[args[0]] = args[1]; })(emptyMutJson, ["cool",({"a": 1,"b": 2})]);
-    ((obj, args) => { obj[args[0]] = args[1]; })((emptyMutJson)["cool"], ["a",3]);
+    ((obj, args) => { obj[args[0]] = args[1]; })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(emptyMutJson, "cool"), ["a",3]);
     ((obj, args) => { obj[args[0]] = args[1]; })(emptyMutJsonArr, [0,({"a": 1,"b": 2})]);
-    ((obj, args) => { obj[args[0]] = args[1]; })((emptyMutJsonArr)[0], ["a",3]);
+    ((obj, args) => { obj[args[0]] = args[1]; })(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(emptyMutJsonArr, 0), ["a",3]);
     const theTowerOfJson = ({"a": ({}),"b": ({"c": ({}),"d": [[[({})]]]}),"e": ({"f": ({"g": ({}),"h": [({}), []]})})});
-    ((obj, args) => { obj[args[0]] = args[1]; })(((((theTowerOfJson)["e"])["f"])["h"])[0], ["a",1]);
-    const thatSuperNestedValue = (((((theTowerOfJson)["e"])["f"])["h"])[0])["a"];
+    ((obj, args) => { obj[args[0]] = args[1]; })(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(theTowerOfJson, "e"), "f"), "h"), 0), ["a",1]);
+    const thatSuperNestedValue = ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(theTowerOfJson, "e"), "f"), "h"), 0), "a");
     {((cond) => {if (!cond) throw new Error("assertion failed: num.fromJson(thatSuperNestedValue) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })(thatSuperNestedValue),1)))};
     const unestedJsonArr = [1, 2, 3];
-    {((cond) => {if (!cond) throw new Error("assertion failed: unestedJsonArr.getAt(0) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((unestedJsonArr)[0],1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: unestedJsonArr.getAt(0) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(unestedJsonArr, 0),1)))};
     const jsonElements = ({"strings": ({"single": "Hello","array": ["Hello", "World", "!"]}),"numbers": ({"one": 1,"two": 2,"three": 3}),"bools": ({"t": true,"f": false})});
     {
-      const $IF_LET_VALUE = ((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((jsonElements)?.["strings"])?.["single"]);
-      if ($IF_LET_VALUE != undefined) {
-        const val = $IF_LET_VALUE;
+      const $if_let_value = ((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((jsonElements)?.["strings"])?.["single"]);
+      if ($if_let_value != undefined) {
+        const val = $if_let_value;
         {((cond) => {if (!cond) throw new Error("assertion failed: val == \"Hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(val,"Hello")))};
       }
       else {
@@ -363,13 +366,13 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     {
-      const $IF_LET_VALUE = ((jsonElements)?.["strings"])?.["array"];
-      if ($IF_LET_VALUE != undefined) {
-        const vals = $IF_LET_VALUE;
+      const $if_let_value = ((jsonElements)?.["strings"])?.["array"];
+      if ($if_let_value != undefined) {
+        const vals = $if_let_value;
         {
-          const $IF_LET_VALUE = (vals)?.[0];
-          if ($IF_LET_VALUE != undefined) {
-            const hello = $IF_LET_VALUE;
+          const $if_let_value = (vals)?.[0];
+          if ($if_let_value != undefined) {
+            const hello = $if_let_value;
             {((cond) => {if (!cond) throw new Error("assertion failed: hello == \"Hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(hello,"Hello")))};
           }
           else {
@@ -382,9 +385,9 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     {
-      const $IF_LET_VALUE = ((arg) => { return (typeof arg === "number") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)?.["numbers"])?.["two"]);
-      if ($IF_LET_VALUE != undefined) {
-        const two = $IF_LET_VALUE;
+      const $if_let_value = ((arg) => { return (typeof arg === "number") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)?.["numbers"])?.["two"]);
+      if ($if_let_value != undefined) {
+        const two = $if_let_value;
         {((cond) => {if (!cond) throw new Error("assertion failed: two + 2 == 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((two + 2),4)))};
       }
       else {
@@ -392,9 +395,9 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     {
-      const $IF_LET_VALUE = ((arg) => { return (typeof arg === "boolean") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)?.["bools"])?.["t"]);
-      if ($IF_LET_VALUE != undefined) {
-        const truth = $IF_LET_VALUE;
+      const $if_let_value = ((arg) => { return (typeof arg === "boolean") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)?.["bools"])?.["t"]);
+      if ($if_let_value != undefined) {
+        const truth = $if_let_value;
         {((cond) => {if (!cond) throw new Error("assertion failed: truth")})(truth)};
       }
       else {
@@ -402,32 +405,32 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     {
-      const $IF_LET_VALUE = ((((jsonElements)?.["strings"])?.["non"])?.["existant"])?.["element"];
-      if ($IF_LET_VALUE != undefined) {
-        const val = $IF_LET_VALUE;
+      const $if_let_value = ((((jsonElements)?.["strings"])?.["non"])?.["existant"])?.["element"];
+      if ($if_let_value != undefined) {
+        const val = $if_let_value;
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
     }
     {
-      const $IF_LET_VALUE = (((jsonElements)?.["cant"])?.[1000])?.[42];
-      if ($IF_LET_VALUE != undefined) {
-        const val = $IF_LET_VALUE;
+      const $if_let_value = (((jsonElements)?.["cant"])?.[1000])?.[42];
+      if ($if_let_value != undefined) {
+        const val = $if_let_value;
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
     }
     const notSpecified = ({"foo": "bar"});
-    {((cond) => {if (!cond) throw new Error("assertion failed: notSpecified.get(\"foo\") == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((notSpecified)["foo"],"bar")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: notSpecified.get(\"foo\") == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(notSpecified, "foo"),"bar")))};
     const empty = ({});
     {((cond) => {if (!cond) throw new Error("assertion failed: Json.has(empty, \"something\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return args[0].hasOwnProperty(args[1]); })([empty,"something"]),false)))};
-    const Base = require("./Base.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
-    const LastOne = require("./LastOne.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
-    const InnerStructyJson = require("./InnerStructyJson.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
-    const StructyJson = require("./StructyJson.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
+    const Base = require("./Base.Struct.js")($stdlib.std.Struct);
+    const LastOne = require("./LastOne.Struct.js")($stdlib.std.Struct);
+    const InnerStructyJson = require("./InnerStructyJson.Struct.js")($stdlib.std.Struct);
+    const StructyJson = require("./StructyJson.Struct.js")($stdlib.std.Struct);
     const notJsonMissingField = ({"foo": "bar","stuff": []});
     const notJson = ({"foo": "bar","stuff": [1, 2, 3],"maybe": ({"good": true,"inner_stuff": [({"hi": 1,"base": "base"})]})});
     let mutableJson = ({"foo": "bar","stuff": [1, 2, 3],"maybe": ({"good": true,"inner_stuff": [({"hi": 1,"base": "base"})]})});
-    const HasBucket = require("./HasBucket.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
-    const HasInnerBucket = require("./HasInnerBucket.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
+    const HasBucket = require("./HasBucket.Struct.js")($stdlib.std.Struct);
+    const HasInnerBucket = require("./HasInnerBucket.Struct.js")($stdlib.std.Struct);
     const hasBucket = ({"a": ({"a": this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket")})});
   }
 }

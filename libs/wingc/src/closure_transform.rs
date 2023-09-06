@@ -2,9 +2,9 @@ use indexmap::IndexMap;
 
 use crate::{
 	ast::{
-		ArgList, Class, ClassField, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
-		Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind,
-		UserDefinedType,
+		ArgList, AssignmentKind, CalleeKind, Class, ClassField, Expr, ExprKind, FunctionBody, FunctionDefinition,
+		FunctionParameter, FunctionSignature, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
+		TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	diagnostic::WingSpan,
 	fold::{self, Fold},
@@ -184,23 +184,38 @@ impl Fold for ClosureTransformer {
 
 				// class_init_body :=
 				// ```
-				// this.display.hidden = true;
+				// std.Node.of(this).hidden = true;
 				// ```
+				let std_display_of_this = Expr::new(
+					ExprKind::Call {
+						callee: CalleeKind::Expr(Box::new(Expr::new(
+							ExprKind::Reference(Reference::TypeMember {
+								type_name: UserDefinedType {
+									root: Symbol::new("std", WingSpan::for_file(file_id)),
+									fields: vec![Symbol::new("Node", WingSpan::for_file(file_id))],
+									span: WingSpan::for_file(file_id),
+								},
+								property: Symbol::new("of", WingSpan::for_file(file_id)),
+							}),
+							WingSpan::for_file(file_id),
+						))),
+						arg_list: ArgList {
+							named_args: IndexMap::new(),
+							pos_args: vec![Expr::new(
+								ExprKind::Reference(Reference::Identifier(Symbol::new("this", WingSpan::for_file(file_id)))),
+								WingSpan::for_file(file_id),
+							)],
+							span: WingSpan::for_file(file_id),
+						},
+					},
+					WingSpan::for_file(file_id),
+				);
 				let class_init_body = vec![Stmt {
 					idx: 0,
 					kind: StmtKind::Assignment {
+						kind: AssignmentKind::Assign,
 						variable: Reference::InstanceMember {
-							object: Box::new(Expr::new(
-								ExprKind::Reference(Reference::InstanceMember {
-									object: Box::new(Expr::new(
-										ExprKind::Reference(Reference::Identifier(Symbol::new("this", WingSpan::for_file(file_id)))),
-										WingSpan::for_file(file_id),
-									)),
-									property: Symbol::new("display", WingSpan::for_file(file_id)),
-									optional_accessor: false,
-								}),
-								WingSpan::for_file(file_id),
-							)),
+							object: Box::new(std_display_of_this),
 							property: Symbol::new("hidden", WingSpan::for_file(file_id)),
 							optional_accessor: false,
 						},
@@ -287,7 +302,7 @@ impl Fold for ClosureTransformer {
 				// ```
 				let new_class_instance = Expr::new(
 					ExprKind::New(NewExpr {
-						class: Box::new(class_udt.to_expression()),
+						class: class_udt,
 						arg_list: ArgList {
 							named_args: IndexMap::new(),
 							pos_args: vec![],
@@ -348,9 +363,7 @@ impl<'a> Fold for RenameThisTransformer<'a> {
 					Reference::Identifier(ident)
 				}
 			}
-			Reference::InstanceMember { .. } | Reference::TypeMember { .. } | Reference::TypeReference(_) => {
-				fold::fold_reference(self, node)
-			}
+			Reference::InstanceMember { .. } | Reference::TypeMember { .. } => fold::fold_reference(self, node),
 		}
 	}
 }
