@@ -81,7 +81,7 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:http.delete and http.fetch can preform a call to an api\",\"${aws_lambda_function.testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_98044CDF.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -141,15 +141,6 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util }) {
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      },
-      "testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_IamRole_F3B23120": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:http.delete and http.fetch can preform a call to an api/Handler/IamRole",
-            "uniqueId": "testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_IamRole_F3B23120"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
@@ -162,16 +153,6 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util }) {
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.name}"
-      },
-      "testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicy_03683652": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:http.delete and http.fetch can preform a call to an api/Handler/IamRolePolicy",
-            "uniqueId": "testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicy_03683652"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_IamRole_F3B23120.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -184,16 +165,6 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util }) {
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.name}"
-      },
-      "testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicyAttachment_A5AE872D": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:http.delete and http.fetch can preform a call to an api/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicyAttachment_A5AE872D"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_IamRole_F3B23120.name}"
       }
     },
     "aws_lambda_function": {
@@ -220,36 +191,6 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util }) {
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudApi_cloudApi-OnRequest-cdafee6e_S3Object_5DAAA0EF.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      },
-      "testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_98044CDF": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:http.delete and http.fetch can preform a call to an api/Handler/Default",
-            "uniqueId": "testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_98044CDF"
-          }
-        },
-        "architectures": [
-          "arm64"
-        ],
-        "environment": {
-          "variables": {
-            "WING_FUNCTION_NAME": "Handler-c897cd38",
-            "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_8": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
-          }
-        },
-        "function_name": "Handler-c897cd38",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_IamRole_F3B23120.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_S3Object_64313242.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -289,17 +230,6 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util }) {
           "metadata": {
             "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-cdafee6e/S3Object",
             "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_S3Object_5DAAA0EF"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      },
-      "testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_S3Object_64313242": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:http.delete and http.fetch can preform a call to an api/Handler/S3Object",
-            "uniqueId": "testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_S3Object_64313242"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
