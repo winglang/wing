@@ -25,6 +25,7 @@ export interface Client {
   runAllTests: () => Promise<any>;
   listResources: () => Promise<ExplorerItem>;
   onInvalidateQuery: (options: SubscriptionOptions) => void;
+  onOpenFileInEditor: (options: SubscriptionOptions) => void;
   close: () => void;
 }
 
@@ -98,6 +99,13 @@ export const createClient = (host: string): Client => {
     return client["app.invalidateQuery"].subscribe(undefined, options);
   };
 
+  const onOpenFileInEditor = (options: SubscriptionOptions) => {
+    return client["app.openFileInEditorSubscription"].subscribe(
+      undefined,
+      options
+    );
+  };
+
   const close = () => {
     wsClient.close();
   };
@@ -112,6 +120,7 @@ export const createClient = (host: string): Client => {
     runAllTests,
     listResources,
     onInvalidateQuery,
+    onOpenFileInEditor,
     close,
   };
 };

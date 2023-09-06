@@ -4,7 +4,18 @@ let b = new cloud.Bucket();
 b.addObject("file2.txt", "Bar");
 
 test "delete" {
-  let var error = "";
+  let assertThrows = (expected: str, block: (): void) => {
+    let var error = false;
+    try {
+      block();
+    } catch actual {
+      assert(actual == expected);
+      error = true;
+    }
+    assert(error);
+  };
+
+  let OBJECT_DOES_NOT_EXIST_ERROR = "Object does not exist (key=file1.json).";
   let jsonObj1 = Json { key1: "value1" };
 
   b.putJson("file1.json", jsonObj1);
@@ -14,13 +25,10 @@ test "delete" {
   assert(b.exists("file2.txt"));
 
   b.delete("file1.json", mustExist: true);
-  try {
-    b.delete("file1.json", mustExist: true);
-  } catch e {
-    error = e;
-  }
 
-  assert(error == "Object does not exist (key=file1.json).");
+  assertThrows(OBJECT_DOES_NOT_EXIST_ERROR, () => {
+    b.delete("file1.json", mustExist: true);
+  });
   assert(b.exists("file2.txt"));
 
   b.delete("file2.txt");

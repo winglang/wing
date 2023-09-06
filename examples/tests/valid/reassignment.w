@@ -4,6 +4,13 @@ assert(x == 5);
 x = x + 1;
 assert(x == 6);
 
+let var z = 1;
+z += 2;
+assert(z == 3);
+
+z -= 1;
+assert(z == 2);
+
 class R {
   var f: num;
   f1: num;
