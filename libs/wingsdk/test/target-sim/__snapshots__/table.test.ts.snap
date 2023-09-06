@@ -471,7 +471,7 @@ exports[`tryGet row 2`] = `
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -484,7 +484,7 @@ exports[`tryGet row 2`] = `
         "my_table": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud NoSQL database table that can be used to store and query data",
@@ -496,7 +496,7 @@ exports[`tryGet row 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.69",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
