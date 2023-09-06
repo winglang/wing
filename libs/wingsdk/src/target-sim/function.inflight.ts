@@ -64,7 +64,10 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
             );
           },
 
-          env: this.env,
+          env: {
+            ...this.env,
+            WING_SIMULATOR_URL: this.context.serverUrl,
+          },
         };
 
         const sandboxConsole: any = {};
@@ -86,7 +89,6 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
           timeout: this.timeout,
           context: {
             process: sandboxProcess,
-            $simulator: this.context,
             console: sandboxConsole,
           },
         });

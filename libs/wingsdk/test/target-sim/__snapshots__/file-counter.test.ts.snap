@@ -17,20 +17,54 @@ return class Handler {
         }
 };
 })())({
-counter: (function(env) {
-  let handle = process.env[env];
+counter: (function() {
+  const handle = process.env[\\"COUNTER_HANDLE_4ecd8d46\\"];
   if (!handle) {
     throw new Error(\\"Missing environment variable: \\" + env);
   }
-  return $simulator.findInstance(handle);
-})(\\"COUNTER_HANDLE_4ecd8d46\\"),
-bucket: (function(env) {
-  let handle = process.env[env];
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+  }
+
+  return new Proxy({}, {
+    get: function(target, method, receiver) {
+      return async function() {
+        const resp = await fetch(simulatorUrl + \\"/v1/call\\", {
+          method: \\"POST\\",
+          headers: { \\"Content-Type\\": \\"application/json\\" },
+          body: JSON.stringify({ handle, method, args: Array.from(arguments) }),
+        });
+        const parsed = await resp.json();
+        return parsed.result;
+      };
+    }
+  });
+})(),
+bucket: (function() {
+  const handle = process.env[\\"BUCKET_HANDLE_5f2a41c8\\"];
   if (!handle) {
     throw new Error(\\"Missing environment variable: \\" + env);
   }
-  return $simulator.findInstance(handle);
-})(\\"BUCKET_HANDLE_5f2a41c8\\")
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+  }
+
+  return new Proxy({}, {
+    get: function(target, method, receiver) {
+      return async function() {
+        const resp = await fetch(simulatorUrl + \\"/v1/call\\", {
+          method: \\"POST\\",
+          headers: { \\"Content-Type\\": \\"application/json\\" },
+          body: JSON.stringify({ handle, method, args: Array.from(arguments) }),
+        });
+        const parsed = await resp.json();
+        return parsed.result;
+      };
+    }
+  });
+})()
 }), args: {} })).handle(event);
 };",
   "connections.json": {

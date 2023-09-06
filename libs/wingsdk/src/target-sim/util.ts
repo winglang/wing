@@ -50,13 +50,32 @@ export function bindSimulatorResource(
 export function makeSimulatorJsClient(filename: string, resource: Resource) {
   const type = basename(filename).split(".")[0];
   const env = makeEnvVarName(type, resource);
-  return `(function(env) {
-  let handle = process.env[env];
+
+  // return an object where calling any method will make a request to the simulator server
+  return `(function() {
+  const handle = process.env["${env}"];
   if (!handle) {
     throw new Error("Missing environment variable: " + env);
   }
-  return $simulator.findInstance(handle);
-})("${env}")`;
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error("Missing environment variable: WING_SIMULATOR_URL");
+  }
+
+  return new Proxy({}, {
+    get: function(target, method, receiver) {
+      return async function() {
+        const resp = await fetch(simulatorUrl + "/v1/call", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ handle, method, args: Array.from(arguments) }),
+        });
+        const parsed = await resp.json();
+        return parsed.result;
+      };
+    }
+  });
+})()`;
 }
 
 // helper function to convert duration to a cron string

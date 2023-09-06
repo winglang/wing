@@ -755,13 +755,30 @@ return class Handler {
 }
 };
 })())({
-queue: (function(env) {
-  let handle = process.env[env];
+queue: (function() {
+  const handle = process.env[\\"QUEUE_HANDLE_54fcf4cd\\"];
   if (!handle) {
     throw new Error(\\"Missing environment variable: \\" + env);
   }
-  return $simulator.findInstance(handle);
-})(\\"QUEUE_HANDLE_54fcf4cd\\")
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+  }
+
+  return new Proxy({}, {
+    get: function(target, method, receiver) {
+      return async function() {
+        const resp = await fetch(simulatorUrl + \\"/v1/call\\", {
+          method: \\"POST\\",
+          headers: { \\"Content-Type\\": \\"application/json\\" },
+          body: JSON.stringify({ handle, method, args: Array.from(arguments) }),
+        });
+        const parsed = await resp.json();
+        return parsed.result;
+      };
+    }
+  });
+})()
 })).handle(event);
 };",
   ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "exports.handler = async function(event) {

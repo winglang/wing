@@ -65,7 +65,7 @@ test("update an object in bucket", async () => {
   expect(listMessages(s)).toMatchSnapshot();
 });
 
-test("bucket on event creates 3 topics, and sends the right event and key in the event handlers ", async () => {
+test("bucket on event creates 3 topics, and sends the right event and key in the event handlers", async () => {
   // GIVEN
   const app = new SimApp();
   const bucket = cloud.Bucket._newBucket(app, "my_bucket");
@@ -73,9 +73,9 @@ test("bucket on event creates 3 topics, and sends the right event and key in the
   const testInflight = Testing.makeHandler(
     app,
     "inflight_test",
-    `async handle(key, event) { await this.bucket.put(key, event); }`,
+    `async handle(key, event) { await this.logBucket.put(key, event); }`,
     {
-      bucket: {
+      logBucket: {
         obj: logBucket,
         ops: [cloud.BucketInflightMethods.PUT],
       },
