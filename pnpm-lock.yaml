@@ -34,6 +34,9 @@ importers:
       bump-pack:
         specifier: workspace:^
         version: link:tools/bump-pack
+      generate-workspace:
+        specifier: workspace:^
+        version: link:tools/generate-workspace
       turbo:
         specifier: ^1.10.13
         version: 1.10.13
@@ -965,6 +968,8 @@ importers:
         specifier: ^5.2.2
         version: 5.2.2
 
+  docs/docs: {}
+
   examples/tests/error: {}
 
   examples/tests/invalid:
@@ -1326,6 +1331,34 @@ importers:
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
+
+  tools/generate-workspace:
+    dependencies:
+      '@pnpm/find-workspace-dir':
+        specifier: ^6.0.2
+        version: 6.0.2
+      '@pnpm/workspace.find-packages':
+        specifier: ^1.0.1
+        version: 1.0.5(@pnpm/logger@5.0.0)
+      npm-which:
+        specifier: ^3.0.1
+        version: 3.0.1
+      tsx:
+        specifier: ^3.12.7
+        version: 3.12.7
+    devDependencies:
+      '@types/fs-extra':
+        specifier: ^11
+        version: 11.0.1
+      '@types/node':
+        specifier: ^18.16.18
+        version: 18.17.13
+      '@types/semver':
+        specifier: ^7.5.0
+        version: 7.5.1
+      typescript:
+        specifier: ^5.1.3
+        version: 5.1.6
 
   tools/hangar:
     devDependencies:
@@ -12402,7 +12435,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20230905
+      typescript: 5.3.0-dev.20230906
     dev: true
 
   /dset@3.1.2:
@@ -21209,6 +21242,17 @@ packages:
       typescript: 5.2.2
     dev: false
 
+  /tsx@3.12.7:
+    resolution: {integrity: sha512-C2Ip+jPmqKd1GWVQDvz/Eyc6QJbGfE7NrR3fx5BpEHMZsEHoIxHL1j+lKdGobr8ovEyqeNkPLSKp6SCSOt7gmw==}
+    hasBin: true
+    dependencies:
+      '@esbuild-kit/cjs-loader': 2.4.2
+      '@esbuild-kit/core-utils': 3.2.2
+      '@esbuild-kit/esm-loader': 2.5.5
+    optionalDependencies:
+      fsevents: 2.3.3
+    dev: false
+
   /tsx@3.12.8:
     resolution: {integrity: sha512-Lt9KYaRGF023tlLInPj8rgHwsZU8qWLBj4iRXNWxTfjIkU7canGL806AqKear1j722plHuiYNcL2ZCo6uS9UJA==}
     hasBin: true
@@ -21443,8 +21487,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20230905:
-    resolution: {integrity: sha512-Nl9MoKWN0YYlCvQnw850L4ZgqdmqwVGCi9cAoQDw4PsqRGaWAi9HKizS9xu0q4qgKKsEKetWCZHT8dBtJTGaMg==}
+  /typescript@5.3.0-dev.20230906:
+    resolution: {integrity: sha512-7dCmQgfQ4i38daoPCCert+rM6gLxBpxRdjncJkHkJV4CWvNZsRX+RVTusojkqGAtW9vqB0+/8iDH6CZ0PDxghg==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
