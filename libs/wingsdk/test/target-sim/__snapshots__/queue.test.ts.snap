@@ -735,7 +735,7 @@ exports[`queue batch size of 2, purge the queue 2`] = `
 }
 `;
 
-exports[`queue with one subscriber, batch size of 5 1`] = `
+exports[`queue with one subscriber, batch size of 5, should get processed in two batches 1`] = `
 {
   ".wing/function_c8ab799f.js": "exports.handler = async function(event) {
   return await (new ((function(){
@@ -746,12 +746,7 @@ return class Handler {
     }
   }
   async handle() {
-  await this.queue.push(\\"A\\");
-  await this.queue.push(\\"B\\");
-  await this.queue.push(\\"C\\");
-  await this.queue.push(\\"D\\");
-  await this.queue.push(\\"E\\");
-  await this.queue.push(\\"F\\");
+  await this.queue.push(\\"A\\", \\"B\\", \\"C\\", \\"D\\", \\"E\\", \\"F\\");
 }
 };
 })())({
