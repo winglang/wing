@@ -254,7 +254,14 @@ export class Simulator {
     app.post("/v1/call", async (req, res, next) => {
       try {
         const request: SimulatorServerRequest = req.body;
-        const { handle, method, args } = request;
+        let { handle, method, args } = request;
+
+        // when a JSON object is stringified to be sent over the wire, any occurrences of `undefined` are replaced with `null`.
+        // deeply replace all nulls with undefineds to avoid issues
+        args = JSON.parse(JSON.stringify(args), (_k, v) =>
+          v === null ? undefined : v
+        );
+
         const resource = this._handles.find(handle);
 
         try {
