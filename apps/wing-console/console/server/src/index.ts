@@ -23,6 +23,7 @@ export type {
   TestsStateManager,
   TestStatus,
   TestItem,
+  FileLink,
 } from "./utils/createRouter.js";
 export type { Trace, State } from "./types.js";
 export type { LogInterface } from "./utils/LogInterface.js";
