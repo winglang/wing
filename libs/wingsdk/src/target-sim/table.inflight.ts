@@ -97,7 +97,13 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `get row ${key} from table ${this.name}.`,
       activity: async () => {
-        return this.table.get(key);
+        try {
+          return this.table.get(key);
+        } catch (e) {
+          throw new Error(
+            `Row does not exist (key=${key}) : ${(e as Error).stack}`
+          );
+        }
       },
     });
   }
