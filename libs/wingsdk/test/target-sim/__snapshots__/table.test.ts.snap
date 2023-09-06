@@ -169,7 +169,7 @@ exports[`get row 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Table created.",
-  "get row joe-id from table my_get_table.",
+  "try get row joe-id from table my_get_table.",
   "insert row joe-id into the table my_get_table.",
   "get row joe-id from table my_get_table.",
   "wingsdk.cloud.Table deleted.",
@@ -255,7 +255,7 @@ exports[`insert row 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Table created.",
-  "get row joe-id from table my_insert_table.",
+  "try get row joe-id from table my_insert_table.",
   "insert row joe-id into the table my_insert_table.",
   "wingsdk.cloud.Table deleted.",
   "wingsdk.cloud.TestRunner deleted.",
@@ -340,9 +340,9 @@ exports[`list table 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Table created.",
-  "get row joe-id from table my_list_table.",
+  "try get row joe-id from table my_list_table.",
   "insert row joe-id into the table my_list_table.",
-  "get row jane-id from table my_list_table.",
+  "try get row jane-id from table my_list_table.",
   "insert row jane-id into the table my_list_table.",
   "list all rows from table my_list_table.",
   "wingsdk.cloud.Table deleted.",
@@ -428,7 +428,7 @@ exports[`update row 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Table created.",
-  "get row joe-id from table my_update_table.",
+  "try get row joe-id from table my_update_table.",
   "insert row joe-id into the table my_update_table.",
   "get row joe-id from table my_update_table.",
   "get row joe-id from table my_update_table.",

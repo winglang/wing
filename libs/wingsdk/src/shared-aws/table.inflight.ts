@@ -67,7 +67,19 @@ export class TableClient implements ITableClient {
     if (result.Item) {
       return unmarshall(result.Item) as Json;
     }
-    return {} as Json;
+    throw new Error(`Row does not exist (key=${key}).`);
+  }
+
+  public async tryGet(key: string): Promise<Json | undefined> {
+    const command = new GetItemCommand({
+      TableName: this.tableName,
+      Key: { [this.primaryKey]: { S: key } },
+    });
+    const result = await this.client.send(command);
+    if (result.Item) {
+      return unmarshall(result.Item) as Json;
+    }
+    return undefined;
   }
 
   public async list(): Promise<Array<Json>> {

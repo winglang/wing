@@ -142,6 +142,17 @@ exports[`run single test > test failure 1`] = `
     at new Promise (<anonymous>)
 <sanitized>
 <sanitized>
+<sanitized>
+<sanitized>
+<sanitized>
+<sanitized>
+<sanitized>
+<sanitized>
+<sanitized>
+<sanitized>
+<sanitized>
+<sanitized>
+<sanitized>
 <sanitized>",
   "pass": false,
   "path": "root/test",

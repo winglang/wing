@@ -44,7 +44,7 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `insert row ${key} into the table ${this.name}.`,
       activity: async () => {
-        if (await this.get(key)) {
+        if (await this.tryGet(key)) {
           throw new Error(
             `The primary key "${key}" already exists in the "${this.name}" table.`
           );
@@ -64,18 +64,20 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `update row ${key} in table ${this.name}.`,
       activity: async () => {
-        let item: any = await this.get(key);
-        if (!item) {
+        try {
+          let item: any = await this.get(key);
+
+          for (const column of Object.keys(this.columns)) {
+            if (anyRow[column]) {
+              item[column] = anyRow[column];
+            }
+          }
+          this.table.set(key, item);
+        } catch {
           throw new Error(
             `The primary key "${key}" was not found in the "${this.name}" table.`
           );
         }
-        for (const column of Object.keys(this.columns)) {
-          if (anyRow[column]) {
-            item[column] = anyRow[column];
-          }
-        }
-        this.table.set(key, item);
       },
     });
   }
@@ -94,6 +96,15 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
   public async get(key: string): Promise<Json> {
     return this.context.withTrace({
       message: `get row ${key} from table ${this.name}.`,
+      activity: async () => {
+        return this.table.get(key);
+      },
+    });
+  }
+
+  public async tryGet(key: string): Promise<Json | undefined> {
+    return this.context.withTrace({
+      message: `try get row ${key} from table ${this.name}.`,
       activity: async () => {
         return this.table.get(key);
       },
