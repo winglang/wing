@@ -84,11 +84,11 @@ export async function getWingBin(): Promise<string | null> {
     return resolvePath(whichPath);
   } catch (e) {
     const choice = await window.showWarningMessage(
-      `"${configuredWingBin}" is not in PATH. Install globally with \`npm install -g winglang@latest\`? (${e})`,
-      "Ok"
+      `Unable to find wing from "${configuredWingBin}" (not in PATH). Install globally with \`npm install -g winglang@latest\`? (${e})`,
+      "Yes!"
     );
 
-    if (choice === "Ok") {
+    if (choice === "Yes!") {
       if (await guidedWingInstallation()) {
         return getWingBin();
       } else {
