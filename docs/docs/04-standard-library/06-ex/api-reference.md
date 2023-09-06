@@ -278,7 +278,7 @@ new ex.Table(props: TableProps);
 | <code><a href="#@winglang/sdk.ex.ITableClient.get">get</a></code> | Get a row from the table, by primary key. |
 | <code><a href="#@winglang/sdk.ex.ITableClient.insert">insert</a></code> | Insert a row into the table. |
 | <code><a href="#@winglang/sdk.ex.ITableClient.list">list</a></code> | List all rows in the table. |
-| <code><a href="#@winglang/sdk.ex.ITableClient.tryGet">tryGet</a></code> | Get a row from the table, by primary key. |
+| <code><a href="#@winglang/sdk.ex.ITableClient.tryGet">tryGet</a></code> | Get a row from the table if exists, by primary key. |
 | <code><a href="#@winglang/sdk.ex.ITableClient.update">update</a></code> | Update a row in the table. |
 
 ---
@@ -373,7 +373,7 @@ List all rows in the table.
 inflight tryGet(key: str): Json
 ```
 
-Get a row from the table, by primary key.
+Get a row from the table if exists, by primary key.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.ITableClient.tryGet.parameter.key"></a>
 
