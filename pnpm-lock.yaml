@@ -229,7 +229,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(eslint-config-prettier@8.10.0)(eslint@8.48.0)(prettier@2.8.8)
       node-fetch:
-        specifier: '2'
+        specifier: ^2.6.7
         version: 2.7.0
       npm-check-updates:
         specifier: ^16
@@ -834,6 +834,9 @@ importers:
       '@wingconsole/use-loading':
         specifier: workspace:^
         version: link:../../packages/use-loading
+      '@wingconsole/use-persistent-state':
+        specifier: workspace:^
+        version: link:../../packages/use-persistent-state
       autoprefixer:
         specifier: ^10.4.15
         version: 10.4.15(postcss@8.4.29)
@@ -893,6 +896,21 @@ importers:
         version: link:../../tools/tsconfig
       typescript:
         specifier: ^5.2.2
+        version: 5.2.2
+
+  apps/wing-console/packages/use-persistent-state:
+    devDependencies:
+      '@types/react':
+        specifier: ^18.2.12
+        version: 18.2.21
+      '@wingconsole/eslint-plugin':
+        specifier: workspace:^
+        version: link:../../tools/eslint-plugin
+      '@wingconsole/tsconfig':
+        specifier: workspace:^
+        version: link:../../tools/tsconfig
+      typescript:
+        specifier: ^5.1.3
         version: 5.2.2
 
   apps/wing-console/tools/eslint-plugin:
