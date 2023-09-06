@@ -1,8 +1,8 @@
-# [404.w](../../../../../../examples/tests/sdk_tests/api/404.w) | compile | tf-aws
+# [cors.w](../../../../../../examples/tests/sdk_tests/api/cors.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.js
 ```js
-module.exports = function({  }) {
+module.exports = function({ $body }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -10,7 +10,7 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle(req) {
-      return ({"status": 200,"body": "world"});
+      return ({"status": 200,"body": $body});
     }
   }
   return $Closure1;
@@ -28,10 +28,9 @@ module.exports = function({ $api_url, $http_Util }) {
       return $obj;
     }
     async handle() {
-      const url = String.raw({ raw: ["", "/does-not-exists"] }, $api_url);
+      const url = ($api_url + "/path");
       const response = (await $http_Util.get(url));
-      {((cond) => {if (!cond) throw new Error("assertion failed: response.status == 404")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(response.status,404)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: response.body?.contains(\"Error\") == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(response.body.includes("Error"),true)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: response.headers.get(\"access-control-allow-origin\") == \"*\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((response.headers)["access-control-allow-origin"],"*")))};
     }
   }
   return $Closure2;
@@ -72,7 +71,7 @@ module.exports = function({ $api_url, $http_Util }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:it responds with 404\",\"${aws_lambda_function.testitrespondswith404_Handler_2D34428F.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:http.get and http.fetch can preform a call to an api\",\"${aws_lambda_function.testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_9FEA2521.arn}\"]]"
     }
   },
   "provider": {
@@ -106,7 +105,7 @@ module.exports = function({ $api_url, $http_Util }) {
             "uniqueId": "cloudApi_api_2B334D75"
           }
         },
-        "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/hello\":{\"get\":{\"operationId\":\"get-hello\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{}}},\"parameters\":[],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}},\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"\\n                {\\\"statusCode\\\": 404}\\n              \"},\"passthroughBehavior\":\"never\",\"responses\":{\"404\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}},\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
+        "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/path\":{\"get\":{\"operationId\":\"get-path\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{},\"headers\":{\"Access-Control-Allow-Origin\":{\"schema\":{\"type\":\"string\"}},\"Access-Control-Allow-Methods\":{\"schema\":{\"type\":\"string\"}},\"Access-Control-Allow-Headers\":{\"schema\":{\"type\":\"string\"}}}}},\"parameters\":[],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}},\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"\\n                #if ($context.httpMethod == \\\"OPTIONS\\\")\\n                    {\\\"statusCode\\\": 204}\\n                #else\\n                    {\\\"statusCode\\\": 404}\\n                #end\\n              \"},\"passthroughBehavior\":\"never\",\"responses\":{\"204\":{\"statusCode\":\"204\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\",\"method.response.header.Access-Control-Allow-Origin\":\"'*'\",\"method.response.header.Access-Control-Allow-Methods\":\"'GET,POST,PUT,DELETE,HEAD,OPTIONS'\",\"method.response.header.Access-Control-Allow-Headers\":\"'Content-Type,Authorization,X-Requested-With'\"},\"responseTemplates\":{\"application/json\":\"{}\"}},\"404\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}},\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"204\":{\"description\":\"204 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"},\"Access-Control-Allow-Origin\":{\"type\":\"string\"},\"Access-Control-Allow-Methods\":{\"type\":\"string\"},\"Access-Control-Allow-Headers\":{\"type\":\"string\"}}},\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
         "name": "api-c895068c"
       }
     },
@@ -133,11 +132,11 @@ module.exports = function({ $api_url, $http_Util }) {
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "testitrespondswith404_Handler_IamRole_E0973EE8": {
+      "testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_IamRole_678DDBCB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:it responds with 404/Handler/IamRole",
-            "uniqueId": "testitrespondswith404_Handler_IamRole_E0973EE8"
+            "path": "root/Default/Default/test:http.get and http.fetch can preform a call to an api/Handler/IamRole",
+            "uniqueId": "testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_IamRole_678DDBCB"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -154,15 +153,15 @@ module.exports = function({ $api_url, $http_Util }) {
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.name}"
       },
-      "testitrespondswith404_Handler_IamRolePolicy_4E2D3D6D": {
+      "testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicy_047F62EA": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:it responds with 404/Handler/IamRolePolicy",
-            "uniqueId": "testitrespondswith404_Handler_IamRolePolicy_4E2D3D6D"
+            "path": "root/Default/Default/test:http.get and http.fetch can preform a call to an api/Handler/IamRolePolicy",
+            "uniqueId": "testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicy_047F62EA"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testitrespondswith404_Handler_IamRole_E0973EE8.name}"
+        "role": "${aws_iam_role.testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_IamRole_678DDBCB.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -176,15 +175,15 @@ module.exports = function({ $api_url, $http_Util }) {
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.name}"
       },
-      "testitrespondswith404_Handler_IamRolePolicyAttachment_943423A4": {
+      "testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicyAttachment_328C8EF0": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:it responds with 404/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testitrespondswith404_Handler_IamRolePolicyAttachment_943423A4"
+            "path": "root/Default/Default/test:http.get and http.fetch can preform a call to an api/Handler/IamRolePolicyAttachment",
+            "uniqueId": "testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicyAttachment_328C8EF0"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testitrespondswith404_Handler_IamRole_E0973EE8.name}"
+        "role": "${aws_iam_role.testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_IamRole_678DDBCB.name}"
       }
     },
     "aws_lambda_function": {
@@ -217,11 +216,11 @@ module.exports = function({ $api_url, $http_Util }) {
           "subnet_ids": []
         }
       },
-      "testitrespondswith404_Handler_2D34428F": {
+      "testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_9FEA2521": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:it responds with 404/Handler/Default",
-            "uniqueId": "testitrespondswith404_Handler_2D34428F"
+            "path": "root/Default/Default/test:http.get and http.fetch can preform a call to an api/Handler/Default",
+            "uniqueId": "testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_9FEA2521"
           }
         },
         "architectures": [
@@ -229,18 +228,18 @@ module.exports = function({ $api_url, $http_Util }) {
         ],
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c83f9661",
+            "WING_FUNCTION_NAME": "Handler-c838ce37",
             "WING_TARGET": "tf-aws",
             "WING_TOKEN_TFTOKEN_TOKEN_8": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
           }
         },
-        "function_name": "Handler-c83f9661",
+        "function_name": "Handler-c838ce37",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.testitrespondswith404_Handler_IamRole_E0973EE8.arn}",
+        "role": "${aws_iam_role.testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_IamRole_678DDBCB.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testitrespondswith404_Handler_S3Object_7180AA4B.key}",
+        "s3_key": "${aws_s3_object.testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_S3Object_88ED484E.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -249,18 +248,18 @@ module.exports = function({ $api_url, $http_Util }) {
       }
     },
     "aws_lambda_permission": {
-      "cloudApi_api_permission-GET-df16733f_0EEF8FF5": {
+      "cloudApi_api_permission-GET-e2131352_3FDDE199": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/api/permission-GET-df16733f",
-            "uniqueId": "cloudApi_api_permission-GET-df16733f_0EEF8FF5"
+            "path": "root/Default/Default/cloud.Api/api/permission-GET-e2131352",
+            "uniqueId": "cloudApi_api_permission-GET-e2131352_3FDDE199"
           }
         },
         "action": "lambda:InvokeFunction",
         "function_name": "${aws_lambda_function.cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F.function_name}",
         "principal": "apigateway.amazonaws.com",
-        "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/GET/hello",
-        "statement_id": "AllowExecutionFromAPIGateway-GET-df16733f"
+        "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/GET/path",
+        "statement_id": "AllowExecutionFromAPIGateway-GET-e2131352"
       }
     },
     "aws_s3_bucket": {
@@ -286,11 +285,11 @@ module.exports = function({ $api_url, $http_Util }) {
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "testitrespondswith404_Handler_S3Object_7180AA4B": {
+      "testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_S3Object_88ED484E": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:it responds with 404/Handler/S3Object",
-            "uniqueId": "testitrespondswith404_Handler_S3Object_7180AA4B"
+            "path": "root/Default/Default/test:http.get and http.fetch can preform a call to an api/Handler/S3Object",
+            "uniqueId": "testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_S3Object_88ED484E"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
@@ -311,6 +310,7 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 const http = $stdlib.http;
+const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -322,6 +322,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
+            $body: ${context._lift(body)},
           })
         `;
       }
@@ -338,6 +339,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _getInflightOps() {
         return ["handle", "$inflight_init"];
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("handle")) {
+          $Closure1._registerBindObject(body, host, []);
+        }
+        super._registerBind(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -374,13 +381,14 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
-    (api.get("/hello",new $Closure1(this,"$Closure1")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:it responds with 404",new $Closure2(this,"$Closure2"));
+    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api",({"cors": true}));
+    const body = "ok!";
+    (api.get("/path",new $Closure1(this,"$Closure1")));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:http.get and http.fetch can preform a call to an api",new $Closure2(this,"$Closure2"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "404", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+new $App({ outdir: $outdir, name: "cors", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 
