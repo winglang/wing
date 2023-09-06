@@ -19,6 +19,7 @@ let languageServerManager: LanguageServerManager | undefined;
 export async function deactivate() {
   wingBinWatcher?.close();
   await languageServerManager?.stop();
+  await wingConsoleContext?.stop();
 }
 
 export async function activate(context: ExtensionContext) {
