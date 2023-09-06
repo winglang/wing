@@ -288,6 +288,16 @@ export class Simulator {
   }
 
   /**
+   * The URL that the simulator server is listening on.
+   */
+  public get serverUrl(): string {
+    if (!this._serverUrl) {
+      throw new Error("Simulator server is not running.");
+    }
+    return this._serverUrl;
+  }
+
+  /**
    * Stop the simulation and clean up all resources.
    */
   public async stop(): Promise<void> {
