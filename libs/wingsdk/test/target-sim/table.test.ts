@@ -89,8 +89,52 @@ test("get row", async () => {
   const s = await app.startSimulator();
   const client = s.getResource("/my_table") as ex.ITableClient;
 
-  await client.insert("joe-id", { name: "Joe Doe", age: 50 } as any);
-  const joe = await client.get("joe-id");
+  const KEY = "joe-id";
+
+  await client.insert(KEY, { name: "Joe Doe", age: 50 } as any);
+  const joe = await client.get(KEY);
+  expect(joe).toEqual({ id: "joe-id", name: "Joe Doe", age: 50 });
+
+  expect(s.getResourceConfig("/my_table")).toEqual({
+    attrs: {
+      handle: expect.any(String),
+    },
+    path: "root/my_table",
+    props: {
+      name: "my_get_table",
+      columns: {
+        name: ex.ColumnType.STRING,
+        age: ex.ColumnType.NUMBER,
+      },
+      primaryKey: "id",
+      initialRows: {},
+    },
+    type: "wingsdk.cloud.Table",
+  });
+  await s.stop();
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("tryGet row", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const t = ex.Table._newTable(app, "my_table", {
+    name: "my_get_table",
+    columns: {
+      name: ex.ColumnType.STRING,
+      age: ex.ColumnType.NUMBER,
+    },
+    primaryKey: "id",
+  });
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_table") as ex.ITableClient;
+
+  const KEY = "joe-id";
+
+  await client.insert(KEY, { name: "Joe Doe", age: 50 } as any);
+  const joe = await client.tryGet(KEY);
   expect(joe).toEqual({ id: "joe-id", name: "Joe Doe", age: 50 });
 
   expect(s.getResourceConfig("/my_table")).toEqual({

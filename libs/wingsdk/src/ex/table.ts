@@ -153,7 +153,7 @@ export interface ITableClient {
    */
   get(key: string): Promise<Json>;
   /**
-   * Get a row from the table, by primary key.
+   * Get a row from the table if exists, by primary key.
    * @param key primary key to search.
    * @returns get the row from table if it exists, nil otherwise.
    * @inflight

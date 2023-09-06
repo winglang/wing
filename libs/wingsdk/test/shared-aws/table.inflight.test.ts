@@ -96,7 +96,7 @@ describe("inflight table tests", () => {
     expect(response).toEqual(undefined);
   });
 
-  test("get to a empty table", async () => {
+  test("get to an empty table", async () => {
     // GIVEN
     const expectedRequest: GetItemCommandInput = {
       TableName: MOCK_TABLE_NAME,
@@ -131,6 +131,45 @@ describe("inflight table tests", () => {
     dynamoMock.on(GetItemCommand, expectedRequest).resolves(mockResponse);
     // WHEN
     const response = await client.get(key);
+    // THEN
+    expect(response).toEqual({ id: key, somenumber: row.somenumber });
+  });
+
+  test("tryGet to an empty table", async () => {
+    // GIVEN
+    const expectedRequest: GetItemCommandInput = {
+      TableName: MOCK_TABLE_NAME,
+      Key: { id: { S: key } },
+    };
+    const mockResponse: GetItemCommandOutput = {
+      $metadata: {},
+    };
+    dynamoMock.on(GetItemCommand, expectedRequest).resolves(mockResponse);
+
+    // WHEN
+    const response = await client.tryGet(key);
+
+    // THEN
+    expect(response).toEqual(undefined);
+  });
+
+  test("tryGet", async () => {
+    const expectedRequest: GetItemCommandInput = {
+      TableName: MOCK_TABLE_NAME,
+      Key: {
+        id: { S: key },
+      },
+    };
+    const mockResponse: GetItemCommandOutput = {
+      $metadata: {},
+      Item: {
+        id: { S: `${key}` },
+        somenumber: { N: `${row.somenumber}` },
+      },
+    };
+    dynamoMock.on(GetItemCommand, expectedRequest).resolves(mockResponse);
+    // WHEN
+    const response = await client.tryGet(key);
     // THEN
     expect(response).toEqual({ id: key, somenumber: row.somenumber });
   });

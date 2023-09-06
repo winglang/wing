@@ -109,12 +109,10 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
   }
 
   public async tryGet(key: string): Promise<Json | undefined> {
-    return this.context.withTrace({
-      message: `try get row ${key} from table ${this.name}.`,
-      activity: async () => {
-        return this.table.get(key);
-      },
-    });
+    if (this.table.has(key)) {
+      return this.get(key);
+    }
+    return undefined;
   }
 
   public async list(): Promise<Array<Json>> {
