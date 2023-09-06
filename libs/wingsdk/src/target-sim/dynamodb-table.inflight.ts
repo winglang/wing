@@ -17,7 +17,7 @@ export class DynamodbTable
   extends DynamodbTableClientBase
   implements ISimulatorResourceInstance
 {
-  private container_name: string;
+  private containerName: string;
   private readonly WING_DYNAMODB_IMAGE =
     process.env.WING_DYNAMODB_IMAGE ?? "amazon/dynamodb-local:2.0.0";
   private readonly context: ISimulatorContext;
@@ -30,7 +30,7 @@ export class DynamodbTable
     super(props.name, props.primaryKey);
 
     this.context = context;
-    this.container_name = `wing-sim-dynamodb-${this.context.resourcePath.replace(
+    this.containerName = `wing-sim-dynamodb-${this.context.resourcePath.replace(
       /\//g,
       "."
     )}-${uuidv4()}`;
@@ -40,7 +40,7 @@ export class DynamodbTable
     try {
       const { hostPort } = await runDockerImage({
         imageName: this.WING_DYNAMODB_IMAGE,
-        containerName: this.container_name,
+        containerName: this.containerName,
         containerPort: "8000",
       });
 
@@ -67,7 +67,7 @@ export class DynamodbTable
     // disconnect from the dynamodb server
     this.client?.destroy();
     // stop the dynamodb container
-    await runCommand("docker", ["rm", "-f", `${this.container_name}`]);
+    await runCommand("docker", ["rm", "-f", `${this.containerName}`]);
   }
 
   public async _rawClient(): Promise<DynamoDBClient> {
@@ -97,13 +97,13 @@ export class DynamodbTable
     });
 
     // dynamodb server process might take some time to start
-    let attempNum = 0;
+    let attemptNumber = 0;
     while (true) {
       try {
         await this.client!.send(createTableCommand);
         break;
       } catch (err) {
-        if (++attempNum >= MAX_CREATE_TABLE_COMMAND_ATTEMPTS) {
+        if (++attemptNumber >= MAX_CREATE_TABLE_COMMAND_ATTEMPTS) {
           throw err;
         }
         await this.sleep(50);

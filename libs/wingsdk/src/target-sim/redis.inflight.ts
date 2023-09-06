@@ -12,7 +12,7 @@ export class Redis
   extends RedisClientBase
   implements ISimulatorResourceInstance
 {
-  private container_name: string;
+  private containerName: string;
   private readonly WING_REDIS_IMAGE =
     process.env.WING_REDIS_IMAGE ??
     // Redis version 7.0.9
@@ -25,7 +25,7 @@ export class Redis
   public constructor(_props: RedisSchema["props"], context: ISimulatorContext) {
     super();
     this.context = context;
-    this.container_name = `wing-sim-redis-${this.context.resourcePath.replace(
+    this.containerName = `wing-sim-redis-${this.context.resourcePath.replace(
       /\//g,
       "."
     )}-${uuidv4()}`;
@@ -35,7 +35,7 @@ export class Redis
     try {
       const { hostPort } = await runDockerImage({
         imageName: this.WING_REDIS_IMAGE,
-        containerName: this.container_name,
+        containerName: this.containerName,
         containerPort: "6379",
       });
 
@@ -52,7 +52,7 @@ export class Redis
     // disconnect from the redis server
     await this.connection?.disconnect();
     // stop the redis container
-    await runCommand("docker", ["rm", "-f", `${this.container_name}`]);
+    await runCommand("docker", ["rm", "-f", `${this.containerName}`]);
   }
 
   public async rawClient(): Promise<any> {

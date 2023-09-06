@@ -296,7 +296,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
     const result = await client.send(
       new UpdateItemCommand({
         TableName: this.tableName,
-        Key: { [this.primaryKey]: { S: key } },
+        Key: marshall({ [this.primaryKey]: key }),
         UpdateExpression: props?.updateExpression,
         ExpressionAttributeValues: props?.expressionAttributeValues
           ? marshall(props?.expressionAttributeValues)
@@ -314,7 +314,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
     await client.send(
       new DeleteItemCommand({
         TableName: this.tableName,
-        Key: { [this.primaryKey]: { S: key } },
+        Key: marshall({ [this.primaryKey]: key }),
       })
     );
   }
@@ -324,7 +324,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
     const result = await client.send(
       new GetItemCommand({
         TableName: this.tableName,
-        Key: { [this.primaryKey]: { S: key } },
+        Key: marshall({ [this.primaryKey]: key }),
       })
     );
     if (result.Item) {
