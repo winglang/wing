@@ -609,7 +609,7 @@ export const createAppRouter = () => {
           });
           return;
         }
-        const launch = require("launch-editor");
+        const { default: launch } = await import("launch-editor");
         launch(`${input.path}:${input.line}:${input.column}`);
       }),
 
