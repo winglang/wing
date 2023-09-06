@@ -171,6 +171,7 @@ exports[`get row 1`] = `
   "wingsdk.cloud.Table created.",
   "insert row joe-id into the table my_get_table.",
   "get row joe-id from table my_get_table.",
+  "get row NON_EXISTENT_KEY from table my_get_table.",
   "wingsdk.cloud.Table deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]

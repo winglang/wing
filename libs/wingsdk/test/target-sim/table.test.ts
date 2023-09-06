@@ -90,10 +90,13 @@ test("get row", async () => {
   const client = s.getResource("/my_table") as ex.ITableClient;
 
   const KEY = "joe-id";
-
   await client.insert(KEY, { name: "Joe Doe", age: 50 } as any);
   const joe = await client.get(KEY);
   expect(joe).toEqual({ id: "joe-id", name: "Joe Doe", age: 50 });
+
+  await expect(() => client.get("NON_EXISTENT_KEY")).rejects.toThrowError(
+    /Row does not exist/
+  );
 
   expect(s.getResourceConfig("/my_table")).toEqual({
     attrs: {
@@ -132,10 +135,12 @@ test("tryGet row", async () => {
   const client = s.getResource("/my_table") as ex.ITableClient;
 
   const KEY = "joe-id";
-
   await client.insert(KEY, { name: "Joe Doe", age: 50 } as any);
   const joe = await client.tryGet(KEY);
   expect(joe).toEqual({ id: "joe-id", name: "Joe Doe", age: 50 });
+
+  const nonExistentRow = await client.tryGet("NON_EXISTENT_KEY");
+  expect(nonExistentRow).toEqual(undefined);
 
   expect(s.getResourceConfig("/my_table")).toEqual({
     attrs: {
