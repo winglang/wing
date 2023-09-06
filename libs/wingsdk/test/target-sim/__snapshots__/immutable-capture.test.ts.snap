@@ -143,6 +143,9 @@ my_buckets: [(function() {
           body: JSON.stringify({ handle, method, args: Array.from(arguments) }),
         });
         const parsed = await resp.json();
+        if (parsed.error) {
+          throw new Error(parsed.error);
+        }
         return parsed.result;
       };
     }
@@ -166,6 +169,9 @@ my_buckets: [(function() {
           body: JSON.stringify({ handle, method, args: Array.from(arguments) }),
         });
         const parsed = await resp.json();
+        if (parsed.error) {
+          throw new Error(parsed.error);
+        }
         return parsed.result;
       };
     }
@@ -1075,6 +1081,9 @@ my_map: new Map([[\\"foo\\",(function() {
           body: JSON.stringify({ handle, method, args: Array.from(arguments) }),
         });
         const parsed = await resp.json();
+        if (parsed.error) {
+          throw new Error(parsed.error);
+        }
         return parsed.result;
       };
     }
@@ -1098,6 +1107,9 @@ my_map: new Map([[\\"foo\\",(function() {
           body: JSON.stringify({ handle, method, args: Array.from(arguments) }),
         });
         const parsed = await resp.json();
+        if (parsed.error) {
+          throw new Error(parsed.error);
+        }
         return parsed.result;
       };
     }
@@ -1905,6 +1917,9 @@ my_struct: {\\"bucky\\": (function() {
           body: JSON.stringify({ handle, method, args: Array.from(arguments) }),
         });
         const parsed = await resp.json();
+        if (parsed.error) {
+          throw new Error(parsed.error);
+        }
         return parsed.result;
       };
     }
@@ -1928,6 +1943,9 @@ my_struct: {\\"bucky\\": (function() {
           body: JSON.stringify({ handle, method, args: Array.from(arguments) }),
         });
         const parsed = await resp.json();
+        if (parsed.error) {
+          throw new Error(parsed.error);
+        }
         return parsed.result;
       };
     }
@@ -1951,6 +1969,9 @@ my_struct: {\\"bucky\\": (function() {
           body: JSON.stringify({ handle, method, args: Array.from(arguments) }),
         });
         const parsed = await resp.json();
+        if (parsed.error) {
+          throw new Error(parsed.error);
+        }
         return parsed.result;
       };
     }
@@ -1974,6 +1995,9 @@ my_struct: {\\"bucky\\": (function() {
           body: JSON.stringify({ handle, method, args: Array.from(arguments) }),
         });
         const parsed = await resp.json();
+        if (parsed.error) {
+          throw new Error(parsed.error);
+        }
         return parsed.result;
       };
     }
@@ -1997,6 +2021,9 @@ my_struct: {\\"bucky\\": (function() {
           body: JSON.stringify({ handle, method, args: Array.from(arguments) }),
         });
         const parsed = await resp.json();
+        if (parsed.error) {
+          throw new Error(parsed.error);
+        }
         return parsed.result;
       };
     }
