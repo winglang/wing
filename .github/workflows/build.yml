@@ -342,7 +342,7 @@ jobs:
 
   publish:
     name: Publish
-    if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' && github.ref == 'refs/heads/main' }}
+    if: ${{ !cancelled() && needs.quality-gate.result == 'success' && github.event_name == 'push' && github.repository == 'winglang/wing' && github.ref == 'refs/heads/main' }}
     needs:
       - quality-gate
       - build

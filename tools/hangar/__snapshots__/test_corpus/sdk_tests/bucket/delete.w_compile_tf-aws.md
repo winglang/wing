@@ -10,21 +10,30 @@ module.exports = function({ $b }) {
       return $obj;
     }
     async handle() {
-      let error = "";
+      const assertThrows = async (expected, block) => {
+        let error = false;
+        try {
+          (await block());
+        }
+        catch ($error_actual) {
+          const actual = $error_actual.message;
+          {((cond) => {if (!cond) throw new Error("assertion failed: actual == expected")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(actual,expected)))};
+          error = true;
+        }
+        {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
+      }
+      ;
+      const OBJECT_DOES_NOT_EXIST_ERROR = "Object does not exist (key=file1.json).";
       const jsonObj1 = ({"key1": "value1"});
       (await $b.putJson("file1.json",jsonObj1));
       (await $b.delete("file1.txt"));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file1.json\")")})((await $b.exists("file1.json")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file2.txt\")")})((await $b.exists("file2.txt")))};
       (await $b.delete("file1.json",{ mustExist: true }));
-      try {
+      (await assertThrows(OBJECT_DOES_NOT_EXIST_ERROR,async () => {
         (await $b.delete("file1.json",{ mustExist: true }));
       }
-      catch ($error_e) {
-        const e = $error_e.message;
-        error = e;
-      }
-      {((cond) => {if (!cond) throw new Error("assertion failed: error == \"Object does not exist (key=file1.json).\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(error,"Object does not exist (key=file1.json).")))};
+      ));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file2.txt\")")})((await $b.exists("file2.txt")))};
       (await $b.delete("file2.txt"));
       {((cond) => {if (!cond) throw new Error("assertion failed: !b.exists(\"file2.txt\")")})((!(await $b.exists("file2.txt"))))};
