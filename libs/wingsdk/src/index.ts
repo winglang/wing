@@ -4,6 +4,7 @@ export * as core from "./core";
 export * as ex from "./ex";
 export * as http from "./http";
 export * as math from "./math";
+export * as regex from "./regex";
 export * as aws from "./shared-aws";
 export * as simulatorTesting from "./simulator-testing";
 export * as std from "./std";

@@ -72,6 +72,7 @@ const WINGSDK_MATH_MODULE: &'static str = "math";
 const WINGSDK_AWS_MODULE: &'static str = "aws";
 const WINGSDK_EX_MODULE: &'static str = "ex";
 const WINGSDK_TESTING_MODULE: &'static str = "testing";
+const WINGSDK_REGEX_MODULE: &'static str = "regex";
 
 const WINGSDK_BRINGABLE_MODULES: [&'static str; 7] = [
 	WINGSDK_CLOUD_MODULE,
@@ -81,6 +82,7 @@ const WINGSDK_BRINGABLE_MODULES: [&'static str; 7] = [
 	WINGSDK_AWS_MODULE,
 	WINGSDK_EX_MODULE,
 	WINGSDK_TESTING_MODULE,
+	WINGSDK_REGEX_MODULE,
 ];
 
 const WINGSDK_DURATION: &'static str = "std.Duration";

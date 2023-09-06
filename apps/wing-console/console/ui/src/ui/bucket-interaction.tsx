@@ -112,7 +112,7 @@ export const BucketInteraction = ({
             "px-2.5 py-1.5",
             "outline-none rounded text-center inline-block w-full text-xs",
           )}
-          data-testId="cloud.bucket:empty-state"
+          data-testid="cloud.bucket:empty-state"
         >
           No files
         </div>

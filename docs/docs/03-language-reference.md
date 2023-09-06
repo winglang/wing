@@ -657,6 +657,14 @@ for item in [1,2,3] {
 }
 ```
 
+To modify a numeric value, it is also possible to use `+=` and `-=` operators.
+```TS
+// wing
+let var x = 0;
+x += 5; // x == 5
+x -= 10; // x == -5
+```
+
 Re-assignment to class fields is allowed if field is marked with `var`.
 Examples in the class section below.
 
@@ -1761,6 +1769,8 @@ exports.makeId = function () {
 
 Given a method of name X, the compiler will map the method to the JavaScript export with the 
 matching name (without any case conversion).
+
+Extern methods do not support access to class's members through `this`, so they must be declared `static`.
 
 ### 5.2.1 TypeScript
 

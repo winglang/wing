@@ -5,7 +5,7 @@ class Foo {
   extern "./external_js.js" static inflight regexInflight(pattern: str, text: str): bool;
   extern "./external_js.js" static inflight getUuid(): str;
   extern "./external_js.js" static inflight getData(): str;
-  extern "./external_js.js" inflight print(msg: str);
+  extern "./external_js.js" static inflight print(msg: str);
   extern "uuid" static v4(): str;
 
   inflight call() {
@@ -27,5 +27,5 @@ test "call" {
 }
 
 test "console" {
-  f.print("hey there");
+  Foo.print("hey there");
 }
