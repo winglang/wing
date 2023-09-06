@@ -757,6 +757,21 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`extern_static.w 1`] = `
+"error: Extern methods must be declared \\"static\\" (they cannot access instance members)
+  --> ../../../examples/tests/invalid/extern_static.w:2:39
+  |
+2 |   extern \\"../external_js.js\\" inflight getGreeting(name: str): str;
+  |                                       ^^^^^^^^^^^ Extern methods must be declared \\"static\\" (they cannot access instance members)
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`file_with_variables.w 1`] = `
 "error: Preflight field \\"x\\" is not initialized
    --> ../../../examples/tests/invalid/file_with_variables.w:10:3

@@ -237,7 +237,7 @@ exports[`default website behavior 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A static website",
@@ -267,7 +267,7 @@ exports[`default website behavior 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -280,7 +280,7 @@ exports[`default website behavior 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.69",
+              "version": "10.2.70",
             },
             "id": "Default",
             "path": "root/Default",
@@ -567,7 +567,7 @@ exports[`website with add_json 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A static website",
@@ -597,7 +597,7 @@ exports[`website with add_json 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -610,7 +610,7 @@ exports[`website with add_json 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.69",
+              "version": "10.2.70",
             },
             "id": "Default",
             "path": "root/Default",
