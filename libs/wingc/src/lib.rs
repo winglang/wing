@@ -74,7 +74,7 @@ const WINGSDK_EX_MODULE: &'static str = "ex";
 const WINGSDK_TESTING_MODULE: &'static str = "testing";
 const WINGSDK_REGEX_MODULE: &'static str = "regex";
 
-const WINGSDK_BRINGABLE_MODULES: [&'static str; 7] = [
+const WINGSDK_BRINGABLE_MODULES: [&'static str; 8] = [
 	WINGSDK_CLOUD_MODULE,
 	WINGSDK_UTIL_MODULE,
 	WINGSDK_HTTP_MODULE,
