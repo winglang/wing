@@ -254,11 +254,20 @@ export class Simulator {
     app.post("/v1/call", async (req, res, next) => {
       try {
         const request: SimulatorServerRequest = req.body;
-        const resource = this._handles.find(request.handle);
+        const { handle, method, args } = request;
+        const resource = this._handles.find(handle);
 
-        // TODO: handle exceptions
-        const result = await (resource as any)[request.method](...request.args);
-        res.status(200).json({ result });
+        try {
+          const result = await (resource as any)[method](...args);
+          res.status(200).json({ result });
+        } catch (err) {
+          if (err instanceof Error) {
+            // TODO: serialize more information about the error?
+            res.status(500).json({ error: err.message });
+          } else {
+            res.status(500).json({ error: err });
+          }
+        }
       } catch (err) {
         return next(err);
       }

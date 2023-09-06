@@ -71,6 +71,9 @@ export function makeSimulatorJsClient(filename: string, resource: Resource) {
           body: JSON.stringify({ handle, method, args: Array.from(arguments) }),
         });
         const parsed = await resp.json();
+        if (parsed.error) {
+          throw new Error(parsed.error);
+        }
         return parsed.result;
       };
     }
