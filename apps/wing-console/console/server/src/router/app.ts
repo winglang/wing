@@ -613,9 +613,11 @@ export const createAppRouter = () => {
         launch(`${input.path}:${input.line}:${input.column}`);
       }),
 
-    // Subscribing to this procedure will override the default behavior of opening files in the editor
-    // provided by the "app.openFileInEditor" procedure.
-    // Needed to manage file opening within the vs-code extension.
+    /**
+     * Warning! Subscribing to this procedure will override the default behavior of opening files in the editor
+     * provided by the "app.openFileInEditor" procedure.
+     * Needed to manage file opening within the vs-code extension.
+     */
     "app.openFileInEditorSubscription": createProcedure.subscription(
       ({ ctx }) => {
         return observable<FileLink>((emit) => {
