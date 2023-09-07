@@ -275,6 +275,13 @@ export interface DynamodbTableSchema extends BaseResourceSchema {
   readonly type: typeof DYNAMODB_TABLE_TYPE;
   readonly props: {
     readonly name: string;
-    readonly primaryKey: string;
+    /**
+     * Table attribute definitions. e.g. { "myKey": "S", "myOtherKey": "S" }.
+     */
+    readonly attributeDefinitions: Json;
+    /**
+     * Table key schema. e.g. { "myKey": "HASH", "myOtherKey": "RANGE" }.
+     */
+    readonly keySchema: Json;
   };
 }

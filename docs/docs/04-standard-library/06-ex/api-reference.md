@@ -55,14 +55,14 @@ new ex.DynamodbTable(props: DynamodbTableProps);
 ##### `deleteItem` <a name="deleteItem" id="@winglang/sdk.ex.IDynamodbTableClient.deleteItem"></a>
 
 ```wing
-inflight deleteItem(key: str): void
+inflight deleteItem(key: Json): void
 ```
 
 Delete an item from the table.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.IDynamodbTableClient.deleteItem.parameter.key"></a>
 
-- *Type:* str
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 key of the item.
 
@@ -71,14 +71,14 @@ key of the item.
 ##### `getItem` <a name="getItem" id="@winglang/sdk.ex.IDynamodbTableClient.getItem"></a>
 
 ```wing
-inflight getItem(key: str): Json
+inflight getItem(key: Json): Json
 ```
 
 Get an item from the table.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.IDynamodbTableClient.getItem.parameter.key"></a>
 
-- *Type:* str
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 key of the item.
 
@@ -135,14 +135,14 @@ properties for the transact write items operation.
 ##### `updateItem` <a name="updateItem" id="@winglang/sdk.ex.IDynamodbTableClient.updateItem"></a>
 
 ```wing
-inflight updateItem(key: str, props?: DynamodbTableUpdateItemProps): Json
+inflight updateItem(key: Json, props?: DynamodbTableUpdateItemProps): Json
 ```
 
 Get an item from the table.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.IDynamodbTableClient.updateItem.parameter.key"></a>
 
-- *Type:* str
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 key of the item.
 
@@ -162,8 +162,9 @@ dynamodb UpdateItem props.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.ex.DynamodbTable.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTable.property.attributeDefinitions">attributeDefinitions</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | Table attribute definitions. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTable.property.keySchema">keySchema</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | Table key schema. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTable.property.name">name</a></code> | <code>str</code> | Table name. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTable.property.primaryKey">primaryKey</a></code> | <code>str</code> | Table primary key name. |
 
 ---
 
@@ -179,6 +180,34 @@ The tree node.
 
 ---
 
+##### `attributeDefinitions`<sup>Required</sup> <a name="attributeDefinitions" id="@winglang/sdk.ex.DynamodbTable.property.attributeDefinitions"></a>
+
+```wing
+attributeDefinitions: Json;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+Table attribute definitions.
+
+e.g. { "myKey": "S", "myOtherKey": "S" }.
+
+---
+
+##### `keySchema`<sup>Required</sup> <a name="keySchema" id="@winglang/sdk.ex.DynamodbTable.property.keySchema"></a>
+
+```wing
+keySchema: Json;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+Table key schema.
+
+e.g. { "myKey": "HASH", "myOtherKey": "RANGE" }.
+
+---
+
 ##### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.ex.DynamodbTable.property.name"></a>
 
 ```wing
@@ -188,18 +217,6 @@ name: str;
 - *Type:* str
 
 Table name.
-
----
-
-##### `primaryKey`<sup>Required</sup> <a name="primaryKey" id="@winglang/sdk.ex.DynamodbTable.property.primaryKey"></a>
-
-```wing
-primaryKey: str;
-```
-
-- *Type:* str
-
-Table primary key name.
 
 ---
 
@@ -655,13 +672,14 @@ Base class for `DynamodbTable` Client.
 ```wing
 bring ex;
 
-new ex.DynamodbTableClientBase(tableName: str, primaryKey: str);
+new ex.DynamodbTableClientBase(tableName: str, attributeDefinitions: Json, keySchema: Json);
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.Initializer.parameter.tableName">tableName</a></code> | <code>str</code> | the table name. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.Initializer.parameter.primaryKey">primaryKey</a></code> | <code>str</code> | the table primary key. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.Initializer.parameter.attributeDefinitions">attributeDefinitions</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | the table attribute definitions. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.Initializer.parameter.keySchema">keySchema</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | the table key schema. |
 
 ---
 
@@ -673,11 +691,19 @@ the table name.
 
 ---
 
-##### `primaryKey`<sup>Required</sup> <a name="primaryKey" id="@winglang/sdk.ex.DynamodbTableClientBase.Initializer.parameter.primaryKey"></a>
+##### `attributeDefinitions`<sup>Required</sup> <a name="attributeDefinitions" id="@winglang/sdk.ex.DynamodbTableClientBase.Initializer.parameter.attributeDefinitions"></a>
 
-- *Type:* str
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
-the table primary key.
+the table attribute definitions.
+
+---
+
+##### `keySchema`<sup>Required</sup> <a name="keySchema" id="@winglang/sdk.ex.DynamodbTableClientBase.Initializer.parameter.keySchema"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+the table key schema.
 
 ---
 
@@ -697,28 +723,28 @@ the table primary key.
 ##### `deleteItem` <a name="deleteItem" id="@winglang/sdk.ex.DynamodbTableClientBase.deleteItem"></a>
 
 ```wing
-deleteItem(key: str): void
+deleteItem(key: Json): void
 ```
 
 Delete an item from the table.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.DynamodbTableClientBase.deleteItem.parameter.key"></a>
 
-- *Type:* str
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 ---
 
 ##### `getItem` <a name="getItem" id="@winglang/sdk.ex.DynamodbTableClientBase.getItem"></a>
 
 ```wing
-getItem(key: str): Json
+getItem(key: Json): Json
 ```
 
 Get an item from the table.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.DynamodbTableClientBase.getItem.parameter.key"></a>
 
-- *Type:* str
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 ---
 
@@ -767,14 +793,14 @@ Perform a synchronous write operation that groups up to 100 action requests.
 ##### `updateItem` <a name="updateItem" id="@winglang/sdk.ex.DynamodbTableClientBase.updateItem"></a>
 
 ```wing
-updateItem(key: str, props?: DynamodbTableUpdateItemProps): Json
+updateItem(key: Json, props?: DynamodbTableUpdateItemProps): Json
 ```
 
 Get an item from the table.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.DynamodbTableClientBase.updateItem.parameter.key"></a>
 
-- *Type:* str
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 ---
 
@@ -987,8 +1013,37 @@ let DynamodbTableProps = ex.DynamodbTableProps{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableProps.property.attributeDefinitions">attributeDefinitions</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | Table attribute definitions. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableProps.property.keySchema">keySchema</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | Table key schema. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableProps.property.name">name</a></code> | <code>str</code> | The table's name. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableProps.property.primaryKey">primaryKey</a></code> | <code>str</code> | The table's primary key. |
+
+---
+
+##### `attributeDefinitions`<sup>Required</sup> <a name="attributeDefinitions" id="@winglang/sdk.ex.DynamodbTableProps.property.attributeDefinitions"></a>
+
+```wing
+attributeDefinitions: Json;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+Table attribute definitions.
+
+e.g.  { "myKey": "S", "myOtherKey": "S" }.
+
+---
+
+##### `keySchema`<sup>Required</sup> <a name="keySchema" id="@winglang/sdk.ex.DynamodbTableProps.property.keySchema"></a>
+
+```wing
+keySchema: Json;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+Table key schema.
+
+e.g. { "myKey": "HASH", "myOtherKey": "RANGE" }.
 
 ---
 
@@ -1001,21 +1056,6 @@ name: str;
 - *Type:* str
 
 The table's name.
-
----
-
-##### `primaryKey`<sup>Required</sup> <a name="primaryKey" id="@winglang/sdk.ex.DynamodbTableProps.property.primaryKey"></a>
-
-```wing
-primaryKey: str;
-```
-
-- *Type:* str
-
-The table's primary key.
-
-No two rows can have the same value for the
-primary key.
 
 ---
 
@@ -1173,17 +1213,17 @@ let DynamodbTransactWriteItemDeleteProps = ex.DynamodbTransactWriteItemDeletePro
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemDeleteProps.property.key">key</a></code> | <code>str</code> | The item to delete. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemDeleteProps.property.key">key</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The item to delete. |
 
 ---
 
 ##### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.DynamodbTransactWriteItemDeleteProps.property.key"></a>
 
 ```wing
-key: str;
+key: Json;
 ```
 
-- *Type:* str
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 The item to delete.
 
@@ -1283,7 +1323,7 @@ let DynamodbTransactWriteItemUpdateProps = ex.DynamodbTransactWriteItemUpdatePro
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemUpdateProps.property.key">key</a></code> | <code>str</code> | The item to update. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemUpdateProps.property.key">key</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The item to update. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemUpdateProps.property.expressionAttributeValues">expressionAttributeValues</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | One or more values that can be substituted in an expression. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemUpdateProps.property.updateExpression">updateExpression</a></code> | <code>str</code> | An expression that defines one or more attributes to be updated. |
 
@@ -1292,10 +1332,10 @@ let DynamodbTransactWriteItemUpdateProps = ex.DynamodbTransactWriteItemUpdatePro
 ##### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.DynamodbTransactWriteItemUpdateProps.property.key"></a>
 
 ```wing
-key: str;
+key: Json;
 ```
 
-- *Type:* str
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 The item to update.
 

@@ -27,7 +27,7 @@ export class DynamodbTable
     props: DynamodbTableSchema["props"],
     context: ISimulatorContext
   ) {
-    super(props.name, props.primaryKey);
+    super(props.name, props.attributeDefinitions, props.keySchema);
 
     this.context = context;
     this.containerName = `wing-sim-dynamodb-${this.context.resourcePath.replace(
@@ -81,18 +81,13 @@ export class DynamodbTable
   private async createTable() {
     const createTableCommand = new CreateTableCommand({
       TableName: this.tableName,
-      AttributeDefinitions: [
-        {
-          AttributeName: this.primaryKey,
-          AttributeType: "S",
-        },
-      ],
-      KeySchema: [
-        {
-          AttributeName: this.primaryKey,
-          KeyType: "HASH",
-        },
-      ],
+      AttributeDefinitions: Object.entries(this.attributeDefinitions).map(
+        ([k, v]) => ({ AttributeName: k, AttributeType: v })
+      ),
+      KeySchema: Object.entries(this.keySchema).map(([k, v]) => ({
+        AttributeName: k,
+        KeyType: v,
+      })),
       BillingMode: "PAY_PER_REQUEST",
     });
 

@@ -14,7 +14,8 @@ import {
 test("default dynamodb table behavior", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
   ex.DynamodbTable._newDynamodbTable(app, "Table", {
-    primaryKey: "id",
+    attributeDefinitions: { id: "S" } as any,
+    keySchema: { id: "HASH" } as any,
     name: "my-wing-table",
   });
   const output = app.synth();
@@ -26,7 +27,8 @@ test("default dynamodb table behavior", () => {
 test("function with a table binding", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
   const table = ex.DynamodbTable._newDynamodbTable(app, "Table", {
-    primaryKey: "id",
+    attributeDefinitions: { id: "S" } as any,
+    keySchema: { id: "HASH" } as any,
     name: "my-wing-table",
   });
   const inflight = Testing.makeHandler(

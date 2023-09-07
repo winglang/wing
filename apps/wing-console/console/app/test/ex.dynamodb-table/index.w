@@ -2,5 +2,6 @@ bring ex;
 
 new ex.DynamodbTable({
   name: "table",
-  primaryKey: "id"
+  attributeDefinitions: { "id": "S" },
+  keySchema: { "id": "HASH" }
 });

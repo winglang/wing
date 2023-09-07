@@ -27,10 +27,13 @@ export interface DynamodbTableProps {
    */
   readonly name: string;
   /**
-   * The table's primary key. No two rows can have the same value for the
-   * primary key.
+   * Table attribute definitions. e.g.  { "myKey": "S", "myOtherKey": "S" }.
    */
-  readonly primaryKey: string;
+  readonly attributeDefinitions: Json;
+  /**
+   * Table key schema. e.g. { "myKey": "HASH", "myOtherKey": "RANGE" }.
+   */
+  readonly keySchema: Json;
 }
 
 /**
@@ -56,9 +59,13 @@ export abstract class DynamodbTable extends Resource {
    */
   public readonly name: string;
   /**
-   * Table primary key name
+   * Table attribute definitions. e.g. { "myKey": "S", "myOtherKey": "S" }.
    */
-  public readonly primaryKey: string;
+  public readonly attributeDefinitions: Json;
+  /**
+   * Table key schema. e.g. { "myKey": "HASH", "myOtherKey": "RANGE" }.
+   */
+  public readonly keySchema: Json;
 
   constructor(scope: Construct, id: string, props: DynamodbTableProps) {
     super(scope, id);
@@ -70,11 +77,8 @@ export abstract class DynamodbTable extends Resource {
       throw new Error("Dynamodb table name is not defined");
     }
     this.name = props.name;
-
-    if (!props.primaryKey) {
-      throw new Error("Dynamodb primary key is not defined");
-    }
-    this.primaryKey = props.primaryKey;
+    this.attributeDefinitions = props.attributeDefinitions;
+    this.keySchema = props.keySchema;
   }
 
   /** @internal */
@@ -140,7 +144,7 @@ export interface DynamodbTransactWriteItemUpdateProps {
   /**
    * The item to update.
    */
-  readonly key: string;
+  readonly key: Json;
   /**
    * An expression that defines one or more attributes to be updated.
    * @default undefined
@@ -160,7 +164,7 @@ export interface DynamodbTransactWriteItemDeleteProps {
   /**
    * The item to delete.
    */
-  readonly key: string;
+  readonly key: Json;
 }
 
 /**
@@ -209,21 +213,21 @@ export interface IDynamodbTableClient {
    * @param props dynamodb UpdateItem props.
    * @inflight
    */
-  updateItem(key: string, props?: DynamodbTableUpdateItemProps): Promise<Json>;
+  updateItem(key: Json, props?: DynamodbTableUpdateItemProps): Promise<Json>;
 
   /**
    * Delete an item from the table.
    * @param key key of the item.
    * @inflight
    */
-  deleteItem(key: string): Promise<void>;
+  deleteItem(key: Json): Promise<void>;
 
   /**
    * Get an item from the table.
    * @param key key of the item.
    * @inflight
    */
-  getItem(key: string): Promise<Json>;
+  getItem(key: Json): Promise<Json>;
 
   /**
    * Get the table.
@@ -264,9 +268,14 @@ export enum DynamodbTableInflightMethods {
 export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
   /**
    * @param tableName the table name.
-   * @param primaryKey the table primary key.
+   * @param attributeDefinitions the table attribute definitions.
+   * @param keySchema the table key schema.
    */
-  constructor(protected tableName: string, protected primaryKey: string) {}
+  constructor(
+    protected tableName: string,
+    protected attributeDefinitions: Json,
+    protected keySchema: Json
+  ) {}
 
   /**
    * Dynamodb table client.
@@ -289,14 +298,14 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
   }
 
   public async updateItem(
-    key: string,
+    key: Json,
     props?: DynamodbTableUpdateItemProps
   ): Promise<Json> {
     const client = await this._rawClient();
     const result = await client.send(
       new UpdateItemCommand({
         TableName: this.tableName,
-        Key: marshall({ [this.primaryKey]: key }),
+        Key: marshall(key),
         UpdateExpression: props?.updateExpression,
         ExpressionAttributeValues: props?.expressionAttributeValues
           ? marshall(props?.expressionAttributeValues)
@@ -309,22 +318,22 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
     return {} as Json;
   }
 
-  public async deleteItem(key: string): Promise<void> {
+  public async deleteItem(key: Json): Promise<void> {
     const client = await this._rawClient();
     await client.send(
       new DeleteItemCommand({
         TableName: this.tableName,
-        Key: marshall({ [this.primaryKey]: key }),
+        Key: marshall(key),
       })
     );
   }
 
-  public async getItem(key: string): Promise<Json> {
+  public async getItem(key: Json): Promise<Json> {
     const client = await this._rawClient();
     const result = await client.send(
       new GetItemCommand({
         TableName: this.tableName,
-        Key: marshall({ [this.primaryKey]: key }),
+        Key: marshall(key),
       })
     );
     if (result.Item) {
@@ -367,7 +376,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
         return {
           Update: {
             TableName: this.tableName,
-            Key: { [this.primaryKey]: { S: item.update.key } },
+            Key: marshall(item.update.key),
             UpdateExpression: item.update.updateExpression,
             ExpressionAttributeValues: item.update.expressionAttributeValues
               ? marshall(item.update.expressionAttributeValues)
@@ -378,7 +387,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
         return {
           Delete: {
             TableName: this.tableName,
-            Key: { [this.primaryKey]: { S: item.delete.key } },
+            Key: marshall(item.delete.key),
           },
         };
       } else {

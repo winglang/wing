@@ -8,7 +8,8 @@ test("create a table", async () => {
   const app = new SimApp();
   const t = ex.DynamodbTable._newDynamodbTable(app, "create_table", {
     name: "new_table",
-    primaryKey: "id",
+    attributeDefinitions: { id: "S" } as any,
+    keySchema: { id: "HASH" } as any,
   });
 
   const s = await app.startSimulator();
@@ -19,7 +20,12 @@ test("create a table", async () => {
     path: "root/create_table",
     props: {
       name: "new_table",
-      primaryKey: "id",
+      attributeDefinitions: {
+        id: "S",
+      },
+      keySchema: {
+        id: "HASH",
+      },
     },
     type: "wingsdk.ex.DynamodbTable",
   });
@@ -33,14 +39,15 @@ test("put item", async () => {
   const app = new SimApp();
   const t = ex.DynamodbTable._newDynamodbTable(app, "put_table", {
     name: "my_insert_table",
-    primaryKey: "id",
+    attributeDefinitions: { id: "S" } as any,
+    keySchema: { id: "HASH" } as any,
   });
   const s = await app.startSimulator();
   const client = s.getResource("/put_table") as ex.IDynamodbTableClient;
 
   const expectedValue = { id: "1", name: "Joe Doe", age: 50 };
   await client.putItem(expectedValue as any);
-  const result = await client.getItem("1");
+  const result = await client.getItem({ id: "1" } as any);
   expect(result).toEqual(expectedValue);
 
   expect(s.getResourceConfig("/put_table")).toEqual({
@@ -50,7 +57,12 @@ test("put item", async () => {
     path: "root/put_table",
     props: {
       name: "my_insert_table",
-      primaryKey: "id",
+      attributeDefinitions: {
+        id: "S",
+      },
+      keySchema: {
+        id: "HASH",
+      },
     },
     type: "wingsdk.ex.DynamodbTable",
   });
@@ -65,14 +77,15 @@ test("get item", async () => {
   const app = new SimApp();
   const t = ex.DynamodbTable._newDynamodbTable(app, "get_table", {
     name: "my_get_table",
-    primaryKey: "id",
+    attributeDefinitions: { id: "S" } as any,
+    keySchema: { id: "HASH" } as any,
   });
   const s = await app.startSimulator();
   const client = s.getResource("/get_table") as ex.IDynamodbTableClient;
 
   const expectedValue = { id: "1", name: "Joe Doe", age: 50 };
   await client.putItem(expectedValue as any);
-  const joe = await client.getItem("1");
+  const joe = await client.getItem({ id: "1" } as any);
   expect(joe).toEqual(expectedValue);
 
   expect(s.getResourceConfig("/get_table")).toEqual({
@@ -82,7 +95,12 @@ test("get item", async () => {
     path: "root/get_table",
     props: {
       name: "my_get_table",
-      primaryKey: "id",
+      attributeDefinitions: {
+        id: "S",
+      },
+      keySchema: {
+        id: "HASH",
+      },
     },
     type: "wingsdk.ex.DynamodbTable",
   });
@@ -97,20 +115,21 @@ test("update item", async () => {
   const app = new SimApp();
   const t = ex.DynamodbTable._newDynamodbTable(app, "update_table", {
     name: "my_update_table",
-    primaryKey: "id",
+    attributeDefinitions: { id: "S" } as any,
+    keySchema: { id: "HASH" } as any,
   });
   const s = await app.startSimulator();
   const client = s.getResource("/update_table") as ex.IDynamodbTableClient;
 
   const expectedValue = { id: "1", name: "Joe Doe", age: 50 };
   await client.putItem(expectedValue as any);
-  let joe = await client.getItem("1");
+  let joe = await client.getItem({ id: "1" } as any);
   expect(joe).toEqual(expectedValue);
-  await client.updateItem("1", {
+  await client.updateItem({ id: "1" } as any, {
     updateExpression: "set age = :age",
     expressionAttributeValues: { ":age": 51 } as any,
   });
-  joe = await client.getItem("1");
+  joe = await client.getItem({ id: "1" } as any);
   expect(joe).toEqual({ id: "1", name: "Joe Doe", age: 51 });
 
   expect(s.getResourceConfig("/update_table")).toEqual({
@@ -120,7 +139,12 @@ test("update item", async () => {
     path: "root/update_table",
     props: {
       name: "my_update_table",
-      primaryKey: "id",
+      attributeDefinitions: {
+        id: "S",
+      },
+      keySchema: {
+        id: "HASH",
+      },
     },
     type: "wingsdk.ex.DynamodbTable",
   });
@@ -135,17 +159,18 @@ test("inserting the same id twice", async () => {
   const app = new SimApp();
   const t = ex.DynamodbTable._newDynamodbTable(app, "put_twice_table", {
     name: "my_insert_twice_table",
-    primaryKey: "id",
+    attributeDefinitions: { id: "S" } as any,
+    keySchema: { id: "HASH" } as any,
   });
   const s = await app.startSimulator();
   const client = s.getResource("/put_twice_table") as ex.IDynamodbTableClient;
 
   await client.putItem({ id: "1", name: "Joe Doe" } as any);
-  let joe = await client.getItem("1");
+  let joe = await client.getItem({ id: "1" } as any);
   expect(joe).toEqual({ id: "1", name: "Joe Doe" });
 
   await client.putItem({ id: "1", name: "Joe Doe II" } as any);
-  joe = await client.getItem("1");
+  joe = await client.getItem({ id: "1" } as any);
   expect(joe).toEqual({ id: "1", name: "Joe Doe II" });
 
   await expect(() =>
@@ -165,7 +190,8 @@ test("update non-existent item", async () => {
     "update_non_existing_table",
     {
       name: "my_update_non_existent_table",
-      primaryKey: "id",
+      attributeDefinitions: { id: "S" } as any,
+      keySchema: { id: "HASH" } as any,
     }
   );
   const s = await app.startSimulator();
@@ -173,11 +199,11 @@ test("update non-existent item", async () => {
     "/update_non_existing_table"
   ) as ex.IDynamodbTableClient;
 
-  await client.updateItem("1", {
+  await client.updateItem({ id: "1" } as any, {
     updateExpression: "set age = :age",
     expressionAttributeValues: { ":age": 50 } as any,
   });
-  const joe = await client.getItem("1");
+  const joe = await client.getItem({ id: "1" } as any);
   expect(joe).toEqual({ id: "1", age: 50 });
 
   await s.stop();
@@ -188,18 +214,19 @@ test("delete item", async () => {
   const app = new SimApp();
   const t = ex.DynamodbTable._newDynamodbTable(app, "delete_table", {
     name: "my_delete_non_existent_table",
-    primaryKey: "id",
+    attributeDefinitions: { id: "S" } as any,
+    keySchema: { id: "HASH" } as any,
   });
   const s = await app.startSimulator();
   const client = s.getResource("/delete_table") as ex.IDynamodbTableClient;
 
   await client.putItem({ id: "1", age: 50 } as any);
-  await client.deleteItem("1");
-  let joe = await client.getItem("1");
+  await client.deleteItem({ id: "1" } as any);
+  let joe = await client.getItem({ id: "1" } as any);
   expect(joe).toEqual({});
 
   // will not throw
-  await client.deleteItem("1");
+  await client.deleteItem({ id: "1" } as any);
 
   await s.stop();
 });
@@ -209,7 +236,8 @@ test("scan", async () => {
   const app = new SimApp();
   const t = ex.DynamodbTable._newDynamodbTable(app, "scan_table", {
     name: "scan_table",
-    primaryKey: "id",
+    attributeDefinitions: { id: "S" } as any,
+    keySchema: { id: "HASH" } as any,
   });
   const s = await app.startSimulator();
   const client = s.getResource("/scan_table") as ex.IDynamodbTableClient;
@@ -230,7 +258,8 @@ test("write transaction", async () => {
   const app = new SimApp();
   const t = ex.DynamodbTable._newDynamodbTable(app, "write_transact_table", {
     name: "write_transact_table",
-    primaryKey: "id",
+    attributeDefinitions: { id: "S" } as any,
+    keySchema: { id: "HASH" } as any,
   });
   const s = await app.startSimulator();
   const client = s.getResource(
@@ -251,26 +280,26 @@ test("write transaction", async () => {
       },
       {
         update: {
-          key: "1",
+          key: { id: "1" } as any,
           updateExpression: "set age = :age",
           expressionAttributeValues: { ":age": 51 } as any,
         },
       },
       {
         delete: {
-          key: "2",
+          key: { id: "2" } as any,
         },
       },
     ],
   });
 
-  let item1 = await client.getItem("1");
+  let item1 = await client.getItem({ id: "1" } as any);
   expect(item1).toEqual({ id: "1", age: 51 });
 
-  let item2 = await client.getItem("2");
+  let item2 = await client.getItem({ id: "2" } as any);
   expect(item2).toEqual({});
 
-  let item3 = await client.getItem("3");
+  let item3 = await client.getItem({ id: "3" } as any);
   expect(item3).toEqual({ id: "3", age: 30 });
 
   await s.stop();

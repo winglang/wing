@@ -20,8 +20,13 @@ exports[`create a table 1`] = `
         "attrs": {},
         "path": "root/create_table",
         "props": {
+          "attributeDefinitions": {
+            "id": "S",
+          },
+          "keySchema": {
+            "id": "HASH",
+          },
           "name": "new_table",
-          "primaryKey": "id",
         },
         "type": "wingsdk.ex.DynamodbTable",
       },
@@ -98,8 +103,13 @@ exports[`get item 2`] = `
         "attrs": {},
         "path": "root/get_table",
         "props": {
+          "attributeDefinitions": {
+            "id": "S",
+          },
+          "keySchema": {
+            "id": "HASH",
+          },
           "name": "my_get_table",
-          "primaryKey": "id",
         },
         "type": "wingsdk.ex.DynamodbTable",
       },
@@ -176,8 +186,13 @@ exports[`put item 2`] = `
         "attrs": {},
         "path": "root/put_table",
         "props": {
+          "attributeDefinitions": {
+            "id": "S",
+          },
+          "keySchema": {
+            "id": "HASH",
+          },
           "name": "my_insert_table",
-          "primaryKey": "id",
         },
         "type": "wingsdk.ex.DynamodbTable",
       },
@@ -254,8 +269,13 @@ exports[`update item 2`] = `
         "attrs": {},
         "path": "root/update_table",
         "props": {
+          "attributeDefinitions": {
+            "id": "S",
+          },
+          "keySchema": {
+            "id": "HASH",
+          },
           "name": "my_update_table",
-          "primaryKey": "id",
         },
         "type": "wingsdk.ex.DynamodbTable",
       },

@@ -26,13 +26,28 @@ export class DynamodbTable extends ex.DynamodbTable {
   constructor(scope: Construct, id: string, props: ex.DynamodbTableProps) {
     super(scope, id, props);
 
+    const hashKey = Object.entries(props.keySchema).find(
+      ([_, v]) => v === "HASH"
+    );
+    if (!hashKey) {
+      throw Error("missing HASH key in `keySchema`.");
+    }
+
+    const rangeKey = Object.entries(props.keySchema).find(
+      ([_, v]) => v === "RANGE"
+    );
+
     this.table = new AwsDynamodbTable(this, "Default", {
       name: ResourceNames.generateName(this, {
         prefix: this.name,
         ...NAME_OPTS,
       }),
-      attribute: [{ name: this.primaryKey, type: "S" }],
-      hashKey: this.primaryKey,
+      attribute: Object.entries(this.attributeDefinitions).map(([k, v]) => ({
+        name: k,
+        type: v,
+      })),
+      hashKey: hashKey[0],
+      rangeKey: rangeKey?.[0],
       billingMode: "PAY_PER_REQUEST",
     });
   }
@@ -106,7 +121,14 @@ export class DynamodbTable extends ex.DynamodbTable {
     }
 
     host.addEnvironment(this.envName(), this.table.name);
-    host.addEnvironment(this.primaryKeyEnvName(), this.primaryKey);
+    host.addEnvironment(
+      this.attributeDefinitionsEnvName(),
+      JSON.stringify(this.attributeDefinitions)
+    );
+    host.addEnvironment(
+      this.KeySchemaEnvName(),
+      JSON.stringify(this.keySchema)
+    );
 
     super.bind(host, ops);
   }
@@ -119,7 +141,8 @@ export class DynamodbTable extends ex.DynamodbTable {
       "DynamodbTableClient",
       [
         `process.env["${this.envName()}"]`,
-        `process.env["${this.primaryKeyEnvName()}"]`,
+        `process.env["${this.attributeDefinitionsEnvName()}"]`,
+        `process.env["${this.KeySchemaEnvName()}"]`,
       ]
     );
   }
@@ -128,7 +151,11 @@ export class DynamodbTable extends ex.DynamodbTable {
     return `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
   }
 
-  private primaryKeyEnvName(): string {
-    return `${this.envName()}_PRIMARY_KEY`;
+  private attributeDefinitionsEnvName(): string {
+    return `${this.envName()}_ATTRIBUTE_DEFINITIONS`;
+  }
+
+  private KeySchemaEnvName(): string {
+    return `${this.envName()}_KEY_SCHEMA`;
   }
 }

@@ -4,10 +4,11 @@ import { DynamodbTableClientBase } from "../ex/dynamodb-table";
 export class DynamodbTableClient extends DynamodbTableClientBase {
   constructor(
     tableName: string,
-    primaryKey: string,
+    attributeDefinitions: string,
+    keySchema: string,
     private readonly _client = new DynamoDBClient({})
   ) {
-    super(tableName, primaryKey);
+    super(tableName, JSON.parse(attributeDefinitions), JSON.parse(keySchema));
   }
 
   public async _rawClient(): Promise<DynamoDBClient> {

@@ -10,17 +10,19 @@ module.exports = function({ $t1 }) {
       return $obj;
     }
     async handle() {
-      (await $t1.putItem(({"k1": "key1","k2": "value1"})));
-      (await $t1.putItem(({"k1": "key2","k2": "value2"})));
-      (await $t1.transactWriteItems({ transactItems: [({"put": ({"item": ({"k1": "key3","k2": "value3"})})}), ({"delete": ({"key": "key2"})}), ({"update": ({"key": "key1","updateExpression": "set k2 = :k2","expressionAttributeValues": ({":k2": "not-value1"})})})] }));
-      let r = (await $t1.getItem("key1"));
+      (await $t1.putItem(({"k1": "key1","k2": "value1","k3": "other-value1"})));
+      (await $t1.putItem(({"k1": "key2","k2": "value2","k3": "other-value2"})));
+      (await $t1.transactWriteItems({ transactItems: [({"put": ({"item": ({"k1": "key3","k2": "value3","k3": "other-value3"})})}), ({"delete": ({"key": ({"k1": "key2","k2": "value2"})})}), ({"update": ({"key": ({"k1": "key1","k2": "value1"}),"updateExpression": "set k3 = :k3","expressionAttributeValues": ({":k3": "not-other-value1"})})})] }));
+      let r = (await $t1.getItem(({"k1": "key1","k2": "value1"})));
       {((cond) => {if (!cond) throw new Error("assertion failed: r.get(\"k1\").asStr() == \"key1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(r, "k1")),"key1")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: r.get(\"k2\").asStr() == \"not-value1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(r, "k2")),"not-value1")))};
-      r = (await $t1.getItem("key2"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: r.get(\"k2\").asStr() == \"value1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(r, "k2")),"value1")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: r.get(\"k3\").asStr() == \"not-other-value1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(r, "k3")),"not-other-value1")))};
+      r = (await $t1.getItem(({"k1": "key2","k2": "value2"})));
       {((cond) => {if (!cond) throw new Error("assertion failed: r.tryGet(\"k1\") == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((r)?.["k1"],undefined)))};
-      r = (await $t1.getItem("key3"));
+      r = (await $t1.getItem(({"k1": "key3","k2": "value3"})));
       {((cond) => {if (!cond) throw new Error("assertion failed: r.get(\"k1\").asStr() == \"key3\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(r, "k1")),"key3")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: r.get(\"k2\").asStr() == \"value3\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(r, "k2")),"value3")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: r.get(\"k3\").asStr() == \"other-value3\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(r, "k3")),"other-value3")))};
     }
   }
   return $Closure1;
@@ -70,11 +72,16 @@ module.exports = function({ $t1 }) {
           {
             "name": "k1",
             "type": "S"
+          },
+          {
+            "name": "k2",
+            "type": "S"
           }
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "k1",
-        "name": "test1ex.DynamodbTable-c8d9b5e7"
+        "name": "test1ex.DynamodbTable-c8d9b5e7",
+        "range_key": "k2"
       }
     },
     "aws_iam_role": {
@@ -126,7 +133,8 @@ module.exports = function({ $t1 }) {
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_c181cf1c": "${aws_dynamodb_table.exDynamodbTable.name}",
-            "DYNAMODB_TABLE_NAME_c181cf1c_PRIMARY_KEY": "k1",
+            "DYNAMODB_TABLE_NAME_c181cf1c_ATTRIBUTE_DEFINITIONS": "{\"k1\":\"S\",\"k2\":\"S\"}",
+            "DYNAMODB_TABLE_NAME_c181cf1c_KEY_SCHEMA": "{\"k1\":\"HASH\",\"k2\":\"RANGE\"}",
             "WING_FUNCTION_NAME": "Handler-c839d4f9",
             "WING_TARGET": "tf-aws"
           }
@@ -217,7 +225,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const t1 = this.node.root.newAbstract("@winglang/sdk.ex.DynamodbTable",this,"ex.DynamodbTable",{ name: "test1", primaryKey: "k1" });
+    const t1 = this.node.root.newAbstract("@winglang/sdk.ex.DynamodbTable",this,"ex.DynamodbTable",{ name: "test1", attributeDefinitions: ({"k1": "S","k2": "S"}), keySchema: ({"k1": "HASH","k2": "RANGE"}) });
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:transactWriteItems",new $Closure1(this,"$Closure1"));
   }
 }

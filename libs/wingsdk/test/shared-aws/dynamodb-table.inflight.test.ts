@@ -19,7 +19,8 @@ import { test, expect, describe, beforeEach } from "vitest";
 import { DynamodbTableClient } from "../../src/shared-aws/dynamodb-table.inflight";
 
 const MOCK_TABLE_NAME = "MyBeautifulTable";
-const PRIMARY_KEY = "id";
+const ATTRIBUTE_DEFINITIONS = JSON.stringify({ id: "S" });
+const KEY_SCHEMA = JSON.stringify({ id: "HASH" });
 const dynamoMock = mockClient(DynamoDBClient);
 
 describe("inflight table tests", () => {
@@ -29,7 +30,11 @@ describe("inflight table tests", () => {
   beforeEach(() => {
     key = "test";
     row = { id: key, somenumber: 1 };
-    client = new DynamodbTableClient(MOCK_TABLE_NAME, PRIMARY_KEY);
+    client = new DynamodbTableClient(
+      MOCK_TABLE_NAME,
+      ATTRIBUTE_DEFINITIONS,
+      KEY_SCHEMA
+    );
     dynamoMock.reset();
   });
 
@@ -74,7 +79,7 @@ describe("inflight table tests", () => {
     };
     dynamoMock.on(UpdateItemCommand, expectedRequest).resolves(mockResponse);
     // WHEN
-    const response = await client.updateItem(key, {
+    const response = await client.updateItem({ id: key } as any, {
       updateExpression: `SET somenumber = :somenumber`,
       expressionAttributeValues: {
         ":somenumber": row.somenumber,
@@ -99,7 +104,7 @@ describe("inflight table tests", () => {
     };
     dynamoMock.on(DeleteItemCommand, expectedRequest).resolves(mockResponse);
     // WHEN
-    const response = await client.deleteItem(row.id);
+    const response = await client.deleteItem({ id: row.id } as any);
     // THEN
     expect(response).toEqual(undefined);
     expect(dynamoMock).toHaveReceivedCommandWith(
@@ -119,7 +124,7 @@ describe("inflight table tests", () => {
     };
     dynamoMock.on(GetItemCommand, expectedRequest).resolves(mockResponse);
     // WHEN
-    const response = await client.getItem(key);
+    const response = await client.getItem({ id: key } as any);
     // THEN
     expect(response).toEqual({});
     expect(dynamoMock).toHaveReceivedCommandWith(
@@ -145,7 +150,7 @@ describe("inflight table tests", () => {
     };
     dynamoMock.on(GetItemCommand, expectedRequest).resolves(mockResponse);
     // WHEN
-    const response = await client.getItem(key);
+    const response = await client.getItem({ id: key } as any);
     // THEN
     expect(response).toEqual({ id: key, somenumber: row.somenumber });
     expect(dynamoMock).toHaveReceivedCommandWith(

@@ -25,7 +25,8 @@ export class DynamodbTable
       path: this.node.path,
       props: {
         name: this.name,
-        primaryKey: this.primaryKey,
+        attributeDefinitions: this.attributeDefinitions,
+        keySchema: this.keySchema,
       },
       attrs: {} as any,
     };

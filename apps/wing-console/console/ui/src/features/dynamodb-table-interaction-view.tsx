@@ -37,14 +37,10 @@ export const DynamodbTableInteractionView = ({
       try {
         await addRow(row);
       } catch (error: any) {
-        const primaryKey = table.data?.primaryKey;
-        if (!primaryKey) {
-          return;
-        }
         showError(error.message);
       }
     },
-    [addRow, showError, table.data?.primaryKey],
+    [addRow, showError, table.data?.keySchema],
   );
 
   const onRemoveRow = useCallback(
@@ -77,7 +73,7 @@ export const DynamodbTableInteractionView = ({
           <div className="flex items-center gap-2 justify-end">
             <DynamodbTableInteraction
               rows={rows}
-              primaryKey={table.data?.primaryKey || ""}
+              keySchema={table.data?.keySchema || {}}
               onAddRow={onAddRow}
               onRemoveRow={onRemoveRow}
               loading={loading}
