@@ -104,7 +104,12 @@ export abstract class App extends Construct {
    * The name of the compilation target.
    * @internal
    */
-  public abstract readonly _target: string;
+  public abstract readonly _target:
+    | "sim"
+    | "tf-aws"
+    | "tf-azure"
+    | "tf-gcp"
+    | "awscdk";
 
   /**
    * Wing source files directory absolute path

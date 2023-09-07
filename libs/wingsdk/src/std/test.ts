@@ -39,8 +39,8 @@ export class Test extends Resource implements IInflightHost {
   }
 
   /**
-   * The function that will be called when the test is run. This will not be created
-   * if the app is not compiled as a test.
+   * The function that will be called when the test is run. This will only be created
+   * if the app is compiled with `wing test` for a non-simulator target.
    * @internal
    */
   public readonly _fn: Function | undefined;
