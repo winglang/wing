@@ -502,6 +502,7 @@ impl<'a> JsiiImporter<'a> {
 					.define(
 						&sym,
 						SymbolKind::make_member_variable(
+							wing_type,
 							sym.clone(),
 							method_sig,
 							false,
@@ -546,6 +547,7 @@ impl<'a> JsiiImporter<'a> {
 					.define(
 						&sym,
 						SymbolKind::make_member_variable(
+							wing_type,
 							sym.clone(),
 							wing_type,
 							!matches!(p.immutable, Some(true)),
@@ -769,6 +771,7 @@ impl<'a> JsiiImporter<'a> {
 			if let Err(e) = class_env.define(
 				&sym,
 				SymbolKind::make_member_variable(
+					new_type,
 					sym.clone(),
 					method_sig,
 					false,

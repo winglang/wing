@@ -91,7 +91,7 @@ pub enum VariableKind {
 	Free,
 
 	/// an instance member (either of classes or of structs)
-	InstanceMember,
+	InstanceMember(TypeRef),
 
 	/// a class member (or an enum member)
 	StaticMember,
@@ -120,7 +120,9 @@ pub struct VariableInfo {
 }
 
 impl SymbolKind {
+	#[allow(clippy::too_many_arguments)] // TODO: refactor this
 	pub fn make_member_variable(
+		member_of: TypeRef,
 		name: Symbol,
 		type_: TypeRef,
 		reassignable: bool,
@@ -137,7 +139,7 @@ impl SymbolKind {
 			kind: if is_static {
 				VariableKind::StaticMember
 			} else {
-				VariableKind::InstanceMember
+				VariableKind::InstanceMember(member_of)
 			},
 			access_modifier,
 			docs,
@@ -3173,6 +3175,7 @@ impl<'a> TypeChecker<'a> {
 			match struct_env.define(
 				&field.name,
 				SymbolKind::make_member_variable(
+					struct_type,
 					field.name.clone(),
 					field_type,
 					false,
@@ -3264,6 +3267,7 @@ impl<'a> TypeChecker<'a> {
 			match interface_env.define(
 				method_name,
 				SymbolKind::make_member_variable(
+					interface_type,
 					method_name.clone(),
 					method_type,
 					false,
@@ -3355,6 +3359,7 @@ impl<'a> TypeChecker<'a> {
 			match class_env.define(
 				&field.name,
 				SymbolKind::make_member_variable(
+					class_type,
 					field.name.clone(),
 					field_type,
 					field.reassignable,
@@ -4091,7 +4096,7 @@ impl<'a> TypeChecker<'a> {
 		&mut self,
 		method_sig: &ast::FunctionSignature,
 		env: &mut SymbolEnv,
-		instance_type: Option<TypeRef>,
+		instance_type: Option<TypeRef>, // TODO: change to bool, this can be inferred from the env (see `class_type` below)
 		access_modifier: AccessModifier,
 		class_env: &mut SymbolEnv,
 		method_name: &Symbol,
@@ -4103,9 +4108,14 @@ impl<'a> TypeChecker<'a> {
 			.expect("Expected method type to be a function")
 			.this_type = instance_type;
 
+		let SymbolEnvKind::Type(class_type) = class_env.kind else {
+			panic!("Expected class env to be a type");
+		};
+
 		match class_env.define(
 			method_name,
 			SymbolKind::make_member_variable(
+				class_type,
 				method_name.clone(),
 				method_type,
 				false,
@@ -4311,6 +4321,10 @@ impl<'a> TypeChecker<'a> {
 		// Update the class's env to point to the new env
 		new_type_class.env = new_env;
 
+		let SymbolEnvKind::Type(new_type) = new_type_class.env.kind else { // TODO: Ugly hack to get non mut ref of new_type so we can use it
+			panic!("Expected class env to be a type");
+		};
+
 		// Add symbols from original type to new type
 		// Note: this is currently limited to top-level function signatures and fields
 		for (name, symbol, _) in original_type_class.env.iter(true) {
@@ -4358,6 +4372,7 @@ impl<'a> TypeChecker<'a> {
 							// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
 							&sym,
 							SymbolKind::make_member_variable(
+								new_type,
 								sym.clone(),
 								self.types.add_type(Type::Function(new_sig)),
 								*reassignable,
@@ -4380,6 +4395,7 @@ impl<'a> TypeChecker<'a> {
 							// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
 							&var_name,
 							SymbolKind::make_member_variable(
+								new_type,
 								var_name.clone(),
 								new_var_type,
 								*reassignable,
@@ -4658,9 +4674,12 @@ impl<'a> TypeChecker<'a> {
 					let current_class_type = self
 						.resolve_user_defined_type(&current_class, env, self.ctx.current_stmt_idx())
 						.unwrap();
-					// TODO: instance type is wrong here we type where property is defined (might be a super class)
-					private_access = current_class_type.is_same_type_as(&instance_type);
-					protected_access = private_access || current_class_type.is_strict_subtype_of(&instance_type);
+					// TODO: instance type is wrong here, we need the type where property is defined (might be a super class)
+					let VariableKind::InstanceMember(property_defined_in) = property_variable.kind else {
+						panic!("Expected property to be an instance member");
+					};
+					private_access = current_class_type.is_same_type_as(&property_defined_in);
+					protected_access = private_access || current_class_type.is_strict_subtype_of(&property_defined_in);
 				}
 				match property_variable.access_modifier {
 					AccessModifier::Private => {
@@ -4805,7 +4824,7 @@ impl<'a> TypeChecker<'a> {
 				type_: instance_type,
 				reassignable: false,
 				phase: env.phase,
-				kind: VariableKind::InstanceMember,
+				kind: VariableKind::InstanceMember(instance_type),
 				access_modifier: AccessModifier::Public,
 				docs: None,
 			},
@@ -4900,7 +4919,7 @@ impl<'a> TypeChecker<'a> {
 		allow_static: bool,
 	) -> VariableInfo {
 		let lookup_res = class.get_env().lookup_ext(property, None);
-		if let LookupResult::Found(field, _) = lookup_res {
+		if let LookupResult::Found(field, lookup_info) = lookup_res {
 			let var = field.as_variable().expect("Expected property to be a variable");
 			if let VariableKind::StaticMember = var.kind {
 				if allow_static {
@@ -5011,8 +5030,12 @@ impl VisitorWithContext for TypeChecker<'_> {
 fn add_parent_members_to_struct_env(
 	extends_types: &Vec<TypeRef>,
 	name: &Symbol,
-	struct_env: &mut SymbolEnv,
+	struct_env: &mut SymbolEnv, // TODO: pass the struct_type here and we'll extract the env
 ) -> Result<(), TypeError> {
+	let SymbolEnvKind::Type(struct_type) = struct_env.kind else {
+		panic!("Expected struct env");
+	};
+
 	// Add members of all parents to the struct's environment
 	for parent_type in extends_types.iter() {
 		let parent_struct = if let Some(parent_struct) = parent_type.as_struct() {
@@ -5054,6 +5077,7 @@ fn add_parent_members_to_struct_env(
 				struct_env.define(
 					&sym,
 					SymbolKind::make_member_variable(
+						struct_type,
 						sym.clone(),
 						member_type,
 						false,
@@ -5074,8 +5098,12 @@ fn add_parent_members_to_struct_env(
 fn add_parent_members_to_iface_env(
 	extends_types: &Vec<TypeRef>,
 	name: &Symbol,
-	iface_env: &mut SymbolEnv,
+	iface_env: &mut SymbolEnv, // TODO: pass the iface_type here and we'll extract the env
 ) -> Result<(), TypeError> {
+	let SymbolEnvKind::Type(iface_type) = iface_env.kind else {
+		panic!("Expected interface env");
+	};
+
 	// Add members of all parents to the interface's environment
 	for parent_type in extends_types.iter() {
 		let parent_iface = if let Some(parent_iface) = parent_type.as_interface() {
@@ -5117,6 +5145,7 @@ fn add_parent_members_to_iface_env(
 				iface_env.define(
 					&sym,
 					SymbolKind::make_member_variable(
+						iface_type,
 						sym.clone(),
 						member_type,
 						false,
