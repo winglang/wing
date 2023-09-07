@@ -170,7 +170,7 @@ Purge all of the messages in the queue.
 ##### `push` <a name="push" id="@winglang/sdk.cloud.IQueueClient.push"></a>
 
 ```wing
-inflight push(messages: str): void
+inflight push(...messages: Array<str>): void
 ```
 
 Push one or more messages to the queue.

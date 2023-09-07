@@ -157,6 +157,49 @@ describe("ApiResponseMapper", () => {
       },
     });
   });
+
+  test("inject cors response headers", async () => {
+    // GIVEN
+    const apiRequestEvent: Partial<APIGatewayProxyEvent> = {
+      body: JSON.stringify({}),
+      headers: {},
+      path: "/",
+      httpMethod: "GET",
+    };
+
+    const handlerResponse: ApiResponse = {
+      status: 200,
+      body: JSON.stringify({ key: "value" }),
+    };
+    const requestHandlerClient = new ApiOnRequestHandlerClient({
+      handler: {
+        handle: async () => {
+          return handlerResponse;
+        },
+      },
+      args: {
+        corsHeaders: {
+          "Access-Control-Allow-Origin": "*",
+        },
+      },
+    });
+
+    // WHEN
+    const response = await requestHandlerClient.handle(
+      apiRequestEvent as APIGatewayProxyEvent
+    );
+
+    // THEN
+
+    expect(response).toEqual({
+      statusCode: 200,
+      body: JSON.stringify({ key: "value" }),
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
+  });
 });
 
 describe("ApiRequest", () => {
