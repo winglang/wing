@@ -3291,9 +3291,7 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn type_check_class(&mut self, env: &mut SymbolEnv, stmt: &Stmt, ast_class: &AstClass) {
-		self
-			.ctx
-			.push_class(UserDefinedType::for_class(ast_class), &env.phase, None);
+		self.ctx.push_class(UserDefinedType::for_class(ast_class), &env.phase);
 
 		// preflight classes cannot be declared inside an inflight scope
 		// (the other way is okay)
@@ -4289,10 +4287,10 @@ impl<'a> TypeChecker<'a> {
 			types_map.insert(format!("{o}"), (*o, *n));
 		}
 
-		let mut new_env = SymbolEnv::new(None, SymbolEnvKind::Type(original_type), Phase::Independent, 0);
+		let dummy_env = SymbolEnv::new(None, SymbolEnvKind::Type(original_type), Phase::Independent, 0);
 		let tt = Type::Class(Class {
 			name: original_type_class.name.clone(),
-			env: new_env,
+			env: dummy_env,
 			fqn: Some(original_fqn.to_string()),
 			parent: original_type_class.parent,
 			implements: original_type_class.implements.clone(),
@@ -4306,9 +4304,12 @@ impl<'a> TypeChecker<'a> {
 
 		// TODO: here we add a new type regardless whether we already "hydrated" `original_type` with these `type_params`. Cache!
 		let mut new_type = self.types.add_type(tt);
+		let new_env = SymbolEnv::new(None, SymbolEnvKind::Type(new_type), Phase::Independent, 0);
+
 		let new_type_class = new_type.as_class_mut().unwrap();
-		// Update the type's environment with the new type
-		new_type_class.env.kind = SymbolEnvKind::Type(new_type);
+
+		// Update the class's env to point to the new env
+		new_type_class.env = new_env;
 
 		// Add symbols from original type to new type
 		// Note: this is currently limited to top-level function signatures and fields

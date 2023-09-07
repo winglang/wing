@@ -156,12 +156,11 @@ pub struct SymbolLookupInfo {
 impl SymbolEnv {
 	pub fn new(parent: Option<SymbolEnvRef>, kind: SymbolEnvKind, phase: Phase, statement_idx: usize) -> Self {
 		// Some sanity checks
-		// If parent is a type-environent this must be one too, otherwise it must not be
+		// If parent is a type-environent this must be one too
 		assert!(
-			matches!(parent, Some(parent) if matches!(parent.kind, SymbolEnvKind::Type(_)) == matches!(kind, SymbolEnvKind::Type(_)))
+			parent.is_none()
+				|| matches!(parent, Some(parent) if matches!(parent.kind, SymbolEnvKind::Type(_)) == matches!(kind, SymbolEnvKind::Type(_)))
 		);
-		//
-		//assert!(matches!(*return_type, Type::Void) || parent.is_some());
 
 		Self {
 			symbol_map: BTreeMap::new(),
