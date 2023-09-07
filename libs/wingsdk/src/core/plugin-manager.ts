@@ -54,8 +54,14 @@ export class PluginManager {
       );
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    this.hooks.push(require(pluginAbsolutePath));
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      this.hooks.push(require(pluginAbsolutePath));
+    } catch (err) {
+      throw new Error(
+        `Failed to load plugin from "${pluginAbsolutePath}":\n${err}`
+      );
+    }
   }
 
   /**

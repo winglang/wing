@@ -7,7 +7,9 @@ import * as tfaws from "../../src/target-tf-aws";
 import { tfResourcesOfCount, mkdtemp } from "../util";
 
 const PLUGIN_CODE = `
-var s3_bucket = require("../.gen/providers/aws/s3-bucket");
+var s3_bucket = require("${require.resolve(
+  "../../src/.gen/providers/aws/s3-bucket"
+)}");
 
 exports.preSynth = function(app) {
   new s3_bucket.S3Bucket(app, "PluginBucket", {bucket: "plugin-bucket"})  
