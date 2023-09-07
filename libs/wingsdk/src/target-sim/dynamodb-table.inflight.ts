@@ -11,7 +11,7 @@ import {
   ISimulatorResourceInstance,
 } from "../testing/simulator";
 
-const MAX_CREATE_TABLE_COMMAND_ATTEMPTS = 20;
+const MAX_CREATE_TABLE_COMMAND_ATTEMPTS = 50;
 
 export class DynamodbTable
   extends DynamodbTableClientBase

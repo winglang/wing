@@ -45,7 +45,7 @@ export const DynamodbTableInteraction = ({
   const addRow = useCallback(async () => {
     try {
       const row = JSON.parse(newRow.data);
-      if (Object.keys(keySchema).some(k => row[k] === undefined)) {
+      if (Object.keys(keySchema).some((k) => row[k] === undefined)) {
         return;
       }
       onAddRow(row);
