@@ -1,5 +1,7 @@
 node_modules/
 
+.pnpm-store/
+
 # Terraform state files
 *.tfstate
 *.tfstate.*

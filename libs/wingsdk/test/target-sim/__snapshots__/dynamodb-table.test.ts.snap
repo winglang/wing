@@ -39,7 +39,7 @@ exports[`create a table 1`] = `
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -52,7 +52,7 @@ exports[`create a table 1`] = `
         "create_table": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A DynamoDb Table",
@@ -64,7 +64,7 @@ exports[`create a table 1`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.69",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -122,7 +122,7 @@ exports[`get item 2`] = `
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -135,7 +135,7 @@ exports[`get item 2`] = `
         "get_table": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A DynamoDb Table",
@@ -147,7 +147,7 @@ exports[`get item 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.69",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -205,7 +205,7 @@ exports[`put item 2`] = `
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -218,7 +218,7 @@ exports[`put item 2`] = `
         "put_table": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A DynamoDb Table",
@@ -230,7 +230,7 @@ exports[`put item 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.69",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -288,7 +288,7 @@ exports[`update item 2`] = `
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -301,7 +301,7 @@ exports[`update item 2`] = `
         "update_table": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.69",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A DynamoDb Table",
@@ -313,7 +313,7 @@ exports[`update item 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.69",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",

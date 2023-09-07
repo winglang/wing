@@ -193,7 +193,7 @@ exports[`function with a table binding 3`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -205,7 +205,7 @@ exports[`function with a table binding 3`] = `
               "Handler": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -228,7 +228,7 @@ exports[`function with a table binding 3`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A DynamoDb Table",
@@ -258,7 +258,7 @@ exports[`function with a table binding 3`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -271,7 +271,7 @@ exports[`function with a table binding 3`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.69",
+              "version": "10.2.70",
             },
             "id": "Default",
             "path": "root/Default",

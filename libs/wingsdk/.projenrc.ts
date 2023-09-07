@@ -6,7 +6,7 @@ const UNDOCUMENTED_CLOUD_FILES = ["index", "test-runner"];
 const cloudFiles = readdirSync("./src/cloud");
 
 const cloudResources: Set<string> = new Set(
-  cloudFiles.map((filename) => filename.split(".").slice(0, -1).join("."))
+  cloudFiles.map((filename) => filename.split(".")[0])
 );
 
 UNDOCUMENTED_CLOUD_FILES.forEach((file) => cloudResources.delete(file));
@@ -74,16 +74,16 @@ const project = new cdk.JsiiProject({
     // aws client dependencies
     // (note: these should always be updated together, otherwise they will
     // conflict with each other)
-    "@aws-sdk/client-cloudwatch-logs@3.354.0",
-    "@aws-sdk/client-dynamodb@3.354.0",
-    "@aws-sdk/client-elasticache@3.354.0",
-    "@aws-sdk/util-dynamodb@3.354.0",
-    "@aws-sdk/client-lambda@3.354.0",
-    "@aws-sdk/client-s3@3.354.0",
-    "@aws-sdk/client-secrets-manager@3.354.0",
-    "@aws-sdk/client-sqs@3.354.0",
-    "@aws-sdk/client-sns@3.354.0",
-    "@aws-sdk/types@3.347.0",
+    "@aws-sdk/client-cloudwatch-logs@3.405.0",
+    "@aws-sdk/client-dynamodb@3.405.0",
+    "@aws-sdk/client-elasticache@3.405.0",
+    "@aws-sdk/util-dynamodb@3.405.0",
+    "@aws-sdk/client-lambda@3.405.0",
+    "@aws-sdk/client-s3@3.405.0",
+    "@aws-sdk/client-secrets-manager@3.405.0",
+    "@aws-sdk/client-sqs@3.405.0",
+    "@aws-sdk/client-sns@3.405.0",
+    "@aws-sdk/types@3.398.0",
     "@aws-sdk/util-stream-node@3.350.0",
     "@aws-sdk/util-utf8-node@3.259.0",
     "@types/aws-lambda",

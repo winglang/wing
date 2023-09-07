@@ -1,7 +1,10 @@
 import classNames from "classnames";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
-import { formatAbsolutePaths } from "../features/console-logs.js";
+import {
+  OpenFileInEditorButton,
+  createHtmlLink,
+} from "../shared/use-file-link.js";
 
 export const BlueScreenOfDeath = ({
   title,
@@ -22,7 +25,7 @@ export const BlueScreenOfDeath = ({
       return;
     }
     setFormattedPathsError(
-      formatAbsolutePaths(
+      createHtmlLink(
         error,
         "underline text-slate-300 hover:text-slate-400",
         true,
@@ -46,10 +49,12 @@ export const BlueScreenOfDeath = ({
         <div className="space-y-4">
           <div>{title}</div>
           <div className="py-4">
-            <span
-              className="outline-none select-text whitespace-pre-wrap"
-              dangerouslySetInnerHTML={{ __html: formattedPathsError }}
-            />
+            <OpenFileInEditorButton>
+              <span
+                className="outline-none select-text whitespace-pre-wrap"
+                dangerouslySetInnerHTML={{ __html: formattedPathsError }}
+              />
+            </OpenFileInEditorButton>
           </div>
           {displayLinks && (
             <div className="w-full text-center py-4">
