@@ -1,7 +1,7 @@
 {
   "name": "examples-invalid",
   "dependencies": {
-    "cdktf": "^0.17.3",
+    "cdktf": "^0.18.0",
     "constructs": "^10.2.70",
     "jsii-code-samples": "1.7.0"
   },

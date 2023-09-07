@@ -90,7 +90,7 @@ exports[`basic function 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.3",
+                      "version": "0.18.0",
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
@@ -98,7 +98,7 @@ exports[`basic function 2`] = `
                   "CodeBlob": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.3",
+                      "version": "0.18.0",
                     },
                     "id": "CodeBlob",
                     "path": "root/Default/Function/CodeBlob",
@@ -106,7 +106,7 @@ exports[`basic function 2`] = `
                   "Function": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.3",
+                      "version": "0.18.0",
                     },
                     "id": "Function",
                     "path": "root/Default/Function/Function",
@@ -116,7 +116,7 @@ exports[`basic function 2`] = `
                       "Bucket": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.3",
+                          "version": "0.18.0",
                         },
                         "id": "Bucket",
                         "path": "root/Default/Function/FunctionBucket/Bucket",
@@ -136,7 +136,7 @@ exports[`basic function 2`] = `
                   "ReadLambdaCodeAssignment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.3",
+                      "version": "0.18.0",
                     },
                     "id": "ReadLambdaCodeAssignment",
                     "path": "root/Default/Function/ReadLambdaCodeAssignment",
@@ -169,7 +169,7 @@ exports[`basic function 2`] = `
               "ResourceGroup": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.3",
+                  "version": "0.18.0",
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
@@ -177,7 +177,7 @@ exports[`basic function 2`] = `
               "ServicePlan": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.3",
+                  "version": "0.18.0",
                 },
                 "id": "ServicePlan",
                 "path": "root/Default/ServicePlan",
@@ -185,7 +185,7 @@ exports[`basic function 2`] = `
               "StorageAccount": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.3",
+                  "version": "0.18.0",
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
@@ -193,7 +193,7 @@ exports[`basic function 2`] = `
               "azure": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.3",
+                  "version": "0.18.0",
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
@@ -209,7 +209,7 @@ exports[`basic function 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.3",
+              "version": "0.18.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -217,7 +217,7 @@ exports[`basic function 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.3",
+          "version": "0.18.0",
         },
         "id": "root",
         "path": "root",
@@ -225,7 +225,7 @@ exports[`basic function 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.3",
+      "version": "0.18.0",
     },
     "id": "App",
     "path": "",
@@ -326,7 +326,7 @@ exports[`basic function with environment variables 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.3",
+                      "version": "0.18.0",
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
@@ -334,7 +334,7 @@ exports[`basic function with environment variables 2`] = `
                   "CodeBlob": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.3",
+                      "version": "0.18.0",
                     },
                     "id": "CodeBlob",
                     "path": "root/Default/Function/CodeBlob",
@@ -342,7 +342,7 @@ exports[`basic function with environment variables 2`] = `
                   "Function": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.3",
+                      "version": "0.18.0",
                     },
                     "id": "Function",
                     "path": "root/Default/Function/Function",
@@ -352,7 +352,7 @@ exports[`basic function with environment variables 2`] = `
                       "Bucket": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.3",
+                          "version": "0.18.0",
                         },
                         "id": "Bucket",
                         "path": "root/Default/Function/FunctionBucket/Bucket",
@@ -372,7 +372,7 @@ exports[`basic function with environment variables 2`] = `
                   "ReadLambdaCodeAssignment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.3",
+                      "version": "0.18.0",
                     },
                     "id": "ReadLambdaCodeAssignment",
                     "path": "root/Default/Function/ReadLambdaCodeAssignment",
@@ -405,7 +405,7 @@ exports[`basic function with environment variables 2`] = `
               "ResourceGroup": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.3",
+                  "version": "0.18.0",
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
@@ -413,7 +413,7 @@ exports[`basic function with environment variables 2`] = `
               "ServicePlan": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.3",
+                  "version": "0.18.0",
                 },
                 "id": "ServicePlan",
                 "path": "root/Default/ServicePlan",
@@ -421,7 +421,7 @@ exports[`basic function with environment variables 2`] = `
               "StorageAccount": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.3",
+                  "version": "0.18.0",
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
@@ -429,7 +429,7 @@ exports[`basic function with environment variables 2`] = `
               "azure": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.3",
+                  "version": "0.18.0",
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
@@ -445,7 +445,7 @@ exports[`basic function with environment variables 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.3",
+              "version": "0.18.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -453,7 +453,7 @@ exports[`basic function with environment variables 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.3",
+          "version": "0.18.0",
         },
         "id": "root",
         "path": "root",
@@ -461,7 +461,7 @@ exports[`basic function with environment variables 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.3",
+      "version": "0.18.0",
     },
     "id": "App",
     "path": "",
@@ -571,7 +571,7 @@ exports[`replace invalid character from function name 2`] = `
               "ResourceGroup": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.3",
+                  "version": "0.18.0",
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
@@ -579,7 +579,7 @@ exports[`replace invalid character from function name 2`] = `
               "ServicePlan": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.3",
+                  "version": "0.18.0",
                 },
                 "id": "ServicePlan",
                 "path": "root/Default/ServicePlan",
@@ -587,7 +587,7 @@ exports[`replace invalid character from function name 2`] = `
               "StorageAccount": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.3",
+                  "version": "0.18.0",
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
@@ -595,7 +595,7 @@ exports[`replace invalid character from function name 2`] = `
               "azure": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.3",
+                  "version": "0.18.0",
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
@@ -605,7 +605,7 @@ exports[`replace invalid character from function name 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.3",
+                      "version": "0.18.0",
                     },
                     "id": "Asset",
                     "path": "root/Default/someFunction01/Asset",
@@ -613,7 +613,7 @@ exports[`replace invalid character from function name 2`] = `
                   "CodeBlob": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.3",
+                      "version": "0.18.0",
                     },
                     "id": "CodeBlob",
                     "path": "root/Default/someFunction01/CodeBlob",
@@ -621,7 +621,7 @@ exports[`replace invalid character from function name 2`] = `
                   "Function": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.3",
+                      "version": "0.18.0",
                     },
                     "id": "Function",
                     "path": "root/Default/someFunction01/Function",
@@ -631,7 +631,7 @@ exports[`replace invalid character from function name 2`] = `
                       "Bucket": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.3",
+                          "version": "0.18.0",
                         },
                         "id": "Bucket",
                         "path": "root/Default/someFunction01/FunctionBucket/Bucket",
@@ -651,7 +651,7 @@ exports[`replace invalid character from function name 2`] = `
                   "ReadLambdaCodeAssignment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.3",
+                      "version": "0.18.0",
                     },
                     "id": "ReadLambdaCodeAssignment",
                     "path": "root/Default/someFunction01/ReadLambdaCodeAssignment",
@@ -679,7 +679,7 @@ exports[`replace invalid character from function name 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.3",
+              "version": "0.18.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -687,7 +687,7 @@ exports[`replace invalid character from function name 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.3",
+          "version": "0.18.0",
         },
         "id": "root",
         "path": "root",
@@ -695,7 +695,7 @@ exports[`replace invalid character from function name 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.3",
+      "version": "0.18.0",
     },
     "id": "App",
     "path": "",

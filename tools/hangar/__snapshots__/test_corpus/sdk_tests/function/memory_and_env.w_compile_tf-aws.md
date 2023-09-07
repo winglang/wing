@@ -66,7 +66,7 @@ module.exports = function({ $c, $f1, $f2 }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.3"
+      "version": "0.18.0"
     },
     "outputs": {
       "root": {

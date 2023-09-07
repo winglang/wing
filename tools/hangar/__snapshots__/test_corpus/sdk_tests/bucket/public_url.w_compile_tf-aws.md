@@ -49,7 +49,7 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.3"
+      "version": "0.18.0"
     },
     "outputs": {
       "root": {

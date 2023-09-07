@@ -2,7 +2,7 @@
   "dependencies": [
     {
       "name": "@cdktf/provider-aws",
-      "version": "^15.0.0",
+      "version": "^17.0.2",
       "type": "build"
     },
     {
@@ -62,7 +62,7 @@
     },
     {
       "name": "cdktf-cli",
-      "version": "^0.17.3",
+      "version": "^0.18.0",
       "type": "build"
     },
     {
@@ -254,7 +254,7 @@
     },
     {
       "name": "cdktf",
-      "version": "^0.17.3",
+      "version": "^0.18.0",
       "type": "bundled"
     },
     {

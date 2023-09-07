@@ -30,7 +30,7 @@ module.exports = function({ $__obj__args_______if__obj_args______undefined__thro
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.3"
+      "version": "0.18.0"
     },
     "outputs": {
       "root": {

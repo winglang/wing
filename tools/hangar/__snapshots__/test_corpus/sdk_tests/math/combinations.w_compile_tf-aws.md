@@ -25,7 +25,7 @@ module.exports = function({ $math_Util, $population, $subset }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.3"
+      "version": "0.18.0"
     },
     "outputs": {
       "root": {

@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@trpc/server": "^10.38.1",
-    "@types/cors": "^2.8.13",
+    "@types/cors": "^2.8.14",
     "@types/express": "^4.17.17",
     "@types/lodash.uniqby": "^4.7.7",
     "@types/ws": "^8.5.5",
@@ -52,7 +52,7 @@
     "tsup": "^6.7.0",
     "typescript": "^5.2.2",
     "vitest": "^0.31.4",
-    "ws": "^8.13.0",
+    "ws": "^8.14.0",
     "zod": "^3.22.2"
   },
   "volta": {

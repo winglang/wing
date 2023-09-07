@@ -24,7 +24,7 @@ if (undocumentedResources.length) {
 }
 
 const JSII_DEPS = ["constructs@~10.2.70"];
-const CDKTF_VERSION = "^0.17.3";
+const CDKTF_VERSION = "^0.18.0";
 
 const CDKTF_PROVIDERS = [
   "aws@~>4.65.0",
@@ -106,7 +106,7 @@ const project = new cdk.JsiiProject({
     "jsonschema",
   ],
   devDeps: [
-    `@cdktf/provider-aws@^15.0.0`, // only for testing Wing plugins
+    `@cdktf/provider-aws@^17.0.2`, // only for testing Wing plugins
     "wing-api-checker",
     "bump-pack",
     "@types/aws-lambda",

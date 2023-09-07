@@ -39,7 +39,7 @@ module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_second
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.3"
+      "version": "0.18.0"
     },
     "outputs": {
       "root": {

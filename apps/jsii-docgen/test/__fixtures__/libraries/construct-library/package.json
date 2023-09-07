@@ -43,7 +43,7 @@
     "constructs": "^3.3.69"
   },
   "devDependencies": {
-    "@types/node": "^18.17.13",
+    "@types/node": "^18.17.14",
     "@types/prettier": "2.6.0",
     "jsii": "~5.0.21",
     "typescript": "^4.9.5"
