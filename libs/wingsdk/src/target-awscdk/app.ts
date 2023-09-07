@@ -54,6 +54,8 @@ export class App extends CoreApp {
   public readonly isTestEnvironment: boolean;
   public readonly _tokens: CdkTokens;
 
+  public readonly _target = "awscdk";
+
   private readonly cdkApp: cdk.App;
   private readonly cdkStack: cdk.Stack;
   private readonly pluginManager: PluginManager;

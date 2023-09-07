@@ -37,6 +37,8 @@ export class App extends CdktfApp {
    */
   public readonly storageLocation: string;
 
+  public readonly _target = "tf-gcp";
+
   constructor(props: AppProps) {
     super(props);
 
