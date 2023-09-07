@@ -1,5 +1,5 @@
 use crate::{
-	ast::{ExprId, Phase, Symbol, UserDefinedType},
+	ast::{ExprId, FunctionSignature, Phase, Symbol, UserDefinedType},
 	type_check::symbol_env::SymbolEnvRef,
 };
 
@@ -7,9 +7,9 @@ use crate::{
 pub struct VisitContext {
 	phase: Vec<Phase>,
 	env: Vec<SymbolEnvRef>,
-	method_env: Vec<Option<SymbolEnvRef>>,
+	function_env: Vec<SymbolEnvRef>,
 	property: Vec<Symbol>,
-	method: Vec<Option<Symbol>>,
+	function: Vec<(Option<Symbol>, FunctionSignature)>,
 	class: Vec<UserDefinedType>,
 	statement: Vec<usize>,
 	in_json: Vec<bool>,
@@ -22,11 +22,11 @@ impl VisitContext {
 		VisitContext {
 			phase: vec![],
 			env: vec![],
-			method_env: vec![],
+			function_env: vec![],
 			property: vec![],
 			class: vec![],
 			statement: vec![],
-			method: vec![],
+			function: vec![],
 			in_json: vec![],
 			in_type_annotation: vec![],
 			expression: vec![],
@@ -77,16 +77,14 @@ impl VisitContext {
 
 	// --
 
-	pub fn push_class(&mut self, class: UserDefinedType, phase: &Phase, initializer_env: Option<SymbolEnvRef>) {
+	pub fn push_class(&mut self, class: UserDefinedType, phase: &Phase) {
 		self.class.push(class);
 		self.push_phase(*phase);
-		self.method_env.push(initializer_env);
 	}
 
 	pub fn pop_class(&mut self) {
 		self.class.pop();
 		self.pop_phase();
-		self.method_env.pop();
 	}
 
 	pub fn current_class(&self) -> Option<&UserDefinedType> {
@@ -95,25 +93,35 @@ impl VisitContext {
 
 	// --
 
-	pub fn push_function_definition(&mut self, function_name: &Option<Symbol>, phase: &Phase, env: SymbolEnvRef) {
-		self.push_phase(*phase);
-		self.method.push(function_name.clone());
-
-		// if the function definition doesn't have a name (i.e. it's a closure), don't push its env
-		// because it's not a method dude!
-		let maybe_env = function_name.as_ref().map(|_| env);
-		self.method_env.push(maybe_env);
+	pub fn push_function_definition(
+		&mut self,
+		function_name: Option<&Symbol>,
+		sig: &FunctionSignature,
+		env: SymbolEnvRef,
+	) {
+		self.push_phase(sig.phase);
+		self.function.push((function_name.cloned(), sig.clone()));
+		self.function_env.push(env);
 	}
 
 	pub fn pop_function_definition(&mut self) {
 		self.pop_phase();
-		self.method.pop();
-		self.method_env.pop();
+		self.function.pop();
+		self.function_env.pop();
 	}
 
-	pub fn current_method(&self) -> Option<Symbol> {
+	pub fn current_method(&self) -> Option<(Symbol, FunctionSignature)> {
 		// return the first none-None method in the stack (from the end)
-		self.method.iter().rev().find_map(|m| m.clone())
+		self
+			.function
+			.iter()
+			.rev()
+			.find(|(m, _)| m.is_some())
+			.map(|(m, sig)| (m.clone().unwrap(), sig.clone()))
+	}
+
+	pub fn current_function(&self) -> Option<(Option<Symbol>, FunctionSignature)> {
+		self.function.last().cloned()
 	}
 
 	pub fn current_phase(&self) -> Phase {
@@ -121,7 +129,20 @@ impl VisitContext {
 	}
 
 	pub fn current_method_env(&self) -> Option<&SymbolEnvRef> {
-		self.method_env.iter().rev().find_map(|m| m.as_ref())
+		// Get the env of the first named function in the stack (non named functions are closures)
+		self.function.iter().zip(self.function_env.iter()).rev().find_map(
+			|((m, _), e)| {
+				if m.is_some() {
+					Some(e)
+				} else {
+					None
+				}
+			},
+		)
+	}
+
+	pub fn current_function_env(&self) -> Option<&SymbolEnvRef> {
+		self.function_env.last()
 	}
 
 	// --
@@ -190,5 +211,18 @@ pub trait VisitorWithContext {
 		self.ctx().push_stmt(stmt);
 		f(self);
 		self.ctx().pop_stmt();
+	}
+
+	fn with_function_def<T>(
+		&mut self,
+		function_name: Option<&Symbol>,
+		sig: &FunctionSignature,
+		env: SymbolEnvRef,
+		f: impl FnOnce(&mut Self) -> T,
+	) -> T {
+		self.ctx().push_function_definition(function_name, sig, env);
+		let res = f(self);
+		self.ctx().pop_function_definition();
+		res
 	}
 }

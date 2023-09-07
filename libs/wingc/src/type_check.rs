@@ -16,6 +16,7 @@ use crate::ast::{
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, TypeError, WingSpan};
 use crate::docs::Docs;
+use crate::type_check::symbol_env::SymbolEnvKind;
 use crate::visit_context::{VisitContext, VisitorWithContext};
 use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
@@ -919,6 +920,14 @@ impl TypeRef {
 		}
 	}
 
+	pub fn as_mut_struct(&mut self) -> Option<&mut Struct> {
+		if let Type::Struct(ref mut st) = **self {
+			Some(st)
+		} else {
+			None
+		}
+	}
+
 	pub fn as_interface(&self) -> Option<&Interface> {
 		if let Type::Interface(ref iface) = **self {
 			Some(iface)
@@ -1289,10 +1298,7 @@ impl Types {
 		types.push(Box::new(Type::Unresolved));
 		let err_idx = types.len() - 1;
 
-		// TODO: this is hack to create the top-level mapping from lib names to symbols
-		// We construct a void ref by hand since we can't call self.void() while constructing the Types struct
-		let void_ref = UnsafeRef::<Type>(&*types[void_idx] as *const Type);
-		let libraries = SymbolEnv::new(None, void_ref, false, false, Phase::Preflight, 0);
+		let libraries = SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0);
 
 		Self {
 			types,
@@ -2501,6 +2507,7 @@ impl<'a> TypeChecker<'a> {
 	fn type_check_closure(&mut self, func_def: &ast::FunctionDefinition, env: &SymbolEnv) -> (TypeRef, Phase) {
 		// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
 		// https://github.com/winglang/wing/issues/457
+
 		// Create a type_checker function signature from the AST function definition
 		let function_type = self.resolve_type_annotation(&func_def.signature.to_type_annotation(), env);
 		let sig = function_type.as_function_sig().unwrap();
@@ -2508,24 +2515,24 @@ impl<'a> TypeChecker<'a> {
 		// Create an environment for the function
 		let mut function_env = self.types.add_symbol_env(SymbolEnv::new(
 			Some(env.get_ref()),
-			sig.return_type,
-			false,
-			true,
+			SymbolEnvKind::Function { is_init: false },
 			func_def.signature.phase,
 			self.ctx.current_stmt_idx(),
 		));
 		self.add_arguments_to_env(&func_def.signature.parameters, &sig, &mut function_env);
 
-		// Type check the function body
-		if let FunctionBody::Statements(scope) = &func_def.body {
-			self.types.set_scope_env(scope, function_env);
+		self.with_function_def(None, &func_def.signature, function_env, |tc| {
+			// Type check the function body
+			if let FunctionBody::Statements(scope) = &func_def.body {
+				tc.types.set_scope_env(scope, function_env);
 
-			self.inner_scopes.push((scope, self.ctx.clone()));
+				tc.inner_scopes.push((scope, tc.ctx.clone()));
 
-			(function_type, sig.phase)
-		} else {
-			(function_type, sig.phase)
-		}
+				(function_type, sig.phase)
+			} else {
+				(function_type, sig.phase)
+			}
+		})
 	}
 
 	/// Validate that a given map can be assigned to a variable of given struct type
@@ -2804,15 +2811,15 @@ impl<'a> TypeChecker<'a> {
 			self.ctx = ctx;
 			self.type_check_scope(scope);
 		}
-		if env.is_function {
-			if let Type::Inferred(n) = &*env.return_type {
-				if self.types.get_inference_by_id(*n).is_none() {
-					// If function types don't return anything then we should set the return type to void
-					self.types.update_inferred_type(*n, self.types.void(), &scope.span);
-				}
-				self.update_known_inferences(&mut env.return_type, &scope.span);
-			}
-		}
+		// if matches!(env.kind, SymbolEnvKind::Function { .. }) {
+		// 	if let Type::Inferred(n) = &*env.return_type {
+		// 		if self.types.get_inference_by_id(*n).is_none() {
+		// 			// If function types don't return anything then we should set the return type to void
+		// 			self.types.update_inferred_type(*n, self.types.void(), &scope.span);
+		// 		}
+		// 		self.update_known_inferences(&mut env.return_type, &scope.span);
+		// 	}
+		// }
 
 		for symbol_data in env.symbol_map.values_mut() {
 			if let SymbolKind::Variable(ref mut var_info) = symbol_data.1 {
@@ -2996,9 +3003,7 @@ impl<'a> TypeChecker<'a> {
 			StmtKind::Scope(scope) => {
 				let scope_env = tc.types.add_symbol_env(SymbolEnv::new(
 					Some(env.get_ref()),
-					env.return_type,
-					false,
-					false,
+					SymbolEnvKind::Scope,
 					env.phase,
 					stmt.idx,
 				));
@@ -3051,9 +3056,7 @@ impl<'a> TypeChecker<'a> {
 		// Create a new environment for the try block
 		let try_env = self.types.add_symbol_env(SymbolEnv::new(
 			Some(env.get_ref()),
-			env.return_type,
-			false,
-			false,
+			SymbolEnvKind::Scope,
 			env.phase,
 			stmt.idx,
 		));
@@ -3064,9 +3067,7 @@ impl<'a> TypeChecker<'a> {
 		if let Some(catch_block) = catch_block {
 			let mut catch_env = self.types.add_symbol_env(SymbolEnv::new(
 				Some(env.get_ref()),
-				env.return_type,
-				false,
-				false,
+				SymbolEnvKind::Scope,
 				env.phase,
 				stmt.idx,
 			));
@@ -3092,9 +3093,7 @@ impl<'a> TypeChecker<'a> {
 		if let Some(finally_statements) = finally_statements {
 			let finally_env = self.types.add_symbol_env(SymbolEnv::new(
 				Some(env.get_ref()),
-				env.return_type,
-				false,
-				false,
+				SymbolEnvKind::Scope,
 				env.phase,
 				stmt.idx,
 			));
@@ -3130,8 +3129,40 @@ impl<'a> TypeChecker<'a> {
 		//   If we encounter an existing member with the same name and type we skip it, if the types are different we
 		//   fail type checking.
 
-		// Create an environment for the struct
-		let mut struct_env = SymbolEnv::new(None, self.types.void(), false, false, Phase::Independent, stmt.idx);
+		// Create a dummy environment for the struct so we can create the struct type
+		let dummy_env = SymbolEnv::new(
+			None,
+			SymbolEnvKind::Type(self.types.void()),
+			Phase::Independent,
+			stmt.idx,
+		);
+
+		// Collect types this struct extends
+		let extends_types = extends
+			.iter()
+			.filter_map(|ext| {
+				let t = self
+					.resolve_user_defined_type(ext, env, stmt.idx)
+					.unwrap_or_else(|e| self.type_error(e));
+				if t.as_struct().is_some() {
+					Some(t)
+				} else {
+					self.spanned_error(ext, format!("Expected a struct, found type \"{}\"", t));
+					None
+				}
+			})
+			.collect::<Vec<_>>();
+
+		// Create the struct type
+		let mut struct_type = self.types.add_type(Type::Struct(Struct {
+			name: name.clone(),
+			extends: extends_types.clone(),
+			env: dummy_env,
+			docs: Docs::default(),
+		}));
+
+		// Create the actual environment for the struct
+		let mut struct_env = SymbolEnv::new(None, SymbolEnvKind::Type(struct_type), Phase::Independent, stmt.idx);
 
 		// Add fields to the struct env
 		for field in fields.iter() {
@@ -3159,40 +3190,18 @@ impl<'a> TypeChecker<'a> {
 			};
 		}
 
-		// Add members from the structs parents
-		let extends_types = extends
-			.iter()
-			.filter_map(|ext| {
-				let t = self
-					.resolve_user_defined_type(ext, env, stmt.idx)
-					.unwrap_or_else(|e| self.type_error(e));
-				if t.as_struct().is_some() {
-					Some(t)
-				} else {
-					self.spanned_error(ext, format!("Expected a struct, found type \"{}\"", t));
-					None
-				}
-			})
-			.collect::<Vec<_>>();
-
 		if let Err(e) = add_parent_members_to_struct_env(&extends_types, name, &mut struct_env) {
 			self.type_error(e);
 		}
-		match env.define(
-			name,
-			SymbolKind::Type(self.types.add_type(Type::Struct(Struct {
-				name: name.clone(),
-				extends: extends_types,
-				env: struct_env,
-				docs: Docs::default(),
-			}))),
-			StatementIdx::Top,
-		) {
+		match env.define(name, SymbolKind::Type(struct_type), StatementIdx::Top) {
 			Err(type_error) => {
 				self.type_error(type_error);
 			}
 			_ => {}
 		};
+
+		// Replace the dummy struct environment with the real one
+		struct_type.as_mut_struct().unwrap().env = struct_env;
 	}
 
 	fn type_check_interface(
@@ -3204,7 +3213,7 @@ impl<'a> TypeChecker<'a> {
 		methods: &Vec<(Symbol, ast::FunctionSignature)>,
 	) {
 		// Create environment representing this interface, for now it'll be empty just so we can support referencing ourselves from the interface definition.
-		let dummy_env = SymbolEnv::new(None, self.types.void(), false, false, env.phase, stmt.idx);
+		let dummy_env = SymbolEnv::new(None, SymbolEnvKind::Type(self.types.void()), env.phase, stmt.idx);
 
 		let extend_interfaces = extends
 			.iter()
@@ -3240,7 +3249,7 @@ impl<'a> TypeChecker<'a> {
 		};
 
 		// Create the real interface environment to be filled with the interface AST types
-		let mut interface_env = SymbolEnv::new(None, self.types.void(), false, false, env.phase, stmt.idx);
+		let mut interface_env = SymbolEnv::new(None, SymbolEnvKind::Type(interface_type), env.phase, stmt.idx);
 
 		// Add methods to the interface env
 		for (method_name, sig) in methods.iter() {
@@ -3277,7 +3286,7 @@ impl<'a> TypeChecker<'a> {
 			self.type_error(e);
 		}
 
-		// Replace the dummy interface environment with the real one before type checking the methods
+		// Replace the dummy interface environment with the real one
 		interface_type.as_mut_interface().unwrap().env = interface_env;
 	}
 
@@ -3299,7 +3308,7 @@ impl<'a> TypeChecker<'a> {
 			self.extract_parent_class(ast_class.parent.as_ref(), ast_class.phase, &ast_class.name, env);
 
 		// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
-		let dummy_env = SymbolEnv::new(None, self.types.void(), false, false, env.phase, stmt.idx);
+		let dummy_env = SymbolEnv::new(None, SymbolEnvKind::Type(self.types.void()), env.phase, stmt.idx);
 
 		let impl_interfaces = ast_class
 			.implements
@@ -3340,7 +3349,7 @@ impl<'a> TypeChecker<'a> {
 		};
 
 		// Create a the real class environment to be filled with the class AST types
-		let mut class_env = SymbolEnv::new(parent_class_env, self.types.void(), false, false, env.phase, stmt.idx);
+		let mut class_env = SymbolEnv::new(parent_class_env, SymbolEnvKind::Type(class_type), env.phase, stmt.idx);
 
 		// Add fields to the class env
 		for field in ast_class.fields.iter() {
@@ -3516,28 +3525,43 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn type_check_return(&mut self, env: &mut SymbolEnv, stmt: &Stmt, exp: &Option<Expr>) {
-		let return_type_inferred = self.update_known_inferences(&mut env.return_type, &stmt.span);
+		//let return_type_inferred = self.update_known_inferences(&mut env.return_type, &stmt.span);
+
+		// Make sure we're inside a function
+		let Some((_, current_func_sig)) = self.ctx.current_method() else {
+				self.spanned_error(stmt, "Return statement outside of function cannot return a value");
+				return;
+			};
+
+		// Get the expected return type, we need to look it up in the parent of the current function's env
+		let function_def_env = self
+			.ctx
+			.current_function_env()
+			.expect("Expected to be in a function")
+			.parent
+			.expect("Function is defined in an env");
+		let mut function_ret_type = self.resolve_type_annotation(&current_func_sig.return_type, &function_def_env);
+
 		if let Some(return_expression) = exp {
 			let (return_type, _) = self.type_check_exp(return_expression, env);
-			if !env.return_type.is_void() {
-				self.validate_type(return_type, env.return_type, return_expression);
-			} else if env.is_in_function() {
-				if return_type_inferred {
-					self.spanned_error(stmt, "Unexpected return value from void function");
-				} else {
-					self.spanned_error(
-						stmt,
-						"Unexpected return value from void function. Return type annotations are required for methods.",
-					);
-				}
+
+			if !function_ret_type.is_void() {
+				self.validate_type(return_type, function_ret_type, return_expression);
 			} else {
-				self.spanned_error(stmt, "Return statement outside of function cannot return a value");
+				//if return_type_inferred {
+				self.spanned_error(stmt, "Unexpected return value from void function");
+				// } else {
+				// 	self.spanned_error(
+				// 		stmt,
+				// 		"Unexpected return value from void function. Return type annotations are required for methods.",
+				// 	);
+				// }
 			}
 		} else {
-			self.validate_type(self.types.void(), env.return_type, stmt);
+			self.validate_type(self.types.void(), function_ret_type, stmt);
 		}
 
-		if let Type::Json(d) = &mut *env.return_type {
+		if let Type::Json(d) = &mut *function_ret_type {
 			// We do not have the required analysis to know the type of the Json data after return
 			if d.is_some() {
 				d.take();
@@ -3597,14 +3621,7 @@ impl<'a> TypeChecker<'a> {
 				}
 				let ns = self.types.add_namespace(Namespace {
 					name: name.name.to_string(),
-					env: SymbolEnv::new(
-						Some(brought_env.get_ref()),
-						brought_env.return_type,
-						false,
-						false,
-						brought_env.phase,
-						0,
-					),
+					env: SymbolEnv::new(Some(brought_env.get_ref()), SymbolEnvKind::Scope, brought_env.phase, 0),
 					loaded: true,
 				});
 				if let Err(e) = env.define(
@@ -3660,9 +3677,7 @@ impl<'a> TypeChecker<'a> {
 		if let Some(else_scope) = else_statements {
 			let else_scope_env = self.types.add_symbol_env(SymbolEnv::new(
 				Some(env.get_ref()),
-				env.return_type,
-				false,
-				false,
+				SymbolEnvKind::Scope,
 				env.phase,
 				stmt.idx,
 			));
@@ -3695,9 +3710,7 @@ impl<'a> TypeChecker<'a> {
 		if let Some(else_scope) = &iflet.else_statements {
 			let else_scope_env = self.types.add_symbol_env(SymbolEnv::new(
 				Some(env.get_ref()),
-				env.return_type,
-				false,
-				false,
+				SymbolEnvKind::Scope,
 				env.phase,
 				stmt.idx,
 			));
@@ -3712,9 +3725,7 @@ impl<'a> TypeChecker<'a> {
 
 		let scope_env = self.types.add_symbol_env(SymbolEnv::new(
 			Some(env.get_ref()),
-			env.return_type,
-			false,
-			false,
+			SymbolEnvKind::Scope,
 			env.phase,
 			stmt.idx,
 		));
@@ -3750,9 +3761,7 @@ impl<'a> TypeChecker<'a> {
 
 		let mut scope_env = self.types.add_symbol_env(SymbolEnv::new(
 			Some(env.get_ref()),
-			env.return_type,
-			false,
-			false,
+			SymbolEnvKind::Scope,
 			env.phase,
 			stmt.idx,
 		));
@@ -3868,9 +3877,7 @@ impl<'a> TypeChecker<'a> {
 
 		let mut stmt_env = self.types.add_symbol_env(SymbolEnv::new(
 			Some(env.get_ref()),
-			env.return_type,
-			false,
-			false,
+			SymbolEnvKind::Scope,
 			env.phase,
 			stmt.idx,
 		));
@@ -3897,9 +3904,7 @@ impl<'a> TypeChecker<'a> {
 
 		let if_scope_env = self.types.add_symbol_env(SymbolEnv::new(
 			Some(env.get_ref()),
-			env.return_type,
-			false,
-			false,
+			SymbolEnvKind::Scope,
 			env.phase,
 			stmt.idx,
 		));
@@ -3937,9 +3942,7 @@ impl<'a> TypeChecker<'a> {
 						// Create a temp init environment to use for typechecking args
 						let init_env = &mut SymbolEnv::new(
 							Some(class_env.get_ref()),
-							self.types.void(),
-							true,
-							true,
+							SymbolEnvKind::Function { is_init: true },
 							class_env.phase,
 							scope.statements[0].idx,
 						);
@@ -4050,9 +4053,7 @@ impl<'a> TypeChecker<'a> {
 		let is_init = method_name.name == CLASS_INIT_NAME || method_name.name == CLASS_INFLIGHT_INIT_NAME;
 		let mut method_env = self.types.add_symbol_env(SymbolEnv::new(
 			Some(parent_env.get_ref()),
-			method_sig.return_type,
-			is_init,
-			true,
+			SymbolEnvKind::Function { is_init },
 			method_sig.phase,
 			statement_idx,
 		));
@@ -4071,19 +4072,21 @@ impl<'a> TypeChecker<'a> {
 		}
 		self.add_arguments_to_env(&method_def.signature.parameters, method_sig, &mut method_env);
 
-		if let FunctionBody::Statements(scope) = &method_def.body {
-			self.types.set_scope_env(scope, method_env);
-			self.inner_scopes.push((scope, self.ctx.clone()));
-		}
-
-		if let FunctionBody::External(_) = &method_def.body {
-			if !method_def.is_static {
-				self.spanned_error(
-					method_name,
-					"Extern methods must be declared \"static\" (they cannot access instance members)",
-				);
+		self.with_function_def(Some(method_name), &method_def.signature, method_env, |tc| {
+			if let FunctionBody::Statements(scope) = &method_def.body {
+				tc.types.set_scope_env(scope, method_env);
+				tc.inner_scopes.push((scope, tc.ctx.clone()));
 			}
-		}
+
+			if let FunctionBody::External(_) = &method_def.body {
+				if !method_def.is_static {
+					tc.spanned_error(
+						method_name,
+						"Extern methods must be declared \"static\" (they cannot access instance members)",
+					);
+				}
+			}
+		});
 	}
 
 	fn add_method_to_class_env(
@@ -4286,14 +4289,7 @@ impl<'a> TypeChecker<'a> {
 			types_map.insert(format!("{o}"), (*o, *n));
 		}
 
-		let new_env = SymbolEnv::new(
-			None,
-			original_type_class.env.return_type,
-			false,
-			false,
-			Phase::Independent,
-			0,
-		);
+		let mut new_env = SymbolEnv::new(None, SymbolEnvKind::Type(original_type), Phase::Independent, 0);
 		let tt = Type::Class(Class {
 			name: original_type_class.name.clone(),
 			env: new_env,
@@ -4311,6 +4307,8 @@ impl<'a> TypeChecker<'a> {
 		// TODO: here we add a new type regardless whether we already "hydrated" `original_type` with these `type_params`. Cache!
 		let mut new_type = self.types.add_type(tt);
 		let new_type_class = new_type.as_class_mut().unwrap();
+		// Update the type's environment with the new type
+		new_type_class.env.kind = SymbolEnvKind::Type(new_type);
 
 		// Add symbols from original type to new type
 		// Note: this is currently limited to top-level function signatures and fields
@@ -5227,7 +5225,7 @@ pub fn resolve_super_method(method: &Symbol, env: &SymbolEnv, types: &Types) -> 
 		}
 	} else {
 		Err(TypeError {
-			message: (if env.is_function {
+			message: (if matches!(env.kind, SymbolEnvKind::Function { .. }) {
 				"Cannot call super method inside of a static method"
 			} else {
 				"\"super\" can only be used inside of classes"

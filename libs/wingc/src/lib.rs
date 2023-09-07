@@ -20,7 +20,7 @@ use jsify::JSifier;
 use lifting::LiftVisitor;
 use parser::parse_wing_project;
 use type_check::jsii_importer::JsiiImportSpec;
-use type_check::symbol_env::StatementIdx;
+use type_check::symbol_env::{StatementIdx, SymbolEnvKind};
 use type_check::{FunctionSignature, SymbolKind, Type};
 use type_check_assert::TypeCheckAssert;
 use valid_json_visitor::ValidJsonVisitor;
@@ -198,7 +198,7 @@ pub fn type_check(
 	jsii_types: &mut TypeSystem,
 	jsii_imports: &mut Vec<JsiiImportSpec>,
 ) {
-	let env = types.add_symbol_env(SymbolEnv::new(None, types.void(), false, false, Phase::Preflight, 0));
+	let env = types.add_symbol_env(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0));
 	types.set_scope_env(scope, env);
 
 	// note: Globals are emitted here and wrapped in "{ ... }" blocks. Wrapping makes these emissions, actual
