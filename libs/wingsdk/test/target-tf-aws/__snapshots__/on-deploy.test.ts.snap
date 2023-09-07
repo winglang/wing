@@ -85,7 +85,7 @@ exports[`create an OnDeploy 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.17.3",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -106,7 +106,7 @@ exports[`create an OnDeploy 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.17.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -116,7 +116,7 @@ exports[`create an OnDeploy 2`] = `
                   "TestFunctionArns": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "TestFunctionArns",
                     "path": "root/Default/cloud.TestRunner/TestFunctionArns",
@@ -141,7 +141,7 @@ exports[`create an OnDeploy 2`] = `
                       "Asset": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformAsset",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "Asset",
                         "path": "root/Default/my_on_deploy/Function/Asset",
@@ -149,7 +149,7 @@ exports[`create an OnDeploy 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "Default",
                         "path": "root/Default/my_on_deploy/Function/Default",
@@ -157,7 +157,7 @@ exports[`create an OnDeploy 2`] = `
                       "IamRole": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "IamRole",
                         "path": "root/Default/my_on_deploy/Function/IamRole",
@@ -165,7 +165,7 @@ exports[`create an OnDeploy 2`] = `
                       "IamRolePolicy": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "IamRolePolicy",
                         "path": "root/Default/my_on_deploy/Function/IamRolePolicy",
@@ -173,7 +173,7 @@ exports[`create an OnDeploy 2`] = `
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "IamRolePolicyAttachment",
                         "path": "root/Default/my_on_deploy/Function/IamRolePolicyAttachment",
@@ -181,7 +181,7 @@ exports[`create an OnDeploy 2`] = `
                       "S3Object": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "S3Object",
                         "path": "root/Default/my_on_deploy/Function/S3Object",
@@ -201,7 +201,7 @@ exports[`create an OnDeploy 2`] = `
                   "Invocation": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformDataSource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "Invocation",
                     "path": "root/Default/my_on_deploy/Invocation",
@@ -229,7 +229,7 @@ exports[`create an OnDeploy 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.17.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -237,7 +237,7 @@ exports[`create an OnDeploy 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.17.3",
         },
         "id": "root",
         "path": "root",
@@ -245,7 +245,7 @@ exports[`create an OnDeploy 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.17.3",
     },
     "id": "App",
     "path": "",
@@ -358,7 +358,7 @@ exports[`execute OnDeploy after other resources 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.17.3",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -379,7 +379,7 @@ exports[`execute OnDeploy after other resources 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.17.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -389,7 +389,7 @@ exports[`execute OnDeploy after other resources 2`] = `
                   "TestFunctionArns": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "TestFunctionArns",
                     "path": "root/Default/cloud.TestRunner/TestFunctionArns",
@@ -412,7 +412,7 @@ exports[`execute OnDeploy after other resources 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
@@ -420,7 +420,7 @@ exports[`execute OnDeploy after other resources 2`] = `
                   "Encryption": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "Encryption",
                     "path": "root/Default/my_bucket/Encryption",
@@ -444,7 +444,7 @@ exports[`execute OnDeploy after other resources 2`] = `
                       "Asset": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformAsset",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "Asset",
                         "path": "root/Default/my_on_deploy/Function/Asset",
@@ -452,7 +452,7 @@ exports[`execute OnDeploy after other resources 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "Default",
                         "path": "root/Default/my_on_deploy/Function/Default",
@@ -460,7 +460,7 @@ exports[`execute OnDeploy after other resources 2`] = `
                       "IamRole": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "IamRole",
                         "path": "root/Default/my_on_deploy/Function/IamRole",
@@ -468,7 +468,7 @@ exports[`execute OnDeploy after other resources 2`] = `
                       "IamRolePolicy": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "IamRolePolicy",
                         "path": "root/Default/my_on_deploy/Function/IamRolePolicy",
@@ -476,7 +476,7 @@ exports[`execute OnDeploy after other resources 2`] = `
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "IamRolePolicyAttachment",
                         "path": "root/Default/my_on_deploy/Function/IamRolePolicyAttachment",
@@ -484,7 +484,7 @@ exports[`execute OnDeploy after other resources 2`] = `
                       "S3Object": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "S3Object",
                         "path": "root/Default/my_on_deploy/Function/S3Object",
@@ -504,7 +504,7 @@ exports[`execute OnDeploy after other resources 2`] = `
                   "Invocation": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformDataSource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "Invocation",
                     "path": "root/Default/my_on_deploy/Invocation",
@@ -532,7 +532,7 @@ exports[`execute OnDeploy after other resources 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.17.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -540,7 +540,7 @@ exports[`execute OnDeploy after other resources 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.17.3",
         },
         "id": "root",
         "path": "root",
@@ -548,7 +548,7 @@ exports[`execute OnDeploy after other resources 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.17.3",
     },
     "id": "App",
     "path": "",
@@ -664,7 +664,7 @@ exports[`execute OnDeploy before other resources 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.17.3",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -685,7 +685,7 @@ exports[`execute OnDeploy before other resources 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.17.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -695,7 +695,7 @@ exports[`execute OnDeploy before other resources 2`] = `
                   "TestFunctionArns": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "TestFunctionArns",
                     "path": "root/Default/cloud.TestRunner/TestFunctionArns",
@@ -718,7 +718,7 @@ exports[`execute OnDeploy before other resources 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
@@ -726,7 +726,7 @@ exports[`execute OnDeploy before other resources 2`] = `
                   "Encryption": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "Encryption",
                     "path": "root/Default/my_bucket/Encryption",
@@ -750,7 +750,7 @@ exports[`execute OnDeploy before other resources 2`] = `
                       "Asset": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformAsset",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "Asset",
                         "path": "root/Default/my_on_deploy/Function/Asset",
@@ -758,7 +758,7 @@ exports[`execute OnDeploy before other resources 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "Default",
                         "path": "root/Default/my_on_deploy/Function/Default",
@@ -766,7 +766,7 @@ exports[`execute OnDeploy before other resources 2`] = `
                       "IamRole": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "IamRole",
                         "path": "root/Default/my_on_deploy/Function/IamRole",
@@ -774,7 +774,7 @@ exports[`execute OnDeploy before other resources 2`] = `
                       "IamRolePolicy": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "IamRolePolicy",
                         "path": "root/Default/my_on_deploy/Function/IamRolePolicy",
@@ -782,7 +782,7 @@ exports[`execute OnDeploy before other resources 2`] = `
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "IamRolePolicyAttachment",
                         "path": "root/Default/my_on_deploy/Function/IamRolePolicyAttachment",
@@ -790,7 +790,7 @@ exports[`execute OnDeploy before other resources 2`] = `
                       "S3Object": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "S3Object",
                         "path": "root/Default/my_on_deploy/Function/S3Object",
@@ -810,7 +810,7 @@ exports[`execute OnDeploy before other resources 2`] = `
                   "Invocation": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformDataSource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "Invocation",
                     "path": "root/Default/my_on_deploy/Invocation",
@@ -838,7 +838,7 @@ exports[`execute OnDeploy before other resources 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.17.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -846,7 +846,7 @@ exports[`execute OnDeploy before other resources 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.17.3",
         },
         "id": "root",
         "path": "root",
@@ -854,7 +854,7 @@ exports[`execute OnDeploy before other resources 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.17.3",
     },
     "id": "App",
     "path": "",

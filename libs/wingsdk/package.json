@@ -51,8 +51,8 @@
     "aws-sdk-client-mock": "^2.2.0",
     "aws-sdk-client-mock-jest": "^2.2.0",
     "bump-pack": "workspace:^",
-    "cdktf-cli": "0.17.0",
-    "constructs": "~10.2.69",
+    "cdktf-cli": "^0.17.3",
+    "constructs": "~10.2.70",
     "eslint": "^8",
     "eslint-config-prettier": "^8.10.0",
     "eslint-import-resolver-node": "^0.3.9",
@@ -76,7 +76,7 @@
     "wing-api-checker": "workspace:^"
   },
   "peerDependencies": {
-    "constructs": "~10.2.69"
+    "constructs": "~10.2.70"
   },
   "dependencies": {
     "@aws-sdk/client-cloudwatch-logs": "3.405.0",
@@ -98,8 +98,8 @@
     "@azure/storage-blob": "12.14.0",
     "@types/aws-lambda": "^8.10.119",
     "aws-cdk-lib": "^2.64.0",
-    "cdktf": "0.17.0",
-    "constructs": "~10.2.69",
+    "cdktf": "^0.17.3",
+    "constructs": "~10.2.70",
     "cron-parser": "^4.9.0",
     "esbuild-wasm": "^0.18.20",
     "express": "^4.18.2",

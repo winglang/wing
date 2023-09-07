@@ -35,7 +35,7 @@ module.exports = function({ $__x_, $__y_, $math_Util, $x, $y }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.17.3"
     },
     "outputs": {
       "root": {

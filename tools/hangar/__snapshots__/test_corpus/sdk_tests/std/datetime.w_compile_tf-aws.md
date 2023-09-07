@@ -46,7 +46,7 @@ module.exports = function({ $_d4_toUtc____hours, $d4_hours, $d4_timezone, $math_
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.17.3"
     },
     "outputs": {
       "root": {

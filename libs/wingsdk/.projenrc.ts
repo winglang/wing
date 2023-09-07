@@ -23,8 +23,8 @@ if (undocumentedResources.length) {
   );
 }
 
-const JSII_DEPS = ["constructs@~10.2.69"];
-const CDKTF_VERSION = "0.17.0";
+const JSII_DEPS = ["constructs@~10.2.70"];
+const CDKTF_VERSION = "^0.17.3";
 
 const CDKTF_PROVIDERS = [
   "aws@~>4.65.0",

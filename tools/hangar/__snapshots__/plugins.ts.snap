@@ -6,7 +6,7 @@ exports[`Plugin examples > AWS target plugins > permission-boundary.js 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0",
+      "version": "0.17.3",
     },
     "outputs": {
       "root": {
@@ -183,7 +183,7 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0",
+      "version": "0.17.3",
     },
     "outputs": {
       "root": {
@@ -547,7 +547,7 @@ exports[`Plugin examples > AWS target plugins > tf-backend.js > azurerm backend 
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0",
+      "version": "0.17.3",
     },
     "outputs": {
       "root": {
@@ -723,7 +723,7 @@ exports[`Plugin examples > AWS target plugins > tf-backend.js > gcp backend 1`] 
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0",
+      "version": "0.17.3",
     },
     "outputs": {
       "root": {
@@ -899,7 +899,7 @@ exports[`Plugin examples > AWS target plugins > tf-backend.js > s3 backend 1`] =
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0",
+      "version": "0.17.3",
     },
     "outputs": {
       "root": {

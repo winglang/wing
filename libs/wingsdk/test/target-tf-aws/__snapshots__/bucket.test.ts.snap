@@ -59,7 +59,7 @@ exports[`bucket is public 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.17.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -69,7 +69,7 @@ exports[`bucket is public 2`] = `
                   "TestFunctionArns": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "TestFunctionArns",
                     "path": "root/Default/cloud.TestRunner/TestFunctionArns",
@@ -92,7 +92,7 @@ exports[`bucket is public 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
@@ -100,7 +100,7 @@ exports[`bucket is public 2`] = `
                   "Encryption": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "Encryption",
                     "path": "root/Default/my_bucket/Encryption",
@@ -108,7 +108,7 @@ exports[`bucket is public 2`] = `
                   "PublicAccessBlock": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "PublicAccessBlock",
                     "path": "root/Default/my_bucket/PublicAccessBlock",
@@ -116,7 +116,7 @@ exports[`bucket is public 2`] = `
                   "PublicPolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "PublicPolicy",
                     "path": "root/Default/my_bucket/PublicPolicy",
@@ -144,7 +144,7 @@ exports[`bucket is public 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.17.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -152,7 +152,7 @@ exports[`bucket is public 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.17.3",
         },
         "id": "root",
         "path": "root",
@@ -160,7 +160,7 @@ exports[`bucket is public 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.17.3",
     },
     "id": "App",
     "path": "",
@@ -212,7 +212,7 @@ exports[`bucket prefix must be lowercase 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "Default",
                     "path": "root/Default/The-Uncanny.Bucket/Default",
@@ -220,7 +220,7 @@ exports[`bucket prefix must be lowercase 2`] = `
                   "Encryption": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "Encryption",
                     "path": "root/Default/The-Uncanny.Bucket/Encryption",
@@ -240,7 +240,7 @@ exports[`bucket prefix must be lowercase 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.17.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -250,7 +250,7 @@ exports[`bucket prefix must be lowercase 2`] = `
                   "TestFunctionArns": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "TestFunctionArns",
                     "path": "root/Default/cloud.TestRunner/TestFunctionArns",
@@ -279,7 +279,7 @@ exports[`bucket prefix must be lowercase 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.17.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -287,7 +287,7 @@ exports[`bucket prefix must be lowercase 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.17.3",
         },
         "id": "root",
         "path": "root",
@@ -295,7 +295,7 @@ exports[`bucket prefix must be lowercase 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.17.3",
     },
     "id": "App",
     "path": "",
@@ -345,7 +345,7 @@ exports[`bucket prefix valid 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.17.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -355,7 +355,7 @@ exports[`bucket prefix valid 2`] = `
                   "TestFunctionArns": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "TestFunctionArns",
                     "path": "root/Default/cloud.TestRunner/TestFunctionArns",
@@ -378,7 +378,7 @@ exports[`bucket prefix valid 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "Default",
                     "path": "root/Default/the-uncanny.bucket/Default",
@@ -386,7 +386,7 @@ exports[`bucket prefix valid 2`] = `
                   "Encryption": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "Encryption",
                     "path": "root/Default/the-uncanny.bucket/Encryption",
@@ -414,7 +414,7 @@ exports[`bucket prefix valid 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.17.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -422,7 +422,7 @@ exports[`bucket prefix valid 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.17.3",
         },
         "id": "root",
         "path": "root",
@@ -430,7 +430,7 @@ exports[`bucket prefix valid 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.17.3",
     },
     "id": "App",
     "path": "",
@@ -592,7 +592,7 @@ exports[`bucket with onCreate method 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.17.3",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -600,7 +600,7 @@ exports[`bucket with onCreate method 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.17.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -610,7 +610,7 @@ exports[`bucket with onCreate method 2`] = `
                   "TestFunctionArns": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "TestFunctionArns",
                     "path": "root/Default/cloud.TestRunner/TestFunctionArns",
@@ -646,7 +646,7 @@ exports[`bucket with onCreate method 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
@@ -654,7 +654,7 @@ exports[`bucket with onCreate method 2`] = `
                   "Encryption": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "Encryption",
                     "path": "root/Default/my_bucket/Encryption",
@@ -662,7 +662,7 @@ exports[`bucket with onCreate method 2`] = `
                   "PublicAccessBlock": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "PublicAccessBlock",
                     "path": "root/Default/my_bucket/PublicAccessBlock",
@@ -670,7 +670,7 @@ exports[`bucket with onCreate method 2`] = `
                   "PublicPolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "PublicPolicy",
                     "path": "root/Default/my_bucket/PublicPolicy",
@@ -678,7 +678,7 @@ exports[`bucket with onCreate method 2`] = `
                   "S3BucketNotification": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "S3BucketNotification",
                     "path": "root/Default/my_bucket/S3BucketNotification",
@@ -688,7 +688,7 @@ exports[`bucket with onCreate method 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "Default",
                         "path": "root/Default/my_bucket/my_bucket-oncreate/Default",
@@ -696,7 +696,7 @@ exports[`bucket with onCreate method 2`] = `
                       "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
                         "path": "root/Default/my_bucket/my_bucket-oncreate/PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
@@ -704,7 +704,7 @@ exports[`bucket with onCreate method 2`] = `
                       "my_bucket-oncreate-TopicSubscription-7b961f4d": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "my_bucket-oncreate-TopicSubscription-7b961f4d",
                         "path": "root/Default/my_bucket/my_bucket-oncreate/my_bucket-oncreate-TopicSubscription-7b961f4d",
@@ -726,7 +726,7 @@ exports[`bucket with onCreate method 2`] = `
                       "Asset": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformAsset",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "Asset",
                         "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d/Asset",
@@ -734,7 +734,7 @@ exports[`bucket with onCreate method 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "Default",
                         "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d/Default",
@@ -742,7 +742,7 @@ exports[`bucket with onCreate method 2`] = `
                       "IamRole": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "IamRole",
                         "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d/IamRole",
@@ -750,7 +750,7 @@ exports[`bucket with onCreate method 2`] = `
                       "IamRolePolicy": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "IamRolePolicy",
                         "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d/IamRolePolicy",
@@ -758,7 +758,7 @@ exports[`bucket with onCreate method 2`] = `
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "IamRolePolicyAttachment",
                         "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d/IamRolePolicyAttachment",
@@ -766,7 +766,7 @@ exports[`bucket with onCreate method 2`] = `
                       "InvokePermission-c81e8728eb64a11308ced47594c2396d2467e4d9d3": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "InvokePermission-c81e8728eb64a11308ced47594c2396d2467e4d9d3",
                         "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d/InvokePermission-c81e8728eb64a11308ced47594c2396d2467e4d9d3",
@@ -774,7 +774,7 @@ exports[`bucket with onCreate method 2`] = `
                       "S3Object": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "S3Object",
                         "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d/S3Object",
@@ -836,7 +836,7 @@ exports[`bucket with onCreate method 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.17.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -844,7 +844,7 @@ exports[`bucket with onCreate method 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.17.3",
         },
         "id": "root",
         "path": "root",
@@ -852,7 +852,7 @@ exports[`bucket with onCreate method 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.17.3",
     },
     "id": "App",
     "path": "",
@@ -1014,7 +1014,7 @@ exports[`bucket with onDelete method 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.17.3",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -1022,7 +1022,7 @@ exports[`bucket with onDelete method 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.17.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -1032,7 +1032,7 @@ exports[`bucket with onDelete method 2`] = `
                   "TestFunctionArns": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "TestFunctionArns",
                     "path": "root/Default/cloud.TestRunner/TestFunctionArns",
@@ -1068,7 +1068,7 @@ exports[`bucket with onDelete method 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
@@ -1076,7 +1076,7 @@ exports[`bucket with onDelete method 2`] = `
                   "Encryption": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "Encryption",
                     "path": "root/Default/my_bucket/Encryption",
@@ -1084,7 +1084,7 @@ exports[`bucket with onDelete method 2`] = `
                   "PublicAccessBlock": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "PublicAccessBlock",
                     "path": "root/Default/my_bucket/PublicAccessBlock",
@@ -1092,7 +1092,7 @@ exports[`bucket with onDelete method 2`] = `
                   "PublicPolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "PublicPolicy",
                     "path": "root/Default/my_bucket/PublicPolicy",
@@ -1100,7 +1100,7 @@ exports[`bucket with onDelete method 2`] = `
                   "S3BucketNotification": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "S3BucketNotification",
                     "path": "root/Default/my_bucket/S3BucketNotification",
@@ -1110,7 +1110,7 @@ exports[`bucket with onDelete method 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "Default",
                         "path": "root/Default/my_bucket/my_bucket-ondelete/Default",
@@ -1118,7 +1118,7 @@ exports[`bucket with onDelete method 2`] = `
                       "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
                         "path": "root/Default/my_bucket/my_bucket-ondelete/PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
@@ -1126,7 +1126,7 @@ exports[`bucket with onDelete method 2`] = `
                       "my_bucket-ondelete-TopicSubscription-1de1a361": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "my_bucket-ondelete-TopicSubscription-1de1a361",
                         "path": "root/Default/my_bucket/my_bucket-ondelete/my_bucket-ondelete-TopicSubscription-1de1a361",
@@ -1148,7 +1148,7 @@ exports[`bucket with onDelete method 2`] = `
                       "Asset": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformAsset",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "Asset",
                         "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361/Asset",
@@ -1156,7 +1156,7 @@ exports[`bucket with onDelete method 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "Default",
                         "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361/Default",
@@ -1164,7 +1164,7 @@ exports[`bucket with onDelete method 2`] = `
                       "IamRole": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "IamRole",
                         "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361/IamRole",
@@ -1172,7 +1172,7 @@ exports[`bucket with onDelete method 2`] = `
                       "IamRolePolicy": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "IamRolePolicy",
                         "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361/IamRolePolicy",
@@ -1180,7 +1180,7 @@ exports[`bucket with onDelete method 2`] = `
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "IamRolePolicyAttachment",
                         "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361/IamRolePolicyAttachment",
@@ -1188,7 +1188,7 @@ exports[`bucket with onDelete method 2`] = `
                       "InvokePermission-c804d947f12e6d883f018387429c0ba10b852c46ba": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "InvokePermission-c804d947f12e6d883f018387429c0ba10b852c46ba",
                         "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361/InvokePermission-c804d947f12e6d883f018387429c0ba10b852c46ba",
@@ -1196,7 +1196,7 @@ exports[`bucket with onDelete method 2`] = `
                       "S3Object": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "S3Object",
                         "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361/S3Object",
@@ -1258,7 +1258,7 @@ exports[`bucket with onDelete method 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.17.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -1266,7 +1266,7 @@ exports[`bucket with onDelete method 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.17.3",
         },
         "id": "root",
         "path": "root",
@@ -1274,7 +1274,7 @@ exports[`bucket with onDelete method 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.17.3",
     },
     "id": "App",
     "path": "",
@@ -1564,7 +1564,7 @@ exports[`bucket with onEvent method 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.17.3",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -1572,7 +1572,7 @@ exports[`bucket with onEvent method 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.17.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -1582,7 +1582,7 @@ exports[`bucket with onEvent method 2`] = `
                   "TestFunctionArns": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "TestFunctionArns",
                     "path": "root/Default/cloud.TestRunner/TestFunctionArns",
@@ -1618,7 +1618,7 @@ exports[`bucket with onEvent method 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
@@ -1626,7 +1626,7 @@ exports[`bucket with onEvent method 2`] = `
                   "Encryption": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "Encryption",
                     "path": "root/Default/my_bucket/Encryption",
@@ -1634,7 +1634,7 @@ exports[`bucket with onEvent method 2`] = `
                   "PublicAccessBlock": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "PublicAccessBlock",
                     "path": "root/Default/my_bucket/PublicAccessBlock",
@@ -1642,7 +1642,7 @@ exports[`bucket with onEvent method 2`] = `
                   "PublicPolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "PublicPolicy",
                     "path": "root/Default/my_bucket/PublicPolicy",
@@ -1650,7 +1650,7 @@ exports[`bucket with onEvent method 2`] = `
                   "S3BucketNotification": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "S3BucketNotification",
                     "path": "root/Default/my_bucket/S3BucketNotification",
@@ -1660,7 +1660,7 @@ exports[`bucket with onEvent method 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "Default",
                         "path": "root/Default/my_bucket/my_bucket-oncreate/Default",
@@ -1668,7 +1668,7 @@ exports[`bucket with onEvent method 2`] = `
                       "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
                         "path": "root/Default/my_bucket/my_bucket-oncreate/PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
@@ -1676,7 +1676,7 @@ exports[`bucket with onEvent method 2`] = `
                       "my_bucket-oncreate-TopicSubscription-7b961f4d": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "my_bucket-oncreate-TopicSubscription-7b961f4d",
                         "path": "root/Default/my_bucket/my_bucket-oncreate/my_bucket-oncreate-TopicSubscription-7b961f4d",
@@ -1698,7 +1698,7 @@ exports[`bucket with onEvent method 2`] = `
                       "Asset": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformAsset",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "Asset",
                         "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d/Asset",
@@ -1706,7 +1706,7 @@ exports[`bucket with onEvent method 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "Default",
                         "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d/Default",
@@ -1714,7 +1714,7 @@ exports[`bucket with onEvent method 2`] = `
                       "IamRole": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "IamRole",
                         "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d/IamRole",
@@ -1722,7 +1722,7 @@ exports[`bucket with onEvent method 2`] = `
                       "IamRolePolicy": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "IamRolePolicy",
                         "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d/IamRolePolicy",
@@ -1730,7 +1730,7 @@ exports[`bucket with onEvent method 2`] = `
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "IamRolePolicyAttachment",
                         "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d/IamRolePolicyAttachment",
@@ -1738,7 +1738,7 @@ exports[`bucket with onEvent method 2`] = `
                       "InvokePermission-c81e8728eb64a11308ced47594c2396d2467e4d9d3": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "InvokePermission-c81e8728eb64a11308ced47594c2396d2467e4d9d3",
                         "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d/InvokePermission-c81e8728eb64a11308ced47594c2396d2467e4d9d3",
@@ -1746,7 +1746,7 @@ exports[`bucket with onEvent method 2`] = `
                       "S3Object": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "S3Object",
                         "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d/S3Object",
@@ -1790,7 +1790,7 @@ exports[`bucket with onEvent method 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "Default",
                         "path": "root/Default/my_bucket/my_bucket-ondelete/Default",
@@ -1798,7 +1798,7 @@ exports[`bucket with onEvent method 2`] = `
                       "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
                         "path": "root/Default/my_bucket/my_bucket-ondelete/PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
@@ -1806,7 +1806,7 @@ exports[`bucket with onEvent method 2`] = `
                       "my_bucket-ondelete-TopicSubscription-1de1a361": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "my_bucket-ondelete-TopicSubscription-1de1a361",
                         "path": "root/Default/my_bucket/my_bucket-ondelete/my_bucket-ondelete-TopicSubscription-1de1a361",
@@ -1828,7 +1828,7 @@ exports[`bucket with onEvent method 2`] = `
                       "Asset": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformAsset",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "Asset",
                         "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361/Asset",
@@ -1836,7 +1836,7 @@ exports[`bucket with onEvent method 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "Default",
                         "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361/Default",
@@ -1844,7 +1844,7 @@ exports[`bucket with onEvent method 2`] = `
                       "IamRole": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "IamRole",
                         "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361/IamRole",
@@ -1852,7 +1852,7 @@ exports[`bucket with onEvent method 2`] = `
                       "IamRolePolicy": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "IamRolePolicy",
                         "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361/IamRolePolicy",
@@ -1860,7 +1860,7 @@ exports[`bucket with onEvent method 2`] = `
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "IamRolePolicyAttachment",
                         "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361/IamRolePolicyAttachment",
@@ -1868,7 +1868,7 @@ exports[`bucket with onEvent method 2`] = `
                       "InvokePermission-c804d947f12e6d883f018387429c0ba10b852c46ba": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "InvokePermission-c804d947f12e6d883f018387429c0ba10b852c46ba",
                         "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361/InvokePermission-c804d947f12e6d883f018387429c0ba10b852c46ba",
@@ -1876,7 +1876,7 @@ exports[`bucket with onEvent method 2`] = `
                       "S3Object": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "S3Object",
                         "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361/S3Object",
@@ -1920,7 +1920,7 @@ exports[`bucket with onEvent method 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "Default",
                         "path": "root/Default/my_bucket/my_bucket-onupdate/Default",
@@ -1928,7 +1928,7 @@ exports[`bucket with onEvent method 2`] = `
                       "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
                         "path": "root/Default/my_bucket/my_bucket-onupdate/PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
@@ -1936,7 +1936,7 @@ exports[`bucket with onEvent method 2`] = `
                       "my_bucket-onupdate-TopicSubscription-46c07356": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "my_bucket-onupdate-TopicSubscription-46c07356",
                         "path": "root/Default/my_bucket/my_bucket-onupdate/my_bucket-onupdate-TopicSubscription-46c07356",
@@ -1958,7 +1958,7 @@ exports[`bucket with onEvent method 2`] = `
                       "Asset": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformAsset",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "Asset",
                         "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356/Asset",
@@ -1966,7 +1966,7 @@ exports[`bucket with onEvent method 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "Default",
                         "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356/Default",
@@ -1974,7 +1974,7 @@ exports[`bucket with onEvent method 2`] = `
                       "IamRole": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "IamRole",
                         "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356/IamRole",
@@ -1982,7 +1982,7 @@ exports[`bucket with onEvent method 2`] = `
                       "IamRolePolicy": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "IamRolePolicy",
                         "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356/IamRolePolicy",
@@ -1990,7 +1990,7 @@ exports[`bucket with onEvent method 2`] = `
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "IamRolePolicyAttachment",
                         "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356/IamRolePolicyAttachment",
@@ -1998,7 +1998,7 @@ exports[`bucket with onEvent method 2`] = `
                       "InvokePermission-c85a09033744f6af2426f88e40823fbfd778fbdc16": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "InvokePermission-c85a09033744f6af2426f88e40823fbfd778fbdc16",
                         "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356/InvokePermission-c85a09033744f6af2426f88e40823fbfd778fbdc16",
@@ -2006,7 +2006,7 @@ exports[`bucket with onEvent method 2`] = `
                       "S3Object": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "S3Object",
                         "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356/S3Object",
@@ -2068,7 +2068,7 @@ exports[`bucket with onEvent method 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.17.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -2076,7 +2076,7 @@ exports[`bucket with onEvent method 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.17.3",
         },
         "id": "root",
         "path": "root",
@@ -2084,7 +2084,7 @@ exports[`bucket with onEvent method 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.17.3",
     },
     "id": "App",
     "path": "",
@@ -2246,7 +2246,7 @@ exports[`bucket with onUpdate method 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.17.3",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -2254,7 +2254,7 @@ exports[`bucket with onUpdate method 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.17.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -2264,7 +2264,7 @@ exports[`bucket with onUpdate method 2`] = `
                   "TestFunctionArns": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "TestFunctionArns",
                     "path": "root/Default/cloud.TestRunner/TestFunctionArns",
@@ -2300,7 +2300,7 @@ exports[`bucket with onUpdate method 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
@@ -2308,7 +2308,7 @@ exports[`bucket with onUpdate method 2`] = `
                   "Encryption": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "Encryption",
                     "path": "root/Default/my_bucket/Encryption",
@@ -2316,7 +2316,7 @@ exports[`bucket with onUpdate method 2`] = `
                   "PublicAccessBlock": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "PublicAccessBlock",
                     "path": "root/Default/my_bucket/PublicAccessBlock",
@@ -2324,7 +2324,7 @@ exports[`bucket with onUpdate method 2`] = `
                   "PublicPolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "PublicPolicy",
                     "path": "root/Default/my_bucket/PublicPolicy",
@@ -2332,7 +2332,7 @@ exports[`bucket with onUpdate method 2`] = `
                   "S3BucketNotification": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "S3BucketNotification",
                     "path": "root/Default/my_bucket/S3BucketNotification",
@@ -2342,7 +2342,7 @@ exports[`bucket with onUpdate method 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "Default",
                         "path": "root/Default/my_bucket/my_bucket-onupdate/Default",
@@ -2350,7 +2350,7 @@ exports[`bucket with onUpdate method 2`] = `
                       "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
                         "path": "root/Default/my_bucket/my_bucket-onupdate/PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
@@ -2358,7 +2358,7 @@ exports[`bucket with onUpdate method 2`] = `
                       "my_bucket-onupdate-TopicSubscription-46c07356": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "my_bucket-onupdate-TopicSubscription-46c07356",
                         "path": "root/Default/my_bucket/my_bucket-onupdate/my_bucket-onupdate-TopicSubscription-46c07356",
@@ -2380,7 +2380,7 @@ exports[`bucket with onUpdate method 2`] = `
                       "Asset": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformAsset",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "Asset",
                         "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356/Asset",
@@ -2388,7 +2388,7 @@ exports[`bucket with onUpdate method 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "Default",
                         "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356/Default",
@@ -2396,7 +2396,7 @@ exports[`bucket with onUpdate method 2`] = `
                       "IamRole": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "IamRole",
                         "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356/IamRole",
@@ -2404,7 +2404,7 @@ exports[`bucket with onUpdate method 2`] = `
                       "IamRolePolicy": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "IamRolePolicy",
                         "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356/IamRolePolicy",
@@ -2412,7 +2412,7 @@ exports[`bucket with onUpdate method 2`] = `
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "IamRolePolicyAttachment",
                         "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356/IamRolePolicyAttachment",
@@ -2420,7 +2420,7 @@ exports[`bucket with onUpdate method 2`] = `
                       "InvokePermission-c85a09033744f6af2426f88e40823fbfd778fbdc16": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "InvokePermission-c85a09033744f6af2426f88e40823fbfd778fbdc16",
                         "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356/InvokePermission-c85a09033744f6af2426f88e40823fbfd778fbdc16",
@@ -2428,7 +2428,7 @@ exports[`bucket with onUpdate method 2`] = `
                       "S3Object": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.17.3",
                         },
                         "id": "S3Object",
                         "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356/S3Object",
@@ -2490,7 +2490,7 @@ exports[`bucket with onUpdate method 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.17.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -2498,7 +2498,7 @@ exports[`bucket with onUpdate method 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.17.3",
         },
         "id": "root",
         "path": "root",
@@ -2506,7 +2506,7 @@ exports[`bucket with onUpdate method 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.17.3",
     },
     "id": "App",
     "path": "",
@@ -2586,7 +2586,7 @@ exports[`bucket with two preflight files 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.17.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -2596,7 +2596,7 @@ exports[`bucket with two preflight files 2`] = `
                   "TestFunctionArns": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "TestFunctionArns",
                     "path": "root/Default/cloud.TestRunner/TestFunctionArns",
@@ -2619,7 +2619,7 @@ exports[`bucket with two preflight files 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
@@ -2627,7 +2627,7 @@ exports[`bucket with two preflight files 2`] = `
                   "Encryption": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "Encryption",
                     "path": "root/Default/my_bucket/Encryption",
@@ -2635,7 +2635,7 @@ exports[`bucket with two preflight files 2`] = `
                   "PublicAccessBlock": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "PublicAccessBlock",
                     "path": "root/Default/my_bucket/PublicAccessBlock",
@@ -2643,7 +2643,7 @@ exports[`bucket with two preflight files 2`] = `
                   "PublicPolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "PublicPolicy",
                     "path": "root/Default/my_bucket/PublicPolicy",
@@ -2651,7 +2651,7 @@ exports[`bucket with two preflight files 2`] = `
                   "S3Object-file1.txt": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "S3Object-file1.txt",
                     "path": "root/Default/my_bucket/S3Object-file1.txt",
@@ -2659,7 +2659,7 @@ exports[`bucket with two preflight files 2`] = `
                   "S3Object-file2.txt": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "S3Object-file2.txt",
                     "path": "root/Default/my_bucket/S3Object-file2.txt",
@@ -2687,7 +2687,7 @@ exports[`bucket with two preflight files 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.17.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -2695,7 +2695,7 @@ exports[`bucket with two preflight files 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.17.3",
         },
         "id": "root",
         "path": "root",
@@ -2703,7 +2703,7 @@ exports[`bucket with two preflight files 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.17.3",
     },
     "id": "App",
     "path": "",
@@ -2783,7 +2783,7 @@ exports[`bucket with two preflight objects 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.17.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -2793,7 +2793,7 @@ exports[`bucket with two preflight objects 2`] = `
                   "TestFunctionArns": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "TestFunctionArns",
                     "path": "root/Default/cloud.TestRunner/TestFunctionArns",
@@ -2816,7 +2816,7 @@ exports[`bucket with two preflight objects 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
@@ -2824,7 +2824,7 @@ exports[`bucket with two preflight objects 2`] = `
                   "Encryption": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "Encryption",
                     "path": "root/Default/my_bucket/Encryption",
@@ -2832,7 +2832,7 @@ exports[`bucket with two preflight objects 2`] = `
                   "PublicAccessBlock": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "PublicAccessBlock",
                     "path": "root/Default/my_bucket/PublicAccessBlock",
@@ -2840,7 +2840,7 @@ exports[`bucket with two preflight objects 2`] = `
                   "PublicPolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "PublicPolicy",
                     "path": "root/Default/my_bucket/PublicPolicy",
@@ -2848,7 +2848,7 @@ exports[`bucket with two preflight objects 2`] = `
                   "S3Object-file1.txt": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "S3Object-file1.txt",
                     "path": "root/Default/my_bucket/S3Object-file1.txt",
@@ -2856,7 +2856,7 @@ exports[`bucket with two preflight objects 2`] = `
                   "S3Object-file2.txt": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "S3Object-file2.txt",
                     "path": "root/Default/my_bucket/S3Object-file2.txt",
@@ -2884,7 +2884,7 @@ exports[`bucket with two preflight objects 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.17.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -2892,7 +2892,7 @@ exports[`bucket with two preflight objects 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.17.3",
         },
         "id": "root",
         "path": "root",
@@ -2900,7 +2900,7 @@ exports[`bucket with two preflight objects 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.17.3",
     },
     "id": "App",
     "path": "",
@@ -2950,7 +2950,7 @@ exports[`create a bucket 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.17.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -2960,7 +2960,7 @@ exports[`create a bucket 2`] = `
                   "TestFunctionArns": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "TestFunctionArns",
                     "path": "root/Default/cloud.TestRunner/TestFunctionArns",
@@ -2983,7 +2983,7 @@ exports[`create a bucket 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
@@ -2991,7 +2991,7 @@ exports[`create a bucket 2`] = `
                   "Encryption": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.17.3",
                     },
                     "id": "Encryption",
                     "path": "root/Default/my_bucket/Encryption",
@@ -3019,7 +3019,7 @@ exports[`create a bucket 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.17.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -3027,7 +3027,7 @@ exports[`create a bucket 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.17.3",
         },
         "id": "root",
         "path": "root",
@@ -3035,7 +3035,7 @@ exports[`create a bucket 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.17.3",
     },
     "id": "App",
     "path": "",

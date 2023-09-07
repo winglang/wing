@@ -9,7 +9,7 @@
     "aws-cdk-lib": "^2.94.0",
     "cdk8s": "^2.64.2",
     "cdk8s-plus-27": "^2.7.1",
-    "cdktf": "0.17.0",
+    "cdktf": "^0.17.3",
     "constructs": "^10.2.70",
     "jsii-code-samples": "1.7.0",
     "projen": "^0.71.163",

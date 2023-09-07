@@ -973,8 +973,8 @@ importers:
   examples/tests/invalid:
     dependencies:
       cdktf:
-        specifier: 0.17.0
-        version: 0.17.0(constructs@10.2.70)
+        specifier: ^0.17.3
+        version: 0.17.3(constructs@10.2.70)
       constructs:
         specifier: ^10.2.70
         version: 10.2.70
@@ -1007,7 +1007,7 @@ importers:
         version: 3.405.0
       '@cdktf/provider-aws':
         specifier: ^15.0.0
-        version: 15.0.0(cdktf@0.17.0)(constructs@10.2.70)
+        version: 15.0.0(cdktf@0.17.3)(constructs@10.2.70)
       aws-cdk-lib:
         specifier: ^2.94.0
         version: 2.94.0(constructs@10.2.70)
@@ -1018,8 +1018,8 @@ importers:
         specifier: ^2.7.1
         version: 2.7.1(cdk8s@2.64.2)(constructs@10.2.70)
       cdktf:
-        specifier: 0.17.0
-        version: 0.17.0(constructs@10.2.70)
+        specifier: ^0.17.3
+        version: 0.17.3(constructs@10.2.70)
       constructs:
         specifier: ^10.2.70
         version: 10.2.70
@@ -1148,10 +1148,10 @@ importers:
         specifier: ^2.64.0
         version: 2.94.0(constructs@10.2.70)
       cdktf:
-        specifier: 0.17.0
-        version: 0.17.0(constructs@10.2.70)
+        specifier: ^0.17.3
+        version: 0.17.3(constructs@10.2.70)
       constructs:
-        specifier: ~10.2.69
+        specifier: ~10.2.70
         version: 10.2.70
       cron-parser:
         specifier: ^4.9.0
@@ -1183,7 +1183,7 @@ importers:
     devDependencies:
       '@cdktf/provider-aws':
         specifier: ^15.0.0
-        version: 15.0.0(cdktf@0.17.0)(constructs@10.2.70)
+        version: 15.0.0(cdktf@0.17.3)(constructs@10.2.70)
       '@types/express':
         specifier: ^4.17.17
         version: 4.17.17
@@ -1221,8 +1221,8 @@ importers:
         specifier: workspace:^
         version: link:../../tools/bump-pack
       cdktf-cli:
-        specifier: 0.17.0
-        version: 0.17.0(ink@3.2.0)(react@17.0.2)
+        specifier: ^0.17.3
+        version: 0.17.3(ink@3.2.0)(react@17.0.2)
       eslint:
         specifier: ^8
         version: 8.48.0
@@ -4094,16 +4094,16 @@ packages:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
     dev: true
 
-  /@cdktf/cli-core@0.17.0(react@17.0.2):
-    resolution: {integrity: sha512-SW84rbcnvUsROC5FOIw6AXBGq2cBAdM278ar7j3PPTaun5tjYZaImIN70YFI5aV2A8PDm8yoilZADem8/2rUUA==}
+  /@cdktf/cli-core@0.17.3(react@17.0.2):
+    resolution: {integrity: sha512-KgsibdYAB5MuC0wM2143kiKj/jUsAuCOTRzHfIakIUVd6xsLIOxMdWCTOPbPhmcUPr0SHatFnjKD/d7y1A5Bow==}
     dependencies:
-      '@cdktf/commons': 0.17.0
-      '@cdktf/hcl2cdk': 0.17.0
-      '@cdktf/hcl2json': 0.17.0
+      '@cdktf/commons': 0.17.3
+      '@cdktf/hcl2cdk': 0.17.3
+      '@cdktf/hcl2json': 0.17.3
       '@cdktf/node-pty-prebuilt-multiarch': 0.10.1-pre.10
       '@sentry/node': 6.19.7
       archiver: 5.3.2
-      cdktf: 0.17.0(constructs@10.2.70)
+      cdktf: 0.17.3(constructs@10.2.70)
       chalk: 4.1.2
       chokidar: 3.5.3
       cli-spinners: 2.7.0
@@ -4154,12 +4154,12 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@cdktf/commons@0.17.0:
-    resolution: {integrity: sha512-zXWuaU/5HpIrg+IJPcCIp+yJHsn34Z0tmB6OusCofjhK677TLDt+jE5KKhgThM+NJLBYW5iSd8dMqn9e5KZong==}
+  /@cdktf/commons@0.17.3:
+    resolution: {integrity: sha512-5TZpuxjfYvmf1iXoel5HWz06Sf+5VYmZF/HeBmf03uHIAgDYJZZoyFp4wwH4lzT6pjr1uYBbyX49HTkLlmDbxQ==}
     dependencies:
       '@npmcli/ci-detect': 1.4.0
       '@sentry/node': 6.19.7
-      cdktf: 0.17.0(constructs@10.2.70)
+      cdktf: 0.17.3(constructs@10.2.70)
       codemaker: 1.88.0
       constructs: 10.2.70
       cross-spawn: 7.0.3
@@ -4173,15 +4173,15 @@ packages:
       - supports-color
     dev: true
 
-  /@cdktf/hcl2cdk@0.17.0:
-    resolution: {integrity: sha512-RkBTWlK15YjO5wqlgmLyPBy2nsoeIFZRI5EhaPeYhqjBr8qHH+Zhg4/jSSfW/trrdZazIortQzdfdbShvZYhhw==}
+  /@cdktf/hcl2cdk@0.17.3:
+    resolution: {integrity: sha512-T49ptQ2L5c80hO8XSLESjHq5ILfXQsceK7oK6LFheOidvCFyQPH4EsKUGUazqiqB0/Loab4+tsp/ou2L2BMc6Q==}
     dependencies:
       '@babel/generator': 7.22.10
       '@babel/template': 7.22.5
       '@babel/types': 7.22.11
-      '@cdktf/commons': 0.17.0
-      '@cdktf/hcl2json': 0.17.0
-      '@cdktf/provider-generator': 0.17.0
+      '@cdktf/commons': 0.17.3
+      '@cdktf/hcl2json': 0.17.3
+      '@cdktf/provider-generator': 0.17.3
       camelcase: 6.3.0
       deep-equal: 2.2.2
       glob: 10.3.4
@@ -4196,8 +4196,8 @@ packages:
       - supports-color
     dev: true
 
-  /@cdktf/hcl2json@0.17.0:
-    resolution: {integrity: sha512-PNEDsVJBHqlBZtQNvMimjpkIkqqrRqWq7NVJaGiCSpb02rf5VeCgJvZhY0stUXd6hmsi4pg/Y10v4tjv7gb/XA==}
+  /@cdktf/hcl2json@0.17.3:
+    resolution: {integrity: sha512-lczep0P2adwv08bf3mF1ScKyAD/Y502QVxGrYm8+E+3cl11qtFVblFJXRcAS288Opnqz1X0ekN4YCmkPawETbg==}
     dependencies:
       fs-extra: 11.1.1
     dev: true
@@ -4210,21 +4210,21 @@ packages:
       prebuild-install: 7.1.1
     dev: true
 
-  /@cdktf/provider-aws@15.0.0(cdktf@0.17.0)(constructs@10.2.70):
+  /@cdktf/provider-aws@15.0.0(cdktf@0.17.3)(constructs@10.2.70):
     resolution: {integrity: sha512-GeXpsU8+TsXhFFowjos+7bYv2CDAMHjOlKxXTx6aaqEO7BTlyqXBM/Qetw6y/6MxwIcyEf5siduBeT6T3lg3Dg==}
     engines: {node: '>= 16.14.0'}
     peerDependencies:
       cdktf: ^0.17.0
       constructs: ^10.0.0
     dependencies:
-      cdktf: 0.17.0(constructs@10.2.70)
+      cdktf: 0.17.3(constructs@10.2.70)
       constructs: 10.2.70
 
-  /@cdktf/provider-generator@0.17.0:
-    resolution: {integrity: sha512-/Ei9uVuLT6xjJIn6hvGepmS7tOjOAYsUplpc3J2jS1US85aO7oMASgjjgISvDC7saddLqhYCfysSWrYU5zUp0g==}
+  /@cdktf/provider-generator@0.17.3:
+    resolution: {integrity: sha512-HXzLVmn2Y+1OuoRkhIhUy8A3EikgnZUcuNHgyt0Z7+uUQ6qf0082iF5v7qrRbs+sZ7UvKyLIgy+bch+ZkskVpg==}
     dependencies:
-      '@cdktf/commons': 0.17.0
-      '@cdktf/hcl2json': 0.17.0
+      '@cdktf/commons': 0.17.3
+      '@cdktf/hcl2json': 0.17.3
       '@types/node': 16.18.23
       codemaker: 1.88.0
       deepmerge: 4.3.1
@@ -10996,17 +10996,17 @@ packages:
       - follow-redirects
       - yaml
 
-  /cdktf-cli@0.17.0(ink@3.2.0)(react@17.0.2):
-    resolution: {integrity: sha512-D2vZRtmFenYLDLUXF+uxuxUkJM3uYNce7Jn7/nWk/+qlcH/3n7TOEqV9UAgZFvjMLotGrA5/FIEDv4xse7sKRg==}
+  /cdktf-cli@0.17.3(ink@3.2.0)(react@17.0.2):
+    resolution: {integrity: sha512-wVOjzfwF4KUkGbdxuQ+/TfLuENbl0Lymp4Kz3cwbxXdEOOy//GlYjHIV+HA+kIl7bS6UtcyfKFXP3QDjjyb/3w==}
     hasBin: true
     dependencies:
-      '@cdktf/cli-core': 0.17.0(react@17.0.2)
-      '@cdktf/commons': 0.17.0
-      '@cdktf/hcl2cdk': 0.17.0
-      '@cdktf/hcl2json': 0.17.0
+      '@cdktf/cli-core': 0.17.3(react@17.0.2)
+      '@cdktf/commons': 0.17.3
+      '@cdktf/hcl2cdk': 0.17.3
+      '@cdktf/hcl2json': 0.17.3
       '@inquirer/prompts': 2.3.1
       '@sentry/node': 6.19.7
-      cdktf: 0.17.0(constructs@10.2.70)
+      cdktf: 0.17.3(constructs@10.2.70)
       codemaker: 1.88.0
       constructs: 10.2.70
       cross-spawn: 7.0.3
@@ -11035,20 +11035,6 @@ packages:
       - utf-8-validate
     dev: true
 
-  /cdktf@0.17.0(constructs@10.2.70):
-    resolution: {integrity: sha512-4R57uBLBqeb8NgfKZdn/az8UE3yXxGHyzH6Xjsz1Oo9kNvSkPibX7YqNLUpuCgdYNVgU2fdaNoHj9h4LXc6iCw==}
-    peerDependencies:
-      constructs: ^10.0.25
-    dependencies:
-      archiver: 5.3.1
-      constructs: 10.2.70
-      json-stable-stringify: 1.0.2
-      semver: 7.5.4
-    bundledDependencies:
-      - archiver
-      - json-stable-stringify
-      - semver
-
   /cdktf@0.17.3(constructs@10.2.70):
     resolution: {integrity: sha512-bqAzuuYLc8sy0ZoKw/RnohS6SH6fwAhCsU31vxuEiwu0BVcCaExfjQVZx/iJgmF1TJqk/cu2fMCLUgT3PDAuhQ==}
     peerDependencies:
@@ -11058,7 +11044,6 @@ packages:
       constructs: 10.2.70
       json-stable-stringify: 1.0.2
       semver: 7.5.4
-    dev: true
     bundledDependencies:
       - archiver
       - json-stable-stringify
@@ -12405,7 +12390,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20230906
+      typescript: 5.3.0-dev.20230907
     dev: true
 
   /dset@3.1.2:
@@ -14554,7 +14539,7 @@ packages:
       ink: '>=3.0.5'
       react: '>=16.8.2'
     dependencies:
-      cli-spinners: 2.7.0
+      cli-spinners: 2.9.0
       ink: 3.2.0(react@17.0.2)
       react: 17.0.2
     dev: true
@@ -21452,8 +21437,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20230906:
-    resolution: {integrity: sha512-7dCmQgfQ4i38daoPCCert+rM6gLxBpxRdjncJkHkJV4CWvNZsRX+RVTusojkqGAtW9vqB0+/8iDH6CZ0PDxghg==}
+  /typescript@5.3.0-dev.20230907:
+    resolution: {integrity: sha512-8yegC0GyY5ug9184BxLq8fLDt08+g8jRfut0QSraLFoT13c39Z6fVoviDEeqJgbnIGVxzAEiNQLUslpKYCyUsg==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

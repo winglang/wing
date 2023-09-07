@@ -221,7 +221,7 @@ module.exports = function({ $Source, $b, $checkHitCount, $util_Util, $wait }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.17.3"
     },
     "outputs": {
       "root": {

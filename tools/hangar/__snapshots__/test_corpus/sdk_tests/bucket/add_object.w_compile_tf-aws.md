@@ -27,7 +27,7 @@ module.exports = function({ $b, $jsonObj1, $std_Json }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.17.3"
     },
     "outputs": {
       "root": {

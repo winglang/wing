@@ -123,7 +123,7 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.17.3"
     },
     "outputs": {
       "root": {
