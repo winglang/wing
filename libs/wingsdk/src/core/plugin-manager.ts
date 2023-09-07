@@ -1,5 +1,6 @@
-import { writeFileSync } from "fs";
-import { resolve } from "path";
+import { readFileSync, writeFileSync } from "fs";
+import { dirname, resolve } from "path";
+import * as vm from "vm";
 import { IConstruct } from "constructs";
 
 /**
@@ -54,14 +55,33 @@ export class PluginManager {
       );
     }
 
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      this.hooks.push(require(pluginAbsolutePath));
-    } catch (err) {
-      throw new Error(
-        `Failed to load plugin from "${pluginAbsolutePath}":\n${err}`
-      );
-    }
+    const hooks: ICompilationHook = {
+      name: pluginAbsolutePath,
+    };
+
+    const pluginDir = dirname(pluginAbsolutePath);
+
+    const modulePaths = module.paths ?? [__dirname];
+
+    const requireResolve = (path: string) =>
+      require.resolve(path, { paths: [...modulePaths, pluginDir] });
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const pluginRequire = (path: string) => require(requireResolve(path));
+    pluginRequire.resolve = requireResolve;
+
+    const context = vm.createContext({
+      require: pluginRequire,
+      console,
+      exports: hooks,
+      process,
+      __dirname: pluginDir,
+    });
+
+    const pluginCode = readFileSync(pluginAbsolutePath, "utf8");
+    const script = new vm.Script(pluginCode);
+    script.runInContext(context);
+
+    this.hooks.push(hooks);
   }
 
   /**
