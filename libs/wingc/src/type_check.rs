@@ -3527,7 +3527,7 @@ impl<'a> TypeChecker<'a> {
 		//let return_type_inferred = self.update_known_inferences(&mut env.return_type, &stmt.span);
 
 		// Make sure we're inside a function
-		let Some((_, current_func_sig)) = self.ctx.current_method() else {
+		let Some((_, current_func_sig)) = self.ctx.current_function() else {
 				self.spanned_error(stmt, "Return statement outside of function cannot return a value");
 				return;
 			};
@@ -4664,16 +4664,7 @@ impl<'a> TypeChecker<'a> {
 						.resolve_user_defined_type(&current_class, env, self.ctx.current_stmt_idx())
 						.unwrap();
 					// Lookup the property in the class env to find out in which class (peraps an ancestor) it was defined
-					let SymbolEnvKind::Type(property_defined_in) = current_class_type
-						.as_class()
-						.expect("current class to be a class")
-						.env
-						.lookup_ext(&property, None)
-						.expect("property to be in class")
-						.1
-						.env.kind else {						
-							panic!("Expected class env to be a type");						
-					};
+					let property_defined_in = self.get_definition_type(instance_type, property);
 					private_access = current_class_type.is_same_type_as(&property_defined_in);
 					protected_access = private_access || current_class_type.is_strict_subtype_of(&property_defined_in);
 				}
@@ -5019,7 +5010,27 @@ impl<'a> TypeChecker<'a> {
 			(None, None)
 		}
 	}
+
+	/// Returns the type in which the property is defined (this might be any class like type). It might
+	/// be either the passed `instance_type` or one of its ancestors.
+	fn get_definition_type(&self, instance_type: UnsafeRef<Type>, property: &Symbol) -> UnsafeRef<Type> {
+		let class_like_env=  match &*instance_type {
+			Type::Class(c) => &c.env,
+			Type::Interface(i) => &i.env,
+			Type::Struct(s) => &s.env,
+			_ => panic!("Expected instance type to be a class like type"),
+		};
+    let SymbolEnvKind::Type(property_defined_in) = class_like_env
+			.lookup_ext(property, None)
+			.expect(&format!("property {property} to be in class {instance_type}"))
+			.1
+			.env.kind else {						
+				panic!("Expected class env to be a type");						
+		};
+    property_defined_in
+	}
 }
+
 
 impl VisitorWithContext for TypeChecker<'_> {
 	fn ctx(&mut self) -> &mut VisitContext {
