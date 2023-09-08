@@ -15,11 +15,6 @@
   <a href="https://www.winglang.io/contributing/">Contribute 💖</a>
 </p>
 
-> **🚧 Alpha Extension 🚧**
-> 
-> Together with the Wing language, this extension is in alpha. 
-> Please enjoy the ride and feel free to [report any issues you find](https://github.com/winglang/wing/issues/new/choose).
-
 ###  Features
 
 - 💅 Syntax highlighting
