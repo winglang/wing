@@ -11,8 +11,7 @@ export const createHtmlLink = (
     .replaceAll(
       /\B((?:[a-z]:)?[/\\]\S+):(\d+):(\d+)/gi,
       (match, path, line, column) => {
-        const link = `vscode://file/${path}:${line}:${column}`;
-        return `<a class="${className}" href="${link}" path="${path}" line="${line}" column="${column}" >${match}</a>`;
+        return `<a class="${className}" path="${path}" line="${line}" column="${column}" >${match}</a>`;
       },
     )
     .replaceAll(/(\r\n|\n|\r)/gm, expanded ? "<br />" : "\n");
@@ -25,6 +24,7 @@ export const OpenFileInEditorButton = ({ children }: PropsWithChildren) => {
     <button
       className="appearance-none text-left"
       onClick={(event) => {
+        event.preventDefault();
         const target = event.target as HTMLElement;
         if (target.tagName === "A") {
           const path = target.getAttribute("path")!;

@@ -42,105 +42,13 @@ module.exports = function({ $math_Util }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inflight cotangent\",\"${aws_lambda_function.testinflightcotangent_Handler_93C199E4.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
     "aws": [
       {}
     ]
-  },
-  "resource": {
-    "aws_iam_role": {
-      "testinflightcotangent_Handler_IamRole_4B4EF664": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflight cotangent/Handler/IamRole",
-            "uniqueId": "testinflightcotangent_Handler_IamRole_4B4EF664"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      }
-    },
-    "aws_iam_role_policy": {
-      "testinflightcotangent_Handler_IamRolePolicy_79041ED0": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflight cotangent/Handler/IamRolePolicy",
-            "uniqueId": "testinflightcotangent_Handler_IamRolePolicy_79041ED0"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testinflightcotangent_Handler_IamRole_4B4EF664.name}"
-      }
-    },
-    "aws_iam_role_policy_attachment": {
-      "testinflightcotangent_Handler_IamRolePolicyAttachment_D8E7B217": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflight cotangent/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testinflightcotangent_Handler_IamRolePolicyAttachment_D8E7B217"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testinflightcotangent_Handler_IamRole_4B4EF664.name}"
-      }
-    },
-    "aws_lambda_function": {
-      "testinflightcotangent_Handler_93C199E4": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflight cotangent/Handler/Default",
-            "uniqueId": "testinflightcotangent_Handler_93C199E4"
-          }
-        },
-        "architectures": [
-          "arm64"
-        ],
-        "environment": {
-          "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8fc3a88",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c8fc3a88",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testinflightcotangent_Handler_IamRole_4B4EF664.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testinflightcotangent_Handler_S3Object_3699819A.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      }
-    },
-    "aws_s3_bucket": {
-      "Code": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
-          }
-        },
-        "bucket_prefix": "code-c84a50b1-"
-      }
-    },
-    "aws_s3_object": {
-      "testinflightcotangent_Handler_S3Object_3699819A": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflight cotangent/Handler/S3Object",
-            "uniqueId": "testinflightcotangent_Handler_S3Object_3699819A"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      }
-    }
   }
 }
 ```
