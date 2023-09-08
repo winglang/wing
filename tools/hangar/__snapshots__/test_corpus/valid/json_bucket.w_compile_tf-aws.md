@@ -59,7 +59,7 @@ module.exports = function({ $b, $fileName, $getJson, $j }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:put\",\"${aws_lambda_function.testput_Handler_724F92D5.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -77,15 +77,6 @@ module.exports = function({ $b, $fileName, $getJson, $j }) {
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      },
-      "testput_Handler_IamRole_0914AA2F": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:put/Handler/IamRole",
-            "uniqueId": "testput_Handler_IamRole_0914AA2F"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
@@ -98,16 +89,6 @@ module.exports = function({ $b, $fileName, $getJson, $j }) {
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.cloudFunction_IamRole_5A4430DC.name}"
-      },
-      "testput_Handler_IamRolePolicy_CB5C72C0": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:put/Handler/IamRolePolicy",
-            "uniqueId": "testput_Handler_IamRolePolicy_CB5C72C0"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.cloudFunction.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.testput_Handler_IamRole_0914AA2F.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -120,16 +101,6 @@ module.exports = function({ $b, $fileName, $getJson, $j }) {
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.cloudFunction_IamRole_5A4430DC.name}"
-      },
-      "testput_Handler_IamRolePolicyAttachment_B3A1DDC2": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:put/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testput_Handler_IamRolePolicyAttachment_B3A1DDC2"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testput_Handler_IamRole_0914AA2F.name}"
       }
     },
     "aws_lambda_function": {
@@ -157,37 +128,6 @@ module.exports = function({ $b, $fileName, $getJson, $j }) {
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudFunction_S3Object_71908BAD.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      },
-      "testput_Handler_724F92D5": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:put/Handler/Default",
-            "uniqueId": "testput_Handler_724F92D5"
-          }
-        },
-        "architectures": [
-          "arm64"
-        ],
-        "environment": {
-          "variables": {
-            "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
-            "FUNCTION_NAME_5bb84dfa": "${aws_lambda_function.cloudFunction.arn}",
-            "WING_FUNCTION_NAME": "Handler-c8a253bd",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c8a253bd",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testput_Handler_IamRole_0914AA2F.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testput_Handler_S3Object_920402A2.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -240,17 +180,6 @@ module.exports = function({ $b, $fileName, $getJson, $j }) {
           "metadata": {
             "path": "root/Default/Default/cloud.Function/S3Object",
             "uniqueId": "cloudFunction_S3Object_71908BAD"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      },
-      "testput_Handler_S3Object_920402A2": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:put/Handler/S3Object",
-            "uniqueId": "testput_Handler_S3Object_920402A2"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",

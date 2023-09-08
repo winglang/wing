@@ -47,6 +47,7 @@ pnpm turbo <task> --filter=<project> -- <args>
 - `pnpm` can be omitted if [Turbo] is installed globally
 - `--filter=<project>` may be used to filter to a specific project (and it's dependencies)
 - Running `turbo <task>` inside of a project directory will automatically filter to that project
+- We use [Turbo caching](https://turbo.build/repo/docs/core-concepts/caching) to speed up builds. If you want to force a rebuild, use `--force`.
 
 :::
 

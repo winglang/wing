@@ -9,10 +9,7 @@ import classNames from "classnames";
 import throttle from "lodash.throttle";
 import { Fragment, useEffect, useRef, useState } from "react";
 
-import {
-  OpenFileInEditorButton,
-  useFileLink,
-} from "../shared/use-file-link.js";
+import { OpenFileInEditorButton } from "../shared/use-file-link.js";
 import { createHtmlLink } from "../shared/use-file-link.js";
 
 const dateTimeFormat = new Intl.DateTimeFormat(undefined, {

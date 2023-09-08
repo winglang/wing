@@ -4998,6 +4998,14 @@ pub fn resolve_user_defined_type(
 	}
 }
 
+pub fn is_udt_struct_type(udt: &UserDefinedType, env: &SymbolEnv) -> bool {
+	if let Ok(type_) = resolve_user_defined_type(udt, env, 0) {
+		type_.as_struct().is_some()
+	} else {
+		false
+	}
+}
+
 pub fn resolve_super_method(method: &Symbol, env: &SymbolEnv, types: &Types) -> Result<(TypeRef, Phase), TypeError> {
 	let this_type = env.lookup(&Symbol::global("this"), None);
 	if let Some(SymbolKind::Variable(VariableInfo {

@@ -1,37 +1,5 @@
 # [bring_local.w](../../../../../examples/tests/valid/bring_local.w) | compile | tf-aws
 
-## Point.Struct.js
-```js
-module.exports = function(stdStruct) {
-  class Point {
-    static jsonSchema() {
-      return {
-        id: "/Point",
-        type: "object",
-        properties: {
-          x: { type: "number" },
-          y: { type: "number" },
-        },
-        required: [
-          "x",
-          "y",
-        ],
-        $defs: {
-        }
-      }
-    }
-    static fromJson(obj) {
-      return stdStruct._validate(obj, this.jsonSchema())
-    }
-    static _toInflightType(context) {
-      return `require("./Point.Struct.js")(${ context._lift(stdStruct) })`;
-    }
-  }
-  return Point;
-};
-
-```
-
 ## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $__parent_this_1_b }) {
@@ -168,7 +136,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:add data to store\",\"${aws_lambda_function.testadddatatostore_Handler_19066842.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -186,15 +154,6 @@ module.exports = function({  }) {
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      },
-      "testadddatatostore_Handler_IamRole_D112FE1A": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:add data to store/Handler/IamRole",
-            "uniqueId": "testadddatatostore_Handler_IamRole_D112FE1A"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
@@ -207,16 +166,6 @@ module.exports = function({  }) {
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.file1Store_cloudBucket_86CE87B1.arn}\",\"${aws_s3_bucket.file1Store_cloudBucket_86CE87B1.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.file1Store_cloudOnDeploy_Function_IamRole_233573CC.name}"
-      },
-      "testadddatatostore_Handler_IamRolePolicy_2759864D": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:add data to store/Handler/IamRolePolicy",
-            "uniqueId": "testadddatatostore_Handler_IamRolePolicy_2759864D"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.file1Store_cloudBucket_86CE87B1.arn}\",\"${aws_s3_bucket.file1Store_cloudBucket_86CE87B1.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.testadddatatostore_Handler_IamRole_D112FE1A.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -229,16 +178,6 @@ module.exports = function({  }) {
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.file1Store_cloudOnDeploy_Function_IamRole_233573CC.name}"
-      },
-      "testadddatatostore_Handler_IamRolePolicyAttachment_1100277D": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:add data to store/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testadddatatostore_Handler_IamRolePolicyAttachment_1100277D"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testadddatatostore_Handler_IamRole_D112FE1A.name}"
       }
     },
     "aws_lambda_function": {
@@ -266,36 +205,6 @@ module.exports = function({  }) {
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.file1Store_cloudOnDeploy_Function_S3Object_CBBF816B.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      },
-      "testadddatatostore_Handler_19066842": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:add data to store/Handler/Default",
-            "uniqueId": "testadddatatostore_Handler_19066842"
-          }
-        },
-        "architectures": [
-          "arm64"
-        ],
-        "environment": {
-          "variables": {
-            "BUCKET_NAME_94dc4b3e": "${aws_s3_bucket.file1Store_cloudBucket_86CE87B1.bucket}",
-            "WING_FUNCTION_NAME": "Handler-c8157444",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c8157444",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testadddatatostore_Handler_IamRole_D112FE1A.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testadddatatostore_Handler_S3Object_6CF2BC7E.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -348,17 +257,6 @@ module.exports = function({  }) {
           "metadata": {
             "path": "root/Default/Default/file1.Store/cloud.OnDeploy/Function/S3Object",
             "uniqueId": "file1Store_cloudOnDeploy_Function_S3Object_CBBF816B"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      },
-      "testadddatatostore_Handler_S3Object_6CF2BC7E": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:add data to store/Handler/S3Object",
-            "uniqueId": "testadddatatostore_Handler_S3Object_6CF2BC7E"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
@@ -604,8 +502,7 @@ module.exports = function({ $stdlib }) {
       return tmp;
     })({})
   ;
-  const Point = require("./Point.Struct.js")($stdlib.std.Struct);
-  return { Util, Store, Color, Point };
+  return { Util, Store, Color };
 };
 
 ```
