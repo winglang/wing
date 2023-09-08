@@ -180,7 +180,7 @@ module.exports = function({ $InflightA }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:super call inflight\",\"${aws_lambda_function.testsupercallinflight_Handler_8BA833E3.arn}\"],[\"root/Default/Default/test:super call sets binding permissions\",\"${aws_lambda_function.testsupercallsetsbindingpermissions_Handler_094D9398.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -189,141 +189,7 @@ module.exports = function({ $InflightA }) {
     ]
   },
   "resource": {
-    "aws_iam_role": {
-      "testsupercallinflight_Handler_IamRole_BFD5186E": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:super call inflight/Handler/IamRole",
-            "uniqueId": "testsupercallinflight_Handler_IamRole_BFD5186E"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      },
-      "testsupercallsetsbindingpermissions_Handler_IamRole_64C69931": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:super call sets binding permissions/Handler/IamRole",
-            "uniqueId": "testsupercallsetsbindingpermissions_Handler_IamRole_64C69931"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      }
-    },
-    "aws_iam_role_policy": {
-      "testsupercallinflight_Handler_IamRolePolicy_657A4ED2": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:super call inflight/Handler/IamRolePolicy",
-            "uniqueId": "testsupercallinflight_Handler_IamRolePolicy_657A4ED2"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testsupercallinflight_Handler_IamRole_BFD5186E.name}"
-      },
-      "testsupercallsetsbindingpermissions_Handler_IamRolePolicy_58870805": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:super call sets binding permissions/Handler/IamRolePolicy",
-            "uniqueId": "testsupercallsetsbindingpermissions_Handler_IamRolePolicy_58870805"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.testsupercallsetsbindingpermissions_Handler_IamRole_64C69931.name}"
-      }
-    },
-    "aws_iam_role_policy_attachment": {
-      "testsupercallinflight_Handler_IamRolePolicyAttachment_74E493C1": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:super call inflight/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testsupercallinflight_Handler_IamRolePolicyAttachment_74E493C1"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testsupercallinflight_Handler_IamRole_BFD5186E.name}"
-      },
-      "testsupercallsetsbindingpermissions_Handler_IamRolePolicyAttachment_FB4798F3": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:super call sets binding permissions/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testsupercallsetsbindingpermissions_Handler_IamRolePolicyAttachment_FB4798F3"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testsupercallsetsbindingpermissions_Handler_IamRole_64C69931.name}"
-      }
-    },
-    "aws_lambda_function": {
-      "testsupercallinflight_Handler_8BA833E3": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:super call inflight/Handler/Default",
-            "uniqueId": "testsupercallinflight_Handler_8BA833E3"
-          }
-        },
-        "architectures": [
-          "arm64"
-        ],
-        "environment": {
-          "variables": {
-            "WING_FUNCTION_NAME": "Handler-c83c6423",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c83c6423",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testsupercallinflight_Handler_IamRole_BFD5186E.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testsupercallinflight_Handler_S3Object_83823694.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      },
-      "testsupercallsetsbindingpermissions_Handler_094D9398": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:super call sets binding permissions/Handler/Default",
-            "uniqueId": "testsupercallsetsbindingpermissions_Handler_094D9398"
-          }
-        },
-        "architectures": [
-          "arm64"
-        ],
-        "environment": {
-          "variables": {
-            "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
-            "WING_FUNCTION_NAME": "Handler-c8c1dd55",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c8c1dd55",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testsupercallsetsbindingpermissions_Handler_IamRole_64C69931.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testsupercallsetsbindingpermissions_Handler_S3Object_6D280664.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      }
-    },
     "aws_s3_bucket": {
-      "Code": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
-          }
-        },
-        "bucket_prefix": "code-c84a50b1-"
-      },
       "cloudBucket": {
         "//": {
           "metadata": {
@@ -351,30 +217,6 @@ module.exports = function({ $InflightA }) {
             }
           }
         ]
-      }
-    },
-    "aws_s3_object": {
-      "testsupercallinflight_Handler_S3Object_83823694": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:super call inflight/Handler/S3Object",
-            "uniqueId": "testsupercallinflight_Handler_S3Object_83823694"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      },
-      "testsupercallsetsbindingpermissions_Handler_S3Object_6D280664": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:super call sets binding permissions/Handler/S3Object",
-            "uniqueId": "testsupercallsetsbindingpermissions_Handler_S3Object_6D280664"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
       }
     }
   }

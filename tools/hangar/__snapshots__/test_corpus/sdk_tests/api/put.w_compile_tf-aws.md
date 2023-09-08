@@ -86,7 +86,7 @@ module.exports = function({ $_id, $api_url, $body, $http_HttpMethod, $http_Util,
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:http.put and http.fetch can preform a call to an api\",\"${aws_lambda_function.testhttpputandhttpfetchcanpreformacalltoanapi_Handler_2B7157C1.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -120,7 +120,7 @@ module.exports = function({ $_id, $api_url, $body, $http_HttpMethod, $http_Util,
             "uniqueId": "cloudApi_api_2B334D75"
           }
         },
-        "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/path/{id}/nn/{user}\":{\"put\":{\"operationId\":\"put-path/{id}/nn/{user}\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{}}},\"parameters\":[{\"name\":\"id\",\"in\":\"path\",\"required\":true,\"schema\":{\"type\":\"string\"}},{\"name\":\"user\",\"in\":\"path\",\"required\":true,\"schema\":{\"type\":\"string\"}}],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}},\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"consumes\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404}\"},\"responses\":{\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode: 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
+        "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/path/{id}/nn/{user}\":{\"put\":{\"operationId\":\"put-path/{id}/nn/{user}\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{}}},\"parameters\":[{\"name\":\"id\",\"in\":\"path\",\"required\":true,\"schema\":{\"type\":\"string\"}},{\"name\":\"user\",\"in\":\"path\",\"required\":true,\"schema\":{\"type\":\"string\"}}],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}},\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"\\n                {\\\"statusCode\\\": 404}\\n              \"},\"passthroughBehavior\":\"never\",\"responses\":{\"404\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}},\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
         "name": "api-c895068c"
       }
     },
@@ -146,15 +146,6 @@ module.exports = function({ $_id, $api_url, $body, $http_HttpMethod, $http_Util,
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      },
-      "testhttpputandhttpfetchcanpreformacalltoanapi_Handler_IamRole_4C35EBED": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:http.put and http.fetch can preform a call to an api/Handler/IamRole",
-            "uniqueId": "testhttpputandhttpfetchcanpreformacalltoanapi_Handler_IamRole_4C35EBED"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
@@ -167,16 +158,6 @@ module.exports = function({ $_id, $api_url, $body, $http_HttpMethod, $http_Util,
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.name}"
-      },
-      "testhttpputandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicy_D35A09FD": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:http.put and http.fetch can preform a call to an api/Handler/IamRolePolicy",
-            "uniqueId": "testhttpputandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicy_D35A09FD"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testhttpputandhttpfetchcanpreformacalltoanapi_Handler_IamRole_4C35EBED.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -189,16 +170,6 @@ module.exports = function({ $_id, $api_url, $body, $http_HttpMethod, $http_Util,
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.name}"
-      },
-      "testhttpputandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicyAttachment_DEDD4EEB": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:http.put and http.fetch can preform a call to an api/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testhttpputandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicyAttachment_DEDD4EEB"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testhttpputandhttpfetchcanpreformacalltoanapi_Handler_IamRole_4C35EBED.name}"
       }
     },
     "aws_lambda_function": {
@@ -225,36 +196,6 @@ module.exports = function({ $_id, $api_url, $body, $http_HttpMethod, $http_Util,
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudApi_cloudApi-OnRequest-cdafee6e_S3Object_5DAAA0EF.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      },
-      "testhttpputandhttpfetchcanpreformacalltoanapi_Handler_2B7157C1": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:http.put and http.fetch can preform a call to an api/Handler/Default",
-            "uniqueId": "testhttpputandhttpfetchcanpreformacalltoanapi_Handler_2B7157C1"
-          }
-        },
-        "architectures": [
-          "arm64"
-        ],
-        "environment": {
-          "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8e4b12f",
-            "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_8": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
-          }
-        },
-        "function_name": "Handler-c8e4b12f",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testhttpputandhttpfetchcanpreformacalltoanapi_Handler_IamRole_4C35EBED.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testhttpputandhttpfetchcanpreformacalltoanapi_Handler_S3Object_8E1D5390.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -294,17 +235,6 @@ module.exports = function({ $_id, $api_url, $body, $http_HttpMethod, $http_Util,
           "metadata": {
             "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-cdafee6e/S3Object",
             "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_S3Object_5DAAA0EF"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      },
-      "testhttpputandhttpfetchcanpreformacalltoanapi_Handler_S3Object_8E1D5390": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:http.put and http.fetch can preform a call to an api/Handler/S3Object",
-            "uniqueId": "testhttpputandhttpfetchcanpreformacalltoanapi_Handler_S3Object_8E1D5390"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",

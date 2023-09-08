@@ -73,6 +73,12 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstruct ApiConnectProps\n```\n---\nOptions for Api patch endpoint."
   sortText: hh|ApiConnectProps
+- label: ApiCorsOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct ApiCorsOptions\n```\n---\nCors Options for `Api`.\n### Fields\n- `allowCredentials?` — Whether to allow credentials.\n- `allowHeaders?` — The list of allowed headers.\n- `allowMethods?` — The list of allowed methods.\n- `allowOrigin?` — The list of allowed allowOrigin.\n- `exposeHeaders?` — The list of exposed headers."
+  sortText: hh|ApiCorsOptions
 - label: ApiDeleteProps
   kind: 22
   documentation:
@@ -113,7 +119,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ApiProps\n```\n---\nOptions for `Api`."
+    value: "```wing\nstruct ApiProps\n```\n---\nOptions for `Api`.\n### Fields\n- `cors?` — Options for configuring the API's CORS behavior across all routes.\n- `corsOptions?` — Options for configuring the API's CORS behavior across all routes."
   sortText: hh|ApiProps
 - label: ApiPutProps
   kind: 22

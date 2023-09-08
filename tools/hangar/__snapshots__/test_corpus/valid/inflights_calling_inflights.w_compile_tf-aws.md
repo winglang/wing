@@ -130,7 +130,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inflights can call other inflights\",\"${aws_lambda_function.testinflightscancallotherinflights_Handler_90705AE1.arn}\"],[\"root/Default/Default/test:variable can be an inflight closure\",\"${aws_lambda_function.testvariablecanbeaninflightclosure_Handler_E55D136A.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -148,24 +148,6 @@ module.exports = function({  }) {
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      },
-      "testinflightscancallotherinflights_Handler_IamRole_30D96E98": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflights can call other inflights/Handler/IamRole",
-            "uniqueId": "testinflightscancallotherinflights_Handler_IamRole_30D96E98"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      },
-      "testvariablecanbeaninflightclosure_Handler_IamRole_12408457": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:variable can be an inflight closure/Handler/IamRole",
-            "uniqueId": "testvariablecanbeaninflightclosure_Handler_IamRole_12408457"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
@@ -178,26 +160,6 @@ module.exports = function({  }) {
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.func1_IamRole_31EC29DC.name}"
-      },
-      "testinflightscancallotherinflights_Handler_IamRolePolicy_1E6CC29C": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflights can call other inflights/Handler/IamRolePolicy",
-            "uniqueId": "testinflightscancallotherinflights_Handler_IamRolePolicy_1E6CC29C"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.func1.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.testinflightscancallotherinflights_Handler_IamRole_30D96E98.name}"
-      },
-      "testvariablecanbeaninflightclosure_Handler_IamRolePolicy_B1660864": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:variable can be an inflight closure/Handler/IamRolePolicy",
-            "uniqueId": "testvariablecanbeaninflightclosure_Handler_IamRolePolicy_B1660864"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.testvariablecanbeaninflightclosure_Handler_IamRole_12408457.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -210,26 +172,6 @@ module.exports = function({  }) {
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.func1_IamRole_31EC29DC.name}"
-      },
-      "testinflightscancallotherinflights_Handler_IamRolePolicyAttachment_C2809755": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflights can call other inflights/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testinflightscancallotherinflights_Handler_IamRolePolicyAttachment_C2809755"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testinflightscancallotherinflights_Handler_IamRole_30D96E98.name}"
-      },
-      "testvariablecanbeaninflightclosure_Handler_IamRolePolicyAttachment_3CD3586A": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:variable can be an inflight closure/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testvariablecanbeaninflightclosure_Handler_IamRolePolicyAttachment_3CD3586A"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testvariablecanbeaninflightclosure_Handler_IamRole_12408457.name}"
       }
     },
     "aws_lambda_function": {
@@ -257,67 +199,6 @@ module.exports = function({  }) {
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.func1_S3Object_33D0CBF3.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      },
-      "testinflightscancallotherinflights_Handler_90705AE1": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflights can call other inflights/Handler/Default",
-            "uniqueId": "testinflightscancallotherinflights_Handler_90705AE1"
-          }
-        },
-        "architectures": [
-          "arm64"
-        ],
-        "environment": {
-          "variables": {
-            "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
-            "FUNCTION_NAME_c79d5cd4": "${aws_lambda_function.func1.arn}",
-            "WING_FUNCTION_NAME": "Handler-c8ad4c02",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c8ad4c02",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testinflightscancallotherinflights_Handler_IamRole_30D96E98.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testinflightscancallotherinflights_Handler_S3Object_D58857F2.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      },
-      "testvariablecanbeaninflightclosure_Handler_E55D136A": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:variable can be an inflight closure/Handler/Default",
-            "uniqueId": "testvariablecanbeaninflightclosure_Handler_E55D136A"
-          }
-        },
-        "architectures": [
-          "arm64"
-        ],
-        "environment": {
-          "variables": {
-            "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
-            "WING_FUNCTION_NAME": "Handler-c8210662",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c8210662",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testvariablecanbeaninflightclosure_Handler_IamRole_12408457.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testvariablecanbeaninflightclosure_Handler_S3Object_11B4C449.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -370,28 +251,6 @@ module.exports = function({  }) {
           "metadata": {
             "path": "root/Default/Default/func1/S3Object",
             "uniqueId": "func1_S3Object_33D0CBF3"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      },
-      "testinflightscancallotherinflights_Handler_S3Object_D58857F2": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflights can call other inflights/Handler/S3Object",
-            "uniqueId": "testinflightscancallotherinflights_Handler_S3Object_D58857F2"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      },
-      "testvariablecanbeaninflightclosure_Handler_S3Object_11B4C449": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:variable can be an inflight closure/Handler/S3Object",
-            "uniqueId": "testvariablecanbeaninflightclosure_Handler_S3Object_11B4C449"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
