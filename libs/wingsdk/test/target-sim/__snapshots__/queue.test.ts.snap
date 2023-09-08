@@ -751,31 +751,45 @@ return class Handler {
 };
 })())({
 queue: (function() {
-  const handle = process.env[\\"QUEUE_HANDLE_54fcf4cd\\"];
+  const handle = process.env.QUEUE_HANDLE_54fcf4cd;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: QUEUE_HANDLE_54fcf4cd\\");
   }
   const simulatorUrl = process.env.WING_SIMULATOR_URL;
   if (!simulatorUrl) {
     throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
   }
 
-  return new Proxy({}, {
-    get: function(target, method, receiver) {
-      return async function() {
-        const resp = await fetch(simulatorUrl + \\"/v1/call\\", {
-          method: \\"POST\\",
-          headers: { \\"Content-Type\\": \\"application/json\\" },
-          body: JSON.stringify({ handle, method, args: Array.from(arguments) }),
-        });
-        const parsed = await resp.json();
-        if (parsed.error) {
-          throw new Error(parsed.error);
-        }
-        return parsed.result;
-      };
-    }
-  });
+  return (function makeSimulatorClient(url, handle) {
+    const superjson = require(\\"superjson\\");
+    return new Proxy({}, {
+        get: function (_target, method, _receiver) {
+            return async function () {
+                const body = {
+                    handle,
+                    method,
+                    args: Array.from(arguments),
+                };
+                const resp = await fetch(url + \\"/v1/call\\", {
+                    method: \\"POST\\",
+                    headers: { \\"Content-Type\\": \\"application/json\\" },
+                    body: superjson.stringify(body),
+                });
+                const json = await resp.json();
+                const parsed = superjson.deserialize(json);
+                if (parsed.error) {
+                    if (parsed.error instanceof Error) {
+                        throw parsed.error;
+                    }
+                    else {
+                        throw new Error(parsed.error);
+                    }
+                }
+                return parsed.result;
+            };
+        },
+    });
+})(simulatorUrl, handle);
 })()
 })).handle(event);
 };",

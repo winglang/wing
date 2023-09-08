@@ -210,12 +210,12 @@ test("runtime environment tests", async () => {
 
   // check that fetch is a function (we can't really make network calls here)
   const fetchFn = app.newCloudFunction(`
-    return fetch;
+    return typeof fetch;
   `);
 
   const cryptoFn = app.newCloudFunction(`
     const c = require("crypto");
-    return c.createHash;
+    return typeof c.createHash;
   `);
 
   // check that we can import ESM modules
@@ -226,9 +226,9 @@ test("runtime environment tests", async () => {
 
   // THEN
   const s = await app.startSimulator();
-  expect(await cryptoFn(s)).toBeTypeOf("function");
+  expect(await cryptoFn(s)).toEqual("function");
   expect(await urlSearchParamsFn(s)).toBe("api");
-  expect(await fetchFn(s)).toBeTypeOf("function");
+  expect(await fetchFn(s)).toEqual("function");
   expect(await esmModulesFn(s)).toHaveLength(21);
 
   await s.stop();

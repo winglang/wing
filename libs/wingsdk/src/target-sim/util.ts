@@ -5,6 +5,7 @@ import { IConstruct } from "constructs";
 import { Function } from "./function";
 import { simulatorHandleToken } from "./tokens";
 import { Duration, IInflightHost, Resource } from "../std";
+import { makeSimulatorClient } from "../testing";
 
 /**
  * Check if a file exists for an specific path
@@ -53,31 +54,16 @@ export function makeSimulatorJsClient(filename: string, resource: Resource) {
 
   // return an object where calling any method will make a request to the simulator server
   return `(function() {
-  const handle = process.env["${env}"];
+  const handle = process.env.${env};
   if (!handle) {
-    throw new Error("Missing environment variable: " + env);
+    throw new Error("Missing environment variable: ${env}");
   }
   const simulatorUrl = process.env.WING_SIMULATOR_URL;
   if (!simulatorUrl) {
     throw new Error("Missing environment variable: WING_SIMULATOR_URL");
   }
 
-  return new Proxy({}, {
-    get: function(target, method, receiver) {
-      return async function() {
-        const resp = await fetch(simulatorUrl + "/v1/call", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ handle, method, args: Array.from(arguments) }),
-        });
-        const parsed = await resp.json();
-        if (parsed.error) {
-          throw new Error(parsed.error);
-        }
-        return parsed.result;
-      };
-    }
-  });
+  return (${makeSimulatorClient.toString()})(simulatorUrl, handle);
 })()`;
 }
 

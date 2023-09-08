@@ -125,57 +125,85 @@ if (!(await this.my_buckets[1].get(\\"foo\\") === \\"bar\\")) { throw new Error(
 };
 })())({
 my_buckets: [(function() {
-  const handle = process.env[\\"BUCKET_HANDLE_4fecd6d0\\"];
+  const handle = process.env.BUCKET_HANDLE_4fecd6d0;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_4fecd6d0\\");
   }
   const simulatorUrl = process.env.WING_SIMULATOR_URL;
   if (!simulatorUrl) {
     throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
   }
 
-  return new Proxy({}, {
-    get: function(target, method, receiver) {
-      return async function() {
-        const resp = await fetch(simulatorUrl + \\"/v1/call\\", {
-          method: \\"POST\\",
-          headers: { \\"Content-Type\\": \\"application/json\\" },
-          body: JSON.stringify({ handle, method, args: Array.from(arguments) }),
-        });
-        const parsed = await resp.json();
-        if (parsed.error) {
-          throw new Error(parsed.error);
-        }
-        return parsed.result;
-      };
-    }
-  });
+  return (function makeSimulatorClient(url, handle) {
+    const superjson = require(\\"superjson\\");
+    return new Proxy({}, {
+        get: function (_target, method, _receiver) {
+            return async function () {
+                const body = {
+                    handle,
+                    method,
+                    args: Array.from(arguments),
+                };
+                const resp = await fetch(url + \\"/v1/call\\", {
+                    method: \\"POST\\",
+                    headers: { \\"Content-Type\\": \\"application/json\\" },
+                    body: superjson.stringify(body),
+                });
+                const json = await resp.json();
+                const parsed = superjson.deserialize(json);
+                if (parsed.error) {
+                    if (parsed.error instanceof Error) {
+                        throw parsed.error;
+                    }
+                    else {
+                        throw new Error(parsed.error);
+                    }
+                }
+                return parsed.result;
+            };
+        },
+    });
+})(simulatorUrl, handle);
 })(),(function() {
-  const handle = process.env[\\"BUCKET_HANDLE_300e8055\\"];
+  const handle = process.env.BUCKET_HANDLE_300e8055;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_300e8055\\");
   }
   const simulatorUrl = process.env.WING_SIMULATOR_URL;
   if (!simulatorUrl) {
     throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
   }
 
-  return new Proxy({}, {
-    get: function(target, method, receiver) {
-      return async function() {
-        const resp = await fetch(simulatorUrl + \\"/v1/call\\", {
-          method: \\"POST\\",
-          headers: { \\"Content-Type\\": \\"application/json\\" },
-          body: JSON.stringify({ handle, method, args: Array.from(arguments) }),
-        });
-        const parsed = await resp.json();
-        if (parsed.error) {
-          throw new Error(parsed.error);
-        }
-        return parsed.result;
-      };
-    }
-  });
+  return (function makeSimulatorClient(url, handle) {
+    const superjson = require(\\"superjson\\");
+    return new Proxy({}, {
+        get: function (_target, method, _receiver) {
+            return async function () {
+                const body = {
+                    handle,
+                    method,
+                    args: Array.from(arguments),
+                };
+                const resp = await fetch(url + \\"/v1/call\\", {
+                    method: \\"POST\\",
+                    headers: { \\"Content-Type\\": \\"application/json\\" },
+                    body: superjson.stringify(body),
+                });
+                const json = await resp.json();
+                const parsed = superjson.deserialize(json);
+                if (parsed.error) {
+                    if (parsed.error instanceof Error) {
+                        throw parsed.error;
+                    }
+                    else {
+                        throw new Error(parsed.error);
+                    }
+                }
+                return parsed.result;
+            };
+        },
+    });
+})(simulatorUrl, handle);
 })()]
 })).handle(event);
 };",
@@ -1063,57 +1091,85 @@ if (!(await foo.get(\\"hello.txt\\") === \\"world\\")) { throw new Error(\`asser
 };
 })())({
 my_map: new Map([[\\"foo\\",(function() {
-  const handle = process.env[\\"BUCKET_HANDLE_4fecd6d0\\"];
+  const handle = process.env.BUCKET_HANDLE_4fecd6d0;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_4fecd6d0\\");
   }
   const simulatorUrl = process.env.WING_SIMULATOR_URL;
   if (!simulatorUrl) {
     throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
   }
 
-  return new Proxy({}, {
-    get: function(target, method, receiver) {
-      return async function() {
-        const resp = await fetch(simulatorUrl + \\"/v1/call\\", {
-          method: \\"POST\\",
-          headers: { \\"Content-Type\\": \\"application/json\\" },
-          body: JSON.stringify({ handle, method, args: Array.from(arguments) }),
-        });
-        const parsed = await resp.json();
-        if (parsed.error) {
-          throw new Error(parsed.error);
-        }
-        return parsed.result;
-      };
-    }
-  });
+  return (function makeSimulatorClient(url, handle) {
+    const superjson = require(\\"superjson\\");
+    return new Proxy({}, {
+        get: function (_target, method, _receiver) {
+            return async function () {
+                const body = {
+                    handle,
+                    method,
+                    args: Array.from(arguments),
+                };
+                const resp = await fetch(url + \\"/v1/call\\", {
+                    method: \\"POST\\",
+                    headers: { \\"Content-Type\\": \\"application/json\\" },
+                    body: superjson.stringify(body),
+                });
+                const json = await resp.json();
+                const parsed = superjson.deserialize(json);
+                if (parsed.error) {
+                    if (parsed.error instanceof Error) {
+                        throw parsed.error;
+                    }
+                    else {
+                        throw new Error(parsed.error);
+                    }
+                }
+                return parsed.result;
+            };
+        },
+    });
+})(simulatorUrl, handle);
 })()],[\\"bar\\",(function() {
-  const handle = process.env[\\"BUCKET_HANDLE_300e8055\\"];
+  const handle = process.env.BUCKET_HANDLE_300e8055;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_300e8055\\");
   }
   const simulatorUrl = process.env.WING_SIMULATOR_URL;
   if (!simulatorUrl) {
     throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
   }
 
-  return new Proxy({}, {
-    get: function(target, method, receiver) {
-      return async function() {
-        const resp = await fetch(simulatorUrl + \\"/v1/call\\", {
-          method: \\"POST\\",
-          headers: { \\"Content-Type\\": \\"application/json\\" },
-          body: JSON.stringify({ handle, method, args: Array.from(arguments) }),
-        });
-        const parsed = await resp.json();
-        if (parsed.error) {
-          throw new Error(parsed.error);
-        }
-        return parsed.result;
-      };
-    }
-  });
+  return (function makeSimulatorClient(url, handle) {
+    const superjson = require(\\"superjson\\");
+    return new Proxy({}, {
+        get: function (_target, method, _receiver) {
+            return async function () {
+                const body = {
+                    handle,
+                    method,
+                    args: Array.from(arguments),
+                };
+                const resp = await fetch(url + \\"/v1/call\\", {
+                    method: \\"POST\\",
+                    headers: { \\"Content-Type\\": \\"application/json\\" },
+                    body: superjson.stringify(body),
+                });
+                const json = await resp.json();
+                const parsed = superjson.deserialize(json);
+                if (parsed.error) {
+                    if (parsed.error instanceof Error) {
+                        throw parsed.error;
+                    }
+                    else {
+                        throw new Error(parsed.error);
+                    }
+                }
+                return parsed.result;
+            };
+        },
+    });
+})(simulatorUrl, handle);
 })()]])
 })).handle(event);
 };",
@@ -1899,135 +1955,205 @@ if (!(await bar.get(\\"foo\\") === \\"bar\\")) { throw new Error(\`assertion fai
 };
 })())({
 my_struct: {\\"bucky\\": (function() {
-  const handle = process.env[\\"BUCKET_HANDLE_4fecd6d0\\"];
+  const handle = process.env.BUCKET_HANDLE_4fecd6d0;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_4fecd6d0\\");
   }
   const simulatorUrl = process.env.WING_SIMULATOR_URL;
   if (!simulatorUrl) {
     throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
   }
 
-  return new Proxy({}, {
-    get: function(target, method, receiver) {
-      return async function() {
-        const resp = await fetch(simulatorUrl + \\"/v1/call\\", {
-          method: \\"POST\\",
-          headers: { \\"Content-Type\\": \\"application/json\\" },
-          body: JSON.stringify({ handle, method, args: Array.from(arguments) }),
-        });
-        const parsed = await resp.json();
-        if (parsed.error) {
-          throw new Error(parsed.error);
-        }
-        return parsed.result;
-      };
-    }
-  });
+  return (function makeSimulatorClient(url, handle) {
+    const superjson = require(\\"superjson\\");
+    return new Proxy({}, {
+        get: function (_target, method, _receiver) {
+            return async function () {
+                const body = {
+                    handle,
+                    method,
+                    args: Array.from(arguments),
+                };
+                const resp = await fetch(url + \\"/v1/call\\", {
+                    method: \\"POST\\",
+                    headers: { \\"Content-Type\\": \\"application/json\\" },
+                    body: superjson.stringify(body),
+                });
+                const json = await resp.json();
+                const parsed = superjson.deserialize(json);
+                if (parsed.error) {
+                    if (parsed.error instanceof Error) {
+                        throw parsed.error;
+                    }
+                    else {
+                        throw new Error(parsed.error);
+                    }
+                }
+                return parsed.result;
+            };
+        },
+    });
+})(simulatorUrl, handle);
 })(),\\"mapy\\": new Map([[\\"foo\\",(function() {
-  const handle = process.env[\\"BUCKET_HANDLE_300e8055\\"];
+  const handle = process.env.BUCKET_HANDLE_300e8055;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_300e8055\\");
   }
   const simulatorUrl = process.env.WING_SIMULATOR_URL;
   if (!simulatorUrl) {
     throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
   }
 
-  return new Proxy({}, {
-    get: function(target, method, receiver) {
-      return async function() {
-        const resp = await fetch(simulatorUrl + \\"/v1/call\\", {
-          method: \\"POST\\",
-          headers: { \\"Content-Type\\": \\"application/json\\" },
-          body: JSON.stringify({ handle, method, args: Array.from(arguments) }),
-        });
-        const parsed = await resp.json();
-        if (parsed.error) {
-          throw new Error(parsed.error);
-        }
-        return parsed.result;
-      };
-    }
-  });
+  return (function makeSimulatorClient(url, handle) {
+    const superjson = require(\\"superjson\\");
+    return new Proxy({}, {
+        get: function (_target, method, _receiver) {
+            return async function () {
+                const body = {
+                    handle,
+                    method,
+                    args: Array.from(arguments),
+                };
+                const resp = await fetch(url + \\"/v1/call\\", {
+                    method: \\"POST\\",
+                    headers: { \\"Content-Type\\": \\"application/json\\" },
+                    body: superjson.stringify(body),
+                });
+                const json = await resp.json();
+                const parsed = superjson.deserialize(json);
+                if (parsed.error) {
+                    if (parsed.error instanceof Error) {
+                        throw parsed.error;
+                    }
+                    else {
+                        throw new Error(parsed.error);
+                    }
+                }
+                return parsed.result;
+            };
+        },
+    });
+})(simulatorUrl, handle);
 })()],[\\"bar\\",(function() {
-  const handle = process.env[\\"BUCKET_HANDLE_0120daf4\\"];
+  const handle = process.env.BUCKET_HANDLE_0120daf4;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_0120daf4\\");
   }
   const simulatorUrl = process.env.WING_SIMULATOR_URL;
   if (!simulatorUrl) {
     throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
   }
 
-  return new Proxy({}, {
-    get: function(target, method, receiver) {
-      return async function() {
-        const resp = await fetch(simulatorUrl + \\"/v1/call\\", {
-          method: \\"POST\\",
-          headers: { \\"Content-Type\\": \\"application/json\\" },
-          body: JSON.stringify({ handle, method, args: Array.from(arguments) }),
-        });
-        const parsed = await resp.json();
-        if (parsed.error) {
-          throw new Error(parsed.error);
-        }
-        return parsed.result;
-      };
-    }
-  });
+  return (function makeSimulatorClient(url, handle) {
+    const superjson = require(\\"superjson\\");
+    return new Proxy({}, {
+        get: function (_target, method, _receiver) {
+            return async function () {
+                const body = {
+                    handle,
+                    method,
+                    args: Array.from(arguments),
+                };
+                const resp = await fetch(url + \\"/v1/call\\", {
+                    method: \\"POST\\",
+                    headers: { \\"Content-Type\\": \\"application/json\\" },
+                    body: superjson.stringify(body),
+                });
+                const json = await resp.json();
+                const parsed = superjson.deserialize(json);
+                if (parsed.error) {
+                    if (parsed.error instanceof Error) {
+                        throw parsed.error;
+                    }
+                    else {
+                        throw new Error(parsed.error);
+                    }
+                }
+                return parsed.result;
+            };
+        },
+    });
+})(simulatorUrl, handle);
 })()]]),\\"arry\\": {\\"boom\\": [(function() {
-  const handle = process.env[\\"BUCKET_HANDLE_ea7944ef\\"];
+  const handle = process.env.BUCKET_HANDLE_ea7944ef;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_ea7944ef\\");
   }
   const simulatorUrl = process.env.WING_SIMULATOR_URL;
   if (!simulatorUrl) {
     throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
   }
 
-  return new Proxy({}, {
-    get: function(target, method, receiver) {
-      return async function() {
-        const resp = await fetch(simulatorUrl + \\"/v1/call\\", {
-          method: \\"POST\\",
-          headers: { \\"Content-Type\\": \\"application/json\\" },
-          body: JSON.stringify({ handle, method, args: Array.from(arguments) }),
-        });
-        const parsed = await resp.json();
-        if (parsed.error) {
-          throw new Error(parsed.error);
-        }
-        return parsed.result;
-      };
-    }
-  });
+  return (function makeSimulatorClient(url, handle) {
+    const superjson = require(\\"superjson\\");
+    return new Proxy({}, {
+        get: function (_target, method, _receiver) {
+            return async function () {
+                const body = {
+                    handle,
+                    method,
+                    args: Array.from(arguments),
+                };
+                const resp = await fetch(url + \\"/v1/call\\", {
+                    method: \\"POST\\",
+                    headers: { \\"Content-Type\\": \\"application/json\\" },
+                    body: superjson.stringify(body),
+                });
+                const json = await resp.json();
+                const parsed = superjson.deserialize(json);
+                if (parsed.error) {
+                    if (parsed.error instanceof Error) {
+                        throw parsed.error;
+                    }
+                    else {
+                        throw new Error(parsed.error);
+                    }
+                }
+                return parsed.result;
+            };
+        },
+    });
+})(simulatorUrl, handle);
 })(),(function() {
-  const handle = process.env[\\"BUCKET_HANDLE_1d7ab674\\"];
+  const handle = process.env.BUCKET_HANDLE_1d7ab674;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_1d7ab674\\");
   }
   const simulatorUrl = process.env.WING_SIMULATOR_URL;
   if (!simulatorUrl) {
     throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
   }
 
-  return new Proxy({}, {
-    get: function(target, method, receiver) {
-      return async function() {
-        const resp = await fetch(simulatorUrl + \\"/v1/call\\", {
-          method: \\"POST\\",
-          headers: { \\"Content-Type\\": \\"application/json\\" },
-          body: JSON.stringify({ handle, method, args: Array.from(arguments) }),
-        });
-        const parsed = await resp.json();
-        if (parsed.error) {
-          throw new Error(parsed.error);
-        }
-        return parsed.result;
-      };
-    }
-  });
+  return (function makeSimulatorClient(url, handle) {
+    const superjson = require(\\"superjson\\");
+    return new Proxy({}, {
+        get: function (_target, method, _receiver) {
+            return async function () {
+                const body = {
+                    handle,
+                    method,
+                    args: Array.from(arguments),
+                };
+                const resp = await fetch(url + \\"/v1/call\\", {
+                    method: \\"POST\\",
+                    headers: { \\"Content-Type\\": \\"application/json\\" },
+                    body: superjson.stringify(body),
+                });
+                const json = await resp.json();
+                const parsed = superjson.deserialize(json);
+                if (parsed.error) {
+                    if (parsed.error instanceof Error) {
+                        throw parsed.error;
+                    }
+                    else {
+                        throw new Error(parsed.error);
+                    }
+                }
+                return parsed.result;
+            };
+        },
+    });
+})(simulatorUrl, handle);
 })()],},}
 })).handle(event);
 };",

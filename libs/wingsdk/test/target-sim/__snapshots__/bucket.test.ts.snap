@@ -575,7 +575,6 @@ exports[`update an object in bucket 1`] = `
   "Invoke (payload=\\"greeting.txt\\").",
   "Subscriber error: TypeError: this.handler.handle is not a function",
   "Put (key=greeting.txt).",
-  "Put (key=greeting.txt).",
   "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Bucket deleted.",

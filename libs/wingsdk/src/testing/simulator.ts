@@ -3,6 +3,7 @@ import { Server } from "http";
 import { AddressInfo } from "net";
 import { join } from "path";
 import express from "express";
+import * as superjsonLib from "superjson";
 import { Tree } from "./tree";
 import { SDK_VERSION } from "../constants";
 import { ConstructTree, TREE_FILE_PATH } from "../core";
@@ -251,31 +252,20 @@ export class Simulator {
   public async startServer(): Promise<void> {
     const app = express();
     app.use(express.json());
-    app.use(express.urlencoded({ extended: true }));
 
     app.post("/v1/call", async (req, res, next) => {
       try {
-        const request: SimulatorServerRequest = req.body;
-        let { handle, method, args } = request;
-
-        // when a JSON object is stringified to be sent over the wire, any occurrences of `undefined` are replaced with `null`.
-        // deeply replace all nulls with undefineds to avoid issues
-        args = JSON.parse(JSON.stringify(args), (_k, v) =>
-          v === null ? undefined : v
+        const request = superjsonLib.deserialize<SimulatorServerRequest>(
+          req.body
         );
-
+        let { handle, method, args } = request;
         const resource = this._handles.find(handle);
 
         try {
           const result = await (resource as any)[method](...args);
-          res.status(200).json({ result });
+          res.status(200).json(superjsonLib.serialize({ result }));
         } catch (err) {
-          if (err instanceof Error) {
-            // TODO: serialize more information about the error?
-            res.status(500).json({ error: err.message });
-          } else {
-            res.status(500).json({ error: err });
-          }
+          res.status(500).json(superjsonLib.serialize({ error: err }));
         }
       } catch (err) {
         return next(err);
@@ -299,7 +289,7 @@ export class Simulator {
   /**
    * The URL that the simulator server is listening on.
    */
-  public get serverUrl(): string {
+  public get url(): string {
     if (!this._serverUrl) {
       throw new Error("Simulator server is not running.");
     }
@@ -377,28 +367,28 @@ export class Simulator {
   }
 
   /**
-   * Get a simulated resource instance.
+   * Get a resource client.
    * @returns the resource
    */
   public getResource(path: string): any {
-    const handle = this.tryGetResource(path);
-    if (!handle) {
+    const client = this.tryGetResource(path);
+    if (!client) {
       throw new Error(`Resource "${path}" not found.`);
     }
-    return handle;
+    return client;
   }
 
   /**
-   * Get a simulated resource instance.
+   * Get a resource client.
    * @returns The resource of undefined if not found
    */
   public tryGetResource(path: string): any | undefined {
-    const handle = this.tryGetResourceConfig(path)?.attrs.handle;
+    const handle: string = this.tryGetResourceConfig(path)?.attrs.handle;
     if (!handle) {
       return undefined;
     }
 
-    return this._handles.find(handle);
+    return makeSimulatorClient(this.url, handle);
   }
 
   /**
@@ -683,6 +673,41 @@ class HandleManager {
   }
 }
 
+/* eslint-disable @typescript-eslint/no-require-imports */
+export function makeSimulatorClient(url: string, handle: string) {
+  const superjson = require("superjson") as typeof superjsonLib;
+  return new Proxy(
+    {},
+    {
+      get: function (_target, method, _receiver) {
+        return async function () {
+          const body = {
+            handle,
+            method,
+            args: Array.from(arguments),
+          };
+          const resp = await fetch(url + "/v1/call", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: superjson.stringify(body),
+          });
+          const json = await resp.json();
+          const parsed = superjson.deserialize<SimulatorServerResponse>(json);
+          if (parsed.error) {
+            if (parsed.error instanceof Error) {
+              throw parsed.error;
+            } else {
+              throw new Error(parsed.error);
+            }
+          }
+          return parsed.result;
+        };
+      },
+    }
+  );
+}
+/* eslint-enable @typescript-eslint/no-require-imports */
+
 /**
  * Shared interface for resource simulations.
  */
@@ -737,11 +762,18 @@ export interface ConnectionData {
   readonly name: string;
 }
 
-interface SimulatorServerRequest {
-  /** The resource handle. */
+export interface SimulatorServerRequest {
+  /** The resource handle (an ID unique among resources in the simulation). */
   handle: string;
   /** The method to call on the resource. */
   method: string;
   /** The arguments to the method. */
-  args: string[];
+  args: any[];
+}
+
+export interface SimulatorServerResponse {
+  /** The result of the method call. */
+  result?: any;
+  /** The error that occurred during the method call. */
+  error?: any;
 }
