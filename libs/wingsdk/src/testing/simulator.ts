@@ -14,6 +14,8 @@ import { isToken } from "../target-sim/tokens";
 
 const START_ATTEMPT_COUNT = 10;
 
+const LOCALHOST_ADDRESS = "127.0.0.1";
+
 /**
  * Props for `Simulator`.
  */
@@ -281,7 +283,7 @@ export class Simulator {
     });
 
     const addrInfo: AddressInfo = await new Promise((resolve, reject) => {
-      this._server = app.listen(0, "localhost", () => {
+      this._server = app.listen(0, LOCALHOST_ADDRESS, () => {
         const addr = this._server?.address();
         if (addr && typeof addr === "object" && (addr as any).port) {
           resolve(addr);
@@ -291,7 +293,7 @@ export class Simulator {
       });
     });
 
-    this._serverUrl = `http://localhost:${addrInfo.port}`;
+    this._serverUrl = `http://${addrInfo.address}:${addrInfo.port}`;
   }
 
   /**
