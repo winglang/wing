@@ -19,6 +19,7 @@ use indexmap::IndexMap;
 use jsify::JSifier;
 use lifting::LiftVisitor;
 use parser::parse_wing_project;
+use struct_schema::StructSchemaVisitor;
 use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
@@ -54,6 +55,7 @@ pub mod jsify;
 mod lifting;
 pub mod lsp;
 pub mod parser;
+pub mod struct_schema;
 pub mod type_check;
 mod type_check_assert;
 mod valid_json_visitor;
@@ -358,6 +360,17 @@ pub fn compile(
 	if found_errors() {
 		return Err(());
 	}
+
+	// -- STRUCT SCHEMA GENERATION PHASE --
+	// Need to do this before jsification so that we know what struct schemas need to be generated
+	asts = asts
+		.into_iter()
+		.map(|(path, scope)| {
+			let mut reference_visitor = StructSchemaVisitor::new(&jsifier);
+			reference_visitor.visit_scope(&scope);
+			(path, scope)
+		})
+		.collect::<IndexMap<Utf8PathBuf, Scope>>();
 
 	// -- JSIFICATION PHASE --
 
