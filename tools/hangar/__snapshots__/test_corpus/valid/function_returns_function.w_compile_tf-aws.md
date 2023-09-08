@@ -49,105 +49,13 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inflight functions can return other inflight functions\",\"${aws_lambda_function.testinflightfunctionscanreturnotherinflightfunctions_Handler_7EBEFDAA.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
     "aws": [
       {}
     ]
-  },
-  "resource": {
-    "aws_iam_role": {
-      "testinflightfunctionscanreturnotherinflightfunctions_Handler_IamRole_4EB0A887": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflight functions can return other inflight functions/Handler/IamRole",
-            "uniqueId": "testinflightfunctionscanreturnotherinflightfunctions_Handler_IamRole_4EB0A887"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      }
-    },
-    "aws_iam_role_policy": {
-      "testinflightfunctionscanreturnotherinflightfunctions_Handler_IamRolePolicy_7F73A8AD": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflight functions can return other inflight functions/Handler/IamRolePolicy",
-            "uniqueId": "testinflightfunctionscanreturnotherinflightfunctions_Handler_IamRolePolicy_7F73A8AD"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testinflightfunctionscanreturnotherinflightfunctions_Handler_IamRole_4EB0A887.name}"
-      }
-    },
-    "aws_iam_role_policy_attachment": {
-      "testinflightfunctionscanreturnotherinflightfunctions_Handler_IamRolePolicyAttachment_E544C997": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflight functions can return other inflight functions/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testinflightfunctionscanreturnotherinflightfunctions_Handler_IamRolePolicyAttachment_E544C997"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testinflightfunctionscanreturnotherinflightfunctions_Handler_IamRole_4EB0A887.name}"
-      }
-    },
-    "aws_lambda_function": {
-      "testinflightfunctionscanreturnotherinflightfunctions_Handler_7EBEFDAA": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflight functions can return other inflight functions/Handler/Default",
-            "uniqueId": "testinflightfunctionscanreturnotherinflightfunctions_Handler_7EBEFDAA"
-          }
-        },
-        "architectures": [
-          "arm64"
-        ],
-        "environment": {
-          "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8801592",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c8801592",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testinflightfunctionscanreturnotherinflightfunctions_Handler_IamRole_4EB0A887.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testinflightfunctionscanreturnotherinflightfunctions_Handler_S3Object_CA1E98C2.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      }
-    },
-    "aws_s3_bucket": {
-      "Code": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
-          }
-        },
-        "bucket_prefix": "code-c84a50b1-"
-      }
-    },
-    "aws_s3_object": {
-      "testinflightfunctionscanreturnotherinflightfunctions_Handler_S3Object_CA1E98C2": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflight functions can return other inflight functions/Handler/S3Object",
-            "uniqueId": "testinflightfunctionscanreturnotherinflightfunctions_Handler_S3Object_CA1E98C2"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      }
-    }
   }
 }
 ```

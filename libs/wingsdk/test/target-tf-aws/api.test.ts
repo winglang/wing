@@ -350,3 +350,20 @@ test("api url can be used as environment variable", () => {
     tfConfig.resource.aws_lambda_function.Fn.environment.variables.API_URL
   ).toEqual("${aws_api_gateway_stage.Api_api_stage_E0FA39D6.invoke_url}");
 });
+
+test("api configured for cors", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const api = new Api(app, "Api", { cors: true });
+  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  api.get("/", handler);
+
+  const output = app.synth();
+
+  // THEN
+  const apiSpec = extractApiSpec(output);
+  expect(tfResourcesOfCount(output, "aws_api_gateway_rest_api")).toEqual(1);
+  expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(1);
+  expect(Object.keys(apiSpec.paths["/"])).toStrictEqual(["get"]);
+  expect(apiSpec).toMatchSnapshot();
+});

@@ -80,7 +80,7 @@ module.exports = function({ $c, $f1, $f2 }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:function with memory and function with env can be invoked\",\"${aws_lambda_function.testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_BE0A518F.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -126,15 +126,6 @@ module.exports = function({ $c, $f1, $f2 }) {
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      },
-      "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_8471F020": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:function with memory and function with env can be invoked/Handler/IamRole",
-            "uniqueId": "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_8471F020"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
@@ -157,16 +148,6 @@ module.exports = function({ $c, $f1, $f2 }) {
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.memoryfn_IamRole_87751238.name}"
-      },
-      "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRolePolicy_8C973050": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:function with memory and function with env can be invoked/Handler/IamRolePolicy",
-            "uniqueId": "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRolePolicy_8C973050"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.memoryfn.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.envfn.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_8471F020.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -189,16 +170,6 @@ module.exports = function({ $c, $f1, $f2 }) {
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.memoryfn_IamRole_87751238.name}"
-      },
-      "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRolePolicyAttachment_82EEF7BB": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:function with memory and function with env can be invoked/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRolePolicyAttachment_82EEF7BB"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_8471F020.name}"
       }
     },
     "aws_lambda_function": {
@@ -264,38 +235,6 @@ module.exports = function({ $c, $f1, $f2 }) {
           "security_group_ids": [],
           "subnet_ids": []
         }
-      },
-      "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_BE0A518F": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:function with memory and function with env can be invoked/Handler/Default",
-            "uniqueId": "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_BE0A518F"
-          }
-        },
-        "architectures": [
-          "arm64"
-        ],
-        "environment": {
-          "variables": {
-            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
-            "FUNCTION_NAME_2d5b932f": "${aws_lambda_function.memoryfn.arn}",
-            "FUNCTION_NAME_d7a1b8c8": "${aws_lambda_function.envfn.arn}",
-            "WING_FUNCTION_NAME": "Handler-c8bf8232",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c8bf8232",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_8471F020.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_S3Object_8A751E03.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
       }
     },
     "aws_s3_bucket": {
@@ -354,17 +293,6 @@ module.exports = function({ $c, $f1, $f2 }) {
           "metadata": {
             "path": "root/Default/Default/memory fn/S3Object",
             "uniqueId": "memoryfn_S3Object_3B51C445"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      },
-      "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_S3Object_8A751E03": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:function with memory and function with env can be invoked/Handler/S3Object",
-            "uniqueId": "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_S3Object_8A751E03"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",

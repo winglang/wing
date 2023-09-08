@@ -1818,7 +1818,7 @@ metadata describing how one construct is related to another construct.
 ##### `addDependency` <a name="addDependency" id="@winglang/sdk.std.Node.addDependency"></a>
 
 ```wing
-addDependency(deps: IDependable): void
+addDependency(...deps: Array<IDependable>): void
 ```
 
 Add an ordering dependency on another construct.

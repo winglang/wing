@@ -54,7 +54,7 @@ module.exports = function({ $globalCounter }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:access cloud resource through static methods only\",\"${aws_lambda_function.testaccesscloudresourcethroughstaticmethodsonly_Handler_BC0E7705.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -80,97 +80,6 @@ module.exports = function({ $globalCounter }) {
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "id",
         "name": "wing-counter-cloud.Counter-c866f225"
-      }
-    },
-    "aws_iam_role": {
-      "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_1B04D5D0": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:access cloud resource through static methods only/Handler/IamRole",
-            "uniqueId": "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_1B04D5D0"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      }
-    },
-    "aws_iam_role_policy": {
-      "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicy_A6861688": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:access cloud resource through static methods only/Handler/IamRolePolicy",
-            "uniqueId": "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicy_A6861688"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_1B04D5D0.name}"
-      }
-    },
-    "aws_iam_role_policy_attachment": {
-      "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicyAttachment_842C871D": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:access cloud resource through static methods only/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicyAttachment_842C871D"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_1B04D5D0.name}"
-      }
-    },
-    "aws_lambda_function": {
-      "testaccesscloudresourcethroughstaticmethodsonly_Handler_BC0E7705": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:access cloud resource through static methods only/Handler/Default",
-            "uniqueId": "testaccesscloudresourcethroughstaticmethodsonly_Handler_BC0E7705"
-          }
-        },
-        "architectures": [
-          "arm64"
-        ],
-        "environment": {
-          "variables": {
-            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
-            "WING_FUNCTION_NAME": "Handler-c8de1ef1",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c8de1ef1",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_1B04D5D0.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testaccesscloudresourcethroughstaticmethodsonly_Handler_S3Object_57D98226.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      }
-    },
-    "aws_s3_bucket": {
-      "Code": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
-          }
-        },
-        "bucket_prefix": "code-c84a50b1-"
-      }
-    },
-    "aws_s3_object": {
-      "testaccesscloudresourcethroughstaticmethodsonly_Handler_S3Object_57D98226": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:access cloud resource through static methods only/Handler/S3Object",
-            "uniqueId": "testaccesscloudresourcethroughstaticmethodsonly_Handler_S3Object_57D98226"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
       }
     }
   }
