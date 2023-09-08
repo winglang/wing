@@ -30,7 +30,7 @@ pub struct SymbolEnv {
 
 pub enum SymbolEnvKind {
 	Scope,
-	Function { is_init: bool },
+	Function { is_init: bool, sig: TypeRef },
 	Type(TypeRef),
 }
 
@@ -266,7 +266,7 @@ impl SymbolEnv {
 				kind,
 				SymbolLookupInfo {
 					phase: self.phase,
-					init: matches!(self.kind, SymbolEnvKind::Function { is_init: true }),
+					init: matches!(self.kind, SymbolEnvKind::Function { is_init: true, .. }),
 					env: get_ref,
 				},
 			);
@@ -388,7 +388,7 @@ impl<'a> Iterator for SymbolEnvIter<'a> {
 					kind,
 					SymbolLookupInfo {
 						phase: self.curr_env.phase,
-						init: matches!(self.curr_env.kind, SymbolEnvKind::Function { is_init: true }),
+						init: matches!(self.curr_env.kind, SymbolEnvKind::Function { is_init: true, .. }),
 						env: self.curr_env.get_ref(),
 					},
 				))
