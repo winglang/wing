@@ -2516,7 +2516,10 @@ impl<'a> TypeChecker<'a> {
 		// Create an environment for the function
 		let mut function_env = self.types.add_symbol_env(SymbolEnv::new(
 			Some(env.get_ref()),
-			SymbolEnvKind::Function { is_init: false },
+			SymbolEnvKind::Function {
+				is_init: false,
+				sig: function_type,
+			},
 			func_def.signature.phase,
 			self.ctx.current_stmt_idx(),
 		));
@@ -2812,15 +2815,17 @@ impl<'a> TypeChecker<'a> {
 			self.ctx = ctx;
 			self.type_check_scope(scope);
 		}
-		// if matches!(env.kind, SymbolEnvKind::Function { .. }) {
-		// 	if let Type::Inferred(n) = &*env.return_type {
-		// 		if self.types.get_inference_by_id(*n).is_none() {
-		// 			// If function types don't return anything then we should set the return type to void
-		// 			self.types.update_inferred_type(*n, self.types.void(), &scope.span);
-		// 		}
-		// 		self.update_known_inferences(&mut env.return_type, &scope.span);
-		// 	}
-		// }
+
+		if let SymbolEnvKind::Function { sig, .. } = env.kind {
+			let mut return_type = sig.as_function_sig().expect("a fucntion type").return_type;
+			if let Type::Inferred(n) = &*return_type {
+				if self.types.get_inference_by_id(*n).is_none() {
+					// If function types don't return anything then we should set the return type to void
+					self.types.update_inferred_type(*n, self.types.void(), &scope.span);
+				}
+				self.update_known_inferences(&mut return_type, &scope.span);
+			}
+		}
 
 		for symbol_data in env.symbol_map.values_mut() {
 			if let SymbolKind::Variable(ref mut var_info) = symbol_data.1 {
@@ -2968,7 +2973,7 @@ impl<'a> TypeChecker<'a> {
 				initial_value,
 				type_,
 			} => {
-				tc.type_check_let(type_, env, initial_value, var_name, reassignable, stmt);
+				tc.type_check_let(type_, env, initial_value, var_name, reassignable, stmt); // TODO: do we now need to pass stmt everywhere when we can get it from the ctx?
 			}
 			StmtKind::ForLoop {
 				iterator,
@@ -3524,22 +3529,27 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn type_check_return(&mut self, env: &mut SymbolEnv, stmt: &Stmt, exp: &Option<Expr>) {
-		//let return_type_inferred = self.update_known_inferences(&mut env.return_type, &stmt.span);
-
 		// Make sure we're inside a function
-		let Some((_, current_func_sig)) = self.ctx.current_function() else {
-				self.spanned_error(stmt, "Return statement outside of function cannot return a value");
-				return;
-			};
+		if self.ctx.current_function().is_none() {
+			self.spanned_error(stmt, "Return statement outside of function cannot return a value");
+			return;
+		};
+
+		let cur_func_env = *self.ctx.current_function_env().expect("a function env");
+		let SymbolEnvKind::Function{sig: cur_func_type, ..} = cur_func_env.kind else {
+				panic!("Expected function env");
+		};
+		let mut function_ret_type = cur_func_type.as_function_sig().expect("a function_type").return_type;
 
 		// Get the expected return type, we need to look it up in the parent of the current function's env
-		let function_def_env = self
-			.ctx
-			.current_function_env()
-			.expect("Expected to be in a function")
-			.parent
-			.expect("Function is defined in an env");
-		let mut function_ret_type = self.resolve_type_annotation(&current_func_sig.return_type, &function_def_env);
+		// let function_def_env = self
+		// 	.ctx
+		// 	.current_function_env()
+		// 	.expect("Expected to be in a function")
+		// 	.parent
+		// 	.expect("Function is defined in an env");
+		//let mut function_ret_type = self.resolve_type_annotation(&current_func_sig.return_type, &function_def_env);
+		let return_type_inferred = self.update_known_inferences(&mut function_ret_type, &stmt.span);
 
 		if let Some(return_expression) = exp {
 			let (return_type, _) = self.type_check_exp(return_expression, env);
@@ -3547,14 +3557,14 @@ impl<'a> TypeChecker<'a> {
 			if !function_ret_type.is_void() {
 				self.validate_type(return_type, function_ret_type, return_expression);
 			} else {
-				//if return_type_inferred {
-				self.spanned_error(stmt, "Unexpected return value from void function");
-				// } else {
-				// 	self.spanned_error(
-				// 		stmt,
-				// 		"Unexpected return value from void function. Return type annotations are required for methods.",
-				// 	);
-				// }
+				if return_type_inferred {
+					self.spanned_error(stmt, "Unexpected return value from void function");
+				} else {
+					self.spanned_error(
+						stmt,
+						"Unexpected return value from void function. Return type annotations are required for methods.",
+					);
+				}
 			}
 		} else {
 			self.validate_type(self.types.void(), function_ret_type, stmt);
@@ -3612,9 +3622,9 @@ impl<'a> TypeChecker<'a> {
 					self.spanned_error(
 						stmt,
 						format!(
-									    "Cannot bring \"{}\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought",
-									    name
-								    ),
+							"Cannot bring \"{}\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought",
+							name
+						),
 					);
 					return;
 				}
@@ -3940,8 +3950,11 @@ impl<'a> TypeChecker<'a> {
 
 						// Create a temp init environment to use for typechecking args
 						let init_env = &mut SymbolEnv::new(
-							Some(class_env.get_ref()),
-							SymbolEnvKind::Function { is_init: true },
+							Some(class_env.get_ref()), // TODO: this doesn't make sense, the class_env is a type's env and we're creating an env for a function!
+							SymbolEnvKind::Function {
+								is_init: true,
+								sig: *class_initializer,
+							},
 							class_env.phase,
 							scope.statements[0].idx,
 						);
@@ -4052,7 +4065,10 @@ impl<'a> TypeChecker<'a> {
 		let is_init = method_name.name == CLASS_INIT_NAME || method_name.name == CLASS_INFLIGHT_INIT_NAME;
 		let mut method_env = self.types.add_symbol_env(SymbolEnv::new(
 			Some(parent_env.get_ref()),
-			SymbolEnvKind::Function { is_init },
+			SymbolEnvKind::Function {
+				is_init,
+				sig: method_type,
+			},
 			method_sig.phase,
 			statement_idx,
 		));
@@ -5014,23 +5030,22 @@ impl<'a> TypeChecker<'a> {
 	/// Returns the type in which the property is defined (this might be any class like type). It might
 	/// be either the passed `instance_type` or one of its ancestors.
 	fn get_definition_type(&self, instance_type: UnsafeRef<Type>, property: &Symbol) -> UnsafeRef<Type> {
-		let class_like_env=  match &*instance_type {
+		let class_like_env = match &*instance_type {
 			Type::Class(c) => &c.env,
 			Type::Interface(i) => &i.env,
 			Type::Struct(s) => &s.env,
 			_ => panic!("Expected instance type to be a class like type"),
 		};
-    let SymbolEnvKind::Type(property_defined_in) = class_like_env
+		let SymbolEnvKind::Type(property_defined_in) = class_like_env
 			.lookup_ext(property, None)
 			.expect(&format!("property {property} to be in class {instance_type}"))
 			.1
-			.env.kind else {						
+			.env.kind else {
 				panic!("Expected class env to be a type");						
 		};
-    property_defined_in
+		property_defined_in
 	}
 }
-
 
 impl VisitorWithContext for TypeChecker<'_> {
 	fn ctx(&mut self) -> &mut VisitContext {
@@ -5323,7 +5338,9 @@ pub fn fully_qualify_std_type(type_: &str) -> String {
 
 	match type_name {
 		"Json" | "MutJson" | "MutArray" | "MutMap" | "MutSet" | "Array" | "Map" | "Set" | "String" | "Duration"
-		| "Boolean" | "Number" => format!("{WINGSDK_STD_MODULE}.{type_name}"),
+		| "Boolean" | "Number" => {
+			format!("{WINGSDK_STD_MODULE}.{type_name}")
+		}
 		_ => type_name.to_string(),
 	}
 }
