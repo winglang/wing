@@ -293,40 +293,6 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
         "policy": "${data.aws_iam_policy_document.website-2_AllowDistributionReadOnly_994269D9.json}"
       }
     },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "cloudWebsite_Encryption_6A8A4E29": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Website/Encryption",
-            "uniqueId": "cloudWebsite_Encryption_6A8A4E29"
-          }
-        },
-        "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      },
-      "website-2_Encryption_A1B72094": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/website-2/Encryption",
-            "uniqueId": "website-2_Encryption_A1B72094"
-          }
-        },
-        "bucket": "${aws_s3_bucket.website-2_WebsiteBucket_59576A0C.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      }
-    },
     "aws_s3_bucket_website_configuration": {
       "cloudWebsite_BucketWebsiteConfiguration_920E8E41": {
         "//": {

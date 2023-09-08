@@ -190,24 +190,6 @@ module.exports = function({  }) {
         "policy": "${data.aws_iam_policy_document.cloudWebsite_AllowDistributionReadOnly_89DC4FD0.json}"
       }
     },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "cloudWebsite_Encryption_6A8A4E29": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Website/Encryption",
-            "uniqueId": "cloudWebsite_Encryption_6A8A4E29"
-          }
-        },
-        "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      }
-    },
     "aws_s3_bucket_website_configuration": {
       "cloudWebsite_BucketWebsiteConfiguration_920E8E41": {
         "//": {
