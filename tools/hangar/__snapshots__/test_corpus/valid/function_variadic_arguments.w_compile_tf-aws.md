@@ -61,56 +61,6 @@
         "bucket_prefix": "bucket3-c8b6c706-",
         "force_destroy": false
       }
-    },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "bucket1_Encryption_4417F366": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/bucket1/Encryption",
-            "uniqueId": "bucket1_Encryption_4417F366"
-          }
-        },
-        "bucket": "${aws_s3_bucket.bucket1.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      },
-      "bucket2_Encryption_6F02F3D7": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/bucket2/Encryption",
-            "uniqueId": "bucket2_Encryption_6F02F3D7"
-          }
-        },
-        "bucket": "${aws_s3_bucket.bucket2.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      },
-      "bucket3_Encryption_43A64F29": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/bucket3/Encryption",
-            "uniqueId": "bucket3_Encryption_43A64F29"
-          }
-        },
-        "bucket": "${aws_s3_bucket.bucket3.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      }
     }
   }
 }
