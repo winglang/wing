@@ -1,18 +1,26 @@
-import * as ex from "../ex";
-import { Construct } from "constructs";
-import { Json } from "../std";
-import { BigtableTable, BigtableTableConfig, BigtableTableColumnFamily } from "../.gen/providers/google/bigtable-table";
-import { ResourceNames, NameOptions, CaseConventions } from "../shared/resource-names";
-import { Id } from "../.gen/providers/random/id";
 import { log } from "console";
+import { Construct } from "constructs";
+import {
+  BigtableTable,
+  BigtableTableConfig,
+  BigtableTableColumnFamily,
+} from "../.gen/providers/google/bigtable-table";
+import { Id } from "../.gen/providers/random/id";
+import * as ex from "../ex";
+import {
+  ResourceNames,
+  NameOptions,
+  CaseConventions,
+} from "../shared/resource-names";
+import { Json } from "../std";
 
 /*
  * Table names must be between 1 and 50 characters. We reserve 9 characters for
  * a random ID, so the maximum length is 41.
-*
- * Must be 1-50 characters and must only contain 
+ *
+ * Must be 1-50 characters and must only contain
  * hyphens, underscores, periods, letters and numbers.
-*
+ *
  * We skip generating a hash since we need to append a random string to the
  * bucket name to make it globally unique.
  *
@@ -60,9 +68,9 @@ export class Table extends ex.Table {
       byteLength: 4, // 4 bytes = 8 hex characters
     });
 
-
-    const columns = props.columns
-    let columnsFamily: BigtableTableColumnFamily[] = []
+    // TODO(wiktor.zajac) improve that
+    const columns = props.columns;
+    let columnsFamily: BigtableTableColumnFamily[] = [];
     if (columns != undefined) {
       for (let key in columns) {
         columnsFamily.push({ family: key });
@@ -73,13 +81,12 @@ export class Table extends ex.Table {
       name: tableName + `-${randomId.hex}`,
       instanceName: instanceName,
       columnFamily: columnsFamily,
-    }
+    };
 
     this.table = new BigtableTable(this, "Default", config);
 
     log(`What the hell am I supposed to do with ${this.table}`);
   }
-
 
   public addRow(key: string, row: Json): void {
     throw new Error(`Method not implemented. Can not add ${row} at a ${key}`);

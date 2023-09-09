@@ -1,9 +1,11 @@
 import { Construct } from "constructs";
 import { Bucket } from "./bucket";
+import { Table } from "./table";
 import { GoogleProvider } from "../.gen/providers/google/provider";
 import { RandomProvider } from "../.gen/providers/random/provider";
 import { BUCKET_FQN } from "../cloud";
 import { AppProps as CdktfAppProps } from "../core";
+import { TABLE_FQN } from "../ex";
 import { CdktfApp } from "../shared-tf/app";
 
 /**
@@ -83,6 +85,8 @@ export class App extends CdktfApp {
     switch (fqn) {
       case BUCKET_FQN:
         return new Bucket(scope, id, args[0]);
+      case TABLE_FQN:
+        return new Table(scope, id, args[0]);
     }
 
     return undefined;
