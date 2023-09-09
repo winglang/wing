@@ -482,56 +482,6 @@ module.exports = function({ $headers }) {
         "restrict_public_buckets": false
       }
     },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "PrivateBucket_Encryption_38F5F83C": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/PrivateBucket/Encryption",
-            "uniqueId": "PrivateBucket_Encryption_38F5F83C"
-          }
-        },
-        "bucket": "${aws_s3_bucket.PrivateBucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      },
-      "PublicBucket_Encryption_4F6F735E": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/PublicBucket/Encryption",
-            "uniqueId": "PublicBucket_Encryption_4F6F735E"
-          }
-        },
-        "bucket": "${aws_s3_bucket.PublicBucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      },
-      "cloudBucket_Encryption_77B6AEEF": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Encryption",
-            "uniqueId": "cloudBucket_Encryption_77B6AEEF"
-          }
-        },
-        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      }
-    },
     "aws_s3_object": {
       "AnotherFunction_S3Object_6987727B": {
         "//": {

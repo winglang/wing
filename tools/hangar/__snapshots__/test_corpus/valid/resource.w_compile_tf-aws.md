@@ -539,56 +539,6 @@ module.exports = function({  }) {
         ]
       }
     },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "BigPublisher_b2_Encryption_24266321": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/Encryption",
-            "uniqueId": "BigPublisher_b2_Encryption_24266321"
-          }
-        },
-        "bucket": "${aws_s3_bucket.BigPublisher_b2_702AC841.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      },
-      "BigPublisher_cloudBucket_Encryption_F03B9FDE": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Bucket/Encryption",
-            "uniqueId": "BigPublisher_cloudBucket_Encryption_F03B9FDE"
-          }
-        },
-        "bucket": "${aws_s3_bucket.BigPublisher_cloudBucket_ABF95118.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      },
-      "cloudBucket_Encryption_77B6AEEF": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Encryption",
-            "uniqueId": "cloudBucket_Encryption_77B6AEEF"
-          }
-        },
-        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      }
-    },
     "aws_s3_object": {
       "BigPublisher_b2_b2-oncreate-OnMessage-59543b60_S3Object_759B056E": {
         "//": {

@@ -357,18 +357,6 @@ exports[`function with bucket binding > put operation 2`] = `
         "bucket_prefix": "code-c84a50b1-",
       },
     },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "Bucket_Encryption_016FDA0C": {
-        "bucket": "\${aws_s3_bucket.Bucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256",
-            },
-          },
-        ],
-      },
-    },
     "aws_s3_object": {
       "Function_S3Object_C62A0C2D": {
         "bucket": "\${aws_s3_bucket.Code.bucket}",
