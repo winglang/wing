@@ -51,6 +51,8 @@ export class App extends core.App {
   public readonly isTestEnvironment: boolean;
   public readonly _tokens: SimTokens;
 
+  public readonly _target = "sim";
+
   /**
    * The test runner for this app.
    */

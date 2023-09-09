@@ -44,7 +44,7 @@ module.exports = function({ $__obj__args_______if__obj_args______undefined__thro
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:addRow\",\"${aws_lambda_function.testaddRow_Handler_2806A65E.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -94,99 +94,6 @@ module.exports = function({ $__obj__args_______if__obj_args______undefined__thro
         "hash_key": "${aws_dynamodb_table.exTable.hash_key}",
         "item": "{\"name\":{\"S\":\"peach\"},\"gender\":{\"S\":\"female\"},\"role\":{\"S\":\"princess\"}}",
         "table_name": "${aws_dynamodb_table.exTable.name}"
-      }
-    },
-    "aws_iam_role": {
-      "testaddRow_Handler_IamRole_809942D9": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:addRow/Handler/IamRole",
-            "uniqueId": "testaddRow_Handler_IamRole_809942D9"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      }
-    },
-    "aws_iam_role_policy": {
-      "testaddRow_Handler_IamRolePolicy_CA240997": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:addRow/Handler/IamRolePolicy",
-            "uniqueId": "testaddRow_Handler_IamRolePolicy_CA240997"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.exTable.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.testaddRow_Handler_IamRole_809942D9.name}"
-      }
-    },
-    "aws_iam_role_policy_attachment": {
-      "testaddRow_Handler_IamRolePolicyAttachment_0784B360": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:addRow/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testaddRow_Handler_IamRolePolicyAttachment_0784B360"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testaddRow_Handler_IamRole_809942D9.name}"
-      }
-    },
-    "aws_lambda_function": {
-      "testaddRow_Handler_2806A65E": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:addRow/Handler/Default",
-            "uniqueId": "testaddRow_Handler_2806A65E"
-          }
-        },
-        "architectures": [
-          "arm64"
-        ],
-        "environment": {
-          "variables": {
-            "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
-            "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"gender\":0,\"role\":0}",
-            "DYNAMODB_TABLE_NAME_d5d44f18_PRIMARY_KEY": "name",
-            "WING_FUNCTION_NAME": "Handler-c8f74599",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c8f74599",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testaddRow_Handler_IamRole_809942D9.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testaddRow_Handler_S3Object_1B25BFDC.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      }
-    },
-    "aws_s3_bucket": {
-      "Code": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
-          }
-        },
-        "bucket_prefix": "code-c84a50b1-"
-      }
-    },
-    "aws_s3_object": {
-      "testaddRow_Handler_S3Object_1B25BFDC": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:addRow/Handler/S3Object",
-            "uniqueId": "testaddRow_Handler_S3Object_1B25BFDC"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
       }
     }
   }
