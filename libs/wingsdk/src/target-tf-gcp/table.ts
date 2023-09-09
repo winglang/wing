@@ -1,4 +1,3 @@
-import { log } from "console";
 import { Construct } from "constructs";
 import {
   BigtableTable,
@@ -25,12 +24,6 @@ import { Json } from "../std";
  * bucket name to make it globally unique.
  *
  */
-
-/**
- * GCP implementation of `ex.Table`.
- *
- * @inflight `@winglang/sdk.ex.ITableClient`
- */
 const TABLE_NAME_OPTS: NameOptions = {
   maxLen: 41,
   case: CaseConventions.LOWERCASE,
@@ -38,13 +31,6 @@ const TABLE_NAME_OPTS: NameOptions = {
   includeHash: false,
 };
 
-// NOTES
-// Bigtable requires atleast one ColumnFamily
-// before data can be written
-
-// NOTE
-// I could not find exact specifications about instance
-// name requirements, it is only based on what GC console showed me
 const INSTANCE_NAME_OPTS: NameOptions = {
   maxLen: 30,
   disallowedRegex: /()/g,
@@ -56,8 +42,6 @@ const INSTANCE_NAME_OPTS: NameOptions = {
  * @inflight `@winglang/sdk.ex.ITableClient`
  */
 export class Table extends ex.Table {
-  private readonly table: BigtableTable;
-
   constructor(scope: Construct, id: string, props: ex.TableProps = {}) {
     super(scope, id, props);
 
@@ -68,13 +52,9 @@ export class Table extends ex.Table {
       byteLength: 4, // 4 bytes = 8 hex characters
     });
 
-    // TODO(wiktor.zajac) improve that
-    const columns = props.columns;
     let columnsFamily: BigtableTableColumnFamily[] = [];
-    if (columns != undefined) {
-      for (let key in columns) {
-        columnsFamily.push({ family: key });
-      }
+    for (let key in this.columns) {
+      columnsFamily.push({ family: key });
     }
 
     const config: BigtableTableConfig = {
@@ -83,13 +63,11 @@ export class Table extends ex.Table {
       columnFamily: columnsFamily,
     };
 
-    this.table = new BigtableTable(this, "Default", config);
-
-    log(`What the hell am I supposed to do with ${this.table}`);
+    new BigtableTable(this, "Default", config);
   }
 
   public addRow(key: string, row: Json): void {
-    throw new Error(`Method not implemented. Can not add ${row} at a ${key}`);
+    throw new Error(`Can not insert ${row} at given ${key}`);
   }
 
   public _toInflight(): string {
