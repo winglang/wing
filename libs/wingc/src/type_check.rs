@@ -4672,37 +4672,8 @@ impl<'a> TypeChecker<'a> {
 
 				let mut property_variable = self.resolve_variable_from_instance_type(instance_type, property, env, object);
 
-				// TODO: Here we can get the access_modifier of the property and check it based on the current class
-				let mut private_access = false;
-				let mut protected_access = false;
-				if let Some(current_class) = self.ctx.current_class().map(|udt| udt.clone()) {
-					let current_class_type = self
-						.resolve_user_defined_type(&current_class, env, self.ctx.current_stmt_idx())
-						.unwrap();
-					// Lookup the property in the class env to find out in which class (peraps an ancestor) it was defined
-					let property_defined_in = self.get_definition_type(instance_type, property);
-					private_access = current_class_type.is_same_type_as(&property_defined_in);
-					protected_access = private_access || current_class_type.is_strict_subtype_of(&property_defined_in);
-				}
-				match property_variable.access_modifier {
-					AccessModifier::Private => {
-						if !private_access {
-							self.spanned_error(
-								property,
-								format!("Cannot access private member {property} of {instance_type}"),
-							);
-						}
-					}
-					AccessModifier::Protected => {
-						if !protected_access {
-							self.spanned_error(
-								property,
-								format!("Cannot access protected member {property} of {instance_type}"),
-							);
-						}
-					}
-					AccessModifier::Public => {} // keep this here to make sure we don't add a new access modifier without handling it here
-				}
+				// Validate access modifier
+				self.check_access(env, instance_type, property, property_variable.access_modifier);
 
 				// if the object is `this`, then use the property's phase instead of the object phase
 				let property_phase = if property_variable.phase == Phase::Independent {
@@ -4788,6 +4759,8 @@ impl<'a> TypeChecker<'a> {
 					Type::Class(ref c) => match c.env.lookup(&property, None) {
 						Some(SymbolKind::Variable(v)) => {
 							if let VariableKind::StaticMember = v.kind {
+								// Validate access modifier
+								self.check_access(env, type_, property, v.access_modifier);
 								(v.clone(), v.phase)
 							} else {
 								self.spanned_error_with_var(
@@ -4807,6 +4780,45 @@ impl<'a> TypeChecker<'a> {
 					_ => self.spanned_error_with_var(property, format!("\"{}\" not a valid reference", reference)),
 				}
 			}
+		}
+	}
+
+	/// Check if the given property on the given type with the given access modifier can be accessed from the current context
+	fn check_access(
+		&mut self,
+		env: &mut SymbolEnv,
+		type_: UnsafeRef<Type>,
+		property: &Symbol,
+		allowed_access: AccessModifier,
+	) {
+		// Determine the access type of the property
+		let mut private_access = false;
+		let mut protected_access = false;
+		if let Some(current_class) = self.ctx.current_class().map(|udt| udt.clone()) {
+			let current_class_type = self
+				.resolve_user_defined_type(&current_class, env, self.ctx.current_stmt_idx())
+				.unwrap();
+			// Lookup the property in the class env to find out in which class (perhaps an ancestor) it was defined
+			let property_defined_in = self.get_definition_type(type_, property);
+			private_access = current_class_type.is_same_type_as(&property_defined_in);
+			protected_access = private_access || current_class_type.is_strict_subtype_of(&property_defined_in);
+		}
+		// Compare the access type with what's allowed
+		match allowed_access {
+			AccessModifier::Private => {
+				if !private_access {
+					self.spanned_error(property, format!("Cannot access private member {property} of {type_}"));
+				}
+			}
+			AccessModifier::Protected => {
+				if !protected_access {
+					self.spanned_error(
+						property,
+						format!("Cannot access protected member {property} of {type_}"),
+					);
+				}
+			}
+			AccessModifier::Public => {} // keep this here to make sure we don't add a new access modifier without handling it here
 		}
 	}
 
