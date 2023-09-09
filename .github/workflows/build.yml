@@ -204,7 +204,8 @@ jobs:
       fail-fast: true
       matrix:
         runner: [windows, macos, ubuntu]
-        node: ["18", "20"]
+        # Pinned 20 to 20.5.1 until https://github.com/nodejs/node/issues/49497 is released
+        node: ["18", "20.5.1"]
         shard: ["1/2", "2/2"]
         full_run:
           # Do a full run on push or when the PR is labeled "pr/e2e-full"
