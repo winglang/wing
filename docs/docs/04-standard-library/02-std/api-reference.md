@@ -818,7 +818,7 @@ The index of the element in the Json Array to return.
 | <code><a href="#@winglang/sdk.std.Json.delete">delete</a></code> | Deletes a key in a given Json. |
 | <code><a href="#@winglang/sdk.std.Json.entries">entries</a></code> | Returns the entries from the Json. |
 | <code><a href="#@winglang/sdk.std.Json.has">has</a></code> | Checks if a Json object has a given key. |
-| <code><a href="#@winglang/sdk.std.Json.keys">keys</a></code> | Returns the keys from the Json object. |
+| <code><a href="#@winglang/sdk.std.Json.keys">keys</a></code> | Returns the keys from the Json. |
 | <code><a href="#@winglang/sdk.std.Json.parse">parse</a></code> | Parse a string into a Json. |
 | <code><a href="#@winglang/sdk.std.Json.stringify">stringify</a></code> | Formats Json as string. |
 | <code><a href="#@winglang/sdk.std.Json.tryParse">tryParse</a></code> | Try to parse a string into a Json. |
@@ -894,7 +894,7 @@ Returns the entries from the Json.
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
-to get values from.
+map to get the entries from.
 
 ---
 
@@ -928,13 +928,13 @@ The key to check.
 Json.keys(json: any);
 ```
 
-Returns the keys from the Json object.
+Returns the keys from the Json.
 
 ###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.keys.parameter.json"></a>
 
 - *Type:* any
 
-to get keys from.
+map to get the keys from.
 
 ---
 
@@ -1004,7 +1004,7 @@ Returns the values from the Json.
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
-to get values from.
+map to get the values from.
 
 ---
 
