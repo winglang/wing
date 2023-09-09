@@ -1,7 +1,7 @@
 import * as ex from "../ex";
 import { Construct } from "constructs";
 import { Json } from "../std";
-import { BigtableTable } from "../.gen/providers/google/bigtable-table";
+import { BigtableTable, BigtableTableConfig, BigtableTableColumnFamily } from "../.gen/providers/google/bigtable-table";
 import { ResourceNames, NameOptions, CaseConventions } from "../shared/resource-names";
 import { Id } from "../.gen/providers/random/id";
 import { log } from "console";
@@ -60,10 +60,22 @@ export class Table extends ex.Table {
       byteLength: 4, // 4 bytes = 8 hex characters
     });
 
-    this.table = new BigtableTable(this, "Default", {
+
+    const columns = props.columns
+    let columnsFamily: BigtableTableColumnFamily[] = []
+    if (columns != undefined) {
+      for (let key in columns) {
+        columnsFamily.push({ family: key });
+      }
+    }
+
+    const config: BigtableTableConfig = {
       name: tableName + `-${randomId.hex}`,
       instanceName: instanceName,
-    });
+      columnFamily: columnsFamily,
+    }
+
+    this.table = new BigtableTable(this, "Default", config);
 
     log(`What the hell am I supposed to do with ${this.table}`);
   }
