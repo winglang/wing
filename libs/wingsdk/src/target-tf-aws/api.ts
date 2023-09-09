@@ -7,9 +7,12 @@ import { API_CORS_DEFAULT_RESPONSE } from "./api.cors";
 import { App } from "./app";
 import { Function } from "./function";
 import { core } from "..";
-import { ApiGatewayDeployment } from "../.gen/providers/aws/api-gateway-deployment";
 import { ApiGatewayRestApi } from "../.gen/providers/aws/api-gateway-rest-api";
 import { ApiGatewayStage } from "../.gen/providers/aws/api-gateway-stage";
+import { ApiGatewayDeployment } from "../.gen/providers/aws/api-gateway-deployment";
+import { Apigatewayv2Api } from "../.gen/providers/aws/apigatewayv2-api";
+import { Apigatewayv2Stage } from "../.gen/providers/aws/apigatewayv2-stage";
+import { Apigatewayv2Deployment } from "../.gen/providers/aws/apigatewayv2-deployment";
 import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
@@ -473,6 +476,105 @@ class WingRestApi extends Construct {
    * @param method Method of the endpoint
    * @param handler Lambda function to handle the endpoint
    */
+  private addHandlerPermissions = (
+    path: string,
+    method: string,
+    handler: Function
+  ) => {
+    const pathHash = createHash("sha1").update(path).digest("hex").slice(-8);
+    const permissionId = `${method}-${pathHash}`;
+    new LambdaPermission(this, `permission-${permissionId}`, {
+      statementId: `AllowExecutionFromAPIGateway-${permissionId}`,
+      action: "lambda:InvokeFunction",
+      functionName: handler._functionName,
+      principal: "apigateway.amazonaws.com",
+      sourceArn: `${this.api.executionArn}/*/${method}${path}`,
+    });
+  };
+}
+
+class WingHttpApi extends Construct {
+  public readonly url: string;
+  public readonly api: Apigatewayv2Api;
+  public readonly stage: Apigatewayv2Stage;
+  private readonly deployment: Apigatewayv2Deployment;
+  private readonly region: string;
+
+  constructor(
+    scope: Construct,
+    id: string,
+    props: {
+      apiSpec: OpenApiSpec;
+      cors?: cloud.ApiCorsOptions;
+    }
+  ) {
+    super(scope, id);
+    this.region = (App.of(this) as App).region;
+
+    const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
+
+    this.api = new Apigatewayv2Api(this, "api", {
+      name: ResourceNames.generateName(this, NAME_OPTS),
+      protocolType: "HTTP",
+      // Assuming cors configurations and route key is set in openApi
+      body: Lazy.stringValue({
+        produce: () => {
+          const injectGreedy404Handler = (openApiSpec: OpenApiSpec) => {
+            openApiSpec.paths = {
+              ...openApiSpec.paths,
+              ...defaultResponse,
+            };
+            return openApiSpec;
+          };
+          return JSON.stringify(injectGreedy404Handler(props.apiSpec));
+        },
+      }),
+    });
+
+    this.deployment = new Apigatewayv2Deployment(this, "deployment", {
+      apiId: this.api.id,
+      triggers: {
+        redeployment: Fn.sha256(this.api.body),
+      },
+    });
+
+    this.stage = new Apigatewayv2Stage(this, "stage", {
+      apiId: this.api.id,
+      name: STAGE_NAME,
+      deploymentId: this.deployment.id,
+      autoDeploy: true,
+    });
+
+    // Adjusting the invoke URL to HTTP API
+    this.url = `https://${this.api.id}.execute-api.${this.region}.amazonaws.com/${STAGE_NAME}/`;
+  }
+
+  public addEndpoint(path: string, method: string, handler: Function) {
+    const endpointExtension = this.createApiSpecExtension(handler);
+    this.addHandlerPermissions(path, method, handler);
+    return endpointExtension;
+  }
+
+  private createApiSpecExtension(handler: Function) {
+    const extension = {
+      "x-amazon-apigateway-integration": {
+        uri: `arn:aws:apigateway:${this.region}:lambda:path/2015-03-31/functions/${handler.arn}/invocations`,
+        type: "aws_proxy",
+        httpMethod: "POST",
+        integrationMethod: "POST",
+        responses: {
+          default: {
+            statusCode: "200",
+          },
+        },
+        passthroughBehavior: "when_no_match",
+        contentHandling: "CONVERT_TO_TEXT",
+      },
+    };
+
+    return extension;
+  }
+
   private addHandlerPermissions = (
     path: string,
     method: string,
