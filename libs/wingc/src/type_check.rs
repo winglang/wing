@@ -3529,6 +3529,9 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn type_check_return(&mut self, env: &mut SymbolEnv, stmt: &Stmt, exp: &Option<Expr>) {
+		// Type check the return expression
+		let return_type = exp.as_ref().map(|exp| (self.type_check_exp(exp, env).0, exp));
+
 		// Make sure we're inside a function
 		if self.ctx.current_function().is_none() {
 			self.spanned_error(stmt, "Return statement outside of function cannot return a value");
@@ -3541,19 +3544,9 @@ impl<'a> TypeChecker<'a> {
 		};
 		let mut function_ret_type = cur_func_type.as_function_sig().expect("a function_type").return_type;
 
-		// Get the expected return type, we need to look it up in the parent of the current function's env
-		// let function_def_env = self
-		// 	.ctx
-		// 	.current_function_env()
-		// 	.expect("Expected to be in a function")
-		// 	.parent
-		// 	.expect("Function is defined in an env");
-		//let mut function_ret_type = self.resolve_type_annotation(&current_func_sig.return_type, &function_def_env);
 		let return_type_inferred = self.update_known_inferences(&mut function_ret_type, &stmt.span);
 
-		if let Some(return_expression) = exp {
-			let (return_type, _) = self.type_check_exp(return_expression, env);
-
+		if let Some((return_type, return_expression)) = return_type {
 			if !function_ret_type.is_void() {
 				self.validate_type(return_type, function_ret_type, return_expression);
 			} else {
