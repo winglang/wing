@@ -20,12 +20,12 @@ export class Json {
   }
 
   /**
-   * Returns the keys from the Json object.
+   * Returns the keys from the Json.
    *
    * @macro (Object.keys($args$))
    *
-   * @param json to get keys from
-   * @returns the keys from the Json object as string array
+   * @param json map to get the keys from
+   * @returns the keys as Array<String>
    */
   public static keys(json: Json | MutJson): string[] {
     json;
@@ -37,8 +37,8 @@ export class Json {
    *
    * @macro (Object.values($args$))
    *
-   * @param json to get values from
-   * @returns the values from the Json as array of Json
+   * @param json map to get the values from
+   * @returns the values as Array<Json>
    */
   public static values(json: Json): Json[] {
     json;
@@ -50,8 +50,8 @@ export class Json {
    *
    * @macro (Object.entries($args$))
    *
-   * @param json to get values from
-   * @returns the entries from the Json as array of Json
+   * @param json map to get the entries from
+   * @returns the entries as Array<Json> consisting of enumerable [key, value] pairs
    */
   public static entries(json: Json): Json[] {
     json;
