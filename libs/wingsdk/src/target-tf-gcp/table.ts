@@ -52,7 +52,7 @@ export class Table extends ex.Table {
       byteLength: 4, // 4 bytes = 8 hex characters
     });
 
-    let columnsFamily: BigtableTableColumnFamily[] = [];
+    const columnsFamily: BigtableTableColumnFamily[] = [];
     for (let key in this.columns) {
       columnsFamily.push({ family: key });
     }
