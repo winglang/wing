@@ -1,37 +1,5 @@
 # [deep_equality.w](../../../../../examples/tests/valid/deep_equality.w) | compile | tf-aws
 
-## Cat.Struct.js
-```js
-module.exports = function(stdStruct) {
-  class Cat {
-    static jsonSchema() {
-      return {
-        id: "/Cat",
-        type: "object",
-        properties: {
-          name: { type: "string" },
-          age: { type: "number" },
-        },
-        required: [
-          "name",
-          "age",
-        ],
-        $defs: {
-        }
-      }
-    }
-    static fromJson(obj) {
-      return stdStruct._validate(obj, this.jsonSchema())
-    }
-    static _toInflightType(context) {
-      return `require("./Cat.Struct.js")(${ context._lift(stdStruct) })`;
-    }
-  }
-  return Cat;
-};
-
-```
-
 ## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $numA, $numB, $strA, $strB }) {
@@ -770,7 +738,6 @@ class $Root extends $stdlib.std.Resource {
     const arrayC = [4, 5, 6];
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Array with the same value",new $Closure9(this,"$Closure9"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Array with different values",new $Closure10(this,"$Closure10"));
-    const Cat = require("./Cat.Struct.js")($stdlib.std.Struct);
     const cat1 = ({"name": "Mittens","age": 3});
     const cat2 = ({"name": "Mittens","age": 3});
     const cat3 = ({"name": "Simba","age": 5});

@@ -1,42 +1,5 @@
 # [events.w](../../../../../../examples/tests/sdk_tests/bucket/events.w) | compile | tf-aws
 
-## CheckHitCountOptions.Struct.js
-```js
-module.exports = function(stdStruct) {
-  class CheckHitCountOptions {
-    static jsonSchema() {
-      return {
-        id: "/CheckHitCountOptions",
-        type: "object",
-        properties: {
-          key: { type: "string" },
-          type: { type: "string" },
-          source: { "$ref": "#/$defs/Source" },
-          count: { type: "number" },
-        },
-        required: [
-          "key",
-          "type",
-          "source",
-          "count",
-        ],
-        $defs: {
-          "Source": { type: "object", "properties": require("./Source.Struct.js")().jsonSchema().properties },
-        }
-      }
-    }
-    static fromJson(obj) {
-      return stdStruct._validate(obj, this.jsonSchema())
-    }
-    static _toInflightType(context) {
-      return `require("./CheckHitCountOptions.Struct.js")(${ context._lift(stdStruct) })`;
-    }
-  }
-  return CheckHitCountOptions;
-};
-
-```
-
 ## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $idsCounter, $table }) {
@@ -794,24 +757,6 @@ module.exports = function({ $Source, $b, $checkHitCount, $util_Util, $wait }) {
         ]
       }
     },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "cloudBucket_Encryption_77B6AEEF": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Encryption",
-            "uniqueId": "cloudBucket_Encryption_77B6AEEF"
-          }
-        },
-        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      }
-    },
     "aws_s3_object": {
       "cloudBucket_cloudBucket-oncreate-OnMessage-42558af0_S3Object_141E43E0": {
         "//": {
@@ -1313,7 +1258,6 @@ class $Root extends $stdlib.std.Resource {
     (b.onCreate(new $Closure4(this,"$Closure4")));
     (b.onEvent(new $Closure5(this,"$Closure5")));
     const wait = new $Closure6(this,"$Closure6");
-    const CheckHitCountOptions = require("./CheckHitCountOptions.Struct.js")($stdlib.std.Struct);
     const checkHitCount = new $Closure7(this,"$Closure7");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"hitCount is incremented according to the bucket event",new $Closure8(this,"$Closure8"),{ timeout: (std.Duration.fromSeconds(480)) });
   }

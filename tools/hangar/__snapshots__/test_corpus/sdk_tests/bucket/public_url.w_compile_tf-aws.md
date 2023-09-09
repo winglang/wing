@@ -123,40 +123,6 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
         "ignore_public_acls": false,
         "restrict_public_buckets": false
       }
-    },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "privateBucket_Encryption_0E029000": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/privateBucket/Encryption",
-            "uniqueId": "privateBucket_Encryption_0E029000"
-          }
-        },
-        "bucket": "${aws_s3_bucket.privateBucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      },
-      "publicBucket_Encryption_60BD8E69": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/publicBucket/Encryption",
-            "uniqueId": "publicBucket_Encryption_60BD8E69"
-          }
-        },
-        "bucket": "${aws_s3_bucket.publicBucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      }
     }
   }
 }

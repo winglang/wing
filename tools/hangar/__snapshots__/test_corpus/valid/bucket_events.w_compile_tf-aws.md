@@ -892,40 +892,6 @@ module.exports = function({ $b }) {
         ]
       }
     },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "b_Encryption_AF1DCBD9": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/b/Encryption",
-            "uniqueId": "b_Encryption_AF1DCBD9"
-          }
-        },
-        "bucket": "${aws_s3_bucket.b.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      },
-      "other_Encryption_D901EDA1": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/other/Encryption",
-            "uniqueId": "other_Encryption_D901EDA1"
-          }
-        },
-        "bucket": "${aws_s3_bucket.other.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      }
-    },
     "aws_s3_object": {
       "b_b-oncreate-OnMessage-1d3b2039_S3Object_5BB7AE5C": {
         "//": {

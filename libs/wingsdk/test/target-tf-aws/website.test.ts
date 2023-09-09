@@ -25,7 +25,6 @@ test("default website behavior", () => {
     "aws_cloudfront_origin_access_control",
     "aws_s3_bucket",
     "aws_s3_bucket_policy",
-    "aws_s3_bucket_server_side_encryption_configuration",
     "aws_s3_bucket_website_configuration",
     "aws_s3_object",
   ]);
@@ -72,7 +71,6 @@ test("website with add_json", () => {
     "aws_cloudfront_origin_access_control",
     "aws_s3_bucket",
     "aws_s3_bucket_policy",
-    "aws_s3_bucket_server_side_encryption_configuration",
     "aws_s3_bucket_website_configuration",
     "aws_s3_object",
   ]);
