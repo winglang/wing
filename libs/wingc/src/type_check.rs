@@ -3925,10 +3925,10 @@ impl<'a> TypeChecker<'a> {
 		&mut self,
 		scope: &Scope,
 		class_type: TypeRef,
-		class_env: &mut SymbolEnv,
+		env: &mut SymbolEnv,
 		init_name: &str,
 	) {
-		if &scope.statements.len() >= &1 {
+		if scope.statements.len() >= 1 {
 			match &scope.statements[0].kind {
 				StmtKind::SuperConstructor { arg_list } => {
 					if let Some(parent_class) = &class_type.as_class().unwrap().parent {
@@ -3940,44 +3940,7 @@ impl<'a> TypeChecker<'a> {
 							.collect_vec()[0]
 							.1;
 
-						let class_initializer = &class_type
-							.as_class()
-							.unwrap()
-							.methods(true)
-							.filter(|(name, _type)| name == init_name)
-							.collect_vec()[0]
-							.1;
-
-						// Create a temp init environment to use for typechecking args
-						let init_env = &mut SymbolEnv::new(
-							Some(class_env.get_ref()), // TODO: this doesn't make sense, the class_env is a type's env and we're creating an env for a function!
-							SymbolEnvKind::Function {
-								is_init: true,
-								sig: *class_initializer,
-							},
-							class_env.phase,
-							scope.statements[0].idx,
-						);
-
-						// add the initializer args to the init_env
-						for arg in class_initializer.as_function_sig().unwrap().parameters.iter() {
-							let sym = Symbol {
-								name: arg.name.clone(),
-								span: scope.statements[0].span.clone(),
-							};
-							match init_env.define(
-								&sym,
-								SymbolKind::make_free_variable(sym.clone(), arg.typeref, false, init_env.phase),
-								StatementIdx::Top,
-							) {
-								Err(type_error) => {
-									self.type_error(type_error);
-								}
-								_ => {}
-							};
-						}
-
-						let arg_list_types = self.type_check_arg_list(&arg_list, init_env);
+						let arg_list_types = self.type_check_arg_list(&arg_list, env);
 						self.type_check_arg_list_against_function_sig(
 							&arg_list,
 							parent_initializer.as_function_sig().unwrap(),
@@ -4673,7 +4636,9 @@ impl<'a> TypeChecker<'a> {
 				let mut property_variable = self.resolve_variable_from_instance_type(instance_type, property, env, object);
 
 				// Validate access modifier
-				self.check_access(env, instance_type, property, property_variable.access_modifier);
+				if !property_variable.type_.is_unresolved() {
+					self.check_access(env, instance_type, property, property_variable.access_modifier);
+				}
 
 				// if the object is `this`, then use the property's phase instead of the object phase
 				let property_phase = if property_variable.phase == Phase::Independent {
@@ -4760,7 +4725,9 @@ impl<'a> TypeChecker<'a> {
 						Some(SymbolKind::Variable(v)) => {
 							if let VariableKind::StaticMember = v.kind {
 								// Validate access modifier
-								self.check_access(env, type_, property, v.access_modifier);
+								if !v.type_.is_unresolved() {
+									self.check_access(env, type_, property, v.access_modifier);
+								}
 								(v.clone(), v.phase)
 							} else {
 								self.spanned_error_with_var(
