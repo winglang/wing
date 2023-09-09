@@ -57,7 +57,7 @@ export async function run(entrypoint?: string, options?: RunOptions) {
         await open(url);
       },
     },
-    requireAcceptTerms: process.stdin.isTTY,
+    requireAcceptTerms: !!process.stdin.isTTY,
   });
   const url = `http://localhost:${port}/`;
   if (openBrowser) {
