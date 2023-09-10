@@ -1,5 +1,9 @@
+// `Assert` needs to be imported from the index file due
+// to a bug in `v8-to-istanbul` that causes it to
+// exit with a non-zero code when trying to generate
+// coverage reports. See https://github.com/istanbuljs/v8-to-istanbul/issues/198
+import { Assert } from "../../src/testing";
 import { test, describe, expect } from "vitest";
-import { Assert } from "../../src/testing/assert";
 
 describe("equal string", () => {
   test("is equal", () => {
