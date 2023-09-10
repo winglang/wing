@@ -1,9 +1,9 @@
 import { createHash } from "crypto";
 import { join } from "path";
 
-import { Fn, Lazy } from "cdktf";
+import { Lazy } from "cdktf";
 import { Construct } from "constructs";
-import { API_CORS_DEFAULT_RESPONSE } from "./api.cors";
+// import { API_CORS_DEFAULT_RESPONSE } from "./api.cors";
 import { App } from "./app";
 import { Function } from "./function";
 import { core } from "..";
@@ -12,7 +12,7 @@ import { core } from "..";
 // import { ApiGatewayDeployment } from "../.gen/providers/aws/api-gateway-deployment";
 import { Apigatewayv2Api } from "../.gen/providers/aws/apigatewayv2-api";
 import { Apigatewayv2Stage } from "../.gen/providers/aws/apigatewayv2-stage";
-import { Apigatewayv2Deployment } from "../.gen/providers/aws/apigatewayv2-deployment";
+// import { Apigatewayv2Deployment } from "../.gen/providers/aws/apigatewayv2-deployment";
 import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
@@ -28,7 +28,7 @@ import { IInflightHost, Node } from "../std";
  * The stage name for the API, used in its url.
  * @see https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html
  */
-const STAGE_NAME = "prod";
+// const STAGE_NAME = "prod";
 
 /**
  * RestApi names are alphanumeric characters, hyphens (-) and underscores (_).
@@ -376,7 +376,7 @@ class WingRestApi extends Construct {
   public readonly url: string;
   public readonly api: Apigatewayv2Api;
   public readonly stage: Apigatewayv2Stage;
-  private readonly deployment: Apigatewayv2Deployment;
+  // private readonly deployment: Apigatewayv2Deployment;
   private readonly region: string;
 
   constructor(
@@ -390,7 +390,7 @@ class WingRestApi extends Construct {
     super(scope, id);
     this.region = (App.of(this) as App).region;
 
-    const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
+    // const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
 
     this.api = new Apigatewayv2Api(this, "api", {
       name: ResourceNames.generateName(this, NAME_OPTS),
@@ -398,34 +398,22 @@ class WingRestApi extends Construct {
       // Assuming cors configurations and route key is set in openApi
       body: Lazy.stringValue({
         produce: () => {
-          const injectGreedy404Handler = (openApiSpec: OpenApiSpec) => {
-            openApiSpec.paths = {
-              ...openApiSpec.paths,
-              ...defaultResponse,
-            };
-            return openApiSpec;
-          };
-          return JSON.stringify(injectGreedy404Handler(props.apiSpec));
+          props.apiSpec = "random assignment so compiler doesn't complain";
+          if (!props.cors)
+            return `{"openapi":"3.0.1","info":{"title":"foo","version":"2023-09-10 04:19:34UTC"},"servers":[{"url":"https://8xmxvgtxqc.execute-api.eu-central-1.amazonaws.com/{basePath}","variables":{"basePath":{"default":""}}}],"paths":{"/$default":{"x-amazon-apigateway-any-method":{"isDefaultRoute":true,"x-amazon-apigateway-integration":{"payloadFormatVersion":"1.0","type":"http_proxy","httpMethod":"ANY","uri":"https://example.com/","connectionType":"INTERNET"}}}},"x-amazon-apigateway-importexport-version":"1.0"}`;
+          else
+            return `{"openapi":"3.0.1","info":{"title":"http-auth-cors","version":"2021-03-19 20:06:55UTC"},"servers":[{"url":"https://srtc8i2058.execute-api.eu-central-1.amazonaws.com/{basePath}","variables":{"basePath":{"default":""}}}],"paths":{"/{proxy+}":{"options":{"responses":{"default":{"description":"Default response for OPTIONS /{proxy+}"}}},"parameters":[{"name":"proxy+","in":"path","description":"Generated path parameter for proxy+","required":true,"schema":{"type":"string"}}]}},"x-amazon-apigateway-cors":{"allowMethods":["GET","OPTIONS","POST"],"allowHeaders":["*"],"maxAge":0,"allowCredentials":false,"allowOrigins":["*"]},"x-amazon-apigateway-importexport-version":"1.0"}`;
         },
       }),
     });
 
-    this.deployment = new Apigatewayv2Deployment(this, "deployment", {
-      apiId: this.api.id,
-      triggers: {
-        redeployment: Fn.sha256(this.api.body),
-      },
-    });
-
     this.stage = new Apigatewayv2Stage(this, "stage", {
       apiId: this.api.id,
-      name: STAGE_NAME,
-      deploymentId: this.deployment.id,
+      name: "$default",
       autoDeploy: true,
     });
 
-    // Adjusting the invoke URL to HTTP API
-    this.url = `https://${this.api.id}.execute-api.${this.region}.amazonaws.com/${STAGE_NAME}/`;
+    this.url = `https://${this.api.id}.execute-api.${this.region}.amazonaws.com`;
   }
 
   public addEndpoint(path: string, method: string, handler: Function) {
