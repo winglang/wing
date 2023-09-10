@@ -547,7 +547,7 @@ error: Variable cannot be reassigned from inflight
    --> ../../../examples/tests/invalid/class.w:61:5
    |
 61 |     this.y = 1;
-   |     ^^^^^^^^^^^ Variable cannot be reassigned from inflight
+   |     ^^^^^^ Variable cannot be reassigned from inflight
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -1327,7 +1327,7 @@ exports[`inflight_reassign.w 1`] = `
   --> ../../../examples/tests/invalid/inflight_reassign.w:5:3
   |
 5 |   xvar = \\"hi\\";
-  |   ^^^^^^^^^^^^ Variable cannot be reassigned from inflight
+  |   ^^^^ Variable cannot be reassigned from inflight
 
 
 error: Variable is not reassignable
