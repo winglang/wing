@@ -1281,7 +1281,7 @@ impl<'s> Parser<'s> {
 	fn build_access_modifier(&self, am_node: Option<Node>) -> DiagnosticResult<AccessModifier> {
 		match am_node {
 			Some(am_node) => match self.node_text(&am_node) {
-				"pub" => Ok(AccessModifier::Public),
+				"public" => Ok(AccessModifier::Public),
 				"protected" => Ok(AccessModifier::Protected),
 				other => self.with_error(format!("Unknown access modifier {other}"), &am_node),
 			},
