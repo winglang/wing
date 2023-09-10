@@ -20,7 +20,7 @@ import { IInflightHost, Json } from "../std";
  * Table names must be between 1 and 50 characters. We reserve 9 characters for
  * a random ID, so the maximum length is 41.
  *
- * Must be 1-50 characters and must only contain
+ * Must only contain
  * hyphens, underscores, periods, letters and numbers.
  *
  * We skip generating a hash since we need to append a random string to the
@@ -36,7 +36,7 @@ const TABLE_NAME_OPTS: NameOptions = {
 
 const INSTANCE_NAME_OPTS: NameOptions = {
   maxLen: 30,
-  disallowedRegex: /()/g,
+  disallowedRegex: /([^a-z0-9.\-\_]+)/g,
 };
 
 /**

@@ -23,6 +23,11 @@ export interface AppProps extends CdktfAppProps {
    * @see https://cloud.google.com/storage/docs/locations
    */
   readonly storageLocation: string;
+
+  /**
+   * Should environment variable be overriden
+   */
+  readonly overrideEnv?: boolean;
 }
 
 /**
@@ -45,24 +50,33 @@ export class App extends CdktfApp {
   constructor(props: AppProps) {
     super(props);
 
-    this.projectId = props.projectId ?? process.env.GOOGLE_PROJECT_ID;
+    let projectId: string | undefined = props.projectId;
+    if (projectId === undefined && !props.overrideEnv) {
+      projectId = process.env.GOOGLE_PROJECT_ID
+    }
+    // this.projectId = projectId;
+
     // Using env variable for location is work around until we are
     // able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
-    if (this.projectId === undefined) {
+    if (projectId === undefined) {
       throw new Error(
         "A Google Cloud project ID must be specified through the GOOGLE_PROJECT_ID environment variable."
       );
     }
+    this.projectId = projectId;
 
-    this.storageLocation =
-      props.storageLocation ?? process.env.GOOGLE_STORAGE_LOCATION;
+    let storageLocation: string | undefined = props.storageLocation;
+    if (storageLocation === undefined && !props.overrideEnv) {
+      storageLocation = process.env.GOOGLE_STORAGE_LOCATION;
+    }
     // Using env variable for location is work around until we are
     // able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
-    if (this.storageLocation === undefined) {
+    if (storageLocation === undefined) {
       throw new Error(
         "A Google Cloud storage location must be specified through the GOOGLE_STORAGE_LOCATION environment variable."
       );
     }
+    this.storageLocation = storageLocation;
 
     new GoogleProvider(this, "google", {
       project: this.projectId,
