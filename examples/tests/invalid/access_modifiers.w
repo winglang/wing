@@ -1,7 +1,7 @@
 class Foo {
   protected protected_field: str;
   private_field: str;
-  pub public_field: str;
+  public public_field: str;
 
   init() {
     this.protected_field = "hello";
@@ -17,13 +17,22 @@ class Foo {
     this.public_method();
     this.protected_method();
     this.private_method();
+
+    class InnerFoo {
+      method(f: Foo) {
+        // Check access from inner class
+        log(f.protected_field);
+        log(f.private_field);
+        log(f.public_field);
+      }
+    }
   }
   
-  pub public_method() {}
+  public public_method() {}
   protected protected_method() {}
   private_method() {}
 
-  pub static public_static_method() {}
+  public static public_static_method() {}
   protected static protected_static_method() {}
   static private_static_method() {}
 }
@@ -86,3 +95,6 @@ class BarBar {
     //  ^ Cannot access private member
   }
 }
+
+// TODO: check jsii imported access modifiers
+

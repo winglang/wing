@@ -4884,19 +4884,24 @@ impl<'a> TypeChecker<'a> {
 			let var = field.as_variable().expect("Expected property to be a variable");
 
 			// Determine the access type of the property
+			// Lookup the property in the class env to find out in which class (perhaps an ancestor) it was defined
+			let SymbolEnvKind::Type(property_defined_in) = lookup_info.env.kind else {
+				panic!("Expected env to be a type env");
+			};
+			// Check if the class in which the property is defined is the current class nesting
 			let mut private_access = false;
 			let mut protected_access = false;
-			if let Some(current_class) = self.ctx.current_class().map(|udt| udt.clone()) {
+			for current_class in self.ctx.current_class_nesting() {
 				let current_class_type = self
 					.resolve_user_defined_type(&current_class, env, self.ctx.current_stmt_idx())
 					.unwrap();
-				// Lookup the property in the class env to find out in which class (perhaps an ancestor) it was defined
-				let SymbolEnvKind::Type(property_defined_in) = lookup_info.env.kind else {
-					panic!("Expected env to be a type env");
-				};
 				private_access = current_class_type.is_same_type_as(&property_defined_in);
 				protected_access = private_access || current_class_type.is_strict_subtype_of(&property_defined_in);
+				if private_access {
+					break;
+				}
 			}
+
 			// Compare the access type with what's allowed
 			match var.access_modifier {
 				AccessModifier::Private => {
@@ -5014,7 +5019,6 @@ impl<'a> TypeChecker<'a> {
 			(None, None)
 		}
 	}
-
 }
 
 impl VisitorWithContext for TypeChecker<'_> {
