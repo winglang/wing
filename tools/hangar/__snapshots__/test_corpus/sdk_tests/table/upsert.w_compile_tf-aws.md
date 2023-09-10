@@ -33,7 +33,7 @@ module.exports = function({ $table }) {
       }
       ));
       (await assertThrows(JSON_PROPERTY_GENDER_DOES_NOT_EXIST_ERROR,async () => {
-        ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })((await $table.get("luigi")), "gender");
+        ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })((await $table.get("mario")), "gender");
       }
       ));
       {((cond) => {if (!cond) throw new Error("assertion failed: table.get(\"luigi\").get(\"role\") == \"ghostbuster\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })((await $table.get("luigi")), "role"),"ghostbuster")))};
@@ -72,7 +72,7 @@ module.exports = function({ $table }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:upsert\",\"${aws_lambda_function.testupsert_Handler_C2ADB7F2.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -122,99 +122,6 @@ module.exports = function({ $table }) {
         "hash_key": "${aws_dynamodb_table.exTable.hash_key}",
         "item": "{\"name\":{\"S\":\"mario\"},\"gender\":{\"S\":\"male\"},\"role\":{\"S\":\"plumber\"}}",
         "table_name": "${aws_dynamodb_table.exTable.name}"
-      }
-    },
-    "aws_iam_role": {
-      "testupsert_Handler_IamRole_FE9E3158": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:upsert/Handler/IamRole",
-            "uniqueId": "testupsert_Handler_IamRole_FE9E3158"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      }
-    },
-    "aws_iam_role_policy": {
-      "testupsert_Handler_IamRolePolicy_EDEDA501": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:upsert/Handler/IamRolePolicy",
-            "uniqueId": "testupsert_Handler_IamRolePolicy_EDEDA501"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.exTable.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.testupsert_Handler_IamRole_FE9E3158.name}"
-      }
-    },
-    "aws_iam_role_policy_attachment": {
-      "testupsert_Handler_IamRolePolicyAttachment_42CC30D3": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:upsert/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testupsert_Handler_IamRolePolicyAttachment_42CC30D3"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testupsert_Handler_IamRole_FE9E3158.name}"
-      }
-    },
-    "aws_lambda_function": {
-      "testupsert_Handler_C2ADB7F2": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:upsert/Handler/Default",
-            "uniqueId": "testupsert_Handler_C2ADB7F2"
-          }
-        },
-        "architectures": [
-          "arm64"
-        ],
-        "environment": {
-          "variables": {
-            "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
-            "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"gender\":0,\"role\":0}",
-            "DYNAMODB_TABLE_NAME_d5d44f18_PRIMARY_KEY": "name",
-            "WING_FUNCTION_NAME": "Handler-c8aaf16e",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c8aaf16e",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testupsert_Handler_IamRole_FE9E3158.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testupsert_Handler_S3Object_F89ADA57.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      }
-    },
-    "aws_s3_bucket": {
-      "Code": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
-          }
-        },
-        "bucket_prefix": "code-c84a50b1-"
-      }
-    },
-    "aws_s3_object": {
-      "testupsert_Handler_S3Object_F89ADA57": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:upsert/Handler/S3Object",
-            "uniqueId": "testupsert_Handler_S3Object_F89ADA57"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
       }
     }
   }
