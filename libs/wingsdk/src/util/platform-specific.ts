@@ -1,5 +1,5 @@
-import { parse } from 'yaml';
-import { readFileSync } from 'fs';
+import { readFileSync } from "fs";
+import { parse } from "yaml";
 
 const getPlatformSpecificValue = (
   path: string,
@@ -28,9 +28,12 @@ const getPlatformSpecificValuesFromFile = (path: string, file: string) => {
   const data = readFileSync(file);
   const yamlObj = parse(data.toString());
   return yamlObj[`${path}`];
-}
+};
 
-export const getPlatformSpecificValues = (path: string, ...args: string[]): { [key: string]: string | undefined } | undefined => {
+export const getPlatformSpecificValues = (
+  path: string,
+  ...args: string[]
+): { [key: string]: string | undefined } | undefined => {
   const wingValues = process.env.WING_VALUES;
   const wingValuesFile = process.env.WING_VALUES_FILE;
   if (!wingValues && !wingValuesFile) return;
@@ -38,10 +41,14 @@ export const getPlatformSpecificValues = (path: string, ...args: string[]): { [k
   let result: { [key: string]: string | undefined } = {};
   if (wingValues) {
     for (const argument of args) {
-      result[`${argument}`] = getPlatformSpecificValue(path, argument, wingValues);
+      result[`${argument}`] = getPlatformSpecificValue(
+        path,
+        argument,
+        wingValues
+      );
     }
   } else if (wingValuesFile) {
     result = getPlatformSpecificValuesFromFile(path, wingValuesFile);
   }
   return result;
-}
+};

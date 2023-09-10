@@ -24,7 +24,13 @@ export class Domain extends cloud.Domain {
       "hostedZoneId"
     );
 
-    if (!values || (values && !values.iamCertificate && !values.acmCertificateArn && !values.hostedZoneId)) {
+    if (
+      !values ||
+      (values &&
+        !values.iamCertificate &&
+        !values.acmCertificateArn &&
+        !values.hostedZoneId)
+    ) {
       throw new Error(
         `'iamCertificate' or 'acmCertificateArn' is missing from ${this.node.path}
 ERROR: 'hostedZoneId' is missing from ${this.node.path}
