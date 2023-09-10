@@ -15,6 +15,105 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`access_modifiers.w 1`] = `
+"error: Cannot access protected member protected_field of Foo
+   --> ../../../examples/tests/invalid/access_modifiers.w:64:9
+   |
+64 | log(foo.protected_field);
+   |         ^^^^^^^^^^^^^^^ Cannot access protected member protected_field of Foo
+
+
+error: Cannot access private member private_field of Foo
+   --> ../../../examples/tests/invalid/access_modifiers.w:66:9
+   |
+66 | log(foo.private_field);
+   |         ^^^^^^^^^^^^^ Cannot access private member private_field of Foo
+
+
+error: Cannot access protected member protected_static_method of Foo
+   --> ../../../examples/tests/invalid/access_modifiers.w:70:5
+   |
+70 | Foo.protected_static_method();
+   |     ^^^^^^^^^^^^^^^^^^^^^^^ Cannot access protected member protected_static_method of Foo
+
+
+error: Cannot access private member private_static_method of Foo
+   --> ../../../examples/tests/invalid/access_modifiers.w:72:5
+   |
+72 | Foo.private_static_method();
+   |     ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member private_static_method of Foo
+
+
+error: Cannot access protected member protected_static_method of Foo
+   --> ../../../examples/tests/invalid/access_modifiers.w:92:9
+   |
+92 |     Foo.protected_static_method();
+   |         ^^^^^^^^^^^^^^^^^^^^^^^ Cannot access protected member protected_static_method of Foo
+
+
+error: Cannot access private member private_static_method of Foo
+   --> ../../../examples/tests/invalid/access_modifiers.w:94:9
+   |
+94 |     Foo.private_static_method();
+   |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member private_static_method of Foo
+
+
+error: Cannot access protected member protected_field of Foo
+   --> ../../../examples/tests/invalid/access_modifiers.w:78:13
+   |
+78 |     log(foo.protected_field);
+   |             ^^^^^^^^^^^^^^^ Cannot access protected member protected_field of Foo
+
+
+error: Cannot access private member private_field of Foo
+   --> ../../../examples/tests/invalid/access_modifiers.w:80:13
+   |
+80 |     log(foo.private_field);
+   |             ^^^^^^^^^^^^^ Cannot access private member private_field of Foo
+
+
+error: Cannot access protected member protected_method of Foo
+   --> ../../../examples/tests/invalid/access_modifiers.w:84:9
+   |
+84 |     foo.protected_method();
+   |         ^^^^^^^^^^^^^^^^ Cannot access protected member protected_method of Foo
+
+
+error: Cannot access private member private_method of Foo
+   --> ../../../examples/tests/invalid/access_modifiers.w:86:9
+   |
+86 |     foo.private_method();
+   |         ^^^^^^^^^^^^^^ Cannot access private member private_method of Foo
+
+
+error: Cannot access private member private_static_method of Foo
+   --> ../../../examples/tests/invalid/access_modifiers.w:57:9
+   |
+57 |     Foo.private_static_method();
+   |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member private_static_method of Foo
+
+
+error: Cannot access private member private_field of Bar
+   --> ../../../examples/tests/invalid/access_modifiers.w:44:14
+   |
+44 |     log(this.private_field);
+   |              ^^^^^^^^^^^^^ Cannot access private member private_field of Bar
+
+
+error: Cannot access private member private_method of Bar
+   --> ../../../examples/tests/invalid/access_modifiers.w:49:10
+   |
+49 |     this.private_method();
+   |          ^^^^^^^^^^^^^^ Cannot access private member private_method of Bar
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`access_static_from_instance.w 1`] = `
 "error: Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
   --> ../../../examples/tests/invalid/access_static_from_instance.w:4:3
@@ -23,11 +122,25 @@ exports[`access_static_from_instance.w 1`] = `
   |   ^^^^^^^^^^^^^^ Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
 
 
+error: Cannot access private member f of Foo
+   --> ../../../examples/tests/invalid/access_static_from_instance.w:19:5
+   |
+19 | foo.f; // Can't access static fields through instances
+   |     ^ Cannot access private member f of Foo
+
+
 error: Cannot access static property \\"f\\" from instance
    --> ../../../examples/tests/invalid/access_static_from_instance.w:19:5
    |
 19 | foo.f; // Can't access static fields through instances
    |     ^ Cannot access static property \\"f\\" from instance
+
+
+error: Cannot access private member m of Foo
+   --> ../../../examples/tests/invalid/access_static_from_instance.w:20:5
+   |
+20 | foo.m(); // Can't access static methods through instances
+   |     ^ Cannot access private member m of Foo
 
 
 error: Cannot access static property \\"m\\" from instance
@@ -195,6 +308,13 @@ exports[`call_inflight_from_preflight.w 1`] = `
   |
 4 | util.sleep(1s);
   | ^^^^^^^^^^^^^^ Cannot call into inflight phase while preflight
+
+
+error: Cannot access private member do of Foo
+   --> ../../../examples/tests/invalid/call_inflight_from_preflight.w:12:5
+   |
+12 | foo.do();
+   |     ^^ Cannot access private member do of Foo
 
 
 error: Cannot call into inflight phase while preflight
@@ -1225,7 +1345,49 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_ref_explicit_ops.w 1`] = `
-"error: Cannot qualify access to a lifted object of type \\"Queue\\" (see https://github.com/winglang/wing/issues/76 for more details)
+"error: Cannot access private member test4 of Test
+   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.w:60:18
+   |
+60 | test \\"test4\\" { f.test4(); }
+   |                  ^^^^^ Cannot access private member test4 of Test
+
+
+error: Cannot access private member test3 of Test
+   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.w:59:18
+   |
+59 | test \\"test3\\" { f.test3(); }
+   |                  ^^^^^ Cannot access private member test3 of Test
+
+
+error: Cannot access private member test2 of Test
+   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.w:58:18
+   |
+58 | test \\"test2\\" { f.test2(); }
+   |                  ^^^^^ Cannot access private member test2 of Test
+
+
+error: Cannot access private member test1 of Test
+   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.w:57:18
+   |
+57 | test \\"test1\\" { f.test1(); }
+   |                  ^^^^^ Cannot access private member test1 of Test
+
+
+error: Cannot access private member anotherStr of Another
+   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.w:52:25
+   |
+52 |     assert(this.another.anotherStr == \\"bang\\");
+   |                         ^^^^^^^^^^ Cannot access private member anotherStr of Another
+
+
+error: Cannot access private member inflightReturnsResource of Another
+   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.w:42:26
+   |
+42 |     let q = this.another.inflightReturnsResource();
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^ Cannot access private member inflightReturnsResource of Another
+
+
+error: Cannot qualify access to a lifted object of type \\"Queue\\" (see https://github.com/winglang/wing/issues/76 for more details)
    --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.w:13:12
    |
 13 |     return this.myQueue;
@@ -1254,7 +1416,28 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_ref_resource_sub_method.w 1`] = `
-"error: Cannot qualify access to a lifted object of type \\"Queue\\" (see https://github.com/winglang/wing/issues/76 for more details)
+"error: Cannot access private member test of Test
+   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.w:40:17
+   |
+40 | test \\"test\\" { f.test(); }
+   |                 ^^^^ Cannot access private member test of Test
+
+
+error: Cannot access private member inflightReturnsResource of Another
+   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.w:31:26
+   |
+31 |     let q = this.another.inflightReturnsResource();
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^ Cannot access private member inflightReturnsResource of Another
+
+
+error: Cannot access private member inflightReturnsResource2 of Another
+   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.w:34:27
+   |
+34 |     let q2 = this.another.inflightReturnsResource2();
+   |                           ^^^^^^^^^^^^^^^^^^^^^^^^ Cannot access private member inflightReturnsResource2 of Another
+
+
+error: Cannot qualify access to a lifted object of type \\"Queue\\" (see https://github.com/winglang/wing/issues/76 for more details)
    --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.w:13:12
    |
 13 |     return this.myQueue;
@@ -1276,7 +1459,14 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_ref_unknown_op.w 1`] = `
-"error: Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
+"error: Cannot access private member test of Test
+   --> ../../../examples/tests/invalid/inflight_ref_unknown_op.w:24:17
+   |
+24 | test \\"test\\" { f.test(); }
+   |                 ^^^^ Cannot access private member test of Test
+
+
+error: Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
    --> ../../../examples/tests/invalid/inflight_ref_unknown_op.w:13:13
    |
 13 |     let x = this.b;
@@ -1686,6 +1876,13 @@ error: Cannot assign nil value to variables without explicit optional type
    |                 ^^^^^^^^^^^^^^^ Cannot assign nil value to variables without explicit optional type
 
 
+error: Cannot access private member setBar of Foo
+   --> ../../../examples/tests/invalid/nil.w:20:7
+   |
+20 |   foo.setBar(nil);
+   |       ^^^^^^ Cannot access private member setBar of Foo
+
+
 error: Expected type to be \\"num\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"num?\\")
    --> ../../../examples/tests/invalid/nil.w:20:14
    |
@@ -1817,7 +2014,14 @@ Duration <DURATION>"
 exports[`panic.w 2`] = `"Panicked, backtrace not captured: Unsupported"`;
 
 exports[`preflight_from_inflight.w 1`] = `
-"error: Cannot call into preflight phase while inflight
+"error: Cannot access private member myPreflight of MyResource
+   --> ../../../examples/tests/invalid/preflight_from_inflight.w:15:12
+   |
+15 |     this.r.myPreflight();
+   |            ^^^^^^^^^^^ Cannot access private member myPreflight of MyResource
+
+
+error: Cannot call into preflight phase while inflight
    --> ../../../examples/tests/invalid/preflight_from_inflight.w:15:5
    |
 15 |     this.r.myPreflight();
@@ -1896,6 +2100,13 @@ error: Variable is not reassignable
    |     ^^^^^^ Variable is not reassignable
 
 
+error: Cannot access private member inner of InnerR
+   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:30:17
+   |
+30 |     this.innerR.inner = 2;
+   |                 ^^^^^ Cannot access private member inner of InnerR
+
+
 error: Variable is not reassignable
    --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:30:5
    |
@@ -1911,7 +2122,14 @@ Duration <DURATION>"
 `;
 
 exports[`resource_access_field_as_method.w 1`] = `
-"error: Expected a function or method, found \\"str\\"
+"error: Cannot access private member name of SomeResource
+  --> ../../../examples/tests/invalid/resource_access_field_as_method.w:9:3
+  |
+9 | x.name();
+  |   ^^^^ Cannot access private member name of SomeResource
+
+
+error: Expected a function or method, found \\"str\\"
   --> ../../../examples/tests/invalid/resource_access_field_as_method.w:9:1
   |
 9 | x.name();
@@ -2506,11 +2724,11 @@ Duration <DURATION>"
 `;
 
 exports[`unknown_field.w 1`] = `
-"error: No member \\"a\\" in class \\"String\\"
+"error: Unknown symbol \\"a\\"
   --> ../../../examples/tests/invalid/unknown_field.w:1:12
   |
 1 | std.String.a.b.c.fromJson();
-  |            ^ No member \\"a\\" in class \\"String\\"
+  |            ^ Unknown symbol \\"a\\"
 
 
  
