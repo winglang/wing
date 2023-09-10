@@ -7,6 +7,8 @@ import {
   ViewColumn,
   Uri,
   ExtensionContext,
+  Position,
+  Range,
 } from "vscode";
 
 import {
@@ -156,6 +158,42 @@ export const createConsoleManager = (
         logger.appendLine(err);
       },
     });
+
+    instance.client.onOpenFileInEditor({
+      onData: async (data) => {
+        const path = data?.path;
+        const line = data?.line - 1 || 0;
+        const column = data?.column || 0;
+
+        const openEditor = window.visibleTextEditors.find((editor) => {
+          return editor.document.uri.fsPath === path;
+        });
+
+        if (!openEditor || !openEditor.viewColumn) {
+          await commands.executeCommand(
+            "vscode.open",
+            Uri.file(path),
+            new Position(line, column)
+          );
+          return;
+        }
+
+        await commands.executeCommand("workbench.action.focusFirstEditorGroup");
+        for (let i = 0; i < openEditor.viewColumn - 1; i++) {
+          await commands.executeCommand("workbench.action.focusNextGroup");
+        }
+        await window.showTextDocument(openEditor.document, {
+          selection: new Range(
+            new Position(line, column),
+            new Position(line, column)
+          ),
+        });
+      },
+      onError: (err) => {
+        logger.appendLine(err);
+      },
+    });
+
     instances[instance.id] = instance;
 
     await setActiveInstance(instance.id);
@@ -244,11 +282,6 @@ export const createConsoleManager = (
     });
 
     context.subscriptions.push(webviewPanel, explorerView, testsExplorerView);
-
-    const node = await resourcesExplorer.getChildren();
-    if (node[0]?.id) {
-      await explorerView?.reveal(new ResourceItem(node[0].id));
-    }
     activeInstanceId = instanceId;
   };
 

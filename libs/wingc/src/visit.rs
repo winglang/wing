@@ -170,7 +170,11 @@ where
 		StmtKind::Expression(expr) => {
 			v.visit_expr(&expr);
 		}
-		StmtKind::Assignment { variable, value } => {
+		StmtKind::Assignment {
+			kind: _,
+			variable,
+			value,
+		} => {
 			v.visit_reference(variable);
 			v.visit_expr(value);
 		}

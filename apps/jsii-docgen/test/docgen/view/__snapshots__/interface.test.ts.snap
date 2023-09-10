@@ -4886,7 +4886,7 @@ Object {
           },
         },
       ],
-      "usage": "grant(grantee: IGrantable, actions: str): Grant",
+      "usage": "grant(grantee: IGrantable, ...actions: Array<str>): Grant",
     },
     Object {
       "displayName": "grantPull",
@@ -5312,7 +5312,7 @@ Add a policy statement to the repository's resource policy.
 ## \`grant\` <a name=\\"grant\\" id=\\"@aws-cdk/aws-ecr.IRepository.grant\\"></a>
 
 \`\`\`wing
-grant(grantee: IGrantable, actions: str): Grant
+grant(grantee: IGrantable, ...actions: Array<str>): Grant
 \`\`\`
 
 Grant the given principal identity permissions to perform the actions on this repository.

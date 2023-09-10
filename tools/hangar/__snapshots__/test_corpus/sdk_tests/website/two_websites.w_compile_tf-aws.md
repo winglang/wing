@@ -114,7 +114,7 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:deploying two websites\",\"${aws_lambda_function.testdeployingtwowebsites_Handler_DDBE7E21.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -249,84 +249,7 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
         "signing_protocol": "sigv4"
       }
     },
-    "aws_iam_role": {
-      "testdeployingtwowebsites_Handler_IamRole_C5BF60A5": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:deploying two websites/Handler/IamRole",
-            "uniqueId": "testdeployingtwowebsites_Handler_IamRole_C5BF60A5"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      }
-    },
-    "aws_iam_role_policy": {
-      "testdeployingtwowebsites_Handler_IamRolePolicy_E99ED47B": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:deploying two websites/Handler/IamRolePolicy",
-            "uniqueId": "testdeployingtwowebsites_Handler_IamRolePolicy_E99ED47B"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testdeployingtwowebsites_Handler_IamRole_C5BF60A5.name}"
-      }
-    },
-    "aws_iam_role_policy_attachment": {
-      "testdeployingtwowebsites_Handler_IamRolePolicyAttachment_54B8671A": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:deploying two websites/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testdeployingtwowebsites_Handler_IamRolePolicyAttachment_54B8671A"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testdeployingtwowebsites_Handler_IamRole_C5BF60A5.name}"
-      }
-    },
-    "aws_lambda_function": {
-      "testdeployingtwowebsites_Handler_DDBE7E21": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:deploying two websites/Handler/Default",
-            "uniqueId": "testdeployingtwowebsites_Handler_DDBE7E21"
-          }
-        },
-        "architectures": [
-          "arm64"
-        ],
-        "environment": {
-          "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8683851",
-            "WING_TARGET": "tf-aws",
-            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_15": "${jsonencode(\"https://${aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name}\")}",
-            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_30": "${jsonencode(\"https://${aws_cloudfront_distribution.website-2_Distribution_F1FA4680.domain_name}\")}"
-          }
-        },
-        "function_name": "Handler-c8683851",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testdeployingtwowebsites_Handler_IamRole_C5BF60A5.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testdeployingtwowebsites_Handler_S3Object_E54888BB.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      }
-    },
     "aws_s3_bucket": {
-      "Code": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
-          }
-        },
-        "bucket_prefix": "code-c84a50b1-"
-      },
       "cloudWebsite_WebsiteBucket_EB03D355": {
         "//": {
           "metadata": {
@@ -368,40 +291,6 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
         },
         "bucket": "${aws_s3_bucket.website-2_WebsiteBucket_59576A0C.id}",
         "policy": "${data.aws_iam_policy_document.website-2_AllowDistributionReadOnly_994269D9.json}"
-      }
-    },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "cloudWebsite_Encryption_6A8A4E29": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Website/Encryption",
-            "uniqueId": "cloudWebsite_Encryption_6A8A4E29"
-          }
-        },
-        "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      },
-      "website-2_Encryption_A1B72094": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/website-2/Encryption",
-            "uniqueId": "website-2_Encryption_A1B72094"
-          }
-        },
-        "bucket": "${aws_s3_bucket.website-2_WebsiteBucket_59576A0C.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
       }
     },
     "aws_s3_bucket_website_configuration": {
@@ -462,17 +351,6 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
         "key": "/inner-folder/other.html",
         "source": "<SOURCE>",
         "source_hash": "${filemd5(<SOURCE>)}"
-      },
-      "testdeployingtwowebsites_Handler_S3Object_E54888BB": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:deploying two websites/Handler/S3Object",
-            "uniqueId": "testdeployingtwowebsites_Handler_S3Object_E54888BB"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
       },
       "website-2_File--indexhtml_E2F4EB6E": {
         "//": {
