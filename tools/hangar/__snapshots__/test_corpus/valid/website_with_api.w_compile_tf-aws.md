@@ -53,12 +53,12 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $testing_Ass
     async handle() {
       const response = (await $http_Util.fetch(($api_url + "/users"),({"method": $http_HttpMethod.GET,"headers": ({"Content-Type": "text/json"})})));
       const headers = response.headers;
-      (await $testing_Assert.numEqual(response.status,200));
-      (await $testing_Assert.strEqual((headers)["access-control-allow-origin"],"*"));
-      (await $testing_Assert.strEqual((headers)["access-control-expose-headers"],"Content-Type"));
-      (await $testing_Assert.strEqual((headers)["access-control-allow-credentials"],"false"));
-      (await $testing_Assert.strIsNil((headers)["access-control-allow-headers"]));
-      (await $testing_Assert.strIsNil((headers)["access-control-allow-methods"]));
+      (await $testing_Assert.equal(response.status,200));
+      (await $testing_Assert.equal((headers)["access-control-allow-origin"],"*"));
+      (await $testing_Assert.equal((headers)["access-control-expose-headers"],"Content-Type"));
+      (await $testing_Assert.equal((headers)["access-control-allow-credentials"],"false"));
+      (await $testing_Assert.isNil((headers)["access-control-allow-headers"]));
+      (await $testing_Assert.isNil((headers)["access-control-allow-methods"]));
     }
   }
   return $Closure3;
@@ -78,9 +78,9 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $testing_Ass
     async handle() {
       const response = (await $http_Util.fetch(($api_url + "/users"),({"method": $http_HttpMethod.OPTIONS,"headers": ({"Content-Type": "text/json"})})));
       const headers = response.headers;
-      (await $testing_Assert.numEqual(response.status,204));
-      (await $testing_Assert.strEqual((headers)["access-control-allow-methods"],"GET,POST,OPTIONS"));
-      (await $testing_Assert.strEqual((headers)["access-control-allow-headers"],"Content-Type"));
+      (await $testing_Assert.equal(response.status,204));
+      (await $testing_Assert.equal((headers)["access-control-allow-methods"],"GET,POST,OPTIONS"));
+      (await $testing_Assert.equal((headers)["access-control-allow-headers"],"Content-Type"));
     }
   }
   return $Closure4;

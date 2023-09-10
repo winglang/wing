@@ -11,7 +11,7 @@ module.exports = function({ $InflightB, $testing_Assert }) {
     }
     async handle() {
       const b = new $InflightB();
-      (await $testing_Assert.strEqual((await b.description()),"InflightB extends InflightA"));
+      (await $testing_Assert.equal((await b.description()),"InflightB extends InflightA"));
     }
   }
   return $Closure1;
@@ -29,7 +29,7 @@ module.exports = function({ $extended, $testing_Assert }) {
       return $obj;
     }
     async handle() {
-      (await $testing_Assert.strEqual((await $extended.do()),"value"));
+      (await $testing_Assert.equal((await $extended.do()),"value"));
     }
   }
   return $Closure2;
@@ -535,7 +535,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const e = new E(this,"E");
-    (testing.Assert.strEqual((e.description()),"E extends C extends B"));
+    (testing.Assert.equal((e.description()),"E extends C extends B"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:super call inflight",new $Closure1(this,"$Closure1"));
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const extended = new ExtendedClass(this,"ExtendedClass");

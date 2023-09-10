@@ -30,12 +30,12 @@ module.exports = function({ $apiDefaultCors_url, $http_Util, $testing_Assert }) 
     async handle() {
       const response = (await $http_Util.get(($apiDefaultCors_url + "/users")));
       const headers = response.headers;
-      (await $testing_Assert.numEqual(response.status,200));
-      (await $testing_Assert.strEqual((headers)["access-control-allow-origin"],"*"));
-      (await $testing_Assert.strEqual((headers)["access-control-allow-credentials"],"false"));
-      (await $testing_Assert.strEqual((headers)["access-control-expose-headers"],""));
-      (await $testing_Assert.strIsNil((headers)["access-control-allow-headers"]));
-      (await $testing_Assert.strIsNil((headers)["access-control-allow-methods"]));
+      (await $testing_Assert.equal(response.status,200));
+      (await $testing_Assert.equal((headers)["access-control-allow-origin"],"*"));
+      (await $testing_Assert.equal((headers)["access-control-allow-credentials"],"false"));
+      (await $testing_Assert.equal((headers)["access-control-expose-headers"],""));
+      (await $testing_Assert.isNil((headers)["access-control-allow-headers"]));
+      (await $testing_Assert.isNil((headers)["access-control-allow-methods"]));
     }
   }
   return $Closure2;
@@ -55,12 +55,12 @@ module.exports = function({ $apiDefaultCors_url, $http_HttpMethod, $http_Util, $
     async handle() {
       const response = (await $http_Util.fetch(($apiDefaultCors_url + "/users"),({"method": $http_HttpMethod.OPTIONS})));
       const headers = response.headers;
-      (await $testing_Assert.numEqual(response.status,204));
-      (await $testing_Assert.strEqual((headers)["access-control-allow-headers"],"Content-Type,Authorization,X-Requested-With"));
-      (await $testing_Assert.strEqual((headers)["access-control-allow-methods"],"GET,POST,PUT,DELETE,HEAD,OPTIONS"));
-      (await $testing_Assert.strEqual((headers)["access-control-allow-origin"],"*"));
-      (await $testing_Assert.strIsNil((headers)["access-control-allow-credentials"]));
-      (await $testing_Assert.strIsNil((headers)["access-control-expose-headers"]));
+      (await $testing_Assert.equal(response.status,204));
+      (await $testing_Assert.equal((headers)["access-control-allow-headers"],"Content-Type,Authorization,X-Requested-With"));
+      (await $testing_Assert.equal((headers)["access-control-allow-methods"],"GET,POST,PUT,DELETE,HEAD,OPTIONS"));
+      (await $testing_Assert.equal((headers)["access-control-allow-origin"],"*"));
+      (await $testing_Assert.isNil((headers)["access-control-allow-credentials"]));
+      (await $testing_Assert.isNil((headers)["access-control-expose-headers"]));
     }
   }
   return $Closure3;
