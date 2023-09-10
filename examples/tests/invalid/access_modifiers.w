@@ -97,4 +97,4 @@ class BarBar {
 }
 
 // TODO: check jsii imported access modifiers
-
+// TODO: add tests and implement checks for overriding methods with different access modifiers
