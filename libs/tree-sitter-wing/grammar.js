@@ -529,7 +529,7 @@ module.exports = grammar({
 
     async_modifier: ($) => "async",
 
-    access_modifier: ($) => choice("pub", "protected"),
+    access_modifier: ($) => choice("public", "protected"),
 
     variadic: ($) => "...",
 
