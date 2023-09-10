@@ -3,7 +3,7 @@ import { Server } from "http";
 import { AddressInfo } from "net";
 import { join } from "path";
 import express from "express";
-import * as superjsonLib from "superjson";
+import { makeSimulatorClient } from "./client";
 import { Tree } from "./tree";
 import { SDK_VERSION } from "../constants";
 import { ConstructTree, TREE_FILE_PATH } from "../core";
@@ -255,17 +255,27 @@ export class Simulator {
 
     app.post("/v1/call", async (req, res, next) => {
       try {
-        const request = superjsonLib.deserialize<SimulatorServerRequest>(
-          req.body
-        );
-        let { handle, method, args } = request;
+        let request: SimulatorServerRequest = req.body;
+        // assumption: Wing APIs don't distinguish between null and undefined, so we can swap them
+        request = JSON.parse(JSON.stringify(request), (_key, value) => {
+          return value === null ? undefined : value;
+        });
+
+        const { handle, method, args } = request;
         const resource = this._handles.find(handle);
 
         try {
           const result = await (resource as any)[method](...args);
-          res.status(200).json(superjsonLib.serialize({ result }));
+          // assumption: Wing APIs are only returning JSON-serializable values
+          res.status(200).json({ result } as SimulatorServerResponse);
         } catch (err) {
-          res.status(500).json(superjsonLib.serialize({ error: err }));
+          if (err instanceof Error) {
+            res.status(500).json({
+              error: err.stack ?? err.message,
+            } as SimulatorServerResponse);
+          } else {
+            res.status(500).json({ error: err } as SimulatorServerResponse);
+          }
         }
       } catch (err) {
         return next(err);
@@ -673,41 +683,6 @@ class HandleManager {
   }
 }
 
-/* eslint-disable @typescript-eslint/no-require-imports */
-export function makeSimulatorClient(url: string, handle: string) {
-  const superjson = require("superjson") as typeof superjsonLib;
-  return new Proxy(
-    {},
-    {
-      get: function (_target, method, _receiver) {
-        return async function () {
-          const body = {
-            handle,
-            method,
-            args: Array.from(arguments),
-          };
-          const resp = await fetch(url + "/v1/call", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: superjson.stringify(body),
-          });
-          const json = await resp.json();
-          const parsed = superjson.deserialize<SimulatorServerResponse>(json);
-          if (parsed.error) {
-            if (parsed.error instanceof Error) {
-              throw parsed.error;
-            } else {
-              throw new Error(parsed.error);
-            }
-          }
-          return parsed.result;
-        };
-      },
-    }
-  );
-}
-/* eslint-enable @typescript-eslint/no-require-imports */
-
 /**
  * Shared interface for resource simulations.
  */
@@ -762,18 +737,26 @@ export interface ConnectionData {
   readonly name: string;
 }
 
+/**
+ * Internal schema for requests to the simulator server's /call endpoint.
+ * Subject to breaking changes.
+ */
 export interface SimulatorServerRequest {
   /** The resource handle (an ID unique among resources in the simulation). */
-  handle: string;
+  readonly handle: string;
   /** The method to call on the resource. */
-  method: string;
+  readonly method: string;
   /** The arguments to the method. */
-  args: any[];
+  readonly args: any[];
 }
 
+/**
+ * Internal schema for responses from the simulator server's /call endpoint.
+ * Subject to breaking changes.
+ */
 export interface SimulatorServerResponse {
   /** The result of the method call. */
-  result?: any;
+  readonly result?: any;
   /** The error that occurred during the method call. */
-  error?: any;
+  readonly error?: any;
 }

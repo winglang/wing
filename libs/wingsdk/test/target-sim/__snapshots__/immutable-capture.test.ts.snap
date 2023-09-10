@@ -135,29 +135,26 @@ my_buckets: [(function() {
   }
 
   return (function makeSimulatorClient(url, handle) {
-    const superjson = require(\\"superjson\\");
     return new Proxy({}, {
         get: function (_target, method, _receiver) {
-            return async function () {
+            return async function (...args) {
                 const body = {
                     handle,
-                    method,
-                    args: Array.from(arguments),
+                    method: method,
+                    args,
                 };
                 const resp = await fetch(url + \\"/v1/call\\", {
                     method: \\"POST\\",
                     headers: { \\"Content-Type\\": \\"application/json\\" },
-                    body: superjson.stringify(body),
+                    body: JSON.stringify(body),
                 });
-                const json = await resp.json();
-                const parsed = superjson.deserialize(json);
+                let parsed = await resp.json();
+                // assumption: Wing APIs don't distinguish between null and undefined, so we can swap them
+                parsed = JSON.parse(JSON.stringify(parsed), (_key, value) => {
+                    return value === null ? undefined : value;
+                });
                 if (parsed.error) {
-                    if (parsed.error instanceof Error) {
-                        throw parsed.error;
-                    }
-                    else {
-                        throw new Error(parsed.error);
-                    }
+                    throw new Error(parsed.error);
                 }
                 return parsed.result;
             };
@@ -175,29 +172,26 @@ my_buckets: [(function() {
   }
 
   return (function makeSimulatorClient(url, handle) {
-    const superjson = require(\\"superjson\\");
     return new Proxy({}, {
         get: function (_target, method, _receiver) {
-            return async function () {
+            return async function (...args) {
                 const body = {
                     handle,
-                    method,
-                    args: Array.from(arguments),
+                    method: method,
+                    args,
                 };
                 const resp = await fetch(url + \\"/v1/call\\", {
                     method: \\"POST\\",
                     headers: { \\"Content-Type\\": \\"application/json\\" },
-                    body: superjson.stringify(body),
+                    body: JSON.stringify(body),
                 });
-                const json = await resp.json();
-                const parsed = superjson.deserialize(json);
+                let parsed = await resp.json();
+                // assumption: Wing APIs don't distinguish between null and undefined, so we can swap them
+                parsed = JSON.parse(JSON.stringify(parsed), (_key, value) => {
+                    return value === null ? undefined : value;
+                });
                 if (parsed.error) {
-                    if (parsed.error instanceof Error) {
-                        throw parsed.error;
-                    }
-                    else {
-                        throw new Error(parsed.error);
-                    }
+                    throw new Error(parsed.error);
                 }
                 return parsed.result;
             };
@@ -1101,29 +1095,26 @@ my_map: new Map([[\\"foo\\",(function() {
   }
 
   return (function makeSimulatorClient(url, handle) {
-    const superjson = require(\\"superjson\\");
     return new Proxy({}, {
         get: function (_target, method, _receiver) {
-            return async function () {
+            return async function (...args) {
                 const body = {
                     handle,
-                    method,
-                    args: Array.from(arguments),
+                    method: method,
+                    args,
                 };
                 const resp = await fetch(url + \\"/v1/call\\", {
                     method: \\"POST\\",
                     headers: { \\"Content-Type\\": \\"application/json\\" },
-                    body: superjson.stringify(body),
+                    body: JSON.stringify(body),
                 });
-                const json = await resp.json();
-                const parsed = superjson.deserialize(json);
+                let parsed = await resp.json();
+                // assumption: Wing APIs don't distinguish between null and undefined, so we can swap them
+                parsed = JSON.parse(JSON.stringify(parsed), (_key, value) => {
+                    return value === null ? undefined : value;
+                });
                 if (parsed.error) {
-                    if (parsed.error instanceof Error) {
-                        throw parsed.error;
-                    }
-                    else {
-                        throw new Error(parsed.error);
-                    }
+                    throw new Error(parsed.error);
                 }
                 return parsed.result;
             };
@@ -1141,29 +1132,26 @@ my_map: new Map([[\\"foo\\",(function() {
   }
 
   return (function makeSimulatorClient(url, handle) {
-    const superjson = require(\\"superjson\\");
     return new Proxy({}, {
         get: function (_target, method, _receiver) {
-            return async function () {
+            return async function (...args) {
                 const body = {
                     handle,
-                    method,
-                    args: Array.from(arguments),
+                    method: method,
+                    args,
                 };
                 const resp = await fetch(url + \\"/v1/call\\", {
                     method: \\"POST\\",
                     headers: { \\"Content-Type\\": \\"application/json\\" },
-                    body: superjson.stringify(body),
+                    body: JSON.stringify(body),
                 });
-                const json = await resp.json();
-                const parsed = superjson.deserialize(json);
+                let parsed = await resp.json();
+                // assumption: Wing APIs don't distinguish between null and undefined, so we can swap them
+                parsed = JSON.parse(JSON.stringify(parsed), (_key, value) => {
+                    return value === null ? undefined : value;
+                });
                 if (parsed.error) {
-                    if (parsed.error instanceof Error) {
-                        throw parsed.error;
-                    }
-                    else {
-                        throw new Error(parsed.error);
-                    }
+                    throw new Error(parsed.error);
                 }
                 return parsed.result;
             };
@@ -1965,29 +1953,26 @@ my_struct: {\\"bucky\\": (function() {
   }
 
   return (function makeSimulatorClient(url, handle) {
-    const superjson = require(\\"superjson\\");
     return new Proxy({}, {
         get: function (_target, method, _receiver) {
-            return async function () {
+            return async function (...args) {
                 const body = {
                     handle,
-                    method,
-                    args: Array.from(arguments),
+                    method: method,
+                    args,
                 };
                 const resp = await fetch(url + \\"/v1/call\\", {
                     method: \\"POST\\",
                     headers: { \\"Content-Type\\": \\"application/json\\" },
-                    body: superjson.stringify(body),
+                    body: JSON.stringify(body),
                 });
-                const json = await resp.json();
-                const parsed = superjson.deserialize(json);
+                let parsed = await resp.json();
+                // assumption: Wing APIs don't distinguish between null and undefined, so we can swap them
+                parsed = JSON.parse(JSON.stringify(parsed), (_key, value) => {
+                    return value === null ? undefined : value;
+                });
                 if (parsed.error) {
-                    if (parsed.error instanceof Error) {
-                        throw parsed.error;
-                    }
-                    else {
-                        throw new Error(parsed.error);
-                    }
+                    throw new Error(parsed.error);
                 }
                 return parsed.result;
             };
@@ -2005,29 +1990,26 @@ my_struct: {\\"bucky\\": (function() {
   }
 
   return (function makeSimulatorClient(url, handle) {
-    const superjson = require(\\"superjson\\");
     return new Proxy({}, {
         get: function (_target, method, _receiver) {
-            return async function () {
+            return async function (...args) {
                 const body = {
                     handle,
-                    method,
-                    args: Array.from(arguments),
+                    method: method,
+                    args,
                 };
                 const resp = await fetch(url + \\"/v1/call\\", {
                     method: \\"POST\\",
                     headers: { \\"Content-Type\\": \\"application/json\\" },
-                    body: superjson.stringify(body),
+                    body: JSON.stringify(body),
                 });
-                const json = await resp.json();
-                const parsed = superjson.deserialize(json);
+                let parsed = await resp.json();
+                // assumption: Wing APIs don't distinguish between null and undefined, so we can swap them
+                parsed = JSON.parse(JSON.stringify(parsed), (_key, value) => {
+                    return value === null ? undefined : value;
+                });
                 if (parsed.error) {
-                    if (parsed.error instanceof Error) {
-                        throw parsed.error;
-                    }
-                    else {
-                        throw new Error(parsed.error);
-                    }
+                    throw new Error(parsed.error);
                 }
                 return parsed.result;
             };
@@ -2045,29 +2027,26 @@ my_struct: {\\"bucky\\": (function() {
   }
 
   return (function makeSimulatorClient(url, handle) {
-    const superjson = require(\\"superjson\\");
     return new Proxy({}, {
         get: function (_target, method, _receiver) {
-            return async function () {
+            return async function (...args) {
                 const body = {
                     handle,
-                    method,
-                    args: Array.from(arguments),
+                    method: method,
+                    args,
                 };
                 const resp = await fetch(url + \\"/v1/call\\", {
                     method: \\"POST\\",
                     headers: { \\"Content-Type\\": \\"application/json\\" },
-                    body: superjson.stringify(body),
+                    body: JSON.stringify(body),
                 });
-                const json = await resp.json();
-                const parsed = superjson.deserialize(json);
+                let parsed = await resp.json();
+                // assumption: Wing APIs don't distinguish between null and undefined, so we can swap them
+                parsed = JSON.parse(JSON.stringify(parsed), (_key, value) => {
+                    return value === null ? undefined : value;
+                });
                 if (parsed.error) {
-                    if (parsed.error instanceof Error) {
-                        throw parsed.error;
-                    }
-                    else {
-                        throw new Error(parsed.error);
-                    }
+                    throw new Error(parsed.error);
                 }
                 return parsed.result;
             };
@@ -2085,29 +2064,26 @@ my_struct: {\\"bucky\\": (function() {
   }
 
   return (function makeSimulatorClient(url, handle) {
-    const superjson = require(\\"superjson\\");
     return new Proxy({}, {
         get: function (_target, method, _receiver) {
-            return async function () {
+            return async function (...args) {
                 const body = {
                     handle,
-                    method,
-                    args: Array.from(arguments),
+                    method: method,
+                    args,
                 };
                 const resp = await fetch(url + \\"/v1/call\\", {
                     method: \\"POST\\",
                     headers: { \\"Content-Type\\": \\"application/json\\" },
-                    body: superjson.stringify(body),
+                    body: JSON.stringify(body),
                 });
-                const json = await resp.json();
-                const parsed = superjson.deserialize(json);
+                let parsed = await resp.json();
+                // assumption: Wing APIs don't distinguish between null and undefined, so we can swap them
+                parsed = JSON.parse(JSON.stringify(parsed), (_key, value) => {
+                    return value === null ? undefined : value;
+                });
                 if (parsed.error) {
-                    if (parsed.error instanceof Error) {
-                        throw parsed.error;
-                    }
-                    else {
-                        throw new Error(parsed.error);
-                    }
+                    throw new Error(parsed.error);
                 }
                 return parsed.result;
             };
@@ -2125,29 +2101,26 @@ my_struct: {\\"bucky\\": (function() {
   }
 
   return (function makeSimulatorClient(url, handle) {
-    const superjson = require(\\"superjson\\");
     return new Proxy({}, {
         get: function (_target, method, _receiver) {
-            return async function () {
+            return async function (...args) {
                 const body = {
                     handle,
-                    method,
-                    args: Array.from(arguments),
+                    method: method,
+                    args,
                 };
                 const resp = await fetch(url + \\"/v1/call\\", {
                     method: \\"POST\\",
                     headers: { \\"Content-Type\\": \\"application/json\\" },
-                    body: superjson.stringify(body),
+                    body: JSON.stringify(body),
                 });
-                const json = await resp.json();
-                const parsed = superjson.deserialize(json);
+                let parsed = await resp.json();
+                // assumption: Wing APIs don't distinguish between null and undefined, so we can swap them
+                parsed = JSON.parse(JSON.stringify(parsed), (_key, value) => {
+                    return value === null ? undefined : value;
+                });
                 if (parsed.error) {
-                    if (parsed.error instanceof Error) {
-                        throw parsed.error;
-                    }
-                    else {
-                        throw new Error(parsed.error);
-                    }
+                    throw new Error(parsed.error);
                 }
                 return parsed.result;
             };

@@ -291,10 +291,6 @@
       "type": "bundled"
     },
     {
-      "name": "superjson",
-      "type": "bundled"
-    },
-    {
       "name": "uuid",
       "type": "bundled"
     },
