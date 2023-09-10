@@ -428,6 +428,13 @@ pub enum BringSource {
 }
 
 #[derive(Debug)]
+pub enum AssignmentKind {
+	Assign,
+	AssignIncr,
+	AssignDecr,
+}
+
+#[derive(Debug)]
 pub struct IfLet {
 	pub reassignable: bool,
 	pub var_name: Symbol,
@@ -474,6 +481,7 @@ pub enum StmtKind {
 	Throw(Expr),
 	Expression(Expr),
 	Assignment {
+		kind: AssignmentKind,
 		variable: Reference,
 		value: Expr,
 	},

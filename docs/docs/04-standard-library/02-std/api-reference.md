@@ -687,7 +687,7 @@ Immutable Json.
 | <code><a href="#@winglang/sdk.std.Json.asBool">asBool</a></code> | Convert Json element to boolean if possible. |
 | <code><a href="#@winglang/sdk.std.Json.asNum">asNum</a></code> | Convert Json element to number if possible. |
 | <code><a href="#@winglang/sdk.std.Json.asStr">asStr</a></code> | Convert Json element to string if possible. |
-| <code><a href="#@winglang/sdk.std.Json.get">get</a></code> | Returns a specified element from the Json. |
+| <code><a href="#@winglang/sdk.std.Json.get">get</a></code> | Returns the value associated with the specified Json key. |
 | <code><a href="#@winglang/sdk.std.Json.getAt">getAt</a></code> | Returns a specified element at a given index from Json Array. |
 | <code><a href="#@winglang/sdk.std.Json.tryAsBool">tryAsBool</a></code> | Convert Json element to boolean if possible. |
 | <code><a href="#@winglang/sdk.std.Json.tryAsNum">tryAsNum</a></code> | Convert Json element to number if possible. |
@@ -727,13 +727,13 @@ Convert Json element to string if possible.
 get(key: str): Json
 ```
 
-Returns a specified element from the Json.
+Returns the value associated with the specified Json key.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Json.get.parameter.key"></a>
 
 - *Type:* str
 
-The key of the element to return.
+The key of the Json property.
 
 ---
 
@@ -990,6 +990,64 @@ Returns the values from the Json.
 to get values from.
 
 ---
+
+
+
+### JsonSchema <a name="JsonSchema" id="@winglang/sdk.std.JsonSchema"></a>
+
+Struct Schema.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.JsonSchema.Initializer"></a>
+
+```wing
+new JsonSchema(schema: Json);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.JsonSchema.Initializer.parameter.schema">schema</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | *No description.* |
+
+---
+
+##### `schema`<sup>Required</sup> <a name="schema" id="@winglang/sdk.std.JsonSchema.Initializer.parameter.schema"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.JsonSchema.asStr">asStr</a></code> | Retrieve the json schema as a string. |
+| <code><a href="#@winglang/sdk.std.JsonSchema.validate">validate</a></code> | Attempt to validate a json object against the schema. |
+
+---
+
+##### `asStr` <a name="asStr" id="@winglang/sdk.std.JsonSchema.asStr"></a>
+
+```wing
+asStr(): str
+```
+
+Retrieve the json schema as a string.
+
+##### `validate` <a name="validate" id="@winglang/sdk.std.JsonSchema.validate"></a>
+
+```wing
+validate(obj: Json): void
+```
+
+Attempt to validate a json object against the schema.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.std.JsonSchema.validate.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+the Json object to validate.
+
+---
+
 
 
 
@@ -1348,7 +1406,7 @@ Mutable Json.
 | <code><a href="#@winglang/sdk.std.MutJson.asBool">asBool</a></code> | Convert Json element to boolean if possible. |
 | <code><a href="#@winglang/sdk.std.MutJson.asNum">asNum</a></code> | Convert Json element to number if possible. |
 | <code><a href="#@winglang/sdk.std.MutJson.asStr">asStr</a></code> | Convert Json element to string if possible. |
-| <code><a href="#@winglang/sdk.std.MutJson.get">get</a></code> | Returns a specified element from the Json. |
+| <code><a href="#@winglang/sdk.std.MutJson.get">get</a></code> | Returns the value associated with the specified Json key. |
 | <code><a href="#@winglang/sdk.std.MutJson.getAt">getAt</a></code> | Returns a specified element at a given index from MutJson Array. |
 | <code><a href="#@winglang/sdk.std.MutJson.set">set</a></code> | Adds or updates an element in MutJson with a specific key and value. |
 | <code><a href="#@winglang/sdk.std.MutJson.setAt">setAt</a></code> | Set element in MutJson Array with a specific key and value. |
@@ -1390,13 +1448,13 @@ Convert Json element to string if possible.
 get(key: str): MutJson
 ```
 
-Returns a specified element from the Json.
+Returns the value associated with the specified Json key.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutJson.get.parameter.key"></a>
 
 - *Type:* str
 
-The key of the element to return.
+The key of the Json property.
 
 ---
 
@@ -1818,7 +1876,7 @@ metadata describing how one construct is related to another construct.
 ##### `addDependency` <a name="addDependency" id="@winglang/sdk.std.Node.addDependency"></a>
 
 ```wing
-addDependency(deps: IDependable): void
+addDependency(...deps: Array<IDependable>): void
 ```
 
 Add an ordering dependency on another construct.
@@ -2645,6 +2703,7 @@ Shared behavior for all structs.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.std.Struct.fromJson">fromJson</a></code> | Converts a Json to a Struct. |
+| <code><a href="#@winglang/sdk.std.Struct.schema">schema</a></code> | Retrieve the schema for this struct. |
 | <code><a href="#@winglang/sdk.std.Struct.tryFromJson">tryFromJson</a></code> | Converts a Json to a Struct, returning nil if the Json is not valid. |
 
 ---
@@ -2662,6 +2721,14 @@ Converts a Json to a Struct.
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 ---
+
+##### `schema` <a name="schema" id="@winglang/sdk.std.Struct.schema"></a>
+
+```wing
+Struct.schema();
+```
+
+Retrieve the schema for this struct.
 
 ##### `tryFromJson` <a name="tryFromJson" id="@winglang/sdk.std.Struct.tryFromJson"></a>
 

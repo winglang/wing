@@ -68,6 +68,12 @@ export interface TestsStateManager {
   setTest: (test: TestItem) => void;
 }
 
+export interface FileLink {
+  path: string;
+  line?: number;
+  column?: number;
+}
+
 export interface RouterContext {
   simulator(): Promise<testing.Simulator>;
   appDetails(): Promise<{
@@ -77,6 +83,7 @@ export interface RouterContext {
   emitter: Emittery<{
     invalidateQuery: string | undefined;
     trace: Trace;
+    openFileInEditor: FileLink;
   }>;
   appState(): State;
   logger: ConsoleLogger;

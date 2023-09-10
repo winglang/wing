@@ -152,13 +152,16 @@ module.exports = grammar({
     throw_statement: ($) =>
       seq("throw", optional(field("expression", $.expression)), $._semicolon),
 
+    assignment_operator: ($) => choice("=", "+=", "-="),
+
     variable_assignment_statement: ($) =>
       seq(
         field("name", alias($.reference, $.lvalue)),
-        "=",
+        field("operator", $.assignment_operator),
         field("value", $.expression),
         $._semicolon
       ),
+
 
     expression_statement: ($) => seq($.expression, $._semicolon),
 

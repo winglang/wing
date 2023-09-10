@@ -133,7 +133,7 @@ module.exports = function({ $b }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:putting and deleting from a bucket to trigger bucket events\",\"${aws_lambda_function.testputtinganddeletingfromabuckettotriggerbucketevents_Handler_31F6B48C.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -220,15 +220,6 @@ module.exports = function({ $b }) {
           "metadata": {
             "path": "root/Default/Default/other/other-onupdate-OnMessage-bffa2a20/IamRole",
             "uniqueId": "other_other-onupdate-OnMessage-bffa2a20_IamRole_EC396E4E"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      },
-      "testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRole_C2098456": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:putting and deleting from a bucket to trigger bucket events/Handler/IamRole",
-            "uniqueId": "testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRole_C2098456"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -324,16 +315,6 @@ module.exports = function({ $b }) {
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.other_other-onupdate-OnMessage-bffa2a20_IamRole_EC396E4E.name}"
-      },
-      "testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRolePolicy_4BAD9EF3": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:putting and deleting from a bucket to trigger bucket events/Handler/IamRolePolicy",
-            "uniqueId": "testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRolePolicy_4BAD9EF3"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\",\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.b.arn}\",\"${aws_s3_bucket.b.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRole_C2098456.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -426,16 +407,6 @@ module.exports = function({ $b }) {
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.other_other-onupdate-OnMessage-bffa2a20_IamRole_EC396E4E.name}"
-      },
-      "testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRolePolicyAttachment_2DB05AD7": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:putting and deleting from a bucket to trigger bucket events/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRolePolicyAttachment_2DB05AD7"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRole_C2098456.name}"
       }
     },
     "aws_lambda_function": {
@@ -702,36 +673,6 @@ module.exports = function({ $b }) {
           "security_group_ids": [],
           "subnet_ids": []
         }
-      },
-      "testputtinganddeletingfromabuckettotriggerbucketevents_Handler_31F6B48C": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:putting and deleting from a bucket to trigger bucket events/Handler/Default",
-            "uniqueId": "testputtinganddeletingfromabuckettotriggerbucketevents_Handler_31F6B48C"
-          }
-        },
-        "architectures": [
-          "arm64"
-        ],
-        "environment": {
-          "variables": {
-            "BUCKET_NAME_34279ead": "${aws_s3_bucket.b.bucket}",
-            "WING_FUNCTION_NAME": "Handler-c8457446",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c8457446",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRole_C2098456.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testputtinganddeletingfromabuckettotriggerbucketevents_Handler_S3Object_B00A26B2.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
       }
     },
     "aws_lambda_permission": {
@@ -951,40 +892,6 @@ module.exports = function({ $b }) {
         ]
       }
     },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "b_Encryption_AF1DCBD9": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/b/Encryption",
-            "uniqueId": "b_Encryption_AF1DCBD9"
-          }
-        },
-        "bucket": "${aws_s3_bucket.b.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      },
-      "other_Encryption_D901EDA1": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/other/Encryption",
-            "uniqueId": "other_Encryption_D901EDA1"
-          }
-        },
-        "bucket": "${aws_s3_bucket.other.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      }
-    },
     "aws_s3_object": {
       "b_b-oncreate-OnMessage-1d3b2039_S3Object_5BB7AE5C": {
         "//": {
@@ -1079,17 +986,6 @@ module.exports = function({ $b }) {
           "metadata": {
             "path": "root/Default/Default/other/other-onupdate-OnMessage-bffa2a20/S3Object",
             "uniqueId": "other_other-onupdate-OnMessage-bffa2a20_S3Object_EFC38FB1"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      },
-      "testputtinganddeletingfromabuckettotriggerbucketevents_Handler_S3Object_B00A26B2": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:putting and deleting from a bucket to trigger bucket events/Handler/S3Object",
-            "uniqueId": "testputtinganddeletingfromabuckettotriggerbucketevents_Handler_S3Object_B00A26B2"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",

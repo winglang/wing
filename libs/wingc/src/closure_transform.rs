@@ -214,6 +214,7 @@ impl Fold for ClosureTransformer {
 				let class_init_body = vec![Stmt {
 					idx: 0,
 					kind: StmtKind::Assignment {
+						kind: AssignmentKind::Assign,
 						variable: Reference::InstanceMember {
 							object: Box::new(std_display_of_this),
 							property: Symbol::new("hidden", WingSpan::for_file(file_id)),

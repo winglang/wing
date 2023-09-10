@@ -21,9 +21,9 @@ let handler_two = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
 };
 
 api.get("/users/{name}", handler);
-api.get("/{name}", handler);
+api.get("/path/{name}", handler);
 api.get("/users/permission/{name}", handler);
-api.get("/{name}/{age}", handler_two);
+api.get("/path/{name}/{age}", handler_two);
 
 test "test" {
   let username = "tsuf";
@@ -36,7 +36,7 @@ test "test" {
 
 test "test2" {
   let username = "akhil";
-  let res: http.Response = http.get("${api.url}/${username}");
+  let res: http.Response = http.get("${api.url}/path/${username}");
 
 
   assert(res.status == 200);
@@ -55,7 +55,7 @@ test "test3" {
 test "test4" {
   let username = "akhil";
   let age = "23";
-  let res: http.Response = http.get("${api.url}/${username}/${age}");
+  let res: http.Response = http.get("${api.url}/path/${username}/${age}");
 
 
   assert(res.status == 200);

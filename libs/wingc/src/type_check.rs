@@ -3006,8 +3006,8 @@ impl<'a> TypeChecker<'a> {
 			StmtKind::Expression(e) => {
 				tc.type_check_exp(e, env);
 			}
-			StmtKind::Assignment { variable, value } => {
-				tc.type_check_assignment(value, env, variable, stmt);
+			StmtKind::Assignment { kind, variable, value } => {
+				tc.type_check_assignment(kind, value, env, variable, stmt);
 			}
 			StmtKind::Bring { source, identifier } => {
 				tc.type_check_bring(source, identifier, stmt, env);
@@ -3650,7 +3650,7 @@ impl<'a> TypeChecker<'a> {
 		// alias is the symbol we are giving to the imported library or namespace
 	}
 
-	fn type_check_assignment(&mut self, value: &Expr, env: &mut SymbolEnv, variable: &Reference, stmt: &Stmt) {
+	fn type_check_assignment(&mut self, kind: AssignmentKind, value: &Expr, env: &mut SymbolEnv, variable: &Reference, stmt: &Stmt) {
 		let (exp_type, _) = self.type_check_exp(value, env);
 
 		// TODO: we need to verify that if this variable is defined in a parent environment (i.e.
@@ -3662,6 +3662,11 @@ impl<'a> TypeChecker<'a> {
 			self.spanned_error(variable, "Variable is not reassignable".to_string());
 		} else if var_phase == Phase::Preflight && env.phase == Phase::Inflight {
 			self.spanned_error(stmt, "Variable cannot be reassigned from inflight".to_string());
+		}
+
+		if matches!(&kind, AssignmentKind::AssignIncr | AssignmentKind::AssignDecr) {
+			self.validate_type(exp_type, self.types.number(), value);
+			self.validate_type(var.type_, self.types.number(), variable);
 		}
 
 		self.validate_type(exp_type, var.type_, value);
@@ -5200,6 +5205,14 @@ pub fn resolve_user_defined_type(
 		}
 	} else {
 		Err(lookup_result_to_type_error(lookup_result, user_defined_type))
+	}
+}
+
+pub fn is_udt_struct_type(udt: &UserDefinedType, env: &SymbolEnv) -> bool {
+	if let Ok(type_) = resolve_user_defined_type(udt, env, 0) {
+		type_.as_struct().is_some()
+	} else {
+		false
 	}
 }
 
