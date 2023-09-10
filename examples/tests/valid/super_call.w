@@ -23,7 +23,7 @@ class D extends C {
 }
 
 class E extends D {
-  description(): str {
+  public description(): str {
     return "E extends ${super.description()}";
   }
 }
@@ -40,7 +40,7 @@ inflight class InflightA {
 
 // Test super calls on inflight classes
 inflight class InflightB extends InflightA {
-  description(): str {
+  public description(): str {
     return "InflightB extends ${super.description()}";
   }
 }
@@ -60,7 +60,7 @@ class BaseClass {
 }
 
 class ExtendedClass extends BaseClass {
-  inflight do(): str {
+  public inflight do(): str {
     b.put("k", "value"); // This should require write access to b
     return super.do(); // We expect to add binding permissions based on what `super.do()` requires (read)
   }

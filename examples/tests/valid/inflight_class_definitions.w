@@ -1,18 +1,18 @@
 class A {
-  foo(): str { return "a1"; }
-  inflight goo(): str { return "a2"; }
+  public foo(): str { return "a1"; }
+  public inflight goo(): str { return "a2"; }
 }
 
 let a = new A();
 assert(a.foo() == "a1");
 
 inflight class B {
-  foo(): str { return "b1"; }
+  public foo(): str { return "b1"; }
 }
 
 let fn = inflight () => {
   inflight class C {
-    foo(): str { return "c1"; }
+    public foo(): str { return "c1"; }
   }
 
   let c = new C();
@@ -24,14 +24,14 @@ class D {
 
   init() {
     class E {
-      foo(): str { return "e1"; }
+      public foo(): str { return "e1"; }
     }
 
     let pb = new E();
     assert(pb.foo() == "e1");
 
     inflight class F {
-      foo(): str { return "f1"; }
+      public foo(): str { return "f1"; }
     }
 
     this.inner = inflight (): str => {
@@ -39,11 +39,11 @@ class D {
     };
   }
 
-  getInner(): inflight (): str {
+  public getInner(): inflight (): str {
     return this.inner;
   }
 
-  inflight callInner(): str {
+  public inflight callInner(): str {
     return this.inner();
   }
 }

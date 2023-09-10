@@ -6,7 +6,7 @@ class Foo {
   inflight bar(): num { 
     return this.x;
   }
-  inflight foo(): num { 
+  public inflight foo(): num { 
     return this.bar() / 2;
   }
 }

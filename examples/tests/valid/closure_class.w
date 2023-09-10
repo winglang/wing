@@ -1,5 +1,5 @@
 class MyClosure {
-  inflight another(): str {
+  public inflight another(): str {
     return "hello";
   }
 

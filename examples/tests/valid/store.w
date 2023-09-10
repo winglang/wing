@@ -14,7 +14,7 @@ class Store {
       this.b.put("data.txt", "<empty>");
     });
   }
-  inflight store(data: str) {
+  public inflight store(data: str) {
     this.b.put("data.txt", data);
   }
 }

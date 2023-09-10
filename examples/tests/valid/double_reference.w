@@ -7,16 +7,16 @@ class Foo {
     initCount.inc();
   }
 
-  inflight method() { }
+  public inflight method() { }
 }
 
 class Bar {
-  foo: Foo;
+  public foo: Foo;
   init() {
     this.foo = new Foo();
   }
 
-  inflight callFoo() {
+  public inflight callFoo() {
     this.foo.method();
   }
 }

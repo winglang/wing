@@ -3,7 +3,7 @@ bring cloud;
 // User defined resource
 class Foo {
   c: cloud.Counter; // Use SDK built in resource in the user defined resource
-  inflight inflightField: num;
+  public inflight inflightField: num;
 
   init() {
     this.c = new cloud.Counter();
@@ -19,16 +19,16 @@ class Foo {
   }
 
   // Inflight method
-  inflight fooInc() {
+  public inflight fooInc() {
     // Call the SDK built in resource's inflight method from our inflight code
     this.c.inc();
   }
 
-  inflight fooGet(): num {
+  public inflight fooGet(): num {
     return this.c.peek(); 
   }
 
-  static inflight fooStatic(): str {
+  public static inflight fooStatic(): str {
     return "foo static";
   }
 }
@@ -43,7 +43,7 @@ class Bar {
   name: str;
   b: cloud.Bucket;
   // Use a user defined resource inside another user defined resource
-  foo: Foo;
+  public foo: Foo;
   // Use an enum inside a user defined resource to verify enum capturing works
   e: MyEnum;
   
@@ -58,7 +58,7 @@ class Bar {
     return "bar static";
   }
 
-  inflight myMethod(): str {
+  public inflight myMethod(): str {
     // Call user defined inflight code from another user defined resource
     this.foo.fooInc();
 
@@ -69,7 +69,7 @@ class Bar {
     return this.b.get("foo");
   }
 
-  inflight testTypeAccess() {
+  public inflight testTypeAccess() {
     // We purposefully run these test in an inner scope to validate the compiler analyzes the code
     // correctly and finds type access in inner scopes.
     if true {
@@ -124,13 +124,13 @@ class BigPublisher {
     });
   }
 
-  inflight publish(s: str) {
+  public inflight publish(s: str) {
     this.t.publish(s);
     this.q.push(s);
     this.b2.put("foo", s);
   }
 
-  inflight getObjectCount(): num {
+  public inflight getObjectCount(): num {
     return this.b.list().length;
   }
 }

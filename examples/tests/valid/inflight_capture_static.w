@@ -1,13 +1,13 @@
 bring util;
 
 class Preflight {
-  static inflight staticMethod(a: num): str {
+  public static inflight staticMethod(a: num): str {
     return "foo-${a}";
   }
 }
 
 inflight class OuterInflight {
-  static staticMethod(b: str): num {
+  public static staticMethod(b: str): num {
     return b.length;
   }
 }
@@ -22,7 +22,7 @@ test "call static method of an outer inflight class" {
 
 test "call static method of an inner inflight class" {
   class InnerInflight {
-    static staticMethod(): str { return "hello"; }
+    public static staticMethod(): str { return "hello"; }
   }
 
   assert(InnerInflight.staticMethod() == "hello");

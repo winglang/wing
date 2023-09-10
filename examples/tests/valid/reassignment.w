@@ -5,7 +5,7 @@ x = x + 1;
 assert(x == 6);
 
 class R {
-  var f: num;
+  public var f: num;
   f1: num;
   init() {
     // Initialize fields in `init` but in an inner scope to make sure 
@@ -16,7 +16,7 @@ class R {
     }
   }
   
-  inc() {
+  public inc() {
     this.f = this.f + 1;
   }
 }

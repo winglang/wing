@@ -10,7 +10,7 @@ let globalMapOfNum = Map<num>{ "a" => -5, "b" => 2 };
 let globalSetOfStr = Set<str>{ "a", "b" };
 
 class First {
-  myResource: cloud.Bucket;
+  public myResource: cloud.Bucket;
 
   init() {
     this.myResource = new cloud.Bucket();
@@ -18,8 +18,8 @@ class First {
 }
 
 class Another {
-  myField: str;
-  first: First;
+  public myField: str;
+  public first: First;
 
   init () {
     this.myField = "hello!";
@@ -30,12 +30,12 @@ class Another {
     assert(globalCounter.peek() == 0);
   }
 
-  inflight myMethod(): num {
+  public inflight myMethod(): num {
     globalCounter.inc();
     return globalCounter.peek();
   }
 
-  static inflight myStaticMethod(): num {
+  public static inflight myStaticMethod(): num {
     return globalCounter.peek();
   }
 }
@@ -59,7 +59,7 @@ class MyResource {
     this.localTopic.onMessage(new R());
   }
 
-  inflight myPut() {
+  public inflight myPut() {
     this.localTopic.publish("hello");
     globalBucket.put("key", "value");
     assert(globalStr == "hello");

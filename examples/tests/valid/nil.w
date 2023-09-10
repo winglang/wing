@@ -7,18 +7,18 @@ class Foo {
     this.optionalVar = nil;
   }
 
-  inflight returnNil(t: bool): str? {
+  public inflight returnNil(t: bool): str? {
     if t {
       return "hello";
     }
     return nil;
   }
 
-  inflight setOptionalValue(msg: str?) {
+  public inflight setOptionalValue(msg: str?) {
     this.optionalVar = msg;
   }
 
-  inflight getOptionalValue(): str? {
+  public inflight getOptionalValue(): str? {
     return this.optionalVar;
   }
 }

@@ -1,5 +1,5 @@
 class Foo {
-  value: str;
+  public value: str;
   init() { this.value = "hello"; }
 }
 
