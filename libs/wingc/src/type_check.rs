@@ -5,8 +5,8 @@ pub mod lifts;
 pub mod symbol_env;
 
 use crate::ast::{
-	self, AccessModifier, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition, IfLet, NewExpr,
-	TypeAnnotationKind,
+	self, AccessModifier, AssignmentKind, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition, IfLet,
+	NewExpr, TypeAnnotationKind,
 };
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter as AstFunctionParameter,
@@ -3650,7 +3650,14 @@ impl<'a> TypeChecker<'a> {
 		// alias is the symbol we are giving to the imported library or namespace
 	}
 
-	fn type_check_assignment(&mut self, kind: AssignmentKind, value: &Expr, env: &mut SymbolEnv, variable: &Reference, stmt: &Stmt) {
+	fn type_check_assignment(
+		&mut self,
+		kind: &AssignmentKind,
+		value: &Expr,
+		env: &mut SymbolEnv,
+		variable: &Reference,
+		stmt: &Stmt,
+	) {
 		let (exp_type, _) = self.type_check_exp(value, env);
 
 		// TODO: we need to verify that if this variable is defined in a parent environment (i.e.
@@ -3664,7 +3671,7 @@ impl<'a> TypeChecker<'a> {
 			self.spanned_error(stmt, "Variable cannot be reassigned from inflight".to_string());
 		}
 
-		if matches!(&kind, AssignmentKind::AssignIncr | AssignmentKind::AssignDecr) {
+		if matches!(kind, AssignmentKind::AssignIncr | AssignmentKind::AssignDecr) {
 			self.validate_type(exp_type, self.types.number(), value);
 			self.validate_type(var.type_, self.types.number(), variable);
 		}

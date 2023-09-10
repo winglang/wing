@@ -10,9 +10,9 @@ use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, collections::BTreeMap, v
 
 use crate::{
 	ast::{
-		ArgList, BinaryOperator, BringSource, CalleeKind, Class as AstClass, ElifLetBlock, Expr, ExprKind, FunctionBody,
-		FunctionDefinition, IfLet, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind,
-		StructField, Symbol, TypeAnnotationKind, UnaryOperator, UserDefinedType,
+		ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, ElifLetBlock, Expr, ExprKind,
+		FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt,
+		StmtKind, Symbol, UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic, debug,
@@ -1500,10 +1500,6 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 	}
 
 	symbols
-}
-
-fn struct_filename(s: &String) -> String {
-	format!("./{}.Struct.js", s)
 }
 
 fn lookup_span(span: &WingSpan, files: &Files) -> String {

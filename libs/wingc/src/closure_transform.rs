@@ -2,9 +2,9 @@ use indexmap::IndexMap;
 
 use crate::{
 	ast::{
-		AccessModifier, ArgList, CalleeKind, Class, ClassField, Expr, ExprKind, FunctionBody, FunctionDefinition,
-		FunctionParameter, FunctionSignature, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
-		TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		AccessModifier, ArgList, AssignmentKind, CalleeKind, Class, ClassField, Expr, ExprKind, FunctionBody,
+		FunctionDefinition, FunctionParameter, FunctionSignature, Literal, NewExpr, Phase, Reference, Scope, Stmt,
+		StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	diagnostic::WingSpan,
 	fold::{self, Fold},
