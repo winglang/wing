@@ -336,15 +336,6 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			return;
 		}
 
-		// extract the "env" from the class initializer and push it to the context
-		// because this is the environment in which we want to resolve references
-		// as oppose to the environment of the class definition itself.
-		// let init_env = if let FunctionBody::Statements(ref s) = node.initializer.body {
-		// 	Some(self.jsify.types.get_scope_env(&s))
-		// } else {
-		// 	None
-		// };
-
 		let udt = UserDefinedType {
 			root: node.name.clone(),
 			fields: vec![],

@@ -4734,9 +4734,7 @@ impl<'a> TypeChecker<'a> {
 						let v = self.get_property_from_class_like(new_class.as_class().unwrap(), property, true, env);
 						(v, Phase::Independent)
 					}
-					Type::Class(ref c) =>
-					/*match c.env.lookup(&property, None)*/
-					{
+					Type::Class(ref c) => {
 						let v = self.get_property_from_class_like(c, property, true, env);
 						if matches!(v.kind, VariableKind::InstanceMember) {
 							return self.spanned_error_with_var(
@@ -4745,27 +4743,6 @@ impl<'a> TypeChecker<'a> {
 							);
 						}
 						(v.clone(), v.phase)
-						// Some(SymbolKind::Variable(v)) => {
-						// 	if let VariableKind::StaticMember = v.kind {
-						// 		// Validate access modifier
-						// 		if !v.type_.is_unresolved() {
-						// 			self.check_access(env, type_, property, v.access_modifier);
-						// 		}
-						// 		(v.clone(), v.phase)
-						// 	} else {
-						// 		self.spanned_error_with_var(
-						// 			property,
-						// 			format!(
-						// 				"Class \"{}\" contains a member \"{}\" but it is not static",
-						// 				type_, property.name
-						// 			),
-						// 		)
-						// 	}
-						// }
-						// _ => self.spanned_error_with_var(
-						// 	property,
-						// 	format!("No member \"{}\" in class \"{}\"", property.name, type_),
-						// ),
 					}
 					_ => self.spanned_error_with_var(property, format!("\"{}\" not a valid reference", reference)),
 				}
