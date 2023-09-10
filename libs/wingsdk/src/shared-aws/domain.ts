@@ -17,20 +17,14 @@ export class Domain extends cloud.Domain {
   constructor(scope: Construct, id: string, props: cloud.DomainProps) {
     super(scope, id, props);
 
-    const iamCertificate = getPlatformSpecificValues(
+    const values = getPlatformSpecificValues(
       this.node.path,
-      "iamCertificate"
-    );
-    const acmCertificateArn = getPlatformSpecificValues(
-      this.node.path,
-      "acmCertificateArn"
-    );
-    const hostedZoneId = getPlatformSpecificValues(
-      this.node.path,
+      "iamCertificate",
+      "acmCertificateArn",
       "hostedZoneId"
     );
 
-    if (!iamCertificate && !acmCertificateArn && !hostedZoneId) {
+    if (!values || (values && !values.iamCertificate && !values.acmCertificateArn && !values.hostedZoneId)) {
       throw new Error(
         `'iamCertificate' or 'acmCertificateArn' is missing from ${this.node.path}
 ERROR: 'hostedZoneId' is missing from ${this.node.path}
@@ -39,7 +33,7 @@ These are required properties of platform-specific types. You can set these valu
 either through '- v | --value' switches or '--values' file.
         `
       );
-    } else if (!iamCertificate && !acmCertificateArn) {
+    } else if (!values.iamCertificate && !values.acmCertificateArn) {
       throw new Error(
         `'iamCertificate' or 'acmCertificateArn' is missing from ${this.node.path}
 
@@ -47,7 +41,7 @@ These are required properties of platform-specific types. You can set these valu
 either through '- v | --value' switches or '--values' file.
         `
       );
-    } else if (!hostedZoneId) {
+    } else if (!values.hostedZoneId) {
       throw new Error(
         `'hostedZoneId' is missing from ${this.node.path}
 
@@ -55,12 +49,12 @@ These are required properties of platform-specific types. You can set these valu
 either through '- v | --value' switches or '--values' file.
         `
       );
-    } else if (iamCertificate && hostedZoneId) {
-      this._iamCertificate = iamCertificate;
-      this._hostedZoneId = hostedZoneId;
-    } else if (acmCertificateArn && hostedZoneId) {
-      this._acmCertificateArn = acmCertificateArn;
-      this._hostedZoneId = hostedZoneId;
+    } else if (values.iamCertificate && values.hostedZoneId) {
+      this._iamCertificate = values.iamCertificate;
+      this._hostedZoneId = values.hostedZoneId;
+    } else if (values.acmCertificateArn && values.hostedZoneId) {
+      this._acmCertificateArn = values.acmCertificateArn;
+      this._hostedZoneId = values.hostedZoneId;
     }
   }
 
