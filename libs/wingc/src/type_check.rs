@@ -4,7 +4,9 @@ pub(crate) mod jsii_importer;
 pub mod lifts;
 pub mod symbol_env;
 
-use crate::ast::{self, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition, NewExpr, TypeAnnotationKind};
+use crate::ast::{
+	self, AssignmentKind, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition, NewExpr, TypeAnnotationKind,
+};
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter as AstFunctionParameter,
 	Interface as AstInterface, InterpolatedStringPart, Literal, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Symbol,
@@ -3131,7 +3133,7 @@ impl<'a> TypeChecker<'a> {
 			StmtKind::Expression(e) => {
 				self.type_check_exp(e, env);
 			}
-			StmtKind::Assignment { variable, value } => {
+			StmtKind::Assignment { kind, variable, value } => {
 				let (exp_type, _) = self.type_check_exp(value, env);
 
 				// TODO: we need to verify that if this variable is defined in a parent environment (i.e.
@@ -3143,6 +3145,11 @@ impl<'a> TypeChecker<'a> {
 					self.spanned_error(variable, "Variable is not reassignable".to_string());
 				} else if var_phase == Phase::Preflight && env.phase == Phase::Inflight {
 					self.spanned_error(stmt, "Variable cannot be reassigned from inflight".to_string());
+				}
+
+				if matches!(&kind, AssignmentKind::AssignIncr | AssignmentKind::AssignDecr) {
+					self.validate_type(exp_type, self.types.number(), value);
+					self.validate_type(var.type_, self.types.number(), variable);
 				}
 
 				self.validate_type(exp_type, var.type_, value);
@@ -4988,6 +4995,14 @@ pub fn resolve_user_defined_type(
 		}
 	} else {
 		Err(lookup_result_to_type_error(lookup_result, user_defined_type))
+	}
+}
+
+pub fn is_udt_struct_type(udt: &UserDefinedType, env: &SymbolEnv) -> bool {
+	if let Ok(type_) = resolve_user_defined_type(udt, env, 0) {
+		type_.as_struct().is_some()
+	} else {
+		false
 	}
 }
 

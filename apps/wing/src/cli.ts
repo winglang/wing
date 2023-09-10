@@ -70,6 +70,11 @@ async function main() {
 
   const program = new Command();
 
+  program.configureHelp({
+    sortOptions: true,
+    showGlobalOptions: true,
+  });
+
   program.name("wing").version(PACKAGE_VERSION);
 
   program

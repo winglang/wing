@@ -174,6 +174,7 @@ export class WingTranspile extends transpile.TranspileBase {
       parentType: this.type(parameter.parentType),
       typeReference: typeRef,
       optional: parameter.optional,
+      variadic: parameter.spec.variadic,
       declaration: this.formatProperty(name, typeRef),
     };
   }
@@ -280,7 +281,14 @@ export class WingTranspile extends transpile.TranspileBase {
     if (tf === "Inflight") {
       tf = "~Inflight";
     }
-    return `${transpiled.name}${transpiled.optional ? "?" : ""}: ${tf}`;
+    if (transpiled.variadic) {
+      tf = `Array<${tf}>`;
+    }
+    const name = transpiled.variadic
+      ? `...${transpiled.name}`
+      : transpiled.name;
+
+    return `${name}${transpiled.optional ? "?" : ""}: ${tf}`;
   }
 
   private formatProperty(

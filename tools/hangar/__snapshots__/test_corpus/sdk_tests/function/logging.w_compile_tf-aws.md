@@ -95,7 +95,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:logging\",\"${aws_lambda_function.testlogging_Handler_2002EF98.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -122,15 +122,6 @@ module.exports = function({  }) {
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      },
-      "testlogging_Handler_IamRole_68ABF7AD": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:logging/Handler/IamRole",
-            "uniqueId": "testlogging_Handler_IamRole_68ABF7AD"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
@@ -153,16 +144,6 @@ module.exports = function({  }) {
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.f1.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.f2_IamRole_B66911B2.name}"
-      },
-      "testlogging_Handler_IamRolePolicy_8CFCB9C2": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:logging/Handler/IamRolePolicy",
-            "uniqueId": "testlogging_Handler_IamRolePolicy_8CFCB9C2"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.f2.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.testlogging_Handler_IamRole_68ABF7AD.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -185,16 +166,6 @@ module.exports = function({  }) {
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.f2_IamRole_B66911B2.name}"
-      },
-      "testlogging_Handler_IamRolePolicyAttachment_9E5DEC2E": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:logging/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testlogging_Handler_IamRolePolicyAttachment_9E5DEC2E"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testlogging_Handler_IamRole_68ABF7AD.name}"
       }
     },
     "aws_lambda_function": {
@@ -256,36 +227,6 @@ module.exports = function({  }) {
           "security_group_ids": [],
           "subnet_ids": []
         }
-      },
-      "testlogging_Handler_2002EF98": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:logging/Handler/Default",
-            "uniqueId": "testlogging_Handler_2002EF98"
-          }
-        },
-        "architectures": [
-          "arm64"
-        ],
-        "environment": {
-          "variables": {
-            "FUNCTION_NAME_0300817a": "${aws_lambda_function.f2.arn}",
-            "WING_FUNCTION_NAME": "Handler-c886ec8e",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c886ec8e",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testlogging_Handler_IamRole_68ABF7AD.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testlogging_Handler_S3Object_335C77BA.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
       }
     },
     "aws_s3_bucket": {
@@ -316,17 +257,6 @@ module.exports = function({  }) {
           "metadata": {
             "path": "root/Default/Default/f2/S3Object",
             "uniqueId": "f2_S3Object_ABE842D7"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      },
-      "testlogging_Handler_S3Object_335C77BA": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:logging/Handler/S3Object",
-            "uniqueId": "testlogging_Handler_S3Object_335C77BA"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
