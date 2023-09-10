@@ -1,6 +1,6 @@
 # [api_cors_default.w](../../../../../examples/tests/valid/api_cors_default.w) | compile | tf-aws
 
-## inflight.$Closure1-2.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({  }) {
   class $Closure1 {
@@ -18,9 +18,9 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure2-2.js
+## inflight.$Closure2-1.js
 ```js
-module.exports = function({ $apiDefaultCors_url, $http_Util, $t_Assert }) {
+module.exports = function({ $apiDefaultCors_url, $http_Util, $testing_Assert }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -30,12 +30,12 @@ module.exports = function({ $apiDefaultCors_url, $http_Util, $t_Assert }) {
     async handle() {
       const response = (await $http_Util.get(($apiDefaultCors_url + "/users")));
       const headers = response.headers;
-      (await $t_Assert.equalNum(response.status,200));
-      (await $t_Assert.equalStr((headers)["access-control-allow-origin"],"*"));
-      (await $t_Assert.equalStr((headers)["access-control-allow-credentials"],"false"));
-      (await $t_Assert.equalStr((headers)["access-control-expose-headers"],""));
-      (await $t_Assert.isNil((headers)["access-control-allow-headers"]));
-      (await $t_Assert.isNil((headers)["access-control-allow-methods"]));
+      (await $testing_Assert.numEqual(response.status,200));
+      (await $testing_Assert.strEqual((headers)["access-control-allow-origin"],"*"));
+      (await $testing_Assert.strEqual((headers)["access-control-allow-credentials"],"false"));
+      (await $testing_Assert.strEqual((headers)["access-control-expose-headers"],""));
+      (await $testing_Assert.strIsNil((headers)["access-control-allow-headers"]));
+      (await $testing_Assert.strIsNil((headers)["access-control-allow-methods"]));
     }
   }
   return $Closure2;
@@ -43,9 +43,9 @@ module.exports = function({ $apiDefaultCors_url, $http_Util, $t_Assert }) {
 
 ```
 
-## inflight.$Closure3-2.js
+## inflight.$Closure3-1.js
 ```js
-module.exports = function({ $apiDefaultCors_url, $http_HttpMethod, $http_Util, $t_Assert }) {
+module.exports = function({ $apiDefaultCors_url, $http_HttpMethod, $http_Util, $testing_Assert }) {
   class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -55,54 +55,15 @@ module.exports = function({ $apiDefaultCors_url, $http_HttpMethod, $http_Util, $
     async handle() {
       const response = (await $http_Util.fetch(($apiDefaultCors_url + "/users"),({"method": $http_HttpMethod.OPTIONS})));
       const headers = response.headers;
-      (await $t_Assert.equalNum(response.status,204));
-      (await $t_Assert.equalStr((headers)["access-control-allow-headers"],"Content-Type,Authorization,X-Requested-With"));
-      (await $t_Assert.equalStr((headers)["access-control-allow-methods"],"GET,POST,PUT,DELETE,HEAD,OPTIONS"));
-      (await $t_Assert.equalStr((headers)["access-control-allow-origin"],"*"));
-      (await $t_Assert.isNil((headers)["access-control-allow-credentials"]));
-      (await $t_Assert.isNil((headers)["access-control-expose-headers"]));
+      (await $testing_Assert.numEqual(response.status,204));
+      (await $testing_Assert.strEqual((headers)["access-control-allow-headers"],"Content-Type,Authorization,X-Requested-With"));
+      (await $testing_Assert.strEqual((headers)["access-control-allow-methods"],"GET,POST,PUT,DELETE,HEAD,OPTIONS"));
+      (await $testing_Assert.strEqual((headers)["access-control-allow-origin"],"*"));
+      (await $testing_Assert.strIsNil((headers)["access-control-allow-credentials"]));
+      (await $testing_Assert.strIsNil((headers)["access-control-expose-headers"]));
     }
   }
   return $Closure3;
-}
-
-```
-
-## inflight.Assert-1.js
-```js
-module.exports = function({  }) {
-  class Assert {
-    static async equalStr(a, b) {
-      try {
-        {((cond) => {if (!cond) throw new Error("assertion failed: a == b")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(a,b)))};
-      }
-      catch ($error_e) {
-        const e = $error_e.message;
-        throw new Error(String.raw({ raw: ["expected: ", " got: ", ""] }, b, a));
-      }
-    }
-    static async isNil(a) {
-      try {
-        {((cond) => {if (!cond) throw new Error("assertion failed: a == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(a,undefined)))};
-      }
-      catch ($error_e) {
-        const e = $error_e.message;
-        {console.log(e)};
-        throw new Error(String.raw({ raw: ["expected '", "' to be nil"] }, a));
-      }
-    }
-    static async equalNum(a, b) {
-      try {
-        {((cond) => {if (!cond) throw new Error("assertion failed: a == b")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(a,b)))};
-      }
-      catch ($error_e) {
-        const e = $error_e.message;
-        {console.log(e)};
-        throw new Error(String.raw({ raw: ["expected: ", " got: ", ""] }, b, a));
-      }
-    }
-  }
-  return Assert;
 }
 
 ```
@@ -300,40 +261,6 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.assertions-1.js
-```js
-module.exports = function({ $stdlib }) {
-  const std = $stdlib.std;
-  class Assert extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
-    }
-    static _toInflightType(context) {
-      return `
-        require("./inflight.Assert-1.js")({
-        })
-      `;
-    }
-    _toInflight() {
-      return `
-        (await (async () => {
-          const AssertClient = ${Assert._toInflightType(this)};
-          const client = new AssertClient({
-          });
-          if (client.$inflight_init) { await client.$inflight_init(); }
-          return client;
-        })())
-      `;
-    }
-    _getInflightOps() {
-      return ["equalStr", "isNil", "equalNum", "$inflight_init"];
-    }
-  }
-  return { Assert };
-};
-
-```
-
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
@@ -344,7 +271,7 @@ const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 const ex = $stdlib.ex;
 const http = $stdlib.http;
-const t = require("./preflight.assertions-1.js")({ $stdlib });
+const testing = $stdlib.testing;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -355,7 +282,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-2.js")({
+          require("./inflight.$Closure1-1.js")({
           })
         `;
       }
@@ -381,10 +308,10 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure2-2.js")({
+          require("./inflight.$Closure2-1.js")({
             $apiDefaultCors_url: ${context._lift(apiDefaultCors.url)},
             $http_Util: ${context._lift(http.Util)},
-            $t_Assert: ${context._lift(t.Assert)},
+            $testing_Assert: ${context._lift(testing.Assert)},
           })
         `;
       }
@@ -416,11 +343,11 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure3-2.js")({
+          require("./inflight.$Closure3-1.js")({
             $apiDefaultCors_url: ${context._lift(apiDefaultCors.url)},
             $http_HttpMethod: ${context._lift(http.HttpMethod)},
             $http_Util: ${context._lift(http.Util)},
-            $t_Assert: ${context._lift(t.Assert)},
+            $testing_Assert: ${context._lift(testing.Assert)},
           })
         `;
       }

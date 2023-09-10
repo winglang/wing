@@ -32,7 +32,10 @@ export class Assert {
    * @returns void
    */
   public static strIsNil(actual: string | undefined): void {
-    assert.ok(actual === null || actual === undefined, `Expected "${actual}" to be nil`);
+    assert.ok(
+      actual === null || actual === undefined,
+      `Expected "${actual}" to be nil`
+    );
   }
 
   /**
@@ -53,7 +56,10 @@ export class Assert {
    * @returns void
    */
   public static numIsNil(actual: number | undefined): void {
-    assert.ok(actual === null || actual === undefined, `Expected ${actual} to be nil`);
+    assert.ok(
+      actual === null || actual === undefined,
+      `Expected ${actual} to be nil`
+    );
   }
 
   private constructor() {}
