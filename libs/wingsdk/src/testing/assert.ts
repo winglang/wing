@@ -1,5 +1,5 @@
-import assert from "node:assert/strict";
 import { InflightClient } from "../core";
+import nodeAssert from "node:assert/strict";
 
 /**
  * The Assert class provides methods for making assertions in tests,
@@ -22,7 +22,7 @@ export class Assert {
    * @returns void
    */
   public static equal(actual: unknown, expected: unknown): void {
-    assert.strictEqual(actual, expected);
+    nodeAssert.strictEqual(actual, expected);
   }
 
   /**
@@ -33,7 +33,7 @@ export class Assert {
    * @returns void
    */
   public static notEqual(actual: unknown, expected: unknown): void {
-    assert.notStrictEqual(actual, expected);
+    nodeAssert.notStrictEqual(actual, expected);
   }
 
   /**
@@ -43,7 +43,7 @@ export class Assert {
    * @returns void
    */
   public static isNil(actual: unknown): void {
-    assert.ok(
+    nodeAssert.ok(
       actual === null || actual === undefined,
       `Expected "${actual}" to be nil`
     );
