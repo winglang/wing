@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 use crate::{
 	ast::{ExprId, FunctionSignature, Phase, Symbol, UserDefinedType},
 	type_check::symbol_env::SymbolEnvRef,
@@ -89,6 +91,10 @@ impl VisitContext {
 
 	pub fn current_class(&self) -> Option<&UserDefinedType> {
 		self.class.last()
+	}
+
+	pub fn current_class_nesting(&self) -> Vec<UserDefinedType> {
+		self.class.iter().rev().map(|udt| udt.clone()).collect_vec()
 	}
 
 	// --
