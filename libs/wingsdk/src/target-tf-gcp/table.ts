@@ -6,12 +6,15 @@ import {
 } from "../.gen/providers/google/bigtable-table";
 import { Id } from "../.gen/providers/random/id";
 import * as ex from "../ex";
+import * as core from "../core";
+import { Function } from "./function";
 import {
   ResourceNames,
   NameOptions,
   CaseConventions,
 } from "../shared/resource-names";
-import { Json } from "../std";
+import { IInflightHost, Json } from "../std";
+import { TableInflightMethods } from "../ex";
 
 /*
  * Table names must be between 1 and 50 characters. We reserve 9 characters for
@@ -42,6 +45,8 @@ const INSTANCE_NAME_OPTS: NameOptions = {
  * @inflight `@winglang/sdk.ex.ITableClient`
  */
 export class Table extends ex.Table {
+  private readonly table: BigtableTable;
+
   constructor(scope: Construct, id: string, props: ex.TableProps = {}) {
     super(scope, id, props);
 
@@ -63,14 +68,53 @@ export class Table extends ex.Table {
       columnFamily: columnsFamily,
     };
 
-    new BigtableTable(this, "Default", config);
+    this.table = new BigtableTable(this, "Default", config);
   }
 
   public addRow(key: string, row: Json): void {
     throw new Error(`Can not insert ${row} at given ${key}`);
   }
 
+  public bind(host: IInflightHost, ops: string[]): void {
+    if (!(host instanceof Function)) {
+      throw new Error("tables can only be bound by tfgcp.Function for now");
+    }
+
+    if (ops.includes(TableInflightMethods.INSERT)) { }
+    if (ops.includes(TableInflightMethods.UPDATE)) { }
+    if (ops.includes(TableInflightMethods.DELETE)) { }
+    if (ops.includes(TableInflightMethods.GET)) { }
+    if (ops.includes(TableInflightMethods.LIST)) { }
+
+    host.addEnvironment(this.envName(), this.table.name);
+    host.addEnvironment(this.primaryKeyEnvName(), this.primaryKey);
+    host.addEnvironment(this.columnsFamilyEnvName(), JSON.stringify(this.columns));
+
+    super.bind(host, ops);
+  }
+
   public _toInflight(): string {
-    throw new Error("Method not implemented.");
+    return core.InflightClient.for(
+      __dirname.replace("target-tf-gcp", "shared-gcp"),
+      __filename,
+      "TableClient",
+      [
+        `process.env["${this.envName()}"]`,
+        `process.env["${this.primaryKeyEnvName()}"]`,
+        `process.env["${this.columnsFamilyEnvName()}"]`,
+      ]
+    )
+  }
+
+  private envName(): string {
+    return `BIGTABLE_TABLE_NAME_${this.node.addr.slice(-8)}`;
+  }
+
+  private primaryKeyEnvName(): string {
+    return `${this.envName()}_PRIMARY_KEY`;
+  }
+
+  private columnsFamilyEnvName(): string {
+    return `${this.envName()}_COLUMNS_FAMILY`;
   }
 }
