@@ -362,7 +362,7 @@ impl Display for Interface {
 type ClassLikeIterator<'a> =
 	FilterMap<SymbolEnvIter<'a>, fn(<SymbolEnvIter as Iterator>::Item) -> Option<(String, TypeRef)>>;
 
-pub trait ClassLike {
+pub trait ClassLike: Display {
 	fn get_env(&self) -> &SymbolEnv;
 
 	fn methods(&self, with_ancestry: bool) -> ClassLikeIterator<'_> {
@@ -448,6 +448,12 @@ pub struct Struct {
 	pub extends: Vec<TypeRef>, // Must be a Type::Struct type
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
+}
+
+impl Display for Struct {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		write!(f, "{}", self.name.name)
+	}
 }
 
 #[derive(Debug)]
@@ -4629,9 +4635,11 @@ impl<'a> TypeChecker<'a> {
 				let mut property_variable = self.resolve_variable_from_instance_type(instance_type, property, env, object);
 
 				// Validate access modifier
-				if !property_variable.type_.is_unresolved() {
-					self.check_access(env, instance_type, property, property_variable.access_modifier);
-				}
+				// if !property_variable.type_.is_unresolved() {
+				// 	// TODO: this isn't good enough becaues `instance_type` might be an array so we need to "actual" class_type (Array). This is done for us in
+				// 	// `resolve_variable_from_instance_type`, fixing this might also make the unresolved check above redundant
+				// 	self.check_access(env, instance_type, property, property_variable.access_modifier);
+				// }
 
 				// if the object is `this`, then use the property's phase instead of the object phase
 				let property_phase = if property_variable.phase == Phase::Independent {
@@ -4711,32 +4719,42 @@ impl<'a> TypeChecker<'a> {
 						}
 
 						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_STRUCT, vec![type_]);
-						let v = self.get_property_from_class_like(new_class.as_class().unwrap(), property, true);
+						let v = self.get_property_from_class_like(new_class.as_class().unwrap(), property, true, env);
 						(v, Phase::Independent)
 					}
-					Type::Class(ref c) => match c.env.lookup(&property, None) {
-						Some(SymbolKind::Variable(v)) => {
-							if let VariableKind::StaticMember = v.kind {
-								// Validate access modifier
-								if !v.type_.is_unresolved() {
-									self.check_access(env, type_, property, v.access_modifier);
-								}
-								(v.clone(), v.phase)
-							} else {
-								self.spanned_error_with_var(
-									property,
-									format!(
-										"Class \"{}\" contains a member \"{}\" but it is not static",
-										type_, property.name
-									),
-								)
-							}
+					Type::Class(ref c) =>
+					/*match c.env.lookup(&property, None)*/
+					{
+						let v = self.get_property_from_class_like(c, property, true, env);
+						if matches!(v.kind, VariableKind::InstanceMember) {
+							return self.spanned_error_with_var(
+								property,
+								format!("Class \"{c}\" contains a member \"{property}\" but it is not static"),
+							);
 						}
-						_ => self.spanned_error_with_var(
-							property,
-							format!("No member \"{}\" in class \"{}\"", property.name, type_),
-						),
-					},
+						(v.clone(), v.phase)
+						// Some(SymbolKind::Variable(v)) => {
+						// 	if let VariableKind::StaticMember = v.kind {
+						// 		// Validate access modifier
+						// 		if !v.type_.is_unresolved() {
+						// 			self.check_access(env, type_, property, v.access_modifier);
+						// 		}
+						// 		(v.clone(), v.phase)
+						// 	} else {
+						// 		self.spanned_error_with_var(
+						// 			property,
+						// 			format!(
+						// 				"Class \"{}\" contains a member \"{}\" but it is not static",
+						// 				type_, property.name
+						// 			),
+						// 		)
+						// 	}
+						// }
+						// _ => self.spanned_error_with_var(
+						// 	property,
+						// 	format!("No member \"{}\" in class \"{}\"", property.name, type_),
+						// ),
+					}
 					_ => self.spanned_error_with_var(property, format!("\"{}\" not a valid reference", reference)),
 				}
 			}
@@ -4744,43 +4762,6 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	/// Check if the given property on the given type with the given access modifier can be accessed from the current context
-	fn check_access(
-		&mut self,
-		env: &mut SymbolEnv,
-		type_: UnsafeRef<Type>,
-		property: &Symbol,
-		allowed_access: AccessModifier,
-	) {
-		// Determine the access type of the property
-		let mut private_access = false;
-		let mut protected_access = false;
-		if let Some(current_class) = self.ctx.current_class().map(|udt| udt.clone()) {
-			let current_class_type = self
-				.resolve_user_defined_type(&current_class, env, self.ctx.current_stmt_idx())
-				.unwrap();
-			// Lookup the property in the class env to find out in which class (perhaps an ancestor) it was defined
-			let property_defined_in = self.get_definition_type(type_, property);
-			private_access = current_class_type.is_same_type_as(&property_defined_in);
-			protected_access = private_access || current_class_type.is_strict_subtype_of(&property_defined_in);
-		}
-		// Compare the access type with what's allowed
-		match allowed_access {
-			AccessModifier::Private => {
-				if !private_access {
-					self.spanned_error(property, format!("Cannot access private member {property} of {type_}"));
-				}
-			}
-			AccessModifier::Protected => {
-				if !protected_access {
-					self.spanned_error(
-						property,
-						format!("Cannot access protected member {property} of {type_}"),
-					);
-				}
-			}
-			AccessModifier::Public => {} // keep this here to make sure we don't add a new access modifier without handling it here
-		}
-	}
 
 	fn resolve_variable_from_instance_type(
 		&mut self,
@@ -4792,8 +4773,8 @@ impl<'a> TypeChecker<'a> {
 	) -> VariableInfo {
 		match *instance_type {
 			Type::Optional(t) => self.resolve_variable_from_instance_type(t, property, env, _object),
-			Type::Class(ref class) => self.get_property_from_class_like(class, property, false),
-			Type::Interface(ref interface) => self.get_property_from_class_like(interface, property, false),
+			Type::Class(ref class) => self.get_property_from_class_like(class, property, false, env),
+			Type::Interface(ref interface) => self.get_property_from_class_like(interface, property, false, env),
 			Type::Anything => VariableInfo {
 				name: property.clone(),
 				type_: instance_type,
@@ -4807,27 +4788,27 @@ impl<'a> TypeChecker<'a> {
 			// Lookup wingsdk std types, hydrating generics if necessary
 			Type::Array(t) => {
 				let new_class = self.hydrate_class_type_arguments(env, WINGSDK_ARRAY, vec![t]);
-				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false)
+				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env)
 			}
 			Type::MutArray(t) => {
 				let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_ARRAY, vec![t]);
-				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false)
+				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env)
 			}
 			Type::Set(t) => {
 				let new_class = self.hydrate_class_type_arguments(env, WINGSDK_SET, vec![t]);
-				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false)
+				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env)
 			}
 			Type::MutSet(t) => {
 				let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_SET, vec![t]);
-				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false)
+				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env)
 			}
 			Type::Map(t) => {
 				let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MAP, vec![t]);
-				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false)
+				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env)
 			}
 			Type::MutMap(t) => {
 				let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_MAP, vec![t]);
-				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false)
+				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env)
 			}
 			Type::Json(_) => self.get_property_from_class_like(
 				env
@@ -4840,6 +4821,7 @@ impl<'a> TypeChecker<'a> {
 					.unwrap(),
 				property,
 				false,
+				env,
 			),
 			Type::MutJson => self.get_property_from_class_like(
 				env
@@ -4852,6 +4834,7 @@ impl<'a> TypeChecker<'a> {
 					.unwrap(),
 				property,
 				false,
+				env,
 			),
 			Type::String => self.get_property_from_class_like(
 				env
@@ -4864,6 +4847,7 @@ impl<'a> TypeChecker<'a> {
 					.unwrap(),
 				property,
 				false,
+				env,
 			),
 			Type::Duration => self.get_property_from_class_like(
 				env
@@ -4876,8 +4860,9 @@ impl<'a> TypeChecker<'a> {
 					.unwrap(),
 				property,
 				false,
+				env,
 			),
-			Type::Struct(ref s) => self.get_property_from_class_like(s, property, true),
+			Type::Struct(ref s) => self.get_property_from_class_like(s, property, true, env),
 			_ => {
 				self
 					.spanned_error_with_var(property, "Property not found".to_string())
@@ -4892,13 +4877,44 @@ impl<'a> TypeChecker<'a> {
 		class: &impl ClassLike,
 		property: &Symbol,
 		allow_static: bool,
+		env: &SymbolEnv,
 	) -> VariableInfo {
 		let lookup_res = class.get_env().lookup_ext(property, None);
-		if let LookupResult::Found(field, _) = lookup_res {
+		if let LookupResult::Found(field, lookup_info) = lookup_res {
 			let var = field.as_variable().expect("Expected property to be a variable");
-			// let SymbolEnvKind::Type(def_type) = lookup_info.env.kind else { // TODO: make an "as_type_env" method
-			// 	panic!("Expected env to be a type env");
-			// };
+
+			// Determine the access type of the property
+			let mut private_access = false;
+			let mut protected_access = false;
+			if let Some(current_class) = self.ctx.current_class().map(|udt| udt.clone()) {
+				let current_class_type = self
+					.resolve_user_defined_type(&current_class, env, self.ctx.current_stmt_idx())
+					.unwrap();
+				// Lookup the property in the class env to find out in which class (perhaps an ancestor) it was defined
+				let SymbolEnvKind::Type(property_defined_in) = lookup_info.env.kind else {
+					panic!("Expected env to be a type env");
+				};
+				private_access = current_class_type.is_same_type_as(&property_defined_in);
+				protected_access = private_access || current_class_type.is_strict_subtype_of(&property_defined_in);
+			}
+			// Compare the access type with what's allowed
+			match var.access_modifier {
+				AccessModifier::Private => {
+					if !private_access {
+						self.spanned_error(property, format!("Cannot access private member {property} of {class}"));
+					}
+				}
+				AccessModifier::Protected => {
+					if !protected_access {
+						self.spanned_error(
+							property,
+							format!("Cannot access protected member {property} of {class}"),
+						);
+					}
+				}
+				AccessModifier::Public => {} // keep this here to make sure we don't add a new access modifier without handling it here
+			}
+
 			if let VariableKind::StaticMember = var.kind {
 				if allow_static {
 					return var.clone();
@@ -4999,24 +5015,6 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	/// Returns the type in which the property is defined (this might be any class like type). It might
-	/// be either the passed `instance_type` or one of its ancestors.
-	fn get_definition_type(&self, instance_type: UnsafeRef<Type>, property: &Symbol) -> UnsafeRef<Type> {
-		let class_like_env = match &*instance_type {
-			Type::Class(c) => &c.env,
-			Type::Interface(i) => &i.env,
-			Type::Struct(s) => &s.env,
-			_ => panic!("Expected instance type to be a class like type"),
-		};
-		let SymbolEnvKind::Type(property_defined_in) = class_like_env
-			.lookup_ext(property, None)
-			.expect(&format!("property {property} to be in class {instance_type}"))
-			.1
-			.env.kind else {
-				panic!("Expected class env to be a type");						
-		};
-		property_defined_in
-	}
 }
 
 impl VisitorWithContext for TypeChecker<'_> {
