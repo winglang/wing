@@ -36,7 +36,7 @@ test "upsert" {
     table.get("mario").get("role");
   });
   assertThrows(JSON_PROPERTY_GENDER_DOES_NOT_EXIST_ERROR, () => {
-    table.get("luigi").get("gender");
+    table.get("mario").get("gender");
   });
 
   assert(table.get("luigi").get("role") == "ghostbuster");
