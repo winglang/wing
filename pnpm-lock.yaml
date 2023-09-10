@@ -1180,6 +1180,9 @@ importers:
       uuid:
         specifier: ^8.3.2
         version: 8.3.2
+      yaml:
+        specifier: ^2.3.2
+        version: 2.3.2
     devDependencies:
       '@cdktf/provider-aws':
         specifier: ^15.0.0
@@ -12405,7 +12408,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20230906
+      typescript: 5.3.0-dev.20230910
     dev: true
 
   /dset@3.1.2:
@@ -21452,8 +21455,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20230906:
-    resolution: {integrity: sha512-7dCmQgfQ4i38daoPCCert+rM6gLxBpxRdjncJkHkJV4CWvNZsRX+RVTusojkqGAtW9vqB0+/8iDH6CZ0PDxghg==}
+  /typescript@5.3.0-dev.20230910:
+    resolution: {integrity: sha512-ig1saY778M8pNhr99DhhgHKbFTCZCsRt95xv/ToPRevn4vttmcbs/Q/tSyBJSdPlkfQ5wO/XWU1kMI081iAmmw==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
