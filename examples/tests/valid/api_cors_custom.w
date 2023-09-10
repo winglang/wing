@@ -25,16 +25,16 @@ test "GET /users has cors headers" {
   let response = http.get(api.url + "/users");
 
   let headers = response.headers;
-  testing.Assert.numEqual(response.status, 200);
+  testing.Assert.equal(response.status, 200);
 
   // GET cors headers are set
-  testing.Assert.strEqual(headers.get("access-control-allow-origin"), "winglang.io");
-  testing.Assert.strEqual(headers.get("access-control-allow-credentials"), "true");
-  testing.Assert.strEqual(headers.get("access-control-expose-headers"), "Content-Type");
+  testing.Assert.equal(headers.get("access-control-allow-origin"), "winglang.io");
+  testing.Assert.equal(headers.get("access-control-allow-credentials"), "true");
+  testing.Assert.equal(headers.get("access-control-expose-headers"), "Content-Type");
 
   // OPTIONS cors headers are not set
-  testing.Assert.strIsNil(headers.get("access-control-allow-headers"));
-  testing.Assert.strIsNil(headers.get("access-control-allow-methods"));
+  testing.Assert.isNil(headers.get("access-control-allow-headers"));
+  testing.Assert.isNil(headers.get("access-control-allow-methods"));
 }
 
 test "OPTIONS /users has cors headers" {
@@ -44,16 +44,16 @@ test "OPTIONS /users has cors headers" {
 
   let headers = response.headers;
 
-  testing.Assert.numEqual(response.status, 204);
+  testing.Assert.equal(response.status, 204);
 
   // OPTIONS cors headers are set
-  testing.Assert.strEqual(headers.get("access-control-allow-methods"), "GET,POST,OPTIONS");
-  testing.Assert.strEqual(headers.get("access-control-allow-headers"), "Content-Type,Authorization,X-Custom-Header");
-  testing.Assert.strEqual(headers.get("access-control-allow-origin"), "winglang.io");
+  testing.Assert.equal(headers.get("access-control-allow-methods"), "GET,POST,OPTIONS");
+  testing.Assert.equal(headers.get("access-control-allow-headers"), "Content-Type,Authorization,X-Custom-Header");
+  testing.Assert.equal(headers.get("access-control-allow-origin"), "winglang.io");
 
   // Other cors headers are not set
-  testing.Assert.strIsNil(headers.get("access-control-expose-headers"));
-  testing.Assert.strIsNil(headers.get("access-control-allow-credentials"));
+  testing.Assert.isNil(headers.get("access-control-expose-headers"));
+  testing.Assert.isNil(headers.get("access-control-allow-credentials"));
 }
 
 test "OPTIONS /users responds with proper headers for requested" {
@@ -66,8 +66,8 @@ test "OPTIONS /users responds with proper headers for requested" {
   });
 
   let headers = response.headers;
-  testing.Assert.numEqual(response.status, 204);
-  testing.Assert.strEqual(headers.get("access-control-allow-methods"), "GET,POST,OPTIONS");
-  testing.Assert.strEqual(headers.get("access-control-allow-headers"), "Content-Type,Authorization,X-Custom-Header");
-  testing.Assert.strEqual(headers.get("access-control-allow-origin"), "winglang.io");
+  testing.Assert.equal(response.status, 204);
+  testing.Assert.equal(headers.get("access-control-allow-methods"), "GET,POST,OPTIONS");
+  testing.Assert.equal(headers.get("access-control-allow-headers"), "Content-Type,Authorization,X-Custom-Header");
+  testing.Assert.equal(headers.get("access-control-allow-origin"), "winglang.io");
 }

@@ -32,7 +32,7 @@ class E extends D {
 
 let e = new E();
 // Make sure super calls work and skip anything in the inheritance chain that doesn't have the method
-testing.Assert.strEqual(e.description(), "E extends C extends B");
+testing.Assert.equal(e.description(), "E extends C extends B");
 
 inflight class InflightA {
   description(): str {
@@ -49,7 +49,7 @@ inflight class InflightB extends InflightA {
 
 test "super call inflight" {
   let b = new InflightB();
-  testing.Assert.strEqual(b.description(), "InflightB extends InflightA");
+  testing.Assert.equal(b.description(), "InflightB extends InflightA");
 }
 
 // Test correct binding when calling a super method
@@ -70,5 +70,5 @@ class ExtendedClass extends BaseClass {
 
 let extended = new ExtendedClass();
 test "super call sets binding permissions" {
-  testing.Assert.strEqual(extended.do(), "value");
+  testing.Assert.equal(extended.do(), "value");
 }

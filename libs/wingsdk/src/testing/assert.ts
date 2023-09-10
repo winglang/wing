@@ -15,50 +15,37 @@ export class Assert {
   }
 
   /**
-   * Compares two strings for equality.
-   * @param expected The expected string.
-   * @param actual The string to test.
-   * @throws Will throw an error if the actual string does not match the expected string.
+   * Compares two values for equality.
+   * @param expected The expected value.
+   * @param actual The value to test.
+   * @throws Will throw an error if the actual value does not match the expected value.
    * @returns void
    */
-  public static strEqual(actual: string, expected: string): void {
+  public static equal(actual: unknown, expected: unknown): void {
     assert.strictEqual(actual, expected);
   }
 
   /**
-   * Checks if a string is null or undefined.
-   * @param actual The string to test.
-   * @throws Will throw an error if the actual string is not null or undefined.
+   * Compares two values for inequality.
+   * @param expected The expected value.
+   * @param actual The value to test.
+   * @throws Will throw an error if the actual value matches the expected value.
    * @returns void
    */
-  public static strIsNil(actual: string | undefined): void {
+  public static notEqual(actual: unknown, expected: unknown): void {
+    assert.notStrictEqual(actual, expected);
+  }
+
+  /**
+   * Checks if a value is nil.
+   * @param actual The value to test.
+   * @throws Will throw an error if the actual value is not nil.
+   * @returns void
+   */
+  public static isNil(actual: unknown): void {
     assert.ok(
       actual === null || actual === undefined,
       `Expected "${actual}" to be nil`
-    );
-  }
-
-  /**
-   * Compares two numbers for equality.
-   * @param expected The expected number.
-   * @param actual The number to test.
-   * @throws Will throw an error if the actual number does not match the expected number.
-   * @returns void
-   */
-  public static numEqual(actual: number, expected: number): void {
-    assert.strictEqual(actual, expected);
-  }
-
-  /**
-   * Checks if a number is null or undefined.
-   * @param actual The number to test.
-   * @throws Will throw an error if the actual number is not null or undefined.
-   * @returns void
-   */
-  public static numIsNil(actual: number | undefined): void {
-    assert.ok(
-      actual === null || actual === undefined,
-      `Expected ${actual} to be nil`
     );
   }
 

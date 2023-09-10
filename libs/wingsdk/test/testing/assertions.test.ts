@@ -1,58 +1,64 @@
 import { test, describe, expect } from "vitest";
 import { Assert } from "../../src/testing/assert";
 
-describe("equalStr", () => {
+describe("equal string", () => {
   test("is equal", () => {
     expect(() => {
-      Assert.strEqual("a", "a");
+      Assert.equal("a", "a");
     }).not.toThrow();
   });
 
   test("is not equal", () => {
     expect(() => {
-      Assert.strEqual("a", "b");
+      Assert.equal("a", "b");
     }).toThrowError(new RegExp("'a' !== 'b'"));
   });
 });
 
-describe("numEqual", () => {
+describe("equal number", () => {
   test("is equal", () => {
     expect(() => {
-      Assert.numEqual(1, 1);
+      Assert.equal(1, 1);
     }).not.toThrow();
   });
 
   test("is not equal", () => {
     expect(() => {
-      Assert.numEqual(1, 2);
+      Assert.equal(1, 2);
     }).toThrowError(new RegExp("1 !== 2"));
   });
 });
 
-describe("strIsNil", () => {
-  test("is null", () => {
+describe("equal boolean", () => {
+  test("is equal", () => {
     expect(() => {
-      Assert.strIsNil(undefined);
+      Assert.equal(true, true);
     }).not.toThrow();
   });
 
-  test("is not null", () => {
+  test("is not equal", () => {
     expect(() => {
-      Assert.strIsNil("not null");
-    }).toThrow();
+      Assert.equal(true, false);
+    }).toThrowError(new RegExp("true !== false"));
   });
 });
 
-describe("numIsNil", () => {
+describe("is nil", () => {
   test("is null", () => {
     expect(() => {
-      Assert.numIsNil(undefined);
+      Assert.isNil(undefined);
     }).not.toThrow();
   });
 
   test("is not null", () => {
     expect(() => {
-      Assert.numIsNil(1);
+      Assert.isNil("not null");
+    }).toThrow();
+  });
+
+  test("is not null number", () => {
+    expect(() => {
+      Assert.isNil(5);
     }).toThrow();
   });
 });
