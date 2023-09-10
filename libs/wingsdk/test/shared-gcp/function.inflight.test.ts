@@ -1,5 +1,5 @@
 import { test, expect } from "vitest";
-import { FunctionClient } from "../../src/shared-aws/function.inflight";
+import { FunctionClient } from "../../src/shared-gcp/function.inflight";
 
 test("invoke - happy path", async () => {
   // GIVEN
@@ -9,7 +9,7 @@ test("invoke - happy path", async () => {
 
   //
   // WHEN
-  const client = new FunctionClient(FUNCTION_NAME, "root/Function");
+  const client = new FunctionClient();
   const response = await client.invoke(PAYLOAD);
 
   // THEN
