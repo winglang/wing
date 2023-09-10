@@ -21,8 +21,18 @@ export class Assert {
    * @throws Will throw an error if the actual string does not match the expected string.
    * @returns void
    */
-  public static strEqual(expected: string, actual: string): void {
+  public static strEqual(actual: string, expected: string): void {
     assert.strictEqual(actual, expected);
+  }
+
+  /**
+   * Checks if a string is null or undefined.
+   * @param actual The string to test.
+   * @throws Will throw an error if the actual string is not null or undefined.
+   * @returns void
+   */
+  public static strIsNil(actual: string | undefined): void {
+    assert.ok(actual === null || actual === undefined, `Expected "${actual}" to be nil`);
   }
 
   /**
@@ -32,8 +42,18 @@ export class Assert {
    * @throws Will throw an error if the actual number does not match the expected number.
    * @returns void
    */
-  public static numEqual(expected: number, actual: number): void {
+  public static numEqual(actual: number, expected: number): void {
     assert.strictEqual(actual, expected);
+  }
+
+  /**
+   * Checks if a number is null or undefined.
+   * @param actual The number to test.
+   * @throws Will throw an error if the actual number is not null or undefined.
+   * @returns void
+   */
+  public static numIsNil(actual: number | undefined): void {
+    assert.ok(actual === null || actual === undefined, `Expected ${actual} to be nil`);
   }
 
   private constructor() {}
