@@ -392,6 +392,44 @@ class WingRestApi extends Construct {
 
     // const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
 
+    let CORS = true;
+
+    let OAS30_BASE = {
+      openapi: "3.0.1",
+      info: {
+        title: "fugazi",
+        version: "v1",
+      },
+      paths: {
+        "/$default": {
+          "x-amazon-apigateway-any-method": {
+            isDefaultRoute: true,
+            "x-amazon-apigateway-integration": {
+              payloadFormatVersion: "1.0",
+              type: "http_proxy",
+              httpMethod: "ANY",
+              uri: "https://example.com/",
+              connectionType: "INTERNET",
+            },
+          },
+        },
+      },
+      "x-amazon-apigateway-importexport-version": "1.0",
+    };
+
+    let OAS30 = CORS
+      ? {
+          ...OAS30_BASE,
+          "x-amazon-apigateway-cors": {
+            allowMethods: ["GET", "OPTIONS", "POST"],
+            allowHeaders: ["*"],
+            maxAge: 0,
+            allowCredentials: false,
+            allowOrigins: ["*"],
+          },
+        }
+      : OAS30_BASE;
+
     this.api = new Apigatewayv2Api(this, "api", {
       name: ResourceNames.generateName(this, NAME_OPTS),
       protocolType: "HTTP",
@@ -399,10 +437,7 @@ class WingRestApi extends Construct {
       body: Lazy.stringValue({
         produce: () => {
           props.apiSpec = "random assignment so compiler doesn't complain";
-          if (!props.cors)
-            return `{"openapi":"3.0.1","info":{"title":"foo","version":"2023-09-10 04:19:34UTC"},"servers":[{"url":"https://8xmxvgtxqc.execute-api.eu-central-1.amazonaws.com/{basePath}","variables":{"basePath":{"default":""}}}],"paths":{"/$default":{"x-amazon-apigateway-any-method":{"isDefaultRoute":true,"x-amazon-apigateway-integration":{"payloadFormatVersion":"1.0","type":"http_proxy","httpMethod":"ANY","uri":"https://example.com/","connectionType":"INTERNET"}}}},"x-amazon-apigateway-importexport-version":"1.0"}`;
-          else
-            return `{"openapi":"3.0.1","info":{"title":"http-auth-cors","version":"2021-03-19 20:06:55UTC"},"servers":[{"url":"https://srtc8i2058.execute-api.eu-central-1.amazonaws.com/{basePath}","variables":{"basePath":{"default":""}}}],"paths":{"/{proxy+}":{"options":{"responses":{"default":{"description":"Default response for OPTIONS /{proxy+}"}}},"parameters":[{"name":"proxy+","in":"path","description":"Generated path parameter for proxy+","required":true,"schema":{"type":"string"}}]}},"x-amazon-apigateway-cors":{"allowMethods":["GET","OPTIONS","POST"],"allowHeaders":["*"],"maxAge":0,"allowCredentials":false,"allowOrigins":["*"]},"x-amazon-apigateway-importexport-version":"1.0"}`;
+          return JSON.stringify(OAS30);
         },
       }),
     });
