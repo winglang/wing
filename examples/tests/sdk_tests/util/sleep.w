@@ -1,7 +1,7 @@
 bring util;
 
 class JSHelper { 
-  extern "./sleep-helper.js" static inflight getTime(): num;
+  extern "./sleep-helper.js" public static inflight getTime(): num;
 }
 
 let oneHundredMiliseconds = 0.1s;

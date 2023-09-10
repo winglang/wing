@@ -1,7 +1,7 @@
 bring cloud;
 
 class Util {
-  extern "./logging.js" static inflight logging(): void;
+  extern "./logging.js" public static inflight logging(): void;
 }
 
 let f1 = new cloud.Function(inflight (input: str): void => {

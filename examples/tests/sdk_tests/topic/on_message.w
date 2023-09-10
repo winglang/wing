@@ -10,7 +10,7 @@ class Predicate {
     this.c = c;
   }
 
-  inflight test(): bool{
+  public inflight test(): bool{
     return this.c.peek() == 10;
   }
 }
