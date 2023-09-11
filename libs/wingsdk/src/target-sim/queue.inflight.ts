@@ -11,7 +11,7 @@ import { IFunctionClient, IQueueClient } from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
-} from "../simulator-testing/simulator";
+} from "../simulator/simulator";
 import { TraceType } from "../std";
 
 export class Queue

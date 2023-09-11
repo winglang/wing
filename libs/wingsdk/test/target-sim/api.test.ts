@@ -1,7 +1,7 @@
 import { test, expect } from "vitest";
 import { listMessages } from "./util";
 import * as cloud from "../../src/cloud";
-import { Simulator, Testing } from "../../src/simulator-testing";
+import { Simulator, Testing } from "../../src/simulator";
 import { ApiAttributes } from "../../src/target-sim/schema-resources";
 import { SimApp } from "../sim-app";
 

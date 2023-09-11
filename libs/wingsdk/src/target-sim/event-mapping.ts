@@ -12,7 +12,7 @@ import { fqnForType } from "../constants";
 import {
   BaseResourceSchema,
   ISimulatorResourceInstance,
-} from "../simulator-testing/simulator";
+} from "../simulator/simulator";
 import { IInflightHost, IResource, Node, Resource } from "../std";
 
 /**

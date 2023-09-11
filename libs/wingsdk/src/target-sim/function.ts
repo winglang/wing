@@ -5,7 +5,7 @@ import { FunctionSchema, FUNCTION_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { App } from "../core";
-import { BaseResourceSchema } from "../simulator-testing/simulator";
+import { BaseResourceSchema } from "../simulator/simulator";
 import { IInflightHost } from "../std";
 import { Duration } from "../std/duration";
 

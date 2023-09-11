@@ -1,6 +1,6 @@
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
-import * as testing from "../../src/simulator-testing";
+import * as testing from "../../src/simulator";
 import * as sim from "../../src/target-sim";
 import { mkdtemp } from "../util";
 

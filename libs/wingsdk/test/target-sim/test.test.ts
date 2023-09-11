@@ -1,5 +1,5 @@
 import { test, expect } from "vitest";
-import { Testing } from "../../src/simulator-testing";
+import { Testing } from "../../src/simulator";
 import { Test } from "../../src/std";
 import { SimApp } from "../sim-app";
 

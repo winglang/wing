@@ -1,7 +1,7 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
-import { Testing } from "../../src/simulator-testing";
+import { Testing } from "../../src/simulator";
 import * as tfazure from "../../src/target-tf-azure";
 import { mkdtemp, sanitizeCode, tfResourcesOf, tfSanitize } from "../util";
 

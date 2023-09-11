@@ -1,7 +1,7 @@
 import { Capture, Match, Template } from "aws-cdk-lib/assertions";
 import { expect, test } from "vitest";
 import { Bucket, OnDeploy } from "../../src/cloud";
-import { Testing } from "../../src/simulator-testing";
+import { Testing } from "../../src/simulator";
 import * as awscdk from "../../src/target-awscdk";
 import { sanitizeCode, mkdtemp } from "../util";
 

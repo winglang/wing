@@ -3,7 +3,7 @@ import { ColumnType } from "../ex";
 import {
   BaseResourceAttributes,
   BaseResourceSchema,
-} from "../simulator-testing/simulator";
+} from "../simulator/simulator";
 import { Json } from "../std";
 
 export const API_TYPE = "wingsdk.cloud.Api";

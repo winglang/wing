@@ -11,7 +11,7 @@ import {
 } from "./util";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
-import { BaseResourceSchema } from "../simulator-testing";
+import { BaseResourceSchema } from "../simulator";
 import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
 /**

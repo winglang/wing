@@ -20,7 +20,7 @@ import type {
   ISimulatorFactory,
   ISimulatorContext,
   ISimulatorResourceInstance,
-} from "../simulator-testing/simulator";
+} from "../simulator/simulator";
 
 export class DefaultSimulatorFactory implements ISimulatorFactory {
   /**

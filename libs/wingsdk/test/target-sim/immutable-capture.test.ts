@@ -3,7 +3,7 @@ import { test, expect } from "vitest";
 import { Bucket } from "../../src/cloud";
 import { Function, IFunctionClient } from "../../src/cloud/function";
 import { InflightBindings, NodeJsCode } from "../../src/core/inflight";
-import { Testing } from "../../src/simulator-testing";
+import { Testing } from "../../src/simulator";
 import { Duration } from "../../src/std";
 import { SimApp } from "../sim-app";
 

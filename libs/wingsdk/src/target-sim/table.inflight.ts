@@ -4,7 +4,7 @@ import { validateRow } from "../shared/table-utils";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
-} from "../simulator-testing/simulator";
+} from "../simulator/simulator";
 import { Json } from "../std";
 
 export class Table implements ITableClient, ISimulatorResourceInstance {

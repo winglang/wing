@@ -1,6 +1,6 @@
 import { test, expect } from "vitest";
 import { Function } from "../../src/cloud";
-import { Testing } from "../../src/simulator-testing";
+import { Testing } from "../../src/simulator";
 import * as tfaws from "../../src/target-tf-aws";
 import { mkdtemp, sanitizeCode, tfResourcesOf, tfSanitize } from "../util";
 

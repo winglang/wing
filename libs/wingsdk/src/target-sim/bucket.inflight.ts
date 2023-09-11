@@ -13,7 +13,7 @@ import {
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
-} from "../simulator-testing/simulator";
+} from "../simulator/simulator";
 import { Json } from "../std";
 
 export class Bucket implements IBucketClient, ISimulatorResourceInstance {

@@ -10,7 +10,7 @@ import { ISecretClient } from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
-} from "../simulator-testing/simulator";
+} from "../simulator/simulator";
 import { Json, TraceType } from "../std";
 
 export class Secret implements ISecretClient, ISimulatorResourceInstance {

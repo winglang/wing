@@ -1,5 +1,5 @@
 import { test, expect } from "vitest";
-import { Testing } from "../../src/simulator-testing";
+import { Testing } from "../../src/simulator";
 import * as tfaws from "../../src/target-tf-aws";
 import { Api, Function } from "../../src/target-tf-aws";
 import { mkdtemp, tfResourcesOfCount } from "../util";

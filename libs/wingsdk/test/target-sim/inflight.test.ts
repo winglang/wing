@@ -1,6 +1,6 @@
 import { test, expect } from "vitest";
 import { treeJsonOf } from "./util";
-import { Testing } from "../../src/simulator-testing";
+import { Testing } from "../../src/simulator";
 import { Node } from "../../src/std";
 import { SimApp } from "../sim-app";
 

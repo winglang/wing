@@ -2,7 +2,7 @@ import { readFileSync } from "fs";
 import { resolve } from "path";
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
-import { Simulator } from "../../src/simulator-testing";
+import { Simulator } from "../../src/simulator";
 import { ApiAttributes } from "../../src/target-sim/schema-resources";
 import { SimApp } from "../sim-app";
 

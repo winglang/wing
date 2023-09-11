@@ -1,6 +1,6 @@
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
-import { Testing } from "../../src/simulator-testing";
+import { Testing } from "../../src/simulator";
 import { Duration } from "../../src/std";
 import { SCHEDULE_TYPE } from "../../src/target-sim/schema-resources";
 import { SimApp } from "../sim-app";

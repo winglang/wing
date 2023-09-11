@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { test, expect, describe } from "vitest";
 import { Bucket, ITestRunnerClient, TestResult } from "../../src/cloud";
 import { InflightBindings } from "../../src/core";
-import { Testing } from "../../src/simulator-testing";
+import { Testing } from "../../src/simulator";
 import { Test } from "../../src/std";
 import { SimApp } from "../sim-app";
 

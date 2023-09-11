@@ -20,7 +20,7 @@ import {
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
-} from "../simulator-testing/simulator";
+} from "../simulator/simulator";
 import { TraceType } from "../std";
 
 const LOCALHOST_ADDRESS = "127.0.0.1";

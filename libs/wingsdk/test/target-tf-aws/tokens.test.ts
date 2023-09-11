@@ -1,6 +1,6 @@
 import { TerraformVariable } from "cdktf";
 import { test, expect } from "vitest";
-import { Testing } from "../../src/simulator-testing";
+import { Testing } from "../../src/simulator";
 import * as tfaws from "../../src/target-tf-aws";
 import { Api } from "../../src/target-tf-aws";
 import { mkdtemp, tfSanitize, sanitizeCode } from "../util";

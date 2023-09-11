@@ -3,7 +3,7 @@ import { IFunctionClient } from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
-} from "../simulator-testing";
+} from "../simulator";
 import { ITestRunnerClient, TestResult } from "../std";
 
 export class TestRunnerClient

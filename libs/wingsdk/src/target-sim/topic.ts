@@ -7,7 +7,7 @@ import { TopicSchema, TOPIC_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
-import { BaseResourceSchema } from "../simulator-testing/simulator";
+import { BaseResourceSchema } from "../simulator/simulator";
 import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
 /**

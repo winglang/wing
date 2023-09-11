@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { test, expect } from "vitest";
 import { waitUntilTrace } from "./util";
 import * as cloud from "../../src/cloud";
-import { Testing } from "../../src/simulator-testing";
+import { Testing } from "../../src/simulator";
 import { TraceType } from "../../src/std";
 import { SimApp } from "../sim-app";
 

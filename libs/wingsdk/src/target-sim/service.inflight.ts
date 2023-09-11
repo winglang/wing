@@ -7,7 +7,7 @@ import { IFunctionClient, IServiceClient } from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
-} from "../simulator-testing";
+} from "../simulator";
 import { TraceType } from "../std";
 
 export class Service implements IServiceClient, ISimulatorResourceInstance {

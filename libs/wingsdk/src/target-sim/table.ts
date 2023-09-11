@@ -3,7 +3,7 @@ import { ISimulatorResource } from "./resource";
 import { TableSchema, TABLE_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as ex from "../ex";
-import { BaseResourceSchema } from "../simulator-testing/simulator";
+import { BaseResourceSchema } from "../simulator/simulator";
 import { Json, IInflightHost } from "../std";
 
 /**

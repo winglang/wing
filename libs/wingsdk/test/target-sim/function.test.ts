@@ -1,7 +1,7 @@
 import { test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
-import { Testing } from "../../src/simulator-testing";
+import { Testing } from "../../src/simulator";
 import { Node } from "../../src/std";
 import { SimApp } from "../sim-app";
 
