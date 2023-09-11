@@ -280,6 +280,7 @@ new ex.Table(props: TableProps);
 | <code><a href="#@winglang/sdk.ex.ITableClient.list">list</a></code> | List all rows in the table. |
 | <code><a href="#@winglang/sdk.ex.ITableClient.tryGet">tryGet</a></code> | Get a row from the table if exists, by primary key. |
 | <code><a href="#@winglang/sdk.ex.ITableClient.update">update</a></code> | Update a row in the table. |
+| <code><a href="#@winglang/sdk.ex.ITableClient.upsert">upsert</a></code> | Insert a row into the table if it doesn't exist, otherwise update it. |
 
 ---
 
@@ -404,6 +405,30 @@ primary key to update the row.
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 data to be updated.
+
+---
+
+##### `upsert` <a name="upsert" id="@winglang/sdk.ex.ITableClient.upsert"></a>
+
+```wing
+inflight upsert(key: str, row: Json): void
+```
+
+Insert a row into the table if it doesn't exist, otherwise update it.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.ITableClient.upsert.parameter.key"></a>
+
+- *Type:* str
+
+primary key to upsert the row.
+
+---
+
+###### `row`<sup>Required</sup> <a name="row" id="@winglang/sdk.ex.ITableClient.upsert.parameter.row"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+data to be upserted.
 
 ---
 

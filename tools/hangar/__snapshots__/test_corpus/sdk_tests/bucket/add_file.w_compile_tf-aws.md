@@ -41,7 +41,7 @@ module.exports = function({ $b }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:addObject\",\"${aws_lambda_function.testaddObject_Handler_44ECC49C.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -50,83 +50,7 @@ module.exports = function({ $b }) {
     ]
   },
   "resource": {
-    "aws_iam_role": {
-      "testaddObject_Handler_IamRole_1A9672A7": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:addObject/Handler/IamRole",
-            "uniqueId": "testaddObject_Handler_IamRole_1A9672A7"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      }
-    },
-    "aws_iam_role_policy": {
-      "testaddObject_Handler_IamRolePolicy_B5188189": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:addObject/Handler/IamRolePolicy",
-            "uniqueId": "testaddObject_Handler_IamRolePolicy_B5188189"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.testaddObject_Handler_IamRole_1A9672A7.name}"
-      }
-    },
-    "aws_iam_role_policy_attachment": {
-      "testaddObject_Handler_IamRolePolicyAttachment_DB1EE647": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:addObject/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testaddObject_Handler_IamRolePolicyAttachment_DB1EE647"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testaddObject_Handler_IamRole_1A9672A7.name}"
-      }
-    },
-    "aws_lambda_function": {
-      "testaddObject_Handler_44ECC49C": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:addObject/Handler/Default",
-            "uniqueId": "testaddObject_Handler_44ECC49C"
-          }
-        },
-        "architectures": [
-          "arm64"
-        ],
-        "environment": {
-          "variables": {
-            "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
-            "WING_FUNCTION_NAME": "Handler-c89ea41b",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c89ea41b",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testaddObject_Handler_IamRole_1A9672A7.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testaddObject_Handler_S3Object_88DEF745.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      }
-    },
     "aws_s3_bucket": {
-      "Code": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
-          }
-        },
-        "bucket_prefix": "code-c84a50b1-"
-      },
       "cloudBucket": {
         "//": {
           "metadata": {
@@ -136,24 +60,6 @@ module.exports = function({ $b }) {
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
         "force_destroy": false
-      }
-    },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "cloudBucket_Encryption_77B6AEEF": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Encryption",
-            "uniqueId": "cloudBucket_Encryption_77B6AEEF"
-          }
-        },
-        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
       }
     },
     "aws_s3_object": {
@@ -178,17 +84,6 @@ module.exports = function({ $b }) {
         "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
         "content": "test2",
         "key": "file2.txt"
-      },
-      "testaddObject_Handler_S3Object_88DEF745": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:addObject/Handler/S3Object",
-            "uniqueId": "testaddObject_Handler_S3Object_88DEF745"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
       }
     }
   }

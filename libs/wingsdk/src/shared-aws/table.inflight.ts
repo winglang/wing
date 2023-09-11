@@ -5,6 +5,7 @@ import {
   PutItemCommand,
   ScanCommand,
   DynamoDBClient,
+  ConditionalCheckFailedException,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { ITableClient } from "../ex";
@@ -20,6 +21,28 @@ export class TableClient implements ITableClient {
   ) {}
 
   public async insert(key: string, row: Json): Promise<void> {
+    validateRow(row, JSON.parse(this.columns));
+    let insertRow = { [this.primaryKey]: key, ...row };
+    try {
+      const command = new PutItemCommand({
+        TableName: this.tableName,
+        Item: marshall(insertRow),
+        ConditionExpression: `attribute_not_exists(${this.primaryKey})`,
+      });
+      await this.client.send(command);
+    } catch (e) {
+      if (e instanceof ConditionalCheckFailedException) {
+        throw new Error(
+          `The primary key "${key}" already exists in the "${
+            this.tableName
+          }" table: ${(e as Error).stack})}`
+        );
+      }
+      throw new Error((e as Error).stack);
+    }
+  }
+
+  public async upsert(key: string, row: Json): Promise<void> {
     validateRow(row, JSON.parse(this.columns));
     let insertRow = { [this.primaryKey]: key, ...row };
     const command = new PutItemCommand({

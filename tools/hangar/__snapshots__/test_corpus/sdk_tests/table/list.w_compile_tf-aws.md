@@ -50,7 +50,7 @@ module.exports = function({ $std_String, $table }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:list\",\"${aws_lambda_function.testlist_Handler_58856559.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -76,99 +76,6 @@ module.exports = function({ $std_String, $table }) {
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "name",
         "name": "usersex.Table-c840a49c"
-      }
-    },
-    "aws_iam_role": {
-      "testlist_Handler_IamRole_1E7E84A8": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:list/Handler/IamRole",
-            "uniqueId": "testlist_Handler_IamRole_1E7E84A8"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      }
-    },
-    "aws_iam_role_policy": {
-      "testlist_Handler_IamRolePolicy_7EFE6464": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:list/Handler/IamRolePolicy",
-            "uniqueId": "testlist_Handler_IamRolePolicy_7EFE6464"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.exTable.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:Scan\"],\"Resource\":[\"${aws_dynamodb_table.exTable.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.testlist_Handler_IamRole_1E7E84A8.name}"
-      }
-    },
-    "aws_iam_role_policy_attachment": {
-      "testlist_Handler_IamRolePolicyAttachment_913EEFDF": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:list/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testlist_Handler_IamRolePolicyAttachment_913EEFDF"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testlist_Handler_IamRole_1E7E84A8.name}"
-      }
-    },
-    "aws_lambda_function": {
-      "testlist_Handler_58856559": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:list/Handler/Default",
-            "uniqueId": "testlist_Handler_58856559"
-          }
-        },
-        "architectures": [
-          "arm64"
-        ],
-        "environment": {
-          "variables": {
-            "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
-            "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"gender\":0}",
-            "DYNAMODB_TABLE_NAME_d5d44f18_PRIMARY_KEY": "name",
-            "WING_FUNCTION_NAME": "Handler-c8867143",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c8867143",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testlist_Handler_IamRole_1E7E84A8.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testlist_Handler_S3Object_8A6D3046.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      }
-    },
-    "aws_s3_bucket": {
-      "Code": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
-          }
-        },
-        "bucket_prefix": "code-c84a50b1-"
-      }
-    },
-    "aws_s3_object": {
-      "testlist_Handler_S3Object_8A6D3046": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:list/Handler/S3Object",
-            "uniqueId": "testlist_Handler_S3Object_8A6D3046"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
       }
     }
   }
