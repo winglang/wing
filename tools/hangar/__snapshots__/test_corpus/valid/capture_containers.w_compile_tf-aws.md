@@ -2,7 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
-module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_at_0____, $__world__in__myMap__, $_arr_at_0__, $_arr_at_1__, $_j___b__, $_mySet_has__my___, $arr_length, $mySet_size }) {
+module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_at_0____, $__obj__args_______if__obj_args______undefined__throw_new_Error__Json_property____args___does_not_exist____return_obj_args_____j___b__, $__world__in__myMap__, $_arr_at_0__, $_arr_at_1__, $_mySet_has__my___, $arr_length, $mySet_size }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -18,7 +18,7 @@ module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_a
       {((cond) => {if (!cond) throw new Error("assertion failed: myMap.has(\"world\")")})($__world__in__myMap__)};
       {((cond) => {if (!cond) throw new Error("assertion failed: myMap.size() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($Object_keys_myMap__length,2)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: arrOfMap.at(0).has(\"bang\")")})($__bang__in___arrOfMap_at_0____)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: j.get(\"b\") == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($_j___b__,"world")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: j.get(\"b\") == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($__obj__args_______if__obj_args______undefined__throw_new_Error__Json_property____args___does_not_exist____return_obj_args_____j___b__,"world")))};
     }
   }
   return $Closure1;
@@ -47,102 +47,13 @@ module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_a
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:capture_containers\",\"${aws_lambda_function.testcapture_containers_Handler_C1B42BA9.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
     "aws": [
       {}
     ]
-  },
-  "resource": {
-    "aws_iam_role": {
-      "testcapture_containers_Handler_IamRole_F3F5FC11": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:capture_containers/Handler/IamRole",
-            "uniqueId": "testcapture_containers_Handler_IamRole_F3F5FC11"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      }
-    },
-    "aws_iam_role_policy": {
-      "testcapture_containers_Handler_IamRolePolicy_631AF9E4": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:capture_containers/Handler/IamRolePolicy",
-            "uniqueId": "testcapture_containers_Handler_IamRolePolicy_631AF9E4"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testcapture_containers_Handler_IamRole_F3F5FC11.name}"
-      }
-    },
-    "aws_iam_role_policy_attachment": {
-      "testcapture_containers_Handler_IamRolePolicyAttachment_8C9C0779": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:capture_containers/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testcapture_containers_Handler_IamRolePolicyAttachment_8C9C0779"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testcapture_containers_Handler_IamRole_F3F5FC11.name}"
-      }
-    },
-    "aws_lambda_function": {
-      "testcapture_containers_Handler_C1B42BA9": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:capture_containers/Handler/Default",
-            "uniqueId": "testcapture_containers_Handler_C1B42BA9"
-          }
-        },
-        "environment": {
-          "variables": {
-            "WING_FUNCTION_NAME": "Handler-c876b763",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c876b763",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testcapture_containers_Handler_IamRole_F3F5FC11.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testcapture_containers_Handler_S3Object_4CA88332.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      }
-    },
-    "aws_s3_bucket": {
-      "Code": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
-          }
-        },
-        "bucket_prefix": "code-c84a50b1-"
-      }
-    },
-    "aws_s3_object": {
-      "testcapture_containers_Handler_S3Object_4CA88332": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:capture_containers/Handler/S3Object",
-            "uniqueId": "testcapture_containers_Handler_S3Object_4CA88332"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      }
-    }
   }
 }
 ```
@@ -150,6 +61,7 @@ module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_a
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -160,44 +72,46 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure1-1.js")({
             $Object_keys_myMap__length: ${context._lift(Object.keys(myMap).length)},
             $__bang__in___arrOfMap_at_0____: ${context._lift(("bang" in ((arrOfMap.at(0)))))},
+            $__obj__args_______if__obj_args______undefined__throw_new_Error__Json_property____args___does_not_exist____return_obj_args_____j___b__: ${context._lift(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(j, "b"))},
             $__world__in__myMap__: ${context._lift(("world" in (myMap)))},
             $_arr_at_0__: ${context._lift((arr.at(0)))},
             $_arr_at_1__: ${context._lift((arr.at(1)))},
-            $_j___b__: ${context._lift((j)["b"])},
             $_mySet_has__my___: ${context._lift((mySet.has("my")))},
             $arr_length: ${context._lift(arr.length)},
             $mySet_size: ${context._lift(mySet.size)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(Object.keys(myMap).length, host, []);
           $Closure1._registerBindObject(("bang" in ((arrOfMap.at(0)))), host, []);
           $Closure1._registerBindObject(("world" in (myMap)), host, []);
+          $Closure1._registerBindObject(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(j, "b"), host, []);
           $Closure1._registerBindObject((arr.at(0)), host, []);
           $Closure1._registerBindObject((arr.at(1)), host, []);
-          $Closure1._registerBindObject((j)["b"], host, []);
           $Closure1._registerBindObject((mySet.has("my")), host, []);
+          $Closure1._registerBindObject(Object.keys(myMap).length, host, []);
           $Closure1._registerBindObject(arr.length, host, []);
           $Closure1._registerBindObject(mySet.size, host, []);
         }

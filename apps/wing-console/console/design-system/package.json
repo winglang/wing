@@ -28,7 +28,7 @@
     "package": "bump-pack -b"
   },
   "dependencies": {
-    "@headlessui/react": "^1.7.15",
+    "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
     "@popperjs/core": "^2.11.8",
     "@tailwindcss/forms": "^0.5.3",
@@ -38,27 +38,27 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-popper": "^2.3.0",
-    "tailwindcss": "^3.3.2"
+    "tailwindcss": "^3.3.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.5",
-    "@storybook/react": "^7.0.20",
+    "@babel/core": "^7.22.11",
+    "@storybook/react": "^7.4.0",
     "@testing-library/react": "^14.0.0",
     "@types/lodash.uniq": "^4.5.7",
-    "@types/react": "^18.2.12",
-    "@types/react-dom": "^18.2.5",
-    "@vitejs/plugin-react": "^4.0.0",
+    "@types/react": "^18.2.21",
+    "@types/react-dom": "^18.2.7",
+    "@vitejs/plugin-react": "^4.0.4",
     "@vitest/coverage-c8": "^0.31.4",
     "@wingconsole/eslint-plugin": "workspace:^",
     "@wingconsole/tsconfig": "workspace:^",
     "bump-pack": "workspace:^",
-    "eslint": "^8.42.0",
+    "eslint": "^8.48.0",
     "happy-dom": "^9.20.3",
-    "tsup": "^7.1.0",
-    "typescript": "^5.1.3",
-    "vite": "^4.3.9",
+    "tsup": "^7.2.0",
+    "typescript": "^5.2.2",
+    "vite": "^4.4.9",
     "vitest": "^0.31.4",
-    "webpack": "^5.86.0"
+    "webpack": "^5.88.2"
   },
   "volta": {
     "extends": "../../../../package.json"

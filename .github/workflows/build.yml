@@ -22,22 +22,23 @@ env:
   RUST_VERSION: "1.67.1"
   NODE_VERSION: "18.16.0"
   PNPM_VERSION: "8.6.3"
+  CARGO_TERM_COLOR: always
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 
 jobs:
   build:
     name: "Build"
     timeout-minutes: 30
     runs-on: ubuntu-latest
-    env:
-      CARGO_TERM_COLOR: always
-      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
     outputs:
       version: ${{ fromJson(steps.changelog.outputs.data).newVersion }}
       last-version: ${{ fromJson(steps.changelog.outputs.data).lastVersion }}
       changelog: ${{ fromJson(steps.changelog.outputs.data).changelog }}
-      vscode-wing-changed: ${{ steps.git-diff-vscode-wing.outputs.diff }}
-
+      vscode-wing-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['vscode-wing#compile'].changes }}
+      console-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['@wingconsole/app#preview:fly'].changes }}
+      e2e-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['hangar#test'].changes }}
+      bench-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['hangar#bench'].changes }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -66,15 +67,26 @@ jobs:
 
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
+        with:
+          # Don't save cache here, to avoid thrashing with test job
+          save-if: false
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Derive appropriate SHAs for base and head
+        id: shas
+        uses: nrwl/nx-set-shas@v3
+
+      - name: Figure out what projects changed
+        id: turbo-diff
+        run: pnpm turbo-diff --startRef ${{ steps.shas.outputs.base }} --endRef ${{ steps.shas.outputs.head }}
 
       - name: Changelog Generation
         id: changelog
         env:
           GENERATE_VERSION: ${{ github.event_name != 'push' || github.repository != 'winglang/wing' }}
-        run: pnpm changelog
+        run: pnpm bump-pack
 
       - name: Build and Package
         run: pnpm package:ci
@@ -85,56 +97,15 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: dist
-          path: dist/*.tgz
-
-      - name: Upload WingC WASM
-        uses: actions/upload-artifact@v3
-        with:
-          name: wingc
-          path: libs/wingcompiler/wingc.wasm
-
-      - name: Derive appropriate SHAs for base and head
-        id: setSHAs
-        uses: nrwl/nx-set-shas@v3
-
-      - name: Check git diff of VSCode Extension
-        id: git-diff-vscode-wing
-        run: |
-          if git diff --quiet ${{ steps.setSHAs.outputs.base }} ${{ github.sha }} -- apps/vscode-wing; then
-            echo "diff=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "diff=true" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Upload Extension
-        uses: actions/upload-artifact@v3
-        with:
-          name: vscode-wing
-          path: apps/vscode-wing/vscode-wing.vsix
-
-      - name: Compress Docs
-        run: tar -czvf docs.tgz docs/*
-
-      - name: Upload Docs
-        uses: actions/upload-artifact@v3
-        with:
-          name: docs
-          path: docs.tgz
+          path: dist/*
 
   test:
     name: Test
-    timeout-minutes: 30
+    timeout-minutes: 60
     runs-on: ubuntu-latest
-    env:
-      CARGO_TERM_COLOR: always
-      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 1
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2.2.4
@@ -171,14 +142,7 @@ jobs:
 
       - name: Create git patch
         id: diff
-        run: |
-          git add --all
-          git diff --staged --binary --patch > build.diff
-          if [ -s build.diff ]; then
-            echo "Diff found, creating a patch to apply later"
-            cat build.diff
-            echo "diff=true" >> $GITHUB_OUTPUT
-          fi
+        run: scripts/create_patch.sh build.diff
 
       - name: Upload patch
         if: steps.diff.outputs.diff == 'true'
@@ -189,6 +153,7 @@ jobs:
 
   benchmark:
     name: Benchmark
+    if: needs.build.outputs.bench-changed == 'true' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full')
     runs-on: ubuntu-latest
     needs:
       - build
@@ -227,18 +192,20 @@ jobs:
           path: tools/hangar/results/report.json
 
       - name: Create Markdown report
-        run: node scripts/benchmark_json_to_table.mjs
+        run: scripts/benchmark_json_to_table.mjs
 
   e2e-test:
     name: "E2E / ${{ matrix.runner }} + Node${{ matrix.node }} [${{ matrix.shard }}]"
     runs-on: "${{ matrix.runner }}-latest"
     needs:
       - build
+    if: needs.build.outputs.e2e-changed == 'true' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full')
     strategy:
       fail-fast: true
       matrix:
         runner: [windows, macos, ubuntu]
-        node: ["18", "20"]
+        # Pinned 20 to 20.5.1 until https://github.com/nodejs/node/issues/49497 is released
+        node: ["18", "20.5.1"]
         shard: ["1/2", "2/2"]
         full_run:
           # Do a full run on push or when the PR is labeled "pr/e2e-full"
@@ -254,8 +221,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 1
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2.2.4
@@ -291,13 +256,7 @@ jobs:
           RAW_SHARD: ${{ matrix.shard }}
         run: |
           SHARD=$(echo $RAW_SHARD | sed 's/\//of/g')
-          DIFF_NAME="e2e-$SHARD.diff"
-          git add --all
-          git diff --staged --binary --patch > $DIFF_NAME
-          if [ -s $DIFF_NAME ]; then
-            echo "diff=true" >> $GITHUB_OUTPUT
-            echo "diff_name=$DIFF_NAME" >> $GITHUB_OUTPUT
-          fi
+          scripts/create_patch.sh "e2e-$SHARD.diff"
 
       - name: Upload mutation
         if: matrix.runner == 'ubuntu' && matrix.node == '18' && steps.diff.outputs.diff == 'true'
@@ -306,15 +265,66 @@ jobs:
           name: ${{ steps.diff.outputs.diff_name }}
           path: ${{ steps.diff.outputs.diff_name }}
 
+  console-preview:
+    name: "Console Preview"
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    env:
+      FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      FLY_VERSION: "0.1.80"
+      APP_NAME: wing-console-pr-${{github.event.number}}
+    if: ${{ needs.build.outputs.console-changed == 'true' && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && !startsWith(github.head_ref, 'mergify/merge-queue/') }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download Dist Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: dist
+
+      - name: Install flyctl
+        uses: superfly/flyctl-actions/setup-flyctl@1.4
+        with:
+          version: ${{ env.FLY_VERSION }}
+
+      - name: Deploy to Fly.io
+        id: deploy-fly
+        run: |
+          if ! flyctl status --app "$APP_NAME"; then
+            pushd ./apps/wing-console/console/app/preview
+            flyctl launch --no-deploy --copy-config --name "$APP_NAME" --image-label latest
+            popd
+          fi
+          flyctl deploy . --config ./apps/wing-console/console/app/preview/fly.toml --app "$APP_NAME" --image-label latest --vm-memory 512 --strategy immediate
+          flyctl scale count 1 --yes --app "$APP_NAME"
+          echo "deploytime=$(TZ=UTC date +'%Y-%m-%d %H:%M')" >> $GITHUB_OUTPUT
+        
+      - name: Post preview comment
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            Console preview environment is available at https://${{env.APP_NAME}}.fly.dev :rocket:
+            
+            *Updated (UTC): ${{steps.deploy-fly.outputs.deploytime }}*
+          comment_tag: Console preview environment
+          GITHUB_TOKEN: ${{secrets.PROJEN_GITHUB_TOKEN}}
+
   quality-gate:
     name: Quality Gate
     runs-on: ubuntu-latest
+    if: ${{ !cancelled() }}
     needs:
       - build
       - e2e-test
       - benchmark
       - test
     steps:
+      - name: Check failure
+        if: needs.build.result == 'failure' || needs.e2e-test.result == 'failure' || needs.benchmark.result == 'failure' || needs.test.result == 'failure'
+        run: exit 1
       - name: Download patches
         uses: actions/download-artifact@v3
       - name: Check patches
@@ -333,7 +343,7 @@ jobs:
 
   publish:
     name: Publish
-    if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' && github.ref == 'refs/heads/main' }}
+    if: ${{ !cancelled() && needs.quality-gate.result == 'success' && github.event_name == 'push' && github.repository == 'winglang/wing' && github.ref == 'refs/heads/main' }}
     needs:
       - quality-gate
       - build
@@ -349,24 +359,27 @@ jobs:
           repo-token: "${{ secrets.PROJEN_GITHUB_TOKEN }}"
           tag: "v${{ needs.build.outputs.version }}"
 
+      - name: Login to NPM registry
+        run: npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
+
+      - name: Publish npm packages
+        working-directory: dist
+        env:
+          PACKAGE_VERSION: ${{ needs.build.outputs.version }}
+        run: |
+          PACKAGES=("winglang-sdk" "winglang-compiler" "wingconsole-design-system" "wingconsole-ui" "wingconsole-server" "wingconsole-app" "winglang")
+          for PACKAGE in "${PACKAGES[@]}"; do
+            npm publish "$PACKAGE-$PACKAGE_VERSION.tgz" --access public
+          done
+
       - name: Publish Extension to Visual Studio Marketplace
         if: needs.build.outputs.vscode-wing-changed == 'true'
         uses: "HaaLeo/publish-vscode-extension@v1"
         with:
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
           registryUrl: "https://marketplace.visualstudio.com"
-          extensionFile: "vscode-wing/vscode-wing.vsix"
+          extensionFile: "dist/vscode-wing.vsix"
           dependencies: false
-
-      - name: Login to NPM registry
-        run: npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
-
-      - name: Publish npm packages
-        run: |
-          for file in *.tgz; do
-            npm publish "$file" --access public
-          done
-        working-directory: dist
 
       - name: Write Changelog
         uses: DamianReeves/write-file-action@v1.2
@@ -377,10 +390,11 @@ jobs:
 
       - name: Compute Checksums
         run: |
-          mv ./docs/*.tgz ./dist
-          mv ./*/*.vsix ./dist
-          mv ./*/*.wasm ./dist
-          mv ./benchmarks/* ./dist
+          # if there is a ./benchmarks/report.json, move it to ./dist
+          if [ -f ./benchmarks/report.json ]; then
+            mv ./benchmarks/report.json ./dist
+          fi
+
           cd dist
 
           echo '' >> ../CHANGELOG.md

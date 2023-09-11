@@ -51,7 +51,24 @@ new cloud.Function(counterFunc);
 
 ### Using keys to manage multiple counter values
 
-🚧 Not implemented yet (tracking issue: [#1375](https://github.com/winglang/wing/issues/1375))
+```js playground
+bring cloud;
+
+let counter = new cloud.Counter(initial: 100);
+
+let counterFunc = inflight () => {
+  let k1 = "key-1";
+  let k2 = "key-2";
+
+  counter.dec(1, k1); // decrement k1 by 1
+  counter.inc(11, k2); // increment k2 by 11
+
+  assert(counter.peek(k1) == 99); // check the current value of k1
+  assert(counter.peek(k2) == 111); // check the current value of k2
+};
+
+new cloud.Function(counterFunc);
+```
 
 ## Target-specific details
 
@@ -208,7 +225,6 @@ specify the key to be set.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Counter.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Counter.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/sdk.cloud.Counter.property.initial">initial</a></code> | <code>num</code> | The initial value of the counter. |
 
 ---
@@ -222,18 +238,6 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
-
----
-
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.Counter.property.display"></a>
-
-```wing
-display: Display;
-```
-
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
-
-Information on how to display a resource in the UI.
 
 ---
 

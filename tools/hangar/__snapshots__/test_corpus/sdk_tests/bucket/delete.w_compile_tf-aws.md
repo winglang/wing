@@ -10,21 +10,30 @@ module.exports = function({ $b }) {
       return $obj;
     }
     async handle() {
-      let error = "";
+      const assertThrows = async (expected, block) => {
+        let error = false;
+        try {
+          (await block());
+        }
+        catch ($error_actual) {
+          const actual = $error_actual.message;
+          {((cond) => {if (!cond) throw new Error("assertion failed: actual == expected")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(actual,expected)))};
+          error = true;
+        }
+        {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
+      }
+      ;
+      const OBJECT_DOES_NOT_EXIST_ERROR = "Object does not exist (key=file1.json).";
       const jsonObj1 = ({"key1": "value1"});
       (await $b.putJson("file1.json",jsonObj1));
       (await $b.delete("file1.txt"));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file1.json\")")})((await $b.exists("file1.json")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file2.txt\")")})((await $b.exists("file2.txt")))};
       (await $b.delete("file1.json",{ mustExist: true }));
-      try {
+      (await assertThrows(OBJECT_DOES_NOT_EXIST_ERROR,async () => {
         (await $b.delete("file1.json",{ mustExist: true }));
       }
-      catch ($error_e) {
-        const e = $error_e.message;
-        error = e;
-      }
-      {((cond) => {if (!cond) throw new Error("assertion failed: error == \"Object does not exist (key=file1.json).\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(error,"Object does not exist (key=file1.json).")))};
+      ));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file2.txt\")")})((await $b.exists("file2.txt")))};
       (await $b.delete("file2.txt"));
       {((cond) => {if (!cond) throw new Error("assertion failed: !b.exists(\"file2.txt\")")})((!(await $b.exists("file2.txt"))))};
@@ -56,7 +65,7 @@ module.exports = function({ $b }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:delete\",\"${aws_lambda_function.testdelete_Handler_3DFCE06A.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -65,80 +74,7 @@ module.exports = function({ $b }) {
     ]
   },
   "resource": {
-    "aws_iam_role": {
-      "testdelete_Handler_IamRole_0B29F48A": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:delete/Handler/IamRole",
-            "uniqueId": "testdelete_Handler_IamRole_0B29F48A"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      }
-    },
-    "aws_iam_role_policy": {
-      "testdelete_Handler_IamRolePolicy_D6FF0B67": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:delete/Handler/IamRolePolicy",
-            "uniqueId": "testdelete_Handler_IamRolePolicy_D6FF0B67"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.testdelete_Handler_IamRole_0B29F48A.name}"
-      }
-    },
-    "aws_iam_role_policy_attachment": {
-      "testdelete_Handler_IamRolePolicyAttachment_F5BB5ED1": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:delete/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testdelete_Handler_IamRolePolicyAttachment_F5BB5ED1"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testdelete_Handler_IamRole_0B29F48A.name}"
-      }
-    },
-    "aws_lambda_function": {
-      "testdelete_Handler_3DFCE06A": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:delete/Handler/Default",
-            "uniqueId": "testdelete_Handler_3DFCE06A"
-          }
-        },
-        "environment": {
-          "variables": {
-            "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
-            "WING_FUNCTION_NAME": "Handler-c8edf1bd",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c8edf1bd",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testdelete_Handler_IamRole_0B29F48A.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testdelete_Handler_S3Object_3216CE50.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      }
-    },
     "aws_s3_bucket": {
-      "Code": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
-          }
-        },
-        "bucket_prefix": "code-c84a50b1-"
-      },
       "cloudBucket": {
         "//": {
           "metadata": {
@@ -148,39 +84,6 @@ module.exports = function({ $b }) {
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
         "force_destroy": false
-      }
-    },
-    "aws_s3_bucket_public_access_block": {
-      "cloudBucket_PublicAccessBlock_5946CCE8": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "cloudBucket_PublicAccessBlock_5946CCE8"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      }
-    },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "cloudBucket_Encryption_77B6AEEF": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Encryption",
-            "uniqueId": "cloudBucket_Encryption_77B6AEEF"
-          }
-        },
-        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
       }
     },
     "aws_s3_object": {
@@ -194,17 +97,6 @@ module.exports = function({ $b }) {
         "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
         "content": "Bar",
         "key": "file2.txt"
-      },
-      "testdelete_Handler_S3Object_3216CE50": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:delete/Handler/S3Object",
-            "uniqueId": "testdelete_Handler_S3Object_3216CE50"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
       }
     }
   }
@@ -214,6 +106,7 @@ module.exports = function({ $b }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -224,26 +117,28 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure1-1.js")({
             $b: ${context._lift(b)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {

@@ -98,102 +98,13 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:calling different types of inflights\",\"${aws_lambda_function.testcallingdifferenttypesofinflights_Handler_F0BAE661.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
     "aws": [
       {}
     ]
-  },
-  "resource": {
-    "aws_iam_role": {
-      "testcallingdifferenttypesofinflights_Handler_IamRole_3D2D3E24": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:calling different types of inflights/Handler/IamRole",
-            "uniqueId": "testcallingdifferenttypesofinflights_Handler_IamRole_3D2D3E24"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      }
-    },
-    "aws_iam_role_policy": {
-      "testcallingdifferenttypesofinflights_Handler_IamRolePolicy_150C3E36": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:calling different types of inflights/Handler/IamRolePolicy",
-            "uniqueId": "testcallingdifferenttypesofinflights_Handler_IamRolePolicy_150C3E36"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testcallingdifferenttypesofinflights_Handler_IamRole_3D2D3E24.name}"
-      }
-    },
-    "aws_iam_role_policy_attachment": {
-      "testcallingdifferenttypesofinflights_Handler_IamRolePolicyAttachment_6F365B35": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:calling different types of inflights/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testcallingdifferenttypesofinflights_Handler_IamRolePolicyAttachment_6F365B35"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testcallingdifferenttypesofinflights_Handler_IamRole_3D2D3E24.name}"
-      }
-    },
-    "aws_lambda_function": {
-      "testcallingdifferenttypesofinflights_Handler_F0BAE661": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:calling different types of inflights/Handler/Default",
-            "uniqueId": "testcallingdifferenttypesofinflights_Handler_F0BAE661"
-          }
-        },
-        "environment": {
-          "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8f324e0",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c8f324e0",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testcallingdifferenttypesofinflights_Handler_IamRole_3D2D3E24.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testcallingdifferenttypesofinflights_Handler_S3Object_A64779ED.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      }
-    },
-    "aws_s3_bucket": {
-      "Code": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
-          }
-        },
-        "bucket_prefix": "code-c84a50b1-"
-      }
-    },
-    "aws_s3_object": {
-      "testcallingdifferenttypesofinflights_Handler_S3Object_A64779ED": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:calling different types of inflights/Handler/S3Object",
-            "uniqueId": "testcallingdifferenttypesofinflights_Handler_S3Object_A64779ED"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      }
-    }
   }
 }
 ```
@@ -201,6 +112,7 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -210,67 +122,71 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("makeFn", "callFn", "callFn2", "$inflight_init", "inflight2");
         const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
-            this._addInflightOps("handle", "$inflight_init");
-            this.display.hidden = true;
+            (std.Node.of(this)).hidden = true;
           }
           static _toInflightType(context) {
-            return $stdlib.core.NodeJsCode.fromInline(`
+            return `
               require("./inflight.$Closure1-1.js")({
               })
-            `);
+            `;
           }
           _toInflight() {
-            return $stdlib.core.NodeJsCode.fromInline(`
+            return `
               (await (async () => {
-                const $Closure1Client = ${$Closure1._toInflightType(this).text};
+                const $Closure1Client = ${$Closure1._toInflightType(this)};
                 const client = new $Closure1Client({
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
                 return client;
               })())
-            `);
+            `;
+          }
+          _getInflightOps() {
+            return ["handle", "$inflight_init"];
           }
         }
         this.inflight1 = new $Closure1(this,"$Closure1");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.Foo-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const FooClient = ${Foo._toInflightType(this).text};
+            const FooClient = ${Foo._toInflightType(this)};
             const client = new FooClient({
               $this_inflight1: ${this._lift(this.inflight1)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["inflight2", "makeFn", "callFn", "callFn2", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject(this.inflight1, host, []);
           Foo._registerBindObject(this, host, ["inflight2"]);
+          Foo._registerBindObject(this.inflight1, host, []);
         }
         if (ops.includes("callFn")) {
           Foo._registerBindObject(this, host, ["makeFn"]);
         }
         if (ops.includes("callFn2")) {
-          Foo._registerBindObject(this.inflight1, host, ["handle"]);
           Foo._registerBindObject(this, host, ["inflight2"]);
+          Foo._registerBindObject(this.inflight1, host, ["handle"]);
         }
         if (ops.includes("makeFn")) {
-          Foo._registerBindObject(this.inflight1, host, ["handle"]);
           Foo._registerBindObject(this, host, ["inflight2"]);
+          Foo._registerBindObject(this.inflight1, host, ["handle"]);
         }
         super._registerBind(host, ops);
       }
@@ -278,26 +194,28 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure2-1.js")({
             $foo: ${context._lift(foo)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const $Closure2Client = ${$Closure2._toInflightType(this)};
             const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {

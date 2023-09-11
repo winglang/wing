@@ -2,9 +2,9 @@ import { existsSync } from "fs";
 import { join } from "path";
 import { Tree } from "./tree";
 import { SDK_VERSION } from "../constants";
-import { CONNECTIONS_FILE_PATH, ConstructTree, TREE_FILE_PATH } from "../core";
+import { ConstructTree, TREE_FILE_PATH } from "../core";
 import { readJsonSync } from "../shared/misc";
-import { Trace, TraceType } from "../std";
+import { CONNECTIONS_FILE_PATH, Trace, TraceType } from "../std";
 // eslint-disable-next-line import/no-restricted-paths
 import { DefaultSimulatorFactory } from "../target-sim/factory.inflight";
 import { isToken } from "../target-sim/tokens";

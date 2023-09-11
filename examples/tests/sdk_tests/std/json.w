@@ -3,34 +3,86 @@
 //-----------------------------------------------------------------------------
 bring cloud;
 
-// set() & get()
-let a = MutJson { a: 1 };
-let b = MutJson { b: 2 };
-a.set("c", b);
+test "get()" {
+  let assertThrows = (expected: str, block: (): void) => {
+    let var error = false;
+    try {
+      block();
+    } catch actual {
+      assert(actual == expected);
+      error = true;
+    }
+    assert(error);
+  };
 
-let c = a.get("c");
-assert(c.get("b") == 2);
+  let JSON_PROPERTY_DOES_NOT_EXIST_ERROR = "Json property \"c\" does not exist";
+  let obj = Json { a: 1, b: 2 };
+  let mutObj = MutJson { a: 1, b: 2 };
 
-test "set()" {
-  let x = MutJson { a: 1 };
-  x.set("b", 2);
-  let y = x.get("b"); 
-  assert(y == 2);
+  assert(obj.get("b") == 2);
+  assert(mutObj.get("b") == 2);
+
+  assertThrows(JSON_PROPERTY_DOES_NOT_EXIST_ERROR, () => {
+    obj.get("c");
+  });
+  assertThrows(JSON_PROPERTY_DOES_NOT_EXIST_ERROR, () => {
+    mutObj.get("c");
+  });
 }
 
-//-----------------------------------------------------------------------------
-// setAt() & getAt()
-let d = MutJson { d: 3 };
-a.setAt(2, d);
-let e = a.getAt(2);
-assert(e.get("d") == 3);
+test "getAt()" {
+  let assertThrows = (expected: str, block: (): void) => {
+    let var error = false;
+    try {
+      block();
+    } catch actual {
+      assert(actual == expected);
+      error = true;
+    }
+    assert(error);
+  };
+
+  let INDEX_OUT_OF_BOUNDS_ERROR = "Index out of bounds";
+  let jsonArray = Json ["foo", "bar", "baz"];
+  let mutJsonArray = MutJson [1, 2, 3];
+
+  assert(jsonArray.getAt(2) == "baz");
+  assert(mutJsonArray.getAt(2) == 3);
+
+  assertThrows(INDEX_OUT_OF_BOUNDS_ERROR, () => {
+    jsonArray.getAt(3);
+    mutJsonArray.getAt(3);
+  });
+}
+
+test "set()" {
+  let mutObj = MutJson { x: 1, y: 2 };
+
+  mutObj.set("x", -1);
+  mutObj.set("z", 3);
+
+  assert(mutObj.get("x") == -1);
+  assert(mutObj.get("z") == 3);
+}
 
 test "setAt()" {
-  let x = MutJson { a: 1 };
-  let a = MutJson { c: 3 };
-  x.setAt(2, a);
-  let d = x.getAt(2);
-  assert(d.get("c") == 3);
+  let mutJsonArray = MutJson [1, 2, 3];
+
+  mutJsonArray.setAt(0, -1);
+  mutJsonArray.setAt(3, 3);
+
+  assert(mutJsonArray.getAt(0) == -1);
+  assert(mutJsonArray.getAt(3) == 3);
+}
+
+test "stringify()" {
+  let obj = Json { a: 1, b: 2 };
+
+  let stringified = Json.stringify(obj);
+  let stringifiedIndent = Json.stringify(obj, indent: 2);
+
+  assert(stringified == "{\"a\":1,\"b\":2}");
+  assert(stringifiedIndent == "{\n  \"a\": 1,\n  \"b\": 2\n}");
 }
 
 //-----------------------------------------------------------------------------

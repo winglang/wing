@@ -29,8 +29,8 @@ import {
   App as CoreApp,
   AppProps,
   preSynthesizeAllConstructs,
-  Connections,
   synthesizeTree,
+  Connections,
 } from "../core";
 import { PluginManager } from "../core/plugin-manager";
 import { TEST_RUNNER_FQN } from "../std";
@@ -53,6 +53,8 @@ export class App extends CoreApp {
   public readonly outdir: string;
   public readonly isTestEnvironment: boolean;
   public readonly _tokens: CdkTokens;
+
+  public readonly _target = "awscdk";
 
   private readonly cdkApp: cdk.App;
   private readonly cdkStack: cdk.Stack;

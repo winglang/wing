@@ -72,7 +72,7 @@ exports[`bucket is public 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -92,7 +92,145 @@ exports[`bucket is public 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.70",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.17.0",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.17.0",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.17.0",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`bucket with two preflight files 1`] = `
+{
+  "resource": {
+    "google_storage_bucket": {
+      "my_bucket": {
+        "location": "US",
+        "name": "my_bucket-\${random_id.my_bucket_Id_50F73A6B.hex}",
+        "public_access_prevention": "enforced",
+        "uniform_bucket_level_access": true,
+      },
+    },
+    "google_storage_bucket_object": {
+      "my_bucket_Object-file1txt_F3CECCDA": {
+        "bucket": "\${google_storage_bucket.my_bucket.id}",
+        "content": "test1",
+        "name": "file1.txt",
+      },
+      "my_bucket_Object-file2txt_DA15A080": {
+        "bucket": "\${google_storage_bucket.my_bucket.id}",
+        "content": "test2",
+        "name": "file2.txt",
+      },
+    },
+    "random_id": {
+      "my_bucket_Id_50F73A6B": {
+        "byte_length": 4,
+      },
+    },
+  },
+}
+`;
+
+exports[`bucket with two preflight files 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "google": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.17.0",
+                },
+                "id": "google",
+                "path": "root/Default/google",
+              },
+              "my_bucket": {
+                "children": {
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "Default",
+                    "path": "root/Default/my_bucket/Default",
+                  },
+                  "Id": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "Id",
+                    "path": "root/Default/my_bucket/Id",
+                  },
+                  "Object-file1.txt": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "Object-file1.txt",
+                    "path": "root/Default/my_bucket/Object-file1.txt",
+                  },
+                  "Object-file2.txt": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "Object-file2.txt",
+                    "path": "root/Default/my_bucket/Object-file2.txt",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "A cloud object store",
+                  "title": "Bucket",
+                },
+                "id": "my_bucket",
+                "path": "root/Default/my_bucket",
+              },
+              "random": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.17.0",
+                },
+                "id": "random",
+                "path": "root/Default/random",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.2.70",
             },
             "id": "Default",
             "path": "root/Default",
@@ -210,7 +348,7 @@ exports[`bucket with two preflight objects 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -230,7 +368,7 @@ exports[`bucket with two preflight objects 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.70",
             },
             "id": "Default",
             "path": "root/Default",
@@ -320,7 +458,7 @@ exports[`create a bucket 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -340,7 +478,7 @@ exports[`create a bucket 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.70",
             },
             "id": "Default",
             "path": "root/Default",
@@ -439,7 +577,7 @@ exports[`two buckets 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -469,7 +607,7 @@ exports[`two buckets 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -489,7 +627,7 @@ exports[`two buckets 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.70",
             },
             "id": "Default",
             "path": "root/Default",

@@ -63,102 +63,13 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:structure interface types for 'handle'\",\"${aws_lambda_function.teststructureinterfacetypesforhandle_Handler_2DA6D9F8.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
     "aws": [
       {}
     ]
-  },
-  "resource": {
-    "aws_iam_role": {
-      "teststructureinterfacetypesforhandle_Handler_IamRole_12602AE7": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:structure interface types for 'handle'/Handler/IamRole",
-            "uniqueId": "teststructureinterfacetypesforhandle_Handler_IamRole_12602AE7"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      }
-    },
-    "aws_iam_role_policy": {
-      "teststructureinterfacetypesforhandle_Handler_IamRolePolicy_AD8B964E": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:structure interface types for 'handle'/Handler/IamRolePolicy",
-            "uniqueId": "teststructureinterfacetypesforhandle_Handler_IamRolePolicy_AD8B964E"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.teststructureinterfacetypesforhandle_Handler_IamRole_12602AE7.name}"
-      }
-    },
-    "aws_iam_role_policy_attachment": {
-      "teststructureinterfacetypesforhandle_Handler_IamRolePolicyAttachment_B1D53B86": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:structure interface types for 'handle'/Handler/IamRolePolicyAttachment",
-            "uniqueId": "teststructureinterfacetypesforhandle_Handler_IamRolePolicyAttachment_B1D53B86"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.teststructureinterfacetypesforhandle_Handler_IamRole_12602AE7.name}"
-      }
-    },
-    "aws_lambda_function": {
-      "teststructureinterfacetypesforhandle_Handler_2DA6D9F8": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:structure interface types for 'handle'/Handler/Default",
-            "uniqueId": "teststructureinterfacetypesforhandle_Handler_2DA6D9F8"
-          }
-        },
-        "environment": {
-          "variables": {
-            "WING_FUNCTION_NAME": "Handler-c83718d0",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c83718d0",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.teststructureinterfacetypesforhandle_Handler_IamRole_12602AE7.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.teststructureinterfacetypesforhandle_Handler_S3Object_9308866C.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      }
-    },
-    "aws_s3_bucket": {
-      "Code": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
-          }
-        },
-        "bucket_prefix": "code-c84a50b1-"
-      }
-    },
-    "aws_s3_object": {
-      "teststructureinterfacetypesforhandle_Handler_S3Object_9308866C": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:structure interface types for 'handle'/Handler/S3Object",
-            "uniqueId": "teststructureinterfacetypesforhandle_Handler_S3Object_9308866C"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      }
-    }
   }
 }
 ```
@@ -166,6 +77,7 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -176,49 +88,53 @@ class $Root extends $stdlib.std.Resource {
     class NotGoo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.NotGoo-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const NotGooClient = ${NotGoo._toInflightType(this).text};
+            const NotGooClient = ${NotGoo._toInflightType(this)};
             const client = new NotGooClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure1-1.js")({
             $NotGoo: ${context._lift(NotGoo)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
     }
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:structure interface types for 'handle'",new $Closure1(this,"$Closure1"));

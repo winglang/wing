@@ -78,7 +78,7 @@ async handle(message) {
         "OnStartHandler": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -91,7 +91,7 @@ async handle(message) {
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -106,7 +106,7 @@ async handle(message) {
             "my_service-ServiceOnStart-ef2b13b9": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.70",
               },
               "display": {
                 "hidden": true,
@@ -117,7 +117,7 @@ async handle(message) {
             "my_service-ServiceOnStartef2b13b9": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.70",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -130,7 +130,7 @@ async handle(message) {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud service",
@@ -142,7 +142,7 @@ async handle(message) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",

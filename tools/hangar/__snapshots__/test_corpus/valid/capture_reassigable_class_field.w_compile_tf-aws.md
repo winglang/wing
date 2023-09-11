@@ -107,7 +107,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:main\",\"${aws_lambda_function.testmain_Handler_242B2607.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -135,81 +135,7 @@ module.exports = function({  }) {
         "name": "wing-counter-sasa-c8fc4cc8"
       }
     },
-    "aws_iam_role": {
-      "testmain_Handler_IamRole_0E2C4B8D": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:main/Handler/IamRole",
-            "uniqueId": "testmain_Handler_IamRole_0E2C4B8D"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      }
-    },
-    "aws_iam_role_policy": {
-      "testmain_Handler_IamRolePolicy_A91080AC": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:main/Handler/IamRolePolicy",
-            "uniqueId": "testmain_Handler_IamRolePolicy_A91080AC"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.arn}\",\"${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.sasa.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.sasa.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.testmain_Handler_IamRole_0E2C4B8D.name}"
-      }
-    },
-    "aws_iam_role_policy_attachment": {
-      "testmain_Handler_IamRolePolicyAttachment_4B878377": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:main/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testmain_Handler_IamRolePolicyAttachment_4B878377"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testmain_Handler_IamRole_0E2C4B8D.name}"
-      }
-    },
-    "aws_lambda_function": {
-      "testmain_Handler_242B2607": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:main/Handler/Default",
-            "uniqueId": "testmain_Handler_242B2607"
-          }
-        },
-        "environment": {
-          "variables": {
-            "BUCKET_NAME_ce72b88b": "${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.bucket}",
-            "DYNAMODB_TABLE_NAME_5a275103": "${aws_dynamodb_table.sasa.name}",
-            "WING_FUNCTION_NAME": "Handler-c8d10438",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c8d10438",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testmain_Handler_IamRole_0E2C4B8D.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testmain_Handler_S3Object_3FA67F7E.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      }
-    },
     "aws_s3_bucket": {
-      "Code": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
-          }
-        },
-        "bucket_prefix": "code-c84a50b1-"
-      },
       "KeyValueStore_cloudBucket_D9D365FD": {
         "//": {
           "metadata": {
@@ -220,52 +146,6 @@ module.exports = function({  }) {
         "bucket_prefix": "cloud-bucket-c8a9ef69-",
         "force_destroy": false
       }
-    },
-    "aws_s3_bucket_public_access_block": {
-      "KeyValueStore_cloudBucket_PublicAccessBlock_A373F90E": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/KeyValueStore/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "KeyValueStore_cloudBucket_PublicAccessBlock_A373F90E"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      }
-    },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "KeyValueStore_cloudBucket_Encryption_D3F8A987": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/KeyValueStore/cloud.Bucket/Encryption",
-            "uniqueId": "KeyValueStore_cloudBucket_Encryption_D3F8A987"
-          }
-        },
-        "bucket": "${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      }
-    },
-    "aws_s3_object": {
-      "testmain_Handler_S3Object_3FA67F7E": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:main/Handler/S3Object",
-            "uniqueId": "testmain_Handler_S3Object_3FA67F7E"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      }
     }
   }
 }
@@ -274,6 +154,7 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -285,31 +166,32 @@ class $Root extends $stdlib.std.Resource {
     class KeyValueStore extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("get", "set", "$inflight_init");
         this.bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
         const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
-            this._addInflightOps("handle", "$inflight_init");
-            this.display.hidden = true;
+            (std.Node.of(this)).hidden = true;
           }
           static _toInflightType(context) {
-            return $stdlib.core.NodeJsCode.fromInline(`
+            return `
               require("./inflight.$Closure1-1.js")({
               })
-            `);
+            `;
           }
           _toInflight() {
-            return $stdlib.core.NodeJsCode.fromInline(`
+            return `
               (await (async () => {
-                const $Closure1Client = ${$Closure1._toInflightType(this).text};
+                const $Closure1Client = ${$Closure1._toInflightType(this)};
                 const client = new $Closure1Client({
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
                 return client;
               })())
-            `);
+            `;
+          }
+          _getInflightOps() {
+            return ["handle", "$inflight_init"];
           }
         }
         this.onUpdateCallback = new $Closure1(this,"$Closure1");
@@ -318,15 +200,15 @@ class $Root extends $stdlib.std.Resource {
         this.onUpdateCallback = fn;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.KeyValueStore-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const KeyValueStoreClient = ${KeyValueStore._toInflightType(this).text};
+            const KeyValueStoreClient = ${KeyValueStore._toInflightType(this)};
             const client = new KeyValueStoreClient({
               $this_bucket: ${this._lift(this.bucket)},
               $this_onUpdateCallback: ${this._lift(this.onUpdateCallback)},
@@ -334,7 +216,10 @@ class $Root extends $stdlib.std.Resource {
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["get", "set", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -354,26 +239,28 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure2-1.js")({
             $counter: ${context._lift(counter)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const $Closure2Client = ${$Closure2._toInflightType(this)};
             const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -385,28 +272,30 @@ class $Root extends $stdlib.std.Resource {
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure3-1.js")({
             $counter: ${context._lift(counter)},
             $kv: ${context._lift(kv)},
             $util_Util: ${context._lift(util.Util)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure3Client = ${$Closure3._toInflightType(this).text};
+            const $Closure3Client = ${$Closure3._toInflightType(this)};
             const client = new $Closure3Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {

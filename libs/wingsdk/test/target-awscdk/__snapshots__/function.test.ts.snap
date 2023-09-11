@@ -20,6 +20,9 @@ exports[`basic function 1`] = `
         "FunctionServiceRole675BB04A",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
@@ -120,6 +123,9 @@ exports[`basic function with environment variables 1`] = `
         "FunctionServiceRole675BB04A",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
@@ -226,6 +232,9 @@ exports[`basic function with memory size specified 1`] = `
         "FunctionServiceRole675BB04A",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
@@ -327,6 +336,9 @@ exports[`basic function with timeout explicitly set 1`] = `
         "FunctionServiceRole675BB04A",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",

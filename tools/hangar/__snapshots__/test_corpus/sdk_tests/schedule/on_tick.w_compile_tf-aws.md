@@ -79,7 +79,7 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/on tick is called both for rate and cron schedules\",\"${aws_lambda_function.ontickiscalledbothforrateandcronschedules_Handler_B4B8DF58.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -186,15 +186,6 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      },
-      "ontickiscalledbothforrateandcronschedules_Handler_IamRole_89BBCA80": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/on tick is called both for rate and cron schedules/Handler/IamRole",
-            "uniqueId": "ontickiscalledbothforrateandcronschedules_Handler_IamRole_89BBCA80"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
@@ -217,16 +208,6 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.c2.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.from_rate-OnTick-86898773_IamRole_0C967FAF.name}"
-      },
-      "ontickiscalledbothforrateandcronschedules_Handler_IamRolePolicy_458097AC": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/on tick is called both for rate and cron schedules/Handler/IamRolePolicy",
-            "uniqueId": "ontickiscalledbothforrateandcronschedules_Handler_IamRolePolicy_458097AC"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.c1.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.c2.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.ontickiscalledbothforrateandcronschedules_Handler_IamRole_89BBCA80.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -249,16 +230,6 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.from_rate-OnTick-86898773_IamRole_0C967FAF.name}"
-      },
-      "ontickiscalledbothforrateandcronschedules_Handler_IamRolePolicyAttachment_39063BDF": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/on tick is called both for rate and cron schedules/Handler/IamRolePolicyAttachment",
-            "uniqueId": "ontickiscalledbothforrateandcronschedules_Handler_IamRolePolicyAttachment_39063BDF"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.ontickiscalledbothforrateandcronschedules_Handler_IamRole_89BBCA80.name}"
       }
     },
     "aws_lambda_function": {
@@ -269,6 +240,9 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
             "uniqueId": "from_cron-OnTick-cdafee6e"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_bca69a1d": "${aws_dynamodb_table.c1.name}",
@@ -296,6 +270,9 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
             "uniqueId": "from_rate-OnTick-86898773"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_7ba9f967": "${aws_dynamodb_table.c2.name}",
@@ -311,34 +288,6 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.from_rate-OnTick-86898773_S3Object_68EB6CB9.key}",
         "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      },
-      "ontickiscalledbothforrateandcronschedules_Handler_B4B8DF58": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/on tick is called both for rate and cron schedules/Handler/Default",
-            "uniqueId": "ontickiscalledbothforrateandcronschedules_Handler_B4B8DF58"
-          }
-        },
-        "environment": {
-          "variables": {
-            "DYNAMODB_TABLE_NAME_7ba9f967": "${aws_dynamodb_table.c2.name}",
-            "DYNAMODB_TABLE_NAME_bca69a1d": "${aws_dynamodb_table.c1.name}",
-            "WING_FUNCTION_NAME": "Handler-c8fa0698",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c8fa0698",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.ontickiscalledbothforrateandcronschedules_Handler_IamRole_89BBCA80.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.ontickiscalledbothforrateandcronschedules_Handler_S3Object_C05D01D6.key}",
-        "timeout": 120,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
@@ -406,17 +355,6 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
         "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
-      },
-      "ontickiscalledbothforrateandcronschedules_Handler_S3Object_C05D01D6": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/on tick is called both for rate and cron schedules/Handler/S3Object",
-            "uniqueId": "ontickiscalledbothforrateandcronschedules_Handler_S3Object_C05D01D6"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
       }
     }
   }
@@ -426,6 +364,7 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -437,26 +376,28 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure1-1.js")({
             $c1: ${context._lift(c1)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -468,26 +409,28 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure2-1.js")({
             $c2: ${context._lift(c2)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const $Closure2Client = ${$Closure2._toInflightType(this)};
             const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -499,29 +442,31 @@ class $Root extends $stdlib.std.Resource {
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure3-1.js")({
             $c1: ${context._lift(c1)},
             $c2: ${context._lift(c2)},
             $std_Duration: ${context._lift(std.Duration)},
             $util_Util: ${context._lift(util.Util)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure3Client = ${$Closure3._toInflightType(this).text};
+            const $Closure3Client = ${$Closure3._toInflightType(this)};
             const client = new $Closure3Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {

@@ -37,10 +37,6 @@ export interface LayoutPanel {
 }
 
 export interface LayoutConfig {
-  header?: {
-    hide?: boolean;
-    showThemeToggle?: boolean;
-  };
   leftPanel?: LayoutPanel;
   bottomPanel?: LayoutPanel;
   statusBar?: {
@@ -51,6 +47,9 @@ export interface LayoutConfig {
     position?: "default" | "bottom";
     displayTitle?: boolean;
     displayLinks?: boolean;
+  };
+  panels?: {
+    rounded?: boolean;
   };
 }
 
@@ -69,6 +68,12 @@ export interface TestsStateManager {
   setTest: (test: TestItem) => void;
 }
 
+export interface FileLink {
+  path: string;
+  line?: number;
+  column?: number;
+}
+
 export interface RouterContext {
   simulator(): Promise<testing.Simulator>;
   appDetails(): Promise<{
@@ -78,6 +83,7 @@ export interface RouterContext {
   emitter: Emittery<{
     invalidateQuery: string | undefined;
     trace: Trace;
+    openFileInEditor: FileLink;
   }>;
   appState(): State;
   logger: ConsoleLogger;

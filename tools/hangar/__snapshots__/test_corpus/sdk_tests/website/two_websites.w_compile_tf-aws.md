@@ -10,16 +10,8 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
       return $obj;
     }
     async handle() {
-      let url1 = $w1_url;
-      if ((!url1.startsWith("http"))) {
-        url1 = ("http://" + url1);
-      }
-      let url2 = $w2_url;
-      if ((!url2.startsWith("http"))) {
-        url2 = ("http://" + url2);
-      }
-      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(url1).ok")})((await $http_Util.get(url1)).ok)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(url2).ok")})((await $http_Util.get(url2)).ok)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(w1.url).ok")})((await $http_Util.get($w1_url)).ok)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(w2.url).ok")})((await $http_Util.get($w2_url)).ok)};
     }
   }
   return $Closure1;
@@ -122,7 +114,7 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:deploying two websites\",\"${aws_lambda_function.testdeployingtwowebsites_Handler_DDBE7E21.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -257,81 +249,7 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
         "signing_protocol": "sigv4"
       }
     },
-    "aws_iam_role": {
-      "testdeployingtwowebsites_Handler_IamRole_C5BF60A5": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:deploying two websites/Handler/IamRole",
-            "uniqueId": "testdeployingtwowebsites_Handler_IamRole_C5BF60A5"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      }
-    },
-    "aws_iam_role_policy": {
-      "testdeployingtwowebsites_Handler_IamRolePolicy_E99ED47B": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:deploying two websites/Handler/IamRolePolicy",
-            "uniqueId": "testdeployingtwowebsites_Handler_IamRolePolicy_E99ED47B"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testdeployingtwowebsites_Handler_IamRole_C5BF60A5.name}"
-      }
-    },
-    "aws_iam_role_policy_attachment": {
-      "testdeployingtwowebsites_Handler_IamRolePolicyAttachment_54B8671A": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:deploying two websites/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testdeployingtwowebsites_Handler_IamRolePolicyAttachment_54B8671A"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testdeployingtwowebsites_Handler_IamRole_C5BF60A5.name}"
-      }
-    },
-    "aws_lambda_function": {
-      "testdeployingtwowebsites_Handler_DDBE7E21": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:deploying two websites/Handler/Default",
-            "uniqueId": "testdeployingtwowebsites_Handler_DDBE7E21"
-          }
-        },
-        "environment": {
-          "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8683851",
-            "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_16": "${jsonencode(aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name)}",
-            "WING_TOKEN_TFTOKEN_TOKEN_32": "${jsonencode(aws_cloudfront_distribution.website-2_Distribution_F1FA4680.domain_name)}"
-          }
-        },
-        "function_name": "Handler-c8683851",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testdeployingtwowebsites_Handler_IamRole_C5BF60A5.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testdeployingtwowebsites_Handler_S3Object_E54888BB.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      }
-    },
     "aws_s3_bucket": {
-      "Code": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
-          }
-        },
-        "bucket_prefix": "code-c84a50b1-"
-      },
       "cloudWebsite_WebsiteBucket_EB03D355": {
         "//": {
           "metadata": {
@@ -373,68 +291,6 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
         },
         "bucket": "${aws_s3_bucket.website-2_WebsiteBucket_59576A0C.id}",
         "policy": "${data.aws_iam_policy_document.website-2_AllowDistributionReadOnly_994269D9.json}"
-      }
-    },
-    "aws_s3_bucket_public_access_block": {
-      "cloudWebsite_PublicAccessBlock_18A70311": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Website/PublicAccessBlock",
-            "uniqueId": "cloudWebsite_PublicAccessBlock_18A70311"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      },
-      "website-2_PublicAccessBlock_304A3A16": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/website-2/PublicAccessBlock",
-            "uniqueId": "website-2_PublicAccessBlock_304A3A16"
-          }
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.website-2_WebsiteBucket_59576A0C.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true
-      }
-    },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "cloudWebsite_Encryption_6A8A4E29": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Website/Encryption",
-            "uniqueId": "cloudWebsite_Encryption_6A8A4E29"
-          }
-        },
-        "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      },
-      "website-2_Encryption_A1B72094": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/website-2/Encryption",
-            "uniqueId": "website-2_Encryption_A1B72094"
-          }
-        },
-        "bucket": "${aws_s3_bucket.website-2_WebsiteBucket_59576A0C.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
       }
     },
     "aws_s3_bucket_website_configuration": {
@@ -496,17 +352,6 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
         "source": "<SOURCE>",
         "source_hash": "${filemd5(<SOURCE>)}"
       },
-      "testdeployingtwowebsites_Handler_S3Object_E54888BB": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:deploying two websites/Handler/S3Object",
-            "uniqueId": "testdeployingtwowebsites_Handler_S3Object_E54888BB"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      },
       "website-2_File--indexhtml_E2F4EB6E": {
         "//": {
           "metadata": {
@@ -547,6 +392,7 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -558,33 +404,35 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure1-1.js")({
             $http_Util: ${context._lift(http.Util)},
             $w1_url: ${context._lift(w1.url)},
             $w2_url: ${context._lift(w2.url)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(w1.url, host, []);
-          $Closure1._registerBindObject(w2.url, host, []);
+          $Closure1._registerBindObject(w1.url, host, ["ok"]);
+          $Closure1._registerBindObject(w2.url, host, ["ok"]);
         }
         super._registerBind(host, ops);
       }

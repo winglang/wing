@@ -89,7 +89,7 @@ export const EdgeMetadata = ({
             "border-t",
             theme.border4,
             "px-2 py-1.5 flex flex-col gap-y-1 gap-x-4",
-            "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-250",
+            "text-slate-900 dark:text-slate-250",
           )}
         >
           <Attribute name="Source">

@@ -57,102 +57,13 @@ module.exports = function({ $math_Util }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inflight arc sine\",\"${aws_lambda_function.testinflightarcsine_Handler_7B606063.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
     "aws": [
       {}
     ]
-  },
-  "resource": {
-    "aws_iam_role": {
-      "testinflightarcsine_Handler_IamRole_EBCCD81D": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflight arc sine/Handler/IamRole",
-            "uniqueId": "testinflightarcsine_Handler_IamRole_EBCCD81D"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      }
-    },
-    "aws_iam_role_policy": {
-      "testinflightarcsine_Handler_IamRolePolicy_58AE68F0": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflight arc sine/Handler/IamRolePolicy",
-            "uniqueId": "testinflightarcsine_Handler_IamRolePolicy_58AE68F0"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testinflightarcsine_Handler_IamRole_EBCCD81D.name}"
-      }
-    },
-    "aws_iam_role_policy_attachment": {
-      "testinflightarcsine_Handler_IamRolePolicyAttachment_62A643BB": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflight arc sine/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testinflightarcsine_Handler_IamRolePolicyAttachment_62A643BB"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testinflightarcsine_Handler_IamRole_EBCCD81D.name}"
-      }
-    },
-    "aws_lambda_function": {
-      "testinflightarcsine_Handler_7B606063": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflight arc sine/Handler/Default",
-            "uniqueId": "testinflightarcsine_Handler_7B606063"
-          }
-        },
-        "environment": {
-          "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8343dcd",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c8343dcd",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testinflightarcsine_Handler_IamRole_EBCCD81D.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testinflightarcsine_Handler_S3Object_D9A3F771.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      }
-    },
-    "aws_s3_bucket": {
-      "Code": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
-          }
-        },
-        "bucket_prefix": "code-c84a50b1-"
-      }
-    },
-    "aws_s3_object": {
-      "testinflightarcsine_Handler_S3Object_D9A3F771": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflight arc sine/Handler/S3Object",
-            "uniqueId": "testinflightarcsine_Handler_S3Object_D9A3F771"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      }
-    }
   }
 }
 ```
@@ -160,6 +71,7 @@ module.exports = function({ $math_Util }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -170,26 +82,28 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure1-1.js")({
             $math_Util: ${context._lift(math.Util)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
     }
     try {

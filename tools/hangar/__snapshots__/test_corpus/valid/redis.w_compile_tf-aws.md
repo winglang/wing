@@ -69,7 +69,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:testing Redis\",\"${aws_lambda_function.testtestingRedis_Handler_7678DD27.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -163,15 +163,6 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      },
-      "testtestingRedis_Handler_IamRole_8B9140DE": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:testing Redis/Handler/IamRole",
-            "uniqueId": "testtestingRedis_Handler_IamRole_8B9140DE"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
@@ -184,16 +175,6 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:ReceiveMessage\",\"sqs:ChangeMessageVisibility\",\"sqs:GetQueueUrl\",\"sqs:DeleteMessage\",\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.cloudQueue.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"elasticache:Describe*\"],\"Resource\":[\"${aws_elasticache_cluster.exRedis_RedisCluster_3C9A5882.arn}\"],\"Effect\":\"Allow\"},{\"Effect\":\"Allow\",\"Action\":[\"ec2:CreateNetworkInterface\",\"ec2:DescribeNetworkInterfaces\",\"ec2:DeleteNetworkInterface\",\"ec2:DescribeSubnets\",\"ec2:DescribeSecurityGroups\"],\"Resource\":\"*\"},{\"Effect\":\"Allow\",\"Action\":[\"ec2:CreateNetworkInterface\",\"ec2:DescribeNetworkInterfaces\",\"ec2:DeleteNetworkInterface\",\"ec2:DescribeSubnets\",\"ec2:DescribeSecurityGroups\"],\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.cloudQueue-SetConsumer-cdafee6e_IamRole_2548D828.name}"
-      },
-      "testtestingRedis_Handler_IamRolePolicy_21FBAD46": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:testing Redis/Handler/IamRolePolicy",
-            "uniqueId": "testtestingRedis_Handler_IamRolePolicy_21FBAD46"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"elasticache:Describe*\"],\"Resource\":[\"${aws_elasticache_cluster.exRedis_RedisCluster_3C9A5882.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"elasticache:Describe*\"],\"Resource\":[\"${aws_elasticache_cluster.r2_RedisCluster_C6087F40.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.cloudQueue.arn}\"],\"Effect\":\"Allow\"},{\"Effect\":\"Allow\",\"Action\":[\"ec2:CreateNetworkInterface\",\"ec2:DescribeNetworkInterfaces\",\"ec2:DeleteNetworkInterface\",\"ec2:DescribeSubnets\",\"ec2:DescribeSecurityGroups\"],\"Resource\":\"*\"},{\"Effect\":\"Allow\",\"Action\":[\"ec2:CreateNetworkInterface\",\"ec2:DescribeNetworkInterfaces\",\"ec2:DeleteNetworkInterface\",\"ec2:DescribeSubnets\",\"ec2:DescribeSecurityGroups\"],\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testtestingRedis_Handler_IamRole_8B9140DE.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -206,16 +187,6 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.cloudQueue-SetConsumer-cdafee6e_IamRole_2548D828.name}"
-      },
-      "testtestingRedis_Handler_IamRolePolicyAttachment_4A5E3F4E": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:testing Redis/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testtestingRedis_Handler_IamRolePolicyAttachment_4A5E3F4E"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testtestingRedis_Handler_IamRole_8B9140DE.name}"
       }
     },
     "aws_internet_gateway": {
@@ -253,6 +224,9 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
             "uniqueId": "cloudQueue-SetConsumer-cdafee6e"
           }
         },
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "REDIS_CLUSTER_ID_89baf91f": "${aws_elasticache_cluster.exRedis_RedisCluster_3C9A5882.cluster_id}",
@@ -273,41 +247,6 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
             "${aws_security_group.exRedis_securityGroup_3948C3F2.id}"
           ],
           "subnet_ids": [
-            "${aws_subnet.PrivateSubnet.id}"
-          ]
-        }
-      },
-      "testtestingRedis_Handler_7678DD27": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:testing Redis/Handler/Default",
-            "uniqueId": "testtestingRedis_Handler_7678DD27"
-          }
-        },
-        "environment": {
-          "variables": {
-            "QUEUE_URL_31e95cbd": "${aws_sqs_queue.cloudQueue.url}",
-            "REDIS_CLUSTER_ID_30c8c4ae": "${aws_elasticache_cluster.r2_RedisCluster_C6087F40.cluster_id}",
-            "REDIS_CLUSTER_ID_89baf91f": "${aws_elasticache_cluster.exRedis_RedisCluster_3C9A5882.cluster_id}",
-            "WING_FUNCTION_NAME": "Handler-c8775e77",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c8775e77",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testtestingRedis_Handler_IamRole_8B9140DE.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testtestingRedis_Handler_S3Object_3AE6E27A.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [
-            "${aws_security_group.exRedis_securityGroup_3948C3F2.id}",
-            "${aws_security_group.r2_securityGroup_35A75C2E.id}"
-          ],
-          "subnet_ids": [
-            "${aws_subnet.PrivateSubnet.id}",
             "${aws_subnet.PrivateSubnet.id}"
           ]
         }
@@ -429,17 +368,6 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
           "metadata": {
             "path": "root/Default/Default/cloud.Queue-SetConsumer-cdafee6e/S3Object",
             "uniqueId": "cloudQueue-SetConsumer-cdafee6e_S3Object_8868B9FB"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      },
-      "testtestingRedis_Handler_S3Object_3AE6E27A": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:testing Redis/Handler/S3Object",
-            "uniqueId": "testtestingRedis_Handler_S3Object_3AE6E27A"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
@@ -591,6 +519,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -603,26 +532,28 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure1-1.js")({
             $r: ${context._lift(r)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -634,29 +565,31 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure2-1.js")({
             $queue: ${context._lift(queue)},
             $r: ${context._lift(r)},
             $r2: ${context._lift(r2)},
             $util_Util: ${context._lift(util.Util)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const $Closure2Client = ${$Closure2._toInflightType(this)};
             const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {

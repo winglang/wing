@@ -69,102 +69,13 @@ module.exports = function({ $fn }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:capture shadow interaction\",\"${aws_lambda_function.testcaptureshadowinteraction_Handler_9B768E38.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
     "aws": [
       {}
     ]
-  },
-  "resource": {
-    "aws_iam_role": {
-      "testcaptureshadowinteraction_Handler_IamRole_7A8AB102": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:capture shadow interaction/Handler/IamRole",
-            "uniqueId": "testcaptureshadowinteraction_Handler_IamRole_7A8AB102"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      }
-    },
-    "aws_iam_role_policy": {
-      "testcaptureshadowinteraction_Handler_IamRolePolicy_E2199BB8": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:capture shadow interaction/Handler/IamRolePolicy",
-            "uniqueId": "testcaptureshadowinteraction_Handler_IamRolePolicy_E2199BB8"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testcaptureshadowinteraction_Handler_IamRole_7A8AB102.name}"
-      }
-    },
-    "aws_iam_role_policy_attachment": {
-      "testcaptureshadowinteraction_Handler_IamRolePolicyAttachment_51CBDE42": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:capture shadow interaction/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testcaptureshadowinteraction_Handler_IamRolePolicyAttachment_51CBDE42"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testcaptureshadowinteraction_Handler_IamRole_7A8AB102.name}"
-      }
-    },
-    "aws_lambda_function": {
-      "testcaptureshadowinteraction_Handler_9B768E38": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:capture shadow interaction/Handler/Default",
-            "uniqueId": "testcaptureshadowinteraction_Handler_9B768E38"
-          }
-        },
-        "environment": {
-          "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8807c1f",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c8807c1f",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testcaptureshadowinteraction_Handler_IamRole_7A8AB102.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testcaptureshadowinteraction_Handler_S3Object_ACDDE567.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      }
-    },
-    "aws_s3_bucket": {
-      "Code": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
-          }
-        },
-        "bucket_prefix": "code-c84a50b1-"
-      }
-    },
-    "aws_s3_object": {
-      "testcaptureshadowinteraction_Handler_S3Object_ACDDE567": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:capture shadow interaction/Handler/S3Object",
-            "uniqueId": "testcaptureshadowinteraction_Handler_S3Object_ACDDE567"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      }
-    }
   }
 }
 ```
@@ -172,6 +83,7 @@ module.exports = function({ $fn }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -182,26 +94,28 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure1-1.js")({
             $bar: ${context._lift(bar)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -213,26 +127,28 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure2-1.js")({
             $fn: ${context._lift(fn)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const $Closure2Client = ${$Closure2._toInflightType(this)};
             const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {

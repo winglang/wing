@@ -75,7 +75,7 @@ module.exports = function({ $counterC }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:initial:default\",\"${aws_lambda_function.testinitialdefault_Handler_CE963B96.arn}\"],[\"root/Default/Default/test:initial:positive-value\",\"${aws_lambda_function.testinitialpositive-value_Handler_473ACDB1.arn}\"],[\"root/Default/Default/test:initial:negative-value\",\"${aws_lambda_function.testinitialnegative-value_Handler_C5E9E480.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -136,228 +136,6 @@ module.exports = function({ $counterC }) {
         "hash_key": "id",
         "name": "wing-counter-counterC-c83ab8ef"
       }
-    },
-    "aws_iam_role": {
-      "testinitialdefault_Handler_IamRole_17A8E87E": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:initial:default/Handler/IamRole",
-            "uniqueId": "testinitialdefault_Handler_IamRole_17A8E87E"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      },
-      "testinitialnegative-value_Handler_IamRole_ABB74877": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:initial:negative-value/Handler/IamRole",
-            "uniqueId": "testinitialnegative-value_Handler_IamRole_ABB74877"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      },
-      "testinitialpositive-value_Handler_IamRole_C4B67BEC": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:initial:positive-value/Handler/IamRole",
-            "uniqueId": "testinitialpositive-value_Handler_IamRole_C4B67BEC"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      }
-    },
-    "aws_iam_role_policy": {
-      "testinitialdefault_Handler_IamRolePolicy_D5C46C98": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:initial:default/Handler/IamRolePolicy",
-            "uniqueId": "testinitialdefault_Handler_IamRolePolicy_D5C46C98"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.counterA.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.testinitialdefault_Handler_IamRole_17A8E87E.name}"
-      },
-      "testinitialnegative-value_Handler_IamRolePolicy_18C99321": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:initial:negative-value/Handler/IamRolePolicy",
-            "uniqueId": "testinitialnegative-value_Handler_IamRolePolicy_18C99321"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.counterC.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.testinitialnegative-value_Handler_IamRole_ABB74877.name}"
-      },
-      "testinitialpositive-value_Handler_IamRolePolicy_B8E28D3D": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:initial:positive-value/Handler/IamRolePolicy",
-            "uniqueId": "testinitialpositive-value_Handler_IamRolePolicy_B8E28D3D"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.counterB.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.testinitialpositive-value_Handler_IamRole_C4B67BEC.name}"
-      }
-    },
-    "aws_iam_role_policy_attachment": {
-      "testinitialdefault_Handler_IamRolePolicyAttachment_2901029D": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:initial:default/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testinitialdefault_Handler_IamRolePolicyAttachment_2901029D"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testinitialdefault_Handler_IamRole_17A8E87E.name}"
-      },
-      "testinitialnegative-value_Handler_IamRolePolicyAttachment_11314DB1": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:initial:negative-value/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testinitialnegative-value_Handler_IamRolePolicyAttachment_11314DB1"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testinitialnegative-value_Handler_IamRole_ABB74877.name}"
-      },
-      "testinitialpositive-value_Handler_IamRolePolicyAttachment_5834A2E4": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:initial:positive-value/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testinitialpositive-value_Handler_IamRolePolicyAttachment_5834A2E4"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testinitialpositive-value_Handler_IamRole_C4B67BEC.name}"
-      }
-    },
-    "aws_lambda_function": {
-      "testinitialdefault_Handler_CE963B96": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:initial:default/Handler/Default",
-            "uniqueId": "testinitialdefault_Handler_CE963B96"
-          }
-        },
-        "environment": {
-          "variables": {
-            "DYNAMODB_TABLE_NAME_220d28dd": "${aws_dynamodb_table.counterA.name}",
-            "WING_FUNCTION_NAME": "Handler-c88a038b",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c88a038b",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testinitialdefault_Handler_IamRole_17A8E87E.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testinitialdefault_Handler_S3Object_905C4002.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      },
-      "testinitialnegative-value_Handler_C5E9E480": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:initial:negative-value/Handler/Default",
-            "uniqueId": "testinitialnegative-value_Handler_C5E9E480"
-          }
-        },
-        "environment": {
-          "variables": {
-            "DYNAMODB_TABLE_NAME_4795370d": "${aws_dynamodb_table.counterC.name}",
-            "WING_FUNCTION_NAME": "Handler-c88178b6",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c88178b6",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testinitialnegative-value_Handler_IamRole_ABB74877.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testinitialnegative-value_Handler_S3Object_02526CAC.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      },
-      "testinitialpositive-value_Handler_473ACDB1": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:initial:positive-value/Handler/Default",
-            "uniqueId": "testinitialpositive-value_Handler_473ACDB1"
-          }
-        },
-        "environment": {
-          "variables": {
-            "DYNAMODB_TABLE_NAME_96df6c3c": "${aws_dynamodb_table.counterB.name}",
-            "WING_FUNCTION_NAME": "Handler-c835d39a",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c835d39a",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testinitialpositive-value_Handler_IamRole_C4B67BEC.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testinitialpositive-value_Handler_S3Object_B6747816.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      }
-    },
-    "aws_s3_bucket": {
-      "Code": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
-          }
-        },
-        "bucket_prefix": "code-c84a50b1-"
-      }
-    },
-    "aws_s3_object": {
-      "testinitialdefault_Handler_S3Object_905C4002": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:initial:default/Handler/S3Object",
-            "uniqueId": "testinitialdefault_Handler_S3Object_905C4002"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      },
-      "testinitialnegative-value_Handler_S3Object_02526CAC": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:initial:negative-value/Handler/S3Object",
-            "uniqueId": "testinitialnegative-value_Handler_S3Object_02526CAC"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      },
-      "testinitialpositive-value_Handler_S3Object_B6747816": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:initial:positive-value/Handler/S3Object",
-            "uniqueId": "testinitialpositive-value_Handler_S3Object_B6747816"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      }
     }
   }
 }
@@ -366,6 +144,7 @@ module.exports = function({ $counterC }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -376,26 +155,28 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure1-1.js")({
             $counterA: ${context._lift(counterA)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -407,26 +188,28 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure2-1.js")({
             $counterB: ${context._lift(counterB)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const $Closure2Client = ${$Closure2._toInflightType(this)};
             const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -438,26 +221,28 @@ class $Root extends $stdlib.std.Resource {
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure3-1.js")({
             $counterC: ${context._lift(counterC)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure3Client = ${$Closure3._toInflightType(this).text};
+            const $Closure3Client = ${$Closure3._toInflightType(this)};
             const client = new $Closure3Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {

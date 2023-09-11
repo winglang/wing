@@ -13,10 +13,9 @@ import { App } from "./app";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { calculateBucketPermissions } from "../shared-aws/permissions";
-import { IInflightHost } from "../std";
+import { IInflightHost, Node } from "../std";
 
 const EVENTS = {
   [cloud.BucketEventType.DELETE]: EventType.OBJECT_REMOVED,
@@ -96,7 +95,7 @@ export class Bucket extends cloud.Bucket {
   ): void {
     const fn = this.onEventFunction("OnCreate", inflight, opts);
 
-    Connections.of(this).add({
+    Node.of(this).addConnection({
       source: this,
       target: fn,
       name: "onCreate()",
@@ -114,7 +113,7 @@ export class Bucket extends cloud.Bucket {
   ): void {
     const fn = this.onEventFunction("OnDelete", inflight, opts);
 
-    Connections.of(this).add({
+    Node.of(this).addConnection({
       source: this,
       target: fn,
       name: "onDelete()",
@@ -132,7 +131,7 @@ export class Bucket extends cloud.Bucket {
   ): void {
     const fn = this.onEventFunction("OnUpdate", inflight, opts);
 
-    Connections.of(this).add({
+    Node.of(this).addConnection({
       source: this,
       target: fn,
       name: "onUpdate()",
@@ -150,7 +149,7 @@ export class Bucket extends cloud.Bucket {
   ) {
     const fn = this.onEventFunction("OnEvent", inflight, opts);
 
-    Connections.of(this).add({
+    Node.of(this).addConnection({
       source: this,
       target: fn,
       name: "onCreate()",
@@ -160,7 +159,7 @@ export class Bucket extends cloud.Bucket {
       new LambdaDestination(fn._function)
     );
 
-    Connections.of(this).add({
+    Node.of(this).addConnection({
       source: this,
       target: fn,
       name: "onDelete()",
@@ -170,7 +169,7 @@ export class Bucket extends cloud.Bucket {
       new LambdaDestination(fn._function)
     );
 
-    Connections.of(this).add({
+    Node.of(this).addConnection({
       source: this,
       target: fn,
       name: "onUpdate()",
@@ -198,7 +197,7 @@ export class Bucket extends cloud.Bucket {
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return core.InflightClient.for(
       __dirname.replace("target-awscdk", "shared-aws"),
       __filename,

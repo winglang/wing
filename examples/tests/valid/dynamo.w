@@ -25,7 +25,7 @@ class DynamoTable {
   init() {
     let target = util.env("WING_TARGET");
     if target != "tf-aws" {
-      throw("Unsupported target: ${target} (expected 'tf-aws')");
+      throw "Unsupported target: ${target} (expected 'tf-aws')";
     }
 
     this.table = new tfaws.dynamodbTable.DynamodbTable(
@@ -54,11 +54,11 @@ class DynamoTable {
     }
   }
 
-  extern "./dynamo.js" inflight _putItem(tableName: str, item: Json): void;
+  extern "./dynamo.js" static inflight _putItem(tableName: str, item: Json): void;
 
   inflight putItem(item: Map<Attribute>) {
     let json = this._itemToJson(item);
-    this._putItem(this.tableName, json);
+    DynamoTable._putItem(this.tableName, json);
   }
 
   inflight _itemToJson(item: Map<Attribute>): Json {

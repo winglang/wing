@@ -1,6 +1,16 @@
 {
   "$schema": "https://turborepo.org/schema.json",
-  "globalDependencies": ["*.json", "*.toml", ".node-version", "insta.yaml"],
+  "globalDependencies": [
+    "*.json",
+    "*.toml",
+    ".node-version",
+    "insta.yaml",
+    ".github/workflows/build.yml",
+    "scripts/*",
+    "patches/*",
+    "tools/bump-pack/**",
+    "!tools/bump-pack/node_modules/**"
+  ],
   "pipeline": {
     "default": {
       "inputs": ["*.json", ".projenrc.ts"]
@@ -15,7 +25,9 @@
         "*.json",
         "*.toml",
         "*.lock",
-        "src/**"
+        "src/**/*.rs",
+        "!src/**/*.test.ts",
+        "src/**/*.ts"
       ]
     },
     "test": {
@@ -27,9 +39,12 @@
         "*.json",
         "*.toml",
         "*.lock",
-        "src/**",
+        "src/**/*.rs",
+        "src/**/*.ts",
+        "src/**/*.test.ts",
         "test/**"
-      ]
+      ],
+      "outputs": ["**/__snapshots__/**", "**/*.snap"]
     },
     "test:playwright": {
       "dependsOn": ["compile"],
@@ -45,6 +60,7 @@
       ]
     },
     "post-compile": {
+      "inputs": [""],
       "dependsOn": ["compile"]
     },
     "lint": {
@@ -55,7 +71,8 @@
         "*.json",
         "*.toml",
         "*.lock",
-        "src/**",
+        "src/**/*.rs",
+        "src/**/*.ts",
         "test/**"
       ]
     },
@@ -67,24 +84,22 @@
         "*.json",
         "*.toml",
         "*.lock",
-        "src/**",
+        "src/**/*.rs",
+        "src/**/*.ts",
         "test/**"
       ]
     },
     "package": {
       "dependsOn": ["compile", "post-compile"],
-      "env": ["PROJEN_BUMP_VERSION"]
+      "env": ["PROJEN_BUMP_VERSION"],
+      "inputs": ["*.md", "LICENSE"]
     },
     "topo": {
       "dependsOn": ["^topo"]
     },
-    "examples-tests": {
-      "dependsOn": ["topo"],
-      "inputs": [
-        "examples/tests/**",
-        "!examples/tests/valid/**/node_modules/**",
-        "!examples/tests/valid/**/target/**"
-      ]
+    "dev": {
+      "cache": false,
+      "persistent": true
     }
   }
 }

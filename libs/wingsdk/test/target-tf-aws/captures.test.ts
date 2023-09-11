@@ -55,8 +55,6 @@ describe("function with bucket binding", () => {
       "aws_iam_role_policy_attachment",
       "aws_lambda_function",
       "aws_s3_bucket",
-      "aws_s3_bucket_public_access_block",
-      "aws_s3_bucket_server_side_encryption_configuration",
       "aws_s3_object",
     ]);
     expect(tfSanitize(output)).toMatchSnapshot();

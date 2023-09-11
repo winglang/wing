@@ -1,9 +1,9 @@
 import { Construct, IConstruct } from "constructs";
 import { Duration } from "./duration";
-import { App, Connections } from "../core";
-import { Code } from "../core/inflight";
+import { App } from "../core";
 import { liftObject } from "../core/internal";
 import { log } from "../shared/log";
+import { Node } from "../std";
 
 /**
  * A resource that can run inflight code.
@@ -16,11 +16,6 @@ export interface IInflightHost extends IResource {}
  * @skipDocs
  */
 export interface IResource extends IConstruct {
-  /**
-   * Information on how to display a resource in the UI.
-   */
-  readonly display: Display;
-
   /**
    * Binds the resource to the host so that it can be used by inflight code.
    *
@@ -40,11 +35,22 @@ export interface IResource extends IConstruct {
 
   /**
    * Return a code snippet that can be used to reference this resource inflight.
+   *
    * Note this code snippet may by async code, so it's unsafe to run it in a
    * constructor or other sync context.
+   *
    * @internal
    */
-  _toInflight(): Code;
+  _toInflight(): string;
+
+  /**
+   * Return a list of all inflight operations that are supported by this resource.
+   *
+   * If this method doesn't exist, the resource is assumed to not support any inflight operations.
+   *
+   * @internal
+   */
+  _getInflightOps(): string[];
 
   /**
    * A hook for performing operations after the tree of resources has been
@@ -162,27 +168,8 @@ export abstract class Resource extends Construct implements IResource {
 
   private readonly bindMap: Map<IInflightHost, Set<string>> = new Map();
 
-  /**
-   * A list of all inflight operations that are supported by this resource.
-   */
-  private readonly inflightOps: string[] = ["$inflight_init"];
-
-  /**
-   * Information on how to display a resource in the UI.
-   */
-  public readonly display = new Display();
-
-  /**
-   * Record that this resource supports the given inflight operation.
-   *
-   * This is used to give better error messages if the compiler attempts to bind
-   * a resource with an operation that is not supported.
-   *
-   * @internal
-   */
-  public _addInflightOps(...ops: string[]) {
-    this.inflightOps.push(...ops);
-  }
+  /** @internal */
+  public abstract _getInflightOps(): string[];
 
   /**
    * Binds the resource to the host so that it can be used by inflight code.
@@ -229,9 +216,10 @@ export abstract class Resource extends Construct implements IResource {
 
     const opsForHost = this.bindMap.get(host)!;
 
-    // For each operation, re
+    // For each operation, check if the host supports it. If it does, register the binding.
+    const supportedOps = [...(this._getInflightOps() ?? []), "$inflight_init"];
     for (const op of ops) {
-      if (!this.inflightOps.includes(op)) {
+      if (!supportedOps.includes(op)) {
         throw new Error(
           `Resource ${this.node.path} does not support inflight operation ${op} (requested by ${host.node.path})`
         );
@@ -245,7 +233,7 @@ export abstract class Resource extends Construct implements IResource {
         this._registerBind(host, [op]);
 
         // add connection metadata
-        Connections.of(this).add({
+        Node.of(this).addConnection({
           source: host,
           target: this,
           name: op.endsWith("()") ? op : `${op}()`,
@@ -274,12 +262,9 @@ export abstract class Resource extends Construct implements IResource {
   /**
    * Return a code snippet that can be used to reference this resource inflight.
    *
-   * TODO: support passing an InflightRuntime enum to indicate which language
-   * runtime we're targeting.
-   *
    * @internal
    */
-  public abstract _toInflight(): Code;
+  public abstract _toInflight(): string;
 
   /**
    * "Lifts" a value into an inflight context. If the value is a resource (i.e. has a `_toInflight`
@@ -310,74 +295,6 @@ export interface OperationAnnotation {
   [resource: string]: {
     ops: string[];
   };
-}
-
-/**
- * Properties for the Display class.
- * @skipDocs
- */
-export interface DisplayProps {
-  /**
-   * Title of the resource.
-   * @default - No title.
-   */
-  readonly title?: string;
-
-  /**
-   * Description of the resource.
-   * @default - No description.
-   */
-  readonly description?: string;
-
-  /**
-   * The source file or library where the resource was defined.
-   * @default - No source module.
-   */
-  readonly sourceModule?: string;
-
-  /**
-   * Whether the resource should be hidden from the UI.
-   * @default - Undefined
-   */
-  readonly hidden?: boolean;
-}
-
-/**
- * Information on how to display a resource in the UI.
- * @skipDocs
- */
-export class Display {
-  /**
-   * The source module for the SDK.
-   */
-  public static readonly SDK_SOURCE_MODULE = "@winglang/sdk";
-
-  /**
-   * Title of the resource.
-   */
-  public title?: string;
-
-  /**
-   * Description of the resource.
-   */
-  public description?: string;
-
-  /**
-   * The source file or library where the resource was defined.
-   */
-  public sourceModule?: string;
-
-  /**
-   * Whether the resource should be hidden from the UI.
-   */
-  public hidden?: boolean;
-
-  public constructor(props?: DisplayProps) {
-    this.title = props?.title;
-    this.description = props?.description;
-    this.hidden = props?.hidden;
-    this.sourceModule = props?.sourceModule;
-  }
 }
 
 function isResource(obj: any): obj is Resource {
