@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ push.wsim » root/env0/test:push
+pass ─ push.wsim » root/env0/push
  
  
 Tests 1 passed (1)
