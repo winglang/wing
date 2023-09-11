@@ -1,4 +1,4 @@
-bring "./bring_local_self.w" as foo;
+bring "./bring_local_self.main.w" as foo;
 // ^ error: Cannot bring a module into itself
 
 bring "./non-existent.w" as bar;
