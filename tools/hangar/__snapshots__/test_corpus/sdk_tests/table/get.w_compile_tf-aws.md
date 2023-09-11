@@ -29,13 +29,13 @@ module.exports = function({ $table }) {
       }
       ;
       (await $table.insert(VALID_KEY,({"gender": COLUMN_VALUE})));
-      {((cond) => {if (!cond) throw new Error("assertion failed: table.get(VALID_KEY).get(COLUMN_NAME) == COLUMN_VALUE")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((await $table.get(VALID_KEY)))[COLUMN_NAME],COLUMN_VALUE)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: table.get(VALID_KEY).get(COLUMN_NAME) == COLUMN_VALUE")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })((await $table.get(VALID_KEY)), COLUMN_NAME),COLUMN_VALUE)))};
       (await assertThrows(ROW_DOES_NOT_EXIST_ERROR,async () => {
         (await $table.get(NON_EXISTENT_KEY));
       }
       ));
       let result = (await $table.tryGet(VALID_KEY));
-      {((cond) => {if (!cond) throw new Error("assertion failed: result.get(COLUMN_NAME) == COLUMN_VALUE")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((result)[COLUMN_NAME],COLUMN_VALUE)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: result.get(COLUMN_NAME) == COLUMN_VALUE")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(result, COLUMN_NAME),COLUMN_VALUE)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: table.tryGet(NON_EXISTENT_KEY) == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $table.tryGet(NON_EXISTENT_KEY)),undefined)))};
     }
   }
@@ -65,7 +65,7 @@ module.exports = function({ $table }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:get\",\"${aws_lambda_function.testget_Handler_67989B36.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -91,99 +91,6 @@ module.exports = function({ $table }) {
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "name",
         "name": "usersex.Table-c840a49c"
-      }
-    },
-    "aws_iam_role": {
-      "testget_Handler_IamRole_AA97A8BA": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:get/Handler/IamRole",
-            "uniqueId": "testget_Handler_IamRole_AA97A8BA"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      }
-    },
-    "aws_iam_role_policy": {
-      "testget_Handler_IamRolePolicy_393F6CAD": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:get/Handler/IamRolePolicy",
-            "uniqueId": "testget_Handler_IamRolePolicy_393F6CAD"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.exTable.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.exTable.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.testget_Handler_IamRole_AA97A8BA.name}"
-      }
-    },
-    "aws_iam_role_policy_attachment": {
-      "testget_Handler_IamRolePolicyAttachment_CF094E80": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:get/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testget_Handler_IamRolePolicyAttachment_CF094E80"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testget_Handler_IamRole_AA97A8BA.name}"
-      }
-    },
-    "aws_lambda_function": {
-      "testget_Handler_67989B36": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:get/Handler/Default",
-            "uniqueId": "testget_Handler_67989B36"
-          }
-        },
-        "architectures": [
-          "arm64"
-        ],
-        "environment": {
-          "variables": {
-            "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
-            "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"gender\":0}",
-            "DYNAMODB_TABLE_NAME_d5d44f18_PRIMARY_KEY": "name",
-            "WING_FUNCTION_NAME": "Handler-c89a33bd",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c89a33bd",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testget_Handler_IamRole_AA97A8BA.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testget_Handler_S3Object_991F0EC4.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      }
-    },
-    "aws_s3_bucket": {
-      "Code": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
-          }
-        },
-        "bucket_prefix": "code-c84a50b1-"
-      }
-    },
-    "aws_s3_object": {
-      "testget_Handler_S3Object_991F0EC4": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:get/Handler/S3Object",
-            "uniqueId": "testget_Handler_S3Object_991F0EC4"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
       }
     }
   }
