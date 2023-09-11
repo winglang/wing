@@ -64,7 +64,10 @@ jobs:
 
       - name: Install Wing from Dist
         if: ${{github.event_name != 'release'}}
-        run: npm install -g ./dist/*-[0-9]*.[0-9]*.[0-9]*.tgz
+        run: |
+          npm install -g ./dist/*-[0-9]*.[0-9]*.[0-9]*.tgz
+          npm install -g ./dist/*-[0-9]*.[0-9]*.[0-9]*.tgz
+          npm install -g ./dist/*-[0-9]*.[0-9]*.[0-9]*.tgz
 
       ########################################################################
       - name: Install winglang globally
