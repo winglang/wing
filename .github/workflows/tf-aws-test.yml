@@ -62,9 +62,9 @@ jobs:
           name: dist
           path: dist
 
-      - name: Install Dependencies
-        if: ${{github.event_name != 'release'}}
-        run: pnpm install --frozen-lockfile
+      # - name: Install Dependencies
+      #   if: ${{github.event_name != 'release'}}
+      #   run: pnpm install --frozen-lockfile
 
       ########################################################################
       - name: Install winglang globally
