@@ -4638,13 +4638,6 @@ impl<'a> TypeChecker<'a> {
 
 				let mut property_variable = self.resolve_variable_from_instance_type(instance_type, property, env, object);
 
-				// Validate access modifier
-				// if !property_variable.type_.is_unresolved() {
-				// 	// TODO: this isn't good enough becaues `instance_type` might be an array so we need to "actual" class_type (Array). This is done for us in
-				// 	// `resolve_variable_from_instance_type`, fixing this might also make the unresolved check above redundant
-				// 	self.check_access(env, instance_type, property, property_variable.access_modifier);
-				// }
-
 				// if the object is `this`, then use the property's phase instead of the object phase
 				let property_phase = if property_variable.phase == Phase::Independent {
 					instance_phase
