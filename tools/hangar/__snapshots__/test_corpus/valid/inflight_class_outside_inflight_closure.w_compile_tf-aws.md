@@ -57,105 +57,13 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inflight class outside inflight closure\",\"${aws_lambda_function.testinflightclassoutsideinflightclosure_Handler_D7A68A3D.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
     "aws": [
       {}
     ]
-  },
-  "resource": {
-    "aws_iam_role": {
-      "testinflightclassoutsideinflightclosure_Handler_IamRole_3F60361C": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflight class outside inflight closure/Handler/IamRole",
-            "uniqueId": "testinflightclassoutsideinflightclosure_Handler_IamRole_3F60361C"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      }
-    },
-    "aws_iam_role_policy": {
-      "testinflightclassoutsideinflightclosure_Handler_IamRolePolicy_A961D2D3": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflight class outside inflight closure/Handler/IamRolePolicy",
-            "uniqueId": "testinflightclassoutsideinflightclosure_Handler_IamRolePolicy_A961D2D3"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testinflightclassoutsideinflightclosure_Handler_IamRole_3F60361C.name}"
-      }
-    },
-    "aws_iam_role_policy_attachment": {
-      "testinflightclassoutsideinflightclosure_Handler_IamRolePolicyAttachment_1B756D9D": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflight class outside inflight closure/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testinflightclassoutsideinflightclosure_Handler_IamRolePolicyAttachment_1B756D9D"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testinflightclassoutsideinflightclosure_Handler_IamRole_3F60361C.name}"
-      }
-    },
-    "aws_lambda_function": {
-      "testinflightclassoutsideinflightclosure_Handler_D7A68A3D": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflight class outside inflight closure/Handler/Default",
-            "uniqueId": "testinflightclassoutsideinflightclosure_Handler_D7A68A3D"
-          }
-        },
-        "architectures": [
-          "arm64"
-        ],
-        "environment": {
-          "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8046c38",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c8046c38",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testinflightclassoutsideinflightclosure_Handler_IamRole_3F60361C.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testinflightclassoutsideinflightclosure_Handler_S3Object_4AFDD6EF.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      }
-    },
-    "aws_s3_bucket": {
-      "Code": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
-          }
-        },
-        "bucket_prefix": "code-c84a50b1-"
-      }
-    },
-    "aws_s3_object": {
-      "testinflightclassoutsideinflightclosure_Handler_S3Object_4AFDD6EF": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflight class outside inflight closure/Handler/S3Object",
-            "uniqueId": "testinflightclassoutsideinflightclosure_Handler_S3Object_4AFDD6EF"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      }
-    }
   }
 }
 ```

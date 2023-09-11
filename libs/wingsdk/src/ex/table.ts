@@ -107,6 +107,7 @@ export abstract class Table extends Resource {
   public _getInflightOps(): string[] {
     return [
       TableInflightMethods.INSERT,
+      TableInflightMethods.UPSERT,
       TableInflightMethods.UPDATE,
       TableInflightMethods.DELETE,
       TableInflightMethods.GET,
@@ -131,6 +132,13 @@ export interface ITableClient {
    * @inflight
    */
   insert(key: string, row: Json): Promise<void>;
+  /**
+   * Insert a row into the table if it doesn't exist, otherwise update it.
+   * @param key primary key to upsert the row.
+   * @param row data to be upserted.
+   * @inflight
+   */
+  upsert(key: string, row: Json): Promise<void>;
   /**
    * Update a row in the table.
    * @param key primary key to update the row.
@@ -167,6 +175,8 @@ export interface ITableClient {
 export enum TableInflightMethods {
   /** `Table.insert` */
   INSERT = "insert",
+  /** `Table.insert` */
+  UPSERT = "upsert",
   /** `Table.update` */
   UPDATE = "update",
   /** `Table.delete` */

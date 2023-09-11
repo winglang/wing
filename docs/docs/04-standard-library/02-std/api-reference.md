@@ -816,8 +816,9 @@ The index of the element in the Json Array to return.
 | <code><a href="#@winglang/sdk.std.Json.deepCopy">deepCopy</a></code> | Creates an immutable deep copy of the Json. |
 | <code><a href="#@winglang/sdk.std.Json.deepCopyMut">deepCopyMut</a></code> | Creates a mutable deep copy of the Json. |
 | <code><a href="#@winglang/sdk.std.Json.delete">delete</a></code> | Deletes a key in a given Json. |
+| <code><a href="#@winglang/sdk.std.Json.entries">entries</a></code> | Returns the entries from the Json. |
 | <code><a href="#@winglang/sdk.std.Json.has">has</a></code> | Checks if a Json object has a given key. |
-| <code><a href="#@winglang/sdk.std.Json.keys">keys</a></code> | Returns the keys from the Json object. |
+| <code><a href="#@winglang/sdk.std.Json.keys">keys</a></code> | Returns the keys from the Json. |
 | <code><a href="#@winglang/sdk.std.Json.parse">parse</a></code> | Parse a string into a Json. |
 | <code><a href="#@winglang/sdk.std.Json.stringify">stringify</a></code> | Formats Json as string. |
 | <code><a href="#@winglang/sdk.std.Json.tryParse">tryParse</a></code> | Try to parse a string into a Json. |
@@ -881,6 +882,22 @@ the key to delete.
 
 ---
 
+##### `entries` <a name="entries" id="@winglang/sdk.std.Json.entries"></a>
+
+```wing
+Json.entries(json: Json);
+```
+
+Returns the entries from the Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.entries.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+map to get the entries from.
+
+---
+
 ##### `has` <a name="has" id="@winglang/sdk.std.Json.has"></a>
 
 ```wing
@@ -911,13 +928,13 @@ The key to check.
 Json.keys(json: any);
 ```
 
-Returns the keys from the Json object.
+Returns the keys from the Json.
 
 ###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.keys.parameter.json"></a>
 
 - *Type:* any
 
-to get keys from.
+map to get the keys from.
 
 ---
 
@@ -987,9 +1004,67 @@ Returns the values from the Json.
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
-to get values from.
+map to get the values from.
 
 ---
+
+
+
+### JsonSchema <a name="JsonSchema" id="@winglang/sdk.std.JsonSchema"></a>
+
+Struct Schema.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.JsonSchema.Initializer"></a>
+
+```wing
+new JsonSchema(schema: Json);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.JsonSchema.Initializer.parameter.schema">schema</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | *No description.* |
+
+---
+
+##### `schema`<sup>Required</sup> <a name="schema" id="@winglang/sdk.std.JsonSchema.Initializer.parameter.schema"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.JsonSchema.asStr">asStr</a></code> | Retrieve the json schema as a string. |
+| <code><a href="#@winglang/sdk.std.JsonSchema.validate">validate</a></code> | Attempt to validate a json object against the schema. |
+
+---
+
+##### `asStr` <a name="asStr" id="@winglang/sdk.std.JsonSchema.asStr"></a>
+
+```wing
+asStr(): str
+```
+
+Retrieve the json schema as a string.
+
+##### `validate` <a name="validate" id="@winglang/sdk.std.JsonSchema.validate"></a>
+
+```wing
+validate(obj: Json): void
+```
+
+Attempt to validate a json object against the schema.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.std.JsonSchema.validate.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+the Json object to validate.
+
+---
+
 
 
 
@@ -1818,7 +1893,7 @@ metadata describing how one construct is related to another construct.
 ##### `addDependency` <a name="addDependency" id="@winglang/sdk.std.Node.addDependency"></a>
 
 ```wing
-addDependency(deps: IDependable): void
+addDependency(...deps: Array<IDependable>): void
 ```
 
 Add an ordering dependency on another construct.
@@ -2645,6 +2720,7 @@ Shared behavior for all structs.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.std.Struct.fromJson">fromJson</a></code> | Converts a Json to a Struct. |
+| <code><a href="#@winglang/sdk.std.Struct.schema">schema</a></code> | Retrieve the schema for this struct. |
 | <code><a href="#@winglang/sdk.std.Struct.tryFromJson">tryFromJson</a></code> | Converts a Json to a Struct, returning nil if the Json is not valid. |
 
 ---
@@ -2662,6 +2738,14 @@ Converts a Json to a Struct.
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 ---
+
+##### `schema` <a name="schema" id="@winglang/sdk.std.Struct.schema"></a>
+
+```wing
+Struct.schema();
+```
+
+Retrieve the schema for this struct.
 
 ##### `tryFromJson` <a name="tryFromJson" id="@winglang/sdk.std.Struct.tryFromJson"></a>
 
