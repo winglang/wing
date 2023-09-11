@@ -24,6 +24,7 @@ export class Domain extends cloud.Domain {
       "hostedZoneId"
     );
 
+    let errors: Array<String> = new Array<String>();
     if (
       !values ||
       (values &&
@@ -31,36 +32,32 @@ export class Domain extends cloud.Domain {
         !values.acmCertificateArn &&
         !values.hostedZoneId)
     ) {
-      throw new Error(
-        `'iamCertificate' or 'acmCertificateArn' is missing from ${this.node.path}
-ERROR: 'hostedZoneId' is missing from ${this.node.path}
-
-These are required properties of platform-specific types. You can set these values
-either through '- v | --value' switches or '--values' file.
-        `
+      errors.push(
+        `\n  - 'iamCertificate' or 'acmCertificateArn' is missing from ${this.node.path}`
       );
+      errors.push(`  - 'hostedZoneId' is missing from ${this.node.path}`);
     } else if (!values.iamCertificate && !values.acmCertificateArn) {
-      throw new Error(
-        `'iamCertificate' or 'acmCertificateArn' is missing from ${this.node.path}
-
-These are required properties of platform-specific types. You can set these values
-either through '- v | --value' switches or '--values' file.
-        `
+      errors.push(
+        `\n  - 'iamCertificate' or 'acmCertificateArn' is missing from ${this.node.path}`
       );
     } else if (!values.hostedZoneId) {
-      throw new Error(
-        `'hostedZoneId' is missing from ${this.node.path}
-
-These are required properties of platform-specific types. You can set these values
-either through '- v | --value' switches or '--values' file.
-        `
-      );
+      errors.push(`\n  - 'hostedZoneId' is missing from ${this.node.path}`);
     } else if (values.iamCertificate && values.hostedZoneId) {
       this._iamCertificate = values.iamCertificate;
       this._hostedZoneId = values.hostedZoneId;
     } else if (values.acmCertificateArn && values.hostedZoneId) {
       this._acmCertificateArn = values.acmCertificateArn;
       this._hostedZoneId = values.hostedZoneId;
+    }
+
+    if (errors.length > 0) {
+      errors.push(
+        "\nThese are required properties of platform-specific types. You can set these values"
+      );
+      errors.push(
+        `either through '- v | --value' switches or '--values' file.`
+      );
+      throw new Error(errors.join("\n"));
     }
   }
 
