@@ -44,105 +44,13 @@ module.exports = function({ $math_Util }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inflight cosine\",\"${aws_lambda_function.testinflightcosine_Handler_8C1A066C.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
     "aws": [
       {}
     ]
-  },
-  "resource": {
-    "aws_iam_role": {
-      "testinflightcosine_Handler_IamRole_3CB91B01": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflight cosine/Handler/IamRole",
-            "uniqueId": "testinflightcosine_Handler_IamRole_3CB91B01"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      }
-    },
-    "aws_iam_role_policy": {
-      "testinflightcosine_Handler_IamRolePolicy_DEC09071": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflight cosine/Handler/IamRolePolicy",
-            "uniqueId": "testinflightcosine_Handler_IamRolePolicy_DEC09071"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testinflightcosine_Handler_IamRole_3CB91B01.name}"
-      }
-    },
-    "aws_iam_role_policy_attachment": {
-      "testinflightcosine_Handler_IamRolePolicyAttachment_30BBA33F": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflight cosine/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testinflightcosine_Handler_IamRolePolicyAttachment_30BBA33F"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testinflightcosine_Handler_IamRole_3CB91B01.name}"
-      }
-    },
-    "aws_lambda_function": {
-      "testinflightcosine_Handler_8C1A066C": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflight cosine/Handler/Default",
-            "uniqueId": "testinflightcosine_Handler_8C1A066C"
-          }
-        },
-        "architectures": [
-          "arm64"
-        ],
-        "environment": {
-          "variables": {
-            "WING_FUNCTION_NAME": "Handler-c81ebe2a",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c81ebe2a",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testinflightcosine_Handler_IamRole_3CB91B01.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testinflightcosine_Handler_S3Object_20AE5FC3.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      }
-    },
-    "aws_s3_bucket": {
-      "Code": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
-          }
-        },
-        "bucket_prefix": "code-c84a50b1-"
-      }
-    },
-    "aws_s3_object": {
-      "testinflightcosine_Handler_S3Object_20AE5FC3": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflight cosine/Handler/S3Object",
-            "uniqueId": "testinflightcosine_Handler_S3Object_20AE5FC3"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      }
-    }
   }
 }
 ```

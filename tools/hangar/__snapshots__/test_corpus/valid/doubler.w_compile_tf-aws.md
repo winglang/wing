@@ -126,7 +126,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:f(2) == 8\",\"${aws_lambda_function.testf28_Handler_DBBFD2BC.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -144,15 +144,6 @@ module.exports = function({  }) {
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      },
-      "testf28_Handler_IamRole_20743714": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:f(2) == 8/Handler/IamRole",
-            "uniqueId": "testf28_Handler_IamRole_20743714"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
@@ -165,16 +156,6 @@ module.exports = function({  }) {
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.Doubler2_cloudFunction_IamRole_3E4BED38.name}"
-      },
-      "testf28_Handler_IamRolePolicy_29B7D085": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:f(2) == 8/Handler/IamRolePolicy",
-            "uniqueId": "testf28_Handler_IamRolePolicy_29B7D085"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.Doubler2_cloudFunction_402CDAA3.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.testf28_Handler_IamRole_20743714.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -187,16 +168,6 @@ module.exports = function({  }) {
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.Doubler2_cloudFunction_IamRole_3E4BED38.name}"
-      },
-      "testf28_Handler_IamRolePolicyAttachment_259C103C": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:f(2) == 8/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testf28_Handler_IamRolePolicyAttachment_259C103C"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testf28_Handler_IamRole_20743714.name}"
       }
     },
     "aws_lambda_function": {
@@ -228,36 +199,6 @@ module.exports = function({  }) {
           "security_group_ids": [],
           "subnet_ids": []
         }
-      },
-      "testf28_Handler_DBBFD2BC": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:f(2) == 8/Handler/Default",
-            "uniqueId": "testf28_Handler_DBBFD2BC"
-          }
-        },
-        "architectures": [
-          "arm64"
-        ],
-        "environment": {
-          "variables": {
-            "FUNCTION_NAME_f7db7b1d": "${aws_lambda_function.Doubler2_cloudFunction_402CDAA3.arn}",
-            "WING_FUNCTION_NAME": "Handler-c8914de5",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c8914de5",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testf28_Handler_IamRole_20743714.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testf28_Handler_S3Object_79FCC5B9.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
       }
     },
     "aws_s3_bucket": {
@@ -277,17 +218,6 @@ module.exports = function({  }) {
           "metadata": {
             "path": "root/Default/Default/Doubler2/cloud.Function/S3Object",
             "uniqueId": "Doubler2_cloudFunction_S3Object_8029A145"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      },
-      "testf28_Handler_S3Object_79FCC5B9": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:f(2) == 8/Handler/S3Object",
-            "uniqueId": "testf28_Handler_S3Object_79FCC5B9"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
