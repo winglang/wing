@@ -149,6 +149,31 @@ module.exports = function({ $std_Json }) {
 
 ```
 
+## inflight.$Closure6-1.js
+```js
+module.exports = function({ $std_Json }) {
+  class $Closure6 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      const obj = ({"a": 1,"b": [3, 7, 9],"c": ({"foo": "bar"})});
+      const entries = (Object.entries(obj));
+      const keys = (Object.keys(obj));
+      const values = (Object.values(obj));
+      for (const i of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,entries.length,false)) {
+        {((cond) => {if (!cond) throw new Error("assertion failed: entries.at(i).getAt(0) == keys.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })((await entries.at(i)), 0),(await keys.at(i)))))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: entries.at(i).getAt(1) == values.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })((await entries.at(i)), 1),(await values.at(i)))))};
+      }
+    }
+  }
+  return $Closure6;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -323,11 +348,39 @@ class $Root extends $stdlib.std.Resource {
         return ["handle", "$inflight_init"];
       }
     }
+    class $Closure6 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        (std.Node.of(this)).hidden = true;
+      }
+      static _toInflightType(context) {
+        return `
+          require("./inflight.$Closure6-1.js")({
+            $std_Json: ${context._lift(std.Json)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure6Client = ${$Closure6._toInflightType(this)};
+            const client = new $Closure6Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
+      }
+    }
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:get()",new $Closure1(this,"$Closure1"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:getAt()",new $Closure2(this,"$Closure2"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:set()",new $Closure3(this,"$Closure3"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:setAt()",new $Closure4(this,"$Closure4"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:stringify()",new $Closure5(this,"$Closure5"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:keys(), values(), entries()",new $Closure6(this,"$Closure6"));
     {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(nil) == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })(undefined),undefined)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(\"boom\") == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })("boom"),undefined)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(\"\") == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })(""),undefined)))};
