@@ -85,6 +85,23 @@ test "stringify()" {
   assert(stringifiedIndent == "{\n  \"a\": 1,\n  \"b\": 2\n}");
 }
 
+test "entries()" {
+  let obj = Json { 
+    a: 1,
+    b: [3, 7, 9],
+    c: { foo: "bar" }
+  };
+
+  let entries = Json.entries(obj);
+  let keys = Json.keys(obj);
+  let values = Json.values(obj);
+
+  for i in 0..entries.length {
+    assert(entries.at(i).getAt(0) == keys.at(i));
+    assert(entries.at(i).getAt(1) == values.at(i));
+  }
+}
+
 //-----------------------------------------------------------------------------
 // tryParse()
 assert(Json.tryParse(nil) == nil);
