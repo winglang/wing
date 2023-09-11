@@ -85,7 +85,7 @@ test "stringify()" {
   assert(stringifiedIndent == "{\n  \"a\": 1,\n  \"b\": 2\n}");
 }
 
-test "entries()" {
+test "keys(), values(), entries()" {
   let obj = Json { 
     a: 1,
     b: [3, 7, 9],
