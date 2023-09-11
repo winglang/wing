@@ -1,5 +1,5 @@
-import { InflightClient } from "../core";
 import nodeAssert from "node:assert/strict";
+import { InflightClient } from "../core";
 
 /**
  * The Assert class provides methods for making assertions in tests,

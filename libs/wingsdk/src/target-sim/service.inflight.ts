@@ -4,10 +4,7 @@ import {
   ServiceSchema,
 } from "./schema-resources";
 import { IFunctionClient, IServiceClient } from "../cloud";
-import {
-  ISimulatorContext,
-  ISimulatorResourceInstance,
-} from "../simulator";
+import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
 import { TraceType } from "../std";
 
 export class Service implements IServiceClient, ISimulatorResourceInstance {

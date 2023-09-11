@@ -1,9 +1,6 @@
 import { TestRunnerAttributes, TestRunnerSchema } from "./schema-resources";
 import { IFunctionClient } from "../cloud";
-import {
-  ISimulatorContext,
-  ISimulatorResourceInstance,
-} from "../simulator";
+import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
 import { ITestRunnerClient, TestResult } from "../std";
 
 export class TestRunnerClient
