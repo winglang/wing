@@ -67,6 +67,18 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
       }
     }
   },
+  "data": {
+    "aws_region": {
+      "Region": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Region",
+            "uniqueId": "Region"
+          }
+        }
+      }
+    }
+  },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]"
@@ -476,6 +488,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
             "uniqueId": "PrivateSubnet"
           }
         },
+        "availability_zone": "${data.aws_region.Region.name}a",
         "cidr_block": "10.0.4.0/22",
         "tags": {
           "Name": "Default-c82bf964-private-subnet-1"
@@ -489,6 +502,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
             "uniqueId": "PublicSubnet"
           }
         },
+        "availability_zone": "${data.aws_region.Region.name}a",
         "cidr_block": "10.0.0.0/24",
         "tags": {
           "Name": "Default-c82bf964-public-subnet-1"
