@@ -1,8 +1,8 @@
-# [capture_resource_and_data.w](../../../../../examples/tests/valid/capture_resource_and_data.w) | compile | tf-aws
+# [push.w](../../../../../../examples/tests/sdk_tests/queue/push.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.js
 ```js
-module.exports = function({ $data_size, $queue, $res }) {
+module.exports = function({ $q, $std_Duration, $util_Util }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -10,10 +10,25 @@ module.exports = function({ $data_size, $queue, $res }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: data.size == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($data_size,3)))};
-      (await $res.put("file.txt","world"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: res.get(\"file.txt\") == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $res.get("file.txt")),"world")))};
-      (await $queue.push("spirulina"));
+      const obj = ({"k1": 1,"k2": "hello","k3": true,"k4": ({"k1": [1, "a", true, ({})]})});
+      (await $q.push("Foo"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: util.waitUntil((): bool => {\n    return q.approxSize() == 1;\n  })")})((await $util_Util.waitUntil(async () => {
+        return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $q.approxSize()),1));
+      }
+      )))};
+      (await $q.pop());
+      (await $q.push("Bar","Baz"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: util.waitUntil((): bool => {\n    return q.approxSize() == 2;\n  })")})((await $util_Util.waitUntil(async () => {
+        return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $q.approxSize()),2));
+      }
+      )))};
+      (await $q.purge());
+      (await $util_Util.sleep((await $std_Duration.fromSeconds(60))));
+      (await $q.push("123","\r",String.raw({ raw: ["", ""] }, JSON.stringify(obj))));
+      {((cond) => {if (!cond) throw new Error("assertion failed: util.waitUntil((): bool => {\n    return q.approxSize() == 3;\n  })")})((await $util_Util.waitUntil(async () => {
+        return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $q.approxSize()),3));
+      }
+      )))};
     }
   }
   return $Closure1;
@@ -51,18 +66,6 @@ module.exports = function({ $data_size, $queue, $res }) {
     ]
   },
   "resource": {
-    "aws_s3_bucket": {
-      "cloudBucket": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Default",
-            "uniqueId": "cloudBucket"
-          }
-        },
-        "bucket_prefix": "cloud-bucket-c87175e7-",
-        "force_destroy": false
-      }
-    },
     "aws_sqs_queue": {
       "cloudQueue": {
         "//": {
@@ -86,6 +89,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
+const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -97,9 +101,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $data_size: ${context._lift(data.size)},
-            $queue: ${context._lift(queue)},
-            $res: ${context._lift(res)},
+            $q: ${context._lift(q)},
+            $std_Duration: ${context._lift(std.Duration)},
+            $util_Util: ${context._lift(util.Util)},
           })
         `;
       }
@@ -119,21 +123,17 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(data.size, host, []);
-          $Closure1._registerBindObject(queue, host, ["push"]);
-          $Closure1._registerBindObject(res, host, ["get", "put"]);
+          $Closure1._registerBindObject(q, host, ["approxSize", "pop", "purge", "push"]);
         }
         super._registerBind(host, ops);
       }
     }
-    const data = new Set([1, 2, 3]);
-    const res = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:resource and data",new $Closure1(this,"$Closure1"));
+    const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"push",new $Closure1(this,"$Closure1"),({"timeout": (std.Duration.fromSeconds(180))}));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "capture_resource_and_data", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+new $App({ outdir: $outdir, name: "push", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

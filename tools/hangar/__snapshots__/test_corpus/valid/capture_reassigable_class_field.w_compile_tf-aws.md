@@ -146,24 +146,6 @@ module.exports = function({  }) {
         "bucket_prefix": "cloud-bucket-c8a9ef69-",
         "force_destroy": false
       }
-    },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "KeyValueStore_cloudBucket_Encryption_D3F8A987": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/KeyValueStore/cloud.Bucket/Encryption",
-            "uniqueId": "KeyValueStore_cloudBucket_Encryption_D3F8A987"
-          }
-        },
-        "bucket": "${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      }
     }
   }
 }

@@ -58,6 +58,21 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
       },
     });
   }
+  public async upsert(key: string, row: Json): Promise<void> {
+    validateRow(row, this.columns);
+    const anyRow = row as any;
+    return this.context.withTrace({
+      message: `upsert row ${key} into the table ${this.name}.`,
+      activity: async () => {
+        let item: Record<string, any> = {};
+        item[this.primaryKey] = key;
+        for (const column of Object.keys(this.columns)) {
+          item[column] = anyRow[column];
+        }
+        this.table.set(key, item);
+      },
+    });
+  }
   public async update(key: string, row: Json): Promise<void> {
     validateRow(row, this.columns);
     const anyRow = row as any;

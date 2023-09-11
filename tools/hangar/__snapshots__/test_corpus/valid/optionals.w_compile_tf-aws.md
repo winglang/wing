@@ -112,24 +112,6 @@ module.exports = function({  }) {
         "bucket_prefix": "orange-bucket-c8ecc927-",
         "force_destroy": false
       }
-    },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "orangebucket_Encryption_F338E6D4": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/orange bucket/Encryption",
-            "uniqueId": "orangebucket_Encryption_F338E6D4"
-          }
-        },
-        "bucket": "${aws_s3_bucket.orangebucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      }
     }
   }
 }
