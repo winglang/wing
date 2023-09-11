@@ -2132,7 +2132,11 @@ impl<'s> Parser<'s> {
 }
 
 fn is_entrypoint_file(path: &Utf8Path) -> bool {
-	path == "main.w" || path.ends_with(".main.w") || path.ends_with("/main.w")
+	path.file_name() == Some("main.w")
+		|| path
+			.file_name()
+			.map(|s| s.to_string().ends_with(".main.w"))
+			.unwrap_or(false)
 }
 
 fn is_valid_module_statement(stmt: &Stmt) -> bool {
