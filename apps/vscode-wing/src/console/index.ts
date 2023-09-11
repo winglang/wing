@@ -1,4 +1,4 @@
-import { spawn } from "child_process";
+import { execSync, spawn } from "child_process";
 import path from "path";
 import fetch from "node-fetch";
 
@@ -88,10 +88,30 @@ export class WingConsoleManager {
         stdio: ["ignore", "pipe", "pipe"],
         windowsHide: true,
         shell: false,
+        detached: process.platform !== "win32",
       }
     );
 
+    const onDidClose = () => {
+      if (process.platform === "win32") {
+        try {
+          execSync(`taskkill /pid ${cp.pid} /T /F`);
+        } catch (error) {
+          Loggers.default.appendLine(
+            `Failed to kill the process with taskkill: ${error}`
+          );
+
+          cp.kill();
+        }
+      } else {
+        if (cp.pid) {
+          process.kill(-cp.pid, "SIGTERM");
+        }
+      }
+    };
+
     cp.on("error", async (err) => {
+      Loggers.default.appendLine(err.toString());
       if (err) {
         Loggers.default.appendLine(`Wing Console Closed: ${err}`);
         this.consoleManager.closeInstance(wingfilePath);
@@ -111,11 +131,11 @@ export class WingConsoleManager {
         wingfile,
         url,
         client: createClient(url),
-        onDidClose: () => {
-          cp.kill();
-        },
+        onDidClose,
       });
     });
+
+    process.once("exit", onDidClose);
   }
 
   public async openFile() {
