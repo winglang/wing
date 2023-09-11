@@ -146,7 +146,7 @@ async function main() {
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .option("-r, --rootId <rootId>", "App root id")
     .option("-v, --value <value>", "Platform-specific value", addValue, [])
-    .option("--values <file>", "Yamll file with Platform-specific values")
+    .option("--values <file>", "Yaml file with Platform-specific values")
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("compile"));
