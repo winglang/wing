@@ -61,7 +61,7 @@ export async function activate(context: ExtensionContext) {
         await languageServerManager?.start();
 
         // restart the language server and reset any open console windows
-        if (wingConsoleContext?.consoleManager?.activeInstances) {
+        if (wingConsoleContext?.consoleManager?.activeInstances()) {
           const chooseReload = await window.showInformationMessage(
             `Wing has been updated and there are open consoles. Would you like to close them? (This will reset their state)`,
             "Yes",
