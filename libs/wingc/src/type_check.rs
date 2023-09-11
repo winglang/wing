@@ -4862,7 +4862,7 @@ impl<'a> TypeChecker<'a> {
 			let SymbolEnvKind::Type(property_defined_in) = lookup_info.env.kind else {
 				panic!("Expected env to be a type env");
 			};
-			// Check if the class in which the property is defined is the current class nesting
+			// Check if the class in which the property is defined is one of the classes we're currently nested in
 			let mut private_access = false;
 			let mut protected_access = false;
 			for current_class in self.ctx.current_class_nesting() {
