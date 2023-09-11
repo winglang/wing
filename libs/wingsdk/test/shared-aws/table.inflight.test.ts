@@ -102,9 +102,10 @@ describe("inflight table tests", () => {
       TableName: MOCK_TABLE_NAME,
       Key: { id: { S: key } },
     };
-    dynamoMock
-      .on(GetItemCommand, expectedRequest)
-      .rejects(new Error("Row does not exist"));
+    const mockResponse: GetItemCommandOutput = {
+      $metadata: {},
+    };
+    dynamoMock.on(GetItemCommand, expectedRequest).resolves(mockResponse);
 
     // WHEN
     const get = client.get(key);

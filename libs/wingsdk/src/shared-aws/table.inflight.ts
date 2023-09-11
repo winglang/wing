@@ -59,27 +59,15 @@ export class TableClient implements ITableClient {
   }
 
   public async get(key: string): Promise<Json> {
-    const command = new GetItemCommand({
-      TableName: this.tableName,
-      Key: { [this.primaryKey]: { S: key } },
-    });
-    const result = await this.client.send(command);
-    if (result.Item) {
-      return unmarshall(result.Item) as Json;
+    const result = await this.tryGetJson(key);
+    if (!result) {
+      throw new Error(`Row does not exist (key=${key})`);
     }
-    throw new Error(`Row does not exist (key=${key}).`);
+    return result;
   }
 
   public async tryGet(key: string): Promise<Json | undefined> {
-    const command = new GetItemCommand({
-      TableName: this.tableName,
-      Key: { [this.primaryKey]: { S: key } },
-    });
-    const result = await this.client.send(command);
-    if (result.Item) {
-      return unmarshall(result.Item) as Json;
-    }
-    return undefined;
+    return this.tryGetJson(key);
   }
 
   public async list(): Promise<Array<Json>> {
@@ -92,5 +80,17 @@ export class TableClient implements ITableClient {
       response.push(unmarshall(item));
     }
     return response;
+  }
+
+  private async tryGetJson(key: string): Promise<Json | undefined> {
+    const command = new GetItemCommand({
+      TableName: this.tableName,
+      Key: { [this.primaryKey]: { S: key } },
+    });
+    const result = await this.client.send(command);
+    if (result.Item) {
+      return unmarshall(result.Item) as Json;
+    }
+    return undefined;
   }
 }
