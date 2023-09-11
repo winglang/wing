@@ -1,69 +1,5 @@
 # [optionals.w](../../../../../examples/tests/valid/optionals.w) | compile | tf-aws
 
-## Name.Struct.js
-```js
-module.exports = function(stdStruct) {
-  class Name {
-    static jsonSchema() {
-      return {
-        id: "/Name",
-        type: "object",
-        properties: {
-          first: { type: "string" },
-          last: { type: "string" },
-        },
-        required: [
-          "first",
-        ],
-        $defs: {
-        }
-      }
-    }
-    static fromJson(obj) {
-      return stdStruct._validate(obj, this.jsonSchema())
-    }
-    static _toInflightType(context) {
-      return `require("./Name.Struct.js")(${ context._lift(stdStruct) })`;
-    }
-  }
-  return Name;
-};
-
-```
-
-## Payload.Struct.js
-```js
-module.exports = function(stdStruct) {
-  class Payload {
-    static jsonSchema() {
-      return {
-        id: "/Payload",
-        type: "object",
-        properties: {
-          a: { type: "string" },
-          b: { type: "object", patternProperties: { ".*": { type: "string" } } },
-          c: { "$ref": "#/$defs/cloud" },
-        },
-        required: [
-          "a",
-        ],
-        $defs: {
-          "cloud": { type: "object", "properties": require("./cloud.Struct.js")().jsonSchema().properties },
-        }
-      }
-    }
-    static fromJson(obj) {
-      return stdStruct._validate(obj, this.jsonSchema())
-    }
-    static _toInflightType(context) {
-      return `require("./Payload.Struct.js")(${ context._lift(stdStruct) })`;
-    }
-  }
-  return Payload;
-};
-
-```
-
 ## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutOptions_b_____null_, $payloadWithBucket_c }) {
@@ -156,7 +92,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:t\",\"${aws_lambda_function.testt_Handler_FF112F5E.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -165,83 +101,7 @@ module.exports = function({  }) {
     ]
   },
   "resource": {
-    "aws_iam_role": {
-      "testt_Handler_IamRole_BF49E95A": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:t/Handler/IamRole",
-            "uniqueId": "testt_Handler_IamRole_BF49E95A"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      }
-    },
-    "aws_iam_role_policy": {
-      "testt_Handler_IamRolePolicy_F429CB90": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:t/Handler/IamRolePolicy",
-            "uniqueId": "testt_Handler_IamRolePolicy_F429CB90"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.orangebucket.arn}\",\"${aws_s3_bucket.orangebucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.testt_Handler_IamRole_BF49E95A.name}"
-      }
-    },
-    "aws_iam_role_policy_attachment": {
-      "testt_Handler_IamRolePolicyAttachment_16BB0DB0": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:t/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testt_Handler_IamRolePolicyAttachment_16BB0DB0"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testt_Handler_IamRole_BF49E95A.name}"
-      }
-    },
-    "aws_lambda_function": {
-      "testt_Handler_FF112F5E": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:t/Handler/Default",
-            "uniqueId": "testt_Handler_FF112F5E"
-          }
-        },
-        "architectures": [
-          "arm64"
-        ],
-        "environment": {
-          "variables": {
-            "BUCKET_NAME_c1491ba5": "${aws_s3_bucket.orangebucket.bucket}",
-            "WING_FUNCTION_NAME": "Handler-c83c24f9",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c83c24f9",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testt_Handler_IamRole_BF49E95A.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testt_Handler_S3Object_572CA425.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      }
-    },
     "aws_s3_bucket": {
-      "Code": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
-          }
-        },
-        "bucket_prefix": "code-c84a50b1-"
-      },
       "orangebucket": {
         "//": {
           "metadata": {
@@ -251,37 +111,6 @@ module.exports = function({  }) {
         },
         "bucket_prefix": "orange-bucket-c8ecc927-",
         "force_destroy": false
-      }
-    },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "orangebucket_Encryption_F338E6D4": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/orange bucket/Encryption",
-            "uniqueId": "orangebucket_Encryption_F338E6D4"
-          }
-        },
-        "bucket": "${aws_s3_bucket.orangebucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      }
-    },
-    "aws_s3_object": {
-      "testt_Handler_S3Object_572CA425": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:t/Handler/S3Object",
-            "uniqueId": "testt_Handler_S3Object_572CA425"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
       }
     }
   }
@@ -453,7 +282,6 @@ class $Root extends $stdlib.std.Resource {
     const optionalSup = new Super(this,"Super");
     const s = (optionalSup ?? new Sub(this,"Sub"));
     {((cond) => {if (!cond) throw new Error("assertion failed: s.name == \"Super\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s.name,"Super")))};
-    const Name = require("./Name.Struct.js")($stdlib.std.Struct);
     let name = ({"first": "John","last": "Doe"});
     {
       const $if_let_value = name;
@@ -612,7 +440,6 @@ class $Root extends $stdlib.std.Resource {
         {((cond) => {if (!cond) throw new Error("assertion failed: o.value == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(o.value,1)))};
       }
     }
-    const Payload = require("./Payload.Struct.js")($stdlib.std.Struct);
     const payloadWithoutOptions = ({"a": "a"});
     const payloadWithBucket = ({"a": "a","c": this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"orange bucket")});
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:t",new $Closure1(this,"$Closure1"));

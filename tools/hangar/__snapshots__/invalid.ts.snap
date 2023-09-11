@@ -757,6 +757,21 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`extern_static.w 1`] = `
+"error: Extern methods must be declared \\"static\\" (they cannot access instance members)
+  --> ../../../examples/tests/invalid/extern_static.w:2:39
+  |
+2 |   extern \\"../external_js.js\\" inflight getGreeting(name: str): str;
+  |                                       ^^^^^^^^^^^ Extern methods must be declared \\"static\\" (they cannot access instance members)
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`file_with_variables.w 1`] = `
 "error: Preflight field \\"x\\" is not initialized
    --> ../../../examples/tests/invalid/file_with_variables.w:10:3
@@ -2377,6 +2392,21 @@ error: Cannot call super method because class A has no parent
   |
 4 |     super.method();
   |           ^^^^^^ Cannot call super method because class A has no parent
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`throw_non_string.w 1`] = `
+"error: Expected type to be \\"str\\", but got \\"num\\" instead
+  --> ../../../examples/tests/invalid/throw_non_string.w:1:7
+  |
+1 | throw 42;
+  |       ^^ Expected type to be \\"str\\", but got \\"num\\" instead
 
 
  

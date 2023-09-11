@@ -1,8 +1,19 @@
 bring cloud;
 bring ex;
+bring http;
+bring "./assertions.w" as t;
 
 //needs to be written before the website (so the website will be able to use it's url on sim env)
-let api = new cloud.Api();
+let api = new cloud.Api(
+  cors: true,
+  corsOptions: cloud.ApiCorsOptions {
+    allowOrigin: ["*"],
+    allowMethods: [cloud.HttpMethod.GET, cloud.HttpMethod.POST, cloud.HttpMethod.OPTIONS],
+    allowHeaders: ["Content-Type"],
+    allowCredentials: false,
+    exposeHeaders: ["Content-Type"]
+  }
+);
 
 let website = new cloud.Website(path: "./website_with_api");
 
@@ -15,7 +26,6 @@ let usersTable = new ex.Table(
     "age" => ex.ColumnType.NUMBER,
   }
 );
-
 
 let getHandler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   return cloud.ApiResponse {
@@ -39,20 +49,40 @@ let postHandler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   };
 };
 
-  // responsible for the CORS - https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-cors.html
-let optionsHandler = inflight(req: cloud.ApiRequest): cloud.ApiResponse => {
-  return cloud.ApiResponse {
-    headers: {
-      "Access-Control-Allow-Headers" => "Content-Type",
-      "Access-Control-Allow-Origin" => "*",
-      "Access-Control-Allow-Methods" => "OPTIONS,POST,GET"
-    },
-    status: 204
-  };
-};
-
 api.get("/users", getHandler);
 api.post("/users", postHandler);
-api.options("/users", optionsHandler);
 
 website.addJson("config.json", { apiUrl: api.url });
+
+test "GET /users" {
+  let response = http.fetch(api.url + "/users", {
+    method: http.HttpMethod.GET,
+    headers: {
+      "Content-Type": "text/json"
+    }
+  });
+
+let headers = response.headers;
+  t.Assert.equalNum(response.status, 200);
+
+  t.Assert.equalStr(headers.get("access-control-allow-origin"), "*");
+  t.Assert.equalStr(headers.get("access-control-expose-headers"), "Content-Type");
+  t.Assert.equalStr(headers.get("access-control-allow-credentials"), "false");
+
+  t.Assert.isNil(headers.get("access-control-allow-headers"));
+  t.Assert.isNil(headers.get("access-control-allow-methods"));
+}
+
+test "OPTIONS /users" {
+  let response = http.fetch(api.url + "/users", {
+    method: http.HttpMethod.OPTIONS,
+    headers: {
+      "Content-Type": "text/json"
+    }
+  });
+
+  let headers = response.headers;
+  t.Assert.equalNum(response.status, 204);
+  t.Assert.equalStr(headers.get("access-control-allow-methods"), "GET,POST,OPTIONS");
+  t.Assert.equalStr(headers.get("access-control-allow-headers"), "Content-Type");
+}

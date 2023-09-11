@@ -426,6 +426,13 @@ pub enum BringSource {
 }
 
 #[derive(Debug)]
+pub enum AssignmentKind {
+	Assign,
+	AssignIncr,
+	AssignDecr,
+}
+
+#[derive(Debug)]
 pub enum StmtKind {
 	Bring {
 		source: BringSource,
@@ -466,8 +473,10 @@ pub enum StmtKind {
 	Break,
 	Continue,
 	Return(Option<Expr>),
+	Throw(Expr),
 	Expression(Expr),
 	Assignment {
+		kind: AssignmentKind,
 		variable: Reference,
 		value: Expr,
 	},

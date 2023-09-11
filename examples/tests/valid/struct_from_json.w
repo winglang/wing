@@ -1,7 +1,14 @@
-// TODO: https://github.com/winglang/wing/issues/3792
-// bring cloud;
-// let j = { public: false };
-// let x = cloud.BucketProps.fromJson(j);
+bring cloud;
+
+// JSII structs
+let j = { public: false };
+let x = cloud.BucketProps.fromJson(j);
+assert(x.public == false);
+
+test "inflight jsii struct conversion" {
+  let x = cloud.BucketProps.fromJson(j);
+  assert(x.public == false);
+}
 
 // simple case
 struct Foo {
@@ -249,3 +256,38 @@ let jj1 = {
 
 let externalBar = externalStructs.MyOtherStruct.fromJson(jj1);
 assert(externalBar.data.val == 10);
+
+// test namespaced struct collisions dont occur
+bring "./subdir/structs_2.w" as otherExternalStructs;
+
+struct MyStruct {
+  m1: externalStructs.MyStruct;
+  m2: otherExternalStructs.MyStruct;
+}
+
+let jMyStruct = {
+  m1: {
+    val: 10
+  },
+  m2: {
+    val: "10"
+  }
+};
+
+let myStruct = MyStruct.fromJson(jMyStruct);
+assert(myStruct.m1.val == 10);
+assert(myStruct.m2.val == "10");
+
+// Test using schema object
+let schema = MyStruct.schema();
+schema.validate(jMyStruct); // Should not throw exception
+
+let expectedSchema = {"id":"/MyStruct","type":"object","properties":{"m1":{"type":"object","properties":{"val":{"type":"number"}},"required":["val"]},"m2":{"type":"object","properties":{"val":{"type":"string"}},"required":["val"]}},"required":["m1","m2"]};
+
+assert(schema.asStr() == Json.stringify(expectedSchema));
+
+test "inflight schema usage" {
+  let s = MyStruct.schema();
+  s.validate(jMyStruct);
+  assert(schema.asStr() == Json.stringify(expectedSchema));
+}

@@ -4,7 +4,9 @@ pub(crate) mod jsii_importer;
 pub mod lifts;
 pub mod symbol_env;
 
-use crate::ast::{self, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition, NewExpr, TypeAnnotationKind};
+use crate::ast::{
+	self, AssignmentKind, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition, NewExpr, TypeAnnotationKind,
+};
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter as AstFunctionParameter,
 	Interface as AstInterface, InterpolatedStringPart, Literal, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Symbol,
@@ -19,6 +21,7 @@ use crate::{
 	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_RESOURCE, WINGSDK_SET,
 	WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
 };
+use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
 use duplicate::duplicate_item;
 use indexmap::{IndexMap, IndexSet};
@@ -28,7 +31,6 @@ use jsii_importer::JsiiImporter;
 use std::collections::HashMap;
 use std::fmt::{Debug, Display};
 use std::iter::FilterMap;
-use std::path::{Path, PathBuf};
 use symbol_env::{StatementIdx, SymbolEnv};
 use wingii::fqn::FQN;
 use wingii::type_system::TypeSystem;
@@ -1234,7 +1236,7 @@ pub struct Types {
 	namespaces: Vec<Box<Namespace>>,
 	symbol_envs: Vec<Box<SymbolEnv>>,
 	/// A map from source file name to the symbol environment for that file (and whether that file is safe to bring)
-	source_file_envs: IndexMap<PathBuf, (SymbolEnvRef, bool)>,
+	source_file_envs: IndexMap<Utf8PathBuf, (SymbolEnvRef, bool)>,
 	pub libraries: SymbolEnv,
 	numeric_idx: usize,
 	string_idx: usize,
@@ -1595,7 +1597,7 @@ pub struct TypeChecker<'a> {
 	inner_scopes: Vec<*const Scope>,
 
 	/// The path to the source file being type checked.
-	source_path: &'a Path,
+	source_path: &'a Utf8Path,
 
 	/// JSII Manifest descriptions to be imported.
 	/// May be reused between compilations
@@ -1616,7 +1618,7 @@ pub struct TypeChecker<'a> {
 impl<'a> TypeChecker<'a> {
 	pub fn new(
 		types: &'a mut Types,
-		source_path: &'a Path,
+		source_path: &'a Utf8Path,
 		jsii_types: &'a mut TypeSystem,
 		jsii_imports: &'a mut Vec<JsiiImportSpec>,
 	) -> Self {
@@ -2770,7 +2772,7 @@ impl<'a> TypeChecker<'a> {
 		first_expected_type
 	}
 
-	pub fn type_check_file(&mut self, source_path: &Path, scope: &Scope) {
+	pub fn type_check_file(&mut self, source_path: &Utf8Path, scope: &Scope) {
 		CompilationContext::set(CompilationPhase::TypeChecking, &scope.span);
 		self.type_check_scope(scope);
 
@@ -3131,7 +3133,7 @@ impl<'a> TypeChecker<'a> {
 			StmtKind::Expression(e) => {
 				self.type_check_exp(e, env);
 			}
-			StmtKind::Assignment { variable, value } => {
+			StmtKind::Assignment { kind, variable, value } => {
 				let (exp_type, _) = self.type_check_exp(value, env);
 
 				// TODO: we need to verify that if this variable is defined in a parent environment (i.e.
@@ -3143,6 +3145,11 @@ impl<'a> TypeChecker<'a> {
 					self.spanned_error(variable, "Variable is not reassignable".to_string());
 				} else if var_phase == Phase::Preflight && env.phase == Phase::Inflight {
 					self.spanned_error(stmt, "Variable cannot be reassigned from inflight".to_string());
+				}
+
+				if matches!(&kind, AssignmentKind::AssignIncr | AssignmentKind::AssignDecr) {
+					self.validate_type(exp_type, self.types.number(), value);
+					self.validate_type(var.type_, self.types.number(), variable);
 				}
 
 				self.validate_type(exp_type, var.type_, value);
@@ -3178,7 +3185,7 @@ impl<'a> TypeChecker<'a> {
 						alias = identifier.as_ref().unwrap();
 					}
 					BringSource::WingFile(name) => {
-						let (brought_env, is_bringable) = match self.types.source_file_envs.get(Path::new(&name.name)) {
+						let (brought_env, is_bringable) = match self.types.source_file_envs.get(Utf8Path::new(&name.name)) {
 							Some((env, is_bringable)) => (*env, *is_bringable),
 							None => {
 								self.spanned_error(
@@ -3234,6 +3241,10 @@ impl<'a> TypeChecker<'a> {
 				));
 				self.types.set_scope_env(scope, scope_env);
 				self.inner_scopes.push(scope)
+			}
+			StmtKind::Throw(exp) => {
+				let (exp_type, _) = self.type_check_exp(exp, env);
+				self.validate_type(exp_type, self.types.string(), exp);
 			}
 			StmtKind::Return(exp) => {
 				let return_type_inferred = self.update_known_inferences(&mut env.return_type, &stmt.span);
@@ -3937,6 +3948,15 @@ impl<'a> TypeChecker<'a> {
 			self.types.set_scope_env(scope, method_env);
 			self.inner_scopes.push(scope);
 		}
+
+		if let FunctionBody::External(_) = &method_def.body {
+			if !method_def.is_static {
+				self.spanned_error(
+					method_name,
+					"Extern methods must be declared \"static\" (they cannot access instance members)",
+				);
+			}
+		}
 	}
 
 	fn add_method_to_class_env(
@@ -3995,7 +4015,7 @@ impl<'a> TypeChecker<'a> {
 			let assembly_name = if library_name == WINGSDK_ASSEMBLY_NAME {
 				// in runtime, if "WINGSDK_MANIFEST_ROOT" env var is set, read it. otherwise set to "../wingsdk" for dev
 				let manifest_root = std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../wingsdk".to_string());
-				let assembly_name = match self.jsii_types.load_module(manifest_root.as_str()) {
+				let assembly_name = match self.jsii_types.load_module(&Utf8Path::new(&manifest_root)) {
 					Ok(name) => name,
 					Err(type_error) => {
 						self.spanned_error(
@@ -4011,7 +4031,7 @@ impl<'a> TypeChecker<'a> {
 
 				assembly_name
 			} else {
-				let source_dir = self.source_path.parent().unwrap().to_str().unwrap();
+				let source_dir = self.source_path.parent().unwrap();
 				let assembly_name = match self.jsii_types.load_dep(library_name.as_str(), source_dir) {
 					Ok(name) => name,
 					Err(type_error) => {
@@ -4978,6 +4998,14 @@ pub fn resolve_user_defined_type(
 	}
 }
 
+pub fn is_udt_struct_type(udt: &UserDefinedType, env: &SymbolEnv) -> bool {
+	if let Ok(type_) = resolve_user_defined_type(udt, env, 0) {
+		type_.as_struct().is_some()
+	} else {
+		false
+	}
+}
+
 pub fn resolve_super_method(method: &Symbol, env: &SymbolEnv, types: &Types) -> Result<(TypeRef, Phase), TypeError> {
 	let this_type = env.lookup(&Symbol::global("this"), None);
 	if let Some(SymbolKind::Variable(VariableInfo {
@@ -5109,6 +5137,7 @@ fn check_is_bringable(scope: &Scope) -> bool {
 		StmtKind::Break => false,
 		StmtKind::Continue => false,
 		StmtKind::Return(_) => false,
+		StmtKind::Throw(_) => false,
 		StmtKind::Expression(_) => false,
 		StmtKind::Assignment { .. } => false,
 		StmtKind::Scope(_) => false,

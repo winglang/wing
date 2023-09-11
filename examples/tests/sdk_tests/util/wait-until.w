@@ -63,7 +63,7 @@ test "throwing exception from predicate should throw immediately" {
   try {
     util.waitUntil((): bool => { 
       invokeCounter.inc();
-      throw("ERROR"); 
+      throw "ERROR";
     });
     assert(false);
   } catch {
