@@ -64,7 +64,7 @@ jobs:
 
       - name: Install Wing from Dist
         if: ${{github.event_name != 'release'}}
-        run: npm install -g --no-package-lock ./dist/*-[0-9]*.[0-9]*.[0-9]*.tgz
+        run: npm install -g ./dist/*-[0-9]*.[0-9]*.[0-9]*.tgz
 
       ########################################################################
       - name: Install winglang globally
@@ -95,7 +95,9 @@ jobs:
           max_attempts: 3
           retry_on: error
           timeout_minutes: 30
-          command: wing test -t tf-aws ${{ matrix.test.directory }}/*.w
+          command: |
+            wing --version
+            wing test -t tf-aws ${{ matrix.test.directory }}/*.w
 
       - name: Output Terraform log
         if: failure()
