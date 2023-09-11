@@ -55,11 +55,25 @@ export async function activate(context: ExtensionContext) {
       if (hasWingBin) {
         Loggers.default.appendLine(`Using wing from "${currentWingBin}"`);
 
-        // restart the language server and reset any open console windows
         languageServerManager?.setWingBin(currentWingBin);
         wingConsoleContext?.setWingBin(currentWingBin);
+
         await languageServerManager?.start();
-        await wingConsoleContext?.stop();
+
+        // restart the language server and reset any open console windows
+        if (wingConsoleContext?.consoleManager?.activeInstances) {
+          const chooseReload = await window.showInformationMessage(
+            `Wing has been updated and there are open consoles. Would you like to close them? (This will reset their state)`,
+            "Yes",
+            "No (Close and reopen console to use new version)"
+          );
+
+          if (chooseReload === "Yes") {
+            await wingConsoleContext?.stop();
+          }
+        } else {
+          await wingConsoleContext?.stop();
+        }
       } else {
         void window.showErrorMessage(`wing not found at "${currentWingBin}"`);
       }
