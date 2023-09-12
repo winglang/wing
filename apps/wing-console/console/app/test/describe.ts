@@ -38,7 +38,9 @@ export const describe = (wingfile: string, callback: () => void) => {
 
     await page.waitForLoadState("domcontentloaded");
 
-    await page.getByTestId("loading-overlay").waitFor({ state: "hidden" });
+    await page
+      .getByTestId("loading-overlay")
+      .waitFor({ state: "detached", timeout: 10_000 });
   });
 
   test.afterEach(() => {
