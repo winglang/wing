@@ -515,17 +515,10 @@ error: Unknown symbol \\"C11\\"
    |                   ^^^ Unknown symbol \\"C11\\"
 
 
-error: Expected type to be \\"num\\", but got \\"str\\" instead
-    --> ../../../examples/tests/invalid/class.w:123:11
-    |
-123 |     super(someStr);
-    |           ^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
-
-
 error: Expected 1 positional argument(s) but got 0
-    --> ../../../examples/tests/invalid/class.w:132:5
+    --> ../../../examples/tests/invalid/class.w:157:5
     |
-132 |     super();
+157 |     super();
     |     ^^^^^^^^ Expected 1 positional argument(s) but got 0
 
 
@@ -537,10 +530,17 @@ error: Expected 1 arguments but got 2
 
 
 error: Expected 1 positional argument(s) but got 0
-    --> ../../../examples/tests/invalid/class.w:157:5
+    --> ../../../examples/tests/invalid/class.w:132:5
     |
-157 |     super();
+132 |     super();
     |     ^^^^^^^^ Expected 1 positional argument(s) but got 0
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+    --> ../../../examples/tests/invalid/class.w:123:11
+    |
+123 |     super(someStr);
+    |           ^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Variable cannot be reassigned from inflight

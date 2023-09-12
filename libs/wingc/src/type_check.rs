@@ -2399,7 +2399,7 @@ impl<'a> TypeChecker<'a> {
 		&mut self,
 		arg_list: &ArgList,
 		func_sig: &FunctionSignature,
-		exp: &impl Spanned,
+		call_span: &impl Spanned,
 		arg_list_types: ArgListTypes,
 	) -> Option<TypeRef> {
 		// Verify arity
@@ -2410,7 +2410,7 @@ impl<'a> TypeChecker<'a> {
 				"Expected {} positional argument(s) but got {}",
 				min_args, pos_args_count
 			);
-			self.spanned_error(exp, err_text);
+			self.spanned_error(call_span, err_text);
 			return Some(self.types.error());
 		}
 
@@ -2419,19 +2419,22 @@ impl<'a> TypeChecker<'a> {
 				Some(arg) => arg.typeref.maybe_unwrap_option(),
 				None => {
 					self.spanned_error(
-						exp,
-						format!("Expected 0 named arguments for func at {}", exp.span().to_string()),
+						call_span,
+						format!(
+							"Expected 0 named arguments for func at {}",
+							call_span.span().to_string()
+						),
 					);
 					return Some(self.types.error());
 				}
 			};
 
 			if !last_arg.is_struct() {
-				self.spanned_error(exp, "No named arguments expected");
+				self.spanned_error(call_span, "No named arguments expected");
 				return Some(self.types.error());
 			}
 
-			self.validate_structural_type(&arg_list_types.named_args, &last_arg, exp);
+			self.validate_structural_type(&arg_list_types.named_args, &last_arg, call_span);
 		}
 
 		// Count number of optional parameters from the end of the function's params
@@ -2469,7 +2472,7 @@ impl<'a> TypeChecker<'a> {
 					min_args, max_args, arg_count
 				)
 			};
-			self.spanned_error(exp, err_text);
+			self.spanned_error(call_span, err_text);
 		}
 		let params = func_sig.parameters.iter();
 
@@ -3052,7 +3055,7 @@ impl<'a> TypeChecker<'a> {
 				println!("{}", env);
 			}
 			StmtKind::SuperConstructor { arg_list } => {
-				tc.type_check_arg_list(arg_list, env);
+				tc.type_check_super_constructor_against_parent_initializer(stmt, arg_list, env);
 			}
 		});
 	}
@@ -3447,12 +3450,6 @@ impl<'a> TypeChecker<'a> {
 
 		if let FunctionBody::Statements(scope) = &ast_class.inflight_initializer.body {
 			self.check_class_field_initialization(&scope, &ast_class.fields, Phase::Inflight);
-			self.type_check_super_constructor_against_parent_initializer(
-				scope,
-				class_type,
-				&mut class_type.as_class_mut().unwrap().env,
-				CLASS_INFLIGHT_INIT_NAME,
-			);
 		};
 
 		// Type check constructor
@@ -3465,13 +3462,6 @@ impl<'a> TypeChecker<'a> {
 		};
 
 		self.check_class_field_initialization(&init_statements, &ast_class.fields, Phase::Preflight);
-
-		self.type_check_super_constructor_against_parent_initializer(
-			init_statements,
-			class_type,
-			&mut class_type.as_class_mut().unwrap().env,
-			CLASS_INIT_NAME,
-		);
 
 		// Type check the inflight initializer
 		self.type_check_method(
@@ -3926,35 +3916,61 @@ impl<'a> TypeChecker<'a> {
 
 	fn type_check_super_constructor_against_parent_initializer(
 		&mut self,
-		scope: &Scope,
-		class_type: TypeRef,
+		super_constructor_call: &Stmt,
+		arg_list: &ArgList,
 		env: &mut SymbolEnv,
-		init_name: &str,
 	) {
-		if scope.statements.len() >= 1 {
-			match &scope.statements[0].kind {
-				StmtKind::SuperConstructor { arg_list } => {
-					if let Some(parent_class) = &class_type.as_class().unwrap().parent {
-						let parent_initializer = parent_class
-							.as_class()
-							.unwrap()
-							.methods(false)
-							.filter(|(name, _type)| name == init_name)
-							.collect_vec()[0]
-							.1;
+		let arg_list_types = self.type_check_arg_list(arg_list, env);
 
-						let arg_list_types = self.type_check_arg_list(&arg_list, env);
-						self.type_check_arg_list_against_function_sig(
-							&arg_list,
-							parent_initializer.as_function_sig().unwrap(),
-							&scope.statements[0],
-							arg_list_types,
-						);
-					}
-				}
-				_ => {} // No super no problem
-			}
+		// Verify we're inside a class
+		let class_type = if let Some(current_clas) = self.ctx.current_class().cloned() {
+			self
+				.resolve_user_defined_type(&current_clas, env, self.ctx.current_stmt_idx())
+				.expect("current class type to be defined")
+		} else {
+			self.spanned_error(
+				super_constructor_call,
+				"Call to super constructor can only be done from within a class initializer",
+			);
+			return;
 		};
+
+		let init_name = if env.phase == Phase::Inflight {
+			CLASS_INFLIGHT_INIT_NAME
+		} else {
+			CLASS_INIT_NAME
+		};
+
+		// Verify we're inside the class's initializer
+		let (method_name, _) = self.ctx.current_method().expect("to be inside a method");
+		if method_name.name != init_name {
+			self.spanned_error(
+				super_constructor_call,
+				"Call to super constructor can only be done from within a class initializer",
+			);
+			return;
+		}
+
+		// Verify the class has a parent class
+		let Some(parent_class) = &class_type.as_class().expect("class type to be a class").parent else {
+			self.spanned_error(super_constructor_call, format!("Class \"{class_type}\" does not have a parent class"));
+			return;
+		};
+
+		let parent_initializer = parent_class
+			.as_class()
+			.unwrap()
+			.methods(false)
+			.filter(|(name, _type)| name == init_name)
+			.collect_vec()[0]
+			.1;
+
+		self.type_check_arg_list_against_function_sig(
+			&arg_list,
+			parent_initializer.as_function_sig().unwrap(),
+			super_constructor_call,
+			arg_list_types,
+		);
 	}
 
 	/// Validate if the fields of a class are initialized in the constructor (init) according to the given phase.
