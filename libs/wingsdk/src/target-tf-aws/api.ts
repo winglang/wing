@@ -445,6 +445,7 @@ class WingRestApi extends Construct {
             exposedHeaders: props.cors.exposeHeaders
               ? props.cors.exposeHeaders
               : ["Content-Type"],
+            // rename allowOrigin to allowOrigins
             allowOrigins: props.cors.allowOrigins
               ? props.cors.allowOrigins
               : ["*"],

@@ -43,7 +43,7 @@ export const API_CORS_DEFAULT_RESPONSE = (
                 statusCode: "204",
                 responseParameters: {
                   "method.response.header.Content-Type": "'application/json'",
-                  "method.response.header.Access-Control-Allow-Origin": `'${corsOptions.allowOrigin}'`,
+                  "method.response.header.Access-Control-Allow-Origin": `'${corsOptions.allowOrigins}'`,
                   "method.response.header.Access-Control-Allow-Methods": `'${corsOptions.allowMethods}'`,
                   "method.response.header.Access-Control-Allow-Headers": `'${corsOptions.allowHeaders}'`,
                 },

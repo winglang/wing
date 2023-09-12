@@ -381,7 +381,7 @@ export abstract class Api extends Resource {
     }
 
     const {
-      allowOrigin = [],
+      allowOrigins = [],
       allowHeaders = [],
       allowMethods = [],
       exposeHeaders = [],
@@ -389,13 +389,13 @@ export abstract class Api extends Resource {
     } = corsOptions;
 
     const defaultHeaders: CorsDefaultResponseHeaders = {
-      "Access-Control-Allow-Origin": allowOrigin.join(",") || "",
+      "Access-Control-Allow-Origin": allowOrigins.join(",") || "",
       "Access-Control-Expose-Headers": exposeHeaders.join(",") || "",
       "Access-Control-Allow-Credentials": allowCredentials ? "true" : "false",
     };
 
     const optionsHeaders: CorsOptionsResponseHeaders = {
-      "Access-Control-Allow-Origin": allowOrigin.join(",") || "",
+      "Access-Control-Allow-Origin": allowOrigins.join(",") || "",
       "Access-Control-Allow-Headers": allowHeaders.join(",") || "",
       "Access-Control-Allow-Methods": allowMethods.join(",") || "",
     };
