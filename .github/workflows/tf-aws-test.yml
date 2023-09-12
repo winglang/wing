@@ -43,7 +43,7 @@ jobs:
     name: ${{ matrix.test.name }}
     steps:
       - name: Print Environment Variable
-        run: echo "The value of LOCAL_BUILD is ${{ env.LOCAL_BUILD }}"
+        run: echo "The value of LOCAL_BUILD is ${{ env.LOCAL_BUILD == true }}"
 
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -55,14 +55,14 @@ jobs:
 
       ##################### install a local wing version #########################
       - name: Download Dist Artifacts
-        if: ${{ env.LOCAL_BUILD }}
+        if: ${{ env.LOCAL_BUILD == true }}
         uses: actions/download-artifact@v3
         with:
           name: dist
           path: dist
 
       - name: Install Wing from Dist
-        if: ${{ env.LOCAL_BUILD }}
+        if: ${{ env.LOCAL_BUILD == true }}
         # npm isn't installing everything on the first try, so we need to call it twice...
         run: |
           npm install -g ./dist/*-[0-9]*.[0-9]*.[0-9]*.tgz
@@ -70,7 +70,7 @@ jobs:
 
       #################### install a remote wing version ########################
       - name: Install winglang globally
-        if: ${{ !env.LOCAL_BUILD }}
+        if: ${{ env.LOCAL_BUILD == false }}
         uses: nick-fields/retry@v2
         with:
           max_attempts: 3
@@ -79,7 +79,7 @@ jobs:
           command: npm install -g winglang
 
       - name: Installing external js modules
-        if: ${{ !env.LOCAL_BUILD }}
+        if: ${{ env.LOCAL_BUILD == false }}
         run: |
           cd examples/tests/sdk_tests
           npm install
