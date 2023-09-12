@@ -115,7 +115,7 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:http.fetch can preform a call to an api to CONNECT, HEAD and OPTIONS\",\"${aws_lambda_function.testhttpfetchcanpreformacalltoanapitoCONNECTHEADandOPTIONS_Handler_E8EF5111.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -193,15 +193,6 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      },
-      "testhttpfetchcanpreformacalltoanapitoCONNECTHEADandOPTIONS_Handler_IamRole_F762CCC6": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:http.fetch can preform a call to an api to CONNECT, HEAD and OPTIONS/Handler/IamRole",
-            "uniqueId": "testhttpfetchcanpreformacalltoanapitoCONNECTHEADandOPTIONS_Handler_IamRole_F762CCC6"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
@@ -234,16 +225,6 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.name}"
-      },
-      "testhttpfetchcanpreformacalltoanapitoCONNECTHEADandOPTIONS_Handler_IamRolePolicy_665D7306": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:http.fetch can preform a call to an api to CONNECT, HEAD and OPTIONS/Handler/IamRolePolicy",
-            "uniqueId": "testhttpfetchcanpreformacalltoanapitoCONNECTHEADandOPTIONS_Handler_IamRolePolicy_665D7306"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testhttpfetchcanpreformacalltoanapitoCONNECTHEADandOPTIONS_Handler_IamRole_F762CCC6.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -276,16 +257,6 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.name}"
-      },
-      "testhttpfetchcanpreformacalltoanapitoCONNECTHEADandOPTIONS_Handler_IamRolePolicyAttachment_032BCE8A": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:http.fetch can preform a call to an api to CONNECT, HEAD and OPTIONS/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testhttpfetchcanpreformacalltoanapitoCONNECTHEADandOPTIONS_Handler_IamRolePolicyAttachment_032BCE8A"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testhttpfetchcanpreformacalltoanapitoCONNECTHEADandOPTIONS_Handler_IamRole_F762CCC6.name}"
       }
     },
     "aws_lambda_function": {
@@ -375,36 +346,6 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
           "security_group_ids": [],
           "subnet_ids": []
         }
-      },
-      "testhttpfetchcanpreformacalltoanapitoCONNECTHEADandOPTIONS_Handler_E8EF5111": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:http.fetch can preform a call to an api to CONNECT, HEAD and OPTIONS/Handler/Default",
-            "uniqueId": "testhttpfetchcanpreformacalltoanapitoCONNECTHEADandOPTIONS_Handler_E8EF5111"
-          }
-        },
-        "architectures": [
-          "arm64"
-        ],
-        "environment": {
-          "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8f5c667",
-            "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_8": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
-          }
-        },
-        "function_name": "Handler-c8f5c667",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testhttpfetchcanpreformacalltoanapitoCONNECTHEADandOPTIONS_Handler_IamRole_F762CCC6.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testhttpfetchcanpreformacalltoanapitoCONNECTHEADandOPTIONS_Handler_S3Object_FEEF8ACC.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
       }
     },
     "aws_lambda_permission": {
@@ -487,17 +428,6 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
           "metadata": {
             "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-cdafee6e/S3Object",
             "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_S3Object_5DAAA0EF"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      },
-      "testhttpfetchcanpreformacalltoanapitoCONNECTHEADandOPTIONS_Handler_S3Object_FEEF8ACC": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:http.fetch can preform a call to an api to CONNECT, HEAD and OPTIONS/Handler/S3Object",
-            "uniqueId": "testhttpfetchcanpreformacalltoanapitoCONNECTHEADandOPTIONS_Handler_S3Object_FEEF8ACC"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",

@@ -79,7 +79,7 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/on tick is called both for rate and cron schedules\",\"${aws_lambda_function.ontickiscalledbothforrateandcronschedules_Handler_B4B8DF58.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -186,15 +186,6 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      },
-      "ontickiscalledbothforrateandcronschedules_Handler_IamRole_89BBCA80": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/on tick is called both for rate and cron schedules/Handler/IamRole",
-            "uniqueId": "ontickiscalledbothforrateandcronschedules_Handler_IamRole_89BBCA80"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
@@ -217,16 +208,6 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.c2.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.from_rate-OnTick-86898773_IamRole_0C967FAF.name}"
-      },
-      "ontickiscalledbothforrateandcronschedules_Handler_IamRolePolicy_458097AC": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/on tick is called both for rate and cron schedules/Handler/IamRolePolicy",
-            "uniqueId": "ontickiscalledbothforrateandcronschedules_Handler_IamRolePolicy_458097AC"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.c1.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.c2.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.ontickiscalledbothforrateandcronschedules_Handler_IamRole_89BBCA80.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -249,16 +230,6 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.from_rate-OnTick-86898773_IamRole_0C967FAF.name}"
-      },
-      "ontickiscalledbothforrateandcronschedules_Handler_IamRolePolicyAttachment_39063BDF": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/on tick is called both for rate and cron schedules/Handler/IamRolePolicyAttachment",
-            "uniqueId": "ontickiscalledbothforrateandcronschedules_Handler_IamRolePolicyAttachment_39063BDF"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.ontickiscalledbothforrateandcronschedules_Handler_IamRole_89BBCA80.name}"
       }
     },
     "aws_lambda_function": {
@@ -321,37 +292,6 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
           "security_group_ids": [],
           "subnet_ids": []
         }
-      },
-      "ontickiscalledbothforrateandcronschedules_Handler_B4B8DF58": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/on tick is called both for rate and cron schedules/Handler/Default",
-            "uniqueId": "ontickiscalledbothforrateandcronschedules_Handler_B4B8DF58"
-          }
-        },
-        "architectures": [
-          "arm64"
-        ],
-        "environment": {
-          "variables": {
-            "DYNAMODB_TABLE_NAME_7ba9f967": "${aws_dynamodb_table.c2.name}",
-            "DYNAMODB_TABLE_NAME_bca69a1d": "${aws_dynamodb_table.c1.name}",
-            "WING_FUNCTION_NAME": "Handler-c8fa0698",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c8fa0698",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.ontickiscalledbothforrateandcronschedules_Handler_IamRole_89BBCA80.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.ontickiscalledbothforrateandcronschedules_Handler_S3Object_C05D01D6.key}",
-        "timeout": 120,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
       }
     },
     "aws_lambda_permission": {
@@ -410,17 +350,6 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
           "metadata": {
             "path": "root/Default/Default/from_rate-OnTick-86898773/S3Object",
             "uniqueId": "from_rate-OnTick-86898773_S3Object_68EB6CB9"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      },
-      "ontickiscalledbothforrateandcronschedules_Handler_S3Object_C05D01D6": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/on tick is called both for rate and cron schedules/Handler/S3Object",
-            "uniqueId": "ontickiscalledbothforrateandcronschedules_Handler_S3Object_C05D01D6"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",

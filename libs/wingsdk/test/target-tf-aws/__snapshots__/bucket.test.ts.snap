@@ -32,18 +32,6 @@ exports[`bucket is public 1`] = `
         "restrict_public_buckets": false,
       },
     },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "my_bucket_Encryption_3B1569A4": {
-        "bucket": "\${aws_s3_bucket.my_bucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256",
-            },
-          },
-        ],
-      },
-    },
   },
 }
 `;
@@ -96,14 +84,6 @@ exports[`bucket is public 2`] = `
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
-                  },
-                  "Encryption": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "Encryption",
-                    "path": "root/Default/my_bucket/Encryption",
                   },
                   "PublicAccessBlock": {
                     "constructInfo": {
@@ -183,18 +163,6 @@ exports[`bucket prefix must be lowercase 1`] = `
         "force_destroy": false,
       },
     },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "The-UncannyBucket_Encryption_4CFC1E98": {
-        "bucket": "\${aws_s3_bucket.The-UncannyBucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256",
-            },
-          },
-        ],
-      },
-    },
   },
 }
 `;
@@ -216,14 +184,6 @@ exports[`bucket prefix must be lowercase 2`] = `
                     },
                     "id": "Default",
                     "path": "root/Default/The-Uncanny.Bucket/Default",
-                  },
-                  "Encryption": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "Encryption",
-                    "path": "root/Default/The-Uncanny.Bucket/Encryption",
                   },
                 },
                 "constructInfo": {
@@ -318,18 +278,6 @@ exports[`bucket prefix valid 1`] = `
         "force_destroy": false,
       },
     },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "the-uncannybucket_Encryption_78D02B71": {
-        "bucket": "\${aws_s3_bucket.the-uncannybucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256",
-            },
-          },
-        ],
-      },
-    },
   },
 }
 `;
@@ -382,14 +330,6 @@ exports[`bucket prefix valid 2`] = `
                     },
                     "id": "Default",
                     "path": "root/Default/the-uncanny.bucket/Default",
-                  },
-                  "Encryption": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "Encryption",
-                    "path": "root/Default/the-uncanny.bucket/Encryption",
                   },
                 },
                 "constructInfo": {
@@ -540,18 +480,6 @@ exports[`bucket with onCreate method 1`] = `
         "restrict_public_buckets": false,
       },
     },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "my_bucket_Encryption_3B1569A4": {
-        "bucket": "\${aws_s3_bucket.my_bucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256",
-            },
-          },
-        ],
-      },
-    },
     "aws_s3_object": {
       "my_bucket_my_bucket-oncreate-OnMessage-7b961f4d_S3Object_AA8B2734": {
         "bucket": "\${aws_s3_bucket.Code.bucket}",
@@ -650,14 +578,6 @@ exports[`bucket with onCreate method 2`] = `
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
-                  },
-                  "Encryption": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "Encryption",
-                    "path": "root/Default/my_bucket/Encryption",
                   },
                   "PublicAccessBlock": {
                     "constructInfo": {
@@ -962,18 +882,6 @@ exports[`bucket with onDelete method 1`] = `
         "restrict_public_buckets": false,
       },
     },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "my_bucket_Encryption_3B1569A4": {
-        "bucket": "\${aws_s3_bucket.my_bucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256",
-            },
-          },
-        ],
-      },
-    },
     "aws_s3_object": {
       "my_bucket_my_bucket-ondelete-OnMessage-1de1a361_S3Object_2203B527": {
         "bucket": "\${aws_s3_bucket.Code.bucket}",
@@ -1072,14 +980,6 @@ exports[`bucket with onDelete method 2`] = `
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
-                  },
-                  "Encryption": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "Encryption",
-                    "path": "root/Default/my_bucket/Encryption",
                   },
                   "PublicAccessBlock": {
                     "constructInfo": {
@@ -1478,18 +1378,6 @@ exports[`bucket with onEvent method 1`] = `
         "restrict_public_buckets": false,
       },
     },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "my_bucket_Encryption_3B1569A4": {
-        "bucket": "\${aws_s3_bucket.my_bucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256",
-            },
-          },
-        ],
-      },
-    },
     "aws_s3_object": {
       "my_bucket_my_bucket-oncreate-OnMessage-7b961f4d_S3Object_AA8B2734": {
         "bucket": "\${aws_s3_bucket.Code.bucket}",
@@ -1622,14 +1510,6 @@ exports[`bucket with onEvent method 2`] = `
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
-                  },
-                  "Encryption": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "Encryption",
-                    "path": "root/Default/my_bucket/Encryption",
                   },
                   "PublicAccessBlock": {
                     "constructInfo": {
@@ -2194,18 +2074,6 @@ exports[`bucket with onUpdate method 1`] = `
         "restrict_public_buckets": false,
       },
     },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "my_bucket_Encryption_3B1569A4": {
-        "bucket": "\${aws_s3_bucket.my_bucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256",
-            },
-          },
-        ],
-      },
-    },
     "aws_s3_object": {
       "my_bucket_my_bucket-onupdate-OnMessage-46c07356_S3Object_0B6EDB66": {
         "bucket": "\${aws_s3_bucket.Code.bucket}",
@@ -2304,14 +2172,6 @@ exports[`bucket with onUpdate method 2`] = `
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
-                  },
-                  "Encryption": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "Encryption",
-                    "path": "root/Default/my_bucket/Encryption",
                   },
                   "PublicAccessBlock": {
                     "constructInfo": {
@@ -2547,18 +2407,6 @@ exports[`bucket with two preflight files 1`] = `
         "restrict_public_buckets": false,
       },
     },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "my_bucket_Encryption_3B1569A4": {
-        "bucket": "\${aws_s3_bucket.my_bucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256",
-            },
-          },
-        ],
-      },
-    },
     "aws_s3_object": {
       "my_bucket_S3Object-file1txt_7AFE54AE": {
         "bucket": "\${aws_s3_bucket.my_bucket.bucket}",
@@ -2623,14 +2471,6 @@ exports[`bucket with two preflight files 2`] = `
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
-                  },
-                  "Encryption": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "Encryption",
-                    "path": "root/Default/my_bucket/Encryption",
                   },
                   "PublicAccessBlock": {
                     "constructInfo": {
@@ -2744,18 +2584,6 @@ exports[`bucket with two preflight objects 1`] = `
         "restrict_public_buckets": false,
       },
     },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "my_bucket_Encryption_3B1569A4": {
-        "bucket": "\${aws_s3_bucket.my_bucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256",
-            },
-          },
-        ],
-      },
-    },
     "aws_s3_object": {
       "my_bucket_S3Object-file1txt_7AFE54AE": {
         "bucket": "\${aws_s3_bucket.my_bucket.bucket}",
@@ -2820,14 +2648,6 @@ exports[`bucket with two preflight objects 2`] = `
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
-                  },
-                  "Encryption": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "Encryption",
-                    "path": "root/Default/my_bucket/Encryption",
                   },
                   "PublicAccessBlock": {
                     "constructInfo": {
@@ -2923,18 +2743,6 @@ exports[`create a bucket 1`] = `
         "force_destroy": false,
       },
     },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "my_bucket_Encryption_3B1569A4": {
-        "bucket": "\${aws_s3_bucket.my_bucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256",
-            },
-          },
-        ],
-      },
-    },
   },
 }
 `;
@@ -2987,14 +2795,6 @@ exports[`create a bucket 2`] = `
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
-                  },
-                  "Encryption": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "Encryption",
-                    "path": "root/Default/my_bucket/Encryption",
                   },
                 },
                 "constructInfo": {

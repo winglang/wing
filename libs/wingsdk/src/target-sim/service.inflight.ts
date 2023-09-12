@@ -55,7 +55,8 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       sourceType: SERVICE_TYPE,
       timestamp: new Date().toISOString(),
     });
-    await fnClient.invoke("");
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    fnClient.invoke("");
     this.running = true;
   }
 
