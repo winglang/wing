@@ -265,11 +265,18 @@ jobs:
           name: ${{ steps.diff.outputs.diff_name }}
           path: ${{ steps.diff.outputs.diff_name }}
 
-  sdk-spec-test:
+  aws-sdk-spec-test:
     needs:
       - build
     if: github.event_name == 'push'
     uses: ./.github/workflows/tf-aws-test.yml
+    secrets: inherit
+
+  file-diff-sdk-spec-test:
+    needs:
+      - build
+    if: github.event_name == 'pull_request'
+    uses: ./.github/workflows/wing-test.yml
     secrets: inherit
 
   console-preview:
@@ -328,7 +335,8 @@ jobs:
       - e2e-test
       - benchmark
       - test
-      - sdk-spec-test
+      - aws-sdk-spec-test
+      - file-diff-sdk-spec-test
     steps:
       - name: Check failure
         if: needs.build.result == 'failure' || needs.e2e-test.result == 'failure' || needs.benchmark.result == 'failure' || needs.test.result == 'failure'

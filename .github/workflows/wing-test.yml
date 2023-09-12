@@ -1,15 +1,10 @@
-name: SDK Spec AWS Tests
+name: Diff based SDK Spec Tests Runner
 on:
   workflow_call: {}
-  workflow_dispatch: {}
-  release:
-    types:
-      - published
 
 env:
   AWS_REGION: "us-east-1"
   NODE_VERSION: "18.16.0"
-  LOCAL_BUILD: ${{ github.workflow == 'build'}}
 
 jobs:
   setup:
@@ -17,28 +12,29 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-      - name: Get list of directories
-        id: setdirs
+        with:
+          fetch-depth: 0
+
+      - name: Get diff wing files
+        id: getFiles
         shell: bash
         run: |
-          dirs=$(ls -d examples/tests/sdk_tests/*/ | sed 's/\/$//' | grep -v "external" | jq -R -s -c 'split("\n")[:-1]')
-          processed_dirs=$(echo "{ \"directory\": $dirs }" | jq -c '[ .directory[] | {directory: ., name: (split("/") | last)}]')
-          wrapped_dirs=$(echo "{ \"test\": $processed_dirs }" | jq -c .)
-          echo "DIRS=$wrapped_dirs" >> $GITHUB_ENV
-      - name: Pass environment variable to output
-        id: passenv
-        run: |
-          echo "dirs=$DIRS" >> $GITHUB_OUTPUT
+          echo "files=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .w$ | xargs)" >> $GITHUB_OUTPUT
+
+      - name: Exit if no files
+        if: steps.getFiles.outputs.files[0] != null
+        run: exit 1
     outputs:
-      tests: ${{ steps.passenv.outputs.dirs }}
+      files: ${{ steps.getFiles.outputs.files }}
 
   test-tf-aws:
     needs: setup
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix: ${{ fromJson(needs.setup.outputs.tests) }}
-    name: ${{ matrix.test.name }}
+      matrix:
+        target: ["sim"]
+    name: ${{ matrix.target }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -48,44 +44,28 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      ##################### install a local wing version #########################
       - name: Download Dist Artifacts
-        if: ${{ env.LOCAL_BUILD ==  'true' }}
         uses: actions/download-artifact@v3
         with:
           name: dist
           path: dist
 
       - name: Install Wing from Dist
-        if: ${{ env.LOCAL_BUILD ==  'true' }}
         # npm isn't installing everything on the first try, so we need to call it twice...
         run: |
           npm install -g ./dist/*-[0-9]*.[0-9]*.[0-9]*.tgz
           npm install -g ./dist/*-[0-9]*.[0-9]*.[0-9]*.tgz
 
-      #################### install a remote wing version ########################
-      - name: Install winglang globally
-        if: ${{ env.LOCAL_BUILD == 'false' }}
-        uses: nick-fields/retry@v2
-        with:
-          max_attempts: 3
-          retry_on: error
-          timeout_minutes: 5
-          command: npm install -g winglang
-
-      - name: Installing external js modules
-        if: ${{ env.LOCAL_BUILD == 'false' }}
-        run: |
-          cd examples/tests/sdk_tests
-          npm install
-        ########################################################################
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
+        if: matrix.target == 'tf-aws'
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
+
       - name: Execute wing test in matrix directory
+        id: runTest
         uses: nick-fields/retry@v2
         env:
           TF_LOG: info
@@ -96,7 +76,16 @@ jobs:
           timeout_minutes: 30
           command: |
             wing --version
-            wing test -t tf-aws ${{ matrix.test.directory }}/*.w
+            echo "results=(wing test -t ${{ matrix.target }} ${{ needs.setup.outputs.files }})" >> $GITHUB_OUTPUT
+
+      - name: Post preview comment
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            Results for ${{ matrix.target }}
+            ${{ steps.runTest.outputs.results }}
+          comment_tag: Console preview environment
+          GITHUB_TOKEN: ${{secrets.PROJEN_GITHUB_TOKEN}}
 
       - name: Output Terraform log
         if: failure()
