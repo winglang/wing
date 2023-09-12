@@ -394,7 +394,7 @@ class WingRestApi extends Construct {
 
     // let CORS = true;
 
-    let OAS30 = {
+    let OAS30: OpenApiSpec = {
       openapi: "3.0.1",
       info: {
         title: "fugazi",
