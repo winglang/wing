@@ -16,18 +16,18 @@ Duration <DURATION>"
 `;
 
 exports[`access_modifiers.w 1`] = `
-"error: Method \\"private_method\\" is not public but it's part of the \\"SomeInterface\\" interface
+"error: Method \\"private_method\\" is private in \\"Foo\\" but it's an implementation of \\"SomeInterface\\". Interface members must be public.
    --> ../../../examples/tests/invalid/access_modifiers.w:40:3
    |
 40 |   private_method() {}
-   |   ^^^^^^^^^^^^^^ Method \\"private_method\\" is not public but it's part of the \\"SomeInterface\\" interface
+   |   ^^^^^^^^^^^^^^ Method \\"private_method\\" is private in \\"Foo\\" but it's an implementation of \\"SomeInterface\\". Interface members must be public.
 
 
-error: Method \\"protected_method\\" is not public but it's part of the \\"SomeInterface\\" interface
+error: Method \\"protected_method\\" is protected in \\"Foo\\" but it's an implementation of \\"SomeInterface\\". Interface members must be public.
    --> ../../../examples/tests/invalid/access_modifiers.w:38:13
    |
 38 |   protected protected_method() {}
-   |             ^^^^^^^^^^^^^^^^ Method \\"protected_method\\" is not public but it's part of the \\"SomeInterface\\" interface
+   |             ^^^^^^^^^^^^^^^^ Method \\"protected_method\\" is protected in \\"Foo\\" but it's an implementation of \\"SomeInterface\\". Interface members must be public.
 
 
 error: Cannot access protected member \\"protected_field\\" of \\"Foo\\"

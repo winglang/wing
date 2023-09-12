@@ -528,6 +528,16 @@ pub enum AccessModifier {
 	Protected,
 }
 
+impl Display for AccessModifier {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match self {
+			AccessModifier::Private => write!(f, "private"),
+			AccessModifier::Public => write!(f, "public"),
+			AccessModifier::Protected => write!(f, "protected"),
+		}
+	}
+}
+
 #[derive(Debug)]
 pub struct StructField {
 	pub name: Symbol,

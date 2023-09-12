@@ -3505,7 +3505,10 @@ impl<'a> TypeChecker<'a> {
 					if !matches!(class_method_var.access_modifier, AccessModifier::Public) {
 						self.spanned_error(
 							&class_method_var.name,
-							format!("Method \"{method_name}\" is not public but it's part of the \"{interface_type}\" interface",),
+							format!(
+								"Method \"{method_name}\" is {} in \"{}\" but it's an implementation of \"{interface_type}\". Interface members must be public.",
+								class_method_var.access_modifier, ast_class.name,
+							),
 						);
 					}
 				} else {
