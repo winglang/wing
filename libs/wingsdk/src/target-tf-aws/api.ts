@@ -394,7 +394,7 @@ class WingRestApi extends Construct {
 
     let CORS = true;
 
-    let OAS30_BASE = {
+    let OAS30 = {
       openapi: "3.0.1",
       info: {
         title: "fugazi",
@@ -417,10 +417,22 @@ class WingRestApi extends Construct {
       "x-amazon-apigateway-importexport-version": "1.0",
     };
 
-    let OAS30 = CORS
+    // let OAS30 = CORS
+    //   ? {
+    //       ...OAS30_BASE,
+    //       "x-amazon-apigateway-cors": {
+    //         allowMethods: ["GET", "OPTIONS", "POST"],
+    //         allowHeaders: ["*"],
+    //         maxAge: 0,
+    //         allowCredentials: false,
+    //         allowOrigins: ["*"],
+    //       },
+    //     }
+    //   : OAS30_BASE;
+
+    const apigwCorsConfig = props.cors
       ? {
-          ...OAS30_BASE,
-          "x-amazon-apigateway-cors": {
+          corsConfiguration: {
             allowMethods: ["GET", "OPTIONS", "POST"],
             allowHeaders: ["*"],
             maxAge: 0,
@@ -428,18 +440,18 @@ class WingRestApi extends Construct {
             allowOrigins: ["*"],
           },
         }
-      : OAS30_BASE;
+      : {};
 
     this.api = new Apigatewayv2Api(this, "api", {
       name: ResourceNames.generateName(this, NAME_OPTS),
       protocolType: "HTTP",
-      // Assuming cors configurations and route key is set in openApi
       body: Lazy.stringValue({
         produce: () => {
           props.apiSpec = "random assignment so compiler doesn't complain";
           return JSON.stringify(OAS30);
         },
       }),
+      ...apigwCorsConfig,
     });
 
     this.stage = new Apigatewayv2Stage(this, "stage", {
