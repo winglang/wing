@@ -81,10 +81,11 @@ jobs:
           command: |
             wing --version
             results=$(wing test -t ${{ matrix.target }} ${{ needs.setup.outputs.files }})
-            EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
-            echo "text<<$EOF" >> $GITHUB_OUTPUT
-            echo "$results" >> $GITHUB_OUTPUT
-            echo "$EOF" >> $GITHUB_OUTPUT
+            # EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+            # echo "text<<$EOF" >> $GITHUB_OUTPUT
+            # echo "$results" >> $GITHUB_OUTPUT
+            # echo "$EOF" >> $GITHUB_OUTPUT
+            echo "results=$results" >> $GITHUB_OUTPUT
 
       - name: Post preview comment
         uses: thollander/actions-comment-pull-request@v2
