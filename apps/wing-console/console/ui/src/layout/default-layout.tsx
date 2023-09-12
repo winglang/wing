@@ -107,7 +107,7 @@ export const DefaultLayout = ({
 
   const { loading: deferredLoading, setLoading: setDeferredLoading } =
     useLoading({
-      delay: 500,
+      delay: 800,
       duration: 100,
     });
   useEffect(() => {
@@ -280,6 +280,15 @@ export const DefaultLayout = ({
           {renderApp && (
             <>
               <div className="flex-1 flex relative gap-0.5">
+                {loading && (
+                  <div
+                    data-testid="loading-overlay"
+                    className={classNames(
+                      "absolute h-full w-full",
+                      "flex-1 flex flex-col",
+                    )}
+                  />
+                )}
                 <div
                   className={classNames(
                     "absolute h-full w-full bg-white/70 dark:bg-slate-600/70",
@@ -287,7 +296,6 @@ export const DefaultLayout = ({
                     deferredLoading && "opacity-100 z-50",
                     !deferredLoading && "opacity-100 -z-10",
                   )}
-                  data-testid="loading-overlay"
                 >
                   <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                     <SpinnerLoader data-testid="main-view-loader" />
