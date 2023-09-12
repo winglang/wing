@@ -22,8 +22,8 @@ jobs:
           echo "files=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .w$ | xargs)" >> $GITHUB_OUTPUT
 
       - name: Exit if no files
-        if: steps.getFiles.outputs.files != null
-        run: exit 1
+        if: steps.getFiles.outputs.files == null
+        run: exit 0
     outputs:
       files: ${{ steps.getFiles.outputs.files }}
 
@@ -64,7 +64,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Execute wing test in matrix directory
+      - name: Execute wing test
         id: runTest
         uses: nick-fields/retry@v2
         env:
