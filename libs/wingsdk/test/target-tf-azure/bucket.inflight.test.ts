@@ -22,7 +22,7 @@ type TestPath = "happy" | "sad" | "happyJson" | "sadJson";
 let TEST_PATH: TestPath;
 
 const mockBlobServiceClient = new BlobServiceClient(
-  "https://some-fake-url.com",
+  "https://some-fake-url.com"
 );
 mockBlobServiceClient.getContainerClient = vi.fn(() => {
   return new MockContainerClient("");
@@ -369,7 +369,7 @@ test("tryDelete a non-existent object from the bucket", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
-    true,
+    false,
     mockBlobServiceClient
   );
   TEST_PATH = "sad";
