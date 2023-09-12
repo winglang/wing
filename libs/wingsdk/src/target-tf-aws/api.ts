@@ -4,7 +4,7 @@ import { join } from "path";
 import { Lazy } from "cdktf";
 import { Construct } from "constructs";
 // import { API_CORS_DEFAULT_RESPONSE } from "./api.cors";
-import { App } from "./app";
+// import { App } from "./app";
 import { Function } from "./function";
 import { core } from "..";
 // import { ApiGatewayRestApi } from "../.gen/providers/aws/api-gateway-rest-api";
@@ -377,7 +377,7 @@ class WingRestApi extends Construct {
   public readonly api: Apigatewayv2Api;
   public readonly stage: Apigatewayv2Stage;
   // private readonly deployment: Apigatewayv2Deployment;
-  private readonly region: string;
+  // private readonly region: string;
 
   constructor(
     scope: Construct,
@@ -388,11 +388,24 @@ class WingRestApi extends Construct {
     }
   ) {
     super(scope, id);
-    this.region = (App.of(this) as App).region;
+    // this.region = (App.of(this) as App).region;
 
     // const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
 
     // let CORS = true;
+
+    // let OAS30 = CORS
+    //   ? {
+    //       ...OAS30_BASE,
+    //       "x-amazon-apigateway-cors": {
+    //         allowMethods: ["GET", "OPTIONS", "POST"],
+    //         allowHeaders: ["*"],
+    //         maxAge: 0,
+    //         allowCredentials: false,
+    //         allowOrigins: ["*"],
+    //       },
+    //     }
+    //   : OAS30_BASE;
 
     let OAS30: OpenApiSpec = {
       openapi: "3.0.1",
@@ -416,19 +429,6 @@ class WingRestApi extends Construct {
       },
       "x-amazon-apigateway-importexport-version": "1.0",
     };
-
-    // let OAS30 = CORS
-    //   ? {
-    //       ...OAS30_BASE,
-    //       "x-amazon-apigateway-cors": {
-    //         allowMethods: ["GET", "OPTIONS", "POST"],
-    //         allowHeaders: ["*"],
-    //         maxAge: 0,
-    //         allowCredentials: false,
-    //         allowOrigins: ["*"],
-    //       },
-    //     }
-    //   : OAS30_BASE;
 
     const apigwCorsConfig = props.cors
       ? {
@@ -460,7 +460,6 @@ class WingRestApi extends Construct {
       protocolType: "HTTP",
       body: Lazy.stringValue({
         produce: () => {
-          props.apiSpec = "random assignment so compiler doesn't complain";
           return JSON.stringify(OAS30);
         },
       }),
@@ -473,7 +472,7 @@ class WingRestApi extends Construct {
       autoDeploy: true,
     });
 
-    this.url = `https://${this.api.id}.execute-api.${this.region}.amazonaws.com`;
+    this.url = this.stage.invokeUrl;
   }
 
   public addEndpoint(path: string, method: string, handler: Function) {
@@ -485,17 +484,10 @@ class WingRestApi extends Construct {
   private createApiSpecExtension(handler: Function) {
     const extension = {
       "x-amazon-apigateway-integration": {
-        uri: `arn:aws:apigateway:${this.region}:lambda:path/2015-03-31/functions/${handler.arn}/invocations`,
+        payloadFormatVersion: "2.0",
         type: "aws_proxy",
         httpMethod: "POST",
-        integrationMethod: "POST",
-        responses: {
-          default: {
-            statusCode: "200",
-          },
-        },
-        passthroughBehavior: "when_no_match",
-        contentHandling: "CONVERT_TO_TEXT",
+        uri: handler.arn,
       },
     };
 
