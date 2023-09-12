@@ -435,14 +435,14 @@ class WingRestApi extends Construct {
           corsConfiguration: {
             allowMethods: props.cors.allowMethods
               ? props.cors.allowMethods
-              : [],
+              : ["GET"],
             allowHeaders: props.cors.allowHeaders
               ? props.cors.allowHeaders
               : ["*"],
             allowCredentials: props.cors.allowCredentials
               ? props.cors.allowCredentials
               : false,
-            exposedHeaders: props.cors.exposeHeaders
+            exposeHeaders: props.cors.exposeHeaders
               ? props.cors.exposeHeaders
               : ["Content-Type"],
             // rename allowOrigin to allowOrigins
