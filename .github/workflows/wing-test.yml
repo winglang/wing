@@ -6,6 +6,9 @@ env:
   AWS_REGION: "us-east-1"
   NODE_VERSION: "18.16.0"
 
+permissions:
+  pull-requests: write
+
 jobs:
   setup:
     runs-on: ubuntu-latest
@@ -77,8 +80,8 @@ jobs:
           timeout_minutes: 30
           command: |
             wing --version
-            echo "results=$(wing test -t ${{ matrix.target }} ${{ needs.setup.outputs.files }})" >> $GITHUB_OUTPUT
-
+            results=$(wing test -t ${{ matrix.target }} ${{ needs.setup.outputs.files }})
+            echo "reults=$results" >> $GITHUB_OUTPUT
       - name: Post preview comment
         uses: thollander/actions-comment-pull-request@v2
         with:
