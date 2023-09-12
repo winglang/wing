@@ -1,35 +1,34 @@
-import { ExtensionContext } from "vscode";
 import { LanguageClientOptions } from "vscode-languageclient";
 import {
   LanguageClient,
   Executable,
   ServerOptions,
 } from "vscode-languageclient/node";
-import { getWingBinAndArgs } from "./bin-helper";
 import { LANGUAGE_SERVER_ID, LANGUAGE_SERVER_NAME } from "./constants";
 
 export class LanguageServerManager {
   client: LanguageClient | undefined;
+  wingBin: string | undefined;
 
-  constructor(public readonly context: ExtensionContext) {}
+  setWingBin(wingBin: string) {
+    this.wingBin = wingBin;
+  }
 
   async stop() {
     await this.client?.stop();
+    await this.client?.dispose();
+    this.client = undefined;
   }
 
   async start() {
-    const args = await getWingBinAndArgs(this.context);
-
-    if (!args) {
-      // User doesn't have wing and doesn't want to install it yet
+    await this.stop();
+    if (!this.wingBin) {
       return;
     }
 
-    args.push("lsp");
-
     const run: Executable = {
-      command: args[0]!,
-      args: args.slice(1),
+      command: this.wingBin,
+      args: ["lsp", "--no-update-check"],
       options: {
         env: {
           ...process.env,
