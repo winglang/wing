@@ -703,6 +703,9 @@ let f = new Foo();
 f.public_method(); // We can call this method from outside the class - it's public
 ```
 
+Access modifier rules apply for both fields and methods of a class.
+Struct fields are always public and do not have access modifiers.
+
 [`▲ top`][top]
 
 ---
