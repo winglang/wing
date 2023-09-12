@@ -18,7 +18,7 @@ export interface ApiCorsOptions {
    * @example ["https://example.com"]
    * @default - ["*"]
    */
-  readonly allowOrigin?: Array<string>;
+  readonly allowOrigins?: Array<string>;
 
   /**
    * The list of allowed methods.
@@ -186,7 +186,7 @@ export abstract class Api extends Resource {
   };
 
   private corsDefaultValues: ApiCorsOptions = {
-    allowOrigin: ["*"],
+    allowOrigins: ["*"],
     allowMethods: [
       HttpMethod.GET,
       HttpMethod.POST,

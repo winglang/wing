@@ -442,9 +442,11 @@ class WingRestApi extends Construct {
             allowCredentials: props.cors.allowCredentials
               ? props.cors.allowCredentials
               : false,
-            // rename allowOrigin to allowOrigins
-            allowOrigins: props.cors.allowOrigin
-              ? props.cors.allowOrigin
+            exposedHeaders: props.cors.exposeHeaders
+              ? props.cors.exposeHeaders
+              : ["Content-Type"],
+            allowOrigins: props.cors.allowOrigins
+              ? props.cors.allowOrigins
               : ["*"],
             // add maxAge
             maxAge: 0,
