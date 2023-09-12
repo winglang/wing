@@ -46,6 +46,12 @@ export interface ApiCorsOptions {
    * @default - false
    */
   readonly allowCredentials?: boolean;
+
+  /**
+   * Number of seconds that the browser should cache preflight request results.
+   * @default - 0
+   */
+  readonly maxAge?: number;
 }
 
 /**
@@ -124,6 +130,12 @@ type CorsDefaultResponseHeaders = {
    * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
    */
   "Access-Control-Allow-Credentials": string;
+
+  /**
+   * Indicates how long the results of a preflight request can be cached.
+   * developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age
+   */
+  "Access-Control-Max-Age": number;
 };
 
 /**
@@ -198,6 +210,7 @@ export abstract class Api extends Resource {
     allowHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
     exposeHeaders: [],
     allowCredentials: false,
+    maxAge: 0,
   };
 
   /**
@@ -382,16 +395,18 @@ export abstract class Api extends Resource {
 
     const {
       allowOrigins = [],
-      allowHeaders = [],
       allowMethods = [],
+      allowHeaders = [],
       exposeHeaders = [],
       allowCredentials = false,
+      maxAge = 0,
     } = corsOptions;
 
     const defaultHeaders: CorsDefaultResponseHeaders = {
       "Access-Control-Allow-Origin": allowOrigins.join(",") || "",
       "Access-Control-Expose-Headers": exposeHeaders.join(",") || "",
       "Access-Control-Allow-Credentials": allowCredentials ? "true" : "false",
+      "Access-Control-Max-Age": maxAge,
     };
 
     const optionsHeaders: CorsOptionsResponseHeaders = {
