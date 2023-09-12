@@ -19,6 +19,7 @@ jobs:
         id: getFiles
         shell: bash
         run: |
+
           echo "files=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .w$ | xargs)" >> $GITHUB_OUTPUT
 
       - name: Exit if no files
@@ -76,7 +77,7 @@ jobs:
           timeout_minutes: 30
           command: |
             wing --version
-            echo "results=(wing test -t ${{ matrix.target }} ${{ needs.setup.outputs.files }})" >> $GITHUB_OUTPUT
+            echo "results=$(wing test -t ${{ matrix.target }} ${{ needs.setup.outputs.files }})" >> $GITHUB_OUTPUT
 
       - name: Post preview comment
         uses: thollander/actions-comment-pull-request@v2
