@@ -59,6 +59,34 @@ class Bar extends Foo {
   }
 }
 
+// Check 2nd level inheritance
+class Baz extends Bar {
+  method() {
+    // Check protected access
+    log(this.protected_field);
+    log(this.private_field);
+    //       ^ Cannot access private member
+    log(this.public_field);
+    this.public_method();
+    this.protected_method();
+    this.private_method();
+    //   ^ Cannot access private member
+  }
+
+  static static_method() {
+    // Check static protected access
+    Foo.public_static_method();
+    Foo.protected_static_method();
+    Foo.private_static_method();
+    //  ^ Cannot access private member
+    // Check static protected access using parent class (in which the methods are not defined)
+    Bar.public_static_method();
+    Bar.protected_static_method();
+    Bar.private_static_method();
+    //  ^ Cannot access private member
+  }
+}
+
 let foo = new Foo();
 // Chck access from non class
 log(foo.protected_field);
