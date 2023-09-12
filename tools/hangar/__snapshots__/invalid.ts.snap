@@ -160,15 +160,8 @@ exports[`access_static_from_instance.w 1`] = `
 "error: Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
   --> ../../../examples/tests/invalid/access_static_from_instance.w:4:3
   |
-4 |   static f: num;
-  |   ^^^^^^^^^^^^^^ Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
-
-
-error: Cannot access private member \\"f\\" of \\"Foo\\"
-   --> ../../../examples/tests/invalid/access_static_from_instance.w:19:5
-   |
-19 | foo.f; // Can't access static fields through instances
-   |     ^ Cannot access private member \\"f\\" of \\"Foo\\"
+4 |   public static f: num;
+  |   ^^^^^^^^^^^^^^^^^^^^^ Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
 
 
 error: Cannot access static property \\"f\\" from instance
@@ -176,13 +169,6 @@ error: Cannot access static property \\"f\\" from instance
    |
 19 | foo.f; // Can't access static fields through instances
    |     ^ Cannot access static property \\"f\\" from instance
-
-
-error: Cannot access private member \\"m\\" of \\"Foo\\"
-   --> ../../../examples/tests/invalid/access_static_from_instance.w:20:5
-   |
-20 | foo.m(); // Can't access static methods through instances
-   |     ^ Cannot access private member \\"m\\" of \\"Foo\\"
 
 
 error: Cannot access static property \\"m\\" from instance
@@ -350,13 +336,6 @@ exports[`call_inflight_from_preflight.w 1`] = `
   |
 4 | util.sleep(1s);
   | ^^^^^^^^^^^^^^ Cannot call into inflight phase while preflight
-
-
-error: Cannot access private member \\"do\\" of \\"Foo\\"
-   --> ../../../examples/tests/invalid/call_inflight_from_preflight.w:12:5
-   |
-12 | foo.do();
-   |     ^^ Cannot access private member \\"do\\" of \\"Foo\\"
 
 
 error: Cannot call into inflight phase while preflight
