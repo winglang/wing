@@ -11,7 +11,7 @@ env:
   RUST_VERSION: "1.67.1"
   NODE_VERSION: "18.16.0"
   PNPM_VERSION: "8.6.3"
-  LOCAL_BUILD: ${{ github.event_name == 'workflow_run' && github.event.workflow == 'build'}}
+  LOCAL_BUILD: ${{ github.event_name == 'workflow_call' && github.event.workflow == 'build'}}
 
 jobs:
   setup:
@@ -43,7 +43,7 @@ jobs:
     name: ${{ matrix.test.name }}
     steps:
       - name: Print Environment Variable
-        run: echo "The value of MY_VARIABLE is ${{ env.LOCAL_BUILD }}
+        run: echo "The value of LOCAL_BUILD is ${{ env.LOCAL_BUILD }}"
 
       - name: Checkout Repository
         uses: actions/checkout@v3
