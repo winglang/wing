@@ -209,7 +209,7 @@ export class BucketClient implements IBucketClient {
         `Cannot provide public url for a non-existent key (key=${key})`
       );
     }
-    
+
     return encodeURI(
       `https://${this.storageAccount}.blob.core.windows.net/${this.bucketName}/${key}`
     );

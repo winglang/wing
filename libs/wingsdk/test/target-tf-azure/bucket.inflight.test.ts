@@ -442,8 +442,7 @@ test("Given a public bucket, when giving one of its keys, we should get its publ
 
   // THEN
   expect(response).toEqual(expectedUrl);
-})
-
+});
 
 // Mock Clients
 class MockBlobClient extends BlobClient {
@@ -519,7 +518,7 @@ class MockContainerClient extends ContainerClient {
 
 function createMockStream(text: string): Readable {
   const stream = new Readable();
-  stream._read = () => { };
+  stream._read = () => {};
   stream.push(text);
   stream.push(null);
   return stream;
