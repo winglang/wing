@@ -79,6 +79,7 @@ class A {
     public inflight inflight_func2(): num {}
     protected inflight inflight_func3(): num {}
     pf_member: str;
+    internal internal_member: str;
     inflight if_member: str;
     public inflight var if_member2: str;
     protected inflight var if_member3: str;
@@ -133,6 +134,10 @@ class A {
         type: (builtin_type)
         block: (block))
       (class_field
+        name: (identifier)
+        type: (builtin_type))
+      (class_field
+        access_modifier: (access_modifier)
         name: (identifier)
         type: (builtin_type))
       (class_field

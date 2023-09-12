@@ -27,7 +27,7 @@ static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"any" => "https://github.com/winglang/wing/issues/434",
 	"Promise" => "https://github.com/winglang/wing/issues/529",
 	"storage_modifier" => "https://github.com/winglang/wing/issues/107",
-	"access_modifier" => "https://github.com/winglang/wing/issues/108",
+	"internal" => "https://github.com/winglang/wing/issues/4156",
 	"await_expression" => "https://github.com/winglang/wing/issues/116",
 	"defer_expression" => "https://github.com/winglang/wing/issues/116",
 };
@@ -79,6 +79,7 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 	"private",
 	"protected",
 	"public",
+	"internal",
 	"return",
 	"short",
 	"static",
@@ -1298,7 +1299,7 @@ impl<'s> Parser<'s> {
 			Some(am_node) => match self.node_text(&am_node) {
 				"public" => Ok(AccessModifier::Public),
 				"protected" => Ok(AccessModifier::Protected),
-				other => self.with_error(format!("Unknown access modifier {other}"), &am_node),
+				other => self.report_unimplemented_grammar(other, "access modifier", &am_node),
 			},
 			None => Ok(AccessModifier::Private),
 		}
