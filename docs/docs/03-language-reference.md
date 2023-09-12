@@ -59,12 +59,12 @@ import TOCInline from '@theme/TOCInline';
 
 #### 1.1.1 Primitive Types
 
-| Name   | Extra information                  |
-| ------ | ---------------------------------- |
-| `void` | represents the absence of a type   |
-| `num`  | represents numbers (doubles)       |
-| `str`  | UTF-16 encoded strings             |
-| `bool` | represents true or false           |
+| Name   | Extra information                |
+| ------ | -------------------------------- |
+| `void` | represents the absence of a type |
+| `num`  | represents numbers (doubles)     |
+| `str`  | UTF-16 encoded strings           |
+| `bool` | represents true or false         |
 
 > ```TS
 > let x = 1;                  // x is a num
@@ -221,10 +221,10 @@ log("${jsonObj.get("boom").get("dude").get("world")}");
 // ERROR: Cannot read properties of undefined (reading 'world')
 ```
 
-To obtain an array of all the keys within a JSON object use the `Json.keys(o)` method. 
+To obtain an array of all the keys, use `Json.keys(o)`:
 
 ```TS
-let j = Json { hello: 123, world: [ 1, 2, 3 ] };
+let j = Json { hello: 123, world: [1, 2, 3] };
 assert(Json.keys(j).at(0) == "hello");
 assert(Json.keys(j).at(1) == "world");
 ```
@@ -232,10 +232,22 @@ assert(Json.keys(j).at(1) == "world");
 To obtain an array of all the values, use `Json.values(o)`:
 
 ```TS
-assert(Json.values(j).equals([ Json 123, Json [ 1, 2, 3 ] ]));
+assert(Json.values(j).at(0) == 123);
+assert(Json.values(j).at(1) == [1, 2, 3]);
 ```
 
 > NOTE: `values()` returns an array inside a `Json` object because at the moment we
+> cannot represent heterogenous arrays in Wing.
+
+To obtain an array of all key/value pairs, use `Json.entries(o)`:
+
+```TS
+assert(Json.entries(j).at(0).getAt(0) == "hello");
+assert(Json.entries(j).at(0).getAt(1) == 123);
+assert(Json.entries(j).at(1).getAt(0) == "world");
+assert(Json.entries(j).at(1).getAt(1) == [1, 2, 3]);
+```
+> NOTE: `entries()` returns an array inside a `Json` object because at the moment we
 > cannot represent heterogenous arrays in Wing.
 
 ##### 1.1.4.3 Assignment from native types
@@ -424,7 +436,6 @@ my object is: {
 The following features are not yet implemented, but we are planning to add them in the future:
 
 * Array/Set/Map.fromJson() - see https://github.com/winglang/wing/issues/1796 to track.
-* Json.entries() - see https://github.com/winglang/wing/issues/3142 to track.
 * Equality, diff and patch - see https://github.com/winglang/wing/issues/3140 to track.
 
 [`▲ top`][top]
@@ -513,10 +524,10 @@ log("UTC: ${t1.utc.toIso())}");            // output: 2023-02-09T06:21:03.000Z
 
 ### 1.2 Utility Functions
 
-| Name     | Extra information                                        |
-| -------- | -------------------------------------------------------- |
-| `log`    | logs str                                                 |
-| `assert` | checks a condition and _throws_ if evaluated to false    |
+| Name     | Extra information                                     |
+| -------- | ----------------------------------------------------- |
+| `log`    | logs str                                              |
+| `assert` | checks a condition and _throws_ if evaluated to false |
 
 > ```TS
 > log("Hello ${name}");
@@ -1785,7 +1796,7 @@ When calling **extern** function, the parameter and return types are **assumed**
 
 
 | Built-in Wing type        | TypeScript type                                                       |
-|---------------------------|-----------------------------------------------------------------------|
+| ------------------------- | --------------------------------------------------------------------- |
 | `void`                    | `undefined`                                                           |
 | `nil`                     | `null`                                                                |
 | `any`                     | `any`                                                                 |
@@ -1797,12 +1808,12 @@ When calling **extern** function, the parameter and return types are **assumed**
 | `Array<T>`, `MutArray<T>` | `Array<T>`                                                            |
 | `Json`, `MutJson`         | `string ⏐ number ⏐ boolean ⏐ null ⏐ Json[] ⏐ { [key: string]: Json }` |
 
-| User-defined Wing type  | TypeScript type                                                                        |
-|-------------------------|----------------------------------------------------------------------------------------|
-| `class`                 | `class`, only with members whose phase is compatible with the function signature       |
-| `interface`             | `interface`, only with members whose phase is compatible with the function signature   |
-| `struct`                | `interface`                                                                            |
-| `enum`                  | `string`-based enum-like `Object`                                                      |
+| User-defined Wing type | TypeScript type                                                                      |
+| ---------------------- | ------------------------------------------------------------------------------------ |
+| `class`                | `class`, only with members whose phase is compatible with the function signature     |
+| `interface`            | `interface`, only with members whose phase is compatible with the function signature |
+| `struct`               | `interface`                                                                          |
+| `enum`                 | `string`-based enum-like `Object`                                                    |
 
 [`▲ top`][top]
 
@@ -2071,7 +2082,7 @@ Ternary or conditional operators are not supported.
 | Operator             | Notes                                             |
 | -------------------- | ------------------------------------------------- |
 | ()                   | Parentheses                                       |
-| **                   | Power                                    |
+| **                   | Power                                             |
 | -x                   | Unary minus                                       |
 | \*, /, \\, %         | Multiplication, Division, Floor division, Modulus |
 | +, -                 | Addition, Subtraction                             |
