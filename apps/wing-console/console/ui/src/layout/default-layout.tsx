@@ -279,16 +279,15 @@ export const DefaultLayout = ({
 
           {renderApp && (
             <>
-              <div className="flex-1 flex relative gap-0.5">
-                {loading && (
-                  <div
-                    data-testid="loading-overlay"
-                    className={classNames(
-                      "absolute h-full w-full",
-                      "flex-1 flex flex-col",
-                    )}
-                  />
+              <div
+                data-testid="loading-overlay"
+                className={classNames(
+                  "fixed inset-0 z-50",
+                  !loading && "hidden",
                 )}
+              />
+
+              <div className="flex-1 flex relative gap-0.5">
                 <div
                   className={classNames(
                     "absolute h-full w-full bg-white/70 dark:bg-slate-600/70",
