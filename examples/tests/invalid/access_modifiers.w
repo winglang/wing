@@ -1,4 +1,10 @@
-class Foo {
+interface SomeInterface {
+  public_method(): void;
+  protected_method(): void;
+  private_method(): void;
+}
+
+class Foo impl SomeInterface {
   protected protected_field: str;
   private_field: str;
   public public_field: str;
@@ -30,7 +36,9 @@ class Foo {
   
   public public_method() {}
   protected protected_method() {}
+  //        ^ Method is not public but it's part of an interface
   private_method() {}
+  //^ Method is not public but it's part of an interface
 
   public static public_static_method() {}
   protected static protected_static_method() {}

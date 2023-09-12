@@ -51,7 +51,7 @@ class MyResource {
     let $parentThis = this;
 
     class R impl cloud.ITopicOnMessageHandler {
-      inflight handle() {
+      public inflight handle() {
         globalCounter.inc();
         $parentThis.localCounter.inc();
       }

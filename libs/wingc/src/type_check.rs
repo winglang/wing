@@ -3498,35 +3498,22 @@ impl<'a> TypeChecker<'a> {
 					.env
 					.lookup(&method_name.as_str().into(), None)
 				{
-					let class_method_type = symbol.as_variable().expect("Expected method to be a variable").type_;
+					let class_method_var = symbol.as_variable().expect("Expected method to be a variable");
+					let class_method_type = class_method_var.type_;
 					self.validate_type(class_method_type, method_type, &ast_class.name);
+					// Make sure the method is public (interface methods must be public)
+					if !matches!(class_method_var.access_modifier, AccessModifier::Public) {
+						self.spanned_error(
+							&class_method_var.name,
+							format!("Method \"{method_name}\" is not public but it's part of the \"{interface_type}\" interface",),
+						);
+					}
 				} else {
 					self.spanned_error(
 						&ast_class.name,
 						format!(
 							"Class \"{}\" does not implement method \"{}\" of interface \"{}\"",
 							&ast_class.name, method_name, interface_type.name.name
-						),
-					);
-				}
-			}
-
-			// Check all fields are implemented
-			for (field_name, field_type) in interface_type.fields(true) {
-				if let Some(symbol) = &mut class_type
-					.as_class_mut()
-					.unwrap()
-					.env
-					.lookup(&field_name.as_str().into(), None)
-				{
-					let class_field_type = symbol.as_variable().expect("Expected field to be a variable").type_;
-					self.validate_type(class_field_type, field_type, &ast_class.name);
-				} else {
-					self.spanned_error(
-						&ast_class.name,
-						format!(
-							"Class \"{}\" does not implement field \"{}\" of interface \"{}\"",
-							&ast_class.name, field_name, interface_type.name.name
 						),
 					);
 				}

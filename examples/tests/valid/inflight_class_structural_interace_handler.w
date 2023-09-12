@@ -12,7 +12,7 @@ inflight class NotGoo {
 
 test "structure interface types for 'handle'" {
   inflight class YesGoo impl IGoo {
-    handle(): num {
+    public handle(): num {
       return 456;
     }
 
