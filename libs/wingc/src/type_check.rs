@@ -4896,14 +4896,17 @@ impl<'a> TypeChecker<'a> {
 			match var.access_modifier {
 				AccessModifier::Private => {
 					if !private_access {
-						self.spanned_error(property, format!("Cannot access private member {property} of {class}"));
+						self.spanned_error(
+							property,
+							format!("Cannot access private member \"{property}\" of \"{class}\""),
+						);
 					}
 				}
 				AccessModifier::Protected => {
 					if !protected_access {
 						self.spanned_error(
 							property,
-							format!("Cannot access protected member {property} of {class}"),
+							format!("Cannot access protected member \"{property}\" of \"{class}\""),
 						);
 					}
 				}
