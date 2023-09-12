@@ -42,6 +42,9 @@ jobs:
       matrix: ${{ fromJson(needs.setup.outputs.tests) }}
     name: ${{ matrix.test.name }}
     steps:
+      - name: Print Environment Variable
+        run: echo "The value of MY_VARIABLE is ${{ env.LOCAL_BUILD }}
+
       - name: Checkout Repository
         uses: actions/checkout@v3
 
