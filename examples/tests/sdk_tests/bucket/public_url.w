@@ -2,6 +2,8 @@ bring cloud;
 bring http;
 bring util;
 
+// minor change to see if works
+
 let publicBucket = new cloud.Bucket(public: true) as "publicBucket";
 let privateBucket = new cloud.Bucket() as "privateBucket";
 

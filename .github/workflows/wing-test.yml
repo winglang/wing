@@ -22,7 +22,7 @@ jobs:
           echo "files=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .w$ | xargs)" >> $GITHUB_OUTPUT
 
       - name: Exit if no files
-        if: steps.getFiles.outputs.files[0] != null
+        if: steps.getFiles.outputs.files != null
         run: exit 1
     outputs:
       files: ${{ steps.getFiles.outputs.files }}
@@ -82,7 +82,7 @@ jobs:
         uses: thollander/actions-comment-pull-request@v2
         with:
           message: |
-            Results for ${{ matrix.target }}
+            Results for ${{ matrix.target }} SDK spec tests: 
             ${{ steps.runTest.outputs.results }}
           comment_tag: Console preview environment
           GITHUB_TOKEN: ${{secrets.PROJEN_GITHUB_TOKEN}}

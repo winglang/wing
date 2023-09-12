@@ -2,6 +2,8 @@ bring cloud;
 
 let b = new cloud.Bucket();
 
+// another minor change
+
 test "put" {
   b.put("test1.txt", "Foo");
   b.put("test2.txt", "Bar");
