@@ -16,7 +16,7 @@ const options = parseArgs({
 const { port } = await createConsoleApp({
   wingfile:
     options.values.wingfile ??
-    fileURLToPath(new URL("../demo/index.w", import.meta.url)),
+    fileURLToPath(new URL("../demo/main.w", import.meta.url)),
   requestedPort: 1214,
   hostUtils: {
     async openExternal(url) {
