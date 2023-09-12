@@ -85,7 +85,6 @@ jobs:
           message: |
             Results for ${{ matrix.target }} SDK spec tests: 
             ${{ steps.runTest.outputs.results }}
-          comment_tag: Console preview environment
           GITHUB_TOKEN: ${{secrets.PROJEN_GITHUB_TOKEN}}
 
       - name: Output Terraform log
