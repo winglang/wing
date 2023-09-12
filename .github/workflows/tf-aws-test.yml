@@ -1,6 +1,7 @@
 name: SDK Spec AWS Tests
 on:
   workflow_call: {}
+  workflow_dispatch: {}
   release:
     types:
       - published
@@ -10,6 +11,7 @@ env:
   RUST_VERSION: "1.67.1"
   NODE_VERSION: "18.16.0"
   PNPM_VERSION: "8.6.3"
+  LOCAL_BUILD: ${{ github.event_name == 'workflow_call' }}
 
 jobs:
   setup:
@@ -43,45 +45,42 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # - name: Setup pnpm
-      #   uses: pnpm/action-setup@v2.2.4
-      #   if: ${{github.event_name != 'release'}}
-      #   with:
-      #     version: ${{ env.PNPM_VERSION }}
-
       - name: Setup Node.js v18
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      ########################### install a local wing version ###############
+      ##################### install a local wing version #########################
       - name: Download Dist Artifacts
-        if: ${{github.event_name != 'release'}}
+        if: ${{ env.LOCAL_BUILD }}
         uses: actions/download-artifact@v3
         with:
           name: dist
           path: dist
 
       - name: Install Wing from Dist
-        if: ${{github.event_name != 'release'}}
+        if: ${{ env.LOCAL_BUILD }}
+        # npm isn't installing everything on the first try, so we need to call it twice...
         run: |
           npm install -g ./dist/*-[0-9]*.[0-9]*.[0-9]*.tgz
           npm install -g ./dist/*-[0-9]*.[0-9]*.[0-9]*.tgz
 
-      ########################################################################
+      #################### install a remote wing version ########################
       - name: Install winglang globally
-        if: ${{github.event_name == 'release'}}
+        if: ${{ !env.LOCAL_BUILD }}
         uses: nick-fields/retry@v2
         with:
           max_attempts: 3
           retry_on: error
           timeout_minutes: 5
           command: npm install -g winglang
+
       - name: Installing external js modules
-        if: ${{github.event_name == 'release'}}
+        if: ${{ !env.LOCAL_BUILD }}
         run: |
           cd examples/tests/sdk_tests
           npm install
+        ########################################################################
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -99,7 +98,7 @@ jobs:
           timeout_minutes: 30
           command: |
             wing --version
-            wing test -t tf-aws ${{ matrix.test.directory }}/*.w
+            wing test -t sim ${{ matrix.test.directory }}/*.w
 
       - name: Output Terraform log
         if: failure()
