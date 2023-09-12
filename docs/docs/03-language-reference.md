@@ -654,7 +654,59 @@ Static class fields are not supported yet, see https://github.com/winglang/wing/
 
 ---
 
-### 1.5 Reassignability
+### 1.5 Access Modifiers (member visibility)
+
+Class members, by default, can only be accessed from within the implementation code of the same class (private).
+Inner classes or closures can access private members of their containing class.
+```TS
+class Foo {
+  private_field: num; // This is private by default
+  
+  init() {this.private_field = 1;}
+  
+  method() {
+    log(this.private_field); // We can access `private_field` since we're in Foo
+    
+    class InnerFoo {
+      method(f: Foo) {
+        log(f.private_field); // We can access `private_field` since we're in Foo
+      }
+    }
+  }
+}
+```
+Accessing class members of a super class can be done by adding the the `protected` access modifier.
+```TS
+class Foo {
+  protected protected_method() {}; // This is a `protected` method
+}
+
+class Bar extends Foo {
+  method() {
+    this.protected_method(); // We can access `protected_method` from a subclass
+  }
+}
+```
+The `public` access modifier makes the class member accessible from anywhere. 
+Interface members are always public. 
+Implementing interface members in a class requires explicitly flagging them as `public`.
+```TS
+interface FooInterface {
+  public interface_method(): void; // Interface definitions are always implicitly `public`
+}
+
+class Foo impl FooInterface {
+  public public_method() {} // This can be accessed from outside of the class implemenetation
+  public interface_method() {} // This must be explicitly defined as `public` since it's an interface implementation
+}
+let f = new Foo();
+f.public_method(); // We can call this method from outside the class - it's public
+```
+
+[`▲ top`][top]
+
+---
+### 1.6 Reassignability
 
 Re-assignment to variables that are defined with `let` is not allowed in Wing.
 
@@ -700,7 +752,7 @@ let f = (arg1: num, var arg2: num) => {
 
 ---
 
-### 1.6 Optionality
+### 1.7 Optionality
 
 Nullity is a primary source of bugs in software. Being able to guarantee that a value will never be
 null makes it easier to write safe code without constantly having to take nullity into account.
@@ -723,9 +775,9 @@ Here's a quick summary of how optionality works in Wing:
 * The keyword `nil` can be used in assignment scenarios to indicate that an optional doesn't have a
   value. It cannot be used to test if an optional has a value or not.
 
-#### 1.6.1 Declaration
+#### 1.7.1 Declaration
 
-##### 1.6.1.1 Struct fields
+##### 1.7.1.1 Struct fields
 
 One of the more common use cases for optionals is to use them in struct declarations.
 
@@ -746,7 +798,7 @@ assert(david.address? == false);
 assert(jonathan.address? == true);
 ```
 
-##### 1.6.1.2 Variables
+##### 1.7.1.2 Variables
 
 Use `T?` to indicate that a variable is optional. To initialize it without a value use `= nil`.
 
@@ -764,7 +816,7 @@ x = nil;
 assert(x? == false);
 ```
 
-##### 1.6.1.3 Class fields
+##### 1.7.1.3 Class fields
 
 Similarly to struct fields, fields of classes can be also defined as optional using `T?`:
 
@@ -784,7 +836,7 @@ class Foo {
 }
 ```
 
-##### 1.6.1.4 Function arguments
+##### 1.7.1.4 Function arguments
 
 In the following example, the argument `by` is optional, so it is possible to call `increment()`
 without supplying a value for `by`:
@@ -826,7 +878,7 @@ f(myRequired: "hello");
 f(myOptional: 12, myRequired: "dang");
 ```
 
-##### 1.6.1.5 Function return types
+##### 1.7.1.5 Function return types
 
 If a function returns an optional type, use the `return nil;` statement to indicate that the value
 is not defined.
@@ -852,7 +904,7 @@ if let name = tryParseName("Neo Matrix") {
 }
 ```
 
-#### 1.6.2 Testing using `x?`
+#### 1.7.2 Testing using `x?`
 
 To test if an optional has a value or not, you can either use `x == nil` or `x != nil` or the
 special syntax `x?`.
@@ -883,7 +935,7 @@ if myPerson.address == nil {
 }
 ```
 
-#### 1.6.3 Unwrapping using `if let`
+#### 1.7.3 Unwrapping using `if let`
 
 The `if let` statement (or `if let var` for a reassignable variable) can be used to test if an 
 optional is defined and *unwrap* it into a non-optional variable defined inside the block:
@@ -899,7 +951,7 @@ if let address = myPerson.address {
 > multiple conditions, or unwrapping multiple optionals. This is something we might consider in the
 > future.
 
-#### 1.6.4 Unwrapping or default value using `??`
+#### 1.7.4 Unwrapping or default value using `??`
 
 The `??` operator can be used to unwrap or provide a default value. This returns a value of `T` that
 can safely be used.
@@ -908,7 +960,7 @@ can safely be used.
 let address: str = myPerson.address ?? "Planet Earth";
 ```
 
-#### 1.6.5 Optional chaining using `?.`
+#### 1.7.5 Optional chaining using `?.`
 
 The `?.` syntax can be used for optional chaining. Optional chaining returns a value of type `T?`
 which must be unwrapped in order to be used.
@@ -925,7 +977,7 @@ if let ip = ipAddress {
 
 ---
 
-#### 1.6.6 Roadmap
+#### 1.7.6 Roadmap
 
 The following features are not yet implemented, but we are planning to add them in the future:
 
@@ -944,7 +996,7 @@ The following features are not yet implemented, but we are planning to add them 
 * Support `??` for different types if they have a common ancestor (and also think of interfaces).
   See https://github.com/winglang/wing/issues/2103 to track.
 
-### 1.7 Type Inference
+### 1.8 Type Inference
 
 Type can optionally be put between name and the equal sign, using a colon.  
 Partial type inference is allowed while using the `?` keyword immediately after
@@ -972,7 +1024,7 @@ Type annotations are required for method arguments and their return value but op
 
 ---
 
-### 1.8 Error Handling
+### 1.9 Error Handling
 
 Exceptions and `try/catch/finally` are the error mechanism. Mechanics directly
 translate to JavaScript. You can create a new exception with a `throw` call.
@@ -997,7 +1049,7 @@ In the presence of `catch` the variable holding the exception (`e` in the exampl
 
 ---
 
-### 1.9 Recommended Formatting
+### 1.10 Recommended Formatting
 
 Wing recommends the following formatting and naming conventions:
 
@@ -1013,7 +1065,7 @@ Wing recommends the following formatting and naming conventions:
 
 ---
 
-### 1.10 Memory Management
+### 1.11 Memory Management
 
 There is no implicit memory de-allocation function, dynamic memory is managed by
 Wing and is garbage collected (relying on JSII target GC for the meantime).
@@ -1022,7 +1074,7 @@ Wing and is garbage collected (relying on JSII target GC for the meantime).
 
 ---
 
-### 1.11 Execution Model
+### 1.12 Execution Model
 
 Execution model currently is delegated to the JSII target. This means if you are
 targeting JSII with Node, Wing will use the event based loop that Node offers.
@@ -1051,7 +1103,7 @@ AWS CDK or `TerraformApp` in case of CDK for Terraform target.
 
 ---
 
-### 1.12 Asynchronous Model
+### 1.13 Asynchronous Model
 
 Wing builds upon the asynchronous model of JavaScript currently and expands upon
 it with new keywords and concepts. The `async` keyword of JavaScript is replaced
@@ -1064,17 +1116,17 @@ Main concepts to understand:
 
 Contrary to JavaScript, any call to an async function is implicitly awaited in Wing.
 
-#### 1.12.1 Roadmap
+#### 1.13.1 Roadmap
 
 The following features are not yet implemented, but we are planning to add them in the future:
 
 * `await`/`defer` statements - see https://github.com/winglang/wing/issues/116 to track.
 * Promise function type - see https://github.com/winglang/wing/issues/1004 to track.
 
-### 1.13 Roadmap
+### 1.14 Roadmap
 
-Access modifiers (`private`/`public`/`internal`/`protected`) are not yet implemented.
-See https://github.com/winglang/wing/issues/108 to track.
+* Module type visibility (exports/`public` types) is not implemented yet - see https://github.com/winglang/wing/issues/130 to track.
+* `internal` access modifier is not yet implemented - see https://github.com/winglang/wing/issues/4156 to track.
 
 ## 2. Statements
 
