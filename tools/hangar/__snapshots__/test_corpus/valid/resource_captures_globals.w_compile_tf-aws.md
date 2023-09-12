@@ -295,40 +295,6 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
         "force_destroy": false
       }
     },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "Another_First_cloudBucket_Encryption_C22274BF": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/Another/First/cloud.Bucket/Encryption",
-            "uniqueId": "Another_First_cloudBucket_Encryption_C22274BF"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Another_First_cloudBucket_DB822B7C.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      },
-      "cloudBucket_Encryption_77B6AEEF": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Encryption",
-            "uniqueId": "cloudBucket_Encryption_77B6AEEF"
-          }
-        },
-        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      }
-    },
     "aws_s3_object": {
       "MyResource_cloudTopic-OnMessage-f10eb240_S3Object_B244E1DD": {
         "//": {

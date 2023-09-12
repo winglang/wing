@@ -333,9 +333,9 @@ new JsonFile(project, "cdktf.json", {
     projectId: "93afdbfa-23ed-40cf-9ce4-495b3289c519",
   },
 });
-project.gitignore.addPatterns("src/.gen/providers");
+project.gitignore.addPatterns("src/.gen");
 
-project.preCompileTask.exec("cdktf get");
+project.preCompileTask.exec("cdktf get --force");
 
 project.package.file.addDeletionOverride("pnpm");
 project.tryRemoveFile(".npmrc");

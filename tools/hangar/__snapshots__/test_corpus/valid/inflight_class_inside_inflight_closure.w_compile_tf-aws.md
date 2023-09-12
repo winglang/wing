@@ -202,24 +202,6 @@ module.exports = function({  }) {
         "force_destroy": false
       }
     },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "PreflightClass_cloudBucket_Encryption_30FD2B0E": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/PreflightClass/cloud.Bucket/Encryption",
-            "uniqueId": "PreflightClass_cloudBucket_Encryption_30FD2B0E"
-          }
-        },
-        "bucket": "${aws_s3_bucket.PreflightClass_cloudBucket_05421049.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      }
-    },
     "aws_s3_object": {
       "PreflightClass_cloudFunction_S3Object_D4E803CB": {
         "//": {

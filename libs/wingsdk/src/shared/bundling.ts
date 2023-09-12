@@ -32,7 +32,6 @@ export function createBundle(entrypoint: string, outputDir?: string): Bundle {
     minify: false,
     platform: "node",
     target: "node18",
-    external: ["@aws-sdk"],
   });
 
   if (esbuild.errors.length > 0) {

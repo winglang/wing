@@ -51,7 +51,24 @@ new cloud.Function(counterFunc);
 
 ### Using keys to manage multiple counter values
 
-🚧 Not implemented yet (tracking issue: [#1375](https://github.com/winglang/wing/issues/1375))
+```js playground
+bring cloud;
+
+let counter = new cloud.Counter(initial: 100);
+
+let counterFunc = inflight () => {
+  let k1 = "key-1";
+  let k2 = "key-2";
+
+  counter.dec(1, k1); // decrement k1 by 1
+  counter.inc(11, k2); // increment k2 by 11
+
+  assert(counter.peek(k1) == 99); // check the current value of k1
+  assert(counter.peek(k2) == 111); // check the current value of k2
+};
+
+new cloud.Function(counterFunc);
+```
 
 ## Target-specific details
 

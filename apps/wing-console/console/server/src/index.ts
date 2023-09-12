@@ -246,6 +246,7 @@ export const createConsoleServer = async ({
       updater?.removeEventListener("status-change", invalidateUpdaterStatus);
       config?.removeEventListener("config-change", invalidateConfig);
       await Promise.allSettled([
+        server.closeAllConnections(),
         server.close(),
         compiler.stop(),
         simulator.stop(),
@@ -256,8 +257,6 @@ export const createConsoleServer = async ({
       if (typeof callback === "function") callback();
     }
   };
-
-  process.on("SIGINT", () => close(() => process.exit(0)));
 
   return {
     port,

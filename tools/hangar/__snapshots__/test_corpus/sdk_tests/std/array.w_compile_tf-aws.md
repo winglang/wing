@@ -505,56 +505,6 @@ module.exports = function({  }) {
         "bucket_prefix": "mysecondbucket-c8d5dc33-",
         "force_destroy": false
       }
-    },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "cloudBucket_Encryption_77B6AEEF": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Encryption",
-            "uniqueId": "cloudBucket_Encryption_77B6AEEF"
-          }
-        },
-        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      },
-      "myBucket_Encryption_689540CB": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/myBucket/Encryption",
-            "uniqueId": "myBucket_Encryption_689540CB"
-          }
-        },
-        "bucket": "${aws_s3_bucket.myBucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      },
-      "mySecondBucket_Encryption_4630E612": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/mySecondBucket/Encryption",
-            "uniqueId": "mySecondBucket_Encryption_4630E612"
-          }
-        },
-        "bucket": "${aws_s3_bucket.mySecondBucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      }
     }
   }
 }

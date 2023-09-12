@@ -136,40 +136,6 @@ module.exports = function({ $bucket2 }) {
         "bucket_prefix": "cloud-bucket-c87175e7-",
         "force_destroy": false
       }
-    },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "MyClosure_cloudBucket_Encryption_31C1B5A0": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/MyClosure/cloud.Bucket/Encryption",
-            "uniqueId": "MyClosure_cloudBucket_Encryption_31C1B5A0"
-          }
-        },
-        "bucket": "${aws_s3_bucket.MyClosure_cloudBucket_4DAD12C0.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      },
-      "cloudBucket_Encryption_77B6AEEF": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Encryption",
-            "uniqueId": "cloudBucket_Encryption_77B6AEEF"
-          }
-        },
-        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      }
     }
   }
 }

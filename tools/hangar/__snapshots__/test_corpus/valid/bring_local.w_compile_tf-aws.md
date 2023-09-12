@@ -233,24 +233,6 @@ module.exports = function({  }) {
         "force_destroy": false
       }
     },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "file1Store_cloudBucket_Encryption_387D9114": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/file1.Store/cloud.Bucket/Encryption",
-            "uniqueId": "file1Store_cloudBucket_Encryption_387D9114"
-          }
-        },
-        "bucket": "${aws_s3_bucket.file1Store_cloudBucket_86CE87B1.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256"
-            }
-          }
-        ]
-      }
-    },
     "aws_s3_object": {
       "file1Store_cloudOnDeploy_Function_S3Object_CBBF816B": {
         "//": {
