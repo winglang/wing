@@ -98,7 +98,7 @@ jobs:
           timeout_minutes: 30
           command: |
             wing --version
-            wing test -t sim ${{ matrix.test.directory }}/*.w
+            wing test -t tf-aws ${{ matrix.test.directory }}/*.w
 
       - name: Output Terraform log
         if: failure()
