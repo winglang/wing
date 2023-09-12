@@ -392,7 +392,7 @@ class WingRestApi extends Construct {
 
     // const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
 
-    let CORS = true;
+    // let CORS = true;
 
     let OAS30 = {
       openapi: "3.0.1",
@@ -433,11 +433,21 @@ class WingRestApi extends Construct {
     const apigwCorsConfig = props.cors
       ? {
           corsConfiguration: {
-            allowMethods: ["GET", "OPTIONS", "POST"],
-            allowHeaders: ["*"],
+            allowMethods: props.cors.allowMethods
+              ? props.cors.allowMethods
+              : [],
+            allowHeaders: props.cors.allowHeaders
+              ? props.cors.allowHeaders
+              : ["*"],
+            allowCredentials: props.cors.allowCredentials
+              ? props.cors.allowCredentials
+              : false,
+            // rename allowOrigin to allowOrigins
+            allowOrigins: props.cors.allowOrigin
+              ? props.cors.allowOrigin
+              : ["*"],
+            // add maxAge
             maxAge: 0,
-            allowCredentials: false,
-            allowOrigins: ["*"],
           },
         }
       : {};
