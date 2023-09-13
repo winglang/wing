@@ -15,7 +15,7 @@ const addRow = async (page: Page, data?: Record<string, any>) => {
   await expect(JSON.parse((await row.textContent()) as string)).toEqual(data);
 };
 
-describe(`${__dirname}/index.w`, () => {
+describe(`${__dirname}/main.w`, () => {
   test("adds new item", async ({ page }) => {
     await getResourceNode(page, "root/Default/ex.DynamodbTable").click();
 
