@@ -401,9 +401,8 @@ class WingRestApi extends Construct {
     const apigwCorsConfig = props.cors
       ? {
           corsConfiguration: {
-            // renamed allowOrigin to allowOrigins
-            allowOrigins: props.cors.allowOrigins
-              ? props.cors.allowOrigins
+            allowOrigin: props.cors.allowOrigin
+              ? props.cors.allowOrigin
               : ["*"],
             allowMethods: props.cors.allowMethods
               ? props.cors.allowMethods

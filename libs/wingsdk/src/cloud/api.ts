@@ -18,7 +18,7 @@ export interface ApiCorsOptions {
    * @example ["https://example.com"]
    * @default - ["*"]
    */
-  readonly allowOrigins?: Array<string>;
+  readonly allowOrigin?: Array<string>;
 
   /**
    * The list of allowed methods.
@@ -159,6 +159,12 @@ type CorsOptionsResponseHeaders = {
    * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Methods
    */
   "Access-Control-Allow-Methods": string;
+
+  /**
+   * Indicates how long the results of a preflight request can be cached.
+   * developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age
+   */
+  "Access-Control-Max-Age": number;
 };
 
 /**
@@ -198,7 +204,7 @@ export abstract class Api extends Resource {
   };
 
   private corsDefaultValues: ApiCorsOptions = {
-    allowOrigins: ["*"],
+    allowOrigin: ["*"],
     allowMethods: [
       HttpMethod.GET,
       HttpMethod.POST,
@@ -394,7 +400,7 @@ export abstract class Api extends Resource {
     }
 
     const {
-      allowOrigins = [],
+      allowOrigin = [],
       allowMethods = [],
       allowHeaders = [],
       exposeHeaders = [],
@@ -403,16 +409,17 @@ export abstract class Api extends Resource {
     } = corsOptions;
 
     const defaultHeaders: CorsDefaultResponseHeaders = {
-      "Access-Control-Allow-Origin": allowOrigins.join(",") || "",
+      "Access-Control-Allow-Origin": allowOrigin.join(",") || "",
       "Access-Control-Expose-Headers": exposeHeaders.join(",") || "",
       "Access-Control-Allow-Credentials": allowCredentials ? "true" : "false",
       "Access-Control-Max-Age": maxAge,
     };
 
     const optionsHeaders: CorsOptionsResponseHeaders = {
-      "Access-Control-Allow-Origin": allowOrigins.join(",") || "",
+      "Access-Control-Allow-Origin": allowOrigin.join(",") || "",
       "Access-Control-Allow-Headers": allowHeaders.join(",") || "",
       "Access-Control-Allow-Methods": allowMethods.join(",") || "",
+      "Access-Control-Max-Age": maxAge,
     };
 
     return {
