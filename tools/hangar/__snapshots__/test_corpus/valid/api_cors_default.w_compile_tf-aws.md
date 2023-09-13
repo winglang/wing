@@ -161,6 +161,9 @@ module.exports = function({  }) {
             "HEAD",
             "OPTIONS"
           ],
+          "allow_origins": [
+            "*"
+          ],
           "expose_headers": [],
           "max_age": 0
         },

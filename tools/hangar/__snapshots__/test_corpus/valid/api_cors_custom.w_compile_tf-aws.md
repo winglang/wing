@@ -181,6 +181,9 @@ module.exports = function({  }) {
             "POST",
             "OPTIONS"
           ],
+          "allow_origins": [
+            "winglang.io"
+          ],
           "expose_headers": [
             "Content-Type"
           ],

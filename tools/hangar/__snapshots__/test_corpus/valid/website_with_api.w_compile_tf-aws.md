@@ -215,6 +215,9 @@ module.exports = function({  }) {
             "POST",
             "OPTIONS"
           ],
+          "allow_origins": [
+            "*"
+          ],
           "expose_headers": [
             "Content-Type"
           ],
