@@ -11,10 +11,10 @@ The **Wing Console** is a web application that provides an interface that can be
 Use the `wing it` command to start the console with our newly created application:
 
 ```sh
-wing it hello.w
+wing it main.w
 ```
 
-This will now compile `hello.w` to [the "`sim`" target](../concepts/simulator),
+This will now compile `main.w` to [the "`sim`" target](../concepts/simulator),
 and load the application in the **Wing Console**.
 
 In the Wing Console window, you will see the following view of you application:
