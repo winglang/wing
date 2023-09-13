@@ -450,7 +450,7 @@ class WingHttpApi extends Construct {
   private createApiSpecExtension(handler: Function) {
     const extension = {
       "x-amazon-apigateway-integration": {
-        payloadFormatVersion: "2.0",
+        payloadFormatVersion: "1.0",
         type: "aws_proxy",
         httpMethod: "POST",
         uri: handler.arn,
