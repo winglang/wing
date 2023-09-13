@@ -2,7 +2,6 @@ import {
   window,
   WebviewPanel,
   commands,
-  OutputChannel,
   TreeView,
   ViewColumn,
   Uri,
@@ -21,6 +20,7 @@ import {
 } from "./explorer-providers/TestsExplorerProvider";
 import { type Client } from "./services/client";
 import { VIEW_TYPE_CONSOLE } from "../constants";
+import { Loggers } from "../logging";
 
 export interface ConsoleInstance {
   id: string;
@@ -37,11 +37,11 @@ export interface ConsoleManager {
   setActiveInstance: (instanceId: string) => Promise<void>;
   activeInstances: () => boolean;
   getActiveInstanceId: () => string | undefined;
+  stopAll: () => Promise<void>;
 }
 
 export const createConsoleManager = (
-  context: ExtensionContext,
-  logger: OutputChannel
+  context: ExtensionContext
 ): ConsoleManager => {
   const instances: Record<string, ConsoleInstance> = {};
   const resourcesExplorer = new ResourcesExplorerProvider();
@@ -115,7 +115,7 @@ export const createConsoleManager = (
     const logs = await instance.client.getLogs({ time: logsTimestamp });
 
     logs.forEach((log) => {
-      logger.appendLine(`[${log.level}] ${log.message}`);
+      Loggers.console.appendLine(`[${log.level}] ${log.message}`);
     });
     logsTimestamp = Date.now();
   };
@@ -136,7 +136,9 @@ export const createConsoleManager = (
   };
 
   const addInstance = async (instance: ConsoleInstance) => {
-    logger.appendLine(`Wing Console is running at http://${instance.url}`);
+    Loggers.console.appendLine(
+      `Wing Console is running at http://${instance.url}`
+    );
 
     instance.client.onInvalidateQuery({
       onData: async (key) => {
@@ -155,7 +157,7 @@ export const createConsoleManager = (
         }, 300);
       },
       onError: (err) => {
-        logger.appendLine(err);
+        Loggers.console.appendLine(err);
       },
     });
 
@@ -190,7 +192,7 @@ export const createConsoleManager = (
         });
       },
       onError: (err) => {
-        logger.appendLine(err);
+        Loggers.console.appendLine(err);
       },
     });
 
@@ -235,7 +237,7 @@ export const createConsoleManager = (
           await closeInstance(id);
         });
       });
-      logger.show();
+      Loggers.console.show();
     }
 
     webviewPanel.title = `${instance.wingfile} - [console]`;
@@ -290,7 +292,9 @@ export const createConsoleManager = (
     if (!instance) {
       return;
     }
-    logger.appendLine(`Closing Console instance: '${instance.wingfile}'`);
+    Loggers.console.appendLine(
+      `Closing Console instance: '${instance.wingfile}'`
+    );
 
     instance.client.close();
     instance.onDidClose();
@@ -317,6 +321,11 @@ export const createConsoleManager = (
     },
     getActiveInstanceId: () => {
       return activeInstanceId;
+    },
+    stopAll: async () => {
+      Object.keys(instances).forEach(async (id) => {
+        await closeInstance(id);
+      });
     },
   };
 };

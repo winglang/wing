@@ -47,4 +47,4 @@ tsconfig.json
 src/**/*.js
 src/**/*.d.ts
 !/cdktf.json
-src/.gen/providers
+src/.gen
