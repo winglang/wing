@@ -193,9 +193,8 @@ const contributes: VSCodeExtensionContributions = {
       properties: {
         "wing.bin": {
           type: "string",
-          default: "wing",
           description:
-            "Path to the Wing binary. Will be `wing` from PATH by default.\nSet to `npx` to automatically retrieve the version that matches this extension",
+            "Path to the Wing binary. Will be `wing` from PATH by default.",
         },
       },
     },

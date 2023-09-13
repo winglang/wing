@@ -1,6 +1,6 @@
 import type { inferRouterInputs } from "@trpc/server";
 import Emittery from "emittery";
-import type { Application as ExpressApplication } from "express";
+import type { Express } from "express";
 
 import type { Config } from "./config.js";
 import { type ConsoleLogger, createConsoleLogger } from "./consoleLogger.js";
@@ -57,7 +57,8 @@ export interface CreateConsoleServerOptions {
   requestedPort?: number;
   hostUtils?: HostUtils;
   onTrace?: (trace: Trace) => void;
-  onExpressCreated?: (app: ExpressApplication) => void;
+  expressApp?: Express;
+  onExpressCreated?: (app: Express) => void;
   requireAcceptTerms?: boolean;
   layoutConfig?: LayoutConfig;
 }
@@ -70,6 +71,7 @@ export const createConsoleServer = async ({
   requestedPort,
   hostUtils,
   onTrace,
+  expressApp,
   onExpressCreated,
   requireAcceptTerms,
   layoutConfig,
@@ -224,6 +226,7 @@ export const createConsoleServer = async ({
       return appState;
     },
     hostUtils,
+    expressApp,
     onExpressCreated,
     wingfile,
     requireAcceptTerms,
@@ -246,6 +249,7 @@ export const createConsoleServer = async ({
       updater?.removeEventListener("status-change", invalidateUpdaterStatus);
       config?.removeEventListener("config-change", invalidateConfig);
       await Promise.allSettled([
+        server.closeAllConnections(),
         server.close(),
         compiler.stop(),
         simulator.stop(),
@@ -256,8 +260,6 @@ export const createConsoleServer = async ({
       if (typeof callback === "function") callback();
     }
   };
-
-  process.on("SIGINT", () => close(() => process.exit(0)));
 
   return {
     port,
