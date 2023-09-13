@@ -6,7 +6,7 @@ import { Target } from "@winglang/compiler";
 import { generateTmpDir } from "src/util";
 
 const exampleDir = resolve("../../examples/tests/valid");
-const exampleFilePath = join(exampleDir, "captures.w");
+const exampleFilePath = join(exampleDir, "captures.main.w");
 
 describe(
   "compile command tests",
@@ -53,7 +53,7 @@ describe(
         process.chdir(exampleDir);
 
         // because we changed to the example directory, we can just pass the filename
-        const outDir = await compile("extern_implementation.w", {
+        const outDir = await compile("extern_implementation.main.w", {
           target: Target.SIM,
           targetDir: `${await generateTmpDir()}/target`,
         });
