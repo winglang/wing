@@ -93,7 +93,7 @@ async function main() {
         process.env.WING_DISABLE_ANALYTICS = "1";
       }
     )
-    .option("--no-colors", "Disable colors for the CLI", () => {
+    .option("--no-color", "Disable colors for all output", () => {
       process.env.NO_COLOR = "1";
     });
 
