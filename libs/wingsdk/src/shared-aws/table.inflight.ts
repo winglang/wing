@@ -27,7 +27,10 @@ export class TableClient implements ITableClient {
       const command = new PutItemCommand({
         TableName: this.tableName,
         Item: marshall(insertRow),
-        ConditionExpression: `attribute_not_exists(${this.primaryKey})`,
+        ConditionExpression: `attribute_not_exists(#primary_key)`,
+        ExpressionAttributeNames: {
+          "#primary_key": this.primaryKey,
+        },
       });
       await this.client.send(command);
     } catch (e) {
