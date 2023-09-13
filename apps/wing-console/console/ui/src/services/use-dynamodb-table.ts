@@ -23,12 +23,13 @@ export const useDynamodbTable = ({ resourcePath }: UseTableOptions) => {
 
   const removeRow = useCallback(
     async (index: number) => {
-      if (!table.data?.rows[index]) {
+      const row = table.data?.rows[index];
+      if (!row) {
         return;
       }
       await tableDelete.mutateAsync({
         resourcePath,
-        data: table.data.rows[index] || {},
+        data: row,
       });
     },
     [tableDelete, resourcePath, table.data?.rows],

@@ -40,7 +40,7 @@ export const DynamodbTableInteractionView = ({
         showError(error.message);
       }
     },
-    [addRow, showError, table.data?.keySchema],
+    [addRow, showError],
   );
 
   const onRemoveRow = useCallback(
