@@ -34,11 +34,11 @@ const NAME_OPTS: NameOptions = {
  * AWS Implementation of `cloud.Api`.
  */
 export class Api extends cloud.Api {
-  private readonly api: WingRestApi;
+  private readonly api: WingHttpApi;
 
   constructor(scope: Construct, id: string, props: cloud.ApiProps = {}) {
     super(scope, id, props);
-    this.api = new WingRestApi(this, "api", {
+    this.api = new WingHttpApi(this, "api", {
       apiSpec: this._getApiSpec(),
       cors: this.corsOptions,
     });
@@ -365,7 +365,7 @@ export class Api extends cloud.Api {
   }
 }
 
-class WingRestApi extends Construct {
+class WingHttpApi extends Construct {
   public readonly url: string;
   public readonly api: Apigatewayv2Api;
   public readonly stage: Apigatewayv2Stage;
@@ -401,7 +401,7 @@ class WingRestApi extends Construct {
     const APIGW_CORS_CONFIG = props.cors
       ? {
           corsConfiguration: {
-            allowOrigin: props.cors.allowOrigin
+            allowOrigins: props.cors.allowOrigin
               ? props.cors.allowOrigin
               : ["*"],
             allowMethods: props.cors.allowMethods
