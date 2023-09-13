@@ -398,7 +398,7 @@ class WingRestApi extends Construct {
       ...APIGW_DEFAULT_ROUTE,
     };
 
-    const apigwCorsConfig = props.cors
+    const APIGW_CORS_CONFIG = props.cors
       ? {
           corsConfiguration: {
             allowOrigin: props.cors.allowOrigin
@@ -416,7 +416,6 @@ class WingRestApi extends Construct {
             allowCredentials: props.cors.allowCredentials
               ? props.cors.allowCredentials
               : false,
-            // added maxAge
             maxAge: props.cors.maxAge ? props.cors.maxAge : 0,
           },
         }
@@ -430,7 +429,7 @@ class WingRestApi extends Construct {
           return JSON.stringify(props.apiSpec);
         },
       }),
-      ...apigwCorsConfig,
+      ...APIGW_CORS_CONFIG,
     });
 
     this.stage = new Apigatewayv2Stage(this, "stage", {
