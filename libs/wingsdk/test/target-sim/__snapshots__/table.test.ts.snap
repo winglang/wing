@@ -169,9 +169,9 @@ exports[`get row 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Table created.",
-  "get row joe-id from table my_get_table.",
   "insert row joe-id into the table my_get_table.",
   "get row joe-id from table my_get_table.",
+  "get row NON_EXISTENT_KEY from table my_get_table.",
   "wingsdk.cloud.Table deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
@@ -255,7 +255,6 @@ exports[`insert row 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Table created.",
-  "get row joe-id from table my_insert_table.",
   "insert row joe-id into the table my_insert_table.",
   "wingsdk.cloud.Table deleted.",
   "wingsdk.cloud.TestRunner deleted.",
@@ -340,9 +339,7 @@ exports[`list table 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Table created.",
-  "get row joe-id from table my_list_table.",
   "insert row joe-id into the table my_list_table.",
-  "get row jane-id from table my_list_table.",
   "insert row jane-id into the table my_list_table.",
   "list all rows from table my_list_table.",
   "wingsdk.cloud.Table deleted.",
@@ -424,11 +421,95 @@ exports[`list table 2`] = `
 }
 `;
 
+exports[`tryGet row 1`] = `
+[
+  "wingsdk.cloud.TestRunner created.",
+  "wingsdk.cloud.Table created.",
+  "insert row joe-id into the table my_get_table.",
+  "get row joe-id from table my_get_table.",
+  "wingsdk.cloud.Table deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
+]
+`;
+
+exports[`tryGet row 2`] = `
+{
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_table",
+        "props": {
+          "columns": {
+            "age": 1,
+            "name": 0,
+          },
+          "initialRows": {},
+          "name": "my_get_table",
+          "primaryKey": "id",
+        },
+        "type": "wingsdk.cloud.Table",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "cloud.TestRunner": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.2.70",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
+        "my_table": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.2.70",
+          },
+          "display": {
+            "description": "A cloud NoSQL database table that can be used to store and query data",
+            "title": "Table",
+          },
+          "id": "my_table",
+          "path": "root/my_table",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.2.70",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
 exports[`update row 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Table created.",
-  "get row joe-id from table my_update_table.",
   "insert row joe-id into the table my_update_table.",
   "get row joe-id from table my_update_table.",
   "get row joe-id from table my_update_table.",
