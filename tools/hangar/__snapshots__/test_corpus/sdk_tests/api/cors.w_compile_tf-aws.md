@@ -92,6 +92,9 @@ module.exports = function({ $api_url, $http_Util }) {
             "HEAD",
             "OPTIONS"
           ],
+          "allow_origins": [
+            "*"
+          ],
           "expose_headers": [],
           "max_age": 0
         },
