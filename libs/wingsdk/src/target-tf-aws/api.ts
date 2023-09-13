@@ -1,18 +1,11 @@
 import { createHash } from "crypto";
 import { join } from "path";
-
 import { Lazy } from "cdktf";
 import { Construct } from "constructs";
-// import { API_CORS_DEFAULT_RESPONSE } from "./api.cors";
-// import { App } from "./app";
 import { Function } from "./function";
 import { core } from "..";
-// import { ApiGatewayRestApi } from "../.gen/providers/aws/api-gateway-rest-api";
-// import { ApiGatewayStage } from "../.gen/providers/aws/api-gateway-stage";
-// import { ApiGatewayDeployment } from "../.gen/providers/aws/api-gateway-deployment";
 import { Apigatewayv2Api } from "../.gen/providers/aws/apigatewayv2-api";
 import { Apigatewayv2Stage } from "../.gen/providers/aws/apigatewayv2-stage";
-// import { Apigatewayv2Deployment } from "../.gen/providers/aws/apigatewayv2-deployment";
 import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
@@ -376,8 +369,6 @@ class WingRestApi extends Construct {
   public readonly url: string;
   public readonly api: Apigatewayv2Api;
   public readonly stage: Apigatewayv2Stage;
-  // private readonly deployment: Apigatewayv2Deployment;
-  // private readonly region: string;
 
   constructor(
     scope: Construct,
@@ -388,46 +379,23 @@ class WingRestApi extends Construct {
     }
   ) {
     super(scope, id);
-    // this.region = (App.of(this) as App).region;
 
-    // const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
-
-    // let CORS = true;
-
-    // let OAS30 = CORS
-    //   ? {
-    //       ...OAS30_BASE,
-    //       "x-amazon-apigateway-cors": {
-    //         allowMethods: ["GET", "OPTIONS", "POST"],
-    //         allowHeaders: ["*"],
-    //         maxAge: 0,
-    //         allowCredentials: false,
-    //         allowOrigins: ["*"],
-    //       },
-    //     }
-    //   : OAS30_BASE;
-
-    let OAS30: OpenApiSpec = {
-      openapi: "3.0.1",
-      info: {
-        title: "fugazi",
-        version: "v1",
-      },
-      paths: {
-        "/$default": {
-          "x-amazon-apigateway-any-method": {
-            isDefaultRoute: true,
-            "x-amazon-apigateway-integration": {
-              payloadFormatVersion: "1.0",
-              type: "http_proxy",
-              httpMethod: "ANY",
-              uri: "https://example.com/",
-              connectionType: "INTERNET",
-            },
+    const APIGW_DEFAULT_ROUTE = {
+      "/$default": {
+        "x-amazon-apigateway-any-method": {
+          isDefaultRoute: true,
+          "x-amazon-apigateway-integration": {
+            payloadFormatVersion: "1.0",
+            type: "http_proxy",
+            httpMethod: "ANY",
+            uri: "https://example.com/",
           },
         },
       },
-      "x-amazon-apigateway-importexport-version": "1.0",
+    };
+
+    props.apiSpec.paths = {
+      ...APIGW_DEFAULT_ROUTE,
     };
 
     const apigwCorsConfig = props.cors
@@ -460,7 +428,7 @@ class WingRestApi extends Construct {
       protocolType: "HTTP",
       body: Lazy.stringValue({
         produce: () => {
-          return JSON.stringify(OAS30);
+          return JSON.stringify(props.apiSpec);
         },
       }),
       ...apigwCorsConfig,
@@ -510,124 +478,3 @@ class WingRestApi extends Construct {
     });
   };
 }
-
-// /**
-//  * Encapsulates the API Gateway REST API as a abstraction for Terraform.
-//  */
-// class WingRestApi extends Construct {
-//   public readonly url: string;
-//   public readonly api: ApiGatewayRestApi;
-//   public readonly stage: ApiGatewayStage;
-//   private readonly deployment: ApiGatewayDeployment;
-//   private readonly region: string;
-
-//   constructor(
-//     scope: Construct,
-//     id: string,
-//     props: {
-//       apiSpec: OpenApiSpec;
-//       cors?: cloud.ApiCorsOptions;
-//     }
-//   ) {
-//     super(scope, id);
-//     this.region = (App.of(this) as App).region;
-
-//     const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
-
-//     this.api = new ApiGatewayRestApi(this, "api", {
-//       name: ResourceNames.generateName(this, NAME_OPTS),
-//       // Lazy generation of the api spec because routes can be added after the API is created
-//       body: Lazy.stringValue({
-//         produce: () => {
-//           const injectGreedy404Handler = (openApiSpec: OpenApiSpec) => {
-//             openApiSpec.paths = {
-//               ...openApiSpec.paths,
-//               ...defaultResponse,
-//             };
-//             return openApiSpec;
-//           };
-//           return JSON.stringify(injectGreedy404Handler(props.apiSpec));
-//         },
-//       }),
-//     });
-
-//     this.deployment = new ApiGatewayDeployment(this, "deployment", {
-//       restApiId: this.api.id,
-//       lifecycle: {
-//         createBeforeDestroy: true,
-//       },
-//       triggers: {
-//         // Trigger redeployment when the api spec changes
-//         redeployment: Fn.sha256(this.api.body),
-//       },
-//     });
-
-//     this.stage = new ApiGatewayStage(this, "stage", {
-//       restApiId: this.api.id,
-//       stageName: STAGE_NAME,
-//       deploymentId: this.deployment.id,
-//     });
-
-//     //should be exported from here, otherwise won't be mapped to the right token
-//     this.url = this.stage.invokeUrl;
-//   }
-
-//   /**
-//    * Add an endpoint to the API
-//    * @param path Path of the endpoint
-//    * @param method Method of the endpoint
-//    * @param handler Lambda function to handle the endpoint
-//    * @returns OpenApi spec extension for the endpoint
-//    */
-//   public addEndpoint(path: string, method: string, handler: Function) {
-//     const endpointExtension = this.createApiSpecExtension(handler);
-//     this.addHandlerPermissions(path, method, handler);
-//     return endpointExtension;
-//   }
-
-//   /**
-//    * Creates a OpenApi extension object for the endpoint and handler
-//    * @param handler Lambda function to handle the endpoint
-//    * @returns OpenApi extension object for the endpoint and handler
-//    */
-//   private createApiSpecExtension(handler: Function) {
-//     const extension = {
-//       "x-amazon-apigateway-integration": {
-//         uri: `arn:aws:apigateway:${this.region}:lambda:path/2015-03-31/functions/${handler.arn}/invocations`,
-//         type: "aws_proxy",
-//         httpMethod: "POST",
-//         responses: {
-//           default: {
-//             statusCode: "200",
-//           },
-//         },
-//         passthroughBehavior: "when_no_match",
-//         contentHandling: "CONVERT_TO_TEXT",
-//       },
-//     };
-
-//     return extension;
-//   }
-
-//   /**
-//    * Add permissions to the handler to allow it to be called by the API
-//    * @param path Path of the endpoint
-//    * @param method Method of the endpoint
-//    * @param handler Lambda function to handle the endpoint
-//    */
-//   private addHandlerPermissions = (
-//     path: string,
-//     method: string,
-//     handler: Function
-//   ) => {
-//     const pathHash = createHash("sha1").update(path).digest("hex").slice(-8);
-//     const permissionId = `${method}-${pathHash}`;
-//     new LambdaPermission(this, `permission-${permissionId}`, {
-//       statementId: `AllowExecutionFromAPIGateway-${permissionId}`,
-//       action: "lambda:InvokeFunction",
-//       functionName: handler._functionName,
-//       principal: "apigateway.amazonaws.com",
-//       sourceArn: `${this.api.executionArn}/*/${method}${path}`,
-//     });
-//   };
-// }
