@@ -12,7 +12,7 @@ z -= 1;
 assert(z == 2);
 
 class R {
-  public var f: num;
+  pub var f: num;
   f1: num;
   init() {
     // Initialize fields in `init` but in an inner scope to make sure 
@@ -23,7 +23,7 @@ class R {
     }
   }
   
-  public inc() {
+  pub inc() {
     this.f = this.f + 1;
   }
 }

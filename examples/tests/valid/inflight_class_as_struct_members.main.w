@@ -1,5 +1,5 @@
 inflight class Foo {
-  public get(): num { return 42; }
+  pub get(): num { return 42; }
 }
 
 struct Bar {

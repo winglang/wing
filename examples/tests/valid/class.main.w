@@ -6,7 +6,7 @@ new C1();
 
 // class with init and no arguments
 class C2 {
-  public x: num;
+  pub x: num;
   init() {
     this.x = 1;
   }
@@ -16,8 +16,8 @@ assert(c2.x == 1);
 
 // class with init and arguments
 class C3 {
-  public x: num;
-  public y: num;
+  pub x: num;
+  pub y: num;
   init(a: num, b: num) {
     this.x = a;
     if true {
@@ -31,19 +31,19 @@ assert(c3.y == 2);
 
 // class with static method and no init
 class C4 {
-  public static m():num {return 1;}
+  pub static m():num {return 1;}
 }
 assert(C4.m() == 1);
 
 // class with inflight field
 class C5 {
-  public inflight x: num;
-  public inflight var y: num;
+  pub inflight x: num;
+  pub inflight var y: num;
   inflight init() {
     this.x = 123;
     this.y = 321;
   }
-  public inflight set(b: num) {
+  pub inflight set(b: num) {
     this.y = b;
   }
 }
@@ -57,14 +57,14 @@ test "access inflight field" {
 }
 
 class Person {
-  public name: str;
+  pub name: str;
   init(name: str) {
     this.name = name;
   }
 }
 
 class Student extends Person {
-  public major: str;
+  pub major: str;
 
   init(name: str, major: str) {
     super(name);
@@ -73,7 +73,7 @@ class Student extends Person {
 }
 
 class PaidStudent extends Student {
-  public hrlyWage: num;
+  pub hrlyWage: num;
   init(name: str, major: str, hrlyWage: num) {
     super(name, major);
     this.hrlyWage = hrlyWage;
@@ -103,7 +103,7 @@ test "devived class init body happens after super" {
 
 // Inflight inheritence
 inflight class A {
-  public sound: str;
+  pub sound: str;
 
   inflight init(sound: str) {
     this.sound = sound;

@@ -1,7 +1,7 @@
 bring cloud;
 
 class MyResource {
-  public myPreflight() { }
+  pub myPreflight() { }
 }
 
 class Test {

@@ -23,7 +23,7 @@ let fn = new Doubler(inflight (m: str): str => {
 
 class Doubler2 {
   // TODO: make into a static method - see https://github.com/winglang/wing/issues/2583
-  public makeFunc(handler: inflight (num): num): cloud.Function {
+  pub makeFunc(handler: inflight (num): num): cloud.Function {
     return new cloud.Function(inflight (x: str): str => {
       let xStr = num.fromStr(x);
       let y = handler(xStr);

@@ -9,7 +9,7 @@ class Foo {
     this.bar = 1;
   }
 
-  public inflight setBar(b: num) {
+  pub inflight setBar(b: num) {
     this.bar = b;
   }
 }

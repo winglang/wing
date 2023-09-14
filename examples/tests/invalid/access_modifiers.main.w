@@ -7,7 +7,7 @@ interface SomeInterface {
 class Foo impl SomeInterface {
   protected protected_field: str;
   private_field: str;
-  public public_field: str;
+  pub public_field: str;
 
   init() {
     this.protected_field = "hello";
@@ -34,13 +34,13 @@ class Foo impl SomeInterface {
     }
   }
   
-  public public_method() {}
+  pub public_method() {}
   protected protected_method() {}
   //        ^ Method is not public but it's part of an interface
   private_method() {}
   //^ Method is not public but it's part of an interface
 
-  public static public_static_method() {}
+  pub static public_static_method() {}
   protected static protected_static_method() {}
   static private_static_method() {}
 }
@@ -162,8 +162,8 @@ class FooOverrideToProtected extends Foo {
 }
 
 class FooOverrideToPublic extends Foo {
-  public public_method() {}
-  public protected_method() {}
-  public private_method() {}
+  pub public_method() {}
+  pub protected_method() {}
+  pub private_method() {}
   //     ^ Cannot override
 }

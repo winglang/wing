@@ -10,7 +10,7 @@ let y: num = x ?? 5;
 assert(y == 4);
 
 class Super {
-  public name: str;
+  pub name: str;
   init() { this.name = "Super"; }
 }
 class Sub extends Super {
@@ -136,9 +136,9 @@ assert(fun("hello") == "hello");
 assert(fun(nil) == "default");
 
 class Node {
-  public value: num;
-  public left: Node?;
-  public right: Node?;
+  pub value: num;
+  pub left: Node?;
+  pub right: Node?;
 
   init(value: num, left: Node?, right: Node?) {
     this.value = value;

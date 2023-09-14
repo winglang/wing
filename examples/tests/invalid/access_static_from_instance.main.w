@@ -1,9 +1,9 @@
 class Foo {
   instanceField: num;
 
-  public static f: num;
+  pub static f: num;
 
-  public static m() {
+  pub static m() {
     this.instanceField = 1; // Can't access instance fields from static methods
     this.f = 1; // Can't access static fields through `this`
   }

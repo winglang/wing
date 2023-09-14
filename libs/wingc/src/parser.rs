@@ -78,7 +78,7 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 	"package",
 	"private",
 	"protected",
-	"public",
+	"pub",
 	"internal",
 	"return",
 	"short",
@@ -1315,7 +1315,7 @@ impl<'s> Parser<'s> {
 	fn build_access_modifier(&self, am_node: Option<Node>) -> DiagnosticResult<AccessModifier> {
 		match am_node {
 			Some(am_node) => match self.node_text(&am_node) {
-				"public" => Ok(AccessModifier::Public),
+				"pub" => Ok(AccessModifier::Public),
 				"protected" => Ok(AccessModifier::Protected),
 				other => self.report_unimplemented_grammar(other, "access modifier", &am_node),
 			},

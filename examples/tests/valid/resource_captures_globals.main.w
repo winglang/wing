@@ -10,7 +10,7 @@ let globalMapOfNum = Map<num>{ "a" => -5, "b" => 2 };
 let globalSetOfStr = Set<str>{ "a", "b" };
 
 class First {
-  public myResource: cloud.Bucket;
+  pub myResource: cloud.Bucket;
 
   init() {
     this.myResource = new cloud.Bucket();
@@ -18,8 +18,8 @@ class First {
 }
 
 class Another {
-  public myField: str;
-  public first: First;
+  pub myField: str;
+  pub first: First;
 
   init () {
     this.myField = "hello!";
@@ -30,12 +30,12 @@ class Another {
     assert(globalCounter.peek() == 0);
   }
 
-  public inflight myMethod(): num {
+  pub inflight myMethod(): num {
     globalCounter.inc();
     return globalCounter.peek();
   }
 
-  public static inflight myStaticMethod(): num {
+  pub static inflight myStaticMethod(): num {
     return globalCounter.peek();
   }
 }
@@ -51,7 +51,7 @@ class MyResource {
     let $parentThis = this;
 
     class R impl cloud.ITopicOnMessageHandler {
-      public inflight handle() {
+      pub inflight handle() {
         globalCounter.inc();
         $parentThis.localCounter.inc();
       }
@@ -59,7 +59,7 @@ class MyResource {
     this.localTopic.onMessage(new R());
   }
 
-  public inflight myPut() {
+  pub inflight myPut() {
     this.localTopic.publish("hello");
     globalBucket.put("key", "value");
     assert(globalStr == "hello");

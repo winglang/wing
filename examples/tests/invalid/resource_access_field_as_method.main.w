@@ -1,5 +1,5 @@
 class SomeResource {
-    public name: str;
+    pub name: str;
     init() {
         this.name = "John Doe";
     }

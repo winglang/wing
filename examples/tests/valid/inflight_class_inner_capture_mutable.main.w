@@ -5,7 +5,7 @@ test "inner inflight class capture immutable" {
   let var i = 10;
 
   class Inner {
-    public dang(): num {
+    pub dang(): num {
       y.push(2);
     
       // since the inner class is defined within the same scope, it is actually possible to reassign

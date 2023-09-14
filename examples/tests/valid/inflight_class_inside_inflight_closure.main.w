@@ -5,7 +5,7 @@ class PreflightClass {
   init() {
     this.b = new cloud.Bucket();
   }
-  public preflight_method(): cloud.Function {
+  pub preflight_method(): cloud.Function {
     let inflight_closure = inflight (payload: str) => {
       this.b.put("k","v");  // Here `this` is the parent class instance
       inflight class InflightClass {
@@ -13,7 +13,7 @@ class PreflightClass {
         init() {
           this.field = "value";
         }
-        public inflight method() {
+        pub inflight method() {
           assert(this.field == "value"); // Here `this` is the inflight class instance
         }
       }
@@ -34,7 +34,7 @@ test "it works" {
 test "inflight class inside closure captures from closure" {
   let x = 12;
   class Foo {
-    public getX(): num { return x; }
+    pub getX(): num { return x; }
   }
 
   let foo = new Foo();

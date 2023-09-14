@@ -687,17 +687,17 @@ class Bar extends Foo {
   }
 }
 ```
-The `public` access modifier makes the class member accessible from anywhere. 
+The `pub` access modifier makes the class member accessible from anywhere. 
 Interface members are always public. 
-Implementing interface members in a class requires explicitly flagging them as `public`.
+Implementing interface members in a class requires explicitly flagging them as `pub`.
 ```TS
 interface FooInterface {
-  public interface_method(): void; // Interface definitions are always implicitly `public`
+  interface_method(): void; // Interface definitions are always implicitly `pub`
 }
 
 class Foo impl FooInterface {
-  public public_method() {} // This can be accessed from outside of the class implemenetation
-  public interface_method() {} // This must be explicitly defined as `public` since it's an interface implementation
+  pub public_method() {} // This can be accessed from outside of the class implemenetation
+  pub interface_method() {} // This must be explicitly defined as `pub` since it's an interface implementation
 }
 let f = new Foo();
 f.public_method(); // We can call this method from outside the class - it's public
@@ -708,12 +708,12 @@ Struct fields are always public and do not have access modifiers.
 
 #### 1.5.1 Method overriding and access modifiers
 Private methods cannot be overriden. 
-Overriding a method of a parent class requires the parent class's method to be either `public` or `protected`.
+Overriding a method of a parent class requires the parent class's method to be either `pub` or `protected`.
 The overriding method can have either the same access modifier as the original method or a more permissive one.
 You cannot "decrease" the access level down the inheritence hierarchy, only "increase" it. 
 In practice this means:
-* `protected` methods can be overidden by either a `protected` or a `public` method.
-* `public` methods can be overriden by a `public` method.
+* `protected` methods can be overidden by either a `protected` or a `pub` method.
+* `pub` methods can be overriden by a `pub` method.
 
 Note that method overriding only applies to instance methods. `static` methods are not treated as part of the inheritence hierarcy.
 
@@ -1131,7 +1131,7 @@ The following features are not yet implemented, but we are planning to add them 
 
 ### 1.14 Roadmap
 
-* Module type visibility (exports/`public` types) is not implemented yet - see https://github.com/winglang/wing/issues/130 to track.
+* Module type visibility (exports/`pub` types) is not implemented yet - see https://github.com/winglang/wing/issues/130 to track.
 * `internal` access modifier is not yet implemented - see https://github.com/winglang/wing/issues/4156 to track.
 
 ## 2. Statements
@@ -1376,7 +1376,7 @@ class Bar {
     this.z = new Foo();
     this.log(); // OK to call here
   }
-  public log() {
+  pub log() {
     log("${this.y}");
   }
 }
@@ -1397,7 +1397,7 @@ their "strict" mode.
 class Foo {
   x: num;
   init() { this.x = 0; }
-  public method() { }
+  pub method() { }
 }
 class Boo extends Foo {
   init() {
@@ -1415,7 +1415,7 @@ Classes can implement interfaces iff the interfaces do not contain `inflight`.
 class Foo {
   x: num;
   init() { this.x = 0; }
-  public method() { }
+  pub method() { }
 }
 class Boo extends Foo {
   init() { super(); this.x = 10; }

@@ -4,13 +4,13 @@ bring "./bar.w" as bar;
 bring "../baz.w" as baz;
 
 class Foo {
-  public static foo(): str {
+  pub static foo(): str {
     return "foo";
   }
-  public static bar(): str {
+  pub static bar(): str {
     return bar.Bar.bar();
   }
-  public static baz(): str {
+  pub static baz(): str {
     return baz.Baz.baz();
   }
 }

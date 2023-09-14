@@ -9,7 +9,7 @@ inflight class BinaryOperation {
     this.rhs = rhs;
   }
 
-  public add(): num {
+  pub add(): num {
     return this.lhs + this.rhs;
   }
 }

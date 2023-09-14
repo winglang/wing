@@ -5,7 +5,7 @@ util.sleep(1s);
 //^^^^^^^^^^^^^^ Cannot call into inflight phase while preflight
 
 class Foo {
-  public inflight do() {}
+  pub inflight do() {}
 }
 let foo = new Foo();
 // Call an inflight method

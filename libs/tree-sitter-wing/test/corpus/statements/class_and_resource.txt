@@ -74,14 +74,14 @@ class A {
     inflight init() {}
     preflight_func() {}
     async preflight_func() {}
-    public preflight_func2() {}
+    pub preflight_func2() {}
     inflight inflight_func() {}
-    public inflight inflight_func2(): num {}
+    pub inflight inflight_func2(): num {}
     protected inflight inflight_func3(): num {}
     pf_member: str;
     internal internal_member: str;
     inflight if_member: str;
-    public inflight var if_member2: str;
+    pub inflight var if_member2: str;
     protected inflight var if_member3: str;
     static inflight inflight_field: num;
     static inflight inflight_method() {}

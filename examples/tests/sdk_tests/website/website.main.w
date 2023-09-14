@@ -5,7 +5,7 @@ let w = new cloud.Website(path: "./website");
 let config = Json { json: 1 };
 
 class Util {
-  extern "../external/fs.js" public static readFile(path: str): str;    
+  extern "../external/fs.js" pub static readFile(path: str): str;    
 }
  
 let indexFile = Util.readFile("./website/website/index.html");

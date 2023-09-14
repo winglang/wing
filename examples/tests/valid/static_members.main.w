@@ -1,13 +1,13 @@
 bring cloud;
 
 class Foo {
-  public instanceField: num;
+  pub instanceField: num;
 
   // TODO: Static field initialization not supported yet (https://github.com/winglang/wing/issues/1668)
   // static staticField: str = "Static resource value"; 
   // static inflight inflightStaticField: str = "Inflight static resource value";
 
-  public static m(): num { return 99; }
+  pub static m(): num { return 99; }
 
   init() {
     this.instanceField = 100;
@@ -27,10 +27,10 @@ assert(Foo.m() == 99);
 test "test" {
   inflight class InflightClass {
     init() {}
-    public inflight inflightMethod(): str {
+    pub inflight inflightMethod(): str {
       return "Inflight method";
     }
-    public static inflight staticInflightMethod(): str {
+    pub static inflight staticInflightMethod(): str {
       return "Static inflight method";
     }
 

@@ -9,12 +9,12 @@ class Another {
     this.myQueue = new cloud.Queue();
   }
 
-  public inflight inflightReturnsResource(): cloud.Queue {
+  pub inflight inflightReturnsResource(): cloud.Queue {
     return this.myQueue;
 //              ^^^^^^^^ Cannot qualify access to a lifted object
   }
 
-  public inflight inflightReturnsResource2(): cloud.Queue {
+  pub inflight inflightReturnsResource2(): cloud.Queue {
     return globalQueue;
 //         ^^^^^^^^^^^^ Cannot qualify access to a lifted object
   }
@@ -27,7 +27,7 @@ class Test {
     this.another = new Another();
   }
 
-  public inflight test() {
+  pub inflight test() {
     let q = this.another.inflightReturnsResource();
     q.push("push!");
 

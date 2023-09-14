@@ -13,7 +13,7 @@ inflight class NotGoo {
 test "f" {
 
   inflight class YesGoo impl IGoo {
-    public notHandle(): void {
+    pub notHandle(): void {
       log("i am goo");
     }
   }

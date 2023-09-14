@@ -48,7 +48,7 @@ fn call_static_inflight_from_static_inflight() {
 	assert_compile_ok!(
 		r#"
     class A {
-      public static inflight foo() { log("hello"); }
+      pub static inflight foo() { log("hello"); }
     }
 
     inflight class B {
@@ -66,7 +66,7 @@ fn static_local_inflight_class() {
 		r#"
     test "test" {
       class A {
-        public static foo() { log("hello"); }
+        pub static foo() { log("hello"); }
       }
 
       class B {
@@ -86,7 +86,7 @@ fn static_external_inflight_class() {
 	assert_compile_ok!(
 		r#"
     inflight class A {
-      public static foo() { log("hello"); }
+      pub static foo() { log("hello"); }
     }
 
     test "test" {
@@ -106,7 +106,7 @@ fn static_external_preflight_class() {
 	assert_compile_ok!(
 		r#"
     class A {
-      public static inflight foo() { log("hello"); }
+      pub static inflight foo() { log("hello"); }
     }
 
     test "test" {
@@ -177,8 +177,8 @@ fn preflight_object() {
 	assert_compile_ok!(
 		r#"
     class A {
-      public inflight hello() {}
-      public inflight goodbye() {}
+      pub inflight hello() {}
+      pub inflight goodbye() {}
     }
     let pf_obj = new A();
     test "test" {
@@ -247,7 +247,7 @@ fn preflight_nested_object_with_operations() {
     bring cloud;
     let b = new cloud.Bucket();
     class A {
-      public bucky: cloud.Bucket;
+      pub bucky: cloud.Bucket;
       init() {
         this.bucky = b;
       }
@@ -269,7 +269,7 @@ fn static_inflight_operation() {
     let b = new cloud.Bucket();
 
     class A {
-      public static inflight myop() {
+      pub static inflight myop() {
         b.list();
       }
     }
@@ -399,7 +399,7 @@ fn capture_type_static_method() {
 	assert_compile_ok!(
 		r#"
     class Foo {
-      public static inflight bars(): str { return "bar"; }
+      pub static inflight bars(): str { return "bar"; }
     }
 
     test "test" {
@@ -414,7 +414,7 @@ fn capture_type_static_method_inflight_class() {
 	assert_compile_ok!(
 		r#"
     inflight class Foo {
-      public static bar(): str { return "bar"; }
+      pub static bar(): str { return "bar"; }
     }
 
     test "test" {
@@ -545,7 +545,7 @@ fn capture_identifier_from_preflight_scope_with_method_call() {
 	assert_compile_ok!(
 		r#"
     class Foo {
-      public inflight bar() {}
+      pub inflight bar() {}
     }
 
     let f = new Foo();
@@ -563,7 +563,7 @@ fn capture_identifier_from_preflight_scope_with_nested_object() {
     bring cloud;
 
     class Foo {
-      public b: cloud.Bucket;
+      pub b: cloud.Bucket;
       init() {
         this.b = new cloud.Bucket();
       }
@@ -692,8 +692,8 @@ fn preflight_value_field() {
 	assert_compile_ok!(
 		r#"
     class MyType {
-      public name: str;
-      public last: str;
+      pub name: str;
+      pub last: str;
 
       init() {
         this.name = "hello";
@@ -735,13 +735,13 @@ fn nested_preflight_operation() {
 		r#"
     bring cloud;
     class YourType {
-      public b: cloud.Bucket;
+      pub b: cloud.Bucket;
       init() {
         this.b = new cloud.Bucket();
       }
     }
     class MyType {
-      public y: YourType;
+      pub y: YourType;
       init() {
         this.y = new YourType();
       }
@@ -762,7 +762,7 @@ fn nested_inflight_after_preflight_operation() {
 		r#"
     bring cloud;
     class YourType {
-      public inflight b: str;
+      pub inflight b: str;
       inflight init() {
         this.b = "hello";
       }
@@ -802,7 +802,7 @@ fn preflight_object_through_property() {
     bring cloud;
 
     class MyType {
-      public b: cloud.Bucket;
+      pub b: cloud.Bucket;
       init() {
         this.b = new cloud.Bucket();
       }
@@ -837,7 +837,7 @@ fn reference_static_inflight() {
 	assert_compile_ok!(
 		r#"
     class MyType {
-      public static inflight myStaticMethod(): str {}
+      pub static inflight myStaticMethod(): str {}
     }
 
     test "test" {
@@ -858,7 +858,7 @@ fn reference_static_inflight_which_references_preflight_object() {
     let b = new cloud.Bucket();
 
     class MyType {
-      public static inflight staticMethod(): str {
+      pub static inflight staticMethod(): str {
         b.list();
         return "foo";
       }
@@ -962,7 +962,7 @@ fn transitive_reference() {
         return this.b.list().length == 0;
       }
 
-      public inflight checkIfEmpty() {
+      pub inflight checkIfEmpty() {
         if this.isEmpty() {
           log("empty!");
         }
@@ -1012,13 +1012,13 @@ fn transitive_reference_via_static() {
     let b = new cloud.Bucket();
     
 		class MyType {
-      public static inflight putInBucket() {
+      pub static inflight putInBucket() {
         b.put("in", "bucket");
       }
     }
 
     class YourType {
-      public inflight putIndirect() {
+      pub inflight putIndirect() {
         MyType.putInBucket();
       }
     }
@@ -1053,7 +1053,7 @@ fn transitive_reference_via_inflight_class() {
     let b = new cloud.Bucket();
 
 		inflight class MyInflightClass {
-      public putInBucket() {
+      pub putInBucket() {
         b.put("in", "bucket");
       }
     }
@@ -1071,7 +1071,7 @@ fn reference_inflight_class() {
 	assert_compile_ok!(
 		r#"
     inflight class Foo {
-      public static a(): str { return "a"; }
+      pub static a(): str { return "a"; }
     }
 
     test "test" {
@@ -1691,7 +1691,7 @@ fn indirect_capture() {
         b.list();
       }
 
-      public inflight goo() {
+      pub inflight goo() {
         this.foo();
       }
     }
@@ -1746,7 +1746,7 @@ fn lift_this() {
       inflight bar(): num { 
         return this.x;
       }
-      public inflight foo(): num { 
+      pub inflight foo(): num { 
         return this.bar() / 2;
       }
     }
@@ -1859,7 +1859,7 @@ fn closure_field() {
         };
       }
     
-      public inflight foo(): str {
+      pub inflight foo(): str {
         return this.closure("anything");
       }
     }
@@ -1910,7 +1910,7 @@ fn lift_var_with_this() {
 	assert_compile_ok!(
 		r#"
     class Foo {
-      public value: str;
+      pub value: str;
       init() { this.value = "hello"; }
     }
 

@@ -4,14 +4,14 @@ class MyResource {
   api: cloud.Api;
   url: str;
 
-  extern "./url_utils.js" public static inflight isValidUrl(url: str): bool;
+  extern "./url_utils.js" pub static inflight isValidUrl(url: str): bool;
 
   init() {
     this.api = new cloud.Api();
     this.url = this.api.url;  
   }
 
-  public inflight foo() {
+  pub inflight foo() {
     assert(MyResource.isValidUrl(this.url));
     assert(MyResource.isValidUrl(this.api.url));
   }
