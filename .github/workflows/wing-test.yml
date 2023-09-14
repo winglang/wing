@@ -5,7 +5,7 @@ on:
 env:
   AWS_REGION: "us-east-1"
   NODE_VERSION: "18.16.0"
-  PR: ${{github.event.review.state }}
+  PR: ${{toJson( github.event) }}
 
 permissions:
   pull-requests: write
@@ -89,6 +89,7 @@ jobs:
             wing test -t ${{ matrix.target }} ${{ needs.setup.outputs.files }}
 
       - name: Post preview comment
+        if: failure() || !failure()
         uses: thollander/actions-comment-pull-request@v2
         with:
           message: |
