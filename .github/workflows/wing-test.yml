@@ -5,7 +5,7 @@ on:
 env:
   AWS_REGION: "us-east-1"
   NODE_VERSION: "18.16.0"
-  PR: ${{toJson( github.event) }}
+  PR: ${{toJson( github.event.review) }}
 
 permissions:
   pull-requests: write
