@@ -111,6 +111,7 @@ export abstract class Table extends Resource {
       TableInflightMethods.UPDATE,
       TableInflightMethods.DELETE,
       TableInflightMethods.GET,
+      TableInflightMethods.TRYGET,
       TableInflightMethods.LIST,
     ];
   }
@@ -156,9 +157,17 @@ export interface ITableClient {
    * Get a row from the table, by primary key.
    * @param key primary key to search.
    * @returns get the row from table.
+   * @throws if no row with the given key exists.
    * @inflight
    */
   get(key: string): Promise<Json>;
+  /**
+   * Get a row from the table if exists, by primary key.
+   * @param key primary key to search.
+   * @returns get the row from table if it exists, nil otherwise.
+   * @inflight
+   */
+  tryGet(key: string): Promise<Json | undefined>;
   /**
    * List all rows in the table.
    * @returns list all row.
@@ -183,6 +192,8 @@ export enum TableInflightMethods {
   DELETE = "delete",
   /** `Table.get` */
   GET = "get",
+  /** `Table.tryGet` */
+  TRYGET = "tryGet",
   /** `Table.list` */
   LIST = "list",
 }
