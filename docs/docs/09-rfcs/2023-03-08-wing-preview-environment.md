@@ -30,16 +30,16 @@ Wing Cloud will be integrated with GitHub.
 
 1. On https://wing.cloud website click on sign in.
 2. Authenticate using your GitHub account.
-3. If you were already signed in, you will see the Wing Cloud dashboard (under https://wing.cloud directly).
+3. After signinig in, you will be redirected to https://wing.cloud/dashboard.
 
 #### Redirect to sign-in process from a Preview Environment URL (#2)
 
 1. If you try to access a preview environment URL while you are not signed in to Wing Cloud (from the PR comment for example), you will be temporarily redirected to the Wing Cloud sign-in flow.
-2. Once singed in, you will be redirected to the preview environment URL.
+2. Once singed in, you will be redirected back to the preview environment URL.
 
 #### Wing Cloud Dashboard for Signed-In Users (#3)
 
-1. Once signed in, you will automatically see Wing Cloud for signed-in users (under https://wing.cloud directly).
+1. Once signed in, you will be able to navigate directly to https://wing.cloud/dashboard.
 2. You can see and manage all your projects and teams.
 3. You will see all preview environments associated with your personal account and teams you are member in.
 4. In order to see a preview environment, just click on the preview environment URL from the list of all your preview environments.
@@ -52,7 +52,7 @@ Wing Cloud will be integrated with GitHub.
 3. Define your secret values.
 4. Make sure there's a `main.w` file in the root of the repository.
 5. Click on "Deploy".
-6. You'll be redirected to your new project's page (https://wing.cloud/-user/-project).
+6. You'll be redirected to your new project's page (https://wing.cloud/dashboard/-user/-project).
 
 #### Create a new Team (#5)
 
@@ -67,13 +67,13 @@ Wing Cloud will be integrated with GitHub.
 3. Define your secret values.
 4. Make sure there's a `main.w` file in the root of the repository.
 5. Click on "Deploy".
-6. You'll be redirected to your new project's page (https://wing.cloud/-team/-project).
+6. You'll be redirected to your new project's page (https://wing.cloud/dashboard/-team/-project).
 
 #### Preview Environment for production branch (#7)
 
 For the repository production branch, there is a single preview environment that will constantly be up-to-date with the latest code committed.
 A link to the preview environment is available in the repository main page ("About" section).
-Production branch environment url structure is: `https://wing.cloud/-account/-project/-branch`
+Production branch environment url structure is: `https://wing.cloud/-account/dashboard/-project/-branch`
 Once the installation of the Wing Cloud application is completed, an initial preview environment will be created and will be available in the repository main page.
 
 #### Preview Environments for Pull Requests (#8)
@@ -83,17 +83,17 @@ Provide a streamlined process for updating a pull request preview environment, e
 
 1. Provide a real-time build and deployment status updates
 2. While preview environment is being updated, the user that is currently using the environment will be notified and will be able to refresh the page to get the latest changes.
-3. Ensure a consistent and unique url for each preview environment. The url structure: `https://wing.cloud/-account/-project/-branch`
-4. Provide the ability to download the preview environment deployment logs for debugging purposes in case of failure, logs urls structure is: `https://wing.cloud/-account/-project/-branch/logs/build/`
+3. Ensure a consistent and unique url for each preview environment. The url structure: `https://wing.cloud/dashboard/-account/-project/-branch` (account is a <user> or a <team>)
+4. Provide the ability to download the preview environment deployment logs for debugging purposes in case of failure, logs urls structure is: `https://wing.cloud/dashboard/-account/-project/-branch/logs/build/`
 
 PR comment example (only one entry point will be supported):
 
 | Entry Point     | Status                                                                           | Preview                                                       | Tests                                                                                                                                                  | Updated (UTC)       |
 | --------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------- |
-| main.w          | ✅ Ready ([logs](https://wing.cloud/-account/-project/-branch/logs/build/))      | [Visit Preview](https://wing.cloud/-account/-project/-branch) | ✅ [sanity](https://wing.cloud/-account/-project/-branch/logs/tests/sanity) <br> ✅ [E2E](https://wing.cloud/-account/-project/-branch/logs/tests/E2E) | Jul 31, 2023 8:01am |
-| failed.main.w   | ❌ Failed ([logs](https://wing.cloud/-account/-project/-branch/logs/build/))     |                                                               |                                                                                                                                                        | Jul 31, 2023 8:01am |
-| building.main.w | 🔄 Building ([logs](https://wing.cloud/-account/-project/-branch/logs/build/))   |                                                               |                                                                                                                                                        | Jul 31, 2023 8:01am |
-| stale.main.w    | ⏸️ Stale ([lean more](https://wing.cloud/-account/-project/-branch/logs/build/)) |                                                               |                                                                                                                                                        | Jul 31, 2023 8:01am |
+| main.w          | ✅ Ready ([logs](https://wing.cloud/dashboard/-account/-project/-branch/logs/build/))      | [Visit Preview](https://wing.cloud/dashboard/-account/-project/-branch) | ✅ [sanity](https://wing.cloud/dashboard/-account/-project/-branch/logs/tests/sanity) <br> ✅ [E2E](https://wing.cloud/dashboard/-account/-project/-branch/logs/tests/E2E) | Jul 31, 2023 8:01am |
+| failed.main.w   | ❌ Failed ([logs](https://wing.cloud/dashboard/-account/-project/-branch/logs/build/))     |                                                               |                                                                                                                                                        | Jul 31, 2023 8:01am |
+| building.main.w | 🔄 Building ([logs](https://wing.cloud/dashboard/-account/-project/-branch/logs/build/))   |                                                               |                                                                                                                                                        | Jul 31, 2023 8:01am |
+| stale.main.w    | ⏸️ Stale ([lean more](https://wing.cloud/dashboard/-account/-project/-branch/logs/build/)) |                                                               |                                                                                                                                                        | Jul 31, 2023 8:01am |
 
 #### Preview Environment Environment Variables (Secrets) (#9)
 
@@ -103,7 +103,7 @@ The project management dashboard will include a section to manage the secrets of
 
 Upon PR creation and code changes, Wing Cloud Preview Environments will automatically run all tests defined for the entry point.
 For each test run, a new simulator will be created and will be destroyed upon test completion.
-The test results will be available in the PR comment with links to the tests logs (`https://wing.cloud/-account/-project/-branch/logs/tests/<test-name>`)
+The test results will be available in the PR comment with links to the tests logs (`https://wing.cloud/dashboard/-account/-project/-branch/logs/tests/<test-name>`)
 
 #### Running Tests Manually From Wing Console (#11)
 
