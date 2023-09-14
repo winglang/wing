@@ -100,6 +100,9 @@ class $Root extends $stdlib.std.Resource {
     const jsonArray = [1, 2, 3];
     const jsonMap = ({"1": 1,"2": 2,"3": 3});
     const jsonObj = ({"boom": 123});
+    for (const j of [jsonNumber, jsonBool, jsonArray, jsonMap, jsonObj]) {
+      {((cond) => {if (!cond) throw new Error("assertion failed: j == Json.parse(Json.stringify(j))")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(j,(JSON.parse(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([j]))))))};
+    }
     const jsonMutObj = ({"hello": 123,"world": [1, "cat", 3],"boom boom": ({"hello": 1233})});
     const message = "Coolness";
     ((obj, args) => { obj[args[0]] = args[1]; })(jsonMutObj, ["hello",message]);
