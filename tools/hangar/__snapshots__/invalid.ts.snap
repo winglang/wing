@@ -15,240 +15,191 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
-exports[`access_modifiers.w 1`] = `
-"error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
-   --> ../../../examples/tests/invalid/access_modifiers.w:98:1
-   |
-98 | let foo = new Foo();
-   | ^^^^^^^^^^^^^^^^^^^^ Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
-
-
-error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
-    --> ../../../examples/tests/invalid/access_modifiers.w:100:1
-    |
-100 | log(foo.protected_field);
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^ Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
-
-
-error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
-    --> ../../../examples/tests/invalid/access_modifiers.w:102:1
-    |
-102 | log(foo.private_field);
-    | ^^^^^^^^^^^^^^^^^^^^^^^ Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
-
-
-error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
-    --> ../../../examples/tests/invalid/access_modifiers.w:104:1
-    |
-104 | log(foo.public_field);
-    | ^^^^^^^^^^^^^^^^^^^^^^ Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
-
-
-error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
-    --> ../../../examples/tests/invalid/access_modifiers.w:105:1
-    |
-105 | Foo.public_static_method();
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
-
-
-error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
-    --> ../../../examples/tests/invalid/access_modifiers.w:106:1
-    |
-106 | Foo.protected_static_method();
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
-
-
-error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
-    --> ../../../examples/tests/invalid/access_modifiers.w:108:1
-    |
-108 | Foo.private_static_method();
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
-
-
-error: Method \\"private_method\\" is private in \\"Foo\\" but it's an implementation of \\"SomeInterface\\". Interface members must be public.
-   --> ../../../examples/tests/invalid/access_modifiers.w:40:3
+exports[`access_modifiers.main.w 1`] = `
+"error: Method \\"private_method\\" is private in \\"Foo\\" but it's an implementation of \\"SomeInterface\\". Interface members must be public.
+   --> ../../../examples/tests/invalid/access_modifiers.main.w:40:3
    |
 40 |   private_method() {}
    |   ^^^^^^^^^^^^^^ Method \\"private_method\\" is private in \\"Foo\\" but it's an implementation of \\"SomeInterface\\". Interface members must be public.
 
 
 error: Method \\"protected_method\\" is protected in \\"Foo\\" but it's an implementation of \\"SomeInterface\\". Interface members must be public.
-   --> ../../../examples/tests/invalid/access_modifiers.w:38:13
+   --> ../../../examples/tests/invalid/access_modifiers.main.w:38:13
    |
 38 |   protected protected_method() {}
    |             ^^^^^^^^^^^^^^^^ Method \\"protected_method\\" is protected in \\"Foo\\" but it's an implementation of \\"SomeInterface\\". Interface members must be public.
 
 
 error: Cannot override private method \\"method\\" of \\"Foo\\"
-   --> ../../../examples/tests/invalid/access_modifiers.w:49:3
+   --> ../../../examples/tests/invalid/access_modifiers.main.w:49:3
    |
 49 |   method() {
    |   ^^^^^^ Cannot override private method \\"method\\" of \\"Foo\\"
 
 
 error: Cannot override private method \\"method\\" of \\"Bar\\"
-   --> ../../../examples/tests/invalid/access_modifiers.w:72:3
+   --> ../../../examples/tests/invalid/access_modifiers.main.w:72:3
    |
 72 |   method() {
    |   ^^^^^^ Cannot override private method \\"method\\" of \\"Bar\\"
 
 
 error: Cannot access protected member \\"protected_field\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.w:100:9
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:100:9
     |
 100 | log(foo.protected_field);
     |         ^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_field\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_field\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.w:102:9
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:102:9
     |
 102 | log(foo.private_field);
     |         ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Foo\\"
 
 
 error: Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.w:106:5
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:106:5
     |
 106 | Foo.protected_static_method();
     |     ^^^^^^^^^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.w:108:5
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:108:5
     |
 108 | Foo.private_static_method();
     |     ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
 
 
 error: Cannot override public method \\"public_method\\" of \\"Foo\\" with a private method
-    --> ../../../examples/tests/invalid/access_modifiers.w:148:3
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:148:3
     |
 148 |   public_method() {}
     |   ^^^^^^^^^^^^^ Cannot override public method \\"public_method\\" of \\"Foo\\" with a private method
 
 
 error: Cannot override protected method \\"protected_method\\" of \\"Foo\\" with a private method
-    --> ../../../examples/tests/invalid/access_modifiers.w:150:3
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:150:3
     |
 150 |   protected_method() {}
     |   ^^^^^^^^^^^^^^^^ Cannot override protected method \\"protected_method\\" of \\"Foo\\" with a private method
 
 
 error: Cannot override private method \\"private_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.w:152:3
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:152:3
     |
 152 |   private_method() {}
     |   ^^^^^^^^^^^^^^ Cannot override private method \\"private_method\\" of \\"Foo\\"
 
 
 error: Cannot override public method \\"public_method\\" of \\"Foo\\" with a protected method
-    --> ../../../examples/tests/invalid/access_modifiers.w:157:13
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:157:13
     |
 157 |   protected public_method() {}
     |             ^^^^^^^^^^^^^ Cannot override public method \\"public_method\\" of \\"Foo\\" with a protected method
 
 
 error: Cannot override private method \\"private_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.w:160:13
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:160:13
     |
 160 |   protected private_method() {}
     |             ^^^^^^^^^^^^^^ Cannot override private method \\"private_method\\" of \\"Foo\\"
 
 
 error: Cannot override private method \\"private_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.w:167:10
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:167:10
     |
 167 |   public private_method() {}
     |          ^^^^^^^^^^^^^^ Cannot override private method \\"private_method\\" of \\"Foo\\"
 
 
 error: Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.w:128:9
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:128:9
     |
 128 |     Foo.protected_static_method();
     |         ^^^^^^^^^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.w:130:9
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:130:9
     |
 130 |     Foo.private_static_method();
     |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
 
 
 error: Cannot access protected member \\"protected_field\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.w:114:13
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:114:13
     |
 114 |     log(foo.protected_field);
     |             ^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_field\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_field\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.w:116:13
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:116:13
     |
 116 |     log(foo.private_field);
     |             ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Foo\\"
 
 
 error: Cannot access protected member \\"protected_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.w:120:9
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:120:9
     |
 120 |     foo.protected_method();
     |         ^^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_method\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.w:122:9
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:122:9
     |
 122 |     foo.private_method();
     |         ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-   --> ../../../examples/tests/invalid/access_modifiers.w:88:9
+   --> ../../../examples/tests/invalid/access_modifiers.main.w:88:9
    |
 88 |     Foo.private_static_method();
    |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Bar\\"
-   --> ../../../examples/tests/invalid/access_modifiers.w:93:9
+   --> ../../../examples/tests/invalid/access_modifiers.main.w:93:9
    |
 93 |     Bar.private_static_method();
    |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Bar\\"
 
 
 error: Cannot access private member \\"private_field\\" of \\"Baz\\"
-   --> ../../../examples/tests/invalid/access_modifiers.w:75:14
+   --> ../../../examples/tests/invalid/access_modifiers.main.w:75:14
    |
 75 |     log(this.private_field);
    |              ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Baz\\"
 
 
 error: Cannot access private member \\"private_method\\" of \\"Baz\\"
-   --> ../../../examples/tests/invalid/access_modifiers.w:80:10
+   --> ../../../examples/tests/invalid/access_modifiers.main.w:80:10
    |
 80 |     this.private_method();
    |          ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Baz\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-   --> ../../../examples/tests/invalid/access_modifiers.w:65:9
+   --> ../../../examples/tests/invalid/access_modifiers.main.w:65:9
    |
 65 |     Foo.private_static_method();
    |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_field\\" of \\"Bar\\"
-   --> ../../../examples/tests/invalid/access_modifiers.w:52:14
+   --> ../../../examples/tests/invalid/access_modifiers.main.w:52:14
    |
 52 |     log(this.private_field);
    |              ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Bar\\"
 
 
 error: Cannot access private member \\"private_method\\" of \\"Bar\\"
-   --> ../../../examples/tests/invalid/access_modifiers.w:57:10
+   --> ../../../examples/tests/invalid/access_modifiers.main.w:57:10
    |
 57 |     this.private_method();
    |          ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Bar\\"
@@ -1636,30 +1587,9 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
-exports[`jsii_access_modifiers.w 1`] = `
-"error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
-  --> ../../../examples/tests/invalid/jsii_access_modifiers.w:4:1
-  |
-4 | let b = new cloud.Bucket();
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
-
-
-error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
-   --> ../../../examples/tests/invalid/jsii_access_modifiers.w:13:1
-   |
-13 | b.createTopic(cloud.BucketEventType.CREATE);
-   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
-
-
-error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
-   --> ../../../examples/tests/invalid/jsii_access_modifiers.w:17:1
-   |
-17 | b.addObject(\\"k\\", \\"v\\");
-   | ^^^^^^^^^^^^^^^^^^^^^^ Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
-
-
-error: Cannot access protected member \\"createTopic\\" of \\"Bucket\\"
-   --> ../../../examples/tests/invalid/jsii_access_modifiers.w:13:3
+exports[`jsii_access_modifiers.main.w 1`] = `
+"error: Cannot access protected member \\"createTopic\\" of \\"Bucket\\"
+   --> ../../../examples/tests/invalid/jsii_access_modifiers.main.w:13:3
    |
 13 | b.createTopic(cloud.BucketEventType.CREATE);
    |   ^^^^^^^^^^^ Cannot access protected member \\"createTopic\\" of \\"Bucket\\"
