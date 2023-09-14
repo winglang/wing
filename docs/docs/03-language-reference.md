@@ -1094,24 +1094,16 @@ Execution model currently is delegated to the JSII target. This means if you are
 targeting JSII with Node, Wing will use the event based loop that Node offers.
 
 In Wing, writing and executing at root block scope level is forbidden except for
-the entrypoint of the program. Root block scope is considered special and
-compiler generates special instructions to properly assign all preflight classes to
-their respective scopes recursively down the constructs tree based on entry.
+in entrypoint files (designated by `main.w` or `*.main.w`). Root block scope is
+considered special and compiler generates special instructions to properly
+assign all preflight classes to their respective scopes recursively down the
+constructs tree based on entry.
 
-Entrypoint is always a Wing source with an extension of `.w`. Within this entry
-point, a root preflight class is made available for all subsequent preflight classes that are
-initialized and instantiated. Type of the root class is determined by the
-target being used by the compiler. The root class might be of type `App` in
-AWS CDK or `TerraformApp` in case of CDK for Terraform target.
-
-> Following "shimming" is only done for the entrypoint file and nowhere else.
-> Type of the "shim" changes from `cdk.Stack` to `TerraformStack` for cdk-tf.
-
-> ```TS
-> // Wing Entrypoint Code:
-> let a = MyResource();
-> let b = MyResource() be "my-resource";
-> ```
+Within the entrypoint file, a root preflight class is made available for all
+subsequent preflight classes that are initialized and instantiated. The type of
+the root class is determined by the target being used by the compiler. The root
+class might be of type `aws-cdk-lib.App` in AWS CDK or `cdktf.TerraformApp` in
+case of CDK for Terraform target.
 
 [`▲ top`][top]
 

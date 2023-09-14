@@ -31,10 +31,10 @@ impl<'a> StructSchemaVisitor<'a> {
 		code
 	}
 
-	fn get_struct_schema_field(&self, typ: &UnsafeRef<Type>, env: &SymbolEnv) -> String {
+	fn get_struct_schema_field(&self, typ: &UnsafeRef<Type>) -> String {
 		match **typ {
 			Type::String | Type::Number | Type::Boolean => {
-				format!("{{ type: \"{}\" }}", self.jsify.jsify_type(typ).unwrap())
+				format!("{{ type: \"{}\" }}", JSifier::jsify_type(typ).unwrap())
 			}
 			Type::Struct(ref s) => {
 				let mut code = CodeMaker::default();
@@ -57,7 +57,7 @@ impl<'a> StructSchemaVisitor<'a> {
 					code.line("uniqueItems: true,");
 				}
 
-				code.line(format!("items: {}", self.get_struct_schema_field(t, env)));
+				code.line(format!("items: {}", self.get_struct_schema_field(t)));
 
 				code.close("}");
 				code.to_string().strip_suffix("\n").unwrap().to_string()
@@ -69,13 +69,13 @@ impl<'a> StructSchemaVisitor<'a> {
 				code.line("type: \"object\",");
 				code.line(format!(
 					"patternProperties: {{ \".*\": {} }}",
-					self.get_struct_schema_field(t, env)
+					self.get_struct_schema_field(t)
 				));
 
 				code.close("}");
 				code.to_string().strip_suffix("\n").unwrap().to_string()
 			}
-			Type::Optional(t) => self.get_struct_schema_field(&t, env),
+			Type::Optional(t) => self.get_struct_schema_field(&t),
 			Type::Json(_) => "{ type: \"object\" }".to_string(),
 			_ => "{ type: \"null\" }".to_string(),
 		}
@@ -87,7 +87,7 @@ impl<'a> StructSchemaVisitor<'a> {
 			code.line(format!(
 				"{}: {},",
 				field_name,
-				self.get_struct_schema_field(&kind.as_variable().unwrap().type_, env)
+				self.get_struct_schema_field(&kind.as_variable().unwrap().type_)
 			));
 		}
 		code

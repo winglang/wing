@@ -304,21 +304,21 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	pub fn jsify_type(&self, typ: &Type) -> Option<String> {
+	pub fn jsify_type(typ: &Type) -> Option<String> {
 		match typ {
 			Type::Struct(t) => Some(t.name.name.clone()),
 			Type::String => Some("string".to_string()),
 			Type::Number => Some("number".to_string()),
 			Type::Boolean => Some("boolean".to_string()),
 			Type::Array(t) => {
-				if let Some(inner) = self.jsify_type(&t) {
+				if let Some(inner) = Self::jsify_type(&t) {
 					Some(format!("{}[]", inner))
 				} else {
 					None
 				}
 			}
 			Type::Optional(t) => {
-				if let Some(inner) = self.jsify_type(&t) {
+				if let Some(inner) = Self::jsify_type(&t) {
 					Some(format!("{}?", inner))
 				} else {
 					None
