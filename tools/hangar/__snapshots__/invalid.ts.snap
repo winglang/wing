@@ -108,10 +108,10 @@ error: Cannot override private method \\"private_method\\" of \\"Foo\\"
 
 
 error: Cannot override private method \\"private_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.main.w:167:10
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:167:7
     |
-167 |   public private_method() {}
-    |          ^^^^^^^^^^^^^^ Cannot override private method \\"private_method\\" of \\"Foo\\"
+167 |   pub private_method() {}
+    |       ^^^^^^^^^^^^^^ Cannot override private method \\"private_method\\" of \\"Foo\\"
 
 
 error: Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
@@ -216,8 +216,8 @@ exports[`access_static_from_instance.main.w 1`] = `
 "error: Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
   --> ../../../examples/tests/invalid/access_static_from_instance.main.w:4:3
   |
-4 |   public static f: num;
-  |   ^^^^^^^^^^^^^^^^^^^^^ Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
+4 |   pub static f: num;
+  |   ^^^^^^^^^^^^^^^^^^ Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
 
 
 error: Cannot access static property \\"f\\" from instance

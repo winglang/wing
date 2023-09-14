@@ -10,13 +10,13 @@ source: libs/wingc/src/jsify/tests.rs
     let b = new cloud.Bucket();
     
     class MyType {
-      public static inflight putInBucket() {
+      pub static inflight putInBucket() {
         b.put("in", "bucket");
       }
     }
 
     class YourType {
-      public inflight putIndirect() {
+      pub inflight putIndirect() {
         MyType.putInBucket();
       }
     }
