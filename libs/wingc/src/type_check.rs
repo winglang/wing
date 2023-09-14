@@ -3502,7 +3502,7 @@ impl<'a> TypeChecker<'a> {
 					let class_method_type = class_method_var.type_;
 					self.validate_type(class_method_type, method_type, &ast_class.name);
 					// Make sure the method is public (interface methods must be public)
-					if !matches!(class_method_var.access_modifier, AccessModifier::Public) {
+					if class_method_var.access_modifier != AccessModifier::Public {
 						self.spanned_error(
 							&class_method_var.name,
 							format!(
@@ -4080,7 +4080,7 @@ impl<'a> TypeChecker<'a> {
 		&mut self,
 		method_sig: &ast::FunctionSignature,
 		env: &mut SymbolEnv,
-		instance_type: Option<TypeRef>, // TODO: change to bool, this can be inferred from the env (see `class_type` below)
+		instance_type: Option<TypeRef>,
 		access_modifier: AccessModifier,
 		class_env: &mut SymbolEnv,
 		method_name: &Symbol,
@@ -4091,6 +4091,40 @@ impl<'a> TypeChecker<'a> {
 			.as_mut_function_sig()
 			.expect("Expected method type to be a function")
 			.this_type = instance_type;
+
+		// If this method is overriding a parent method, check access modifiers allow it, note this is only relevant for instance methods
+		if instance_type.is_some() {
+			if let Some(parent_type_env) = class_env.parent {
+				if let LookupResult::Found(SymbolKind::Variable(var), li) = parent_type_env.lookup_ext(method_name, None) {
+					let SymbolEnvKind::Type(method_defined_in) = li.env.kind else {
+						panic!("Expected env to be a type env");
+					};
+					// If parent method is private we don't allow overriding
+					if var.access_modifier == AccessModifier::Private {
+						self.spanned_error(
+							method_name,
+							format!("Cannot override private method \"{method_name}\" of \"{method_defined_in}\""),
+						);
+					} else {
+						// For non private methods, we only allow overriding if the access modifier is the same or more permissive:
+						// - public can override public or protected
+						// - protected can only override protected
+						if !(access_modifier == AccessModifier::Public
+							&& matches!(var.access_modifier, AccessModifier::Public | AccessModifier::Protected)
+							|| access_modifier == AccessModifier::Protected && var.access_modifier == AccessModifier::Protected)
+						{
+							self.spanned_error(
+								method_name,
+								format!(
+									"Cannot override {} method \"{method_name}\" of \"{method_defined_in}\" with a {access_modifier} method",
+									var.access_modifier
+								),
+							);
+						}
+					}
+				}
+			}
+		}
 
 		match class_env.define(
 			method_name,

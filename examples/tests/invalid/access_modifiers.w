@@ -132,5 +132,38 @@ class BarBar {
   }
 }
 
-// TODO: check jsii imported access modifiers
-// TODO: add tests and implement checks for overriding methods with different access modifiers
+// Test overriding methods with different access modifiers
+// to               from
+// private          private   err
+// private          protected err
+// private          public    err
+// protected        private   err
+// protected        protected ok
+// protected        public    err
+// public           private   err
+// public           protected ok
+// public           public    ok
+
+class FooOverrideToPrivate extends Foo {
+  public_method() {}
+  //^ Cannot override
+  protected_method() {}
+  //^ Cannot override
+  private_method() {}
+  //^ Cannot override
+}
+
+class FooOverrideToProtected extends Foo {
+  protected public_method() {}
+  //        ^ Cannot override
+  protected protected_method() {}
+  protected private_method() {}
+  //        ^ Cannot override
+}
+
+class FooOverrideToPublic extends Foo {
+  public public_method() {}
+  public protected_method() {}
+  public private_method() {}
+  //     ^ Cannot override
+}

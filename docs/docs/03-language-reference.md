@@ -706,6 +706,17 @@ f.public_method(); // We can call this method from outside the class - it's publ
 Access modifier rules apply for both fields and methods of a class.
 Struct fields are always public and do not have access modifiers.
 
+#### 1.5.1 Method overriding and access modifiers
+Private methods cannot be overriden. 
+Overriding a method of a parent class requires the parent class's method to be either `public` or `protected`.
+The overriding method can have either the same access modifier as the original method or a more permissive one.
+You cannot "decrease" the access level down the inheritence hierarchy, only "increase" it. 
+In practice this means:
+* `protected` methods can be overidden by either a `protected` or a `public` method.
+* `public` methods can be overriden by a `public` method.
+
+Note that method overriding only applies to instance methods. `static` methods are not treated as part of the inheritence hierarcy.
+
 [`▲ top`][top]
 
 ---
@@ -1435,7 +1446,6 @@ In methods if return type is missing, `: void` is assumed.
 The following features are not yet implemented, but we are planning to add them in the future:
 
 * Overloading class methods (including `init`) - see https://github.com/winglang/wing/issues/3123 to track.
-* Overriding class methods - see https://github.com/winglang/wing/issues/1124 to track.
 * Using the `final` keyword to stop the inheritance chain - see https://github.com/winglang/wing/issues/460 to track. 
 
 [`▲ top`][top]

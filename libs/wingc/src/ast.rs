@@ -521,7 +521,7 @@ pub struct ClassField {
 	pub access_modifier: AccessModifier,
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub enum AccessModifier {
 	Private,
 	Public,
