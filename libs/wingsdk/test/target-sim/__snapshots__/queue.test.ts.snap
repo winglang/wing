@@ -1011,22 +1011,6 @@ async handle(message) {
 `;
 
 exports[`queue with one subscriber, default batch size of 1 1`] = `
-[
-  "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Function created.",
-  "wingsdk.cloud.Queue created.",
-  "wingsdk.sim.EventMapping created.",
-  "Push (messages=A,B).",
-  "Sending messages (messages=[\\"A\\"], subscriber=sim-1).",
-  "Sending messages (messages=[\\"B\\"], subscriber=sim-1).",
-  "wingsdk.sim.EventMapping deleted.",
-  "wingsdk.cloud.Queue deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.TestRunner deleted.",
-]
-`;
-
-exports[`queue with one subscriber, default batch size of 1 2`] = `
 {
   ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
