@@ -91,7 +91,7 @@ jobs:
         with:
           message: |
             **Results for ${{ matrix.target }} SDK spec tests:** 
-            ${{steps.runTest.outputs.results.*[0]}}
+            ${{steps.runTest.outputs.results.*[0][0]}}
           GITHUB_TOKEN: ${{secrets.PROJEN_GITHUB_TOKEN}}
 
       - name: Output Terraform log
