@@ -84,7 +84,11 @@ export class Queue
     return this.context.withTrace({
       message: `Pop ().`,
       activity: async () => {
-        const message = this.messages.shift();
+        // extract a random message from the queue
+        const message = this.messages.splice(
+          Math.floor(Math.random() * this.messages.length),
+          1
+        )[0];
         return message?.payload;
       },
     });
@@ -97,11 +101,22 @@ export class Queue
       // Randomize the order of subscribers to avoid user code making
       // assumptions on the order that subscribers process messages.
       for (const subscriber of new RandomArrayIterator(this.subscribers)) {
-        const messages = this.messages.splice(0, subscriber.batchSize);
+        // Extract random messages from the queue
+        const messages = new Array<QueueMessage>();
+        for (let i = 0; i < subscriber.batchSize; i++) {
+          const message = this.messages.splice(
+            Math.floor(Math.random() * this.messages.length),
+            1
+          )[0];
+          if (message) {
+            messages.push(message);
+          }
+        }
         const messagesPayload = messages.map((m) => m.payload);
         if (messagesPayload.length === 0) {
           continue;
         }
+
         const fnClient = this.context.findInstance(
           subscriber.functionHandle!
         ) as IFunctionClient & ISimulatorResourceInstance;
