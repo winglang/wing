@@ -7,13 +7,13 @@ class A {
 }
 
 class B extends A {
-  description(): str {
+  public description(): str {
     return "B";
   }
 }
 
 class C extends B {
-  description(): str {
+  public description(): str {
     return "C extends ${super.description()}";
   }
 }
@@ -33,7 +33,7 @@ let e = new E();
 assert(e.description() == "E extends C extends B");
 
 inflight class InflightA {
-  description(): str {
+  public description(): str {
     return "InflightA";
   }
 }
@@ -54,7 +54,7 @@ test "super call inflight" {
 bring cloud;
 let b = new cloud.Bucket();
 class BaseClass {
-  inflight do(): str {
+  public inflight do(): str {
     return b.get("k"); // BaseClass class required read acceess to b
   }
 }
