@@ -3,6 +3,8 @@ bring cloud;
 let jsonNumber  = Json 123;
 let jsonBool    = Json true;
 let jsonArray   = Json [ 1, 2, 3 ];
+let jsonSet   = Json { 1, 2, 3 };
+let jsonMap   = Json { "1" => 1, "2" => 2, "3" => 3 };
 let jsonObj     = Json { boom: 123 };
 let jsonMutObj = MutJson {
   hello: 123,
