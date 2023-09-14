@@ -35,6 +35,7 @@ export interface CreateExpressServerOptions {
   requestedPort?: number;
   appState(): State;
   hostUtils?: HostUtils;
+  expressApp?: express.Express;
   onExpressCreated?: (app: express.Express) => void;
   wingfile: string;
   requireAcceptTerms?: boolean;
@@ -55,6 +56,7 @@ export const createExpressServer = async ({
   requestedPort,
   appState,
   hostUtils,
+  expressApp,
   onExpressCreated,
   wingfile,
   requireAcceptTerms = false,
@@ -63,7 +65,7 @@ export const createExpressServer = async ({
   setSelectedNode,
   testsStateManager,
 }: CreateExpressServerOptions) => {
-  const app = express();
+  const app = expressApp ?? express();
   app.use(cors());
 
   const { router } = mergeAllRouters();

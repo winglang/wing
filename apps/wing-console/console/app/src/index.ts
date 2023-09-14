@@ -33,6 +33,7 @@ export interface CreateConsoleAppOptions {
   requestedPort?: number;
   hostUtils?: HostUtils;
   onTrace?: (trace: Trace) => void;
+  expressApp?: express.Express;
   onExpressCreated?: CreateConsoleServerOptions["onExpressCreated"];
   requireAcceptTerms?: boolean;
   layoutConfig?: LayoutConfig;

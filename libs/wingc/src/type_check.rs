@@ -1148,6 +1148,7 @@ impl TypeRef {
 			Type::MutJson | Type::Json(None) => true,
 			Type::Inferred(..) => true,
 			Type::Array(v) => v.is_json_legal_value(),
+			Type::Map(v) => v.is_json_legal_value(),
 			Type::Optional(v) => v.is_json_legal_value(),
 			Type::Struct(ref s) => {
 				for (_, t) in s.fields(true) {
@@ -1236,7 +1237,7 @@ pub struct Types {
 	namespaces: Vec<Box<Namespace>>,
 	symbol_envs: Vec<Box<SymbolEnv>>,
 	/// A map from source file name to the symbol environment for that file (and whether that file is safe to bring)
-	source_file_envs: IndexMap<Utf8PathBuf, (SymbolEnvRef, bool)>,
+	source_file_envs: IndexMap<Utf8PathBuf, SymbolEnvRef>,
 	pub libraries: SymbolEnv,
 	numeric_idx: usize,
 	string_idx: usize,
@@ -2779,11 +2780,7 @@ impl<'a> TypeChecker<'a> {
 		// Save the module's symbol environment to `self.types.source_file_envs`
 		// (replacing any existing ones if there was already a SymbolEnv from a previous compilation)
 		let scope_env = self.types.get_scope_env(scope);
-		let is_bringable = check_is_bringable(scope);
-		self
-			.types
-			.source_file_envs
-			.insert(source_path.to_owned(), (scope_env, is_bringable));
+		self.types.source_file_envs.insert(source_path.to_owned(), scope_env);
 	}
 
 	fn type_check_scope(&mut self, scope: &Scope) {
@@ -3185,8 +3182,8 @@ impl<'a> TypeChecker<'a> {
 						alias = identifier.as_ref().unwrap();
 					}
 					BringSource::WingFile(name) => {
-						let (brought_env, is_bringable) = match self.types.source_file_envs.get(Utf8Path::new(&name.name)) {
-							Some((env, is_bringable)) => (*env, *is_bringable),
+						let brought_env = match self.types.source_file_envs.get(Utf8Path::new(&name.name)) {
+							Some(env) => *env,
 							None => {
 								self.spanned_error(
 									stmt,
@@ -3195,16 +3192,6 @@ impl<'a> TypeChecker<'a> {
 								return;
 							}
 						};
-						if !is_bringable {
-							self.spanned_error(
-								stmt,
-								format!(
-									"Cannot bring \"{}\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought",
-									name
-								),
-							);
-							return;
-						}
 						let ns = self.types.add_namespace(Namespace {
 							name: name.name.to_string(),
 							env: SymbolEnv::new(
@@ -5118,34 +5105,6 @@ pub fn fully_qualify_std_type(type_: &str) -> String {
 		| "Boolean" | "Number" => format!("{WINGSDK_STD_MODULE}.{type_name}"),
 		_ => type_name.to_string(),
 	}
-}
-
-fn check_is_bringable(scope: &Scope) -> bool {
-	let valid_stmt = |stmt: &Stmt| match stmt.kind {
-		StmtKind::Bring { .. } => true,
-		StmtKind::Class(_) => true,
-		StmtKind::Interface(_) => true,
-		StmtKind::Struct { .. } => true,
-		StmtKind::Enum { .. } => true,
-		StmtKind::CompilerDebugEnv => true,
-		StmtKind::SuperConstructor { .. } => false,
-		StmtKind::Let { .. } => false,
-		StmtKind::ForLoop { .. } => false,
-		StmtKind::While { .. } => false,
-		StmtKind::IfLet { .. } => false,
-		StmtKind::If { .. } => false,
-		StmtKind::Break => false,
-		StmtKind::Continue => false,
-		StmtKind::Return(_) => false,
-		StmtKind::Throw(_) => false,
-		StmtKind::Expression(_) => false,
-		StmtKind::Assignment { .. } => false,
-		StmtKind::Scope(_) => false,
-		StmtKind::TryCatch { .. } => false,
-	};
-
-	// A module is bringable if it only contains valid statement kinds
-	scope.statements.iter().all(valid_stmt)
 }
 
 #[cfg(test)]
