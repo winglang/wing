@@ -20,7 +20,7 @@ use wingii::{
 
 use super::{
 	symbol_env::{LookupResult, SymbolEnv},
-	Enum, Namespace,
+	Enum, Namespace, NamespaceKind,
 };
 
 trait JsiiInterface {
@@ -186,39 +186,37 @@ impl<'a> JsiiImporter<'a> {
 		// First, create a namespace in the Wing type system (if there isn't one already) corresponding to the JSII assembly
 		// the type belongs to.
 		debug!("Setting up namespaces for {}", type_name);
+		let assembly = type_name.assembly();
 
-		if let Some(symb) = self.wing_types.libraries.lookup_mut(&type_name.assembly().into(), None) {
+		if let Some(symb) = self.wing_types.libraries.lookup_mut(&assembly.into(), None) {
 			if let SymbolKind::Namespace(_) = symb {
 				// do nothing
 			} else {
 				// TODO: make this a proper error
 				panic!(
 					"Tried importing {} but {} already defined as a {}",
-					type_name,
-					type_name.assembly(),
-					symb
+					type_name, assembly, symb
 				)
 			}
 		} else {
 			let ns = self.wing_types.add_namespace(Namespace {
-				name: type_name.assembly().to_string(),
+				name: assembly.to_string(),
 				env: SymbolEnv::new(None, self.wing_types.void(), false, false, Phase::Preflight, 0),
 				loaded: false,
+				kind: NamespaceKind::JSII {
+					fqn: assembly.to_string(),
+				},
 			});
 			self
 				.wing_types
 				.libraries
-				.define(
-					&Symbol::global(type_name.assembly()),
-					SymbolKind::Namespace(ns),
-					StatementIdx::Top,
-				)
+				.define(&Symbol::global(assembly), SymbolKind::Namespace(ns), StatementIdx::Top)
 				.unwrap();
 		};
 
 		// Next, ensure there is a namespace for each of the namespaces in the type name
 		for (ns_idx, namespace_name) in type_name.namespaces().enumerate() {
-			let mut lookup_str = vec![type_name.assembly()];
+			let mut lookup_str = vec![assembly];
 			lookup_str.extend(type_name.namespaces().take(ns_idx));
 			let lookup_str = lookup_str.join(".");
 
@@ -246,6 +244,9 @@ impl<'a> JsiiImporter<'a> {
 					name: namespace_name.to_string(),
 					env: SymbolEnv::new(None, self.wing_types.void(), false, false, Phase::Preflight, 0),
 					loaded: false,
+					kind: NamespaceKind::JSII {
+						fqn: lookup_str.to_string(),
+					},
 				});
 				parent_ns
 					.env
@@ -936,6 +937,9 @@ impl<'a> JsiiImporter<'a> {
 					name: assembly.name.clone(),
 					env: SymbolEnv::new(None, self.wing_types.void(), false, false, Phase::Preflight, 0),
 					loaded: false,
+					kind: NamespaceKind::JSII {
+						fqn: assembly.name.clone(),
+					},
 				});
 				self
 					.wing_types

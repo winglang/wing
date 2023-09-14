@@ -9,10 +9,11 @@ use crate::{
 		lifts::{Liftable, Lifts},
 		resolve_user_defined_type,
 		symbol_env::LookupResult,
-		ClassLike, TypeRef, CLOSURE_CLASS_HANDLE_METHOD,
+		ClassLike, NamespaceKind, SymbolKind, TypeRef, CLOSURE_CLASS_HANDLE_METHOD,
 	},
 	visit::{self, Visit},
 	visit_context::{VisitContext, VisitorWithContext},
+	WINGSDK_ASSEMBLY_NAME,
 };
 
 pub struct LiftVisitor<'a> {
@@ -281,8 +282,28 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 		// CAPTURE
 		if self.should_capture_type(&node) {
 			// jsify the type so we can get the preflight code
-			let code = self.jsify_udt(&node);
+			let current_env = self.ctx.current_env().expect("an env");
+			let code = if let LookupResult::Found(SymbolKind::Namespace(root_namespace), _) =
+				current_env.lookup_ext(&node.root, None)
+			{
+				match &root_namespace.kind {
+					// types in wing files and the built-in wingsdk module already implement a helper to lift types
+					NamespaceKind::FileModule => self.jsify_udt(&node),
+					NamespaceKind::JSII { fqn } if fqn == WINGSDK_ASSEMBLY_NAME => self.jsify_udt(&node),
 
+					NamespaceKind::JSII { fqn } => format!(
+						"{{ _toInflightType: () => `require(\"{fqn}\").{}` }}",
+						node
+							.fields
+							.iter()
+							.map(|f| f.name.clone())
+							.collect::<Vec<String>>()
+							.join(".")
+					),
+				}
+			} else {
+				self.jsify_udt(&node)
+			};
 			let mut lifts = self.lifts_stack.pop().unwrap();
 			lifts.capture(&Liftable::Type(node.clone()), &code, false);
 			self.lifts_stack.push(lifts);

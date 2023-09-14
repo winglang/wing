@@ -2,7 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
-module.exports = function({ $greeting }) {
+module.exports = function({ $___toInflightType_________require__jsii_code_samples___HelloWorld___, $greeting }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -11,6 +11,8 @@ module.exports = function({ $greeting }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: greeting == \"Hello, wingnuts\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($greeting,"Hello, wingnuts")))};
+      const helloInflight = new $___toInflightType_________require__jsii_code_samples___HelloWorld___();
+      {((cond) => {if (!cond) throw new Error("assertion failed: helloInflight.sayHello(\"wingnuts\") == greeting")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await helloInflight.sayHello("wingnuts")),$greeting)))};
     }
   }
   return $Closure1;
@@ -70,6 +72,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
+            $___toInflightType_________require__jsii_code_samples___HelloWorld___: ${context._lift({ _toInflightType: () => `require("jsii-code-samples").HelloWorld` })},
             $greeting: ${context._lift(greeting)},
           })
         `;

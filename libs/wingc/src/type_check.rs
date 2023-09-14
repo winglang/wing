@@ -264,6 +264,19 @@ pub struct Namespace {
 	// the types after initial compilation.
 	#[derivative(Debug = "ignore")]
 	pub loaded: bool,
+
+	pub kind: NamespaceKind,
+}
+
+#[derive(Debug)]
+pub enum NamespaceKind {
+	/// Modules pointing to another wing file
+	FileModule,
+	/// External JSII library
+	JSII {
+		/// Fully qualified name of the JSII module or submodule
+		fqn: String,
+	},
 }
 
 pub type NamespaceRef = UnsafeRef<Namespace>;
@@ -1915,7 +1928,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Type check args against constructor
-				let init_method_name = if env.phase == Phase::Preflight {
+				let init_method_name = if env.phase == Phase::Preflight || class_env.phase == Phase::Independent {
 					CLASS_INIT_NAME
 				} else {
 					CLASS_INFLIGHT_INIT_NAME
@@ -3202,6 +3215,7 @@ impl<'a> TypeChecker<'a> {
 								0,
 							),
 							loaded: true,
+							kind: NamespaceKind::FileModule,
 						});
 						if let Err(e) = env.define(
 							identifier.as_ref().unwrap(),
