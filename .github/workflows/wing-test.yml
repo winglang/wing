@@ -71,22 +71,17 @@ jobs:
 
       - name: Execute wing test
         id: runTest
-        uses: nick-fields/retry@v2
         env:
           TF_LOG: info
           TF_LOG_PATH: ${{ runner.workspace }}/terraform.log
-        with:
-          max_attempts: 3
-          retry_on: error
-          timeout_minutes: 30
-          command: |
-            wing --version
-            # results=$(wing test -t ${{ matrix.target }} ${{ needs.setup.outputs.files }})
-            # EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
-            # echo "text<<$EOF" >> $GITHUB_OUTPUT
-            # echo "$results" >> $GITHUB_OUTPUT
-            # echo "$EOF" >> $GITHUB_OUTPUT
-            wing test -t ${{ matrix.target }} ${{ needs.setup.outputs.files }}
+        run: |
+          wing --version
+          results=$(wing test -t ${{ matrix.target }} ${{ needs.setup.outputs.files }})
+          # EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          # echo "text<<$EOF" >> $GITHUB_OUTPUT
+          echo "$results" >> $GITHUB_OUTPUT
+          # echo "$EOF" >> $GITHUB_OUTPUT
+          # wing test -t ${{ matrix.target }} ${{ needs.setup.outputs.files }}
 
       - name: Post preview comment
         if: failure() || !failure()
