@@ -98,6 +98,7 @@ class $Root extends $stdlib.std.Resource {
     const jsonNumber = 123;
     const jsonBool = true;
     const jsonArray = [1, 2, 3];
+    const jsonMap = ({"1": 1,"2": 2,"3": 3});
     const jsonObj = ({"boom": 123});
     const jsonMutObj = ({"hello": 123,"world": [1, "cat", 3],"boom boom": ({"hello": 1233})});
     const message = "Coolness";
