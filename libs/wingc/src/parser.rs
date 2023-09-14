@@ -10,8 +10,8 @@ use tree_sitter_traversal::{traverse, Order};
 use crate::ast::{
 	AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
 	ElifBlock, ElifLetBlock, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
-	IfLet, Interface, InterpolatedString, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt,
-	StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
+	IfLet, Interface, InterpolatedString, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Spanned,
+	Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan};

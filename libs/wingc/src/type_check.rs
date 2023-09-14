@@ -3595,7 +3595,7 @@ impl<'a> TypeChecker<'a> {
 			}
 			BringSource::WingFile(name) => {
 				let brought_env = match self.types.source_file_envs.get(Utf8Path::new(&name.name)) {
-					Some(env) => *env, *is_bringable),
+					Some(env) => *env,
 					None => {
 						self.spanned_error(
 							stmt,
