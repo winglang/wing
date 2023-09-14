@@ -20,6 +20,7 @@ sidebar_position: 1
 
 The `cloud.Queue` resource represents a data structure for holding a list of messages.
 Queues are typically used to decouple producers of data and the consumers of said data in distributed systems.
+Queues by default are not FIFO (first in, first out) - so the order of messages is not guaranteed.
 
 ## Usage
 
@@ -170,7 +171,7 @@ Purge all of the messages in the queue.
 ##### `push` <a name="push" id="@winglang/sdk.cloud.IQueueClient.push"></a>
 
 ```wing
-inflight push(messages: str): void
+inflight push(...messages: Array<str>): void
 ```
 
 Push one or more messages to the queue.
@@ -189,7 +190,6 @@ Payload to send to the queue.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Queue.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Queue.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
@@ -202,18 +202,6 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
-
----
-
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.Queue.property.display"></a>
-
-```wing
-display: Display;
-```
-
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
-
-Information on how to display a resource in the UI.
 
 ---
 
@@ -361,7 +349,6 @@ A resource with an inflight "handle" method that can be passed to `Queue.setCons
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.IQueueSetConsumerHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.IQueueSetConsumerHandler.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
@@ -374,18 +361,6 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
-
----
-
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.IQueueSetConsumerHandler.property.display"></a>
-
-```wing
-display: Display;
-```
-
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
-
-Information on how to display a resource in the UI.
 
 ---
 

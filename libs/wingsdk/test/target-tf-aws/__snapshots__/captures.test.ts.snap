@@ -71,6 +71,9 @@ exports[`function with a function binding 3`] = `
     },
     "aws_lambda_function": {
       "Function1": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Function1-c87c16f1",
@@ -90,6 +93,9 @@ exports[`function with a function binding 3`] = `
         },
       },
       "Function2": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "FUNCTION_NAME_50735b21": "\${aws_lambda_function.Function1.arn}",
@@ -206,6 +212,9 @@ exports[`function with a queue binding 3`] = `
     },
     "aws_lambda_function": {
       "Function": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "QUEUE_URL_1cfcc997": "\${aws_sqs_queue.Queue.url}",
@@ -226,6 +235,9 @@ exports[`function with a queue binding 3`] = `
         },
       },
       "Queue-SetConsumer-5cb7e554": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Queue-SetConsumer-5cb7e554-c8f6c540",
@@ -313,6 +325,9 @@ exports[`function with bucket binding > put operation 2`] = `
     },
     "aws_lambda_function": {
       "Function": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_1357ca3a": "\${aws_s3_bucket.Bucket.bucket}",
@@ -340,18 +355,6 @@ exports[`function with bucket binding > put operation 2`] = `
       },
       "Code": {
         "bucket_prefix": "code-c84a50b1-",
-      },
-    },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "Bucket_Encryption_016FDA0C": {
-        "bucket": "\${aws_s3_bucket.Bucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256",
-            },
-          },
-        ],
       },
     },
     "aws_s3_object": {
@@ -403,6 +406,9 @@ exports[`two functions reusing the same IFunctionHandler 1`] = `
     },
     "aws_lambda_function": {
       "Function1": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Function1-c87c16f1",
@@ -422,6 +428,9 @@ exports[`two functions reusing the same IFunctionHandler 1`] = `
         },
       },
       "Function2": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Function2-c827e998",

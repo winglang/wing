@@ -1,7 +1,7 @@
 import { createHash } from "crypto";
 import { nanoid, customAlphabet } from "nanoid";
 import { v4 } from "uuid";
-import { Code, InflightClient } from "../core";
+import { InflightClient } from "../core";
 import { Duration, IResource } from "../std";
 
 /**
@@ -168,7 +168,7 @@ export class Util {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
   private constructor() {}

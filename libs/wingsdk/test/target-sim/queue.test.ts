@@ -6,7 +6,7 @@ import {
   waitUntilTraceCount,
 } from "./util";
 import * as cloud from "../../src/cloud";
-import { Duration } from "../../src/std";
+import { Duration, Node } from "../../src/std";
 import { QUEUE_TYPE } from "../../src/target-sim/schema-resources";
 import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
@@ -62,7 +62,7 @@ test("queue with one subscriber, default batch size of 1", async () => {
   // THEN
   await s.stop();
 
-  expect(listMessages(s)).toMatchSnapshot();
+  expect(listMessages(s)).not.toContain("Subscriber error");
   expect(app.snapshot()).toMatchSnapshot();
 });
 
@@ -139,11 +139,14 @@ async handle() {
   // THEN
   await s.stop();
 
-  const traces = s.listTraces().map((trace) => trace.data.message);
-  expect(traces).toContain(
-    'Invoke (payload="{\\"messages\\":[\\"A\\",\\"B\\",\\"C\\",\\"D\\",\\"E\\"]}").'
-  );
-  expect(traces).toContain('Invoke (payload="{\\"messages\\":[\\"F\\"]}").');
+  const invokeMessages = s
+    .listTraces()
+    .filter(
+      (trace) =>
+        trace.sourcePath === "root/my_queue/my_queue-SetConsumer-e645076f" &&
+        trace.data.message.startsWith("Invoke")
+    );
+  expect(invokeMessages.length).toEqual(2); // queue messages are processed in two batches based on batch size
   expect(app.snapshot()).toMatchSnapshot();
 });
 
@@ -274,7 +277,7 @@ test("queue has no display hidden property", async () => {
   const queue = app.node.tryFindChild("my_queue") as cloud.Queue;
 
   // THEN
-  expect(queue.display.hidden).toBeUndefined();
+  expect(Node.of(queue).hidden).toBeUndefined();
   expect(treeJson.tree.children).toBeDefined();
   expect(treeJson.tree.children).not.toMatchObject({
     my_queue: {
@@ -295,8 +298,8 @@ test("queue has display title and description properties", async () => {
   const queue = app.node.tryFindChild("my_queue") as cloud.Queue;
 
   // THEN
-  expect(queue.display.title).toBeDefined();
-  expect(queue.display.description).toBeDefined();
+  expect(Node.of(queue).title).toBeDefined();
+  expect(Node.of(queue).description).toBeDefined();
   expect(treeJson.tree.children).toMatchObject({
     my_queue: {
       display: {
@@ -327,6 +330,7 @@ test("can pop messages from queue", async () => {
   for (let i = 0; i < messages.length; i++) {
     poppedMessages.push(await queueClient.pop());
   }
+  poppedMessages.sort();
   const poppedOnEmptyQueue = await queueClient.pop();
 
   // THEN

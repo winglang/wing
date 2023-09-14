@@ -55,6 +55,7 @@ module.exports = function({ $Base }) {
 
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -64,31 +65,32 @@ class $Root extends $stdlib.std.Resource {
     class Base extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
         this.f = "hello";
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.Base-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const BaseClient = ${Base._toInflightType(this).text};
+            const BaseClient = ${Base._toInflightType(this)};
             const client = new BaseClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["$inflight_init"];
       }
     }
     class Derived extends Base {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
         this.g = "world";
       }
       foo() {
@@ -96,22 +98,25 @@ class $Root extends $stdlib.std.Resource {
         this.g;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.Derived-1.js")({
             $Base: ${context._lift(Base)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const DerivedClient = ${Derived._toInflightType(this).text};
+            const DerivedClient = ${Derived._toInflightType(this)};
             const client = new DerivedClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
+      }
+      _getInflightOps() {
+        return ["$inflight_init"];
       }
     }
   }

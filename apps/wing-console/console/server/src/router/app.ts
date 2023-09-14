@@ -12,7 +12,11 @@ import {
   NodeConnection,
   ConstructTreeNodeMap,
 } from "../utils/constructTreeNodeMap.js";
-import { createProcedure, createRouter } from "../utils/createRouter.js";
+import {
+  FileLink,
+  createProcedure,
+  createRouter,
+} from "../utils/createRouter.js";
 import {
   isTermsAccepted,
   acceptTerms,
@@ -113,6 +117,33 @@ export const createAppRouter = () => {
           simulator,
           input?.showTests,
         );
+      }),
+    "app.nodeIds": createProcedure
+      .input(
+        z
+          .object({
+            showTests: z.boolean().optional(),
+          })
+          .optional(),
+      )
+      .query(async ({ ctx, input }) => {
+        const simulator = await ctx.simulator();
+        const { tree } = simulator.tree().rawData();
+        const node = createExplorerItemFromConstructTreeNode(
+          shakeTree(tree),
+          simulator,
+          input?.showTests,
+        );
+
+        const list = new Array<string>();
+        const getNodeIds = (item: ExplorerItem) => {
+          list.push(item.id);
+          for (const child of item.childItems ?? []) {
+            getNodeIds(child);
+          }
+        };
+        getNodeIds(node);
+        return list;
       }),
     "app.selectNode": createProcedure
       .input(
@@ -561,6 +592,42 @@ export const createAppRouter = () => {
       .mutation(async ({ ctx, input }) => {
         await ctx.hostUtils?.openExternal(input.url);
       }),
+    "app.openFileInEditor": createProcedure
+      .input(
+        z.object({
+          path: z.string(),
+          line: z.number().optional(),
+          column: z.number().optional(),
+        }),
+      )
+      .mutation(async ({ ctx, input }) => {
+        if (ctx.emitter.listenerCount("openFileInEditor") > 0) {
+          ctx.emitter.emit("openFileInEditor", {
+            path: input.path,
+            line: input.line,
+            column: input.column,
+          });
+          return;
+        }
+        const { default: launch } = await import("launch-editor");
+        launch(`${input.path}:${input.line}:${input.column}`);
+      }),
+
+    /**
+     * Warning! Subscribing to this procedure will override the default behavior of opening files in the editor
+     * provided by the "app.openFileInEditor" procedure.
+     * Needed to manage file opening within the vs-code extension.
+     */
+    "app.openFileInEditorSubscription": createProcedure.subscription(
+      ({ ctx }) => {
+        return observable<FileLink>((emit) => {
+          ctx.emitter.on("openFileInEditor", emit.next);
+          return () => {
+            ctx.emitter.off("openFileInEditor", emit.next);
+          };
+        });
+      },
+    ),
   });
 
   return { router };

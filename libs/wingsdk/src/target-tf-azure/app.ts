@@ -59,6 +59,7 @@ export class App extends CdktfApp {
    * @link https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group#location
    * */
   public readonly location: string;
+  public readonly _target = "tf-azure";
   private _resourceGroup?: ResourceGroup;
   private _storageAccount?: StorageAccount;
   private _servicePlan?: ServicePlan;

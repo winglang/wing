@@ -59,12 +59,12 @@ import TOCInline from '@theme/TOCInline';
 
 #### 1.1.1 Primitive Types
 
-| Name   | Extra information                  |
-| ------ | ---------------------------------- |
-| `void` | represents the absence of a type   |
-| `num`  | represents numbers (doubles)       |
-| `str`  | UTF-16 encoded strings             |
-| `bool` | represents true or false           |
+| Name   | Extra information                |
+| ------ | -------------------------------- |
+| `void` | represents the absence of a type |
+| `num`  | represents numbers (doubles)     |
+| `str`  | UTF-16 encoded strings           |
+| `bool` | represents true or false         |
 
 > ```TS
 > let x = 1;                  // x is a num
@@ -221,10 +221,10 @@ log("${jsonObj.get("boom").get("dude").get("world")}");
 // ERROR: Cannot read properties of undefined (reading 'world')
 ```
 
-To obtain an array of all the keys within a JSON object use the `Json.keys(o)` method. 
+To obtain an array of all the keys, use `Json.keys(o)`:
 
 ```TS
-let j = Json { hello: 123, world: [ 1, 2, 3 ] };
+let j = Json { hello: 123, world: [1, 2, 3] };
 assert(Json.keys(j).at(0) == "hello");
 assert(Json.keys(j).at(1) == "world");
 ```
@@ -232,10 +232,22 @@ assert(Json.keys(j).at(1) == "world");
 To obtain an array of all the values, use `Json.values(o)`:
 
 ```TS
-assert(Json.values(j).equals([ Json 123, Json [ 1, 2, 3 ] ]));
+assert(Json.values(j).at(0) == 123);
+assert(Json.values(j).at(1) == [1, 2, 3]);
 ```
 
 > NOTE: `values()` returns an array inside a `Json` object because at the moment we
+> cannot represent heterogenous arrays in Wing.
+
+To obtain an array of all key/value pairs, use `Json.entries(o)`:
+
+```TS
+assert(Json.entries(j).at(0).getAt(0) == "hello");
+assert(Json.entries(j).at(0).getAt(1) == 123);
+assert(Json.entries(j).at(1).getAt(0) == "world");
+assert(Json.entries(j).at(1).getAt(1) == [1, 2, 3]);
+```
+> NOTE: `entries()` returns an array inside a `Json` object because at the moment we
 > cannot represent heterogenous arrays in Wing.
 
 ##### 1.1.4.3 Assignment from native types
@@ -424,7 +436,6 @@ my object is: {
 The following features are not yet implemented, but we are planning to add them in the future:
 
 * Array/Set/Map.fromJson() - see https://github.com/winglang/wing/issues/1796 to track.
-* Json.entries() - see https://github.com/winglang/wing/issues/3142 to track.
 * Equality, diff and patch - see https://github.com/winglang/wing/issues/3140 to track.
 
 [`▲ top`][top]
@@ -513,21 +524,13 @@ log("UTC: ${t1.utc.toIso())}");            // output: 2023-02-09T06:21:03.000Z
 
 ### 1.2 Utility Functions
 
-| Name     | Extra information                                        |
-| -------- | -------------------------------------------------------- |
-| `log`    | logs str                                                 |
-| `throw`  | creates and throws an instance of an exception           |
-| `panic`  | exits with a serializable, dumps the trace + a core dump |
-| `assert` | checks a condition and _panics_ if evaluated to false    |
-
-`panic` is a fatal call by design. If the intention is error handling, panic is the
-last resort. Exceptions are non fatal and should be used instead for effectively
-communicating errors to the user.
+| Name     | Extra information                                     |
+| -------- | ----------------------------------------------------- |
+| `log`    | logs str                                              |
+| `assert` | checks a condition and _throws_ if evaluated to false |
 
 > ```TS
 > log("Hello ${name}");
-> throw("a recoverable error occurred");
-> panic("a fatal error encountered");
 > assert(x > 0);
 > ```
 
@@ -663,6 +666,14 @@ let var sum = 0;
 for item in [1,2,3] {
   sum = sum + item;
 }
+```
+
+To modify a numeric value, it is also possible to use `+=` and `-=` operators.
+```TS
+// wing
+let var x = 0;
+x += 5; // x == 5
+x -= 10; // x == -5
 ```
 
 Re-assignment to class fields is allowed if field is marked with `var`.
@@ -969,12 +980,7 @@ translate to JavaScript. You can create a new exception with a `throw` call.
 In the presence of `try`, both `catch` and `finally` are optional but at least one of them must be present.
 In the presence of `catch` the variable holding the exception (`e` in the example below) is optional.
 
-`panic` is meant to be fatal error handling.  
 `throw` is meant to be recoverable error handling.
-
-An uncaught exception is considered user error but a panic call is not. Compiler
-guarantees exception safety by throwing a compile error if an exception is
-expected from a call and it is not being caught.
 
 > ```TS
 > try {
@@ -1022,24 +1028,16 @@ Execution model currently is delegated to the JSII target. This means if you are
 targeting JSII with Node, Wing will use the event based loop that Node offers.
 
 In Wing, writing and executing at root block scope level is forbidden except for
-the entrypoint of the program. Root block scope is considered special and
-compiler generates special instructions to properly assign all preflight classes to
-their respective scopes recursively down the constructs tree based on entry.
+in entrypoint files (designated by `main.w` or `*.main.w`). Root block scope is
+considered special and compiler generates special instructions to properly
+assign all preflight classes to their respective scopes recursively down the
+constructs tree based on entry.
 
-Entrypoint is always a Wing source with an extension of `.w`. Within this entry
-point, a root preflight class is made available for all subsequent preflight classes that are
-initialized and instantiated. Type of the root class is determined by the
-target being used by the compiler. The root class might be of type `App` in
-AWS CDK or `TerraformApp` in case of CDK for Terraform target.
-
-> Following "shimming" is only done for the entrypoint file and nowhere else.
-> Type of the "shim" changes from `cdk.Stack` to `TerraformStack` for cdk-tf.
-
-> ```TS
-> // Wing Entrypoint Code:
-> let a = MyResource();
-> let b = MyResource() be "my-resource";
-> ```
+Within the entrypoint file, a root preflight class is made available for all
+subsequent preflight classes that are initialized and instantiated. The type of
+the root class is determined by the target being used by the compiler. The root
+class might be of type `aws-cdk-lib.App` in AWS CDK or `cdktf.TerraformApp` in
+case of CDK for Terraform target.
 
 [`▲ top`][top]
 
@@ -1184,7 +1182,7 @@ The loop invariant in for loops is implicitly re-assignable (`var`).
 
 ### 2.7 while
 
-**while** statement is used to execute a block of code while a condition is true.  
+The **while** statement evaluates a condition, and if it is true, a set of statements is repeated until the condition is false.
 
 > ```TS
 > // Wing program:
@@ -1196,6 +1194,20 @@ The loop invariant in for loops is implicitly re-assignable (`var`).
 [`▲ top`][top]
 
 ---
+
+### 2.8 throw
+
+The **throw** statement raises a user-defined exception, which must be a string expression.
+Execution of the current function will stop (the statements after throw won't be executed), and control will be passed to the first catch block in the call stack.
+If no catch block exists among caller functions, the program will terminate.
+(An uncaught exception in preflight causes a compilation error, while an uncaught exception in inflight causes a runtime error.)
+
+> ```TS
+> // Wing program:
+> throw "Username must be at least 3 characters long.";
+> ```
+
+[`▲ top`][top]
 
 ## 3. Declarations
 
@@ -1522,10 +1534,17 @@ let [var] <name>[: <type>] = [<type>] <value>;
 Assignment operator is `=`.  
 Assignment declaration keyword is `let`.  
 Type annotation is optional if a default value is given.  
+`var` keyword after `let` makes a variable mutable.
 
 > ```TS
 > let n = 10;
 > let s: str = "hello";
+> s = "world"; // error: Variable is not reassignable
+> ```
+
+> ```TS
+> let var s = "hello";
+> s = "hello world"; // compiles
 > ```
 
 [`▲ top`][top]
@@ -1754,6 +1773,8 @@ exports.makeId = function () {
 Given a method of name X, the compiler will map the method to the JavaScript export with the 
 matching name (without any case conversion).
 
+Extern methods do not support access to class's members through `this`, so they must be declared `static`.
+
 ### 5.2.1 TypeScript
 
 It is possible to use TypeScript to write helpers, but at the moment this is not
@@ -1767,7 +1788,7 @@ When calling **extern** function, the parameter and return types are **assumed**
 
 
 | Built-in Wing type        | TypeScript type                                                       |
-|---------------------------|-----------------------------------------------------------------------|
+| ------------------------- | --------------------------------------------------------------------- |
 | `void`                    | `undefined`                                                           |
 | `nil`                     | `null`                                                                |
 | `any`                     | `any`                                                                 |
@@ -1779,12 +1800,12 @@ When calling **extern** function, the parameter and return types are **assumed**
 | `Array<T>`, `MutArray<T>` | `Array<T>`                                                            |
 | `Json`, `MutJson`         | `string ⏐ number ⏐ boolean ⏐ null ⏐ Json[] ⏐ { [key: string]: Json }` |
 
-| User-defined Wing type  | TypeScript type                                                                        |
-|-------------------------|----------------------------------------------------------------------------------------|
-| `class`                 | `class`, only with members whose phase is compatible with the function signature       |
-| `interface`             | `interface`, only with members whose phase is compatible with the function signature   |
-| `struct`                | `interface`                                                                            |
-| `enum`                  | `string`-based enum-like `Object`                                                      |
+| User-defined Wing type | TypeScript type                                                                      |
+| ---------------------- | ------------------------------------------------------------------------------------ |
+| `class`                | `class`, only with members whose phase is compatible with the function signature     |
+| `interface`            | `interface`, only with members whose phase is compatible with the function signature |
+| `struct`               | `interface`                                                                          |
+| `enum`                 | `string`-based enum-like `Object`                                                    |
 
 [`▲ top`][top]
 
@@ -1956,7 +1977,7 @@ assert(cat1 != dog); // compile time error (can't compare different types)
 
 ### 6.2 Strings
 
-String reference doc is available [here](https://www.winglang.io/docs/language-guide/language-reference#61-strings).
+String reference doc is available [here](https://www.winglang.io/docs/standard-library/std/api-reference#string-).
 Type of string is UTF-16 internally.  
 All string declaration variants are multi-line.  
 
@@ -2053,7 +2074,7 @@ Ternary or conditional operators are not supported.
 | Operator             | Notes                                             |
 | -------------------- | ------------------------------------------------- |
 | ()                   | Parentheses                                       |
-| **                   | Power                                    |
+| **                   | Power                                             |
 | -x                   | Unary minus                                       |
 | \*, /, \\, %         | Multiplication, Division, Floor division, Modulus |
 | +, -                 | Addition, Subtraction                             |

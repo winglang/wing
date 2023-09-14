@@ -53,6 +53,8 @@ export class App extends CdktfApp {
    */
   protected readonly testRunner: TestRunner;
 
+  public readonly _target = "tf-aws";
+
   private awsRegionProvider?: DataAwsRegion;
   private awsAccountIdProvider?: DataAwsCallerIdentity;
   private _vpc?: Vpc;

@@ -30,7 +30,7 @@ export class OnDeploy extends cloud.OnDeploy {
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return core.InflightClient.for(
       __dirname.replace("target-awscdk", "shared-aws"),
       __filename,

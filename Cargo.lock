@@ -134,6 +134,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "89b2fd2a0dcf38d7971e2194b6b6eebab45ae01067456a7fd93d5547a61b70be"
 
 [[package]]
+name = "camino"
+version = "1.1.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c59e92b5a388f549b863a7bea62612c09f24c8393560709a54558a9abdfb3b9c"
+
+[[package]]
 name = "cc"
 version = "1.0.81"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1667,6 +1673,7 @@ name = "wingc"
 version = "0.1.0"
 dependencies = [
  "aho-corasick 0.7.20",
+ "camino",
  "colored",
  "const_format",
  "derivative",
@@ -1696,6 +1703,7 @@ name = "wingii"
 version = "0.1.0"
 dependencies = [
  "blake3",
+ "camino",
  "filetime",
  "flate2",
  "rand",

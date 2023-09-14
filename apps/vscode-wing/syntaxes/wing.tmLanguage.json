@@ -109,7 +109,7 @@
       "patterns": [
         {
           "name": "keyword.control.flow.wing",
-          "match": "\\b(else|elif|if|return|try|catch|finally|bring|as)\\b"
+          "match": "\\b(else|elif|if|return|throw|try|catch|finally|bring|as)\\b"
         },
         {
           "name": "keyword.control.loop.wing",

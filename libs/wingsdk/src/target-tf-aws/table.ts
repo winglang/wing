@@ -56,7 +56,10 @@ export class Table extends ex.Table {
       throw new Error("tables can only be bound by tfaws.Function for now");
     }
 
-    if (ops.includes(ex.TableInflightMethods.INSERT)) {
+    if (
+      ops.includes(ex.TableInflightMethods.INSERT) ||
+      ops.includes(ex.TableInflightMethods.UPSERT)
+    ) {
       host.addPolicyStatements([
         {
           actions: ["dynamodb:PutItem"],
@@ -108,7 +111,7 @@ export class Table extends ex.Table {
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return core.InflightClient.for(
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,

@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Json, Resource } from "../std";
+import { Json, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Table`.
@@ -84,8 +84,8 @@ export abstract class Table extends Resource {
   constructor(scope: Construct, id: string, props: TableProps) {
     super(scope, id);
 
-    this.display.title = "Table";
-    this.display.description =
+    Node.of(this).title = "Table";
+    Node.of(this).description =
       "A cloud NoSQL database table that can be used to store and query data";
 
     if (!props.name) {
@@ -101,14 +101,19 @@ export abstract class Table extends Resource {
       throw new Error("No column is defined");
     }
     this.columns = props.columns;
+  }
 
-    this._addInflightOps(
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [
       TableInflightMethods.INSERT,
+      TableInflightMethods.UPSERT,
       TableInflightMethods.UPDATE,
       TableInflightMethods.DELETE,
       TableInflightMethods.GET,
-      TableInflightMethods.LIST
-    );
+      TableInflightMethods.TRYGET,
+      TableInflightMethods.LIST,
+    ];
   }
 
   /**
@@ -129,6 +134,13 @@ export interface ITableClient {
    */
   insert(key: string, row: Json): Promise<void>;
   /**
+   * Insert a row into the table if it doesn't exist, otherwise update it.
+   * @param key primary key to upsert the row.
+   * @param row data to be upserted.
+   * @inflight
+   */
+  upsert(key: string, row: Json): Promise<void>;
+  /**
    * Update a row in the table.
    * @param key primary key to update the row.
    * @param row data to be updated.
@@ -145,9 +157,17 @@ export interface ITableClient {
    * Get a row from the table, by primary key.
    * @param key primary key to search.
    * @returns get the row from table.
+   * @throws if no row with the given key exists.
    * @inflight
    */
   get(key: string): Promise<Json>;
+  /**
+   * Get a row from the table if exists, by primary key.
+   * @param key primary key to search.
+   * @returns get the row from table if it exists, nil otherwise.
+   * @inflight
+   */
+  tryGet(key: string): Promise<Json | undefined>;
   /**
    * List all rows in the table.
    * @returns list all row.
@@ -164,12 +184,16 @@ export interface ITableClient {
 export enum TableInflightMethods {
   /** `Table.insert` */
   INSERT = "insert",
+  /** `Table.insert` */
+  UPSERT = "upsert",
   /** `Table.update` */
   UPDATE = "update",
   /** `Table.delete` */
   DELETE = "delete",
   /** `Table.get` */
   GET = "get",
+  /** `Table.tryGet` */
+  TRYGET = "tryGet",
   /** `Table.list` */
   LIST = "list",
 }

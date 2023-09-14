@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Resource } from "../std";
+import { Node, Resource } from "../std";
 
 /**
  * Global identifier for `Counter`.
@@ -44,17 +44,20 @@ export abstract class Counter extends Resource {
   constructor(scope: Construct, id: string, props: CounterProps = {}) {
     super(scope, id);
 
-    this.display.title = "Counter";
-    this.display.description = "A distributed atomic counter";
+    Node.of(this).title = "Counter";
+    Node.of(this).description = "A distributed atomic counter";
 
-    this._addInflightOps(
+    this.initial = props.initial ?? 0;
+  }
+
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [
       CounterInflightMethods.INC,
       CounterInflightMethods.DEC,
       CounterInflightMethods.PEEK,
-      CounterInflightMethods.SET
-    );
-
-    this.initial = props.initial ?? 0;
+      CounterInflightMethods.SET,
+    ];
   }
 }
 
