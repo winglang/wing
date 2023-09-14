@@ -1,0 +1,30 @@
+{
+  "name": "generate-workspace",
+  "version": "0.0.0",
+  "private": true,
+  "bin": {
+    "generate-workspace": "./bin/generate-workspace.cjs"
+  },
+  "exports": null,
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "scripts": {},
+  "devDependencies": {
+    "@types/fs-extra": "^11",
+    "@types/node": "^18.16.18",
+    "@types/semver": "^7.5.0",
+    "typescript": "^5.1.3"
+  },
+  "dependencies": {
+    "@pnpm/find-workspace-dir": "^6.0.2",
+    "@pnpm/workspace.find-packages": "^1.0.1",
+    "tsx": "^3.12.7",
+    "npm-which": "^3.0.1"
+  },
+  "volta": {
+    "extends": "../../package.json"
+  }
+}
