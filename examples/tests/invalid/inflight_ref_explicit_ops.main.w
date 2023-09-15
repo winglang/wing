@@ -2,14 +2,14 @@ bring cloud;
 
 class Another {
   myQueue: cloud.Queue;
-  anotherStr: str;
+  pub anotherStr: str;
 
   init () {
     this.myQueue = new cloud.Queue();
     this.anotherStr = "bang";
   }
 
-  inflight inflightReturnsResource(): cloud.Queue {
+  pub inflight inflightReturnsResource(): cloud.Queue {
     return this.myQueue;
 //              ^^^^^^^^ Cannot qualify access to a lifted object
   }
@@ -30,7 +30,7 @@ class Test {
     this.justStr = "hello";
   }
 
-  inflight test1() {
+  pub inflight test1() {
     let x = this.b;
 //               ^ Cannot qualify access to a lifted object
     x.put("hello", "world");
@@ -38,17 +38,17 @@ class Test {
     this.justBucket.put("hello", "world");
   }
 
-  inflight test2() {
+  pub inflight test2() {
     let q = this.another.inflightReturnsResource();
     q.push("push!");
   }
 
-  inflight test3() {
+  pub inflight test3() {
     let b = this.array.at(1);
     assert(b.list().length == 0);
   }
 
-  inflight test4() {
+  pub inflight test4() {
     assert(this.another.anotherStr == "bang");
   }
 }

@@ -9,7 +9,7 @@ source: libs/wingc/src/jsify/tests.rs
     let b = new cloud.Bucket();
 
     class A {
-      static inflight myop() {
+      pub static inflight myop() {
         b.list();
       }
     }

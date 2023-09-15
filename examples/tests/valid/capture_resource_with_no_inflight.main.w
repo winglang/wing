@@ -1,7 +1,7 @@
 bring cloud;
 
 class A {
-  field: str;
+  pub field: str;
   counter: cloud.Counter;
 
   init() { 
@@ -13,7 +13,7 @@ class A {
     this.counter.inc();
   }
 
-  inflight bar() { }
+  pub inflight bar() { }
 }
 
 let a = new A();

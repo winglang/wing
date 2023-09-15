@@ -5,7 +5,7 @@ class A impl cloud.IQueueSetConsumerHandler {
 }
 
 class B impl cloud.IQueueSetConsumerHandler {
-  inflight handle(x: num) {
+  pub inflight handle(x: num) {
     // Error: Expected type to be "inflight (str): void", but got "inflight (num): void" instead
     return;
   }

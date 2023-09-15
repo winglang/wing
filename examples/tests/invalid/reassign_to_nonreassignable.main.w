@@ -3,7 +3,7 @@ let x = 5;
 x = x + 1;
 
 class InnerR {
-  inflight inner: num;
+  pub inflight inner: num;
   inflight init() {
     this.inner = 1;
   }
