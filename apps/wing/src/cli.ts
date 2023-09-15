@@ -160,6 +160,7 @@ async function main() {
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .option("-r, --rootId <rootId>", "App root id")
     .option("--no-clean", "Keep build output")
+    .option("--test-filter <regex>", "Run tests that match the provided regex pattern")
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("test"));
