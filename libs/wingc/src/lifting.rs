@@ -283,9 +283,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 		if self.should_capture_type(&node) {
 			// jsify the type so we can get the preflight code
 			let current_env = self.ctx.current_env().expect("an env");
-			let code = if let LookupResult::Found(SymbolKind::Namespace(root_namespace), _) =
-				current_env.lookup_ext(&node.root, None)
-			{
+			let code = if let Some(SymbolKind::Namespace(root_namespace)) = current_env.lookup(&node.root, None) {
 				match &root_namespace.kind {
 					// types in wing files and the built-in wingsdk module already implement a helper to lift types
 					NamespaceKind::FileModule => self.jsify_udt(&node),
