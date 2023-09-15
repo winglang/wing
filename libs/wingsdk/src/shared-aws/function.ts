@@ -6,17 +6,9 @@ import { IInflightHost } from "../std";
  */
 export interface IAwsFunction {
   /**
-   * Add an environment variable to the function.
-   */
-  addEnvironment(key: string, value: string): void;
-
-  /**
    * Add policy statements to the function's IAM role.
-   *
-   * TODO: update this to accept a variadic parameter (...policies)
-   * https://github.com/winglang/wing/issues/397
    */
-  addPolicyStatements(policies: PolicyStatement[]): void;
+  addPolicyStatements(...policies: PolicyStatement[]): void;
 }
 
 /**
@@ -36,9 +28,6 @@ export class Function {
   }
 
   private static isAwsFunction(obj: any): obj is IAwsFunction {
-    return (
-      typeof obj.addPolicyStatements === "function" &&
-      typeof obj.addEnvironment === "function"
-    );
+    return typeof obj.addPolicyStatements === "function";
   }
 }
