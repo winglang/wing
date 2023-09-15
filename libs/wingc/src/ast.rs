@@ -425,6 +425,7 @@ pub enum BringSource {
 	BuiltinModule(Symbol),
 	JsiiModule(Symbol),
 	WingFile(Symbol),
+	Directory(Symbol),
 }
 
 #[derive(Debug)]

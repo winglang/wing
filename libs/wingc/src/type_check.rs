@@ -2800,6 +2800,8 @@ impl<'a> TypeChecker<'a> {
 		CompilationContext::set(CompilationPhase::TypeChecking, &scope.span);
 		self.type_check_scope(scope);
 
+		// TODO: implement special logic for __init__.w
+
 		// Save the module's symbol environment to `self.types.source_file_envs`
 		// (replacing any existing ones if there was already a SymbolEnv from a previous compilation)
 		let scope_env = self.types.get_scope_env(scope);
@@ -3619,6 +3621,7 @@ impl<'a> TypeChecker<'a> {
 				}
 				return;
 			}
+			BringSource::Directory(_) => todo!(),
 		}
 		self.add_module_to_env(env, library_name, namespace_filter, alias, Some(&stmt));
 		// library_name is the name of the library we are importing from the JSII world

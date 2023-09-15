@@ -153,7 +153,7 @@ pub fn parse_wing_project(
 	asts: &mut IndexMap<Utf8PathBuf, Scope>,
 ) -> Vec<Utf8PathBuf> {
 	// Parse the initial file (even if we have already seen it before)
-	let (tree_sitter_tree, ast, dependent_wing_files) = parse_wing_file(init_path, &init_text);
+	let (tree_sitter_tree, ast, dependent_wing_paths) = parse_wing_file(init_path, &init_text);
 
 	// Update our files collection with the new source text. For a fresh compilation,
 	// this will be the first time we've seen this file. In the LSP we might already have
@@ -163,41 +163,76 @@ pub fn parse_wing_project(
 	// Update our collections of trees and ASTs and our file graph
 	tree_sitter_trees.insert(init_path.to_owned(), tree_sitter_tree);
 	asts.insert(init_path.to_owned(), ast);
-	file_graph.update_file(init_path, &dependent_wing_files);
+	file_graph.update_file(init_path, &dependent_wing_paths);
 
 	// Track which files still need parsing
-	let mut unparsed_files = dependent_wing_files;
+	let mut unparsed_files = dependent_wing_paths;
 
 	// Parse all remaining files in the project
-	while let Some(file_path) = unparsed_files.pop() {
+	while let Some(file_or_dir_path) = unparsed_files.pop() {
+		if file_or_dir_path.is_dir() {
+			// Create a fake file at path/to/dir/__init__.w
+			let fake_file_path = file_or_dir_path.join("__init__.w");
+
+			// Collect a list of all files and subdirectories in the directory
+			let mut files_and_dirs = Vec::new();
+			for entry in fs::read_dir(&file_or_dir_path).unwrap() {
+				let entry = entry.unwrap();
+				let path = Utf8PathBuf::from_path_buf(entry.path()).expect("invalid utf8 path");
+				if path.is_dir() || path.extension() == Some("w") {
+					files_and_dirs.push(path);
+				}
+			}
+
+			// Sort the files and directories so that we always visit them in the same order
+			files_and_dirs.sort();
+
+			// Parse the fake file here (since it doesn't exist)
+			let mut tree_sitter_parser = tree_sitter::Parser::new();
+			tree_sitter_parser.set_language(tree_sitter_wing::language()).unwrap();
+			let tree_sitter_tree = tree_sitter_parser.parse("", None).unwrap();
+			let ast = Scope::empty();
+			let dependent_wing_paths = files_and_dirs;
+
+			// Update our collections of trees and ASTs and our file graph
+			tree_sitter_trees.insert(fake_file_path.clone(), tree_sitter_tree);
+			asts.insert(fake_file_path.clone(), ast);
+			file_graph.update_file(&fake_file_path, &dependent_wing_paths);
+
+			// Add all files and directories to the list of files to parse
+			unparsed_files.extend(dependent_wing_paths);
+
+			continue;
+		}
+
 		// Skip files that we have already seen before (they should already be parsed)
-		if files.contains_file(&file_path) {
+		if files.contains_file(&file_or_dir_path) {
 			assert!(
-				tree_sitter_trees.contains_key(&file_path),
+				tree_sitter_trees.contains_key(&file_or_dir_path),
 				"files is not in sync with tree_sitter_trees"
 			);
-			assert!(asts.contains_key(&file_path), "files is not in sync with asts");
+			assert!(asts.contains_key(&file_or_dir_path), "files is not in sync with asts");
 			assert!(
-				file_graph.contains_file(&file_path),
+				file_graph.contains_file(&file_or_dir_path),
 				"files is not in sync with file_graph"
 			);
 			continue;
 		}
 
-		let file_text = fs::read_to_string(&file_path).unwrap_or(String::new());
-		files.add_file(&file_path, file_text.clone()).unwrap();
-		files.get_file(&file_path).unwrap();
+		let file_text = fs::read_to_string(&file_or_dir_path).unwrap_or(String::new());
+		files.add_file(&file_or_dir_path, file_text.clone()).unwrap();
+		files.get_file(&file_or_dir_path).unwrap();
 
 		// Parse the file
-		let (tree_sitter_tree, ast, dependent_wing_files) = parse_wing_file(&file_path, &file_text);
+		let (tree_sitter_tree, ast, dependent_wing_paths) = parse_wing_file(&file_or_dir_path, &file_text);
 
 		// Update our collections of trees and ASTs and our file graph
-		tree_sitter_trees.insert(file_path.clone(), tree_sitter_tree);
-		asts.insert(file_path.clone(), ast);
-		file_graph.update_file(&file_path, &dependent_wing_files);
+		tree_sitter_trees.insert(file_or_dir_path.clone(), tree_sitter_tree);
+		asts.insert(file_or_dir_path.clone(), ast);
+		file_graph.update_file(&file_or_dir_path, &dependent_wing_paths);
 
 		// Add the file's dependencies to the list of files to parse
-		unparsed_files.extend(dependent_wing_files);
+		unparsed_files.extend(dependent_wing_paths);
 	}
 
 	// Return the files in the order they should be compiled
@@ -236,8 +271,8 @@ fn parse_wing_file(source_path: &Utf8Path, source_text: &str) -> (tree_sitter::T
 	let tree_sitter_root = tree_sitter_tree.root_node();
 
 	let parser = Parser::new(&source_text.as_bytes(), source_path.to_owned());
-	let (scope, dependent_wing_files) = parser.parse(&tree_sitter_root);
-	(tree_sitter_tree, scope, dependent_wing_files)
+	let (scope, dependent_wing_paths) = parser.parse(&tree_sitter_root);
+	(tree_sitter_tree, scope, dependent_wing_paths)
 }
 
 /// Parses a single Wing source file.
@@ -252,7 +287,7 @@ pub struct Parser<'a> {
 	is_in_loop: RefCell<bool>,
 	/// Track all file paths that have been found while parsing the current file
 	/// These will need to be eventually parsed (or diagnostics will be reported if they don't exist)
-	referenced_wing_files: RefCell<Vec<Utf8PathBuf>>,
+	referenced_wing_paths: RefCell<Vec<Utf8PathBuf>>,
 }
 
 impl<'s> Parser<'s> {
@@ -268,7 +303,7 @@ impl<'s> Parser<'s> {
 			// mutability from the root of the Json literal.
 			in_json: RefCell::new(0),
 			is_in_mut_json: RefCell::new(false),
-			referenced_wing_files: RefCell::new(Vec::new()),
+			referenced_wing_paths: RefCell::new(Vec::new()),
 		}
 	}
 
@@ -292,7 +327,7 @@ impl<'s> Parser<'s> {
 
 		self.report_unhandled_errors(&root);
 
-		(scope, self.referenced_wing_files.into_inner())
+		(scope, self.referenced_wing_paths.into_inner())
 	}
 
 	fn add_error_from_span(&self, message: impl ToString, span: WingSpan) {
@@ -735,9 +770,7 @@ impl<'s> Parser<'s> {
 			None
 		};
 
-		// if the module name is a path ending in .w, create a new Parser to parse it as a new Scope,
-		// and create a StmtKind::Module instead
-		if module_name.name.starts_with("\"") && module_name.name.ends_with(".w\"") {
+		if module_name.name.starts_with("\".") && module_name.name.ends_with("\"") {
 			let module_path = Utf8Path::new(&module_name.name[1..module_name.name.len() - 1]);
 			let source_path = normalize_path(module_path, Some(&Utf8Path::new(&self.source_name)));
 			if source_path == Utf8Path::new(&self.source_name) {
@@ -746,11 +779,37 @@ impl<'s> Parser<'s> {
 			if !source_path.exists() {
 				return self.with_error(format!("Cannot find module \"{}\"", source_path), statement_node);
 			}
-			if !source_path.is_file() {
-				return self.with_error(
-					format!("Cannot bring module \"{}\": not a file", source_path),
-					statement_node,
-				);
+
+			// case: .w file
+			if source_path.is_file() {
+				if source_path.extension() != Some("w") {
+					return self.with_error(
+						format!("Cannot bring \"{}\": not a recognized file type", source_path),
+						statement_node,
+					);
+				}
+
+				self.referenced_wing_paths.borrow_mut().push(source_path.clone());
+
+				// parse error if no alias is provided
+				let module = if let Some(alias) = alias {
+					Ok(StmtKind::Bring {
+						source: BringSource::WingFile(Symbol {
+							name: source_path.to_string(),
+							span: module_name.span,
+						}),
+						identifier: Some(alias),
+					})
+				} else {
+					self.with_error::<StmtKind>(
+						format!(
+							"bring {} must be assigned to an identifier (e.g. bring \"foo\" as foo)",
+							module_name
+						),
+						statement_node,
+					)
+				};
+				return module;
 			}
 			if source_path.ends_with(".main.w\"") {
 				return self.with_error(
@@ -758,28 +817,38 @@ impl<'s> Parser<'s> {
 					statement_node,
 				);
 			}
-			self.referenced_wing_files.borrow_mut().push(source_path.clone());
+			self.referenced_wing_paths.borrow_mut().push(source_path.clone());
 
-			// parse error if no alias is provided
-			let module = if let Some(alias) = alias {
-				Ok(StmtKind::Bring {
-					source: BringSource::WingFile(Symbol {
-						name: source_path.to_string(),
-						span: module_name.span,
-					}),
-					identifier: Some(alias),
-				})
-			} else {
-				self.with_error::<StmtKind>(
-					format!(
-						"bring {} must be assigned to an identifier (e.g. bring \"foo\" as foo)",
-						module_name
-					),
-					statement_node,
-				)
-			};
+			// case: directory
+			if source_path.is_dir() {
+				self.referenced_wing_paths.borrow_mut().push(source_path.clone());
 
-			return module;
+				// parse error if no alias is provided
+				let module = if let Some(alias) = alias {
+					Ok(StmtKind::Bring {
+						source: BringSource::Directory(Symbol {
+							name: source_path.to_string(),
+							span: module_name.span,
+						}),
+						identifier: Some(alias),
+					})
+				} else {
+					self.with_error::<StmtKind>(
+						format!(
+							"bring {} must be assigned to an identifier (e.g. bring \"foo\" as foo)",
+							module_name
+						),
+						statement_node,
+					)
+				};
+				return module;
+			}
+
+			// case: path does not satisfy is_file or is_dir (is this possible?)
+			return self.with_error(
+				format!("Cannot bring \"{}\": not a recognized file type", source_path),
+				statement_node,
+			);
 		}
 
 		if module_name.name.starts_with("\"") && module_name.name.ends_with("\"") {

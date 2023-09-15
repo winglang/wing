@@ -315,9 +315,10 @@ pub fn compile(
 	// Create a universal JSII import spec (need to keep this alive during entire compilation)
 	let mut jsii_imports = vec![];
 
-	// Type check all files in topological order (start with files that don't require any other
-	// Wing files, then move on to files that depend on those, etc.)
+	// Type check all files in topological order (start with files that don't bring any other
+	// Wing files, then move on to files that depend on those, and repeat)
 	for file in &topo_sorted_files {
+		dbg!(&file);
 		let mut scope = asts.get_mut(file).expect("matching AST not found");
 		type_check(&mut scope, &mut types, &file, &mut jsii_types, &mut jsii_imports);
 

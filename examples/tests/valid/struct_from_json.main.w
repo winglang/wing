@@ -262,7 +262,7 @@ bring "./subdir/structs_2.w" as otherExternalStructs;
 
 struct MyStruct {
   m1: externalStructs.MyStruct;
-  m2: otherExternalStructs.MyStruct;
+  m2: otherExternalStructs.MyStruct2;
 }
 
 let jMyStruct = {

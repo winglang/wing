@@ -745,6 +745,7 @@ impl<'a> JSifier<'a> {
 						STDLIB,
 					))
 				}
+				BringSource::Directory(_) => todo!(),
 			},
 			StmtKind::SuperConstructor { arg_list } => {
 				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
