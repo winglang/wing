@@ -79,8 +79,8 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("./inflight.$Closure1-1.js")({
             $PARSE_ERROR: ${context._lift(PARSE_ERROR)},
-            $std_Boolean: ${context._lift(std.Boolean)},
-            $std_Json: ${context._lift(std.Json)},
+            $std_Boolean: ${context._lift($stdlib.core.toLiftableModuleType(std.Boolean, "@winglang/sdk/std", "Boolean"))},
+            $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
           })
         `;
       }

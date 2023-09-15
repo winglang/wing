@@ -353,7 +353,7 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("./inflight.$Closure1-1.js")({
             $PARSE_ERROR: ${context._lift(PARSE_ERROR)},
-            $std_String: ${context._lift(std.String)},
+            $std_String: ${context._lift($stdlib.core.toLiftableModuleType(std.String, "@winglang/sdk/std", "String"))},
           })
         `;
       }

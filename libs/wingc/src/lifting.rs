@@ -13,7 +13,6 @@ use crate::{
 	},
 	visit::{self, Visit},
 	visit_context::{VisitContext, VisitorWithContext},
-	WINGSDK_ASSEMBLY_NAME,
 };
 
 pub struct LiftVisitor<'a> {
@@ -285,19 +284,23 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			let current_env = self.ctx.current_env().expect("an env");
 			let code = if let Some(SymbolKind::Namespace(root_namespace)) = current_env.lookup(&node.root, None) {
 				match &root_namespace.kind {
-					// types in wing files and the built-in wingsdk module already implement a helper to lift types
+					// types in wing files already implement a helper to lift types
 					NamespaceKind::FileModule => self.jsify_udt(&node),
-					NamespaceKind::JSII { fqn } if fqn == WINGSDK_ASSEMBLY_NAME => self.jsify_udt(&node),
 
-					NamespaceKind::JSII { fqn } => format!(
-						"{{ _toInflightType: () => `require(\"{fqn}\").{}` }}",
-						node
+					NamespaceKind::JSII { fqn } => {
+						let mut fqn = fqn.clone();
+						if root_namespace.name != fqn {
+							fqn = format!("{}/{}", fqn, root_namespace.name);
+						};
+						let type_path = node
 							.fields
 							.iter()
 							.map(|f| f.name.clone())
 							.collect::<Vec<String>>()
-							.join(".")
-					),
+							.join(".");
+						let udt = self.jsify_udt(&node);
+						format!("$stdlib.core.toLiftableModuleType({udt}, \"{fqn}\", \"{type_path}\")",)
+					}
 				}
 			} else {
 				self.jsify_udt(&node)
