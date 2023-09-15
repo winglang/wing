@@ -170,41 +170,6 @@ pub fn parse_wing_project(
 
 	// Parse all remaining files in the project
 	while let Some(file_or_dir_path) = unparsed_files.pop() {
-		if file_or_dir_path.is_dir() {
-			// Create a fake file at path/to/dir/__init__.w
-			let fake_file_path = file_or_dir_path.join("__init__.w");
-
-			// Collect a list of all files and subdirectories in the directory
-			let mut files_and_dirs = Vec::new();
-			for entry in fs::read_dir(&file_or_dir_path).unwrap() {
-				let entry = entry.unwrap();
-				let path = Utf8PathBuf::from_path_buf(entry.path()).expect("invalid utf8 path");
-				if path.is_dir() || path.extension() == Some("w") {
-					files_and_dirs.push(path);
-				}
-			}
-
-			// Sort the files and directories so that we always visit them in the same order
-			files_and_dirs.sort();
-
-			// Parse the fake file here (since it doesn't exist)
-			let mut tree_sitter_parser = tree_sitter::Parser::new();
-			tree_sitter_parser.set_language(tree_sitter_wing::language()).unwrap();
-			let tree_sitter_tree = tree_sitter_parser.parse("", None).unwrap();
-			let ast = Scope::empty();
-			let dependent_wing_paths = files_and_dirs;
-
-			// Update our collections of trees and ASTs and our file graph
-			tree_sitter_trees.insert(fake_file_path.clone(), tree_sitter_tree);
-			asts.insert(fake_file_path.clone(), ast);
-			file_graph.update_file(&fake_file_path, &dependent_wing_paths);
-
-			// Add all files and directories to the list of files to parse
-			unparsed_files.extend(dependent_wing_paths);
-
-			continue;
-		}
-
 		// Skip files that we have already seen before (they should already be parsed)
 		if files.contains_file(&file_or_dir_path) {
 			assert!(
@@ -216,6 +181,39 @@ pub fn parse_wing_project(
 				file_graph.contains_file(&file_or_dir_path),
 				"files is not in sync with file_graph"
 			);
+			continue;
+		}
+
+		// Handle directories specially
+		if file_or_dir_path.is_dir() {
+			// Collect a list of all files and subdirectories in the directory
+			let mut files_and_dirs = Vec::new();
+			for entry in fs::read_dir(&file_or_dir_path).expect("read_dir call failed") {
+				let entry = entry.unwrap();
+				let path = Utf8PathBuf::from_path_buf(entry.path()).expect("invalid utf8 path");
+				if path.is_dir() || path.extension() == Some("w") {
+					files_and_dirs.push(path);
+				}
+			}
+
+			// Sort the files and directories so that we always visit them in the same order
+			files_and_dirs.sort();
+
+			// Parse the file here (since it doesn't exist)
+			let mut tree_sitter_parser = tree_sitter::Parser::new();
+			tree_sitter_parser.set_language(tree_sitter_wing::language()).unwrap();
+			let tree_sitter_tree = tree_sitter_parser.parse("", None).unwrap();
+			let ast = Scope::empty();
+			let dependent_wing_paths = files_and_dirs;
+
+			// Update our collections of trees and ASTs and our file graph
+			tree_sitter_trees.insert(file_or_dir_path.clone(), tree_sitter_tree);
+			asts.insert(file_or_dir_path.clone(), ast);
+			file_graph.update_file(&file_or_dir_path, &dependent_wing_paths);
+
+			// Add all children files and directories to the list of files to parse
+			unparsed_files.extend(dependent_wing_paths);
+
 			continue;
 		}
 

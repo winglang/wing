@@ -16,6 +16,7 @@ use crate::ast::{
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, TypeError, WingSpan};
 use crate::docs::Docs;
+use crate::file_graph::FileGraph;
 use crate::type_check::symbol_env::SymbolEnvKind;
 use crate::visit_context::{VisitContext, VisitorWithContext};
 use crate::visit_types::{VisitType, VisitTypeMut};
@@ -1620,6 +1621,9 @@ pub struct TypeChecker<'a> {
 	/// The path to the source file being type checked.
 	source_path: &'a Utf8Path,
 
+	/// The file graph of the compilation.
+	file_graph: &'a FileGraph,
+
 	/// JSII Manifest descriptions to be imported.
 	/// May be reused between compilations
 	jsii_imports: &'a mut Vec<JsiiImportSpec>,
@@ -1636,6 +1640,7 @@ impl<'a> TypeChecker<'a> {
 	pub fn new(
 		types: &'a mut Types,
 		source_path: &'a Utf8Path,
+		file_graph: &'a FileGraph,
 		jsii_types: &'a mut TypeSystem,
 		jsii_imports: &'a mut Vec<JsiiImportSpec>,
 	) -> Self {
@@ -1644,6 +1649,7 @@ impl<'a> TypeChecker<'a> {
 			inner_scopes: vec![],
 			jsii_types,
 			source_path,
+			file_graph,
 			jsii_imports,
 			is_in_mut_json: false,
 			ctx: VisitContext::new(),
@@ -3621,7 +3627,13 @@ impl<'a> TypeChecker<'a> {
 				}
 				return;
 			}
-			BringSource::Directory(_) => todo!(),
+			BringSource::Directory(name) => {
+				// Get a list of all of the files in the directory through the file graph
+				let path = Utf8Path::new(&name.name);
+				let directory_files = self.file_graph.dependencies_of(path);
+				dbg!(&directory_files);
+				todo!()
+			}
 		}
 		self.add_module_to_env(env, library_name, namespace_filter, alias, Some(&stmt));
 		// library_name is the name of the library we are importing from the JSII world

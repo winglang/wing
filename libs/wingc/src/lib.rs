@@ -197,6 +197,7 @@ pub fn type_check(
 	scope: &mut Scope,
 	types: &mut Types,
 	file_path: &Utf8Path,
+	file_graph: &FileGraph,
 	jsii_types: &mut TypeSystem,
 	jsii_imports: &mut Vec<JsiiImportSpec>,
 ) {
@@ -245,7 +246,7 @@ pub fn type_check(
 	);
 
 	let mut scope_env = types.get_scope_env(&scope);
-	let mut tc = TypeChecker::new(types, file_path, jsii_types, jsii_imports);
+	let mut tc = TypeChecker::new(types, file_path, file_graph, jsii_types, jsii_imports);
 	tc.add_module_to_env(
 		&mut scope_env,
 		WINGSDK_ASSEMBLY_NAME.to_string(),
@@ -318,9 +319,15 @@ pub fn compile(
 	// Type check all files in topological order (start with files that don't bring any other
 	// Wing files, then move on to files that depend on those, and repeat)
 	for file in &topo_sorted_files {
-		dbg!(&file);
 		let mut scope = asts.get_mut(file).expect("matching AST not found");
-		type_check(&mut scope, &mut types, &file, &mut jsii_types, &mut jsii_imports);
+		type_check(
+			&mut scope,
+			&mut types,
+			&file,
+			&file_graph,
+			&mut jsii_types,
+			&mut jsii_imports,
+		);
 
 		// Validate the type checker didn't miss anything - see `TypeCheckAssert` for details
 		let mut tc_assert = TypeCheckAssert::new(&types, found_errors());

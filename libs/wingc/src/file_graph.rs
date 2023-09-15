@@ -44,6 +44,15 @@ impl FileGraph {
 		self.path_to_node_index.contains_key(path)
 	}
 
+	pub fn dependencies_of(&self, path: &Utf8Path) -> Vec<&Utf8PathBuf> {
+		let node_index = self.path_to_node_index.get(path).unwrap();
+		self
+			.graph
+			.edges(*node_index)
+			.map(|edge| &self.graph[edge.target()])
+			.collect::<Vec<_>>()
+	}
+
 	/// Returns a list of files in the order they should be compiled
 	/// Or a list of files that are part of a cycle, if one exists
 	pub fn toposort(&self) -> Result<Vec<Utf8PathBuf>, Vec<Utf8PathBuf>> {

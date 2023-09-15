@@ -167,7 +167,14 @@ fn partial_compile(
 	// Wing files, then move on to files that depend on those, etc.)
 	for file in &topo_sorted_files {
 		let mut scope = project_data.asts.get_mut(file).expect("matching AST not found");
-		type_check(&mut scope, &mut types, &file, jsii_types, &mut jsii_imports);
+		type_check(
+			&mut scope,
+			&mut types,
+			&file,
+			&project_data.file_graph,
+			jsii_types,
+			&mut jsii_imports,
+		);
 
 		// Validate the type checker didn't miss anything - see `TypeCheckAssert` for details
 		let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
