@@ -1,6 +1,6 @@
 use crate::ast::{
-	CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
-	UserDefinedType,
+	CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, IfLet, Phase, Reference, Scope, Stmt, StmtKind,
+	Symbol, UserDefinedType,
 };
 use crate::diagnostic::WingSpan;
 use crate::docs::Documented;
@@ -162,14 +162,14 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 					self.visit_scope(finally_statements);
 				}
 			}
-			StmtKind::IfLet {
+			StmtKind::IfLet(IfLet {
 				var_name,
 				value,
 				statements,
 				reassignable: _,
 				elif_statements,
 				else_statements,
-			} => {
+			}) => {
 				self.with_scope(statements, |v| {
 					v.visit_symbol(var_name);
 				});

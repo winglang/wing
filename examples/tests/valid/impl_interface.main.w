@@ -1,7 +1,7 @@
 bring cloud;
 
 class A impl cloud.IQueueSetConsumerHandler {
-  inflight handle(msg: str) {
+  pub inflight handle(msg: str) {
     return;
   }
 }
@@ -25,13 +25,13 @@ interface I3 extends I2 {
 }
 
 class r impl I3 {
-  method1(x: num): num {
+  pub method1(x: num): num {
     return x;
   }
-  inflight method2(x: str): str {
+  pub inflight method2(x: str): str {
     return x;
   }
-  method3(x: Array<num>): Array<num> {
+  pub method3(x: Array<num>): Array<num> {
     return x;
   }
 }
@@ -42,7 +42,7 @@ interface IAnimal {
 }
 
 class Dog impl IAnimal {
-  inflight eat() {
+  pub inflight eat() {
     return;
   }
 }
@@ -51,7 +51,7 @@ let z: IAnimal = new Dog();
 
 // base class is checked for implemention of interface
 class Terrier extends Dog {
-  inflight eat() {
+  pub inflight eat() {
     return;
   }
 }

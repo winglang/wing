@@ -8,7 +8,7 @@ source: libs/wingc/src/jsify/tests.rs
     let x = "hello";
 
     class Base {
-      f: str;
+      protected f: str;
       init() {
         this.f = x;
       }

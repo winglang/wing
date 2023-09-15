@@ -22,15 +22,16 @@ pub struct SymbolEnv {
 	pub(crate) symbol_map: BTreeMap<String, (StatementIdx, SymbolKind)>,
 	pub(crate) parent: Option<SymbolEnvRef>,
 
-	// TODO: This doesn't make much sense in the context of the "environment" but I needed a way to propagate the return type of a function
-	// down the scopes. Think of a nicer way to do this.
-	pub return_type: TypeRef,
+	pub kind: SymbolEnvKind,
 
-	pub is_init: bool,
-	// Whether this scope is inside of a function
-	pub is_function: bool,
 	pub phase: Phase,
 	statement_idx: usize,
+}
+
+pub enum SymbolEnvKind {
+	Scope,
+	Function { is_init: bool, sig: TypeRef },
+	Type(TypeRef),
 }
 
 impl Display for SymbolEnv {
@@ -153,23 +154,18 @@ pub struct SymbolLookupInfo {
 }
 
 impl SymbolEnv {
-	pub fn new(
-		parent: Option<SymbolEnvRef>,
-		return_type: TypeRef,
-		is_init: bool,
-		is_function: bool,
-		phase: Phase,
-		statement_idx: usize,
-	) -> Self {
-		// assert that if the return type isn't void, then there is a parent environment
-		assert!(matches!(*return_type, Type::Void) || parent.is_some());
+	pub fn new(parent: Option<SymbolEnvRef>, kind: SymbolEnvKind, phase: Phase, statement_idx: usize) -> Self {
+		// Some sanity checks
+		// If parent is a type-environent this must be one too
+		assert!(
+			parent.is_none()
+				|| matches!(parent, Some(parent) if matches!(parent.kind, SymbolEnvKind::Type(_)) == matches!(kind, SymbolEnvKind::Type(_)))
+		);
 
 		Self {
 			symbol_map: BTreeMap::new(),
 			parent,
-			return_type,
-			is_init,
-			is_function,
+			kind,
 			phase,
 			statement_idx,
 		}
@@ -270,7 +266,7 @@ impl SymbolEnv {
 				kind,
 				SymbolLookupInfo {
 					phase: self.phase,
-					init: self.is_init,
+					init: matches!(self.kind, SymbolEnvKind::Function { is_init: true, .. }),
 					env: get_ref,
 				},
 			);
@@ -356,11 +352,7 @@ impl SymbolEnv {
 	}
 
 	pub fn is_in_function(&self) -> bool {
-		let mut curr_env = self.get_ref();
-		while !curr_env.is_function && !curr_env.is_root() {
-			curr_env = curr_env.parent.unwrap();
-		}
-		curr_env.is_function
+		matches!(self.kind, SymbolEnvKind::Function { .. })
 	}
 }
 
@@ -396,7 +388,7 @@ impl<'a> Iterator for SymbolEnvIter<'a> {
 					kind,
 					SymbolLookupInfo {
 						phase: self.curr_env.phase,
-						init: self.curr_env.is_init,
+						init: matches!(self.curr_env.kind, SymbolEnvKind::Function { is_init: true, .. }),
 						env: self.curr_env.get_ref(),
 					},
 				))
@@ -419,7 +411,10 @@ impl<'a> Iterator for SymbolEnvIter<'a> {
 mod tests {
 	use crate::{
 		ast::{Phase, Symbol},
-		type_check::{symbol_env::LookupResult, Namespace, NamespaceKind, SymbolKind, Types},
+		type_check::{
+			symbol_env::{LookupResult, SymbolEnvKind},
+			Namespace, NamespaceKind, SymbolKind, Types,
+		},
 	};
 
 	use super::{StatementIdx, SymbolEnv};
@@ -431,13 +426,11 @@ mod tests {
 	#[test]
 	fn test_statement_idx_lookups() {
 		let types = setup_types();
-		let mut parent_env = SymbolEnv::new(None, types.void(), false, false, Phase::Independent, 0);
+		let mut parent_env = SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Independent, 0);
 		let child_scope_idx = 10;
 		let mut child_env = SymbolEnv::new(
 			Some(parent_env.get_ref()),
-			types.void(),
-			false,
-			false,
+			SymbolEnvKind::Scope,
 			crate::ast::Phase::Independent,
 			child_scope_idx,
 		);
@@ -551,12 +544,10 @@ mod tests {
 	#[test]
 	fn test_nested_lookups() {
 		let mut types = setup_types();
-		let mut parent_env = SymbolEnv::new(None, types.void(), false, false, Phase::Independent, 0);
+		let mut parent_env = SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Independent, 0);
 		let child_env = SymbolEnv::new(
 			Some(parent_env.get_ref()),
-			types.void(),
-			false,
-			false,
+			SymbolEnvKind::Scope,
 			crate::ast::Phase::Independent,
 			0,
 		);
@@ -564,20 +555,13 @@ mod tests {
 		// Create namespaces
 		let ns1 = types.add_namespace(Namespace {
 			name: "ns1".to_string(),
-			env: SymbolEnv::new(None, types.void(), false, false, Phase::Independent, 0),
+			env: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Independent, 0),
 			loaded: false,
 			kind: NamespaceKind::FileModule,
 		});
 		let ns2 = types.add_namespace(Namespace {
 			name: "ns2".to_string(),
-			env: SymbolEnv::new(
-				Some(ns1.env.get_ref()),
-				types.void(),
-				false,
-				false,
-				Phase::Independent,
-				0,
-			),
+			env: SymbolEnv::new(Some(ns1.env.get_ref()), SymbolEnvKind::Scope, Phase::Independent, 0),
 			loaded: false,
 			kind: NamespaceKind::FileModule,
 		});
