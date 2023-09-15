@@ -6,6 +6,11 @@ import { IInflightHost } from "../std";
  */
 export interface IAwsFunction {
   /**
+   * Add an environment variable to the function.
+   */
+  addEnvironment(key: string, value: string): void;
+
+  /**
    * Add policy statements to the function's IAM role.
    */
   addPolicyStatements(...policies: PolicyStatement[]): void;
@@ -28,6 +33,9 @@ export class Function {
   }
 
   private static isAwsFunction(obj: any): obj is IAwsFunction {
-    return typeof obj.addPolicyStatements === "function";
+    return (
+      typeof obj.addPolicyStatements === "function" &&
+      typeof obj.addEnvironment === "function"
+    );
   }
 }

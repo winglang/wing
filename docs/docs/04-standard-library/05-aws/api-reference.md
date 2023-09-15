@@ -132,7 +132,28 @@ A shared interface for AWS functions.
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsFunction.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
 | <code><a href="#@winglang/sdk.aws.IAwsFunction.addPolicyStatements">addPolicyStatements</a></code> | Add policy statements to the function's IAM role. |
+
+---
+
+##### `addEnvironment` <a name="addEnvironment" id="@winglang/sdk.aws.IAwsFunction.addEnvironment"></a>
+
+```wing
+addEnvironment(key: str, value: str): void
+```
+
+Add an environment variable to the function.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.aws.IAwsFunction.addEnvironment.parameter.key"></a>
+
+- *Type:* str
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.aws.IAwsFunction.addEnvironment.parameter.value"></a>
+
+- *Type:* str
 
 ---
 
