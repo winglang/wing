@@ -3622,6 +3622,7 @@ impl<'a> TypeChecker<'a> {
 					name: name.name.to_string(),
 					env: SymbolEnv::new(Some(brought_env.get_ref()), SymbolEnvKind::Scope, brought_env.phase, 0),
 					loaded: true,
+					kind: NamespaceKind::FileModule,
 				});
 				if let Err(e) = env.define(
 					identifier.as_ref().unwrap(),
