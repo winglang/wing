@@ -41,7 +41,7 @@ let jj3 = Json getStr();
 assert(jj3 == Json "hello");
 
 class Foo {
-  SumStr: str;
+  pub SumStr: str;
   init() {
     this.SumStr = "wow!";
   }

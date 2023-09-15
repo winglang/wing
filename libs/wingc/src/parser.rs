@@ -8,10 +8,10 @@ use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
-	ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock,
-	ElifLetBlock, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface,
-	InterpolatedString, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Spanned, Stmt, StmtKind,
-	StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
+	AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
+	ElifBlock, ElifLetBlock, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
+	IfLet, Interface, InterpolatedString, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Spanned,
+	Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan};
@@ -27,7 +27,7 @@ static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"any" => "https://github.com/winglang/wing/issues/434",
 	"Promise" => "https://github.com/winglang/wing/issues/529",
 	"storage_modifier" => "https://github.com/winglang/wing/issues/107",
-	"access_modifier" => "https://github.com/winglang/wing/issues/108",
+	"internal" => "https://github.com/winglang/wing/issues/4156",
 	"await_expression" => "https://github.com/winglang/wing/issues/116",
 	"defer_expression" => "https://github.com/winglang/wing/issues/116",
 };
@@ -78,7 +78,8 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 	"package",
 	"private",
 	"protected",
-	"public",
+	"pub",
+	"internal",
 	"return",
 	"short",
 	"static",
@@ -615,14 +616,14 @@ impl<'s> Parser<'s> {
 		} else {
 			None
 		};
-		Ok(StmtKind::IfLet {
+		Ok(StmtKind::IfLet(IfLet {
 			var_name: name,
 			reassignable,
 			value,
 			statements: if_block,
 			elif_statements: elif_vec,
 			else_statements: else_block,
-		})
+		}))
 	}
 
 	fn build_if_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
@@ -909,6 +910,7 @@ impl<'s> Parser<'s> {
 						reassignable: class_element.child_by_field_name("reassignable").is_some(),
 						is_static,
 						phase,
+						access_modifier: self.build_access_modifier(class_element.child_by_field_name("access_modifier"))?,
 					})
 				}
 				"initializer" => {
@@ -961,6 +963,7 @@ impl<'s> Parser<'s> {
 							},
 							is_static: false,
 							span: self.node_span(&class_element),
+							access_modifier: AccessModifier::Public,
 						})
 					} else {
 						initializer = Some(FunctionDefinition {
@@ -975,6 +978,7 @@ impl<'s> Parser<'s> {
 								phase: Phase::Preflight,
 							},
 							span: self.node_span(&class_element),
+							access_modifier: AccessModifier::Public,
 						})
 					}
 				}
@@ -1018,6 +1022,7 @@ impl<'s> Parser<'s> {
 				body: FunctionBody::Statements(Scope::new(vec![], WingSpan::default())),
 				is_static: false,
 				span: WingSpan::default(),
+				access_modifier: AccessModifier::Public,
 			},
 		};
 
@@ -1042,6 +1047,7 @@ impl<'s> Parser<'s> {
 				body: FunctionBody::Statements(Scope::new(vec![], WingSpan::default())),
 				is_static: false,
 				span: WingSpan::default(),
+				access_modifier: AccessModifier::Public,
 			},
 		};
 
@@ -1233,6 +1239,7 @@ impl<'s> Parser<'s> {
 			signature,
 			is_static,
 			span: self.node_span(func_def_node),
+			access_modifier: self.build_access_modifier(func_def_node.child_by_field_name("access_modifier"))?,
 		})
 	}
 
@@ -1302,6 +1309,17 @@ impl<'s> Parser<'s> {
 				}
 			}
 			other => self.with_error(format!("Expected class. Found {}", other), type_node),
+		}
+	}
+
+	fn build_access_modifier(&self, am_node: Option<Node>) -> DiagnosticResult<AccessModifier> {
+		match am_node {
+			Some(am_node) => match self.node_text(&am_node) {
+				"pub" => Ok(AccessModifier::Public),
+				"protected" => Ok(AccessModifier::Protected),
+				other => self.report_unimplemented_grammar(other, "access modifier", &am_node),
+			},
+			None => Ok(AccessModifier::Private),
 		}
 	}
 
@@ -2106,6 +2124,7 @@ impl<'s> Parser<'s> {
 				},
 				is_static: true,
 				span: statements_span.clone(),
+				access_modifier: AccessModifier::Public,
 			}),
 			statements_span.clone(),
 		);

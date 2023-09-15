@@ -27,14 +27,14 @@ class Foo {
     }
   }
 
-  inflight callFn(x: bool): num {
+  pub inflight callFn(x: bool): num {
     // partialFn could be an inflight function created during preflight or inflight,
     // so we have to code-generate this to work for both cases
     let partialFn = this.makeFn(x);
     return partialFn();
   }
 
-  inflight callFn2(): void {
+  pub inflight callFn2(): void {
     // now we call inflight1 and inflight2 directly which know they are handler classes
     let one = this.inflight1();
     let two = this.inflight2();
