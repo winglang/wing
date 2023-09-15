@@ -139,7 +139,7 @@ export class Topic extends cloud.Topic {
       throw new Error("topics can only be bound by tfaws.Function for now");
     }
 
-    host.addPolicyStatements(calculateTopicPermissions(this.topic.arn, ops));
+    host.addPolicyStatements(...calculateTopicPermissions(this.topic.arn, ops));
 
     host.addEnvironment(this.envName(), this.topic.arn);
 
