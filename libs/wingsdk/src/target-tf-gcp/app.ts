@@ -2,9 +2,10 @@ import { Construct } from "constructs";
 import { Bucket } from "./bucket";
 import { GoogleProvider } from "../.gen/providers/google/provider";
 import { RandomProvider } from "../.gen/providers/random/provider";
-import { BUCKET_FQN } from "../cloud";
+import { BUCKET_FQN, FUNCTION_FQN } from "../cloud";
 import { AppProps as CdktfAppProps } from "../core";
 import { CdktfApp } from "../shared-tf/app";
+import { Function } from "./function";
 
 /**
  * GCP App props.
@@ -85,6 +86,8 @@ export class App extends CdktfApp {
     switch (fqn) {
       case BUCKET_FQN:
         return new Bucket(scope, id, args[0]);
+      case FUNCTION_FQN:
+        throw new Function(scope, id, args[0], args[1]);
     }
 
     return undefined;
