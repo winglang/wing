@@ -87,7 +87,7 @@ export class App extends CdktfApp {
       case BUCKET_FQN:
         return new Bucket(scope, id, args[0]);
       case FUNCTION_FQN:
-        throw new Function(scope, id, args[0], args[1]);
+        return new Function(scope, id, args[0], args[1]);
     }
 
     return undefined;
