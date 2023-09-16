@@ -1,16 +1,16 @@
-import { IInflightHost } from "../std";
-import { CloudfunctionsFunctionIamMember } from "../.gen/providers/google/cloudfunctions-function-iam-member";
-import { CloudfunctionsFunction } from "../.gen/providers/google/cloudfunctions-function";
-import { CaseConventions, NameOptions, ResourceNames } from "../shared/resource-names";
+import { Construct } from "constructs";
 import * as cloud from "../cloud";
+import { CloudfunctionsFunction } from "../.gen/providers/google/cloudfunctions-function"
 import { StorageBucket } from "../.gen/providers/google/storage-bucket";
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
-import { Construct } from "constructs";
+import { CloudfunctionsFunctionIamMember } from "../.gen/providers/google/cloudfunctions-function-iam-member";
 import { App } from "./app";
+import { CaseConventions, NameOptions, ResourceNames } from "../shared/resource-names";
+import { Id } from "../.gen/providers/random/id";
 import { createBundle } from "../shared/bundling";
 import { AssetType, TerraformAsset } from "cdktf";
 import { resolve } from "path";
-import { Id } from "../.gen/providers/random/id";
+import { IInflightHost } from "../std";
 
 const FUNCTION_NAME_OPTS: NameOptions = {
     maxLen: 32,
@@ -89,7 +89,7 @@ export class Function extends cloud.Function {
         });
 
         // create the permissions
-        new CloudfunctionsFunctionIamMember(this, "Function_IAM", {
+        new CloudfunctionsFunctionIamMember(this, "Function_IAM_Member", {
             project: app.projectId,
             region: app.storageLocation,
             cloudFunction: this.function.name,
