@@ -86,7 +86,7 @@ export class Function extends cloud.Function {
             sourceArchiveObject: this.bucketObject.name,
             entryPoint: "handler",
             triggerHttp: true,
-            timeout: 60,
+            timeout: props.timeout?.seconds ?? 60,
             environmentVariables: props.env ?? {},
         });
 

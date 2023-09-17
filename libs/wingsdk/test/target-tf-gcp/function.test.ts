@@ -4,6 +4,7 @@ import { Testing } from "../../src/testing";
 import { test, expect } from "vitest";
 import { Function } from "../../src/cloud";
 import { mkdtemp, tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
+import { Duration } from "../../src/std";
 
 
 const GCP_APP_OPTS = {
@@ -65,5 +66,54 @@ test("basic function with environment variables", () => {
     ).toEqual(true);
     expect(tfSanitize(output)).toMatchSnapshot();
     expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
 
+test("basic function with timeout explicitly set", () => {
+    // GIVEN
+    const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+    const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+
+    // WHEN
+    Function._newFunction(app, "Function", inflight, {
+        timeout: Duration.fromSeconds(30),
+    });
+    const output = app.synth();
+
+    // THEN
+    expect(
+        cdktf.Testing.toHaveResourceWithProperties(
+            output,
+            "google_cloudfunctions_function",
+            {
+                timeout: 30,
+            }
+        )
+    ).toEqual(true);
+    expect(tfSanitize(output)).toMatchSnapshot();
+    expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("basic function with memory size specified", () => {
+    // GIVEN
+    const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+    const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+
+    // WHEN
+    Function._newFunction(app, "Function", inflight, {
+        memory: 256,
+    });
+    const output = app.synth();
+
+    // THEN
+    expect(
+        cdktf.Testing.toHaveResourceWithProperties(
+            output,
+            "google_cloudfunctions_function",
+            {
+                available_memory_mb: 256,
+            }
+        )
+    ).toEqual(true);
+    expect(tfSanitize(output)).toMatchSnapshot();
+    expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
