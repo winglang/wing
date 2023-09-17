@@ -1,11 +1,11 @@
 import { Construct } from "constructs";
 import { Bucket } from "./bucket";
+import { Function } from "./function";
 import { GoogleProvider } from "../.gen/providers/google/provider";
 import { RandomProvider } from "../.gen/providers/random/provider";
 import { BUCKET_FQN, FUNCTION_FQN } from "../cloud";
 import { AppProps as CdktfAppProps } from "../core";
 import { CdktfApp } from "../shared-tf/app";
-import { Function } from "./function";
 
 /**
  * GCP App props.
