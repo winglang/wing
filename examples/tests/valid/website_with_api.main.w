@@ -11,7 +11,8 @@ let api = new cloud.Api(
     allowMethods: [cloud.HttpMethod.GET, cloud.HttpMethod.POST, cloud.HttpMethod.OPTIONS],
     allowHeaders: ["Content-Type"],
     allowCredentials: false,
-    exposeHeaders: ["Content-Type"]
+    exposeHeaders: ["Content-Type"],
+    maxAge: 600
   }
 );
 
