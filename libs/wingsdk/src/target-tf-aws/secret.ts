@@ -1,8 +1,7 @@
 import { TerraformOutput } from "cdktf";
 import { Construct } from "constructs";
 import { Function } from "./function";
-import { DataAwsSecretsmanagerSecret } from "../.gen/providers/aws/data-aws-secretsmanager-secret";
-import { SecretsmanagerSecret } from "../.gen/providers/aws/secretsmanager-secret";
+import { SsmParameter } from "../.gen/providers/aws/ssm-parameter";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
@@ -22,18 +21,24 @@ const NAME_OPTS: NameOptions = {
  * @inflight `@winglang/sdk.cloud.ISecretClient`
  */
 export class Secret extends cloud.Secret {
-  private readonly secret: DataAwsSecretsmanagerSecret | SecretsmanagerSecret;
+  private readonly secret: SsmParameter;
 
   constructor(scope: Construct, id: string, props: cloud.SecretProps = {}) {
     super(scope, id, props);
 
     if (props.name) {
-      this.secret = new DataAwsSecretsmanagerSecret(this, "Default", {
+      this.secret = new SsmParameter(this, "Default", {
         name: props.name,
+        value: "test",
+        type: "SecureString",
+        tier: "Intelligent-Tiering",
       });
     } else {
-      this.secret = new SecretsmanagerSecret(this, "Default", {
+      this.secret = new SsmParameter(this, "Default", {
         name: ResourceNames.generateName(this, NAME_OPTS),
+        value: "test",
+        type: "SecureString",
+        tier: "Intelligent-Tiering",
       });
 
       new TerraformOutput(this, "SecretArn", {
