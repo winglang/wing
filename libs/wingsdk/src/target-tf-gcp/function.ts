@@ -81,11 +81,13 @@ export class Function extends cloud.Function {
             name: ResourceNames.generateName(this, FUNCTION_NAME_OPTS),
             description: "This function was created by Wing",
             runtime: "nodejs16",
-            availableMemoryMb: 128,
+            availableMemoryMb: props.memory ?? 128,
             sourceArchiveBucket: this.bucket.name,
             sourceArchiveObject: this.bucketObject.name,
             entryPoint: "handler",
             triggerHttp: true,
+            timeout: 60,
+            environmentVariables: props.env ?? {},
         });
 
         // create the permissions
