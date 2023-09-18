@@ -266,20 +266,16 @@ async function testSimulator(synthDir: string, options: TestOptions) {
   const s = new testing.Simulator({ simfile: synthDir });
   const { clean } = options;
   await s.start();
-  // if (options.testFilter) console.log("YES");
-  // else console.log("NO");
 
   const testRunner = s.getResource("root/cloud.TestRunner") as std.ITestRunnerClient;
   const tests = await testRunner.listTests();
   const filteredTests = pickOneTestPerEnvironment(tests);
-  // console.log(filteredTests);
 
   let testsToRun;
   const results = new Array<std.TestResult>();
 
   if (options.testFilter) {
     testsToRun = filterTestsByRegex(filteredTests, options.testFilter);
-    // console.log(testsToRun);
   } else {
     testsToRun = filteredTests;
   }
