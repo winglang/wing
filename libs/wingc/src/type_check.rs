@@ -2816,24 +2816,29 @@ impl<'a> TypeChecker<'a> {
 
 	/// returns false if the type is not known json
 	pub fn validate_type_json(&mut self, actual_type: TypeRef, expected_type: TypeRef, span: &impl Spanned) -> bool {
+		let expected_type = self.types.maybe_unwrap_inference(expected_type);
+		let expected_type_unwrapped = expected_type.maybe_unwrap_option();
 		let mut json_type = actual_type;
-		if let Some(inner_expected) = expected_type.collection_item_type() {
+		if let Some(inner_expected) = expected_type_unwrapped.collection_item_type() {
 			if let Some(inner_actual) = actual_type.collection_item_type() {
 				if !inner_actual.is_known_json() {
 					// check for nested collections
 					return self.validate_type_json(inner_actual, inner_expected, span);
 				} else {
+					// If the outer collection type doesn't match then don't bother
+					// Collections of Json are not subtypes of other collections, so we can just check the collection enum variant
+					if std::mem::discriminant(&**expected_type_unwrapped) != std::mem::discriminant(&*actual_type) {
+						return false;
+					}
 					json_type = inner_actual;
 				}
 			}
 		}
 
 		let Type::Json(Some(data)) = &*json_type else {
-		return false;
-	};
+			return false;
+		};
 
-		let expected_type = self.types.maybe_unwrap_inference(expected_type);
-		let expected_type_unwrapped = expected_type.maybe_unwrap_option();
 		if expected_type_unwrapped.is_json() {
 			return false;
 		}
@@ -2853,22 +2858,19 @@ impl<'a> TypeChecker<'a> {
 				if expected_type_unwrapped.is_struct() {
 					self.validate_structural_type(fields, expected_type_unwrapped, span);
 					return true;
-				} else if let Type::Map(expected_map) = &**expected_type_unwrapped {
+				} else if let Some(expected_map) = expected_type_unwrapped.collection_item_type() {
 					for field_info in fields.values() {
-						self.validate_type(field_info.type_, *expected_map, &field_info.span);
+						self.validate_type(field_info.type_, expected_map, &field_info.span);
 					}
 					return true;
 				}
 			}
 			JsonDataKind::List(list) => {
-				// Collections of Json are not subtypes of other collections, so we can just check the collection variant
-				if std::mem::discriminant(&**expected_type_unwrapped) == std::mem::discriminant(&*actual_type) {
-					if let Type::Array(expected_inner) | Type::Set(expected_inner) = **expected_type_unwrapped {
-						for t in list {
-							self.validate_type(t.type_, expected_inner, &t.span);
-						}
-						return true;
+				if let Some(expected_inner) = expected_type_unwrapped.collection_item_type() {
+					for t in list {
+						self.validate_type(t.type_, expected_inner, &t.span);
 					}
+					return true;
 				}
 			}
 		};
