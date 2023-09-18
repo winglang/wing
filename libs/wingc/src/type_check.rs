@@ -3626,13 +3626,14 @@ impl<'a> TypeChecker<'a> {
 				return;
 			}
 			BringSource::Directory(name) => {
-				// Get a list of all of the files in the directory through the file graph
-				let path = Utf8Path::new(&name.name);
-				let directory_files = self.file_graph.dependencies_of(path);
+				// Get a list of all of the children (files or directories) through the file graph
+				let directory_path = Utf8Path::new(&name.name);
+				let children = self.file_graph.dependencies_of(directory_path);
 
+				// Obtain each child's environment
 				let mut brought_envs = vec![];
-				for file in directory_files.iter() {
-					let brought_env = match self.types.source_file_envs.get(*file) {
+				for child in children.iter() {
+					let brought_env = match self.types.source_file_envs.get(*child) {
 						Some(env) => *env,
 						None => {
 							self.spanned_error(
