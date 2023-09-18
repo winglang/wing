@@ -21,7 +21,7 @@ export interface SecretProps {
    *
    * @default - a new secret is provisioned with a generated name
    */
-  readonly name?: string;
+  readonly name: string;
 }
 
 /**
@@ -37,12 +37,12 @@ export abstract class Secret extends Resource {
   public static _newSecret(
     scope: Construct,
     id: string,
-    props: SecretProps = {}
+    props: SecretProps
   ): Secret {
     return App.of(scope).newAbstract(SECRET_FQN, scope, id, props);
   }
 
-  constructor(scope: Construct, id: string, props: SecretProps = {}) {
+  constructor(scope: Construct, id: string, props: SecretProps) {
     super(scope, id);
 
     Node.of(this).title = "Secret";

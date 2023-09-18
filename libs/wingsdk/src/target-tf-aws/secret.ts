@@ -1,19 +1,11 @@
 import { TerraformOutput } from "cdktf";
 import { Construct } from "constructs";
 import { Function } from "./function";
-import { SsmParameter } from "../.gen/providers/aws/ssm-parameter";
+import { DataAwsSsmParameter } from "../.gen/providers/aws/data-aws-ssm-parameter";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { calculateSecretPermissions } from "../shared-aws/permissions";
 import { IInflightHost } from "../std";
-
-/**
- * The secret name can contain ASCII letters, numbers, and the following characters: /_+=.@-
- */
-const NAME_OPTS: NameOptions = {
-  disallowedRegex: /[^\w/+=.@-]+/g,
-};
 
 /**
  * AWS implementation of `cloud.Secret`
@@ -21,30 +13,18 @@ const NAME_OPTS: NameOptions = {
  * @inflight `@winglang/sdk.cloud.ISecretClient`
  */
 export class Secret extends cloud.Secret {
-  private readonly secret: SsmParameter;
+  private readonly secret: DataAwsSsmParameter;
 
-  constructor(scope: Construct, id: string, props: cloud.SecretProps = {}) {
+  constructor(scope: Construct, id: string, props: cloud.SecretProps) {
     super(scope, id, props);
 
-    if (props.name) {
-      this.secret = new SsmParameter(this, "Default", {
-        name: props.name,
-        value: "test",
-        type: "SecureString",
-        tier: "Intelligent-Tiering",
-      });
-    } else {
-      this.secret = new SsmParameter(this, "Default", {
-        name: ResourceNames.generateName(this, NAME_OPTS),
-        value: "test",
-        type: "SecureString",
-        tier: "Intelligent-Tiering",
-      });
+    this.secret = new DataAwsSsmParameter(this, "Default", {
+      name: props.name,
+    });
 
-      new TerraformOutput(this, "SecretArn", {
-        value: this.secret.arn,
-      });
-    }
+    new TerraformOutput(this, "SecretArn", {
+      value: this.secret.arn,
+    });
   }
 
   /**

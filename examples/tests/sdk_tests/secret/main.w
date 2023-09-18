@@ -1,3 +1,3 @@
 bring cloud;
 
-let secret = new cloud.Secret();
+let secret = new cloud.Secret(name: "test");
