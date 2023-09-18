@@ -14,9 +14,9 @@ import {
   GetObjectOutput,
   NoSuchKey,
 } from "@aws-sdk/client-s3";
-import { BucketDeleteOptions, IBucketClient } from "../cloud";
-import { Duration, Json } from "../std";
-import { getSignedUrl ,S3RequestPresigner} from "@aws-sdk/s3-request-presigner";
+import { BucketDeleteOptions, IBucketClient, SignedUrlOptions } from "../cloud";
+import { Json } from "../std";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 export class BucketClient implements IBucketClient {
   constructor(
     private readonly bucketName: string,
@@ -273,13 +273,13 @@ export class BucketClient implements IBucketClient {
    */
 
 
-  public async signedUrl(key: string, duration?: Duration): Promise<string> {
+  public async signedUrl(key: string, options?: SignedUrlOptions): Promise<string> {
     if (!(await this.exists(key))) {
       throw new Error(
         `Cannot provide signed url for a non-existent key (key=${key})`
       );
     }
-    const expiryTimeInSeconds:number= duration?.seconds|| 86400;
+    const expiryTimeInSeconds:number= options?.duration?.seconds|| 86400;
     const command: any = new GetObjectCommand({
     Bucket: this.bucketName,
     Key: key
