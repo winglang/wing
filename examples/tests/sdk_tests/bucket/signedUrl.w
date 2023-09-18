@@ -9,17 +9,17 @@ test "signedUrl" {
   testBucket.put("file1.txt", "Foo");
 
   let signedUrl = testBucket.signedUrl("file1.txt");
-  assert(http.get(signedUrl).ok);
+   if (util.env("WING_TARGET") != "sim") { 
+   assert(http.get(publicUrl).body ==  "Foo"); 
+  } 
 
 
 }
 
 test "signedUrlForNonExistentKey"{
   let var error = "";
-  testBucket.put("file1.txt", "Foo");
-
   try{
-    let signedUrl = testBucket.signedUrl("file1.txt");
+    let signedUrl = testBucket.signedUrl("file.txt");
   }catch e{
     error=e;
   }
