@@ -2708,14 +2708,16 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	/// If possible, structurally checks the given type as a Json against the expected type.
+	/// If possible, structurally check the given type as a Json against the expected type.
 	///
-	/// returns true if actual type validation occurred, false otherwise
+	/// returns true if validation occurred, false otherwise
 	pub fn validate_type_json(&mut self, actual_type: TypeRef, expected_type: TypeRef, span: &impl Spanned) -> bool {
 		let mut json_type = actual_type;
 		let expected_type = self.types.maybe_unwrap_inference(expected_type);
 		let expected_type_unwrapped = expected_type.maybe_unwrap_option();
+
 		if expected_type_unwrapped.is_json() {
+			// No need for fancy type checking against Json
 			return false;
 		}
 
@@ -2742,16 +2744,17 @@ impl<'a> TypeChecker<'a> {
 			return false;
 		};
 
-		if expected_type_unwrapped.is_json_legal_value()
-			|| expected_type_unwrapped.is_struct()
+		if expected_type_unwrapped.is_struct()
 			|| expected_type_unwrapped.is_immutable_collection()
+			|| expected_type_unwrapped.is_json_legal_value()
 		{
-			// We don't need to check the json-ability of this expr later because we know it's legal or it's being used as a struct/map
+			// We don't need to check the json-legality of this expr later because we know it's either legal or it's being used as a struct/map
 			self.types.json_literal_casts.insert(data.expression_id, expected_type);
 		}
 
 		match &data.kind {
 			JsonDataKind::Type(t) => {
+				// The expected type is some sort of primitive
 				self.validate_type(t.type_, expected_type, span);
 				true
 			}
@@ -2760,6 +2763,7 @@ impl<'a> TypeChecker<'a> {
 					self.validate_structural_type(fields, expected_type_unwrapped, span);
 					true
 				} else if let Some(inner_expected) = inner_expected {
+					// The expected type is a Map
 					for field_info in fields.values() {
 						self.validate_type(field_info.type_, inner_expected, &field_info.span);
 					}
@@ -2770,6 +2774,7 @@ impl<'a> TypeChecker<'a> {
 			}
 			JsonDataKind::List(list) => {
 				if let Some(inner_expected) = inner_expected {
+					// The expected type is an Array or Set
 					for t in list {
 						self.validate_type(t.type_, inner_expected, &t.span);
 					}
