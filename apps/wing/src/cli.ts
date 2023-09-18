@@ -92,7 +92,10 @@ async function main() {
       () => {
         process.env.WING_DISABLE_ANALYTICS = "1";
       }
-    );
+    )
+    .option("--no-color", "Disable colors for all output", () => {
+      process.env.NO_COLOR = "1";
+    });
 
   async function progressHook(cmd: Command) {
     const target = cmd.opts().target;

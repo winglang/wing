@@ -13,7 +13,7 @@ source: libs/wingc/src/jsify/tests.rs
         this.b = new cloud.Bucket();
       }
 
-      inflight put() {
+      protected inflight put() {
         this.b.put("hello", "world");
         this.b.list();
       }

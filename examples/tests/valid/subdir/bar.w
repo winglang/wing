@@ -1,7 +1,7 @@
 // used by bring_local_normalization.w
 
 class Bar {
-  static bar(): str {
+  pub static bar(): str {
     return "bar";
   }
 }

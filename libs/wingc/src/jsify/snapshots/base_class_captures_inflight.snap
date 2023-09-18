@@ -8,7 +8,7 @@ source: libs/wingc/src/jsify/tests.rs
     let x = "hello";
 
     class Base {
-      inflight bar() {
+      protected inflight bar() {
         log(x);
       }
     }

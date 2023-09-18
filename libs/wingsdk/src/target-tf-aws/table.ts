@@ -56,48 +56,41 @@ export class Table extends ex.Table {
       throw new Error("tables can only be bound by tfaws.Function for now");
     }
 
-    if (ops.includes(ex.TableInflightMethods.INSERT)) {
-      host.addPolicyStatements([
-        {
-          actions: ["dynamodb:PutItem"],
-          resources: [this.table.arn],
-        },
-      ]);
+    if (
+      ops.includes(ex.TableInflightMethods.INSERT) ||
+      ops.includes(ex.TableInflightMethods.UPSERT)
+    ) {
+      host.addPolicyStatements({
+        actions: ["dynamodb:PutItem"],
+        resources: [this.table.arn],
+      });
     }
     if (ops.includes(ex.TableInflightMethods.UPDATE)) {
-      host.addPolicyStatements([
-        {
-          actions: ["dynamodb:UpdateItem"],
-          resources: [this.table.arn],
-        },
-      ]);
+      host.addPolicyStatements({
+        actions: ["dynamodb:UpdateItem"],
+        resources: [this.table.arn],
+      });
     }
 
     if (ops.includes(ex.TableInflightMethods.DELETE)) {
-      host.addPolicyStatements([
-        {
-          actions: ["dynamodb:DeleteItem"],
-          resources: [this.table.arn],
-        },
-      ]);
+      host.addPolicyStatements({
+        actions: ["dynamodb:DeleteItem"],
+        resources: [this.table.arn],
+      });
     }
 
     if (ops.includes(ex.TableInflightMethods.GET)) {
-      host.addPolicyStatements([
-        {
-          actions: ["dynamodb:GetItem"],
-          resources: [this.table.arn],
-        },
-      ]);
+      host.addPolicyStatements({
+        actions: ["dynamodb:GetItem"],
+        resources: [this.table.arn],
+      });
     }
 
     if (ops.includes(ex.TableInflightMethods.LIST)) {
-      host.addPolicyStatements([
-        {
-          actions: ["dynamodb:Scan"],
-          resources: [this.table.arn],
-        },
-      ]);
+      host.addPolicyStatements({
+        actions: ["dynamodb:Scan"],
+        resources: [this.table.arn],
+      });
     }
 
     host.addEnvironment(this.envName(), this.table.name);

@@ -7,7 +7,7 @@ source: libs/wingc/src/jsify/tests.rs
 
     bring cloud;
     class YourType {
-      inflight b: str;
+      pub inflight b: str;
       inflight init() {
         this.b = "hello";
       }
