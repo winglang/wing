@@ -1,7 +1,7 @@
 bring cloud;
 
 class First {
-  myResource: cloud.Bucket;
+  pub myResource: cloud.Bucket;
 
   init() {
     this.myResource = new cloud.Bucket();
@@ -9,19 +9,19 @@ class First {
 }
 
 class Another {
-  myField: str;
-  first: First;
+  pub myField: str;
+  pub first: First;
 
   init () {
     this.myField = "hello!";
     this.first = new First();
   }
 
-  inflight meaningOfLife(): num {
+  pub inflight meaningOfLife(): num {
     return 42;
   }
 
-  inflight anotherFunc(): str {
+  pub inflight anotherFunc(): str {
     return "42";
   }
 }
@@ -67,13 +67,13 @@ class MyResource {
     this.unusedResource = new cloud.Counter();
   }
 
-  inflight testNoCapture() {
+  pub inflight testNoCapture() {
     let arr = [1,2,3];
     assert(arr.length == 3);
     log("array.len=${arr.length}");
   }
 
-  inflight testCaptureCollectionsOfData() {
+  pub inflight testCaptureCollectionsOfData() {
     assert(this.arrayOfStr.length == 2);
     assert(this.arrayOfStr.at(0) == "s1");
     assert(this.arrayOfStr.at(1) == "s2");
@@ -84,13 +84,13 @@ class MyResource {
     assert(!this.setOfStr.has("s3"));
   }
 
-  inflight testCapturePrimitives() {
+  pub inflight testCapturePrimitives() {
     assert(this.myStr == "myString");
     assert(this.myNum == 42);
     assert(this.myBool == true);
   }
 
-  inflight testCaptureOptional() {
+  pub inflight testCaptureOptional() {
     assert(this.myOptStr ?? "" == "myOptString");
   }
 
@@ -98,39 +98,39 @@ class MyResource {
     return this.another;
   }
 
-  inflight testCaptureResource() {
+  pub inflight testCaptureResource() {
     this.myResource.put("f1.txt", "f1");
     assert(this.myResource.get("f1.txt") == "f1");
     assert(this.myResource.list().length == 1);
   }
 
-  inflight testNestedInflightField() {
+  pub inflight testNestedInflightField() {
     assert(this.another.myField == "hello!");
     log("field=${this.another.myField}");
   }
 
-  inflight testNestedResource() {
+  pub inflight testNestedResource() {
     assert(this.another.first.myResource.list().length == 0);
     this.another.first.myResource.put("hello", this.myStr);
     log("this.another.first.myResource:${this.another.first.myResource.get("hello")}");
   }
 
   // expression within an expression
-  inflight testExpressionRecursive() {
+  pub inflight testExpressionRecursive() {
     this.myQueue.push(this.myStr);
   }
 
-  inflight testExternal() {
+  pub inflight testExternal() {
     assert(this.extBucket.list().length == 0);
     assert(this.extNum == 12);
   }
 
-  inflight testUserDefinedResource() {
+  pub inflight testUserDefinedResource() {
     assert(this.another.meaningOfLife() == 42);
     assert(this.another.anotherFunc() == "42");
   }
 
-  inflight testInflightField() {
+  pub inflight testInflightField() {
     assert(this.inflightField == 123);
   }
 }
