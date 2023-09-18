@@ -248,7 +248,7 @@ pub struct JsonData {
 	pub kind: JsonDataKind,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct SpannedTypeInfo {
 	pub type_: TypeRef,
 	pub span: WingSpan,
@@ -1011,11 +1011,11 @@ impl TypeRef {
 	}
 
 	pub fn is_json(&self) -> bool {
-		matches!(**self, Type::Json(_) | Type::MutJson)
-	}
-
-	pub fn is_known_json(&self) -> bool {
-		matches!(**self, Type::Json(Some(_)))
+		if let Type::Json(_) | Type::MutJson = **self {
+			return true;
+		} else {
+			false
+		}
 	}
 
 	pub fn is_preflight_class(&self) -> bool {
@@ -2612,26 +2612,6 @@ impl<'a> TypeChecker<'a> {
 		})
 	}
 
-	// fn type_to_json(&self, t: &TypeRef) -> JsonData {
-	// 		match &**t {
-	// 			Type::Json(_) => json_data.clone(),
-	// 			Type::Json(None) => JsonData {
-	// 				expression_id: 0,
-	// 				kind: JsonDataKind::Type(SpannedTypeInfo {
-	// 					type_: self.types.error(),
-	// 					span: Span::default(),
-	// 				}),
-	// 			},
-	// 			_ => JsonData {
-	// 				expression_id: 0,
-	// 				kind: JsonDataKind::Type(SpannedTypeInfo {
-	// 					type_: t.clone(),
-	// 					span: Span::default(),
-	// 				}),
-	// 			},
-	// 		}
-	// 	}
-
 	/// Validate that a given map can be assigned to a variable of given struct type
 	fn validate_structural_type(
 		&mut self,
@@ -2728,6 +2708,79 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
+	/// If possible, structurally checks the given type as a Json against the expected type.
+	///
+	/// returns true if actual type validation occurred, false otherwise
+	pub fn validate_type_json(&mut self, actual_type: TypeRef, expected_type: TypeRef, span: &impl Spanned) -> bool {
+		let mut json_type = actual_type;
+		let expected_type = self.types.maybe_unwrap_inference(expected_type);
+		let expected_type_unwrapped = expected_type.maybe_unwrap_option();
+		if expected_type_unwrapped.is_json() {
+			return false;
+		}
+
+		let inner_expected = expected_type_unwrapped.collection_item_type();
+		if let Some(inner_expected) = inner_expected {
+			if let Some(inner_actual) = actual_type.collection_item_type() {
+				if matches!(*inner_actual, Type::Json(Some(_))) {
+					// If the outer collection type doesn't match then don't bother
+					// We can just check the collection enum variant to make sure they match exactly (subtyping isn't relevant here)
+					if std::mem::discriminant(&**expected_type_unwrapped) != std::mem::discriminant(&*actual_type) {
+						return false;
+					}
+					json_type = inner_actual;
+				} else {
+					// The expected type is a collection and the actual type is a collection of non-json
+					// In case the actual type is a nested collection, we must recurse here
+					return self.validate_type_json(inner_actual, inner_expected, span);
+				}
+			}
+		}
+
+		let Type::Json(Some(data)) = &*json_type else {
+			// We don't have any json data to validate
+			return false;
+		};
+
+		if expected_type_unwrapped.is_json_legal_value()
+			|| expected_type_unwrapped.is_struct()
+			|| expected_type_unwrapped.is_immutable_collection()
+		{
+			// We don't need to check the json-ability of this expr later because we know it's legal or it's being used as a struct/map
+			self.types.json_literal_casts.insert(data.expression_id, expected_type);
+		}
+
+		match &data.kind {
+			JsonDataKind::Type(t) => {
+				self.validate_type(t.type_, expected_type, span);
+				true
+			}
+			JsonDataKind::Fields(fields) => {
+				if expected_type_unwrapped.is_struct() {
+					self.validate_structural_type(fields, expected_type_unwrapped, span);
+					true
+				} else if let Some(inner_expected) = inner_expected {
+					for field_info in fields.values() {
+						self.validate_type(field_info.type_, inner_expected, &field_info.span);
+					}
+					true
+				} else {
+					false
+				}
+			}
+			JsonDataKind::List(list) => {
+				if let Some(inner_expected) = inner_expected {
+					for t in list {
+						self.validate_type(t.type_, inner_expected, &t.span);
+					}
+					true
+				} else {
+					false
+				}
+			}
+		}
+	}
+
 	/// Validate that the given type is a subtype (or same) as the expected type. If not, add an error
 	/// to the diagnostics.
 	///
@@ -2801,7 +2854,7 @@ impl<'a> TypeChecker<'a> {
 		if return_type.is_nil() && expected_types.len() == 1 {
 			message = format!("{message} (hint: to allow \"nil\" assignment use optional type: \"{first_expected_type}?\")");
 		}
-		if return_type.is_json() {
+		if return_type.maybe_unwrap_option().is_json() {
 			// known json data is statically known
 			message = format!("{message} (hint: use {first_expected_type}.fromJson() to convert dynamic Json)");
 		}
@@ -2812,70 +2865,6 @@ impl<'a> TypeChecker<'a> {
 
 		// Evaluate to one of the expected types
 		first_expected_type
-	}
-
-	/// returns false if the type is not known json
-	pub fn validate_type_json(&mut self, actual_type: TypeRef, expected_type: TypeRef, span: &impl Spanned) -> bool {
-		let expected_type = self.types.maybe_unwrap_inference(expected_type);
-		let expected_type_unwrapped = expected_type.maybe_unwrap_option();
-		let mut json_type = actual_type;
-		if let Some(inner_expected) = expected_type_unwrapped.collection_item_type() {
-			if let Some(inner_actual) = actual_type.collection_item_type() {
-				if !inner_actual.is_known_json() {
-					// check for nested collections
-					return self.validate_type_json(inner_actual, inner_expected, span);
-				} else {
-					// If the outer collection type doesn't match then don't bother
-					// Collections of Json are not subtypes of other collections, so we can just check the collection enum variant
-					if std::mem::discriminant(&**expected_type_unwrapped) != std::mem::discriminant(&*actual_type) {
-						return false;
-					}
-					json_type = inner_actual;
-				}
-			}
-		}
-
-		let Type::Json(Some(data)) = &*json_type else {
-			return false;
-		};
-
-		if expected_type_unwrapped.is_json() {
-			return false;
-		}
-		if expected_type_unwrapped.is_json_legal_value()
-			|| expected_type_unwrapped.is_struct()
-			|| expected_type_unwrapped.is_immutable_collection()
-		{
-			// we don't need to check the json-ability of this expr later because we know it's legal or it's being used as a struct/map
-			self.types.json_literal_casts.insert(data.expression_id, expected_type);
-		}
-		match &data.kind {
-			JsonDataKind::Type(t) => {
-				self.validate_type(t.type_, expected_type, span);
-				return true;
-			}
-			JsonDataKind::Fields(fields) => {
-				if expected_type_unwrapped.is_struct() {
-					self.validate_structural_type(fields, expected_type_unwrapped, span);
-					return true;
-				} else if let Some(expected_map) = expected_type_unwrapped.collection_item_type() {
-					for field_info in fields.values() {
-						self.validate_type(field_info.type_, expected_map, &field_info.span);
-					}
-					return true;
-				}
-			}
-			JsonDataKind::List(list) => {
-				if let Some(expected_inner) = expected_type_unwrapped.collection_item_type() {
-					for t in list {
-						self.validate_type(t.type_, expected_inner, &t.span);
-					}
-					return true;
-				}
-			}
-		};
-
-		true
 	}
 
 	pub fn type_check_file(&mut self, source_path: &Utf8Path, scope: &Scope) {
