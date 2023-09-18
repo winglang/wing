@@ -48,10 +48,10 @@ export interface ApiCorsOptions {
   readonly allowCredentials?: boolean;
 
   /**
-   * Number of seconds that the browser should cache preflight request results.
-   * @default - 300
+   * How long the browser should cache preflight request results.
+   * @default - 300 seconds
    */
-  readonly maxAge?: number;
+  readonly maxAge?: Duration;
 }
 
 /**
