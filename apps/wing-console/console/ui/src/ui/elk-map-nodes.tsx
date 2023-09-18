@@ -158,7 +158,7 @@ export const ContainerNode = ({
                 "leading-tight",
                 "truncate",
                 "transition-all",
-                "text-xs",
+                "text-sm",
                 compilerNamed && ["text-slate-600 dark:text-slate-350"],
                 !compilerNamed && [theme.text1],
               )}
