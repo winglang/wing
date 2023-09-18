@@ -716,27 +716,21 @@ fn get_completions_from_namespace(
 ) -> Vec<CompletionItem> {
 	// If a namespace has a class named "Util", then its members can be accessed directly from
 	// the namespace as a syntactic sugar. e.g. "foo.bar()" is equivalent to "foo.Util.bar()"
-	let util_completions = match namespace.env.lookup_nested_str("Util", None) {
-		LookupResult::Found(kind, _) => match kind {
-			SymbolKind::Type(typeref) => {
+	let mut util_completions = vec![];
+	for ns_env in &namespace.envs {
+		if let LookupResult::Found(kind, _) = ns_env.lookup_nested_str("Util", None) {
+			if let SymbolKind::Type(typeref) = kind {
 				let util_class = typeref.as_class();
 				if let Some(util_class) = util_class {
-					get_completions_from_class(util_class, current_phase, false)
-				} else {
-					vec![]
+					util_completions.extend(get_completions_from_class(util_class, current_phase, false));
 				}
 			}
-			SymbolKind::Variable(_) => vec![],
-			SymbolKind::Namespace(_) => vec![],
-		},
-		LookupResult::NotFound(_) => vec![],
-		LookupResult::DefinedLater => vec![],
-		LookupResult::ExpectedNamespace(_) => vec![],
-	};
+		}
+	}
 	namespace
-		.env
-		.symbol_map
+		.envs
 		.iter()
+		.flat_map(|env| env.symbol_map.iter())
 		.flat_map(|(name, symbol)| format_symbol_kind_as_completion(name, &symbol.1))
 		.chain(util_completions.into_iter())
 		.collect()

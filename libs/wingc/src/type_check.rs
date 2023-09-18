@@ -267,7 +267,7 @@ pub struct Namespace {
 	pub name: String,
 
 	#[derivative(Debug = "ignore")]
-	pub env: SymbolEnv,
+	pub envs: Vec<SymbolEnvRef>,
 
 	// Indicate whether all the types in this namespace have been loaded, this is part of our
 	// lazy loading mechanism and is used by the lsp's autocomplete in case we need to load
@@ -3615,7 +3615,7 @@ impl<'a> TypeChecker<'a> {
 				};
 				let ns = self.types.add_namespace(Namespace {
 					name: name.name.to_string(),
-					env: SymbolEnv::new(Some(brought_env.get_ref()), SymbolEnvKind::Scope, brought_env.phase, 0),
+					envs: vec![brought_env],
 					loaded: true,
 				});
 				if let Err(e) = env.define(
@@ -3631,8 +3631,35 @@ impl<'a> TypeChecker<'a> {
 				// Get a list of all of the files in the directory through the file graph
 				let path = Utf8Path::new(&name.name);
 				let directory_files = self.file_graph.dependencies_of(path);
-				dbg!(&directory_files);
-				todo!()
+
+				// Create a combined namespace
+				let mut brought_envs = vec![];
+				for file in directory_files.iter() {
+					let brought_env = match self.types.source_file_envs.get(*file) {
+						Some(env) => *env,
+						None => {
+							self.spanned_error(
+								stmt,
+								format!("Could not type check \"{}\" due to cyclic bring statements", name),
+							);
+							return;
+						}
+					};
+					brought_envs.push(brought_env);
+				}
+				let ns = self.types.add_namespace(Namespace {
+					name: name.name.to_string(),
+					envs: brought_envs,
+					loaded: true,
+				});
+				if let Err(e) = env.define(
+					identifier.as_ref().unwrap(),
+					SymbolKind::Namespace(ns),
+					StatementIdx::Top,
+				) {
+					self.type_error(e);
+				}
+				return;
 			}
 		}
 		self.add_module_to_env(env, library_name, namespace_filter, alias, Some(&stmt));
@@ -5182,6 +5209,10 @@ where
 {
 	let (message, span) = match lookup_result {
 		LookupResult::NotFound(s) => (format!("Unknown symbol \"{s}\""), s.span()),
+		LookupResult::MultipleFound => (
+			format!("Ambiguous symbol \"{looked_up_object}\""),
+			looked_up_object.span(),
+		),
 		LookupResult::DefinedLater => (
 			format!("Symbol \"{looked_up_object}\" used before being defined"),
 			looked_up_object.span(),
