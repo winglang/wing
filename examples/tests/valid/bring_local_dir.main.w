@@ -1,11 +1,9 @@
-bring "./subdir" as subdir;
-bring math;
+bring "./subdir2" as subdir;
 
-// from subdir/foo.w
+// from subdir/file1.w
 let foo = new subdir.Foo();
-assert(subdir.Foo.foo() == "foo");
+assert(foo.foo() == "foo");
 
-// from subdir/structs.w
-let s = subdir.MyStruct {
-  val: 42
-};
+// from subdir/file2.w
+let bar = new subdir.Bar();
+assert(bar.bar() == "bar");
