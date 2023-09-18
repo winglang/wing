@@ -58,6 +58,16 @@ let notJsonMissingField: StructyJson = {
 };
 //^ Missing required field "maybe" from "StructyJson"
 
+let notJsonMissingFieldArray: Map<Set<Array<StructyJson>>> = {
+  "1" => {[ 
+    {
+      foo: "bar",
+      stuff: [],
+    }
+  //^ Missing required field "maybe" from "StructyJson"
+  ]}
+};
+
 let notJsonBadNesting: StructyJson = {
   foo: "bar",
   stuff: [1, 2, 3],

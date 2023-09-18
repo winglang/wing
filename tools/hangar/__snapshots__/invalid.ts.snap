@@ -1684,32 +1684,42 @@ error: Missing required field \\"maybe\\" from \\"StructyJson\\"
    | \\\\-^ Missing required field \\"maybe\\" from \\"StructyJson\\"
 
 
+error: Missing required field \\"maybe\\" from \\"StructyJson\\"
+   --> ../../../examples/tests/invalid/json.main.w:63:5
+   |  
+63 | /     {
+64 | |       foo: \\"bar\\",
+65 | |       stuff: [],
+66 | |     }
+   | \\\\-----^ Missing required field \\"maybe\\" from \\"StructyJson\\"
+
+
 error: Expected type to be \\"bool\\", but got \\"num\\" instead
-   --> ../../../examples/tests/invalid/json.main.w:65:11
+   --> ../../../examples/tests/invalid/json.main.w:75:11
    |
-65 |     good: 2,
+75 |     good: 2,
    |           ^ Expected type to be \\"bool\\", but got \\"num\\" instead
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/json.main.w:72:14
+   --> ../../../examples/tests/invalid/json.main.w:82:14
    |
-72 |   stuff: [1, \\"hi\\", 3],
+82 |   stuff: [1, \\"hi\\", 3],
    |              ^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/json.main.w:83:8
+   --> ../../../examples/tests/invalid/json.main.w:93:8
    |
-83 |     b: \\"\\",
+93 |     b: \\"\\",
    |        ^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Expected type to be \\"StructyJson\\", but got \\"Json\\" instead (hint: use StructyJson.fromJson() to convert dynamic Json)
-   --> ../../../examples/tests/invalid/json.main.w:96:38
-   |
-96 | let mutableJsonStruct: StructyJson = mutableJson;
-   |                                      ^^^^^^^^^^^ Expected type to be \\"StructyJson\\", but got \\"Json\\" instead (hint: use StructyJson.fromJson() to convert dynamic Json)
+    --> ../../../examples/tests/invalid/json.main.w:106:38
+    |
+106 | let mutableJsonStruct: StructyJson = mutableJson;
+    |                                      ^^^^^^^^^^^ Expected type to be \\"StructyJson\\", but got \\"Json\\" instead (hint: use StructyJson.fromJson() to convert dynamic Json)
 
 
 error: \\"Array<Json>\\" is not a legal JSON value
@@ -1727,16 +1737,16 @@ error: \\"Bucket\\" is not a legal JSON value
 
 
 error: \\"Bucket\\" is not a legal JSON value
-    --> ../../../examples/tests/invalid/json.main.w:100:6
+    --> ../../../examples/tests/invalid/json.main.w:110:6
     |
-100 |   b: new cloud.Bucket()
+110 |   b: new cloud.Bucket()
     |      ^^^^^^^^^^^^^^^^^^ \\"Bucket\\" is not a legal JSON value
 
 
 error: \\"Bucket\\" is not a legal JSON value
-    --> ../../../examples/tests/invalid/json.main.w:104:21
+    --> ../../../examples/tests/invalid/json.main.w:114:21
     |
-104 | let isBucket = Json new cloud.Bucket();
+114 | let isBucket = Json new cloud.Bucket();
     |                     ^^^^^^^^^^^^^^^^^^ \\"Bucket\\" is not a legal JSON value
 
 

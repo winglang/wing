@@ -2801,7 +2801,7 @@ impl<'a> TypeChecker<'a> {
 		if return_type.is_nil() && expected_types.len() == 1 {
 			message = format!("{message} (hint: to allow \"nil\" assignment use optional type: \"{first_expected_type}?\")");
 		}
-		if !return_type.is_known_json() {
+		if return_type.is_json() {
 			// known json data is statically known
 			message = format!("{message} (hint: use {first_expected_type}.fromJson() to convert dynamic Json)");
 		}

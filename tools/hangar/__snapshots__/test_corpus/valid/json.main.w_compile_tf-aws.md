@@ -219,6 +219,7 @@ class $Root extends $stdlib.std.Resource {
     const arrayStruct = [({"foo": "","stuff": []})];
     const setStruct = new Set([({"foo": "","stuff": []})]);
     const mapStruct = ({"1": ({"foo": "","stuff": []})});
+    const deepCollectionStruct = ({"1": [new Set([({"foo": "","stuff": []})])]});
     const notJsonMissingField = ({"foo": "bar","stuff": []});
     const notJson = ({"foo": "bar","stuff": [1, 2, 3],"maybe": ({"good": true,"inner_stuff": [({"hi": 1,"base": "base"})]})});
     let mutableJson = ({"foo": "bar","stuff": [1, 2, 3],"maybe": ({"good": true,"inner_stuff": [({"hi": 1,"base": "base"})]})});
