@@ -686,4 +686,5 @@ test("api with CORS settings responds to OPTIONS request", async () => {
   expect(response.headers.get("access-control-allow-methods")).toEqual(
     "GET,POST,PUT,DELETE,HEAD,OPTIONS"
   );
+  expect(response.headers.get("access-control-max-age")).toEqual("300");
 });
