@@ -30,7 +30,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           className={classNames(
             theme.borderInput,
             "block w-full rounded-md outline-none transition ease-in-out",
-            "px-2 text-xs",
+            "px-2 text-sm",
             "shadow-inner",
             className,
             props.disabled && [theme.bg3, theme.text2],

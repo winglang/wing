@@ -26,7 +26,7 @@ export const ResponseInput = ({
             theme.textInput,
             theme.borderInput,
             "py-1 w-full justify-center flex",
-            "rounded text-sm border",
+            "rounded text-base border",
           )}
         >
           <SpinnerLoader size="sm" />
@@ -38,7 +38,7 @@ export const ResponseInput = ({
             theme.bgInput,
             theme.text2,
             theme.borderInput,
-            "flex-1 text-center text-xs",
+            "flex-1 text-center text-sm",
             "px-2.5 py-1.5 rounded border",
           )}
         >

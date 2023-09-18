@@ -116,13 +116,15 @@ function NotificationsContainer() {
                       <p
                         className={classNames(
                           theme.textInput,
-                          "text-sm font-medium",
+                          "text-base font-medium",
                         )}
                       >
                         {notification.title}
                       </p>
                       {notification.body && (
-                        <p className={classNames("mt-1 text-sm", theme.text2)}>
+                        <p
+                          className={classNames("mt-1 text-base", theme.text2)}
+                        >
                           {notification.body}
                         </p>
                       )}

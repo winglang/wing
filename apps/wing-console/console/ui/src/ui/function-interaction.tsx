@@ -32,12 +32,12 @@ export const FunctionInteraction = ({
 
   return (
     <>
-      <div className="h-full flex-1 flex flex-col text-sm">
+      <div className="h-full flex-1 flex flex-col text-base">
         <div className="flex flex-col gap-2">
           <TextArea
             id={payloadElementId}
             placeholder="Payload"
-            className="text-xs"
+            className="text-sm"
             value={payload}
             onInput={(event) => setPayload(event.currentTarget.value)}
             disabled={isLoading}
@@ -53,7 +53,7 @@ export const FunctionInteraction = ({
           <div>
             <label
               htmlFor={responseElementId}
-              className={classNames("text-sm", theme.text2)}
+              className={classNames("text-base", theme.text2)}
             >
               Response
             </label>

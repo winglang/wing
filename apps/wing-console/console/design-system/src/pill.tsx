@@ -19,7 +19,7 @@ export const Pill = ({
         theme.text2,
         {
           "text-[0.6rem]": textSize === "xs",
-          "text-xs": textSize === "base",
+          "text-sm": textSize === "base",
         },
       )}
     >

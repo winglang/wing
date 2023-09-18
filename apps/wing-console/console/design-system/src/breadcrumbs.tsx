@@ -24,7 +24,7 @@ export const Breadcrumbs = (props: BreadcrumbsProps) => {
     <nav className="flex" aria-label="Breadcrumb">
       <ol
         className={classNames(
-          "px-4 py-2 flex items-center text-xs",
+          "px-4 py-2 flex items-center text-sm",
           theme.text2,
         )}
       >
@@ -40,7 +40,7 @@ export const Breadcrumbs = (props: BreadcrumbsProps) => {
                 className={classNames(
                   theme.text2,
                   theme.text4Hover,
-                  "flex items-center gap-1 text-sm whitespace-nowrap",
+                  "flex items-center gap-1 text-base whitespace-nowrap",
                 )}
                 aria-current={isLastBreadcrumb ? "page" : undefined}
               >

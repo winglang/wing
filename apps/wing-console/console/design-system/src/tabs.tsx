@@ -42,7 +42,7 @@ export const Tabs = (props: TabsProps) => {
     <div className="h-full flex flex-col">
       <div
         className={classNames(
-          "relative w-full text-sm select-none",
+          "relative w-full text-base select-none",
           !props.transparent && [theme.bg3, theme.text2],
           props.small ? "h-6" : "h-8",
         )}
@@ -86,7 +86,7 @@ export const Tabs = (props: TabsProps) => {
                 <div className="whitespace-nowrap space-x-1">
                   <span>{tab.name}</span>
                   {tab.count !== undefined && (
-                    <span className="text-xs">({tab.count})</span>
+                    <span className="text-sm">({tab.count})</span>
                   )}
                 </div>
 

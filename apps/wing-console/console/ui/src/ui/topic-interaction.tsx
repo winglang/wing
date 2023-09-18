@@ -16,11 +16,11 @@ export const TopicInteraction = ({
   const elementId = useId();
 
   return (
-    <div className="h-full flex-1 flex flex-col text-sm">
+    <div className="h-full flex-1 flex flex-col text-base">
       <div className="flex flex-col gap-2">
         <TextArea
           id={elementId}
-          className="text-xs"
+          className="text-sm"
           value={message}
           dataTestid="cloud.topic:message"
           onInput={(event) => setMessage(event.currentTarget.value)}

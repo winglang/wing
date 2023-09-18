@@ -31,7 +31,7 @@ export const TermsAndConditionsModal = ({
           )}
         >
           <h1 className="text-lg font-bold">Terms and Conditions</h1>
-          <div className="text-sm max-w-[40rem] max-h-[30rem] overflow-auto pr-4">
+          <div className="text-base max-w-[40rem] max-h-[30rem] overflow-auto pr-4">
             <div className="space-y-3">
               <ReactMarkdown
                 // eslint-disable-next-line react/no-children-prop

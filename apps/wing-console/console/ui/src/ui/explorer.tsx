@@ -93,7 +93,7 @@ export const Explorer = (props: ExplorerProps) => {
           <ScrollableArea
             overflowY
             className={classNames(
-              "h-full w-full text-sm flex flex-col gap-1",
+              "h-full w-full text-base flex flex-col gap-1",
               theme.bg3,
               theme.text2,
             )}

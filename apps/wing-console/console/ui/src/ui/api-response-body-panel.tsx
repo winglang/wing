@@ -49,13 +49,13 @@ export const ApiResponseBodyPanel = ({
           <span
             className={classNames(
               getResponseColor(response.status),
-              "text-xs truncate",
+              "text-sm truncate",
             )}
           >
             {response.status} {response.statusText}
           </span>
           {response.duration >= 0 && (
-            <span className={classNames(theme.text2, "text-xs truncate")}>
+            <span className={classNames(theme.text2, "text-sm truncate")}>
               {response.duration}ms
             </span>
           )}

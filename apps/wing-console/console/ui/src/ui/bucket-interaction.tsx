@@ -67,7 +67,7 @@ export const BucketInteraction = ({
   const layoutType = useContext(LayoutContext);
 
   return (
-    <div className="h-full flex-1 flex flex-col text-sm space-y-1.5">
+    <div className="h-full flex-1 flex flex-col text-base space-y-1.5">
       <div className="flex justify-between items-center gap-1">
         <div className="flex items-center gap-1">
           <Button
@@ -110,7 +110,7 @@ export const BucketInteraction = ({
             theme.text2,
             theme.borderInput,
             "px-2.5 py-1.5",
-            "outline-none rounded text-center inline-block w-full text-xs",
+            "outline-none rounded text-center inline-block w-full text-sm",
           )}
           data-testid="cloud.bucket:empty-state"
         >
@@ -140,7 +140,7 @@ export const BucketInteraction = ({
 
       {selectedFile && (
         <div className="space-y-1 pt-2">
-          <div className={classNames(theme.text2, "text-sm flex gap-x-1")}>
+          <div className={classNames(theme.text2, "text-base flex gap-x-1")}>
             <span className={theme.text1}>File:</span>
             <span className="truncate">{selectedFile}</span>
             <div className="grow" />

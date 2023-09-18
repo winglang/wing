@@ -118,7 +118,7 @@ export const Combobox = ({
               className={classNames(
                 theme.bgInput,
                 "z-20 absolute mt-1 max-h-60 w-full left-0 overflow-auto rounded-md py-1",
-                "text-xs shadow-lg ring-1 ring-black ring-opacity-5 outline-none",
+                "text-sm shadow-lg ring-1 ring-black ring-opacity-5 outline-none",
                 !items?.length && "invisible",
                 !emptyLabel && filtered.length === 0 && "invisible",
               )}

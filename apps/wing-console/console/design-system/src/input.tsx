@@ -42,7 +42,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           disabled={disabled}
           className={classNames(
             theme.borderInput,
-            "inline-flex gap-2 items-center px-2.5 py-1.5 border text-xs rounded",
+            "inline-flex gap-2 items-center px-2.5 py-1.5 border text-sm rounded",
             "outline-none",
             "shadow-inner",
             LeftIcon && "pl-7",

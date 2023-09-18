@@ -60,7 +60,7 @@ export const EdgeMetadata = ({
   return (
     <ScrollableArea
       overflowY
-      className={classNames("h-full text-sm", theme.bg3, theme.text1)}
+      className={classNames("h-full text-base", theme.bg3, theme.text1)}
     >
       <div className="flex justify-between">
         <div className="flex items-center gap-2 px-2 py-2 truncate w-1/2">
@@ -69,7 +69,7 @@ export const EdgeMetadata = ({
           </div>
 
           <div className="flex flex-col min-w-0">
-            <div className="text-sm font-medium truncate">Relationship</div>
+            <div className="text-base font-medium truncate">Relationship</div>
             <div className="flex">
               <Pill>Relationship</Pill>
             </div>
@@ -97,7 +97,7 @@ export const EdgeMetadata = ({
               className={classNames(
                 theme.bg3Hover,
                 theme.text1,
-                "w-full max-w-full truncate text-sm flex items-center gap-1 min-w-0",
+                "w-full max-w-full truncate text-base flex items-center gap-1 min-w-0",
                 "border border-transparent rounded",
               )}
               title={source.path}
@@ -120,7 +120,7 @@ export const EdgeMetadata = ({
               className={classNames(
                 theme.bg3Hover,
                 theme.text1,
-                "w-full max-w-full truncate text-sm flex items-center gap-1 min-w-0",
+                "w-full max-w-full truncate text-base flex items-center gap-1 min-w-0",
                 "border border-transparent rounded",
               )}
               title={target.path}

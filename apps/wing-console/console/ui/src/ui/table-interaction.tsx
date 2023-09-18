@@ -147,7 +147,7 @@ export const TableInteraction = ({
                 <th
                   key={name}
                   className={classNames(
-                    "text-sm p-1.5",
+                    "text-base p-1.5",
                     "border-b border-slate-300 dark:border-slate-700",
                     getInputType(type) === "checkbox"
                       ? "text-center"
@@ -171,7 +171,7 @@ export const TableInteraction = ({
                 <td
                   colSpan={columns.length + 1}
                   className={classNames(
-                    "text-center text-xs pt-4",
+                    "text-center text-sm pt-4",
                     theme.text2,
                   )}
                 >
@@ -264,7 +264,7 @@ export const TableInteraction = ({
                     return (
                       <button
                         className={classNames(
-                          "inline-flex gap-2 items-center text-xs font-medium outline-none rounded",
+                          "inline-flex gap-2 items-center text-sm font-medium outline-none rounded",
                           "p-1.5",
                           theme.bg4Hover,
                           theme.bgInputHover,

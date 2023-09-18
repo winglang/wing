@@ -210,7 +210,7 @@ export const ApiInteraction = ({
   }, [schemaData]);
 
   return (
-    <div className="h-full flex-1 flex flex-col text-sm space-y-1">
+    <div className="h-full flex-1 flex flex-col text-base space-y-1">
       <div className="relative grow">
         {appMode === "local" && (
           <Attribute name="URL" value={url} noLeftPadding />
@@ -225,7 +225,7 @@ export const ApiInteraction = ({
                   theme.borderInput,
                   theme.focusWithin,
                   "flex relative",
-                  "text-xs w-full",
+                  "text-sm w-full",
                   "border rounded",
                   "transition ease-in-out",
                 )}
@@ -242,7 +242,7 @@ export const ApiInteraction = ({
                     theme.bgInput,
                     theme.bgInputHover,
                     theme.borderInput,
-                    "text-xs text-left outline-none w-[5.5rem] rounded-l",
+                    "text-sm text-left outline-none w-[5.5rem] rounded-l",
                     "px-2.5 py-1.5",
                     "border-r",
                   )}
@@ -269,7 +269,7 @@ export const ApiInteraction = ({
                   }}
                   className="w-full"
                   inputClassName={classNames(
-                    "border-none focus-none text-xs outline-none w-full rounded-r",
+                    "border-none focus-none text-sm outline-none w-full rounded-r",
                     "px-2.5 py-1.5",
                     "focus:ring-0",
                   )}
@@ -330,7 +330,7 @@ export const ApiInteraction = ({
                     <div className="pt-2 space-y-2">
                       <div className="space-y-1">
                         {pathVariables.length > 0 && (
-                          <div className={classNames("text-sm", theme.text2)}>
+                          <div className={classNames("text-base", theme.text2)}>
                             Query params
                           </div>
                         )}
@@ -345,7 +345,7 @@ export const ApiInteraction = ({
                       </div>
                       {pathVariables.length > 0 && (
                         <div className="space-y-1">
-                          <div className={classNames("text-sm", theme.text2)}>
+                          <div className={classNames("text-base", theme.text2)}>
                             Path variables
                           </div>
 
@@ -368,7 +368,7 @@ export const ApiInteraction = ({
                       <TextArea
                         id={bodyId}
                         containerClassName="w-full"
-                        className="text-sm min-h-[2rem]"
+                        className="text-base min-h-[2rem]"
                         placeholder="Body..."
                         value={body}
                         onInput={(event) => setBody(event.currentTarget.value)}

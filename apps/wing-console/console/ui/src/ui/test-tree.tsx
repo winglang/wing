@@ -53,7 +53,7 @@ export const TestTree = ({
           <ScrollableArea
             overflowY
             className={classNames(
-              "h-full w-full text-sm flex flex-col gap-1",
+              "h-full w-full text-base flex flex-col gap-1",
               theme.bg3,
               theme.text2,
             )}
@@ -81,7 +81,7 @@ export const TestTree = ({
                       <div className="flex items-center gap-1">
                         <span className="truncate">{test.label}</span>
 
-                        <span className={classNames(theme.text2, "text-xs")}>
+                        <span className={classNames(theme.text2, "text-sm")}>
                           {test.time && test.time > 0 ? `${test.time}ms` : ""}
                         </span>
                       </div>

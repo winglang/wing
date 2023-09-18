@@ -129,7 +129,7 @@ export const KeyValueList = ({
               theme.textInput,
               theme.focusInput,
               theme.borderInput,
-              "px-2.5 py-1.5 text-xs outline-none w-36",
+              "px-2.5 py-1.5 text-sm outline-none w-36",
               "border rounded",
               "transition ease-in-out",
             )}
@@ -157,7 +157,7 @@ export const KeyValueList = ({
               theme.textInput,
               theme.focusInput,
               theme.borderInput,
-              "px-2.5 py-1.5 text-xs outline-none grow flex min-w-0 w-full",
+              "px-2.5 py-1.5 text-sm outline-none grow flex min-w-0 w-full",
               "border rounded",
               "transition ease-in-out",
             )}
@@ -186,7 +186,7 @@ export const KeyValueList = ({
             theme.bgInput,
             theme.text2,
             theme.borderInput,
-            "flex-1 text-center text-xs",
+            "flex-1 text-center text-sm",
             "px-2.5 py-1.5 rounded border",
           )}
         >

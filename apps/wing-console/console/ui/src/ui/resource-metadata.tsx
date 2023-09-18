@@ -219,7 +219,7 @@ export const ResourceMetadata = ({
   return (
     <ScrollableArea
       overflowY
-      className={classNames("h-full text-sm", theme.bg3, theme.text1)}
+      className={classNames("h-full text-base", theme.bg3, theme.text1)}
       dataTestid={`resource-metadata:${node.path}`}
     >
       <div className="flex items-center gap-2 px-2 py-2">
@@ -232,7 +232,7 @@ export const ResourceMetadata = ({
         </div>
 
         <div className="flex flex-col min-w-0">
-          <div className="text-sm font-medium truncate">{node.id}</div>
+          <div className="text-base font-medium truncate">{node.id}</div>
           <div className="flex">
             <Pill>{node.type}</Pill>
           </div>
@@ -284,7 +284,7 @@ export const ResourceMetadata = ({
                             theme.bg3,
                             theme.bg3Hover,
                             theme.text1,
-                            "w-full flex-shrink-0 max-w-full truncate shadow-sm text-sm pl-4 pr-2 py-1 flex items-center gap-1 min-w-0",
+                            "w-full flex-shrink-0 max-w-full truncate shadow-sm text-base pl-4 pr-2 py-1 flex items-center gap-1 min-w-0",
                           )}
                           title={connection.path}
                           onClick={() =>
@@ -312,7 +312,7 @@ export const ResourceMetadata = ({
                             </div>
                             <span
                               className={classNames(
-                                "uppercase text-xs",
+                                "uppercase text-sm",
                                 theme.text1,
                               )}
                             >

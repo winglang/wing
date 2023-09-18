@@ -16,7 +16,7 @@ export const UnsupportedInteraction = ({
 
   return (
     <div className="flex flex-col gap-y-1 gap-x-4">
-      <div className="h-full flex-1 flex flex-col text-sm space-y-2">
+      <div className="h-full flex-1 flex flex-col text-base space-y-2">
         <p className={classNames(theme.text2)}>
           <span className={classNames(theme.text2, "font-medium")}>
             {resourceType}
@@ -32,7 +32,7 @@ export const UnsupportedInteraction = ({
             />
           </div>
           <div className="text-left">
-            <h3 className={classNames(theme.text2, "text-sm")}>
+            <h3 className={classNames(theme.text2, "text-base")}>
               Do you want this resource to be supported?
             </h3>
             <div className="mt-2">

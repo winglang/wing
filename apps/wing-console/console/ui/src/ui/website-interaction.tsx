@@ -16,7 +16,7 @@ export const WebsiteInteraction = ({
 }: WebsiteInteractionProps) => {
   const { theme } = useTheme();
   return (
-    <div className="h-full flex-1 flex flex-col text-sm space-y-1">
+    <div className="h-full flex-1 flex flex-col text-base space-y-1">
       <div className="relative grow flex-row flex items-center">
         {appMode === "local" && (
           <>
@@ -29,7 +29,7 @@ export const WebsiteInteraction = ({
             <ArrowTopRightOnSquareIcon
               className={classNames(
                 theme.text2,
-                "text-sm flex ml-2 h-4 w-4 cursor-pointer",
+                "text-base flex ml-2 h-4 w-4 cursor-pointer",
               )}
               onClick={() => onUrlClick(url)}
               data-testid="cloud.website:open-url"

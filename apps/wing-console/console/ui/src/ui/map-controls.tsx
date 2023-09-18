@@ -51,7 +51,7 @@ export const MapControls = ({}: MapControlsProps) => {
                 ) : (
                   <EyeIcon className="w-4 h-4" />
                 )}
-                <span className="text-xs px-0.5">
+                <span className="text-sm px-0.5">
                   {showTests ? "Hide tests" : "Show tests"}
                 </span>
               </div>

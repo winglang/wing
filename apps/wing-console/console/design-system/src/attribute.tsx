@@ -53,7 +53,7 @@ export const Attribute = ({
             theme.focusInput,
             theme.borderInput,
             "w-full border opacity-70 ease-in-out",
-            "items-center px-2 select-text text-sm transition truncate rounded",
+            "items-center px-2 select-text text-base transition truncate rounded",
           )}
           value={value}
           readOnly

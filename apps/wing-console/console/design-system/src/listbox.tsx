@@ -105,7 +105,7 @@ export const Listbox = ({
                   theme.bgInput,
                   theme.textInput,
                   "z-10 m-1 max-h-60 w-full overflow-auto rounded-md",
-                  "py-1 text-xs shadow-lg ring-1 ring-black ring-opacity-5 outline-none",
+                  "py-1 text-sm shadow-lg ring-1 ring-black ring-opacity-5 outline-none",
                 )}
               >
                 {defaultSelection && (

@@ -102,7 +102,7 @@ export const TableInteractionView = ({
   }, [table.data?.rows]);
 
   return (
-    <div className="h-full flex-1 flex flex-col text-sm">
+    <div className="h-full flex-1 flex flex-col text-base">
       <div className="flex flex-col gap-2">
         <div className="flex flex-col space-y-1">
           <div className="w-full">

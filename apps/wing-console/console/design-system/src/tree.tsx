@@ -251,7 +251,7 @@ export const Tree = ({
             key={entry.name}
             className={classNames(
               "px-2 w-full truncate py-0.5",
-              "text-left text-sm cursor-default focus:outline-none",
+              "text-left text-base cursor-default focus:outline-none",
               selected && [
                 !active && "bg-slate-200 dark:bg-slate-750",
                 active && "bg-sky-500 text-white",

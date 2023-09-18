@@ -97,7 +97,7 @@ export const FilePreview = ({
               <audio
                 src={`data:audio/${getFileType(filename)};base64,${content}`}
                 controls
-                className="mx-auto focus:outline-none py-2 text-xs scale-75"
+                className="mx-auto focus:outline-none py-2 text-sm scale-75"
               />
             </div>
           )}
@@ -123,7 +123,7 @@ export const FilePreview = ({
             theme.borderInput,
             "flex-1 font-mono w-full",
             "p-2 rounded border",
-            "select-text text-xs",
+            "select-text text-sm",
             "break-words whitespace-pre-wrap",
 
             className,

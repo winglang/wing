@@ -62,10 +62,13 @@ export const RedisInteraction = ({
   }, [terminalHistory]);
 
   return (
-    <div className="h-full flex-1 flex flex-col text-sm gap-y-1">
+    <div className="h-full flex-1 flex flex-col text-base gap-y-1">
       <Attribute name="URL" value={url} noLeftPadding />
       <div>
-        <label htmlFor={inputId} className={classNames("text-sm", theme.text2)}>
+        <label
+          htmlFor={inputId}
+          className={classNames("text-base", theme.text2)}
+        >
           Command Line
         </label>
         <div
@@ -74,7 +77,7 @@ export const RedisInteraction = ({
             theme.borderInput,
             theme.textInput,
             theme.focusWithin,
-            "items-end flex text-xs",
+            "items-end flex text-sm",
             "outline-none rounded-md border",
             "transition ease-in-out group overflow-y-auto",
           )}
@@ -117,7 +120,7 @@ export const RedisInteraction = ({
                   autoComplete="off"
                   spellCheck="false"
                   className={classNames(
-                    "bg-transparent font-mono text-xs leading-none",
+                    "bg-transparent font-mono text-sm leading-none",
                     "px-1 py-0",
                     "w-full border-none focus:ring-0 outline-none focus:outline-none",
                   )}

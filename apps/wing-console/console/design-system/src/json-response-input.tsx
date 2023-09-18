@@ -31,7 +31,7 @@ export const JsonResponseInput = ({
           theme.borderInput,
           "flex-1 font-mono w-full",
           "p-2 rounded border",
-          "select-text text-xs",
+          "select-text text-sm",
           "break-words whitespace-pre-wrap",
           "resize-y overflow-y-auto",
           className,

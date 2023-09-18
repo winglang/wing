@@ -52,8 +52,8 @@ export const RowInput = ({
       checked={type === "checkbox" && value === true}
       className={classNames(
         theme.borderInput,
-        "rounded text-sm relative",
-        "text-sm ring-0 focus:ring-0 bg-transparent",
+        "rounded text-base relative",
+        "text-base ring-0 focus:ring-0 bg-transparent",
         "border-0 p-0 m-0 appearance-none rounded",
         showPlaceholderAsText && "placeholder:italic",
         error && "bg-red-300/50 dark:bg-red-500/50",
