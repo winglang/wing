@@ -3632,7 +3632,6 @@ impl<'a> TypeChecker<'a> {
 				let path = Utf8Path::new(&name.name);
 				let directory_files = self.file_graph.dependencies_of(path);
 
-				// Create a combined namespace
 				let mut brought_envs = vec![];
 				for file in directory_files.iter() {
 					let brought_env = match self.types.source_file_envs.get(*file) {
@@ -3647,6 +3646,10 @@ impl<'a> TypeChecker<'a> {
 					};
 					brought_envs.push(brought_env);
 				}
+
+				// TODO: check that there are not conflicting identifiers in the files we are importing
+
+				// Create a combined namespace
 				let ns = self.types.add_namespace(Namespace {
 					name: name.name.to_string(),
 					envs: brought_envs,

@@ -17,6 +17,7 @@ use crate::{
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic, debug,
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
+	file_graph::FileGraph,
 	files::Files,
 	type_check::{
 		is_udt_struct_type,
@@ -68,6 +69,7 @@ pub struct JSifier<'a> {
 	/// e.g. "bucket.w" -> "preflight.bucket-1.js"
 	preflight_file_map: RefCell<IndexMap<Utf8PathBuf, String>>,
 	source_files: &'a Files,
+	source_file_graph: &'a FileGraph,
 	/// Root of the project, used for resolving extern modules
 	absolute_project_root: &'a Utf8Path,
 	/// The entrypoint file of the Wing application.
@@ -86,6 +88,7 @@ impl<'a> JSifier<'a> {
 	pub fn new(
 		types: &'a mut Types,
 		source_files: &'a Files,
+		source_file_graph: &'a FileGraph,
 		entrypoint_file_path: &'a Utf8Path,
 		absolute_project_root: &'a Utf8Path,
 	) -> Self {
@@ -93,6 +96,7 @@ impl<'a> JSifier<'a> {
 		Self {
 			types,
 			source_files,
+			source_file_graph,
 			entrypoint_file_path,
 			absolute_project_root,
 			referenced_struct_schemas: RefCell::new(BTreeMap::new()),
@@ -745,7 +749,34 @@ impl<'a> JSifier<'a> {
 						STDLIB,
 					))
 				}
-				BringSource::Directory(_) => todo!(),
+				BringSource::Directory(name) => {
+					let path = Utf8Path::new(&name.name);
+					let directory_files = self.source_file_graph.dependencies_of(path);
+					let preflight_file_map = self.preflight_file_map.borrow();
+					let mut preflight_files = vec![];
+					for file in directory_files {
+						if let Some(preflight_file_name) = preflight_file_map.get(file) {
+							preflight_files.push(preflight_file_name);
+						}
+					}
+					// generate something that looks like this
+					// ```
+					// const foo = {
+					//   ...require("./foo.js")({ $stdlib: $stdlib }),
+					//   ...require("./bar.js")({ $stdlib: $stdlib }),
+					// };
+					// ```
+					let mut code = CodeMaker::default();
+					code.open(format!(
+						"const {} = {{",
+						identifier.as_ref().expect("bring directory requires an alias")
+					));
+					for preflight_file_name in preflight_files.iter() {
+						code.line(format!("...require(\"./{}\")({{ {} }}),", preflight_file_name, STDLIB));
+					}
+					code.close("};");
+					code
+				}
 			},
 			StmtKind::SuperConstructor { arg_list } => {
 				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
