@@ -99,7 +99,7 @@ export type OpenApiSpec = any;
 
 /**
  * The OpenAPI spec extension for a route.
- * see https://spec.openapis.org/oas/v3.0.3
+ * @see https://spec.openapis.org/oas/v3.0.3
  * */
 export type OpenApiSpecExtension = any;
 
@@ -114,20 +114,20 @@ export type OpenApiCorsHeaders = Record<string, { schema: { type: string } }>;
 type CorsDefaultResponseHeaders = {
   /**
    * Specifies the origin that is allowed to access the resource.
-   * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
    */
   "Access-Control-Allow-Origin": string;
 
   /**
    * Lists the headers that the client can access.
-   * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Expose-Headers
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Expose-Headers
    */
   "Access-Control-Expose-Headers": string;
 
   /**
    * Indicates whether the response to the request can
    * be exposed when the credentials flag is true.
-   * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
    */
   "Access-Control-Allow-Credentials": string;
 };
@@ -138,19 +138,19 @@ type CorsDefaultResponseHeaders = {
 type CorsOptionsResponseHeaders = {
   /**
    * Specifies the origin that is allowed to access the resource.
-   * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
    */
   "Access-Control-Allow-Origin": string;
 
   /**
    * Specifies the headers that are allowed in a request.
-   * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers
    */
   "Access-Control-Allow-Headers": string;
 
   /**
    * Specifies the methods that are allowed in a request.
-   * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Methods
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Methods
    */
   "Access-Control-Allow-Methods": string;
 
