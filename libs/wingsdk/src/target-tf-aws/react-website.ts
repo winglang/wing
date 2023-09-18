@@ -11,16 +11,17 @@ import * as ex from "../ex";
 import { Connections } from "../core";
 
 /**
- * AWS implementation of `cloud.ReactWebsite`.
+ * AWS implementation of `ex.ReactWebsite`.
  *
  * @inflight `@winglang/sdk.cloud.IReactWebsiteClient`
  */
 export class ReactWebsite extends ex.ReactWebsite {
   constructor(scope: Construct, id: string, props: ex.ReactWebsiteProps) {
     super(scope, id, props);
+    this._createWebsiteHost();
   }
 
-  public _preSynthesize() {
+  private _createWebsiteHost() {
     execSync(this._startCommand, {
       cwd: this._projectPath,
       maxBuffer: 10 * 1024 * 1024,
