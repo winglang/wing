@@ -2801,11 +2801,10 @@ impl<'a> TypeChecker<'a> {
 		assert!(expected_types.len() > 0);
 		let first_expected_type = expected_types[0];
 		let mut return_type = actual_type;
-		let og_span = span;
-		let span = span.span();
 
 		// To avoid ambiguity, only do inference if there is one expected type
 		if expected_types.len() == 1 {
+			let span = span.span();
 			// First check if the actual type is an inference that can be replaced with the expected type
 			if self.add_new_inference(&actual_type, &first_expected_type, &span) {
 				// Update the type we validate and return
@@ -2834,14 +2833,17 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		// If the expected type is Json and the actual type is a Json legal value then we're good
-		if expected_types.iter().any(|t| t.is_json()) {
+		if expected_types.iter().any(|t| t.maybe_unwrap_option().is_json()) {
 			if return_type.is_json_legal_value() {
 				return return_type;
 			}
-		}
-
-		if self.validate_type_json(actual_type, first_expected_type, og_span) {
-			return return_type;
+		} else {
+			if expected_types
+				.iter()
+				.any(|t| self.validate_type_json(actual_type, *t, span))
+			{
+				return return_type;
+			}
 		}
 
 		let expected_type_str = if expected_types.len() > 1 {
