@@ -156,7 +156,7 @@ type CorsOptionsResponseHeaders = {
 
   /**
    * Indicates how long the results of a preflight request can be cached.
-   * developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age
    */
   "Access-Control-Max-Age": number;
 };
