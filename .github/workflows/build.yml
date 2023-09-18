@@ -36,7 +36,7 @@ jobs:
       last-version: ${{ fromJson(steps.changelog.outputs.data).lastVersion }}
       changelog: ${{ fromJson(steps.changelog.outputs.data).changelog }}
       vscode-wing-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['vscode-wing#compile'].changes }}
-      console-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['@wingconsole/app#preview:fly'].changes }}
+      console-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['@wingconsole/app#preview:fly'].changes || fromJson(steps.turbo-diff.outputs.data)['@wingconsole/ui#preview:fly'].changes || fromJson(steps.turbo-diff.outputs.data)['@wingconsole/server#preview:fly'].changes }}
       e2e-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['hangar#test'].changes }}
       bench-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['hangar#bench'].changes }}
     steps:

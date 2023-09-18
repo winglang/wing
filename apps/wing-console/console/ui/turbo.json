@@ -7,6 +7,9 @@
     },
     "package": {
       "outputs": ["../../../../dist/wingconsole-ui-*.tgz"]
+    },
+    "preview:fly": {
+      "dependsOn": ["compile"]
     }
   }
 }
