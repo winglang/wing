@@ -10,7 +10,7 @@ import {
   S3Client,
   NoSuchKey,
 } from "@aws-sdk/client-s3";
-import { SdkStream } from "@aws-sdk/types";
+import { HttpAuthLocation, SdkStream } from "@aws-sdk/types";
 import { sdkStreamMixin } from "@aws-sdk/util-stream-node";
 import { mockClient } from "aws-sdk-client-mock";
 import { test, expect, beforeEach } from "vitest";
@@ -82,6 +82,7 @@ test("get an object from the bucket", async () => {
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
   const response = await client.get(KEY);
+
 
   // THEN
   expect(response).toEqual(VALUE);
@@ -542,17 +543,7 @@ test("Given a bucket when reaching to a non existent key, signed url it should t
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "KEY";
 
-  s3Mock.on(GetPublicAccessBlockCommand, { Bucket: BUCKET_NAME }).resolves({
-    PublicAccessBlockConfiguration: {
-      BlockPublicAcls: false,
-      BlockPublicPolicy: false,
-      RestrictPublicBuckets: false,
-      IgnorePublicAcls: false,
-    },
-  });
-  s3Mock
-    .on(GetBucketLocationCommand, { Bucket: BUCKET_NAME })
-    .resolves({ LocationConstraint: "us-east-2" });
+  
   s3Mock
     .on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
     .rejects({ name: "NotFound" });
@@ -573,24 +564,16 @@ test("Given a bucket when reaching to a non existent key, signed url it should t
 test("Given a bucket, when giving one of its keys, we should get its signed url", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
-  const KEY = "KEY";
+  const KEY = "sampletext.Pdf";
   const REGION = "us-east-2";
+  const VALUE="VALUE";
 
-  s3Mock.on(GetPublicAccessBlockCommand, { Bucket: BUCKET_NAME }).resolves({
-    PublicAccessBlockConfiguration: {
-      BlockPublicAcls: false,
-      BlockPublicPolicy: false,
-      RestrictPublicBuckets: false,
-      IgnorePublicAcls: false,
-    },
+  s3Mock.on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({
+    Body: createMockStream(VALUE),
   });
-  s3Mock
-    .on(GetBucketLocationCommand, { Bucket: BUCKET_NAME })
-    .resolves({ LocationConstraint: REGION });
   s3Mock.on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({
     AcceptRanges: "bytes",
-    ContentLength: 3191,
-    ContentType: "image/jpeg",
+    ContentType: "application/pdf",
     ETag: "6805f2cfc46c0f04559748bb039d69ae",
     LastModified: new Date("Thu, 15 Dec 2016 01:19:41 GMT"),
     Metadata: {},
@@ -607,3 +590,6 @@ test("Given a bucket, when giving one of its keys, we should get its signed url"
   );
 
 });
+
+
+
