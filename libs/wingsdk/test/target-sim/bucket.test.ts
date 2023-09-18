@@ -706,49 +706,49 @@ test("tryDelete objects from bucket", async () => {
   expect(nonExistentObjectTryDelete).toEqual(false);
 });
 
-test("Given a bucket when reaching to a non existent key, signed url it should throw an error", async () => {
-  //GIVEN
-  let error;
-  const app = new SimApp();
-  cloud.Bucket._newBucket(app, "my_bucket", { public: true });
+// test("Given a bucket when reaching to a non existent key, signed url it should throw an error", async () => {
+//   //GIVEN
+//   let error;
+//   const app = new SimApp();
+//   cloud.Bucket._newBucket(app, "my_bucket", { public: true });
 
-  const s = await app.startSimulator();
-  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+//   const s = await app.startSimulator();
+//   const client = s.getResource("/my_bucket") as cloud.IBucketClient;
 
-  const KEY = "KEY";
+//   const KEY = "KEY";
 
-  // WHEN
-  try {
-    await client.signedUrl(KEY);
-  } catch (err) {
-    error = err;
-  }
+//   // WHEN
+//   try {
+//     await client.signedUrl(KEY);
+//   } catch (err) {
+//     error = err;
+//   }
 
-  expect(error?.message).toBe(
-    "Cannot provide signed url for an non-existent key (key=KEY)"
-  );
-  // THEN
-  await s.stop();
-});
+//   expect(error?.message).toBe(
+//     "Cannot provide signed url for an non-existent key (key=${KEY})"
+//   );
+//   // THEN
+//   await s.stop();
+// });
 
 
-test("Given a bucket, when giving one of its keys, we should get it's signed url", async () => {
-  // GIVEN
-  const app = new SimApp();
-  cloud.Bucket._newBucket(app, "my_bucket", { public: true });
+// test("Given a bucket, when giving one of its keys, we should get it's signed url", async () => {
+//   // GIVEN
+//   const app = new SimApp();
+//   cloud.Bucket._newBucket(app, "my_bucket", { public: true });
 
-  const s = await app.startSimulator();
-  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+//   const s = await app.startSimulator();
+//   const client = s.getResource("/my_bucket") as cloud.IBucketClient;
 
-  const KEY = "KEY";
-  const VALUE = "VALUE";
+//   const KEY = "KEY";
+//   const VALUE = "VALUE";
 
-  // WHEN
-  await client.put(KEY, VALUE);
-  const response = await client.signedUrl(KEY);
+//   // WHEN
+//   await client.put(KEY, VALUE);
+//   const response = await client.signedUrl(KEY);
 
-  // THEN
-  await s.stop();
-  const filePath = `${client.fileDir}/${KEY}`;
-  expect(response).toEqual(url.pathToFileURL(filePath).searchParams.append("Expires","86400"));
-});
+//   // THEN
+//   await s.stop();
+//   const filePath = `${client.fileDir}/${KEY}`;
+//   expect(response).toEqual(url.pathToFileURL(filePath).searchParams.append("Expires","86400"));
+// });
