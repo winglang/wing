@@ -15,7 +15,7 @@ test "signedUrl" {
 }
 
 test "signedUrlForNonExistentKey"{
-  et var error = "";
+  let var error = "";
   testBucket.put("file1.txt", "Foo");
 
   try{
