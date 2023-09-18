@@ -45,7 +45,7 @@ export class ReactWebsite extends ex.ReactWebsite {
       name: `host`,
     });
 
-    const env = Object.fromEntries(this._environments.entries());
+    const env = Object.fromEntries(this._environmentVariables.entries());
     const content = `window.wingEnv = ${JSON.stringify(env, null, 2)};`;
 
     new S3Object(this._websiteHost, `File--wing.js`, {

@@ -20,6 +20,9 @@ export interface WebsiteProps extends BaseWebsiteProps {
   readonly path: string;
 }
 
+/**
+ * Options for `Website`, and `ReactWebsite`
+ */
 export interface BaseWebsiteProps {
   /**
    * The website's custom domain name.

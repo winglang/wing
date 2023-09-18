@@ -13,6 +13,99 @@ sidebar_position: 100
 
 ## Resources <a name="Resources" id="Resources"></a>
 
+### ReactWebsite <a name="ReactWebsite" id="@winglang/sdk.ex.ReactWebsite"></a>
+
+A cloud deployable React website.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.ex.ReactWebsite.Initializer"></a>
+
+```wing
+bring ex;
+
+new ex.ReactWebsite(props: ReactWebsiteProps);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.ex.ReactWebsite.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.ex.ReactWebsiteProps">ReactWebsiteProps</a></code> | *No description.* |
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.ex.ReactWebsite.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.ex.ReactWebsiteProps">ReactWebsiteProps</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+##### Preflight Methods
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.ex.ReactWebsite.addEnvironment">addEnvironment</a></code> | Adding a key-value pair that can be accessible later via the `window.wingEnv` object in the react code. |
+
+---
+
+##### `addEnvironment` <a name="addEnvironment" id="@winglang/sdk.ex.ReactWebsite.addEnvironment"></a>
+
+```wing
+addEnvironment(key: str, value: str): void
+```
+
+Adding a key-value pair that can be accessible later via the `window.wingEnv` object in the react code.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.ReactWebsite.addEnvironment.parameter.key"></a>
+
+- *Type:* str
+
+the key to add.
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.ex.ReactWebsite.addEnvironment.parameter.value"></a>
+
+- *Type:* str
+
+the key to add.
+
+---
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.ex.ReactWebsite.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.ex.ReactWebsite.property.url">url</a></code> | <code>str</code> | website's url. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.ex.ReactWebsite.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.ex.ReactWebsite.property.url"></a>
+
+```wing
+url: str;
+```
+
+- *Type:* str
+
+website's url.
+
+---
+
+
 ### Redis <a name="Redis" id="@winglang/sdk.ex.Redis"></a>
 
 A cloud redis db.
@@ -678,6 +771,122 @@ Get url of redis server.
 
 
 ## Structs <a name="Structs" id="Structs"></a>
+
+### ReactWebsiteProps <a name="ReactWebsiteProps" id="@winglang/sdk.ex.ReactWebsiteProps"></a>
+
+Options for `ReactWebsite`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.ex.ReactWebsiteProps.Initializer"></a>
+
+```wing
+bring ex;
+
+let ReactWebsiteProps = ex.ReactWebsiteProps{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.ex.ReactWebsiteProps.property.projectPath">projectPath</a></code> | <code>str</code> | The path to the React app root folder- can be absolute or relative to the wing folder. |
+| <code><a href="#@winglang/sdk.ex.ReactWebsiteProps.property.buildCommand">buildCommand</a></code> | <code>str</code> | a command for building the React app. |
+| <code><a href="#@winglang/sdk.ex.ReactWebsiteProps.property.buildFolder">buildFolder</a></code> | <code>str</code> | The path to the React app build folder- relative to the `projectPath`. |
+| <code><a href="#@winglang/sdk.ex.ReactWebsiteProps.property.hostProps">hostProps</a></code> | <code><a href="#@winglang/sdk.cloud.BaseWebsiteProps">BaseWebsiteProps</a></code> | additional properties to run the website host with. |
+| <code><a href="#@winglang/sdk.ex.ReactWebsiteProps.property.isDevRun">isDevRun</a></code> | <code>bool</code> | in sim, if `true` - will use the start command, and if `false` - the build command. |
+| <code><a href="#@winglang/sdk.ex.ReactWebsiteProps.property.localPort">localPort</a></code> | <code>any</code> | a port to start a local build of the React app on. |
+| <code><a href="#@winglang/sdk.ex.ReactWebsiteProps.property.startCommand">startCommand</a></code> | <code>str</code> | a command for starting React app locally. |
+
+---
+
+##### `projectPath`<sup>Required</sup> <a name="projectPath" id="@winglang/sdk.ex.ReactWebsiteProps.property.projectPath"></a>
+
+```wing
+projectPath: str;
+```
+
+- *Type:* str
+
+The path to the React app root folder- can be absolute or relative to the wing folder.
+
+---
+
+##### `buildCommand`<sup>Optional</sup> <a name="buildCommand" id="@winglang/sdk.ex.ReactWebsiteProps.property.buildCommand"></a>
+
+```wing
+buildCommand: str;
+```
+
+- *Type:* str
+- *Default:* "npm run build"
+
+a command for building the React app.
+
+---
+
+##### `buildFolder`<sup>Optional</sup> <a name="buildFolder" id="@winglang/sdk.ex.ReactWebsiteProps.property.buildFolder"></a>
+
+```wing
+buildFolder: str;
+```
+
+- *Type:* str
+- *Default:* "/build"
+
+The path to the React app build folder- relative to the `projectPath`.
+
+---
+
+##### `hostProps`<sup>Optional</sup> <a name="hostProps" id="@winglang/sdk.ex.ReactWebsiteProps.property.hostProps"></a>
+
+```wing
+hostProps: BaseWebsiteProps;
+```
+
+- *Type:* <a href="#@winglang/sdk.cloud.BaseWebsiteProps">BaseWebsiteProps</a>
+- *Default:* {}
+
+additional properties to run the website host with.
+
+---
+
+##### `isDevRun`<sup>Optional</sup> <a name="isDevRun" id="@winglang/sdk.ex.ReactWebsiteProps.property.isDevRun"></a>
+
+```wing
+isDevRun: bool;
+```
+
+- *Type:* bool
+- *Default:* false
+
+in sim, if `true` - will use the start command, and if `false` - the build command.
+
+---
+
+##### `localPort`<sup>Optional</sup> <a name="localPort" id="@winglang/sdk.ex.ReactWebsiteProps.property.localPort"></a>
+
+```wing
+localPort: any;
+```
+
+- *Type:* any
+- *Default:* 3001
+
+a port to start a local build of the React app on.
+
+---
+
+##### `startCommand`<sup>Optional</sup> <a name="startCommand" id="@winglang/sdk.ex.ReactWebsiteProps.property.startCommand"></a>
+
+```wing
+startCommand: str;
+```
+
+- *Type:* str
+- *Default:* "npm run start"
+
+a command for starting React app locally.
+
+---
 
 ### TableProps <a name="TableProps" id="@winglang/sdk.ex.TableProps"></a>
 

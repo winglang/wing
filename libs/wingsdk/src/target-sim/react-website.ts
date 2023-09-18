@@ -41,7 +41,9 @@ export class ReactWebsite
       props: {
         path: this._projectPath,
         startCommand: this._startCommand,
-        environmentVariables: Object.fromEntries(this._environments.entries()),
+        environmentVariables: Object.fromEntries(
+          this._environmentVariables.entries()
+        ),
         isDevRun: this._isDevRun,
       },
       attrs: {} as any,

@@ -40,14 +40,17 @@ export interface ReactWebsiteProps {
   readonly buildCommand?: string;
   /**
    * in sim, if `true` - will use the start command, and if `false` - the build command
+   * @default false
    */
   readonly isDevRun?: boolean;
   /**
    * additional properties to run the website host with
+   * @default {}
    */
   readonly hostProps?: BaseWebsiteProps;
   /**
    * a port to start a local build of the React app on.
+   * @default 3001
    */
   readonly localPort?: string | number;
 }
@@ -59,7 +62,7 @@ export interface ReactWebsiteProps {
  */
 export abstract class ReactWebsite extends Resource {
   /**
-   * Create a new website.
+   * Create a new react website.
    * @internal
    */
   public static _newReactWebsite(
@@ -102,7 +105,7 @@ export abstract class ReactWebsite extends Resource {
   /**
    * @internal
    */
-  protected readonly _environments: Map<string, string> = new Map();
+  protected readonly _environmentVariables: Map<string, string> = new Map();
 
   constructor(scope: Construct, id: string, props: ReactWebsiteProps) {
     const buildFolder = props.buildFolder ?? DEFAULT_BUILD_FOLDER;
@@ -125,16 +128,27 @@ export abstract class ReactWebsite extends Resource {
       : buildCommand;
   }
 
+  /**
+   * website's url
+   */
   public get url(): string {
     return this._websiteHost?.url ?? `http://localhost:${this._localPort}`;
   }
 
+  /**
+   * @internal
+   */
   private _parsePath(scope: Construct, path: string) {
     return isAbsolute(path) ? path : resolve(App.of(scope).entrypointDir, path);
   }
 
+  /**
+   * Adding a key-value pair that can be accessible later via the `window.wingEnv` object in the react code
+   * @param key the key to add
+   * @param value the key to add
+   */
   public addEnvironment(key: string, value: string) {
-    this._environments.set(key, value);
+    this._environmentVariables.set(key, value);
   }
 }
 
