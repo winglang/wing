@@ -49,64 +49,48 @@ export class DynamodbTable extends ex.DynamodbTable {
     }
 
     if (ops.includes(ex.DynamodbTableInflightMethods.PUT_ITEM)) {
-      host.addPolicyStatements([
-        {
-          actions: ["dynamodb:PutItem"],
-          resources: [this.table.arn],
-        },
-      ]);
+      host.addPolicyStatements({
+        actions: ["dynamodb:PutItem"],
+        resources: [this.table.arn],
+      });
     }
     if (ops.includes(ex.DynamodbTableInflightMethods.UPDATE_ITEM)) {
-      host.addPolicyStatements([
-        {
-          actions: ["dynamodb:UpdateItem"],
-          resources: [this.table.arn],
-        },
-      ]);
+      host.addPolicyStatements({
+        actions: ["dynamodb:UpdateItem"],
+        resources: [this.table.arn],
+      });
     }
     if (ops.includes(ex.DynamodbTableInflightMethods.DELETE_ITEM)) {
-      host.addPolicyStatements([
-        {
-          actions: ["dynamodb:DeleteItem"],
-          resources: [this.table.arn],
-        },
-      ]);
+      host.addPolicyStatements({
+        actions: ["dynamodb:DeleteItem"],
+        resources: [this.table.arn],
+      });
     }
     if (ops.includes(ex.DynamodbTableInflightMethods.GET_ITEM)) {
-      host.addPolicyStatements([
-        {
-          actions: ["dynamodb:GetItem"],
-          resources: [this.table.arn],
-        },
-      ]);
+      host.addPolicyStatements({
+        actions: ["dynamodb:GetItem"],
+        resources: [this.table.arn],
+      });
     }
     if (ops.includes(ex.DynamodbTableInflightMethods.SCAN)) {
-      host.addPolicyStatements([
-        {
-          actions: ["dynamodb:Scan"],
-          resources: [this.table.arn],
-        },
-      ]);
+      host.addPolicyStatements({
+        actions: ["dynamodb:Scan"],
+        resources: [this.table.arn],
+      });
     }
     if (ops.includes(ex.DynamodbTableInflightMethods.TRANSACT_WRITE_ITEMS)) {
-      host.addPolicyStatements([
-        {
-          actions: ["dynamodb:PutItem"],
-          resources: [this.table.arn],
-        },
-      ]);
-      host.addPolicyStatements([
-        {
-          actions: ["dynamodb:UpdateItem"],
-          resources: [this.table.arn],
-        },
-      ]);
-      host.addPolicyStatements([
-        {
-          actions: ["dynamodb:DeleteItem"],
-          resources: [this.table.arn],
-        },
-      ]);
+      host.addPolicyStatements({
+        actions: ["dynamodb:PutItem"],
+        resources: [this.table.arn],
+      });
+      host.addPolicyStatements({
+        actions: ["dynamodb:UpdateItem"],
+        resources: [this.table.arn],
+      });
+      host.addPolicyStatements({
+        actions: ["dynamodb:DeleteItem"],
+        resources: [this.table.arn],
+      });
     }
 
     host.addEnvironment(this.envName(), this.table.name);
