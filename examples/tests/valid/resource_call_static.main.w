@@ -3,7 +3,7 @@ bring cloud;
 let globalCounter = new cloud.Counter();
 
 class Another {
-  static inflight myStaticMethod(): num {
+  pub static inflight myStaticMethod(): num {
     return globalCounter.peek();
   }
 }

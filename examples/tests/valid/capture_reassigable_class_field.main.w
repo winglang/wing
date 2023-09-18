@@ -9,15 +9,15 @@ class KeyValueStore {
     this.onUpdateCallback = inflight (k: str) => {};
   }
 
-  onUpdate(fn: inflight (str):void){
+  pub onUpdate(fn: inflight (str):void){
     this.onUpdateCallback = fn;
   }
 
-  inflight get(key: str): Json {
+  pub inflight get(key: str): Json {
     this.onUpdateCallback(key);
     return this.bucket.getJson(key);
   }
-  inflight set(key: str, value: Json): void {
+  pub inflight set(key: str, value: Json): void {
     this.bucket.putJson(key, value);
   }
 }
