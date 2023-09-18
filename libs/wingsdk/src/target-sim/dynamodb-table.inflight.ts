@@ -24,10 +24,10 @@ export class DynamodbTable
   private client?: DynamoDBClient;
 
   public constructor(
-    props: DynamodbTableSchema["props"],
+    private props: DynamodbTableSchema["props"],
     context: ISimulatorContext
   ) {
-    super(props.name, props.attributeDefinitions, props.keySchema);
+    super(props.name);
 
     this.context = context;
     this.containerName = `wing-sim-dynamodb-${this.context.resourcePath.replace(
@@ -79,15 +79,25 @@ export class DynamodbTable
   }
 
   private async createTable() {
+    const keySchema = [
+      {
+        AttributeName: this.props.hashKey,
+        KeyType: "HASH",
+      },
+    ];
+    if (this.props.rangeKey) {
+      keySchema.push({
+        AttributeName: this.props.rangeKey,
+        KeyType: "RANGE",
+      });
+    }
+
     const createTableCommand = new CreateTableCommand({
       TableName: this.tableName,
-      AttributeDefinitions: Object.entries(this.attributeDefinitions).map(
+      AttributeDefinitions: Object.entries(this.props.attributeDefinitions).map(
         ([k, v]) => ({ AttributeName: k, AttributeType: v })
       ),
-      KeySchema: Object.entries(this.keySchema).map(([k, v]) => ({
-        AttributeName: k,
-        KeyType: v,
-      })),
+      KeySchema: keySchema,
       BillingMode: "PAY_PER_REQUEST",
     });
 

@@ -281,8 +281,12 @@ export interface DynamodbTableSchema extends BaseResourceSchema {
      */
     readonly attributeDefinitions: Json;
     /**
-     * Table key schema. e.g. { "myKey": "HASH", "myOtherKey": "RANGE" }.
+     * Hash key for this table.
      */
-    readonly keySchema: Json;
+    readonly hashKey: string;
+    /**
+     * Range key for this table.
+     */
+    readonly rangeKey?: string;
   };
 }

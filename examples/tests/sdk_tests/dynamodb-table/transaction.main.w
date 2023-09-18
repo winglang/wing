@@ -1,6 +1,6 @@
 bring ex;
 
-let t1 = new ex.DynamodbTable(name: "test1", attributeDefinitions: { "k1": "S", "k2": "S" }, keySchema: { "k1": "HASH", "k2": "RANGE" });
+let t1 = new ex.DynamodbTable(name: "test1", attributeDefinitions: { "k1": "S", "k2": "S" }, hashKey: "k1", rangeKey: "k2");
 
 test "transactWriteItems" {
   t1.putItem({

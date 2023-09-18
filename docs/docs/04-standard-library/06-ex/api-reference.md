@@ -162,8 +162,6 @@ dynamodb UpdateItem props.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.ex.DynamodbTable.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTable.property.attributeDefinitions">attributeDefinitions</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | Table attribute definitions. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTable.property.keySchema">keySchema</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | Table key schema. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTable.property.name">name</a></code> | <code>str</code> | Table name. |
 
 ---
@@ -177,34 +175,6 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
-
----
-
-##### `attributeDefinitions`<sup>Required</sup> <a name="attributeDefinitions" id="@winglang/sdk.ex.DynamodbTable.property.attributeDefinitions"></a>
-
-```wing
-attributeDefinitions: Json;
-```
-
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-
-Table attribute definitions.
-
-e.g. { "myKey": "S", "myOtherKey": "S" }.
-
----
-
-##### `keySchema`<sup>Required</sup> <a name="keySchema" id="@winglang/sdk.ex.DynamodbTable.property.keySchema"></a>
-
-```wing
-keySchema: Json;
-```
-
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-
-Table key schema.
-
-e.g. { "myKey": "HASH", "myOtherKey": "RANGE" }.
 
 ---
 
@@ -714,14 +684,12 @@ Base class for `DynamodbTable` Client.
 ```wing
 bring ex;
 
-new ex.DynamodbTableClientBase(tableName: str, attributeDefinitions: Json, keySchema: Json);
+new ex.DynamodbTableClientBase(tableName: str);
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.Initializer.parameter.tableName">tableName</a></code> | <code>str</code> | the table name. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.Initializer.parameter.attributeDefinitions">attributeDefinitions</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | the table attribute definitions. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.Initializer.parameter.keySchema">keySchema</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | the table key schema. |
 
 ---
 
@@ -730,22 +698,6 @@ new ex.DynamodbTableClientBase(tableName: str, attributeDefinitions: Json, keySc
 - *Type:* str
 
 the table name.
-
----
-
-##### `attributeDefinitions`<sup>Required</sup> <a name="attributeDefinitions" id="@winglang/sdk.ex.DynamodbTableClientBase.Initializer.parameter.attributeDefinitions"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-
-the table attribute definitions.
-
----
-
-##### `keySchema`<sup>Required</sup> <a name="keySchema" id="@winglang/sdk.ex.DynamodbTableClientBase.Initializer.parameter.keySchema"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-
-the table key schema.
 
 ---
 
@@ -1056,8 +1008,9 @@ let DynamodbTableProps = ex.DynamodbTableProps{ ... };
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableProps.property.attributeDefinitions">attributeDefinitions</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | Table attribute definitions. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableProps.property.keySchema">keySchema</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | Table key schema. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableProps.property.hashKey">hashKey</a></code> | <code>str</code> | Hash key for this table. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableProps.property.name">name</a></code> | <code>str</code> | The table's name. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableProps.property.rangeKey">rangeKey</a></code> | <code>str</code> | Range key for this table. |
 
 ---
 
@@ -1075,17 +1028,15 @@ e.g.  { "myKey": "S", "myOtherKey": "S" }.
 
 ---
 
-##### `keySchema`<sup>Required</sup> <a name="keySchema" id="@winglang/sdk.ex.DynamodbTableProps.property.keySchema"></a>
+##### `hashKey`<sup>Required</sup> <a name="hashKey" id="@winglang/sdk.ex.DynamodbTableProps.property.hashKey"></a>
 
 ```wing
-keySchema: Json;
+hashKey: str;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- *Type:* str
 
-Table key schema.
-
-e.g. { "myKey": "HASH", "myOtherKey": "RANGE" }.
+Hash key for this table.
 
 ---
 
@@ -1098,6 +1049,19 @@ name: str;
 - *Type:* str
 
 The table's name.
+
+---
+
+##### `rangeKey`<sup>Optional</sup> <a name="rangeKey" id="@winglang/sdk.ex.DynamodbTableProps.property.rangeKey"></a>
+
+```wing
+rangeKey: str;
+```
+
+- *Type:* str
+- *Default:* undefined
+
+Range key for this table.
 
 ---
 

@@ -132,7 +132,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const t1 = this.node.root.newAbstract("@winglang/sdk.ex.DynamodbTable",this,"ex.DynamodbTable",{ name: "test1", attributeDefinitions: ({"k1": "S","k2": "S"}), keySchema: ({"k1": "HASH","k2": "RANGE"}) });
+    const t1 = this.node.root.newAbstract("@winglang/sdk.ex.DynamodbTable",this,"ex.DynamodbTable",{ name: "test1", attributeDefinitions: ({"k1": "S","k2": "S"}), hashKey: "k1", rangeKey: "k2" });
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:transactWriteItems",new $Closure1(this,"$Closure1"));
   }
 }

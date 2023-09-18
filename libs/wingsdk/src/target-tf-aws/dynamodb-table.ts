@@ -26,28 +26,17 @@ export class DynamodbTable extends ex.DynamodbTable {
   constructor(scope: Construct, id: string, props: ex.DynamodbTableProps) {
     super(scope, id, props);
 
-    const hashKey = Object.entries(props.keySchema).find(
-      ([_, v]) => v === "HASH"
-    );
-    if (!hashKey) {
-      throw Error("missing HASH key in `keySchema`.");
-    }
-
-    const rangeKey = Object.entries(props.keySchema).find(
-      ([_, v]) => v === "RANGE"
-    );
-
     this.table = new AwsDynamodbTable(this, "Default", {
       name: ResourceNames.generateName(this, {
         prefix: this.name,
         ...NAME_OPTS,
       }),
-      attribute: Object.entries(this.attributeDefinitions).map(([k, v]) => ({
+      attribute: Object.entries(props.attributeDefinitions).map(([k, v]) => ({
         name: k,
         type: v,
       })),
-      hashKey: hashKey[0],
-      rangeKey: rangeKey?.[0],
+      hashKey: props.hashKey,
+      rangeKey: props.rangeKey,
       billingMode: "PAY_PER_REQUEST",
     });
   }
@@ -121,14 +110,6 @@ export class DynamodbTable extends ex.DynamodbTable {
     }
 
     host.addEnvironment(this.envName(), this.table.name);
-    host.addEnvironment(
-      this.attributeDefinitionsEnvName(),
-      JSON.stringify(this.attributeDefinitions)
-    );
-    host.addEnvironment(
-      this.KeySchemaEnvName(),
-      JSON.stringify(this.keySchema)
-    );
 
     super.bind(host, ops);
   }
@@ -139,23 +120,11 @@ export class DynamodbTable extends ex.DynamodbTable {
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
       "DynamodbTableClient",
-      [
-        `process.env["${this.envName()}"]`,
-        `process.env["${this.attributeDefinitionsEnvName()}"]`,
-        `process.env["${this.KeySchemaEnvName()}"]`,
-      ]
+      [`process.env["${this.envName()}"]`]
     );
   }
 
   private envName(): string {
     return `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
-  }
-
-  private attributeDefinitionsEnvName(): string {
-    return `${this.envName()}_ATTRIBUTE_DEFINITIONS`;
-  }
-
-  private KeySchemaEnvName(): string {
-    return `${this.envName()}_KEY_SCHEMA`;
   }
 }

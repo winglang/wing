@@ -39,7 +39,7 @@ return class Handler {
 }
 };
 })())({
-my_table: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/dynamodb-table.inflight\\")).DynamodbTableClient(process.env[\\"DYNAMODB_TABLE_NAME_e7245baa\\"], process.env[\\"DYNAMODB_TABLE_NAME_e7245baa_ATTRIBUTE_DEFINITIONS\\"], process.env[\\"DYNAMODB_TABLE_NAME_e7245baa_KEY_SCHEMA\\"])
+my_table: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/dynamodb-table.inflight\\")).DynamodbTableClient(process.env[\\"DYNAMODB_TABLE_NAME_e7245baa\\"])
 })"
 `;
 
@@ -89,8 +89,6 @@ exports[`function with a table binding 2`] = `
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_e7245baa": "\${aws_dynamodb_table.Table.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa_ATTRIBUTE_DEFINITIONS": "{\\"id\\":\\"S\\"}",
-            "DYNAMODB_TABLE_NAME_e7245baa_KEY_SCHEMA": "{\\"id\\":\\"HASH\\"}",
             "WING_FUNCTION_NAME": "Function-c852aba6",
           },
         },

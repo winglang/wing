@@ -73,7 +73,8 @@ export const DynamodbTableInteractionView = ({
           <div className="flex items-center gap-2 justify-end">
             <DynamodbTableInteraction
               rows={rows}
-              keySchema={table.data?.keySchema || {}}
+              hashKey={table.data?.hashKey}
+              rangeKey={table.data?.rangeKey}
               onAddRow={onAddRow}
               onRemoveRow={onRemoveRow}
               loading={loading}

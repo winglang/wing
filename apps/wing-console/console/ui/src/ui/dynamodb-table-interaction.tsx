@@ -17,8 +17,8 @@ export type Row = {
 };
 
 export interface TableInteractionProps {
-  keySchema?: Record<string, any>;
-  columns?: Column[];
+  hashKey: string;
+  rangeKey?: string;
   rows?: Row[];
   onAddRow?: (row: RowData) => void;
   onRemoveRow?: (index: number) => void;
@@ -28,7 +28,8 @@ export interface TableInteractionProps {
 }
 
 export const DynamodbTableInteraction = ({
-  keySchema = {},
+  hashKey,
+  rangeKey,
   rows = [],
   onAddRow = (row: RowData) => {},
   onRemoveRow = (index: number) => {},
@@ -45,7 +46,10 @@ export const DynamodbTableInteraction = ({
   const addRow = useCallback(async () => {
     try {
       const row = JSON.parse(newRow.data);
-      if (Object.keys(keySchema).some((k) => row[k] === undefined)) {
+      if (row[hashKey] === undefined) {
+        return;
+      }
+      if (rangeKey && row[rangeKey] === undefined) {
         return;
       }
       onAddRow(row);
@@ -55,7 +59,7 @@ export const DynamodbTableInteraction = ({
         error: "Not a valid JSON",
       });
     }
-  }, [newRow, onAddRow, keySchema]);
+  }, [newRow, onAddRow, hashKey, rangeKey]);
 
   const updateNewRow = useCallback(
     (newValue: any) => {

@@ -9,7 +9,7 @@ test("create a table", async () => {
   const t = ex.DynamodbTable._newDynamodbTable(app, "create_table", {
     name: "new_table",
     attributeDefinitions: { id: "S" } as any,
-    keySchema: { id: "HASH" } as any,
+    hashKey: "id",
   });
 
   const s = await app.startSimulator();
@@ -23,9 +23,7 @@ test("create a table", async () => {
       attributeDefinitions: {
         id: "S",
       },
-      keySchema: {
-        id: "HASH",
-      },
+      hashKey: "id",
     },
     type: "wingsdk.ex.DynamodbTable",
   });
@@ -40,7 +38,7 @@ test("put item", async () => {
   const t = ex.DynamodbTable._newDynamodbTable(app, "put_table", {
     name: "my_insert_table",
     attributeDefinitions: { id: "S" } as any,
-    keySchema: { id: "HASH" } as any,
+    hashKey: "id",
   });
   const s = await app.startSimulator();
   const client = s.getResource("/put_table") as ex.IDynamodbTableClient;
@@ -60,9 +58,7 @@ test("put item", async () => {
       attributeDefinitions: {
         id: "S",
       },
-      keySchema: {
-        id: "HASH",
-      },
+      hashKey: "id",
     },
     type: "wingsdk.ex.DynamodbTable",
   });
@@ -78,7 +74,7 @@ test("get item", async () => {
   const t = ex.DynamodbTable._newDynamodbTable(app, "get_table", {
     name: "my_get_table",
     attributeDefinitions: { id: "S" } as any,
-    keySchema: { id: "HASH" } as any,
+    hashKey: "id",
   });
   const s = await app.startSimulator();
   const client = s.getResource("/get_table") as ex.IDynamodbTableClient;
@@ -98,9 +94,7 @@ test("get item", async () => {
       attributeDefinitions: {
         id: "S",
       },
-      keySchema: {
-        id: "HASH",
-      },
+      hashKey: "id",
     },
     type: "wingsdk.ex.DynamodbTable",
   });
@@ -116,7 +110,7 @@ test("update item", async () => {
   const t = ex.DynamodbTable._newDynamodbTable(app, "update_table", {
     name: "my_update_table",
     attributeDefinitions: { id: "S" } as any,
-    keySchema: { id: "HASH" } as any,
+    hashKey: "id",
   });
   const s = await app.startSimulator();
   const client = s.getResource("/update_table") as ex.IDynamodbTableClient;
@@ -142,9 +136,7 @@ test("update item", async () => {
       attributeDefinitions: {
         id: "S",
       },
-      keySchema: {
-        id: "HASH",
-      },
+      hashKey: "id",
     },
     type: "wingsdk.ex.DynamodbTable",
   });
@@ -160,7 +152,7 @@ test("inserting the same id twice", async () => {
   const t = ex.DynamodbTable._newDynamodbTable(app, "put_twice_table", {
     name: "my_insert_twice_table",
     attributeDefinitions: { id: "S" } as any,
-    keySchema: { id: "HASH" } as any,
+    hashKey: "id",
   });
   const s = await app.startSimulator();
   const client = s.getResource("/put_twice_table") as ex.IDynamodbTableClient;
@@ -191,7 +183,7 @@ test("update non-existent item", async () => {
     {
       name: "my_update_non_existent_table",
       attributeDefinitions: { id: "S" } as any,
-      keySchema: { id: "HASH" } as any,
+      hashKey: "id",
     }
   );
   const s = await app.startSimulator();
@@ -215,7 +207,7 @@ test("delete item", async () => {
   const t = ex.DynamodbTable._newDynamodbTable(app, "delete_table", {
     name: "my_delete_non_existent_table",
     attributeDefinitions: { id: "S" } as any,
-    keySchema: { id: "HASH" } as any,
+    hashKey: "id",
   });
   const s = await app.startSimulator();
   const client = s.getResource("/delete_table") as ex.IDynamodbTableClient;
@@ -237,7 +229,7 @@ test("scan", async () => {
   const t = ex.DynamodbTable._newDynamodbTable(app, "scan_table", {
     name: "scan_table",
     attributeDefinitions: { id: "S" } as any,
-    keySchema: { id: "HASH" } as any,
+    hashKey: "id",
   });
   const s = await app.startSimulator();
   const client = s.getResource("/scan_table") as ex.IDynamodbTableClient;
@@ -259,7 +251,7 @@ test("write transaction", async () => {
   const t = ex.DynamodbTable._newDynamodbTable(app, "write_transact_table", {
     name: "write_transact_table",
     attributeDefinitions: { id: "S" } as any,
-    keySchema: { id: "HASH" } as any,
+    hashKey: "id",
   });
   const s = await app.startSimulator();
   const client = s.getResource(

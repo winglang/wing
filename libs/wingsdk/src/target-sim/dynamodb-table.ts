@@ -15,8 +15,12 @@ export class DynamodbTable
   extends ex.DynamodbTable
   implements ISimulatorResource
 {
+  private readonly props: ex.DynamodbTableProps;
+
   constructor(scope: Construct, id: string, props: ex.DynamodbTableProps) {
     super(scope, id, props);
+
+    this.props = props;
   }
 
   public toSimulator(): BaseResourceSchema {
@@ -25,8 +29,9 @@ export class DynamodbTable
       path: this.node.path,
       props: {
         name: this.name,
-        attributeDefinitions: this.attributeDefinitions,
-        keySchema: this.keySchema,
+        attributeDefinitions: this.props.attributeDefinitions,
+        hashKey: this.props.hashKey,
+        rangeKey: this.props.rangeKey,
       },
       attrs: {} as any,
     };

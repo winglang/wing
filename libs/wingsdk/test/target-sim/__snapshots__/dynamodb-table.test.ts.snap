@@ -23,9 +23,7 @@ exports[`create a table 1`] = `
           "attributeDefinitions": {
             "id": "S",
           },
-          "keySchema": {
-            "id": "HASH",
-          },
+          "hashKey": "id",
           "name": "new_table",
         },
         "type": "wingsdk.ex.DynamodbTable",
@@ -106,9 +104,7 @@ exports[`get item 2`] = `
           "attributeDefinitions": {
             "id": "S",
           },
-          "keySchema": {
-            "id": "HASH",
-          },
+          "hashKey": "id",
           "name": "my_get_table",
         },
         "type": "wingsdk.ex.DynamodbTable",
@@ -189,9 +185,7 @@ exports[`put item 2`] = `
           "attributeDefinitions": {
             "id": "S",
           },
-          "keySchema": {
-            "id": "HASH",
-          },
+          "hashKey": "id",
           "name": "my_insert_table",
         },
         "type": "wingsdk.ex.DynamodbTable",
@@ -272,9 +266,7 @@ exports[`update item 2`] = `
           "attributeDefinitions": {
             "id": "S",
           },
-          "keySchema": {
-            "id": "HASH",
-          },
+          "hashKey": "id",
           "name": "my_update_table",
         },
         "type": "wingsdk.ex.DynamodbTable",

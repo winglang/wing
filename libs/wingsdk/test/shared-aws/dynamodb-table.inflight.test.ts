@@ -19,8 +19,6 @@ import { test, expect, describe, beforeEach } from "vitest";
 import { DynamodbTableClient } from "../../src/shared-aws/dynamodb-table.inflight";
 
 const MOCK_TABLE_NAME = "MyBeautifulTable";
-const ATTRIBUTE_DEFINITIONS = JSON.stringify({ id: "S" });
-const KEY_SCHEMA = JSON.stringify({ id: "HASH" });
 const dynamoMock = mockClient(DynamoDBClient);
 
 describe("inflight table tests", () => {
@@ -30,11 +28,7 @@ describe("inflight table tests", () => {
   beforeEach(() => {
     key = "test";
     row = { id: key, somenumber: 1 };
-    client = new DynamodbTableClient(
-      MOCK_TABLE_NAME,
-      ATTRIBUTE_DEFINITIONS,
-      KEY_SCHEMA
-    );
+    client = new DynamodbTableClient(MOCK_TABLE_NAME);
     dynamoMock.reset();
   });
 

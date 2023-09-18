@@ -31,9 +31,14 @@ export interface DynamodbTableProps {
    */
   readonly attributeDefinitions: Json;
   /**
-   * Table key schema. e.g. { "myKey": "HASH", "myOtherKey": "RANGE" }.
+   * Hash key for this table.
    */
-  readonly keySchema: Json;
+  readonly hashKey: string;
+  /**
+   * Range key for this table.
+   * @default undefined
+   */
+  readonly rangeKey?: string;
 }
 
 /**
@@ -58,14 +63,6 @@ export abstract class DynamodbTable extends Resource {
    * Table name
    */
   public readonly name: string;
-  /**
-   * Table attribute definitions. e.g. { "myKey": "S", "myOtherKey": "S" }.
-   */
-  public readonly attributeDefinitions: Json;
-  /**
-   * Table key schema. e.g. { "myKey": "HASH", "myOtherKey": "RANGE" }.
-   */
-  public readonly keySchema: Json;
 
   constructor(scope: Construct, id: string, props: DynamodbTableProps) {
     super(scope, id);
@@ -77,8 +74,6 @@ export abstract class DynamodbTable extends Resource {
       throw new Error("Dynamodb table name is not defined");
     }
     this.name = props.name;
-    this.attributeDefinitions = props.attributeDefinitions;
-    this.keySchema = props.keySchema;
   }
 
   /** @internal */
@@ -268,14 +263,8 @@ export enum DynamodbTableInflightMethods {
 export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
   /**
    * @param tableName the table name.
-   * @param attributeDefinitions the table attribute definitions.
-   * @param keySchema the table key schema.
    */
-  constructor(
-    protected tableName: string,
-    protected attributeDefinitions: Json,
-    protected keySchema: Json
-  ) {}
+  constructor(protected tableName: string) {}
 
   /**
    * Dynamodb table client.

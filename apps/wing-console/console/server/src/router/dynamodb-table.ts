@@ -21,11 +21,13 @@ export const createDynamodbTableRouter = () => {
         ) as IDynamodbTableClient;
         const rows = await client.scan();
         const attributeDefinitions = schema.props.attributeDefinitions;
-        const keySchema = schema.props.keySchema;
+        const hashKey = schema.props.hashKey;
+        const rangeKey = schema.props.rangeKey;
         return {
           name: schema.props.name,
           attributeDefinitions,
-          keySchema,
+          hashKey,
+          rangeKey,
           rows,
         };
       }),
@@ -74,15 +76,12 @@ export const createDynamodbTableRouter = () => {
         const schema = simulator.getResourceConfig(
           input.resourcePath,
         ) as DynamodbTableSchema;
-
-        // keep only key attributes
-        const keys = Object.keys(input.data).filter(
-          (k) => (schema.props.keySchema as any)[k],
-        );
-        let itemKey: any = {};
-        for (let k of keys) {
-          itemKey[k] = input.data[k];
-        }
+        const itemKey = {
+          [schema.props.hashKey]: input.data[schema.props.hashKey],
+          ...(schema.props.rangeKey
+            ? { [schema.props.rangeKey]: input.data[schema.props.rangeKey] }
+            : {}),
+        };
         return await client.deleteItem(itemKey as Json);
       }),
   });
