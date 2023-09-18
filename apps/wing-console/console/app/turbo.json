@@ -11,7 +11,8 @@
     },
     "preview:fly": {
       "dependsOn": ["compile"],
-      "inputs": ["demo/*", "preview/*"]
+      "inputs": ["demo/*", "preview/*"],
+      "cache": false
     }
   }
 }

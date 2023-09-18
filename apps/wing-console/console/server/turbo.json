@@ -7,9 +7,6 @@
     },
     "package": {
       "outputs": ["../../../../dist/wingconsole-server-*.tgz"]
-    },
-    "preview:fly": {
-      "dependsOn": ["compile"]
     }
   }
 }
