@@ -29,7 +29,7 @@ class MyResource {
     };
   }
 
-  inflight foo(): str {
+  pub inflight foo(): str {
     return this.closure("anything");
   }
 }

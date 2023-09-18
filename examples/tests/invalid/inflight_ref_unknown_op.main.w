@@ -9,7 +9,7 @@ class Test {
     this.b = new cloud.Bucket();
   }
 
-  inflight test() {
+  pub inflight test() {
     let x = this.b;
 //               ^ Cannot qualify which operations are performed on object
     x.put("hello", "world");

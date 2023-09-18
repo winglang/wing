@@ -7,7 +7,7 @@ let fn = inflight () => {
 };
 
 class MyClosure {
-  bucket: cloud.Bucket;
+  pub bucket: cloud.Bucket;
   
   init() {
     this.bucket = new cloud.Bucket();
@@ -23,7 +23,7 @@ class MyClosure {
     this.bucket.put("hello", "world");
   }
 
-  inflight listFiles(): Array<str> {
+  pub inflight listFiles(): Array<str> {
     bucket2.put("b2", "world");
     return this.bucket.list();
   }

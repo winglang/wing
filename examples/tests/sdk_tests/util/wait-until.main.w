@@ -2,7 +2,7 @@ bring cloud;
 bring util;
 
 class JSHelper { 
-  extern "./sleep-helper.js" static inflight getTime(): num;
+  extern "./sleep-helper.js" pub static inflight getTime(): num;
 }
 
 let invokeCounter = new cloud.Counter();

@@ -3,7 +3,13 @@ bring cloud;
 let jsonNumber  = Json 123;
 let jsonBool    = Json true;
 let jsonArray   = Json [ 1, 2, 3 ];
+let jsonMap     = Json { "1" => 1, "2" => 2, "3" => 3 };
 let jsonObj     = Json { boom: 123 };
+
+for j in [jsonNumber, jsonBool, jsonArray, jsonMap, jsonObj] {
+  assert(j == Json.parse(Json.stringify(j)));
+}
+
 let jsonMutObj = MutJson {
   hello: 123,
   world: [ 1, "cat", 3 ],
@@ -35,7 +41,7 @@ let jj3 = Json getStr();
 assert(jj3 == Json "hello");
 
 class Foo {
-  SumStr: str;
+  pub SumStr: str;
   init() {
     this.SumStr = "wow!";
   }
