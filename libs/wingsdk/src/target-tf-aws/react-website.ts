@@ -7,6 +7,7 @@ import { core } from "..";
 
 import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
+import * as ex from "../ex";
 import { Connections } from "../core";
 
 /**
@@ -14,8 +15,8 @@ import { Connections } from "../core";
  *
  * @inflight `@winglang/sdk.cloud.IReactWebsiteClient`
  */
-export class ReactWebsite extends cloud.ReactWebsite {
-  constructor(scope: Construct, id: string, props: cloud.ReactWebsiteProps) {
+export class ReactWebsite extends ex.ReactWebsite {
+  constructor(scope: Construct, id: string, props: ex.ReactWebsiteProps) {
     super(scope, id, props);
   }
 
@@ -56,12 +57,17 @@ export class ReactWebsite extends cloud.ReactWebsite {
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return core.InflightClient.for(
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
       "ReactWebsiteClient",
       []
     );
+  }
+
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [];
   }
 }

@@ -31,7 +31,7 @@ import {
   TOPIC_FQN,
   WEBSITE_FQN,
 } from "../cloud";
-import { REACT_WEBSITE_FQN } from "../cloud/react-website";
+import { REACT_WEBSITE_FQN } from "../ex/react-website";
 import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";

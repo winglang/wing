@@ -247,7 +247,7 @@ export interface ReactWebsiteSchema extends BaseResourceSchema {
   readonly props: {
     path: string;
     startCommand: string;
-    environments: Record<string, string>;
+    environmentVariables: Record<string, string>;
     isDevRun: boolean;
   };
 }

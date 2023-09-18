@@ -58,14 +58,9 @@ export abstract class Website extends Resource {
     Node.of(this).title = "Website";
     Node.of(this).description = "A static website";
 
-    if (isAbsolute(props.path)) {
-      this._path = props.path;
-    } else {
-      if (!App.of(scope).entrypointDir) {
-        throw new Error("Missing environment variable: WING_SOURCE_DIR");
-      }
-      this._path = resolve(App.of(scope).entrypointDir, props.path);
-    }
+    this._path = isAbsolute(props.path)
+      ? props.path
+      : resolve(App.of(scope).entrypointDir, props.path);
 
     this._domain = props.domain;
   }

@@ -6,9 +6,10 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
+import * as ex from "../ex";
 
 export class ReactWebsite
-  extends cloud.ReactWebsite
+  extends ex.ReactWebsite
   implements ISimulatorResource
 {
   constructor(scope: Construct, id: string, props: cloud.ReactWebsiteProps) {
@@ -40,7 +41,7 @@ export class ReactWebsite
       props: {
         path: this._projectPath,
         startCommand: this._startCommand,
-        environments: Object.fromEntries(this._environments.entries()),
+        environmentVariables: Object.fromEntries(this._environments.entries()),
         isDevRun: this._isDevRun,
       },
       attrs: {} as any,
@@ -54,7 +55,12 @@ export class ReactWebsite
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
+  }
+
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [];
   }
 }

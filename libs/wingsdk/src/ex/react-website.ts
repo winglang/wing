@@ -1,9 +1,9 @@
 import { isAbsolute, join, resolve } from "path";
 import { Construct } from "constructs";
-import { BaseWebsiteProps, Website } from "./website";
+import { BaseWebsiteProps, Website } from "../cloud/website";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Resource } from "../std";
+import { Resource, Node } from "../std";
 
 const DEFAULT_BUILD_FOLDER = "/build";
 const DEFAULT_START_COMMAND = "npm run start";
@@ -19,17 +19,41 @@ export const REACT_WEBSITE_FQN = fqnForType("cloud.ReactWebsite");
  * Options for `ReactWebsite`.
  */
 export interface ReactWebsiteProps {
+  /**
+   * The path to the React app root folder- can be absolute or relative to the wing folder
+   */
   readonly projectPath: string;
+  /**
+   * The path to the React app build folder- relative to the `projectPath`
+   * @default "/build"
+   */
   readonly buildFolder?: string;
+  /**
+   * a command for starting React app locally
+   * @default "npm run start"
+   */
   readonly startCommand?: string;
+  /**
+   * a command for building the React app
+   * @default "npm run build"
+   */
   readonly buildCommand?: string;
+  /**
+   * in sim, if `true` - will use the start command, and if `false` - the build command
+   */
   readonly isDevRun?: boolean;
+  /**
+   * additional properties to run the website host with
+   */
   readonly hostProps?: BaseWebsiteProps;
+  /**
+   * a port to start a local build of the React app on.
+   */
   readonly localPort?: string | number;
 }
 
 /**
- * A cloud dynamic website.
+ * A cloud deployable React website.
  *
  * @inflight `@winglang/sdk.cloud.IReactWebsiteClient`
  */
@@ -87,8 +111,8 @@ export abstract class ReactWebsite extends Resource {
 
     super(scope, id);
 
-    this.display.title = "Dynamic Website";
-    this.display.description = "A dynamic website";
+    Node.of(this).title = "React Website";
+    Node.of(this).description = "A deployable React website";
 
     this._projectPath = this._parsePath(scope, props.projectPath);
     this._hostProps = props.hostProps;
@@ -106,12 +130,7 @@ export abstract class ReactWebsite extends Resource {
   }
 
   private _parsePath(scope: Construct, path: string) {
-    if (isAbsolute(path)) {
-      return path;
-    } else if (!App.of(scope).entrypointDir) {
-      throw new Error("Missing environment variable: WING_SOURCE_DIR");
-    }
-    return resolve(App.of(scope).entrypointDir, path);
+    return isAbsolute(path) ? resolve(App.of(scope).entrypointDir, path) : path;
   }
 
   public addEnvironment(key: string, value: string) {
