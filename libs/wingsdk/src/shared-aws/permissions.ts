@@ -128,7 +128,7 @@ export function calculateBucketPermissions(
   }
 
   // accessing the publicAccessBlock
-  if (ops.includes(cloud.BucketInflightMethods.PUBLIC_URL || ops.includes(cloud.BucketInflightMethods.SIGNED_URL))) {
+  if (ops.includes(cloud.BucketInflightMethods.PUBLIC_URL))) {
     actions.push("s3:GetBucketPublicAccessBlock");
   }
 
