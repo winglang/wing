@@ -13,7 +13,7 @@ const DEFAULT_PORT = 3001;
 /**
  * Global identifier for `ReactWebsite`.
  */
-export const REACT_WEBSITE_FQN = fqnForType("cloud.ReactWebsite");
+export const REACT_WEBSITE_FQN = fqnForType("ex.ReactWebsite");
 
 /**
  * Options for `ReactWebsite`.
@@ -55,7 +55,7 @@ export interface ReactWebsiteProps {
 /**
  * A cloud deployable React website.
  *
- * @inflight `@winglang/sdk.cloud.IReactWebsiteClient`
+ * @inflight `@winglang/sdk.ex.IReactWebsiteClient`
  */
 export abstract class ReactWebsite extends Resource {
   /**
@@ -130,7 +130,7 @@ export abstract class ReactWebsite extends Resource {
   }
 
   private _parsePath(scope: Construct, path: string) {
-    return isAbsolute(path) ? resolve(App.of(scope).entrypointDir, path) : path;
+    return isAbsolute(path) ? path : resolve(App.of(scope).entrypointDir, path);
   }
 
   public addEnvironment(key: string, value: string) {
@@ -139,6 +139,6 @@ export abstract class ReactWebsite extends Resource {
 }
 
 /**
- * Inflight methods and members of `cloudReact.Website`.
+ * Inflight methods and members of `ex.ReactWebsite`.
  */
 export interface IReactWebsiteClient {}

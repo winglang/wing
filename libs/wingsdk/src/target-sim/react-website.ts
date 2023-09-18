@@ -12,7 +12,7 @@ export class ReactWebsite
   extends ex.ReactWebsite
   implements ISimulatorResource
 {
-  constructor(scope: Construct, id: string, props: cloud.ReactWebsiteProps) {
+  constructor(scope: Construct, id: string, props: ex.ReactWebsiteProps) {
     super(scope, id, props);
     if (!this._isDevRun) {
       // In the future we can create an host (proxy like) for the development one if needed

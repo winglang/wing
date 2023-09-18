@@ -28,7 +28,6 @@ import {
   API_FQN,
   BUCKET_FQN,
   COUNTER_FQN,
-  REACT_WEBSITE_FQN,
   FUNCTION_FQN,
   ON_DEPLOY_FQN,
   QUEUE_FQN,
@@ -38,7 +37,7 @@ import {
   WEBSITE_FQN,
 } from "../cloud";
 import { AppProps } from "../core";
-import { TABLE_FQN, REDIS_FQN } from "../ex";
+import { TABLE_FQN, REDIS_FQN, REACT_WEBSITE_FQN } from "../ex";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { CdktfApp } from "../shared-tf/app";
 import { TEST_RUNNER_FQN } from "../std";
