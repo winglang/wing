@@ -12,7 +12,7 @@ let api = new cloud.Api(
     allowHeaders: ["Content-Type"],
     allowCredentials: false,
     exposeHeaders: ["Content-Type"],
-    maxAge: 600
+    maxAge: 600s
   }
 );
 
