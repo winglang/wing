@@ -779,6 +779,13 @@ impl<'s> Parser<'s> {
 			}
 
 			// case: .w file
+			if source_path.ends_with(".main.w\"") || source_path.ends_with("main.w\"") {
+				return self.with_error(
+					format!("Cannot bring module \"{}\": main files cannot be brought", source_path),
+					statement_node,
+				);
+			}
+
 			if source_path.is_file() {
 				if source_path.extension() != Some("w") {
 					return self.with_error(
@@ -809,13 +816,6 @@ impl<'s> Parser<'s> {
 				};
 				return module;
 			}
-			if source_path.ends_with(".main.w\"") {
-				return self.with_error(
-					format!("Cannot bring module \"{}\": main files cannot be brought", source_path),
-					statement_node,
-				);
-			}
-			self.referenced_wing_paths.borrow_mut().push(source_path.clone());
 
 			// case: directory
 			if source_path.is_dir() {

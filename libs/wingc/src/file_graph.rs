@@ -95,7 +95,7 @@ impl Display for FileGraph {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		for node_index in self.graph.node_indices() {
 			let node = &self.graph[node_index];
-			write!(f, "{{{} -> [", node)?;
+			write!(f, "{{{} -> [ ", node)?;
 			for edge in self.graph.edges(node_index) {
 				let target = &self.graph[edge.target()];
 				write!(f, "{} ", target)?;
