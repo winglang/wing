@@ -252,6 +252,7 @@ function filterTestsByRegex(tests: string[], regexString: string): string[] {
 
   return tests.filter((test) => {
     // Extract test name from the string
+    // root/env0/test:<testName>
     const testName = test.split(":").pop();
 
     if (testName) {
