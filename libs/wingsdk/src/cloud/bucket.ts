@@ -68,6 +68,7 @@ export abstract class Bucket extends Resource {
       BucketInflightMethods.TRY_GET,
       BucketInflightMethods.TRY_GET_JSON,
       BucketInflightMethods.TRY_DELETE,
+      BucketInflightMethods.SIGNED_URL,
     ];
   }
 
@@ -245,6 +246,17 @@ export abstract class Bucket extends Resource {
   }
 }
 
+/**
+ * Interface for signed url options
+ */
+export interface SignedUrlOptions{
+  /**
+   * The duration for the signed url to expire
+   */
+
+   readonly duration?: Duration;
+}
+
 /** Interface for delete method inside `Bucket` */
 export interface BucketDeleteOptions {
   /**
@@ -254,6 +266,7 @@ export interface BucketDeleteOptions {
    */
   readonly mustExist?: boolean;
 }
+
 
 /**
  * Inflight interface for `Bucket`.
@@ -352,7 +365,7 @@ export interface IBucketClient {
    * @Throws if object does not exist.
    * @inflight
    */
-  signedUrl(key: string, duration?: Duration): Promise<string>;
+  signedUrl(key: string, options?: SignedUrlOptions): Promise<string>;
 }
 
 /**
