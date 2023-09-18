@@ -2612,6 +2612,26 @@ impl<'a> TypeChecker<'a> {
 		})
 	}
 
+	// fn type_to_json(&self, t: &TypeRef) -> JsonData {
+	// 		match &**t {
+	// 			Type::Json(_) => json_data.clone(),
+	// 			Type::Json(None) => JsonData {
+	// 				expression_id: 0,
+	// 				kind: JsonDataKind::Type(SpannedTypeInfo {
+	// 					type_: self.types.error(),
+	// 					span: Span::default(),
+	// 				}),
+	// 			},
+	// 			_ => JsonData {
+	// 				expression_id: 0,
+	// 				kind: JsonDataKind::Type(SpannedTypeInfo {
+	// 					type_: t.clone(),
+	// 					span: Span::default(),
+	// 				}),
+	// 			},
+	// 		}
+	// 	}
+
 	/// Validate that a given map can be assigned to a variable of given struct type
 	fn validate_structural_type(
 		&mut self,
@@ -2723,6 +2743,7 @@ impl<'a> TypeChecker<'a> {
 		assert!(expected_types.len() > 0);
 		let first_expected_type = expected_types[0];
 		let mut return_type = actual_type;
+		let og_span = span;
 		let span = span.span();
 
 		// To avoid ambiguity, only do inference if there is one expected type
@@ -2761,6 +2782,7 @@ impl<'a> TypeChecker<'a> {
 			}
 		}
 
+		// for the purpose of structural json type checking, treat collections of json as json
 		// if the actual type is an empty array of json, it can be assigned to any array
 		let mut json_type = return_type;
 		if let Type::Array(inner) | Type::Set(inner) = **return_type.maybe_unwrap_option() {
@@ -2785,6 +2807,20 @@ impl<'a> TypeChecker<'a> {
 					return return_type;
 				}
 				json_type = inner;
+			}
+		}
+
+		if let Type::Array(expected_inner) = *first_expected_type {
+			if let Type::Array(actual_inner) = *json_type {
+				return self.validate_type(actual_inner, expected_inner, og_span);
+			}
+		} else if let Type::Map(expected_inner) = *first_expected_type {
+			if let Type::Map(actual_inner) = *json_type {
+				return self.validate_type(actual_inner, expected_inner, og_span);
+			}
+		} else if let Type::Set(expected_inner) = *first_expected_type {
+			if let Type::Set(actual_inner) = *json_type {
+				return self.validate_type(actual_inner, expected_inner, og_span);
 			}
 		}
 

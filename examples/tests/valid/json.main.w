@@ -230,6 +230,7 @@ struct StructyJson {
 let arrayStruct: Array<StructyJson> = [ { foo: "", stuff: [] } ];
 let setStruct: Set<StructyJson> = { { foo: "", stuff: [] } };
 let mapStruct: Map<StructyJson> = { "1" => ({ foo: "", stuff: [] }) };
+let deepCollectionStruct: Map<Array<Set<StructyJson>>> = { "1" => [ { { foo: "", stuff: [] } } ] };
 
 let notJsonMissingField: StructyJson = {
   foo: "bar",
