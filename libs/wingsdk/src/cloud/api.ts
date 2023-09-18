@@ -158,7 +158,7 @@ type CorsOptionsResponseHeaders = {
    * Indicates how long the results of a preflight request can be cached.
    * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age
    */
-  "Access-Control-Max-Age": number;
+  "Access-Control-Max-Age": string;
 };
 
 /**
@@ -210,7 +210,7 @@ export abstract class Api extends Resource {
     allowHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
     exposeHeaders: [],
     allowCredentials: false,
-    maxAge: 300,
+    maxAge: Duration.fromMinutes(5),
   };
 
   /**
@@ -400,7 +400,7 @@ export abstract class Api extends Resource {
       allowMethods = [],
       exposeHeaders = [],
       allowCredentials = false,
-      maxAge = 300,
+      maxAge = Duration.fromMinutes(5),
     } = corsOptions;
 
     const defaultHeaders: CorsDefaultResponseHeaders = {
@@ -413,7 +413,7 @@ export abstract class Api extends Resource {
       "Access-Control-Allow-Origin": allowOrigin.join(",") || "",
       "Access-Control-Allow-Headers": allowHeaders.join(",") || "",
       "Access-Control-Allow-Methods": allowMethods.join(",") || "",
-      "Access-Control-Max-Age": maxAge,
+      "Access-Control-Max-Age": maxAge.seconds.toString(),
     };
 
     return {
