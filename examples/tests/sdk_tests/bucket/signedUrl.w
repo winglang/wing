@@ -10,7 +10,7 @@ test "signedUrl" {
 
   let signedUrl = testBucket.signedUrl("file1.txt");
    if (util.env("WING_TARGET") != "sim") { 
-   assert(http.get(publicUrl).body ==  "Foo"); 
+   assert(http.get(signedUrl).body ==  "Foo"); 
   } 
 
 
