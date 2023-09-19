@@ -81,8 +81,8 @@ test("bucket with two preflight files", () => {
   // GIVEN
   const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
   const bucket = Bucket._newBucket(app, "my_bucket");
-  bucket.addFile("file1.txt", "../testFiles/test1.txt");
-  bucket.addFile("file2.txt", "../testFiles/test2.txt");
+  bucket.addFile("file1.txt", "../test-files/test1.txt");
+  bucket.addFile("file2.txt", "../test-files/test2.txt");
   const output = app.synth();
 
   // THEN

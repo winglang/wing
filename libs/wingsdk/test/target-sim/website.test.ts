@@ -10,7 +10,7 @@ test("website is serving static pages", async () => {
   // GIVEN
   const app = new SimApp();
   const website = cloud.Website._newWebsite(app, "website", {
-    path: resolve(__dirname, "website"),
+    path: resolve(__dirname, "../test-files/website"),
   });
 
   // WHEN
@@ -24,19 +24,22 @@ test("website is serving static pages", async () => {
   // THEN
   await s.stop();
   expect(await indexPage.text()).toEqual(
-    readFileSync(resolve(__dirname, "website/index.html"), {
+    readFileSync(resolve(__dirname, "../test-files/website/index.html"), {
       encoding: "utf-8",
     })
   );
   expect(await aPage.text()).toEqual(
-    readFileSync(resolve(__dirname, "website/b.html"), {
+    readFileSync(resolve(__dirname, "../test-files/website/b.html"), {
       encoding: "utf-8",
     })
   );
   expect(await bPage.text()).toEqual(
-    readFileSync(resolve(__dirname, "website/inner-folder/a.html"), {
-      encoding: "utf-8",
-    })
+    readFileSync(
+      resolve(__dirname, "../test-files/website/inner-folder/a.html"),
+      {
+        encoding: "utf-8",
+      }
+    )
   );
 });
 
@@ -51,7 +54,7 @@ test("website is serving dynamic json content", async () => {
   const jsonPath = "config.json";
   const app = new SimApp();
   const website = cloud.Website._newWebsite(app, "website", {
-    path: resolve(__dirname, "website"),
+    path: resolve(__dirname, "../test-files/website"),
   });
   website.addJson(jsonPath, Object(jsonConfig));
 
@@ -71,7 +74,7 @@ test("addJson throws an error for no json path", async () => {
   const jsonPath = "not a json Path";
   const app = new SimApp();
   const website = cloud.Website._newWebsite(app, "website", {
-    path: resolve(__dirname, "website"),
+    path: resolve(__dirname, "../test-files/website"),
   });
 
   expect(() => {

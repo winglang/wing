@@ -1,3 +1,4 @@
+import { existsSync } from "fs";
 import { isAbsolute, join, resolve } from "path";
 import { Construct } from "constructs";
 import { BaseWebsiteProps, Website } from "../cloud/website";
@@ -126,6 +127,10 @@ export abstract class ReactWebsite extends Resource {
     this._startCommand = this._isDevRun
       ? `PORT=${this._localPort} ${startCommand}`
       : buildCommand;
+
+    if (!existsSync(this._projectPath)) {
+      throw new Error(`non existent directory '${this._projectPath}'`);
+    }
   }
 
   /**
@@ -145,7 +150,7 @@ export abstract class ReactWebsite extends Resource {
   /**
    * Adding a key-value pair that can be accessible later via the `window.wingEnv` object in the react code
    * @param key the key to add
-   * @param value the key to add
+   * @param value the value to add
    */
   public addEnvironment(key: string, value: string) {
     this._environmentVariables.set(key, value);

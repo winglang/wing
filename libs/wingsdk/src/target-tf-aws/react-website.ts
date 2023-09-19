@@ -1,5 +1,5 @@
 import { execSync } from "child_process";
-import { unlinkSync } from "fs";
+import { existsSync, unlinkSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
 import { Website } from "./website";
@@ -27,7 +27,9 @@ export class ReactWebsite extends ex.ReactWebsite {
       maxBuffer: 10 * 1024 * 1024,
     });
 
-    unlinkSync(join(this._buildPath, "/wing.js"));
+    if (existsSync(join(this._buildPath, "/wing.js"))) {
+      unlinkSync(join(this._buildPath, "/wing.js"));
+    }
 
     this._websiteHost = cloud.Website._newWebsite(
       this,
@@ -44,11 +46,13 @@ export class ReactWebsite extends ex.ReactWebsite {
       target: this._websiteHost,
       name: `host`,
     });
+  }
 
+  public _preSynthesize(): void {
     const env = Object.fromEntries(this._environmentVariables.entries());
     const content = `window.wingEnv = ${JSON.stringify(env, null, 2)};`;
 
-    new S3Object(this._websiteHost, `File--wing.js`, {
+    new S3Object(this._websiteHost as Website, `File--wing.js`, {
       dependsOn: [(this._websiteHost as Website).bucket],
       content,
       bucket: (this._websiteHost as Website).bucket.bucket,
