@@ -3,11 +3,12 @@ import {
   SpinnerLoader,
   useTheme,
   Column,
+  getInputType,
+  TableRow,
   TextArea,
-  JsonResponseInput,
 } from "@wingconsole/design-system";
 import classNames from "classnames";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 export type RowData = Record<string, any>;
 
@@ -16,11 +17,16 @@ export type Row = {
   error?: string;
 };
 
+export type RawRow = {
+  data: string;
+  error?: string;
+};
+
 export interface TableInteractionProps {
   hashKey: string;
   rangeKey?: string;
   rows?: Row[];
-  onAddRow?: (row: RowData) => void;
+  onAddRow?: (row: RawRow) => void;
   onRemoveRow?: (index: number) => void;
   disabled?: boolean;
   readonly?: boolean;
@@ -31,7 +37,7 @@ export const DynamodbTableInteraction = ({
   hashKey,
   rangeKey,
   rows = [],
-  onAddRow = (row: RowData) => {},
+  onAddRow = (row: RawRow) => {},
   onRemoveRow = (index: number) => {},
   disabled = false,
   readonly = false,
@@ -39,36 +45,60 @@ export const DynamodbTableInteraction = ({
 }: TableInteractionProps) => {
   const { theme } = useTheme();
 
-  const [newRow, setNewRow] = useState({ data: "", error: "" });
+  const [newRow, setNewRow] = useState<RawRow>({ data: "", error: "" });
   const [internalRows, setInternalRows] = useState<Row[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const addRow = useCallback(async () => {
-    try {
-      const row = JSON.parse(newRow.data);
-      if (row[hashKey] === undefined) {
-        return;
+  const columns = useMemo(() => {
+    let keys = new Set<string>();
+    for (let row of rows) {
+      for (let key of Object.keys(row.data)) {
+        if (key !== hashKey && key !== rangeKey) {
+          keys.add(key);
+        }
       }
-      if (rangeKey && row[rangeKey] === undefined) {
-        return;
-      }
-      onAddRow(row);
-    } catch {
-      setNewRow({
-        data: newRow.data,
-        error: "Not a valid JSON",
-      });
     }
-  }, [newRow, onAddRow, hashKey, rangeKey]);
+
+    const result: Column[] = [{
+      name: hashKey,
+      type: "string"
+    }, 
+    ...(rangeKey ? [{
+      name: rangeKey,
+      type: "string"
+    }] : [])];
+
+    for (let key of Array.from(keys.values()).sort()) {
+      result.push({ name: key, type: "string" })
+    }
+
+    return result;
+  }, [rows]);
+
+  const addRow = useCallback(async () => {
+    onAddRow(newRow);
+  }, [newRow, onAddRow]);
 
   const updateNewRow = useCallback(
     (newValue: any) => {
+      let error = "";
+      try {
+        const row = JSON.parse(newValue);
+        if (row[hashKey] === undefined) {
+          error = `missing hash key ${hashKey}`;
+        } else if (rangeKey && row[rangeKey] === undefined) {
+          error = `missing range key ${rangeKey}`;
+        }
+      } catch {
+        error = "not a valid JSON";
+      }
+
       setNewRow({
         data: newValue,
-        error: "",
+        error,
       });
     },
-    [newRow],
+    [newRow, hashKey, rangeKey],
   );
 
   useEffect(() => {
@@ -80,15 +110,27 @@ export const DynamodbTableInteraction = ({
     inputRef.current?.focus();
   }, [internalRows.length]);
 
+  const headerSuffix = (name: string) => {
+    switch (name) {
+      case hashKey:
+        return "(pk)";
+      case rangeKey:
+        return "(sk)";
+      default:
+        return "";
+    }
+  };
+
   return (
     <div className="inline-block align-middle w-full mt-1">
       <div
         className={classNames(
           "relative min-h-[2rem] max-h-[30rem]",
-          "overflow-auto rounded px-1",
+          "overflow-auto shadow ring-1 ring-black ring-opacity-5 rounded border px-1",
           theme.textInput,
+          theme.borderInput,
           theme.focusWithin,
-          theme.bg3,
+          theme.bgInput,
         )}
       >
         {loading && (
@@ -102,6 +144,96 @@ export const DynamodbTableInteraction = ({
             </div>
           </div>
         )}
+        <table
+          className="w-full border-separate"
+          style={{
+            borderSpacing: "0px 4px",
+          }}
+        >
+          <thead>
+            <tr
+              className={classNames(
+                theme.bgInput,
+                "px-1 sticky top-[4px] z-10 border-spacing-x-0",
+                "ring-2 ring-white dark:ring-slate-800",
+              )}
+            >
+              {columns.map(({ name, type }, index) => (
+                <th
+                  key={index}
+                  className={classNames(
+                    "text-sm p-1.5",
+                    "border-b border-slate-300 dark:border-slate-700",
+                    getInputType(type) === "checkbox"
+                      ? "text-center"
+                      : "text-left",
+                  )}
+                >
+                  {`${name}${headerSuffix(name)}`}
+                </th>
+              ))}
+              <th
+                className={classNames(
+                  "w-0",
+                  "border-b border-slate-300 dark:border-slate-700",
+                )}
+              ></th>
+            </tr>
+          </thead>
+          <tbody className="spacing-y-1">
+            {internalRows.length === 0 && (
+              <tr>
+                <td
+                  colSpan={columns.length + 1}
+                  className={classNames(
+                    "text-center text-xs pt-4",
+                    theme.text2,
+                  )}
+                >
+                  No rows
+                </td>
+              </tr>
+            )}
+            {internalRows.map(({ data: row, error }, index) => (
+              <TableRow
+                key={index}
+                row={row}
+                placeholder="null"
+                error={error}
+                columns={columns}
+                primaryKey={hashKey}
+                disabled={disabled}
+                readonly={true}
+                saveRow={() => {}}
+                updateRow={(key, value) => {}}
+                actions={() => {
+                  return (
+                    <>
+                      {!readonly && (
+                        <button
+                          className={classNames(
+                            "outline-none rounded p-1.5",
+                            theme.bg4Hover,
+                            theme.textInput,
+                            theme.borderInput,
+                            theme.focusInput,
+                            disabled && "opacity-50 cursor-not-allowed",
+                          )}
+                          onClick={() => onRemoveRow(index)}
+                          disabled={disabled}
+                          data-testid={`ex.DynamodbTable:remove-row-${index}`}
+                        >
+                          <TrashIcon className="w-4 h-4" />
+                        </button>
+                      )}
+                    </>
+                  );
+                }}
+                dataTestid={`ex.DynamodbTable:row-${index}`}
+              />
+            ))}
+          </tbody>
+        </table>
         <div
           className="w-full border-separate"
           style={{
@@ -109,38 +241,13 @@ export const DynamodbTableInteraction = ({
           }}
         >
           <div className="spacing-y-1">
-            {internalRows.map(({ data: row, error }, index) => (
-              <div key={index}>
-                <JsonResponseInput
-                  value={JSON.stringify(row) || ""}
-                  loading={false}
-                  json={true}
-                  dataTestid={`ex.DynamodbTable:row-${index}`}
-                />
-                <button
-                  className={classNames(
-                    "outline-none rounded p-1.5",
-                    theme.bg4Hover,
-                    theme.textInput,
-                    theme.borderInput,
-                    theme.focusInput,
-                    disabled && "opacity-50 cursor-not-allowed",
-                  )}
-                  onClick={() => onRemoveRow(index)}
-                  disabled={disabled}
-                  data-testid={`ex.DynamodbTable:remove-row-${index}`}
-                >
-                  <TrashIcon className="w-4 h-4" />
-                </button>
-              </div>
-            ))}
             {!readonly && (
               <div className="flex flex-col">
                 <div>
                   <div
                     className={classNames(
                       "inline-block whitespace-nowrap",
-                      theme.bg1,
+                      theme.bg2,
                       theme.borderInput,
                       theme.textInput,
                       theme.focusInput,
@@ -154,7 +261,10 @@ export const DynamodbTableInteraction = ({
                 </div>
                 <TextArea
                   containerClassName="w-full"
-                  className="text-sm min-h-[2rem]"
+                  className={classNames("text-sm min-h-[2rem]", newRow.error && [
+                    "rounded ring-2 ring-red-800/50",
+                    "dark:ring-red-500/50 dark:border-red-500/50",
+                  ])}
                   placeholder="Item..."
                   value={newRow.data}
                   onInput={(event) => updateNewRow(event.currentTarget.value)}

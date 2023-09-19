@@ -3,8 +3,8 @@ import { useCallback, useEffect, useState } from "react";
 
 import { useDynamodbTable } from "../services/use-dynamodb-table.js";
 import {
-  RowData,
   DynamodbTableInteraction,
+  RawRow,
 } from "../ui/dynamodb-table-interaction.js";
 
 export interface DynamodbTableInteractionViewProps {
@@ -33,11 +33,17 @@ export const DynamodbTableInteractionView = ({
   const [rows, setRows] = useState<{ data: {}; error: string }[]>([]);
 
   const onAddRow = useCallback(
-    async (row: RowData) => {
+    async (data: RawRow) => {
       try {
+        if (data.error) {
+          showError(`Row error: ${data.error}`);
+          return;
+        }
+
+        const row = JSON.parse(data.data);
         await addRow(row);
       } catch (error: any) {
-        showError(error.message);
+        showError(`Failed to add row: ${error.message}`);
       }
     },
     [addRow, showError],
