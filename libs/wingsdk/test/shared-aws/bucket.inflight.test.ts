@@ -557,7 +557,7 @@ test("Given a bucket when reaching to a non existent key, signed url it should t
   }
   // THEN
   expect(error?.message).toBe(
-    "Cannot provide signed url for a non-existent key (key=KEY)"
+    "Cannot provide signed url for a non-existent key (key=${KEY})"
   );
 });
 
