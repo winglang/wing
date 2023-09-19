@@ -62,18 +62,17 @@ export async function updateStatusBar(wingBin: string) {
 export async function getWingBin(): Promise<string | null> {
   let configuredWingBin =
     env.WING_BIN ??
-    workspace.getConfiguration(CFG_WING).get<string>(CFG_WING_BIN, "wing");
+    workspace.getConfiguration(CFG_WING).get<string>(CFG_WING_BIN);
 
-  configuredWingBin = configuredWingBin.trim();
-
-  if (!configuredWingBin) {
+  if (configuredWingBin) {
+    configuredWingBin = configuredWingBin.trim();
+    const configuredPath = await resolvePath(configuredWingBin);
+    if (configuredPath) {
+      // this is already a path, so we can just return it
+      return configuredPath;
+    }
+  } else {
     configuredWingBin = "wing";
-  }
-
-  const configuredPath = await resolvePath(configuredWingBin);
-  if (configuredPath) {
-    // this is already a path, so we can just return it
-    return configuredPath;
   }
 
   try {
