@@ -64,9 +64,8 @@ export async function getWingBin(): Promise<string | null> {
     env.WING_BIN ??
     workspace.getConfiguration(CFG_WING).get<string>(CFG_WING_BIN);
 
-  configuredWingBin = configuredWingBin?.trim();
-
   if (configuredWingBin) {
+    configuredWingBin = configuredWingBin.trim();
     const configuredPath = await resolvePath(configuredWingBin);
     if (configuredPath) {
       // this is already a path, so we can just return it
