@@ -114,12 +114,9 @@ export class Function extends cloud.Function {
 
   // TODO: implement
   public _toInflight(): string {
-    throw new Error("Method not implemented.");
+    throw new Error("cloud.Function cannot be used as an Inflight resource on GCP yet");
   }
 
-  public addPermission(_principal: string, _action: string): void {
-    throw new Error("Method not implemented.");
-  }
 
   public bind(_host: IInflightHost, _ops: string[]): void {
     throw new Error("Method not implemented.");
