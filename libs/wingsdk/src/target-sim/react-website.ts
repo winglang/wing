@@ -4,9 +4,9 @@ import { ReactWebsiteSchema, REACT_WEBSITE_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import * as ex from "../ex";
 import { IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
-import * as ex from "../ex";
 
 export class ReactWebsite
   extends ex.ReactWebsite

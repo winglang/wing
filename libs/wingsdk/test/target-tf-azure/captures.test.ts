@@ -7,7 +7,11 @@ import { mkdtemp, sanitizeCode, tfResourcesOf, tfSanitize } from "../util";
 
 test("function with a bucket binding requiring read_write", () => {
   // GIVEN
-  const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
+  const app = new tfazure.App({
+    outdir: mkdtemp(),
+    location: "East US",
+    entrypointDir: __dirname,
+  });
   const bucket = cloud.Bucket._newBucket(app, "Bucket");
   const inflight = Testing.makeHandler(
     app,
@@ -50,7 +54,11 @@ test("function with a bucket binding requiring read_write", () => {
 
 test("function with a bucket binding requiring only read", () => {
   // GIVEN
-  const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
+  const app = new tfazure.App({
+    outdir: mkdtemp(),
+    location: "East US",
+    entrypointDir: __dirname,
+  });
   const bucket = cloud.Bucket._newBucket(app, "Bucket");
   const inflight = Testing.makeHandler(
     app,

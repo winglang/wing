@@ -7,8 +7,8 @@ import { core } from "..";
 
 import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
-import * as ex from "../ex";
 import { Connections } from "../core";
+import * as ex from "../ex";
 
 /**
  * AWS implementation of `ex.ReactWebsite`.

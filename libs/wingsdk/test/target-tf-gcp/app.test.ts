@@ -8,6 +8,7 @@ test("throw error when no projectId provided", () => {
     outdir: mkdtemp(),
     projectId: undefined as any,
     storageLocation: "US",
+    entrypointDir: __dirname,
   };
 
   // THEN
@@ -22,6 +23,7 @@ test("can read projectId from environment variable", () => {
     outdir: mkdtemp(),
     projectId: undefined as any,
     storageLocation: "US",
+    entrypointDir: __dirname,
   };
   const projectId = "my-project";
   process.env.GOOGLE_PROJECT_ID = projectId;
@@ -38,6 +40,7 @@ test("throw error when no storageLocation provided", () => {
     outdir: mkdtemp(),
     projectId: "projectId",
     storageLocation: undefined as any,
+    entrypointDir: __dirname,
   };
 
   // THEN
@@ -52,6 +55,7 @@ test("can read storageLocation from environment variable", () => {
     outdir: mkdtemp(),
     projectId: "projectId",
     storageLocation: undefined as any,
+    entrypointDir: __dirname,
   };
   const storageLocation = "US";
   process.env.GOOGLE_STORAGE_LOCATION = storageLocation;

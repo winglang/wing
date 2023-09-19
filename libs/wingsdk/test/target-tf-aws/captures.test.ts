@@ -30,7 +30,7 @@ describe("function with bucket binding", () => {
 
   test("put operation", () => {
     // GIVEN
-    const app = new tfaws.App({ outdir: mkdtemp() });
+    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     const bucket = cloud.Bucket._newBucket(app, "Bucket");
     const inflight = Testing.makeHandler(
       app,
@@ -62,7 +62,7 @@ describe("function with bucket binding", () => {
 
   test("put json operation has correct permissions", () => {
     // GIVEN
-    const app = new tfaws.App({ outdir: mkdtemp() });
+    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     const bucket = cloud.Bucket._newBucket(app, "Bucket");
     const inflight = Testing.makeHandler(
       app,
@@ -85,7 +85,7 @@ describe("function with bucket binding", () => {
 
   test("get json operation has correct permissions", () => {
     // GIVEN
-    const app = new tfaws.App({ outdir: mkdtemp() });
+    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     const bucket = cloud.Bucket._newBucket(app, "Bucket");
     const inflight = Testing.makeHandler(
       app,
@@ -113,7 +113,7 @@ describe("function with bucket binding", () => {
 
 test("function with a function binding", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const inflight1 = Testing.makeHandler(
     app,
     "Handler1",
@@ -154,7 +154,7 @@ test("function with a function binding", () => {
 
 test("two functions reusing the same IFunctionHandler", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const inflight = Testing.makeHandler(
     app,
     "Handler1",
@@ -180,7 +180,7 @@ test("two functions reusing the same IFunctionHandler", () => {
 
 test("function with a queue binding", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const queue = cloud.Queue._newQueue(app, "Queue");
   const pusher = Testing.makeHandler(
     app,

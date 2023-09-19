@@ -13,7 +13,7 @@ import {
 
 test("default website behavior", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   cloud.Website._newWebsite(app, "Website", {
     path: path.resolve(__dirname, "website"),
   });
@@ -44,7 +44,7 @@ test("default website behavior", () => {
 test("website with invalid path should throw error", () => {
   // GIVEN
   expect(() => {
-    const app = new tfaws.App({ outdir: mkdtemp() });
+    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     cloud.Website._newWebsite(app, "Website", {
       path: "/absolute/non-existent",
     });
@@ -58,7 +58,7 @@ test("website with invalid path should throw error", () => {
 
 test("website with add_json", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const website = cloud.Website._newWebsite(app, "Website", {
     path: path.resolve(__dirname, "website"),
   });
@@ -93,7 +93,7 @@ test("website with add_json", () => {
 test("website with invalid path should throw error", () => {
   // GIVEN
   expect(() => {
-    const app = new tfaws.App({ outdir: mkdtemp() });
+    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     const website = cloud.Website._newWebsite(app, "Website", {
       path: path.resolve(__dirname, "website"),
     });

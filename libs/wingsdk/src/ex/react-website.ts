@@ -29,27 +29,27 @@ export interface ReactWebsiteProps {
    */
   readonly buildFolder?: string;
   /**
-   * a command for starting React app locally
+   * A command for starting React app locally
    * @default "npm run start"
    */
   readonly startCommand?: string;
   /**
-   * a command for building the React app
+   * A command for building the React app
    * @default "npm run build"
    */
   readonly buildCommand?: string;
   /**
-   * in sim, if `true` - will use the start command, and if `false` - the build command
+   * In sim, if `true` - will use the start command, and if `false` - the build command
    * @default false
    */
   readonly isDevRun?: boolean;
   /**
-   * additional properties to run the website host with
+   * Additional properties to run the website host with
    * @default {}
    */
   readonly hostProps?: BaseWebsiteProps;
   /**
-   * a port to start a local build of the React app on.
+   * A port to start a local build of the React app on.
    * @default 3001
    */
   readonly localPort?: string | number;
@@ -129,7 +129,7 @@ export abstract class ReactWebsite extends Resource {
   }
 
   /**
-   * website's url
+   * Website's url
    */
   public get url(): string {
     return this._websiteHost?.url ?? `http://localhost:${this._localPort}`;

@@ -65,7 +65,7 @@ test("preSynth can add resources to construct tree", () => {
   fs.writeFileSync(pluginFile, PLUGIN_CODE);
 
   // WHEN
-  const app = new tfaws.App({ outdir: tmpDir }); // exclude plugins from constructor for control
+  const app = new tfaws.App({ outdir: tmpDir, entrypointDir: __dirname }); // exclude plugins from constructor for control
   const pm = new PluginManager([pluginFile]);
   pm.preSynth(app);
   const output = app.synth();
@@ -86,7 +86,7 @@ test("postSynth can modify terraform config", () => {
   fs.writeFileSync(pluginFile, PLUGIN_CODE);
 
   // WHEN
-  const app = new tfaws.App({ outdir: tmpDir }); // exclude plugins from constructor for control
+  const app = new tfaws.App({ outdir: tmpDir, entrypointDir: __dirname }); // exclude plugins from constructor for control
   const pm = new PluginManager([pluginFile]);
   new tfaws.Bucket(app, "Bucket", {});
 
@@ -125,7 +125,7 @@ test("postSynth return is ignored if undefined", () => {
   fs.writeFileSync(pluginFile, RETURN_NULL_CONFIG_CODE);
 
   // WHEN
-  const app = new tfaws.App({ outdir: tmpDir }); // exclude plugins from constructor for control
+  const app = new tfaws.App({ outdir: tmpDir, entrypointDir: __dirname }); // exclude plugins from constructor for control
   const pm = new PluginManager([pluginFile]);
   new tfaws.Bucket(app, "Bucket", {});
 
@@ -146,7 +146,7 @@ test("validate can throw an error", () => {
   fs.writeFileSync(pluginFile, PLUGIN_CODE);
 
   // WHEN
-  const app = new tfaws.App({ outdir: tmpDir }); // exclude plugins from constructor for control
+  const app = new tfaws.App({ outdir: tmpDir, entrypointDir: __dirname }); // exclude plugins from constructor for control
   const pm = new PluginManager([pluginFile]);
 
   // THEN
@@ -160,7 +160,7 @@ test("validate cannot modify config", () => {
   fs.writeFileSync(pluginFile, ATTEMPT_TO_MODIFY_CONFIG_IN_VALIDATE_CODE);
 
   // WHEN
-  const app = new tfaws.App({ outdir: tmpDir }); // exclude plugins from constructor for control
+  const app = new tfaws.App({ outdir: tmpDir, entrypointDir: __dirname }); // exclude plugins from constructor for control
   const pm = new PluginManager([pluginFile]);
   new tfaws.Bucket(app, "Bucket", {});
 
@@ -185,6 +185,7 @@ test("plugins are run in order they are passed in", () => {
   // WHEN
   const app = new tfaws.App({
     outdir: tmpDir,
+    entrypointDir: __dirname,
     plugins: [createBucket, deleteBuckets],
   });
   new tfaws.Bucket(app, "Bucket", {});

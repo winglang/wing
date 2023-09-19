@@ -12,7 +12,7 @@ import {
 } from "../util";
 
 test("default table behavior", () => {
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   ex.Table._newTable(app, "Table", {
     columns: { name: ex.ColumnType.STRING },
     primaryKey: "id",
@@ -25,7 +25,7 @@ test("default table behavior", () => {
 });
 
 test("function with a table binding", () => {
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const table = ex.Table._newTable(app, "Table", {
     columns: { name: ex.ColumnType.STRING },
     primaryKey: "id",
