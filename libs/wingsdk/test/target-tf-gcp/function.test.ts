@@ -26,7 +26,6 @@ test("basic function", () => {
   // THEN
   expect(tfResourcesOf(output)).toEqual([
     "google_cloudfunctions_function",
-    "google_cloudfunctions_function_iam_member",
     "google_storage_bucket",
     "google_storage_bucket_object",
     "random_id",
@@ -91,6 +90,20 @@ test("basic function with timeout explicitly set", () => {
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
+test("basic function with timeout beyond the allowed range", () => {
+  // GIVEN
+  const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+
+  // WHEN
+  expect(() => {
+    Function._newFunction(app, "Function", inflight, {
+      timeout: Duration.fromSeconds(0),
+    });
+  }).toThrowErrorMatchingSnapshot();
+}
+);
+
 test("basic function with memory size specified", () => {
   // GIVEN
   const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
@@ -114,4 +127,17 @@ test("basic function with memory size specified", () => {
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("basic function with memory beyond the allowed range", () => {
+  // GIVEN
+  const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+
+  // WHEN
+  expect(() => {
+    Function._newFunction(app, "Function", inflight, {
+      memory: 64,
+    });
+  }).toThrowErrorMatchingSnapshot();
 });
