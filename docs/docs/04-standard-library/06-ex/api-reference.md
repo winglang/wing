@@ -77,7 +77,7 @@ the key to add.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.ex.ReactWebsite.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.ex.ReactWebsite.property.url">url</a></code> | <code>str</code> | website's url. |
+| <code><a href="#@winglang/sdk.ex.ReactWebsite.property.url">url</a></code> | <code>str</code> | Website's url. |
 
 ---
 
@@ -101,7 +101,7 @@ url: str;
 
 - *Type:* str
 
-website's url.
+Website's url.
 
 ---
 
@@ -789,12 +789,12 @@ let ReactWebsiteProps = ex.ReactWebsiteProps{ ... };
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.ex.ReactWebsiteProps.property.projectPath">projectPath</a></code> | <code>str</code> | The path to the React app root folder- can be absolute or relative to the wing folder. |
-| <code><a href="#@winglang/sdk.ex.ReactWebsiteProps.property.buildCommand">buildCommand</a></code> | <code>str</code> | a command for building the React app. |
+| <code><a href="#@winglang/sdk.ex.ReactWebsiteProps.property.buildCommand">buildCommand</a></code> | <code>str</code> | A command for building the React app. |
 | <code><a href="#@winglang/sdk.ex.ReactWebsiteProps.property.buildFolder">buildFolder</a></code> | <code>str</code> | The path to the React app build folder- relative to the `projectPath`. |
-| <code><a href="#@winglang/sdk.ex.ReactWebsiteProps.property.hostProps">hostProps</a></code> | <code><a href="#@winglang/sdk.cloud.BaseWebsiteProps">BaseWebsiteProps</a></code> | additional properties to run the website host with. |
-| <code><a href="#@winglang/sdk.ex.ReactWebsiteProps.property.isDevRun">isDevRun</a></code> | <code>bool</code> | in sim, if `true` - will use the start command, and if `false` - the build command. |
-| <code><a href="#@winglang/sdk.ex.ReactWebsiteProps.property.localPort">localPort</a></code> | <code>any</code> | a port to start a local build of the React app on. |
-| <code><a href="#@winglang/sdk.ex.ReactWebsiteProps.property.startCommand">startCommand</a></code> | <code>str</code> | a command for starting React app locally. |
+| <code><a href="#@winglang/sdk.ex.ReactWebsiteProps.property.hostProps">hostProps</a></code> | <code><a href="#@winglang/sdk.cloud.BaseWebsiteProps">BaseWebsiteProps</a></code> | Additional properties to run the website host with. |
+| <code><a href="#@winglang/sdk.ex.ReactWebsiteProps.property.isDevRun">isDevRun</a></code> | <code>bool</code> | In sim, if `true` - will use the start command, and if `false` - the build command. |
+| <code><a href="#@winglang/sdk.ex.ReactWebsiteProps.property.localPort">localPort</a></code> | <code>any</code> | A port to start a local build of the React app on. |
+| <code><a href="#@winglang/sdk.ex.ReactWebsiteProps.property.startCommand">startCommand</a></code> | <code>str</code> | A command for starting React app locally. |
 
 ---
 
@@ -819,7 +819,7 @@ buildCommand: str;
 - *Type:* str
 - *Default:* "npm run build"
 
-a command for building the React app.
+A command for building the React app.
 
 ---
 
@@ -845,7 +845,7 @@ hostProps: BaseWebsiteProps;
 - *Type:* <a href="#@winglang/sdk.cloud.BaseWebsiteProps">BaseWebsiteProps</a>
 - *Default:* {}
 
-additional properties to run the website host with.
+Additional properties to run the website host with.
 
 ---
 
@@ -858,7 +858,7 @@ isDevRun: bool;
 - *Type:* bool
 - *Default:* false
 
-in sim, if `true` - will use the start command, and if `false` - the build command.
+In sim, if `true` - will use the start command, and if `false` - the build command.
 
 ---
 
@@ -871,7 +871,7 @@ localPort: any;
 - *Type:* any
 - *Default:* 3001
 
-a port to start a local build of the React app on.
+A port to start a local build of the React app on.
 
 ---
 
@@ -884,7 +884,7 @@ startCommand: str;
 - *Type:* str
 - *Default:* "npm run start"
 
-a command for starting React app locally.
+A command for starting React app locally.
 
 ---
 
