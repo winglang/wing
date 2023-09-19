@@ -9,7 +9,7 @@ This topic includes a description of common development workflows for the Wing p
 ## Environment Setup
 
 :::info
-You can open up this repo just using the badge below. It is recommended to select a 4-core minimum machine.
+You can open up this repo by clicking the badge below. It is recommended to select a 4-core minimum machine.
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/winglang/wing)
 :::
 
@@ -60,7 +60,6 @@ pnpm turbo <task> --filter=<project> -- <args>
 [volta]: https://volta.sh
 [PNPM]: https://pnpm.io
 [Docker]: https://docs.docker.com/get-docker/
-[emscripten]: https://emscripten.org/docs/getting_started/downloads.html
 
 ## Full build
 
