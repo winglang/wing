@@ -23,6 +23,7 @@ export class ReactWebsite
   private readonly environmentVariables: Record<string, string>;
   private readonly isDevRun: boolean;
   private childProcess?: ChildProcess;
+  private url: string;
 
   constructor(props: ReactWebsiteSchema["props"], context: ISimulatorContext) {
     this.context = context;
@@ -30,6 +31,7 @@ export class ReactWebsite
     this.startCommand = props.startCommand;
     this.environmentVariables = props.environmentVariables;
     this.isDevRun = props.isDevRun;
+    this.url = props.url;
   }
 
   public async init(): Promise<ReactWebsiteAttributes> {
@@ -76,7 +78,9 @@ window.wingEnv = ${JSON.stringify(this.environmentVariables, null, 2)};`
       }
     }
 
-    return {};
+    return {
+      url: this.url,
+    };
   }
 
   public async cleanup(): Promise<void> {

@@ -7,6 +7,7 @@ import * as core from "../core";
 import * as ex from "../ex";
 import { IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
+// import { simulatorAttrToken } from "./tokens";
 
 export class ReactWebsite
   extends ex.ReactWebsite
@@ -45,8 +46,9 @@ export class ReactWebsite
           this._environmentVariables.entries()
         ),
         isDevRun: this._isDevRun,
+        url: this.url,
       },
-      attrs: {} as any,
+      attrs: {},
     };
     return schema;
   }

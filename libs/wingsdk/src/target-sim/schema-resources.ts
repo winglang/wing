@@ -249,9 +249,12 @@ export interface ReactWebsiteSchema extends BaseResourceSchema {
     startCommand: string;
     environmentVariables: Record<string, string>;
     isDevRun: boolean;
+    url: string;
   };
 }
-export interface ReactWebsiteAttributes {}
+export interface ReactWebsiteAttributes {
+  url: string;
+}
 
 export interface RedisAttributes {}
 
