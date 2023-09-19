@@ -307,6 +307,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 		if self.should_capture_type(&node) {
 			// jsify the type so we can get the preflight code
 			let code = self.jsify_udt(&node);
+
 			let mut lifts = self.lifts_stack.pop().unwrap();
 			lifts.capture(&Liftable::Type(node.clone()), &code, false);
 			self.lifts_stack.push(lifts);
