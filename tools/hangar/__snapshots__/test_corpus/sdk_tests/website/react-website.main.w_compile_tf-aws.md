@@ -403,7 +403,7 @@ module.exports = function({ $http_Util, $website_url }) {
           }
         },
         "bucket": "${aws_s3_bucket.exReactWebsite_exReactWebsite-host_WebsiteBucket_1FBD630D.bucket}",
-        "content": "window.wingEnv = {};",
+        "content": "window.wingEnv = {\n  \"apiUrl\": \"${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url}\",\n  \"anotherEnvVar\": \"preflight variable\"\n};",
         "content_type": "text/javascript",
         "depends_on": [
           "aws_s3_bucket.exReactWebsite_exReactWebsite-host_WebsiteBucket_1FBD630D"
