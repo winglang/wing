@@ -382,7 +382,7 @@ class $Root extends $stdlib.std.Resource {
     const handler = new $Closure1(this,"$Closure1");
     const testInvalidPath = ((path) => {
       let error = "";
-      const expected = String.raw({ raw: ["Invalid path ", ". Url cannot contain \":\", params contains only alpha-numeric chars or \"_\"."] }, path);
+      const expected = String.raw({ raw: ["Invalid path ", ". Url parts can only contain alpha-numeric chars, \"-\", \"_\" and \".\". Params can only contain alpha-numeric chars and \"_\"."] }, path);
       try {
         (api.get(path,handler));
       }
