@@ -40,34 +40,34 @@ class DynamoTable {
     this.tableName = this.table.tableName;
   }
 
-  bind(host: std.IInflightHost, ops: Array<str>) {
+  pub bind(host: std.IInflightHost, ops: Array<str>) {
     if let host = aws.Function.from(host) {
       if ops.contains("putItem") {
-        host.addPolicyStatements([aws.PolicyStatement {
+        host.addPolicyStatements(aws.PolicyStatement {
           actions: ["dynamodb:PutItem"],
           resources: [this.table.tableArn],
           effect: aws.Effect.ALLOW,
-        }]);
+        });
       }
 
       if ops.contains("getItem") {
-        host.addPolicyStatements([aws.PolicyStatement {
+        host.addPolicyStatements(aws.PolicyStatement {
           actions: ["dynamodb:GetItem"],
           resources: [this.table.tableArn],
           effect: aws.Effect.ALLOW,
-        }]);
+        });
       }
     }
   }
 
   extern "./dynamo.js" static inflight _putItem(tableName: str, item: Json): void;
-  inflight putItem(item: Map<Attribute>) {
+  pub inflight putItem(item: Map<Attribute>) {
     let json = this._itemToJson(item);
     DynamoTable._putItem(this.tableName, json);
   }
 
   extern "./dynamo.js" static inflight _getItem(tableName: str, key: Json): Json;
-  inflight getItem(key: Map<Attribute>): Json {
+  pub inflight getItem(key: Map<Attribute>): Json {
     let json = this._itemToJson(key);
     return DynamoTable._getItem(this.tableName, json);
   }

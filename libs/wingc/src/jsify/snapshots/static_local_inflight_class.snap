@@ -7,7 +7,7 @@ source: libs/wingc/src/jsify/tests.rs
 
     test "test" {
       class A {
-        static foo() { log("hello"); }
+        pub static foo() { log("hello"); }
       }
 
       class B {

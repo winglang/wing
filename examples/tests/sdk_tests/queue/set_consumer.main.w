@@ -12,7 +12,7 @@ class Predicate {
     this.c = c;
   }
 
-  inflight test(): bool{
+  pub inflight test(): bool{
     return this.c.peek() == 2;
   }
 }

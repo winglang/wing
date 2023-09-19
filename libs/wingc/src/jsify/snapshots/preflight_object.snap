@@ -6,8 +6,8 @@ source: libs/wingc/src/jsify/tests.rs
 ```w
 
     class A {
-      inflight hello() {}
-      inflight goodbye() {}
+      pub inflight hello() {}
+      pub inflight goodbye() {}
     }
     let pf_obj = new A();
     test "test" {

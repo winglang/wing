@@ -2,4 +2,5 @@
 source: libs/wingc/src/jsify/tests.rs
 ---
 ## Errors
+Cannot access private member "staticMethod" of "MyType" 6:17
 Cannot call into preflight phase while inflight 6:10

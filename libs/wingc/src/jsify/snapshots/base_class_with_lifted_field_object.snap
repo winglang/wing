@@ -8,7 +8,7 @@ source: libs/wingc/src/jsify/tests.rs
     bring cloud;
 
     class Base {
-      b: cloud.Bucket;
+      protected b: cloud.Bucket;
       init() {
         this.b = new cloud.Bucket();
       }
