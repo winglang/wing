@@ -249,7 +249,7 @@ export const DynamodbTableInteraction = ({
                 </td>
               </tr>
               <tr className="sticky bottom-[4px] z-10 align-baseline">
-                <td className={classNames(
+                <td colSpan={columns.length} className={classNames(
                   "first:rounded-bl -mb-2.5 text-left",
                   theme.bg3,
                 )}>
