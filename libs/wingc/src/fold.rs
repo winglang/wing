@@ -1,7 +1,7 @@
 use crate::{
 	ast::{
 		ArgList, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Expr, ExprKind,
-		FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface, InterpolatedString,
+		FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, IfLet, Interface, InterpolatedString,
 		InterpolatedStringPart, Literal, NewExpr, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation,
 		TypeAnnotationKind, UserDefinedType,
 	},
@@ -113,14 +113,14 @@ where
 			condition: f.fold_expr(condition),
 			statements: f.fold_scope(statements),
 		},
-		StmtKind::IfLet {
+		StmtKind::IfLet(IfLet {
 			value,
 			statements,
 			reassignable,
 			var_name,
 			elif_statements,
 			else_statements,
-		} => StmtKind::IfLet {
+		}) => StmtKind::IfLet(IfLet {
 			value: f.fold_expr(value),
 			statements: f.fold_scope(statements),
 			reassignable,
@@ -135,7 +135,7 @@ where
 				})
 				.collect(),
 			else_statements: else_statements.map(|statements| f.fold_scope(statements)),
-		},
+		}),
 		StmtKind::If {
 			condition,
 			statements,
@@ -233,6 +233,7 @@ where
 		reassignable: node.reassignable,
 		phase: node.phase,
 		is_static: node.is_static,
+		access_modifier: node.access_modifier,
 	}
 }
 
@@ -408,6 +409,7 @@ where
 		signature: f.fold_function_signature(node.signature),
 		is_static: node.is_static,
 		span: node.span,
+		access_modifier: node.access_modifier,
 	}
 }
 

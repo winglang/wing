@@ -6,7 +6,7 @@ source: libs/wingc/src/jsify/tests.rs
 ```w
 
     class Base {
-      f: str;
+      protected f: str;
       init() {
         this.f = "hello";
       }

@@ -8,10 +8,10 @@ use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
-	ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock,
-	ElifLetBlock, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface,
-	InterpolatedString, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, StructField,
-	Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
+	AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
+	ElifBlock, ElifLetBlock, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
+	IfLet, Interface, InterpolatedString, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Spanned,
+	Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan};
@@ -27,7 +27,7 @@ static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"any" => "https://github.com/winglang/wing/issues/434",
 	"Promise" => "https://github.com/winglang/wing/issues/529",
 	"storage_modifier" => "https://github.com/winglang/wing/issues/107",
-	"access_modifier" => "https://github.com/winglang/wing/issues/108",
+	"internal" => "https://github.com/winglang/wing/issues/4156",
 	"await_expression" => "https://github.com/winglang/wing/issues/116",
 	"defer_expression" => "https://github.com/winglang/wing/issues/116",
 };
@@ -78,7 +78,8 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 	"package",
 	"private",
 	"protected",
-	"public",
+	"pub",
+	"internal",
 	"return",
 	"short",
 	"static",
@@ -234,7 +235,7 @@ fn parse_wing_file(source_path: &Utf8Path, source_text: &str) -> (tree_sitter::T
 
 	let tree_sitter_root = tree_sitter_tree.root_node();
 
-	let parser = Parser::new(&source_text.as_bytes(), source_path.to_string());
+	let parser = Parser::new(&source_text.as_bytes(), source_path.to_owned());
 	let (scope, dependent_wing_files) = parser.parse(&tree_sitter_root);
 	(tree_sitter_tree, scope, dependent_wing_files)
 }
@@ -243,7 +244,7 @@ fn parse_wing_file(source_path: &Utf8Path, source_text: &str) -> (tree_sitter::T
 pub struct Parser<'a> {
 	/// Source code of the file being parsed
 	pub source: &'a [u8],
-	pub source_name: String,
+	pub source_name: Utf8PathBuf,
 	pub error_nodes: RefCell<HashSet<usize>>,
 	// Nesting level within JSON literals, a value larger than 0 means we're currently in a JSON literal
 	in_json: RefCell<u64>,
@@ -255,7 +256,7 @@ pub struct Parser<'a> {
 }
 
 impl<'s> Parser<'s> {
-	pub fn new(source: &'s [u8], source_name: String) -> Self {
+	pub fn new(source: &'s [u8], source_name: Utf8PathBuf) -> Self {
 		Self {
 			source,
 			source_name,
@@ -276,6 +277,18 @@ impl<'s> Parser<'s> {
 			"source" => self.build_scope(&root, Phase::Preflight),
 			_ => Scope::empty(),
 		};
+
+		// Module files can only have certain kinds of statements
+		if !is_entrypoint_file(&self.source_name) {
+			for stmt in &scope.statements {
+				if !is_valid_module_statement(&stmt) {
+					self.add_error_from_span(
+						"Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with `.main.w` to make this an entrypoint file.",
+						stmt.span(),
+					);
+				}
+			}
+		}
 
 		self.report_unhandled_errors(&root);
 
@@ -413,7 +426,7 @@ impl<'s> Parser<'s> {
 		WingSpan {
 			start: node_range.start_point.into(),
 			end: node_range.end_point.into(),
-			file_id: self.source_name.clone(),
+			file_id: self.source_name.to_string(),
 		}
 	}
 
@@ -603,14 +616,14 @@ impl<'s> Parser<'s> {
 		} else {
 			None
 		};
-		Ok(StmtKind::IfLet {
+		Ok(StmtKind::IfLet(IfLet {
 			var_name: name,
 			reassignable,
 			value,
 			statements: if_block,
 			elif_statements: elif_vec,
 			else_statements: else_block,
-		})
+		}))
 	}
 
 	fn build_if_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
@@ -736,6 +749,12 @@ impl<'s> Parser<'s> {
 			if !source_path.is_file() {
 				return self.with_error(
 					format!("Cannot bring module \"{}\": not a file", source_path),
+					statement_node,
+				);
+			}
+			if source_path.ends_with(".main.w\"") {
+				return self.with_error(
+					format!("Cannot bring module \"{}\": main files cannot be brought", source_path),
 					statement_node,
 				);
 			}
@@ -891,6 +910,7 @@ impl<'s> Parser<'s> {
 						reassignable: class_element.child_by_field_name("reassignable").is_some(),
 						is_static,
 						phase,
+						access_modifier: self.build_access_modifier(class_element.child_by_field_name("access_modifier"))?,
 					})
 				}
 				"initializer" => {
@@ -943,6 +963,7 @@ impl<'s> Parser<'s> {
 							},
 							is_static: false,
 							span: self.node_span(&class_element),
+							access_modifier: AccessModifier::Public,
 						})
 					} else {
 						initializer = Some(FunctionDefinition {
@@ -957,6 +978,7 @@ impl<'s> Parser<'s> {
 								phase: Phase::Preflight,
 							},
 							span: self.node_span(&class_element),
+							access_modifier: AccessModifier::Public,
 						})
 					}
 				}
@@ -1000,6 +1022,7 @@ impl<'s> Parser<'s> {
 				body: FunctionBody::Statements(Scope::new(vec![], WingSpan::default())),
 				is_static: false,
 				span: WingSpan::default(),
+				access_modifier: AccessModifier::Public,
 			},
 		};
 
@@ -1024,6 +1047,7 @@ impl<'s> Parser<'s> {
 				body: FunctionBody::Statements(Scope::new(vec![], WingSpan::default())),
 				is_static: false,
 				span: WingSpan::default(),
+				access_modifier: AccessModifier::Public,
 			},
 		};
 
@@ -1215,6 +1239,7 @@ impl<'s> Parser<'s> {
 			signature,
 			is_static,
 			span: self.node_span(func_def_node),
+			access_modifier: self.build_access_modifier(func_def_node.child_by_field_name("access_modifier"))?,
 		})
 	}
 
@@ -1284,6 +1309,17 @@ impl<'s> Parser<'s> {
 				}
 			}
 			other => self.with_error(format!("Expected class. Found {}", other), type_node),
+		}
+	}
+
+	fn build_access_modifier(&self, am_node: Option<Node>) -> DiagnosticResult<AccessModifier> {
+		match am_node {
+			Some(am_node) => match self.node_text(&am_node) {
+				"pub" => Ok(AccessModifier::Public),
+				"protected" => Ok(AccessModifier::Protected),
+				other => self.report_unimplemented_grammar(other, "access modifier", &am_node),
+			},
+			None => Ok(AccessModifier::Private),
 		}
 	}
 
@@ -1976,11 +2012,7 @@ impl<'s> Parser<'s> {
 				let target_node = Self::last_non_extra(node);
 				let diag = Diagnostic {
 					message: "Expected ';'".to_string(),
-					span: Some(WingSpan {
-						start: target_node.end_position().into(),
-						end: target_node.end_position().into(),
-						file_id: self.source_name.clone(),
-					}),
+					span: Some(self.node_span(&target_node)),
 				};
 				report_diagnostic(diag);
 			} else if node.kind() == "AUTOMATIC_BLOCK" {
@@ -2000,11 +2032,7 @@ impl<'s> Parser<'s> {
 					let target_node = Self::last_non_extra(node);
 					let diag = Diagnostic {
 						message: format!("Expected '{}'", node.kind()),
-						span: Some(WingSpan {
-							start: target_node.end_position().into(),
-							end: target_node.end_position().into(),
-							file_id: self.source_name.clone(),
-						}),
+						span: Some(self.node_span(&target_node)),
 					};
 					report_diagnostic(diag);
 				}
@@ -2096,6 +2124,7 @@ impl<'s> Parser<'s> {
 				},
 				is_static: true,
 				span: statements_span.clone(),
+				access_modifier: AccessModifier::Public,
 			}),
 			statements_span.clone(),
 		);
@@ -2118,6 +2147,43 @@ impl<'s> Parser<'s> {
 			}),
 			span,
 		)))
+	}
+}
+
+fn is_entrypoint_file(path: &Utf8Path) -> bool {
+	path.file_name() == Some("main.w")
+		|| path
+			.file_name()
+			.map(|s| s.to_string().ends_with(".main.w"))
+			.unwrap_or(false)
+}
+
+fn is_valid_module_statement(stmt: &Stmt) -> bool {
+	match stmt.kind {
+		// --- these are all cool ---
+		StmtKind::Bring { .. } => true,
+		StmtKind::Class(_) => true,
+		StmtKind::Interface(_) => true,
+		StmtKind::Struct { .. } => true,
+		StmtKind::Enum { .. } => true,
+		StmtKind::CompilerDebugEnv => true,
+		// --- these are all uncool ---
+		StmtKind::SuperConstructor { .. } => false,
+		StmtKind::If { .. } => false,
+		StmtKind::ForLoop { .. } => false,
+		StmtKind::While { .. } => false,
+		StmtKind::IfLet { .. } => false,
+		StmtKind::Break => false,
+		StmtKind::Continue => false,
+		StmtKind::Return(_) => false,
+		StmtKind::Throw(_) => false,
+		StmtKind::Expression(_) => false,
+		StmtKind::Assignment { .. } => false,
+		StmtKind::Scope(_) => false,
+		StmtKind::TryCatch { .. } => false,
+		// TODO: support constants https://github.com/winglang/wing/issues/3606
+		// TODO: support test statements https://github.com/winglang/wing/issues/3571
+		StmtKind::Let { .. } => false,
 	}
 }
 

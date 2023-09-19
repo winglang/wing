@@ -7,7 +7,7 @@ import { runWingCommand } from "./utils";
 test("JSII manifest cache", async () => {
   // Use awscdk test because it has manifest file redirects and uses gzip compression which is a good test case
   // in addtion to regular manifest files
-  const app = "bring_awscdk.w";
+  const app = "bring_awscdk.main.w";
   const appFile = path.join(validTestDir, app);
   const args = ["compile", "--target", "sim"];
   const manifestCacheExt = ".jsii.speedy";

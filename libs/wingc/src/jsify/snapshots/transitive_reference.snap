@@ -18,7 +18,7 @@ source: libs/wingc/src/jsify/tests.rs
         return this.b.list().length == 0;
       }
 
-      inflight checkIfEmpty() {
+      pub inflight checkIfEmpty() {
         if this.isEmpty() {
           log("empty!");
         }

@@ -11,7 +11,7 @@ use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, collections::BTreeMap, v
 use crate::{
 	ast::{
 		ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, ElifLetBlock, Expr, ExprKind,
-		FunctionBody, FunctionDefinition, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt,
+		FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt,
 		StmtKind, Symbol, UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
@@ -304,21 +304,21 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	pub fn jsify_type(&self, typ: &Type) -> Option<String> {
+	pub fn jsify_type(typ: &Type) -> Option<String> {
 		match typ {
 			Type::Struct(t) => Some(t.name.name.clone()),
 			Type::String => Some("string".to_string()),
 			Type::Number => Some("number".to_string()),
 			Type::Boolean => Some("boolean".to_string()),
 			Type::Array(t) => {
-				if let Some(inner) = self.jsify_type(&t) {
+				if let Some(inner) = Self::jsify_type(&t) {
 					Some(format!("{}[]", inner))
 				} else {
 					None
 				}
 			}
 			Type::Optional(t) => {
-				if let Some(inner) = self.jsify_type(&t) {
+				if let Some(inner) = Self::jsify_type(&t) {
 					Some(format!("{}?", inner))
 				} else {
 					None
@@ -789,14 +789,14 @@ impl<'a> JSifier<'a> {
 			}
 			StmtKind::Break => CodeMaker::one_line("break;"),
 			StmtKind::Continue => CodeMaker::one_line("continue;"),
-			StmtKind::IfLet {
+			StmtKind::IfLet(IfLet {
 				reassignable,
 				value,
 				statements,
 				var_name,
 				elif_statements,
 				else_statements,
-			} => {
+			}) => {
 				let mut code = CodeMaker::default();
 				// To enable shadowing variables in if let statements, the following does some scope trickery
 				// take for example the following wing code:
@@ -1476,7 +1476,7 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 			StmtKind::Let { .. } => {}
 			StmtKind::ForLoop { .. } => {}
 			StmtKind::While { .. } => {}
-			StmtKind::IfLet { .. } => {}
+			StmtKind::IfLet(IfLet { .. }) => {}
 			StmtKind::If { .. } => {}
 			StmtKind::Break => {}
 			StmtKind::Continue => {}
@@ -1500,10 +1500,6 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 	}
 
 	symbols
-}
-
-fn struct_filename(s: &String) -> String {
-	format!("./{}.Struct.js", s)
 }
 
 fn lookup_span(span: &WingSpan, files: &Files) -> String {
