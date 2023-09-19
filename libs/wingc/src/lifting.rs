@@ -123,14 +123,39 @@ impl<'a> LiftVisitor<'a> {
 	}
 
 	fn jsify_udt(&mut self, node: &UserDefinedType) -> String {
-		let res = self.jsify.jsify_user_defined_type(
+		let udt_js = self.jsify.jsify_user_defined_type(
 			&node,
 			&mut JSifyContext {
 				lifts: None,
 				visit_ctx: &mut self.ctx,
 			},
 		);
-		res
+
+		let current_env = self.ctx.current_env().expect("an env");
+		if let Some(SymbolKind::Namespace(root_namespace)) = current_env.lookup(&node.root, None) {
+			match &root_namespace.kind {
+				// Types in wing files already implement a helper to lift types
+				NamespaceKind::FileModule => udt_js,
+
+				NamespaceKind::JSII { fqn } => {
+					let mut fqn = fqn.clone();
+					if root_namespace.name != fqn {
+						fqn = format!("{}/{}", fqn, root_namespace.name);
+					};
+					let type_path = node
+						.fields
+						.iter()
+						.map(|f| f.name.clone())
+						.collect::<Vec<String>>()
+						.join(".");
+					let udt = udt_js;
+					format!("$stdlib.core.toLiftableModuleType({udt}, \"{fqn}\", \"{type_path}\")",)
+				}
+			}
+		} else {
+			// Non-namespaced reference, should be a wing type with a helper to lift it
+			udt_js
+		}
 	}
 }
 
@@ -281,30 +306,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 		// CAPTURE
 		if self.should_capture_type(&node) {
 			// jsify the type so we can get the preflight code
-			let current_env = self.ctx.current_env().expect("an env");
-			let code = if let Some(SymbolKind::Namespace(root_namespace)) = current_env.lookup(&node.root, None) {
-				match &root_namespace.kind {
-					// types in wing files already implement a helper to lift types
-					NamespaceKind::FileModule => self.jsify_udt(&node),
-
-					NamespaceKind::JSII { fqn } => {
-						let mut fqn = fqn.clone();
-						if root_namespace.name != fqn {
-							fqn = format!("{}/{}", fqn, root_namespace.name);
-						};
-						let type_path = node
-							.fields
-							.iter()
-							.map(|f| f.name.clone())
-							.collect::<Vec<String>>()
-							.join(".");
-						let udt = self.jsify_udt(&node);
-						format!("$stdlib.core.toLiftableModuleType({udt}, \"{fqn}\", \"{type_path}\")",)
-					}
-				}
-			} else {
-				self.jsify_udt(&node)
-			};
+			let code = self.jsify_udt(&node);
 			let mut lifts = self.lifts_stack.pop().unwrap();
 			lifts.capture(&Liftable::Type(node.clone()), &code, false);
 			self.lifts_stack.push(lifts);
