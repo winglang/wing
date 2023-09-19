@@ -58,17 +58,23 @@ export const DynamodbTableInteraction = ({
       }
     }
 
-    const result: Column[] = [{
-      name: hashKey,
-      type: "string"
-    }, 
-    ...(rangeKey ? [{
-      name: rangeKey,
-      type: "string"
-    }] : [])];
+    const result: Column[] = [
+      {
+        name: hashKey,
+        type: "string",
+      },
+      ...(rangeKey
+        ? [
+            {
+              name: rangeKey,
+              type: "string",
+            },
+          ]
+        : []),
+    ];
 
-    for (let key of Array.from(keys.values()).sort()) {
-      result.push({ name: key, type: "string" })
+    for (let key of [...keys.values()].sort()) {
+      result.push({ name: key, type: "string" });
     }
 
     return result;
@@ -112,10 +118,12 @@ export const DynamodbTableInteraction = ({
   const headerSuffix = (name: string) => {
     switch (name) {
       case hashKey:
-      case rangeKey:
+      case rangeKey: {
         return "*";
-      default:
+      }
+      default: {
         return "";
+      }
     }
   };
 
@@ -249,10 +257,13 @@ export const DynamodbTableInteraction = ({
                 </td>
               </tr>
               <tr className="sticky bottom-[4px] z-10 align-baseline">
-                <td colSpan={columns.length} className={classNames(
-                  "first:rounded-bl -mb-2.5 text-left",
-                  theme.bg3,
-                )}>
+                <td
+                  colSpan={columns.length}
+                  className={classNames(
+                    "first:rounded-bl -mb-2.5 text-left",
+                    theme.bg3,
+                  )}
+                >
                   <textarea
                     className={classNames(
                       theme.borderInput,
@@ -267,7 +278,7 @@ export const DynamodbTableInteraction = ({
                       newRow.error && [
                         "rounded ring-2 ring-red-800/50",
                         "dark:ring-red-500/50 dark:border-red-500/50",
-                      ]
+                      ],
                     )}
                     rows={2}
                     placeholder="Json Item..."
@@ -276,24 +287,26 @@ export const DynamodbTableInteraction = ({
                     data-testid="ex.DynamodbTable:new-row"
                   />
                 </td>
-                <td className={classNames(
-                  "first:rounded-bl -mb-2.5 text-left",
-                  theme.bg3,
-                )}>
+                <td
+                  className={classNames(
+                    "first:rounded-bl -mb-2.5 text-left",
+                    theme.bg3,
+                  )}
+                >
                   <button
-                      className={classNames(
-                        "inline-flex gap-2 items-center text-xs font-medium outline-none rounded",
-                        "p-1.5",
-                        theme.bg4Hover,
-                        theme.bgInputHover,
-                        theme.textInput,
-                        theme.focusInput,
-                      )}
-                      onClick={addRow}
-                      data-testid="ex.DynamodbTable:add-row"
-                    >
-                      <PlusIcon className="w-4 h-4" />
-                    </button>
+                    className={classNames(
+                      "inline-flex gap-2 items-center text-xs font-medium outline-none rounded",
+                      "p-1.5",
+                      theme.bg4Hover,
+                      theme.bgInputHover,
+                      theme.textInput,
+                      theme.focusInput,
+                    )}
+                    onClick={addRow}
+                    data-testid="ex.DynamodbTable:add-row"
+                  >
+                    <PlusIcon className="w-4 h-4" />
+                  </button>
                 </td>
               </tr>
             </>
