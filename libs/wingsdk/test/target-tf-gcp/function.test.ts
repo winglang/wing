@@ -101,8 +101,7 @@ test("basic function with timeout beyond the allowed range", () => {
       timeout: Duration.fromSeconds(0),
     });
   }).toThrowErrorMatchingSnapshot();
-}
-);
+});
 
 test("basic function with memory size specified", () => {
   // GIVEN
