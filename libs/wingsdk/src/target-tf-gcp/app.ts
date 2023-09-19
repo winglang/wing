@@ -17,6 +17,12 @@ export interface AppProps extends CdktfAppProps {
   readonly projectId: string;
 
   /**
+   * The Google Cloud region, used for all resources.
+   * @see https://cloud.google.com/functions/docs/locations
+   */
+  readonly region: string;
+
+  /**
    * The Google Cloud storage location, used for all storage resources.
    * @see https://cloud.google.com/storage/docs/locations
    */
@@ -32,6 +38,11 @@ export class App extends CdktfApp {
    * The Google Cloud project ID.
    */
   public readonly projectId: string;
+
+  /**
+   * The Google Cloud region, used for all resources.
+   */
+  public readonly region: string;
 
   /**
    * The Google Cloud storage location, used for all storage resources.
@@ -62,8 +73,16 @@ export class App extends CdktfApp {
       );
     }
 
+    this.region = props.region ?? process.env.GOOGLE_REGION;
+    if(this.region === undefined) {
+      throw new Error(
+        "A Google Cloud region must be specified through the GOOGLE_REGION environment variable."
+      );
+    }
+
     new GoogleProvider(this, "google", {
       project: this.projectId,
+      region: this.region,
     });
     new RandomProvider(this, "random");
 

@@ -110,7 +110,7 @@ export class Function extends cloud.Function {
       name: ResourceNames.generateName(this, FUNCTION_NAME_OPTS),
       description: "This function was created by Wing",
       project: app.projectId,
-      region: app.storageLocation,
+      region: app.region,
       runtime: "nodejs16",
       availableMemoryMb: props.memory ?? 128,
       sourceArchiveBucket: this.bucket.name,
