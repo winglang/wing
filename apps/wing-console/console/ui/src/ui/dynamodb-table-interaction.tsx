@@ -5,7 +5,6 @@ import {
   Column,
   getInputType,
   TableRow,
-  TextArea,
 } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -113,9 +112,8 @@ export const DynamodbTableInteraction = ({
   const headerSuffix = (name: string) => {
     switch (name) {
       case hashKey:
-        return "(pk)";
       case rangeKey:
-        return "(sk)";
+        return "*";
       default:
         return "";
     }
@@ -232,63 +230,75 @@ export const DynamodbTableInteraction = ({
                 dataTestid={`ex.DynamodbTable:row-${index}`}
               />
             ))}
-          </tbody>
-        </table>
-        <div
-          className="w-full border-separate"
-          style={{
-            borderSpacing: "0px 4px",
-          }}
-        >
-          <div className="spacing-y-1">
-            {!readonly && (
-              <div className="flex flex-col">
-                <div>
-                  <div
+            <>
+              <tr className="sticky bottom-[35px] z-10">
+                <td className="p-0">
+                  <div className="-mb-[6px]">
+                    <div
+                      className={classNames(
+                        "inline-block whitespace-nowrap",
+                        theme.bg3,
+                        "text-[0.60rem] font-medium tracking-wide text-slate-400 dark:text-slate-350",
+                        "leading-none px-2 pt-1.5 pb-1",
+                        "rounded-t",
+                      )}
+                    >
+                      NEW ROW
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr className="sticky bottom-[4px] z-10 align-baseline">
+                <td className={classNames(
+                  "first:rounded-bl -mb-2.5 text-left",
+                  theme.bg3,
+                )}>
+                  <textarea
                     className={classNames(
-                      "inline-block whitespace-nowrap",
-                      theme.bg2,
                       theme.borderInput,
+                      "rounded text-sm relative",
+                      "text-sm ring-0 focus:ring-0 bg-transparent",
+                      "border-0 p-0 m-0 appearance-none rounded",
+                      "placeholder:italic",
+                      "w-full",
+                      "px-1",
                       theme.textInput,
                       theme.focusInput,
-                      "text-[0.60rem] font-medium tracking-wide text-slate-400 dark:text-slate-350",
-                      "leading-none m-0.5 p-1",
-                      "rounded",
+                      newRow.error && [
+                        "rounded ring-2 ring-red-800/50",
+                        "dark:ring-red-500/50 dark:border-red-500/50",
+                      ]
                     )}
-                  >
-                    NEW ITEM
-                  </div>
-                </div>
-                <TextArea
-                  containerClassName="w-full"
-                  className={classNames("text-sm min-h-[2rem]", newRow.error && [
-                    "rounded ring-2 ring-red-800/50",
-                    "dark:ring-red-500/50 dark:border-red-500/50",
-                  ])}
-                  placeholder="Item..."
-                  value={newRow.data}
-                  onInput={(event) => updateNewRow(event.currentTarget.value)}
-                  dataTestid="ex.DynamodbTable:new-row"
-                />
-                <button
-                  className={classNames(
-                    "inline-flex gap-2 items-center text-xs font-medium outline-none rounded-md",
-                    "p-1.5 w-fit",
-                    theme.bg4Hover,
-                    theme.textInput,
-                    theme.borderInput,
-                    theme.focusInput,
-                  )}
-                  onClick={addRow}
-                  disabled={disabled}
-                  data-testid="ex.DynamodbTable:add-row"
-                >
-                  <PlusIcon className="w-4 h-4" />
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
+                    rows={2}
+                    placeholder="Json Item..."
+                    value={newRow.data}
+                    onInput={(event) => updateNewRow(event.currentTarget.value)}
+                    data-testid="ex.DynamodbTable:new-row"
+                  />
+                </td>
+                <td className={classNames(
+                  "first:rounded-bl -mb-2.5 text-left",
+                  theme.bg3,
+                )}>
+                  <button
+                      className={classNames(
+                        "inline-flex gap-2 items-center text-xs font-medium outline-none rounded",
+                        "p-1.5",
+                        theme.bg4Hover,
+                        theme.bgInputHover,
+                        theme.textInput,
+                        theme.focusInput,
+                      )}
+                      onClick={addRow}
+                      data-testid="ex.DynamodbTable:add-row"
+                    >
+                      <PlusIcon className="w-4 h-4" />
+                    </button>
+                </td>
+              </tr>
+            </>
+          </tbody>
+        </table>
       </div>
     </div>
   );
