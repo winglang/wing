@@ -67,7 +67,7 @@ the key to add.
 
 - *Type:* str
 
-the key to add.
+the value to add.
 
 ---
 
