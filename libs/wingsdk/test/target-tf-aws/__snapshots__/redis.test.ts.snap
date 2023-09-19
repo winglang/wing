@@ -2,6 +2,11 @@
 
 exports[`When creating a Redis resource > should create an elasticache cluster and required vpc networking resources 1`] = `
 {
+  "data": {
+    "aws_region": {
+      "Region": {},
+    },
+  },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]",
@@ -149,6 +154,7 @@ exports[`When creating a Redis resource > should create an elasticache cluster a
     },
     "aws_subnet": {
       "PrivateSubnet": {
+        "availability_zone": "\${data.aws_region.Region.name}a",
         "cidr_block": "10.0.4.0/22",
         "tags": {
           "Name": "Default-c82bf964-private-subnet-1",
@@ -156,6 +162,7 @@ exports[`When creating a Redis resource > should create an elasticache cluster a
         "vpc_id": "\${aws_vpc.VPC.id}",
       },
       "PublicSubnet": {
+        "availability_zone": "\${data.aws_region.Region.name}a",
         "cidr_block": "10.0.0.0/24",
         "tags": {
           "Name": "Default-c82bf964-public-subnet-1",
