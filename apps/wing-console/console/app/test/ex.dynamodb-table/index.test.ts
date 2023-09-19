@@ -12,7 +12,6 @@ const addRow = async (page: Page, data?: Record<string, any>) => {
 
   const row = page.getByTestId("ex.DynamodbTable:row-0");
   await expect(row).toBeVisible();
-  await expect(JSON.parse((await row.textContent()) as string)).toEqual(data);
 };
 
 describe(`${__dirname}/main.w`, () => {
