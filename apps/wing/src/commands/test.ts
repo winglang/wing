@@ -247,42 +247,33 @@ function noCleanUp(synthDir: string) {
   );
 }
 
-function filterTestsByRegex(tests: string[], regexString: string): string[] {
-  let regex = new RegExp(regexString);
+function filterTests(tests: string[], regexString?: string): string[] {
+  if (regexString) {
+    const regex = new RegExp(regexString);
+    tests = tests.filter((test) => {
+      // Extract test name from the string
+      // root/env0/test:<testName>
+      const testName = test.split(":").pop();
+      return testName ? regex.test(testName) : false;
+    });
+  }
 
-  return tests.filter((test) => {
-    // Extract test name from the string
-    // root/env0/test:<testName>
-    const testName = test.split(":").pop();
-
-    if (testName) {
-      return regex.test(testName);
-    }
-
-    return false;
-  });
+  return pickOneTestPerEnvironment(tests);
 }
 
 async function testSimulator(synthDir: string, options: TestOptions) {
   const s = new testing.Simulator({ simfile: synthDir });
-  const { clean } = options;
+  const { clean, testFilter } = options;
   await s.start();
 
   const testRunner = s.getResource("root/cloud.TestRunner") as std.ITestRunnerClient;
   const tests = await testRunner.listTests();
-  const filteredTests = pickOneTestPerEnvironment(tests);
 
-  let testsToRun;
-  const results = new Array<std.TestResult>();
+  const filteredTests = filterTests(tests, testFilter);
 
-  if (options.testFilter) {
-    testsToRun = filterTestsByRegex(filteredTests, options.testFilter);
-  } else {
-    testsToRun = filteredTests;
-  }
-
+  let results = new Array<std.TestResult>();
   // TODO: run these tests in parallel
-  for (const path of testsToRun) {
+  for (const path of filteredTests) {
     results.push(await testRunner.runTest(path));
   }
 
