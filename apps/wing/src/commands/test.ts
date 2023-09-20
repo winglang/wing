@@ -269,10 +269,8 @@ async function testSimulator(synthDir: string, options: TestOptions) {
 
   const testRunner = s.getResource("root/cloud.TestRunner") as std.ITestRunnerClient;
   const tests = await testRunner.listTests();
-
   const filteredTests = filterTests(tests, testFilter);
-
-  let results = new Array<std.TestResult>();
+  const results = new Array<std.TestResult>();
   // TODO: run these tests in parallel
   for (const path of filteredTests) {
     results.push(await testRunner.runTest(path));
