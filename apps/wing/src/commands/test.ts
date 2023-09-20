@@ -253,7 +253,8 @@ function filterTests(tests: string[], regexString?: string): string[] {
     tests = tests.filter((test) => {
       // Extract test name from the string
       // root/env0/test:<testName>
-      const testName = test.split(":").pop();
+      const firstColonIndex = test.indexOf(":");
+      const testName = test.substring(firstColonIndex + 1);
       return testName ? regex.test(testName) : false;
     });
   }
