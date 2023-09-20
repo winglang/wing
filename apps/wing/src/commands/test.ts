@@ -247,7 +247,7 @@ function noCleanUp(synthDir: string) {
   );
 }
 
-function filterTests(tests: string[], regexString?: string): string[] {
+export function filterTests(tests: string[], regexString?: string): string[] {
   if (regexString) {
     const regex = new RegExp(regexString);
     tests = tests.filter((test) => {

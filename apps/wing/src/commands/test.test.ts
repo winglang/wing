@@ -1,5 +1,5 @@
 import { describe, test, expect, beforeEach, afterEach } from "vitest";
-import { renderTestReport } from "./test";
+import { renderTestReport, filterTests } from "./test";
 
 import { TestResult, TraceType } from "@winglang/sdk/lib/std";
 import chalk from "chalk";
@@ -32,6 +32,16 @@ describe("printing test reports", () => {
 
     expect(testReport).toMatchSnapshot();
     expect(testReport).toContain("Push (message=cool)");
+  });
+});
+
+describe("test options", () => {
+  test("--test-filter <regex>", () => {
+    const filteredTests = filterTests(EXAMPLE_UNFILTERED_TESTS, "get");
+
+    expect(filteredTests.length).toBe(2);
+    expect(filteredTests[0]).toBe("root/env0/test:get()");
+    expect(filteredTests[1]).toBe("root/env1/test:get:At()");
   });
 });
 
@@ -99,4 +109,25 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
       },
     ],
   },
+];
+
+const EXAMPLE_UNFILTERED_TESTS: string[] = [
+  "root/env0/test:get()",
+  "root/env0/test:get:At()",
+  "root/env0/test:stringify()",
+  "root/env1/test:get()",
+  "root/env1/test:get:At()",
+  "root/env1/test:stringify()",
+  "root/env2/test:get()",
+  "root/env2/test:get:At()",
+  "root/env2/test:stringify()",
+  "root/env3/test:get()",
+  "root/env3/test:get:At()",
+  "root/env3/test:stringify()",
+  "root/env4/test:get()",
+  "root/env4/test:get:At()",
+  "root/env4/test:stringify()",
+  "root/env5/test:get()",
+  "root/env5/test:get:At()",
+  "root/env5/test:stringify()",
 ];
