@@ -1,11 +1,11 @@
-import React from "react";
+import { forwardRef } from "react";
 
-interface DynamoDBIconProps extends React.ComponentProps<"svg"> {
+type DynamoDBIconProps = React.PropsWithoutRef<React.SVGProps<SVGSVGElement>> & {
   title?: string;
   titleId?: string;
-}
+} & React.RefAttributes<SVGSVGElement>;
 
-export const DynamoDBIcon = React.forwardRef<SVGSVGElement, DynamoDBIconProps>(
+export const DynamoDBIcon = forwardRef<SVGSVGElement, DynamoDBIconProps>(
   ({ title, titleId, ...props }, svgRef) => {
     return (
       <svg
