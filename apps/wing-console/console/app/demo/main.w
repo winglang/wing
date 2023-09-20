@@ -1,7 +1,7 @@
 bring cloud;
 bring ex;
-
-let secret = new cloud.Secret(name: "my-secret");
+// @see https://github.com/winglang/wing/issues/4237 if crashes the Console preview env.
+//let secret = new cloud.Secret(name: "my-secret");
 
 let bucket = new cloud.Bucket();
 let queue = new cloud.Queue();
@@ -68,6 +68,14 @@ let rateSchedule = new cloud.Schedule(cloud.ScheduleProps{
 rateSchedule.onTick(inflight () => {
   log("Rate schedule ticked!");
 });
+
+new cloud.Service(
+      onStart: inflight () => {
+        log("start!");
+      },
+      onStop: inflight () => {
+        log("stop!");
+      });
 
 let cronSchedule = new cloud.Schedule(cloud.ScheduleProps{
   cron: "* * * * ?"
