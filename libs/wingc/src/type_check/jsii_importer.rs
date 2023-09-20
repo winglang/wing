@@ -8,7 +8,8 @@ use crate::{
 	type_check::{
 		self,
 		symbol_env::{StatementIdx, SymbolEnvKind},
-		Class, FunctionParameter, FunctionSignature, Interface, Struct, SymbolKind, Type, TypeRef, Types, CLASS_INIT_NAME,
+		Class, FunctionParameter, FunctionSignature, Interface, ResolveSource, Struct, SymbolKind, Type, TypeRef, Types,
+		CLASS_INIT_NAME,
 	},
 	CONSTRUCT_BASE_CLASS, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_JSON, WINGSDK_MUT_JSON, WINGSDK_RESOURCE,
 };
@@ -204,7 +205,7 @@ impl<'a> JsiiImporter<'a> {
 				name: assembly.to_string(),
 				env: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0),
 				loaded: false,
-				module_path: assembly.to_string(),
+				module_path: ResolveSource::ExternalModule(assembly.to_string()),
 			});
 			self
 				.wing_types
@@ -250,7 +251,7 @@ impl<'a> JsiiImporter<'a> {
 					name: namespace_name.to_string(),
 					env: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0),
 					loaded: false,
-					module_path,
+					module_path: ResolveSource::ExternalModule(module_path),
 				});
 				parent_ns
 					.env
@@ -956,7 +957,7 @@ impl<'a> JsiiImporter<'a> {
 					name: assembly.name.clone(),
 					env: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0),
 					loaded: false,
-					module_path: assembly.name.clone(),
+					module_path: ResolveSource::ExternalModule(assembly.name.clone()),
 				});
 				self
 					.wing_types

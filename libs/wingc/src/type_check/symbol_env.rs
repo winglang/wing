@@ -413,7 +413,7 @@ mod tests {
 		ast::{Phase, Symbol},
 		type_check::{
 			symbol_env::{LookupResult, SymbolEnvKind},
-			Namespace, SymbolKind, Types,
+			Namespace, ResolveSource, SymbolKind, Types,
 		},
 	};
 
@@ -557,13 +557,13 @@ mod tests {
 			name: "ns1".to_string(),
 			env: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Independent, 0),
 			loaded: false,
-			module_path: "ns1".to_string(),
+			module_path: ResolveSource::WingFile,
 		});
 		let ns2 = types.add_namespace(Namespace {
 			name: "ns2".to_string(),
 			env: SymbolEnv::new(Some(ns1.env.get_ref()), SymbolEnvKind::Scope, Phase::Independent, 0),
 			loaded: false,
-			module_path: "ns2".to_string(),
+			module_path: ResolveSource::WingFile,
 		});
 
 		// Define ns2 in n1's env
