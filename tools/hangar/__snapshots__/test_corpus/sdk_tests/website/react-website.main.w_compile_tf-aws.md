@@ -1,43 +1,48 @@
 # [react-website.main.w](../../../../../../examples/tests/sdk_tests/website/react-website.main.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.js
+
 ```js
-module.exports = function({  }) {
+module.exports = function ({}) {
   class $Closure1 {
-    constructor({  }) {
+    constructor({}) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle() {
-      return ({"body": "hi!","status": 200});
+      return { body: "hi!", status: 200 };
     }
   }
   return $Closure1;
-}
-
+};
 ```
 
 ## inflight.$Closure2-1.js
+
 ```js
-module.exports = function({ $http_Util, $website_url }) {
+module.exports = function ({ $http_Util, $website_url }) {
   class $Closure2 {
-    constructor({  }) {
+    constructor({}) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle() {
-      const res = (await $http_Util.get($website_url));
-      {((cond) => {if (!cond) throw new Error("assertion failed: res.ok")})(res.ok)};
+      const res = await $http_Util.get($website_url);
+      {
+        ((cond) => {
+          if (!cond) throw new Error("assertion failed: res.ok");
+        })(res.ok);
+      }
     }
   }
   return $Closure2;
-}
-
+};
 ```
 
 ## main.tf.json
+
 ```json
 {
   "//": {
@@ -58,37 +63,33 @@ module.exports = function({ $http_Util, $website_url }) {
   },
   "data": {
     "aws_iam_policy_document": {
-      "exReactWebsite_exReactWebsite-host_AllowDistributionReadOnly_08E853E9": {
+      "exReactApp_exReactApp-host_AllowDistributionReadOnly_08E853E9": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/ex.ReactWebsite/ex.ReactWebsite-host/AllowDistributionReadOnly",
-            "uniqueId": "exReactWebsite_exReactWebsite-host_AllowDistributionReadOnly_08E853E9"
+            "path": "root/Default/Default/ex.ReactApp/ex.ReactApp-host/AllowDistributionReadOnly",
+            "uniqueId": "exReactApp_exReactApp-host_AllowDistributionReadOnly_08E853E9"
           }
         },
         "statement": [
           {
-            "actions": [
-              "s3:GetObject"
-            ],
+            "actions": ["s3:GetObject"],
             "condition": [
               {
                 "test": "StringEquals",
                 "values": [
-                  "${aws_cloudfront_distribution.exReactWebsite_exReactWebsite-host_Distribution_A6E80E6B.arn}"
+                  "${aws_cloudfront_distribution.exReactApp_exReactApp-host_Distribution_A6E80E6B.arn}"
                 ],
                 "variable": "AWS:SourceArn"
               }
             ],
             "principals": [
               {
-                "identifiers": [
-                  "cloudfront.amazonaws.com"
-                ],
+                "identifiers": ["cloudfront.amazonaws.com"],
                 "type": "Service"
               }
             ],
             "resources": [
-              "${aws_s3_bucket.exReactWebsite_exReactWebsite-host_WebsiteBucket_1FBD630D.arn}/*"
+              "${aws_s3_bucket.exReactApp_exReactApp-host_WebsiteBucket_1FBD630D.arn}/*"
             ]
           }
         ]
@@ -111,9 +112,7 @@ module.exports = function({ $http_Util, $website_url }) {
     }
   },
   "provider": {
-    "aws": [
-      {}
-    ]
+    "aws": [{}]
   },
   "resource": {
     "aws_api_gateway_deployment": {
@@ -159,22 +158,16 @@ module.exports = function({ $http_Util, $website_url }) {
       }
     },
     "aws_cloudfront_distribution": {
-      "exReactWebsite_exReactWebsite-host_Distribution_A6E80E6B": {
+      "exReactApp_exReactApp-host_Distribution_A6E80E6B": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/ex.ReactWebsite/ex.ReactWebsite-host/Distribution",
-            "uniqueId": "exReactWebsite_exReactWebsite-host_Distribution_A6E80E6B"
+            "path": "root/Default/Default/ex.ReactApp/ex.ReactApp-host/Distribution",
+            "uniqueId": "exReactApp_exReactApp-host_Distribution_A6E80E6B"
           }
         },
         "default_cache_behavior": {
-          "allowed_methods": [
-            "GET",
-            "HEAD"
-          ],
-          "cached_methods": [
-            "GET",
-            "HEAD"
-          ],
+          "allowed_methods": ["GET", "HEAD"],
+          "cached_methods": ["GET", "HEAD"],
           "compress": true,
           "default_ttl": 3600,
           "forwarded_values": {
@@ -192,8 +185,8 @@ module.exports = function({ $http_Util, $website_url }) {
         "enabled": true,
         "origin": [
           {
-            "domain_name": "${aws_s3_bucket.exReactWebsite_exReactWebsite-host_WebsiteBucket_1FBD630D.bucket_regional_domain_name}",
-            "origin_access_control_id": "${aws_cloudfront_origin_access_control.exReactWebsite_exReactWebsite-host_CloudfrontOac_7BD93A2E.id}",
+            "domain_name": "${aws_s3_bucket.exReactApp_exReactApp-host_WebsiteBucket_1FBD630D.bucket_regional_domain_name}",
+            "origin_access_control_id": "${aws_cloudfront_origin_access_control.exReactApp_exReactApp-host_CloudfrontOac_7BD93A2E.id}",
             "origin_id": "s3Origin"
           }
         ],
@@ -210,11 +203,11 @@ module.exports = function({ $http_Util, $website_url }) {
       }
     },
     "aws_cloudfront_origin_access_control": {
-      "exReactWebsite_exReactWebsite-host_CloudfrontOac_7BD93A2E": {
+      "exReactApp_exReactApp-host_CloudfrontOac_7BD93A2E": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/ex.ReactWebsite/ex.ReactWebsite-host/CloudfrontOac",
-            "uniqueId": "exReactWebsite_exReactWebsite-host_CloudfrontOac_7BD93A2E"
+            "path": "root/Default/Default/ex.ReactApp/ex.ReactApp-host/CloudfrontOac",
+            "uniqueId": "exReactApp_exReactApp-host_CloudfrontOac_7BD93A2E"
           }
         },
         "name": "ex-React-c8b92f7a-cloudfront-oac",
@@ -266,9 +259,7 @@ module.exports = function({ $http_Util, $website_url }) {
             "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F"
           }
         },
-        "architectures": [
-          "arm64"
-        ],
+        "architectures": ["arm64"],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-cdafee6e-c8147384",
@@ -314,38 +305,38 @@ module.exports = function({ $http_Util, $website_url }) {
         },
         "bucket_prefix": "code-c84a50b1-"
       },
-      "exReactWebsite_exReactWebsite-host_WebsiteBucket_1FBD630D": {
+      "exReactApp_exReactApp-host_WebsiteBucket_1FBD630D": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/ex.ReactWebsite/ex.ReactWebsite-host/WebsiteBucket",
-            "uniqueId": "exReactWebsite_exReactWebsite-host_WebsiteBucket_1FBD630D"
+            "path": "root/Default/Default/ex.ReactApp/ex.ReactApp-host/WebsiteBucket",
+            "uniqueId": "exReactApp_exReactApp-host_WebsiteBucket_1FBD630D"
           }
         },
-        "bucket_prefix": "ex-reactwebsite-host-c8b92f7a-",
+        "bucket_prefix": "ex-ReactApp-host-c8b92f7a-",
         "force_destroy": false
       }
     },
     "aws_s3_bucket_policy": {
-      "exReactWebsite_exReactWebsite-host_DistributionS3BucketPolicy_7A93E12B": {
+      "exReactApp_exReactApp-host_DistributionS3BucketPolicy_7A93E12B": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/ex.ReactWebsite/ex.ReactWebsite-host/DistributionS3BucketPolicy",
-            "uniqueId": "exReactWebsite_exReactWebsite-host_DistributionS3BucketPolicy_7A93E12B"
+            "path": "root/Default/Default/ex.ReactApp/ex.ReactApp-host/DistributionS3BucketPolicy",
+            "uniqueId": "exReactApp_exReactApp-host_DistributionS3BucketPolicy_7A93E12B"
           }
         },
-        "bucket": "${aws_s3_bucket.exReactWebsite_exReactWebsite-host_WebsiteBucket_1FBD630D.id}",
-        "policy": "${data.aws_iam_policy_document.exReactWebsite_exReactWebsite-host_AllowDistributionReadOnly_08E853E9.json}"
+        "bucket": "${aws_s3_bucket.exReactApp_exReactApp-host_WebsiteBucket_1FBD630D.id}",
+        "policy": "${data.aws_iam_policy_document.exReactApp_exReactApp-host_AllowDistributionReadOnly_08E853E9.json}"
       }
     },
     "aws_s3_bucket_website_configuration": {
-      "exReactWebsite_exReactWebsite-host_BucketWebsiteConfiguration_BA5B80BB": {
+      "exReactApp_exReactApp-host_BucketWebsiteConfiguration_BA5B80BB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/ex.ReactWebsite/ex.ReactWebsite-host/BucketWebsiteConfiguration",
-            "uniqueId": "exReactWebsite_exReactWebsite-host_BucketWebsiteConfiguration_BA5B80BB"
+            "path": "root/Default/Default/ex.ReactApp/ex.ReactApp-host/BucketWebsiteConfiguration",
+            "uniqueId": "exReactApp_exReactApp-host_BucketWebsiteConfiguration_BA5B80BB"
           }
         },
-        "bucket": "${aws_s3_bucket.exReactWebsite_exReactWebsite-host_WebsiteBucket_1FBD630D.bucket}",
+        "bucket": "${aws_s3_bucket.exReactApp_exReactApp-host_WebsiteBucket_1FBD630D.bucket}",
         "index_document": {
           "suffix": "index.html"
         }
@@ -363,50 +354,50 @@ module.exports = function({ $http_Util, $website_url }) {
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "exReactWebsite_exReactWebsite-host_File--indexhtml_A4CFFF28": {
+      "exReactApp_exReactApp-host_File--indexhtml_A4CFFF28": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/ex.ReactWebsite/ex.ReactWebsite-host/File--index.html",
-            "uniqueId": "exReactWebsite_exReactWebsite-host_File--indexhtml_A4CFFF28"
+            "path": "root/Default/Default/ex.ReactApp/ex.ReactApp-host/File--index.html",
+            "uniqueId": "exReactApp_exReactApp-host_File--indexhtml_A4CFFF28"
           }
         },
-        "bucket": "${aws_s3_bucket.exReactWebsite_exReactWebsite-host_WebsiteBucket_1FBD630D.bucket}",
+        "bucket": "${aws_s3_bucket.exReactApp_exReactApp-host_WebsiteBucket_1FBD630D.bucket}",
         "content_type": "text/html; charset=utf-8",
         "depends_on": [
-          "aws_s3_bucket.exReactWebsite_exReactWebsite-host_WebsiteBucket_1FBD630D"
+          "aws_s3_bucket.exReactApp_exReactApp-host_WebsiteBucket_1FBD630D"
         ],
         "key": "/index.html",
         "source": "<SOURCE>",
         "source_hash": "${filemd5(<SOURCE>)}"
       },
-      "exReactWebsite_exReactWebsite-host_File--indexjs_B5CBCB59": {
+      "exReactApp_exReactApp-host_File--indexjs_B5CBCB59": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/ex.ReactWebsite/ex.ReactWebsite-host/File--index.js",
-            "uniqueId": "exReactWebsite_exReactWebsite-host_File--indexjs_B5CBCB59"
+            "path": "root/Default/Default/ex.ReactApp/ex.ReactApp-host/File--index.js",
+            "uniqueId": "exReactApp_exReactApp-host_File--indexjs_B5CBCB59"
           }
         },
-        "bucket": "${aws_s3_bucket.exReactWebsite_exReactWebsite-host_WebsiteBucket_1FBD630D.bucket}",
+        "bucket": "${aws_s3_bucket.exReactApp_exReactApp-host_WebsiteBucket_1FBD630D.bucket}",
         "content_type": "application/javascript; charset=utf-8",
         "depends_on": [
-          "aws_s3_bucket.exReactWebsite_exReactWebsite-host_WebsiteBucket_1FBD630D"
+          "aws_s3_bucket.exReactApp_exReactApp-host_WebsiteBucket_1FBD630D"
         ],
         "key": "/index.js",
         "source": "<SOURCE>",
         "source_hash": "${filemd5(<SOURCE>)}"
       },
-      "exReactWebsite_exReactWebsite-host_File--wingjs_0EAF8729": {
+      "exReactApp_exReactApp-host_File--wingjs_0EAF8729": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/ex.ReactWebsite/ex.ReactWebsite-host/File--wing.js",
-            "uniqueId": "exReactWebsite_exReactWebsite-host_File--wingjs_0EAF8729"
+            "path": "root/Default/Default/ex.ReactApp/ex.ReactApp-host/File--wing.js",
+            "uniqueId": "exReactApp_exReactApp-host_File--wingjs_0EAF8729"
           }
         },
-        "bucket": "${aws_s3_bucket.exReactWebsite_exReactWebsite-host_WebsiteBucket_1FBD630D.bucket}",
+        "bucket": "${aws_s3_bucket.exReactApp_exReactApp-host_WebsiteBucket_1FBD630D.bucket}",
         "content": "window.wingEnv = {\n  \"apiUrl\": \"${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url}\",\n  \"anotherEnvVar\": \"preflight variable\"\n};",
         "content_type": "text/javascript",
         "depends_on": [
-          "aws_s3_bucket.exReactWebsite_exReactWebsite-host_WebsiteBucket_1FBD630D"
+          "aws_s3_bucket.exReactApp_exReactApp-host_WebsiteBucket_1FBD630D"
         ],
         "key": "wing.js"
       }
@@ -416,9 +407,12 @@ module.exports = function({ $http_Util, $website_url }) {
 ```
 
 ## preflight.js
+
 ```js
-const $stdlib = require('@winglang/sdk');
-const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
+const $stdlib = require("@winglang/sdk");
+const $plugins = ((s) => (!s ? [] : s.split(";")))(
+  process.env.WING_PLUGIN_PATHS
+);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -430,9 +424,9 @@ class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
+      constructor(scope, id) {
         super(scope, id);
-        (std.Node.of(this)).hidden = true;
+        std.Node.of(this).hidden = true;
       }
       static _toInflightType(context) {
         return `
@@ -456,9 +450,9 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
+      constructor(scope, id) {
         super(scope, id);
-        (std.Node.of(this)).hidden = true;
+        std.Node.of(this).hidden = true;
       }
       static _toInflightType(context) {
         return `
@@ -489,17 +483,48 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
-    (api.get("/",new $Closure1(this,"$Closure1")));
-    const website = this.node.root.newAbstract("@winglang/sdk.ex.ReactWebsite",this,"ex.ReactWebsite",{ projectPath: "./react-website", buildFolder: "/build/public", isDevRun: (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((util.Util.tryEnv("ENV")),"dev")) });
+    const api = this.node.root.newAbstract(
+      "@winglang/sdk.cloud.Api",
+      this,
+      "cloud.Api"
+    );
+    api.get("/", new $Closure1(this, "$Closure1"));
+    const website = this.node.root.newAbstract(
+      "@winglang/sdk.ex.ReactApp",
+      this,
+      "ex.ReactApp",
+      {
+        projectPath: "./react-website",
+        outDir: "/build/public",
+        isDevRun: ((a, b) => {
+          try {
+            return require("assert").deepStrictEqual(a, b) === undefined;
+          } catch {
+            return false;
+          }
+        })(util.Util.tryEnv("ENV"), "dev"),
+      }
+    );
     const preflightVariable = "preflight variable";
-    (website.addEnvironment("apiUrl",api.url));
-    (website.addEnvironment("anotherEnvVar",preflightVariable));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:website is working",new $Closure2(this,"$Closure2"));
+    website.addEnvironment("apiUrl", api.url);
+    website.addEnvironment("anotherEnvVar", preflightVariable);
+    this.node.root.new(
+      "@winglang/sdk.std.Test",
+      std.Test,
+      this,
+      "test:website is working",
+      new $Closure2(this, "$Closure2")
+    );
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "react-website.main", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+new $App({
+  outdir: $outdir,
+  name: "react-website.main",
+  rootConstruct: $Root,
+  plugins: $plugins,
+  isTestEnvironment: $wing_is_test,
+  entrypointDir: process.env["WING_SOURCE_DIR"],
+  rootId: process.env["WING_ROOT_ID"],
+}).synth();
 ```
-

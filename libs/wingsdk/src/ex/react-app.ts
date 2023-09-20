@@ -30,7 +30,7 @@ export interface ReactAppProps {
    * The path to the React app build folder- relative to the `projectPath`
    * @default "/build"
    */
-  readonly buildFolder?: string;
+  readonly outDir?: string;
   /**
    * A command for starting React app locally
    * @default "npm run start"
@@ -111,7 +111,7 @@ export abstract class ReactApp extends Resource {
   protected readonly _environmentVariables: Map<string, string> = new Map();
 
   constructor(scope: Construct, id: string, props: ReactAppProps) {
-    const buildFolder = props.buildFolder ?? DEFAULT_BUILD_FOLDER;
+    const outDir = props.outDir ?? DEFAULT_BUILD_FOLDER;
     const startCommand = props.startCommand ?? DEFAULT_START_COMMAND;
     const buildCommand = props.buildCommand ?? DEFAULT_BUILD_COMMAND;
 
@@ -122,7 +122,7 @@ export abstract class ReactApp extends Resource {
 
     this._projectPath = this._parsePath(scope, props.projectPath);
     this._hostProps = props.hostProps;
-    this._buildPath = join(this._projectPath, buildFolder);
+    this._buildPath = join(this._projectPath, outDir);
     this._isDevRun = props.isDevRun ?? false;
     this._localPort = props.localPort ?? DEFAULT_PORT;
 

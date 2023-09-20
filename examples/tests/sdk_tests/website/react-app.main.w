@@ -13,7 +13,7 @@ api.get("/", inflight () => {
 // but a mock with start and build commands
 let website = new ex.ReactApp(
   projectPath: "./react-website", 
-  buildFolder: "/build/public",
+  outDir: "/build/public",
   isDevRun: util.tryEnv("ENV") == "dev"
 );
 

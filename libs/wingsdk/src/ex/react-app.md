@@ -6,7 +6,7 @@ keywords: [Website, React, deployment, build]
 sidebar_position: 1
 ---
 
-The `ex.ReactWebsite` resource represents a website, built using React, that can be both hosted in the cloud or to run on a development hot-reload server in the sim target.
+The `ex.ReactApp` resource represents a website, built using React, that can be both hosted in the cloud or to run on a development hot-reload server in the sim target.
 
 ## Usage
 
@@ -18,7 +18,7 @@ Using the default arguments:
 bring ex;
 bring util;
 
-let website = new ex.ReactWebsite(projectPath: "./client", isDevRun: util.tryEnv("ENV") == "dev");
+let website = new ex.ReactApp(projectPath: "./client", isDevRun: util.tryEnv("ENV") == "dev");
 ```
 
 or customizing them:
@@ -27,10 +27,10 @@ or customizing them:
 bring ex;
 bring util;
 
-let website = new ex.ReactWebsite(
+let website = new ex.ReactApp(
   projectPath: "./client",
   isDevRun: util.tryEnv("ENV") == "dev"
-  buildFolder: "/dist" // default is "/build"
+  outDir: "/dist" // default is "/build"
   startCommand: "pnpm start" // default is "npm start"
   buildCommand: "pnpm build" // default is "npm build"
   hostProps: {} // website resource props (expect of the "path" prop)
@@ -44,7 +44,7 @@ let website = new ex.ReactWebsite(
 
 #### using wing variables within react code
 
-`ex.ReactWebsite` allows you to pass preflight arguments from wing to the React app using `addEnvironment` method:
+`ex.ReactApp` allows you to pass preflight arguments from wing to the React app using `addEnvironment` method:
 
 ```ts
 bring cloud;
@@ -52,7 +52,7 @@ bring util;
 bring ex;
 
 let api = new cloud.Api();
-let website = new ex.ReactWebsite(projectPath: "./client", isDevRun: util.tryEnv("ENV") == "dev");
+let website = new ex.ReactApp(projectPath: "./client", isDevRun: util.tryEnv("ENV") == "dev");
 
 website.addEnvironment("apiUrl", api.url);
 website.addEnvironment("another", "some string variable");
@@ -73,11 +73,11 @@ Currently, we can only pass preflight string variables to the React app environm
 
 ### Simulator (`sim`)
 
-sim implementations of `ex.ReactWebsite` is using either the [Website resource](../01-cloud/website.md) (when `isDevRun` is `false`) or starts React development server when `true`.
+sim implementations of `ex.ReactApp` is using either the [Website resource](../01-cloud/website.md) (when `isDevRun` is `false`) or starts React development server when `true`.
 
 ### AWS (`tf-aws` and `awscdk`)
 
-AWS implementations of `ex.ReactWebsite` uses the [Website resource](../01-cloud/website.md).
+AWS implementations of `ex.ReactApp` uses the [Website resource](../01-cloud/website.md).
 
 ### Azure (`tf-azure`)
 
