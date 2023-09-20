@@ -38,7 +38,7 @@ let website = new cloud.Website(
  );
 ```
 
-- When calling `wing it` when `isDevRun` is `true`- wing starts both the simulator and React's development server
+- When calling `wing it` when `isDevRun` is `true`- wing starts both the simulator and React's development server.
 - When calling `wing it`/`wing compile` on the sim target, when `isDevRun` is `false`- wing builds React and serves it over the [Website resource](./website.md).
 - When calling `wing compile` to any other target - wing builds react locally then deploys it to the cloud! (using the [Website resource](./website.md))
 
