@@ -29,7 +29,7 @@ function expectFirstArgToBe(fn: SpyInstance, firstArg: any) {
   expect(lastCall[0]).toBe(firstArg);
 }
 
-describe("Testing ReactWebsite", () => {
+describe("Testing ReactApp", () => {
   const execMock = vi.spyOn(child_process, "exec");
 
   beforeAll(() => {
@@ -55,7 +55,7 @@ describe("Testing ReactWebsite", () => {
   test("website builds and serves static files", async () => {
     // GIVEN
     const app = new SimApp();
-    ex.ReactWebsite._newReactWebsite(app, "website", {
+    ex.ReactApp._newReactApp(app, "website", {
       projectPath: resolve(__dirname, "../test-files/react-website"),
     });
 
@@ -91,7 +91,7 @@ window.wingEnv = {};`);
   test("adding an env var to the website ", async () => {
     // GIVEN
     const app = new SimApp();
-    const website = ex.ReactWebsite._newReactWebsite(app, "website", {
+    const website = ex.ReactApp._newReactApp(app, "website", {
       projectPath: resolve(__dirname, "../test-files/react-website"),
     });
 
@@ -128,10 +128,10 @@ window.wingEnv = {
     expectFirstArgToBe(execMock, "npm run build");
   });
 
-  test("running react website on dev mode", async () => {
+  test("running React App on dev mode", async () => {
     // GIVEN
     const app = new SimApp();
-    ex.ReactWebsite._newReactWebsite(app, "website", {
+    ex.ReactApp._newReactApp(app, "website", {
       projectPath: resolve(__dirname, "../test-files/react-website"),
       isDevRun: true,
     });
@@ -145,10 +145,10 @@ window.wingEnv = {
     expectFirstArgToBe(execMock, "PORT=3001 npm run start");
   });
 
-  test("running react website on dev mode on custom port", async () => {
+  test("running React App on dev mode on custom port", async () => {
     // GIVEN
     const app = new SimApp();
-    ex.ReactWebsite._newReactWebsite(app, "website", {
+    ex.ReactApp._newReactApp(app, "website", {
       projectPath: resolve(__dirname, "../test-files/react-website"),
       isDevRun: true,
       localPort: "4032",
@@ -163,11 +163,11 @@ window.wingEnv = {
     expectFirstArgToBe(execMock, "PORT=4032 npm run start");
   });
 
-  test("running react website on dev mode with custom command", async () => {
+  test("running React App on dev mode with custom command", async () => {
     // GIVEN
     const CUSTOM_COMMAND = "echo 'custom command'";
     const app = new SimApp();
-    ex.ReactWebsite._newReactWebsite(app, "website", {
+    ex.ReactApp._newReactApp(app, "website", {
       projectPath: resolve(__dirname, "../test-files/react-website"),
       startCommand: CUSTOM_COMMAND,
       isDevRun: true,
@@ -182,11 +182,11 @@ window.wingEnv = {
     expectFirstArgToBe(execMock, `PORT=3001 ${CUSTOM_COMMAND}`);
   });
 
-  test("running react website with custom command", async () => {
+  test("running React App with custom command", async () => {
     // GIVEN
     const CUSTOM_COMMAND = "echo 'custom command'";
     const app = new SimApp();
-    ex.ReactWebsite._newReactWebsite(app, "website", {
+    ex.ReactApp._newReactApp(app, "website", {
       projectPath: resolve(__dirname, "../test-files/react-website"),
       buildCommand: CUSTOM_COMMAND,
     });

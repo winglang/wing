@@ -14,14 +14,14 @@ const DEFAULT_PORT = 3001;
 export const WING_JS = "wing.js";
 
 /**
- * Global identifier for `ReactWebsite`.
+ * Global identifier for `ReactApp`.
  */
-export const REACT_WEBSITE_FQN = fqnForType("ex.ReactWebsite");
+export const REACT_APP_FQN = fqnForType("ex.ReactApp");
 
 /**
- * Options for `ReactWebsite`.
+ * Options for `ReactApp`.
  */
-export interface ReactWebsiteProps {
+export interface ReactAppProps {
   /**
    * The path to the React app root folder- can be absolute or relative to the wing folder
    */
@@ -59,21 +59,21 @@ export interface ReactWebsiteProps {
 }
 
 /**
- * A cloud deployable React website.
+ * A cloud deployable React App.
  *
- * @inflight `@winglang/sdk.ex.IReactWebsiteClient`
+ * @inflight `@winglang/sdk.ex.IReactAppClient`
  */
-export abstract class ReactWebsite extends Resource {
+export abstract class ReactApp extends Resource {
   /**
-   * Create a new react website.
+   * Create a new React App.
    * @internal
    */
-  public static _newReactWebsite(
+  public static _newReactApp(
     scope: Construct,
     id: string,
-    props: ReactWebsiteProps
-  ): ReactWebsite {
-    return App.of(scope).newAbstract(REACT_WEBSITE_FQN, scope, id, props);
+    props: ReactAppProps
+  ): ReactApp {
+    return App.of(scope).newAbstract(REACT_APP_FQN, scope, id, props);
   }
 
   /**
@@ -110,15 +110,15 @@ export abstract class ReactWebsite extends Resource {
    */
   protected readonly _environmentVariables: Map<string, string> = new Map();
 
-  constructor(scope: Construct, id: string, props: ReactWebsiteProps) {
+  constructor(scope: Construct, id: string, props: ReactAppProps) {
     const buildFolder = props.buildFolder ?? DEFAULT_BUILD_FOLDER;
     const startCommand = props.startCommand ?? DEFAULT_START_COMMAND;
     const buildCommand = props.buildCommand ?? DEFAULT_BUILD_COMMAND;
 
     super(scope, id);
 
-    Node.of(this).title = "React Website";
-    Node.of(this).description = "A deployable React website";
+    Node.of(this).title = "React App";
+    Node.of(this).description = "A deployable React App";
 
     this._projectPath = this._parsePath(scope, props.projectPath);
     this._hostProps = props.hostProps;
@@ -165,6 +165,6 @@ export abstract class ReactWebsite extends Resource {
 }
 
 /**
- * Inflight methods and members of `ex.ReactWebsite`.
+ * Inflight methods and members of `ex.ReactApp`.
  */
-export interface IReactWebsiteClient {}
+export interface IReactAppClient {}

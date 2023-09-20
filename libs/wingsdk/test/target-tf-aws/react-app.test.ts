@@ -12,18 +12,18 @@ import {
   treeJsonOf,
 } from "../util";
 
-describe("Testing ReactWebsite", () => {
+describe("Testing ReactApp", () => {
   const execMock = vi.spyOn(child_process, "execSync");
 
   afterAll(() => {
     execMock.mockReset();
   });
 
-  test("default react website behavior", () => {
+  test("default React App behavior", () => {
     // GIVEN
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-    // this isn't a react website, but a website with a package json and a build command
-    ex.ReactWebsite._newReactWebsite(app, "Website", {
+    // this isn't a React App, but a website with a package json and a build command
+    ex.ReactApp._newReactApp(app, "Website", {
       projectPath: "../test-files/react-website",
     });
 
@@ -56,14 +56,14 @@ describe("Testing ReactWebsite", () => {
     });
   });
 
-  test("react website with invalid path should throw error", () => {
+  test("React App with invalid path should throw error", () => {
     // GIVEN
     expect(() => {
       const app = new tfaws.App({
         outdir: mkdtemp(),
         entrypointDir: __dirname,
       });
-      ex.ReactWebsite._newReactWebsite(app, "Website", {
+      ex.ReactApp._newReactApp(app, "Website", {
         projectPath: "/absolute/non-existent",
       });
       app.synth();
@@ -74,8 +74,8 @@ describe("Testing ReactWebsite", () => {
   test("website with addEnvironment", () => {
     // GIVEN
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-    // this isn't a react website, but a website with a package json and a build command
-    const website = ex.ReactWebsite._newReactWebsite(app, "Website", {
+    // this isn't a React App, but a website with a package json and a build command
+    const website = ex.ReactApp._newReactApp(app, "Website", {
       projectPath: "../test-files/react-website",
     });
 
@@ -116,8 +116,8 @@ describe("Testing ReactWebsite", () => {
   test("website with isDevRun=true still uses build command", () => {
     // GIVEN
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-    // this isn't a react website, but a website with a package json and a build command
-    const website = ex.ReactWebsite._newReactWebsite(app, "Website", {
+    // this isn't a React App, but a website with a package json and a build command
+    const website = ex.ReactApp._newReactApp(app, "Website", {
       projectPath: "../test-files/react-website",
       isDevRun: true,
     });
@@ -134,8 +134,8 @@ describe("Testing ReactWebsite", () => {
     // GIVEN
     const CUSTOM_COMMAND = "echo 'custom command'";
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-    // this isn't a react website, but a website with a package json and a build command
-    ex.ReactWebsite._newReactWebsite(app, "Website", {
+    // this isn't a React App, but a website with a package json and a build command
+    ex.ReactApp._newReactApp(app, "Website", {
       projectPath: "../test-files/react-website",
       buildCommand: CUSTOM_COMMAND,
     });

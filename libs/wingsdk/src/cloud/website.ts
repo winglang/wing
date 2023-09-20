@@ -21,7 +21,7 @@ export interface WebsiteProps extends BaseWebsiteProps {
 }
 
 /**
- * Options for `Website`, and `ReactWebsite`
+ * Options for `Website`, and `ReactApp`
  */
 export interface BaseWebsiteProps {
   /**

@@ -11,12 +11,12 @@ import { Connections } from "../core";
 import * as ex from "../ex";
 
 /**
- * AWS implementation of `ex.ReactWebsite`.
+ * AWS implementation of `ex.ReactApp`.
  *
- * @inflight `@winglang/sdk.cloud.IReactWebsiteClient`
+ * @inflight `@winglang/sdk.cloud.IReactAppClient`
  */
-export class ReactWebsite extends ex.ReactWebsite {
-  constructor(scope: Construct, id: string, props: ex.ReactWebsiteProps) {
+export class ReactApp extends ex.ReactApp {
+  constructor(scope: Construct, id: string, props: ex.ReactAppProps) {
     super(scope, id, props);
     this._createWebsiteHost();
   }
@@ -66,7 +66,7 @@ export class ReactWebsite extends ex.ReactWebsite {
     return core.InflightClient.for(
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
-      "ReactWebsiteClient",
+      "ReactAppClient",
       []
     );
   }

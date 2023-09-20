@@ -3,20 +3,18 @@ import { writeFileSync } from "fs";
 import { join } from "path";
 import { promisify } from "util";
 import {
-  REACT_WEBSITE_TYPE,
-  ReactWebsiteAttributes,
-  ReactWebsiteSchema,
+  REACT_APP_TYPE,
+  ReactAppAttributes,
+  ReactAppSchema,
 } from "./schema-resources";
-import { IReactWebsiteClient, WING_JS } from "../ex";
+import { IReactAppClient, WING_JS } from "../ex";
 import { TraceType } from "../std";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
 } from "../testing/simulator";
 
-export class ReactWebsite
-  implements IReactWebsiteClient, ISimulatorResourceInstance
-{
+export class ReactApp implements IReactAppClient, ISimulatorResourceInstance {
   private readonly context: ISimulatorContext;
   private readonly startCommand: string;
   private readonly path: string;
@@ -25,7 +23,7 @@ export class ReactWebsite
   private childProcess?: ChildProcess;
   private url: string;
 
-  constructor(props: ReactWebsiteSchema["props"], context: ISimulatorContext) {
+  constructor(props: ReactAppSchema["props"], context: ISimulatorContext) {
     this.context = context;
     this.path = props.path;
     this.startCommand = props.startCommand;
@@ -34,7 +32,7 @@ export class ReactWebsite
     this.url = props.url;
   }
 
-  public async init(): Promise<ReactWebsiteAttributes> {
+  public async init(): Promise<ReactAppAttributes> {
     this.addTrace(`Executing start command: ${this.startCommand}`);
 
     writeFileSync(
@@ -94,7 +92,7 @@ window.wingEnv = ${JSON.stringify(this.environmentVariables, null, 2)};`
         message,
       },
       sourcePath: this.context.resourcePath,
-      sourceType: REACT_WEBSITE_TYPE,
+      sourceType: REACT_APP_TYPE,
       timestamp: new Date().toISOString(),
     });
   }

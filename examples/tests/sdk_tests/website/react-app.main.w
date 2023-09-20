@@ -11,7 +11,7 @@ api.get("/", inflight () => {
 
 // the project isn't actually react (since it can make wing's size much larger) 
 // but a mock with start and build commands
-let website = new ex.ReactWebsite(
+let website = new ex.ReactApp(
   projectPath: "./react-website", 
   buildFolder: "/build/public",
   isDevRun: util.tryEnv("ENV") == "dev"

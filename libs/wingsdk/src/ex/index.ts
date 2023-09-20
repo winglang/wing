@@ -1,4 +1,4 @@
-export * from "./react-website";
+export * from "./react-app";
 export * from "./dynamodb-table";
 export * from "./redis";
 export * from "./table";

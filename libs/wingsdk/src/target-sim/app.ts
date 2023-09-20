@@ -8,7 +8,7 @@ import { DynamodbTable } from "./dynamodb-table";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
-import { ReactWebsite } from "./react-website";
+import { ReactApp } from "./react-app";
 import { Redis } from "./redis";
 import { isSimulatorResource } from "./resource";
 import { Schedule } from "./schedule";
@@ -35,12 +35,7 @@ import {
 import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
-import {
-  TABLE_FQN,
-  REDIS_FQN,
-  DYNAMODB_TABLE_FQN,
-  REACT_WEBSITE_FQN,
-} from "../ex";
+import { TABLE_FQN, REDIS_FQN, DYNAMODB_TABLE_FQN, REACT_APP_FQN } from "../ex";
 import { TEST_RUNNER_FQN } from "../std";
 import { WingSimulatorSchema } from "../testing/simulator";
 
@@ -116,8 +111,8 @@ export class App extends core.App {
       case WEBSITE_FQN:
         return new Website(scope, id, args[0]);
 
-      case REACT_WEBSITE_FQN:
-        return new ReactWebsite(scope, id, args[0]);
+      case REACT_APP_FQN:
+        return new ReactApp(scope, id, args[0]);
 
       case SECRET_FQN:
         return new Secret(scope, id, args[0]);

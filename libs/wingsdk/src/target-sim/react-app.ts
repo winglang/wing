@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
-import { ReactWebsiteSchema, REACT_WEBSITE_TYPE } from "./schema-resources";
+import { ReactAppSchema, REACT_APP_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
@@ -8,11 +8,8 @@ import * as ex from "../ex";
 import { IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 
-export class ReactWebsite
-  extends ex.ReactWebsite
-  implements ISimulatorResource
-{
-  constructor(scope: Construct, id: string, props: ex.ReactWebsiteProps) {
+export class ReactApp extends ex.ReactApp implements ISimulatorResource {
+  constructor(scope: Construct, id: string, props: ex.ReactAppProps) {
     super(scope, id, props);
     if (!this._isDevRun) {
       // In the future we can create an host (proxy like) for the development one if needed
@@ -37,8 +34,8 @@ export class ReactWebsite
   }
 
   public toSimulator(): BaseResourceSchema {
-    const schema: ReactWebsiteSchema = {
-      type: REACT_WEBSITE_TYPE,
+    const schema: ReactAppSchema = {
+      type: REACT_APP_TYPE,
       path: this.node.path,
       props: {
         path: this._projectPath,
