@@ -15,19 +15,19 @@ The `ex.ReactWebsite` resource represents a website, built using React, that can
 Using the default arguments:
 
 ```ts
-bring cloud;
+bring ex;
 bring util;
 
-let website = new cloud.Website(projectPath: "./client", isDevRun: util.tryEnv("ENV") == "dev");
+let website = new ex.ReactWebsite(projectPath: "./client", isDevRun: util.tryEnv("ENV") == "dev");
 ```
 
 or customizing them:
 
 ```ts
-bring cloud;
+bring ex;
 bring util;
 
-let website = new cloud.Website(
+let website = new ex.ReactWebsite(
   projectPath: "./client",
   isDevRun: util.tryEnv("ENV") == "dev"
   buildFolder: "/dist" // default is "/build"
@@ -49,9 +49,10 @@ let website = new cloud.Website(
 ```ts
 bring cloud;
 bring util;
+bring ex;
 
-let website = new cloud.Api();
-let website = new cloud.Website(projectPath: "./client", isDevRun: util.tryEnv("ENV") == "dev");
+let api = new cloud.Api();
+let website = new ex.ReactWebsite(projectPath: "./client", isDevRun: util.tryEnv("ENV") == "dev");
 
 website.addEnvironment("apiUrl", api.url);
 website.addEnvironment("another", "some string variable");
@@ -59,6 +60,7 @@ website.addEnvironment("another", "some string variable");
 ```
 
 Then in the React app use `window.wingEnv`:
+(accessible after adding `<script src="./wing.js"></script>` to the index file)
 
 ```ts
 const { apiUrl } = window.wingEnv;
@@ -79,8 +81,8 @@ AWS implementations of `ex.ReactWebsite` uses the [Website resource](./website.m
 
 ### Azure (`tf-azure`)
 
-🚧 Not supported yet (tracking issue: [#1295](https://github.com/winglang/wing/issues/1295))
+🚧 Not supported yet (tracking issue: [#4220](https://github.com/winglang/wing/issues/4220))
 
 ### GCP (`tf-gcp`)
 
-🚧 Not supported yet (tracking issue: [#1296](https://github.com/winglang/wing/issues/1296))
+🚧 Not supported yet (tracking issue: [#4221](https://github.com/winglang/wing/issues/4221))
