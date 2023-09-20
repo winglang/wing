@@ -1250,6 +1250,23 @@ struct ResolvedExpression {
 	phase: Phase,
 }
 
+/// In Wing projects that have both files and directories, type information is stored like so:
+///
+/// "src/subdir/inner/widget.w" -> SymbolEnv { "Widget": TypeRef } = SE1
+/// "src/subdir/inner/" -> Namespace { envs: [SE1] } = NS1
+/// "src/subdir/foo.w" -> SymbolEnv { "Foo": TypeRef } = SE2
+/// "src/subdir/bar.w" -> SymbolEnv { "Bar": TypeRef } = SE3
+/// "src/subdir/" -> Namespace { envs: [SE2, SE3, SymbolEnv { "inner": NS1 }] } = NS2
+///
+/// Then when a file at "src/main.w" has a statement `bring "./subdir" as subdir;`,
+/// it retrieves NS2 from the types.source_file_envs map and adds it to the main file's symbol environment
+/// under the symbol "subdir".
+enum SymbolEnvOrNamespace {
+	SymbolEnv(SymbolEnvRef),
+	Namespace(NamespaceRef),
+	Error(Diagnostic),
+}
+
 /// File-unique identifier for each necessary inference while type checking. This is an index of the Types.inferences vec.
 /// There will always be an entry for each InferenceId.
 pub type InferenceId = usize;
@@ -1260,8 +1277,9 @@ pub struct Types {
 	types: Vec<Box<Type>>,
 	namespaces: Vec<Box<Namespace>>,
 	symbol_envs: Vec<Box<SymbolEnv>>,
-	/// A map from source file name to the symbol environment for that file (and whether that file is safe to bring)
-	source_file_envs: IndexMap<Utf8PathBuf, SymbolEnvRef>,
+	/// A map from source paths to type information about that path
+	/// If it's a file, we save its symbol environment, and if it's a directory, we save a namespace that points to all the files in that directory
+	source_file_envs: IndexMap<Utf8PathBuf, SymbolEnvOrNamespace>,
 	pub libraries: SymbolEnv,
 	numeric_idx: usize,
 	string_idx: usize,
@@ -2802,14 +2820,79 @@ impl<'a> TypeChecker<'a> {
 		first_expected_type
 	}
 
-	pub fn type_check_file(&mut self, source_path: &Utf8Path, scope: &Scope) {
+	pub fn type_check_file_or_dir(&mut self, source_path: &Utf8Path, scope: &Scope) {
 		CompilationContext::set(CompilationPhase::TypeChecking, &scope.span);
 		self.type_check_scope(scope);
 
-		// Save the module's symbol environment to `self.types.source_file_envs`
+		if source_path.is_dir() {
+			self.type_check_dir(source_path);
+			return;
+		}
+
+		// Save the file's symbol environment to `self.types.source_file_envs`
 		// (replacing any existing ones if there was already a SymbolEnv from a previous compilation)
 		let scope_env = self.types.get_scope_env(scope);
-		self.types.source_file_envs.insert(source_path.to_owned(), scope_env);
+		self
+			.types
+			.source_file_envs
+			.insert(source_path.to_owned(), SymbolEnvOrNamespace::SymbolEnv(scope_env));
+	}
+
+	pub fn type_check_dir(&mut self, source_path: &Utf8Path) {
+		// Get a list of all children paths (files or directories) through the file graph
+		let children = self.file_graph.dependencies_of(source_path);
+
+		// Obtain each child's symbol environment or namespace
+		// If it's a namespace (i.e. it's a directory), wrap it in a symbol env
+		let mut child_envs = vec![];
+		for child_path in children.iter() {
+			match self.types.source_file_envs.get(*child_path) {
+				Some(SymbolEnvOrNamespace::SymbolEnv(env)) => {
+					child_envs.push(*env);
+				}
+				Some(SymbolEnvOrNamespace::Namespace(ns)) => {
+					let mut new_env = SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Independent, 0);
+					new_env
+						.define(
+							&Symbol::global(child_path.file_stem().unwrap().to_string()),
+							SymbolKind::Namespace(*ns),
+							StatementIdx::Top,
+						)
+						.unwrap();
+					let wrapper_env = self.types.add_symbol_env(new_env);
+					child_envs.push(wrapper_env);
+				}
+				Some(SymbolEnvOrNamespace::Error(diagnostic)) => {
+					self
+						.types
+						.source_file_envs
+						.insert(source_path.to_owned(), SymbolEnvOrNamespace::Error(diagnostic.clone()));
+					return;
+				}
+				None => {
+					self.types.source_file_envs.insert(
+						source_path.to_owned(),
+						SymbolEnvOrNamespace::Error(Diagnostic {
+							message: format!("Could not bring \"{}\" due to cyclic bring statements", source_path,),
+							span: None,
+						}),
+					);
+					return;
+				}
+			};
+		}
+
+		// TODO: check that there are not conflicting identifiers in the files in the directory
+
+		let ns = self.types.add_namespace(Namespace {
+			name: source_path.file_stem().unwrap().to_string(),
+			envs: child_envs,
+			loaded: true,
+		});
+		self
+			.types
+			.source_file_envs
+			.insert(source_path.to_owned(), SymbolEnvOrNamespace::Namespace(ns));
 	}
 
 	fn type_check_scope(&mut self, scope: &Scope) {
@@ -3602,7 +3685,14 @@ impl<'a> TypeChecker<'a> {
 			}
 			BringSource::WingFile(name) => {
 				let brought_env = match self.types.source_file_envs.get(Utf8Path::new(&name.name)) {
-					Some(env) => *env,
+					Some(SymbolEnvOrNamespace::SymbolEnv(env)) => *env,
+					Some(SymbolEnvOrNamespace::Namespace(_)) => {
+						panic!("Expected a symbol environment to be associated with the file")
+					}
+					Some(SymbolEnvOrNamespace::Error(diagnostic)) => {
+						report_diagnostic(diagnostic.clone());
+						return;
+					}
 					None => {
 						self.spanned_error(
 							stmt,
@@ -3626,37 +3716,26 @@ impl<'a> TypeChecker<'a> {
 				return;
 			}
 			BringSource::Directory(name) => {
-				// Get a list of all of the children (files or directories) through the file graph
-				let directory_path = Utf8Path::new(&name.name);
-				let children = self.file_graph.dependencies_of(directory_path);
-
-				// Obtain each child's environment
-				let mut brought_envs = vec![];
-				for child in children.iter() {
-					let brought_env = match self.types.source_file_envs.get(*child) {
-						Some(env) => *env,
-						None => {
-							self.spanned_error(
-								stmt,
-								format!("Could not type check \"{}\" due to cyclic bring statements", name),
-							);
-							return;
-						}
-					};
-					brought_envs.push(brought_env);
-				}
-
-				// TODO: check that there are not conflicting identifiers in the files we are importing
-
-				// Create a combined namespace
-				let ns = self.types.add_namespace(Namespace {
-					name: name.name.to_string(),
-					envs: brought_envs,
-					loaded: true,
-				});
+				let brought_ns = match self.types.source_file_envs.get(Utf8Path::new(&name.name)) {
+					Some(SymbolEnvOrNamespace::SymbolEnv(_)) => {
+						panic!("Expected a namespace to be associated with the directory")
+					}
+					Some(SymbolEnvOrNamespace::Namespace(ns)) => ns,
+					Some(SymbolEnvOrNamespace::Error(diagnostic)) => {
+						report_diagnostic(diagnostic.clone());
+						return;
+					}
+					None => {
+						self.spanned_error(
+							stmt,
+							format!("Could not type check \"{}\" due to cyclic bring statements", name),
+						);
+						return;
+					}
+				};
 				if let Err(e) = env.define(
 					identifier.as_ref().unwrap(),
-					SymbolKind::Namespace(ns),
+					SymbolKind::Namespace(*brought_ns),
 					StatementIdx::Top,
 				) {
 					self.type_error(e);

@@ -255,7 +255,7 @@ pub fn type_check(
 		None,
 	);
 
-	tc.type_check_file(file_path, scope);
+	tc.type_check_file_or_dir(file_path, scope);
 }
 
 // TODO: refactor this (why is scope needed?) (move to separate module?)
