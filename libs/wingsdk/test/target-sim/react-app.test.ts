@@ -95,7 +95,7 @@ window.wingEnv = {};`);
       projectPath: resolve(__dirname, "../test-files/react-website"),
     });
 
-    website.addEnvironment("key", "value");
+    website.addEnvironmentVariable("key", "value");
 
     // WHEN
     const s = await app.startSimulator();

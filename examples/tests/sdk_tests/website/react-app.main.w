@@ -13,13 +13,13 @@ api.get("/", inflight () => {
 // but a mock with start and build commands
 let website = new ex.ReactApp(
   projectPath: "./react-website", 
-  outDir: "/build/public",
+  buildDir: "/build/public",
   isDevRun: util.tryEnv("ENV") == "dev"
 );
 
 let preflightVariable = "preflight variable";
-website.addEnvironment("apiUrl", api.url);
-website.addEnvironment("anotherEnvVar", preflightVariable);
+website.addEnvironmentVariable("apiUrl", api.url);
+website.addEnvironmentVariable("anotherEnvVar", preflightVariable);
 
 test "website is working" {
   let res = http.get(website.url);

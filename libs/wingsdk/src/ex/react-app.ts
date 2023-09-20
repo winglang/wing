@@ -1,7 +1,7 @@
 import { existsSync } from "fs";
 import { isAbsolute, join, resolve } from "path";
 import { Construct } from "constructs";
-import { BaseWebsiteProps, Website } from "../cloud/website";
+import { WebsiteOptions, Website } from "../cloud/website";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { Resource, Node } from "../std";
@@ -30,7 +30,7 @@ export interface ReactAppProps {
    * The path to the React app build folder- relative to the `projectPath`
    * @default "/build"
    */
-  readonly outDir?: string;
+  readonly buildDir?: string;
   /**
    * A command for starting React app locally
    * @default "npm run start"
@@ -50,7 +50,7 @@ export interface ReactAppProps {
    * Additional properties to run the website host with
    * @default {}
    */
-  readonly hostProps?: BaseWebsiteProps;
+  readonly hostProps?: WebsiteOptions;
   /**
    * A port to start a local build of the React app on.
    * @default 3001
@@ -104,14 +104,14 @@ export abstract class ReactApp extends Resource {
   /**
    * @internal
    */
-  protected readonly _hostProps?: BaseWebsiteProps;
+  protected readonly _hostProps?: WebsiteOptions;
   /**
    * @internal
    */
   protected readonly _environmentVariables: Map<string, string> = new Map();
 
   constructor(scope: Construct, id: string, props: ReactAppProps) {
-    const outDir = props.outDir ?? DEFAULT_BUILD_FOLDER;
+    const buildDir = props.buildDir ?? DEFAULT_BUILD_FOLDER;
     const startCommand = props.startCommand ?? DEFAULT_START_COMMAND;
     const buildCommand = props.buildCommand ?? DEFAULT_BUILD_COMMAND;
 
@@ -122,7 +122,7 @@ export abstract class ReactApp extends Resource {
 
     this._projectPath = this._parsePath(scope, props.projectPath);
     this._hostProps = props.hostProps;
-    this._buildPath = join(this._projectPath, outDir);
+    this._buildPath = join(this._projectPath, buildDir);
     this._isDevRun = props.isDevRun ?? false;
     this._localPort = props.localPort ?? DEFAULT_PORT;
 
@@ -154,7 +154,7 @@ export abstract class ReactApp extends Resource {
    * @param key the key to add
    * @param value the value to add
    */
-  public addEnvironment(key: string, value: string) {
+  public addEnvironmentVariable(key: string, value: string) {
     this._environmentVariables.set(key, value);
   }
 

@@ -30,7 +30,7 @@ bring util;
 let website = new ex.ReactApp(
   projectPath: "./client",
   isDevRun: util.tryEnv("ENV") == "dev"
-  outDir: "/dist" // default is "/build"
+  buildDir: "/dist" // default is "/build"
   startCommand: "pnpm start" // default is "npm start"
   buildCommand: "pnpm build" // default is "npm build"
   hostProps: {} // website resource props (expect of the "path" prop)
@@ -44,7 +44,7 @@ let website = new ex.ReactApp(
 
 #### using wing variables within react code
 
-`ex.ReactApp` allows you to pass preflight arguments from wing to the React app using `addEnvironment` method:
+`ex.ReactApp` allows you to pass preflight arguments from wing to the React app using `addEnvironmentVariable` method:
 
 ```ts
 bring cloud;
@@ -54,8 +54,8 @@ bring ex;
 let api = new cloud.Api();
 let website = new ex.ReactApp(projectPath: "./client", isDevRun: util.tryEnv("ENV") == "dev");
 
-website.addEnvironment("apiUrl", api.url);
-website.addEnvironment("another", "some string variable");
+website.addEnvironmentVariable("apiUrl", api.url);
+website.addEnvironmentVariable("another", "some string variable");
 
 ```
 

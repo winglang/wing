@@ -162,27 +162,27 @@ The website's url.
 
 ## Structs <a name="Structs" id="Structs"></a>
 
-### BaseWebsiteProps <a name="BaseWebsiteProps" id="@winglang/sdk.cloud.BaseWebsiteProps"></a>
+### WebsiteOptions <a name="WebsiteOptions" id="@winglang/sdk.cloud.WebsiteOptions"></a>
 
 Options for `Website`, and `ReactApp`.
 
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BaseWebsiteProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.WebsiteOptions.Initializer"></a>
 
 ```wing
 bring cloud;
 
-let BaseWebsiteProps = cloud.BaseWebsiteProps{ ... };
+let WebsiteOptions = cloud.WebsiteOptions{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name**                                                                                | **Type**         | **Description**                   |
-| --------------------------------------------------------------------------------------- | ---------------- | --------------------------------- |
-| <code><a href="#@winglang/sdk.cloud.BaseWebsiteProps.property.domain">domain</a></code> | <code>str</code> | The website's custom domain name. |
+| **Name**                                                                              | **Type**         | **Description**                   |
+| ------------------------------------------------------------------------------------- | ---------------- | --------------------------------- |
+| <code><a href="#@winglang/sdk.cloud.WebsiteOptions.property.domain">domain</a></code> | <code>str</code> | The website's custom domain name. |
 
 ---
 
-##### `domain`<sup>Optional</sup> <a name="domain" id="@winglang/sdk.cloud.BaseWebsiteProps.property.domain"></a>
+##### `domain`<sup>Optional</sup> <a name="domain" id="@winglang/sdk.cloud.WebsiteOptions.property.domain"></a>
 
 ```wing
 domain: str;

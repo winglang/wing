@@ -71,7 +71,7 @@ describe("Testing ReactApp", () => {
     }).toThrowError("non existent directory '/absolute/non-existent'");
   });
 
-  test("website with addEnvironment", () => {
+  test("website with addEnvironmentVariable", () => {
     // GIVEN
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     // this isn't a React App, but a website with a package json and a build command
@@ -79,7 +79,7 @@ describe("Testing ReactApp", () => {
       projectPath: "../test-files/react-website",
     });
 
-    website.addEnvironment("key", "value");
+    website.addEnvironmentVariable("key", "value");
 
     const output = app.synth();
 

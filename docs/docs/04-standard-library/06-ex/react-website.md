@@ -198,15 +198,15 @@ let ReactAppProps = ex.ReactAppProps{ ... };
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name**                                                                                      | **Type**                                                                          | **Description**                                                                        |
-| --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| <code><a href="#@winglang/sdk.ex.ReactAppProps.property.projectPath">projectPath</a></code>   | <code>str</code>                                                                  | The path to the React app root folder- can be absolute or relative to the wing folder. |
-| <code><a href="#@winglang/sdk.ex.ReactAppProps.property.buildCommand">buildCommand</a></code> | <code>str</code>                                                                  | A command for building the React app.                                                  |
-| <code><a href="#@winglang/sdk.ex.ReactAppProps.property.outDir">outDir</a></code>             | <code>str</code>                                                                  | The path to the React app build folder- relative to the `projectPath`.                 |
-| <code><a href="#@winglang/sdk.ex.ReactAppProps.property.hostProps">hostProps</a></code>       | <code><a href="#@winglang/sdk.cloud.BaseWebsiteProps">BaseWebsiteProps</a></code> | Additional properties to run the website host with.                                    |
-| <code><a href="#@winglang/sdk.ex.ReactAppProps.property.isDevRun">isDevRun</a></code>         | <code>bool</code>                                                                 | In sim, if `true` - will use the start command, and if `false` - the build command.    |
-| <code><a href="#@winglang/sdk.ex.ReactAppProps.property.localPort">localPort</a></code>       | <code>any</code>                                                                  | A port to start a local build of the React app on.                                     |
-| <code><a href="#@winglang/sdk.ex.ReactAppProps.property.startCommand">startCommand</a></code> | <code>str</code>                                                                  | A command for starting React app locally.                                              |
+| **Name**                                                                                      | **Type**                                                                      | **Description**                                                                        |
+| --------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| <code><a href="#@winglang/sdk.ex.ReactAppProps.property.projectPath">projectPath</a></code>   | <code>str</code>                                                              | The path to the React app root folder- can be absolute or relative to the wing folder. |
+| <code><a href="#@winglang/sdk.ex.ReactAppProps.property.buildCommand">buildCommand</a></code> | <code>str</code>                                                              | A command for building the React app.                                                  |
+| <code><a href="#@winglang/sdk.ex.ReactAppProps.property.outDir">outDir</a></code>             | <code>str</code>                                                              | The path to the React app build folder- relative to the `projectPath`.                 |
+| <code><a href="#@winglang/sdk.ex.ReactAppProps.property.hostProps">hostProps</a></code>       | <code><a href="#@winglang/sdk.cloud.WebsiteOptions">WebsiteOptions</a></code> | Additional properties to run the website host with.                                    |
+| <code><a href="#@winglang/sdk.ex.ReactAppProps.property.isDevRun">isDevRun</a></code>         | <code>bool</code>                                                             | In sim, if `true` - will use the start command, and if `false` - the build command.    |
+| <code><a href="#@winglang/sdk.ex.ReactAppProps.property.localPort">localPort</a></code>       | <code>any</code>                                                              | A port to start a local build of the React app on.                                     |
+| <code><a href="#@winglang/sdk.ex.ReactAppProps.property.startCommand">startCommand</a></code> | <code>str</code>                                                              | A command for starting React app locally.                                              |
 
 ---
 
@@ -251,10 +251,10 @@ The path to the React app build folder- relative to the `projectPath`.
 ##### `hostProps`<sup>Optional</sup> <a name="hostProps" id="@winglang/sdk.ex.ReactAppProps.property.hostProps"></a>
 
 ```wing
-hostProps: BaseWebsiteProps;
+hostProps: WebsiteOptions;
 ```
 
-- _Type:_ <a href="#@winglang/sdk.cloud.BaseWebsiteProps">BaseWebsiteProps</a>
+- _Type:_ <a href="#@winglang/sdk.cloud.WebsiteOptions">WebsiteOptions</a>
 - _Default:_ {}
 
 Additional properties to run the website host with.
