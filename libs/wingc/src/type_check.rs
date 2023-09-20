@@ -274,18 +274,10 @@ pub struct Namespace {
 	#[derivative(Debug = "ignore")]
 	pub loaded: bool,
 
-	pub kind: NamespaceKind,
-}
-
-#[derive(Debug)]
-pub enum NamespaceKind {
-	/// Modules pointing to another wing file
-	FileModule,
-	/// External JSII library
-	JSII {
-		/// Fully qualified name of the JSII module or submodule
-		fqn: String,
-	},
+	/// Abstract path to the namespace.
+	/// For types in external libraries, it will be something like `@winglang/sdk/util`
+	/// For types in wing files, it will be the path to the wing file relative to the entrypoint
+	pub module_path: String,
 }
 
 pub type NamespaceRef = UnsafeRef<Namespace>;
@@ -3622,7 +3614,7 @@ impl<'a> TypeChecker<'a> {
 					name: name.name.to_string(),
 					env: SymbolEnv::new(Some(brought_env.get_ref()), SymbolEnvKind::Scope, brought_env.phase, 0),
 					loaded: true,
-					kind: NamespaceKind::FileModule,
+					module_path: name.name.to_string(),
 				});
 				if let Err(e) = env.define(
 					identifier.as_ref().unwrap(),

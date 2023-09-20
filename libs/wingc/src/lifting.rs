@@ -9,7 +9,7 @@ use crate::{
 		lifts::{Liftable, Lifts},
 		resolve_user_defined_type,
 		symbol_env::LookupResult,
-		ClassLike, NamespaceKind, SymbolKind, TypeRef, CLOSURE_CLASS_HANDLE_METHOD,
+		ClassLike, SymbolKind, TypeRef, CLOSURE_CLASS_HANDLE_METHOD,
 	},
 	visit::{self, Visit},
 	visit_context::{VisitContext, VisitorWithContext},
@@ -133,25 +133,9 @@ impl<'a> LiftVisitor<'a> {
 
 		let current_env = self.ctx.current_env().expect("an env");
 		if let Some(SymbolKind::Namespace(root_namespace)) = current_env.lookup(&node.root, None) {
-			match &root_namespace.kind {
-				// Types in wing files already implement a helper to lift types
-				NamespaceKind::FileModule => udt_js,
-
-				NamespaceKind::JSII { fqn } => {
-					let mut fqn = fqn.clone();
-					if root_namespace.name != fqn {
-						fqn = format!("{}/{}", fqn, root_namespace.name);
-					};
-					let type_path = node
-						.fields
-						.iter()
-						.map(|f| f.name.clone())
-						.collect::<Vec<String>>()
-						.join(".");
-					let udt = udt_js;
-					format!("$stdlib.core.toLiftableModuleType({udt}, \"{fqn}\", \"{type_path}\")",)
-				}
-			}
+			let type_path = node.field_path_str();
+			let module_path = &root_namespace.module_path;
+			format!("$stdlib.core.toLiftableModuleType({udt_js}, \"{module_path}\", \"{type_path}\")")
 		} else {
 			// Non-namespaced reference, should be a wing type with a helper to lift it
 			udt_js

@@ -21,7 +21,7 @@ use wingii::{
 
 use super::{
 	symbol_env::{LookupResult, SymbolEnv},
-	Enum, Namespace, NamespaceKind,
+	Enum, Namespace,
 };
 
 trait JsiiInterface {
@@ -204,9 +204,7 @@ impl<'a> JsiiImporter<'a> {
 				name: assembly.to_string(),
 				env: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0),
 				loaded: false,
-				kind: NamespaceKind::JSII {
-					fqn: assembly.to_string(),
-				},
+				module_path: assembly.to_string(),
 			});
 			self
 				.wing_types
@@ -217,9 +215,9 @@ impl<'a> JsiiImporter<'a> {
 
 		// Next, ensure there is a namespace for each of the namespaces in the type name
 		for (ns_idx, namespace_name) in type_name.namespaces().enumerate() {
-			let mut lookup_str = vec![assembly];
-			lookup_str.extend(type_name.namespaces().take(ns_idx));
-			let lookup_str = lookup_str.join(".");
+			let mut lookup_vec = vec![assembly];
+			lookup_vec.extend(type_name.namespaces().take(ns_idx));
+			let lookup_str = lookup_vec.join(".");
 
 			let mut parent_ns = self
 				.wing_types
@@ -241,13 +239,19 @@ impl<'a> JsiiImporter<'a> {
 					)
 				}
 			} else {
+				// Special case for the SDK, we are able to alias the namespace
+				let module_path = if assembly == WINGSDK_ASSEMBLY_NAME {
+					format!("{}/{}", lookup_vec.join("/"), namespace_name)
+				} else {
+					lookup_vec.join("/")
+				};
+				dbg!(&module_path);
+
 				let ns = self.wing_types.add_namespace(Namespace {
 					name: namespace_name.to_string(),
 					env: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0),
 					loaded: false,
-					kind: NamespaceKind::JSII {
-						fqn: lookup_str.to_string(),
-					},
+					module_path,
 				});
 				parent_ns
 					.env
@@ -953,9 +957,7 @@ impl<'a> JsiiImporter<'a> {
 					name: assembly.name.clone(),
 					env: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0),
 					loaded: false,
-					kind: NamespaceKind::JSII {
-						fqn: assembly.name.clone(),
-					},
+					module_path: assembly.name.clone(),
 				});
 				self
 					.wing_types
