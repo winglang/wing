@@ -23,6 +23,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
       props.onStart,
       "ServiceOnStart"
     );
+    Node.of(onStartFunction).title = "onStart()";
     this.onStartHandlerToken = simulatorHandleToken(onStartFunction);
 
     Node.of(this).addConnection({
@@ -37,6 +38,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
         props.onStop,
         "ServiceOnStop"
       );
+      Node.of(onStopFunction).title = "onStop()";
       this.onStopHandlerToken = simulatorHandleToken(onStopFunction);
 
       Node.of(this).addConnection({
@@ -47,6 +49,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
     }
   }
 
+  // todo onstrart onstop
   private createServiceFunction(
     handler: cloud.IServiceOnEventHandler,
     id: string
@@ -69,8 +72,6 @@ export class Service extends cloud.Service implements ISimulatorResource {
       {}
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
-    Node.of(fn).title = "onStart()";
-
     this.node.addDependency(fn);
     return fn;
   }
