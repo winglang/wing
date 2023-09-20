@@ -9,5 +9,3 @@ class Foo {
     return widget.compute();
   }
 }
-
-class Bar {}
