@@ -17,7 +17,10 @@ export const Toolbar = ({
       {title && (
         <div className="flex items-center min-w-0">
           <span
-            className={classNames("text-sm truncate uppercase", theme.text1)}
+            className={classNames(
+              "text-sm font-semibold truncate uppercase",
+              theme.text1,
+            )}
           >
             {title}
           </span>
