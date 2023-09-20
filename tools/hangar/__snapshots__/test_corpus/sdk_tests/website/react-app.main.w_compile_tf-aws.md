@@ -497,7 +497,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
     (api.get("/",new $Closure1(this,"$Closure1")));
-    const website = this.node.root.newAbstract("@winglang/sdk.ex.ReactApp",this,"ex.ReactApp",{ projectPath: "./react-website", buildDir: "/build/public", isDevRun: (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((util.Util.tryEnv("ENV")),"dev")) });
+    const website = this.node.root.newAbstract("@winglang/sdk.ex.ReactApp",this,"ex.ReactApp",{ projectPath: "./react-website", buildDir: "/build/public", isDevRun: false });
     const preflightVariable = "preflight variable";
     (website.addEnvironmentVariable("apiUrl",api.url));
     (website.addEnvironmentVariable("anotherEnvVar",preflightVariable));
