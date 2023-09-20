@@ -12,7 +12,7 @@ let handler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
 
 let testInvalidPath = (path:str) => {
   let var error = "";
-  let expected = "Invalid path ${path}. Url cannot contain \":\", params contains only alpha-numeric chars or \"_\".";
+  let expected = "Invalid path ${path}. Url parts can only contain alpha-numeric chars, \"-\", \"_\" and \".\". Params can only contain alpha-numeric chars and \"_\".";
   try {
     api.get(path, handler);
   } catch e {
@@ -50,6 +50,7 @@ testInvalidPath("/{misspla}ced");
 testInvalidPath("test");
 testInvalidPath("/{}/empty");
 testInvalidPath("/{}");
+testInvalidPath("/{no.dots.here}");
 
 
 // valid paths
@@ -64,3 +65,4 @@ testValidPath("/t/{param}");
 testValidPath("/test/regular/path/{param}");
 testValidPath("/test/segment1/{param1}/segment2?query1=value1?query2=value2");
 testValidPath("/test/segment1/segment2?query=value1&query2=value2");
+testValidPath("/test.withDots");

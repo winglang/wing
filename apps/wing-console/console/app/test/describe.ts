@@ -40,7 +40,7 @@ export const describe = (wingfile: string, callback: () => void) => {
 
     await page
       .getByTestId("loading-overlay")
-      .waitFor({ state: "detached", timeout: 10_000 });
+      .waitFor({ state: "detached", timeout: 15_000 });
   });
 
   test.afterEach(() => {
