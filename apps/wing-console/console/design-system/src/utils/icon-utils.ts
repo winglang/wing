@@ -24,6 +24,7 @@ import {
   TableCellsIcon as SolidTableCellsIcon,
 } from "@heroicons/react/24/solid";
 
+import { DynamoDBIcon } from "../icons/dynamodb-icon.js";
 import { RedisIcon } from "../icons/redis-icon.js";
 
 const isTest = /(\/test$|\/test:([^/\\])+$)/;
@@ -74,6 +75,9 @@ export const getResourceIconComponent = (
     }
     case "wingsdk.cloud.Test": {
       return solid ? SolidBeakerIcon : BeakerIcon;
+    }
+    case "wingsdk.ex.DynamodbTable": {
+      return DynamoDBIcon;
     }
     default: {
       return CubeIcon;
