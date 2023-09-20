@@ -14,7 +14,7 @@ The `ex.ReactWebsite` resource represents a website, built using React, that can
 
 #### Initiation
 
-using the default arguments:
+Using the default arguments:
 
 ```ts
 bring cloud;
