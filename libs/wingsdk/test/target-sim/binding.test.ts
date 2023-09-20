@@ -1,6 +1,6 @@
 import { test, expect } from "vitest";
 import { Function } from "../../src/cloud";
-import { Testing } from "../../src/testing";
+import { Testing } from "../../src/simulator";
 import { SimApp } from "../sim-app";
 
 test("binding throws if a method is unsupported", () => {

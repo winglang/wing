@@ -7,8 +7,8 @@ import { QueueSchema, QUEUE_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
+import { BaseResourceSchema } from "../simulator/simulator";
 import { Duration, IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
-import { BaseResourceSchema } from "../testing/simulator";
 
 /**
  * Simulator implementation of `cloud.Queue`.

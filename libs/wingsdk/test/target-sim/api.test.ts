@@ -1,8 +1,8 @@
 import { test, expect } from "vitest";
 import { listMessages } from "./util";
 import * as cloud from "../../src/cloud";
+import { Simulator, Testing } from "../../src/simulator";
 import { ApiAttributes } from "../../src/target-sim/schema-resources";
-import { Simulator, Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
 
 // Handler that responds to a request with a fixed string

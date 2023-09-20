@@ -1,8 +1,8 @@
 import { test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
+import { Testing } from "../../src/simulator";
 import { Node } from "../../src/std";
-import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
 
 test("create a topic", async () => {

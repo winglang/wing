@@ -1,8 +1,8 @@
 import { test, expect } from "vitest";
 import { Bucket } from "../../src/cloud";
+import * as testing from "../../src/simulator";
 import { Node } from "../../src/std";
 import * as sim from "../../src/target-sim";
-import * as testing from "../../src/testing";
 import { mkdtemp } from "../util";
 
 test("reloading the simulator updates the state of the tree", async () => {

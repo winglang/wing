@@ -1,9 +1,9 @@
 import { Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import { Queue } from "../../src/cloud";
+import { Testing } from "../../src/simulator";
 import * as std from "../../src/std";
 import * as awscdk from "../../src/target-awscdk";
-import { Testing } from "../../src/testing";
 import { mkdtemp, sanitizeCode, awscdkSanitize } from "../util";
 
 const CDK_APP_OPTS = {

@@ -8,8 +8,8 @@ import {
   ScheduleTask,
 } from "./schema-resources";
 import { IFunctionClient, IScheduleClient } from "../cloud";
+import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
 import { TraceType } from "../std";
-import { ISimulatorContext, ISimulatorResourceInstance } from "../testing";
 
 export class Schedule
   implements IScheduleClient, ISimulatorResourceInstance, IEventPublisher
