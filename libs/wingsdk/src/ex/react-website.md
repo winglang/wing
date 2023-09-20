@@ -38,9 +38,9 @@ let website = new ex.ReactWebsite(
  );
 ```
 
-- When calling `wing it` when `isDevRun` is `true`- wing starts both the simulator and React's development server.
-- When calling `wing it`/`wing compile` on the sim target, when `isDevRun` is `false`- wing builds React and serves it over the [Website resource](./website.md).
-- When calling `wing compile` on any other target - wing builds react locally then deploys it to the cloud! (using the [Website resource](./website.md)).
+- When calling `wing it` with `isDevRun` set to `true`, Wing will start both the simulator and React's development server.
+- When calling `wing it` or `wing compile` for the `sim` target with `isDevRun` set to `false`, Wing will build React and serve it via the [Website resource](../01-cloud/website.md).
+- When calling `wing compile` for any other target, Wing will build React locally and generate output files, preparing it for deployment to the cloud using the [Website resource](../01-cloud/website.md).
 
 #### using wing variables within react code
 
@@ -73,11 +73,11 @@ Currently, we can only pass preflight string variables to the React app environm
 
 ### Simulator (`sim`)
 
-sim implementations of `ex.ReactWebsite` is using either the [Website resource](./website.md) (when `isDevRun` is `false`) or starts React development server when `true`.
+sim implementations of `ex.ReactWebsite` is using either the [Website resource](../01-cloud/website.md) (when `isDevRun` is `false`) or starts React development server when `true`.
 
 ### AWS (`tf-aws` and `awscdk`)
 
-AWS implementations of `ex.ReactWebsite` uses the [Website resource](./website.md).
+AWS implementations of `ex.ReactWebsite` uses the [Website resource](../01-cloud/website.md).
 
 ### Azure (`tf-azure`)
 

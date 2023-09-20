@@ -1,5 +1,5 @@
 import child_process from "child_process";
-import { readFileSync, unlinkSync, existsSync } from "fs";
+import { readFileSync, unlinkSync, existsSync, mkdirSync } from "fs";
 import { resolve } from "path";
 import {
   test,
@@ -9,6 +9,7 @@ import {
   describe,
   SpyInstance,
   afterEach,
+  beforeAll,
 } from "vitest";
 import * as ex from "../../src/ex";
 import { ApiAttributes } from "../../src/target-sim/schema-resources";
@@ -30,6 +31,12 @@ function expectFirstArgToBe(fn: SpyInstance, firstArg: any) {
 
 describe("Testing ReactWebsite", () => {
   const execMock = vi.spyOn(child_process, "exec");
+
+  beforeAll(() => {
+    mkdirSync(resolve(__dirname, `../test-files/react-website/public/`), {
+      recursive: true,
+    });
+  });
 
   afterAll(() => {
     execMock.mockReset();
