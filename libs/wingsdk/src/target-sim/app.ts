@@ -5,6 +5,7 @@ import { Api } from "./api";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
 import { Domain } from "./domain";
+import { DynamodbTable } from "./dynamodb-table";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
@@ -35,7 +36,7 @@ import {
 import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
-import { TABLE_FQN, REDIS_FQN } from "../ex";
+import { TABLE_FQN, REDIS_FQN, DYNAMODB_TABLE_FQN } from "../ex";
 import { TEST_RUNNER_FQN } from "../std";
 import { WingSimulatorSchema } from "../testing/simulator";
 
@@ -125,6 +126,9 @@ export class App extends core.App {
 
       case DOMAIN_FQN:
         return new Domain(scope, id, args[0]);
+
+      case DYNAMODB_TABLE_FQN:
+        return new DynamodbTable(scope, id, args[0]);
     }
 
     return undefined;
