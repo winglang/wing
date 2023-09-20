@@ -43,19 +43,19 @@ class DynamoTable {
   pub bind(host: std.IInflightHost, ops: Array<str>) {
     if let host = aws.Function.from(host) {
       if ops.contains("putItem") {
-        host.addPolicyStatements([aws.PolicyStatement {
+        host.addPolicyStatements(aws.PolicyStatement {
           actions: ["dynamodb:PutItem"],
           resources: [this.table.tableArn],
           effect: aws.Effect.ALLOW,
-        }]);
+        });
       }
 
       if ops.contains("getItem") {
-        host.addPolicyStatements([aws.PolicyStatement {
+        host.addPolicyStatements(aws.PolicyStatement {
           actions: ["dynamodb:GetItem"],
           resources: [this.table.tableArn],
           effect: aws.Effect.ALLOW,
-        }]);
+        });
       }
     }
   }

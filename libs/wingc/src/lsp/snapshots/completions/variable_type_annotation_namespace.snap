@@ -77,7 +77,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ApiCorsOptions\n```\n---\nCors Options for `Api`.\n### Fields\n- `allowCredentials?` — Whether to allow credentials.\n- `allowHeaders?` — The list of allowed headers.\n- `allowMethods?` — The list of allowed methods.\n- `allowOrigin?` — The list of allowed allowOrigin.\n- `exposeHeaders?` — The list of exposed headers."
+    value: "```wing\nstruct ApiCorsOptions\n```\n---\nCors Options for `Api`.\n### Fields\n- `allowCredentials?` — Whether to allow credentials.\n- `allowHeaders?` — The list of allowed headers.\n- `allowMethods?` — The list of allowed methods.\n- `allowOrigin?` — The list of allowed allowOrigin.\n- `exposeHeaders?` — The list of exposed headers.\n- `maxAge?` — How long the browser should cache preflight request results."
   sortText: hh|ApiCorsOptions
 - label: ApiDeleteProps
   kind: 22

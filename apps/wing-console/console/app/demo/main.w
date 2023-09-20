@@ -1,6 +1,8 @@
 bring cloud;
 bring ex;
 
+let secret = new cloud.Secret(name: "my-secret");
+
 let bucket = new cloud.Bucket();
 let queue = new cloud.Queue();
 let api = new cloud.Api();
