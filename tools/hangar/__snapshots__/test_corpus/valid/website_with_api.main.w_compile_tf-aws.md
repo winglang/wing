@@ -723,7 +723,7 @@ class $Root extends $stdlib.std.Resource {
             $api_url: ${context._lift(api.url)},
             $http_HttpMethod: ${context._lift($stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"))},
             $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
-            $t_Assert: ${context._lift($stdlib.core.toLiftableModuleType(t.Assert, "/Users/markm/Documents/GitHub/winglang/examples/tests/valid/assertions.w", "Assert"))},
+            $t_Assert: ${context._lift($stdlib.core.toLiftableModuleType(t.Assert, "/home/runner/work/wing/wing/examples/tests/valid/assertions.w", "Assert"))},
           })
         `;
       }
@@ -759,7 +759,7 @@ class $Root extends $stdlib.std.Resource {
             $api_url: ${context._lift(api.url)},
             $http_HttpMethod: ${context._lift($stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"))},
             $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
-            $t_Assert: ${context._lift($stdlib.core.toLiftableModuleType(t.Assert, "/Users/markm/Documents/GitHub/winglang/examples/tests/valid/assertions.w", "Assert"))},
+            $t_Assert: ${context._lift($stdlib.core.toLiftableModuleType(t.Assert, "/home/runner/work/wing/wing/examples/tests/valid/assertions.w", "Assert"))},
           })
         `;
       }

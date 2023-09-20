@@ -384,7 +384,7 @@ class $Root extends $stdlib.std.Resource {
           require("./inflight.$Closure2-2.js")({
             $apiDefaultCors_url: ${context._lift(apiDefaultCors.url)},
             $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
-            $t_Assert: ${context._lift($stdlib.core.toLiftableModuleType(t.Assert, "/Users/markm/Documents/GitHub/winglang/examples/tests/valid/assertions.w", "Assert"))},
+            $t_Assert: ${context._lift($stdlib.core.toLiftableModuleType(t.Assert, "/home/runner/work/wing/wing/examples/tests/valid/assertions.w", "Assert"))},
           })
         `;
       }
@@ -420,7 +420,7 @@ class $Root extends $stdlib.std.Resource {
             $apiDefaultCors_url: ${context._lift(apiDefaultCors.url)},
             $http_HttpMethod: ${context._lift($stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"))},
             $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
-            $t_Assert: ${context._lift($stdlib.core.toLiftableModuleType(t.Assert, "/Users/markm/Documents/GitHub/winglang/examples/tests/valid/assertions.w", "Assert"))},
+            $t_Assert: ${context._lift($stdlib.core.toLiftableModuleType(t.Assert, "/home/runner/work/wing/wing/examples/tests/valid/assertions.w", "Assert"))},
           })
         `;
       }
