@@ -6,6 +6,8 @@ export const VISIBLE_SUBMODULES = [
   "util",
   "redis",
   "http",
+  "math",
+  "regex",
 ];
 export const HIDDEN_METHODS = ["toString", "toJSON", "bind"];
 export const HIDDEN_PROPS = ["node", "display"];
