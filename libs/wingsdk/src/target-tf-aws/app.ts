@@ -197,6 +197,7 @@ export class App extends CdktfApp {
     const publicSubnet = new Subnet(this, "PublicSubnet", {
       vpcId: this._vpc.id,
       cidrBlock: "10.0.0.0/24", // 10.0.0.0 - 10.0.0.255
+      availabilityZone: `${this.region}a`,
       tags: {
         Name: `${identifier}-public-subnet-1`,
       },
@@ -206,6 +207,7 @@ export class App extends CdktfApp {
     const privateSubnet = new Subnet(this, "PrivateSubnet", {
       vpcId: this._vpc.id,
       cidrBlock: "10.0.4.0/22", // 10.0.4.0 - 10.0.7.255
+      availabilityZone: `${this.region}a`,
       tags: {
         Name: `${identifier}-private-subnet-1`,
       },
