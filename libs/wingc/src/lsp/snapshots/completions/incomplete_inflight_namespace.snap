@@ -139,12 +139,6 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstruct ApiResponse\n```\n---\nShape of a response from a inflight handler.\n### Fields\n- `body?` — The response's body.\n- `headers?` — The response's headers.\n- `status` — The response's status code."
   sortText: hh|ApiResponse
-- label: BaseWebsiteProps
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nstruct BaseWebsiteProps\n```\n---\nOptions for `Website`, and `ReactWebsite`.\n### Fields\n- `domain?` — The website's custom domain name."
-  sortText: hh|BaseWebsiteProps
 - label: BucketDeleteOptions
   kind: 22
   documentation:
@@ -265,11 +259,17 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstruct TopicProps\n```\n---\nOptions for `Topic`."
   sortText: hh|TopicProps
+- label: WebsiteOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct WebsiteOptions\n```\n---\nOptions for `Website`, and `ReactApp`.\n### Fields\n- `domain?` — The website's custom domain name."
+  sortText: hh|WebsiteOptions
 - label: WebsiteProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct WebsiteProps extends BaseWebsiteProps\n```\n---\nOptions for `Website`.\n### Fields\n- `domain?` — str?\n- `path` — Local path to the website's static files, relative to the Wing source file or absolute."
+    value: "```wing\nstruct WebsiteProps extends WebsiteOptions\n```\n---\nOptions for `Website`.\n### Fields\n- `domain?` — str?\n- `path` — Local path to the website's static files, relative to the Wing source file or absolute."
   sortText: hh|WebsiteProps
 - label: IApiClient
   kind: 8

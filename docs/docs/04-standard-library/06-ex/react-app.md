@@ -270,7 +270,7 @@ isDevRun: bool;
 ```
 
 - *Type:* bool
-- *Default:* false
+- *Default:* true
 
 In sim, if `true` - will use the start command, and if `false` - the build command.
 
