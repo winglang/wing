@@ -45,7 +45,7 @@ describe("Testing ReactWebsite", () => {
       })
     ).not.toBeUndefined();
     expect(
-      tfResourcesWithProperty(output, "aws_s3_object", { key: "wing.js" })
+      tfResourcesWithProperty(output, "aws_s3_object", { key: ex.WING_JS })
         ?.content
     ).toBe("window.wingEnv = {};");
     expect(tfSanitize(output)).toMatchSnapshot();
@@ -101,7 +101,7 @@ describe("Testing ReactWebsite", () => {
     expect(tfSanitize(output)).toMatchSnapshot();
     expect(treeJsonOf(app.outdir)).toMatchSnapshot();
     expect(
-      tfResourcesWithProperty(output, "aws_s3_object", { key: "wing.js" })
+      tfResourcesWithProperty(output, "aws_s3_object", { key: ex.WING_JS })
         ?.content
     ).toBe(`window.wingEnv = {
   "key": "value"

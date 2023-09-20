@@ -1,5 +1,5 @@
 import child_process from "child_process";
-import { readFileSync, unlinkSync } from "fs";
+import { readFileSync, unlinkSync, existsSync } from "fs";
 import { resolve } from "path";
 import {
   test,
@@ -36,9 +36,13 @@ describe("Testing ReactWebsite", () => {
   });
 
   afterEach(() => {
-    unlinkSync(
-      resolve(__dirname, "../test-files/react-website/public/wing.js")
+    const wingFile = resolve(
+      __dirname,
+      `../test-files/react-website/public/${ex.WING_JS}`
     );
+    if (existsSync(wingFile)) {
+      unlinkSync(wingFile);
+    }
   });
 
   test("website builds and serves static files", async () => {
@@ -66,7 +70,7 @@ describe("Testing ReactWebsite", () => {
     );
     expect(
       readFileSync(
-        resolve(__dirname, "../test-files/react-website/public/wing.js"),
+        resolve(__dirname, `../test-files/react-website/public/${ex.WING_JS}`),
         {
           encoding: "utf-8",
         }
@@ -104,7 +108,7 @@ window.wingEnv = {};`);
     );
     expect(
       readFileSync(
-        resolve(__dirname, "../test-files/react-website/public/wing.js"),
+        resolve(__dirname, `../test-files/react-website/public/${ex.WING_JS}`),
         {
           encoding: "utf-8",
         }
@@ -198,7 +202,7 @@ window.wingEnv = {
     );
     expect(
       readFileSync(
-        resolve(__dirname, "../test-files/react-website/public/wing.js"),
+        resolve(__dirname, `../test-files/react-website/public/${ex.WING_JS}`),
         {
           encoding: "utf-8",
         }

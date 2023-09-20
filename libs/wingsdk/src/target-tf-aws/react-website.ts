@@ -27,8 +27,8 @@ export class ReactWebsite extends ex.ReactWebsite {
       maxBuffer: 10 * 1024 * 1024,
     });
 
-    if (existsSync(join(this._buildPath, "/wing.js"))) {
-      unlinkSync(join(this._buildPath, "/wing.js"));
+    if (existsSync(join(this._buildPath, ex.WING_JS))) {
+      unlinkSync(join(this._buildPath, ex.WING_JS));
     }
 
     this._websiteHost = cloud.Website._newWebsite(
@@ -43,7 +43,7 @@ export class ReactWebsite extends ex.ReactWebsite {
     this.node.addDependency(this._websiteHost);
     Connections.of(this).add({
       source: this,
-      target: this._websiteHost,
+      target: this._websiteHost as Website,
       name: `host`,
     });
   }
@@ -52,12 +52,12 @@ export class ReactWebsite extends ex.ReactWebsite {
     const env = Object.fromEntries(this._environmentVariables.entries());
     const content = `window.wingEnv = ${JSON.stringify(env, null, 2)};`;
 
-    new S3Object(this._websiteHost as Website, `File--wing.js`, {
+    new S3Object(this._websiteHost as Website, `File--${ex.WING_JS}`, {
       dependsOn: [(this._websiteHost as Website).bucket],
       content,
       bucket: (this._websiteHost as Website).bucket.bucket,
       contentType: "text/javascript",
-      key: "wing.js",
+      key: ex.WING_JS,
     });
   }
 
@@ -69,10 +69,5 @@ export class ReactWebsite extends ex.ReactWebsite {
       "ReactWebsiteClient",
       []
     );
-  }
-
-  /** @internal */
-  public _getInflightOps(): string[] {
-    return [];
   }
 }

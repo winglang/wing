@@ -28,9 +28,11 @@ export class ReactWebsite
       this.node.addDependency(this._websiteHost);
       core.Connections.of(this).add({
         source: this,
-        target: this._websiteHost,
+        target: this._websiteHost as cloud.Website,
         name: `host`,
       });
+    } else {
+      this._websiteHost = { url: `http://localhost:${this._localPort}` };
     }
   }
 
@@ -60,10 +62,5 @@ export class ReactWebsite
   /** @internal */
   public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
-  }
-
-  /** @internal */
-  public _getInflightOps(): string[] {
-    return [];
   }
 }

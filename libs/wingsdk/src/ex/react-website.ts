@@ -11,6 +11,8 @@ const DEFAULT_START_COMMAND = "npm run start";
 const DEFAULT_BUILD_COMMAND = "npm run build";
 const DEFAULT_PORT = 3001;
 
+export const WING_JS = "wing.js";
+
 /**
  * Global identifier for `ReactWebsite`.
  */
@@ -97,7 +99,7 @@ export abstract class ReactWebsite extends Resource {
   /**
    * @internal
    */
-  protected _websiteHost?: Website;
+  protected _websiteHost?: Website | { url: string };
 
   /**
    * @internal
@@ -137,7 +139,7 @@ export abstract class ReactWebsite extends Resource {
    * Website's url
    */
   public get url(): string {
-    return this._websiteHost?.url ?? `http://localhost:${this._localPort}`;
+    return (this._websiteHost as Website | { url: string }).url;
   }
 
   /**
@@ -154,6 +156,11 @@ export abstract class ReactWebsite extends Resource {
    */
   public addEnvironment(key: string, value: string) {
     this._environmentVariables.set(key, value);
+  }
+
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [];
   }
 }
 
