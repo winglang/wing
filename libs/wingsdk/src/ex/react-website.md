@@ -10,9 +10,7 @@ The `ex.ReactWebsite` resource represents a website, built using React, that can
 
 ## Usage
 
-### React Website
-
-#### Initiation
+### Initialization
 
 Using the default arguments:
 
