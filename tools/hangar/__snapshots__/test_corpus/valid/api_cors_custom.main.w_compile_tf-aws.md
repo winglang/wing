@@ -407,7 +407,7 @@ class $Root extends $stdlib.std.Resource {
           require("./inflight.$Closure2-2.js")({
             $api_url: ${context._lift(api.url)},
             $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
-            $t_Assert: ${context._lift(t.Assert)},
+            $t_Assert: ${context._lift($stdlib.core.toLiftableModuleType(t.Assert, "/Users/markm/Documents/GitHub/winglang/examples/tests/valid/assertions.w", "Assert"))},
           })
         `;
       }
@@ -443,7 +443,7 @@ class $Root extends $stdlib.std.Resource {
             $api_url: ${context._lift(api.url)},
             $http_HttpMethod: ${context._lift($stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"))},
             $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
-            $t_Assert: ${context._lift(t.Assert)},
+            $t_Assert: ${context._lift($stdlib.core.toLiftableModuleType(t.Assert, "/Users/markm/Documents/GitHub/winglang/examples/tests/valid/assertions.w", "Assert"))},
           })
         `;
       }
@@ -479,7 +479,7 @@ class $Root extends $stdlib.std.Resource {
             $api_url: ${context._lift(api.url)},
             $http_HttpMethod: ${context._lift($stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"))},
             $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
-            $t_Assert: ${context._lift(t.Assert)},
+            $t_Assert: ${context._lift($stdlib.core.toLiftableModuleType(t.Assert, "/Users/markm/Documents/GitHub/winglang/examples/tests/valid/assertions.w", "Assert"))},
           })
         `;
       }
