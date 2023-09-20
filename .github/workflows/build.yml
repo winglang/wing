@@ -367,9 +367,19 @@ jobs:
         env:
           PACKAGE_VERSION: ${{ needs.build.outputs.version }}
         run: |
-          PACKAGES=("winglang-sdk" "winglang-compiler" "wingconsole-design-system" "wingconsole-ui" "wingconsole-server" "wingconsole-app" "winglang")
+          PACKAGES=("@winglang/sdk" "@winglang/compiler" "@wingconsole/design-system" "@wingconsole/ui" "@wingconsole/server" "@wingconsole/app" "winglang")
           for PACKAGE in "${PACKAGES[@]}"; do
-            npm publish "$PACKAGE-$PACKAGE_VERSION.tgz" --access public
+            # Check if already published
+            VERSION_FOUND=$(npm view "$PACKAGE@$PACKAGE_VERSION" version 2> /dev/null)
+            if [ "$VERSION_FOUND" = "$PACKAGE_VERSION" ]; then
+              echo "$PACKAGE@$PACKAGE_VERSION already published, skipping"
+              continue
+            fi
+
+            # remove "@" and replace "/" with "-"
+            TARBALL=$(echo "$PACKAGE-$PACKAGE_VERSION.tgz" | sed 's/@//g' | sed 's/\//-/g')
+
+            npm publish "$TARBALL" --access public
           done
 
       - name: Publish Extension to Visual Studio Marketplace
