@@ -293,7 +293,7 @@ async function testSimulator(synthDir: string, options: TestOptions) {
 }
 
 async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.TestResult[]> {
-  const { clean } = options;
+  const { clean, testFilter } = options;
   try {
     isAwsCdkInstalled(synthDir);
 
@@ -312,7 +312,7 @@ async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.T
       const testRunner = new TestRunnerClient(testArns);
 
       const tests = await testRunner.listTests();
-      return [testRunner, pickOneTestPerEnvironment(tests)];
+      return [testRunner, filterTests(tests, testFilter)];
     });
 
     const results = await withSpinner("Running tests...", async () => {
@@ -378,7 +378,7 @@ async function awsCdkOutput(synthDir: string, name: string, stackName: string) {
 }
 
 async function testTfAws(synthDir: string, options: TestOptions): Promise<std.TestResult[] | void> {
-  const { clean } = options;
+  const { clean, testFilter } = options;
   try {
     if (!isTerraformInstalled(synthDir)) {
       throw new Error(
@@ -398,7 +398,7 @@ async function testTfAws(synthDir: string, options: TestOptions): Promise<std.Te
       const testRunner = new TestRunnerClient(testArns);
 
       const tests = await testRunner.listTests();
-      return [testRunner, pickOneTestPerEnvironment(tests)];
+      return [testRunner, filterTests(tests, testFilter)];
     });
 
     const results = await withSpinner("Running tests...", async () => {
