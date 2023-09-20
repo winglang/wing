@@ -70,7 +70,7 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
         const Website = require("./website.inflight").Website;
         return new Website(props, context);
       case REACT_APP_TYPE:
-        const ReactApp = require("./react-website.inflight").ReactApp;
+        const ReactApp = require("./react-app.inflight").ReactApp;
         return new ReactApp(props, context);
       case SECRET_TYPE:
         const Secret = require("./secret.inflight").Secret;
