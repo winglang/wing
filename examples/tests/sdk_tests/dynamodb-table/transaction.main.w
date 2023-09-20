@@ -1,3 +1,9 @@
+/*\
+skipPlatforms:
+  - win32
+  - darwin
+\*/
+
 bring ex;
 
 let t1 = new ex.DynamodbTable(name: "test1", attributeDefinitions: { "k1": "S", "k2": "S" }, hashKey: "k1", rangeKey: "k2");
