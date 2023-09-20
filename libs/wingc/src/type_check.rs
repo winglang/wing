@@ -3614,7 +3614,7 @@ impl<'a> TypeChecker<'a> {
 					name: name.name.to_string(),
 					env: SymbolEnv::new(Some(brought_env.get_ref()), SymbolEnvKind::Scope, brought_env.phase, 0),
 					loaded: true,
-					module_path: name.name.to_string(),
+					module_path: "".to_string(),
 				});
 				if let Err(e) = env.define(
 					identifier.as_ref().unwrap(),
