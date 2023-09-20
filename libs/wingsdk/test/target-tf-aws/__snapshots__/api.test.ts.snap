@@ -28,6 +28,11 @@ exports[`api configured for cors 1`] = `
                   "type": "string",
                 },
               },
+              "Access-Control-Max-Age": {
+                "schema": {
+                  "type": "string",
+                },
+              },
             },
           },
         },
