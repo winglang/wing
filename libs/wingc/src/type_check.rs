@@ -32,7 +32,7 @@ use indexmap::{IndexMap, IndexSet};
 use itertools::{izip, Itertools};
 use jsii_importer::JsiiImporter;
 
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::fmt::{Debug, Display};
 use std::iter::FilterMap;
 use symbol_env::{StatementIdx, SymbolEnv};
@@ -2882,7 +2882,28 @@ impl<'a> TypeChecker<'a> {
 			};
 		}
 
-		// TODO: check that there are not conflicting identifiers in the files in the directory
+		// Check that there aren't multiply-defined symbols in the directory
+		let mut seen_symbols = HashSet::new();
+		for child_env in &child_envs {
+			for key in child_env.symbol_map.keys() {
+				// ignore globals
+				if ["assert", "log", "std"].contains(&key.as_str()) {
+					continue;
+				}
+
+				if seen_symbols.contains(key) {
+					self.types.source_file_envs.insert(
+						source_path.to_owned(),
+						SymbolEnvOrNamespace::Error(Diagnostic {
+							message: format!("Symbol \"{}\" has multiple definitions in \"{}\"", key, source_path),
+							span: None,
+						}),
+					);
+					return;
+				}
+				seen_symbols.insert(key.clone());
+			}
+		}
 
 		let ns = self.types.add_namespace(Namespace {
 			name: source_path.file_stem().unwrap().to_string(),
@@ -3690,7 +3711,10 @@ impl<'a> TypeChecker<'a> {
 						panic!("Expected a symbol environment to be associated with the file")
 					}
 					Some(SymbolEnvOrNamespace::Error(diagnostic)) => {
-						report_diagnostic(diagnostic.clone());
+						report_diagnostic(Diagnostic {
+							span: Some(stmt.span()),
+							..diagnostic.clone()
+						});
 						return;
 					}
 					None => {
@@ -3722,7 +3746,10 @@ impl<'a> TypeChecker<'a> {
 					}
 					Some(SymbolEnvOrNamespace::Namespace(ns)) => ns,
 					Some(SymbolEnvOrNamespace::Error(diagnostic)) => {
-						report_diagnostic(diagnostic.clone());
+						report_diagnostic(Diagnostic {
+							span: Some(stmt.span()),
+							..diagnostic.clone()
+						});
 						return;
 					}
 					None => {
