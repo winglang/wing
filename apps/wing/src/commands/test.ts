@@ -26,7 +26,7 @@ const generateTestName = (path: string) => path.split(sep).slice(-2).join("/");
  */
 export interface TestOptions extends CompileOptions {
   clean: boolean;
-  testFilter?: string;
+  filter?: string;
 }
 
 export async function test(entrypoints: string[], options: TestOptions): Promise<number> {
@@ -264,12 +264,12 @@ export function filterTests(tests: string[], regexString?: string): string[] {
 
 async function testSimulator(synthDir: string, options: TestOptions) {
   const s = new testing.Simulator({ simfile: synthDir });
-  const { clean, testFilter } = options;
+  const { clean, filter } = options;
   await s.start();
 
   const testRunner = s.getResource("root/cloud.TestRunner") as std.ITestRunnerClient;
   const tests = await testRunner.listTests();
-  const filteredTests = filterTests(tests, testFilter);
+  const filteredTests = filterTests(tests, filter);
   const results = new Array<std.TestResult>();
   // TODO: run these tests in parallel
   for (const path of filteredTests) {
@@ -291,7 +291,7 @@ async function testSimulator(synthDir: string, options: TestOptions) {
 }
 
 async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.TestResult[]> {
-  const { clean, testFilter } = options;
+  const { clean, filter } = options;
   try {
     isAwsCdkInstalled(synthDir);
 
@@ -310,7 +310,7 @@ async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.T
       const testRunner = new TestRunnerClient(testArns);
 
       const tests = await testRunner.listTests();
-      return [testRunner, filterTests(tests, testFilter)];
+      return [testRunner, filterTests(tests, filter)];
     });
 
     const results = await withSpinner("Running tests...", async () => {
@@ -376,7 +376,7 @@ async function awsCdkOutput(synthDir: string, name: string, stackName: string) {
 }
 
 async function testTfAws(synthDir: string, options: TestOptions): Promise<std.TestResult[] | void> {
-  const { clean, testFilter } = options;
+  const { clean, filter } = options;
   try {
     if (!isTerraformInstalled(synthDir)) {
       throw new Error(
@@ -396,7 +396,7 @@ async function testTfAws(synthDir: string, options: TestOptions): Promise<std.Te
       const testRunner = new TestRunnerClient(testArns);
 
       const tests = await testRunner.listTests();
-      return [testRunner, filterTests(tests, testFilter)];
+      return [testRunner, filterTests(tests, filter)];
     });
 
     const results = await withSpinner("Running tests...", async () => {
