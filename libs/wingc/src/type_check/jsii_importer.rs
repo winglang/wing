@@ -245,7 +245,6 @@ impl<'a> JsiiImporter<'a> {
 				} else {
 					lookup_vec.join("/")
 				};
-				dbg!(&module_path);
 
 				let ns = self.wing_types.add_namespace(Namespace {
 					name: namespace_name.to_string(),
