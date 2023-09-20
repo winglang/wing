@@ -256,41 +256,48 @@ export const DynamodbTableInteraction = ({
                   </div>
                 </td>
               </tr>
-              <tr className="sticky bottom-[4px] z-10 align-baseline">
+              <tr className="sticky bottom-[4px] z-10">
                 <td
                   colSpan={columns.length}
                   className={classNames(
-                    "first:rounded-bl -mb-2.5 text-left",
+                    "first:rounded-bl text-left",
                     theme.bg3,
                   )}
                 >
-                  <textarea
-                    className={classNames(
-                      theme.borderInput,
-                      "rounded text-sm relative",
-                      "text-sm ring-0 focus:ring-0 bg-transparent",
-                      "border-0 p-0 m-0 appearance-none rounded",
-                      "placeholder:italic",
-                      "w-full",
-                      "px-1",
-                      theme.textInput,
-                      theme.focusInput,
-                      newRow.error && [
-                        "rounded ring-2 ring-red-800/50",
-                        "dark:ring-red-500/50 dark:border-red-500/50",
-                      ],
-                    )}
-                    rows={2}
-                    placeholder="Json Item..."
-                    value={newRow.data}
-                    onInput={(event) => updateNewRow(event.currentTarget.value)}
-                    data-testid="ex.DynamodbTable:new-row"
-                  />
+                  <div className="flex p-0.5">
+                    <textarea
+                      className={classNames(
+                        theme.borderInput,
+                        "rounded text-sm relative",
+                        "text-sm ring-0 focus:ring-0 bg-transparent",
+                        "border-0 p-0 m-0 appearance-none rounded",
+                        "placeholder:italic",
+                        "w-full",
+                        "flex-1",
+                        "px-1",
+                        "min-h-[2rem]",
+                        theme.textInput,
+                        theme.focusInput,
+                        newRow.error && [
+                          "rounded ring-2 ring-red-800/50",
+                          "dark:ring-red-500/50 dark:border-red-500/50",
+                        ],
+                      )}
+                      rows={2}
+                      placeholder="Json Item..."
+                      value={newRow.data}
+                      onInput={(event) =>
+                        updateNewRow(event.currentTarget.value)
+                      }
+                      data-testid="ex.DynamodbTable:new-row"
+                    />
+                  </div>
                 </td>
                 <td
                   className={classNames(
                     "first:rounded-bl -mb-2.5 text-left",
                     theme.bg3,
+                    "align-bottom",
                   )}
                 >
                   <button
@@ -301,8 +308,11 @@ export const DynamodbTableInteraction = ({
                       theme.bgInputHover,
                       theme.textInput,
                       theme.focusInput,
+                      (disabled || !newRow.data) &&
+                        "opacity-50 cursor-not-allowed",
                     )}
                     onClick={addRow}
+                    disabled={disabled || !newRow.data}
                     data-testid="ex.DynamodbTable:add-row"
                   >
                     <PlusIcon className="w-4 h-4" />
