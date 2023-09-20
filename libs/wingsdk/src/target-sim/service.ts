@@ -48,8 +48,6 @@ export class Service extends cloud.Service implements ISimulatorResource {
       });
     }
   }
-
-  // todo onstrart onstop
   private createServiceFunction(
     handler: cloud.IServiceOnEventHandler,
     id: string
