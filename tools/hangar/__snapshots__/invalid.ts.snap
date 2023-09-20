@@ -306,6 +306,28 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`bring_local_dir.main.w 1`] = `
+"error: Symbol \\"Foo\\" has multiple definitions in \\"../../../examples/tests/invalid/subdir/inner\\"
+  --> ../../../examples/tests/invalid/subdir/other.w:1:1
+  |
+1 | bring \\"./inner\\" as inner;
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^ Symbol \\"Foo\\" has multiple definitions in \\"../../../examples/tests/invalid/subdir/inner\\"
+
+
+error: Symbol \\"Foo\\" has multiple definitions in \\"../../../examples/tests/invalid/subdir/inner\\"
+  --> ../../../examples/tests/invalid/bring_local_dir.main.w:1:1
+  |
+1 | bring \\"./subdir\\" as subdir;
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Symbol \\"Foo\\" has multiple definitions in \\"../../../examples/tests/invalid/subdir/inner\\"
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`bring_local_self.main.w 1`] = `
 "error: Cannot bring a module into itself
   --> ../../../examples/tests/invalid/bring_local_self.main.w:1:1
