@@ -273,7 +273,7 @@ const UNDOCUMENTED_EX_FILES = ["index"];
 function generateResourceApiDocs(
   module: string,
   pathToFolder: string,
-  docsPrefix: string,
+  docsPath: string,
   excludedFiles: string[] = []
 ) {
   const cloudFiles = readdirSync(pathToFolder);
@@ -298,9 +298,8 @@ function generateResourceApiDocs(
 
   // generate api reference for each cloud/submodule and append it to the doc file
   for (const mod of cloudResources) {
-    const docsPath = `${docsPrefix}${mod}.md`;
     docgen.exec(`jsii-docgen -o API.md -l wing --submodule ${module}/${mod}`);
-    docgen.exec(`cat API.md >> ${docsPath}`);
+    docgen.exec(`cat API.md >> ${docsPath}${mod}.md`);
   }
 }
 

@@ -12,7 +12,7 @@ import {
 } from "../util";
 
 test("default dynamodb table behavior", () => {
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   ex.DynamodbTable._newDynamodbTable(app, "Table", {
     attributeDefinitions: { id: "S" } as any,
     hashKey: "id",
@@ -25,7 +25,7 @@ test("default dynamodb table behavior", () => {
 });
 
 test("function with a table binding", () => {
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const table = ex.DynamodbTable._newDynamodbTable(app, "Table", {
     attributeDefinitions: { id: "S" } as any,
     hashKey: "id",

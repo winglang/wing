@@ -8,9 +8,16 @@ import * as ex from "../ex";
 import { IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 
+const DEFAULT_START_COMMAND = "npm run start";
 export class ReactApp extends ex.ReactApp implements ISimulatorResource {
+  private readonly _startCommand: string;
   constructor(scope: Construct, id: string, props: ex.ReactAppProps) {
     super(scope, id, props);
+
+    this._startCommand = this._isDevRun
+      ? `PORT=${this._localPort} ${props.startCommand ?? DEFAULT_START_COMMAND}`
+      : props.buildCommand ?? ex.DEFAULT_REACT_APP_BUILD_COMMAND;
+
     if (!this._isDevRun) {
       // In the future we can create an host (proxy like) for the development one if needed
       this._websiteHost = cloud.Website._newWebsite(

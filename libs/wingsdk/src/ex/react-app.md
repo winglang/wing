@@ -18,7 +18,7 @@ Using the default arguments:
 bring ex;
 bring util;
 
-let website = new ex.ReactApp(projectPath: "./client", isDevRun: util.tryEnv("ENV") == "dev");
+let website = new ex.ReactApp(projectPath: "./client");
 ```
 
 or customizing them:
@@ -29,11 +29,11 @@ bring util;
 
 let website = new ex.ReactApp(
   projectPath: "./client",
-  isDevRun: util.tryEnv("ENV") == "dev"
+  isDevRun: util.tryEnv("ENV") == "dev" // `true`` by default. will run the start command if true, and the build command if not
   buildDir: "/dist" // default is "/build"
   startCommand: "pnpm start" // default is "npm start"
   buildCommand: "pnpm build" // default is "npm build"
-  hostProps: {} // website resource props (expect of the "path" prop)
+  hostProps: {} // properties that apply to the react app host, which is a `cloud.Website` resource
   localPort: "4000" // default is 3001
  );
 ```

@@ -2,7 +2,16 @@
 title: Website
 id: website
 description: A built-in resource for creating static websites.
-keywords: [Wing reference, Wing language, language, Wing standard library, Wing programming language, Schedule, Cron job]
+keywords:
+  [
+    Wing reference,
+    Wing language,
+    language,
+    Wing standard library,
+    Wing programming language,
+    Schedule,
+    Cron job,
+  ]
 sidebar_position: 1
 ---
 
@@ -51,7 +60,6 @@ AWS implementations of `cloud.Website` uses [Amazon S3](https://aws.amazon.com/s
 ### GCP (`tf-gcp`)
 
 🚧 Not supported yet (tracking issue: [#1296](https://github.com/winglang/wing/issues/1296))
-
 ## API Reference <a name="API Reference" id="API Reference"></a>
 
 ### Website <a name="Website" id="@winglang/sdk.cloud.Website"></a>
@@ -66,15 +74,15 @@ bring cloud;
 new cloud.Website(props: WebsiteProps);
 ```
 
-| **Name**                                                                                  | **Type**                                                                  | **Description**   |
-| ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | ----------------- |
-| <code><a href="#@winglang/sdk.cloud.Website.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.WebsiteProps">WebsiteProps</a></code> | _No description._ |
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Website.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.WebsiteProps">WebsiteProps</a></code> | *No description.* |
 
 ---
 
 ##### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Website.Initializer.parameter.props"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.WebsiteProps">WebsiteProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.WebsiteProps">WebsiteProps</a>
 
 ---
 
@@ -82,8 +90,8 @@ new cloud.Website(props: WebsiteProps);
 
 ##### Preflight Methods
 
-| **Name**                                                                | **Description**                                                     |
-| ----------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| **Name** | **Description** |
+| --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Website.addJson">addJson</a></code> | Add a JSON file with custom values during the website's deployment. |
 
 ---
@@ -100,7 +108,7 @@ If the path conflicts with file path from the website's static assets, an error 
 
 ###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Website.addJson.parameter.path"></a>
 
-- _Type:_ str
+- *Type:* str
 
 the file path it will be uploaded as.
 
@@ -108,19 +116,20 @@ the file path it will be uploaded as.
 
 ###### `data`<sup>Required</sup> <a name="data" id="@winglang/sdk.cloud.Website.addJson.parameter.data"></a>
 
-- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 the data to write to the file.
 
 ---
 
+
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name**                                                                   | **Type**                     | **Description**                                    |
-| -------------------------------------------------------------------------- | ---------------------------- | -------------------------------------------------- |
-| <code><a href="#@winglang/sdk.cloud.Website.property.node">node</a></code> | <code>constructs.Node</code> | The tree node.                                     |
-| <code><a href="#@winglang/sdk.cloud.Website.property.path">path</a></code> | <code>str</code>             | Absolute local path to the website's static files. |
-| <code><a href="#@winglang/sdk.cloud.Website.property.url">url</a></code>   | <code>str</code>             | The website's url.                                 |
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Website.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.cloud.Website.property.path">path</a></code> | <code>str</code> | Absolute local path to the website's static files. |
+| <code><a href="#@winglang/sdk.cloud.Website.property.url">url</a></code> | <code>str</code> | The website's url. |
 
 ---
 
@@ -130,7 +139,7 @@ the data to write to the file.
 node: Node;
 ```
 
-- _Type:_ constructs.Node
+- *Type:* constructs.Node
 
 The tree node.
 
@@ -142,7 +151,7 @@ The tree node.
 path: str;
 ```
 
-- _Type:_ str
+- *Type:* str
 
 Absolute local path to the website's static files.
 
@@ -154,11 +163,13 @@ Absolute local path to the website's static files.
 url: str;
 ```
 
-- _Type:_ str
+- *Type:* str
 
 The website's url.
 
 ---
+
+
 
 ## Structs <a name="Structs" id="Structs"></a>
 
@@ -176,8 +187,8 @@ let WebsiteOptions = cloud.WebsiteOptions{ ... };
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name**                                                                              | **Type**         | **Description**                   |
-| ------------------------------------------------------------------------------------- | ---------------- | --------------------------------- |
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.WebsiteOptions.property.domain">domain</a></code> | <code>str</code> | The website's custom domain name. |
 
 ---
@@ -188,18 +199,19 @@ let WebsiteOptions = cloud.WebsiteOptions{ ... };
 domain: str;
 ```
 
-- _Type:_ str
-- _Default:_ a domain is generated by the cloud provider
+- *Type:* str
+- *Default:* a domain is generated by the cloud provider
 
 The website's custom domain name.
 
 ---
 
-_Example_
+*Example*
 
 ```wing
 "example.com"
 ```
+
 
 ### WebsiteProps <a name="WebsiteProps" id="@winglang/sdk.cloud.WebsiteProps"></a>
 
@@ -215,10 +227,10 @@ let WebsiteProps = cloud.WebsiteProps{ ... };
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name**                                                                            | **Type**         | **Description**                                                                         |
-| ----------------------------------------------------------------------------------- | ---------------- | --------------------------------------------------------------------------------------- |
-| <code><a href="#@winglang/sdk.cloud.WebsiteProps.property.domain">domain</a></code> | <code>str</code> | The website's custom domain name.                                                       |
-| <code><a href="#@winglang/sdk.cloud.WebsiteProps.property.path">path</a></code>     | <code>str</code> | Local path to the website's static files, relative to the Wing source file or absolute. |
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.WebsiteProps.property.domain">domain</a></code> | <code>str</code> | The website's custom domain name. |
+| <code><a href="#@winglang/sdk.cloud.WebsiteProps.property.path">path</a></code> | <code>str</code> | Local path to the website's static files, relative to the Wing source file or absolute. |
 
 ---
 
@@ -228,18 +240,19 @@ let WebsiteProps = cloud.WebsiteProps{ ... };
 domain: str;
 ```
 
-- _Type:_ str
-- _Default:_ a domain is generated by the cloud provider
+- *Type:* str
+- *Default:* a domain is generated by the cloud provider
 
 The website's custom domain name.
 
 ---
 
-_Example_
+*Example*
 
 ```wing
 "example.com"
 ```
+
 
 ##### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.WebsiteProps.property.path"></a>
 
@@ -247,14 +260,17 @@ _Example_
 path: str;
 ```
 
-- _Type:_ str
+- *Type:* str
 
 Local path to the website's static files, relative to the Wing source file or absolute.
 
 ---
 
-_Example_
+*Example*
 
 ```wing
 "./dist"
 ```
+
+
+

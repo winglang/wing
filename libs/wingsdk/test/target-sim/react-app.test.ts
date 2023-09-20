@@ -57,6 +57,7 @@ describe("Testing ReactApp", () => {
     const app = new SimApp();
     ex.ReactApp._newReactApp(app, "website", {
       projectPath: resolve(__dirname, "../test-files/react-website"),
+      isDevRun: false,
     });
 
     // WHEN
@@ -93,6 +94,7 @@ window.wingEnv = {};`);
     const app = new SimApp();
     const website = ex.ReactApp._newReactApp(app, "website", {
       projectPath: resolve(__dirname, "../test-files/react-website"),
+      isDevRun: false,
     });
 
     website.addEnvironmentVariable("key", "value");
@@ -133,7 +135,6 @@ window.wingEnv = {
     const app = new SimApp();
     ex.ReactApp._newReactApp(app, "website", {
       projectPath: resolve(__dirname, "../test-files/react-website"),
-      isDevRun: true,
     });
 
     // WHEN
@@ -189,6 +190,7 @@ window.wingEnv = {
     ex.ReactApp._newReactApp(app, "website", {
       projectPath: resolve(__dirname, "../test-files/react-website"),
       buildCommand: CUSTOM_COMMAND,
+      isDevRun: false,
     });
 
     // WHEN

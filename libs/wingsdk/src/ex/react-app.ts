@@ -7,8 +7,7 @@ import { App } from "../core";
 import { Resource, Node } from "../std";
 
 const DEFAULT_BUILD_FOLDER = "/build";
-const DEFAULT_START_COMMAND = "npm run start";
-const DEFAULT_BUILD_COMMAND = "npm run build";
+export const DEFAULT_REACT_APP_BUILD_COMMAND = "npm run build";
 const DEFAULT_PORT = 3001;
 
 export const WING_JS = "wing.js";
@@ -43,7 +42,7 @@ export interface ReactAppProps {
   readonly buildCommand?: string;
   /**
    * In sim, if `true` - will use the start command, and if `false` - the build command
-   * @default false
+   * @default true
    */
   readonly isDevRun?: boolean;
   /**
@@ -87,10 +86,6 @@ export abstract class ReactApp extends Resource {
   /**
    * @internal
    */
-  protected readonly _startCommand: string;
-  /**
-   * @internal
-   */
   protected readonly _projectPath: string;
   /**
    * @internal
@@ -112,8 +107,6 @@ export abstract class ReactApp extends Resource {
 
   constructor(scope: Construct, id: string, props: ReactAppProps) {
     const buildDir = props.buildDir ?? DEFAULT_BUILD_FOLDER;
-    const startCommand = props.startCommand ?? DEFAULT_START_COMMAND;
-    const buildCommand = props.buildCommand ?? DEFAULT_BUILD_COMMAND;
 
     super(scope, id);
 
@@ -123,12 +116,8 @@ export abstract class ReactApp extends Resource {
     this._projectPath = this._parsePath(scope, props.projectPath);
     this._hostProps = props.hostProps;
     this._buildPath = join(this._projectPath, buildDir);
-    this._isDevRun = props.isDevRun ?? false;
+    this._isDevRun = props.isDevRun ?? true;
     this._localPort = props.localPort ?? DEFAULT_PORT;
-
-    this._startCommand = this._isDevRun
-      ? `PORT=${this._localPort} ${startCommand}`
-      : buildCommand;
 
     if (!existsSync(this._projectPath)) {
       throw new Error(`non existent directory '${this._projectPath}'`);

@@ -18,11 +18,13 @@ import * as ex from "../ex";
 export class ReactApp extends ex.ReactApp {
   constructor(scope: Construct, id: string, props: ex.ReactAppProps) {
     super(scope, id, props);
-    this._createWebsiteHost();
+    this._createWebsiteHost(
+      props.buildCommand ?? ex.DEFAULT_REACT_APP_BUILD_COMMAND
+    );
   }
 
-  private _createWebsiteHost() {
-    execSync(this._startCommand, {
+  private _createWebsiteHost(command: string) {
+    execSync(command, {
       cwd: this._projectPath,
       maxBuffer: 10 * 1024 * 1024,
     });

@@ -241,10 +241,16 @@
           "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/website.md"
         },
         {
-          "exec": "jsii-docgen -o API.md -l wing --submodule ex/react-website"
+          "exec": "jsii-docgen -o API.md -l wing --submodule ex/dynamodb-table"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/06-ex/react-website.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/06-ex/dynamodb-table.md"
+        },
+        {
+          "exec": "jsii-docgen -o API.md -l wing --submodule ex/react-app"
+        },
+        {
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/06-ex/react-app.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule ex/redis"
