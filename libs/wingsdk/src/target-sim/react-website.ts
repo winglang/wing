@@ -7,7 +7,6 @@ import * as core from "../core";
 import * as ex from "../ex";
 import { IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
-// import { simulatorAttrToken } from "./tokens";
 
 export class ReactWebsite
   extends ex.ReactWebsite
