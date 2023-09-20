@@ -4,6 +4,7 @@ import { Construct } from "constructs";
 import { Api } from "./api";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
+import { DynamodbTable } from "./dynamodb-table";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
@@ -34,8 +35,12 @@ import {
 import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
-import { TABLE_FQN, REDIS_FQN } from "../ex";
-import { REACT_WEBSITE_FQN } from "../ex/react-website";
+import {
+  TABLE_FQN,
+  REDIS_FQN,
+  DYNAMODB_TABLE_FQN,
+  REACT_WEBSITE_FQN,
+} from "../ex";
 import { TEST_RUNNER_FQN } from "../std";
 import { WingSimulatorSchema } from "../testing/simulator";
 
@@ -125,6 +130,9 @@ export class App extends core.App {
 
       case ON_DEPLOY_FQN:
         return new OnDeploy(scope, id, args[0], args[1]);
+
+      case DYNAMODB_TABLE_FQN:
+        return new DynamodbTable(scope, id, args[0]);
     }
 
     return undefined;

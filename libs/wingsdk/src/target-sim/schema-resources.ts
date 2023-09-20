@@ -23,6 +23,7 @@ export const REACT_WEBSITE_TYPE = "wingsdk.ex.ReactWebsite";
 export const SECRET_TYPE = "wingsdk.cloud.Secret";
 export const SERVICE_TYPE = "wingsdk.cloud.Service";
 export const ON_DEPLOY_TYPE = "wingsdk.cloud.OnDeploy";
+export const DYNAMODB_TABLE_TYPE = "wingsdk.ex.DynamodbTable";
 
 export type FunctionHandle = string;
 export type PublisherHandle = string;
@@ -281,3 +282,26 @@ export interface OnDeploySchema extends BaseResourceSchema {
 
 /** Runtime attributes for cloud.OnDeploy */
 export interface OnDeployAttributes {}
+
+/** Runtime attributes for ex.DynamodbTable */
+export interface DynamodbTableAttributes {}
+
+/** Schema for ex.DynamodbTable */
+export interface DynamodbTableSchema extends BaseResourceSchema {
+  readonly type: typeof DYNAMODB_TABLE_TYPE;
+  readonly props: {
+    readonly name: string;
+    /**
+     * Table attribute definitions. e.g. { "myKey": "S", "myOtherKey": "S" }.
+     */
+    readonly attributeDefinitions: Json;
+    /**
+     * Hash key for this table.
+     */
+    readonly hashKey: string;
+    /**
+     * Range key for this table.
+     */
+    readonly rangeKey?: string;
+  };
+}

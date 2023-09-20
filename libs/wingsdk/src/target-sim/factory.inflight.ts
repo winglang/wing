@@ -16,6 +16,7 @@ import {
   SERVICE_TYPE,
   ON_DEPLOY_TYPE,
   REACT_WEBSITE_TYPE,
+  DYNAMODB_TABLE_TYPE,
 } from "./schema-resources";
 import type {
   ISimulatorFactory,
@@ -86,6 +87,10 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
       case ON_DEPLOY_TYPE:
         const OnDeploy = require("./on-deploy.inflight").OnDeploy;
         return new OnDeploy(props, context);
+      case DYNAMODB_TABLE_TYPE:
+        const DynamodbTable =
+          require("./dynamodb-table.inflight").DynamodbTable;
+        return new DynamodbTable(props, context);
       default:
         throw new Error(`Type ${type} not implemented by the simulator.`);
     }
