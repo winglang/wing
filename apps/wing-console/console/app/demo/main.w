@@ -1,6 +1,6 @@
 bring cloud;
 bring ex;
-// @see https://github.com/winglang/wing/issues/4237 if crashes the Console preview env.
+// @see https://github.com/winglang/wing/issues/4237 it crashes the Console preview env.
 //let secret = new cloud.Secret(name: "my-secret");
 
 let bucket = new cloud.Bucket();
