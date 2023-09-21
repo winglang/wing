@@ -25,15 +25,15 @@ bring ex;
 new ex.DynamodbTable(props: DynamodbTableProps);
 ```
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.ex.DynamodbTable.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.ex.DynamodbTableProps">DynamodbTableProps</a></code> | *No description.* |
+| **Name**                                                                                     | **Type**                                                                           | **Description**   |
+| -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ----------------- |
+| <code><a href="#@winglang/sdk.ex.DynamodbTable.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.ex.DynamodbTableProps">DynamodbTableProps</a></code> | _No description._ |
 
 ---
 
 ##### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.ex.DynamodbTable.Initializer.parameter.props"></a>
 
-- *Type:* <a href="#@winglang/sdk.ex.DynamodbTableProps">DynamodbTableProps</a>
+- _Type:_ <a href="#@winglang/sdk.ex.DynamodbTableProps">DynamodbTableProps</a>
 
 ---
 
@@ -41,15 +41,15 @@ new ex.DynamodbTable(props: DynamodbTableProps);
 
 ##### Inflight Methods
 
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.deleteItem">deleteItem</a></code> | Delete an item from the table. |
-| <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.getItem">getItem</a></code> | Get an item from the table. |
-| <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.putItem">putItem</a></code> | Put an item into the table. |
-| <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.query">query</a></code> | Return all items with a given partition key value. |
-| <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.scan">scan</a></code> | Return one or more items and item attributes by accessing every item in a table or a secondary index. |
-| <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.transactWriteItems">transactWriteItems</a></code> | Perform a synchronous write operation that groups up to 100 action requests. |
-| <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.updateItem">updateItem</a></code> | Get an item from the table. |
+| **Name**                                                                                                | **Description**                                                                                       |
+| ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.deleteItem">deleteItem</a></code>                 | Delete an item from the table.                                                                        |
+| <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.getItem">getItem</a></code>                       | Get an item from the table.                                                                           |
+| <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.putItem">putItem</a></code>                       | Put an item into the table.                                                                           |
+| <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.query">query</a></code>                           | Return all items with a given partition key value.                                                    |
+| <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.scan">scan</a></code>                             | Return one or more items and item attributes by accessing every item in a table or a secondary index. |
+| <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.transactWriteItems">transactWriteItems</a></code> | Perform a synchronous write operation that groups up to 100 action requests.                          |
+| <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.updateItem">updateItem</a></code>                 | Get an item from the table.                                                                           |
 
 ---
 
@@ -63,7 +63,7 @@ Delete an item from the table.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.IDynamodbTableClient.deleteItem.parameter.key"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
 
 key of the item.
 
@@ -79,9 +79,11 @@ Get an item from the table.
 
 > [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html)
 
+> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html)
+
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.IDynamodbTableClient.getItem.parameter.key"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
 
 key of the item.
 
@@ -97,7 +99,7 @@ Put an item into the table.
 
 ###### `item`<sup>Required</sup> <a name="item" id="@winglang/sdk.ex.IDynamodbTableClient.putItem.parameter.item"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
 
 data to be inserted.
 
@@ -105,7 +107,7 @@ data to be inserted.
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.ex.IDynamodbTableClient.putItem.parameter.props"></a>
 
-- *Type:* <a href="#@winglang/sdk.ex.DynamodbTablePutItemProps">DynamodbTablePutItemProps</a>
+- _Type:_ <a href="#@winglang/sdk.ex.DynamodbTablePutItemProps">DynamodbTablePutItemProps</a>
 
 dynamodb PutItem props.
 
@@ -123,8 +125,9 @@ Return all items with a given partition key value.
 
 ###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.ex.IDynamodbTableClient.query.parameter.props"></a>
 
-- *Type:* <a href="#@winglang/sdk.ex.DynamodbTableQueryProps">DynamodbTableQueryProps</a>
+- _Type:_ <a href="#@winglang/sdk.ex.DynamodbTableQueryProps">DynamodbTableQueryProps</a>
 
+properties for the query operation.
 properties for the query operation.
 
 ---
@@ -139,7 +142,7 @@ Return one or more items and item attributes by accessing every item in a table 
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.ex.IDynamodbTableClient.scan.parameter.props"></a>
 
-- *Type:* <a href="#@winglang/sdk.ex.DynamodbTableScanProps">DynamodbTableScanProps</a>
+- _Type:_ <a href="#@winglang/sdk.ex.DynamodbTableScanProps">DynamodbTableScanProps</a>
 
 properties for the scan operation.
 
@@ -155,7 +158,7 @@ Perform a synchronous write operation that groups up to 100 action requests.
 
 ###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.ex.IDynamodbTableClient.transactWriteItems.parameter.props"></a>
 
-- *Type:* <a href="#@winglang/sdk.ex.DynamodbTransactWriteItemsProps">DynamodbTransactWriteItemsProps</a>
+- _Type:_ <a href="#@winglang/sdk.ex.DynamodbTransactWriteItemsProps">DynamodbTransactWriteItemsProps</a>
 
 properties for the transact write items operation.
 
@@ -171,7 +174,7 @@ Get an item from the table.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.IDynamodbTableClient.updateItem.parameter.key"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
 
 key of the item.
 
@@ -179,19 +182,18 @@ key of the item.
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.ex.IDynamodbTableClient.updateItem.parameter.props"></a>
 
-- *Type:* <a href="#@winglang/sdk.ex.DynamodbTableUpdateItemProps">DynamodbTableUpdateItemProps</a>
+- _Type:_ <a href="#@winglang/sdk.ex.DynamodbTableUpdateItemProps">DynamodbTableUpdateItemProps</a>
 
 dynamodb UpdateItem props.
 
 ---
 
-
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.ex.DynamodbTable.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTable.property.name">name</a></code> | <code>str</code> | Table name. |
+| **Name**                                                                      | **Type**                     | **Description** |
+| ----------------------------------------------------------------------------- | ---------------------------- | --------------- |
+| <code><a href="#@winglang/sdk.ex.DynamodbTable.property.node">node</a></code> | <code>constructs.Node</code> | The tree node.  |
+| <code><a href="#@winglang/sdk.ex.DynamodbTable.property.name">name</a></code> | <code>str</code>             | Table name.     |
 
 ---
 
@@ -201,7 +203,7 @@ dynamodb UpdateItem props.
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- _Type:_ constructs.Node
 
 The tree node.
 
@@ -213,12 +215,11 @@ The tree node.
 name: str;
 ```
 
-- *Type:* str
+- _Type:_ str
 
 Table name.
 
 ---
-
 
 ### Redis <a name="Redis" id="@winglang/sdk.ex.Redis"></a>
 
@@ -233,7 +234,7 @@ new ex.Redis();
 ```
 
 | **Name** | **Type** | **Description** |
-| --- | --- | --- |
+| -------- | -------- | --------------- |
 
 ---
 
@@ -241,17 +242,17 @@ new ex.Redis();
 
 ##### Inflight Methods
 
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.ex.IRedisClient.del">del</a></code> | Removes the specified key. |
-| <code><a href="#@winglang/sdk.ex.IRedisClient.get">get</a></code> | Get value at given key. |
-| <code><a href="#@winglang/sdk.ex.IRedisClient.hget">hget</a></code> | Returns the value associated with field in the hash stored at key. |
-| <code><a href="#@winglang/sdk.ex.IRedisClient.hset">hset</a></code> | Sets the specified field to respective value in the hash stored at key. |
-| <code><a href="#@winglang/sdk.ex.IRedisClient.rawClient">rawClient</a></code> | Get raw redis client (currently IoRedis). |
-| <code><a href="#@winglang/sdk.ex.IRedisClient.sadd">sadd</a></code> | Add the specified members to the set stored at key. |
-| <code><a href="#@winglang/sdk.ex.IRedisClient.set">set</a></code> | Set key value pair. |
-| <code><a href="#@winglang/sdk.ex.IRedisClient.smembers">smembers</a></code> | Returns all the members of the set value stored at key. |
-| <code><a href="#@winglang/sdk.ex.IRedisClient.url">url</a></code> | Get url of redis server. |
+| **Name**                                                                      | **Description**                                                         |
+| ----------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| <code><a href="#@winglang/sdk.ex.IRedisClient.del">del</a></code>             | Removes the specified key.                                              |
+| <code><a href="#@winglang/sdk.ex.IRedisClient.get">get</a></code>             | Get value at given key.                                                 |
+| <code><a href="#@winglang/sdk.ex.IRedisClient.hget">hget</a></code>           | Returns the value associated with field in the hash stored at key.      |
+| <code><a href="#@winglang/sdk.ex.IRedisClient.hset">hset</a></code>           | Sets the specified field to respective value in the hash stored at key. |
+| <code><a href="#@winglang/sdk.ex.IRedisClient.rawClient">rawClient</a></code> | Get raw redis client (currently IoRedis).                               |
+| <code><a href="#@winglang/sdk.ex.IRedisClient.sadd">sadd</a></code>           | Add the specified members to the set stored at key.                     |
+| <code><a href="#@winglang/sdk.ex.IRedisClient.set">set</a></code>             | Set key value pair.                                                     |
+| <code><a href="#@winglang/sdk.ex.IRedisClient.smembers">smembers</a></code>   | Returns all the members of the set value stored at key.                 |
+| <code><a href="#@winglang/sdk.ex.IRedisClient.url">url</a></code>             | Get url of redis server.                                                |
 
 ---
 
@@ -265,7 +266,7 @@ Removes the specified key.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.IRedisClient.del.parameter.key"></a>
 
-- *Type:* str
+- _Type:_ str
 
 the key.
 
@@ -281,7 +282,7 @@ Get value at given key.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.IRedisClient.get.parameter.key"></a>
 
-- *Type:* str
+- _Type:_ str
 
 the key to get.
 
@@ -297,7 +298,7 @@ Returns the value associated with field in the hash stored at key.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.IRedisClient.hget.parameter.key"></a>
 
-- *Type:* str
+- _Type:_ str
 
 the key.
 
@@ -305,7 +306,7 @@ the key.
 
 ###### `field`<sup>Required</sup> <a name="field" id="@winglang/sdk.ex.IRedisClient.hget.parameter.field"></a>
 
-- *Type:* str
+- _Type:_ str
 
 the field at given key.
 
@@ -321,7 +322,7 @@ Sets the specified field to respective value in the hash stored at key.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.IRedisClient.hset.parameter.key"></a>
 
-- *Type:* str
+- _Type:_ str
 
 key to set.
 
@@ -329,7 +330,7 @@ key to set.
 
 ###### `field`<sup>Required</sup> <a name="field" id="@winglang/sdk.ex.IRedisClient.hset.parameter.field"></a>
 
-- *Type:* str
+- _Type:_ str
 
 field in key to set.
 
@@ -337,7 +338,7 @@ field in key to set.
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.ex.IRedisClient.hset.parameter.value"></a>
 
-- *Type:* str
+- _Type:_ str
 
 value to set at field in key.
 
@@ -361,7 +362,7 @@ Add the specified members to the set stored at key.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.IRedisClient.sadd.parameter.key"></a>
 
-- *Type:* str
+- _Type:_ str
 
 the key.
 
@@ -369,7 +370,7 @@ the key.
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.ex.IRedisClient.sadd.parameter.value"></a>
 
-- *Type:* str
+- _Type:_ str
 
 the value to add to the set at given key.
 
@@ -385,7 +386,7 @@ Set key value pair.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.IRedisClient.set.parameter.key"></a>
 
-- *Type:* str
+- _Type:_ str
 
 the key to set.
 
@@ -393,7 +394,7 @@ the key to set.
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.ex.IRedisClient.set.parameter.value"></a>
 
-- *Type:* str
+- _Type:_ str
 
 the value to store at given key.
 
@@ -409,7 +410,7 @@ Returns all the members of the set value stored at key.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.IRedisClient.smembers.parameter.key"></a>
 
-- *Type:* str
+- _Type:_ str
 
 the key.
 
@@ -423,12 +424,11 @@ inflight url(): str
 
 Get url of redis server.
 
-
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.ex.Redis.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| **Name**                                                              | **Type**                     | **Description** |
+| --------------------------------------------------------------------- | ---------------------------- | --------------- |
+| <code><a href="#@winglang/sdk.ex.Redis.property.node">node</a></code> | <code>constructs.Node</code> | The tree node.  |
 
 ---
 
@@ -438,12 +438,11 @@ Get url of redis server.
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- _Type:_ constructs.Node
 
 The tree node.
 
 ---
-
 
 ### Table <a name="Table" id="@winglang/sdk.ex.Table"></a>
 
@@ -457,15 +456,15 @@ bring ex;
 new ex.Table(props: TableProps);
 ```
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.ex.Table.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.ex.TableProps">TableProps</a></code> | *No description.* |
+| **Name**                                                                             | **Type**                                                           | **Description**   |
+| ------------------------------------------------------------------------------------ | ------------------------------------------------------------------ | ----------------- |
+| <code><a href="#@winglang/sdk.ex.Table.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.ex.TableProps">TableProps</a></code> | _No description._ |
 
 ---
 
 ##### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.ex.Table.Initializer.parameter.props"></a>
 
-- *Type:* <a href="#@winglang/sdk.ex.TableProps">TableProps</a>
+- _Type:_ <a href="#@winglang/sdk.ex.TableProps">TableProps</a>
 
 ---
 
@@ -473,20 +472,20 @@ new ex.Table(props: TableProps);
 
 ##### Preflight Methods
 
-| **Name** | **Description** |
-| --- | --- |
+| **Name**                                                         | **Description**                                                  |
+| ---------------------------------------------------------------- | ---------------------------------------------------------------- |
 | <code><a href="#@winglang/sdk.ex.Table.addRow">addRow</a></code> | Add a row to the table that is created when the app is deployed. |
 
 ##### Inflight Methods
 
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.ex.ITableClient.delete">delete</a></code> | Delete a row from the table, by primary key. |
-| <code><a href="#@winglang/sdk.ex.ITableClient.get">get</a></code> | Get a row from the table, by primary key. |
-| <code><a href="#@winglang/sdk.ex.ITableClient.insert">insert</a></code> | Insert a row into the table. |
-| <code><a href="#@winglang/sdk.ex.ITableClient.list">list</a></code> | List all rows in the table. |
-| <code><a href="#@winglang/sdk.ex.ITableClient.tryGet">tryGet</a></code> | Get a row from the table if exists, by primary key. |
-| <code><a href="#@winglang/sdk.ex.ITableClient.update">update</a></code> | Update a row in the table. |
+| **Name**                                                                | **Description**                                                       |
+| ----------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| <code><a href="#@winglang/sdk.ex.ITableClient.delete">delete</a></code> | Delete a row from the table, by primary key.                          |
+| <code><a href="#@winglang/sdk.ex.ITableClient.get">get</a></code>       | Get a row from the table, by primary key.                             |
+| <code><a href="#@winglang/sdk.ex.ITableClient.insert">insert</a></code> | Insert a row into the table.                                          |
+| <code><a href="#@winglang/sdk.ex.ITableClient.list">list</a></code>     | List all rows in the table.                                           |
+| <code><a href="#@winglang/sdk.ex.ITableClient.tryGet">tryGet</a></code> | Get a row from the table if exists, by primary key.                   |
+| <code><a href="#@winglang/sdk.ex.ITableClient.update">update</a></code> | Update a row in the table.                                            |
 | <code><a href="#@winglang/sdk.ex.ITableClient.upsert">upsert</a></code> | Insert a row into the table if it doesn't exist, otherwise update it. |
 
 ---
@@ -501,13 +500,13 @@ Add a row to the table that is created when the app is deployed.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.Table.addRow.parameter.key"></a>
 
-- *Type:* str
+- _Type:_ str
 
 ---
 
 ###### `row`<sup>Required</sup> <a name="row" id="@winglang/sdk.ex.Table.addRow.parameter.row"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
 
 ---
 
@@ -521,7 +520,7 @@ Delete a row from the table, by primary key.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.ITableClient.delete.parameter.key"></a>
 
-- *Type:* str
+- _Type:_ str
 
 primary key to delete the row.
 
@@ -537,7 +536,7 @@ Get a row from the table, by primary key.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.ITableClient.get.parameter.key"></a>
 
-- *Type:* str
+- _Type:_ str
 
 primary key to search.
 
@@ -553,7 +552,7 @@ Insert a row into the table.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.ITableClient.insert.parameter.key"></a>
 
-- *Type:* str
+- _Type:_ str
 
 primary key to insert the row.
 
@@ -561,7 +560,7 @@ primary key to insert the row.
 
 ###### `row`<sup>Required</sup> <a name="row" id="@winglang/sdk.ex.ITableClient.insert.parameter.row"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
 
 data to be inserted.
 
@@ -585,7 +584,7 @@ Get a row from the table if exists, by primary key.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.ITableClient.tryGet.parameter.key"></a>
 
-- *Type:* str
+- _Type:_ str
 
 primary key to search.
 
@@ -601,7 +600,7 @@ Update a row in the table.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.ITableClient.update.parameter.key"></a>
 
-- *Type:* str
+- _Type:_ str
 
 primary key to update the row.
 
@@ -609,7 +608,7 @@ primary key to update the row.
 
 ###### `row`<sup>Required</sup> <a name="row" id="@winglang/sdk.ex.ITableClient.update.parameter.row"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
 
 data to be updated.
 
@@ -625,7 +624,7 @@ Insert a row into the table if it doesn't exist, otherwise update it.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.ITableClient.upsert.parameter.key"></a>
 
-- *Type:* str
+- _Type:_ str
 
 primary key to upsert the row.
 
@@ -633,21 +632,20 @@ primary key to upsert the row.
 
 ###### `row`<sup>Required</sup> <a name="row" id="@winglang/sdk.ex.ITableClient.upsert.parameter.row"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
 
 data to be upserted.
 
 ---
 
-
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.ex.Table.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.ex.Table.property.columns">columns</a></code> | <code>MutMap&lt;<a href="#@winglang/sdk.ex.ColumnType">ColumnType</a>&gt;</code> | Table columns. |
-| <code><a href="#@winglang/sdk.ex.Table.property.name">name</a></code> | <code>str</code> | Table name. |
-| <code><a href="#@winglang/sdk.ex.Table.property.primaryKey">primaryKey</a></code> | <code>str</code> | Table primary key name. |
+| **Name**                                                                          | **Type**                                                                         | **Description**         |
+| --------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ----------------------- |
+| <code><a href="#@winglang/sdk.ex.Table.property.node">node</a></code>             | <code>constructs.Node</code>                                                     | The tree node.          |
+| <code><a href="#@winglang/sdk.ex.Table.property.columns">columns</a></code>       | <code>MutMap&lt;<a href="#@winglang/sdk.ex.ColumnType">ColumnType</a>&gt;</code> | Table columns.          |
+| <code><a href="#@winglang/sdk.ex.Table.property.name">name</a></code>             | <code>str</code>                                                                 | Table name.             |
+| <code><a href="#@winglang/sdk.ex.Table.property.primaryKey">primaryKey</a></code> | <code>str</code>                                                                 | Table primary key name. |
 
 ---
 
@@ -657,7 +655,7 @@ data to be upserted.
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- _Type:_ constructs.Node
 
 The tree node.
 
@@ -669,7 +667,7 @@ The tree node.
 columns: MutMap<ColumnType>;
 ```
 
-- *Type:* MutMap&lt;<a href="#@winglang/sdk.ex.ColumnType">ColumnType</a>&gt;
+- _Type:_ MutMap&lt;<a href="#@winglang/sdk.ex.ColumnType">ColumnType</a>&gt;
 
 Table columns.
 
@@ -681,7 +679,7 @@ Table columns.
 name: str;
 ```
 
-- *Type:* str
+- _Type:_ str
 
 Table name.
 
@@ -693,18 +691,17 @@ Table name.
 primaryKey: str;
 ```
 
-- *Type:* str
+- _Type:_ str
 
 Table primary key name.
 
 ---
 
-
 ## Classes <a name="Classes" id="Classes"></a>
 
 ### DynamodbTableClientBase <a name="DynamodbTableClientBase" id="@winglang/sdk.ex.DynamodbTableClientBase"></a>
 
-- *Implements:* <a href="#@winglang/sdk.ex.IDynamodbTableClient">IDynamodbTableClient</a>
+- _Implements:_ <a href="#@winglang/sdk.ex.IDynamodbTableClient">IDynamodbTableClient</a>
 
 Base class for `DynamodbTable` Client.
 
@@ -716,15 +713,15 @@ bring ex;
 new ex.DynamodbTableClientBase(tableName: str);
 ```
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
+| **Name**                                                                                                       | **Type**         | **Description** |
+| -------------------------------------------------------------------------------------------------------------- | ---------------- | --------------- |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.Initializer.parameter.tableName">tableName</a></code> | <code>str</code> | the table name. |
 
 ---
 
 ##### `tableName`<sup>Required</sup> <a name="tableName" id="@winglang/sdk.ex.DynamodbTableClientBase.Initializer.parameter.tableName"></a>
 
-- *Type:* str
+- _Type:_ str
 
 the table name.
 
@@ -732,15 +729,15 @@ the table name.
 
 #### Methods <a name="Methods" id="Methods"></a>
 
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.deleteItem">deleteItem</a></code> | Delete an item from the table. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.getItem">getItem</a></code> | Get an item from the table. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.putItem">putItem</a></code> | Put an item into the table. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.query">query</a></code> | Return all items with a given partition key value. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.scan">scan</a></code> | Return one or more items and item attributes by accessing every item in a table or a secondary index. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.transactWriteItems">transactWriteItems</a></code> | Perform a synchronous write operation that groups up to 100 action requests. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.updateItem">updateItem</a></code> | Get an item from the table. |
+| **Name**                                                                                                   | **Description**                                                                                       |
+| ---------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.deleteItem">deleteItem</a></code>                 | Delete an item from the table.                                                                        |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.getItem">getItem</a></code>                       | Get an item from the table.                                                                           |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.putItem">putItem</a></code>                       | Put an item into the table.                                                                           |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.query">query</a></code>                           | Return all items with a given partition key value.                                                    |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.scan">scan</a></code>                             | Return one or more items and item attributes by accessing every item in a table or a secondary index. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.transactWriteItems">transactWriteItems</a></code> | Perform a synchronous write operation that groups up to 100 action requests.                          |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.updateItem">updateItem</a></code>                 | Get an item from the table.                                                                           |
 
 ---
 
@@ -754,7 +751,7 @@ Delete an item from the table.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.DynamodbTableClientBase.deleteItem.parameter.key"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
 
 ---
 
@@ -768,7 +765,7 @@ Get an item from the table.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.DynamodbTableClientBase.getItem.parameter.key"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
 
 ---
 
@@ -782,13 +779,13 @@ Put an item into the table.
 
 ###### `item`<sup>Required</sup> <a name="item" id="@winglang/sdk.ex.DynamodbTableClientBase.putItem.parameter.item"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
 
 ---
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.ex.DynamodbTableClientBase.putItem.parameter.props"></a>
 
-- *Type:* <a href="#@winglang/sdk.ex.DynamodbTablePutItemProps">DynamodbTablePutItemProps</a>
+- _Type:_ <a href="#@winglang/sdk.ex.DynamodbTablePutItemProps">DynamodbTablePutItemProps</a>
 
 ---
 
@@ -802,7 +799,7 @@ Return all items with a given partition key value.
 
 ###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.ex.DynamodbTableClientBase.query.parameter.props"></a>
 
-- *Type:* <a href="#@winglang/sdk.ex.DynamodbTableQueryProps">DynamodbTableQueryProps</a>
+- _Type:_ <a href="#@winglang/sdk.ex.DynamodbTableQueryProps">DynamodbTableQueryProps</a>
 
 ---
 
@@ -816,7 +813,7 @@ Return one or more items and item attributes by accessing every item in a table 
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.ex.DynamodbTableClientBase.scan.parameter.props"></a>
 
-- *Type:* <a href="#@winglang/sdk.ex.DynamodbTableScanProps">DynamodbTableScanProps</a>
+- _Type:_ <a href="#@winglang/sdk.ex.DynamodbTableScanProps">DynamodbTableScanProps</a>
 
 ---
 
@@ -830,7 +827,7 @@ Perform a synchronous write operation that groups up to 100 action requests.
 
 ###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.ex.DynamodbTableClientBase.transactWriteItems.parameter.props"></a>
 
-- *Type:* <a href="#@winglang/sdk.ex.DynamodbTransactWriteItemsProps">DynamodbTransactWriteItemsProps</a>
+- _Type:_ <a href="#@winglang/sdk.ex.DynamodbTransactWriteItemsProps">DynamodbTransactWriteItemsProps</a>
 
 ---
 
@@ -844,22 +841,19 @@ Get an item from the table.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.DynamodbTableClientBase.updateItem.parameter.key"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
 
 ---
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.ex.DynamodbTableClientBase.updateItem.parameter.props"></a>
 
-- *Type:* <a href="#@winglang/sdk.ex.DynamodbTableUpdateItemProps">DynamodbTableUpdateItemProps</a>
+- _Type:_ <a href="#@winglang/sdk.ex.DynamodbTableUpdateItemProps">DynamodbTableUpdateItemProps</a>
 
 ---
 
-
-
-
 ### RedisClientBase <a name="RedisClientBase" id="@winglang/sdk.ex.RedisClientBase"></a>
 
-- *Implements:* <a href="#@winglang/sdk.ex.IRedisClient">IRedisClient</a>
+- _Implements:_ <a href="#@winglang/sdk.ex.IRedisClient">IRedisClient</a>
 
 Base class for `Redis` Client.
 
@@ -872,23 +866,23 @@ new ex.RedisClientBase();
 ```
 
 | **Name** | **Type** | **Description** |
-| --- | --- | --- |
+| -------- | -------- | --------------- |
 
 ---
 
 #### Methods <a name="Methods" id="Methods"></a>
 
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.ex.RedisClientBase.del">del</a></code> | Removes the specified key. |
-| <code><a href="#@winglang/sdk.ex.RedisClientBase.get">get</a></code> | Get value at given key. |
-| <code><a href="#@winglang/sdk.ex.RedisClientBase.hget">hget</a></code> | Returns the value associated with field in the hash stored at key. |
-| <code><a href="#@winglang/sdk.ex.RedisClientBase.hset">hset</a></code> | Sets the specified field to respective value in the hash stored at key. |
-| <code><a href="#@winglang/sdk.ex.RedisClientBase.rawClient">rawClient</a></code> | Get raw redis client (currently IoRedis). |
-| <code><a href="#@winglang/sdk.ex.RedisClientBase.sadd">sadd</a></code> | Add the specified members to the set stored at key. |
-| <code><a href="#@winglang/sdk.ex.RedisClientBase.set">set</a></code> | Set key value pair. |
-| <code><a href="#@winglang/sdk.ex.RedisClientBase.smembers">smembers</a></code> | Returns all the members of the set value stored at key. |
-| <code><a href="#@winglang/sdk.ex.RedisClientBase.url">url</a></code> | Get url of redis server. |
+| **Name**                                                                         | **Description**                                                         |
+| -------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| <code><a href="#@winglang/sdk.ex.RedisClientBase.del">del</a></code>             | Removes the specified key.                                              |
+| <code><a href="#@winglang/sdk.ex.RedisClientBase.get">get</a></code>             | Get value at given key.                                                 |
+| <code><a href="#@winglang/sdk.ex.RedisClientBase.hget">hget</a></code>           | Returns the value associated with field in the hash stored at key.      |
+| <code><a href="#@winglang/sdk.ex.RedisClientBase.hset">hset</a></code>           | Sets the specified field to respective value in the hash stored at key. |
+| <code><a href="#@winglang/sdk.ex.RedisClientBase.rawClient">rawClient</a></code> | Get raw redis client (currently IoRedis).                               |
+| <code><a href="#@winglang/sdk.ex.RedisClientBase.sadd">sadd</a></code>           | Add the specified members to the set stored at key.                     |
+| <code><a href="#@winglang/sdk.ex.RedisClientBase.set">set</a></code>             | Set key value pair.                                                     |
+| <code><a href="#@winglang/sdk.ex.RedisClientBase.smembers">smembers</a></code>   | Returns all the members of the set value stored at key.                 |
+| <code><a href="#@winglang/sdk.ex.RedisClientBase.url">url</a></code>             | Get url of redis server.                                                |
 
 ---
 
@@ -902,7 +896,7 @@ Removes the specified key.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.RedisClientBase.del.parameter.key"></a>
 
-- *Type:* str
+- _Type:_ str
 
 ---
 
@@ -916,7 +910,7 @@ Get value at given key.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.RedisClientBase.get.parameter.key"></a>
 
-- *Type:* str
+- _Type:_ str
 
 ---
 
@@ -930,13 +924,13 @@ Returns the value associated with field in the hash stored at key.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.RedisClientBase.hget.parameter.key"></a>
 
-- *Type:* str
+- _Type:_ str
 
 ---
 
 ###### `field`<sup>Required</sup> <a name="field" id="@winglang/sdk.ex.RedisClientBase.hget.parameter.field"></a>
 
-- *Type:* str
+- _Type:_ str
 
 ---
 
@@ -950,19 +944,19 @@ Sets the specified field to respective value in the hash stored at key.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.RedisClientBase.hset.parameter.key"></a>
 
-- *Type:* str
+- _Type:_ str
 
 ---
 
 ###### `field`<sup>Required</sup> <a name="field" id="@winglang/sdk.ex.RedisClientBase.hset.parameter.field"></a>
 
-- *Type:* str
+- _Type:_ str
 
 ---
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.ex.RedisClientBase.hset.parameter.value"></a>
 
-- *Type:* str
+- _Type:_ str
 
 ---
 
@@ -984,13 +978,13 @@ Add the specified members to the set stored at key.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.RedisClientBase.sadd.parameter.key"></a>
 
-- *Type:* str
+- _Type:_ str
 
 ---
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.ex.RedisClientBase.sadd.parameter.value"></a>
 
-- *Type:* str
+- _Type:_ str
 
 ---
 
@@ -1004,13 +998,13 @@ Set key value pair.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.RedisClientBase.set.parameter.key"></a>
 
-- *Type:* str
+- _Type:_ str
 
 ---
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.ex.RedisClientBase.set.parameter.value"></a>
 
-- *Type:* str
+- _Type:_ str
 
 ---
 
@@ -1024,7 +1018,7 @@ Returns all the members of the set value stored at key.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.RedisClientBase.smembers.parameter.key"></a>
 
-- *Type:* str
+- _Type:_ str
 
 ---
 
@@ -1035,9 +1029,6 @@ url(): str
 ```
 
 Get url of redis server.
-
-
-
 
 ## Structs <a name="Structs" id="Structs"></a>
 
@@ -1055,12 +1046,12 @@ let DynamodbTableProps = ex.DynamodbTableProps{ ... };
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
+| **Name**                                                                                                           | **Type**                                                | **Description**              |
+| ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------- | ---------------------------- |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableProps.property.attributeDefinitions">attributeDefinitions</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | Table attribute definitions. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableProps.property.hashKey">hashKey</a></code> | <code>str</code> | Hash key for this table. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableProps.property.name">name</a></code> | <code>str</code> | The table's name. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableProps.property.rangeKey">rangeKey</a></code> | <code>str</code> | Range key for this table. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableProps.property.hashKey">hashKey</a></code>                           | <code>str</code>                                        | Hash key for this table.     |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableProps.property.name">name</a></code>                                 | <code>str</code>                                        | The table's name.            |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableProps.property.rangeKey">rangeKey</a></code>                         | <code>str</code>                                        | Range key for this table.    |
 
 ---
 
@@ -1070,11 +1061,11 @@ let DynamodbTableProps = ex.DynamodbTableProps{ ... };
 attributeDefinitions: Json;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
 
 Table attribute definitions.
 
-e.g.  { "myKey": "S", "myOtherKey": "S" }.
+e.g. { "myKey": "S", "myOtherKey": "S" }.
 
 ---
 
@@ -1084,7 +1075,7 @@ e.g.  { "myKey": "S", "myOtherKey": "S" }.
 hashKey: str;
 ```
 
-- *Type:* str
+- _Type:_ str
 
 Hash key for this table.
 
@@ -1096,7 +1087,7 @@ Hash key for this table.
 name: str;
 ```
 
-- *Type:* str
+- _Type:_ str
 
 The table's name.
 
@@ -1108,8 +1099,8 @@ The table's name.
 rangeKey: str;
 ```
 
-- *Type:* str
-- *Default:* undefined
+- _Type:_ str
+- _Default:_ undefined
 
 Range key for this table.
 
@@ -1129,8 +1120,8 @@ let DynamodbTablePutItemProps = ex.DynamodbTablePutItemProps{ ... };
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
+| **Name**                                                                                                                | **Type**         | **Description**                                                          |
+| ----------------------------------------------------------------------------------------------------------------------- | ---------------- | ------------------------------------------------------------------------ |
 | <code><a href="#@winglang/sdk.ex.DynamodbTablePutItemProps.property.conditionExpression">conditionExpression</a></code> | <code>str</code> | A condition that must be satisfied in order for an operation to succeed. |
 
 ---
@@ -1141,8 +1132,8 @@ let DynamodbTablePutItemProps = ex.DynamodbTablePutItemProps{ ... };
 conditionExpression: str;
 ```
 
-- *Type:* str
-- *Default:* undefined
+- _Type:_ str
+- _Default:_ undefined
 
 A condition that must be satisfied in order for an operation to succeed.
 
@@ -1162,20 +1153,20 @@ let DynamodbTableQueryProps = ex.DynamodbTableQueryProps{ ... };
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryProps.property.keyConditionExpression">keyConditionExpression</a></code> | <code>str</code> | The condition that specifies the key values for items to be retrieved by the Query action. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryProps.property.consistentRead">consistentRead</a></code> | <code>bool</code> | Determines the read consistency model: If set to true, then the operation uses strongly consistent reads; |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryProps.property.exclusiveStartKey">exclusiveStartKey</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The primary key of the first item that this operation will evaluate. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryProps.property.expressionAttributeNames">expressionAttributeNames</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | One or more substitution tokens for attribute names in an expression. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryProps.property.expressionAttributeValues">expressionAttributeValues</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | One or more values that can be substituted in an expression. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryProps.property.filterExpression">filterExpression</a></code> | <code>str</code> | A string that contains conditions that DynamoDB applies after the Query operation, but before the data is returned to you. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryProps.property.indexName">indexName</a></code> | <code>str</code> | The name of an index to query. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryProps.property.limit">limit</a></code> | <code>num</code> | The maximum number of items to evaluate (not necessarily the number of matching items). |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryProps.property.projectionExpression">projectionExpression</a></code> | <code>str</code> | A string that identifies one or more attributes to retrieve from the table. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryProps.property.returnConsumedCapacity">returnConsumedCapacity</a></code> | <code>str</code> | Determines the level of detail about either provisioned or on-demand throughput consumption. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryProps.property.scanIndexForward">scanIndexForward</a></code> | <code>bool</code> | Specifies the order for index traversal. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryProps.property.select">select</a></code> | <code>str</code> | The attributes to be returned in the result. |
+| **Name**                                                                                                                          | **Type**                                                | **Description**                                                                                                            |
+| --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryProps.property.keyConditionExpression">keyConditionExpression</a></code>       | <code>str</code>                                        | The condition that specifies the key values for items to be retrieved by the Query action.                                 |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryProps.property.consistentRead">consistentRead</a></code>                       | <code>bool</code>                                       | Determines the read consistency model: If set to true, then the operation uses strongly consistent reads;                  |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryProps.property.exclusiveStartKey">exclusiveStartKey</a></code>                 | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The primary key of the first item that this operation will evaluate.                                                       |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryProps.property.expressionAttributeNames">expressionAttributeNames</a></code>   | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | One or more substitution tokens for attribute names in an expression.                                                      |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryProps.property.expressionAttributeValues">expressionAttributeValues</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | One or more values that can be substituted in an expression.                                                               |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryProps.property.filterExpression">filterExpression</a></code>                   | <code>str</code>                                        | A string that contains conditions that DynamoDB applies after the Query operation, but before the data is returned to you. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryProps.property.indexName">indexName</a></code>                                 | <code>str</code>                                        | The name of an index to query.                                                                                             |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryProps.property.limit">limit</a></code>                                         | <code>num</code>                                        | The maximum number of items to evaluate (not necessarily the number of matching items).                                    |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryProps.property.projectionExpression">projectionExpression</a></code>           | <code>str</code>                                        | A string that identifies one or more attributes to retrieve from the table.                                                |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryProps.property.returnConsumedCapacity">returnConsumedCapacity</a></code>       | <code>str</code>                                        | Determines the level of detail about either provisioned or on-demand throughput consumption.                               |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryProps.property.scanIndexForward">scanIndexForward</a></code>                   | <code>bool</code>                                       | Specifies the order for index traversal.                                                                                   |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryProps.property.select">select</a></code>                                       | <code>str</code>                                        | The attributes to be returned in the result.                                                                               |
 
 ---
 
@@ -1185,7 +1176,7 @@ let DynamodbTableQueryProps = ex.DynamodbTableQueryProps{ ... };
 keyConditionExpression: str;
 ```
 
-- *Type:* str
+- _Type:_ str
 
 The condition that specifies the key values for items to be retrieved by the Query action.
 
@@ -1199,8 +1190,8 @@ The condition that specifies the key values for items to be retrieved by the Que
 consistentRead: bool;
 ```
 
-- *Type:* bool
-- *Default:* false
+- _Type:_ bool
+- _Default:_ false
 
 Determines the read consistency model: If set to true, then the operation uses strongly consistent reads;
 
@@ -1216,8 +1207,8 @@ otherwise, the operation uses eventually consistent reads.
 exclusiveStartKey: Json;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-- *Default:* undefined
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
+- _Default:_ undefined
 
 The primary key of the first item that this operation will evaluate.
 
@@ -1231,8 +1222,8 @@ The primary key of the first item that this operation will evaluate.
 expressionAttributeNames: Json;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-- *Default:* undefined
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
+- _Default:_ undefined
 
 One or more substitution tokens for attribute names in an expression.
 
@@ -1246,8 +1237,8 @@ One or more substitution tokens for attribute names in an expression.
 expressionAttributeValues: Json;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-- *Default:* undefined
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
+- _Default:_ undefined
 
 One or more values that can be substituted in an expression.
 
@@ -1261,8 +1252,8 @@ One or more values that can be substituted in an expression.
 filterExpression: str;
 ```
 
-- *Type:* str
-- *Default:* undefined
+- _Type:_ str
+- _Default:_ undefined
 
 A string that contains conditions that DynamoDB applies after the Query operation, but before the data is returned to you.
 
@@ -1276,8 +1267,8 @@ A string that contains conditions that DynamoDB applies after the Query operatio
 indexName: str;
 ```
 
-- *Type:* str
-- *Default:* undefined
+- _Type:_ str
+- _Default:_ undefined
 
 The name of an index to query.
 
@@ -1291,8 +1282,8 @@ The name of an index to query.
 limit: num;
 ```
 
-- *Type:* num
-- *Default:* undefined
+- _Type:_ num
+- _Default:_ undefined
 
 The maximum number of items to evaluate (not necessarily the number of matching items).
 
@@ -1306,8 +1297,8 @@ The maximum number of items to evaluate (not necessarily the number of matching 
 projectionExpression: str;
 ```
 
-- *Type:* str
-- *Default:* undefined
+- _Type:_ str
+- _Default:_ undefined
 
 A string that identifies one or more attributes to retrieve from the table.
 
@@ -1321,8 +1312,8 @@ A string that identifies one or more attributes to retrieve from the table.
 returnConsumedCapacity: str;
 ```
 
-- *Type:* str
-- *Default:* "NONE"
+- _Type:_ str
+- _Default:_ "NONE"
 
 Determines the level of detail about either provisioned or on-demand throughput consumption.
 
@@ -1336,8 +1327,8 @@ Determines the level of detail about either provisioned or on-demand throughput 
 scanIndexForward: bool;
 ```
 
-- *Type:* bool
-- *Default:* true
+- _Type:_ bool
+- _Default:_ true
 
 Specifies the order for index traversal.
 
@@ -1351,8 +1342,8 @@ Specifies the order for index traversal.
 select: str;
 ```
 
-- *Type:* str
-- *Default:* undefined
+- _Type:_ str
+- _Default:_ undefined
 
 The attributes to be returned in the result.
 
@@ -1376,13 +1367,13 @@ let DynamodbTableQueryResult = ex.DynamodbTableQueryResult{ ... };
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryResult.property.count">count</a></code> | <code>num</code> | The number of items in the response. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryResult.property.items">items</a></code> | <code>MutArray&lt;<a href="#@winglang/sdk.std.Json">Json</a>&gt;</code> | An array of item attributes that match the scan criteria. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryResult.property.scannedCount">scannedCount</a></code> | <code>num</code> | The number of items evaluated, before any QueryFilter is applied. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryResult.property.consumedCapacity">consumedCapacity</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The capacity units consumed by the Query operation. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryResult.property.lastEvaluatedKey">lastEvaluatedKey</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The primary key of the item where the operation stopped, inclusive of the previous result set. |
+| **Name**                                                                                                         | **Type**                                                                | **Description**                                                                                |
+| ---------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryResult.property.count">count</a></code>                       | <code>num</code>                                                        | The number of items in the response.                                                           |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryResult.property.items">items</a></code>                       | <code>MutArray&lt;<a href="#@winglang/sdk.std.Json">Json</a>&gt;</code> | An array of item attributes that match the scan criteria.                                      |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryResult.property.scannedCount">scannedCount</a></code>         | <code>num</code>                                                        | The number of items evaluated, before any QueryFilter is applied.                              |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryResult.property.consumedCapacity">consumedCapacity</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code>                 | The capacity units consumed by the Query operation.                                            |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableQueryResult.property.lastEvaluatedKey">lastEvaluatedKey</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code>                 | The primary key of the item where the operation stopped, inclusive of the previous result set. |
 
 ---
 
@@ -1392,7 +1383,7 @@ let DynamodbTableQueryResult = ex.DynamodbTableQueryResult{ ... };
 count: num;
 ```
 
-- *Type:* num
+- _Type:_ num
 
 The number of items in the response.
 
@@ -1404,7 +1395,7 @@ The number of items in the response.
 items: MutArray<Json>;
 ```
 
-- *Type:* MutArray&lt;<a href="#@winglang/sdk.std.Json">Json</a>&gt;
+- _Type:_ MutArray&lt;<a href="#@winglang/sdk.std.Json">Json</a>&gt;
 
 An array of item attributes that match the scan criteria.
 
@@ -1416,7 +1407,7 @@ An array of item attributes that match the scan criteria.
 scannedCount: num;
 ```
 
-- *Type:* num
+- _Type:_ num
 
 The number of items evaluated, before any QueryFilter is applied.
 
@@ -1428,7 +1419,7 @@ The number of items evaluated, before any QueryFilter is applied.
 consumedCapacity: Json;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
 
 The capacity units consumed by the Query operation.
 
@@ -1440,7 +1431,7 @@ The capacity units consumed by the Query operation.
 lastEvaluatedKey: Json;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
 
 The primary key of the item where the operation stopped, inclusive of the previous result set.
 
@@ -1460,20 +1451,20 @@ let DynamodbTableScanProps = ex.DynamodbTableScanProps{ ... };
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableScanProps.property.consistentRead">consistentRead</a></code> | <code>bool</code> | Determines the read consistency model: If set to true, then the operation uses strongly consistent reads; |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableScanProps.property.exclusiveStartKey">exclusiveStartKey</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The primary key of the first item that this operation will evaluate. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableScanProps.property.expressionAttributeNames">expressionAttributeNames</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | One or more substitution tokens for attribute names in an expression. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableScanProps.property.expressionAttributeValues">expressionAttributeValues</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | One or more values that can be substituted in an expression. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableScanProps.property.filterExpression">filterExpression</a></code> | <code>str</code> | A string that contains conditions that DynamoDB applies after the Query operation, but before the data is returned to you. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableScanProps.property.indexName">indexName</a></code> | <code>str</code> | The name of an index to query. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableScanProps.property.limit">limit</a></code> | <code>num</code> | The maximum number of items to evaluate (not necessarily the number of matching items). |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableScanProps.property.projectionExpression">projectionExpression</a></code> | <code>str</code> | A string that identifies one or more attributes to retrieve from the table. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableScanProps.property.returnConsumedCapacity">returnConsumedCapacity</a></code> | <code>str</code> | Determines the level of detail about either provisioned or on-demand throughput consumption. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableScanProps.property.segment">segment</a></code> | <code>num</code> | For a parallel Scan request, Segment identifies an individual segment to be scanned by an application worker. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableScanProps.property.select">select</a></code> | <code>str</code> | The attributes to be returned in the result. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableScanProps.property.totalSegments">totalSegments</a></code> | <code>num</code> | For a parallel Scan request, TotalSegments represents the total number of segments into which the Scan operation will be divided. |
+| **Name**                                                                                                                         | **Type**                                                | **Description**                                                                                                                   |
+| -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableScanProps.property.consistentRead">consistentRead</a></code>                       | <code>bool</code>                                       | Determines the read consistency model: If set to true, then the operation uses strongly consistent reads;                         |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableScanProps.property.exclusiveStartKey">exclusiveStartKey</a></code>                 | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The primary key of the first item that this operation will evaluate.                                                              |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableScanProps.property.expressionAttributeNames">expressionAttributeNames</a></code>   | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | One or more substitution tokens for attribute names in an expression.                                                             |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableScanProps.property.expressionAttributeValues">expressionAttributeValues</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | One or more values that can be substituted in an expression.                                                                      |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableScanProps.property.filterExpression">filterExpression</a></code>                   | <code>str</code>                                        | A string that contains conditions that DynamoDB applies after the Query operation, but before the data is returned to you.        |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableScanProps.property.indexName">indexName</a></code>                                 | <code>str</code>                                        | The name of an index to query.                                                                                                    |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableScanProps.property.limit">limit</a></code>                                         | <code>num</code>                                        | The maximum number of items to evaluate (not necessarily the number of matching items).                                           |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableScanProps.property.projectionExpression">projectionExpression</a></code>           | <code>str</code>                                        | A string that identifies one or more attributes to retrieve from the table.                                                       |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableScanProps.property.returnConsumedCapacity">returnConsumedCapacity</a></code>       | <code>str</code>                                        | Determines the level of detail about either provisioned or on-demand throughput consumption.                                      |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableScanProps.property.segment">segment</a></code>                                     | <code>num</code>                                        | For a parallel Scan request, Segment identifies an individual segment to be scanned by an application worker.                     |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableScanProps.property.select">select</a></code>                                       | <code>str</code>                                        | The attributes to be returned in the result.                                                                                      |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableScanProps.property.totalSegments">totalSegments</a></code>                         | <code>num</code>                                        | For a parallel Scan request, TotalSegments represents the total number of segments into which the Scan operation will be divided. |
 
 ---
 
@@ -1483,8 +1474,8 @@ let DynamodbTableScanProps = ex.DynamodbTableScanProps{ ... };
 consistentRead: bool;
 ```
 
-- *Type:* bool
-- *Default:* false
+- _Type:_ bool
+- _Default:_ false
 
 Determines the read consistency model: If set to true, then the operation uses strongly consistent reads;
 
@@ -1500,8 +1491,8 @@ otherwise, the operation uses eventually consistent reads.
 exclusiveStartKey: Json;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-- *Default:* undefined
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
+- _Default:_ undefined
 
 The primary key of the first item that this operation will evaluate.
 
@@ -1515,8 +1506,8 @@ The primary key of the first item that this operation will evaluate.
 expressionAttributeNames: Json;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-- *Default:* undefined
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
+- _Default:_ undefined
 
 One or more substitution tokens for attribute names in an expression.
 
@@ -1530,8 +1521,8 @@ One or more substitution tokens for attribute names in an expression.
 expressionAttributeValues: Json;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-- *Default:* undefined
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
+- _Default:_ undefined
 
 One or more values that can be substituted in an expression.
 
@@ -1545,8 +1536,8 @@ One or more values that can be substituted in an expression.
 filterExpression: str;
 ```
 
-- *Type:* str
-- *Default:* undefined
+- _Type:_ str
+- _Default:_ undefined
 
 A string that contains conditions that DynamoDB applies after the Query operation, but before the data is returned to you.
 
@@ -1560,8 +1551,8 @@ A string that contains conditions that DynamoDB applies after the Query operatio
 indexName: str;
 ```
 
-- *Type:* str
-- *Default:* undefined
+- _Type:_ str
+- _Default:_ undefined
 
 The name of an index to query.
 
@@ -1575,8 +1566,8 @@ The name of an index to query.
 limit: num;
 ```
 
-- *Type:* num
-- *Default:* undefined
+- _Type:_ num
+- _Default:_ undefined
 
 The maximum number of items to evaluate (not necessarily the number of matching items).
 
@@ -1590,8 +1581,8 @@ The maximum number of items to evaluate (not necessarily the number of matching 
 projectionExpression: str;
 ```
 
-- *Type:* str
-- *Default:* undefined
+- _Type:_ str
+- _Default:_ undefined
 
 A string that identifies one or more attributes to retrieve from the table.
 
@@ -1605,8 +1596,8 @@ A string that identifies one or more attributes to retrieve from the table.
 returnConsumedCapacity: str;
 ```
 
-- *Type:* str
-- *Default:* "NONE"
+- _Type:_ str
+- _Default:_ "NONE"
 
 Determines the level of detail about either provisioned or on-demand throughput consumption.
 
@@ -1620,8 +1611,8 @@ Determines the level of detail about either provisioned or on-demand throughput 
 segment: num;
 ```
 
-- *Type:* num
-- *Default:* 0
+- _Type:_ num
+- _Default:_ 0
 
 For a parallel Scan request, Segment identifies an individual segment to be scanned by an application worker.
 
@@ -1635,8 +1626,8 @@ For a parallel Scan request, Segment identifies an individual segment to be scan
 select: str;
 ```
 
-- *Type:* str
-- *Default:* undefined
+- _Type:_ str
+- _Default:_ undefined
 
 The attributes to be returned in the result.
 
@@ -1650,8 +1641,8 @@ The attributes to be returned in the result.
 totalSegments: num;
 ```
 
-- *Type:* num
-- *Default:* 1
+- _Type:_ num
+- _Default:_ 1
 
 For a parallel Scan request, TotalSegments represents the total number of segments into which the Scan operation will be divided.
 
@@ -1675,13 +1666,13 @@ let DynamodbTableScanResult = ex.DynamodbTableScanResult{ ... };
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableScanResult.property.count">count</a></code> | <code>num</code> | The number of items in the response. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableScanResult.property.items">items</a></code> | <code>MutArray&lt;<a href="#@winglang/sdk.std.Json">Json</a>&gt;</code> | An array of item attributes that match the scan criteria. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableScanResult.property.scannedCount">scannedCount</a></code> | <code>num</code> | The number of items evaluated, before any ScanFilter is applied. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableScanResult.property.consumedCapacity">consumedCapacity</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The capacity units consumed by the Scan operation. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableScanResult.property.lastEvaluatedKey">lastEvaluatedKey</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The primary key of the item where the operation stopped, inclusive of the previous result set. |
+| **Name**                                                                                                        | **Type**                                                                | **Description**                                                                                |
+| --------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableScanResult.property.count">count</a></code>                       | <code>num</code>                                                        | The number of items in the response.                                                           |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableScanResult.property.items">items</a></code>                       | <code>MutArray&lt;<a href="#@winglang/sdk.std.Json">Json</a>&gt;</code> | An array of item attributes that match the scan criteria.                                      |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableScanResult.property.scannedCount">scannedCount</a></code>         | <code>num</code>                                                        | The number of items evaluated, before any ScanFilter is applied.                               |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableScanResult.property.consumedCapacity">consumedCapacity</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code>                 | The capacity units consumed by the Scan operation.                                             |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableScanResult.property.lastEvaluatedKey">lastEvaluatedKey</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code>                 | The primary key of the item where the operation stopped, inclusive of the previous result set. |
 
 ---
 
@@ -1691,7 +1682,7 @@ let DynamodbTableScanResult = ex.DynamodbTableScanResult{ ... };
 count: num;
 ```
 
-- *Type:* num
+- _Type:_ num
 
 The number of items in the response.
 
@@ -1703,7 +1694,7 @@ The number of items in the response.
 items: MutArray<Json>;
 ```
 
-- *Type:* MutArray&lt;<a href="#@winglang/sdk.std.Json">Json</a>&gt;
+- _Type:_ MutArray&lt;<a href="#@winglang/sdk.std.Json">Json</a>&gt;
 
 An array of item attributes that match the scan criteria.
 
@@ -1715,7 +1706,7 @@ An array of item attributes that match the scan criteria.
 scannedCount: num;
 ```
 
-- *Type:* num
+- _Type:_ num
 
 The number of items evaluated, before any ScanFilter is applied.
 
@@ -1727,7 +1718,7 @@ The number of items evaluated, before any ScanFilter is applied.
 consumedCapacity: Json;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
 
 The capacity units consumed by the Scan operation.
 
@@ -1739,7 +1730,7 @@ The capacity units consumed by the Scan operation.
 lastEvaluatedKey: Json;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
 
 The primary key of the item where the operation stopped, inclusive of the previous result set.
 
@@ -1759,10 +1750,10 @@ let DynamodbTableUpdateItemProps = ex.DynamodbTableUpdateItemProps{ ... };
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableUpdateItemProps.property.expressionAttributeValues">expressionAttributeValues</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | One or more values that can be substituted in an expression. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableUpdateItemProps.property.updateExpression">updateExpression</a></code> | <code>str</code> | An expression that defines one or more attributes to be updated. |
+| **Name**                                                                                                                               | **Type**                                                | **Description**                                                  |
+| -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- | ---------------------------------------------------------------- |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableUpdateItemProps.property.expressionAttributeValues">expressionAttributeValues</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | One or more values that can be substituted in an expression.     |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableUpdateItemProps.property.updateExpression">updateExpression</a></code>                   | <code>str</code>                                        | An expression that defines one or more attributes to be updated. |
 
 ---
 
@@ -1772,8 +1763,8 @@ let DynamodbTableUpdateItemProps = ex.DynamodbTableUpdateItemProps{ ... };
 expressionAttributeValues: Json;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-- *Default:* undefined
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
+- _Default:_ undefined
 
 One or more values that can be substituted in an expression.
 
@@ -1785,8 +1776,8 @@ One or more values that can be substituted in an expression.
 updateExpression: str;
 ```
 
-- *Type:* str
-- *Default:* undefined
+- _Type:_ str
+- _Default:_ undefined
 
 An expression that defines one or more attributes to be updated.
 
@@ -1806,10 +1797,10 @@ let DynamodbTransactWriteItem = ex.DynamodbTransactWriteItem{ ... };
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
+| **Name**                                                                                      | **Type**                                                                                                               | **Description**                          |
+| --------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
 | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItem.property.delete">delete</a></code> | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemDeleteProps">DynamodbTransactWriteItemDeleteProps</a></code> | A request to perform a delete operation. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItem.property.put">put</a></code> | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemPutProps">DynamodbTransactWriteItemPutProps</a></code> | A request to perform a put operation. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItem.property.put">put</a></code>       | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemPutProps">DynamodbTransactWriteItemPutProps</a></code>       | A request to perform a put operation.    |
 | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItem.property.update">update</a></code> | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemUpdateProps">DynamodbTransactWriteItemUpdateProps</a></code> | A request to perform a update operation. |
 
 ---
@@ -1820,7 +1811,7 @@ let DynamodbTransactWriteItem = ex.DynamodbTransactWriteItem{ ... };
 delete: DynamodbTransactWriteItemDeleteProps;
 ```
 
-- *Type:* <a href="#@winglang/sdk.ex.DynamodbTransactWriteItemDeleteProps">DynamodbTransactWriteItemDeleteProps</a>
+- _Type:_ <a href="#@winglang/sdk.ex.DynamodbTransactWriteItemDeleteProps">DynamodbTransactWriteItemDeleteProps</a>
 
 A request to perform a delete operation.
 
@@ -1832,7 +1823,7 @@ A request to perform a delete operation.
 put: DynamodbTransactWriteItemPutProps;
 ```
 
-- *Type:* <a href="#@winglang/sdk.ex.DynamodbTransactWriteItemPutProps">DynamodbTransactWriteItemPutProps</a>
+- _Type:_ <a href="#@winglang/sdk.ex.DynamodbTransactWriteItemPutProps">DynamodbTransactWriteItemPutProps</a>
 
 A request to perform a put operation.
 
@@ -1844,7 +1835,7 @@ A request to perform a put operation.
 update: DynamodbTransactWriteItemUpdateProps;
 ```
 
-- *Type:* <a href="#@winglang/sdk.ex.DynamodbTransactWriteItemUpdateProps">DynamodbTransactWriteItemUpdateProps</a>
+- _Type:_ <a href="#@winglang/sdk.ex.DynamodbTransactWriteItemUpdateProps">DynamodbTransactWriteItemUpdateProps</a>
 
 A request to perform a update operation.
 
@@ -1864,8 +1855,8 @@ let DynamodbTransactWriteItemDeleteProps = ex.DynamodbTransactWriteItemDeletePro
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
+| **Name**                                                                                           | **Type**                                                | **Description**     |
+| -------------------------------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------- |
 | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemDeleteProps.property.key">key</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The item to delete. |
 
 ---
@@ -1876,7 +1867,7 @@ let DynamodbTransactWriteItemDeleteProps = ex.DynamodbTransactWriteItemDeletePro
 key: Json;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
 
 The item to delete.
 
@@ -1896,10 +1887,10 @@ let DynamodbTransactWriteItemPutProps = ex.DynamodbTransactWriteItemPutProps{ ..
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemPutProps.property.item">item</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The item to put. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemPutProps.property.conditionExpression">conditionExpression</a></code> | <code>str</code> | A condition that must be satisfied in order for an operation to succeed. |
+| **Name**                                                                                                                        | **Type**                                                | **Description**                                                          |
+| ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------ |
+| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemPutProps.property.item">item</a></code>                               | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The item to put.                                                         |
+| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemPutProps.property.conditionExpression">conditionExpression</a></code> | <code>str</code>                                        | A condition that must be satisfied in order for an operation to succeed. |
 
 ---
 
@@ -1909,7 +1900,7 @@ let DynamodbTransactWriteItemPutProps = ex.DynamodbTransactWriteItemPutProps{ ..
 item: Json;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
 
 The item to put.
 
@@ -1921,8 +1912,8 @@ The item to put.
 conditionExpression: str;
 ```
 
-- *Type:* str
-- *Default:* undefined
+- _Type:_ str
+- _Default:_ undefined
 
 A condition that must be satisfied in order for an operation to succeed.
 
@@ -1942,8 +1933,8 @@ let DynamodbTransactWriteItemsProps = ex.DynamodbTransactWriteItemsProps{ ... };
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
+| **Name**                                                                                                          | **Type**                                                                                                         | **Description**           |
+| ----------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemsProps.property.transactItems">transactItems</a></code> | <code>MutArray&lt;<a href="#@winglang/sdk.ex.DynamodbTransactWriteItem">DynamodbTransactWriteItem</a>&gt;</code> | The write transact items. |
 
 ---
@@ -1954,7 +1945,7 @@ let DynamodbTransactWriteItemsProps = ex.DynamodbTransactWriteItemsProps{ ... };
 transactItems: MutArray<DynamodbTransactWriteItem>;
 ```
 
-- *Type:* MutArray&lt;<a href="#@winglang/sdk.ex.DynamodbTransactWriteItem">DynamodbTransactWriteItem</a>&gt;
+- _Type:_ MutArray&lt;<a href="#@winglang/sdk.ex.DynamodbTransactWriteItem">DynamodbTransactWriteItem</a>&gt;
 
 The write transact items.
 
@@ -1974,11 +1965,11 @@ let DynamodbTransactWriteItemUpdateProps = ex.DynamodbTransactWriteItemUpdatePro
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemUpdateProps.property.key">key</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The item to update. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemUpdateProps.property.expressionAttributeValues">expressionAttributeValues</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | One or more values that can be substituted in an expression. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemUpdateProps.property.updateExpression">updateExpression</a></code> | <code>str</code> | An expression that defines one or more attributes to be updated. |
+| **Name**                                                                                                                                       | **Type**                                                | **Description**                                                  |
+| ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- | ---------------------------------------------------------------- |
+| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemUpdateProps.property.key">key</a></code>                                             | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The item to update.                                              |
+| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemUpdateProps.property.expressionAttributeValues">expressionAttributeValues</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | One or more values that can be substituted in an expression.     |
+| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemUpdateProps.property.updateExpression">updateExpression</a></code>                   | <code>str</code>                                        | An expression that defines one or more attributes to be updated. |
 
 ---
 
@@ -1988,7 +1979,7 @@ let DynamodbTransactWriteItemUpdateProps = ex.DynamodbTransactWriteItemUpdatePro
 key: Json;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
 
 The item to update.
 
@@ -2000,8 +1991,8 @@ The item to update.
 expressionAttributeValues: Json;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-- *Default:* undefined
+- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
+- _Default:_ undefined
 
 One or more values that can be substituted in an expression.
 
@@ -2013,8 +2004,8 @@ One or more values that can be substituted in an expression.
 updateExpression: str;
 ```
 
-- *Type:* str
-- *Default:* undefined
+- _Type:_ str
+- _Default:_ undefined
 
 An expression that defines one or more attributes to be updated.
 
@@ -2034,12 +2025,12 @@ let TableProps = ex.TableProps{ ... };
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.ex.TableProps.property.columns">columns</a></code> | <code>MutMap&lt;<a href="#@winglang/sdk.ex.ColumnType">ColumnType</a>&gt;</code> | The table's columns. |
-| <code><a href="#@winglang/sdk.ex.TableProps.property.initialRows">initialRows</a></code> | <code>MutMap&lt;<a href="#@winglang/sdk.std.Json">Json</a>&gt;</code> | The table's initial rows. |
-| <code><a href="#@winglang/sdk.ex.TableProps.property.name">name</a></code> | <code>str</code> | The table's name. |
-| <code><a href="#@winglang/sdk.ex.TableProps.property.primaryKey">primaryKey</a></code> | <code>str</code> | The table's primary key. |
+| **Name**                                                                                 | **Type**                                                                         | **Description**           |
+| ---------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ------------------------- |
+| <code><a href="#@winglang/sdk.ex.TableProps.property.columns">columns</a></code>         | <code>MutMap&lt;<a href="#@winglang/sdk.ex.ColumnType">ColumnType</a>&gt;</code> | The table's columns.      |
+| <code><a href="#@winglang/sdk.ex.TableProps.property.initialRows">initialRows</a></code> | <code>MutMap&lt;<a href="#@winglang/sdk.std.Json">Json</a>&gt;</code>            | The table's initial rows. |
+| <code><a href="#@winglang/sdk.ex.TableProps.property.name">name</a></code>               | <code>str</code>                                                                 | The table's name.         |
+| <code><a href="#@winglang/sdk.ex.TableProps.property.primaryKey">primaryKey</a></code>   | <code>str</code>                                                                 | The table's primary key.  |
 
 ---
 
@@ -2049,8 +2040,8 @@ let TableProps = ex.TableProps{ ... };
 columns: MutMap<ColumnType>;
 ```
 
-- *Type:* MutMap&lt;<a href="#@winglang/sdk.ex.ColumnType">ColumnType</a>&gt;
-- *Default:* undefined
+- _Type:_ MutMap&lt;<a href="#@winglang/sdk.ex.ColumnType">ColumnType</a>&gt;
+- _Default:_ undefined
 
 The table's columns.
 
@@ -2062,8 +2053,8 @@ The table's columns.
 initialRows: MutMap<Json>;
 ```
 
-- *Type:* MutMap&lt;<a href="#@winglang/sdk.std.Json">Json</a>&gt;
-- *Default:* undefined
+- _Type:_ MutMap&lt;<a href="#@winglang/sdk.std.Json">Json</a>&gt;
+- _Default:_ undefined
 
 The table's initial rows.
 
@@ -2075,8 +2066,8 @@ The table's initial rows.
 name: str;
 ```
 
-- *Type:* str
-- *Default:* undefined
+- _Type:_ str
+- _Default:_ undefined
 
 The table's name.
 
@@ -2088,8 +2079,8 @@ The table's name.
 primaryKey: str;
 ```
 
-- *Type:* str
-- *Default:* undefined
+- _Type:_ str
+- _Default:_ undefined
 
 The table's primary key.
 
@@ -2097,7 +2088,6 @@ No two rows can have the same value for the
 primary key.
 
 ---
-
 
 ## Enums <a name="Enums" id="Enums"></a>
 
@@ -2107,13 +2097,13 @@ Table column types.
 
 #### Members <a name="Members" id="Members"></a>
 
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.ex.ColumnType.STRING">STRING</a></code> | String type. |
-| <code><a href="#@winglang/sdk.ex.ColumnType.NUMBER">NUMBER</a></code> | Number type. |
-| <code><a href="#@winglang/sdk.ex.ColumnType.BOOLEAN">BOOLEAN</a></code> | Bool type. |
-| <code><a href="#@winglang/sdk.ex.ColumnType.DATE">DATE</a></code> | Date type. |
-| <code><a href="#@winglang/sdk.ex.ColumnType.JSON">JSON</a></code> | Json type. |
+| **Name**                                                                | **Description** |
+| ----------------------------------------------------------------------- | --------------- |
+| <code><a href="#@winglang/sdk.ex.ColumnType.STRING">STRING</a></code>   | String type.    |
+| <code><a href="#@winglang/sdk.ex.ColumnType.NUMBER">NUMBER</a></code>   | Number type.    |
+| <code><a href="#@winglang/sdk.ex.ColumnType.BOOLEAN">BOOLEAN</a></code> | Bool type.      |
+| <code><a href="#@winglang/sdk.ex.ColumnType.DATE">DATE</a></code>       | Date type.      |
+| <code><a href="#@winglang/sdk.ex.ColumnType.JSON">JSON</a></code>       | Json type.      |
 
 ---
 
@@ -2123,13 +2113,11 @@ String type.
 
 ---
 
-
 ##### `NUMBER` <a name="NUMBER" id="@winglang/sdk.ex.ColumnType.NUMBER"></a>
 
 Number type.
 
 ---
-
 
 ##### `BOOLEAN` <a name="BOOLEAN" id="@winglang/sdk.ex.ColumnType.BOOLEAN"></a>
 
@@ -2137,17 +2125,14 @@ Bool type.
 
 ---
 
-
 ##### `DATE` <a name="DATE" id="@winglang/sdk.ex.ColumnType.DATE"></a>
 
 Date type.
 
 ---
 
-
 ##### `JSON` <a name="JSON" id="@winglang/sdk.ex.ColumnType.JSON"></a>
 
 Json type.
 
 ---
-
