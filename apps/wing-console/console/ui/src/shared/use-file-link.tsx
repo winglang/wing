@@ -8,6 +8,8 @@ export const createHtmlLink = (
   expanded: boolean = false,
 ) => {
   return error
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
     .replaceAll(
       /\B((?:[a-z]:)?[/\\]\S+):(\d+):(\d+)/gi,
       (match, path, line, column) => {

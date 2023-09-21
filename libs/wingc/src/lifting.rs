@@ -215,7 +215,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 
 				let mut lifts = v.lifts_stack.pop().unwrap();
 				let is_field = code.contains("this."); // TODO: starts_with?
-				lifts.lift(v.ctx.current_method(), property, &code, is_field);
+				lifts.lift(v.ctx.current_method().map(|(m,_)|m), property, &code, is_field);
 				lifts.capture(&Liftable::Expr(node.id), &code, is_field);
 				v.lifts_stack.push(lifts);
 				return;
@@ -273,7 +273,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			}
 
 			let mut lifts = self.lifts_stack.pop().unwrap();
-			lifts.lift(self.ctx.current_method(), property, &code, false);
+			lifts.lift(self.ctx.current_method().map(|(m, _)| m), property, &code, false);
 			self.lifts_stack.push(lifts);
 		}
 
@@ -299,8 +299,8 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 		match &node.body {
 			FunctionBody::Statements(scope) => {
 				self.ctx.push_function_definition(
-					&node.name,
-					&node.signature.phase,
+					node.name.as_ref(),
+					&node.signature,
 					self.jsify.types.get_scope_env(&scope),
 				);
 
@@ -336,22 +336,13 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			return;
 		}
 
-		// extract the "env" from the class initializer and push it to the context
-		// because this is the environment in which we want to resolve references
-		// as oppose to the environment of the class definition itself.
-		let init_env = if let FunctionBody::Statements(ref s) = node.initializer.body {
-			Some(self.jsify.types.get_scope_env(&s))
-		} else {
-			None
-		};
-
 		let udt = UserDefinedType {
 			root: node.name.clone(),
 			fields: vec![],
 			span: node.name.span.clone(),
 		};
 
-		self.ctx.push_class(udt.clone(), &node.phase, init_env);
+		self.ctx.push_class(udt.clone(), &node.phase);
 
 		self.lifts_stack.push(Lifts::new());
 

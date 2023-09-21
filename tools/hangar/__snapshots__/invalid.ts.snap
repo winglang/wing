@@ -15,12 +15,209 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`access_modifiers.main.w 1`] = `
+"error: Method \\"private_method\\" is private in \\"Foo\\" but it's an implementation of \\"SomeInterface\\". Interface members must be public.
+   --> ../../../examples/tests/invalid/access_modifiers.main.w:40:3
+   |
+40 |   private_method() {}
+   |   ^^^^^^^^^^^^^^ Method \\"private_method\\" is private in \\"Foo\\" but it's an implementation of \\"SomeInterface\\". Interface members must be public.
+
+
+error: Method \\"protected_method\\" is protected in \\"Foo\\" but it's an implementation of \\"SomeInterface\\". Interface members must be public.
+   --> ../../../examples/tests/invalid/access_modifiers.main.w:38:13
+   |
+38 |   protected protected_method() {}
+   |             ^^^^^^^^^^^^^^^^ Method \\"protected_method\\" is protected in \\"Foo\\" but it's an implementation of \\"SomeInterface\\". Interface members must be public.
+
+
+error: Cannot override private method \\"method\\" of \\"Foo\\"
+   --> ../../../examples/tests/invalid/access_modifiers.main.w:49:3
+   |
+49 |   method() {
+   |   ^^^^^^ Cannot override private method \\"method\\" of \\"Foo\\"
+
+
+error: Cannot override private method \\"method\\" of \\"Bar\\"
+   --> ../../../examples/tests/invalid/access_modifiers.main.w:72:3
+   |
+72 |   method() {
+   |   ^^^^^^ Cannot override private method \\"method\\" of \\"Bar\\"
+
+
+error: Cannot access protected member \\"protected_field\\" of \\"Foo\\"
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:100:9
+    |
+100 | log(foo.protected_field);
+    |         ^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_field\\" of \\"Foo\\"
+
+
+error: Cannot access private member \\"private_field\\" of \\"Foo\\"
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:102:9
+    |
+102 | log(foo.private_field);
+    |         ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Foo\\"
+
+
+error: Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:106:5
+    |
+106 | Foo.protected_static_method();
+    |     ^^^^^^^^^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
+
+
+error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:108:5
+    |
+108 | Foo.private_static_method();
+    |     ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
+
+
+error: Cannot override public method \\"public_method\\" of \\"Foo\\" with a private method
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:148:3
+    |
+148 |   public_method() {}
+    |   ^^^^^^^^^^^^^ Cannot override public method \\"public_method\\" of \\"Foo\\" with a private method
+
+
+error: Cannot override protected method \\"protected_method\\" of \\"Foo\\" with a private method
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:150:3
+    |
+150 |   protected_method() {}
+    |   ^^^^^^^^^^^^^^^^ Cannot override protected method \\"protected_method\\" of \\"Foo\\" with a private method
+
+
+error: Cannot override private method \\"private_method\\" of \\"Foo\\"
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:152:3
+    |
+152 |   private_method() {}
+    |   ^^^^^^^^^^^^^^ Cannot override private method \\"private_method\\" of \\"Foo\\"
+
+
+error: Cannot override public method \\"public_method\\" of \\"Foo\\" with a protected method
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:157:13
+    |
+157 |   protected public_method() {}
+    |             ^^^^^^^^^^^^^ Cannot override public method \\"public_method\\" of \\"Foo\\" with a protected method
+
+
+error: Cannot override private method \\"private_method\\" of \\"Foo\\"
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:160:13
+    |
+160 |   protected private_method() {}
+    |             ^^^^^^^^^^^^^^ Cannot override private method \\"private_method\\" of \\"Foo\\"
+
+
+error: Cannot override private method \\"private_method\\" of \\"Foo\\"
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:167:7
+    |
+167 |   pub private_method() {}
+    |       ^^^^^^^^^^^^^^ Cannot override private method \\"private_method\\" of \\"Foo\\"
+
+
+error: Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:128:9
+    |
+128 |     Foo.protected_static_method();
+    |         ^^^^^^^^^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
+
+
+error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:130:9
+    |
+130 |     Foo.private_static_method();
+    |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
+
+
+error: Cannot access protected member \\"protected_field\\" of \\"Foo\\"
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:114:13
+    |
+114 |     log(foo.protected_field);
+    |             ^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_field\\" of \\"Foo\\"
+
+
+error: Cannot access private member \\"private_field\\" of \\"Foo\\"
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:116:13
+    |
+116 |     log(foo.private_field);
+    |             ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Foo\\"
+
+
+error: Cannot access protected member \\"protected_method\\" of \\"Foo\\"
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:120:9
+    |
+120 |     foo.protected_method();
+    |         ^^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_method\\" of \\"Foo\\"
+
+
+error: Cannot access private member \\"private_method\\" of \\"Foo\\"
+    --> ../../../examples/tests/invalid/access_modifiers.main.w:122:9
+    |
+122 |     foo.private_method();
+    |         ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Foo\\"
+
+
+error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
+   --> ../../../examples/tests/invalid/access_modifiers.main.w:88:9
+   |
+88 |     Foo.private_static_method();
+   |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
+
+
+error: Cannot access private member \\"private_static_method\\" of \\"Bar\\"
+   --> ../../../examples/tests/invalid/access_modifiers.main.w:93:9
+   |
+93 |     Bar.private_static_method();
+   |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Bar\\"
+
+
+error: Cannot access private member \\"private_field\\" of \\"Baz\\"
+   --> ../../../examples/tests/invalid/access_modifiers.main.w:75:14
+   |
+75 |     log(this.private_field);
+   |              ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Baz\\"
+
+
+error: Cannot access private member \\"private_method\\" of \\"Baz\\"
+   --> ../../../examples/tests/invalid/access_modifiers.main.w:80:10
+   |
+80 |     this.private_method();
+   |          ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Baz\\"
+
+
+error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
+   --> ../../../examples/tests/invalid/access_modifiers.main.w:65:9
+   |
+65 |     Foo.private_static_method();
+   |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
+
+
+error: Cannot access private member \\"private_field\\" of \\"Bar\\"
+   --> ../../../examples/tests/invalid/access_modifiers.main.w:52:14
+   |
+52 |     log(this.private_field);
+   |              ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Bar\\"
+
+
+error: Cannot access private member \\"private_method\\" of \\"Bar\\"
+   --> ../../../examples/tests/invalid/access_modifiers.main.w:57:10
+   |
+57 |     this.private_method();
+   |          ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Bar\\"
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`access_static_from_instance.main.w 1`] = `
 "error: Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
   --> ../../../examples/tests/invalid/access_static_from_instance.main.w:4:3
   |
-4 |   static f: num;
-  |   ^^^^^^^^^^^^^^ Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
+4 |   pub static f: num;
+  |   ^^^^^^^^^^^^^^^^^^ Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
 
 
 error: Cannot access static property \\"f\\" from instance
@@ -402,17 +599,10 @@ error: Unknown symbol \\"C11\\"
    |                   ^^^ Unknown symbol \\"C11\\"
 
 
-error: Expected type to be \\"num\\", but got \\"str\\" instead
-    --> ../../../examples/tests/invalid/class.main.w:123:11
-    |
-123 |     super(someStr);
-    |           ^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
-
-
 error: Expected 1 positional argument(s) but got 0
-    --> ../../../examples/tests/invalid/class.main.w:132:5
+    --> ../../../examples/tests/invalid/class.main.w:157:5
     |
-132 |     super();
+157 |     super();
     |     ^^^^^^^^ Expected 1 positional argument(s) but got 0
 
 
@@ -424,17 +614,24 @@ error: Expected 1 arguments but got 2
 
 
 error: Expected 1 positional argument(s) but got 0
-    --> ../../../examples/tests/invalid/class.main.w:157:5
+    --> ../../../examples/tests/invalid/class.main.w:132:5
     |
-157 |     super();
+132 |     super();
     |     ^^^^^^^^ Expected 1 positional argument(s) but got 0
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+    --> ../../../examples/tests/invalid/class.main.w:123:11
+    |
+123 |     super(someStr);
+    |           ^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Variable cannot be reassigned from inflight
    --> ../../../examples/tests/invalid/class.main.w:61:5
    |
 61 |     this.y = 1;
-   |     ^^^^^^^^^^^ Variable cannot be reassigned from inflight
+   |     ^^^^^^ Variable cannot be reassigned from inflight
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -1235,7 +1432,7 @@ exports[`inflight_reassign.main.w 1`] = `
   --> ../../../examples/tests/invalid/inflight_reassign.main.w:5:3
   |
 5 |   xvar = \\"hi\\";
-  |   ^^^^^^^^^^^^ Variable cannot be reassigned from inflight
+  |   ^^^^ Variable cannot be reassigned from inflight
 
 
 error: Variable is not reassignable
@@ -1381,6 +1578,21 @@ exports[`issue_2767.main.w 1`] = `
   |
 4 | x.set(\\"hello\\", new cloud.Bucket());
   |                ^^^^^^^^^^^^^^^^^^ Expected type to be \\"MutJson\\", but got \\"Bucket\\" instead
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`jsii_access_modifiers.main.w 1`] = `
+"error: Cannot access protected member \\"createTopic\\" of \\"Bucket\\"
+   --> ../../../examples/tests/invalid/jsii_access_modifiers.main.w:13:3
+   |
+13 | b.createTopic(cloud.BucketEventType.CREATE);
+   |   ^^^^^^^^^^^ Cannot access protected member \\"createTopic\\" of \\"Bucket\\"
 
 
  
@@ -2387,6 +2599,13 @@ exports[`super_call.main.w 1`] = `
    |       ^^ \\"super\\" can only be used inside of classes
 
 
+error: Cannot override private method \\"m1\\" of \\"BaseClass\\"
+   --> ../../../examples/tests/invalid/super_call.main.w:47:12
+   |
+47 |   inflight m1(): str {
+   |            ^^ Cannot override private method \\"m1\\" of \\"BaseClass\\"
+
+
 error: \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
    --> ../../../examples/tests/invalid/super_call.main.w:52:50
    |
@@ -2534,11 +2753,11 @@ Duration <DURATION>"
 `;
 
 exports[`unknown_field.main.w 1`] = `
-"error: No member \\"a\\" in class \\"String\\"
+"error: Unknown symbol \\"a\\"
   --> ../../../examples/tests/invalid/unknown_field.main.w:1:12
   |
 1 | std.String.a.b.c.fromJson();
-  |            ^ No member \\"a\\" in class \\"String\\"
+  |            ^ Unknown symbol \\"a\\"
 
 
  

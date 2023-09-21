@@ -9,7 +9,8 @@ test "pop" {
   let second = q.pop();
   let third = q.pop();
 
-  assert(first == "Foo");
-  assert(second == "Bar");
+  // queue is not FIFO
+  assert(first == "Foo" || first == "Bar");
+  assert(second == "Foo" || second == "Bar");
   assert(third == nil);
 }

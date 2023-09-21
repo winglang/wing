@@ -14,8 +14,8 @@ module.exports = function({ $q }) {
       const first = (await $q.pop());
       const second = (await $q.pop());
       const third = (await $q.pop());
-      {((cond) => {if (!cond) throw new Error("assertion failed: first == \"Foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(first,"Foo")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: second == \"Bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(second,"Bar")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: first == \"Foo\" || first == \"Bar\"")})(((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(first,"Foo")) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(first,"Bar"))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: second == \"Foo\" || second == \"Bar\"")})(((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(second,"Foo")) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(second,"Bar"))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: third == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(third,undefined)))};
     }
   }

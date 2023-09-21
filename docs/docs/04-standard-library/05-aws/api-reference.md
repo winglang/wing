@@ -160,17 +160,14 @@ Add an environment variable to the function.
 ##### `addPolicyStatements` <a name="addPolicyStatements" id="@winglang/sdk.aws.IAwsFunction.addPolicyStatements"></a>
 
 ```wing
-addPolicyStatements(policies: MutArray<PolicyStatement>): void
+addPolicyStatements(...policies: Array<PolicyStatement>): void
 ```
 
 Add policy statements to the function's IAM role.
 
-TODO: update this to accept a variadic parameter (...policies)
-https://github.com/winglang/wing/issues/397
-
 ###### `policies`<sup>Required</sup> <a name="policies" id="@winglang/sdk.aws.IAwsFunction.addPolicyStatements.parameter.policies"></a>
 
-- *Type:* MutArray&lt;<a href="#@winglang/sdk.aws.PolicyStatement">PolicyStatement</a>&gt;
+- *Type:* <a href="#@winglang/sdk.aws.PolicyStatement">PolicyStatement</a>
 
 ---
 

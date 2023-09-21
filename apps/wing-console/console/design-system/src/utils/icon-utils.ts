@@ -10,6 +10,7 @@ import {
   MegaphoneIcon,
   QueueListIcon,
   TableCellsIcon,
+  LockClosedIcon,
 } from "@heroicons/react/24/outline";
 import {
   ArchiveBoxIcon as SolidArchiveBoxIcon,
@@ -22,8 +23,10 @@ import {
   MegaphoneIcon as SolidMegaphoneIcon,
   QueueListIcon as SolidQueueListIcon,
   TableCellsIcon as SolidTableCellsIcon,
+  LockClosedIcon as SolidLockClosedIcon,
 } from "@heroicons/react/24/solid";
 
+import { DynamoDBIcon } from "../icons/dynamodb-icon.js";
 import { RedisIcon } from "../icons/redis-icon.js";
 
 const isTest = /(\/test$|\/test:([^/\\])+$)/;
@@ -74,6 +77,12 @@ export const getResourceIconComponent = (
     }
     case "wingsdk.cloud.Test": {
       return solid ? SolidBeakerIcon : BeakerIcon;
+    }
+    case "wingsdk.cloud.Secret": {
+      return solid ? SolidLockClosedIcon : LockClosedIcon;
+    }
+    case "wingsdk.ex.DynamodbTable": {
+      return DynamoDBIcon;
     }
     default: {
       return CubeIcon;

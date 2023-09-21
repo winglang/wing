@@ -169,8 +169,6 @@ static bool scan_automatic_block(TSLexer *lexer)
       return false;
     if (lexer->is_at_included_range_start(lexer))
       return true;
-    if (lexer->lookahead == '\n')
-      break;
     if (!iswspace(lexer->lookahead))
       return false;
     skip(lexer);

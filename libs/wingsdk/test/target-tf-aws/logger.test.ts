@@ -1,7 +1,7 @@
 import { test, expect } from "vitest";
 import { Function } from "../../src/cloud";
+import { Testing } from "../../src/simulator";
 import * as tfaws from "../../src/target-tf-aws";
-import { Testing } from "../../src/testing";
 import { mkdtemp, sanitizeCode, tfResourcesOf, tfSanitize } from "../util";
 
 test("inflight function uses a logger", () => {

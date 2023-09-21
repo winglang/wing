@@ -2,8 +2,8 @@ import { Construct } from "constructs";
 import { test, expect } from "vitest";
 import { waitUntilTrace } from "./util";
 import * as cloud from "../../src/cloud";
+import { Testing } from "../../src/simulator";
 import { TraceType } from "../../src/std";
-import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
 
 test("pushing messages through a queue", async () => {
