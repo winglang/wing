@@ -3,8 +3,8 @@ import { ON_DEPLOY_TYPE, OnDeploySchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
+import { BaseResourceSchema } from "../simulator";
 import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
-import { BaseResourceSchema } from "../testing";
 
 export class OnDeploy extends cloud.OnDeploy {
   private readonly fn: cloud.Function;

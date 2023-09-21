@@ -3,8 +3,8 @@ import { ISimulatorResource } from "./resource";
 import { DynamodbTableSchema, DYNAMODB_TABLE_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as ex from "../ex";
+import { BaseResourceSchema } from "../simulator/simulator";
 import { IInflightHost } from "../std";
-import { BaseResourceSchema } from "../testing/simulator";
 
 /**
  * Simulator implementation of `ex.DynamodbTable`.

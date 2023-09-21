@@ -8,11 +8,11 @@ import {
   FunctionHandle,
 } from "./schema-resources";
 import { IFunctionClient, IQueueClient } from "../cloud";
-import { TraceType } from "../std";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
-} from "../testing/simulator";
+} from "../simulator/simulator";
+import { TraceType } from "../std";
 
 export class Queue
   implements IQueueClient, ISimulatorResourceInstance, IEventPublisher
