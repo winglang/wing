@@ -126,6 +126,7 @@ export interface DynamodbTableScanProps {
   /**
    * Determines the read consistency model: If set to true, then the operation uses strongly consistent reads; otherwise, the operation uses eventually consistent reads.
    *
+   * @default false
    * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ConsistentRead
    */
   readonly consistentRead?: boolean;
@@ -133,6 +134,7 @@ export interface DynamodbTableScanProps {
   /**
    * The primary key of the first item that this operation will evaluate.
    *
+   * @default undefined
    * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ExclusiveStartKey
    */
   readonly exclusiveStartKey?: Json;
@@ -140,6 +142,7 @@ export interface DynamodbTableScanProps {
   /**
    * One or more substitution tokens for attribute names in an expression.
    *
+   * @default undefined
    * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ExpressionAttributeNames
    */
   readonly expressionAttributeNames?: Json;
@@ -147,6 +150,7 @@ export interface DynamodbTableScanProps {
   /**
    * One or more values that can be substituted in an expression.
    *
+   * @default undefined
    * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ExpressionAttributeValues
    */
   readonly expressionAttributeValues?: Json;
@@ -154,6 +158,7 @@ export interface DynamodbTableScanProps {
   /**
    * A string that contains conditions that DynamoDB applies after the Query operation, but before the data is returned to you.
    *
+   * @default undefined
    * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-FilterExpression
    */
   readonly filterExpression?: string;
@@ -161,6 +166,7 @@ export interface DynamodbTableScanProps {
   /**
    * The name of an index to query.
    *
+   * @default undefined
    * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-IndexName
    */
   readonly indexName?: string;
@@ -169,6 +175,7 @@ export interface DynamodbTableScanProps {
    * The maximum number of items to evaluate (not necessarily the number of matching items).
    *
    * @minimum 1
+   * @default undefined
    * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-Limit
    */
   readonly limit?: number;
@@ -176,6 +183,7 @@ export interface DynamodbTableScanProps {
   /**
    * A string that identifies one or more attributes to retrieve from the table.
    *
+   * @default undefined
    * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ProjectionExpression
    */
   readonly projectionExpression?: string;
@@ -183,6 +191,7 @@ export interface DynamodbTableScanProps {
   /**
    * Determines the level of detail about either provisioned or on-demand throughput consumption.
    *
+   * @default "NONE"
    * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ReturnConsumedCapacity
    */
   readonly returnConsumedCapacity?: "INDEXES" | "TOTAL" | "NONE";
@@ -192,6 +201,7 @@ export interface DynamodbTableScanProps {
    *
    * @minimum 0
    * @maximum 999999
+   * @default 0
    * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-Segment
    */
   readonly segment?: number;
@@ -199,6 +209,7 @@ export interface DynamodbTableScanProps {
   /**
    * The attributes to be returned in the result.
    *
+   * @default undefined
    * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-Select
    */
   readonly select?:
@@ -212,6 +223,7 @@ export interface DynamodbTableScanProps {
    *
    * @minimum 1
    * @maximum 1000000
+   * @default 1
    * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-TotalSegments
    */
   readonly totalSegments?: number;
@@ -343,7 +355,7 @@ export interface DynamodbTableQueryProps {
   /**
    * The attributes to be returned in the result.
    *
-   * @default "ALL_ATTRIBUTES"
+   * @default undefined
    * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-Select
    */
   readonly select?:
