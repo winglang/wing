@@ -34,8 +34,8 @@ import {
 import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
-import { WingSimulatorSchema } from "../simulator/simulator";
 import { TABLE_FQN, REDIS_FQN, DYNAMODB_TABLE_FQN } from "../ex";
+import { WingSimulatorSchema } from "../simulator/simulator";
 import { TEST_RUNNER_FQN } from "../std";
 
 /**
