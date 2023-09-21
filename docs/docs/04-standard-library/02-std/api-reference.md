@@ -2942,6 +2942,49 @@ Year.
 
 ---
 
+### JsonEntry <a name="JsonEntry" id="@winglang/sdk.std.JsonEntry"></a>
+
+Json entry representation.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.std.JsonEntry.Initializer"></a>
+
+```wing
+let JsonEntry = JsonEntry{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.JsonEntry.property.key">key</a></code> | <code>str</code> | The entry key. |
+| <code><a href="#@winglang/sdk.std.JsonEntry.property.value">value</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The entry value. |
+
+---
+
+##### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.JsonEntry.property.key"></a>
+
+```wing
+key: str;
+```
+
+- *Type:* str
+
+The entry key.
+
+---
+
+##### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.JsonEntry.property.value"></a>
+
+```wing
+value: Json;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+The entry value.
+
+---
+
 ### JsonStringifyOptions <a name="JsonStringifyOptions" id="@winglang/sdk.std.JsonStringifyOptions"></a>
 
 Options for stringify() method.

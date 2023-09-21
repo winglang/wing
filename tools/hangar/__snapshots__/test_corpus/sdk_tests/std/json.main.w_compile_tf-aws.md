@@ -160,12 +160,14 @@ module.exports = function({ $std_Json }) {
     }
     async handle() {
       const obj = ({"a": 1,"b": [3, 7, 9],"c": ({"foo": "bar"})});
-      const entries = (Object.entries(obj));
+      const entries = (await $std_Json.entries(obj));
       const keys = (Object.keys(obj));
       const values = (Object.values(obj));
-      for (const i of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,entries.length,false)) {
-        {((cond) => {if (!cond) throw new Error("assertion failed: entries.at(i).getAt(0) == keys.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })((await entries.at(i)), 0),(await keys.at(i)))))};
-        {((cond) => {if (!cond) throw new Error("assertion failed: entries.at(i).getAt(1) == values.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })((await entries.at(i)), 1),(await values.at(i)))))};
+      let i = 0;
+      for (const e of entries) {
+        {((cond) => {if (!cond) throw new Error("assertion failed: e.key == keys.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e.key,(await keys.at(i)))))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: e.value == values.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e.value,(await values.at(i)))))};
+        i += 1;
       }
     }
   }
