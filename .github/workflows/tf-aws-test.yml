@@ -99,10 +99,10 @@ jobs:
           command: |
             if  ${{ env.LOCAL_BUILD == 'false' }}
             then
-              wing test -t sim ${{ matrix.test.directory }}/*.w
+              wing test -t tf-aws ${{ matrix.test.directory }}/*.w
             else
               cd temp
-              ./node_modules/.bin/wing test -t sim ../${{ matrix.test.directory }}/*.w
+              ./node_modules/.bin/wing test -t tf-aws ../${{ matrix.test.directory }}/*.w
             fi
 
       - name: Output Terraform log
