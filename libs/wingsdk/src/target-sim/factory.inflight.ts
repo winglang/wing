@@ -21,7 +21,7 @@ import type {
   ISimulatorFactory,
   ISimulatorContext,
   ISimulatorResourceInstance,
-} from "../testing/simulator";
+} from "../simulator/simulator";
 
 export class DefaultSimulatorFactory implements ISimulatorFactory {
   /**

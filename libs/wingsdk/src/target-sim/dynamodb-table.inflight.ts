@@ -9,7 +9,7 @@ import { runCommand, runDockerImage } from "../shared/misc";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
-} from "../testing/simulator";
+} from "../simulator/simulator";
 
 const MAX_CREATE_TABLE_COMMAND_ATTEMPTS = 50;
 
