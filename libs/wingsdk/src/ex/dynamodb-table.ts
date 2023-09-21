@@ -501,6 +501,7 @@ export interface IDynamodbTableClient {
    * Get an item from the table.
    * @param key key of the item.
    * @inflight
+   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html
    */
   getItem(key: Json): Promise<Json>;
 
@@ -512,9 +513,10 @@ export interface IDynamodbTableClient {
   scan(props?: DynamodbTableScanProps): Promise<DynamodbTableScanResult>;
 
   /**
-   * Return one or more items and item attributes by accessing every item in a table or a secondary index.
-   * @param props properties for the scan operation.
+   * Returs all items with a given partition key value.
+   * @param props properties for the query operation.
    * @inflight
+   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html
    */
   query(props: DynamodbTableQueryProps): Promise<DynamodbTableQueryResult>;
 
