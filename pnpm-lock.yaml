@@ -273,6 +273,9 @@ importers:
       '@segment/analytics-node':
         specifier: ^1.1.0
         version: 1.1.0
+      '@types/glob':
+        specifier: ^8.1.0
+        version: 8.1.0
       '@wingconsole/app':
         specifier: workspace:^
         version: link:../wing-console/console/app
@@ -300,6 +303,9 @@ importers:
       debug:
         specifier: ^4.3.4
         version: 4.3.4
+      glob:
+        specifier: ^8.1.0
+        version: 8.1.0
       nanoid:
         specifier: ^3.3.6
         version: 3.3.6
@@ -12438,7 +12444,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20230911
+      typescript: 5.3.0-dev.20230921
     dev: true
 
   /dset@3.1.2:
@@ -21476,8 +21482,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20230911:
-    resolution: {integrity: sha512-2iI2l7OuGvU668gBje+JQKE8bsf7SH8w8ScwUkENHCcrbaDpXa/Oqfuwq5gdFM7SfVfp5p6c8kHZRMvL+kabJg==}
+  /typescript@5.3.0-dev.20230921:
+    resolution: {integrity: sha512-TZnDMkY/mgooSXJv72Zxr71MvXYUKiH05lekDOB9FaScoHLGNDvqw6IrT6qXx/kD6eJFpW2gadIz1eJQeA/URw==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

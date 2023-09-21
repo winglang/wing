@@ -6,7 +6,7 @@ import { collectCommandAnalytics } from "./analytics/collect";
 import { exportAnalytics } from "./analytics/export";
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { currentPackage } from "./util";
-
+import { glob } from "glob";
 export const PACKAGE_VERSION = currentPackage.version;
 let analyticsExportFile: Promise<string | undefined>;
 
@@ -21,6 +21,13 @@ if (!SUPPORTED_NODE_VERSION) {
 
 function runSubCommand(subCommand: string) {
   return async (...args: any[]) => {
+    if (args[0] === "DEFAULT_TEST_ENTRYPOINTS") {
+      args[0] = glob.sync("*.test.w");
+      if (args[0].length === 0) {
+        throw new Error("No '.test.w' file found in current directory.");
+      }
+    }
+
     try {
       const exitCode = await import(`./commands/${subCommand}`).then((m) => m[subCommand](...args));
       if (exitCode === 1) {
@@ -119,7 +126,7 @@ async function main() {
     .command("run")
     .alias("it")
     .description("Runs a Wing program in the Wing Console")
-    .argument("[entrypoint]", "program .w entrypoint")
+    .argument("[entrypoint]", "program .w entrypoint", "main.w")
     .option("-p, --port <port>", "specify port")
     .option("--no-open", "Do not open the Wing Console in the browser")
     .hook("preAction", collectAnalyticsHook)
@@ -134,7 +141,7 @@ async function main() {
   program
     .command("compile")
     .description("Compiles a Wing program")
-    .argument("<entrypoint>", "program .w entrypoint")
+    .argument("[entrypoint]", "program .w entrypoint", "main.w")
     .addOption(
       new Option("-t, --target <target>", "Target platform")
         .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])
@@ -151,7 +158,7 @@ async function main() {
     .description(
       "Compiles a Wing program and runs all functions with the word 'test' or start with 'test:' in their resource identifiers"
     )
-    .argument("<entrypoint...>", "all entrypoints to test")
+    .argument("[entrypoint...]", "all entrypoints to test", "DEFAULT_TEST_ENTRYPOINTS")
     .addOption(
       new Option("-t, --target <target>", "Target platform")
         .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])
