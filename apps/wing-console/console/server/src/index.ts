@@ -18,6 +18,7 @@ import {
 } from "./utils/createRouter.js";
 import type { LogInterface } from "./utils/LogInterface.js";
 import { createSimulator } from "./utils/simulator.js";
+import { bindSimulatorResourceUrls } from "./utils/bind-resource-url.js";
 
 export type {
   TestsStateManager,
@@ -157,7 +158,11 @@ export const createConsoleServer = async ({
     appState = "loadingSimulator";
     invalidateQuery("app.state");
   });
-  simulator.on("started", () => {
+  simulator.on("started", async () => {
+    if (hostUtils?.bindResourceUrl) {
+      await bindSimulatorResourceUrls(await simulator.instance(), hostUtils.bindResourceUrl);
+    }
+
     appState = "success";
     invalidateQuery(undefined);
     isStarting = false;
