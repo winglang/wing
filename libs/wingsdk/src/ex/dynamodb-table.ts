@@ -513,7 +513,7 @@ export interface IDynamodbTableClient {
   scan(props?: DynamodbTableScanProps): Promise<DynamodbTableScanResult>;
 
   /**
-   * Returs all items with a given partition key value.
+   * Return all items with a given partition key value.
    * @param props properties for the query operation.
    * @inflight
    * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html

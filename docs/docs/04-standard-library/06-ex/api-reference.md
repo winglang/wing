@@ -46,7 +46,7 @@ new ex.DynamodbTable(props: DynamodbTableProps);
 | <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.deleteItem">deleteItem</a></code> | Delete an item from the table. |
 | <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.getItem">getItem</a></code> | Get an item from the table. |
 | <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.putItem">putItem</a></code> | Put an item into the table. |
-| <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.query">query</a></code> | Return one or more items and item attributes by accessing every item in a table or a secondary index. |
+| <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.query">query</a></code> | Return all items with a given partition key value. |
 | <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.scan">scan</a></code> | Return one or more items and item attributes by accessing every item in a table or a secondary index. |
 | <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.transactWriteItems">transactWriteItems</a></code> | Perform a synchronous write operation that groups up to 100 action requests. |
 | <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.updateItem">updateItem</a></code> | Get an item from the table. |
@@ -76,6 +76,8 @@ inflight getItem(key: Json): Json
 ```
 
 Get an item from the table.
+
+> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html)
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.IDynamodbTableClient.getItem.parameter.key"></a>
 
@@ -115,13 +117,15 @@ dynamodb PutItem props.
 inflight query(props: DynamodbTableQueryProps): DynamodbTableQueryResult
 ```
 
-Return one or more items and item attributes by accessing every item in a table or a secondary index.
+Return all items with a given partition key value.
+
+> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html)
 
 ###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.ex.IDynamodbTableClient.query.parameter.props"></a>
 
 - *Type:* <a href="#@winglang/sdk.ex.DynamodbTableQueryProps">DynamodbTableQueryProps</a>
 
-properties for the scan operation.
+properties for the query operation.
 
 ---
 
@@ -733,7 +737,7 @@ the table name.
 | <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.deleteItem">deleteItem</a></code> | Delete an item from the table. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.getItem">getItem</a></code> | Get an item from the table. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.putItem">putItem</a></code> | Put an item into the table. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.query">query</a></code> | Return one or more items and item attributes by accessing every item in a table or a secondary index. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.query">query</a></code> | Return all items with a given partition key value. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.scan">scan</a></code> | Return one or more items and item attributes by accessing every item in a table or a secondary index. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.transactWriteItems">transactWriteItems</a></code> | Perform a synchronous write operation that groups up to 100 action requests. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.updateItem">updateItem</a></code> | Get an item from the table. |
@@ -794,7 +798,7 @@ Put an item into the table.
 query(props: DynamodbTableQueryProps): DynamodbTableQueryResult
 ```
 
-Return one or more items and item attributes by accessing every item in a table or a secondary index.
+Return all items with a given partition key value.
 
 ###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.ex.DynamodbTableClientBase.query.parameter.props"></a>
 
