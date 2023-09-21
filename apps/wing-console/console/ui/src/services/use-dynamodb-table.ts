@@ -23,7 +23,7 @@ export const useDynamodbTable = ({ resourcePath }: UseTableOptions) => {
 
   const removeRow = useCallback(
     async (index: number) => {
-      const row = table.data?.rows[index];
+      const row = table.data?.rows.items[index];
       if (!row) {
         return;
       }
