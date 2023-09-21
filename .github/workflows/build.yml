@@ -5,7 +5,6 @@ on:
     types:
       - opened
       - synchronize
-      - auto_merge_enabled
     paths-ignore:
       - "docs/**"
       - "logo/**"
@@ -269,7 +268,7 @@ jobs:
   aws-sdk-spec-test:
     needs:
       - build
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action == 'auto_merge_enabled')
+    if: github.event_name == 'push'
     uses: ./.github/workflows/tf-aws-test.yml
     secrets: inherit
 
