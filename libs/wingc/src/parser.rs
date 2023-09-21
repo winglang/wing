@@ -754,7 +754,10 @@ impl<'s> Parser<'s> {
 			}
 			if source_path.ends_with(".main.w\"") || source_path.ends_with(".test.w\"") {
 				return self.with_error(
-					format!("Cannot bring module \"{}\": main/test files cannot be brought", source_path),
+					format!(
+						"Cannot bring module \"{}\": main/test files cannot be brought",
+						source_path
+					),
 					statement_node,
 				);
 			}
