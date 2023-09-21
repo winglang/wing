@@ -1,3 +1,6 @@
+// used by:
+// - bring_local_normalization.test.w
+
 bring "./store.w" as file1;
 bring "./subdir/subfile.w" as file2;
 bring "./subdir/empty.w" as file3;
