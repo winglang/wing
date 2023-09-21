@@ -330,7 +330,6 @@ jobs:
       - benchmark
       - test
       - aws-sdk-spec-test
-      - file-diff-sdk-spec-test
     steps:
       - name: Check failure
         if: needs.build.result == 'failure' || needs.e2e-test.result == 'failure' || needs.benchmark.result == 'failure' || needs.test.result == 'failure'
