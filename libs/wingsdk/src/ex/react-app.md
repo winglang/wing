@@ -42,7 +42,7 @@ let website = new ex.ReactApp(
 - When calling `wing it` or `wing compile` for the `sim` target with `isDevRun` set to `false`, Wing will build React and serve it via the [Website resource](../01-cloud/website.md).
 - When calling `wing compile` for any other target, Wing will build React locally and generate output files, preparing it for deployment to the cloud using the [Website resource](../01-cloud/website.md).
 
-#### using wing variables within react code
+### Using wing variables within react code
 
 `ex.ReactApp` allows you to pass preflight arguments from wing to the React app using `addEnvironmentVariable` method:
 
