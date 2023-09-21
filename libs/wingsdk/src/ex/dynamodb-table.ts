@@ -607,11 +607,11 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
         TableName: this.tableName,
         ConsistentRead: props?.consistentRead,
         ExclusiveStartKey: props?.exclusiveStartKey
-          ? marshall(props?.exclusiveStartKey)
+          ? marshall(props.exclusiveStartKey)
           : undefined,
         ExpressionAttributeNames: props?.expressionAttributeNames as any,
         ExpressionAttributeValues: props?.expressionAttributeValues
-          ? marshall(props?.expressionAttributeValues)
+          ? marshall(props.expressionAttributeValues)
           : undefined,
         FilterExpression: props?.filterExpression,
         IndexName: props?.indexName,
@@ -642,7 +642,9 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
       new QueryCommand({
         TableName: this.tableName,
         ConsistentRead: props.consistentRead,
-        ExclusiveStartKey: marshall(props.exclusiveStartKey),
+        ExclusiveStartKey: props.exclusiveStartKey
+          ? marshall(props.exclusiveStartKey)
+          : undefined,
         ExpressionAttributeNames: props.expressionAttributeNames as any,
         ExpressionAttributeValues: props.expressionAttributeValues
           ? marshall(props.expressionAttributeValues)
@@ -657,6 +659,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
         Select: props.select,
       })
     );
+    console.log({ result });
     return {
       consumedCapacity: result.ConsumedCapacity as Json | undefined,
       count: result.Count!,

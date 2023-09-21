@@ -268,7 +268,7 @@ test("query", async () => {
     });
     expect(result.items).toEqual([
       { id: "1", age: 1 },
-      { id: "1", loc: 2 },
+      { id: "1", age: 2 },
     ]);
   }
   {
@@ -277,7 +277,7 @@ test("query", async () => {
       expressionAttributeValues: { ":id": "2" } as any,
     });
     expect(result.items).toEqual([
-      { id: "2", loc: 1 },
+      { id: "2", age: 1 },
       { id: "2", age: 3 },
     ]);
   }
