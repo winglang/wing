@@ -1,4 +1,4 @@
-name: SDK Spec AWS Tests
+name: SDK Spec AWS Tests #test
 on:
   workflow_call: {}
   workflow_dispatch: {}
