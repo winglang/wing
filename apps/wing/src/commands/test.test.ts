@@ -121,13 +121,4 @@ const EXAMPLE_UNFILTERED_TESTS: string[] = [
   "root/env2/test:get()",
   "root/env2/test:get:At()",
   "root/env2/test:stringify()",
-  "root/env3/test:get()",
-  "root/env3/test:get:At()",
-  "root/env3/test:stringify()",
-  "root/env4/test:get()",
-  "root/env4/test:get:At()",
-  "root/env4/test:stringify()",
-  "root/env5/test:get()",
-  "root/env5/test:get:At()",
-  "root/env5/test:stringify()",
 ];
