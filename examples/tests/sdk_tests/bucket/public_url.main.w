@@ -2,8 +2,6 @@ bring cloud;
 bring http;
 bring util;
 
-// minor change to see if works
-
 let publicBucket = new cloud.Bucket(public: true) as "publicBucket";
 let privateBucket = new cloud.Bucket() as "privateBucket";
 
@@ -28,7 +26,7 @@ test "publicUrl" {
   assert(publicUrl != "");
   
   // TODO: works in aws, doesn't work in sim since publicUrl is returning a path to the file, remove condition when #2833 is resolved.
-  if (util.env("WING_TARGET") != "simm") {
+  if (util.env("WING_TARGET") != "sim") {
     assert(http.get(publicUrl).body ==  "Foo");
   }
 
