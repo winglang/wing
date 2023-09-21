@@ -62,7 +62,7 @@ jobs:
         run: |
           mkdir temp
           cd temp
-
+          npm init --yes
           npm install ../dist/*-[0-9]*.[0-9]*.[0-9]*.tgz
           wing --version
           ./node_modules/.bin/wing --version
