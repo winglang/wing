@@ -12,6 +12,7 @@ on:
     branches:
       - main
       - dev
+      - tsuf/sdk-spec-test-prior-to-build-2
   workflow_dispatch: {}
 
 concurrency:
@@ -270,13 +271,6 @@ jobs:
       - build
     if: github.event_name == 'push'
     uses: ./.github/workflows/tf-aws-test.yml
-    secrets: inherit
-
-  file-diff-sdk-spec-test:
-    needs:
-      - build
-    if: github.event_name == 'pull_request'
-    uses: ./.github/workflows/wing-test.yml
     secrets: inherit
 
   console-preview:
