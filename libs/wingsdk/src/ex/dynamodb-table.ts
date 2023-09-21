@@ -3,6 +3,7 @@ import {
   DynamoDBClient,
   GetItemCommand,
   PutItemCommand,
+  QueryCommand,
   ScanCommand,
   TransactWriteItemsCommand,
   UpdateItemCommand,
@@ -84,6 +85,7 @@ export abstract class DynamodbTable extends Resource {
       DynamodbTableInflightMethods.DELETE_ITEM,
       DynamodbTableInflightMethods.GET_ITEM,
       DynamodbTableInflightMethods.SCAN,
+      DynamodbTableInflightMethods.QUERY,
       DynamodbTableInflightMethods.TRANSACT_WRITE_ITEMS,
     ];
   }
@@ -115,6 +117,97 @@ export interface DynamodbTableUpdateItemProps {
    * @default undefined
    */
   readonly expressionAttributeValues?: Json;
+}
+
+export interface DynamodbTableQueryProps {
+  /**
+   * Determines the read consistency model: If set to true, then the operation uses strongly consistent reads; otherwise, the operation uses eventually consistent reads.
+   *
+   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-ConsistentRead
+   */
+  readonly consistentRead?: boolean;
+
+  /**
+   * The primary key of the first item that this operation will evaluate.
+   *
+   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-ExclusiveStartKey
+   */
+  readonly exclusiveStartKey?: Json;
+
+  /**
+   * One or more substitution tokens for attribute names in an expression.
+   *
+   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#API_Query_RequestSyntax
+   */
+  readonly expressionAttributeNames?: Json;
+
+  /**
+   * One or more values that can be substituted in an expression.
+   *
+   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-ExpressionAttributeValues
+   */
+  readonly expressionAttributeValues?: Json;
+
+  /**
+   * A string that contains conditions that DynamoDB applies after the Query operation, but before the data is returned to you.
+   *
+   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-FilterExpression
+   */
+  readonly filterExpression?: string;
+
+  /**
+   * The name of an index to query.
+   *
+   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-IndexName
+   */
+  readonly indexName?: string;
+
+  /**
+   * The condition that specifies the key values for items to be retrieved by the Query action.
+   *
+   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-KeyConditionExpression
+   */
+  readonly keyConditionExpression?: string;
+
+  /**
+   * The maximum number of items to evaluate (not necessarily the number of matching items).
+   *
+   * @minimum 1
+   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-Limit
+   */
+  readonly limit?: number;
+
+  /**
+   * A string that identifies one or more attributes to retrieve from the table.
+   *
+   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-ProjectionExpression
+   */
+  readonly projectionExpression?: string;
+
+  /**
+   * Determines the level of detail about either provisioned or on-demand throughput consumption.
+   *
+   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-ReturnConsumedCapacity
+   */
+  readonly returnConsumedCapacity?: "INDEXES" | "TOTAL" | "NONE";
+
+  /**
+   * Specifies the order for index traversal.
+   *
+   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-ScanIndexForward
+   */
+  readonly scanIndexForward?: boolean;
+
+  /**
+   * The attributes to be returned in the result.
+   *
+   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-Select
+   */
+  readonly select?:
+    | "ALL_ATTRIBUTES"
+    | "ALL_PROJECTED_ATTRIBUTES"
+    | "SPECIFIC_ATTRIBUTES"
+    | "COUNT";
 }
 
 /**
@@ -253,6 +346,8 @@ export enum DynamodbTableInflightMethods {
   GET_ITEM = "getItem",
   /** `DynamodbTable.scan` */
   SCAN = "scan",
+  /** `DynamodbTable.query` */
+  QUERY = "query",
   /** `DynamodbTable.transactWriteItems` */
   TRANSACT_WRITE_ITEMS = "transactWriteItems",
 }
@@ -336,6 +431,36 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
     const result = await client.send(
       new ScanCommand({
         TableName: this.tableName,
+      })
+    );
+    const response = [];
+    if (result.Items) {
+      for (const item of result.Items) {
+        response.push(unmarshall(item) as Json);
+      }
+    }
+    return response;
+  }
+
+  public async query(props: DynamodbTableQueryProps): Promise<Array<Json>> {
+    const client = await this._rawClient();
+    const result = await client.send(
+      new QueryCommand({
+        TableName: this.tableName,
+        ConsistentRead: props.consistentRead,
+        ExclusiveStartKey: marshall(props.exclusiveStartKey),
+        ExpressionAttributeNames: props.expressionAttributeNames as any,
+        ExpressionAttributeValues: props.expressionAttributeValues
+          ? marshall(props.expressionAttributeValues)
+          : undefined,
+        FilterExpression: props.filterExpression,
+        IndexName: props.indexName,
+        KeyConditionExpression: props.keyConditionExpression,
+        Limit: props.limit,
+        ProjectionExpression: props.projectionExpression,
+        ReturnConsumedCapacity: props.returnConsumedCapacity,
+        ScanIndexForward: props.scanIndexForward,
+        Select: props.select,
       })
     );
     const response = [];
