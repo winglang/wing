@@ -280,9 +280,9 @@ pub struct Namespace {
 
 #[derive(Debug)]
 pub enum ResolveSource {
-	/// A wing file within the source tree for this compilation
+	/// A wing file within the source tree for this compilation.
 	WingFile,
-	/// Something like an external JSII module. This will will the spec for the module.
+	/// External JSII module. This string will be the spec of the module, either a path or a npm package name.
 	ExternalModule(String),
 }
 
