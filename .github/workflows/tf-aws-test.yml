@@ -63,7 +63,7 @@ jobs:
           mkdir temp
           cd temp
 
-          npm install ./dist/*-[0-9]*.[0-9]*.[0-9]*.tgz
+          npm install ../dist/*-[0-9]*.[0-9]*.[0-9]*.tgz
           wing --version
           ./node_modules/.bin/wing --version
 
