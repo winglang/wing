@@ -2152,7 +2152,8 @@ impl<'s> Parser<'s> {
 
 fn is_entrypoint_file(path: &Utf8Path) -> bool {
 	path
-		.file_name().map(|s| s == "main.w" || s.ends_with(".main.w") || s.ends_with(".test.w"))
+		.file_name()
+		.map(|s| s == "main.w" || s.ends_with(".main.w") || s.ends_with(".test.w"))
 		.unwrap_or(false)
 }
 
