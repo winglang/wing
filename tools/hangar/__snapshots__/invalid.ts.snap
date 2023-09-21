@@ -329,25 +329,25 @@ Duration <DURATION>"
 `;
 
 exports[`bring_local_variables.main.w 1`] = `
-"error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
+"error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` or \`.test.w\` to make this an entrypoint file.
   --> ../../../examples/tests/invalid/file_with_variables.w:5:1
   |
 5 | let x = 5;
-  | ^^^^^^^^^^ Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
+  | ^^^^^^^^^^ Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` or \`.test.w\` to make this an entrypoint file.
 
 
-error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
+error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` or \`.test.w\` to make this an entrypoint file.
   --> ../../../examples/tests/invalid/file_with_variables.w:6:1
   |
 6 | let y = [\\"hello\\", \\"world\\"];
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` or \`.test.w\` to make this an entrypoint file.
 
 
-error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
+error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` or \`.test.w\` to make this an entrypoint file.
   --> ../../../examples/tests/invalid/file_with_variables.w:7:1
   |
 7 | let z = new cloud.Bucket();
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` or \`.test.w\` to make this an entrypoint file.
 
 
 error: Preflight field \\"x\\" is not initialized
@@ -977,25 +977,25 @@ Duration <DURATION>"
 `;
 
 exports[`file_with_variables.w 1`] = `
-"error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
+"error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` or \`.test.w\` to make this an entrypoint file.
   --> ../../../examples/tests/invalid/file_with_variables.w:5:1
   |
 5 | let x = 5;
-  | ^^^^^^^^^^ Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
+  | ^^^^^^^^^^ Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` or \`.test.w\` to make this an entrypoint file.
 
 
-error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
+error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` or \`.test.w\` to make this an entrypoint file.
   --> ../../../examples/tests/invalid/file_with_variables.w:6:1
   |
 6 | let y = [\\"hello\\", \\"world\\"];
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` or \`.test.w\` to make this an entrypoint file.
 
 
-error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
+error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` or \`.test.w\` to make this an entrypoint file.
   --> ../../../examples/tests/invalid/file_with_variables.w:7:1
   |
 7 | let z = new cloud.Bucket();
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` to make this an entrypoint file.
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` or \`.test.w\` to make this an entrypoint file.
 
 
 error: Preflight field \\"x\\" is not initialized
