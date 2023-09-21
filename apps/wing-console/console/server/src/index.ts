@@ -10,6 +10,7 @@ import type { Router } from "./router/index.js";
 import type { Trace } from "./types.js";
 import type { State } from "./types.js";
 import type { Updater } from "./updater.js";
+import { bindSimulatorResourceUrls } from "./utils/bind-resource-url.js";
 import { createCompiler } from "./utils/compiler.js";
 import {
   LayoutConfig,
@@ -18,7 +19,6 @@ import {
 } from "./utils/createRouter.js";
 import type { LogInterface } from "./utils/LogInterface.js";
 import { createSimulator } from "./utils/simulator.js";
-import { bindSimulatorResourceUrls } from "./utils/bind-resource-url.js";
 
 export type {
   TestsStateManager,
@@ -160,7 +160,10 @@ export const createConsoleServer = async ({
   });
   simulator.on("started", async () => {
     if (hostUtils?.bindResourceUrl) {
-      await bindSimulatorResourceUrls(await simulator.instance(), hostUtils.bindResourceUrl);
+      await bindSimulatorResourceUrls(
+        await simulator.instance(),
+        hostUtils.bindResourceUrl,
+      );
     }
 
     appState = "success";

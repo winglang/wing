@@ -1,7 +1,10 @@
-import { BindResourceUrl } from "../hostUtils";
-import { Simulator } from "../wingsdk";
+import { BindResourceUrl } from "../hostUtils.js";
+import { Simulator } from "../wingsdk.js";
 
-export async function bindSimulatorResourceUrls(simulator: Simulator, bindResourceUrl: BindResourceUrl) {
+export async function bindSimulatorResourceUrls(
+  simulator: Simulator,
+  bindResourceUrl: BindResourceUrl,
+) {
   const resources = simulator.listResources();
   for (let resource of resources) {
     const config = simulator.getResourceConfig(resource);
