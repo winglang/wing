@@ -1,11 +1,11 @@
 import { TableAttributes, TableSchema } from "./schema-resources";
 import { ColumnType, ITableClient } from "../ex";
 import { validateRow } from "../shared/table-utils";
-import { Json } from "../std";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
-} from "../testing/simulator";
+} from "../simulator/simulator";
+import { Json } from "../std";
 
 export class Table implements ITableClient, ISimulatorResourceInstance {
   private name: string;

@@ -1,7 +1,7 @@
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
+import * as testing from "../../src/simulator";
 import * as sim from "../../src/target-sim";
-import * as testing from "../../src/testing";
 import { mkdtemp } from "../util";
 
 test("onTrace", async () => {

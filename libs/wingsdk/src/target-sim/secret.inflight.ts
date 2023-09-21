@@ -7,11 +7,11 @@ import {
   SecretSchema,
 } from "./schema-resources";
 import { ISecretClient } from "../cloud";
-import { Json, TraceType } from "../std";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
-} from "../testing/simulator";
+} from "../simulator/simulator";
+import { Json, TraceType } from "../std";
 
 export class Secret implements ISecretClient, ISimulatorResourceInstance {
   private readonly context: ISimulatorContext;
