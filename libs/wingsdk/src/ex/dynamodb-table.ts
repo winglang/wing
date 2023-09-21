@@ -682,7 +682,6 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
         Select: props.select,
       })
     );
-    console.log({ result });
     return {
       consumedCapacity: result.ConsumedCapacity as Json | undefined,
       count: result.Count!,
