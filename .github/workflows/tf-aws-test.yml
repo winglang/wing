@@ -97,7 +97,7 @@ jobs:
           retry_on: error
           timeout_minutes: 30
           command: |
-            if  ${{ env.LOCAL_BUILD == 'true' }}
+            if  ${{ env.LOCAL_BUILD == 'false' }}
             then
               wing test -t sim ${{ matrix.test.directory }}/*.w
             else
