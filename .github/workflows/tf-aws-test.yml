@@ -58,7 +58,6 @@ jobs:
 
       - name: Install Wing from Dist
         if: ${{ env.LOCAL_BUILD ==  'true' }}
-        # npm isn't installing everything on the first try, so we need to call it twice...
         run: |
           mkdir temp
           cd temp
@@ -67,40 +66,44 @@ jobs:
           ./node_modules/.bin/wing --version
 
       #################### install a remote wing version ########################
-      # - name: Install winglang globally
-      #   if: ${{ env.LOCAL_BUILD == 'false' }}
-      #   uses: nick-fields/retry@v2
-      #   with:
-      #     max_attempts: 3
-      #     retry_on: error
-      #     timeout_minutes: 5
-      #     command: npm install -g winglang
+      - name: Install winglang globally
+        if: ${{ env.LOCAL_BUILD == 'false' }}
+        uses: nick-fields/retry@v2
+        with:
+          max_attempts: 3
+          retry_on: error
+          timeout_minutes: 5
+          command: npm install -g winglang
 
-      # - name: Installing external js modules
-      #   if: ${{ env.LOCAL_BUILD == 'false' }}
-      #   run: |
-      #     cd examples/tests/sdk_tests
-      #     npm install
-      #   ########################################################################
-      # - name: Configure AWS credentials
-      #   uses: aws-actions/configure-aws-credentials@v2
-      #   with:
-      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws-region: ${{ env.AWS_REGION }}
-      # - name: Execute wing test in matrix directory
-      #   uses: nick-fields/retry@v2
-      #   env:
-      #     TF_LOG: info
-      #     TF_LOG_PATH: ${{ runner.workspace }}/terraform.log
-      #   with:
-      #     max_attempts: 3
-      #     retry_on: error
-      #     timeout_minutes: 30
-      #     command: |
-      #       wing --version
-      #       wing test -t sim ${{ matrix.test.directory }}/*.w
+      - name: Installing external js modules
+        if: ${{ env.LOCAL_BUILD == 'false' }}
+        run: |
+          cd examples/tests/sdk_tests
+          npm install
+        ########################################################################
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Execute wing test in matrix directory
+        uses: nick-fields/retry@v2
+        env:
+          TF_LOG: info
+          TF_LOG_PATH: ${{ runner.workspace }}/terraform.log
+        with:
+          max_attempts: 3
+          retry_on: error
+          timeout_minutes: 30
+          command: |
+            if  ${{ env.LOCAL_BUILD == 'true' }}
+            then
+              wing test -t sim ${{ matrix.test.directory }}/*.w
+            else
+              ./node_modules/.bin/wing test -t sim ../${{ matrix.test.directory }}/*.w
+            fi
 
-      # - name: Output Terraform log
-      #   if: failure()
-      #   run: cat ${{ runner.workspace }}/terraform.log
+      - name: Output Terraform log
+        if: failure()
+        run: cat ${{ runner.workspace }}/terraform.log
