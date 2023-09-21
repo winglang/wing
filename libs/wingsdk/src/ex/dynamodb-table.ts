@@ -299,7 +299,7 @@ export interface DynamodbTableQueryProps {
    *
    * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-KeyConditionExpression
    */
-  readonly keyConditionExpression?: string;
+  readonly keyConditionExpression: string;
 
   /**
    * The maximum number of items to evaluate (not necessarily the number of matching items).
@@ -486,7 +486,7 @@ export interface IDynamodbTableClient {
    * @param props properties for the scan operation.
    * @inflight
    */
-  scan(props: DynamodbTableScanProps): Promise<DynamodbTableScanResult>;
+  scan(props?: DynamodbTableScanProps): Promise<DynamodbTableScanResult>;
 
   /**
    * Return one or more items and item attributes by accessing every item in a table or a secondary index.
@@ -599,28 +599,28 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
   }
 
   public async scan(
-    props: DynamodbTableScanProps
+    props?: DynamodbTableScanProps
   ): Promise<DynamodbTableScanResult> {
     const client = await this._rawClient();
     const result = await client.send(
       new ScanCommand({
         TableName: this.tableName,
-        ConsistentRead: props.consistentRead,
-        ExclusiveStartKey: props.exclusiveStartKey
-          ? marshall(props.exclusiveStartKey)
+        ConsistentRead: props?.consistentRead,
+        ExclusiveStartKey: props?.exclusiveStartKey
+          ? marshall(props?.exclusiveStartKey)
           : undefined,
-        ExpressionAttributeNames: props.expressionAttributeNames as any,
-        ExpressionAttributeValues: props.expressionAttributeValues
-          ? marshall(props.expressionAttributeValues)
+        ExpressionAttributeNames: props?.expressionAttributeNames as any,
+        ExpressionAttributeValues: props?.expressionAttributeValues
+          ? marshall(props?.expressionAttributeValues)
           : undefined,
-        FilterExpression: props.filterExpression,
-        IndexName: props.indexName,
-        Limit: props.limit,
-        ProjectionExpression: props.projectionExpression,
-        ReturnConsumedCapacity: props.returnConsumedCapacity,
-        Segment: props.segment,
-        Select: props.select,
-        TotalSegments: props.totalSegments,
+        FilterExpression: props?.filterExpression,
+        IndexName: props?.indexName,
+        Limit: props?.limit,
+        ProjectionExpression: props?.projectionExpression,
+        ReturnConsumedCapacity: props?.returnConsumedCapacity,
+        Segment: props?.segment,
+        Select: props?.select,
+        TotalSegments: props?.totalSegments,
       })
     );
     return {
