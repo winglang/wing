@@ -81,7 +81,7 @@ class $Root extends $stdlib.std.Resource {
           require("./inflight.$Closure1-1.js")({
             $__x_: ${context._lift((-x))},
             $__y_: ${context._lift((-y))},
-            $math_Util: ${context._lift(math.Util)},
+            $math_Util: ${context._lift($stdlib.core.toLiftableModuleType(math.Util, "@winglang/sdk/math", "Util"))},
             $x: ${context._lift(x)},
             $y: ${context._lift(y)},
           })
