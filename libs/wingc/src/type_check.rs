@@ -2141,7 +2141,7 @@ impl<'a> TypeChecker<'a> {
 			}
 			ExprKind::ArrayLiteral { type_, items } => {
 				// Infer type based on either the explicit type or the value in one of the items
-				let (container_type, mut element_type) = if let Some(type_) = type_ {
+				let (mut container_type, mut element_type) = if let Some(type_) = type_ {
 					let container_type = self.resolve_type_annotation(type_, env);
 					let element_type = match *container_type {
 						Type::Array(t) | Type::MutArray(t) => t,
@@ -2170,6 +2170,15 @@ impl<'a> TypeChecker<'a> {
 				for item in items {
 					let (t, _) = self.type_check_exp(item, env);
 
+					if t.is_json() && !matches!(*element_type, Type::Json(Some(..))) {
+						// This is an array of JSON, change the element type to reflect that
+						let json_data = JsonData {
+							expression_id: exp.id,
+							kind: JsonDataKind::List(vec![]),
+						};
+						element_type = self.types.add_type(Type::Json(Some(json_data)));
+					}
+
 					// Augment the json list data with the new element type
 					if let Type::Json(Some(JsonData { ref mut kind, .. })) = &mut *element_type {
 						if let JsonDataKind::List(ref mut json_list) = kind {
@@ -2193,11 +2202,15 @@ impl<'a> TypeChecker<'a> {
 					}
 				}
 
+				if let Type::Array(ref mut inner) | Type::MutArray(ref mut inner) = &mut *container_type {
+					*inner = element_type;
+				}
+
 				(container_type, env.phase)
 			}
 			ExprKind::MapLiteral { fields, type_ } => {
 				// Infer type based on either the explicit type or the value in one of the fields
-				let (container_type, mut element_type) = if let Some(type_) = type_ {
+				let (mut container_type, mut element_type) = if let Some(type_) = type_ {
 					let container_type = self.resolve_type_annotation(type_, env);
 					let element_type = match *container_type {
 						Type::Map(t) | Type::MutMap(t) => t,
@@ -2216,17 +2229,43 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Verify all types are the same as the inferred type
-				for field in fields.values() {
+				for (sym, field) in fields {
 					let (t, _) = self.type_check_exp(field, env);
+					if t.is_json() && !matches!(*element_type, Type::Json(Some(..))) {
+						// This is an field of JSON, change the element type to reflect that
+						let json_data = JsonData {
+							expression_id: exp.id,
+							kind: JsonDataKind::Fields(IndexMap::new()),
+						};
+						element_type = self.types.add_type(Type::Json(Some(json_data)));
+					}
+
+					// Augment the json list data with the new element type
+					if let Type::Json(Some(JsonData { ref mut kind, .. })) = &mut *element_type {
+						if let JsonDataKind::Fields(ref mut fields) = kind {
+							fields.insert(
+								sym.clone(),
+								SpannedTypeInfo {
+									type_: t,
+									span: field.span(),
+								},
+							);
+						}
+					}
+
 					self.validate_type(t, element_type, field);
 					element_type = self.types.maybe_unwrap_inference(element_type);
+				}
+
+				if let Type::Map(ref mut inner) | Type::MutMap(ref mut inner) = &mut *container_type {
+					*inner = element_type;
 				}
 
 				(container_type, env.phase)
 			}
 			ExprKind::SetLiteral { type_, items } => {
 				// Infer type based on either the explicit type or the value in one of the items
-				let (container_type, mut element_type) = if let Some(type_) = type_ {
+				let (mut container_type, mut element_type) = if let Some(type_) = type_ {
 					let container_type = self.resolve_type_annotation(type_, env);
 					let element_type = match *container_type {
 						Type::Set(t) | Type::MutSet(t) => t,
@@ -2247,8 +2286,32 @@ impl<'a> TypeChecker<'a> {
 				// Verify all types are the same as the inferred type
 				for item in items {
 					let (t, _) = self.type_check_exp(item, env);
+
+					if t.is_json() && !matches!(*element_type, Type::Json(Some(..))) {
+						// this is an set of JSON, change the element type to reflect that
+						let json_data = JsonData {
+							expression_id: exp.id,
+							kind: JsonDataKind::List(vec![]),
+						};
+						element_type = self.types.add_type(Type::Json(Some(json_data)));
+					}
+
+					// Augment the json list data with the new element type
+					if let Type::Json(Some(JsonData { ref mut kind, .. })) = &mut *element_type {
+						if let JsonDataKind::List(ref mut json_list) = kind {
+							json_list.push(SpannedTypeInfo {
+								type_: t,
+								span: item.span(),
+							});
+						}
+					}
+
 					self.validate_type(t, element_type, item);
 					element_type = self.types.maybe_unwrap_inference(element_type);
+				}
+
+				if let Type::Set(ref mut inner) | Type::MutSet(ref mut inner) = &mut *container_type {
+					*inner = element_type;
 				}
 
 				(container_type, env.phase)
@@ -2656,6 +2719,84 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
+	/// If possible, structurally check the given type as a Json against the expected type.
+	///
+	/// returns true if validation occurred, false otherwise
+	pub fn validate_type_json(&mut self, actual_type: TypeRef, expected_type: TypeRef, span: &impl Spanned) -> bool {
+		let mut json_type = actual_type;
+		let expected_type = self.types.maybe_unwrap_inference(expected_type);
+		let expected_type_unwrapped = expected_type.maybe_unwrap_option();
+
+		if expected_type_unwrapped.is_json() {
+			// No need for fancy type checking against Json
+			return false;
+		}
+
+		let inner_expected = expected_type_unwrapped.collection_item_type();
+		if let Some(inner_expected) = inner_expected {
+			if let Some(inner_actual) = actual_type.collection_item_type() {
+				if matches!(*inner_actual, Type::Json(Some(_))) {
+					// If the outer collection type doesn't match then don't bother
+					// We can just check the collection enum variant to make sure they match exactly (subtyping isn't relevant here)
+					if std::mem::discriminant(&**expected_type_unwrapped) != std::mem::discriminant(&*actual_type) {
+						return false;
+					}
+					json_type = inner_actual;
+				} else {
+					// The expected type is a collection and the actual type is a collection of non-json
+					// In case the actual type is a nested collection, we must recurse here
+					return self.validate_type_json(inner_actual, inner_expected, span);
+				}
+			}
+		}
+
+		let Type::Json(Some(data)) = &*json_type else {
+			// We don't have any json data to validate
+			return false;
+		};
+
+		if expected_type_unwrapped.is_struct()
+			|| expected_type_unwrapped.is_immutable_collection()
+			|| expected_type_unwrapped.is_json_legal_value()
+		{
+			// We don't need to check the json-legality of this expr later because we know it's either legal or it's being used as a struct/map
+			self.types.json_literal_casts.insert(data.expression_id, expected_type);
+		}
+
+		match &data.kind {
+			JsonDataKind::Type(t) => {
+				// The expected type is some sort of primitive
+				self.validate_type(t.type_, expected_type, span);
+				true
+			}
+			JsonDataKind::Fields(fields) => {
+				if expected_type_unwrapped.is_struct() {
+					self.validate_structural_type(fields, expected_type_unwrapped, span);
+					true
+				} else if let Some(inner_expected) = inner_expected {
+					// The expected type is a Map
+					for field_info in fields.values() {
+						self.validate_type(field_info.type_, inner_expected, &field_info.span);
+					}
+					true
+				} else {
+					false
+				}
+			}
+			JsonDataKind::List(list) => {
+				if let Some(inner_expected) = inner_expected {
+					// The expected type is an Array or Set
+					for t in list {
+						self.validate_type(t.type_, inner_expected, &t.span);
+					}
+					true
+				} else {
+					false
+				}
+			}
+		}
+	}
+
 	/// Validate that the given type is a subtype (or same) as the expected type. If not, add an error
 	/// to the diagnostics.
 	///
@@ -2671,10 +2812,10 @@ impl<'a> TypeChecker<'a> {
 		assert!(expected_types.len() > 0);
 		let first_expected_type = expected_types[0];
 		let mut return_type = actual_type;
-		let span = span.span();
 
 		// To avoid ambiguity, only do inference if there is one expected type
 		if expected_types.len() == 1 {
+			let span = span.span();
 			// First check if the actual type is an inference that can be replaced with the expected type
 			if self.add_new_inference(&actual_type, &first_expected_type, &span) {
 				// Update the type we validate and return
@@ -2703,79 +2844,16 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		// If the expected type is Json and the actual type is a Json legal value then we're good
-		if expected_types.iter().any(|t| t.is_json()) {
+		if expected_types.iter().any(|t| t.maybe_unwrap_option().is_json()) {
 			if return_type.is_json_legal_value() {
 				return return_type;
 			}
-		}
-
-		// if the actual type is an empty array of json, it can be assigned to any array
-		let mut json_type = return_type;
-		if let Type::Array(inner) = **return_type.maybe_unwrap_option() {
-			if let Type::Json(Some(JsonData {
-				kind: JsonDataKind::List(list),
-				..
-			})) = &*inner
+		} else {
+			if expected_types
+				.iter()
+				.any(|t| self.validate_type_json(actual_type, *t, span))
 			{
-				if list.is_empty() && expected_types.iter().all(|t| matches!(**t, Type::Array(_))) {
-					return return_type;
-				}
-				json_type = inner;
-			}
-		}
-		if let Type::Map(inner) = **return_type.maybe_unwrap_option() {
-			if let Type::Json(Some(JsonData {
-				kind: JsonDataKind::Fields(field),
-				..
-			})) = &*inner
-			{
-				if field.is_empty() && expected_types.iter().all(|t| matches!(**t, Type::Map(_))) {
-					return return_type;
-				}
-				json_type = inner;
-			}
-		}
-
-		// if the actual type is a Json with known data, we can attempt to structurally type check
-		if expected_types.len() == 1 && json_type.is_json() {
-			let expected_type = self.types.maybe_unwrap_inference(first_expected_type);
-			let expected_type_unwrapped = expected_type.maybe_unwrap_option();
-			if expected_type_unwrapped.is_json() {
-				return actual_type;
-			}
-			if let Type::Json(Some(data)) = &**json_type.maybe_unwrap_option() {
-				if expected_type_unwrapped.is_json_legal_value()
-					|| expected_type_unwrapped.is_struct()
-					|| expected_type_unwrapped.is_immutable_collection()
-				{
-					// we don't need to check the json-ability of this expr later because we know it's legal or it's being used as a struct/map
-					self.types.json_literal_casts.insert(data.expression_id, expected_type);
-				}
-				match &data.kind {
-					JsonDataKind::Type(t) => {
-						self.validate_type(t.type_, expected_type, &span);
-						return return_type;
-					}
-					JsonDataKind::Fields(fields) => {
-						if expected_type_unwrapped.is_struct() {
-							self.validate_structural_type(fields, expected_type_unwrapped, &span);
-							return return_type;
-						} else if let Type::Map(expected_map) = &**expected_type_unwrapped {
-							for field_info in fields.values() {
-								self.validate_type(field_info.type_, *expected_map, &field_info.span);
-							}
-							return return_type;
-						}
-					}
-					JsonDataKind::List(list) => {
-						if let Type::Array(expected_inner) = **expected_type_unwrapped {
-							for t in list {
-								self.validate_type(t.type_, expected_inner, &t.span);
-							}
-							return return_type;
-						}
-					}
-				};
+				return return_type;
 			}
 		}
 
@@ -2794,7 +2872,7 @@ impl<'a> TypeChecker<'a> {
 		if return_type.is_nil() && expected_types.len() == 1 {
 			message = format!("{message} (hint: to allow \"nil\" assignment use optional type: \"{first_expected_type}?\")");
 		}
-		if json_type.maybe_unwrap_option().is_json() {
+		if return_type.maybe_unwrap_option().is_json() {
 			// known json data is statically known
 			message = format!("{message} (hint: use {first_expected_type}.fromJson() to convert dynamic Json)");
 		}
