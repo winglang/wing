@@ -9,7 +9,7 @@ use crate::{
 		lifts::{Liftable, Lifts},
 		resolve_user_defined_type,
 		symbol_env::LookupResult,
-		ClassLike, TypeRef, CLOSURE_CLASS_HANDLE_METHOD,
+		ClassLike, ResolveSource, SymbolKind, TypeRef, CLOSURE_CLASS_HANDLE_METHOD,
 	},
 	visit::{self, Visit},
 	visit_context::{VisitContext, VisitorWithContext},
@@ -123,14 +123,26 @@ impl<'a> LiftVisitor<'a> {
 	}
 
 	fn jsify_udt(&mut self, node: &UserDefinedType) -> String {
-		let res = self.jsify.jsify_user_defined_type(
+		let udt_js = self.jsify.jsify_user_defined_type(
 			&node,
 			&mut JSifyContext {
 				lifts: None,
 				visit_ctx: &mut self.ctx,
 			},
 		);
-		res
+
+		let current_env = self.ctx.current_env().expect("an env");
+		if let Some(SymbolKind::Namespace(root_namespace)) = current_env.lookup(&node.root, None) {
+			let type_path = node.field_path_str();
+			let module_path = match &root_namespace.module_path {
+				ResolveSource::WingFile => "",
+				ResolveSource::ExternalModule(p) => p,
+			};
+			format!("$stdlib.core.toLiftableModuleType({udt_js}, \"{module_path}\", \"{type_path}\")")
+		} else {
+			// Non-namespaced reference, should be a wing type with a helper to lift it
+			udt_js
+		}
 	}
 }
 

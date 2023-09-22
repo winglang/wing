@@ -306,10 +306,10 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("./inflight.$Closure1-1.js")({
             $config: ${context._lift(config)},
-            $http_Util: ${context._lift(http.Util)},
+            $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
             $indexFile: ${context._lift(indexFile)},
             $otherFile: ${context._lift(otherFile)},
-            $std_Json: ${context._lift(std.Json)},
+            $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
             $w_url: ${context._lift(w.url)},
           })
         `;

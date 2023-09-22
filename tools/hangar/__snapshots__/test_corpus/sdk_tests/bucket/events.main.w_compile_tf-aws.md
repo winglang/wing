@@ -1150,8 +1150,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure6-1.js")({
-            $std_Duration: ${context._lift(std.Duration)},
-            $util_Util: ${context._lift(util.Util)},
+            $std_Duration: ${context._lift($stdlib.core.toLiftableModuleType(std.Duration, "@winglang/sdk/std", "Duration"))},
+            $util_Util: ${context._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }
@@ -1214,7 +1214,7 @@ class $Root extends $stdlib.std.Resource {
             $Source: ${context._lift(Source)},
             $b: ${context._lift(b)},
             $checkHitCount: ${context._lift(checkHitCount)},
-            $util_Util: ${context._lift(util.Util)},
+            $util_Util: ${context._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
             $wait: ${context._lift(wait)},
           })
         `;

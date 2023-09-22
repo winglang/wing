@@ -273,6 +273,17 @@ pub struct Namespace {
 	// the types after initial compilation.
 	#[derivative(Debug = "ignore")]
 	pub loaded: bool,
+
+	/// Where we can resolve this namespace from
+	pub module_path: ResolveSource,
+}
+
+#[derive(Debug)]
+pub enum ResolveSource {
+	/// A wing file within the source tree for this compilation.
+	WingFile,
+	/// External JSII module. This string will be the spec of the module, either a path or a npm package name.
+	ExternalModule(String),
 }
 
 pub type NamespaceRef = UnsafeRef<Namespace>;
@@ -1932,7 +1943,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Type check args against constructor
-				let init_method_name = if env.phase == Phase::Preflight {
+				let init_method_name = if env.phase == Phase::Preflight || class_env.phase == Phase::Independent {
 					CLASS_INIT_NAME
 				} else {
 					CLASS_INFLIGHT_INIT_NAME
@@ -3609,6 +3620,7 @@ impl<'a> TypeChecker<'a> {
 					name: name.name.to_string(),
 					env: SymbolEnv::new(Some(brought_env.get_ref()), SymbolEnvKind::Scope, brought_env.phase, 0),
 					loaded: true,
+					module_path: ResolveSource::WingFile,
 				});
 				if let Err(e) = env.define(
 					identifier.as_ref().unwrap(),

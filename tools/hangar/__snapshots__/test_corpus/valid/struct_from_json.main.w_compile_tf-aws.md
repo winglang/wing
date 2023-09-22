@@ -163,7 +163,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $cloud_BucketProps: ${context._lift(cloud_BucketProps)},
+            $cloud_BucketProps: ${context._lift($stdlib.core.toLiftableModuleType(cloud_BucketProps, "@winglang/sdk/cloud", "BucketProps"))},
             $j: ${context._lift(j)},
           })
         `;
@@ -262,7 +262,7 @@ class $Root extends $stdlib.std.Resource {
             $_schema_asStr___: ${context._lift((schema.asStr()))},
             $expectedSchema: ${context._lift(expectedSchema)},
             $jMyStruct: ${context._lift(jMyStruct)},
-            $std_Json: ${context._lift(std.Json)},
+            $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
           })
         `;
       }
