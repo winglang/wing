@@ -63,7 +63,7 @@ The tree node.
 
 ---
 
-##### `domainName`<sup>Optional</sup> <a name="domainName" id="@winglang/sdk.aws.Domain.property.domainName"></a>
+##### `domainName`<sup>Required</sup> <a name="domainName" id="@winglang/sdk.aws.Domain.property.domainName"></a>
 
 ```wing
 domainName: str;

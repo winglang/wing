@@ -19,45 +19,16 @@ export class Domain extends cloud.Domain {
 
     const values = getPlatformSpecificValues(
       this.node.path,
-      "iamCertificate",
-      "acmCertificateArn",
+      "iamCertificate||acmCertificateArn",
       "hostedZoneId"
     );
 
-    let errors: Array<String> = new Array<String>();
-    if (
-      !values ||
-      (values &&
-        !values.iamCertificate &&
-        !values.acmCertificateArn &&
-        !values.hostedZoneId)
-    ) {
-      errors.push(
-        `\n  - 'iamCertificate' or 'acmCertificateArn' is missing from ${this.node.path}`
-      );
-      errors.push(`  - 'hostedZoneId' is missing from ${this.node.path}`);
-    } else if (!values.iamCertificate && !values.acmCertificateArn) {
-      errors.push(
-        `\n  - 'iamCertificate' or 'acmCertificateArn' is missing from ${this.node.path}`
-      );
-    } else if (!values.hostedZoneId) {
-      errors.push(`\n  - 'hostedZoneId' is missing from ${this.node.path}`);
-    } else if (values.iamCertificate && values.hostedZoneId) {
+    if (values && values.iamCertificate && values.hostedZoneId) {
       this._iamCertificate = values.iamCertificate;
       this._hostedZoneId = values.hostedZoneId;
-    } else if (values.acmCertificateArn && values.hostedZoneId) {
+    } else if (values && values.acmCertificateArn && values.hostedZoneId) {
       this._acmCertificateArn = values.acmCertificateArn;
       this._hostedZoneId = values.hostedZoneId;
-    }
-
-    if (errors.length > 0) {
-      errors.push(
-        "\nThese are required properties of platform-specific types. You can set these values"
-      );
-      errors.push(
-        `either through '- v | --value' switches or '--values' file.`
-      );
-      throw new Error(errors.join("\n"));
     }
   }
 

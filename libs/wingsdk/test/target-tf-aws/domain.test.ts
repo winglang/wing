@@ -116,5 +116,5 @@ test("default domain behavior without hostedZoneId and certificate information",
   - 'hostedZoneId' is missing from root/Default/Domain
 
 These are required properties of platform-specific types. You can set these values
-either through '- v | --value' switches or '--values' file.`);
+either through '-v | --value' switches or '--values' file.`);
 });
