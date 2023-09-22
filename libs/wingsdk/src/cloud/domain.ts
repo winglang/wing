@@ -55,7 +55,7 @@ export abstract class Domain extends Resource {
   /**
    * The domain value.
    */
-  public get domainName(): string | undefined {
+  public get domainName(): string {
     return this._domain;
   }
 }
