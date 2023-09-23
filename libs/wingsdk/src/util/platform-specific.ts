@@ -31,7 +31,6 @@ const getPlatformSpecificValuesFromFile = (path: string, file: string) => {
 };
 
 /**
- * 
  * @param path the node path of the resource
  * @param args The arguments that should be obtained, if one argument can be
  * substituted for another, the arguments should be concatenated with "||"
