@@ -37,7 +37,7 @@ const getPlatformSpecificValuesFromFile = (path: string, file: string) => {
  * as the separator ("iamCertificate||acmCertificateArn")
  */
 export const getPlatformSpecificValues = (
-  path: string,
+  scope: Construct,
   ...args: string[]
 ): { [key: string]: string | undefined } | undefined => {
   const wingValues = process.env.WING_VALUES;
