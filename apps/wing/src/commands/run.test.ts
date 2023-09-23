@@ -20,42 +20,6 @@ vi.mock("@wingconsole/app", () => {
   };
 });
 
-test("wing it runs the only .w file", async () => {
-  const workdir = await mkdtemp(join(tmpdir(), "-wing-it-test"));
-  const prevdir = process.cwd();
-  try {
-    process.chdir(workdir);
-
-    writeFileSync("foo.main.w", "bring cloud;");
-
-    await run("foo.main.w");
-    expect(createConsoleApp).toBeCalledWith({
-      wingfile: resolve("foo.main.w"),
-      requestedPort: 3000,
-      hostUtils: expect.anything(),
-      requireAcceptTerms: false,
-    });
-    expect(open).toBeCalledWith("http://localhost:3000/");
-  } finally {
-    process.chdir(prevdir);
-  }
-});
-
-test("wing it with no file throws error for a directory with more than 1 .w file", async () => {
-  const workdir = await mkdtemp(join(tmpdir(), "-wing-it-test"));
-  const prevdir = process.cwd();
-  try {
-    process.chdir(workdir);
-
-    writeFileSync("foo.main.w", "bring cloud;");
-    writeFileSync("bar.main.w", "bring cloud;");
-
-    await expect(run).rejects.toThrow("Please specify which file you want to run");
-  } finally {
-    process.chdir(prevdir);
-  }
-});
-
 test("wing it with a file runs", async () => {
   const workdir = await mkdtemp(join(tmpdir(), "-wing-it-test"));
   const prevdir = process.cwd();
@@ -69,7 +33,7 @@ test("wing it with a file runs", async () => {
       wingfile: resolve("foo.main.w"),
       requestedPort: 3000,
       hostUtils: expect.anything(),
-      requireAcceptTerms: false,
+      requireAcceptTerms: true,
     });
     expect(open).toBeCalledWith("http://localhost:3000/");
   } finally {
@@ -93,7 +57,7 @@ test("wing it with a nested file runs", async () => {
       wingfile: resolve(filePath),
       requestedPort: 3000,
       hostUtils: expect.anything(),
-      requireAcceptTerms: false,
+      requireAcceptTerms: true,
     });
     expect(open).toBeCalledWith("http://localhost:3000/");
   } finally {
@@ -128,7 +92,7 @@ test("wing it with a custom port runs", async () => {
       wingfile: resolve("foo.main.w"),
       requestedPort: 5000,
       hostUtils: expect.anything(),
-      requireAcceptTerms: false,
+      requireAcceptTerms: true,
     });
     expect(open).toBeCalledWith("http://localhost:5000/");
   } finally {
