@@ -1,9 +1,9 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
 import { Function } from "../../src/cloud";
+import { Testing } from "../../src/simulator";
 import { Duration } from "../../src/std";
 import * as tfgcp from "../../src/target-tf-gcp";
-import { Testing } from "../../src/testing";
 import { mkdtemp, tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 const GCP_APP_OPTS = {

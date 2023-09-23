@@ -74,7 +74,7 @@ export class App extends CdktfApp {
     }
 
     this.region = props.region ?? process.env.GOOGLE_REGION;
-    if(this.region === undefined) {
+    if (this.region === undefined) {
       throw new Error(
         "A Google Cloud region must be specified through the GOOGLE_REGION environment variable."
       );
