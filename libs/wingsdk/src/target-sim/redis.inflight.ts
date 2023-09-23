@@ -6,7 +6,7 @@ import { runCommand, runDockerImage } from "../shared/misc";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
-} from "../testing/simulator";
+} from "../simulator/simulator";
 
 export class Redis
   extends RedisClientBase

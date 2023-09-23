@@ -5,8 +5,8 @@ import { BucketSchema, BUCKET_TYPE } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
+import { BaseResourceSchema } from "../simulator/simulator";
 import { IInflightHost } from "../std";
-import { BaseResourceSchema } from "../testing/simulator";
 
 /**
  * Simulator implementation of `cloud.Bucket`.

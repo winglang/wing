@@ -1094,10 +1094,10 @@ Execution model currently is delegated to the JSII target. This means if you are
 targeting JSII with Node, Wing will use the event based loop that Node offers.
 
 In Wing, writing and executing at root block scope level is forbidden except for
-in entrypoint files (designated by `main.w` or `*.main.w`). Root block scope is
-considered special and compiler generates special instructions to properly
-assign all preflight classes to their respective scopes recursively down the
-constructs tree based on entry.
+in entrypoint files (designated by `main.w`, `*.main.w` or `*.test.w`).
+Root block scope is considered special and compiler generates special instructions
+to properly assign all preflight classes to their respective scopes recursively
+down the constructs tree based on entry.
 
 Within the entrypoint file, a root preflight class is made available for all
 subsequent preflight classes that are initialized and instantiated. The type of

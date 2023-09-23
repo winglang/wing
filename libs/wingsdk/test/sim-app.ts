@@ -2,8 +2,8 @@ import * as fs from "fs";
 import { join } from "path";
 import { directorySnapshot, mkdtemp } from "./util";
 import { Function, IFunctionClient } from "../src/cloud";
+import { Simulator, Testing } from "../src/simulator";
 import * as sim from "../src/target-sim";
-import { Simulator, Testing } from "../src/testing";
 
 /**
  * A simulated app.

@@ -9,11 +9,11 @@ import {
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
-import { IInflightHost, IResource, Node, Resource } from "../std";
 import {
   BaseResourceSchema,
   ISimulatorResourceInstance,
-} from "../testing/simulator";
+} from "../simulator/simulator";
+import { IInflightHost, IResource, Node, Resource } from "../std";
 
 /**
  * Interface shared by all event publishing simulator resources.

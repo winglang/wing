@@ -38,7 +38,7 @@ export async function getReleaseData() {
     },
   });
 
-  const lastTag = execSync("git tag --sort=committerdate | tail -1", {
+  const lastTag = execSync("git tag -l --sort=version:refname | tail -1", {
     encoding: "utf8",
   }).trim();
   const lastVersion = lastTag.replace("v", "");

@@ -253,7 +253,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $std_Json: ${context._lift(std.Json)},
+            $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
           })
         `;
       }
@@ -281,8 +281,8 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("./inflight.$Closure2-1.js")({
             $api_url: ${context._lift(api.url)},
-            $http_Util: ${context._lift(http.Util)},
-            $std_Json: ${context._lift(std.Json)},
+            $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
+            $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
           })
         `;
       }

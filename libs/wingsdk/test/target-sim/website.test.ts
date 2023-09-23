@@ -2,8 +2,8 @@ import { readFileSync } from "fs";
 import { resolve } from "path";
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
+import { Simulator } from "../../src/simulator";
 import { ApiAttributes } from "../../src/target-sim/schema-resources";
-import { Simulator } from "../../src/testing";
 import { SimApp } from "../sim-app";
 
 test("website is serving static pages", async () => {
