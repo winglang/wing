@@ -284,7 +284,12 @@ export class BucketClient implements IBucketClient {
     Bucket: this.bucketName,
     Key: key
    });
-   return await getSignedUrl(this.s3Client,command,{expiresIn:expiryTimeInSeconds});
+   try {
+      const signedUrl: string = await getSignedUrl(this.s3Client, command, { expiresIn: expiryTimeInSeconds });
+      return signedUrl;
+    } catch (error) {
+      throw new Error(`Unable to generate signed url for key ${key} : ${(error as Error)}`);
+    }
 
   }
 
