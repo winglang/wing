@@ -106,10 +106,8 @@ const checkMissingValues = (
 
     if (i === 0) {
       strValuesError = `'${listValues[i]}'`;
-    } else if (i === listValues.length - 1) {
-      strValuesError += ` or '${listValues[i]}'`;
     } else {
-      strValuesError += `, '${listValues[i]}'`;
+      strValuesError += ` or '${listValues[i]}'`;
     }
   }
 
