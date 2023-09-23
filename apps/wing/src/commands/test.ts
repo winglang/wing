@@ -9,6 +9,7 @@ import { generateTmpDir, withSpinner } from "../util";
 import { Target } from "@winglang/compiler";
 import { nanoid } from "nanoid";
 import { readFile, rm, rmSync } from "fs";
+import { globSync } from "glob";
 
 const log = debug("wing:test");
 
@@ -29,6 +30,13 @@ export interface TestOptions extends CompileOptions {
 }
 
 export async function test(entrypoints: string[], options: TestOptions): Promise<number> {
+  if (entrypoints[0] === "*.test.w") {
+    entrypoints = globSync("*.test.w");
+    if (entrypoints.length === 0) {
+      throw new Error("No '.test.w' file found in current directory.");
+    }
+  }
+
   const startTime = Date.now();
   const results: { testName: string; results: std.TestResult[] }[] = [];
   const testFile = async (entrypoint: string) => {

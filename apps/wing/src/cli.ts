@@ -6,7 +6,6 @@ import { collectCommandAnalytics } from "./analytics/collect";
 import { exportAnalytics } from "./analytics/export";
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { currentPackage } from "./util";
-import { globSync } from "glob";
 export const PACKAGE_VERSION = currentPackage.version;
 let analyticsExportFile: Promise<string | undefined>;
 
@@ -21,13 +20,6 @@ if (!SUPPORTED_NODE_VERSION) {
 
 function runSubCommand(subCommand: string) {
   return async (...args: any[]) => {
-    if (args[0] === "DEFAULT_TEST_ENTRYPOINTS") {
-      args[0] = globSync("*.test.w");
-      if (args[0].length === 0) {
-        throw new Error("No '.test.w' file found in current directory.");
-      }
-    }
-
     try {
       const exitCode = await import(`./commands/${subCommand}`).then((m) => m[subCommand](...args));
       if (exitCode === 1) {
@@ -158,7 +150,7 @@ async function main() {
     .description(
       "Compiles a Wing program and runs all functions with the word 'test' or start with 'test:' in their resource identifiers"
     )
-    .argument("[entrypoint...]", "all entrypoints to test", "DEFAULT_TEST_ENTRYPOINTS")
+    .argument("[entrypoint...]", "all entrypoints to test", ["*.test.w"])
     .addOption(
       new Option("-t, --target <target>", "Target platform")
         .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])
