@@ -44,7 +44,7 @@ new aws.Domain(props: DomainProps);
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.aws.Domain.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.aws.Domain.property.domainName">domainName</a></code> | <code>str</code> | The domain value. |
+| <code><a href="#@winglang/sdk.aws.Domain.property.domainName">domainName</a></code> | <code>str</code> | The domain name. |
 | <code><a href="#@winglang/sdk.aws.Domain.property.acmCertificateArn">acmCertificateArn</a></code> | <code>str</code> | The AWS Certificate Manager (ACM) certificate arn value. |
 | <code><a href="#@winglang/sdk.aws.Domain.property.hostedZoneId">hostedZoneId</a></code> | <code>str</code> | The hosted zone id value. |
 | <code><a href="#@winglang/sdk.aws.Domain.property.iamCertificate">iamCertificate</a></code> | <code>str</code> | The IAM certificate identifier value. |
@@ -71,7 +71,7 @@ domainName: str;
 
 - *Type:* str
 
-The domain value.
+The domain name.
 
 ---
 

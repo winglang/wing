@@ -91,7 +91,7 @@ new cloud.Domain(props: DomainProps);
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Domain.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Domain.property.domainName">domainName</a></code> | <code>str</code> | The domain value. |
+| <code><a href="#@winglang/sdk.cloud.Domain.property.domainName">domainName</a></code> | <code>str</code> | The domain name. |
 
 ---
 
@@ -115,7 +115,7 @@ domainName: str;
 
 - *Type:* str
 
-The domain value.
+The domain name.
 
 ---
 
