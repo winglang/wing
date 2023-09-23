@@ -33,7 +33,7 @@ test("default domain behavior when passing values on the command line", () => {
     "root/Default/Domain.hostedZoneId=Z0111111111111111111F,root/Default/Domain.acmCertificateArn=arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee";
   const app = new tfaws.App({ outdir: mkdtemp() });
   const domain = cloud.Domain._newDomain(app, "Domain", {
-    domain: "www.example.com",
+    domainName: "www.example.com",
   });
   cloud.Website._newWebsite(app, "Website", {
     path: path.resolve(__dirname, "website"),
@@ -70,7 +70,7 @@ test("default domain behavior when passing values from file", () => {
   process.env.WING_VALUES_FILE = __dirname + "/domain.values.yaml";
   const app = new tfaws.App({ outdir: mkdtemp() });
   const domain = cloud.Domain._newDomain(app, "Domain", {
-    domain: "www.example.com",
+    domainName: "www.example.com",
   });
   cloud.Website._newWebsite(app, "Website", {
     path: path.resolve(__dirname, "website"),
@@ -109,7 +109,7 @@ test("default domain behavior without hostedZoneId and certificate information",
     process.env.WING_VALUES = "";
     const app = new tfaws.App({ outdir: mkdtemp() });
     cloud.Domain._newDomain(app, "Domain", {
-      domain: "www.example.com",
+      domainName: "www.example.com",
     });
   }).toThrowError(`
   - 'iamCertificate' or 'acmCertificateArn' is missing from root/Default/Domain

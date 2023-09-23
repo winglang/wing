@@ -1,4 +1,5 @@
 import { readFileSync } from "fs";
+import { Construct } from "constructs";
 import { parse } from "yaml";
 
 const getPlatformSpecificValue = (
@@ -56,18 +57,18 @@ export const getPlatformSpecificValues = (
   if (wingValues) {
     for (const argument of argLst) {
       result[`${argument}`] = getPlatformSpecificValue(
-        path,
+        scope.node.path,
         argument,
         wingValues
       );
     }
   } else if (wingValuesFile) {
-    result = getPlatformSpecificValuesFromFile(path, wingValuesFile);
+    result = getPlatformSpecificValuesFromFile(scope.node.path, wingValuesFile);
   }
 
   let errors: Array<String> = new Array<String>();
   for (const x of args) {
-    const error = checkMissingValues(path, x, result);
+    const error = checkMissingValues(scope.node.path, x, result);
     if (error) {
       errors.push(error);
     }

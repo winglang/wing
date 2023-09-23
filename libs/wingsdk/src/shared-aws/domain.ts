@@ -18,7 +18,7 @@ export class Domain extends cloud.Domain {
     super(scope, id, props);
 
     const values = getPlatformSpecificValues(
-      this.node.path,
+      this,
       "iamCertificate||acmCertificateArn",
       "hostedZoneId"
     );
