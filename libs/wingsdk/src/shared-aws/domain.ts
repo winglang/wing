@@ -23,13 +23,9 @@ export class Domain extends cloud.Domain {
       "hostedZoneId"
     );
 
-    if (values && values.iamCertificate && values.hostedZoneId) {
-      this._iamCertificate = values.iamCertificate;
-      this._hostedZoneId = values.hostedZoneId;
-    } else if (values && values.acmCertificateArn && values.hostedZoneId) {
-      this._acmCertificateArn = values.acmCertificateArn;
-      this._hostedZoneId = values.hostedZoneId;
-    }
+    this._iamCertificate = values.iamCertificate;
+    this._hostedZoneId = values.hostedZoneId;
+    this._acmCertificateArn = values.acmCertificateArn;
   }
 
   /**
