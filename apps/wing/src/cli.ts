@@ -6,7 +6,7 @@ import { collectCommandAnalytics } from "./analytics/collect";
 import { exportAnalytics } from "./analytics/export";
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { currentPackage } from "./util";
-import { glob } from "glob";
+import { globSync } from "glob";
 export const PACKAGE_VERSION = currentPackage.version;
 let analyticsExportFile: Promise<string | undefined>;
 
@@ -22,7 +22,7 @@ if (!SUPPORTED_NODE_VERSION) {
 function runSubCommand(subCommand: string) {
   return async (...args: any[]) => {
     if (args[0] === "DEFAULT_TEST_ENTRYPOINTS") {
-      args[0] = glob.sync("*.test.w");
+      args[0] = globSync("*.test.w");
       if (args[0].length === 0) {
         throw new Error("No '.test.w' file found in current directory.");
       }
