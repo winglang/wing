@@ -216,6 +216,10 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: notSpecified.get(\"foo\") == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(notSpecified, "foo"),"bar")))};
     const empty = ({});
     {((cond) => {if (!cond) throw new Error("assertion failed: Json.has(empty, \"something\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return args[0].hasOwnProperty(args[1]); })([empty,"something"]),false)))};
+    const arrayStruct = [({"foo": "","stuff": []})];
+    const setStruct = new Set([({"foo": "","stuff": []})]);
+    const mapStruct = ({"1": ({"foo": "","stuff": []})});
+    const deepCollectionStruct = ({"1": [new Set([({"foo": "","stuff": []})])]});
     const notJsonMissingField = ({"foo": "bar","stuff": []});
     const notJson = ({"foo": "bar","stuff": [1, 2, 3],"maybe": ({"good": true,"inner_stuff": [({"hi": 1,"base": "base"})]})});
     let mutableJson = ({"foo": "bar","stuff": [1, 2, 3],"maybe": ({"good": true,"inner_stuff": [({"hi": 1,"base": "base"})]})});

@@ -2,7 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
-module.exports = function({ $greeting }) {
+module.exports = function({ $greeting, $stuff_HelloWorld }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -11,6 +11,8 @@ module.exports = function({ $greeting }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: greeting == \"Hello, wingnuts\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($greeting,"Hello, wingnuts")))};
+      const helloInflight = new $stuff_HelloWorld();
+      {((cond) => {if (!cond) throw new Error("assertion failed: helloInflight.sayHello(\"wingnuts\") == greeting")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await helloInflight.sayHello("wingnuts")),$greeting)))};
     }
   }
   return $Closure1;
@@ -71,6 +73,7 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("./inflight.$Closure1-1.js")({
             $greeting: ${context._lift(greeting)},
+            $stuff_HelloWorld: ${context._lift($stdlib.core.toLiftableModuleType(stuff.HelloWorld, "jsii-code-samples", "HelloWorld"))},
           })
         `;
       }

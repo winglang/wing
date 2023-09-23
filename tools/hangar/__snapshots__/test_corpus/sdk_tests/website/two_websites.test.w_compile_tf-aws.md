@@ -409,7 +409,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $http_Util: ${context._lift(http.Util)},
+            $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
             $w1_url: ${context._lift(w1.url)},
             $w2_url: ${context._lift(w2.url)},
           })

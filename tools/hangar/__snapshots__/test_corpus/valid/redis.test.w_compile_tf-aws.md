@@ -587,7 +587,7 @@ class $Root extends $stdlib.std.Resource {
             $queue: ${context._lift(queue)},
             $r: ${context._lift(r)},
             $r2: ${context._lift(r2)},
-            $util_Util: ${context._lift(util.Util)},
+            $util_Util: ${context._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }
