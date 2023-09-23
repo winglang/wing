@@ -24,5 +24,6 @@ test "signedUrlForNonExistentKey"{
     error=e;
   }
 
-  assert(error == "Cannot provide signed url for a non-public bucket");
+  assert(error == "Cannot provide signed url for an non-existent key (key=${KEY}");
+
 }
