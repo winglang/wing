@@ -363,6 +363,9 @@ export interface IBucketClient {
   /**
    * Returns a signed url to the given file.
    * @Throws if object does not exist.
+   * @param key The key to access the cloud object
+   * @param options The signedUrlOptions where you can provide the configurations of the signed url
+   * @returns A string representing the signed url of the object which can be used to download in any downstream system
    * @inflight
    */
   signedUrl(key: string, options?: SignedUrlOptions): Promise<string>;
