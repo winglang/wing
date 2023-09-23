@@ -256,7 +256,7 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("./inflight.$Closure1-1.js")({
             $JSHelper: ${context._lift(JSHelper)},
-            $util_Util: ${context._lift(util.Util)},
+            $util_Util: ${context._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }
@@ -291,7 +291,7 @@ class $Root extends $stdlib.std.Resource {
           require("./inflight.$Closure2-1.js")({
             $JSHelper: ${context._lift(JSHelper)},
             $oneSecond: ${context._lift(oneSecond)},
-            $util_Util: ${context._lift(util.Util)},
+            $util_Util: ${context._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }
@@ -328,7 +328,7 @@ class $Root extends $stdlib.std.Resource {
             $JSHelper: ${context._lift(JSHelper)},
             $invokeCounter: ${context._lift(invokeCounter)},
             $oneSecond: ${context._lift(oneSecond)},
-            $util_Util: ${context._lift(util.Util)},
+            $util_Util: ${context._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }
@@ -367,7 +367,7 @@ class $Root extends $stdlib.std.Resource {
             $fiveSeconds: ${context._lift(fiveSeconds)},
             $invokeCounter: ${context._lift(invokeCounter)},
             $oneSecond: ${context._lift(oneSecond)},
-            $util_Util: ${context._lift(util.Util)},
+            $util_Util: ${context._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }
@@ -404,7 +404,7 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("./inflight.$Closure5-1.js")({
             $invokeCounter: ${context._lift(invokeCounter)},
-            $util_Util: ${context._lift(util.Util)},
+            $util_Util: ${context._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }

@@ -317,8 +317,8 @@ class $Root extends $stdlib.std.Resource {
             return `
               require("./inflight.$Closure2-1.js")({
                 $handler: ${context._lift(handler)},
-                $std_Json: ${context._lift(std.Json)},
-                $std_Number: ${context._lift(std.Number)},
+                $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+                $std_Number: ${context._lift($stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"))},
               })
             `;
           }

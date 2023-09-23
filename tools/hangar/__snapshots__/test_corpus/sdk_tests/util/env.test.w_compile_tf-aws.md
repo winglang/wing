@@ -73,7 +73,7 @@ class $Root extends $stdlib.std.Resource {
           require("./inflight.$Closure1-1.js")({
             $NIL: ${context._lift(NIL)},
             $RANDOM: ${context._lift(RANDOM)},
-            $util_Util: ${context._lift(util.Util)},
+            $util_Util: ${context._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }
