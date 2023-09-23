@@ -109,7 +109,7 @@ test("default domain behavior without hostedZoneId and certificate information",
     process.env.WING_VALUES = "";
     const app = new tfaws.App({ outdir: mkdtemp() });
     cloud.Domain._newDomain(app, "Domain", {
-      domainName: "www.example.com",
+      do: "www.example.com",
     });
   }).toThrowError(`
   - 'iamCertificate' or 'acmCertificateArn' is missing from root/Default/Domain
