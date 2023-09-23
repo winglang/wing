@@ -16,7 +16,7 @@ export interface DomainProps {
    * The website's custom domain name.
    * @example "example.com"
    */
-  readonly domain: string;
+  readonly domainName: string;
 }
 
 /**
