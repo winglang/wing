@@ -43,7 +43,7 @@ export abstract class Domain extends Resource {
     Node.of(this).title = "Domain";
     Node.of(this).description = "A cloud domain";
 
-    this._domain = props.domain;
+    this._domain = props.domainName;
   }
 
   /** @internal */

@@ -39,7 +39,7 @@ const getPlatformSpecificValuesFromFile = (path: string, file: string) => {
 export const getPlatformSpecificValues = (
   path: string,
   ...args: string[]
-): { [key: string]: string | undefined } | undefined => {
+): { [key: string]: string | undefined } => {
   const wingValues = process.env.WING_VALUES;
   const wingValuesFile = process.env.WING_VALUES_FILE;
 
