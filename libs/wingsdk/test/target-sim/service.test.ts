@@ -1,7 +1,7 @@
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
+import { Testing } from "../../src/simulator";
 import { SERVICE_TYPE } from "../../src/target-sim/schema-resources";
-import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
 
 const INFLIGHT_ON_START = `

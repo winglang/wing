@@ -95,10 +95,10 @@ class $Root extends $stdlib.std.Resource {
             $_d4_toUtc____hours: ${context._lift((d4.toUtc()).hours)},
             $d4_hours: ${context._lift(d4.hours)},
             $d4_timezone: ${context._lift(d4.timezone)},
-            $math_Util: ${context._lift(math.Util)},
-            $std_Datetime: ${context._lift(std.Datetime)},
-            $std_Duration: ${context._lift(std.Duration)},
-            $util_Util: ${context._lift(util.Util)},
+            $math_Util: ${context._lift($stdlib.core.toLiftableModuleType(math.Util, "@winglang/sdk/math", "Util"))},
+            $std_Datetime: ${context._lift($stdlib.core.toLiftableModuleType(std.Datetime, "@winglang/sdk/std", "Datetime"))},
+            $std_Duration: ${context._lift($stdlib.core.toLiftableModuleType(std.Duration, "@winglang/sdk/std", "Duration"))},
+            $util_Util: ${context._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }

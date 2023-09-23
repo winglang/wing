@@ -85,6 +85,16 @@ static bool scan_whitespace_and_comments(TSLexer *lexer)
 }
 
 /**
+ * Check if a character is a valid identifier character
+ *
+ * @return true if the character is a valid identifier character, false otherwise
+ */
+static bool iswidentifier(int c)
+{
+  return iswalnum(c) || c == '_';
+}
+
+/**
  * Check if an automatic semicolon could be inserted
  *
  * @return true if an automatic semicolon was found (aka "inserted"), false otherwise
@@ -146,6 +156,26 @@ static bool scan_automatic_semicolon(TSLexer *lexer)
   case '!':
     skip(lexer);
     return lexer->lookahead != '=';
+
+  // Don't insert a semicolon before `in` (unless it's part of an identifier)
+  case 'i':
+    skip(lexer);
+    if (lexer->lookahead == 'n')
+    {
+      skip(lexer);
+      if (!iswidentifier(lexer->lookahead))
+        return false;
+    }
+  
+  // Don't insert a semicolon before `as` (unless it's part of an identifier)
+  case 'a':
+    skip(lexer);
+    if (lexer->lookahead == 's')
+    {
+      skip(lexer);
+      if (!iswidentifier(lexer->lookahead))
+        return false;
+    }
   }
 
   return true;

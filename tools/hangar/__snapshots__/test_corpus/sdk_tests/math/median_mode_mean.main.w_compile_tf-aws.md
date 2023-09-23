@@ -114,7 +114,7 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("./inflight.$Closure1-1.js")({
             $even_arr: ${context._lift(even_arr)},
-            $math_Util: ${context._lift(math.Util)},
+            $math_Util: ${context._lift($stdlib.core.toLiftableModuleType(math.Util, "@winglang/sdk/math", "Util"))},
             $odd_arr: ${context._lift(odd_arr)},
           })
         `;
@@ -154,7 +154,7 @@ class $Root extends $stdlib.std.Resource {
             $_multimodal_at_0__: ${context._lift((multimodal.at(0)))},
             $_multimodal_at_1__: ${context._lift((multimodal.at(1)))},
             $_multimodal_at_2__: ${context._lift((multimodal.at(2)))},
-            $math_Util: ${context._lift(math.Util)},
+            $math_Util: ${context._lift($stdlib.core.toLiftableModuleType(math.Util, "@winglang/sdk/math", "Util"))},
             $modal_arr: ${context._lift(modal_arr)},
           })
         `;
@@ -193,7 +193,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure3-1.js")({
-            $math_Util: ${context._lift(math.Util)},
+            $math_Util: ${context._lift($stdlib.core.toLiftableModuleType(math.Util, "@winglang/sdk/math", "Util"))},
             $mean_arr: ${context._lift(mean_arr)},
           })
         `;

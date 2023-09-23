@@ -87,7 +87,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $math_Util: ${context._lift(math.Util)},
+            $math_Util: ${context._lift($stdlib.core.toLiftableModuleType(math.Util, "@winglang/sdk/math", "Util"))},
           })
         `;
       }
@@ -115,7 +115,7 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("./inflight.$Closure2-1.js")({
             $circumference: ${context._lift(circumference)},
-            $math_Util: ${context._lift(math.Util)},
+            $math_Util: ${context._lift($stdlib.core.toLiftableModuleType(math.Util, "@winglang/sdk/math", "Util"))},
             $r: ${context._lift(r)},
           })
         `;

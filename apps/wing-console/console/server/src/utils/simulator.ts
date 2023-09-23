@@ -1,4 +1,4 @@
-import { testing } from "@winglang/sdk";
+import { simulator } from "@winglang/sdk";
 import Emittery from "emittery";
 
 import type { Trace } from "../types.js";
@@ -6,7 +6,7 @@ import type { Trace } from "../types.js";
 import { formatWingError } from "./format-wing-error.js";
 
 export interface SimulatorEvents {
-  starting: { instance: testing.Simulator };
+  starting: { instance: simulator.Simulator };
   started: undefined;
   error: Error;
   stopping: undefined;
@@ -14,7 +14,7 @@ export interface SimulatorEvents {
 }
 
 export interface Simulator {
-  instance(): Promise<testing.Simulator>;
+  instance(): Promise<simulator.Simulator>;
   start(simfile: string): Promise<void>;
   stop(): Promise<void>;
   on<T extends keyof SimulatorEvents>(
@@ -23,7 +23,7 @@ export interface Simulator {
   ): void;
 }
 
-const stopSilently = async (simulator: testing.Simulator) => {
+const stopSilently = async (simulator: simulator.Simulator) => {
   try {
     await simulator.stop();
   } catch (error) {
@@ -40,7 +40,7 @@ const stopSilently = async (simulator: testing.Simulator) => {
 
 export const createSimulator = (): Simulator => {
   const events = new Emittery<SimulatorEvents>();
-  let instance: testing.Simulator | undefined;
+  let instance: simulator.Simulator | undefined;
   const start = async (simfile: string) => {
     try {
       if (instance) {
@@ -48,7 +48,7 @@ export const createSimulator = (): Simulator => {
         await stopSilently(instance);
       }
 
-      instance = new testing.Simulator({ simfile });
+      instance = new simulator.Simulator({ simfile });
       instance.onTrace({
         callback(trace) {
           events.emit("trace", trace);

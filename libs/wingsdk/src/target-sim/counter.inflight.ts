@@ -3,7 +3,7 @@ import { ICounterClient } from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
-} from "../testing/simulator";
+} from "../simulator/simulator";
 
 export class Counter implements ICounterClient, ISimulatorResourceInstance {
   private values: Map<string, number>;

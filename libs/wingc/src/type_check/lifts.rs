@@ -107,7 +107,10 @@ impl Lifts {
 			return;
 		}
 
-		let token = self.render_token(code);
+		let token = match lifted_thing {
+			Liftable::Expr(_) => self.render_token(code),
+			Liftable::Type(t) => self.render_token(&format!("{}", t)),
+		};
 
 		self
 			.token_for_liftable
