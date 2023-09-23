@@ -139,14 +139,14 @@ let DomainProps = cloud.DomainProps{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.DomainProps.property.domain">domain</a></code> | <code>str</code> | The website's custom domain name. |
+| <code><a href="#@winglang/sdk.cloud.DomainProps.property.domainName">domainName</a></code> | <code>str</code> | The website's custom domain name. |
 
 ---
 
-##### `domain`<sup>Required</sup> <a name="domain" id="@winglang/sdk.cloud.DomainProps.property.domain"></a>
+##### `domainName`<sup>Required</sup> <a name="domainName" id="@winglang/sdk.cloud.DomainProps.property.domainName"></a>
 
 ```wing
-domain: str;
+domainName: str;
 ```
 
 - *Type:* str
