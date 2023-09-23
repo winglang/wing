@@ -67,9 +67,9 @@ export const getPlatformSpecificValues = (
 
   let errors: Array<String> = new Array<String>();
   for (const x of args) {
-    const z = getErrorsFromValues(path, x, result);
-    if (z) {
-      errors.push(z);
+    const error = checkMissingValues(path, x, result);
+    if (error) {
+      errors.push(error);
     }
   }
 
@@ -85,7 +85,7 @@ export const getPlatformSpecificValues = (
   return result;
 };
 
-const getErrorsFromValues = (
+const checkMissingValues = (
   path: string,
   values: string,
   lst: { [key: string]: string | undefined }
