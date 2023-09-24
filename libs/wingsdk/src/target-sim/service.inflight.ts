@@ -80,7 +80,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       timestamp: new Date().toISOString(),
     });
 
-    await fnClient.invoke();
+    await fnClient.invoke("");
     this.running = false;
   }
 }
