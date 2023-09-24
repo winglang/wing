@@ -2,9 +2,15 @@ import { Construct } from "constructs";
 import { beforeEach, describe, expect, test } from "vitest";
 import { getPlatformSpecificValues } from "../../src/util/platform-specific";
 
-class App extends Construct {
+class MyApp extends Construct {
   constructor() {
     super(undefined as any, "root");
+  }
+}
+
+class MyResource extends Construct {
+  constructor(scope: Construct, id: string) {
+    super(scope, id);
   }
 }
 
@@ -16,29 +22,32 @@ describe("getPlatformSpecificValues", () => {
 
   test("get single value form command", () => {
     // GIVEN
-    const app = new App();
-    process.env.WING_VALUES = "root.number=123";
-    const result = getPlatformSpecificValues(app, "number");
+    const app = new MyApp();
+    const resource = new MyResource(app, "my-resource");
+    process.env.WING_VALUES = "root/my-resource.number=123";
+    const result = getPlatformSpecificValues(resource, "number");
     // THEN
     expect(result).toStrictEqual({ number: "123" });
   });
 
   test("get single value from yaml file", () => {
     // GIVEN
-    const app = new App();
+    const app = new MyApp();
+    const resource = new MyResource(app, "my-resource");
     process.env.WING_VALUES_FILE = __dirname + "/single-number-value.yaml";
-    const result = getPlatformSpecificValues(app, "number");
+    const result = getPlatformSpecificValues(resource, "number");
     // THEN
     expect(result).toStrictEqual({ number: "123" });
   });
 
   test("get single optional value from command", () => {
     // GIVEN
-    const app = new App();
-    process.env.WING_VALUES = "root.number=123";
-    const numberResult = getPlatformSpecificValues(app, "string||number");
-    process.env.WING_VALUES = "root.string=abc";
-    const stringResult = getPlatformSpecificValues(app, "string||number");
+    const app = new MyApp();
+    const resource = new MyResource(app, "my-resource");
+    process.env.WING_VALUES = "root/my-resource.number=123";
+    const numberResult = getPlatformSpecificValues(resource, "string||number");
+    process.env.WING_VALUES = "root/my-resource.string=abc";
+    const stringResult = getPlatformSpecificValues(resource, "string||number");
     // THEN
     expect(numberResult).toStrictEqual({ string: undefined, number: "123" });
     expect(stringResult).toStrictEqual({ string: "abc", number: undefined });
@@ -46,11 +55,12 @@ describe("getPlatformSpecificValues", () => {
 
   test("get single optional value from yaml file", () => {
     // GIVEN
-    const app = new App();
+    const app = new MyApp();
+    const resource = new MyResource(app, "my-resource");
     process.env.WING_VALUES_FILE = __dirname + "/single-number-value.yaml";
-    const numberResult = getPlatformSpecificValues(app, "string||number");
+    const numberResult = getPlatformSpecificValues(resource, "string||number");
     process.env.WING_VALUES_FILE = __dirname + "/single-string-value.yaml";
-    const stringResult = getPlatformSpecificValues(app, "string||number");
+    const stringResult = getPlatformSpecificValues(resource, "string||number");
     // THEN
     expect(numberResult).toStrictEqual({ number: "123" });
     expect(stringResult).toStrictEqual({ string: "abc" });
@@ -58,9 +68,10 @@ describe("getPlatformSpecificValues", () => {
 
   test("get multiple values from command", () => {
     // GIVEN
-    process.env.WING_VALUES = "root.number=123,root.string=abc";
-    const app = new App();
-    const result = getPlatformSpecificValues(app, "number", "string");
+    process.env.WING_VALUES = "root/my-resource.number=123,root/my-resource.string=abc";
+    const app = new MyApp();
+    const resource = new MyResource(app, "my-resource");
+    const result = getPlatformSpecificValues(resource, "number", "string");
     // THEN
     expect(result).toStrictEqual({ number: "123", string: "abc" });
   });
@@ -68,20 +79,22 @@ describe("getPlatformSpecificValues", () => {
   test("get multiple values from file", () => {
     // GIVEN
     process.env.WING_VALUES_FILE = __dirname + "/multiple-values.yaml";
-    const app = new App();
-    const result = getPlatformSpecificValues(app, "number", "string");
+    const app = new MyApp();
+    const resource = new MyResource(app, "my-resource");
+    const result = getPlatformSpecificValues(resource, "number", "string");
     // THEN
     expect(result).toStrictEqual({ number: "123", string: "abc" });
   });
 
-  test("", () => {
+  test("throw exception if no value is provided", () => {
     expect(() => {
       // GIVEN
-      const app = new App();
-      getPlatformSpecificValues(app, "number", "string||bool");
+      const app = new MyApp();
+      const resource = new MyResource(app, "my-resource");
+      getPlatformSpecificValues(resource, "number", "string||bool");
     }).toThrowError(`
-  - 'number' is missing from root
-  - 'string' or 'bool' is missing from root
+  - 'number' is missing from root/my-resource
+  - 'string' or 'bool' is missing from root/my-resource
 
 These are required properties of platform-specific types. You can set these values
 either through '-v | --value' switches or '--values' file.`);

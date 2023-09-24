@@ -1,2 +1,2 @@
-root:
+root/my-resource:
   string: "abc"
