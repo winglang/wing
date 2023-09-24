@@ -70,24 +70,6 @@ export class Function extends cloud.Function {
       byteLength: 4, // 4 bytes = 8 hex characters
     });
 
-    // create the bucket
-    this.bucket = new StorageBucket(this, "Function_Bucket", {
-      name: bucketName + "-" + randomId.hex,
-      location: app.storageLocation,
-      project: app.projectId,
-    });
-
-    // put the executable in the bucket as an object
-    this.bucketObject = new StorageBucketObject(
-      this,
-      "Function_Object_Bucket",
-      {
-        name: "objects",
-        bucket: this.bucket.name,
-        source: asset.path,
-      }
-    );
-
     // memory limits must be between 128 and 8192 MB
     if (props?.memory && (props.memory < 128 || props.memory > 8192)) {
       throw new Error(
@@ -105,8 +87,22 @@ export class Function extends cloud.Function {
       );
     }
 
+    // create the bucket
+    this.bucket = new StorageBucket(this, "FunctionBucket", {
+      name: bucketName + "-" + randomId.hex,
+      location: app.storageLocation,
+      project: app.projectId,
+    });
+
+    // put the executable in the bucket as an object
+    this.bucketObject = new StorageBucketObject(this, "FunctionObjectBucket", {
+      name: "objects",
+      bucket: this.bucket.name,
+      source: asset.path,
+    });
+
     // create the cloud function
-    this.function = new CloudfunctionsFunction(this, "Default_Function", {
+    this.function = new CloudfunctionsFunction(this, "DefaultFunction", {
       name: ResourceNames.generateName(this, FUNCTION_NAME_OPTS),
       description: "This function was created by Wing",
       project: app.projectId,
@@ -126,7 +122,7 @@ export class Function extends cloud.Function {
     return this.function.name;
   }
 
-  // TODO: implement
+  // TODO: implement with https://github.com/winglang/wing/issues/1282
   public _toInflight(): string {
     throw new Error(
       "cloud.Function cannot be used as an Inflight resource on GCP yet"

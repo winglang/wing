@@ -4,7 +4,7 @@ exports[`basic function 1`] = `
 {
   "resource": {
     "google_cloudfunctions_function": {
-      "Function_Default_Function_7840458D": {
+      "Function_DefaultFunction_81B206D7": {
         "available_memory_mb": 128,
         "description": "This function was created by Wing",
         "entry_point": "handler",
@@ -13,22 +13,22 @@ exports[`basic function 1`] = `
         "project": "my-project",
         "region": "us-central1",
         "runtime": "nodejs16",
-        "source_archive_bucket": "\${google_storage_bucket.Function_Function_Bucket_CE6F363F.name}",
-        "source_archive_object": "\${google_storage_bucket_object.Function_Function_Object_Bucket_9D62CB11.name}",
+        "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
+        "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
         "timeout": 60,
         "trigger_http": true,
       },
     },
     "google_storage_bucket": {
-      "Function_Function_Bucket_CE6F363F": {
+      "Function_FunctionBucket_CD7D2793": {
         "location": "US",
         "name": "function-\${random_id.Function_Id_A6EBDCE6.hex}",
         "project": "my-project",
       },
     },
     "google_storage_bucket_object": {
-      "Function_Function_Object_Bucket_9D62CB11": {
-        "bucket": "\${google_storage_bucket.Function_Function_Bucket_CE6F363F.name}",
+      "Function_FunctionObjectBucket_A7CD2097": {
+        "bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
         "name": "objects",
         "source": "<source>",
       },
@@ -60,29 +60,29 @@ exports[`basic function 2`] = `
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
                   },
-                  "Default_Function": {
+                  "DefaultFunction": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.17.0",
                     },
-                    "id": "Default_Function",
-                    "path": "root/Default/Function/Default_Function",
+                    "id": "DefaultFunction",
+                    "path": "root/Default/Function/DefaultFunction",
                   },
-                  "Function_Bucket": {
+                  "FunctionBucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.17.0",
                     },
-                    "id": "Function_Bucket",
-                    "path": "root/Default/Function/Function_Bucket",
+                    "id": "FunctionBucket",
+                    "path": "root/Default/Function/FunctionBucket",
                   },
-                  "Function_Object_Bucket": {
+                  "FunctionObjectBucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.17.0",
                     },
-                    "id": "Function_Object_Bucket",
-                    "path": "root/Default/Function/Function_Object_Bucket",
+                    "id": "FunctionObjectBucket",
+                    "path": "root/Default/Function/FunctionObjectBucket",
                   },
                   "Id": {
                     "constructInfo": {
@@ -173,7 +173,7 @@ exports[`basic function with environment variables 1`] = `
 {
   "resource": {
     "google_cloudfunctions_function": {
-      "Function_Default_Function_7840458D": {
+      "Function_DefaultFunction_81B206D7": {
         "available_memory_mb": 128,
         "description": "This function was created by Wing",
         "entry_point": "handler",
@@ -185,22 +185,22 @@ exports[`basic function with environment variables 1`] = `
         "project": "my-project",
         "region": "us-central1",
         "runtime": "nodejs16",
-        "source_archive_bucket": "\${google_storage_bucket.Function_Function_Bucket_CE6F363F.name}",
-        "source_archive_object": "\${google_storage_bucket_object.Function_Function_Object_Bucket_9D62CB11.name}",
+        "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
+        "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
         "timeout": 60,
         "trigger_http": true,
       },
     },
     "google_storage_bucket": {
-      "Function_Function_Bucket_CE6F363F": {
+      "Function_FunctionBucket_CD7D2793": {
         "location": "US",
         "name": "function-\${random_id.Function_Id_A6EBDCE6.hex}",
         "project": "my-project",
       },
     },
     "google_storage_bucket_object": {
-      "Function_Function_Object_Bucket_9D62CB11": {
-        "bucket": "\${google_storage_bucket.Function_Function_Bucket_CE6F363F.name}",
+      "Function_FunctionObjectBucket_A7CD2097": {
+        "bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
         "name": "objects",
         "source": "<source>",
       },
@@ -232,29 +232,29 @@ exports[`basic function with environment variables 2`] = `
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
                   },
-                  "Default_Function": {
+                  "DefaultFunction": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.17.0",
                     },
-                    "id": "Default_Function",
-                    "path": "root/Default/Function/Default_Function",
+                    "id": "DefaultFunction",
+                    "path": "root/Default/Function/DefaultFunction",
                   },
-                  "Function_Bucket": {
+                  "FunctionBucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.17.0",
                     },
-                    "id": "Function_Bucket",
-                    "path": "root/Default/Function/Function_Bucket",
+                    "id": "FunctionBucket",
+                    "path": "root/Default/Function/FunctionBucket",
                   },
-                  "Function_Object_Bucket": {
+                  "FunctionObjectBucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.17.0",
                     },
-                    "id": "Function_Object_Bucket",
-                    "path": "root/Default/Function/Function_Object_Bucket",
+                    "id": "FunctionObjectBucket",
+                    "path": "root/Default/Function/FunctionObjectBucket",
                   },
                   "Id": {
                     "constructInfo": {
@@ -347,7 +347,7 @@ exports[`basic function with memory size specified 1`] = `
 {
   "resource": {
     "google_cloudfunctions_function": {
-      "Function_Default_Function_7840458D": {
+      "Function_DefaultFunction_81B206D7": {
         "available_memory_mb": 256,
         "description": "This function was created by Wing",
         "entry_point": "handler",
@@ -356,22 +356,22 @@ exports[`basic function with memory size specified 1`] = `
         "project": "my-project",
         "region": "us-central1",
         "runtime": "nodejs16",
-        "source_archive_bucket": "\${google_storage_bucket.Function_Function_Bucket_CE6F363F.name}",
-        "source_archive_object": "\${google_storage_bucket_object.Function_Function_Object_Bucket_9D62CB11.name}",
+        "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
+        "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
         "timeout": 60,
         "trigger_http": true,
       },
     },
     "google_storage_bucket": {
-      "Function_Function_Bucket_CE6F363F": {
+      "Function_FunctionBucket_CD7D2793": {
         "location": "US",
         "name": "function-\${random_id.Function_Id_A6EBDCE6.hex}",
         "project": "my-project",
       },
     },
     "google_storage_bucket_object": {
-      "Function_Function_Object_Bucket_9D62CB11": {
-        "bucket": "\${google_storage_bucket.Function_Function_Bucket_CE6F363F.name}",
+      "Function_FunctionObjectBucket_A7CD2097": {
+        "bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
         "name": "objects",
         "source": "<source>",
       },
@@ -403,29 +403,29 @@ exports[`basic function with memory size specified 2`] = `
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
                   },
-                  "Default_Function": {
+                  "DefaultFunction": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.17.0",
                     },
-                    "id": "Default_Function",
-                    "path": "root/Default/Function/Default_Function",
+                    "id": "DefaultFunction",
+                    "path": "root/Default/Function/DefaultFunction",
                   },
-                  "Function_Bucket": {
+                  "FunctionBucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.17.0",
                     },
-                    "id": "Function_Bucket",
-                    "path": "root/Default/Function/Function_Bucket",
+                    "id": "FunctionBucket",
+                    "path": "root/Default/Function/FunctionBucket",
                   },
-                  "Function_Object_Bucket": {
+                  "FunctionObjectBucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.17.0",
                     },
-                    "id": "Function_Object_Bucket",
-                    "path": "root/Default/Function/Function_Object_Bucket",
+                    "id": "FunctionObjectBucket",
+                    "path": "root/Default/Function/FunctionObjectBucket",
                   },
                   "Id": {
                     "constructInfo": {
@@ -518,7 +518,7 @@ exports[`basic function with timeout explicitly set 1`] = `
 {
   "resource": {
     "google_cloudfunctions_function": {
-      "Function_Default_Function_7840458D": {
+      "Function_DefaultFunction_81B206D7": {
         "available_memory_mb": 128,
         "description": "This function was created by Wing",
         "entry_point": "handler",
@@ -527,22 +527,22 @@ exports[`basic function with timeout explicitly set 1`] = `
         "project": "my-project",
         "region": "us-central1",
         "runtime": "nodejs16",
-        "source_archive_bucket": "\${google_storage_bucket.Function_Function_Bucket_CE6F363F.name}",
-        "source_archive_object": "\${google_storage_bucket_object.Function_Function_Object_Bucket_9D62CB11.name}",
+        "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
+        "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
         "timeout": 30,
         "trigger_http": true,
       },
     },
     "google_storage_bucket": {
-      "Function_Function_Bucket_CE6F363F": {
+      "Function_FunctionBucket_CD7D2793": {
         "location": "US",
         "name": "function-\${random_id.Function_Id_A6EBDCE6.hex}",
         "project": "my-project",
       },
     },
     "google_storage_bucket_object": {
-      "Function_Function_Object_Bucket_9D62CB11": {
-        "bucket": "\${google_storage_bucket.Function_Function_Bucket_CE6F363F.name}",
+      "Function_FunctionObjectBucket_A7CD2097": {
+        "bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
         "name": "objects",
         "source": "<source>",
       },
@@ -574,29 +574,29 @@ exports[`basic function with timeout explicitly set 2`] = `
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
                   },
-                  "Default_Function": {
+                  "DefaultFunction": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.17.0",
                     },
-                    "id": "Default_Function",
-                    "path": "root/Default/Function/Default_Function",
+                    "id": "DefaultFunction",
+                    "path": "root/Default/Function/DefaultFunction",
                   },
-                  "Function_Bucket": {
+                  "FunctionBucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.17.0",
                     },
-                    "id": "Function_Bucket",
-                    "path": "root/Default/Function/Function_Bucket",
+                    "id": "FunctionBucket",
+                    "path": "root/Default/Function/FunctionBucket",
                   },
-                  "Function_Object_Bucket": {
+                  "FunctionObjectBucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.17.0",
                     },
-                    "id": "Function_Object_Bucket",
-                    "path": "root/Default/Function/Function_Object_Bucket",
+                    "id": "FunctionObjectBucket",
+                    "path": "root/Default/Function/FunctionObjectBucket",
                   },
                   "Id": {
                     "constructInfo": {
