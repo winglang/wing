@@ -7,7 +7,6 @@ import { SimApp } from "../sim-app";
 const INFLIGHT_ON_START = `
 async handle(message) {
   console.log("Service Started");
-  return { my_context: 1111 };
 }`;
 
 const INFLIGHT_ON_STOP = `
