@@ -271,21 +271,28 @@ let ServiceProps = cloud.ServiceProps{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ServiceProps.property.onStart">onStart</a></code> | <code><a href="#@winglang/sdk.cloud.IServiceOnEventHandler">IServiceOnEventHandler</a></code> | Handler to run with the service starts. |
+| <code><a href="#@winglang/sdk.cloud.ServiceProps.property.onStart">onStart</a></code> | <code><a href="#@winglang/sdk.cloud.IServiceOnStartHandler">IServiceOnStartHandler</a></code> | Handler to run when the service starts. |
 | <code><a href="#@winglang/sdk.cloud.ServiceProps.property.autoStart">autoStart</a></code> | <code>bool</code> | Whether the service should start automatically. |
-| <code><a href="#@winglang/sdk.cloud.ServiceProps.property.onStop">onStop</a></code> | <code><a href="#@winglang/sdk.cloud.IServiceOnEventHandler">IServiceOnEventHandler</a></code> | Handler to run with the service stops. |
+| <code><a href="#@winglang/sdk.cloud.ServiceProps.property.onStop">onStop</a></code> | <code><a href="#@winglang/sdk.cloud.IServiceOnStopHandler">IServiceOnStopHandler</a></code> | Handler to run in order to stop the service. |
 
 ---
 
 ##### `onStart`<sup>Required</sup> <a name="onStart" id="@winglang/sdk.cloud.ServiceProps.property.onStart"></a>
 
 ```wing
-onStart: IServiceOnEventHandler;
+onStart: IServiceOnStartHandler;
 ```
 
-- *Type:* <a href="#@winglang/sdk.cloud.IServiceOnEventHandler">IServiceOnEventHandler</a>
+- *Type:* <a href="#@winglang/sdk.cloud.IServiceOnStartHandler">IServiceOnStartHandler</a>
 
-Handler to run with the service starts.
+Handler to run when the service starts.
+
+This is where you implement the initialization logic of
+the service, start any activities asychronously, and return a context object that will be
+passed into the `onStop(context)` handler.
+
+DO NOT BLOCK! This handler should return as quickly as possible. If you need to run a long
+running process, start it asynchronously.
 
 ---
 
@@ -300,66 +307,51 @@ autoStart: bool;
 
 Whether the service should start automatically.
 
+If `false`, the service will need to be started
+manually by calling the inflight `start()` method.
+
 ---
 
 ##### `onStop`<sup>Optional</sup> <a name="onStop" id="@winglang/sdk.cloud.ServiceProps.property.onStop"></a>
 
 ```wing
-onStop: IServiceOnEventHandler;
+onStop: IServiceOnStopHandler;
 ```
 
-- *Type:* <a href="#@winglang/sdk.cloud.IServiceOnEventHandler">IServiceOnEventHandler</a>
+- *Type:* <a href="#@winglang/sdk.cloud.IServiceOnStopHandler">IServiceOnStopHandler</a>
 - *Default:* no special activity at shutdown
 
-Handler to run with the service stops.
+Handler to run in order to stop the service.
+
+This is where you implement the shutdown logic of
+the service, stop any activities, and clean up any resources.
+
+The handler will be called with the context object returned from `onStart()`.
 
 ---
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
-### IServiceOnEventClient <a name="IServiceOnEventClient" id="@winglang/sdk.cloud.IServiceOnEventClient"></a>
-
-- *Implemented By:* <a href="#@winglang/sdk.cloud.IServiceOnEventClient">IServiceOnEventClient</a>
-
-Inflight client for `IServiceOnEventHandler`.
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IServiceOnEventClient.handle">handle</a></code> | Function that will be called for service events. |
-
----
-
-##### `handle` <a name="handle" id="@winglang/sdk.cloud.IServiceOnEventClient.handle"></a>
-
-```wing
-inflight handle(): void
-```
-
-Function that will be called for service events.
-
-
-### IServiceOnEventHandler <a name="IServiceOnEventHandler" id="@winglang/sdk.cloud.IServiceOnEventHandler"></a>
+### IServiceOnStartHandler <a name="IServiceOnStartHandler" id="@winglang/sdk.cloud.IServiceOnStartHandler"></a>
 
 - *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
-- *Implemented By:* <a href="#@winglang/sdk.cloud.IServiceOnEventHandler">IServiceOnEventHandler</a>
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IServiceOnStartHandler">IServiceOnStartHandler</a>
 
-**Inflight client:** [@winglang/sdk.cloud.IServiceOnEventClient](#@winglang/sdk.cloud.IServiceOnEventClient)
+**Inflight client:** [@winglang/sdk.cloud.IServiceOnStartHandlerClient](#@winglang/sdk.cloud.IServiceOnStartHandlerClient)
 
-A resource with an inflight "handle" method that can be passed to `ServiceProps.on_start` || `ServiceProps.on_stop`.
+A resource with an inflight "handle" method that can be passed to `ServiceProps.onStart`.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IServiceOnEventHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.cloud.IServiceOnStartHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.IServiceOnEventHandler.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.IServiceOnStartHandler.property.node"></a>
 
 ```wing
 node: Node;
@@ -370,4 +362,92 @@ node: Node;
 The tree node.
 
 ---
+
+### IServiceOnStartHandlerClient <a name="IServiceOnStartHandlerClient" id="@winglang/sdk.cloud.IServiceOnStartHandlerClient"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IServiceOnStartHandlerClient">IServiceOnStartHandlerClient</a>
+
+Inflight client for `IServiceOnStartHandler`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IServiceOnStartHandlerClient.handle">handle</a></code> | Function that will be called for service events. |
+
+---
+
+##### `handle` <a name="handle" id="@winglang/sdk.cloud.IServiceOnStartHandlerClient.handle"></a>
+
+```wing
+inflight handle(): any
+```
+
+Function that will be called for service events.
+
+
+### IServiceOnStopHandler <a name="IServiceOnStopHandler" id="@winglang/sdk.cloud.IServiceOnStopHandler"></a>
+
+- *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IServiceOnStopHandler">IServiceOnStopHandler</a>
+
+**Inflight client:** [@winglang/sdk.cloud.IServiceOnStopHandlerClient](#@winglang/sdk.cloud.IServiceOnStopHandlerClient)
+
+A resource with an inflight "handle" method that can be passed to `ServiceProps.onStart`.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IServiceOnStopHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.IServiceOnStopHandler.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+### IServiceOnStopHandlerClient <a name="IServiceOnStopHandlerClient" id="@winglang/sdk.cloud.IServiceOnStopHandlerClient"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IServiceOnStopHandlerClient">IServiceOnStopHandlerClient</a>
+
+Inflight client for `IServiceOnStopHandler`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IServiceOnStopHandlerClient.handle">handle</a></code> | Function that will be called for service events. |
+
+---
+
+##### `handle` <a name="handle" id="@winglang/sdk.cloud.IServiceOnStopHandlerClient.handle"></a>
+
+```wing
+inflight handle(context?: any): void
+```
+
+Function that will be called for service events.
+
+###### `context`<sup>Optional</sup> <a name="context" id="@winglang/sdk.cloud.IServiceOnStopHandlerClient.handle.parameter.context"></a>
+
+- *Type:* any
+
+the context returned from `onStart()`.
+
+if no context is returned, this will be
+`undefined`.
+
+---
+
 

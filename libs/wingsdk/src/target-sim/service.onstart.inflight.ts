@@ -1,4 +1,7 @@
-import type { IFunctionHandlerClient, IServiceOnStartHandlerClient } from "../cloud";
+import type {
+  IFunctionHandlerClient,
+  IServiceOnStartHandlerClient,
+} from "../cloud";
 
 export class ServiceOnStartHandler implements IServiceOnStartHandlerClient {
   private readonly handler: IFunctionHandlerClient;
@@ -8,6 +11,6 @@ export class ServiceOnStartHandler implements IServiceOnStartHandlerClient {
   }
 
   public async handle(): Promise<any | undefined> {
-    return await this.handler.handle("");
+    return this.handler.handle("");
   }
 }

@@ -34,10 +34,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
 
     // On Stop Handler
     if (props.onStop) {
-      const onStopFunction = this.createServiceFunction(
-        props.onStop,
-        "OnStop"
-      );
+      const onStopFunction = this.createServiceFunction(props.onStop, "OnStop");
       Node.of(onStopFunction).title = "onStop()";
       this.onStopHandlerToken = simulatorHandleToken(onStopFunction);
 
@@ -51,7 +48,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
 
   private createServiceFunction(
     handler: IResource,
-    id: "OnStart" | "OnStop",
+    id: "OnStart" | "OnStop"
   ): cloud.Function {
     // On Start Handler
     const onStartHash = handler.node.addr.slice(-8);

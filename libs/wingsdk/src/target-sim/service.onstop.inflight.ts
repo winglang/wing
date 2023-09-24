@@ -1,4 +1,7 @@
-import type { IFunctionHandlerClient, IServiceOnStopHandlerClient } from "../cloud";
+import type {
+  IFunctionHandlerClient,
+  IServiceOnStopHandlerClient,
+} from "../cloud";
 
 export class ServiceOnStopHandler implements IServiceOnStopHandlerClient {
   private readonly handler: IFunctionHandlerClient;
@@ -8,6 +11,6 @@ export class ServiceOnStopHandler implements IServiceOnStopHandlerClient {
   }
 
   public async handle(context: any): Promise<void> {
-    return await this.handler.handle(context);
+    return this.handler.handle(context);
   }
 }

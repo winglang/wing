@@ -245,7 +245,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ServiceProps\n```\n---\nOptions for `Service`.\n### Fields\n- `autoStart?` — Whether the service should start automatically.\n- `onStart` — Handler to run with the service starts.\n- `onStop?` — Handler to run with the service stops."
+    value: "```wing\nstruct ServiceProps\n```\n---\nOptions for `Service`.\n### Fields\n- `autoStart?` — Whether the service should start automatically.\n- `onStart` — Handler to run when the service starts.\n- `onStop?` — Handler to run in order to stop the service."
   sortText: hh|ServiceProps
 - label: TopicOnMessageProps
   kind: 22
@@ -391,18 +391,30 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\ninterface IServiceClient\n```\n---\nInflight interface for `Service`.\n### Methods\n- `start` — Start the service.\n- `stop` — Stop the service."
   sortText: ii|IServiceClient
-- label: IServiceOnEventClient
+- label: IServiceOnStartHandler
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IServiceOnEventClient\n```\n---\nInflight client for `IServiceOnEventHandler`.\n### Methods\n- `handle` — Function that will be called for service events."
-  sortText: ii|IServiceOnEventClient
-- label: IServiceOnEventHandler
+    value: "```wing\ninterface IServiceOnStartHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `ServiceProps.onStart`.\n### Methods\n- `bind` — `preflight (host: IInflightHost, ops: Array<str>): void`\n- `handle` — Function that will be called for service events.\n- `node` — `Node`"
+  sortText: ii|IServiceOnStartHandler
+- label: IServiceOnStartHandlerClient
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IServiceOnEventHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `ServiceProps.on_start` || `ServiceProps.on_stop`.\n### Methods\n- `bind` — `preflight (host: IInflightHost, ops: Array<str>): void`\n- `handle` — Function that will be called for service events.\n- `node` — `Node`"
-  sortText: ii|IServiceOnEventHandler
+    value: "```wing\ninterface IServiceOnStartHandlerClient\n```\n---\nInflight client for `IServiceOnStartHandler`.\n### Methods\n- `handle` — Function that will be called for service events."
+  sortText: ii|IServiceOnStartHandlerClient
+- label: IServiceOnStopHandler
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IServiceOnStopHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `ServiceProps.onStart`.\n### Methods\n- `bind` — `preflight (host: IInflightHost, ops: Array<str>): void`\n- `handle` — Function that will be called for service events.\n- `node` — `Node`"
+  sortText: ii|IServiceOnStopHandler
+- label: IServiceOnStopHandlerClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IServiceOnStopHandlerClient\n```\n---\nInflight client for `IServiceOnStopHandler`.\n### Methods\n- `handle` — Function that will be called for service events."
+  sortText: ii|IServiceOnStopHandlerClient
 - label: ITopicClient
   kind: 8
   documentation:

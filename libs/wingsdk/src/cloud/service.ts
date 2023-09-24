@@ -26,9 +26,9 @@ export interface ServiceProps {
   /**
    * Handler to run in order to stop the service. This is where you implement the shutdown logic of
    * the service, stop any activities, and clean up any resources.
-   * 
+   *
    * The handler will be called with the context object returned from `onStart()`.
-   * 
+   *
    * @default - no special activity at shutdown
    */
   readonly onStop?: IServiceOnStopHandler;
@@ -78,7 +78,7 @@ export abstract class Service extends Resource {
 /**
  * Options for Service.onStart.
  */
-export interface ServiceOnStartProps extends FunctionProps { }
+export interface ServiceOnStartProps extends FunctionProps {}
 
 /**
  * Inflight interface for `Service`.
@@ -100,7 +100,7 @@ export interface IServiceClient {
  * A resource with an inflight "handle" method that can be passed to `ServiceProps.onStart`.
  * @inflight `@winglang/sdk.cloud.IServiceOnStartHandlerClient`
  */
-export interface IServiceOnStartHandler extends IResource { }
+export interface IServiceOnStartHandler extends IResource {}
 
 /**
  * Inflight client for `IServiceOnStartHandler`.
@@ -118,7 +118,7 @@ export interface IServiceOnStartHandlerClient {
  * A resource with an inflight "handle" method that can be passed to `ServiceProps.onStart`.
  * @inflight `@winglang/sdk.cloud.IServiceOnStopHandlerClient`
  */
-export interface IServiceOnStopHandler extends IResource { }
+export interface IServiceOnStopHandler extends IResource {}
 
 /**
  * Inflight client for `IServiceOnStopHandler`.
