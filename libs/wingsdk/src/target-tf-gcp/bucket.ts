@@ -57,7 +57,7 @@ export class Bucket extends cloud.Bucket {
 
     this.bucket = new StorageBucket(this, "Default", {
       name: bucketName + "-" + randomId.hex,
-      location: (App.of(this) as App).storageLocation,
+      location: (App.of(this) as App).region,
       // recommended by GCP: https://cloud.google.com/storage/docs/uniform-bucket-level-access#should-you-use
       uniformBucketLevelAccess: true,
       publicAccessPrevention: props.public ? "inherited" : "enforced",

@@ -21,12 +21,6 @@ export interface AppProps extends CdktfAppProps {
    * @see https://cloud.google.com/functions/docs/locations
    */
   readonly region: string;
-
-  /**
-   * The Google Cloud storage location, used for all storage resources.
-   * @see https://cloud.google.com/storage/docs/locations
-   */
-  readonly storageLocation: string;
 }
 
 /**
@@ -44,11 +38,6 @@ export class App extends CdktfApp {
    */
   public readonly region: string;
 
-  /**
-   * The Google Cloud storage location, used for all storage resources.
-   */
-  public readonly storageLocation: string;
-
   public readonly _target = "tf-gcp";
 
   constructor(props: AppProps) {
@@ -60,16 +49,6 @@ export class App extends CdktfApp {
     if (this.projectId === undefined) {
       throw new Error(
         "A Google Cloud project ID must be specified through the GOOGLE_PROJECT_ID environment variable."
-      );
-    }
-
-    this.storageLocation =
-      props.storageLocation ?? process.env.GOOGLE_STORAGE_LOCATION;
-    // Using env variable for location is work around until we are
-    // able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
-    if (this.storageLocation === undefined) {
-      throw new Error(
-        "A Google Cloud storage location must be specified through the GOOGLE_STORAGE_LOCATION environment variable."
       );
     }
 

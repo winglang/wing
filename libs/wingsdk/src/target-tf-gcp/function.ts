@@ -90,7 +90,7 @@ export class Function extends cloud.Function {
     // create the bucket
     this.bucket = new StorageBucket(this, "FunctionBucket", {
       name: bucketName + "-" + randomId.hex,
-      location: app.storageLocation,
+      location: app.region,
       project: app.projectId,
     });
 
