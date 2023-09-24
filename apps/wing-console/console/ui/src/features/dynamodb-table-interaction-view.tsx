@@ -58,7 +58,7 @@ export const DynamodbTableInteractionView = ({
 
   useEffect(() => {
     if (table.data?.rows) {
-      const rows = table.data.rows.map((row) => {
+      const rows = table.data.rows.items.map((row) => {
         return {
           data: row,
           error: "",
@@ -76,16 +76,18 @@ export const DynamodbTableInteractionView = ({
             <Attribute name="Name" value={table.data?.name} noLeftPadding />
           </div>
 
-          <div className="flex items-center gap-2 justify-end">
-            <DynamodbTableInteraction
-              rows={rows}
-              hashKey={table.data?.hashKey}
-              rangeKey={table.data?.rangeKey}
-              onAddRow={onAddRow}
-              onRemoveRow={onRemoveRow}
-              loading={loading}
-            />
-          </div>
+          {table.data && (
+            <div className="flex items-center gap-2 justify-end">
+              <DynamodbTableInteraction
+                rows={rows}
+                hashKey={table.data.hashKey}
+                rangeKey={table.data.rangeKey}
+                onAddRow={onAddRow}
+                onRemoveRow={onRemoveRow}
+                loading={loading}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

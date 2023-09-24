@@ -45,6 +45,8 @@ export type {
   LayoutComponentType,
 } from "./utils/createRouter.js";
 
+export * from "@winglang/sdk/lib/ex/index.js";
+
 export type RouteNames = keyof inferRouterInputs<Router> | undefined;
 
 export { isTermsAccepted } from "./utils/terms-and-conditions.js";

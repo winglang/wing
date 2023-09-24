@@ -406,8 +406,8 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("./inflight.$Closure2-2.js")({
             $api_url: ${context._lift(api.url)},
-            $http_Util: ${context._lift(http.Util)},
-            $t_Assert: ${context._lift(t.Assert)},
+            $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
+            $t_Assert: ${context._lift($stdlib.core.toLiftableModuleType(t.Assert, "", "Assert"))},
           })
         `;
       }
@@ -441,9 +441,9 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("./inflight.$Closure3-2.js")({
             $api_url: ${context._lift(api.url)},
-            $http_HttpMethod: ${context._lift(http.HttpMethod)},
-            $http_Util: ${context._lift(http.Util)},
-            $t_Assert: ${context._lift(t.Assert)},
+            $http_HttpMethod: ${context._lift($stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"))},
+            $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
+            $t_Assert: ${context._lift($stdlib.core.toLiftableModuleType(t.Assert, "", "Assert"))},
           })
         `;
       }
@@ -477,9 +477,9 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("./inflight.$Closure4-2.js")({
             $api_url: ${context._lift(api.url)},
-            $http_HttpMethod: ${context._lift(http.HttpMethod)},
-            $http_Util: ${context._lift(http.Util)},
-            $t_Assert: ${context._lift(t.Assert)},
+            $http_HttpMethod: ${context._lift($stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"))},
+            $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
+            $t_Assert: ${context._lift($stdlib.core.toLiftableModuleType(t.Assert, "", "Assert"))},
           })
         `;
       }

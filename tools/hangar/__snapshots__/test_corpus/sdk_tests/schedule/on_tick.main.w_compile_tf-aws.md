@@ -449,8 +449,8 @@ class $Root extends $stdlib.std.Resource {
           require("./inflight.$Closure3-1.js")({
             $c1: ${context._lift(c1)},
             $c2: ${context._lift(c2)},
-            $std_Duration: ${context._lift(std.Duration)},
-            $util_Util: ${context._lift(util.Util)},
+            $std_Duration: ${context._lift($stdlib.core.toLiftableModuleType(std.Duration, "@winglang/sdk/std", "Duration"))},
+            $util_Util: ${context._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }
