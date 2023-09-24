@@ -38,7 +38,7 @@ const BUCKET_NAME_OPTS: NameOptions = {
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
 export class Bucket extends cloud.Bucket {
-  private readonly bucket: StorageBucket;
+  public readonly bucket: StorageBucket;
 
   constructor(scope: Construct, id: string, props: cloud.BucketProps = {}) {
     super(scope, id, props);

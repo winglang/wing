@@ -22,8 +22,9 @@ exports[`basic function 1`] = `
     "google_storage_bucket": {
       "Function_FunctionBucket_CD7D2793": {
         "location": "us-central1",
-        "name": "function-\${random_id.Function_Id_A6EBDCE6.hex}",
-        "project": "my-project",
+        "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
+        "public_access_prevention": "enforced",
+        "uniform_bucket_level_access": true,
       },
     },
     "google_storage_bucket_object": {
@@ -34,7 +35,7 @@ exports[`basic function 1`] = `
       },
     },
     "random_id": {
-      "Function_Id_A6EBDCE6": {
+      "Function_FunctionBucket_Id_216676D0": {
         "byte_length": 4,
       },
     },
@@ -69,9 +70,31 @@ exports[`basic function 2`] = `
                     "path": "root/Default/Function/DefaultFunction",
                   },
                   "FunctionBucket": {
+                    "children": {
+                      "Default": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "Default",
+                        "path": "root/Default/Function/FunctionBucket/Default",
+                      },
+                      "Id": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "Id",
+                        "path": "root/Default/Function/FunctionBucket/Id",
+                      },
+                    },
                     "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.70",
+                    },
+                    "display": {
+                      "description": "A cloud object store",
+                      "title": "Bucket",
                     },
                     "id": "FunctionBucket",
                     "path": "root/Default/Function/FunctionBucket",
@@ -83,14 +106,6 @@ exports[`basic function 2`] = `
                     },
                     "id": "FunctionObjectBucket",
                     "path": "root/Default/Function/FunctionObjectBucket",
-                  },
-                  "Id": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "Id",
-                    "path": "root/Default/Function/Id",
                   },
                 },
                 "constructInfo": {
@@ -194,8 +209,9 @@ exports[`basic function with environment variables 1`] = `
     "google_storage_bucket": {
       "Function_FunctionBucket_CD7D2793": {
         "location": "us-central1",
-        "name": "function-\${random_id.Function_Id_A6EBDCE6.hex}",
-        "project": "my-project",
+        "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
+        "public_access_prevention": "enforced",
+        "uniform_bucket_level_access": true,
       },
     },
     "google_storage_bucket_object": {
@@ -206,7 +222,7 @@ exports[`basic function with environment variables 1`] = `
       },
     },
     "random_id": {
-      "Function_Id_A6EBDCE6": {
+      "Function_FunctionBucket_Id_216676D0": {
         "byte_length": 4,
       },
     },
@@ -241,9 +257,31 @@ exports[`basic function with environment variables 2`] = `
                     "path": "root/Default/Function/DefaultFunction",
                   },
                   "FunctionBucket": {
+                    "children": {
+                      "Default": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "Default",
+                        "path": "root/Default/Function/FunctionBucket/Default",
+                      },
+                      "Id": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "Id",
+                        "path": "root/Default/Function/FunctionBucket/Id",
+                      },
+                    },
                     "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.70",
+                    },
+                    "display": {
+                      "description": "A cloud object store",
+                      "title": "Bucket",
                     },
                     "id": "FunctionBucket",
                     "path": "root/Default/Function/FunctionBucket",
@@ -255,14 +293,6 @@ exports[`basic function with environment variables 2`] = `
                     },
                     "id": "FunctionObjectBucket",
                     "path": "root/Default/Function/FunctionObjectBucket",
-                  },
-                  "Id": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "Id",
-                    "path": "root/Default/Function/Id",
                   },
                 },
                 "constructInfo": {
@@ -365,8 +395,9 @@ exports[`basic function with memory size specified 1`] = `
     "google_storage_bucket": {
       "Function_FunctionBucket_CD7D2793": {
         "location": "us-central1",
-        "name": "function-\${random_id.Function_Id_A6EBDCE6.hex}",
-        "project": "my-project",
+        "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
+        "public_access_prevention": "enforced",
+        "uniform_bucket_level_access": true,
       },
     },
     "google_storage_bucket_object": {
@@ -377,7 +408,7 @@ exports[`basic function with memory size specified 1`] = `
       },
     },
     "random_id": {
-      "Function_Id_A6EBDCE6": {
+      "Function_FunctionBucket_Id_216676D0": {
         "byte_length": 4,
       },
     },
@@ -412,9 +443,31 @@ exports[`basic function with memory size specified 2`] = `
                     "path": "root/Default/Function/DefaultFunction",
                   },
                   "FunctionBucket": {
+                    "children": {
+                      "Default": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "Default",
+                        "path": "root/Default/Function/FunctionBucket/Default",
+                      },
+                      "Id": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "Id",
+                        "path": "root/Default/Function/FunctionBucket/Id",
+                      },
+                    },
                     "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.70",
+                    },
+                    "display": {
+                      "description": "A cloud object store",
+                      "title": "Bucket",
                     },
                     "id": "FunctionBucket",
                     "path": "root/Default/Function/FunctionBucket",
@@ -426,14 +479,6 @@ exports[`basic function with memory size specified 2`] = `
                     },
                     "id": "FunctionObjectBucket",
                     "path": "root/Default/Function/FunctionObjectBucket",
-                  },
-                  "Id": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "Id",
-                    "path": "root/Default/Function/Id",
                   },
                 },
                 "constructInfo": {
@@ -536,8 +581,9 @@ exports[`basic function with timeout explicitly set 1`] = `
     "google_storage_bucket": {
       "Function_FunctionBucket_CD7D2793": {
         "location": "us-central1",
-        "name": "function-\${random_id.Function_Id_A6EBDCE6.hex}",
-        "project": "my-project",
+        "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
+        "public_access_prevention": "enforced",
+        "uniform_bucket_level_access": true,
       },
     },
     "google_storage_bucket_object": {
@@ -548,7 +594,7 @@ exports[`basic function with timeout explicitly set 1`] = `
       },
     },
     "random_id": {
-      "Function_Id_A6EBDCE6": {
+      "Function_FunctionBucket_Id_216676D0": {
         "byte_length": 4,
       },
     },
@@ -583,9 +629,31 @@ exports[`basic function with timeout explicitly set 2`] = `
                     "path": "root/Default/Function/DefaultFunction",
                   },
                   "FunctionBucket": {
+                    "children": {
+                      "Default": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "Default",
+                        "path": "root/Default/Function/FunctionBucket/Default",
+                      },
+                      "Id": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "Id",
+                        "path": "root/Default/Function/FunctionBucket/Id",
+                      },
+                    },
                     "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.70",
+                    },
+                    "display": {
+                      "description": "A cloud object store",
+                      "title": "Bucket",
                     },
                     "id": "FunctionBucket",
                     "path": "root/Default/Function/FunctionBucket",
@@ -597,14 +665,6 @@ exports[`basic function with timeout explicitly set 2`] = `
                     },
                     "id": "FunctionObjectBucket",
                     "path": "root/Default/Function/FunctionObjectBucket",
-                  },
-                  "Id": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "Id",
-                    "path": "root/Default/Function/Id",
                   },
                 },
                 "constructInfo": {

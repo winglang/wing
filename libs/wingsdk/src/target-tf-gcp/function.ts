@@ -2,10 +2,9 @@ import { resolve } from "path";
 import { AssetType, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
+import { Bucket } from "./bucket";
 import { CloudfunctionsFunction } from "../.gen/providers/google/cloudfunctions-function";
-import { StorageBucket } from "../.gen/providers/google/storage-bucket";
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
-import { Id } from "../.gen/providers/random/id";
 import * as cloud from "../cloud";
 import { createBundle } from "../shared/bundling";
 import {
@@ -21,12 +20,6 @@ const FUNCTION_NAME_OPTS: NameOptions = {
   case: CaseConventions.LOWERCASE,
 };
 
-const BUCKET_NAME_OPTS: NameOptions = {
-  maxLen: 54,
-  case: CaseConventions.LOWERCASE,
-  disallowedRegex: /([^a-z0-9_\-]+)/g,
-  includeHash: false,
-};
 /**
  * GCP implementation of `cloud.Function`.
  *
@@ -35,8 +28,6 @@ const BUCKET_NAME_OPTS: NameOptions = {
 
 export class Function extends cloud.Function {
   private readonly function: CloudfunctionsFunction;
-  private readonly bucket: StorageBucket;
-  private readonly bucketObject: StorageBucketObject;
 
   constructor(
     scope: Construct,
@@ -58,18 +49,6 @@ export class Function extends cloud.Function {
       type: AssetType.ARCHIVE,
     });
 
-    // create a bucket with unique name
-    const bucketName = ResourceNames.generateName(this, BUCKET_NAME_OPTS);
-    // GCP bucket names must be globally unique, but the Terraform resource
-    // provider doesn't provide a mechanism like `bucketPrefix` as AWS does,
-    // so we must generate a random string to append to the bucket name.
-
-    // The random string must be managed in Terraform state so that it doesn't
-    // change on every subsequent compile or deployment.
-    const randomId = new Id(this, "Id", {
-      byteLength: 4, // 4 bytes = 8 hex characters
-    });
-
     // memory limits must be between 128 and 8192 MB
     if (props?.memory && (props.memory < 128 || props.memory > 8192)) {
       throw new Error(
@@ -87,19 +66,19 @@ export class Function extends cloud.Function {
       );
     }
 
-    // create the bucket
-    this.bucket = new StorageBucket(this, "FunctionBucket", {
-      name: bucketName + "-" + randomId.hex,
-      location: app.region,
-      project: app.projectId,
-    });
+    // create a bucket to store the function executable
+    const FunctionBucket = new Bucket(this, "FunctionBucket");
 
     // put the executable in the bucket as an object
-    this.bucketObject = new StorageBucketObject(this, "FunctionObjectBucket", {
-      name: "objects",
-      bucket: this.bucket.name,
-      source: asset.path,
-    });
+    const FunctionObjectBucket = new StorageBucketObject(
+      this,
+      "FunctionObjectBucket",
+      {
+        name: "objects",
+        bucket: FunctionBucket.bucket.name,
+        source: asset.path,
+      }
+    );
 
     // create the cloud function
     this.function = new CloudfunctionsFunction(this, "DefaultFunction", {
@@ -109,8 +88,8 @@ export class Function extends cloud.Function {
       region: app.region,
       runtime: "nodejs16",
       availableMemoryMb: props.memory ?? 128,
-      sourceArchiveBucket: this.bucket.name,
-      sourceArchiveObject: this.bucketObject.name,
+      sourceArchiveBucket: FunctionBucket.bucket.name,
+      sourceArchiveObject: FunctionObjectBucket.name,
       entryPoint: "handler",
       triggerHttp: true,
       timeout: props.timeout?.seconds ?? 60,
