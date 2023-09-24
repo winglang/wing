@@ -8,7 +8,7 @@ import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
 import { BaseResourceSchema } from "../simulator";
-import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
+import { IInflightHost, IResource, Node, SDK_SOURCE_MODULE } from "../std";
 
 export class Service extends cloud.Service implements ISimulatorResource {
   private readonly autoStart: boolean;
@@ -21,7 +21,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
 
     const onStartFunction = this.createServiceFunction(
       props.onStart,
-      "ServiceOnStart"
+      "OnStart"
     );
     Node.of(onStartFunction).title = "onStart()";
     this.onStartHandlerToken = simulatorHandleToken(onStartFunction);
@@ -34,10 +34,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
 
     // On Stop Handler
     if (props.onStop) {
-      const onStopFunction = this.createServiceFunction(
-        props.onStop,
-        "ServiceOnStop"
-      );
+      const onStopFunction = this.createServiceFunction(props.onStop, "OnStop");
       Node.of(onStopFunction).title = "onStop()";
       this.onStopHandlerToken = simulatorHandleToken(onStopFunction);
 
@@ -48,25 +45,26 @@ export class Service extends cloud.Service implements ISimulatorResource {
       });
     }
   }
+
   private createServiceFunction(
-    handler: cloud.IServiceOnEventHandler,
-    id: string
+    handler: IResource,
+    id: "OnStart" | "OnStop"
   ): cloud.Function {
     // On Start Handler
     const onStartHash = handler.node.addr.slice(-8);
 
-    const onStartFunctionHandler = convertBetweenHandlers(
+    const functionHandler = convertBetweenHandlers(
       this,
       `${this.node.id}-${id}-${onStartHash}`,
       handler,
-      join(__dirname, "service.onevent.inflight.js"),
-      "ServiceOnEventHandler"
+      join(__dirname, `service.${id.toLocaleLowerCase()}.inflight.js`),
+      `Service${id}Handler`
     );
 
     const fn = Function._newFunction(
       this,
       `${this.node.id}-${id}${onStartHash}`,
-      onStartFunctionHandler,
+      functionHandler,
       {}
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
