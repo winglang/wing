@@ -197,7 +197,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct DomainProps\n```\n---\nOptions for `Domain`.\n### Fields\n- `domain` — The website's custom domain name."
+    value: "```wing\nstruct DomainProps\n```\n---\nOptions for `Domain`.\n### Fields\n- `domainName` — The website's custom domain name."
   sortText: hh|DomainProps
 - label: FunctionProps
   kind: 22
