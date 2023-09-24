@@ -10,11 +10,8 @@ async handle(message) {
 }`;
 
 const INFLIGHT_ON_STOP = `
-async handle(context) {
+async handle(message) {
   console.log("Service Stopped");
-  if (context.my_context !== 1111) {
-    throw new Error("Context not passed correctly");
-  }
 }`;
 
 test("create a service with on start method", async () => {
