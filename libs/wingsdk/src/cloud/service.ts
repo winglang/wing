@@ -94,40 +94,23 @@ export interface IServiceClient {
 }
 
 /**
- * A resource with an inflight "handle" method that can be passed to `ServiceProps.onStart`.
- * @inflight `@winglang/sdk.cloud.IServiceOnStartHandlerClient`
+ * A resource with an inflight "handle" method that can be passed to
+ * `ServiceProps.on_start` || `ServiceProps.on_stop`.
+ * 
+ * @inflight `@winglang/sdk.cloud.IServiceOnEventHandler`
  */
 export interface IServiceOnEventHandler extends IResource { }
 
 /**
  * Inflight client for `IServiceOnStartHandler`.
  */
-export interface IServiceOnStartHandlerClient {
+export interface IServiceOnEventHandler {
   /**
    * Function that will be called for service events.
    * @returns a context object that will be passed into the `onStop(context)` handler.
    * @inflight
    */
   handle(): Promise<any | undefined>;
-}
-
-/**
- * A resource with an inflight "handle" method that can be passed to `ServiceProps.onStart`.
- * @inflight `@winglang/sdk.cloud.IServiceOnStopHandlerClient`
- */
-export interface IServiceOnStopHandler extends IResource { }
-
-/**
- * Inflight client for `IServiceOnStopHandler`.
- */
-export interface IServiceOnStopHandlerClient {
-  /**
-   * Function that will be called for service events.
-   * @param context the context returned from `onStart()`. if no context is returned, this will be
-   * `undefined`.
-   * @inflight
-   */
-  handle(context?: any): Promise<void>;
 }
 
 /**
