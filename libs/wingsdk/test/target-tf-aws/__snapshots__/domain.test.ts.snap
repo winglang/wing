@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`default domain behavior when passing values from file 1`] = `
+exports[`cloud.Domain for tf-aws > default domain behavior when passing values from file 1`] = `
 {
   "data": {
     "aws_iam_policy_document": {
@@ -157,7 +157,7 @@ exports[`default domain behavior when passing values from file 1`] = `
 }
 `;
 
-exports[`default domain behavior when passing values from file 2`] = `
+exports[`cloud.Domain for tf-aws > default domain behavior when passing values from file 2`] = `
 {
   "tree": {
     "children": {
@@ -330,7 +330,7 @@ exports[`default domain behavior when passing values from file 2`] = `
 }
 `;
 
-exports[`default domain behavior when passing values on the command line 1`] = `
+exports[`cloud.Domain for tf-aws > default domain behavior when passing values on the command line 1`] = `
 {
   "data": {
     "aws_iam_policy_document": {
@@ -487,7 +487,7 @@ exports[`default domain behavior when passing values on the command line 1`] = `
 }
 `;
 
-exports[`default domain behavior when passing values on the command line 2`] = `
+exports[`cloud.Domain for tf-aws > default domain behavior when passing values on the command line 2`] = `
 {
   "tree": {
     "children": {
