@@ -2,35 +2,6 @@ import { readFileSync } from "fs";
 import { Construct } from "constructs";
 import { parse } from "yaml";
 
-const getPlatformSpecificValue = (
-  path: string,
-  argument: string,
-  wingValues: string
-): string | undefined => {
-  if (wingValues) {
-    const valuesList = wingValues.split(",");
-    for (const v of valuesList) {
-      const x = v.split("=");
-
-      const lastDotIndex = x[0].lastIndexOf(".");
-      const pathPart = x[0].substring(0, lastDotIndex);
-      const argumentPart = x[0].substring(lastDotIndex + 1);
-
-      if (pathPart === path && argumentPart === argument) {
-        return x[1];
-      }
-    }
-  }
-
-  return;
-};
-
-const getPlatformSpecificValuesFromFile = (path: string, file: string) => {
-  const data = readFileSync(file);
-  const yamlObj = parse(data.toString());
-  return yamlObj[`${path}`];
-};
-
 /**
  * @param path the node path of the resource
  * @param args The arguments that should be obtained, if one argument can be
@@ -84,6 +55,35 @@ export const getPlatformSpecificValues = (
   }
 
   return result;
+};
+
+const getPlatformSpecificValue = (
+  path: string,
+  argument: string,
+  wingValues: string
+): string | undefined => {
+  if (wingValues) {
+    const valuesList = wingValues.split(",");
+    for (const v of valuesList) {
+      const x = v.split("=");
+
+      const lastDotIndex = x[0].lastIndexOf(".");
+      const pathPart = x[0].substring(0, lastDotIndex);
+      const argumentPart = x[0].substring(lastDotIndex + 1);
+
+      if (pathPart === path && argumentPart === argument) {
+        return x[1];
+      }
+    }
+  }
+
+  return;
+};
+
+const getPlatformSpecificValuesFromFile = (path: string, file: string) => {
+  const data = readFileSync(file);
+  const yamlObj = parse(data.toString());
+  return yamlObj[`${path}`];
 };
 
 const checkMissingValues = (
