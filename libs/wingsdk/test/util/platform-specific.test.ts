@@ -68,7 +68,8 @@ describe("getPlatformSpecificValues", () => {
 
   test("get multiple values from command", () => {
     // GIVEN
-    process.env.WING_VALUES = "root/my-resource.number=123,root/my-resource.string=abc";
+    process.env.WING_VALUES =
+      "root/my-resource.number=123,root/my-resource.string=abc";
     const app = new MyApp();
     const resource = new MyResource(app, "my-resource");
     const result = getPlatformSpecificValues(resource, "number", "string");
