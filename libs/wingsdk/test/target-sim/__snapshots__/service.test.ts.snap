@@ -2,8 +2,8 @@
 
 exports[`create a service with on start method 1`] = `
 {
-  ".wing/my_service-serviceonstartef2b13b9_c8dd91a7.js": "exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/service.onevent.inflight.js\\")).ServiceOnEventHandler({ handler: new ((function(){
+  ".wing/my_service-onstartef2b13b9_c8719fd1.js": "exports.handler = async function(event) {
+  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/service.onstart.inflight.js\\")).ServiceOnStartHandler({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -13,6 +13,7 @@ return class Handler {
   
 async handle(message) {
   console.log(\\"Service Started\\");
+  return { my_context: 1111 };
 }
 };
 })())({
@@ -23,18 +24,18 @@ async handle(message) {
     "connections": [
       {
         "name": "handle()",
-        "source": "root/my_service/my_service-ServiceOnStartef2b13b9",
+        "source": "root/my_service/my_service-OnStartef2b13b9",
         "target": "root/OnStartHandler",
       },
       {
         "name": "$inflight_init()",
-        "source": "root/my_service/my_service-ServiceOnStartef2b13b9",
+        "source": "root/my_service/my_service-OnStartef2b13b9",
         "target": "root/OnStartHandler",
       },
       {
         "name": "onStart()",
         "source": "root/my_service",
-        "target": "root/my_service/my_service-ServiceOnStartef2b13b9",
+        "target": "root/my_service/my_service-OnStartef2b13b9",
       },
     ],
     "version": "connections-0.1",
@@ -51,10 +52,10 @@ async handle(message) {
       },
       {
         "attrs": {},
-        "path": "root/my_service/my_service-ServiceOnStartef2b13b9",
+        "path": "root/my_service/my_service-OnStartef2b13b9",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_service-serviceonstartef2b13b9_c8dd91a7.js",
+          "sourceCodeFile": ".wing/my_service-onstartef2b13b9_c8719fd1.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -65,7 +66,7 @@ async handle(message) {
         "path": "root/my_service",
         "props": {
           "autoStart": true,
-          "onStartHandler": "\${root/my_service/my_service-ServiceOnStartef2b13b9#attrs.handle}",
+          "onStartHandler": "\${root/my_service/my_service-OnStartef2b13b9#attrs.handle}",
         },
         "type": "wingsdk.cloud.Service",
       },
@@ -103,7 +104,7 @@ async handle(message) {
         },
         "my_service": {
           "children": {
-            "my_service-ServiceOnStart-ef2b13b9": {
+            "my_service-OnStart-ef2b13b9": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -111,10 +112,10 @@ async handle(message) {
               "display": {
                 "hidden": true,
               },
-              "id": "my_service-ServiceOnStart-ef2b13b9",
-              "path": "root/my_service/my_service-ServiceOnStart-ef2b13b9",
+              "id": "my_service-OnStart-ef2b13b9",
+              "path": "root/my_service/my_service-OnStart-ef2b13b9",
             },
-            "my_service-ServiceOnStartef2b13b9": {
+            "my_service-OnStartef2b13b9": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -124,8 +125,8 @@ async handle(message) {
                 "sourceModule": "@winglang/sdk",
                 "title": "onStart()",
               },
-              "id": "my_service-ServiceOnStartef2b13b9",
-              "path": "root/my_service/my_service-ServiceOnStartef2b13b9",
+              "id": "my_service-OnStartef2b13b9",
+              "path": "root/my_service/my_service-OnStartef2b13b9",
             },
           },
           "constructInfo": {

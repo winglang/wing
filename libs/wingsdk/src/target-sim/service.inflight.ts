@@ -13,6 +13,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
   private readonly onStopHandler?: string;
   private readonly autoStart: boolean;
   private running: boolean = false;
+  private state: any;
 
   constructor(props: ServiceSchema["props"], context: ISimulatorContext) {
     this.context = context;
@@ -56,7 +57,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       timestamp: new Date().toISOString(),
     });
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    await fnClient.invoke("");
+    this.state = await fnClient.invoke("");
     this.running = true;
   }
 
@@ -80,8 +81,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       timestamp: new Date().toISOString(),
     });
 
-    await fnClient.invoke("");
-
+    await fnClient.invoke(this.state);
     this.running = false;
   }
 }

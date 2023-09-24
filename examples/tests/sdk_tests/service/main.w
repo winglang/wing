@@ -2,6 +2,8 @@
 bring cloud;
 bring util;
 
+let CONTEXT_VALUE = "hello, context!";
+
 class Resource {
   b: cloud.Bucket;
 
@@ -9,11 +11,16 @@ class Resource {
     this.b = new cloud.Bucket();
     
     new cloud.Service(
-      onStart: inflight () => {
+      onStart: inflight (): str => {
         util.sleep(5s);
         this.b.put("ready", "true");
-      }
-    );    
+        return CONTEXT_VALUE;
+      },
+
+      onStop: inflight (ctx: str) => {
+        assert(ctx == CONTEXT_VALUE);
+      },
+    );
   }
 
   pub inflight access() {
