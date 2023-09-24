@@ -97,20 +97,20 @@ export interface IServiceClient {
  * A resource with an inflight "handle" method that can be passed to
  * `ServiceProps.on_start` || `ServiceProps.on_stop`.
  * 
- * @inflight `@winglang/sdk.cloud.IServiceOnEventHandler`
+ * @inflight `@winglang/sdk.cloud.IServiceOnEventClient`
  */
 export interface IServiceOnEventHandler extends IResource { }
 
 /**
- * Inflight client for `IServiceOnStartHandler`.
+ * Inflight client for `IServiceOnEventHandler`.
  */
-export interface IServiceOnEventHandler {
+export interface IServiceOnEventClient {
   /**
    * Function that will be called for service events.
    * @returns a context object that will be passed into the `onStop(context)` handler.
    * @inflight
    */
-  handle(): Promise<any | undefined>;
+  handle(): Promise<void>;
 }
 
 /**
