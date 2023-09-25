@@ -15,8 +15,7 @@ import {
 import { TraceType } from "../std";
 
 export class Queue
-  implements IQueueClient, ISimulatorResourceInstance, IEventPublisher
-{
+  implements IQueueClient, ISimulatorResourceInstance, IEventPublisher {
   private readonly messages = new Array<QueueMessage>();
   private readonly subscribers = new Array<QueueSubscriber>();
   private readonly intervalId: NodeJS.Timeout;
@@ -98,6 +97,18 @@ export class Queue
     let processedMessages = false;
     do {
       processedMessages = false;
+      // Remove messages that have expired
+      const currentTime = new Date();
+      this.messages.forEach((message, index) => {
+        if (message.retentionTimeout < currentTime) {
+          this.context.withTrace({
+            activity: async () => {
+              return this.messages.splice(index, 1);
+            },
+            message: `Removing expired message (message=${message.payload}).`,
+          });
+        }
+      });
       // Randomize the order of subscribers to avoid user code making
       // assumptions on the order that subscribers process messages.
       for (const subscriber of new RandomArrayIterator(this.subscribers)) {
