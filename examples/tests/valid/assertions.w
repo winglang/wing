@@ -1,3 +1,8 @@
+// used by:
+// - api_cors_custom.test.w
+// - api_cors_default.test.w
+// - website_with_api.test.w
+
 inflight class Assert {
   pub static equalStr(a: str, b: str): bool {
     try {
