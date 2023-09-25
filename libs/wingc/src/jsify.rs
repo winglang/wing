@@ -778,32 +778,6 @@ impl<'a> JSifier<'a> {
 						preflight_file_name,
 						STDLIB,
 					))
-					// let path = Utf8Path::new(&name.name);
-					// let directory_files = self.source_file_graph.dependencies_of(path);
-					// let preflight_file_map = self.preflight_file_map.borrow();
-					// let mut preflight_files = vec![];
-					// for file in directory_files {
-					// 	if let Some(preflight_file_name) = preflight_file_map.get(file) {
-					// 		preflight_files.push(preflight_file_name);
-					// 	}
-					// }
-					// // generate something that looks like this
-					// // ```
-					// // const foo = {
-					// //   ...require("./foo.js")({ $stdlib: $stdlib }),
-					// //   ...require("./bar.js")({ $stdlib: $stdlib }),
-					// // };
-					// // ```
-					// let mut code = CodeMaker::default();
-					// code.open(format!(
-					// 	"const {} = {{",
-					// 	identifier.as_ref().expect("bring directory requires an alias")
-					// ));
-					// for preflight_file_name in preflight_files.iter() {
-					// 	code.line(format!("...require(\"./{}\")({{ {} }}),", preflight_file_name, STDLIB));
-					// }
-					// code.close("};");
-					// code
 				}
 			},
 			StmtKind::SuperConstructor { arg_list } => {
