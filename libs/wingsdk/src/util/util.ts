@@ -142,7 +142,7 @@ export class Util {
    * @param data - The string to be hashed.
    */
   public static sha256(data: string): string {
-    return createHash("sha256").update(data).digest("hex"); //SHA256(data).toString();
+    return createHash("sha256").update(data).digest("hex");
   }
 
   /**

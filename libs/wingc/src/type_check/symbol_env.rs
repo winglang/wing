@@ -428,7 +428,7 @@ mod tests {
 		ast::{Phase, Symbol},
 		type_check::{
 			symbol_env::{LookupResult, SymbolEnvKind},
-			Namespace, SymbolKind, Types,
+			Namespace, ResolveSource, SymbolKind, Types,
 		},
 	};
 
@@ -579,11 +579,13 @@ mod tests {
 			name: "ns1".to_string(),
 			envs: vec![ns1_env],
 			loaded: false,
+			module_path: ResolveSource::WingFile,
 		});
 		let ns2 = types.add_namespace(Namespace {
 			name: "ns2".to_string(),
 			envs: vec![ns2_env],
 			loaded: false,
+			module_path: ResolveSource::WingFile,
 		});
 
 		// Define ns2 in n1's env

@@ -186,6 +186,10 @@ impl UserDefinedType {
 	pub fn full_path_str(&self) -> String {
 		self.full_path().iter().join(".")
 	}
+
+	pub fn field_path_str(&self) -> String {
+		self.fields.iter().join(".")
+	}
 }
 
 impl Display for UserDefinedType {

@@ -2,7 +2,7 @@ export {
   Simulator,
   type WingSimulatorSchema,
   type BaseResourceSchema,
-} from "@winglang/sdk/lib/testing/index.js";
+} from "@winglang/sdk/lib/simulator/index.js";
 
 export { Json } from "@winglang/sdk/lib/std/json.js";
 

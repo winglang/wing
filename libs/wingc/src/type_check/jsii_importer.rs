@@ -8,7 +8,8 @@ use crate::{
 	type_check::{
 		self,
 		symbol_env::{StatementIdx, SymbolEnvKind},
-		Class, FunctionParameter, FunctionSignature, Interface, Struct, SymbolKind, Type, TypeRef, Types, CLASS_INIT_NAME,
+		Class, FunctionParameter, FunctionSignature, Interface, ResolveSource, Struct, SymbolKind, Type, TypeRef, Types,
+		CLASS_INIT_NAME,
 	},
 	CONSTRUCT_BASE_CLASS, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_JSON, WINGSDK_MUT_JSON, WINGSDK_RESOURCE,
 };
@@ -187,17 +188,16 @@ impl<'a> JsiiImporter<'a> {
 		// First, create a namespace in the Wing type system (if there isn't one already) corresponding to the JSII assembly
 		// the type belongs to.
 		debug!("Setting up namespaces for {}", type_name);
+		let assembly = type_name.assembly();
 
-		if let Some(symb) = self.wing_types.libraries.lookup_mut(&type_name.assembly().into(), None) {
+		if let Some(symb) = self.wing_types.libraries.lookup_mut(&assembly.into(), None) {
 			if let SymbolKind::Namespace(_) = symb {
 				// do nothing
 			} else {
 				// TODO: make this a proper error
 				panic!(
 					"Tried importing {} but {} already defined as a {}",
-					type_name,
-					type_name.assembly(),
-					symb
+					type_name, assembly, symb
 				)
 			}
 		} else {
@@ -205,26 +205,23 @@ impl<'a> JsiiImporter<'a> {
 				.wing_types
 				.add_symbol_env(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0));
 			let ns = self.wing_types.add_namespace(Namespace {
-				name: type_name.assembly().to_string(),
+				name: assembly.to_string(),
 				envs: vec![ns_env],
 				loaded: false,
+				module_path: ResolveSource::ExternalModule(assembly.to_string()),
 			});
 			self
 				.wing_types
 				.libraries
-				.define(
-					&Symbol::global(type_name.assembly()),
-					SymbolKind::Namespace(ns),
-					StatementIdx::Top,
-				)
+				.define(&Symbol::global(assembly), SymbolKind::Namespace(ns), StatementIdx::Top)
 				.unwrap();
 		};
 
 		// Next, ensure there is a namespace for each of the namespaces in the type name
 		for (ns_idx, namespace_name) in type_name.namespaces().enumerate() {
-			let mut lookup_str = vec![type_name.assembly()];
-			lookup_str.extend(type_name.namespaces().take(ns_idx));
-			let lookup_str = lookup_str.join(".");
+			let mut lookup_vec = vec![assembly];
+			lookup_vec.extend(type_name.namespaces().take(ns_idx));
+			let lookup_str = lookup_vec.join(".");
 
 			let mut parent_ns = self
 				.wing_types
@@ -254,10 +251,18 @@ impl<'a> JsiiImporter<'a> {
 				let ns_env = self
 					.wing_types
 					.add_symbol_env(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0));
+				// Special case for the SDK, we are able to alias the namespace
+				let module_path = if assembly == WINGSDK_ASSEMBLY_NAME {
+					format!("{}/{}", lookup_vec.join("/"), namespace_name)
+				} else {
+					lookup_vec.join("/")
+				};
+
 				let ns = self.wing_types.add_namespace(Namespace {
 					name: namespace_name.to_string(),
 					envs: vec![ns_env],
 					loaded: false,
+					module_path: ResolveSource::ExternalModule(module_path),
 				});
 				parent_ns
 					.envs
@@ -968,6 +973,7 @@ impl<'a> JsiiImporter<'a> {
 					name: assembly.name.clone(),
 					envs: vec![ns_env],
 					loaded: false,
+					module_path: ResolveSource::ExternalModule(assembly.name.clone()),
 				});
 				self
 					.wing_types
