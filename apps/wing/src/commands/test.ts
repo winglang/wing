@@ -37,7 +37,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
     if (entrypoints[0] === "*.test.w") {
       throw new Error("No '.test.w' files found in current directory.");
     }
-    throw new Error("No files matched any of the provided glob patterns.");
+    throw new Error("No matching files found in current directory.");
   }
 
   const startTime = Date.now();
