@@ -30,11 +30,23 @@ export interface TestOptions extends CompileOptions {
 }
 
 export async function test(entrypoints: string[], options: TestOptions): Promise<number> {
-  if (entrypoints[0] === "*.test.w") {
-    entrypoints = globSync("*.test.w");
-    if (entrypoints.length === 0) {
-      throw new Error("No '.test.w' file found in current directory.");
+  // Initialize a Set to store unique file names
+  let expandedEntrypointsSet: Set<string> = new Set();
+
+  // Expand each entrypoint and add file names to the Set
+  for (const entrypoint of entrypoints) {
+    const expandedEntrypoint = globSync(entrypoint);
+    for (const fileName of expandedEntrypoint) {
+      expandedEntrypointsSet.add(fileName);
     }
+  }
+
+  if (expandedEntrypointsSet.size === 0) {
+    // Check if it's the default entrypoint
+    if (entrypoints[0] === "*.test.w") {
+      throw new Error("No '.test.w' files found in current directory.");
+    }
+    throw new Error("No files matched any of the provided glob patterns.");
   }
 
   const startTime = Date.now();
@@ -52,6 +64,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
       });
     }
   };
+  entrypoints = Array.from(expandedEntrypointsSet);
   await Promise.all(entrypoints.map(testFile));
   printResults(results, Date.now() - startTime);
 
