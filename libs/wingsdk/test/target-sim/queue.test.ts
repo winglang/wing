@@ -18,6 +18,21 @@ async handle(message) {
   }
 }`;
 
+test("try to create a queue with invalid retention period", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const retentionPeriod = Duration.fromSeconds(5);
+  const timeout = Duration.fromSeconds(10);
+
+  // THEN
+  expect(() => {
+    cloud.Queue._newQueue(app, "my_queue", {
+      retentionPeriod,
+      timeout,
+    });
+  }).toThrowError("Retention period must be greater than or equal to timeout");
+});
+
 test("create a queue", async () => {
   // GIVEN
   const app = new SimApp();
@@ -232,6 +247,7 @@ test("messages are not requeued if the function fails after retention timeout", 
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   const queue = cloud.Queue._newQueue(app, "my_queue", {
     retentionPeriod: Duration.fromSeconds(1),
+    timeout: Duration.fromMilliseconds(100),
   });
   queue.setConsumer(handler);
   const s = await app.startSimulator();
@@ -263,6 +279,7 @@ test("messages are not requeued if the function fails after retention timeout", 
       "Push (messages=BAD MESSAGE).",
       "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
       "Subscriber error - returning 1 messages to queue: ERROR",
+      "0 messages pushed back to queue after visibility timeout.",
       "wingsdk.cloud.Queue deleted.",
     ]
   `);
