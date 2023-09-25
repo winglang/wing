@@ -21,9 +21,9 @@ use crate::type_check::symbol_env::SymbolEnvKind;
 use crate::visit_context::{VisitContext, VisitorWithContext};
 use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
-	dbg_panic, debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_JSON,
-	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_RESOURCE, WINGSDK_SET,
-	WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
+	dbg_panic, debug, GLOBAL_SYMBOLS, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION,
+	WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_RESOURCE,
+	WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
@@ -2976,7 +2976,7 @@ impl<'a> TypeChecker<'a> {
 		for child_env in &child_envs {
 			for key in child_env.symbol_map.keys() {
 				// ignore globals
-				if ["assert", "log", "std"].contains(&key.as_str()) {
+				if GLOBAL_SYMBOLS.contains(&key.as_str()) {
 					continue;
 				}
 

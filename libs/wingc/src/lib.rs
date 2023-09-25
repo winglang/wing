@@ -105,6 +105,8 @@ const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";
 const MACRO_REPLACE_ARGS_TEXT: &'static str = "$args_text$";
 
+pub const GLOBAL_SYMBOLS: [&'static str; 3] = [WINGSDK_STD_MODULE, "assert", "log"];
+
 pub struct CompilerOutput {}
 
 /// Exposes an allocation function to the WASM host
