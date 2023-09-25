@@ -450,6 +450,21 @@ Returns the year of the local machine time or in utc.
 
 Represents a length of time.
 
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.Duration.valueOf">valueOf</a></code> | Return the total number of seconds in this duration. |
+
+---
+
+##### `valueOf` <a name="valueOf" id="@winglang/sdk.std.Duration.valueOf"></a>
+
+```wing
+valueOf(): num
+```
+
+Return the total number of seconds in this duration.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
