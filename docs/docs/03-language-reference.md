@@ -980,14 +980,14 @@ In the presence of `catch` the variable holding the exception (`e` in the exampl
 
 ### 1.9 Iterators
 
-The language supports iteration through the built-in `Iterator<T>` type.
+The language supports iteration through the built-in `IIterator<T>` type.
 An iterator represents a sequence of elements of type `T` that may be lazily evaluated.
 Iterators are handy for working with large sequences of data without having to store the entire sequence in memory.
 
 Every iterator must satisfy the following interface:
 
 ```TS
-interface Iterator<T> {
+interface IIterator<T> {
   next(): T;
   hasNext(): bool;
 }
@@ -997,7 +997,7 @@ The `next()` method returns the next element in the sequence. The `hasNext()` me
 if there are more elements in the sequence, `false` otherwise.
 
 ```TS
-let it: Iterator<num> = // iterator with elements 1, 2
+let it: IIterator<num> = // iterator with elements 1, 2
 assert(it.hasNext() == true);
 assert(it.next() == 1);
 assert(it.hasNext() == true);
@@ -1007,12 +1007,12 @@ assert(it.hasNext() == false);
 
 If `next()` is called when `hasNext()` returns `false`, then a runtime error will be thrown.
 
-Many types in Wing implement the `Iterator<T>` interface.
-For example, the `Map<T>` type has a method named `keys()` that returns an `Iterator<T>`:
+Many types in Wing implement the `IIterator<T>` interface.
+For example, the `Map<T>` type has a method named `keys()` that returns an `IIterator<T>`:
 
 ```TS
 let map = Map<num> { a => 1, b => 2, c => 3 };
-let it = map.keys(); // Iterator<num>
+let it = map.keys(); // IIterator<num>
 ```
 
 The `for` statement can be used to iterate over an iterator:
@@ -1023,8 +1023,8 @@ for x in it {
 }
 ```
 
-If an object has a method named `iter()` that returns an `Iterator<T>`, then it will automatically be used by the `for` statement.
-For example, the `Array<T>` type has an `iter()` method that returns an `Iterator<T>`:
+If an object has a method named `iter()` that returns an `IIterator<T>`, then it will automatically be used by the `for` statement.
+For example, the `Array<T>` type has an `iter()` method that returns an `IIterator<T>`:
 
 ```TS
 let arr = Array<num> [1, 2, 3];
@@ -1038,7 +1038,7 @@ for x in arr.iter() {
 }
 ```
 
-> Note: `Array<T>` does not implement the `Iterator<T>` interface directly
+> Note: `Array<T>` does not implement the `IIterator<T>` interface directly
 > since doing so would mean an array could not be iterated over more than once.
 
 [`▲ top`][top]
@@ -1047,8 +1047,8 @@ for x in arr.iter() {
 
 The following features are not yet implemented, but we are planning to add them in the future:
 
-* generator functions, which return `Iterator<T>` - see issue #XYZ (TODO)
-* custom iterator implementations (e.g. `class MyIterator implements Iterator<num>`) - see issue #XYZ (TODO)
+* generator functions, which return `IIterator<T>` - see issue #XYZ (TODO)
+* custom iterator implementations (e.g. `class MyIterator implements IIterator<num>`) - see issue #XYZ (TODO)
 
 ---
 
