@@ -146,4 +146,13 @@ export class Duration {
   public get years() {
     return this.days / 365;
   }
+
+  /**
+   * Return the total number of seconds in this duration
+   * 
+   * @returns the value of this `Duration` expressed in Seconds.
+   */
+  valueOf(): number {
+    return this.seconds;
+  }
 }
