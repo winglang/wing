@@ -40,10 +40,10 @@ jobs:
       - name: Run Test
         run: |
           wing test test_bucket.test.w
-      - name: Download examples/tests/valid/hello.main.w
+      - name: Download examples/tests/valid/hello.test.w
         run: |
-          curl -L https://raw.githubusercontent.com/winglang/wing/main/examples/tests/valid/hello.main.w > hello.main.w
-          cat hello.main.w
+          curl -L https://raw.githubusercontent.com/winglang/wing/main/examples/tests/valid/hello.test.w > hello.test.w
+          cat hello.test.w
       - name: Run Compile
         run: |
-          wing compile hello.main.w -t tf-aws
+          wing compile hello.test.w -t tf-aws
