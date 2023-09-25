@@ -9,7 +9,7 @@ import { generateTmpDir, withSpinner } from "../util";
 import { Target } from "@winglang/compiler";
 import { nanoid } from "nanoid";
 import { readFile, rm, rmSync } from "fs";
-import { globSync } from "glob";
+import { glob } from "glob";
 
 const log = debug("wing:test");
 
@@ -30,18 +30,9 @@ export interface TestOptions extends CompileOptions {
 }
 
 export async function test(entrypoints: string[], options: TestOptions): Promise<number> {
-  // Initialize a Set to store unique file names
-  let expandedEntrypointsSet: Set<string> = new Set();
+  const expandedEntrypoints = await glob(entrypoints);
 
-  // Expand each entrypoint and add file names to the Set
-  for (const entrypoint of entrypoints) {
-    const expandedEntrypoint = globSync(entrypoint);
-    for (const fileName of expandedEntrypoint) {
-      expandedEntrypointsSet.add(fileName);
-    }
-  }
-
-  if (expandedEntrypointsSet.size === 0) {
+  if (expandedEntrypoints.length === 0) {
     // Check if it's the default entrypoint
     if (entrypoints[0] === "*.test.w") {
       throw new Error("No '.test.w' files found in current directory.");
@@ -64,8 +55,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
       });
     }
   };
-  entrypoints = Array.from(expandedEntrypointsSet);
-  await Promise.all(entrypoints.map(testFile));
+  await Promise.all(expandedEntrypoints.map(testFile));
   printResults(results, Date.now() - startTime);
 
   // if we have any failures, exit with 1
