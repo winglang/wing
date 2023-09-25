@@ -44,6 +44,8 @@ impl FileGraph {
 		self.path_to_node_index.contains_key(path)
 	}
 
+	/// Returns a list of the direct dependencies of the given file
+	/// (does not include all transitive dependencies)
 	pub fn dependencies_of(&self, path: &Utf8Path) -> Vec<&Utf8PathBuf> {
 		let node_index = self.path_to_node_index.get(path).unwrap();
 		self

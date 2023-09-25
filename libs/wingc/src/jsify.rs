@@ -142,6 +142,7 @@ impl<'a> JSifier<'a> {
 		let mut output = CodeMaker::default();
 
 		let is_entrypoint_file = source_path == self.entrypoint_file_path;
+		let is_directory = source_path.is_dir();
 
 		if is_entrypoint_file {
 			output.line(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
@@ -179,6 +180,24 @@ impl<'a> JSifier<'a> {
 				"new $App({{ outdir: {}, name: \"{}\", rootConstruct: {}, plugins: {}, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }}).synth();",
 				OUTDIR_VAR, app_name, ROOT_CLASS, PLUGINS_VAR, ENV_WING_IS_TEST
 			));
+		} else if is_directory {
+			let directory_children = self.source_file_graph.dependencies_of(source_path);
+			let preflight_file_map = self.preflight_file_map.borrow();
+			output.open("return {");
+			for file in directory_children {
+				let preflight_file_name = preflight_file_map.get(file).expect("no emitted JS file found");
+				if file.is_dir() {
+					let directory_name = file.file_stem().unwrap();
+					output.line(format!(
+						"{}: require(\"./{}\")({{ {} }}),",
+						directory_name, preflight_file_name, STDLIB
+					));
+				} else {
+					output.line(format!("...require(\"./{}\")({{ {} }}),", preflight_file_name, STDLIB));
+				}
+			}
+			output.close("};");
+			output.close("};");
 		} else {
 			output.add_code(js);
 			let exports = get_public_symbols(&scope);
@@ -750,32 +769,41 @@ impl<'a> JSifier<'a> {
 					))
 				}
 				BringSource::Directory(name) => {
-					let path = Utf8Path::new(&name.name);
-					let directory_files = self.source_file_graph.dependencies_of(path);
 					let preflight_file_map = self.preflight_file_map.borrow();
-					let mut preflight_files = vec![];
-					for file in directory_files {
-						if let Some(preflight_file_name) = preflight_file_map.get(file) {
-							preflight_files.push(preflight_file_name);
-						}
-					}
-					// generate something that looks like this
-					// ```
-					// const foo = {
-					//   ...require("./foo.js")({ $stdlib: $stdlib }),
-					//   ...require("./bar.js")({ $stdlib: $stdlib }),
-					// };
-					// ```
-					let mut code = CodeMaker::default();
-					code.open(format!(
-						"const {} = {{",
-						identifier.as_ref().expect("bring directory requires an alias")
-					));
-					for preflight_file_name in preflight_files.iter() {
-						code.line(format!("...require(\"./{}\")({{ {} }}),", preflight_file_name, STDLIB));
-					}
-					code.close("};");
-					code
+					let preflight_file_name = preflight_file_map.get(Utf8Path::new(&name.name)).unwrap();
+					CodeMaker::one_line(format!(
+						"const {} = require(\"./{}\")({{ {} }});",
+						// checked during type checking
+						identifier.as_ref().expect("bring wing file requires an alias"),
+						preflight_file_name,
+						STDLIB,
+					))
+					// let path = Utf8Path::new(&name.name);
+					// let directory_files = self.source_file_graph.dependencies_of(path);
+					// let preflight_file_map = self.preflight_file_map.borrow();
+					// let mut preflight_files = vec![];
+					// for file in directory_files {
+					// 	if let Some(preflight_file_name) = preflight_file_map.get(file) {
+					// 		preflight_files.push(preflight_file_name);
+					// 	}
+					// }
+					// // generate something that looks like this
+					// // ```
+					// // const foo = {
+					// //   ...require("./foo.js")({ $stdlib: $stdlib }),
+					// //   ...require("./bar.js")({ $stdlib: $stdlib }),
+					// // };
+					// // ```
+					// let mut code = CodeMaker::default();
+					// code.open(format!(
+					// 	"const {} = {{",
+					// 	identifier.as_ref().expect("bring directory requires an alias")
+					// ));
+					// for preflight_file_name in preflight_files.iter() {
+					// 	code.line(format!("...require(\"./{}\")({{ {} }}),", preflight_file_name, STDLIB));
+					// }
+					// code.close("};");
+					// code
 				}
 			},
 			StmtKind::SuperConstructor { arg_list } => {
