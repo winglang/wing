@@ -36,7 +36,7 @@ $ wing run|it [entrypoint]
 
 `[entrypoint]` is a valid entrypoint for a Wing program. An entrypoint can be either source code or compiled. If it's source code, the name refers to a file called either `main.w`, `<file>.main.w` or `<file>.test.w`, whereas if it's compiled the name refers to a directory called `<dir>.wsim`.
 
-:::default entrypoint
+:::note Default Entrypoint
 
 It's possible to execute `wing run|it` without specifying any entrypoint, in which case the CLI looks for a `main.w` file in the current directory.
 
@@ -52,7 +52,7 @@ $ wing compile [entrypoint] --target <target>
 
 `[entrypoint]` specifies the entrypoint file to compile. Valid entrypoint names are `main.w`, `<file>.main.w` or `<file>.test.w`.
 
-:::default entrypoint
+:::note Default Entrypoint
 
 It's possible to execute `wing compile` without specifying any entrypoint, in which case the CLI looks for a `main.w` file in the current directory.
 
@@ -65,7 +65,7 @@ following targets are supported:
 * `tf-aws` - Terraform/AWS
 * `tf-azure` - Terraform/Azure
 
-:::default target
+:::note Default Target
 
 It's possible to execute `wing compile` without specifying any target, in which case the CLI defaults to `sim` target.
 
