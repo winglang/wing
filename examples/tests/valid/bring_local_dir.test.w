@@ -1,4 +1,8 @@
+bring "./subdir2/inner/widget.w" as w;
 bring "./subdir2" as subdir;
+
+let widget1 = new w.Widget();
+assert(widget1.compute() == 42);
 
 // from subdir/file1.w
 let foo = new subdir.Foo();
@@ -9,7 +13,7 @@ let bar = new subdir.Bar();
 assert(bar.bar() == "bar");
 
 // from subdir/inner/widget.w
-let widget = new subdir.inner.Widget();
-assert(widget.compute() == 42);
+let widget2 = new subdir.inner.Widget();
+assert(widget2.compute() == 42);
 
-assert(foo.checkWidget(widget) == 42);
+assert(foo.checkWidget(widget2) == 42);

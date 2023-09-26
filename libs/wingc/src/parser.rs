@@ -171,7 +171,7 @@ pub fn parse_wing_project(
 		file_graph,
 	);
 
-	// Track which files still need parsing
+	// Store a stack (Vec) of which files still need parsing
 	let mut unparsed_files = dependent_wing_paths;
 
 	// Parse all remaining files in the project
