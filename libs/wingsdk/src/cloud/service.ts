@@ -1,8 +1,11 @@
+import { mkdirSync, writeFileSync } from "fs";
+import { join } from "path";
 import { Construct } from "constructs";
 import { FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { IResource, Node, Resource } from "../std";
+import { CaseConventions, ResourceNames } from "../shared/resource-names";
+import { IInflightHost, IResource, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Service`.
@@ -14,21 +17,10 @@ export const SERVICE_FQN = fqnForType("cloud.Service");
  */
 export interface ServiceProps {
   /**
-   * Handler to run when the service starts. This is where you implement the initialization logic of
-   * the service, start any activities asychronously.
-   *
-   * DO NOT BLOCK! This handler should return as quickly as possible. If you need to run a long
-   * running process, start it asynchronously.
+   * Environment variables to pass to the function.
+   * @default - No environment variables.
    */
-  readonly onStart: IServiceOnEventHandler;
-
-  /**
-   * Handler to run in order to stop the service. This is where you implement the shutdown logic of
-   * the service, stop any activities, and clean up any resources.
-   *
-   * @default - no special activity at shutdown
-   */
-  readonly onStop?: IServiceOnEventHandler;
+  readonly env?: { [key: string]: string };
 
   /**
    * Whether the service should start automatically. If `false`, the service will need to be started
@@ -44,7 +36,7 @@ export interface ServiceProps {
  *
  * @inflight `@winglang/sdk.cloud.IServiceClient`
  */
-export abstract class Service extends Resource {
+export abstract class Service extends Resource implements IInflightHost {
   /**
    * Create a new `Service` instance.
    * @internal
@@ -52,18 +44,88 @@ export abstract class Service extends Resource {
   public static _newService(
     scope: Construct,
     id: string,
+    handler: IServiceHandler,
     props: ServiceProps
   ): Service {
-    return App.of(scope).newAbstract(SERVICE_FQN, scope, id, props);
+    return App.of(scope).newAbstract(SERVICE_FQN, scope, id, handler, props);
   }
 
-  constructor(scope: Construct, id: string, props: ServiceProps) {
+  /**
+   * The entrypoint of the service.
+   */
+  protected readonly entrypoint: string;
+
+  private readonly _env: Record<string, string> = {};
+
+  constructor(
+    scope: Construct,
+    id: string,
+    handler: IServiceHandler,
+    props: ServiceProps = {}
+  ) {
     super(scope, id);
+
+    for (const [key, value] of Object.entries(props.env ?? {})) {
+      this.addEnvironment(key, value);
+    }
 
     Node.of(this).title = "Service";
     Node.of(this).description = "A cloud service";
 
-    props;
+    // indicates that we are calling the inflight constructor and the
+    // inflight "handle" method on the handler resource.
+    handler._registerBind(this, ["onStart", "onStop", "$inflight_init"]);
+
+    const inflightClient = handler._toInflight();
+    const lines = new Array<string>();
+
+    lines.push("let $obj;");
+
+    lines.push("async function $initOnce() {");
+    lines.push(`  $obj = $obj || (await (${inflightClient}));`);
+    lines.push("  return $obj;");
+    lines.push("};");
+
+    lines.push("exports.onStart = async function() {");
+    lines.push("  return (await $initOnce()).onStart();");
+    lines.push("};");
+
+    lines.push("exports.onStop = async function() {");
+    lines.push(`  return (await $initOnce()).onStop();`);
+    lines.push("};");
+
+    const assetName = ResourceNames.generateName(this, {
+      disallowedRegex: /[><:"/\\|?*\s]/g, // avoid characters that may cause path issues
+      case: CaseConventions.LOWERCASE,
+      sep: "_",
+    });
+
+    const workdir = App.of(this).workdir;
+    mkdirSync(workdir, { recursive: true });
+    const entrypoint = join(workdir, `${assetName}.js`);
+    writeFileSync(entrypoint, lines.join("\n"));
+    this.entrypoint = entrypoint;
+
+    if (process.env.WING_TARGET) {
+      this.addEnvironment("WING_TARGET", process.env.WING_TARGET);
+    }
+  }
+
+  /**
+   * Add an environment variable to the function.
+   */
+  public addEnvironment(name: string, value: string) {
+    if (this._env[name] !== undefined) {
+      throw new Error(`Environment variable "${name}" already set.`);
+    }
+    this._env[name] = value;
+  }
+
+  /**
+   * Returns the set of environment variables for this function.
+   */
+  public get env(): Record<string, string> {
+    return { ...this._env };
   }
 
   /** @internal */
@@ -94,23 +156,32 @@ export interface IServiceClient {
 }
 
 /**
- * A resource with an inflight "handle" method that can be passed to
- * `ServiceProps.on_start` || `ServiceProps.on_stop`.
+ * A resource with an inflight "onStart()" and "onStop()" methods.
  *
- * @inflight `@winglang/sdk.cloud.IServiceOnEventClient`
+ * @inflight `@winglang/sdk.cloud.IServiceHandlerClient`
  */
-export interface IServiceOnEventHandler extends IResource {}
+export interface IServiceHandler extends IResource {}
 
 /**
- * Inflight client for `IServiceOnEventHandler`.
+ * Inflight client for `IServiceHandler`.
  */
-export interface IServiceOnEventClient {
+export interface IServiceHandlerClient {
   /**
-   * Function that will be called for service events.
-   * @returns a context object that will be passed into the `onStop(context)` handler.
-   * @inflight
+   * Handler to run when the service starts. This is where you implement the initialization logic of
+   * the service, start any activities asychronously.
+   *
+   * DO NOT BLOCK! This handler should return as quickly as possible. If you need to run a long
+   * running process, start it asynchronously.
    */
-  handle(): Promise<void>;
+  onStart(): Promise<void>;
+
+  /**
+   * Handler to run in order to stop the service. This is where you implement the shutdown logic of
+   * the service, stop any activities, and clean up any resources.
+   *
+   * @default - no special activity at shutdown
+   */
+  onStop?(): Promise<void>;
 }
 
 /**

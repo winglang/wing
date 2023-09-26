@@ -9,7 +9,12 @@ import { Node } from "../std";
  * A resource that can run inflight code.
  * @skipDocs
  */
-export interface IInflightHost extends IResource {}
+export interface IInflightHost extends IResource {
+  /**
+   * Adds an environment variable to the host.
+   */
+  addEnvironment(name: string, value: string): void;
+}
 
 /**
  * Abstract interface for `Resource`.
@@ -97,7 +102,7 @@ export abstract class Resource extends Construct implements IResource {
    */
   protected static _registerBindObject(
     obj: any,
-    host: IResource,
+    host: IInflightHost,
     ops: string[] = []
   ): void {
     const tokens = App.of(host)._tokens;
