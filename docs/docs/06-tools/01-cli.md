@@ -214,7 +214,7 @@ Now, if we run the following command:
 
 ```sh
 $ wing test test_bucket.test.w
-pass | test_bucket.testw | root/test:get
+pass | test_bucket.test.w | root/test:get
 pass | test_bucket.test.w | root/test:put
 ```
 
