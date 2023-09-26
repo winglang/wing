@@ -183,6 +183,17 @@ impl<'a> JSifier<'a> {
 		} else if is_directory {
 			let directory_children = self.source_file_graph.dependencies_of(source_path);
 			let preflight_file_map = self.preflight_file_map.borrow();
+
+			// supposing a directory has two files and two subdirectories in it,
+			// we generate code like this:
+			// ```
+			// return {
+			//   inner_directory1: require("./preflight.inner-directory1.js")({ $stdlib }),
+			//   inner_directory2: require("./preflight.inner-directory2.js")({ $stdlib }),
+			//   ...require("./preflight.inner-file1.js")({ $stdlib }),
+			//   ...require("./preflight.inner-file2.js")({ $stdlib }),
+			// };
+			// ```
 			output.open("return {");
 			for file in directory_children {
 				let preflight_file_name = preflight_file_map.get(file).expect("no emitted JS file found");
