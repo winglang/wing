@@ -2,9 +2,6 @@ name: SDK Spec AWS Tests #test
 on:
   workflow_call: {}
   workflow_dispatch: {}
-  release:
-    types:
-      - published
 
 env:
   AWS_REGION: "us-east-1"
@@ -101,7 +98,7 @@ jobs:
             then
               wing test -t tf-aws ${{ matrix.test.directory }}/*.w
             else
-              ./temp/node_modules/.bin/wing test -t tf-aws ${{ matrix.test.directory }}/*.w
+              ./localwing/node_modules/.bin/wing test -t tf-aws ${{ matrix.test.directory }}/*.w
             fi
 
       - name: Output Terraform log
