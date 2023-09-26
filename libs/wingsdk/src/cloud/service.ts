@@ -14,16 +14,26 @@ export const SERVICE_FQN = fqnForType("cloud.Service");
  */
 export interface ServiceProps {
   /**
-   * Handler to run with the service starts.
+   * Handler to run when the service starts. This is where you implement the initialization logic of
+   * the service, start any activities asychronously.
+   *
+   * DO NOT BLOCK! This handler should return as quickly as possible. If you need to run a long
+   * running process, start it asynchronously.
    */
   readonly onStart: IServiceOnEventHandler;
+
   /**
-   * Handler to run with the service stops.
+   * Handler to run in order to stop the service. This is where you implement the shutdown logic of
+   * the service, stop any activities, and clean up any resources.
+   *
    * @default - no special activity at shutdown
    */
   readonly onStop?: IServiceOnEventHandler;
+
   /**
-   * Whether the service should start automatically.
+   * Whether the service should start automatically. If `false`, the service will need to be started
+   * manually by calling the inflight `start()` method.
+   *
    * @default true
    */
   readonly autoStart?: boolean;
@@ -97,6 +107,7 @@ export interface IServiceOnEventHandler extends IResource {}
 export interface IServiceOnEventClient {
   /**
    * Function that will be called for service events.
+   * @returns a context object that will be passed into the `onStop(context)` handler.
    * @inflight
    */
   handle(): Promise<void>;
