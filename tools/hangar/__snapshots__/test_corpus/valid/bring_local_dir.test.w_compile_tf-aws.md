@@ -81,7 +81,7 @@ module.exports = function({ $stdlib }) {
       return "foo";
     }
     checkWidget(widget) {
-      return (widget.compute());
+      return ((widget.compute()) + (blah.Widget.staticCompute()));
     }
     static _toInflightType(context) {
       return `
@@ -164,17 +164,20 @@ const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const w = require("./preflight.widget-1.js")({ $stdlib });
 const subdir = require("./preflight.subdir2-5.js")({ $stdlib });
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    const widget1 = new w.Widget(this,"w.Widget");
+    {((cond) => {if (!cond) throw new Error("assertion failed: widget1.compute() == 42")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((widget1.compute()),42)))};
     const foo = new subdir.Foo(this,"subdir.Foo");
     {((cond) => {if (!cond) throw new Error("assertion failed: foo.foo() == \"foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((foo.foo()),"foo")))};
     const bar = new subdir.Bar(this,"subdir.Bar");
     {((cond) => {if (!cond) throw new Error("assertion failed: bar.bar() == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((bar.bar()),"bar")))};
-    const widget = new subdir.inner.Widget(this,"subdir.inner.Widget");
-    {((cond) => {if (!cond) throw new Error("assertion failed: widget.compute() == 42")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((widget.compute()),42)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: foo.checkWidget(widget) == 42")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((foo.checkWidget(widget)),42)))};
+    const widget2 = new subdir.inner.Widget(this,"subdir.inner.Widget");
+    {((cond) => {if (!cond) throw new Error("assertion failed: widget2.compute() == 42")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((widget2.compute()),42)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: foo.checkWidget(widget2) == 1379")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((foo.checkWidget(widget2)),1379)))};
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
@@ -205,6 +208,9 @@ module.exports = function({ $stdlib }) {
     }
     compute() {
       return 42;
+    }
+    static staticCompute() {
+      return 1337;
     }
     static _toInflightType(context) {
       return `
