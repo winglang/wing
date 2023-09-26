@@ -1,7 +1,7 @@
 import { test, expect, describe } from "vitest";
 import * as cloud from "../../src/cloud";
+import { Testing } from "../../src/simulator";
 import * as tfaws from "../../src/target-tf-aws";
-import { Testing } from "../../src/testing";
 import { mkdtemp, sanitizeCode, tfResourcesOf, tfSanitize } from "../util";
 
 describe("function with bucket binding", () => {
@@ -55,8 +55,6 @@ describe("function with bucket binding", () => {
       "aws_iam_role_policy_attachment",
       "aws_lambda_function",
       "aws_s3_bucket",
-      "aws_s3_bucket_public_access_block",
-      "aws_s3_bucket_server_side_encryption_configuration",
       "aws_s3_object",
     ]);
     expect(tfSanitize(output)).toMatchSnapshot();

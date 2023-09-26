@@ -8,11 +8,11 @@ import {
   FunctionHandle,
 } from "./schema-resources";
 import { IFunctionClient, IQueueClient } from "../cloud";
-import { TraceType } from "../std";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
-} from "../testing/simulator";
+} from "../simulator/simulator";
+import { TraceType } from "../std";
 
 export class Queue
   implements IQueueClient, ISimulatorResourceInstance, IEventPublisher
@@ -25,14 +25,6 @@ export class Queue
   private readonly retentionPeriod: number;
 
   constructor(props: QueueSchema["props"], context: ISimulatorContext) {
-    if (props.initialMessages) {
-      this.messages.push(
-        ...props.initialMessages.map(
-          (message) => new QueueMessage(this.retentionPeriod, message)
-        )
-      );
-    }
-
     this.timeout = props.timeout;
     this.retentionPeriod = props.retentionPeriod;
     this.intervalId = setInterval(() => this.processMessages(), 100); // every 0.1 seconds
@@ -58,12 +50,14 @@ export class Queue
     this.subscribers.push(s);
   }
 
-  public async push(message: string): Promise<void> {
-    // TODO: enforce maximum queue message size?
+  // TODO: enforce maximum queue message size?
+  public async push(...messages: string[]): Promise<void> {
     return this.context.withTrace({
-      message: `Push (message=${message}).`,
+      message: `Push (messages=${messages}).`,
       activity: async () => {
-        this.messages.push(new QueueMessage(this.retentionPeriod, message));
+        for (const message of messages) {
+          this.messages.push(new QueueMessage(this.retentionPeriod, message));
+        }
       },
     });
   }
@@ -90,7 +84,11 @@ export class Queue
     return this.context.withTrace({
       message: `Pop ().`,
       activity: async () => {
-        const message = this.messages.shift();
+        // extract a random message from the queue
+        const message = this.messages.splice(
+          Math.floor(Math.random() * this.messages.length),
+          1
+        )[0];
         return message?.payload;
       },
     });
@@ -103,11 +101,22 @@ export class Queue
       // Randomize the order of subscribers to avoid user code making
       // assumptions on the order that subscribers process messages.
       for (const subscriber of new RandomArrayIterator(this.subscribers)) {
-        const messages = this.messages.splice(0, subscriber.batchSize);
+        // Extract random messages from the queue
+        const messages = new Array<QueueMessage>();
+        for (let i = 0; i < subscriber.batchSize; i++) {
+          const message = this.messages.splice(
+            Math.floor(Math.random() * this.messages.length),
+            1
+          )[0];
+          if (message) {
+            messages.push(message);
+          }
+        }
         const messagesPayload = messages.map((m) => m.payload);
         if (messagesPayload.length === 0) {
           continue;
         }
+
         const fnClient = this.context.findInstance(
           subscriber.functionHandle!
         ) as IFunctionClient & ISimulatorResourceInstance;
@@ -178,8 +187,8 @@ export class Queue
 }
 
 class QueueMessage {
-  retentionTimeout: Date;
-  payload: string;
+  public readonly retentionTimeout: Date;
+  public readonly payload: string;
 
   constructor(retentionPeriod: number, message: string) {
     const currentTime = new Date();
@@ -195,7 +204,7 @@ class RandomArrayIterator<T = any> implements Iterable<T> {
     this.length = this.values.length;
   }
 
-  next(): IteratorResult<T> {
+  public next(): IteratorResult<T> {
     if (this.length === 0) {
       return { done: true, value: undefined };
     }
@@ -210,7 +219,7 @@ class RandomArrayIterator<T = any> implements Iterable<T> {
     return { value };
   }
 
-  [Symbol.iterator]() {
+  public [Symbol.iterator]() {
     return this;
   }
 }

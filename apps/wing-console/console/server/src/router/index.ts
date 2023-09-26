@@ -1,10 +1,11 @@
-import { mergeRouters } from "../utils/createRouter.js";
+import { mergeRouters, middleware } from "../utils/createRouter.js";
 
 import { createApiRouter } from "./api.js";
 import { createAppRouter } from "./app.js";
 import { createBucketRouter } from "./bucket.js";
 import { createConfigRouter } from "./config.js";
 import { createCounterRouter } from "./counter.js";
+import { createDynamodbTableRouter } from "./dynamodb-table.js";
 import { createFunctionRouter } from "./function.js";
 import { createQueueRouter } from "./queue.js";
 import { createRedisRouter } from "./redis.js";
@@ -31,6 +32,7 @@ export const mergeAllRouters = () => {
     createRedisRouter(),
     createWebsiteRouter(),
     createConfigRouter(),
+    createDynamodbTableRouter(),
   );
 
   return { router };

@@ -33,6 +33,7 @@ const DEFAULT_SYNTH_DIR_SUFFIX: Record<Target, string | undefined> = {
 export interface CompileOptions {
   readonly target: Target;
   readonly plugins?: string[];
+  readonly rootId?: string;
   /**
    * Whether to run the compiler in `wing test` mode. This may create multiple
    * copies of the application resources in order to run tests in parallel.
@@ -42,6 +43,9 @@ export interface CompileOptions {
 
   /// Enable/disable color output for the compiler (subject to terminal detection)
   readonly color?: boolean;
+
+  // target directory for the output files
+  readonly targetDir?: string;
 }
 
 /**
@@ -79,7 +83,7 @@ function resolveSynthDir(
 export async function compile(entrypoint: string, options: CompileOptions): Promise<string> {
   const { log } = options;
   // create a unique temporary directory for the compilation
-  const targetdir = join(dirname(entrypoint), "target");
+  const targetdir = options.targetDir ?? join(dirname(entrypoint), "target");
   const wingFile = entrypoint;
   log?.("wing file: %s", wingFile);
   const wingDir = dirname(wingFile);
@@ -93,7 +97,18 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   const workDir = resolve(tmpSynthDir, ".wing");
   log?.("work dir: %s", workDir);
 
-  process.env["WING_SOURCE_DIR"] = resolve(wingDir);
+  // TODO: couldn't be moved to the context's since used in utils.env(...)
+  // in the future we may look for a unified approach
+  process.env["WING_TARGET"] = options.target;
+  process.env["WING_IS_TEST"] = testing.toString();
+  process.env["WING_PLUGIN_PATHS"] = resolvePluginPaths(options.plugins ?? []);
+
+  const tempProcess: { env: Record<string, string | undefined> } = { env: { ...process.env } };
+
+  tempProcess.env["WING_SOURCE_DIR"] = resolve(wingDir);
+  if (options.rootId) {
+    tempProcess.env["WING_ROOT_ID"] = options.rootId;
+  }
   // from wingDir, find the nearest node_modules directory
   let wingNodeModules = resolve(wingDir, "node_modules");
   while (!existsSync(wingNodeModules)) {
@@ -106,10 +121,8 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     wingNodeModules = resolve(wingNodeModules, "node_modules");
   }
 
-  process.env["WING_SYNTH_DIR"] = tmpSynthDir;
-  process.env["WING_NODE_MODULES"] = wingNodeModules;
-  process.env["WING_TARGET"] = options.target;
-  process.env["WING_IS_TEST"] = testing.toString();
+  tempProcess.env["WING_SYNTH_DIR"] = tmpSynthDir;
+  tempProcess.env["WING_NODE_MODULES"] = wingNodeModules;
 
   await Promise.all([
     fs.mkdir(workDir, { recursive: true }),
@@ -129,16 +142,13 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     imports: {
       env: {
         send_diagnostic,
-      }
-    }
+      },
+    },
   });
 
   const errors: wingCompiler.WingDiagnostic[] = [];
 
-  function send_diagnostic(
-    data_ptr: number,
-    data_len: number
-  ) {
+  function send_diagnostic(data_ptr: number, data_len: number) {
     const data_buf = Buffer.from(
       (wingc.exports.memory as WebAssembly.Memory).buffer,
       data_ptr,
@@ -154,7 +164,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   try {
     compileSuccess = wingCompiler.invoke(wingc, WINGC_COMPILE, arg) !== 0;
   } catch (error) {
-    // This is a bug in the compiler, indicate a compilation failure. 
+    // This is a bug in the compiler, indicate a compilation failure.
     // The bug details should be part of the diagnostics handling below.
     compileSuccess = false;
   }
@@ -184,11 +194,10 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   // "__dirname" is also synthetically changed so nested requires work.
   const context = vm.createContext({
     require: preflightRequire,
-    process,
+    process: tempProcess,
     console,
     __dirname: workDir,
     __filename: artifactPath,
-    $plugins: resolvePluginPaths(options.plugins ?? []),
     // since the SDK is loaded in the outer VM, we need these to be the same class instance,
     // otherwise "instanceof" won't work between preflight code and the SDK. this is needed e.g. in
     // `serializeImmutableData` which has special cases for serializing these types.
@@ -231,12 +240,12 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
  * if absolute path is not provided.
  *
  * @param plugins list of plugin paths (absolute or relative)
- * @returns list of absolute plugin paths or relative to cwd
+ * @returns list of absolute plugin paths or relative to cwd, joined by ";"
  */
-function resolvePluginPaths(plugins: string[]): string[] {
+function resolvePluginPaths(plugins: string[]): string {
   const resolvedPluginPaths: string[] = [];
   for (const plugin of plugins) {
     resolvedPluginPaths.push(resolve(process.cwd(), plugin));
   }
-  return resolvedPluginPaths;
+  return resolvedPluginPaths.join(";");
 }

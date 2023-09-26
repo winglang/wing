@@ -12,7 +12,6 @@ import {
 
 import { S3BucketPolicy } from "../.gen/providers/aws/s3-bucket-policy";
 import { S3BucketPublicAccessBlock } from "../.gen/providers/aws/s3-bucket-public-access-block";
-import { S3BucketServerSideEncryptionConfigurationA } from "../.gen/providers/aws/s3-bucket-server-side-encryption-configuration";
 import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
 import * as core from "../core";
@@ -109,23 +108,24 @@ export class Bucket extends cloud.Bucket {
     }
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof AWSFunction)) {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }
 
-    host.addPolicyStatements(calculateBucketPermissions(this.bucket.arn, ops));
+    host.addPolicyStatements(
+      ...calculateBucketPermissions(this.bucket.arn, ops)
+    );
 
     // The bucket name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.bucket.bucket);
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return core.InflightClient.for(
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
@@ -167,18 +167,6 @@ export function createEncryptedBucket(
     forceDestroy: isTestEnvironment ? true : false,
   });
 
-  // best practice: (at-rest) data encryption with Amazon S3-managed keys
-  new S3BucketServerSideEncryptionConfigurationA(scope, "Encryption", {
-    bucket: bucket.bucket,
-    rule: [
-      {
-        applyServerSideEncryptionByDefault: {
-          sseAlgorithm: "AES256",
-        },
-      },
-    ],
-  });
-
   if (isPublic) {
     const publicAccessBlock = new S3BucketPublicAccessBlock(
       scope,
@@ -206,14 +194,6 @@ export function createEncryptedBucket(
       bucket: bucket.bucket,
       policy: JSON.stringify(policy),
       dependsOn: [publicAccessBlock],
-    });
-  } else {
-    new S3BucketPublicAccessBlock(scope, "PublicAccessBlock", {
-      bucket: bucket.bucket,
-      blockPublicAcls: true,
-      blockPublicPolicy: true,
-      ignorePublicAcls: true,
-      restrictPublicBuckets: true,
     });
   }
 

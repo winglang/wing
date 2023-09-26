@@ -7,6 +7,7 @@ import {
   HostUtils,
   Trace,
   isTermsAccepted,
+  LayoutConfig,
 } from "@wingconsole/server";
 import express from "express";
 
@@ -32,8 +33,10 @@ export interface CreateConsoleAppOptions {
   requestedPort?: number;
   hostUtils?: HostUtils;
   onTrace?: (trace: Trace) => void;
+  expressApp?: express.Express;
   onExpressCreated?: CreateConsoleServerOptions["onExpressCreated"];
   requireAcceptTerms?: boolean;
+  layoutConfig?: LayoutConfig;
 }
 
 const staticDir = `${__dirname}/vite`;

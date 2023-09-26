@@ -1,16 +1,14 @@
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
+import { Testing } from "../../src/simulator";
 import { Duration } from "../../src/std";
 import { SCHEDULE_TYPE } from "../../src/target-sim/schema-resources";
-import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
 
 const INFLIGHT_CODE = `
 async handle(message) {
 console.log("Hello from schedule!");
 }`;
-
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 test("create a schedule", async () => {
   // GIVEN

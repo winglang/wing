@@ -5,7 +5,6 @@ import { ElasticacheCluster } from "../.gen/providers/aws/elasticache-cluster";
 import { ElasticacheSubnetGroup } from "../.gen/providers/aws/elasticache-subnet-group";
 import { SecurityGroup } from "../.gen/providers/aws/security-group";
 import { Subnet } from "../.gen/providers/aws/subnet";
-import { Code } from "../core";
 import * as core from "../core";
 import * as ex from "../ex";
 import {
@@ -94,8 +93,7 @@ export class Redis extends ex.Redis {
     this.clusterArn = cluster.arn;
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("redis can only be bound by tfaws.Function for now");
     }
@@ -104,12 +102,10 @@ export class Redis extends ex.Redis {
     // Ops do not matter here since the client connects directly to the cluster.
     // The only thing that we need to use AWS API for is to get the cluster endpoint
     // from the cluster ID.
-    host.addPolicyStatements([
-      {
-        actions: ["elasticache:Describe*"],
-        resources: [this.clusterArn],
-      },
-    ]);
+    host.addPolicyStatements({
+      actions: ["elasticache:Describe*"],
+      resources: [this.clusterArn],
+    });
 
     host.addEnvironment(env, this.clusterId);
     host.addNetworkConfig({
@@ -117,11 +113,11 @@ export class Redis extends ex.Redis {
       subnetIds: [this.subnet.id],
     });
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): Code {
+  public _toInflight(): string {
     return core.InflightClient.for(__dirname, __filename, "RedisClient", [
       `process.env["${this.envName()}"]`,
     ]);

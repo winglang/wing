@@ -5,7 +5,6 @@ import { StorageBucketIamMember } from "../.gen/providers/google/storage-bucket-
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
 import { Id } from "../.gen/providers/random/id";
 import * as cloud from "../cloud";
-import * as core from "../core";
 import {
   CaseConventions,
   NameOptions,
@@ -39,7 +38,7 @@ const BUCKET_NAME_OPTS: NameOptions = {
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
 export class Bucket extends cloud.Bucket {
-  private readonly bucket: StorageBucket;
+  public readonly bucket: StorageBucket;
 
   constructor(scope: Construct, id: string, props: cloud.BucketProps = {}) {
     super(scope, id, props);
@@ -58,7 +57,7 @@ export class Bucket extends cloud.Bucket {
 
     this.bucket = new StorageBucket(this, "Default", {
       name: bucketName + "-" + randomId.hex,
-      location: (App.of(this) as App).storageLocation,
+      location: (App.of(this) as App).region,
       // recommended by GCP: https://cloud.google.com/storage/docs/uniform-bucket-level-access#should-you-use
       uniformBucketLevelAccess: true,
       publicAccessPrevention: props.public ? "inherited" : "enforced",
@@ -82,14 +81,13 @@ export class Bucket extends cloud.Bucket {
     });
   }
 
-  /** @internal */
-  public _bind(_inflightHost: IInflightHost, _ops: string[]): void {
+  public bind(_inflightHost: IInflightHost, _ops: string[]): void {
     // TODO: support functions once tfgcp functions are implemented
     throw new Error("Method not implemented.");
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     throw new Error("Method not implemented.");
   }
 }

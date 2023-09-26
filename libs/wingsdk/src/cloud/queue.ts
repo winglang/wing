@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Duration, IResource, Resource } from "../std";
+import { Duration, IResource, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Queue`.
@@ -24,12 +24,6 @@ export interface QueueProps {
    * @default undefined
    */
   readonly retentionPeriod?: Duration;
-
-  /**
-   * Initialize the queue with a set of messages.
-   * @default []
-   */
-  readonly initialMessages?: string[];
 }
 
 /**
@@ -53,17 +47,20 @@ export abstract class Queue extends Resource {
   constructor(scope: Construct, id: string, props: QueueProps = {}) {
     super(scope, id);
 
-    this.display.title = "Queue";
-    this.display.description = "A distributed message queue";
+    Node.of(this).title = "Queue";
+    Node.of(this).description = "A distributed message queue";
 
-    this._addInflightOps(
+    props;
+  }
+
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [
       QueueInflightMethods.PUSH,
       QueueInflightMethods.PURGE,
       QueueInflightMethods.APPROX_SIZE,
-      QueueInflightMethods.POP
-    );
-
-    props;
+      QueueInflightMethods.POP,
+    ];
   }
 
   /**
@@ -91,11 +88,11 @@ export interface QueueSetConsumerProps extends FunctionProps {
  */
 export interface IQueueClient {
   /**
-   * Push a message to the queue.
-   * @param message Payload to send to the queue.
+   * Push one or more messages to the queue.
+   * @param messages Payload to send to the queue.
    * @inflight
    */
-  push(message: string): Promise<void>;
+  push(...messages: string[]): Promise<void>;
 
   /**
    * Purge all of the messages in the queue.

@@ -3,11 +3,11 @@ import { AddressInfo } from "net";
 import express from "express";
 import { ApiAttributes, WebsiteSchema, WEBSITE_TYPE } from "./schema-resources";
 import { IWebsiteClient } from "../cloud";
-import { Json, TraceType } from "../std";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
-} from "../testing/simulator";
+} from "../simulator/simulator";
+import { Json, TraceType } from "../std";
 
 const LOCALHOST_ADDRESS = "127.0.0.1";
 
@@ -62,6 +62,7 @@ export class Website implements IWebsiteClient, ISimulatorResourceInstance {
   public async cleanup(): Promise<void> {
     this.addTrace(`Closing server on ${this.url}`);
     this.server?.close();
+    this.server?.closeAllConnections();
   }
 
   private addTrace(message: string): void {

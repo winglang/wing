@@ -1,13 +1,14 @@
 import { Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import { Queue } from "../../src/cloud";
+import { Testing } from "../../src/simulator";
 import * as std from "../../src/std";
 import * as awscdk from "../../src/target-awscdk";
-import { Testing } from "../../src/testing";
-import { mkdtemp, sanitizeCode } from "../util";
+import { mkdtemp, sanitizeCode, awscdkSanitize } from "../util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",
+  entrypointDir: __dirname,
 };
 
 test("default queue behavior", () => {
@@ -18,7 +19,7 @@ test("default queue behavior", () => {
 
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("queue with custom timeout", () => {
@@ -31,7 +32,7 @@ test("queue with custom timeout", () => {
 
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("queue with custom retention", () => {
@@ -44,7 +45,7 @@ test("queue with custom retention", () => {
 
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("queue with a consumer function", () => {
@@ -73,5 +74,5 @@ async handle(event) {
   template.resourceCountIs("AWS::IAM::Role", 1);
   template.resourceCountIs("AWS::IAM::Policy", 1);
   template.resourceCountIs("AWS::Lambda::EventSourceMapping", 1);
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });

@@ -2,11 +2,9 @@ import { mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { Code } from "../core";
-import { App } from "../core/app";
+import { App } from "../core";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
-import { Duration } from "../std/duration";
-import { IInflightHost, IResource, Resource } from "../std/resource";
+import { Duration, IInflightHost, IResource, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Function`.
@@ -70,10 +68,8 @@ export abstract class Function extends Resource implements IInflightHost {
   ) {
     super(scope, id);
 
-    this.display.title = "Function";
-    this.display.description = "A cloud function (FaaS)";
-
-    this._addInflightOps(FunctionInflightMethods.INVOKE);
+    Node.of(this).title = "Function";
+    Node.of(this).description = "A cloud function (FaaS)";
 
     for (const [key, value] of Object.entries(props.env ?? {})) {
       this.addEnvironment(key, value);
@@ -84,7 +80,11 @@ export abstract class Function extends Resource implements IInflightHost {
     handler._registerBind(this, ["handle", "$inflight_init"]);
 
     const inflightClient = handler._toInflight();
-    const lines = this._generateLines(inflightClient);
+    const lines = new Array<string>();
+
+    lines.push("exports.handler = async function(event) {");
+    lines.push(`  return await (${inflightClient}).handle(event);`);
+    lines.push("};");
 
     const assetName = ResourceNames.generateName(this, {
       // Avoid characters that may cause path issues
@@ -107,20 +107,9 @@ export abstract class Function extends Resource implements IInflightHost {
     }
   }
 
-  /**
-   * Generates the code lines for the cloud function, can be overridden by the targets
-   * @param inflightClient inflight client code
-   * @returns cloud function code string
-   * @internal
-   */
-  protected _generateLines(inflightClient: Code): string[] {
-    const lines = new Array<string>();
-
-    lines.push("exports.handler = async function(event) {");
-    lines.push(`  return await (${inflightClient.text}).handle(event);`);
-    lines.push("};");
-
-    return lines;
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [FunctionInflightMethods.INVOKE];
   }
 
   /**

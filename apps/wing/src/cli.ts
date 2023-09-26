@@ -1,6 +1,3 @@
-// for WebAssembly typings:
-/// <reference lib="dom" />
-
 import { satisfies } from "compare-versions";
 
 import { Command, Option } from "commander";
@@ -73,6 +70,11 @@ async function main() {
 
   const program = new Command();
 
+  program.configureHelp({
+    sortOptions: true,
+    showGlobalOptions: true,
+  });
+
   program.name("wing").version(PACKAGE_VERSION);
 
   program
@@ -90,7 +92,10 @@ async function main() {
       () => {
         process.env.WING_DISABLE_ANALYTICS = "1";
       }
-    );
+    )
+    .option("--no-color", "Disable colors for all output", () => {
+      process.env.NO_COLOR = "1";
+    });
 
   async function progressHook(cmd: Command) {
     const target = cmd.opts().target;
@@ -136,6 +141,7 @@ async function main() {
         .default("sim")
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
+    .option("-r, --rootId <rootId>", "App root id")
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("compile"));
@@ -152,6 +158,7 @@ async function main() {
         .default("sim")
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
+    .option("-r, --rootId <rootId>", "App root id")
     .option("--no-clean", "Keep build output")
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)

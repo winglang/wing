@@ -1,12 +1,13 @@
 import { basename, resolve, sep } from "path";
 import { compile, CompileOptions } from "./compile";
 import chalk from "chalk";
-import { std, testing } from "@winglang/sdk";
+import { std, simulator } from "@winglang/sdk";
 import * as cp from "child_process";
 import debug from "debug";
 import { promisify } from "util";
 import { generateTmpDir, withSpinner } from "../util";
 import { Target } from "@winglang/compiler";
+import { nanoid } from "nanoid";
 import { readFile, rm, rmSync } from "fs";
 
 const log = debug("wing:test");
@@ -30,7 +31,7 @@ export interface TestOptions extends CompileOptions {
 export async function test(entrypoints: string[], options: TestOptions): Promise<number> {
   const startTime = Date.now();
   const results: { testName: string; results: std.TestResult[] }[] = [];
-  for (const entrypoint of entrypoints) {
+  const testFile = async (entrypoint: string) => {
     const testName = generateTestName(entrypoint);
     try {
       const singleTestResults: std.TestResult[] | void = await testOne(entrypoint, options);
@@ -42,7 +43,8 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
         results: [{ pass: false, path: "", error: (error as Error).message, traces: [] }],
       });
     }
-  }
+  };
+  await Promise.all(entrypoints.map(testFile));
   printResults(results, Date.now() - startTime);
 
   // if we have any failures, exit with 1
@@ -129,16 +131,16 @@ function printResults(
 }
 
 async function testOne(entrypoint: string, options: TestOptions) {
-  // since the test cleans up after each run, it's essential to create a temporary directory-
-  // at least one that is different then the usual compilation dir,  otherwise we might end up cleaning up the user's actual resources.
-  const tempFile: string =
-    options.target === Target.SIM ? entrypoint : await generateTmpDir(entrypoint);
   const synthDir = await withSpinner(
     `Compiling ${generateTestName(entrypoint)} to ${options.target}...`,
-    () =>
-      compile(tempFile, {
+    async () =>
+      compile(entrypoint, {
         ...options,
+        rootId: options.rootId ?? `Test.${nanoid(10)}`,
         testing: true,
+        // since the test cleans up after each run, it's essential to create a temporary output directory-
+        // at least one that is different then the usual compilation output dir,  otherwise we might end up cleaning up the user's actual resources.
+        ...(options.target !== Target.SIM && { targetDir: `${await generateTmpDir()}/target` }),
       })
   );
 
@@ -245,7 +247,7 @@ function noCleanUp(synthDir: string) {
 }
 
 async function testSimulator(synthDir: string, options: TestOptions) {
-  const s = new testing.Simulator({ simfile: synthDir });
+  const s = new simulator.Simulator({ simfile: synthDir });
   const { clean } = options;
   await s.start();
 

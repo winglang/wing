@@ -1,6 +1,7 @@
 import { readdirSync } from "fs";
 import { extname, join, posix, resolve, sep } from "path";
 
+import { Fn } from "cdktf";
 import { Construct } from "constructs";
 import mime from "mime-types";
 import { createEncryptedBucket } from "./bucket";
@@ -13,6 +14,7 @@ import { S3BucketPolicy } from "../.gen/providers/aws/s3-bucket-policy";
 import { S3BucketWebsiteConfiguration } from "../.gen/providers/aws/s3-bucket-website-configuration";
 import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
+import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { Json } from "../std";
 
 const INDEX_FILE = "index.html";
@@ -39,11 +41,17 @@ export class Website extends cloud.Website {
     this.uploadFiles(this.path);
 
     // create a cloudfront oac
+    const OAC_NAME_OPTIONS: NameOptions = {
+      maxLen: 32,
+      disallowedRegex: /[^a-zA-Z0-9-]/,
+      suffix: "-cloudfront-oac",
+    };
+
     const cloudfrontOac = new CloudfrontOriginAccessControl(
       this,
       "CloudfrontOac",
       {
-        name: "cloudfront-oac",
+        name: ResourceNames.generateName(this, OAC_NAME_OPTIONS),
         originAccessControlOriginType: "s3",
         signingBehavior: "always",
         signingProtocol: "sigv4",
@@ -119,7 +127,7 @@ export class Website extends cloud.Website {
       policy: allowDistributionReadOnly.json,
     });
 
-    this._url = distribution.domainName;
+    this._url = `https://${distribution.domainName}`;
   }
 
   public get url(): string {
@@ -152,6 +160,7 @@ export class Website extends cloud.Website {
       key: this.formatPath(filePath.replace(this.path, "")),
       bucket: this.bucket.bucket,
       source: resolve(filePath),
+      sourceHash: Fn.filemd5(resolve(filePath)),
       contentType: mime.contentType(extname(filePath)) || undefined,
     });
   }
@@ -173,7 +182,7 @@ export class Website extends cloud.Website {
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return core.InflightClient.for(
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,

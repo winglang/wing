@@ -1,20 +1,21 @@
+use camino::{Utf8Component, Utf8Path, Utf8PathBuf};
 use indexmap::{IndexMap, IndexSet};
 use phf::{phf_map, phf_set};
 use std::cell::RefCell;
 use std::collections::HashSet;
-use std::path::{Path, PathBuf};
 use std::{fs, str, vec};
 use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
-	ArgList, BinaryOperator, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody,
-	FunctionDefinition, FunctionParameter, FunctionSignature, Interface, InterpolatedString, InterpolatedStringPart,
-	Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind,
-	UnaryOperator, UserDefinedType,
+	AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
+	ElifBlock, ElifLetBlock, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
+	IfLet, Interface, InterpolatedString, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Spanned,
+	Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan};
+use crate::file_graph::FileGraph;
 use crate::files::Files;
 use crate::type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
 use crate::{dbg_panic, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
@@ -23,15 +24,12 @@ use crate::{dbg_panic, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
 // this is meant to serve as a bandaide to be removed once wing is further developed.
 // k=grammar, v=optional_message, example: ("generic", "targed impl: 1.0.0")
 static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
-	"any" => "see https://github.com/winglang/wing/issues/434",
-	"Promise" => "see https://github.com/winglang/wing/issues/529",
-	"preflight_closure" => "see https://github.com/winglang/wing/issues/474",
-	"pure_closure" => "see https://github.com/winglang/wing/issues/474",
-	"storage_modifier" => "see https://github.com/winglang/wing/issues/107",
-	"access_modifier" => "see https://github.com/winglang/wing/issues/108",
-	"await_expression" => "see https://github.com/winglang/wing/issues/116",
-	"defer_expression" => "see https://github.com/winglang/wing/issues/116",
-	"=>" => "see https://github.com/winglang/wing/issues/474",
+	"any" => "https://github.com/winglang/wing/issues/434",
+	"Promise" => "https://github.com/winglang/wing/issues/529",
+	"storage_modifier" => "https://github.com/winglang/wing/issues/107",
+	"internal" => "https://github.com/winglang/wing/issues/4156",
+	"await_expression" => "https://github.com/winglang/wing/issues/116",
+	"defer_expression" => "https://github.com/winglang/wing/issues/116",
 };
 
 static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
@@ -80,7 +78,8 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 	"package",
 	"private",
 	"protected",
-	"public",
+	"pub",
+	"internal",
 	"return",
 	"short",
 	"static",
@@ -131,23 +130,136 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 	"Object",
 };
 
+/// Parses a Wing file and the transitive closure of all files it depends on.
+///
+/// Expects an initial Wing file to be parsed. For Wing's CLI, this is usually
+/// the file the user asked to compile, and in the case of the LSP, the file that was
+/// just opened or changed. The file's path and text can be passed through `init_path` and
+/// `init_text`, respectively.
+///
+/// Internally it parses the initial file, and then recursively parse all of the files that
+/// it depends on, storing all results in the `files`, `file_graph`, `tree_sitter_trees`,
+/// and `asts` parameters. It skips re-parsing any files that have already been parsed. function assumes all of these collections are kept in sync
+/// with each other.
+///
+/// Returns a topological ordering of all known Wing files, where each file only depends on
+/// files that come before it in the ordering.
+pub fn parse_wing_project(
+	init_path: &Utf8Path,
+	init_text: String,
+	files: &mut Files,
+	file_graph: &mut FileGraph,
+	tree_sitter_trees: &mut IndexMap<Utf8PathBuf, tree_sitter::Tree>,
+	asts: &mut IndexMap<Utf8PathBuf, Scope>,
+) -> Vec<Utf8PathBuf> {
+	// Parse the initial file (even if we have already seen it before)
+	let (tree_sitter_tree, ast, dependent_wing_files) = parse_wing_file(init_path, &init_text);
+
+	// Update our files collection with the new source text. For a fresh compilation,
+	// this will be the first time we've seen this file. In the LSP we might already have
+	// text from a previous compilation, so we'll replace the contents.
+	files.update_file(&init_path, init_text);
+
+	// Update our collections of trees and ASTs and our file graph
+	tree_sitter_trees.insert(init_path.to_owned(), tree_sitter_tree);
+	asts.insert(init_path.to_owned(), ast);
+	file_graph.update_file(init_path, &dependent_wing_files);
+
+	// Track which files still need parsing
+	let mut unparsed_files = dependent_wing_files;
+
+	// Parse all remaining files in the project
+	while let Some(file_path) = unparsed_files.pop() {
+		// Skip files that we have already seen before (they should already be parsed)
+		if files.contains_file(&file_path) {
+			assert!(
+				tree_sitter_trees.contains_key(&file_path),
+				"files is not in sync with tree_sitter_trees"
+			);
+			assert!(asts.contains_key(&file_path), "files is not in sync with asts");
+			assert!(
+				file_graph.contains_file(&file_path),
+				"files is not in sync with file_graph"
+			);
+			continue;
+		}
+
+		let file_text = fs::read_to_string(&file_path).unwrap_or(String::new());
+		files.add_file(&file_path, file_text.clone()).unwrap();
+		files.get_file(&file_path).unwrap();
+
+		// Parse the file
+		let (tree_sitter_tree, ast, dependent_wing_files) = parse_wing_file(&file_path, &file_text);
+
+		// Update our collections of trees and ASTs and our file graph
+		tree_sitter_trees.insert(file_path.clone(), tree_sitter_tree);
+		asts.insert(file_path.clone(), ast);
+		file_graph.update_file(&file_path, &dependent_wing_files);
+
+		// Add the file's dependencies to the list of files to parse
+		unparsed_files.extend(dependent_wing_files);
+	}
+
+	// Return the files in the order they should be compiled
+	match file_graph.toposort() {
+		Ok(files) => files,
+		Err(cycle) => {
+			let formatted_cycle = cycle.iter().map(|path| format!("- {}\n", path)).collect::<String>();
+
+			report_diagnostic(Diagnostic {
+				message: format!(
+					"Could not compile \"{}\" due to cyclic bring statements:\n{}",
+					init_path,
+					formatted_cycle.trim_end()
+				),
+				span: None,
+			});
+
+			// return a list of all files just so we can continue type-checking
+			asts.keys().cloned().collect::<Vec<_>>()
+		}
+	}
+}
+
+fn parse_wing_file(source_path: &Utf8Path, source_text: &str) -> (tree_sitter::Tree, Scope, Vec<Utf8PathBuf>) {
+	let language = tree_sitter_wing::language();
+	let mut tree_sitter_parser = tree_sitter::Parser::new();
+	tree_sitter_parser.set_language(language).unwrap();
+
+	let tree_sitter_tree = match tree_sitter_parser.parse(&source_text.as_bytes(), None) {
+		Some(tree) => tree,
+		None => {
+			panic!("Error parsing source file with tree-sitter: {}", source_path);
+		}
+	};
+
+	let tree_sitter_root = tree_sitter_tree.root_node();
+
+	let parser = Parser::new(&source_text.as_bytes(), source_path.to_owned());
+	let (scope, dependent_wing_files) = parser.parse(&tree_sitter_root);
+	(tree_sitter_tree, scope, dependent_wing_files)
+}
+
+/// Parses a single Wing source file.
 pub struct Parser<'a> {
+	/// Source code of the file being parsed
 	pub source: &'a [u8],
-	pub source_name: String,
+	pub source_name: Utf8PathBuf,
 	pub error_nodes: RefCell<HashSet<usize>>,
-	files: RefCell<&'a mut Files>,
 	// Nesting level within JSON literals, a value larger than 0 means we're currently in a JSON literal
 	in_json: RefCell<u64>,
 	is_in_mut_json: RefCell<bool>,
 	is_in_loop: RefCell<bool>,
+	/// Track all file paths that have been found while parsing the current file
+	/// These will need to be eventually parsed (or diagnostics will be reported if they don't exist)
+	referenced_wing_files: RefCell<Vec<Utf8PathBuf>>,
 }
 
 impl<'s> Parser<'s> {
-	pub fn new(source: &'s [u8], source_name: String, files: &'s mut Files) -> Self {
+	pub fn new(source: &'s [u8], source_name: Utf8PathBuf) -> Self {
 		Self {
 			source,
 			source_name,
-			files: RefCell::new(files),
 			error_nodes: RefCell::new(HashSet::new()),
 			is_in_loop: RefCell::new(false),
 			// This is similar to what we do in the type_checker, but we need to know 2 things when
@@ -156,32 +268,31 @@ impl<'s> Parser<'s> {
 			// mutability from the root of the Json literal.
 			in_json: RefCell::new(0),
 			is_in_mut_json: RefCell::new(false),
+			referenced_wing_files: RefCell::new(Vec::new()),
 		}
 	}
 
-	pub fn wingit(&self, root: &Node) -> Scope {
-		match self.files.borrow_mut().add_file(
-			PathBuf::from(self.source_name.clone()),
-			String::from_utf8(self.source.to_vec()).expect("Invalid UTF-8 sequence"),
-		) {
-			Ok(_) => {}
-			Err(err) => {
-				panic!("Failed adding source file to parser: {}", err);
+	pub fn parse(self, root: &Node) -> (Scope, Vec<Utf8PathBuf>) {
+		let scope = match root.kind() {
+			"source" => self.build_scope(&root, Phase::Preflight),
+			_ => Scope::empty(),
+		};
+
+		// Module files can only have certain kinds of statements
+		if !is_entrypoint_file(&self.source_name) {
+			for stmt in &scope.statements {
+				if !is_valid_module_statement(&stmt) {
+					self.add_error_from_span(
+						"Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with `.main.w` or `.test.w` to make this an entrypoint file.",
+						stmt.span(),
+					);
+				}
 			}
 		}
 
-		let scope = match root.kind() {
-			"source" => self.build_scope(&root, Phase::Preflight),
-			_ => Scope {
-				env: RefCell::new(None),
-				span: Default::default(),
-				statements: vec![],
-			},
-		};
-
 		self.report_unhandled_errors(&root);
 
-		scope
+		(scope, self.referenced_wing_files.into_inner())
 	}
 
 	fn add_error_from_span(&self, message: impl ToString, span: WingSpan) {
@@ -221,7 +332,7 @@ impl<'s> Parser<'s> {
 		if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&grammar_element) {
 			self.with_error(
 				format!(
-					"{} \"{}\" is not supported yet {}",
+					"{} \"{}\" is not supported yet - see {}",
 					grammar_context, grammar_element, entry
 				),
 				node,
@@ -315,7 +426,6 @@ impl<'s> Parser<'s> {
 		WingSpan {
 			start: node_range.start_point.into(),
 			end: node_range.end_point.into(),
-			// TODO: Implement multi-file support
 			file_id: self.source_name.to_string(),
 		}
 	}
@@ -325,16 +435,13 @@ impl<'s> Parser<'s> {
 		CompilationContext::set(CompilationPhase::Parsing, &span);
 		let mut cursor = scope_node.walk();
 
-		Scope {
-			statements: scope_node
-				.named_children(&mut cursor)
-				.filter(|child| !child.is_extra() && child.kind() != "AUTOMATIC_BLOCK")
-				.enumerate()
-				.filter_map(|(i, st_node)| self.build_statement(&st_node, i, phase).ok())
-				.collect(),
-			env: RefCell::new(None), // env should be set later when scope is type-checked
-			span,
-		}
+		let statements = scope_node
+			.named_children(&mut cursor)
+			.filter(|child| !child.is_extra() && child.kind() != "AUTOMATIC_BLOCK")
+			.enumerate()
+			.filter_map(|(i, st_node)| self.build_statement(&st_node, i, phase).ok())
+			.collect();
+		Scope::new(statements, span)
 	}
 
 	fn build_statement(&self, statement_node: &Node, idx: usize, phase: Phase) -> DiagnosticResult<Stmt> {
@@ -344,8 +451,16 @@ impl<'s> Parser<'s> {
 			"import_statement" => self.build_bring_statement(statement_node)?,
 
 			"variable_definition_statement" => self.build_variable_def_statement(statement_node, phase)?,
-			"variable_assignment_statement" => self.build_assignment_statement(statement_node, phase)?,
+			"variable_assignment_statement" => {
+				let kind = match self.node_text(&statement_node.child_by_field_name("operator").unwrap()) {
+					"=" => AssignmentKind::Assign,
+					"+=" => AssignmentKind::AssignIncr,
+					"-=" => AssignmentKind::AssignDecr,
+					other => return self.report_unimplemented_grammar(other, "assignment operator", statement_node),
+				};
 
+				self.build_assignment_statement(statement_node, phase, kind)?
+			}
 			"expression_statement" => {
 				StmtKind::Expression(self.build_expression(&statement_node.named_child(0).unwrap(), phase)?)
 			}
@@ -357,6 +472,7 @@ impl<'s> Parser<'s> {
 			"break_statement" => self.build_break_statement(statement_node)?,
 			"continue_statement" => self.build_continue_statement(statement_node)?,
 			"return_statement" => self.build_return_statement(statement_node, phase)?,
+			"throw_statement" => self.build_throw_statement(statement_node, phase)?,
 			"class_definition" => self.build_class_statement(statement_node, Phase::Inflight)?, // `inflight class` is always "inflight"
 			"resource_definition" => self.build_class_statement(statement_node, phase)?, // `class` without a modifier inherits from scope
 			"interface_definition" => self.build_interface_statement(statement_node, phase)?,
@@ -423,6 +539,11 @@ impl<'s> Parser<'s> {
 		))
 	}
 
+	fn build_throw_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
+		let expr = self.build_expression(&statement_node.child_by_field_name("expression").unwrap(), phase)?;
+		Ok(StmtKind::Throw(expr))
+	}
+
 	/// Builds scope statements for a loop (while/for), and maintains the is_in_loop flag
 	/// for the duration of the loop. So that later break statements inside can be validated
 	/// without traversing the AST.
@@ -471,19 +592,38 @@ impl<'s> Parser<'s> {
 
 	fn build_if_let_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
 		let if_block = self.build_scope(&statement_node.child_by_field_name("block").unwrap(), phase);
+		let reassignable = statement_node.child_by_field_name("reassignable").is_some();
 		let value = self.build_expression(&statement_node.child_by_field_name("value").unwrap(), phase)?;
 		let name = self.check_reserved_symbol(&statement_node.child_by_field_name("name").unwrap())?;
+
+		let mut elif_vec = vec![];
+		let mut cursor = statement_node.walk();
+		for node in statement_node.children_by_field_name("elif_let_block", &mut cursor) {
+			let statements = self.build_scope(&node.child_by_field_name("block").unwrap(), phase);
+			let value = self.build_expression(&node.child_by_field_name("value").unwrap(), phase)?;
+			let name = self.check_reserved_symbol(&statement_node.child_by_field_name("name").unwrap())?;
+			let elif = ElifLetBlock {
+				reassignable: node.child_by_field_name("reassignable").is_some(),
+				statements: statements,
+				value: value,
+				var_name: name,
+			};
+			elif_vec.push(elif);
+		}
+
 		let else_block = if let Some(else_block) = statement_node.child_by_field_name("else_block") {
 			Some(self.build_scope(&else_block, phase))
 		} else {
 			None
 		};
-		Ok(StmtKind::IfLet {
+		Ok(StmtKind::IfLet(IfLet {
 			var_name: name,
+			reassignable,
 			value,
 			statements: if_block,
+			elif_statements: elif_vec,
 			else_statements: else_block,
-		})
+		}))
 	}
 
 	fn build_if_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
@@ -512,11 +652,18 @@ impl<'s> Parser<'s> {
 		})
 	}
 
-	fn build_assignment_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
+	fn build_assignment_statement(
+		&self,
+		statement_node: &Node,
+		phase: Phase,
+		kind: AssignmentKind,
+	) -> DiagnosticResult<StmtKind> {
 		let reference = self.build_reference(&statement_node.child_by_field_name("name").unwrap(), phase)?;
+
 		if let ExprKind::Reference(r) = reference.kind {
 			Ok(StmtKind::Assignment {
-				variable: Expr::new(ExprKind::Reference(r), reference.span),
+				kind: kind,
+				variable: r,
 				value: self.build_expression(&statement_node.child_by_field_name("value").unwrap(), phase)?,
 			})
 		} else {
@@ -535,17 +682,17 @@ impl<'s> Parser<'s> {
 
 		for field_node in statement_node.children_by_field_name("field", &mut cursor) {
 			let identifier = self.node_symbol(&self.get_child_field(&field_node, "name")?)?;
-			let type_ = &self.get_child_field(&field_node, "type")?;
+			let type_ = self.get_child_field(&field_node, "type").ok();
 			let f = StructField {
 				name: identifier,
-				member_type: self.build_type_annotation(&type_, phase)?,
+				member_type: self.build_type_annotation(type_, phase)?,
 			};
 			members.push(f);
 		}
 
 		let mut extends = vec![];
 		for super_node in statement_node.children_by_field_name("extends", &mut cursor) {
-			let super_type = self.build_type_annotation(&super_node, phase)?;
+			let super_type = self.build_type_annotation(Some(super_node), phase)?;
 			match super_type.kind {
 				TypeAnnotationKind::UserDefined(t) => {
 					extends.push(t);
@@ -568,7 +715,7 @@ impl<'s> Parser<'s> {
 
 	fn build_variable_def_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
 		let type_ = if let Some(type_node) = statement_node.child_by_field_name("type") {
-			Some(self.build_type_annotation(&type_node, phase)?)
+			Some(self.build_type_annotation(Some(type_node), phase)?)
 		} else {
 			None
 		};
@@ -590,75 +737,76 @@ impl<'s> Parser<'s> {
 
 		// if the module name is a path ending in .w, create a new Parser to parse it as a new Scope,
 		// and create a StmtKind::Module instead
-		if module_name.name.ends_with(".w\"") {
-			let source_path = Path::new(&module_name.name[1..module_name.name.len() - 1]);
-			let source_path = if source_path.starts_with("./") {
-				source_path.strip_prefix("./").unwrap()
-			} else {
-				source_path
-			};
-			let source_path = if source_path.is_absolute() {
-				source_path.to_path_buf()
-			} else {
-				Path::new(&self.source_name).parent().unwrap().join(source_path)
-			};
-			if source_path == Path::new(&self.source_name) {
+		if module_name.name.starts_with("\"") && module_name.name.ends_with(".w\"") {
+			let module_path = Utf8Path::new(&module_name.name[1..module_name.name.len() - 1]);
+			let source_path = normalize_path(module_path, Some(&Utf8Path::new(&self.source_name)));
+			if source_path == Utf8Path::new(&self.source_name) {
 				return self.with_error("Cannot bring a module into itself", statement_node);
 			}
-			let scope = match fs::read(&source_path) {
-				Ok(source) => {
-					let mut files = self.files.borrow_mut();
-					let parser = Parser::new(&source, source_path.to_string_lossy().to_string(), *files);
-					let language = tree_sitter_wing::language();
-					let mut tree_sitter_parser = tree_sitter::Parser::new();
-					tree_sitter_parser.set_language(language).unwrap();
-					let tree = match tree_sitter_parser.parse(&source, None) {
-						Some(tree) => tree,
-						None => {
-							panic!("Failed parsing source file: {}", source_path.display());
-						}
-					};
-					parser.wingit(&tree.root_node())
-				}
-				Err(err) => {
-					report_diagnostic(Diagnostic {
-						message: format!("Error reading source file: {}: {:?}", source_path.display(), err),
-						span: None,
-					});
-					Scope::default()
-				}
-			};
-
-			// Check that the module only declares bringable items (classes, interfaces, enums, structs)
-			// and not variables or functions
-			let scope = if !is_bringable(&scope) {
-				report_diagnostic(Diagnostic {
-					message: format!(
-						"Cannot bring \"{}\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought",
-						module_name.name
+			if !source_path.exists() {
+				return self.with_error(format!("Cannot find module \"{}\"", source_path), statement_node);
+			}
+			if !source_path.is_file() {
+				return self.with_error(
+					format!("Cannot bring module \"{}\": not a file", source_path),
+					statement_node,
+				);
+			}
+			if source_path.ends_with(".main.w\"") || source_path.ends_with(".test.w\"") {
+				return self.with_error(
+					format!(
+						"Cannot bring module \"{}\": main/test files cannot be brought",
+						source_path
 					),
-					span: None,
-				});
-				Scope::default()
-			} else {
-				scope
-			};
+					statement_node,
+				);
+			}
+			self.referenced_wing_files.borrow_mut().push(source_path.clone());
 
 			// parse error if no alias is provided
 			let module = if let Some(alias) = alias {
-				Ok(StmtKind::Module {
-					name: alias,
-					statements: scope,
+				Ok(StmtKind::Bring {
+					source: BringSource::WingFile(Symbol {
+						name: source_path.to_string(),
+						span: module_name.span,
+					}),
+					identifier: Some(alias),
 				})
 			} else {
-				self.with_error::<StmtKind>("No alias provided for module", statement_node)
+				self.with_error::<StmtKind>(
+					format!(
+						"bring {} must be assigned to an identifier (e.g. bring \"foo\" as foo)",
+						module_name
+					),
+					statement_node,
+				)
 			};
 
 			return module;
 		}
 
+		if module_name.name.starts_with("\"") && module_name.name.ends_with("\"") {
+			return if let Some(alias) = alias {
+				Ok(StmtKind::Bring {
+					source: BringSource::JsiiModule(Symbol {
+						name: module_name.name[1..module_name.name.len() - 1].to_string(),
+						span: module_name.span,
+					}),
+					identifier: Some(alias),
+				})
+			} else {
+				self.with_error::<StmtKind>(
+					format!(
+						"bring {} must be assigned to an identifier (e.g. bring \"foo\" as foo)",
+						module_name
+					),
+					statement_node,
+				)
+			};
+		}
+
 		Ok(StmtKind::Bring {
-			module_name,
+			source: BringSource::BuiltinModule(module_name),
 			identifier: alias,
 		})
 	}
@@ -730,6 +878,16 @@ impl<'s> Parser<'s> {
 						continue;
 					};
 
+					// make sure all the parameters have type annotations
+					for param in &func_def.signature.parameters {
+						if matches!(param.type_annotation.kind, TypeAnnotationKind::Inferred) {
+							self.add_error_from_span(
+								"Missing required type annotation for method signature",
+								param.name.span.clone(),
+							);
+						}
+					}
+
 					methods.push((method_name, func_def))
 				}
 				"class_field" => {
@@ -751,10 +909,11 @@ impl<'s> Parser<'s> {
 
 					fields.push(ClassField {
 						name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
-						member_type: self.build_type_annotation(&class_element.child_by_field_name("type").unwrap(), phase)?,
+						member_type: self.build_type_annotation(class_element.child_by_field_name("type"), phase)?,
 						reassignable: class_element.child_by_field_name("reassignable").is_some(),
 						is_static,
 						phase,
+						access_modifier: self.build_access_modifier(class_element.child_by_field_name("access_modifier"))?,
 					})
 				}
 				"initializer" => {
@@ -807,6 +966,7 @@ impl<'s> Parser<'s> {
 							},
 							is_static: false,
 							span: self.node_span(&class_element),
+							access_modifier: AccessModifier::Public,
 						})
 					} else {
 						initializer = Some(FunctionDefinition {
@@ -821,6 +981,7 @@ impl<'s> Parser<'s> {
 								phase: Phase::Preflight,
 							},
 							span: self.node_span(&class_element),
+							access_modifier: AccessModifier::Public,
 						})
 					}
 				}
@@ -864,6 +1025,7 @@ impl<'s> Parser<'s> {
 				body: FunctionBody::Statements(Scope::new(vec![], WingSpan::default())),
 				is_static: false,
 				span: WingSpan::default(),
+				access_modifier: AccessModifier::Public,
 			},
 		};
 
@@ -888,16 +1050,14 @@ impl<'s> Parser<'s> {
 				body: FunctionBody::Statements(Scope::new(vec![], WingSpan::default())),
 				is_static: false,
 				span: WingSpan::default(),
+				access_modifier: AccessModifier::Public,
 			},
 		};
 
 		let parent = if let Some(parent_node) = statement_node.child_by_field_name("parent") {
-			let parent_type = self.build_type_annotation(&parent_node, class_phase)?;
+			let parent_type = self.build_type_annotation(Some(parent_node), class_phase)?;
 			match parent_type.kind {
-				TypeAnnotationKind::UserDefined(parent_type) => Some(Expr::new(
-					ExprKind::Reference(Reference::TypeReference(parent_type)),
-					self.node_span(&parent_node),
-				)),
+				TypeAnnotationKind::UserDefined(parent_type) => Some(parent_type),
 				_ => {
 					self.with_error::<Node>(
 						format!("Parent type must be a user defined type, found {}", parent_type),
@@ -922,7 +1082,7 @@ impl<'s> Parser<'s> {
 				continue;
 			}
 
-			let interface_type = self.build_type_annotation(&type_node, class_phase)?;
+			let interface_type = self.build_type_annotation(Some(type_node), class_phase)?;
 			match interface_type.kind {
 				TypeAnnotationKind::UserDefined(interface_type) => implements.push(interface_type),
 				_ => {
@@ -1033,11 +1193,19 @@ impl<'s> Parser<'s> {
 	fn build_function_signature(&self, func_sig_node: &Node, phase: Phase) -> DiagnosticResult<FunctionSignature> {
 		let parameters = self.build_parameter_list(&func_sig_node.child_by_field_name("parameter_list").unwrap(), phase)?;
 		let return_type = if let Some(rt) = func_sig_node.child_by_field_name("type") {
-			self.build_type_annotation(&rt, phase)?
+			self.build_type_annotation(Some(rt), phase)?
 		} else {
-			TypeAnnotation {
-				kind: TypeAnnotationKind::Void,
-				span: Default::default(),
+			let func_sig_kind = func_sig_node.kind();
+			if func_sig_kind == "inflight_closure" || func_sig_kind == "preflight_closure" {
+				TypeAnnotation {
+					kind: TypeAnnotationKind::Inferred,
+					span: Default::default(),
+				}
+			} else {
+				TypeAnnotation {
+					kind: TypeAnnotationKind::Void,
+					span: Default::default(),
+				}
 			}
 		};
 
@@ -1074,6 +1242,7 @@ impl<'s> Parser<'s> {
 			signature,
 			is_static,
 			span: self.node_span(func_def_node),
+			access_modifier: self.build_access_modifier(func_def_node.child_by_field_name("access_modifier"))?,
 		})
 	}
 
@@ -1092,7 +1261,7 @@ impl<'s> Parser<'s> {
 
 			res.push(FunctionParameter {
 				name: self.check_reserved_symbol(&definition_node.child_by_field_name("name").unwrap())?,
-				type_annotation: self.build_type_annotation(&definition_node.child_by_field_name("type").unwrap(), phase)?,
+				type_annotation: self.build_type_annotation(definition_node.child_by_field_name("type"), phase)?,
 				reassignable: definition_node.child_by_field_name("reassignable").is_some(),
 				variadic: definition_node.child_by_field_name("variadic").is_some(),
 			});
@@ -1146,7 +1315,28 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn build_type_annotation(&self, type_node: &Node, phase: Phase) -> DiagnosticResult<TypeAnnotation> {
+	fn build_access_modifier(&self, am_node: Option<Node>) -> DiagnosticResult<AccessModifier> {
+		match am_node {
+			Some(am_node) => match self.node_text(&am_node) {
+				"pub" => Ok(AccessModifier::Public),
+				"protected" => Ok(AccessModifier::Protected),
+				other => self.report_unimplemented_grammar(other, "access modifier", &am_node),
+			},
+			None => Ok(AccessModifier::Private),
+		}
+	}
+
+	fn build_type_annotation(&self, type_node: Option<Node>, phase: Phase) -> DiagnosticResult<TypeAnnotation> {
+		let type_node = &match type_node {
+			Some(node) => node,
+			None => {
+				return Ok(TypeAnnotation {
+					kind: TypeAnnotationKind::Inferred,
+					span: Default::default(),
+				})
+			}
+		};
+
 		let span = self.node_span(type_node);
 		match type_node.kind() {
 			"builtin_type" => match self.node_text(type_node) {
@@ -1174,9 +1364,7 @@ impl<'s> Parser<'s> {
 				other => return self.report_unimplemented_grammar(other, "builtin", type_node),
 			},
 			"optional" => {
-				let inner_type = self
-					.build_type_annotation(&type_node.named_child(0).unwrap(), phase)
-					.unwrap();
+				let inner_type = self.build_type_annotation(type_node.named_child(0), phase).unwrap();
 				Ok(TypeAnnotation {
 					kind: TypeAnnotationKind::Optional(Box::new(inner_type)),
 					span,
@@ -1189,7 +1377,7 @@ impl<'s> Parser<'s> {
 
 				let mut parameters = vec![];
 				for param_type in param_type_list_node.named_children(&mut cursor) {
-					let t = self.build_type_annotation(&param_type, phase)?;
+					let t = self.build_type_annotation(Some(param_type), phase)?;
 
 					parameters.push(FunctionParameter {
 						name: "".into(),
@@ -1203,7 +1391,7 @@ impl<'s> Parser<'s> {
 					Some(return_type) => Ok(TypeAnnotation {
 						kind: TypeAnnotationKind::Function(FunctionSignature {
 							parameters,
-							return_type: Box::new(self.build_type_annotation(&return_type, phase)?),
+							return_type: Box::new(self.build_type_annotation(Some(return_type), phase)?),
 							phase: if type_node.child_by_field_name("inflight").is_some() {
 								Phase::Inflight
 							} else {
@@ -1231,30 +1419,30 @@ impl<'s> Parser<'s> {
 			}
 			"mutable_container_type" | "immutable_container_type" => {
 				let container_type = self.node_text(&type_node.child_by_field_name("collection_type").unwrap());
-				let element_type = type_node.child_by_field_name("type_parameter").unwrap();
+				let element_type = type_node.child_by_field_name("type_parameter");
 				match container_type {
 					"Map" => Ok(TypeAnnotation {
-						kind: TypeAnnotationKind::Map(Box::new(self.build_type_annotation(&element_type, phase)?)),
+						kind: TypeAnnotationKind::Map(Box::new(self.build_type_annotation(element_type, phase)?)),
 						span,
 					}),
 					"MutMap" => Ok(TypeAnnotation {
-						kind: TypeAnnotationKind::MutMap(Box::new(self.build_type_annotation(&element_type, phase)?)),
+						kind: TypeAnnotationKind::MutMap(Box::new(self.build_type_annotation(element_type, phase)?)),
 						span,
 					}),
 					"Array" => Ok(TypeAnnotation {
-						kind: TypeAnnotationKind::Array(Box::new(self.build_type_annotation(&element_type, phase)?)),
+						kind: TypeAnnotationKind::Array(Box::new(self.build_type_annotation(element_type, phase)?)),
 						span,
 					}),
 					"MutArray" => Ok(TypeAnnotation {
-						kind: TypeAnnotationKind::MutArray(Box::new(self.build_type_annotation(&element_type, phase)?)),
+						kind: TypeAnnotationKind::MutArray(Box::new(self.build_type_annotation(element_type, phase)?)),
 						span,
 					}),
 					"Set" => Ok(TypeAnnotation {
-						kind: TypeAnnotationKind::Set(Box::new(self.build_type_annotation(&element_type, phase)?)),
+						kind: TypeAnnotationKind::Set(Box::new(self.build_type_annotation(element_type, phase)?)),
 						span,
 					}),
 					"MutSet" => Ok(TypeAnnotation {
-						kind: TypeAnnotationKind::MutSet(Box::new(self.build_type_annotation(&element_type, phase)?)),
+						kind: TypeAnnotationKind::MutSet(Box::new(self.build_type_annotation(element_type, phase)?)),
 						span,
 					}),
 					"ERROR" => self.with_error("Expected builtin container type", type_node)?,
@@ -1274,37 +1462,34 @@ impl<'s> Parser<'s> {
 		let object_expr = self.get_child_field(nested_node, "object")?;
 
 		if let Some(property) = nested_node.child_by_field_name("property") {
-			let object_expr = if object_expr.kind() == "json_container_type" {
-				Expr::new(
+			if object_expr.kind() == "json_container_type" {
+				Ok(Expr::new(
 					ExprKind::Reference(Reference::TypeMember {
-						typeobject: Box::new(
-							UserDefinedType {
-								root: Symbol::global(WINGSDK_STD_MODULE),
-								fields: vec![self.node_symbol(&object_expr)?],
-								span: self.node_span(&object_expr),
-							}
-							.to_expression(),
-						),
+						type_name: UserDefinedType {
+							root: Symbol::global(WINGSDK_STD_MODULE),
+							fields: vec![self.node_symbol(&object_expr)?],
+							span: self.node_span(&object_expr),
+						},
 						property: self.node_symbol(&property)?,
 					}),
 					self.node_span(&object_expr),
-				)
+				))
 			} else {
-				self.build_expression(&object_expr, phase)?
-			};
-			let accessor_sym = self.node_symbol(&self.get_child_field(nested_node, "accessor_type")?)?;
-			let optional_accessor = match accessor_sym.name.as_str() {
-				"?." => true,
-				_ => false,
-			};
-			Ok(Expr::new(
-				ExprKind::Reference(Reference::InstanceMember {
-					object: Box::new(object_expr),
-					property: self.node_symbol(&property)?,
-					optional_accessor,
-				}),
-				self.node_span(&nested_node),
-			))
+				let object_expr = self.build_expression(&object_expr, phase)?;
+				let accessor_sym = self.node_symbol(&self.get_child_field(nested_node, "accessor_type")?)?;
+				let optional_accessor = match accessor_sym.name.as_str() {
+					"?." => true,
+					_ => false,
+				};
+				Ok(Expr::new(
+					ExprKind::Reference(Reference::InstanceMember {
+						object: Box::new(object_expr),
+						property: self.node_symbol(&property)?,
+						optional_accessor,
+					}),
+					self.node_span(&nested_node),
+				))
+			}
 		} else {
 			// we are missing the last property, but we can still parse the rest of the expression
 			self.add_error(
@@ -1407,10 +1592,6 @@ impl<'s> Parser<'s> {
 		match expression_node.kind() {
 			"new_expression" => {
 				let class_udt = self.build_udt(&expression_node.child_by_field_name("class").unwrap())?;
-				let class_udt_exp = Expr::new(
-					ExprKind::Reference(Reference::TypeReference(class_udt)),
-					expression_span.clone(),
-				);
 
 				let arg_list = if let Ok(args_node) = self.get_child_field(expression_node, "args") {
 					self.build_arg_list(&args_node, phase)
@@ -1431,7 +1612,7 @@ impl<'s> Parser<'s> {
 
 				Ok(Expr::new(
 					ExprKind::New(NewExpr {
-						class: Box::new(class_udt_exp),
+						class: class_udt,
 						obj_id,
 						arg_list: arg_list?,
 						obj_scope,
@@ -1605,10 +1786,9 @@ impl<'s> Parser<'s> {
 				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node, Phase::Inflight)?),
 				expression_span,
 			)),
-			"pure_closure" => self.with_error("Pure phased anonymous closures not implemented yet", expression_node),
 			"array_literal" => {
 				let array_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
-					Some(self.build_type_annotation(&type_node, phase)?)
+					self.build_type_annotation(Some(type_node), phase).ok()
 				} else {
 					None
 				};
@@ -1633,7 +1813,7 @@ impl<'s> Parser<'s> {
 			}
 			"map_literal" => {
 				let map_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
-					Some(self.build_type_annotation(&type_node, phase)?)
+					self.build_type_annotation(Some(type_node), phase).ok()
 				} else {
 					None
 				};
@@ -1688,8 +1868,6 @@ impl<'s> Parser<'s> {
 					self.build_expression(&element_node, phase)?
 				};
 
-				let element = Box::new(exp);
-
 				*self.in_json.borrow_mut() -= 1;
 
 				// Only set mutability back to false if we are no longer parsing nested json
@@ -1697,11 +1875,17 @@ impl<'s> Parser<'s> {
 					*self.is_in_mut_json.borrow_mut() = false;
 				}
 
+				// avoid unnecessary wrapping of json elements
+				if matches!(exp.kind, ExprKind::JsonLiteral { .. }) {
+					return Ok(exp);
+				}
+
+				let element = Box::new(exp);
 				Ok(Expr::new(ExprKind::JsonLiteral { is_mut, element }, expression_span))
 			}
 			"set_literal" => self.build_set_literal(expression_node, phase),
 			"struct_literal" => {
-				let type_ = self.build_type_annotation(&expression_node.child_by_field_name("type").unwrap(), phase);
+				let type_ = self.build_type_annotation(expression_node.child_by_field_name("type"), phase);
 				let mut fields = IndexMap::new();
 				let mut cursor = expression_node.walk();
 				for field in expression_node.children_by_field_name("fields", &mut cursor) {
@@ -1743,7 +1927,7 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn build_map_fields(&self, expression_node: &Node<'_>, phase: Phase) -> Result<IndexMap<String, Expr>, ()> {
+	fn build_map_fields(&self, expression_node: &Node<'_>, phase: Phase) -> Result<IndexMap<Symbol, Expr>, ()> {
 		let mut fields = IndexMap::new();
 		let mut cursor = expression_node.walk();
 		for field_node in expression_node.children_by_field_name("member", &mut cursor) {
@@ -1755,9 +1939,10 @@ impl<'s> Parser<'s> {
 				"string" => {
 					let s = self.node_text(&key_node);
 					// Remove quotes, we assume this is a valid key for a map
-					s[1..s.len() - 1].to_string()
+					let s = s[1..s.len() - 1].to_string();
+					Symbol::new(s, self.node_span(&key_node))
 				}
-				"identifier" => self.node_text(&key_node).to_string(),
+				"identifier" => self.node_symbol(&key_node)?,
 				other => panic!("Unexpected map key type {} at {:?}", other, key_node),
 			};
 			let value_node = field_node.named_child(1).unwrap();
@@ -1773,10 +1958,11 @@ impl<'s> Parser<'s> {
 	fn build_set_literal(&self, expression_node: &Node, phase: Phase) -> Result<Expr, ()> {
 		let expression_span = self.node_span(expression_node);
 		let set_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
-			Some(self.build_type_annotation(&type_node, phase)?)
+			self.build_type_annotation(Some(type_node), phase).ok()
 		} else {
 			None
 		};
+
 		let mut items = Vec::new();
 		let mut cursor = expression_node.walk();
 		for element_node in expression_node.children_by_field_name("element", &mut cursor) {
@@ -1829,11 +2015,7 @@ impl<'s> Parser<'s> {
 				let target_node = Self::last_non_extra(node);
 				let diag = Diagnostic {
 					message: "Expected ';'".to_string(),
-					span: Some(WingSpan {
-						start: target_node.end_position().into(),
-						end: target_node.end_position().into(),
-						file_id: self.source_name.clone(),
-					}),
+					span: Some(self.node_span(&target_node)),
 				};
 				report_diagnostic(diag);
 			} else if node.kind() == "AUTOMATIC_BLOCK" {
@@ -1853,11 +2035,7 @@ impl<'s> Parser<'s> {
 					let target_node = Self::last_non_extra(node);
 					let diag = Diagnostic {
 						message: format!("Expected '{}'", node.kind()),
-						span: Some(WingSpan {
-							start: target_node.end_position().into(),
-							end: target_node.end_position().into(),
-							file_id: self.source_name.clone(),
-						}),
+						span: Some(self.node_span(&target_node)),
 					};
 					report_diagnostic(diag);
 				}
@@ -1949,6 +2127,7 @@ impl<'s> Parser<'s> {
 				},
 				is_static: true,
 				span: statements_span.clone(),
+				access_modifier: AccessModifier::Public,
 			}),
 			statements_span.clone(),
 		);
@@ -1956,14 +2135,11 @@ impl<'s> Parser<'s> {
 		let type_span = self.node_span(&statement_node.child(0).unwrap());
 		Ok(StmtKind::Expression(Expr::new(
 			ExprKind::New(NewExpr {
-				class: Box::new(Expr::new(
-					ExprKind::Reference(Reference::TypeReference(UserDefinedType {
-						root: Symbol::global(WINGSDK_STD_MODULE),
-						fields: vec![Symbol::global(WINGSDK_TEST_CLASS_NAME)],
-						span: type_span.clone(),
-					})),
-					type_span.clone(),
-				)),
+				class: UserDefinedType {
+					root: Symbol::global(WINGSDK_STD_MODULE),
+					fields: vec![Symbol::global(WINGSDK_TEST_CLASS_NAME)],
+					span: type_span.clone(),
+				},
 				obj_id: Some(test_id),
 				obj_scope: None,
 				arg_list: ArgList {
@@ -1977,33 +2153,149 @@ impl<'s> Parser<'s> {
 	}
 }
 
-fn is_bringable(scope: &Scope) -> bool {
-	let invalid_stmt = |stmt: &Stmt| match stmt.kind {
-		// these statements are ok
-		StmtKind::Bring { .. } => false,
-		StmtKind::Module { .. } => false,
-		StmtKind::Class(_) => false,
-		StmtKind::Interface(_) => false,
-		StmtKind::Struct { .. } => false,
-		StmtKind::Enum { .. } => false,
-		StmtKind::CompilerDebugEnv => false,
-		// these statements are invalid
-		StmtKind::SuperConstructor { .. } => true,
-		StmtKind::Let { .. } => true,
-		StmtKind::ForLoop { .. } => true,
-		StmtKind::While { .. } => true,
-		StmtKind::IfLet { .. } => true,
-		StmtKind::If { .. } => true,
-		StmtKind::Break => true,
-		StmtKind::Continue => true,
-		StmtKind::Return(_) => true,
-		StmtKind::Expression(_) => true,
-		StmtKind::Assignment { .. } => true,
-		StmtKind::Scope(_) => true,
-		StmtKind::TryCatch { .. } => true,
+fn is_entrypoint_file(path: &Utf8Path) -> bool {
+	path
+		.file_name()
+		.map(|s| s == "main.w" || s.ends_with(".main.w") || s.ends_with(".test.w"))
+		.unwrap_or(false)
+}
+
+fn is_valid_module_statement(stmt: &Stmt) -> bool {
+	match stmt.kind {
+		// --- these are all cool ---
+		StmtKind::Bring { .. } => true,
+		StmtKind::Class(_) => true,
+		StmtKind::Interface(_) => true,
+		StmtKind::Struct { .. } => true,
+		StmtKind::Enum { .. } => true,
+		StmtKind::CompilerDebugEnv => true,
+		// --- these are all uncool ---
+		StmtKind::SuperConstructor { .. } => false,
+		StmtKind::If { .. } => false,
+		StmtKind::ForLoop { .. } => false,
+		StmtKind::While { .. } => false,
+		StmtKind::IfLet { .. } => false,
+		StmtKind::Break => false,
+		StmtKind::Continue => false,
+		StmtKind::Return(_) => false,
+		StmtKind::Throw(_) => false,
+		StmtKind::Expression(_) => false,
+		StmtKind::Assignment { .. } => false,
+		StmtKind::Scope(_) => false,
+		StmtKind::TryCatch { .. } => false,
+		// TODO: support constants https://github.com/winglang/wing/issues/3606
+		// TODO: support test statements https://github.com/winglang/wing/issues/3571
+		StmtKind::Let { .. } => false,
+	}
+}
+
+// TODO: this function seems fragile
+// use inodes as source of truth instead https://github.com/winglang/wing/issues/3627
+pub fn normalize_path(path: &Utf8Path, relative_to: Option<&Utf8Path>) -> Utf8PathBuf {
+	let path = if path.is_absolute() {
+		// if the path is absolute, we ignore "relative_to"
+		path.to_path_buf()
+	} else {
+		relative_to
+			.map(|p| p.parent().unwrap_or_else(|| Utf8Path::new(".")).join(path))
+			.unwrap_or_else(|| path.to_path_buf())
 	};
 
-	// A module is bringable if it doesn't have any invalid statement kinds
-	// (rough heuristic for now)
-	!scope.statements.iter().any(invalid_stmt)
+	// Remove excess components like `/./` and `/../`.
+	// This is tricky because ".." usually means we pop the last component
+	// but if a path starts with ".." or looks like "a/../../b" we need to track
+	// how many components we've popped and add them later.
+	let mut normalized = Utf8PathBuf::new();
+	let mut extra_pops = Utf8PathBuf::new();
+	for part in path.components() {
+		match part {
+			Utf8Component::Prefix(ref prefix) => {
+				normalized.push(prefix.as_str());
+			}
+			Utf8Component::RootDir => {
+				normalized.push("/");
+			}
+			Utf8Component::ParentDir => {
+				let popped = normalized.pop();
+				if !popped {
+					extra_pops.push("..");
+				}
+			}
+			Utf8Component::CurDir => {
+				// Nothing
+			}
+			Utf8Component::Normal(name) => {
+				if extra_pops.components().next().is_some() {
+					normalized = extra_pops;
+					extra_pops = Utf8PathBuf::new();
+					normalized.push(name);
+				} else {
+					normalized.push(name);
+				}
+			}
+		}
+	}
+
+	normalized
+}
+
+#[cfg(test)]
+mod tests {
+	use super::*;
+
+	#[test]
+	fn normalize_path_relative_to_nothing() {
+		let file_path = Utf8Path::new("/a/b/c/d/e.f");
+		assert_eq!(normalize_path(file_path, None), file_path);
+
+		let file_path = Utf8Path::new("/a/b/./c/../d/e.f");
+		assert_eq!(normalize_path(file_path, None), Utf8Path::new("/a/b/d/e.f"));
+
+		let file_path = Utf8Path::new("a/b/c/d/e.f");
+		assert_eq!(normalize_path(file_path, None), Utf8Path::new("a/b/c/d/e.f"));
+
+		let file_path = Utf8Path::new("a/b/./c/../d/e.f");
+		assert_eq!(normalize_path(file_path, None), Utf8Path::new("a/b/d/e.f"));
+
+		let file_path = Utf8Path::new("a/../e.f");
+		assert_eq!(normalize_path(file_path, None), Utf8Path::new("e.f"));
+
+		let file_path = Utf8Path::new("a/../../../e.f");
+		assert_eq!(normalize_path(file_path, None), Utf8Path::new("../../e.f"));
+
+		let file_path = Utf8Path::new("./e.f");
+		assert_eq!(normalize_path(file_path, None), Utf8Path::new("e.f"));
+
+		let file_path = Utf8Path::new("../e.f");
+		assert_eq!(normalize_path(file_path, None), Utf8Path::new("../e.f"));
+
+		let file_path = Utf8Path::new("../foo/.././e.f");
+		assert_eq!(normalize_path(file_path, None), Utf8Path::new("../e.f"));
+	}
+
+	#[test]
+	fn normalize_path_relative_to_something() {
+		// If the path is absolute, we ignore "relative_to"
+		let file_path = Utf8Path::new("/a/b/c/d/e.f");
+		let relative_to = Utf8Path::new("/g/h/i");
+		assert_eq!(normalize_path(file_path, Some(relative_to)), file_path);
+
+		let file_path = Utf8Path::new("a/b/c/d/e.f");
+		let relative_to = Utf8Path::new("/g/h/i");
+		assert_eq!(
+			normalize_path(file_path, Some(relative_to)),
+			Utf8Path::new("/g/h/a/b/c/d/e.f")
+		);
+
+		let file_path = Utf8Path::new("a/b/c/d/e.f");
+		let relative_to = Utf8Path::new("g/h/i");
+		assert_eq!(
+			normalize_path(file_path, Some(relative_to)),
+			Utf8Path::new("g/h/a/b/c/d/e.f")
+		);
+
+		let file_path = Utf8Path::new("../foo.w");
+		let relative_to = Utf8Path::new("subdir/bar.w");
+		assert_eq!(normalize_path(file_path, Some(relative_to)), Utf8Path::new("foo.w"));
+	}
 }

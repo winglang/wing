@@ -2,10 +2,9 @@ import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import { TableSchema, TABLE_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
-import * as core from "../core";
 import * as ex from "../ex";
+import { BaseResourceSchema } from "../simulator/simulator";
 import { Json, IInflightHost } from "../std";
-import { BaseResourceSchema } from "../testing/simulator";
 
 /**
  * Simulator implementation of `ex.Table`.
@@ -37,14 +36,13 @@ export class Table extends ex.Table implements ISimulatorResource {
     return schema;
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
   }
 }

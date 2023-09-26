@@ -1,14 +1,16 @@
 import { Construct } from "constructs";
 import { test, expect } from "vitest";
+import { waitUntilTraceCount } from "./util";
 import * as cloud from "../../src/cloud";
-import { Testing } from "../../src/testing";
+import { Testing } from "../../src/simulator";
+import { IResource, Trace } from "../../src/std";
 import { SimApp } from "../sim-app";
-
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 test("can create sequential files in a bucket", async () => {
   // GIVEN
   class HelloWorld extends Construct {
+    public readonly processor: IResource;
+
     constructor(scope: Construct, id: string) {
       super(scope, id);
 
@@ -36,22 +38,26 @@ test("can create sequential files in a bucket", async () => {
           },
         }
       );
-      queue.setConsumer(processor);
+      this.processor = queue.setConsumer(processor);
     }
   }
 
   const app = new SimApp();
-  new HelloWorld(app, "HelloWorld");
+  const helloWorld = new HelloWorld(app, "HelloWorld");
 
   const s = await app.startSimulator();
 
   const pusher = s.getResource("/HelloWorld/Queue") as cloud.IQueueClient;
 
   // WHEN
+  const traceCheck = (trace: Trace) =>
+    trace.sourcePath === helloWorld.processor.node.path &&
+    trace.data.status === "success";
+
   await pusher.push("kachow!");
-  await sleep(500);
+  await waitUntilTraceCount(s, 1, traceCheck);
   await pusher.push("zoom!");
-  await sleep(500);
+  await waitUntilTraceCount(s, 2, traceCheck);
 
   // THEN
   const bucket = s.getResource("/HelloWorld/Bucket") as cloud.IBucketClient;

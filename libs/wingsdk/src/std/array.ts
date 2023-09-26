@@ -3,7 +3,7 @@
 // TODO: These should be interfaces, currently Wing does not support interface JSII imports
 
 import { T1 } from "./generics";
-import { Code, InflightClient } from "../core";
+import { InflightClient } from "../core";
 
 /**
  * Immutable Array
@@ -14,7 +14,7 @@ export class Array {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
 
@@ -36,6 +36,19 @@ export class Array {
   public at(index: number): T1 {
     index;
     throw new Error("Abstract");
+  }
+
+  /**
+   * Get the value at the given index, returning nil if the index is out of bounds.
+   *
+   * @macro ($self$.at($args$))
+   *
+   * @param index index of the value to get
+   * @returns the value at the given index, or undefined if the index is out of bounds
+   */
+  public tryAt(index: number): T1 | undefined {
+    index;
+    throw new Error("Macro");
   }
 
   /**
@@ -122,7 +135,7 @@ export class MutArray {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
 
@@ -173,7 +186,7 @@ export class MutArray {
   /**
    * Create an immutable shallow copy of this array
    *
-   * @macro Object.freeze([...($self$)])
+   * @macro [...($self$)]
    *
    * @returns an ImmutableArray with the same values as this array
    */
@@ -235,5 +248,62 @@ export class MutArray {
    */
   public pop(): T1 {
     throw new Error("Abstract");
+  }
+
+  /**
+   * Removes value from the given index of an array
+   *
+   * @macro ((obj, args) => { if (args[0] < 0 || args[0] >= $self$.length) throw new Error("Index out of bounds"); return obj.splice(args[0], 1)[0]; })($self$, [$args$])
+   *
+   * @param index the index to remove the value at
+   * @returns the value removed
+   * @throws index out of bounds error if the given index does not exist for the array
+   */
+  public popAt(index: number): T1 {
+    index;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Sets a new value at the given index of an array
+   *
+   * @macro ((obj, args) => { if (args[0] < 0 || args[0] >= $self$.length) throw new Error("Index out of bounds"); obj[args[0]] = args[1]; })($self$, [$args$])
+   *
+   * @param index the index to set the value at
+   * @param value the value to set at the given index
+   * @throws index out of bounds error if the given index does not exist for the array
+   */
+  public set(index: number, value: T1): void {
+    index;
+    value;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Inserts a new value at the given index of an array
+   *
+   * @macro ((obj, args) => { if (args[0] < 0 || args[0] > $self$.length) throw new Error("Index out of bounds"); obj.splice(args[0], 0, args[1]); })($self$, [$args$])
+   *
+   * @param index the index to insert the value at
+   * @param value the value to insert at the given index
+   * @throws index out of bounds error if the given index isn't valid
+   */
+  public insert(index: number, value: T1): void {
+    index;
+    value;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Removes first occurence of a given value in an array
+   *
+   * @macro ((obj, args) => { if (obj.indexOf(args[0]) !== -1) { obj.splice(obj.indexOf(args[0]), 1); return true; } return false; })($self$, [$args$])
+   *
+   * @param value the value to remove
+   * @returns true if value was removed
+   */
+  public removeFirst(value: T1): boolean {
+    value;
+    throw new Error("Macro");
   }
 }

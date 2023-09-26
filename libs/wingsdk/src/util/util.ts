@@ -1,7 +1,7 @@
 import { createHash } from "crypto";
 import { nanoid, customAlphabet } from "nanoid";
 import { v4 } from "uuid";
-import { Code, InflightClient } from "../core";
+import { InflightClient } from "../core";
 import { Duration, IResource } from "../std";
 
 /**
@@ -142,7 +142,7 @@ export class Util {
    * @param data - The string to be hashed.
    */
   public static sha256(data: string): string {
-    return createHash("sha256").update(data).digest("hex"); //SHA256(data).toString();
+    return createHash("sha256").update(data).digest("hex");
   }
 
   /**
@@ -168,7 +168,7 @@ export class Util {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
   private constructor() {}

@@ -1,3 +1,4 @@
+import { Construct } from "constructs";
 import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
@@ -5,9 +6,8 @@ import { ApiSchema, API_TYPE, ApiRoute } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import * as core from "../core";
-import { IInflightHost, Resource } from "../std";
-import { BaseResourceSchema } from "../testing/simulator";
+import { BaseResourceSchema } from "../simulator/simulator";
+import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
 /**
  * Simulator implementation of `cloud.Api`.
@@ -16,6 +16,10 @@ import { BaseResourceSchema } from "../testing/simulator";
  */
 export class Api extends cloud.Api implements ISimulatorResource {
   private eventMappings: { [key: string]: EventMapping } = {};
+
+  constructor(scope: Construct, id: string, props: cloud.ApiProps = {}) {
+    super(scope, id, props);
+  }
 
   public get url(): string {
     return simulatorAttrToken(this, "url");
@@ -47,6 +51,8 @@ export class Api extends cloud.Api implements ISimulatorResource {
     }
 
     const fn = Function._newFunction(this, fnPath, inflight, props) as Function;
+    Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
+    Node.of(fn).title = `${method.toLowerCase()}()`;
 
     const eventMapping = new EventMapping(this, eventId, {
       publisher: this,
@@ -73,13 +79,13 @@ export class Api extends cloud.Api implements ISimulatorResource {
   ): void {
     this._validatePath(path);
 
-    this._addToSpec(path, method, undefined);
+    this._addToSpec(path, method, undefined, this.corsOptions);
 
     const fn = this.createOrGetFunction(inflight, props, path, method);
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: `on_${method.toLowerCase()}_request`,
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: `${method.toLowerCase()}()`,
     });
   }
 
@@ -201,20 +207,20 @@ export class Api extends cloud.Api implements ISimulatorResource {
       path: this.node.path,
       props: {
         openApiSpec: this._getApiSpec(),
+        corsHeaders: this._generateCorsHeaders(this.corsOptions),
       },
       attrs: {} as any,
     };
     return schema;
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
   }
 }

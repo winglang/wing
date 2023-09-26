@@ -6,6 +6,7 @@ import * as util from "../../src/util";
 const skip = [
   "std.Direction",
   "std.T1",
+  "std.JsonSchema",
   "std.TEST_FQN",
   "std.Display",
   "std.Test",
@@ -14,6 +15,9 @@ const skip = [
   "std.TraceType",
   "std.TEST_RUNNER_FQN",
   "std.Resource",
+  "std.CONNECTIONS_FILE_PATH",
+  "std.SDK_SOURCE_MODULE",
+  "std.Node",
   "util.RequestCache", // an enum
   "util.RequestRedirect", // an enum
   "util.HttpMethod", // an enum
@@ -33,7 +37,7 @@ function makeTest(module: any, moduleName: string, className: string) {
       `${p} is missing _toInflightType()`
     );
 
-    const code = module[className]._toInflightType().text;
+    const code = module[className]._toInflightType();
     let v = vm.runInNewContext(code, {
       require: (name: string) => {
         // eslint-disable-next-line @typescript-eslint/no-require-imports

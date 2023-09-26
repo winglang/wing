@@ -1,10 +1,10 @@
-import { HttpMethod, OpenApiSpec } from "../cloud";
+import { CorsHeaders, HttpMethod, OpenApiSpec } from "../cloud";
 import { ColumnType } from "../ex";
-import { Json } from "../std";
 import {
   BaseResourceAttributes,
   BaseResourceSchema,
-} from "../testing/simulator";
+} from "../simulator/simulator";
+import { Json } from "../std";
 
 export const API_TYPE = "wingsdk.cloud.Api";
 export const QUEUE_TYPE = "wingsdk.cloud.Queue";
@@ -22,6 +22,7 @@ export const WEBSITE_TYPE = "wingsdk.cloud.Website";
 export const SECRET_TYPE = "wingsdk.cloud.Secret";
 export const SERVICE_TYPE = "wingsdk.cloud.Service";
 export const ON_DEPLOY_TYPE = "wingsdk.cloud.OnDeploy";
+export const DYNAMODB_TABLE_TYPE = "wingsdk.ex.DynamodbTable";
 
 export type FunctionHandle = string;
 export type PublisherHandle = string;
@@ -31,6 +32,7 @@ export interface ApiSchema extends BaseResourceSchema {
   readonly type: typeof API_TYPE;
   readonly props: {
     openApiSpec: OpenApiSpec;
+    corsHeaders?: CorsHeaders;
   };
   readonly attrs: ApiAttributes & BaseResourceAttributes;
 }
@@ -80,8 +82,6 @@ export interface QueueSchema extends BaseResourceSchema {
     readonly timeout: number;
     /** How long a queue retains a message, in seconds */
     readonly retentionPeriod: number;
-    /** Initial messages to be pushed to the queue. */
-    readonly initialMessages: string[];
   };
 }
 
@@ -267,3 +267,26 @@ export interface OnDeploySchema extends BaseResourceSchema {
 
 /** Runtime attributes for cloud.OnDeploy */
 export interface OnDeployAttributes {}
+
+/** Runtime attributes for ex.DynamodbTable */
+export interface DynamodbTableAttributes {}
+
+/** Schema for ex.DynamodbTable */
+export interface DynamodbTableSchema extends BaseResourceSchema {
+  readonly type: typeof DYNAMODB_TABLE_TYPE;
+  readonly props: {
+    readonly name: string;
+    /**
+     * Table attribute definitions. e.g. { "myKey": "S", "myOtherKey": "S" }.
+     */
+    readonly attributeDefinitions: Json;
+    /**
+     * Hash key for this table.
+     */
+    readonly hashKey: string;
+    /**
+     * Range key for this table.
+     */
+    readonly rangeKey?: string;
+  };
+}

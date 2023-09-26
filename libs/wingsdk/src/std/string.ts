@@ -3,7 +3,7 @@
 // TODO: This should be an interface, currently Wing does not support interface JSII imports
 
 import { Json } from "./json";
-import { Code, InflightClient } from "../core";
+import { InflightClient } from "../core";
 
 /**
  * String
@@ -13,7 +13,7 @@ export class String {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
 

@@ -2,6 +2,7 @@ import { Construct } from "constructs";
 import { Api } from "./api";
 import { BUCKET_PREFIX_OPTS, Bucket } from "./bucket";
 import { Counter } from "./counter";
+import { DynamodbTable } from "./dynamodb-table";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
@@ -36,7 +37,7 @@ import {
   WEBSITE_FQN,
 } from "../cloud";
 import { AppProps } from "../core";
-import { TABLE_FQN, REDIS_FQN } from "../ex";
+import { TABLE_FQN, REDIS_FQN, DYNAMODB_TABLE_FQN } from "../ex";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { CdktfApp } from "../shared-tf/app";
 import { TEST_RUNNER_FQN } from "../std";
@@ -50,6 +51,8 @@ export class App extends CdktfApp {
    * The test runner for this app.
    */
   protected readonly testRunner: TestRunner;
+
+  public readonly _target = "tf-aws";
 
   private awsRegionProvider?: DataAwsRegion;
   private awsAccountIdProvider?: DataAwsCallerIdentity;
@@ -117,6 +120,9 @@ export class App extends CdktfApp {
 
       case ON_DEPLOY_FQN:
         return new OnDeploy(scope, id, args[0], args[1]);
+
+      case DYNAMODB_TABLE_FQN:
+        return new DynamodbTable(scope, id, args[0]);
     }
 
     return undefined;
@@ -191,6 +197,7 @@ export class App extends CdktfApp {
     const publicSubnet = new Subnet(this, "PublicSubnet", {
       vpcId: this._vpc.id,
       cidrBlock: "10.0.0.0/24", // 10.0.0.0 - 10.0.0.255
+      availabilityZone: `${this.region}a`,
       tags: {
         Name: `${identifier}-public-subnet-1`,
       },
@@ -200,6 +207,7 @@ export class App extends CdktfApp {
     const privateSubnet = new Subnet(this, "PrivateSubnet", {
       vpcId: this._vpc.id,
       cidrBlock: "10.0.4.0/22", // 10.0.4.0 - 10.0.7.255
+      availabilityZone: `${this.region}a`,
       tags: {
         Name: `${identifier}-private-subnet-1`,
       },

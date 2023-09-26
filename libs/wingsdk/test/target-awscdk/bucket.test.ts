@@ -1,12 +1,13 @@
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import { Bucket } from "../../src/cloud";
+import { Testing } from "../../src/simulator";
 import * as awscdk from "../../src/target-awscdk";
-import { Testing } from "../../src/testing";
-import { mkdtemp } from "../util";
+import { mkdtemp, awscdkSanitize } from "../util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",
+  entrypointDir: __dirname,
 };
 
 test("create a bucket", async () => {
@@ -28,7 +29,7 @@ test("create a bucket", async () => {
       },
     })
   );
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("bucket is public", () => {
@@ -40,7 +41,7 @@ test("bucket is public", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::S3::Bucket", 1);
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("bucket with two preflight objects", () => {
@@ -49,6 +50,20 @@ test("bucket with two preflight objects", () => {
   const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
   bucket.addObject("file1.txt", "hello world");
   bucket.addObject("file2.txt", "boom bam");
+  const output = app.synth();
+
+  // THEN
+  const template = Template.fromJSON(JSON.parse(output));
+  template.resourceCountIs("Custom::CDKBucketDeployment", 2);
+  expect(awscdkSanitize(template)).toMatchSnapshot();
+});
+
+test("bucket with two preflight files", () => {
+  // GIVEN
+  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
+  bucket.addFile("file1.txt", "../testFiles/test1.txt");
+  bucket.addFile("file2.txt", "../testFiles/test2.txt");
   const output = app.synth();
 
   // THEN
@@ -86,7 +101,7 @@ async handle(event) {
       },
     })
   );
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("bucket with onDelete method", () => {
@@ -118,7 +133,7 @@ async handle(event) {
       },
     })
   );
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("bucket with onUpdate method", () => {
@@ -150,7 +165,7 @@ async handle(event) {
       },
     })
   );
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("bucket with onEvent method", () => {
@@ -182,5 +197,5 @@ async handle(event) {
       },
     })
   );
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });

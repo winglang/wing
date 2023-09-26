@@ -1,16 +1,15 @@
 import { createContext } from "react";
 
-import { PlaygroundLayout } from "./playground-layout.js";
-import { TutorialLayout } from "./tutorial-layout.js";
-import { LayoutProps, VscodeLayout } from "./vscode-layout.js";
+import { DefaultLayout, LayoutProps } from "./default-layout.js";
 
 export enum LayoutType {
-  Vscode = 1,
+  Default = 1,
   Playground,
   Tutorial,
+  Vscode,
 }
 
-export const LayoutContext = createContext(LayoutType.Vscode);
+export const LayoutContext = createContext(LayoutType.Default);
 
 export interface LayoutProviderProps {
   layoutType?: LayoutType;
@@ -21,18 +20,78 @@ export function LayoutProvider({
   layoutType,
   layoutProps,
 }: LayoutProviderProps) {
-  let Layout = VscodeLayout;
-  if (layoutType === LayoutType.Playground) {
-    Layout = PlaygroundLayout;
-  } else if (layoutType === LayoutType.Tutorial) {
-    Layout = TutorialLayout;
+  let layoutConfig = layoutProps.layoutConfig;
+  let Layout = DefaultLayout;
+
+  switch (layoutType) {
+    case LayoutType.Playground: {
+      layoutConfig = {
+        leftPanel: {
+          hide: true,
+        },
+        bottomPanel: {
+          components: [
+            {
+              type: "tests",
+            },
+            {
+              type: "logs",
+            },
+          ],
+        },
+        statusBar: {
+          showThemeToggle: false,
+        },
+      };
+
+      break;
+    }
+    case LayoutType.Tutorial: {
+      layoutConfig = {
+        leftPanel: {
+          hide: true,
+        },
+        bottomPanel: {
+          size: "small",
+          components: [
+            {
+              type: "logs",
+            },
+          ],
+        },
+        errorScreen: {
+          position: "bottom",
+          displayTitle: false,
+          displayLinks: false,
+        },
+        statusBar: {
+          hide: true,
+        },
+      };
+      break;
+    }
+    case LayoutType.Vscode: {
+      layoutConfig = {
+        leftPanel: {
+          hide: true,
+        },
+        bottomPanel: {
+          hide: true,
+        },
+        statusBar: {
+          hide: true,
+        },
+      };
+      break;
+    }
   }
 
   return (
-    <LayoutContext.Provider value={layoutType ?? LayoutType.Vscode}>
+    <LayoutContext.Provider value={layoutType ?? LayoutType.Default}>
       <Layout
         cloudAppState={layoutProps.cloudAppState}
         wingVersion={layoutProps.wingVersion}
+        layoutConfig={layoutConfig}
       />
     </LayoutContext.Provider>
   );

@@ -1,11 +1,10 @@
 import { Construct } from "constructs";
 import { test, expect } from "vitest";
+import { waitUntilTrace } from "./util";
 import * as cloud from "../../src/cloud";
+import { Testing } from "../../src/simulator";
 import { TraceType } from "../../src/std";
-import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
-
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 test("pushing messages through a queue", async () => {
   // GIVEN
@@ -48,7 +47,7 @@ test("pushing messages through a queue", async () => {
 
   const pusher = s.getResource("/HelloWorld/Function") as cloud.IFunctionClient;
   const consumer = s.getResource(
-    "root/HelloWorld/Queue-SetConsumer-13c4eaf1"
+    "root/HelloWorld/Queue/Queue-SetConsumer-13c4eaf1"
   ) as cloud.IFunctionClient;
 
   // warm up the consumer so timing is more predictable
@@ -56,7 +55,7 @@ test("pushing messages through a queue", async () => {
 
   // WHEN
   await pusher.invoke("foo");
-  await sleep(200);
+  await waitUntilTrace(s, (t) => t.data.message === "Received foo");
 
   // THEN
   await s.stop();
@@ -70,7 +69,7 @@ test("pushing messages through a queue", async () => {
     },
     {
       data: { message: "Received foo" },
-      sourcePath: "root/HelloWorld/Queue-SetConsumer-13c4eaf1",
+      sourcePath: "root/HelloWorld/Queue/Queue-SetConsumer-13c4eaf1",
       sourceType: "wingsdk.cloud.Function",
       timestamp: expect.any(String),
       type: "log",

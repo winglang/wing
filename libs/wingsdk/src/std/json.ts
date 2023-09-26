@@ -1,4 +1,22 @@
-import { Code, InflightClient } from "../core";
+import { InflightClient } from "../core";
+
+/**
+ * Options for stringify() method.
+ */
+export interface JsonStringifyOptions {
+  /** Indentation spaces number */
+  readonly indent: number;
+}
+
+/**
+ * Json entry representation
+ */
+export interface JsonEntry {
+  /** The entry key */
+  readonly key: string;
+  /** The entry value */
+  readonly value: Json;
+}
 
 /**
  * Immutable Json
@@ -7,21 +25,44 @@ export class Json {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
 
   /**
-   * Returns the keys from the Json object.
+   * Returns the keys from the Json.
    *
    * @macro (Object.keys($args$))
    *
-   * @param json to get keys from
-   * @returns the keys from the Json object as string array
+   * @param json map to get the keys from
+   * @returns the keys as Array<String>
    */
   public static keys(json: Json | MutJson): string[] {
     json;
     throw new Error("Macro");
+  }
+
+  /**
+   * Returns the values from the Json.
+   *
+   * @macro (Object.values($args$))
+   *
+   * @param json map to get the values from
+   * @returns the values as Array<Json>
+   */
+  public static values(json: Json): Json[] {
+    json;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Returns the entries from the Json.
+   *
+   * @param json map to get the entries from
+   * @returns the entries as Array<JsonEntry>
+   */
+  public static entries(json: Json): JsonEntry[] {
+    return Object.entries(json).map(([key, value]) => ({ key, value }));
   }
 
   /**
@@ -41,23 +82,24 @@ export class Json {
   /**
    * Formats Json as string
    *
-   * (JSON.stringify($args$))
-   *
-   * @macro ((args) => { return JSON.stringify(args[0], null, args[1]) })([$args$])
+   * @macro ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$args$])
    *
    * @param json to format as string
    * @returns string representation of the Json
    */
-  public static stringify(json: Json | MutJson, indent?: number): string {
+  public static stringify(
+    json: Json | MutJson,
+    options?: JsonStringifyOptions
+  ): string {
     json;
-    indent;
+    options;
     throw new Error("Macro");
   }
 
   /**
    * Creates an immutable deep copy of the Json.
    *
-   * @macro Object.freeze(JSON.parse(JSON.stringify($args$)))
+   * @macro JSON.parse(JSON.stringify($args$))
    *
    * @param json to copy
    * @returns the immutable copy of the Json
@@ -76,19 +118,6 @@ export class Json {
    * @returns the mutable copy of the Json
    */
   public static deepCopyMut(json: Json): MutJson {
-    json;
-    throw new Error("Macro");
-  }
-
-  /**
-   * Returns the values from the Json.
-   *
-   * @macro (Object.values($args$))
-   *
-   * @param json to get values from
-   * @returns the values from the Json as array of Json
-   */
-  public static values(json: Json): Json[] {
     json;
     throw new Error("Macro");
   }
@@ -137,12 +166,13 @@ export class Json {
   private constructor() {}
 
   /**
-   * Returns a specified element from the Json.
+   * Returns the value associated with the specified Json key
    *
-   * @macro ($self$)[$args$]
+   * @macro ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })($self$, $args$)
    *
-   * @param key The key of the element to return
-   * @returns The element associated with the specified key, or undefined if the key can't be found
+   * @param key The key of the Json property
+   * @returns The value associated with the specified Json key
+   * @throws Json property does not exist if the given key is not part of an existing property
    */
   public get(key: string): Json {
     key;
@@ -152,10 +182,11 @@ export class Json {
   /**
    * Returns a specified element at a given index from Json Array
    *
-   * @macro ($self$)[$args$]
+   * @macro ((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })($self$, $args$)
    *
    * @param index The index of the element in the Json Array to return
-   * @returns The element at given index in Json Array, or undefined if index is not valid
+   * @returns The element at given index in Json Array
+   * @throws index out of bounds error if the given index does not exist for the Json Array
    */
   public getAt(index: number): Json {
     index;
@@ -262,19 +293,20 @@ export class MutJson {
   /**
    * @internal
    */
-  public static _toInflightType(): Code {
+  public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
 
   private constructor() {}
 
   /**
-   * Returns a specified element from the Json.
+   * Returns the value associated with the specified Json key
    *
-   * @macro ($self$)[$args$]
+   * @macro ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })($self$, $args$)
    *
-   * @param key The key of the element to return
-   * @returns The element associated with the specified key, or undefined if the key can't be found
+   * @param key The key of the Json property
+   * @returns The value associated with the specified Json key
+   * @throws Json property does not exist if the given key is not part of an existing property
    */
   public get(key: string): MutJson {
     key;
@@ -284,10 +316,11 @@ export class MutJson {
   /**
    * Returns a specified element at a given index from MutJson Array
    *
-   * @macro ($self$)[$args$]
+   * @macro ((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })($self$, $args$)
    *
    * @param index The index of the element in the MutJson Array to return
-   * @returns The element at given index in MutJson Array, or undefined if index is not valid
+   * @returns The element at given index in MutJson Array
+   * @throws index out of bounds error if the given index does not exist for the MutJson Array
    */
   public getAt(index: number): MutJson {
     index;

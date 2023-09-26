@@ -1,0 +1,29 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "extends": ["//"],
+  "pipeline": {
+    "test:generate": {
+      "inputs": [
+        "*.ts",
+        "*.json",
+        "src/generate_tests.ts",
+        "src/generated_test_targets.ts"
+      ],
+      "dependsOn": [
+        "examples-valid#topo",
+        "examples-invalid#topo",
+        "examples-error#topo",
+        "examples-sdk#topo"
+      ],
+      "outputs": ["src/test_corpus/**"]
+    },
+    "test": {
+      "dependsOn": ["^package", "test:generate"],
+      "inputs": ["src/**"]
+    },
+    "bench": {
+      "dependsOn": ["^package", "examples-valid#topo"],
+      "inputs": ["src/**"]
+    }
+  }
+}

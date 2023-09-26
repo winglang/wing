@@ -29,6 +29,7 @@ Immutable Array.
 | <code><a href="#@winglang/sdk.std.Array.indexOf">indexOf</a></code> | Returns the index of the first occurrence of searchElement found. |
 | <code><a href="#@winglang/sdk.std.Array.join">join</a></code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
 | <code><a href="#@winglang/sdk.std.Array.lastIndexOf">lastIndexOf</a></code> | Returns the index of the last occurrence of searchElement found. |
+| <code><a href="#@winglang/sdk.std.Array.tryAt">tryAt</a></code> | Get the value at the given index, returning nil if the index is out of bounds. |
 
 ---
 
@@ -134,6 +135,22 @@ Returns the index of the last occurrence of searchElement found.
 - *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
 
 to search for.
+
+---
+
+##### `tryAt` <a name="tryAt" id="@winglang/sdk.std.Array.tryAt"></a>
+
+```wing
+tryAt(index: num): <T>
+```
+
+Get the value at the given index, returning nil if the index is out of bounds.
+
+###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.Array.tryAt.parameter.index"></a>
+
+- *Type:* num
+
+index of the value to get.
 
 ---
 
@@ -291,7 +308,7 @@ Create a Datetime from UTC timezone.
 | <code><a href="#@winglang/sdk.std.Datetime.property.sec">sec</a></code> | <code>num</code> | Returns the seconds of the local machine time or in utc. |
 | <code><a href="#@winglang/sdk.std.Datetime.property.timestamp">timestamp</a></code> | <code>num</code> | Return a timestamp of non-leap year seconds since epoch. |
 | <code><a href="#@winglang/sdk.std.Datetime.property.timestampMs">timestampMs</a></code> | <code>num</code> | Return a timestamp of non-leap year milliseconds since epoch. |
-| <code><a href="#@winglang/sdk.std.Datetime.property.timezone">timezone</a></code> | <code>num</code> | returns the offset in minutes from UTC. |
+| <code><a href="#@winglang/sdk.std.Datetime.property.timezone">timezone</a></code> | <code>num</code> | Returns the offset in minutes from UTC. |
 | <code><a href="#@winglang/sdk.std.Datetime.property.year">year</a></code> | <code>num</code> | Returns the year of the local machine time or in utc. |
 
 ---
@@ -412,7 +429,7 @@ timezone: num;
 
 - *Type:* num
 
-returns the offset in minutes from UTC.
+Returns the offset in minutes from UTC.
 
 ---
 
@@ -670,7 +687,7 @@ Immutable Json.
 | <code><a href="#@winglang/sdk.std.Json.asBool">asBool</a></code> | Convert Json element to boolean if possible. |
 | <code><a href="#@winglang/sdk.std.Json.asNum">asNum</a></code> | Convert Json element to number if possible. |
 | <code><a href="#@winglang/sdk.std.Json.asStr">asStr</a></code> | Convert Json element to string if possible. |
-| <code><a href="#@winglang/sdk.std.Json.get">get</a></code> | Returns a specified element from the Json. |
+| <code><a href="#@winglang/sdk.std.Json.get">get</a></code> | Returns the value associated with the specified Json key. |
 | <code><a href="#@winglang/sdk.std.Json.getAt">getAt</a></code> | Returns a specified element at a given index from Json Array. |
 | <code><a href="#@winglang/sdk.std.Json.tryAsBool">tryAsBool</a></code> | Convert Json element to boolean if possible. |
 | <code><a href="#@winglang/sdk.std.Json.tryAsNum">tryAsNum</a></code> | Convert Json element to number if possible. |
@@ -710,13 +727,13 @@ Convert Json element to string if possible.
 get(key: str): Json
 ```
 
-Returns a specified element from the Json.
+Returns the value associated with the specified Json key.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Json.get.parameter.key"></a>
 
 - *Type:* str
 
-The key of the element to return.
+The key of the Json property.
 
 ---
 
@@ -799,8 +816,9 @@ The index of the element in the Json Array to return.
 | <code><a href="#@winglang/sdk.std.Json.deepCopy">deepCopy</a></code> | Creates an immutable deep copy of the Json. |
 | <code><a href="#@winglang/sdk.std.Json.deepCopyMut">deepCopyMut</a></code> | Creates a mutable deep copy of the Json. |
 | <code><a href="#@winglang/sdk.std.Json.delete">delete</a></code> | Deletes a key in a given Json. |
+| <code><a href="#@winglang/sdk.std.Json.entries">entries</a></code> | Returns the entries from the Json. |
 | <code><a href="#@winglang/sdk.std.Json.has">has</a></code> | Checks if a Json object has a given key. |
-| <code><a href="#@winglang/sdk.std.Json.keys">keys</a></code> | Returns the keys from the Json object. |
+| <code><a href="#@winglang/sdk.std.Json.keys">keys</a></code> | Returns the keys from the Json. |
 | <code><a href="#@winglang/sdk.std.Json.parse">parse</a></code> | Parse a string into a Json. |
 | <code><a href="#@winglang/sdk.std.Json.stringify">stringify</a></code> | Formats Json as string. |
 | <code><a href="#@winglang/sdk.std.Json.tryParse">tryParse</a></code> | Try to parse a string into a Json. |
@@ -864,6 +882,22 @@ the key to delete.
 
 ---
 
+##### `entries` <a name="entries" id="@winglang/sdk.std.Json.entries"></a>
+
+```wing
+Json.entries(json: Json);
+```
+
+Returns the entries from the Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.entries.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+map to get the entries from.
+
+---
+
 ##### `has` <a name="has" id="@winglang/sdk.std.Json.has"></a>
 
 ```wing
@@ -894,13 +928,13 @@ The key to check.
 Json.keys(json: any);
 ```
 
-Returns the keys from the Json object.
+Returns the keys from the Json.
 
 ###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.keys.parameter.json"></a>
 
 - *Type:* any
 
-to get keys from.
+map to get the keys from.
 
 ---
 
@@ -923,12 +957,10 @@ to parse as Json.
 ##### `stringify` <a name="stringify" id="@winglang/sdk.std.Json.stringify"></a>
 
 ```wing
-Json.stringify(json: any, indent?: num);
+Json.stringify(json: any, options?: JsonStringifyOptions);
 ```
 
 Formats Json as string.
-
-(JSON.stringify($args$))
 
 ###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.stringify.parameter.json"></a>
 
@@ -938,9 +970,9 @@ to format as string.
 
 ---
 
-###### `indent`<sup>Optional</sup> <a name="indent" id="@winglang/sdk.std.Json.stringify.parameter.indent"></a>
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.std.Json.stringify.parameter.options"></a>
 
-- *Type:* num
+- *Type:* <a href="#@winglang/sdk.std.JsonStringifyOptions">JsonStringifyOptions</a>
 
 ---
 
@@ -972,9 +1004,67 @@ Returns the values from the Json.
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
-to get values from.
+map to get the values from.
 
 ---
+
+
+
+### JsonSchema <a name="JsonSchema" id="@winglang/sdk.std.JsonSchema"></a>
+
+Struct Schema.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.JsonSchema.Initializer"></a>
+
+```wing
+new JsonSchema(schema: Json);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.JsonSchema.Initializer.parameter.schema">schema</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | *No description.* |
+
+---
+
+##### `schema`<sup>Required</sup> <a name="schema" id="@winglang/sdk.std.JsonSchema.Initializer.parameter.schema"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.JsonSchema.asStr">asStr</a></code> | Retrieve the json schema as a string. |
+| <code><a href="#@winglang/sdk.std.JsonSchema.validate">validate</a></code> | Attempt to validate a json object against the schema. |
+
+---
+
+##### `asStr` <a name="asStr" id="@winglang/sdk.std.JsonSchema.asStr"></a>
+
+```wing
+asStr(): str
+```
+
+Retrieve the json schema as a string.
+
+##### `validate` <a name="validate" id="@winglang/sdk.std.JsonSchema.validate"></a>
+
+```wing
+validate(obj: Json): void
+```
+
+Attempt to validate a json object against the schema.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.std.JsonSchema.validate.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+the Json object to validate.
+
+---
+
 
 
 
@@ -1080,10 +1170,14 @@ Mutable Array.
 | <code><a href="#@winglang/sdk.std.MutArray.contains">contains</a></code> | Checks if this array includes searchElement. |
 | <code><a href="#@winglang/sdk.std.MutArray.copy">copy</a></code> | Create an immutable shallow copy of this array. |
 | <code><a href="#@winglang/sdk.std.MutArray.indexOf">indexOf</a></code> | Returns the index of the first occurrence of searchElement found. |
+| <code><a href="#@winglang/sdk.std.MutArray.insert">insert</a></code> | Inserts a new value at the given index of an array. |
 | <code><a href="#@winglang/sdk.std.MutArray.join">join</a></code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
 | <code><a href="#@winglang/sdk.std.MutArray.lastIndexOf">lastIndexOf</a></code> | Returns the index of the last occurrence of searchElement found. |
 | <code><a href="#@winglang/sdk.std.MutArray.pop">pop</a></code> | Remove value from end of array. |
+| <code><a href="#@winglang/sdk.std.MutArray.popAt">popAt</a></code> | Removes value from the given index of an array. |
 | <code><a href="#@winglang/sdk.std.MutArray.push">push</a></code> | Add value to end of array. |
+| <code><a href="#@winglang/sdk.std.MutArray.removeFirst">removeFirst</a></code> | Removes first occurence of a given value in an array. |
+| <code><a href="#@winglang/sdk.std.MutArray.set">set</a></code> | Sets a new value at the given index of an array. |
 
 ---
 
@@ -1159,6 +1253,30 @@ to search for.
 
 ---
 
+##### `insert` <a name="insert" id="@winglang/sdk.std.MutArray.insert"></a>
+
+```wing
+insert(index: num, value: <T>): void
+```
+
+Inserts a new value at the given index of an array.
+
+###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.MutArray.insert.parameter.index"></a>
+
+- *Type:* num
+
+the index to insert the value at.
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutArray.insert.parameter.value"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
+
+the value to insert at the given index.
+
+---
+
 ##### `join` <a name="join" id="@winglang/sdk.std.MutArray.join"></a>
 
 ```wing
@@ -1200,6 +1318,22 @@ pop(): <T>
 
 Remove value from end of array.
 
+##### `popAt` <a name="popAt" id="@winglang/sdk.std.MutArray.popAt"></a>
+
+```wing
+popAt(index: num): <T>
+```
+
+Removes value from the given index of an array.
+
+###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.MutArray.popAt.parameter.index"></a>
+
+- *Type:* num
+
+the index to remove the value at.
+
+---
+
 ##### `push` <a name="push" id="@winglang/sdk.std.MutArray.push"></a>
 
 ```wing
@@ -1213,6 +1347,46 @@ Add value to end of array.
 - *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
 
 value to add.
+
+---
+
+##### `removeFirst` <a name="removeFirst" id="@winglang/sdk.std.MutArray.removeFirst"></a>
+
+```wing
+removeFirst(value: <T>): bool
+```
+
+Removes first occurence of a given value in an array.
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutArray.removeFirst.parameter.value"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
+
+the value to remove.
+
+---
+
+##### `set` <a name="set" id="@winglang/sdk.std.MutArray.set"></a>
+
+```wing
+set(index: num, value: <T>): void
+```
+
+Sets a new value at the given index of an array.
+
+###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.MutArray.set.parameter.index"></a>
+
+- *Type:* num
+
+the index to set the value at.
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutArray.set.parameter.value"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
+
+the value to set at the given index.
 
 ---
 
@@ -1249,7 +1423,7 @@ Mutable Json.
 | <code><a href="#@winglang/sdk.std.MutJson.asBool">asBool</a></code> | Convert Json element to boolean if possible. |
 | <code><a href="#@winglang/sdk.std.MutJson.asNum">asNum</a></code> | Convert Json element to number if possible. |
 | <code><a href="#@winglang/sdk.std.MutJson.asStr">asStr</a></code> | Convert Json element to string if possible. |
-| <code><a href="#@winglang/sdk.std.MutJson.get">get</a></code> | Returns a specified element from the Json. |
+| <code><a href="#@winglang/sdk.std.MutJson.get">get</a></code> | Returns the value associated with the specified Json key. |
 | <code><a href="#@winglang/sdk.std.MutJson.getAt">getAt</a></code> | Returns a specified element at a given index from MutJson Array. |
 | <code><a href="#@winglang/sdk.std.MutJson.set">set</a></code> | Adds or updates an element in MutJson with a specific key and value. |
 | <code><a href="#@winglang/sdk.std.MutJson.setAt">setAt</a></code> | Set element in MutJson Array with a specific key and value. |
@@ -1291,13 +1465,13 @@ Convert Json element to string if possible.
 get(key: str): MutJson
 ```
 
-Returns a specified element from the Json.
+Returns the value associated with the specified Json key.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutJson.get.parameter.key"></a>
 
 - *Type:* str
 
-The key of the element to return.
+The key of the Json property.
 
 ---
 
@@ -1671,6 +1845,491 @@ size: num;
 - *Type:* num
 
 The length of the set.
+
+---
+
+
+### Node <a name="Node" id="@winglang/sdk.std.Node"></a>
+
+The internal node of a construct.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.Node.addConnection">addConnection</a></code> | Adds a connection between two constructs. |
+| <code><a href="#@winglang/sdk.std.Node.addDependency">addDependency</a></code> | Add an ordering dependency on another construct. |
+| <code><a href="#@winglang/sdk.std.Node.addMetadata">addMetadata</a></code> | Adds a metadata entry to this construct. |
+| <code><a href="#@winglang/sdk.std.Node.addValidation">addValidation</a></code> | Adds a validation to this construct. |
+| <code><a href="#@winglang/sdk.std.Node.findAll">findAll</a></code> | Return this construct and all of its children in the given order. |
+| <code><a href="#@winglang/sdk.std.Node.findChild">findChild</a></code> | Return a direct child by id. |
+| <code><a href="#@winglang/sdk.std.Node.getContext">getContext</a></code> | Retrieves a value from tree context if present. Otherwise, would throw an error. |
+| <code><a href="#@winglang/sdk.std.Node.lock">lock</a></code> | Locks this construct from allowing more children to be added. |
+| <code><a href="#@winglang/sdk.std.Node.setContext">setContext</a></code> | This can be used to set contextual values. |
+| <code><a href="#@winglang/sdk.std.Node.tryFindChild">tryFindChild</a></code> | Return a direct child by id, or undefined. |
+| <code><a href="#@winglang/sdk.std.Node.tryGetContext">tryGetContext</a></code> | Retrieves a value from tree context. |
+| <code><a href="#@winglang/sdk.std.Node.tryRemoveChild">tryRemoveChild</a></code> | Remove the child with the given name, if present. |
+| <code><a href="#@winglang/sdk.std.Node.validate">validate</a></code> | Validates this construct. |
+
+---
+
+##### `addConnection` <a name="addConnection" id="@winglang/sdk.std.Node.addConnection"></a>
+
+```wing
+addConnection(props: AddConnectionProps): void
+```
+
+Adds a connection between two constructs.
+
+A connection is a piece of
+metadata describing how one construct is related to another construct.
+
+###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.std.Node.addConnection.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.AddConnectionProps">AddConnectionProps</a>
+
+---
+
+##### `addDependency` <a name="addDependency" id="@winglang/sdk.std.Node.addDependency"></a>
+
+```wing
+addDependency(...deps: Array<IDependable>): void
+```
+
+Add an ordering dependency on another construct.
+
+An `IDependable`
+
+###### `deps`<sup>Required</sup> <a name="deps" id="@winglang/sdk.std.Node.addDependency.parameter.deps"></a>
+
+- *Type:* constructs.IDependable
+
+---
+
+##### `addMetadata` <a name="addMetadata" id="@winglang/sdk.std.Node.addMetadata"></a>
+
+```wing
+addMetadata(type: str, data: any, options?: MetadataOptions): void
+```
+
+Adds a metadata entry to this construct.
+
+Entries are arbitrary values and will also include a stack trace to allow tracing back to
+the code location for when the entry was added. It can be used, for example, to include source
+mapping in CloudFormation templates to improve diagnostics.
+
+###### `type`<sup>Required</sup> <a name="type" id="@winglang/sdk.std.Node.addMetadata.parameter.type"></a>
+
+- *Type:* str
+
+a string denoting the type of metadata.
+
+---
+
+###### `data`<sup>Required</sup> <a name="data" id="@winglang/sdk.std.Node.addMetadata.parameter.data"></a>
+
+- *Type:* any
+
+the value of the metadata (can be a Token).
+
+If null/undefined, metadata will not be added.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.std.Node.addMetadata.parameter.options"></a>
+
+- *Type:* constructs.MetadataOptions
+
+options.
+
+---
+
+##### `addValidation` <a name="addValidation" id="@winglang/sdk.std.Node.addValidation"></a>
+
+```wing
+addValidation(validation: IValidation): void
+```
+
+Adds a validation to this construct.
+
+When `node.validate()` is called, the `validate()` method will be called on
+all validations and all errors will be returned.
+
+###### `validation`<sup>Required</sup> <a name="validation" id="@winglang/sdk.std.Node.addValidation.parameter.validation"></a>
+
+- *Type:* constructs.IValidation
+
+The validation object.
+
+---
+
+##### `findAll` <a name="findAll" id="@winglang/sdk.std.Node.findAll"></a>
+
+```wing
+findAll(order?: ConstructOrder): MutArray<IConstruct>
+```
+
+Return this construct and all of its children in the given order.
+
+###### `order`<sup>Optional</sup> <a name="order" id="@winglang/sdk.std.Node.findAll.parameter.order"></a>
+
+- *Type:* constructs.ConstructOrder
+
+---
+
+##### `findChild` <a name="findChild" id="@winglang/sdk.std.Node.findChild"></a>
+
+```wing
+findChild(): IConstruct
+```
+
+Return a direct child by id.
+
+Throws an error if the child is not found.
+
+##### `getContext` <a name="getContext" id="@winglang/sdk.std.Node.getContext"></a>
+
+```wing
+getContext(key: str): any
+```
+
+Retrieves a value from tree context if present. Otherwise, would throw an error.
+
+Context is usually initialized at the root, but can be overridden at any point in the tree.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Node.getContext.parameter.key"></a>
+
+- *Type:* str
+
+The context key.
+
+---
+
+##### `lock` <a name="lock" id="@winglang/sdk.std.Node.lock"></a>
+
+```wing
+lock(): void
+```
+
+Locks this construct from allowing more children to be added.
+
+After this
+call, no more children can be added to this construct or to any children.
+
+##### `setContext` <a name="setContext" id="@winglang/sdk.std.Node.setContext"></a>
+
+```wing
+setContext(key: str, value: any): void
+```
+
+This can be used to set contextual values.
+
+Context must be set before any children are added, since children may consult context info during construction.
+If the key already exists, it will be overridden.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Node.setContext.parameter.key"></a>
+
+- *Type:* str
+
+The context key.
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.Node.setContext.parameter.value"></a>
+
+- *Type:* any
+
+The context value.
+
+---
+
+##### `tryFindChild` <a name="tryFindChild" id="@winglang/sdk.std.Node.tryFindChild"></a>
+
+```wing
+tryFindChild(): IConstruct
+```
+
+Return a direct child by id, or undefined.
+
+##### `tryGetContext` <a name="tryGetContext" id="@winglang/sdk.std.Node.tryGetContext"></a>
+
+```wing
+tryGetContext(key: str): any
+```
+
+Retrieves a value from tree context.
+
+Context is usually initialized at the root, but can be overridden at any point in the tree.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Node.tryGetContext.parameter.key"></a>
+
+- *Type:* str
+
+The context key.
+
+---
+
+##### `tryRemoveChild` <a name="tryRemoveChild" id="@winglang/sdk.std.Node.tryRemoveChild"></a>
+
+```wing
+tryRemoveChild(childName: str): bool
+```
+
+Remove the child with the given name, if present.
+
+###### `childName`<sup>Required</sup> <a name="childName" id="@winglang/sdk.std.Node.tryRemoveChild.parameter.childName"></a>
+
+- *Type:* str
+
+---
+
+##### `validate` <a name="validate" id="@winglang/sdk.std.Node.validate"></a>
+
+```wing
+validate(): MutArray<str>
+```
+
+Validates this construct.
+
+Invokes the `validate()` method on all validations added through
+`addValidation()`.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.Node.property.addr">addr</a></code> | <code>str</code> | Returns an opaque tree-unique address for this construct. |
+| <code><a href="#@winglang/sdk.std.Node.property.children">children</a></code> | <code>MutArray&lt;constructs.IConstruct&gt;</code> | All direct children of this construct. |
+| <code><a href="#@winglang/sdk.std.Node.property.dependencies">dependencies</a></code> | <code>MutArray&lt;constructs.IConstruct&gt;</code> | Return all dependencies registered on this node (non-recursive). |
+| <code><a href="#@winglang/sdk.std.Node.property.id">id</a></code> | <code>str</code> | The id of this construct within the current scope. |
+| <code><a href="#@winglang/sdk.std.Node.property.locked">locked</a></code> | <code>bool</code> | Returns true if this construct or the scopes in which it is defined are locked. |
+| <code><a href="#@winglang/sdk.std.Node.property.metadata">metadata</a></code> | <code>MutArray&lt;constructs.MetadataEntry&gt;</code> | An immutable array of metadata objects associated with this construct. |
+| <code><a href="#@winglang/sdk.std.Node.property.path">path</a></code> | <code>str</code> | The full, absolute path of this construct in the tree. |
+| <code><a href="#@winglang/sdk.std.Node.property.root">root</a></code> | <code>constructs.IConstruct</code> | Returns the root of the construct tree. |
+| <code><a href="#@winglang/sdk.std.Node.property.scopes">scopes</a></code> | <code>MutArray&lt;constructs.IConstruct&gt;</code> | All parent scopes of this construct. |
+| <code><a href="#@winglang/sdk.std.Node.property.scope">scope</a></code> | <code>constructs.IConstruct</code> | Returns the scope in which this construct is defined. |
+| <code><a href="#@winglang/sdk.std.Node.property.defaultChild">defaultChild</a></code> | <code>constructs.IConstruct</code> | Returns the child construct that has the id `Default` or `Resource"`. |
+| <code><a href="#@winglang/sdk.std.Node.property.description">description</a></code> | <code>str</code> | Description of the construct for display purposes. |
+| <code><a href="#@winglang/sdk.std.Node.property.hidden">hidden</a></code> | <code>bool</code> | Whether the construct should be hidden by default in tree visualizations. |
+| <code><a href="#@winglang/sdk.std.Node.property.sourceModule">sourceModule</a></code> | <code>str</code> | The source file or library where the construct was defined. |
+| <code><a href="#@winglang/sdk.std.Node.property.title">title</a></code> | <code>str</code> | Title of the construct for display purposes. |
+
+---
+
+##### `addr`<sup>Required</sup> <a name="addr" id="@winglang/sdk.std.Node.property.addr"></a>
+
+```wing
+addr: str;
+```
+
+- *Type:* str
+
+Returns an opaque tree-unique address for this construct.
+
+Addresses are 42 characters hexadecimal strings. They begin with "c8"
+followed by 40 lowercase hexadecimal characters (0-9a-f).
+
+Addresses are calculated using a SHA-1 of the components of the construct
+path.
+
+To enable refactorings of construct trees, constructs with the ID `Default`
+will be excluded from the calculation. In those cases constructs in the
+same tree may have the same addreess.
+
+---
+
+*Example*
+
+```wing
+c83a2846e506bcc5f10682b564084bca2d275709ee
+```
+
+
+##### `children`<sup>Required</sup> <a name="children" id="@winglang/sdk.std.Node.property.children"></a>
+
+```wing
+children: MutArray<IConstruct>;
+```
+
+- *Type:* MutArray&lt;constructs.IConstruct&gt;
+
+All direct children of this construct.
+
+---
+
+##### `dependencies`<sup>Required</sup> <a name="dependencies" id="@winglang/sdk.std.Node.property.dependencies"></a>
+
+```wing
+dependencies: MutArray<IConstruct>;
+```
+
+- *Type:* MutArray&lt;constructs.IConstruct&gt;
+
+Return all dependencies registered on this node (non-recursive).
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@winglang/sdk.std.Node.property.id"></a>
+
+```wing
+id: str;
+```
+
+- *Type:* str
+
+The id of this construct within the current scope.
+
+This is a a scope-unique id. To obtain an app-unique id for this construct, use `addr`.
+
+---
+
+##### `locked`<sup>Required</sup> <a name="locked" id="@winglang/sdk.std.Node.property.locked"></a>
+
+```wing
+locked: bool;
+```
+
+- *Type:* bool
+
+Returns true if this construct or the scopes in which it is defined are locked.
+
+---
+
+##### `metadata`<sup>Required</sup> <a name="metadata" id="@winglang/sdk.std.Node.property.metadata"></a>
+
+```wing
+metadata: MutArray<MetadataEntry>;
+```
+
+- *Type:* MutArray&lt;constructs.MetadataEntry&gt;
+
+An immutable array of metadata objects associated with this construct.
+
+This can be used, for example, to implement support for deprecation notices, source mapping, etc.
+
+---
+
+##### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.std.Node.property.path"></a>
+
+```wing
+path: str;
+```
+
+- *Type:* str
+
+The full, absolute path of this construct in the tree.
+
+Components are separated by '/'.
+
+---
+
+##### `root`<sup>Required</sup> <a name="root" id="@winglang/sdk.std.Node.property.root"></a>
+
+```wing
+root: IConstruct;
+```
+
+- *Type:* constructs.IConstruct
+
+Returns the root of the construct tree.
+
+---
+
+##### `scopes`<sup>Required</sup> <a name="scopes" id="@winglang/sdk.std.Node.property.scopes"></a>
+
+```wing
+scopes: MutArray<IConstruct>;
+```
+
+- *Type:* MutArray&lt;constructs.IConstruct&gt;
+
+All parent scopes of this construct.
+
+---
+
+##### `scope`<sup>Optional</sup> <a name="scope" id="@winglang/sdk.std.Node.property.scope"></a>
+
+```wing
+scope: IConstruct;
+```
+
+- *Type:* constructs.IConstruct
+
+Returns the scope in which this construct is defined.
+
+The value is `undefined` at the root of the construct scope tree.
+
+---
+
+##### `defaultChild`<sup>Optional</sup> <a name="defaultChild" id="@winglang/sdk.std.Node.property.defaultChild"></a>
+
+```wing
+defaultChild: IConstruct;
+```
+
+- *Type:* constructs.IConstruct
+
+Returns the child construct that has the id `Default` or `Resource"`.
+
+This is usually the construct that provides the bulk of the underlying functionality.
+Useful for modifications of the underlying construct that are not available at the higher levels.
+Override the defaultChild property.
+
+This should only be used in the cases where the correct
+default child is not named 'Resource' or 'Default' as it
+should be.
+
+If you set this to undefined, the default behavior of finding
+the child named 'Resource' or 'Default' will be used.
+
+---
+
+##### `description`<sup>Optional</sup> <a name="description" id="@winglang/sdk.std.Node.property.description"></a>
+
+```wing
+description: str;
+```
+
+- *Type:* str
+
+Description of the construct for display purposes.
+
+---
+
+##### `hidden`<sup>Optional</sup> <a name="hidden" id="@winglang/sdk.std.Node.property.hidden"></a>
+
+```wing
+hidden: bool;
+```
+
+- *Type:* bool
+
+Whether the construct should be hidden by default in tree visualizations.
+
+---
+
+##### `sourceModule`<sup>Optional</sup> <a name="sourceModule" id="@winglang/sdk.std.Node.property.sourceModule"></a>
+
+```wing
+sourceModule: str;
+```
+
+- *Type:* str
+
+The source file or library where the construct was defined.
+
+---
+
+##### `title`<sup>Optional</sup> <a name="title" id="@winglang/sdk.std.Node.property.title"></a>
+
+```wing
+title: str;
+```
+
+- *Type:* str
+
+Title of the construct for display purposes.
 
 ---
 
@@ -2051,11 +2710,120 @@ The length of the string.
 ---
 
 
+### Struct <a name="Struct" id="@winglang/sdk.std.Struct"></a>
+
+Shared behavior for all structs.
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.Struct.fromJson">fromJson</a></code> | Converts a Json to a Struct. |
+| <code><a href="#@winglang/sdk.std.Struct.schema">schema</a></code> | Retrieve the schema for this struct. |
+| <code><a href="#@winglang/sdk.std.Struct.tryFromJson">tryFromJson</a></code> | Converts a Json to a Struct, returning nil if the Json is not valid. |
+
+---
+
+##### `fromJson` <a name="fromJson" id="@winglang/sdk.std.Struct.fromJson"></a>
+
+```wing
+Struct.fromJson(json: Json);
+```
+
+Converts a Json to a Struct.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Struct.fromJson.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+---
+
+##### `schema` <a name="schema" id="@winglang/sdk.std.Struct.schema"></a>
+
+```wing
+Struct.schema();
+```
+
+Retrieve the schema for this struct.
+
+##### `tryFromJson` <a name="tryFromJson" id="@winglang/sdk.std.Struct.tryFromJson"></a>
+
+```wing
+Struct.tryFromJson(json: Json);
+```
+
+Converts a Json to a Struct, returning nil if the Json is not valid.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Struct.tryFromJson.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+---
+
+
+
 ## Structs <a name="Structs" id="Structs"></a>
+
+### AddConnectionProps <a name="AddConnectionProps" id="@winglang/sdk.std.AddConnectionProps"></a>
+
+Props for `Node.addConnection`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.std.AddConnectionProps.Initializer"></a>
+
+```wing
+let AddConnectionProps = AddConnectionProps{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.AddConnectionProps.property.name">name</a></code> | <code>str</code> | A name for the connection. |
+| <code><a href="#@winglang/sdk.std.AddConnectionProps.property.source">source</a></code> | <code>constructs.IConstruct</code> | The source of the connection. |
+| <code><a href="#@winglang/sdk.std.AddConnectionProps.property.target">target</a></code> | <code>constructs.IConstruct</code> | The target of the connection. |
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.std.AddConnectionProps.property.name"></a>
+
+```wing
+name: str;
+```
+
+- *Type:* str
+
+A name for the connection.
+
+---
+
+##### `source`<sup>Required</sup> <a name="source" id="@winglang/sdk.std.AddConnectionProps.property.source"></a>
+
+```wing
+source: IConstruct;
+```
+
+- *Type:* constructs.IConstruct
+
+The source of the connection.
+
+---
+
+##### `target`<sup>Required</sup> <a name="target" id="@winglang/sdk.std.AddConnectionProps.property.target"></a>
+
+```wing
+target: IConstruct;
+```
+
+- *Type:* constructs.IConstruct
+
+The target of the connection.
+
+---
 
 ### DatetimeComponents <a name="DatetimeComponents" id="@winglang/sdk.std.DatetimeComponents"></a>
 
-interface that is used for setting Datetime date.
+Interface that is used for setting Datetime date.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.std.DatetimeComponents.Initializer"></a>
 
@@ -2067,14 +2835,14 @@ let DatetimeComponents = DatetimeComponents{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.day">day</a></code> | <code>num</code> | day. |
-| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.hour">hour</a></code> | <code>num</code> | hours. |
-| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.min">min</a></code> | <code>num</code> | minutes. |
-| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.month">month</a></code> | <code>num</code> | month. |
-| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.ms">ms</a></code> | <code>num</code> | milliseconds. |
-| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.sec">sec</a></code> | <code>num</code> | seconds. |
-| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.tz">tz</a></code> | <code>num</code> | timezone offset in minutes from UTC. |
-| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.year">year</a></code> | <code>num</code> | year. |
+| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.day">day</a></code> | <code>num</code> | Day. |
+| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.hour">hour</a></code> | <code>num</code> | Hours. |
+| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.min">min</a></code> | <code>num</code> | Minutes. |
+| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.month">month</a></code> | <code>num</code> | Month. |
+| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.ms">ms</a></code> | <code>num</code> | Milliseconds. |
+| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.sec">sec</a></code> | <code>num</code> | Seconds. |
+| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.tz">tz</a></code> | <code>num</code> | Timezone offset in minutes from UTC. |
+| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.year">year</a></code> | <code>num</code> | Year. |
 
 ---
 
@@ -2086,7 +2854,7 @@ day: num;
 
 - *Type:* num
 
-day.
+Day.
 
 ---
 
@@ -2098,7 +2866,7 @@ hour: num;
 
 - *Type:* num
 
-hours.
+Hours.
 
 ---
 
@@ -2110,7 +2878,7 @@ min: num;
 
 - *Type:* num
 
-minutes.
+Minutes.
 
 ---
 
@@ -2122,7 +2890,7 @@ month: num;
 
 - *Type:* num
 
-month.
+Month.
 
 ---
 
@@ -2134,7 +2902,7 @@ ms: num;
 
 - *Type:* num
 
-milliseconds.
+Milliseconds.
 
 ---
 
@@ -2146,7 +2914,7 @@ sec: num;
 
 - *Type:* num
 
-seconds.
+Seconds.
 
 ---
 
@@ -2158,7 +2926,7 @@ tz: num;
 
 - *Type:* num
 
-timezone offset in minutes from UTC.
+Timezone offset in minutes from UTC.
 
 ---
 
@@ -2170,7 +2938,80 @@ year: num;
 
 - *Type:* num
 
-year.
+Year.
+
+---
+
+### JsonEntry <a name="JsonEntry" id="@winglang/sdk.std.JsonEntry"></a>
+
+Json entry representation.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.std.JsonEntry.Initializer"></a>
+
+```wing
+let JsonEntry = JsonEntry{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.JsonEntry.property.key">key</a></code> | <code>str</code> | The entry key. |
+| <code><a href="#@winglang/sdk.std.JsonEntry.property.value">value</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The entry value. |
+
+---
+
+##### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.JsonEntry.property.key"></a>
+
+```wing
+key: str;
+```
+
+- *Type:* str
+
+The entry key.
+
+---
+
+##### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.JsonEntry.property.value"></a>
+
+```wing
+value: Json;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+The entry value.
+
+---
+
+### JsonStringifyOptions <a name="JsonStringifyOptions" id="@winglang/sdk.std.JsonStringifyOptions"></a>
+
+Options for stringify() method.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.std.JsonStringifyOptions.Initializer"></a>
+
+```wing
+let JsonStringifyOptions = JsonStringifyOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.JsonStringifyOptions.property.indent">indent</a></code> | <code>num</code> | Indentation spaces number. |
+
+---
+
+##### `indent`<sup>Required</sup> <a name="indent" id="@winglang/sdk.std.JsonStringifyOptions.property.indent"></a>
+
+```wing
+indent: num;
+```
+
+- *Type:* num
+
+Indentation spaces number.
 
 ---
 

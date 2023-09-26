@@ -20,11 +20,14 @@ exports[`basic function 1`] = `
         "FunctionServiceRole675BB04A",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "38a9ff14245d92554df153366cf2d2a9d28ef2881f7ffb2b54f6485ef1320ff1.zip",
+          "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
         "Role": {
@@ -120,11 +123,14 @@ exports[`basic function with environment variables 1`] = `
         "FunctionServiceRole675BB04A",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "38a9ff14245d92554df153366cf2d2a9d28ef2881f7ffb2b54f6485ef1320ff1.zip",
+          "S3Key": "<S3Key>",
         },
         "Environment": {
           "Variables": {
@@ -226,11 +232,14 @@ exports[`basic function with memory size specified 1`] = `
         "FunctionServiceRole675BB04A",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "38a9ff14245d92554df153366cf2d2a9d28ef2881f7ffb2b54f6485ef1320ff1.zip",
+          "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
         "MemorySize": 512,
@@ -327,11 +336,14 @@ exports[`basic function with timeout explicitly set 1`] = `
         "FunctionServiceRole675BB04A",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "38a9ff14245d92554df153366cf2d2a9d28ef2881f7ffb2b54f6485ef1320ff1.zip",
+          "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
         "Role": {

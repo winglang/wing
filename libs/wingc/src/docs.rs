@@ -76,9 +76,10 @@ impl Documented for TypeRef {
 			| Type::Duration
 			| Type::Boolean
 			| Type::Void
-			| Type::Json
+			| Type::Json(_)
 			| Type::MutJson
 			| Type::Nil
+			| Type::Inferred(_)
 			| Type::Unresolved
 			| Type::Array(_)
 			| Type::MutArray(_)
@@ -117,7 +118,7 @@ impl Documented for VariableInfo {
 
 		let mut markdown = CodeMaker::default();
 		markdown.line("```wing");
-		markdown.line(format!("{name_str}: {}", self.type_.to_string()));
+		markdown.line(format!("{name_str}: {}", self.type_));
 
 		if let Some(d) = &self.docs {
 			markdown.line("```");
@@ -268,7 +269,8 @@ fn render_struct(s: &Struct) -> String {
 			field.0,
 			variable
 				.docs
-				.and_then(|d| d.summary)
+				.as_ref()
+				.and_then(|d| d.summary.clone())
 				.unwrap_or(format!("{}", variable.type_))
 		));
 	}
@@ -308,7 +310,10 @@ fn render_interface(i: &Interface) -> String {
 	}
 
 	for prop in i.env.iter(true) {
-		let prop_docs = prop.1.as_variable().and_then(|v| v.docs.and_then(|d| d.summary));
+		let prop_docs = prop
+			.1
+			.as_variable()
+			.and_then(|v| v.docs.as_ref().and_then(|d| d.summary.clone()));
 		markdown.line(&format!(
 			"- `{}` — {}\n",
 			prop.0,

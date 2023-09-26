@@ -2,8 +2,8 @@ import * as fs from "fs";
 import { join } from "path";
 import { directorySnapshot, mkdtemp } from "./util";
 import { Function, IFunctionClient } from "../src/cloud";
+import { Simulator, Testing } from "../src/simulator";
 import * as sim from "../src/target-sim";
-import { Simulator, Testing } from "../src/testing";
 
 /**
  * A simulated app.
@@ -17,7 +17,7 @@ export class SimApp extends sim.App {
   private functionIndex: number = 0;
 
   constructor() {
-    super({ outdir: mkdtemp() });
+    super({ outdir: mkdtemp(), entrypointDir: __dirname });
 
     // symlink the node_modules so we can test imports and stuffs
     fs.symlinkSync(

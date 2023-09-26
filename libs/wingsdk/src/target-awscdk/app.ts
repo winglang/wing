@@ -7,23 +7,33 @@ import stringify from "safe-stable-stringify";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
 import { Function } from "./function";
+import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
 import { Schedule } from "./schedule";
 import { Secret } from "./secret";
 import { TestRunner } from "./test-runner";
 import { CdkTokens } from "./tokens";
 import { Topic } from "./topic";
+import { Website } from "./website";
 
 import {
   BUCKET_FQN,
   COUNTER_FQN,
   FUNCTION_FQN,
+  ON_DEPLOY_FQN,
   QUEUE_FQN,
   SECRET_FQN,
   TOPIC_FQN,
   SCHEDULE_FQN,
+  WEBSITE_FQN,
 } from "../cloud";
-import { App as CoreApp, AppProps, preSynthesizeAllConstructs } from "../core";
+import {
+  App as CoreApp,
+  AppProps,
+  preSynthesizeAllConstructs,
+  synthesizeTree,
+  Connections,
+} from "../core";
 import { PluginManager } from "../core/plugin-manager";
 import { TEST_RUNNER_FQN } from "../std";
 
@@ -45,6 +55,8 @@ export class App extends CoreApp {
   public readonly outdir: string;
   public readonly isTestEnvironment: boolean;
   public readonly _tokens: CdkTokens;
+
+  public readonly _target = "awscdk";
 
   private readonly cdkApp: cdk.App;
   private readonly cdkStack: cdk.Stack;
@@ -74,7 +86,7 @@ export class App extends CoreApp {
     const cdkApp = new cdk.App({ outdir: cdkOutdir });
     const cdkStack = new cdk.Stack(cdkApp, stackName);
 
-    super(cdkStack, "Default");
+    super(cdkStack, props.rootId ?? "Default", props);
 
     // HACK: monkey patch the `new` method on the cdk app (which is the root of the tree) so that
     // we can intercept the creation of resources and replace them with our own.
@@ -112,7 +124,7 @@ export class App extends CoreApp {
    * This method returns a cleaned snapshot of the resulting CDK template
    * for unit testing.
    */
-  synth(): string {
+  public synth(): string {
     if (this.synthed) {
       return this.synthedOutput!;
     }
@@ -123,6 +135,12 @@ export class App extends CoreApp {
     // synthesize cdk.Stack files in `outdir/cdk.out`
     this.pluginManager.preSynth(this);
     this.cdkApp.synth();
+
+    // write `outdir/tree.json`
+    synthesizeTree(this, this.outdir);
+
+    // write `outdir/connections.json`
+    Connections.of(this).synth(this.outdir);
 
     const template = Template.fromStack(this.cdkStack);
 
@@ -161,6 +179,12 @@ export class App extends CoreApp {
 
       case SECRET_FQN:
         return new Secret(scope, id, args[0]);
+
+      case ON_DEPLOY_FQN:
+        return new OnDeploy(scope, id, args[0], args[1]);
+
+      case WEBSITE_FQN:
+        return new Website(scope, id, args[0]);
     }
     return undefined;
   }

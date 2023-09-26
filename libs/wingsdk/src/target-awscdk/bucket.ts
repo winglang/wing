@@ -15,7 +15,7 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { calculateBucketPermissions } from "../shared-aws/permissions";
-import { IInflightHost, Resource } from "../std";
+import { IInflightHost, Node } from "../std";
 
 const EVENTS = {
   [cloud.BucketEventType.DELETE]: EventType.OBJECT_REMOVED,
@@ -37,15 +37,7 @@ export class Bucket extends cloud.Bucket {
 
     this.public = props.public ?? false;
 
-    const isTestEnvironment = App.of(scope).isTestEnvironment;
-
-    this.bucket = new S3Bucket(this, "Default", {
-      encryption: BucketEncryption.S3_MANAGED,
-      blockPublicAccess: this.public ? undefined : BlockPublicAccess.BLOCK_ALL,
-      publicReadAccess: this.public ? true : false,
-      removalPolicy: RemovalPolicy.DESTROY,
-      autoDeleteObjects: isTestEnvironment ? true : false,
-    });
+    this.bucket = createEncryptedBucket(this, this.public);
   }
 
   public addObject(key: string, body: string): void {
@@ -95,10 +87,10 @@ export class Bucket extends cloud.Bucket {
   ): void {
     const fn = this.onEventFunction("OnCreate", inflight, opts);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: cloud.BucketEventType.CREATE,
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: "onCreate()",
     });
 
     this.bucket.addEventNotification(
@@ -113,10 +105,10 @@ export class Bucket extends cloud.Bucket {
   ): void {
     const fn = this.onEventFunction("OnDelete", inflight, opts);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: cloud.BucketEventType.DELETE,
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: "onDelete()",
     });
 
     this.bucket.addEventNotification(
@@ -131,10 +123,10 @@ export class Bucket extends cloud.Bucket {
   ): void {
     const fn = this.onEventFunction("OnUpdate", inflight, opts);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: cloud.BucketEventType.UPDATE,
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: "onUpdate()",
     });
 
     this.bucket.addEventNotification(
@@ -149,30 +141,30 @@ export class Bucket extends cloud.Bucket {
   ) {
     const fn = this.onEventFunction("OnEvent", inflight, opts);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: cloud.BucketEventType.CREATE,
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: "onCreate()",
     });
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.CREATE],
       new LambdaDestination(fn._function)
     );
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: cloud.BucketEventType.DELETE,
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: "onDelete()",
     });
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.DELETE],
       new LambdaDestination(fn._function)
     );
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: cloud.BucketEventType.UPDATE,
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: "onUpdate()",
     });
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.UPDATE],
@@ -180,25 +172,24 @@ export class Bucket extends cloud.Bucket {
     );
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }
 
     host.addPolicyStatements(
-      calculateBucketPermissions(this.bucket.bucketArn, ops)
+      ...calculateBucketPermissions(this.bucket.bucketArn, ops)
     );
 
     // The bucket name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.bucket.bucketName);
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return core.InflightClient.for(
       __dirname.replace("target-awscdk", "shared-aws"),
       __filename,
@@ -217,4 +208,20 @@ export class Bucket extends cloud.Bucket {
   private envName(): string {
     return `BUCKET_NAME_${this.node.addr.slice(-8)}`;
   }
+}
+
+export function createEncryptedBucket(
+  scope: Construct,
+  isPublic: boolean,
+  name: string = "Default"
+): S3Bucket {
+  const isTestEnvironment = App.of(scope).isTestEnvironment;
+
+  return new S3Bucket(scope, name, {
+    encryption: BucketEncryption.S3_MANAGED,
+    blockPublicAccess: isPublic ? undefined : BlockPublicAccess.BLOCK_ALL,
+    publicReadAccess: isPublic ? true : false,
+    removalPolicy: RemovalPolicy.DESTROY,
+    autoDeleteObjects: isTestEnvironment ? true : false,
+  });
 }

@@ -9,12 +9,11 @@ import {
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
-import { Code } from "../core";
-import { Resource, IInflightHost, IResource } from "../std";
 import {
   BaseResourceSchema,
   ISimulatorResourceInstance,
-} from "../testing/simulator";
+} from "../simulator/simulator";
+import { IInflightHost, IResource, Node, Resource } from "../std";
 
 /**
  * Interface shared by all event publishing simulator resources.
@@ -50,11 +49,16 @@ export class EventMapping extends Resource implements ISimulatorResource {
   constructor(scope: Construct, id: string, props: EventMappingProps) {
     super(scope, id);
     this._eventProps = props;
-    this.display.hidden = true;
+    Node.of(this).hidden = true;
 
     // Add dependencies to the publisher and subscriber
     this.node.addDependency(props.subscriber);
     this.node.addDependency(props.publisher);
+  }
+
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [];
   }
 
   public get eventProps(): EventMappingProps {
@@ -75,12 +79,12 @@ export class EventMapping extends Resource implements ISimulatorResource {
     return schema;
   }
 
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
-  public _toInflight(): Code {
+  public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
   }
 }

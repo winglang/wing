@@ -1,9 +1,12 @@
+import * as fs from "fs";
+import { resolve } from "path";
 import * as url from "url";
 import { vi, test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { BucketEventType } from "../../src/cloud";
-import { Testing } from "../../src/testing";
+import { Testing } from "../../src/simulator";
+import { Node } from "../../src/std";
 import { SimApp } from "../sim-app";
 
 test("create a bucket", async () => {
@@ -440,7 +443,7 @@ test("bucket has no display hidden property", async () => {
   const bucket = app.node.tryFindChild("my_bucket") as cloud.Bucket;
 
   // THEN
-  expect(bucket.display.hidden).toBeUndefined();
+  expect(Node.of(bucket).hidden).toBeUndefined();
   expect(treeJson.tree.children).toBeDefined();
   expect(treeJson.tree.children).not.toMatchObject({
     my_bucket: {
@@ -461,8 +464,8 @@ test("bucket has display title and description properties", async () => {
   const bucket = app.node.tryFindChild("my_bucket") as cloud.Bucket;
 
   // THEN
-  expect(bucket.display.title).toBeDefined();
-  expect(bucket.display.description).toBeDefined();
+  expect(Node.of(bucket).title).toBeDefined();
+  expect(Node.of(bucket).description).toBeDefined();
   expect(treeJson.tree.children).toMatchObject({
     my_bucket: {
       display: {
@@ -495,6 +498,32 @@ test("can add object in preflight", async () => {
 
   expect(getResponse).toEqual(VALUE);
   expect(listResponse).toEqual([KEY]);
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("can add file in preflight", async () => {
+  // GIVEN
+  const FILENAME = "test.txt";
+  const PATH = resolve(__dirname, "../testFiles/test1.txt");
+
+  const app = new SimApp();
+  const bucket = cloud.Bucket._newBucket(app, "my_bucket");
+  bucket.addFile(FILENAME, PATH);
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  // WHEN
+  await client.get(FILENAME);
+  const getResponse = await client.get(FILENAME);
+  const listResponse = await client.list();
+
+  // THEN
+  await s.stop();
+
+  expect(getResponse).toEqual(fs.readFileSync(PATH, "utf8"));
+  expect(listResponse).toEqual([FILENAME]);
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 });

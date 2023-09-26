@@ -4,16 +4,20 @@ import classNames from "classnames";
 
 import { AutoUpdater } from "../features/auto-updater.js";
 
+import { ThemeToggle } from "./theme-toggle.js";
+
 export interface StatusBarProps {
   wingVersion?: string;
   cloudAppState: State;
   isError?: boolean;
+  showThemeToggle?: boolean;
 }
 
 export const StatusBar = ({
   wingVersion = "",
   cloudAppState,
   isError = false,
+  showThemeToggle = false,
 }: StatusBarProps) => {
   const { theme } = useTheme();
   const loading =
@@ -30,7 +34,7 @@ export const StatusBar = ({
         theme.bg3,
         theme.text1,
         theme.border3,
-        "py-1 px-4 flex text-2xs w-full relative border-t z-10",
+        "py-1 px-4 flex text-2xs w-full relative z-10",
       )}
     >
       {/*left side*/}
@@ -62,6 +66,7 @@ export const StatusBar = ({
       {/*right side*/}
       <div className="w-full flex space-x-0 justify-end">
         <AutoUpdater />
+        {showThemeToggle && <ThemeToggle />}
       </div>
     </footer>
   );

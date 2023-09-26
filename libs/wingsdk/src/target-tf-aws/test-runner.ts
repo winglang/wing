@@ -29,8 +29,7 @@ export class TestRunner extends std.TestRunner {
     output.overrideLogicalId(OUTPUT_TEST_RUNNER_FUNCTION_ARNS);
   }
 
-  /** @internal */
-  public _bind(host: std.IInflightHost, ops: string[]): void {
+  public bind(host: std.IInflightHost, ops: string[]): void {
     if (!(host instanceof AwsFunction)) {
       throw new Error("TestRunner can only be bound by tfaws.Function for now");
     }
@@ -50,14 +49,16 @@ export class TestRunner extends std.TestRunner {
       JSON.stringify([...testFunctions.entries()])
     );
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */
   public _preSynthesize(): void {
     // add a dependency on each test function
     for (const test of this.findTests()) {
-      this.node.addDependency(test._fn);
+      if (test._fn) {
+        this.node.addDependency(test._fn);
+      }
     }
 
     super._preSynthesize();
@@ -66,18 +67,20 @@ export class TestRunner extends std.TestRunner {
   private getTestFunctionArns(): Map<string, string> {
     const arns = new Map<string, string>();
     for (const test of this.findTests()) {
-      if (!(test._fn instanceof AwsFunction)) {
-        throw new Error(
-          `Unsupported test function type, ${test._fn.node.path} was not a tfaws.Function`
-        );
+      if (test._fn) {
+        if (!(test._fn instanceof AwsFunction)) {
+          throw new Error(
+            `Unsupported test function type, ${test._fn.node.path} was not a tfaws.Function`
+          );
+        }
+        arns.set(test.node.path, (test._fn as AwsFunction).arn);
       }
-      arns.set(test.node.path, (test._fn as AwsFunction).arn);
     }
     return arns;
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return core.InflightClient.for(
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,

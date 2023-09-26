@@ -1,12 +1,13 @@
 import { Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import { Topic } from "../../src/cloud";
+import { Testing } from "../../src/simulator";
 import * as awscdk from "../../src/target-awscdk";
-import { Testing } from "../../src/testing";
-import { mkdtemp, sanitizeCode } from "../util";
+import { mkdtemp, sanitizeCode, awscdkSanitize } from "../util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",
+  entrypointDir: __dirname,
 };
 
 test("default topic behavior", () => {
@@ -17,7 +18,7 @@ test("default topic behavior", () => {
 
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("topic with subscriber function", () => {
@@ -40,7 +41,7 @@ test("topic with subscriber function", () => {
   template.resourceCountIs("AWS::Lambda::Permission", 1);
   template.resourceCountIs("AWS::IAM::Role", 1);
   template.resourceCountIs("AWS::SNS::Subscription", 1);
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("topic with multiple subscribers", () => {
@@ -74,5 +75,5 @@ test("topic with multiple subscribers", () => {
   template.resourceCountIs("AWS::Lambda::Permission", 2);
   template.resourceCountIs("AWS::IAM::Role", 2);
   template.resourceCountIs("AWS::SNS::Subscription", 2);
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });

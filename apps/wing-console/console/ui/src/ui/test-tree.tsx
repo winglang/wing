@@ -21,16 +21,23 @@ export interface TestTreeProps {
   testList: TestItem[];
   handleRunAllTests: () => void;
   handleRunTest: (testPath: string) => void;
+  onSelectedItemsChange?: (ids: string[]) => void;
+  selectedItems?: string[];
 }
 export const TestTree = ({
   testList,
   handleRunTest,
   handleRunAllTests,
+  onSelectedItemsChange,
+  selectedItems,
 }: TestTreeProps) => {
   const { theme } = useTheme();
 
   return (
-    <div className="w-full h-full flex flex-col" data-testid="test-tree-menu">
+    <div
+      className={classNames("w-full h-full flex flex-col", theme.bg3)}
+      data-testid="test-tree-menu"
+    >
       <Toolbar title="Tests">
         <ToolbarButton
           onClick={() => handleRunAllTests()}
@@ -62,7 +69,10 @@ export const TestTree = ({
                   No Tests
                 </div>
               )}
-              <TreeView>
+              <TreeView
+                selectedItems={selectedItems}
+                onSelectedItemsChange={onSelectedItemsChange}
+              >
                 {testList.map((test) => (
                   <TreeItem
                     key={test.id}
@@ -70,11 +80,10 @@ export const TestTree = ({
                     label={
                       <div className="flex items-center gap-1">
                         <span className="truncate">{test.label}</span>
-                        {test.time && (
-                          <span className={classNames(theme.text2, "text-xs")}>
-                            {test.time}ms
-                          </span>
-                        )}
+
+                        <span className={classNames(theme.text2, "text-xs")}>
+                          {test.time && test.time > 0 ? `${test.time}ms` : ""}
+                        </span>
                       </div>
                     }
                     secondaryLabel={

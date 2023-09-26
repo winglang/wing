@@ -1,8 +1,9 @@
 use crate::{
 	ast::{
-		ArgList, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
-		FunctionParameter, FunctionSignature, Interface, InterpolatedString, InterpolatedStringPart, Literal, NewExpr,
-		Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		ArgList, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Expr, ExprKind,
+		FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, IfLet, Interface, InterpolatedString,
+		InterpolatedStringPart, Literal, NewExpr, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation,
+		TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -69,9 +70,9 @@ where
 	F: Fold + ?Sized,
 {
 	Scope {
+		id: node.id,
 		statements: node.statements.into_iter().map(|stmt| f.fold_stmt(stmt)).collect(),
 		span: node.span,
-		env: node.env,
 	}
 }
 
@@ -80,16 +81,13 @@ where
 	F: Fold + ?Sized,
 {
 	let kind = match node.kind {
-		StmtKind::Bring {
-			module_name,
-			identifier,
-		} => StmtKind::Bring {
-			module_name: f.fold_symbol(module_name),
+		StmtKind::Bring { source, identifier } => StmtKind::Bring {
+			source: match source {
+				BringSource::BuiltinModule(name) => BringSource::BuiltinModule(f.fold_symbol(name)),
+				BringSource::JsiiModule(name) => BringSource::JsiiModule(f.fold_symbol(name)),
+				BringSource::WingFile(name) => BringSource::WingFile(f.fold_symbol(name)),
+			},
 			identifier: identifier.map(|id| f.fold_symbol(id)),
-		},
-		StmtKind::Module { name, statements } => StmtKind::Module {
-			name: f.fold_symbol(name),
-			statements: f.fold_scope(statements),
 		},
 		StmtKind::Let {
 			reassignable,
@@ -115,17 +113,29 @@ where
 			condition: f.fold_expr(condition),
 			statements: f.fold_scope(statements),
 		},
-		StmtKind::IfLet {
+		StmtKind::IfLet(IfLet {
 			value,
 			statements,
+			reassignable,
 			var_name,
+			elif_statements,
 			else_statements,
-		} => StmtKind::IfLet {
+		}) => StmtKind::IfLet(IfLet {
 			value: f.fold_expr(value),
 			statements: f.fold_scope(statements),
+			reassignable,
 			var_name: f.fold_symbol(var_name),
+			elif_statements: elif_statements
+				.into_iter()
+				.map(|elif_let_block| ElifLetBlock {
+					reassignable: elif_let_block.reassignable,
+					statements: f.fold_scope(elif_let_block.statements),
+					value: f.fold_expr(elif_let_block.value),
+					var_name: f.fold_symbol(elif_let_block.var_name),
+				})
+				.collect(),
 			else_statements: else_statements.map(|statements| f.fold_scope(statements)),
-		},
+		}),
 		StmtKind::If {
 			condition,
 			statements,
@@ -146,9 +156,11 @@ where
 		StmtKind::Break => StmtKind::Break,
 		StmtKind::Continue => StmtKind::Continue,
 		StmtKind::Return(value) => StmtKind::Return(value.map(|value| f.fold_expr(value))),
+		StmtKind::Throw(value) => StmtKind::Throw(f.fold_expr(value)),
 		StmtKind::Expression(expr) => StmtKind::Expression(f.fold_expr(expr)),
-		StmtKind::Assignment { variable, value } => StmtKind::Assignment {
-			variable: f.fold_expr(variable),
+		StmtKind::Assignment { kind, variable, value } => StmtKind::Assignment {
+			kind,
+			variable: f.fold_reference(variable),
 			value: f.fold_expr(value),
 		},
 		StmtKind::Scope(scope) => StmtKind::Scope(f.fold_scope(scope)),
@@ -200,7 +212,7 @@ where
 			.map(|(name, def)| (f.fold_symbol(name), f.fold_function_definition(def)))
 			.collect(),
 		initializer: f.fold_function_definition(node.initializer),
-		parent: node.parent.map(|parent| f.fold_expr(parent)),
+		parent: node.parent.map(|parent| f.fold_user_defined_type(parent)),
 		implements: node
 			.implements
 			.into_iter()
@@ -221,6 +233,7 @@ where
 		reassignable: node.reassignable,
 		phase: node.phase,
 		is_static: node.is_static,
+		access_modifier: node.access_modifier,
 	}
 }
 
@@ -332,7 +345,7 @@ where
 	F: Fold + ?Sized,
 {
 	NewExpr {
-		class: Box::new(f.fold_expr(*node.class)),
+		class: f.fold_user_defined_type(node.class),
 		obj_id: node.obj_id,
 		arg_list: f.fold_args(node.arg_list),
 		obj_scope: node.obj_scope,
@@ -376,9 +389,8 @@ where
 			property: f.fold_symbol(property),
 			optional_accessor,
 		},
-		Reference::TypeReference(udt) => Reference::TypeReference(f.fold_user_defined_type(udt)),
-		Reference::TypeMember { typeobject, property } => Reference::TypeMember {
-			typeobject: Box::new(f.fold_expr(*typeobject)),
+		Reference::TypeMember { type_name, property } => Reference::TypeMember {
+			type_name: f.fold_user_defined_type(type_name),
 			property: f.fold_symbol(property),
 		},
 	}
@@ -397,6 +409,7 @@ where
 		signature: f.fold_function_signature(node.signature),
 		is_static: node.is_static,
 		span: node.span,
+		access_modifier: node.access_modifier,
 	}
 }
 
@@ -467,6 +480,7 @@ where
 			phase: t.phase,
 		}),
 		TypeAnnotationKind::UserDefined(t) => TypeAnnotationKind::UserDefined(f.fold_user_defined_type(t)),
+		TypeAnnotationKind::Inferred => TypeAnnotationKind::Inferred,
 	};
 
 	TypeAnnotation { kind, span: node.span }

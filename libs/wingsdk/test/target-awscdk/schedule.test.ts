@@ -1,13 +1,14 @@
 import { Match, Template, MatchResult } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import { Schedule } from "../../src/cloud";
+import { Testing } from "../../src/simulator";
 import * as std from "../../src/std";
 import * as awscdk from "../../src/target-awscdk";
-import { Testing } from "../../src/testing";
-import { mkdtemp } from "../util";
+import { mkdtemp, awscdkSanitize } from "../util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",
+  entrypointDir: __dirname,
 };
 
 test("schedule behavior with rate", () => {
@@ -30,7 +31,7 @@ test("schedule behavior with rate", () => {
   template.hasResourceProperties("AWS::Events::Rule", {
     ScheduleExpression: "rate(2 minutes)",
   });
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("schedule behavior with cron", () => {
@@ -53,7 +54,7 @@ test("schedule behavior with cron", () => {
   template.hasResourceProperties("AWS::Events::Rule", {
     ScheduleExpression: "cron(0/1 * ? * * *)",
   });
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("schedule with two functions", () => {
@@ -88,7 +89,7 @@ test("schedule with two functions", () => {
       }),
     ]),
   });
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("schedule with rate and cron simultaneously", () => {

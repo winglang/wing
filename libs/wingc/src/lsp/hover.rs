@@ -1,16 +1,21 @@
 use crate::ast::{
-	CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
-	TypeAnnotation, TypeAnnotationKind,
+	CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, IfLet, Phase, Reference, Scope, Stmt, StmtKind,
+	Symbol, UserDefinedType,
 };
 use crate::diagnostic::WingSpan;
 use crate::docs::Documented;
-use crate::lsp::sync::FILES;
+use crate::lsp::sync::PROJECT_DATA;
 use crate::type_check::symbol_env::LookupResult;
-use crate::type_check::{resolve_super_method, ClassLike, Type, Types, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
+use crate::type_check::{
+	resolve_super_method, resolve_user_defined_type, ClassLike, Type, TypeRef, Types, CLASS_INFLIGHT_INIT_NAME,
+	CLASS_INIT_NAME,
+};
 use crate::visit::{self, Visit};
 use crate::wasm_util::WASM_RETURN_ERROR;
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr};
 use lsp_types::{Hover, HoverContents, MarkupContent, MarkupKind, Position};
+
+use super::sync::{check_utf8, WING_TYPES};
 
 pub struct HoverVisitor<'a> {
 	position: Position,
@@ -41,8 +46,7 @@ impl<'a> HoverVisitor<'a> {
 	/// Try to look up a full path of a symbol in the current scope and if found, render the docs
 	/// associated with the symbol kind. Returns `None` if not found.
 	fn lookup_docs(&mut self, nested_str: &str, property: Option<&Symbol>) -> Option<String> {
-		let current_env = self.current_scope.env.borrow();
-		let current_env = current_env.as_ref()?;
+		let current_env = self.types.get_scope_env(self.current_scope);
 
 		let result = current_env.lookup_nested_str(nested_str, None);
 
@@ -73,16 +77,11 @@ impl<'a> HoverVisitor<'a> {
 		}
 	}
 
-	fn visit_reference_with_member(&mut self, object: &'a Expr, property: &'a Symbol) {
-		if object.span.contains(&self.position) {
-			self.visit_expr(object);
-			return;
-		}
-		let obj_type = self.types.get_expr_type(object);
+	fn visit_type_with_member(&mut self, obj_type: TypeRef, property: &'a Symbol) {
 		if property.span.contains(&self.position) {
 			let new_span = self.current_expr.unwrap().span.clone();
 			match &**obj_type.maybe_unwrap_option() {
-				Type::Optional(_) | Type::Anything | Type::Void | Type::Nil | Type::Unresolved => {}
+				Type::Optional(_) | Type::Anything | Type::Void | Type::Nil | Type::Unresolved | Type::Inferred(_) => {}
 
 				Type::Array(_)
 				| Type::MutArray(_)
@@ -90,7 +89,7 @@ impl<'a> HoverVisitor<'a> {
 				| Type::MutMap(_)
 				| Type::Set(_)
 				| Type::MutSet(_)
-				| Type::Json
+				| Type::Json(_)
 				| Type::MutJson
 				| Type::Number
 				| Type::String
@@ -163,6 +162,30 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 					self.visit_scope(finally_statements);
 				}
 			}
+			StmtKind::IfLet(IfLet {
+				var_name,
+				value,
+				statements,
+				reassignable: _,
+				elif_statements,
+				else_statements,
+			}) => {
+				self.with_scope(statements, |v| {
+					v.visit_symbol(var_name);
+				});
+				self.visit_expr(value);
+				self.visit_scope(statements);
+				for elif in elif_statements {
+					self.with_scope(&elif.statements, |v| {
+						v.visit_symbol(&elif.var_name);
+					});
+					self.visit_expr(&elif.value);
+					self.visit_scope(&elif.statements);
+				}
+				if let Some(else_statements) = else_statements {
+					self.visit_scope(else_statements);
+				}
+			}
 			_ => crate::visit::visit_stmt(self, node),
 		}
 	}
@@ -177,20 +200,6 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 				this.visit_stmt(stmt);
 			}
 		});
-	}
-
-	fn visit_type_annotation(&mut self, node: &'a TypeAnnotation) {
-		if self.found.is_some() {
-			return;
-		}
-
-		if let TypeAnnotationKind::UserDefined(t) = &node.kind {
-			if t.span.contains(&self.position) {
-				self.found = Some((t.span.clone(), self.lookup_docs(&t.full_path_str(), None)));
-			}
-		}
-
-		visit::visit_type_annotation(self, node);
 	}
 
 	fn visit_symbol(&mut self, node: &'a Symbol) {
@@ -240,12 +249,11 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 			ExprKind::Call { arg_list, callee } => {
 				let x = arg_list.named_args.iter().find(|a| a.0.span.contains(&self.position));
 				if let Some((arg_name, ..)) = x {
-					let curr_env = self.current_scope.env.borrow();
-					let env = curr_env.as_ref().expect("an env");
+					let env = self.types.get_scope_env(self.current_scope);
 					// we need to get the struct type from the callee
 					let callee_type = match callee {
 						CalleeKind::Expr(expr) => self.types.get_expr_type(expr),
-						CalleeKind::SuperCall(method) => resolve_super_method(method, env, &self.types)
+						CalleeKind::SuperCall(method) => resolve_super_method(method, &env, &self.types)
 							.ok()
 							.map_or(self.types.error(), |t| t.0),
 					};
@@ -255,14 +263,28 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 					}
 				}
 			}
-			ExprKind::StructLiteral { fields, .. } => {
+			ExprKind::MapLiteral { fields, .. }
+			| ExprKind::JsonMapLiteral { fields }
+			| ExprKind::StructLiteral { fields, .. } => {
 				if let Some(f) = fields.iter().find(|f| f.0.span.contains(&self.position)) {
 					let field_name = f.0;
-					let struct_type = self.types.get_expr_type(node);
-					if let Some(structy) = struct_type.maybe_unwrap_option().as_struct() {
+					let type_ = self.types.maybe_unwrap_inference(self.types.get_expr_type(node));
+					let type_ = if let Some(type_) = self.types.get_type_from_json_cast(node.id) {
+						*type_
+					} else {
+						type_
+					};
+					if let Some(structy) = type_.maybe_unwrap_option().as_struct() {
 						self.found = Some((
 							field_name.span.clone(),
 							docs_from_classlike_property(structy, field_name),
+						));
+					} else {
+						// just use the type info
+						let inner_type = self.types.maybe_unwrap_inference(self.types.get_expr_type(f.1));
+						self.found = Some((
+							field_name.span.clone(),
+							Some(format!("```wing\n{}: {inner_type}\n```", field_name.name)),
 						));
 					}
 					return;
@@ -333,6 +355,26 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 		}
 	}
 
+	fn visit_user_defined_type(&mut self, node: &'a UserDefinedType) {
+		if self.found.is_some() {
+			return;
+		}
+
+		if node.span.contains(&self.position) {
+			// Only lookup string up to the position
+			let mut partial_path = vec![];
+			node.full_path().iter().for_each(|p| {
+				if p.span.start <= self.position.into() {
+					partial_path.push(p.name.clone());
+				}
+			});
+			let lookup_str = partial_path.join(".");
+			self.found = Some((node.span.clone(), self.lookup_docs(&lookup_str, None)));
+		}
+
+		visit::visit_user_defined_type(self, node);
+	}
+
 	fn visit_reference(&mut self, node: &'a Reference) {
 		if self.found.is_some() {
 			return;
@@ -344,23 +386,29 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 					self.found = Some((sym.span.clone(), self.lookup_docs(&sym.name, None)));
 				}
 			}
-			Reference::TypeReference(t) => {
-				if t.span.contains(&self.position) {
-					// Only lookup string up to the position
-					let mut partial_path = vec![];
-					t.full_path().iter().for_each(|p| {
-						if p.span.start <= self.position.into() {
-							partial_path.push(p.name.clone());
-						}
-					});
-					let lookup_str = partial_path.join(".");
-					self.found = Some((t.span.clone(), self.lookup_docs(&lookup_str, None)));
+			Reference::InstanceMember { object, property, .. } => {
+				if object.span.contains(&self.position) {
+					self.visit_expr(object)
+				} else {
+					self.visit_type_with_member(self.types.get_expr_type(object), property)
 				}
 			}
-			Reference::InstanceMember { object, property, .. } => self.visit_reference_with_member(object, property),
-			Reference::TypeMember { typeobject, property } => self.visit_reference_with_member(&typeobject, property),
+			Reference::TypeMember { type_name, property } => {
+				if type_name.span.contains(&self.position) {
+					self.visit_user_defined_type(type_name)
+				} else {
+					self.visit_type_with_member(
+						resolve_user_defined_type(
+							type_name,
+							&self.types.get_scope_env(self.current_scope),
+							self.current_statement_index,
+						)
+						.unwrap_or(self.types.error()),
+						property,
+					)
+				}
+			}
 		}
-
 		visit::visit_reference(self, node);
 	}
 }
@@ -382,35 +430,27 @@ pub unsafe extern "C" fn wingc_on_hover(ptr: u32, len: u32) -> u64 {
 	}
 }
 pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
-	FILES.with(|files| {
-		let files = files.borrow();
-		let file_data = files.get(&params.text_document_position_params.text_document.uri.clone());
-		let file_data = file_data.expect(
-			format!(
-				"Compiled data not found for \"{}\"",
-				params.text_document_position_params.text_document.uri
-			)
-			.as_str(),
-		);
+	WING_TYPES.with(|types| {
+		let types = types.borrow_mut();
+		PROJECT_DATA.with(|project_data| {
+			let project_data = project_data.borrow();
+			let uri = params.text_document_position_params.text_document.uri.clone();
+			let file = check_utf8(uri.to_file_path().expect("LSP only works on real filesystems"));
+			let root_scope = &project_data.asts.get(&file).unwrap();
 
-		let root_scope = &file_data.scope;
-
-		let mut hover_visitor = HoverVisitor::new(
-			params.text_document_position_params.position,
-			&root_scope,
-			&file_data.types,
-		);
-		if let Some((span, Some(docs))) = hover_visitor.visit() {
-			Some(Hover {
-				contents: HoverContents::Markup(MarkupContent {
-					kind: MarkupKind::Markdown,
-					value: docs,
-				}),
-				range: Some(span.clone().into()),
-			})
-		} else {
-			None
-		}
+			let mut hover_visitor = HoverVisitor::new(params.text_document_position_params.position, &root_scope, &types);
+			if let Some((span, Some(docs))) = hover_visitor.visit() {
+				Some(Hover {
+					contents: HoverContents::Markup(MarkupContent {
+						kind: MarkupKind::Markdown,
+						value: docs,
+					}),
+					range: Some(span.clone().into()),
+				})
+			} else {
+				None
+			}
+		})
 	})
 }
 
@@ -571,8 +611,39 @@ new cloud.Bucket();
 	test_hover_list!(
 		user_defined_types,
 		r#"
-class Foo { };
+class Foo { }
      //^
+"#
+	);
+
+	test_hover_list!(
+		user_defined_type_annotation,
+		r#"
+class Foo { }
+let a: Foo = new Foo();
+      //^
+"#
+	);
+
+	test_hover_list!(
+		user_defined_type_reference_property,
+		r#"
+class Foo { 
+	static static_method() { }
+}
+Foo.static_method();
+   //^
+"#
+	);
+
+	test_hover_list!(
+		user_defined_type_reference_type,
+		r#"
+class Foo { 
+	static static_method() { }
+}
+Foo.static_method();
+//^
 "#
 	);
 
@@ -601,7 +672,7 @@ assert(true);
 		r#"
 class Foo {
   inflight bar() {
-    throw("hello");
+    assert(true);
     //^
   }
 }
@@ -674,6 +745,38 @@ inflight () => {
 let j = Json {};
 j.get("hello").get("world");
  //^
+"#
+	);
+
+	test_hover_list!(
+		map_element,
+		r#"
+{ "hi" => "" }
+ //^
+"#
+	);
+
+	test_hover_list!(
+		json_element,
+		r#"
+{ hi: "cool" }
+ //^
+"#
+	);
+
+	test_hover_list!(
+		json_element_nested_top,
+		r#"
+{ hi: { inner: [1, 2, 3] } }
+ //^
+"#
+	);
+
+	test_hover_list!(
+		json_element_nested_inner,
+		r#"
+{ hi: { inner: [1, 2, 3] } }
+        //^
 "#
 	);
 }

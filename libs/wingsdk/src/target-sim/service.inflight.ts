@@ -4,8 +4,8 @@ import {
   ServiceSchema,
 } from "./schema-resources";
 import { IFunctionClient, IServiceClient } from "../cloud";
+import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
 import { TraceType } from "../std";
-import { ISimulatorContext, ISimulatorResourceInstance } from "../testing";
 
 export class Service implements IServiceClient, ISimulatorResourceInstance {
   private readonly context: ISimulatorContext;
@@ -55,6 +55,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       sourceType: SERVICE_TYPE,
       timestamp: new Date().toISOString(),
     });
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     await fnClient.invoke("");
     this.running = true;
   }
@@ -80,7 +81,6 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     });
 
     await fnClient.invoke("");
-
     this.running = false;
   }
 }

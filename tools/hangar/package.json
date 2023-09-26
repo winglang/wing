@@ -3,20 +3,29 @@
   "version": "0.0.0",
   "description": "wing test suite",
   "scripts": {
-    "test": "vitest run",
+    "test": "vitest run --update",
     "test:generate": "tsx src/generate_tests.ts",
     "test:watch": "vitest watch",
-    "test:update": "vitest run --update",
     "bench": "vitest bench --run"
   },
-  "author": "Monada",
+  "author": "Wing Cloud",
   "license": "Apache-2.0",
   "devDependencies": {
-    "cdktf": "^0.17.0",
-    "execa": "^7.1.1",
-    "npm": "^9.6.4",
-    "tsx": "^3.12.6",
+    "@wingconsole/app": "workspace:^",
+    "@wingconsole/design-system": "workspace:^",
+    "@wingconsole/server": "workspace:^",
+    "@wingconsole/ui": "workspace:^",
+    "@winglang/compiler": "workspace:^",
+    "@winglang/sdk": "workspace:^",
+    "cdktf": "^0.17.3",
+    "execa": "^7.2.0",
+    "npm": "^9.8.1",
+    "tsx": "^3.12.8",
     "vitest": "^0.30.1",
-    "yaml": "^2.2.1"
+    "winglang": "workspace:^",
+    "yaml": "^2.3.2"
+  },
+  "volta": {
+    "extends": "../../package.json"
   }
 }

@@ -6,7 +6,7 @@ const UNDOCUMENTED_CLOUD_FILES = ["index", "test-runner"];
 const cloudFiles = readdirSync("./src/cloud");
 
 const cloudResources: Set<string> = new Set(
-  cloudFiles.map((filename) => filename.split(".").slice(0, -1).join("."))
+  cloudFiles.map((filename) => filename.split(".")[0])
 );
 
 UNDOCUMENTED_CLOUD_FILES.forEach((file) => cloudResources.delete(file));
@@ -23,7 +23,7 @@ if (undocumentedResources.length) {
   );
 }
 
-const JSII_DEPS = ["constructs@~10.1.314"];
+const JSII_DEPS = ["constructs@~10.2.69"];
 const CDKTF_VERSION = "0.17.0";
 
 const CDKTF_PROVIDERS = [
@@ -33,7 +33,7 @@ const CDKTF_PROVIDERS = [
   "google@~>4.63.1",
 ];
 
-const PUBLIC_MODULES = ["std", "http", "util", "aws", "ex"];
+const PUBLIC_MODULES = ["std", "http", "util", "aws", "ex", "math", "regex"];
 
 const CLOUD_DOCS_PREFIX = "../../docs/docs/04-standard-library/01-cloud/";
 
@@ -50,7 +50,7 @@ const sideLoad = Object.values(TARGET_DEPS).flat();
 
 const project = new cdk.JsiiProject({
   name: "@winglang/sdk",
-  author: "Monada, Inc.",
+  author: "Wing Cloud",
   authorOrganization: true,
   authorAddress: "ping@monada.co",
   repositoryUrl: "https://github.com/winglang/wing.git",
@@ -74,16 +74,16 @@ const project = new cdk.JsiiProject({
     // aws client dependencies
     // (note: these should always be updated together, otherwise they will
     // conflict with each other)
-    "@aws-sdk/client-cloudwatch-logs@3.354.0",
-    "@aws-sdk/client-dynamodb@3.354.0",
-    "@aws-sdk/client-elasticache@3.354.0",
-    "@aws-sdk/util-dynamodb@3.354.0",
-    "@aws-sdk/client-lambda@3.354.0",
-    "@aws-sdk/client-s3@3.354.0",
-    "@aws-sdk/client-secrets-manager@3.354.0",
-    "@aws-sdk/client-sqs@3.354.0",
-    "@aws-sdk/client-sns@3.354.0",
-    "@aws-sdk/types@3.347.0",
+    "@aws-sdk/client-cloudwatch-logs@3.405.0",
+    "@aws-sdk/client-dynamodb@3.405.0",
+    "@aws-sdk/client-elasticache@3.405.0",
+    "@aws-sdk/util-dynamodb@3.405.0",
+    "@aws-sdk/client-lambda@3.405.0",
+    "@aws-sdk/client-s3@3.405.0",
+    "@aws-sdk/client-secrets-manager@3.405.0",
+    "@aws-sdk/client-sqs@3.405.0",
+    "@aws-sdk/client-sns@3.405.0",
+    "@aws-sdk/types@3.398.0",
     "@aws-sdk/util-stream-node@3.350.0",
     "@aws-sdk/util-utf8-node@3.259.0",
     "@types/aws-lambda",
@@ -103,11 +103,13 @@ const project = new cdk.JsiiProject({
     "cron-parser",
     // shared client dependencies
     "ioredis",
+    "jsonschema",
   ],
   devDeps: [
     `@cdktf/provider-aws@^15.0.0`, // only for testing Wing plugins
-    "wing-api-checker@workspace:^",
-    "bump-pack@workspace:^",
+    "wing-api-checker",
+    "bump-pack",
+    "@types/aws-lambda",
     "@types/fs-extra",
     "@types/mime-types",
     "@types/express",
@@ -145,7 +147,7 @@ project.eslint?.addOverride({
 
 // use fork of jsii-docgen with wing-ish support
 project.deps.removeDependency("jsii-docgen");
-project.addDevDeps("@winglang/jsii-docgen@workspace:^");
+project.addDevDeps("@winglang/jsii-docgen");
 
 enum Zone {
   PREFLIGHT = "preflight",
@@ -199,6 +201,36 @@ project.eslint!.addRules({
         // preflight code gets compiled with JSII
         disallowImportsRule(Zone.PREFLIGHT, Zone.INFLIGHT),
       ],
+    },
+  ],
+  // Makes sure that all methods and properties are marked with the right member accessibility- public, protected or private
+  "@typescript-eslint/explicit-member-accessibility": [
+    "error",
+    {
+      accessibility: "explicit",
+      overrides: {
+        accessors: "off",
+        constructors: "off",
+        methods: "explicit",
+        properties: "explicit",
+        parameterProperties: "explicit",
+      },
+    },
+  ],
+  // Makes sure comments and doc strings are capitalized
+  "capitalized-comments": [
+    "error",
+    "always",
+    {
+      line: {
+        // ignore everything
+        ignorePattern: ".*",
+      },
+      block: {
+        ignoreConsecutiveComments: true,
+        ignorePattern: "pragma|ignored",
+        ignoreInlineComments: true,
+      },
     },
   ],
 });
@@ -301,11 +333,13 @@ new JsonFile(project, "cdktf.json", {
     projectId: "93afdbfa-23ed-40cf-9ce4-495b3289c519",
   },
 });
-project.gitignore.addPatterns("src/.gen/providers");
+project.gitignore.addPatterns("src/.gen");
 
-project.preCompileTask.exec("cdktf get");
+project.preCompileTask.exec("cdktf get --force");
 
 project.package.file.addDeletionOverride("pnpm");
 project.tryRemoveFile(".npmrc");
+
+project.packageTask.reset("bump-pack -b");
 
 project.synth();

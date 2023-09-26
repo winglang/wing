@@ -3,8 +3,6 @@
 /test-reports/
 junit.xml
 /coverage/
-/dist/changelog.md
-/dist/version.txt
 /test/
 /tsconfig.dev.json
 /src/

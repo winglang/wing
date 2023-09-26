@@ -29,6 +29,10 @@ async handle(event) {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -59,12 +63,9 @@ async handle(event) {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -75,12 +76,9 @@ async handle(event) {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -91,12 +89,9 @@ async handle(event) {
           "path": "root/cloud.TestRunner",
         },
         "my_function": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -108,7 +103,7 @@ async handle(event) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -157,6 +152,10 @@ async handle(event) {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -185,12 +184,9 @@ async handle(event) {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -201,12 +197,9 @@ async handle(event) {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -217,12 +210,9 @@ async handle(event) {
           "path": "root/cloud.TestRunner",
         },
         "my_function": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -234,7 +224,7 @@ async handle(event) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -283,6 +273,10 @@ async handle(event) {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -311,12 +305,9 @@ async handle(event) {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -327,12 +318,9 @@ async handle(event) {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -343,12 +331,9 @@ async handle(event) {
           "path": "root/cloud.TestRunner",
         },
         "my_function": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -360,7 +345,7 @@ async handle(event) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -409,6 +394,10 @@ async handle(event) {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -439,12 +428,9 @@ async handle(event) {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -455,12 +441,9 @@ async handle(event) {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -471,12 +454,9 @@ async handle(event) {
           "path": "root/cloud.TestRunner",
         },
         "my_function": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -488,7 +468,7 @@ async handle(event) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -527,6 +507,10 @@ async handle() {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -555,12 +539,9 @@ async handle() {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -571,12 +552,9 @@ async handle() {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -587,12 +565,9 @@ async handle() {
           "path": "root/cloud.TestRunner",
         },
         "my_function": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -604,7 +579,7 @@ async handle() {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -692,6 +667,10 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -753,12 +732,9 @@ return class Handler {
     "tree": {
       "children": {
         "Function.0": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -768,12 +744,9 @@ return class Handler {
           "path": "root/Function.0",
         },
         "Function.0.handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -784,12 +757,9 @@ return class Handler {
           "path": "root/Function.0.handler",
         },
         "Function.1": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -799,12 +769,9 @@ return class Handler {
           "path": "root/Function.1",
         },
         "Function.1.handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -815,12 +782,9 @@ return class Handler {
           "path": "root/Function.1.handler",
         },
         "Function.2": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -830,12 +794,9 @@ return class Handler {
           "path": "root/Function.2",
         },
         "Function.2.handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -846,12 +807,9 @@ return class Handler {
           "path": "root/Function.2.handler",
         },
         "Function.3": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -861,12 +819,9 @@ return class Handler {
           "path": "root/Function.3",
         },
         "Function.3.handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -877,12 +832,9 @@ return class Handler {
           "path": "root/Function.3.handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -895,7 +847,7 @@ return class Handler {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",

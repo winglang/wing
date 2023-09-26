@@ -16,6 +16,10 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -52,12 +56,9 @@ return class Handler {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -68,12 +69,9 @@ return class Handler {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -84,20 +82,15 @@ return class Handler {
           "path": "root/cloud.TestRunner",
         },
         "my_on_deploy": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "children": {
             "Function": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.70",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
                 "title": "Function",
               },
               "id": "Function",
@@ -106,7 +99,7 @@ return class Handler {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "Run code during the app's deployment.",
@@ -118,7 +111,7 @@ return class Handler {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",

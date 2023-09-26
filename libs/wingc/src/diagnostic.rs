@@ -84,8 +84,17 @@ impl Display for WingLocation {
 pub struct WingSpan {
 	pub start: WingLocation,
 	pub end: WingLocation,
-	/// Relative path to the file based on the working directory used to invoke the compiler
+	/// Relative path to the file based on the entrypoint file
 	pub file_id: String,
+}
+
+impl WingSpan {
+	pub fn for_file<S: Into<String>>(file_id: S) -> Self {
+		Self {
+			file_id: file_id.into(),
+			..Default::default()
+		}
+	}
 }
 
 impl Into<Range> for WingSpan {
@@ -125,6 +134,21 @@ impl WingSpan {
 			}
 		} else {
 			false
+		}
+	}
+
+	pub fn merge(&self, other: &Self) -> Self {
+		assert!(self.file_id == other.file_id);
+		let start = if self.start < other.start {
+			self.start
+		} else {
+			other.start
+		};
+		let end = if self.end > other.end { self.end } else { other.end };
+		Self {
+			start,
+			end,
+			file_id: self.file_id.clone(),
 		}
 	}
 }

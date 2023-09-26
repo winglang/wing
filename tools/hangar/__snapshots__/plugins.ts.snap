@@ -86,6 +86,9 @@ exports[`Plugin examples > AWS target plugins > permission-boundary.js 1`] = `
             "uniqueId": "cloudQueue-SetConsumer-cdafee6e",
           },
         },
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.cloudBucket.bucket}",
@@ -126,39 +129,6 @@ exports[`Plugin examples > AWS target plugins > permission-boundary.js 1`] = `
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
         "force_destroy": false,
-      },
-    },
-    "aws_s3_bucket_public_access_block": {
-      "cloudBucket_PublicAccessBlock_5946CCE8": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "cloudBucket_PublicAccessBlock_5946CCE8",
-          },
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "\${aws_s3_bucket.cloudBucket.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true,
-      },
-    },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "cloudBucket_Encryption_77B6AEEF": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Encryption",
-            "uniqueId": "cloudBucket_Encryption_77B6AEEF",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.cloudBucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256",
-            },
-          },
-        ],
       },
     },
     "aws_s3_object": {
@@ -344,6 +314,9 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
             "uniqueId": "cloudQueue-SetConsumer-cdafee6e",
           },
         },
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.cloudBucket.bucket}",
@@ -404,21 +377,6 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
         "bucket": "some-prefix\${aws_s3_bucket.cloudBucket.bucket}",
       },
     },
-    "aws_s3_bucket_public_access_block": {
-      "cloudBucket_PublicAccessBlock_5946CCE8": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "cloudBucket_PublicAccessBlock_5946CCE8",
-          },
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "\${aws_s3_bucket.cloudBucket.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true,
-      },
-    },
     "aws_s3_bucket_replication_configuration": {
       "ReplicaCodeConfig": {
         "//": {
@@ -465,24 +423,6 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
             },
             "id": "some-prefix\${aws_s3_bucket.cloudBucket.bucket}",
             "status": "Enabled",
-          },
-        ],
-      },
-    },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "cloudBucket_Encryption_77B6AEEF": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Encryption",
-            "uniqueId": "cloudBucket_Encryption_77B6AEEF",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.cloudBucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256",
-            },
           },
         ],
       },
@@ -650,6 +590,9 @@ exports[`Plugin examples > AWS target plugins > tf-backend.js > azurerm backend 
             "uniqueId": "cloudQueue-SetConsumer-cdafee6e",
           },
         },
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.cloudBucket.bucket}",
@@ -690,39 +633,6 @@ exports[`Plugin examples > AWS target plugins > tf-backend.js > azurerm backend 
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
         "force_destroy": false,
-      },
-    },
-    "aws_s3_bucket_public_access_block": {
-      "cloudBucket_PublicAccessBlock_5946CCE8": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "cloudBucket_PublicAccessBlock_5946CCE8",
-          },
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "\${aws_s3_bucket.cloudBucket.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true,
-      },
-    },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "cloudBucket_Encryption_77B6AEEF": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Encryption",
-            "uniqueId": "cloudBucket_Encryption_77B6AEEF",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.cloudBucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256",
-            },
-          },
-        ],
       },
     },
     "aws_s3_object": {
@@ -838,6 +748,9 @@ exports[`Plugin examples > AWS target plugins > tf-backend.js > gcp backend 1`] 
             "uniqueId": "cloudQueue-SetConsumer-cdafee6e",
           },
         },
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.cloudBucket.bucket}",
@@ -878,39 +791,6 @@ exports[`Plugin examples > AWS target plugins > tf-backend.js > gcp backend 1`] 
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
         "force_destroy": false,
-      },
-    },
-    "aws_s3_bucket_public_access_block": {
-      "cloudBucket_PublicAccessBlock_5946CCE8": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "cloudBucket_PublicAccessBlock_5946CCE8",
-          },
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "\${aws_s3_bucket.cloudBucket.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true,
-      },
-    },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "cloudBucket_Encryption_77B6AEEF": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Encryption",
-            "uniqueId": "cloudBucket_Encryption_77B6AEEF",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.cloudBucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256",
-            },
-          },
-        ],
       },
     },
     "aws_s3_object": {
@@ -1026,6 +906,9 @@ exports[`Plugin examples > AWS target plugins > tf-backend.js > s3 backend 1`] =
             "uniqueId": "cloudQueue-SetConsumer-cdafee6e",
           },
         },
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.cloudBucket.bucket}",
@@ -1066,39 +949,6 @@ exports[`Plugin examples > AWS target plugins > tf-backend.js > s3 backend 1`] =
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
         "force_destroy": false,
-      },
-    },
-    "aws_s3_bucket_public_access_block": {
-      "cloudBucket_PublicAccessBlock_5946CCE8": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "cloudBucket_PublicAccessBlock_5946CCE8",
-          },
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "\${aws_s3_bucket.cloudBucket.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true,
-      },
-    },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "cloudBucket_Encryption_77B6AEEF": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Encryption",
-            "uniqueId": "cloudBucket_Encryption_77B6AEEF",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.cloudBucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256",
-            },
-          },
-        ],
       },
     },
     "aws_s3_object": {

@@ -21,6 +21,10 @@ if (!(this.my_capture[1] === \\"dude\\")) { throw new Error(\`assertion failed: 
 my_capture: [\\"hello\\",\\"dude\\"]
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -49,12 +53,9 @@ my_capture: [\\"hello\\",\\"dude\\"]
     "tree": {
       "children": {
         "Function": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -64,12 +65,9 @@ my_capture: [\\"hello\\",\\"dude\\"]
           "path": "root/Function",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -80,12 +78,9 @@ my_capture: [\\"hello\\",\\"dude\\"]
           "path": "root/cloud.TestRunner",
         },
         "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -98,7 +93,7 @@ my_capture: [\\"hello\\",\\"dude\\"]
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -130,20 +125,35 @@ if (!(await this.my_buckets[1].get(\\"foo\\") === \\"bar\\")) { throw new Error(
 };
 })())({
 my_buckets: [(function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"BUCKET_HANDLE_4fecd6d0\\"),(function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"BUCKET_HANDLE_300e8055\\")]
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+})(\\"BUCKET_HANDLE_4fecd6d0\\"),(function(env) {
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+})(\\"BUCKET_HANDLE_300e8055\\")]
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function",
+        "target": "root/B1",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function",
+        "target": "root/B2",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -195,19 +205,9 @@ my_buckets: [(function(env) {
     "tree": {
       "children": {
         "B1": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "$inflight_init",
-                "resource": "root/Function",
-              },
-            ],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud object store",
@@ -217,19 +217,9 @@ my_buckets: [(function(env) {
           "path": "root/B1",
         },
         "B2": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "$inflight_init",
-                "resource": "root/Function",
-              },
-            ],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud object store",
@@ -239,25 +229,9 @@ my_buckets: [(function(env) {
           "path": "root/B2",
         },
         "Function": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "$inflight_init",
-                "resource": "root/B1",
-              },
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "$inflight_init",
-                "resource": "root/B2",
-              },
-            ],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -267,12 +241,9 @@ my_buckets: [(function(env) {
           "path": "root/Function",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -283,12 +254,9 @@ my_buckets: [(function(env) {
           "path": "root/cloud.TestRunner",
         },
         "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -301,7 +269,7 @@ my_buckets: [(function(env) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -329,9 +297,13 @@ if (!(this.my_array[1].minutes === 20)) { throw new Error(\`assertion failed: \\
 }
 };
 })())({
-my_array: [{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds: 1200,minutes: 20,hours: 0.3333333333333333,}]
+my_array: [{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.16666666666666666,},{\\"seconds\\": 1200,\\"minutes\\": 20,\\"hours\\": 0.3333333333333333,}]
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -360,12 +332,9 @@ my_array: [{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds: 1200
     "tree": {
       "children": {
         "Function": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -375,12 +344,9 @@ my_array: [{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds: 1200
           "path": "root/Function",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -391,12 +357,9 @@ my_array: [{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds: 1200
           "path": "root/cloud.TestRunner",
         },
         "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -409,7 +372,7 @@ my_array: [{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds: 1200
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -439,6 +402,10 @@ if (!(this.my_array[1].get('bar') === 4)) { throw new Error(\`assertion failed: 
 my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar\\",4]])]
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -467,12 +434,9 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
     "tree": {
       "children": {
         "Function": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -482,12 +446,9 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
           "path": "root/Function",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -498,12 +459,9 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
           "path": "root/cloud.TestRunner",
         },
         "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -516,7 +474,7 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -545,6 +503,10 @@ if (!(this.my_capture === false)) { throw new Error(\`assertion failed: \\"this.
 my_capture: false
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -573,12 +535,9 @@ my_capture: false
     "tree": {
       "children": {
         "Function": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -588,12 +547,9 @@ my_capture: false
           "path": "root/Function",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -604,12 +560,9 @@ my_capture: false
           "path": "root/cloud.TestRunner",
         },
         "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -622,7 +575,7 @@ my_capture: false
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -650,9 +603,13 @@ if (!(this.my_capture.hours === 2)) { throw new Error(\`assertion failed: \\"thi
 }
 };
 })())({
-my_capture: {seconds: 7200,minutes: 120,hours: 2,}
+my_capture: {\\"seconds\\": 7200,\\"minutes\\": 120,\\"hours\\": 2,}
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -681,12 +638,9 @@ my_capture: {seconds: 7200,minutes: 120,hours: 2,}
     "tree": {
       "children": {
         "Function": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -696,12 +650,9 @@ my_capture: {seconds: 7200,minutes: 120,hours: 2,}
           "path": "root/Function",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -712,12 +663,9 @@ my_capture: {seconds: 7200,minutes: 120,hours: 2,}
           "path": "root/cloud.TestRunner",
         },
         "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -730,7 +678,7 @@ my_capture: {seconds: 7200,minutes: 120,hours: 2,}
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -763,6 +711,10 @@ if (!(this.my_capture.get(\\"bar\\") === 456)) { throw new Error(\`assertion fai
 my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -791,12 +743,9 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
     "tree": {
       "children": {
         "Function": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -806,12 +755,9 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
           "path": "root/Function",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -822,12 +768,9 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
           "path": "root/cloud.TestRunner",
         },
         "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -840,7 +783,7 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -875,6 +818,10 @@ if (!(this.my_map.get(\\"bar\\")[1] === 4)) { throw new Error(\`assertion failed
 my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -903,12 +850,9 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
     "tree": {
       "children": {
         "Function": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -918,12 +862,9 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
           "path": "root/Function",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -934,12 +875,9 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
           "path": "root/cloud.TestRunner",
         },
         "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -952,7 +890,7 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -981,9 +919,13 @@ if (!(this.my_map.get('bar')[1].seconds === 40 * 60)) { throw new Error(\`assert
 }
 };
 })())({
-my_map: new Map([[\\"foo\\",[{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds: 1200,minutes: 20,hours: 0.3333333333333333,}]],[\\"bar\\",[{seconds: 1800,minutes: 30,hours: 0.5,},{seconds: 2400,minutes: 40,hours: 0.6666666666666666,}]]])
+my_map: new Map([[\\"foo\\",[{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.16666666666666666,},{\\"seconds\\": 1200,\\"minutes\\": 20,\\"hours\\": 0.3333333333333333,}]],[\\"bar\\",[{\\"seconds\\": 1800,\\"minutes\\": 30,\\"hours\\": 0.5,},{\\"seconds\\": 2400,\\"minutes\\": 40,\\"hours\\": 0.6666666666666666,}]]])
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -1012,12 +954,9 @@ my_map: new Map([[\\"foo\\",[{seconds: 600,minutes: 10,hours: 0.1666666666666666
     "tree": {
       "children": {
         "Function": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -1027,12 +966,9 @@ my_map: new Map([[\\"foo\\",[{seconds: 600,minutes: 10,hours: 0.1666666666666666
           "path": "root/Function",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -1043,12 +979,9 @@ my_map: new Map([[\\"foo\\",[{seconds: 600,minutes: 10,hours: 0.1666666666666666
           "path": "root/cloud.TestRunner",
         },
         "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -1061,7 +994,7 @@ my_map: new Map([[\\"foo\\",[{seconds: 600,minutes: 10,hours: 0.1666666666666666
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -1090,20 +1023,35 @@ if (!(await foo.get(\\"hello.txt\\") === \\"world\\")) { throw new Error(\`asser
 };
 })())({
 my_map: new Map([[\\"foo\\",(function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"BUCKET_HANDLE_4fecd6d0\\")],[\\"bar\\",(function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"BUCKET_HANDLE_300e8055\\")]])
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+})(\\"BUCKET_HANDLE_4fecd6d0\\")],[\\"bar\\",(function(env) {
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+})(\\"BUCKET_HANDLE_300e8055\\")]])
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function",
+        "target": "root/B1",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function",
+        "target": "root/B2",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -1155,19 +1103,9 @@ my_map: new Map([[\\"foo\\",(function(env) {
     "tree": {
       "children": {
         "B1": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "$inflight_init",
-                "resource": "root/Function",
-              },
-            ],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud object store",
@@ -1177,19 +1115,9 @@ my_map: new Map([[\\"foo\\",(function(env) {
           "path": "root/B1",
         },
         "B2": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "$inflight_init",
-                "resource": "root/Function",
-              },
-            ],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud object store",
@@ -1199,25 +1127,9 @@ my_map: new Map([[\\"foo\\",(function(env) {
           "path": "root/B2",
         },
         "Function": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "$inflight_init",
-                "resource": "root/B1",
-              },
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "$inflight_init",
-                "resource": "root/B2",
-              },
-            ],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -1227,12 +1139,9 @@ my_map: new Map([[\\"foo\\",(function(env) {
           "path": "root/Function",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -1243,12 +1152,9 @@ my_map: new Map([[\\"foo\\",(function(env) {
           "path": "root/cloud.TestRunner",
         },
         "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -1261,7 +1167,7 @@ my_map: new Map([[\\"foo\\",(function(env) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -1290,6 +1196,10 @@ if (!(this.my_capture + 20 === 143)) { throw new Error(\`assertion failed: \\"th
 my_capture: 123
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -1318,12 +1228,9 @@ my_capture: 123
     "tree": {
       "children": {
         "Function": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -1333,12 +1240,9 @@ my_capture: 123
           "path": "root/Function",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -1349,12 +1253,9 @@ my_capture: 123
           "path": "root/cloud.TestRunner",
         },
         "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -1367,7 +1268,7 @@ my_capture: 123
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -1399,6 +1300,10 @@ if (!(this.my_capture.size === 3)) { throw new Error(\`assertion failed: \\"this
 my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -1427,12 +1332,9 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
     "tree": {
       "children": {
         "Function": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -1442,12 +1344,9 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
           "path": "root/Function",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -1458,12 +1357,9 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
           "path": "root/cloud.TestRunner",
         },
         "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -1476,7 +1372,7 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -1504,9 +1400,13 @@ if (!(Array.from(this.my_set)[1].seconds === 1200)) { throw new Error(\`assertio
 }
 };
 })())({
-my_set: new Set([{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds: 1200,minutes: 20,hours: 0.3333333333333333,}])
+my_set: new Set([{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.16666666666666666,},{\\"seconds\\": 1200,\\"minutes\\": 20,\\"hours\\": 0.3333333333333333,}])
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -1535,12 +1435,9 @@ my_set: new Set([{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds
     "tree": {
       "children": {
         "Function": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -1550,12 +1447,9 @@ my_set: new Set([{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds
           "path": "root/Function",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -1566,12 +1460,9 @@ my_set: new Set([{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds
           "path": "root/cloud.TestRunner",
         },
         "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -1584,7 +1475,7 @@ my_set: new Set([{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -1614,6 +1505,10 @@ if (!(this.my_capture === \\"bam bam bam\\")) { throw new Error(\`assertion fail
 my_capture: \\"bam bam bam\\"
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -1642,12 +1537,9 @@ my_capture: \\"bam bam bam\\"
     "tree": {
       "children": {
         "Function": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -1657,12 +1549,9 @@ my_capture: \\"bam bam bam\\"
           "path": "root/Function",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -1673,12 +1562,9 @@ my_capture: \\"bam bam bam\\"
           "path": "root/cloud.TestRunner",
         },
         "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -1691,7 +1577,7 @@ my_capture: \\"bam bam bam\\"
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -1720,9 +1606,13 @@ if (!(Object.keys(this.my_capture).length === 3)) { throw new Error(\`assertion 
 }
 };
 })())({
-my_capture: {hello: \\"dude\\",world: \\"cup\\",foo: \\"bar\\",}
+my_capture: {\\"hello\\": \\"dude\\",\\"world\\": \\"cup\\",\\"foo\\": \\"bar\\",}
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -1751,12 +1641,9 @@ my_capture: {hello: \\"dude\\",world: \\"cup\\",foo: \\"bar\\",}
     "tree": {
       "children": {
         "Function": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -1766,12 +1653,9 @@ my_capture: {hello: \\"dude\\",world: \\"cup\\",foo: \\"bar\\",}
           "path": "root/Function",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -1782,12 +1666,9 @@ my_capture: {hello: \\"dude\\",world: \\"cup\\",foo: \\"bar\\",}
           "path": "root/cloud.TestRunner",
         },
         "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -1800,7 +1681,7 @@ my_capture: {hello: \\"dude\\",world: \\"cup\\",foo: \\"bar\\",}
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -1829,9 +1710,13 @@ if (!(this.my_struct.bar.get('bar') === 4)) { throw new Error(\`assertion failed
 }
 };
 })())({
-my_struct: {foo: new Map([[\\"foo\\",1],[\\"bar\\",2]]),bar: new Map([[\\"foo\\",3],[\\"bar\\",4]]),}
+my_struct: {\\"foo\\": new Map([[\\"foo\\",1],[\\"bar\\",2]]),\\"bar\\": new Map([[\\"foo\\",3],[\\"bar\\",4]]),}
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -1860,12 +1745,9 @@ my_struct: {foo: new Map([[\\"foo\\",1],[\\"bar\\",2]]),bar: new Map([[\\"foo\\"
     "tree": {
       "children": {
         "Function": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -1875,12 +1757,9 @@ my_struct: {foo: new Map([[\\"foo\\",1],[\\"bar\\",2]]),bar: new Map([[\\"foo\\"
           "path": "root/Function",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -1891,12 +1770,9 @@ my_struct: {foo: new Map([[\\"foo\\",1],[\\"bar\\",2]]),bar: new Map([[\\"foo\\"
           "path": "root/cloud.TestRunner",
         },
         "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -1909,7 +1785,7 @@ my_struct: {foo: new Map([[\\"foo\\",1],[\\"bar\\",2]]),bar: new Map([[\\"foo\\"
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",
@@ -1942,39 +1818,69 @@ if (!(await bar.get(\\"foo\\") === \\"bar\\")) { throw new Error(\`assertion fai
 }
 };
 })())({
-my_struct: {bucky: (function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"BUCKET_HANDLE_4fecd6d0\\"),mapy: new Map([[\\"foo\\",(function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"BUCKET_HANDLE_300e8055\\")],[\\"bar\\",(function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"BUCKET_HANDLE_0120daf4\\")]]),arry: {boom: [(function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"BUCKET_HANDLE_ea7944ef\\"),(function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"BUCKET_HANDLE_1d7ab674\\")],},}
+my_struct: {\\"bucky\\": (function(env) {
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+})(\\"BUCKET_HANDLE_4fecd6d0\\"),\\"mapy\\": new Map([[\\"foo\\",(function(env) {
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+})(\\"BUCKET_HANDLE_300e8055\\")],[\\"bar\\",(function(env) {
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+})(\\"BUCKET_HANDLE_0120daf4\\")]]),\\"arry\\": {\\"boom\\": [(function(env) {
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+})(\\"BUCKET_HANDLE_ea7944ef\\"),(function(env) {
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+})(\\"BUCKET_HANDLE_1d7ab674\\")],},}
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function",
+        "target": "root/B1",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function",
+        "target": "root/B2",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function",
+        "target": "root/B3",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function",
+        "target": "root/B4",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function",
+        "target": "root/B5",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -2059,19 +1965,9 @@ my_struct: {bucky: (function(env) {
     "tree": {
       "children": {
         "B1": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "$inflight_init",
-                "resource": "root/Function",
-              },
-            ],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud object store",
@@ -2081,19 +1977,9 @@ my_struct: {bucky: (function(env) {
           "path": "root/B1",
         },
         "B2": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "$inflight_init",
-                "resource": "root/Function",
-              },
-            ],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud object store",
@@ -2103,19 +1989,9 @@ my_struct: {bucky: (function(env) {
           "path": "root/B2",
         },
         "B3": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "$inflight_init",
-                "resource": "root/Function",
-              },
-            ],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud object store",
@@ -2125,19 +2001,9 @@ my_struct: {bucky: (function(env) {
           "path": "root/B3",
         },
         "B4": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "$inflight_init",
-                "resource": "root/Function",
-              },
-            ],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud object store",
@@ -2147,19 +2013,9 @@ my_struct: {bucky: (function(env) {
           "path": "root/B4",
         },
         "B5": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "$inflight_init",
-                "resource": "root/Function",
-              },
-            ],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud object store",
@@ -2169,43 +2025,9 @@ my_struct: {bucky: (function(env) {
           "path": "root/B5",
         },
         "Function": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "$inflight_init",
-                "resource": "root/B1",
-              },
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "$inflight_init",
-                "resource": "root/B2",
-              },
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "$inflight_init",
-                "resource": "root/B3",
-              },
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "$inflight_init",
-                "resource": "root/B4",
-              },
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "$inflight_init",
-                "resource": "root/B5",
-              },
-            ],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -2215,12 +2037,9 @@ my_struct: {bucky: (function(env) {
           "path": "root/Function",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -2231,12 +2050,9 @@ my_struct: {bucky: (function(env) {
           "path": "root/cloud.TestRunner",
         },
         "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.70",
           },
           "display": {
             "description": "An inflight resource",
@@ -2249,7 +2065,7 @@ my_struct: {bucky: (function(env) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.70",
       },
       "id": "root",
       "path": "root",

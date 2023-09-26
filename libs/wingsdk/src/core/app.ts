@@ -47,6 +47,17 @@ export interface AppProps {
    * @default false
    */
   readonly isTestEnvironment?: boolean;
+
+  /**
+   *  The absolute directory location for the wing entry point file
+   */
+  readonly entrypointDir: string;
+
+  /**
+   *  The App root id
+   * @default Default
+   */
+  readonly rootId?: string;
 }
 
 /**
@@ -90,6 +101,22 @@ export abstract class App extends Construct {
   }
 
   /**
+   * The name of the compilation target.
+   * @internal
+   */
+  public abstract readonly _target:
+    | "sim"
+    | "tf-aws"
+    | "tf-azure"
+    | "tf-gcp"
+    | "awscdk";
+
+  /**
+   * Wing source files directory absolute path
+   */
+  public readonly entrypointDir: string;
+
+  /**
    * The output directory.
    */
   public abstract readonly outdir: string;
@@ -104,6 +131,11 @@ export abstract class App extends Construct {
    * @internal
    */
   public abstract readonly _tokens: Tokens;
+
+  constructor(scope: Construct, id: string, props: AppProps) {
+    super(scope, id);
+    this.entrypointDir = props.entrypointDir;
+  }
 
   /**
    * The ".wing" directory, which is where the compiler emits its output. We are taking an implicit

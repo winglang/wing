@@ -1,8 +1,8 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
+import { Testing } from "../../src/simulator";
 import * as tfaws from "../../src/target-tf-aws";
-import { Testing } from "../../src/testing";
 import {
   mkdtemp,
   sanitizeCode,
@@ -12,7 +12,7 @@ import {
 } from "../util";
 
 test("default counter behavior", () => {
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   cloud.Counter._newCounter(app, "Counter");
   const output = app.synth();
 
@@ -21,7 +21,7 @@ test("default counter behavior", () => {
 });
 
 test("counter with initial value", () => {
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   cloud.Counter._newCounter(app, "Counter", {
     initial: 9991,
   });
@@ -33,7 +33,7 @@ test("counter with initial value", () => {
 });
 
 test("function with a counter binding", () => {
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const counter = cloud.Counter._newCounter(app, "Counter");
   const inflight = Testing.makeHandler(
     app,
@@ -86,7 +86,7 @@ test("inc() policy statement", () => {
   cloud.Function._newFunction(app, "Function", inflight);
   const output = app.synth();
 
-  expect(tfSanitize(output)).toContain("dynamodb:UpdateItem");
+  expect(output).toContain("dynamodb:UpdateItem");
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
@@ -111,7 +111,7 @@ test("dec() policy statement", () => {
   cloud.Function._newFunction(app, "Function", inflight);
   const output = app.synth();
 
-  expect(tfSanitize(output)).toContain("dynamodb:UpdateItem");
+  expect(output).toContain("dynamodb:UpdateItem");
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
@@ -136,7 +136,7 @@ test("peek() policy statement", () => {
   cloud.Function._newFunction(app, "Function", inflight);
   const output = app.synth();
 
-  expect(tfSanitize(output)).toContain("dynamodb:GetItem");
+  expect(output).toContain("dynamodb:GetItem");
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
@@ -160,8 +160,7 @@ test("set() policy statement", () => {
   );
   cloud.Function._newFunction(app, "Function", inflight);
   const output = app.synth();
-
-  expect(tfSanitize(output)).toContain("dynamodb:UpdateItem");
+  expect(output).toContain("dynamodb:UpdateItem");
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });

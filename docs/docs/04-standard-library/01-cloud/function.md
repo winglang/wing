@@ -45,15 +45,35 @@ new cloud.Function(inflight () => {
 
 ### Simulator (`sim`)
 
-The sim implementation of `cloud.Function` uses JavaScript's function
+The sim implementation of `cloud.Function` runs the inflight code as a JavaScript function.
 
 ### AWS (`tf-aws` and `awscdk`)
 
-The AWS implementation of `cloud.Function` uses [Amazon Lambda](https://aws.amazon.com/lambda/).
+The AWS implementation of `cloud.Function` uses [AWS Lambda](https://aws.amazon.com/lambda/).
+
+To add extra IAM permissions to the function, you can use the `aws.Function` class as shown below.
+
+```ts playground
+bring aws;
+bring cloud;
+
+let f = new cloud.Function(inflight () => {
+  log("Hello world!");
+});
+if let lambdaFn = aws.Function.from(f) {
+  lambdaFn.addPolicyStatements(
+    aws.PolicyStatement {
+      actions: ["ses:sendEmail"],
+      effect: aws.Effect.ALLOW,
+      resources: ["*"],
+    },
+  );
+}
+```
 
 ### Azure (`tf-azure`)
 
-The Azure implementation of `cloud.Function` uses [Azure Function](https://azure.microsoft.com/en-us/products/function).
+The Azure implementation of `cloud.Function` uses [Azure Functions](https://azure.microsoft.com/en-us/products/functions).
 
 🚧 `invoke` API is not supported yet (tracking issue: [#1371](https://github.com/winglang/wing/issues/1371))
 
@@ -151,7 +171,6 @@ Invoke the function asynchronously with a given payload.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Function.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Function.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/sdk.cloud.Function.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Returns the set of environment variables for this function. |
 
 ---
@@ -165,18 +184,6 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
-
----
-
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.Function.property.display"></a>
-
-```wing
-display: Display;
-```
-
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
-
-Information on how to display a resource in the UI.
 
 ---
 
@@ -275,7 +282,6 @@ A resource with an inflight "handle" method that can be used to create a `cloud.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.IFunctionHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.IFunctionHandler.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
@@ -288,18 +294,6 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
-
----
-
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.IFunctionHandler.property.display"></a>
-
-```wing
-display: Display;
-```
-
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
-
-Information on how to display a resource in the UI.
 
 ---
 

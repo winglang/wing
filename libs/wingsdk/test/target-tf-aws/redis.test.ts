@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { Function } from "../../src/cloud";
 import * as ex from "../../src/ex";
+import { Testing } from "../../src/simulator";
 import * as tfaws from "../../src/target-tf-aws";
-import { Testing } from "../../src/testing";
 import {
   mkdtemp,
   getTfResource,
@@ -61,7 +61,7 @@ describe("When creating a Redis resource", () => {
       const redisCluster = ex.Redis._newRedis(app, "Redis") as ex.Redis;
       const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
       const func = Function._newFunction(app, "Function", inflight);
-      redisCluster._bind(func, ["set", "get"]);
+      redisCluster.bind(func, ["set", "get"]);
 
       // WHEN
       const output = app.synth();
@@ -105,8 +105,8 @@ describe("When creating multiple Redis resources", () => {
       const otherCluster = ex.Redis._newRedis(app, "OtherRedis") as ex.Redis;
       const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
       const func = Function._newFunction(app, "Function", inflight);
-      redisCluster._bind(func, ["set", "get"]);
-      otherCluster._bind(func, ["set", "get"]);
+      redisCluster.bind(func, ["set", "get"]);
+      otherCluster.bind(func, ["set", "get"]);
 
       // WHEN
       const output = app.synth();

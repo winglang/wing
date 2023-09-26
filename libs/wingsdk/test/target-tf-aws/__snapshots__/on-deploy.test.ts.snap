@@ -1,74 +1,77 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`create an OnDeploy 1`] = `
-"{
-  \\"data\\": {
-    \\"aws_lambda_invocation\\": {
-      \\"my_on_deploy_Invocation_1A26E3B9\\": {
-        \\"depends_on\\": [],
-        \\"function_name\\": \\"\${aws_lambda_function.my_on_deploy_Function_59669FC0.function_name}\\",
-        \\"input\\": \\"{}\\"
-      }
-    }
+{
+  "data": {
+    "aws_lambda_invocation": {
+      "my_on_deploy_Invocation_1A26E3B9": {
+        "depends_on": [],
+        "function_name": "\${aws_lambda_function.my_on_deploy_Function_59669FC0.function_name}",
+        "input": "{}",
+      },
+    },
   },
-  \\"output\\": {
-    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
-      \\"value\\": \\"[]\\"
-    }
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
-  \\"resource\\": {
-    \\"aws_iam_role\\": {
-      \\"my_on_deploy_Function_IamRole_76DF13CA\\": {
-        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
-      }
+  "resource": {
+    "aws_iam_role": {
+      "my_on_deploy_Function_IamRole_76DF13CA": {
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
     },
-    \\"aws_iam_role_policy\\": {
-      \\"my_on_deploy_Function_IamRolePolicy_AA6273E9\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.my_on_deploy_Function_IamRole_76DF13CA.name}\\"
-      }
+    "aws_iam_role_policy": {
+      "my_on_deploy_Function_IamRolePolicy_AA6273E9": {
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.my_on_deploy_Function_IamRole_76DF13CA.name}",
+      },
     },
-    \\"aws_iam_role_policy_attachment\\": {
-      \\"my_on_deploy_Function_IamRolePolicyAttachment_505E5C37\\": {
-        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.my_on_deploy_Function_IamRole_76DF13CA.name}\\"
-      }
+    "aws_iam_role_policy_attachment": {
+      "my_on_deploy_Function_IamRolePolicyAttachment_505E5C37": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.my_on_deploy_Function_IamRole_76DF13CA.name}",
+      },
     },
-    \\"aws_lambda_function\\": {
-      \\"my_on_deploy_Function_59669FC0\\": {
-        \\"environment\\": {
-          \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"Function-c88c90bc\\"
-          }
+    "aws_lambda_function": {
+      "my_on_deploy_Function_59669FC0": {
+        "architectures": [
+          "arm64",
+        ],
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Function-c88c90bc",
+          },
         },
-        \\"function_name\\": \\"Function-c88c90bc\\",
-        \\"handler\\": \\"index.handler\\",
-        \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.my_on_deploy_Function_IamRole_76DF13CA.arn}\\",
-        \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.my_on_deploy_Function_S3Object_69D52AC4.key}\\",
-        \\"timeout\\": 30,
-        \\"vpc_config\\": {
-          \\"security_group_ids\\": [],
-          \\"subnet_ids\\": []
-        }
-      }
+        "function_name": "Function-c88c90bc",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.my_on_deploy_Function_IamRole_76DF13CA.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.my_on_deploy_Function_S3Object_69D52AC4.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
     },
-    \\"aws_s3_bucket\\": {
-      \\"Code\\": {
-        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
-      }
+    "aws_s3_bucket": {
+      "Code": {
+        "bucket_prefix": "code-c84a50b1-",
+      },
     },
-    \\"aws_s3_object\\": {
-      \\"my_on_deploy_Function_S3Object_69D52AC4\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"key\\": \\"<key>\\",
-        \\"source\\": \\"<source>\\"
-      }
-    }
-  }
-}"
+    "aws_s3_object": {
+      "my_on_deploy_Function_S3Object_69D52AC4": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+    },
+  },
+}
 `;
 
 exports[`create an OnDeploy 2`] = `
@@ -88,12 +91,9 @@ exports[`create an OnDeploy 2`] = `
                 "path": "root/Default/Code",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -112,9 +112,6 @@ exports[`create an OnDeploy 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -127,7 +124,7 @@ exports[`create an OnDeploy 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -138,14 +135,8 @@ exports[`create an OnDeploy 2`] = `
                 "path": "root/Default/cloud.TestRunner",
               },
               "my_on_deploy": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Function": {
-                    "attributes": {
-                      "wing:resource:connections": [],
-                    },
                     "children": {
                       "Asset": {
                         "constructInfo": {
@@ -198,7 +189,7 @@ exports[`create an OnDeploy 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.70",
                     },
                     "display": {
                       "description": "A cloud function (FaaS)",
@@ -218,7 +209,7 @@ exports[`create an OnDeploy 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "Run code during the app's deployment.",
@@ -230,7 +221,7 @@ exports[`create an OnDeploy 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.70",
             },
             "id": "Default",
             "path": "root/Default",
@@ -264,103 +255,83 @@ exports[`create an OnDeploy 2`] = `
 `;
 
 exports[`execute OnDeploy after other resources 1`] = `
-"{
-  \\"data\\": {
-    \\"aws_lambda_invocation\\": {
-      \\"my_on_deploy_Invocation_1A26E3B9\\": {
-        \\"depends_on\\": [
-          \\"aws_s3_bucket.my_bucket\\",
-          \\"aws_s3_bucket_server_side_encryption_configuration.my_bucket_Encryption_3B1569A4\\",
-          \\"aws_s3_bucket_public_access_block.my_bucket_PublicAccessBlock_538547C0\\"
+{
+  "data": {
+    "aws_lambda_invocation": {
+      "my_on_deploy_Invocation_1A26E3B9": {
+        "depends_on": [
+          "aws_s3_bucket.my_bucket",
         ],
-        \\"function_name\\": \\"\${aws_lambda_function.my_on_deploy_Function_59669FC0.function_name}\\",
-        \\"input\\": \\"{}\\"
-      }
-    }
-  },
-  \\"output\\": {
-    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
-      \\"value\\": \\"[]\\"
-    }
-  },
-  \\"resource\\": {
-    \\"aws_iam_role\\": {
-      \\"my_on_deploy_Function_IamRole_76DF13CA\\": {
-        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
-      }
-    },
-    \\"aws_iam_role_policy\\": {
-      \\"my_on_deploy_Function_IamRolePolicy_AA6273E9\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.my_on_deploy_Function_IamRole_76DF13CA.name}\\"
-      }
-    },
-    \\"aws_iam_role_policy_attachment\\": {
-      \\"my_on_deploy_Function_IamRolePolicyAttachment_505E5C37\\": {
-        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.my_on_deploy_Function_IamRole_76DF13CA.name}\\"
-      }
-    },
-    \\"aws_lambda_function\\": {
-      \\"my_on_deploy_Function_59669FC0\\": {
-        \\"environment\\": {
-          \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"Function-c88c90bc\\"
-          }
-        },
-        \\"function_name\\": \\"Function-c88c90bc\\",
-        \\"handler\\": \\"index.handler\\",
-        \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.my_on_deploy_Function_IamRole_76DF13CA.arn}\\",
-        \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.my_on_deploy_Function_S3Object_69D52AC4.key}\\",
-        \\"timeout\\": 30,
-        \\"vpc_config\\": {
-          \\"security_group_ids\\": [],
-          \\"subnet_ids\\": []
-        }
-      }
-    },
-    \\"aws_s3_bucket\\": {
-      \\"Code\\": {
-        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
+        "function_name": "\${aws_lambda_function.my_on_deploy_Function_59669FC0.function_name}",
+        "input": "{}",
       },
-      \\"my_bucket\\": {
-        \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\",
-        \\"force_destroy\\": false
-      }
     },
-    \\"aws_s3_bucket_public_access_block\\": {
-      \\"my_bucket_PublicAccessBlock_538547C0\\": {
-        \\"block_public_acls\\": true,
-        \\"block_public_policy\\": true,
-        \\"bucket\\": \\"\${aws_s3_bucket.my_bucket.bucket}\\",
-        \\"ignore_public_acls\\": true,
-        \\"restrict_public_buckets\\": true
-      }
+  },
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
     },
-    \\"aws_s3_bucket_server_side_encryption_configuration\\": {
-      \\"my_bucket_Encryption_3B1569A4\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.my_bucket.bucket}\\",
-        \\"rule\\": [
-          {
-            \\"apply_server_side_encryption_by_default\\": {
-              \\"sse_algorithm\\": \\"AES256\\"
-            }
-          }
-        ]
-      }
+  },
+  "resource": {
+    "aws_iam_role": {
+      "my_on_deploy_Function_IamRole_76DF13CA": {
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
     },
-    \\"aws_s3_object\\": {
-      \\"my_on_deploy_Function_S3Object_69D52AC4\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"key\\": \\"<key>\\",
-        \\"source\\": \\"<source>\\"
-      }
-    }
-  }
-}"
+    "aws_iam_role_policy": {
+      "my_on_deploy_Function_IamRolePolicy_AA6273E9": {
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.my_on_deploy_Function_IamRole_76DF13CA.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "my_on_deploy_Function_IamRolePolicyAttachment_505E5C37": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.my_on_deploy_Function_IamRole_76DF13CA.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "my_on_deploy_Function_59669FC0": {
+        "architectures": [
+          "arm64",
+        ],
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Function-c88c90bc",
+          },
+        },
+        "function_name": "Function-c88c90bc",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.my_on_deploy_Function_IamRole_76DF13CA.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.my_on_deploy_Function_S3Object_69D52AC4.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
+    },
+    "aws_s3_bucket": {
+      "Code": {
+        "bucket_prefix": "code-c84a50b1-",
+      },
+      "my_bucket": {
+        "bucket_prefix": "my-bucket-c8045fcc-",
+        "force_destroy": false,
+      },
+    },
+    "aws_s3_object": {
+      "my_on_deploy_Function_S3Object_69D52AC4": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+    },
+  },
+}
 `;
 
 exports[`execute OnDeploy after other resources 2`] = `
@@ -380,12 +351,9 @@ exports[`execute OnDeploy after other resources 2`] = `
                 "path": "root/Default/Code",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -404,9 +372,6 @@ exports[`execute OnDeploy after other resources 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -419,7 +384,7 @@ exports[`execute OnDeploy after other resources 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -430,9 +395,6 @@ exports[`execute OnDeploy after other resources 2`] = `
                 "path": "root/Default/cloud.TestRunner",
               },
               "my_bucket": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -442,26 +404,10 @@ exports[`execute OnDeploy after other resources 2`] = `
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
                   },
-                  "Encryption": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "Encryption",
-                    "path": "root/Default/my_bucket/Encryption",
-                  },
-                  "PublicAccessBlock": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "PublicAccessBlock",
-                    "path": "root/Default/my_bucket/PublicAccessBlock",
-                  },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -471,14 +417,8 @@ exports[`execute OnDeploy after other resources 2`] = `
                 "path": "root/Default/my_bucket",
               },
               "my_on_deploy": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Function": {
-                    "attributes": {
-                      "wing:resource:connections": [],
-                    },
                     "children": {
                       "Asset": {
                         "constructInfo": {
@@ -531,7 +471,7 @@ exports[`execute OnDeploy after other resources 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.70",
                     },
                     "display": {
                       "description": "A cloud function (FaaS)",
@@ -551,7 +491,7 @@ exports[`execute OnDeploy after other resources 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "Run code during the app's deployment.",
@@ -563,7 +503,7 @@ exports[`execute OnDeploy after other resources 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.70",
             },
             "id": "Default",
             "path": "root/Default",
@@ -597,108 +537,84 @@ exports[`execute OnDeploy after other resources 2`] = `
 `;
 
 exports[`execute OnDeploy before other resources 1`] = `
-"{
-  \\"data\\": {
-    \\"aws_lambda_invocation\\": {
-      \\"my_on_deploy_Invocation_1A26E3B9\\": {
-        \\"depends_on\\": [],
-        \\"function_name\\": \\"\${aws_lambda_function.my_on_deploy_Function_59669FC0.function_name}\\",
-        \\"input\\": \\"{}\\"
-      }
-    }
-  },
-  \\"output\\": {
-    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
-      \\"value\\": \\"[]\\"
-    }
-  },
-  \\"resource\\": {
-    \\"aws_iam_role\\": {
-      \\"my_on_deploy_Function_IamRole_76DF13CA\\": {
-        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
-      }
-    },
-    \\"aws_iam_role_policy\\": {
-      \\"my_on_deploy_Function_IamRolePolicy_AA6273E9\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.my_on_deploy_Function_IamRole_76DF13CA.name}\\"
-      }
-    },
-    \\"aws_iam_role_policy_attachment\\": {
-      \\"my_on_deploy_Function_IamRolePolicyAttachment_505E5C37\\": {
-        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.my_on_deploy_Function_IamRole_76DF13CA.name}\\"
-      }
-    },
-    \\"aws_lambda_function\\": {
-      \\"my_on_deploy_Function_59669FC0\\": {
-        \\"environment\\": {
-          \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"Function-c88c90bc\\"
-          }
-        },
-        \\"function_name\\": \\"Function-c88c90bc\\",
-        \\"handler\\": \\"index.handler\\",
-        \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.my_on_deploy_Function_IamRole_76DF13CA.arn}\\",
-        \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.my_on_deploy_Function_S3Object_69D52AC4.key}\\",
-        \\"timeout\\": 30,
-        \\"vpc_config\\": {
-          \\"security_group_ids\\": [],
-          \\"subnet_ids\\": []
-        }
-      }
-    },
-    \\"aws_s3_bucket\\": {
-      \\"Code\\": {
-        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
+{
+  "data": {
+    "aws_lambda_invocation": {
+      "my_on_deploy_Invocation_1A26E3B9": {
+        "depends_on": [],
+        "function_name": "\${aws_lambda_function.my_on_deploy_Function_59669FC0.function_name}",
+        "input": "{}",
       },
-      \\"my_bucket\\": {
-        \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\",
-        \\"depends_on\\": [
-          \\"\${data.aws_lambda_invocation.my_on_deploy_Invocation_1A26E3B9}\\"
-        ],
-        \\"force_destroy\\": false
-      }
     },
-    \\"aws_s3_bucket_public_access_block\\": {
-      \\"my_bucket_PublicAccessBlock_538547C0\\": {
-        \\"block_public_acls\\": true,
-        \\"block_public_policy\\": true,
-        \\"bucket\\": \\"\${aws_s3_bucket.my_bucket.bucket}\\",
-        \\"depends_on\\": [
-          \\"\${data.aws_lambda_invocation.my_on_deploy_Invocation_1A26E3B9}\\"
-        ],
-        \\"ignore_public_acls\\": true,
-        \\"restrict_public_buckets\\": true
-      }
+  },
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
     },
-    \\"aws_s3_bucket_server_side_encryption_configuration\\": {
-      \\"my_bucket_Encryption_3B1569A4\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.my_bucket.bucket}\\",
-        \\"depends_on\\": [
-          \\"\${data.aws_lambda_invocation.my_on_deploy_Invocation_1A26E3B9}\\"
-        ],
-        \\"rule\\": [
-          {
-            \\"apply_server_side_encryption_by_default\\": {
-              \\"sse_algorithm\\": \\"AES256\\"
-            }
-          }
-        ]
-      }
+  },
+  "resource": {
+    "aws_iam_role": {
+      "my_on_deploy_Function_IamRole_76DF13CA": {
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
     },
-    \\"aws_s3_object\\": {
-      \\"my_on_deploy_Function_S3Object_69D52AC4\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"key\\": \\"<key>\\",
-        \\"source\\": \\"<source>\\"
-      }
-    }
-  }
-}"
+    "aws_iam_role_policy": {
+      "my_on_deploy_Function_IamRolePolicy_AA6273E9": {
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.my_on_deploy_Function_IamRole_76DF13CA.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "my_on_deploy_Function_IamRolePolicyAttachment_505E5C37": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.my_on_deploy_Function_IamRole_76DF13CA.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "my_on_deploy_Function_59669FC0": {
+        "architectures": [
+          "arm64",
+        ],
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Function-c88c90bc",
+          },
+        },
+        "function_name": "Function-c88c90bc",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.my_on_deploy_Function_IamRole_76DF13CA.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.my_on_deploy_Function_S3Object_69D52AC4.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
+    },
+    "aws_s3_bucket": {
+      "Code": {
+        "bucket_prefix": "code-c84a50b1-",
+      },
+      "my_bucket": {
+        "bucket_prefix": "my-bucket-c8045fcc-",
+        "depends_on": [
+          "\${data.aws_lambda_invocation.my_on_deploy_Invocation_1A26E3B9}",
+        ],
+        "force_destroy": false,
+      },
+    },
+    "aws_s3_object": {
+      "my_on_deploy_Function_S3Object_69D52AC4": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+    },
+  },
+}
 `;
 
 exports[`execute OnDeploy before other resources 2`] = `
@@ -718,12 +634,9 @@ exports[`execute OnDeploy before other resources 2`] = `
                 "path": "root/Default/Code",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -742,9 +655,6 @@ exports[`execute OnDeploy before other resources 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -757,7 +667,7 @@ exports[`execute OnDeploy before other resources 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -768,9 +678,6 @@ exports[`execute OnDeploy before other resources 2`] = `
                 "path": "root/Default/cloud.TestRunner",
               },
               "my_bucket": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -780,26 +687,10 @@ exports[`execute OnDeploy before other resources 2`] = `
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
                   },
-                  "Encryption": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "Encryption",
-                    "path": "root/Default/my_bucket/Encryption",
-                  },
-                  "PublicAccessBlock": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "PublicAccessBlock",
-                    "path": "root/Default/my_bucket/PublicAccessBlock",
-                  },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -809,14 +700,8 @@ exports[`execute OnDeploy before other resources 2`] = `
                 "path": "root/Default/my_bucket",
               },
               "my_on_deploy": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Function": {
-                    "attributes": {
-                      "wing:resource:connections": [],
-                    },
                     "children": {
                       "Asset": {
                         "constructInfo": {
@@ -869,7 +754,7 @@ exports[`execute OnDeploy before other resources 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.314",
+                      "version": "10.2.70",
                     },
                     "display": {
                       "description": "A cloud function (FaaS)",
@@ -889,7 +774,7 @@ exports[`execute OnDeploy before other resources 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.314",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "Run code during the app's deployment.",
@@ -901,7 +786,7 @@ exports[`execute OnDeploy before other resources 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.314",
+              "version": "10.2.70",
             },
             "id": "Default",
             "path": "root/Default",

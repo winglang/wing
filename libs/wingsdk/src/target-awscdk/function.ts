@@ -2,6 +2,7 @@ import { resolve } from "path";
 import { Duration } from "aws-cdk-lib";
 import { PolicyStatement as CdkPolicyStatement } from "aws-cdk-lib/aws-iam";
 import {
+  Architecture,
   Function as CdkFunction,
   Code,
   IEventSource,
@@ -11,7 +12,7 @@ import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { createBundle } from "../shared/bundling";
-import { PolicyStatement, _generateAwsFunctionLines } from "../shared-aws";
+import { IAwsFunction, PolicyStatement } from "../shared-aws";
 import { IInflightHost } from "../std";
 
 /**
@@ -19,7 +20,7 @@ import { IInflightHost } from "../std";
  *
  * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
-export class Function extends cloud.Function {
+export class Function extends cloud.Function implements IAwsFunction {
   private readonly function: CdkFunction;
   /** Function ARN */
   public readonly arn: string;
@@ -44,46 +45,33 @@ export class Function extends cloud.Function {
         ? Duration.seconds(props.timeout.seconds)
         : Duration.minutes(0.5),
       memorySize: props.memory ? props.memory : undefined,
+      architecture: Architecture.ARM_64,
     });
 
     this.arn = this.function.functionArn;
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("functions can only be bound by awscdk.Function for now");
     }
 
     if (ops.includes(cloud.FunctionInflightMethods.INVOKE)) {
-      host.addPolicyStatements([
-        {
-          actions: ["lambda:InvokeFunction"],
-          resources: [`${this.function.functionArn}`],
-        },
-      ]);
+      host.addPolicyStatements({
+        actions: ["lambda:InvokeFunction"],
+        resources: [`${this.function.functionArn}`],
+      });
     }
 
     // The function name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.function.functionArn);
 
-    super._bind(host, ops);
-  }
-
-  /**
-   * Generates the code lines for the cloud function,
-   * overridden by the awscdk target to have the function context too
-   * @param inflightClient inflight client code
-   * @returns cloud function code string
-   * @internal
-   */
-  protected _generateLines(inflightClient: core.Code): string[] {
-    return _generateAwsFunctionLines(inflightClient);
+    super.bind(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return core.InflightClient.for(
       __dirname.replace("target-awscdk", "shared-aws"),
       __filename,
@@ -107,7 +95,7 @@ export class Function extends cloud.Function {
   /**
    * Add a policy statement to the Lambda role.
    */
-  public addPolicyStatements(statements: PolicyStatement[]) {
+  public addPolicyStatements(...statements: PolicyStatement[]) {
     for (const statement of statements) {
       this.function.addToRolePolicy(new CdkPolicyStatement(statement));
     }

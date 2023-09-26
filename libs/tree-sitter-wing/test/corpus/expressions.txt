@@ -169,6 +169,28 @@ new A() as "b" in c;
         (reference_identifier)))))
 
 ================================================================================
+New expression with id and scope on different lines
+================================================================================
+
+new A()
+  as 
+  "b" 
+  in 
+  c;
+
+--------------------------------------------------------------------------------
+
+(source
+  (expression_statement
+    (new_expression
+      class: (custom_type
+        object: (type_identifier))
+      args: (argument_list)
+      id: (string)
+      scope: (reference
+        (reference_identifier)))))
+
+================================================================================
 preflight anonymous closure
 ================================================================================
 
@@ -206,6 +228,48 @@ inflight (): num => { return 1; };
       (block
         (return_statement
           (number))))))
+
+================================================================================
+inflight anonymous closure inferred return
+================================================================================
+
+inflight () => { return 1; };
+
+--------------------------------------------------------------------------------
+
+(source
+  (expression_statement
+    (inflight_closure
+      (inflight_specifier)
+      (parameter_list)
+      (block
+        (return_statement
+          (number))))))
+
+================================================================================
+inflight anonymous closure inferred args
+================================================================================
+
+inflight (arg1) => { log(arg1); };
+
+--------------------------------------------------------------------------------
+
+(source
+  (expression_statement
+    (inflight_closure
+      (inflight_specifier)
+      (parameter_list
+        (parameter_definition
+          (identifier)))
+      (block
+        (expression_statement
+          (call
+            (reference
+              (reference_identifier))
+            (argument_list
+              (positional_argument
+                (reference
+                  (reference_identifier))))))))))
 
 ================================================================================
 Template string

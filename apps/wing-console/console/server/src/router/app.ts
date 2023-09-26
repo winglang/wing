@@ -12,7 +12,11 @@ import {
   NodeConnection,
   ConstructTreeNodeMap,
 } from "../utils/constructTreeNodeMap.js";
-import { createProcedure, createRouter } from "../utils/createRouter.js";
+import {
+  FileLink,
+  createProcedure,
+  createRouter,
+} from "../utils/createRouter.js";
 import {
   isTermsAccepted,
   acceptTerms,
@@ -62,6 +66,11 @@ export const createAppRouter = () => {
     "app.acceptTerms": createProcedure.mutation(() => {
       acceptTerms(true);
     }),
+    "app.layoutConfig": createProcedure.query(async ({ ctx }) => {
+      return {
+        config: ctx.layoutConfig,
+      };
+    }),
     "app.logs": createProcedure
       .input(
         z.object({
@@ -109,6 +118,45 @@ export const createAppRouter = () => {
           input?.showTests,
         );
       }),
+    "app.nodeIds": createProcedure
+      .input(
+        z
+          .object({
+            showTests: z.boolean().optional(),
+          })
+          .optional(),
+      )
+      .query(async ({ ctx, input }) => {
+        const simulator = await ctx.simulator();
+        const { tree } = simulator.tree().rawData();
+        const node = createExplorerItemFromConstructTreeNode(
+          shakeTree(tree),
+          simulator,
+          input?.showTests,
+        );
+
+        const list = new Array<string>();
+        const getNodeIds = (item: ExplorerItem) => {
+          list.push(item.id);
+          for (const child of item.childItems ?? []) {
+            getNodeIds(child);
+          }
+        };
+        getNodeIds(node);
+        return list;
+      }),
+    "app.selectNode": createProcedure
+      .input(
+        z.object({
+          resourcePath: z.string().optional(),
+        }),
+      )
+      .mutation(async ({ ctx, input }) => {
+        ctx.setSelectedNode(input.resourcePath ?? "");
+      }),
+    "app.selectedNode": createProcedure.query(async ({ ctx }) => {
+      return ctx.getSelectedNode();
+    }),
     "app.childRelationships": createProcedure
       .input(
         z.object({
@@ -119,6 +167,7 @@ export const createAppRouter = () => {
       .query(async ({ ctx, input }) => {
         const simulator = await ctx.simulator();
         const { tree } = simulator.tree().rawData();
+        const connections = simulator.connections();
         const nodeMap = buildConstructTreeNodeMap(shakeTree(tree));
 
         const node = nodeMap.get(input.path);
@@ -144,33 +193,46 @@ export const createAppRouter = () => {
               display: node.display,
             },
             inbound:
-              node.attributes?.["wing:resource:connections"]
-                ?.filter(({ direction, resource }) => {
-                  if (direction !== "inbound") {
+              connections
+                ?.filter(({ source, target }) => {
+                  if (target !== node.path) {
                     return false;
                   }
 
-                  const node = nodeMap.get(resource);
-                  if (!node) {
+                  const sourceNode = nodeMap.get(source);
+                  if (!sourceNode) {
                     throw new Error(
-                      `Could not find node for resource ${resource}`,
+                      `Could not find node for resource ${source}`,
                     );
                   }
 
-                  if (node.display?.hidden) {
+                  const targetNode = nodeMap.get(target);
+                  if (!targetNode) {
+                    throw new Error(
+                      `Could not find node for resource ${target}`,
+                    );
+                  }
+
+                  if (
+                    sourceNode.display?.hidden ||
+                    targetNode.display?.hidden
+                  ) {
                     return false;
                   }
 
-                  if (!input.showTests && matchTest(node.path)) {
+                  if (
+                    !input.showTests &&
+                    (matchTest(sourceNode.path) || matchTest(targetNode.path))
+                  ) {
                     return false;
                   }
 
                   return true;
                 })
                 .map((connection) => {
-                  const node = nodeMap.get(connection.resource)!;
+                  const node = nodeMap.get(connection.source)!;
                   return {
-                    relationshipType: connection.relationship,
+                    relationshipType: connection.name,
                     node: {
                       id: node.id,
                       path: node.path,
@@ -179,32 +241,46 @@ export const createAppRouter = () => {
                   };
                 }) ?? [],
             outbound:
-              node.attributes?.["wing:resource:connections"]
-                ?.filter(({ direction, resource }) => {
-                  if (direction !== "outbound") {
+              connections
+                ?.filter(({ source, target }) => {
+                  if (source !== node.path) {
                     return false;
                   }
 
-                  const node = nodeMap.get(resource);
-                  if (!node) {
+                  const sourceNode = nodeMap.get(source);
+                  if (!sourceNode) {
                     throw new Error(
-                      `Could not find node for resource ${resource}`,
+                      `Could not find node for resource ${source}`,
                     );
                   }
 
-                  if (node.display?.hidden) {
+                  const targetNode = nodeMap.get(target);
+                  if (!targetNode) {
+                    throw new Error(
+                      `Could not find node for resource ${target}`,
+                    );
+                  }
+
+                  if (
+                    sourceNode.display?.hidden ||
+                    targetNode.display?.hidden
+                  ) {
                     return false;
                   }
-                  if (!input.showTests && matchTest(node.path)) {
+
+                  if (
+                    !input.showTests &&
+                    (matchTest(sourceNode.path) || matchTest(targetNode.path))
+                  ) {
                     return false;
                   }
 
                   return true;
                 })
                 .map((connection) => {
-                  const node = nodeMap.get(connection.resource)!;
+                  const node = nodeMap.get(connection.target)!;
                   return {
-                    relationshipType: connection.relationship,
+                    relationshipType: connection.name,
                     node: {
                       id: node.id,
                       path: node.path,
@@ -303,24 +379,31 @@ export const createAppRouter = () => {
         // we keep only one connection per resource and direction (because the SDK currently has
         // no way to distinguish between multiple connections to the same resource).
         // Also, we need to filter out connections to hidden nodes.
-        const connections = uniqby(
-          node.attributes?.["wing:resource:connections"] ?? [],
-          (connection) => {
-            return `${connection.direction}-${connection.resource}`;
-          },
-        ).filter((connection) => {
-          const node = nodeMap.get(connection.resource);
-          if (!node) {
+        const connections = uniqby(simulator.connections(), (connection) => {
+          return `${connection.source}-${connection.target}`;
+        }).filter((connection) => {
+          const sourceNode = nodeMap.get(connection.source);
+          if (!sourceNode) {
             throw new Error(
-              `Could not find node for resource ${connection.resource}`,
+              `Could not find node for resource ${connection.source}`,
             );
           }
 
-          if (node.display?.hidden) {
+          const targetNode = nodeMap.get(connection.target);
+          if (!targetNode) {
+            throw new Error(
+              `Could not find node for resource ${connection.target}`,
+            );
+          }
+
+          if (sourceNode.display?.hidden || targetNode.display?.hidden) {
             return false;
           }
 
-          if (!showTests && matchTest(node.path)) {
+          if (
+            !showTests &&
+            (matchTest(sourceNode.path) || matchTest(targetNode.path))
+          ) {
             return false;
           }
 
@@ -338,11 +421,11 @@ export const createAppRouter = () => {
             attributes: config?.attrs,
           },
           inbound: connections
-            .filter(({ direction }) => {
-              return direction === "inbound";
+            .filter(({ target }) => {
+              return target === node.path;
             })
             .map((connection) => {
-              const node = nodeMap.get(connection.resource)!;
+              const node = nodeMap.get(connection.source)!;
               return {
                 id: node.id,
                 path: node.path,
@@ -350,17 +433,99 @@ export const createAppRouter = () => {
               };
             }),
           outbound: connections
-            .filter(({ direction }) => {
-              return direction === "outbound";
+            .filter(({ source }) => {
+              return source === node.path;
             })
             .map((connection) => {
-              const node = nodeMap.get(connection.resource)!;
+              const node = nodeMap.get(connection.target)!;
               return {
                 id: node.id,
                 path: node.path,
                 type: getResourceType(node, simulator),
               };
             }),
+        };
+      }),
+    "app.edgeMetadata": createProcedure
+      .input(
+        z.object({
+          edgeId: z.string(),
+          showTests: z.boolean().optional(),
+        }),
+      )
+      .query(async ({ ctx, input }) => {
+        const { edgeId, showTests } = input;
+        const simulator = await ctx.simulator();
+
+        const { tree } = simulator.tree().rawData();
+        const nodeMap = buildConstructTreeNodeMap(shakeTree(tree));
+
+        const sourcePath = edgeId.split("->")[0]?.trim();
+        const targetPath = edgeId.split("->")[1]?.trim();
+        const sourceNode = nodeMap.get(sourcePath);
+        if (!sourceNode) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Node was not found.",
+          });
+        }
+        const connections = simulator.connections();
+
+        const connection = connections?.find(
+          (connection) =>
+            sourceNode.path === connection.source &&
+            connection.target === targetPath,
+        );
+        const targetNode = nodeMap.get(connection?.target);
+        if (!targetNode) {
+          throw new Error(
+            `Could not find node for resource ${connection?.target}`,
+          );
+        }
+
+        const inflights = sourceNode.display?.hidden
+          ? []
+          : connections
+              ?.filter(({ source, target, name }) => {
+                if (source !== sourcePath) {
+                  return false;
+                }
+
+                if (target !== targetPath) {
+                  return false;
+                }
+
+                if (name === "$inflight_init()") {
+                  return false;
+                }
+
+                if (
+                  !showTests &&
+                  (matchTest(sourceNode.path) || matchTest(targetNode.path))
+                ) {
+                  return false;
+                }
+
+                return true;
+              })
+              .map((connection) => {
+                return {
+                  name: connection.name,
+                };
+              }) ?? [];
+
+        return {
+          source: {
+            id: sourceNode.id,
+            path: sourceNode.path,
+            type: getResourceType(sourceNode, simulator),
+          },
+          target: {
+            id: targetNode?.id ?? "",
+            path: targetNode?.path ?? "",
+            type: (targetNode && getResourceType(targetNode, simulator)) ?? "",
+          },
+          inflights,
         };
       }),
     "app.invalidateQuery": createProcedure.subscription(({ ctx }) => {
@@ -391,6 +556,7 @@ export const createAppRouter = () => {
         const simulator = await ctx.simulator();
 
         const { tree } = simulator.tree().rawData();
+        const connections = simulator.connections();
         const shakedTree = shakeTree(tree);
         const nodeMap = buildConstructTreeNodeMap(shakedTree);
         const nodes = [
@@ -401,9 +567,9 @@ export const createAppRouter = () => {
           ),
         ];
         const edges = uniqby(
-          createMapEdgeFromConstructTreeNode(
-            shakedTree,
+          createMapEdgesFromConnectionData(
             nodeMap,
+            connections,
             input?.showTests,
           ),
           (edge) => edge.id,
@@ -426,6 +592,42 @@ export const createAppRouter = () => {
       .mutation(async ({ ctx, input }) => {
         await ctx.hostUtils?.openExternal(input.url);
       }),
+    "app.openFileInEditor": createProcedure
+      .input(
+        z.object({
+          path: z.string(),
+          line: z.number().optional(),
+          column: z.number().optional(),
+        }),
+      )
+      .mutation(async ({ ctx, input }) => {
+        if (ctx.emitter.listenerCount("openFileInEditor") > 0) {
+          ctx.emitter.emit("openFileInEditor", {
+            path: input.path,
+            line: input.line,
+            column: input.column,
+          });
+          return;
+        }
+        const { default: launch } = await import("launch-editor");
+        launch(`${input.path}:${input.line}:${input.column}`);
+      }),
+
+    /**
+     * Warning! Subscribing to this procedure will override the default behavior of opening files in the editor
+     * provided by the "app.openFileInEditor" procedure.
+     * Needed to manage file opening within the vs-code extension.
+     */
+    "app.openFileInEditorSubscription": createProcedure.subscription(
+      ({ ctx }) => {
+        return observable<FileLink>((emit) => {
+          ctx.emitter.on("openFileInEditor", emit.next);
+          return () => {
+            ctx.emitter.off("openFileInEditor", emit.next);
+          };
+        });
+      },
+    ),
   });
 
   return { router };
@@ -436,9 +638,14 @@ function createExplorerItemFromConstructTreeNode(
   simulator: Simulator,
   showTests = false,
 ): ExplorerItem {
+  const label =
+    node.display?.sourceModule === "@winglang/sdk" && node.display?.title
+      ? node.display?.title
+      : node.id;
+
   return {
     id: node.path,
-    label: node.id,
+    label,
     type: getResourceType(node, simulator),
     display: node.display,
     childItems: node.children
@@ -460,6 +667,7 @@ export interface MapNode {
   data: {
     label?: string;
     type?: string;
+    path?: string;
     display?: NodeDisplay;
   };
   children?: MapNode[];
@@ -475,6 +683,7 @@ function createMapNodeFromConstructTreeNode(
     data: {
       label: node.id,
       type: getResourceType(node, simulator),
+      path: node.path,
       display: node.display,
     },
     children: node.children
@@ -503,39 +712,44 @@ export interface MapEdge {
   target: string;
 }
 
-function createMapEdgeFromConstructTreeNode(
-  node: ConstructTreeNode,
+function createMapEdgesFromConnectionData(
   nodeMap: ConstructTreeNodeMap,
+  connections: NodeConnection[],
   showTests = false,
 ): MapEdge[] {
-  if (node.display?.hidden || (!showTests && matchTest(node.path))) {
-    return [];
-  }
-
   return [
-    ...(node.attributes?.["wing:resource:connections"]
-      ?.filter(({ direction, resource }: NodeConnection) => {
-        const node = nodeMap.get(resource);
-        if (!node) {
-          throw new Error(`Could not find node for resource ${resource}`);
+    ...connections
+      .filter(({ source, target }) => {
+        const sourceNode = nodeMap.get(source);
+        if (!sourceNode) {
+          throw new Error(`Could not find node for resource ${source}`);
         }
 
-        const shouldRemove =
-          node.display?.hidden || (!showTests && matchTest(node.path));
-        if (direction === "inbound" && !shouldRemove) {
-          return true;
+        const targetNode = nodeMap.get(target);
+        if (!targetNode) {
+          throw new Error(`Could not find node for resource ${target}`);
         }
+
+        if (sourceNode.display?.hidden || targetNode.display?.hidden) {
+          return false;
+        }
+
+        if (
+          !showTests &&
+          (matchTest(sourceNode.path) || matchTest(targetNode.path))
+        ) {
+          return false;
+        }
+
+        return true;
       })
       ?.map((connection: NodeConnection) => {
         return {
-          id: `${connection.resource} -> ${node.path}`,
-          source: connection.resource,
-          target: node.path,
+          id: `${connection.source} -> ${connection.target}`,
+          source: connection.source,
+          target: connection.target,
         };
-      }) ?? []),
-    ...(Object.values(node.children ?? {})?.map((child) =>
-      createMapEdgeFromConstructTreeNode(child, nodeMap, showTests),
-    ) ?? []),
+      }),
   ].flat();
 }
 

@@ -8,6 +8,7 @@ import {
   ListObjectsV2Command,
   PutObjectCommand,
   S3Client,
+  NoSuchKey,
 } from "@aws-sdk/client-s3";
 import { SdkStream } from "@aws-sdk/types";
 import { sdkStreamMixin } from "@aws-sdk/util-stream-node";
@@ -93,7 +94,7 @@ test("get a non-existent object from the bucket", async () => {
   const VALUE = "VALUE";
   s3Mock
     .on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
-    .rejects(new Error("fake error"));
+    .rejects(new Error("Object does not exist"));
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
@@ -186,8 +187,9 @@ test("delete non-existent object from the bucket with mustExist option", async (
   s3Mock
     .on(DeleteObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
     .resolves({});
-  s3Mock.on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({});
-
+  s3Mock
+    .on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .rejects({ name: "NotFound" });
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
 
@@ -211,6 +213,8 @@ test("Given a non public bucket when reaching to a key public url it should thro
       IgnorePublicAcls: true,
     },
   });
+  s3Mock.on(HeadObjectCommand).rejects({ name: "NotFound" });
+
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
 
@@ -242,7 +246,9 @@ test("Given a public bucket when reaching to a non existent key, public url it s
   s3Mock
     .on(GetBucketLocationCommand, { Bucket: BUCKET_NAME })
     .resolves({ LocationConstraint: "us-east-2" });
-  s3Mock.on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({});
+  s3Mock
+    .on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .rejects({ name: "NotFound" });
 
   //WHEN
   const client = new BucketClient(BUCKET_NAME);
@@ -322,7 +328,9 @@ test("check that an object doesn't exist in the bucket", async () => {
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "KEY";
 
-  s3Mock.on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({});
+  s3Mock
+    .on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .rejects({ name: "NotFound" });
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
@@ -365,8 +373,10 @@ test("tryGet a non-existent object from the bucket", async () => {
   const VALUE = "VALUE";
   s3Mock
     .on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
-    .rejects(new Error("fake error"));
-  s3Mock.on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({});
+    .rejects(new NoSuchKey({ message: "NoSuchKey error", $metadata: {} }));
+  s3Mock
+    .on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .rejects({ name: "NotFound" });
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
@@ -374,6 +384,23 @@ test("tryGet a non-existent object from the bucket", async () => {
 
   // THEN
   expect(objectTryGet).toEqual(undefined);
+});
+
+test("tryGet object from the bucket throws an unknown error", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const VALUE = "VALUE";
+  s3Mock
+    .on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .rejects(new Error("unknown error"));
+  s3Mock.on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({});
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+
+  // THEN
+  await expect(() => client.tryGet(KEY)).rejects.toThrowError(/unknown error/);
 });
 
 test("tryGetJson an existing object from the bucket", async () => {
@@ -409,8 +436,10 @@ test("tryGetJson a non-existent object from the bucket", async () => {
   const VALUE = { msg: "Hello, World!" };
   s3Mock
     .on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
-    .rejects(new Error("fake error"));
-  s3Mock.on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({});
+    .rejects(new NoSuchKey({ message: "NoSuchKey error", $metadata: {} }));
+  s3Mock
+    .on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .rejects({ name: "NotFound" });
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
@@ -418,6 +447,23 @@ test("tryGetJson a non-existent object from the bucket", async () => {
 
   // THEN
   expect(objectTryGetJson).toEqual(undefined);
+});
+
+test("tryGetJson object from the bucket throws an unknown error", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const VALUE = { msg: "Hello, World!" };
+  s3Mock
+    .on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .rejects(new Error("unknown error"));
+  s3Mock.on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({});
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+
+  // THEN
+  await expect(() => client.tryGet(KEY)).rejects.toThrowError(/unknown error/);
 });
 
 test("tryGetJson an existing non-Json object from the bucket", async () => {
@@ -478,7 +524,9 @@ test("tryDelete a non-existent object from the bucket", async () => {
   s3Mock
     .on(DeleteObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
     .resolves({});
-  s3Mock.on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({});
+  s3Mock
+    .on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .rejects({ name: "NotFound" });
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME);

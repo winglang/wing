@@ -37,21 +37,22 @@ export class Counter extends cloud.Counter {
     });
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("counters can only be bound by tfaws.Function for now");
     }
 
-    host.addPolicyStatements(calculateCounterPermissions(this.table.arn, ops));
+    host.addPolicyStatements(
+      ...calculateCounterPermissions(this.table.arn, ops)
+    );
 
     host.addEnvironment(this.envName(), this.table.name);
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return core.InflightClient.for(
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,

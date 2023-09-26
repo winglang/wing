@@ -4,6 +4,7 @@ import { Construct } from "constructs";
 import { Api } from "./api";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
+import { DynamodbTable } from "./dynamodb-table";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
@@ -33,9 +34,9 @@ import {
 import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
-import { TABLE_FQN, REDIS_FQN } from "../ex";
+import { TABLE_FQN, REDIS_FQN, DYNAMODB_TABLE_FQN } from "../ex";
+import { WingSimulatorSchema } from "../simulator/simulator";
 import { TEST_RUNNER_FQN } from "../std";
-import { WingSimulatorSchema } from "../testing/simulator";
 
 /**
  * Path of the simulator configuration file in every .wsim tarball.
@@ -51,6 +52,8 @@ export class App extends core.App {
   public readonly isTestEnvironment: boolean;
   public readonly _tokens: SimTokens;
 
+  public readonly _target = "sim";
+
   /**
    * The test runner for this app.
    */
@@ -59,7 +62,8 @@ export class App extends core.App {
   private synthed = false;
 
   constructor(props: core.AppProps) {
-    super(undefined as any, "root");
+    // doesn't allow customize the root id- as used hardcoded in the code
+    super(undefined as any, "root", props);
     this.outdir = props.outdir ?? ".";
     this.isTestEnvironment = props.isTestEnvironment ?? false;
     this._tokens = new SimTokens();
@@ -117,6 +121,9 @@ export class App extends core.App {
 
       case ON_DEPLOY_FQN:
         return new OnDeploy(scope, id, args[0], args[1]);
+
+      case DYNAMODB_TABLE_FQN:
+        return new DynamodbTable(scope, id, args[0]);
     }
 
     return undefined;
@@ -141,6 +148,9 @@ export class App extends core.App {
 
     // write tree.json file into workdir
     core.synthesizeTree(this, this.outdir);
+
+    // write `outdir/connections.json`
+    core.Connections.of(this).synth(this.outdir);
 
     this.synthed = true;
 
