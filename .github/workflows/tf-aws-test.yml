@@ -59,8 +59,8 @@ jobs:
       - name: Install Wing from Dist
         if: ${{ env.LOCAL_BUILD ==  'true' }}
         run: |
-          mkdir temp
-          cd temp
+          mkdir localwing
+          cd localwing
           npm init --yes
           npm install ../dist/*-[0-9]*.[0-9]*.[0-9]*.tgz
           ./node_modules/.bin/wing --version
