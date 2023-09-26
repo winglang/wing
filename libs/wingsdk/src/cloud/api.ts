@@ -360,6 +360,34 @@ export abstract class Api extends Resource {
     };
   }
 
+  protected _arePathsAmbiguous(pathA: string, pathB: string): boolean {
+    const partsA = pathA.split("/");
+    const partsB = pathB.split("/");
+
+    if (partsA.length !== partsB.length) {
+      return false;
+    }
+
+    for (let i = 0; i < partsA.length; i++) {
+      const partA = partsA[i];
+      const partB = partsB[i];
+
+      if (partA !== partB && !partA.match(/^{.+?}$/) && !partB.match(/^{.+?}$/)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  protected _isPathAndMethodAmbiguous(path: string, method: string): boolean {
+    const existingPaths = Object.keys(this.apiSpec.paths);
+
+    return !!(existingPaths.find((existingPath) =>
+      !!this.apiSpec.paths[existingPath][method.toLowerCase()] && this._arePathsAmbiguous(existingPath, path)
+    ));
+  }
+
   /**
    * Generates the OpenAPI schema for CORS headers based on the provided CORS options.
    * @param corsOptions The CORS options to generate the schema from.
@@ -441,9 +469,13 @@ export abstract class Api extends Resource {
         `Endpoint for path '${path}' and method '${method}' already exists`
       );
     }
-    const operationId = `${method.toLowerCase()}${
-      path === "/" ? "" : path.replace("/", "-")
-    }`;
+    if (this._isPathAndMethodAmbiguous(path, method)) {
+      throw new Error(
+        `Endpoint for path '${path}' and method '${method}' is ambiguous`
+      );
+    }
+    const operationId = `${method.toLowerCase()}${path === "/" ? "" : path.replace("/", "-")
+      }`;
     const pathParams = path.match(/{(.*?)}/g);
     const pathParameters: any[] = [];
     if (pathParams) {
