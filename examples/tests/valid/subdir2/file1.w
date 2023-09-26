@@ -6,6 +6,6 @@ class Foo {
   }
 
   pub checkWidget(widget: blah.Widget): num {
-    return widget.compute();
+    return widget.compute() + blah.Widget.staticCompute();
   }
 }

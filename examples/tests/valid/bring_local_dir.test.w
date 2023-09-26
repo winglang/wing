@@ -16,4 +16,4 @@ assert(bar.bar() == "bar");
 let widget2 = new subdir.inner.Widget();
 assert(widget2.compute() == 42);
 
-assert(foo.checkWidget(widget2) == 42);
+assert(foo.checkWidget(widget2) == 1379);
