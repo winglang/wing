@@ -30,7 +30,7 @@ Wing Cloud will be integrated with GitHub.
 
 1. On https://wing.cloud website click on sign in.
 2. Authenticate using your GitHub account.
-3. After signinig in, you will be redirected to https://wing.cloud/dashboard.
+3. After signing in, you will be redirected to https://wing.cloud/dashboard.
 
 #### Redirect to sign-in process from a Preview Environment URL (#2)
 
@@ -50,7 +50,7 @@ Wing Cloud will be integrated with GitHub.
 1. To create a new project, click on "New Project" under "Personal Account".
 2. Choose between the GitHub repositories that you have access to.
 3. Define your secret values / Environment variables.
-4. Make sure there's a `*.main.w` file in the root of the repository.
+4. Make sure there's a `main.w` or a `*.main.w` file in the root of the repository.
 5. Click on "Deploy".
 6. You'll be redirected to your new project's page (https://wing.cloud/dashboard/-user/-project).
 
@@ -65,7 +65,7 @@ Wing Cloud will be integrated with GitHub.
 1. Click on "New Project" under the team of your choice.
 2. Choose between the GitHub repositories that you have access to.
 3. Define your secret values.
-4. Make sure there's a `*.main.w` file in the root of the repository.
+4. Make sure there's a `main.w` or a `*.main.w` file in the root of the repository.
 5. Click on "Deploy".
 6. You'll be redirected to your new project's page (https://wing.cloud/dashboard/-team/-project).
 
@@ -99,9 +99,9 @@ PR comment example (only one entry point will be supported):
 
 The project management dashboard will include a section to manage the secrets of the project. These secrets will be available during the Wing compilation.
 
-#### Run Tests Automatically Upon PR Creation and Code Changes (#10)
+#### Run Tests Automatically Upon PR Creation and Commits (#10)
 
-Upon PR creation and code changes, Wing Cloud Preview Environments will automatically run all tests defined for the entry point.
+Upon PR creation and commits, Wing Cloud Preview Environments will automatically run all tests defined for the entry point.
 For each test run, a new simulator instance will be created and will be destroyed upon test completion.
 The test results will be available in the PR comment with links to the tests logs (`https://wing.cloud/dashboard/-account/-project/-branch/logs/tests/<test-name>`)
 
@@ -121,11 +121,11 @@ Users will be able to access the applications' public endpoints such as APIs and
 Closing a PR will terminate the corresponding preview environments.
 The PR comment will indicate the termination of each preview environment and the URLs won't be valid anymore.
 
-#### Self-Cleaning Environments Mechanism (#14)
+#### Environments Self-Cleaning Mechanism (#14)
 
 To ensure efficient resource utilization:
 
-1. Preview environments associated with stale PRs (without access or code changes for over 10 days) will automatically deactivate.
+1. Preview environments associated with stale PRs (without access or commits for over 10 days) will automatically deactivate.
 2. The PR's preview environment comment will indicate its inactive status.
 3. Changes in code will trigger redeployment for all related preview environments in this PR.
 
@@ -164,7 +164,7 @@ In our docs we have the following information:
 7. Support multiple entry points in a single PR:
 
    There is a support for multiple entry points in a single PR.
-   Every `*.main.w` file in the repository will be considered as an entry point and will have a dedicated preview environment.
+   Every `main.w` and `*.main.w` file in the repository will be considered as an entry point and will have a dedicated preview environment.
    All preview environments will be available in the PR comment and will be updated upon code changes.
 
 ## Technical Details
