@@ -101,8 +101,7 @@ jobs:
             then
               wing test -t tf-aws ${{ matrix.test.directory }}/*.w
             else
-              cd temp
-              ./node_modules/.bin/wing test -t tf-aws ../${{ matrix.test.directory }}/*.w
+              ./temp/node_modules/.bin/wing test -t tf-aws ${{ matrix.test.directory }}/*.w
             fi
 
       - name: Output Terraform log
