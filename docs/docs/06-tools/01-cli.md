@@ -34,11 +34,11 @@ Usage:
 $ wing run|it [entrypoint]
 ```
 
-`[entrypoint]` is a valid entrypoint for a Wing program. An entrypoint can be either source code or compiled. If it's source code, the name refers to a file called either `main.w`, `<file>.main.w` or `<file>.test.w`, whereas if it's compiled the name refers to a directory called `<dir>.wsim`.
+`[entrypoint]` is a valid entrypoint for a Wing program. An entrypoint can be either source code or compiled. If it's source code, the name refers to a file called `main.w`, `<file>.main.w` or `<file>.test.w`, whereas if it's compiled the name refers to a directory called `<dir>.wsim`.
 
 :::note Default Entrypoint
 
-It's possible to execute `wing run|it` without specifying any entrypoint, in which case the CLI looks for a `main.w` file in the current directory.
+It's possible to execute `wing run|it` without specifying any entrypoint, in which case the CLI looks for exactly one file named `main.w`, `<file>.main.w` or `<file>.test.w` in the current directory. If no files or more than one file are found, the CLI throws an error.
 
 :::
 
@@ -54,7 +54,7 @@ $ wing compile [entrypoint] --target <target>
 
 :::note Default Entrypoint
 
-It's possible to execute `wing compile` without specifying any entrypoint, in which case the CLI looks for a `main.w` file in the current directory.
+It's possible to execute `wing compile` without specifying any entrypoint, in which case the CLI looks for exactly one file named `main.w`, `<file>.main.w` or `<file>.test.w` in the current directory. If no files or more than one file are found, the CLI throws an error.
 
 :::
 
@@ -183,13 +183,13 @@ Usage:
 $ wing test [entrypoint...]
 ```
 
-`[entrypoint...]` specifies the entrypoint list of files that will be compiled and tested. Valid entrypoint names are `main.w`, `<file>.main.w` and `<file>.test.w`.
+`[entrypoint...]` specifies the entrypoint list of files that will be compiled and tested. Valid entrypoint names are `<file>.w`.
 
 For example ([test_bucket.test.w](https://github.com/winglang/wing/tree/main/examples/tests/valid/test_bucket.test.w)):
 
 :::note Default Entrypoint(s)
 
-It's possible to execute `wing test` without specifying any entrypoint, in which case the CLI looks for all files ending with `.test.w` in the current directory.
+It's possible to execute `wing test` without specifying any entrypoint, in which case the CLI looks for all files named `main.w`, `<file>.main.w` or `<file>.test.w` in the current directory. If no files are found, the CLI throws an error.
 
 :::
 
