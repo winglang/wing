@@ -45,7 +45,7 @@ export interface CompileOptions {
  */
 export async function compile(entrypoint?: string, options?: CompileOptions): Promise<string> {
   if (!entrypoint) {
-    const wingFiles = await glob("*.w");
+    const wingFiles = await glob("{main,*.main,*.test}.w");
     if (wingFiles.length !== 1) {
       throw new Error("Please specify which file you want to compile");
     }
