@@ -1,8 +1,8 @@
 import { Construct } from "constructs";
 import { Tokens } from "./tokens";
+import { SDK_PACKAGE_NAME } from "../constants";
 import { IResource } from "../std/resource";
 import { TestRunner } from "../std/test-runner";
-import { SDK_PACKAGE_NAME } from "../constants";
 
 /**
  * Props for all `App` classes.
