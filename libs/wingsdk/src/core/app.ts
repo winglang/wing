@@ -193,7 +193,7 @@ export abstract class App extends Construct {
     const typeName = fqn.replace(`${SDK_PACKAGE_NAME}.`, "");
     if (!instance) {
       throw new Error(
-        `Resource "${fqn}" is not yet implemented for "${this._target}" target. Refer roadmap https://github.com/orgs/winglang/projects/3/views/1?filterQuery=${typeName}`
+        `Resource "${fqn}" is not yet implemented for "${this._target}" target. Please refer to the roadmap https://github.com/orgs/winglang/projects/3/views/1?filterQuery=${typeName}`
       );
     }
 

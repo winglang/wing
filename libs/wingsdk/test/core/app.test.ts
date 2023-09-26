@@ -34,7 +34,7 @@ test("new() defaults to just creating an instance", () => {
 test("newAbstract() throws if there is no implementation", () => {
   const app = new MyApp();
   expect(() => app.newAbstract(ANOTHER_FQN, app, "bar")).toThrow(
-    /Resource \"@winglang\/sdk\.another.Another\" is not yet implemented for "awscdk" target\. Refer roadmap https:\/\/github\.com\/orgs\/winglang\/projects\/3\/views\/1\?filterQuery=another\.Another/,
+    /Resource \"@winglang\/sdk\.another.Another\" is not yet implemented for "awscdk" target\. Please refer to the roadmap https:\/\/github\.com\/orgs\/winglang\/projects\/3\/views\/1\?filterQuery=another\.Another/,
   );
 });
 
