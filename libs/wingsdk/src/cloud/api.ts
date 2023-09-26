@@ -360,6 +360,13 @@ export abstract class Api extends Resource {
     };
   }
 
+  /**
+   * Checks if two given paths are ambiguous.
+   * @param pathA
+   * @param pathB
+   * @returns A boolean value indicating if provided paths are ambiguous.
+   * @internal
+   */
   protected _arePathsAmbiguous(pathA: string, pathB: string): boolean {
     const partsA = pathA.split("/");
     const partsB = pathB.split("/");
@@ -372,7 +379,11 @@ export abstract class Api extends Resource {
       const partA = partsA[i];
       const partB = partsB[i];
 
-      if (partA !== partB && !partA.match(/^{.+?}$/) && !partB.match(/^{.+?}$/)) {
+      if (
+        partA !== partB &&
+        !partA.match(/^{.+?}$/) &&
+        !partB.match(/^{.+?}$/)
+      ) {
         return false;
       }
     }
@@ -380,12 +391,21 @@ export abstract class Api extends Resource {
     return true;
   }
 
+  /**
+   * Checks if provided path and method are ambigous with paths and methods already defined in the api spec.
+   * @param path Path to be checked
+   * @param method HTTP method
+   * @returns A boolean value indicating if provided path and method are ambiguous.
+   * @internal
+   */
   protected _isPathAndMethodAmbiguous(path: string, method: string): boolean {
     const existingPaths = Object.keys(this.apiSpec.paths);
 
-    return !!(existingPaths.find((existingPath) =>
-      !!this.apiSpec.paths[existingPath][method.toLowerCase()] && this._arePathsAmbiguous(existingPath, path)
-    ));
+    return !!existingPaths.find(
+      (existingPath) =>
+        !!this.apiSpec.paths[existingPath][method.toLowerCase()] &&
+        this._arePathsAmbiguous(existingPath, path)
+    );
   }
 
   /**
@@ -474,8 +494,9 @@ export abstract class Api extends Resource {
         `Endpoint for path '${path}' and method '${method}' is ambiguous`
       );
     }
-    const operationId = `${method.toLowerCase()}${path === "/" ? "" : path.replace("/", "-")
-      }`;
+    const operationId = `${method.toLowerCase()}${
+      path === "/" ? "" : path.replace("/", "-")
+    }`;
     const pathParams = path.match(/{(.*?)}/g);
     const pathParameters: any[] = [];
     if (pathParams) {
