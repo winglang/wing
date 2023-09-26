@@ -79,11 +79,11 @@ Once the installation of the Wing Cloud application is completed, an initial pre
 #### Preview Environments for Pull Requests (#8)
 
 Upon each creation of a pull request an automatic comment will be added to the PR and will guide the developer to a dedicated preview environment.
-Provide a streamlined process for updating a pull request preview environment, each code changes in a PR will redeploy the preview environment and will also:
+Provide a streamlined process for updating a pull request preview environment, each commit to a PR will redeploy the preview environment and will also:
 
 1. Provide a real-time build, tests and deployment status updates
-2. While preview environment is being updated, the user that is currently using the environment will be notified and will be able to refresh the page to get the latest changes.
-3. Ensure a consistent and unique url for each preview environment. The url structure: `https://wing.cloud/dashboard/-account/-project/-branch` (account is a <user> or a <team>)
+2. While the preview environment is being updated, the user that is currently using the environment will be notified and will be able to refresh the page to get the latest changes.
+3. Ensure a consistent and unique url for each preview environment. The url structure: `https://wing.cloud/dashboard/-account/-project/-branch` (account is a `<user>` or a `<team>`)
 4. Provide the ability to download the preview environment deployment logs for debugging purposes in case of failure, logs urls structure is: `https://wing.cloud/dashboard/-account/-project/-branch/logs/build/`
 
 PR comment example (only one entry point will be supported):
@@ -244,7 +244,7 @@ Notes:
 
 ### Wing Cloud website
 
-The wesbite will be a React app. Astro can be used on top of it to provide the static parts of the web.
+The website will be a React app. Astro can be used on top of it to provide the static parts of the web.
 
 ### Authentication
 
@@ -255,7 +255,7 @@ The wesbite will be a React app. Astro can be used on top of it to provide the s
 
 ### Authorization
 
-1. Only signed in users will be available to navigate to preview environments. Wing Cloud will check the user permissions to the project and will allow access only to users that are members of the project.
+1. Only signed-in users will be available to navigate to preview environments. Wing Cloud will check the user permissions to the project and will allow access only to users that are members of the project.
 
 ### Authentication for Preview Environment Server
 
