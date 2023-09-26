@@ -71,13 +71,12 @@ jobs:
           retry_on: error
           timeout_minutes: 5
           command: npm install -g winglang
-
+      ########################################################################
       - name: Installing external js modules
-        if: ${{ env.LOCAL_BUILD == 'false' }}
         run: |
           cd examples/tests/sdk_tests
           npm install
-        ########################################################################
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
