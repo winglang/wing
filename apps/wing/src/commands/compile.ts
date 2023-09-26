@@ -1,4 +1,5 @@
 import { promises as fsPromise } from "fs";
+import { glob } from "glob";
 import { relative } from "path";
 
 import chalk from "chalk";
@@ -17,7 +18,11 @@ const log = debug("wing:compile");
  * This is passed from Commander to the `compile` function.
  */
 export interface CompileOptions {
-  readonly target: wingCompiler.Target;
+  /**
+   * The target to compile to
+   * @default wingCompiler.Target.SIM
+   */
+  readonly target?: wingCompiler.Target;
   readonly plugins?: string[];
   readonly rootId?: string;
   /**
@@ -38,14 +43,23 @@ export interface CompileOptions {
  * @param options Compile options.
  * @returns the output directory
  */
-export async function compile(entrypoint: string, options: CompileOptions): Promise<string> {
+export async function compile(entrypoint?: string, options?: CompileOptions): Promise<string> {
+  if (!entrypoint) {
+    const wingFiles = await glob("*.w");
+    if (wingFiles.length !== 1) {
+      throw new Error("Please specify which file you want to compile");
+    }
+    entrypoint = wingFiles[0];
+  }
+
   const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
   try {
     return await wingCompiler.compile(entrypoint, {
       ...options,
       log,
       color: coloring,
-      targetDir: options.targetDir,
+      target: options?.target || wingCompiler.Target.SIM,
+      targetDir: options?.targetDir || "./target",
     });
   } catch (error) {
     if (error instanceof wingCompiler.CompileError) {
