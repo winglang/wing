@@ -20,7 +20,7 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 export class BucketClient implements IBucketClient {
   constructor(
     private readonly bucketName: string,
-    private readonly s3Client :any = new S3Client({}),
+    private readonly s3Client: S3Client = new S3Client({}),
   ) {}
 
   /**
