@@ -207,9 +207,15 @@ pub fn parse_wing_project(
 			let dependent_wing_paths = files_and_dirs;
 
 			// Update our collections of trees and ASTs and our file graph
-			tree_sitter_trees.insert(file_or_dir_path.clone(), tree_sitter_tree);
-			asts.insert(file_or_dir_path.clone(), ast);
-			file_graph.update_file(&file_or_dir_path, &dependent_wing_paths);
+			update_trees_and_graph(
+				&file_or_dir_path,
+				tree_sitter_tree,
+				ast,
+				&dependent_wing_paths,
+				tree_sitter_trees,
+				asts,
+				file_graph,
+			);
 
 			// Add all children files and directories to the list of files to parse
 			unparsed_files.extend(dependent_wing_paths);
@@ -225,9 +231,15 @@ pub fn parse_wing_project(
 		let (tree_sitter_tree, ast, dependent_wing_paths) = parse_wing_file(&file_or_dir_path, &file_text);
 
 		// Update our collections of trees and ASTs and our file graph
-		tree_sitter_trees.insert(file_or_dir_path.clone(), tree_sitter_tree);
-		asts.insert(file_or_dir_path.clone(), ast);
-		file_graph.update_file(&file_or_dir_path, &dependent_wing_paths);
+		update_trees_and_graph(
+			&file_or_dir_path,
+			tree_sitter_tree,
+			ast,
+			&dependent_wing_paths,
+			tree_sitter_trees,
+			asts,
+			file_graph,
+		);
 
 		// Add the file's dependencies to the list of files to parse
 		unparsed_files.extend(dependent_wing_paths);
@@ -252,6 +264,21 @@ pub fn parse_wing_project(
 			asts.keys().cloned().collect::<Vec<_>>()
 		}
 	}
+}
+
+fn update_trees_and_graph(
+	file_or_dir_path: &Utf8Path,
+	tree_sitter_tree: tree_sitter::Tree,
+	ast: Scope,
+	dependent_wing_paths: &[Utf8PathBuf],
+	tree_sitter_trees: &mut IndexMap<Utf8PathBuf, tree_sitter::Tree>,
+	asts: &mut IndexMap<Utf8PathBuf, Scope>,
+	file_graph: &mut FileGraph,
+) {
+	// Update our collections of trees and ASTs and our file graph
+	tree_sitter_trees.insert(file_or_dir_path.to_owned(), tree_sitter_tree);
+	asts.insert(file_or_dir_path.to_owned(), ast);
+	file_graph.update_file(file_or_dir_path, &dependent_wing_paths);
 }
 
 fn parse_wing_file(source_path: &Utf8Path, source_text: &str) -> (tree_sitter::Tree, Scope, Vec<Utf8PathBuf>) {
