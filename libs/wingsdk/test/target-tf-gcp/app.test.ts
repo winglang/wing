@@ -7,7 +7,8 @@ test("throw error when no projectId provided", () => {
   const props = {
     outdir: mkdtemp(),
     projectId: undefined as any,
-    storageLocation: "US",
+    region: "us-central1",
+    entrypointDir: __dirname,
   };
 
   // THEN
@@ -21,7 +22,8 @@ test("can read projectId from environment variable", () => {
   const props = {
     outdir: mkdtemp(),
     projectId: undefined as any,
-    storageLocation: "US",
+    region: "us-central1",
+    entrypointDir: __dirname,
   };
   const projectId = "my-project";
   process.env.GOOGLE_PROJECT_ID = projectId;
@@ -32,32 +34,34 @@ test("can read projectId from environment variable", () => {
   expect(app!.projectId).toEqual(projectId);
 });
 
-test("throw error when no storageLocation provided", () => {
+test("throw error when no region provided", () => {
   // GIVEN
   const props = {
     outdir: mkdtemp(),
     projectId: "projectId",
-    storageLocation: undefined as any,
+    region: undefined as any,
+    entrypointDir: __dirname,
   };
 
   // THEN
   expect(() => new tfgcp.App(props)).toThrow(
-    /A Google Cloud storage location must be specified/
+    /A Google Cloud region must be specified/
   );
 });
 
-test("can read storageLocation from environment variable", () => {
+test("can read region from environment variable", () => {
   // GIVEN
   const props = {
     outdir: mkdtemp(),
     projectId: "projectId",
-    storageLocation: undefined as any,
+    region: undefined as any,
+    entrypointDir: __dirname,
   };
-  const storageLocation = "US";
-  process.env.GOOGLE_STORAGE_LOCATION = storageLocation;
+  const region = "us-central1";
+  process.env.GOOGLE_REGION = region;
   let app: tfgcp.App;
 
   // THEN
   expect(() => (app = new tfgcp.App(props))).not.toThrow();
-  expect(app!.storageLocation).toEqual(storageLocation);
+  expect(app!.region).toEqual(region);
 });

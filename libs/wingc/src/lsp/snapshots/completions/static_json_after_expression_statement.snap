@@ -39,10 +39,10 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: entries
   kind: 2
-  detail: "(json: Json): Array<Json>"
+  detail: "(json: Json): Array<JsonEntry>"
   documentation:
     kind: markdown
-    value: "```wing\nstatic entries: (json: Json): Array<Json>\n```\n---\nReturns the entries from the Json.\n\n\n### Returns\nthe entries as Array<Json> consisting of enumerable [key, value] pairs"
+    value: "```wing\nstatic entries: (json: Json): Array<JsonEntry>\n```\n---\nReturns the entries from the Json.\n\n\n### Returns\nthe entries as Array<JsonEntry>"
   sortText: ff|entries
   insertText: entries($0)
   insertTextFormat: 2

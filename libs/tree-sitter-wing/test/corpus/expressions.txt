@@ -169,6 +169,28 @@ new A() as "b" in c;
         (reference_identifier)))))
 
 ================================================================================
+New expression with id and scope on different lines
+================================================================================
+
+new A()
+  as 
+  "b" 
+  in 
+  c;
+
+--------------------------------------------------------------------------------
+
+(source
+  (expression_statement
+    (new_expression
+      class: (custom_type
+        object: (type_identifier))
+      args: (argument_list)
+      id: (string)
+      scope: (reference
+        (reference_identifier)))))
+
+================================================================================
 preflight anonymous closure
 ================================================================================
 
