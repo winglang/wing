@@ -118,7 +118,7 @@ async function main() {
     .command("run")
     .alias("it")
     .description("Runs a Wing program in the Wing Console")
-    .argument("[entrypoint]", "program .w entrypoint", "main.w")
+    .argument("[entrypoint]", "program .w entrypoint")
     .option("-p, --port <port>", "specify port")
     .option("--no-open", "Do not open the Wing Console in the browser")
     .hook("preAction", collectAnalyticsHook)
@@ -133,7 +133,7 @@ async function main() {
   program
     .command("compile")
     .description("Compiles a Wing program")
-    .argument("[entrypoint]", "program .w entrypoint", "main.w")
+    .argument("[entrypoint]", "program .w entrypoint")
     .addOption(
       new Option("-t, --target <target>", "Target platform")
         .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])

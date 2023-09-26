@@ -1,4 +1,5 @@
 import { existsSync } from "fs";
+import { glob } from "glob";
 import { debug } from "debug";
 import { resolve } from "path";
 import open from "open";
@@ -30,9 +31,17 @@ export interface RunOptions {
  * @param entrypoint The program .w entrypoint. Looks for a .w file in the current directory if not specified.
  * @param options Run options.
  */
-export async function run(entrypoint: string, options?: RunOptions) {
+export async function run(entrypoint?: string, options?: RunOptions) {
   const requestedPort = parseNumericString(options?.port) ?? 3000;
   const openBrowser = options?.open ?? true;
+
+  if (!entrypoint) {
+    const wingFiles = await glob("*.w");
+    if (wingFiles.length !== 1) {
+      throw new Error("Please specify which file you want to run");
+    }
+    entrypoint = wingFiles[0];
+  }
 
   if (!existsSync(entrypoint)) {
     throw new Error(entrypoint + " doesn't exist");
