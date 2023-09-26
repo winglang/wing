@@ -280,7 +280,7 @@ export class BucketClient implements IBucketClient {
       );
     }
     const expiryTimeInSeconds:number= options?.duration?.seconds|| 86400;
-    const command: any = new GetObjectCommand({
+    const command: GetObjectCommand = new GetObjectCommand({
     Bucket: this.bucketName,
     Key: key
    });
