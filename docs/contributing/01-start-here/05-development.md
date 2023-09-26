@@ -6,11 +6,22 @@ keywords: [Wing contributors, contributors, workflows]
 
 This topic includes a description of common development workflows for the Wing project.
 
-## Environment Setup
+## How to prepare for take-off? 🐤
 
 :::info
 You can open up this repo by clicking the badge below. It is recommended to select a 4-core minimum machine.
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/winglang/wing)
+:::
+
+:::info
+For windows we recommend to set the tools up within WSL as some of the scripts 
+don't support windows and expect unix tooling.
+
+Some Guides:
+- [💡 Setup WSL](https://learn.microsoft.com/en-us/windows/wsl/install#install-wsl-command)
+- [💡 Which WSL version to use?](https://learn.microsoft.com/en-us/windows/wsl/compare-versions#comparing-wsl-1-and-wsl-2)
+- [💡 Setup build essentials for rust](https://stackoverflow.com/questions/52445961/how-do-i-fix-the-rust-error-linker-cc-not-found-for-debian-on-windows-10)
+- [💡 Enable systemd to install docker without the need of Docker Desktop](https://devblogs.microsoft.com/commandline/systemd-support-is-now-available-in-wsl/#how-can-you-get-systemd-on-your-machine)
 :::
 
 Here is a list of minimal tools you should install to build the Wing repo in your development
@@ -27,13 +38,15 @@ environment:
 - [Docker]
   - Needed to build the grammar as WASM for the web-based playground and to run unit tests
 
-Installation:
+Installation:s
 
 ```sh
 git clone https://github.com/winglang/wing
 cd wing
 pnpm install
 ```
+
+![Bird High Five](https://i.giphy.com/media/TgrXouvj1MwKoREXap/200w.gif)
 
 :::note Turbo Commands
 [Turbo] commands in this document are structured as
