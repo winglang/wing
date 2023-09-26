@@ -20,7 +20,7 @@ use crate::type_check::{
 };
 use crate::visit::{visit_expr, visit_type_annotation, Visit};
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
-use crate::{WINGSDK_ASSEMBLY_NAME, WINGSDK_STD_MODULE};
+use crate::{UTIL_CLASS_NAME, WINGSDK_ASSEMBLY_NAME, WINGSDK_STD_MODULE};
 
 use super::sync::check_utf8;
 
@@ -718,7 +718,7 @@ fn get_completions_from_namespace(
 	// the namespace as a syntactic sugar. e.g. "foo.bar()" is equivalent to "foo.Util.bar()"
 	let mut util_completions = vec![];
 	for ns_env in &namespace.envs {
-		if let LookupResult::Found(kind, _) = ns_env.lookup_nested_str("Util", None) {
+		if let LookupResult::Found(kind, _) = ns_env.lookup_nested_str(UTIL_CLASS_NAME, None) {
 			if let SymbolKind::Type(typeref) = kind {
 				let util_class = typeref.as_class();
 				if let Some(util_class) = util_class {

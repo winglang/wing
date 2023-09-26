@@ -75,6 +75,8 @@ const WINGSDK_AWS_MODULE: &'static str = "aws";
 const WINGSDK_EX_MODULE: &'static str = "ex";
 const WINGSDK_REGEX_MODULE: &'static str = "regex";
 
+pub const UTIL_CLASS_NAME: &'static str = "Util";
+
 const WINGSDK_BRINGABLE_MODULES: [&'static str; 7] = [
 	WINGSDK_CLOUD_MODULE,
 	WINGSDK_UTIL_MODULE,
