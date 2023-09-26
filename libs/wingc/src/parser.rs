@@ -161,9 +161,15 @@ pub fn parse_wing_project(
 	files.update_file(&init_path, init_text);
 
 	// Update our collections of trees and ASTs and our file graph
-	tree_sitter_trees.insert(init_path.to_owned(), tree_sitter_tree);
-	asts.insert(init_path.to_owned(), ast);
-	file_graph.update_file(init_path, &dependent_wing_paths);
+	update_trees_and_graph(
+		init_path,
+		tree_sitter_tree,
+		ast,
+		&dependent_wing_paths,
+		tree_sitter_trees,
+		asts,
+		file_graph,
+	);
 
 	// Track which files still need parsing
 	let mut unparsed_files = dependent_wing_paths;
