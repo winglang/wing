@@ -41,16 +41,16 @@ Wing Cloud will be integrated with GitHub.
 
 1. Once signed in, you will be able to navigate directly to https://wing.cloud/dashboard.
 2. You can see and manage all your projects and teams.
-3. You will see all preview environments associated with your personal account and teams you are member in.
-4. In order to see a preview environment, just click on the preview environment URL from the list of all your preview environments.
+3. Select the project you are currently working on from the projects menu to see all preview environments associated with it.
+4. In order to see a preview environment, just click on the preview environment URL from the list of your preview environments.
 5. For each preview environment, you can see the deployment logs and the test results and logs.
 
 #### Create a new personal Project (#4)
 
 1. To create a new project, click on "New Project" under "Personal Account".
 2. Choose between the GitHub repositories that you have access to.
-3. Define your secret values.
-4. Make sure there's a `main.w` file in the root of the repository.
+3. Define your secret values / Environment variables.
+4. Make sure there's a `*.main.w` file in the root of the repository.
 5. Click on "Deploy".
 6. You'll be redirected to your new project's page (https://wing.cloud/dashboard/-user/-project).
 
@@ -65,7 +65,7 @@ Wing Cloud will be integrated with GitHub.
 1. Click on "New Project" under the team of your choice.
 2. Choose between the GitHub repositories that you have access to.
 3. Define your secret values.
-4. Make sure there's a `main.w` file in the root of the repository.
+4. Make sure there's a `*.main.w` file in the root of the repository.
 5. Click on "Deploy".
 6. You'll be redirected to your new project's page (https://wing.cloud/dashboard/-team/-project).
 
@@ -81,7 +81,7 @@ Once the installation of the Wing Cloud application is completed, an initial pre
 Upon each creation of a pull request an automatic comment will be added to the PR and will guide the developer to a dedicated preview environment.
 Provide a streamlined process for updating a pull request preview environment, each code changes in a PR will redeploy the preview environment and will also:
 
-1. Provide a real-time build and deployment status updates
+1. Provide a real-time build, tests and deployment status updates
 2. While preview environment is being updated, the user that is currently using the environment will be notified and will be able to refresh the page to get the latest changes.
 3. Ensure a consistent and unique url for each preview environment. The url structure: `https://wing.cloud/dashboard/-account/-project/-branch` (account is a <user> or a <team>)
 4. Provide the ability to download the preview environment deployment logs for debugging purposes in case of failure, logs urls structure is: `https://wing.cloud/dashboard/-account/-project/-branch/logs/build/`
@@ -102,7 +102,7 @@ The project management dashboard will include a section to manage the secrets of
 #### Run Tests Automatically Upon PR Creation and Code Changes (#10)
 
 Upon PR creation and code changes, Wing Cloud Preview Environments will automatically run all tests defined for the entry point.
-For each test run, a new simulator will be created and will be destroyed upon test completion.
+For each test run, a new simulator instance will be created and will be destroyed upon test completion.
 The test results will be available in the PR comment with links to the tests logs (`https://wing.cloud/dashboard/-account/-project/-branch/logs/tests/<test-name>`)
 
 #### Running Tests Manually From Wing Console (#11)
@@ -112,20 +112,24 @@ Each test will reload the simulator to create a clean environment.
 
 Once the test is over it will **not** clean up the simulator data, so you can debug the environment and share outputs with your teammates.
 
-#### User-Controlled Environments termination (#12)
+#### Access application endpoints from the Wing Console (#12)
+
+Users will be able to access the applications' public endpoints such as APIs and web pages.
+
+#### User-Controlled Environments termination (#13)
 
 Closing a PR will terminate the corresponding preview environments.
 The PR comment will indicate the termination of each preview environment and the URLs won't be valid anymore.
 
-#### Self-Cleaning Environments Mechanism (#13)
+#### Self-Cleaning Environments Mechanism (#14)
 
 To ensure efficient resource utilization:
 
-1. Preview environments associated with stale PRs (without access or code changes for over 30 days) will automatically deactivate.
+1. Preview environments associated with stale PRs (without access or code changes for over 10 days) will automatically deactivate.
 2. The PR's preview environment comment will indicate its inactive status.
 3. Changes in code will trigger redeployment for all related preview environments in this PR.
 
-### Analytics and Logs (#14)
+### Analytics and Logs (#15)
 
 To improve the product we are collecting data and monitoring the system.
 
@@ -133,7 +137,7 @@ To improve the product we are collecting data and monitoring the system.
 2. OpenTelemetry is used for collecting metrics, logs, traces.
 3. Datadog is used for monitoring the system.
 
-### Documentation (#15)
+### Documentation (#16)
 
 Developers reading our docs can easily sign up to Wing Cloud and start using its Preview Environments feature in their repository.
 In our docs we have the following information:
@@ -144,7 +148,7 @@ In our docs we have the following information:
 4. Populate environment with initial data
 5. Running tests
 
-### Security (#16)
+### Security (#17)
 
 1. Preview environments shouldn’t be able to access files from other preview environments.
 2. Only Wing Cloud signed up developers with access to the repository can view preview environments created for this repository.
