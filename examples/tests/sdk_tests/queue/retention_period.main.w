@@ -1,19 +1,15 @@
 bring cloud;
 bring util;
 
-let var timeout: duration = 5s;
-let var retentionPeriod: duration = 7s;
-let var sleepTime: duration = 9s;
+let var timeout = 100ms;
+let var retentionPeriod = 1s;
 
-let q = new cloud.Queue(cloud.QueueProps{timeout: timeout, retentionPeriod: retentionPeriod});
+let q = new cloud.Queue(timeout: timeout, retentionPeriod: retentionPeriod);
 
 test "retentionPeriod" {
-  q.push("hello");
-  q.push("world");
-  
-  util.sleep(sleepTime);
+  q.push("hello", "world");
 
-  assert(util.waitUntil((): bool => {
+  assert(util.waitUntil(() => {
     return q.approxSize() == 0;
   }));
 }
