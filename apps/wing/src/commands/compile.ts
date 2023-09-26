@@ -18,23 +18,23 @@ const log = debug("wing:compile");
  * This is passed from Commander to the `compile` function.
  */
 export interface CompileOptions {
+  readonly rootId?: string;
+  readonly plugins?: string[];
   /**
    * The target to compile to
    * @default wingCompiler.Target.SIM
    */
   readonly target?: wingCompiler.Target;
-  readonly plugins?: string[];
-  readonly rootId?: string;
-  /**
-   * Whether to run the compiler in `wing test` mode. This may create multiple
-   * copies of the application resources in order to run tests in parallel.
-   */
-  readonly testing?: boolean;
   /**
    * The location to save the compilation output
    * @default "./target"
    */
   readonly targetDir?: string;
+  /**
+   * Whether to run the compiler in `wing test` mode. This may create multiple
+   * copies of the application resources in order to run tests in parallel.
+   */
+  readonly testing?: boolean;
 }
 
 /**
