@@ -46,6 +46,16 @@ test "duration" {
   assert(1s.days == 1 / (60 * 60 * 24));
   assert(1s.months == 1 / ((60 * 60 * 24 * 365) / 12));
   assert(1s.years == 1 / (60 * 60 * 24 * 365));
+
+  assert(1s == 1000ms);
+  assert(60s == 1m);
+  assert(60m == 1h);
+  assert(24h == 1d);
+  assert(365d == 1y);
+  assert(12mo == 1y);
+  assert(3600s == 1h);
+  assert(86400s == 1d);
+  assert(31536000s == 1y);
 }
 
 // TODO: https://github.com/winglang/wing/issues/2785

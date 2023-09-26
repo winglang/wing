@@ -8,9 +8,9 @@ import { App as TfAwsApp } from "../../src/target-tf-aws/app";
 import { App as TfAzureApp } from "../../src/target-tf-azure/app";
 import { App as TfGcpApp } from "../../src/target-tf-gcp/app";
 
-const FOO_FQN = "@lib/foo.Foo";
-const BAR_FQN = "@lib/foo.Bar";
-const ANOTHER_FQN = "@lib/another.Another";
+const FOO_FQN = "@winglang/sdk.foo.Foo";
+const BAR_FQN = "@winglang/sdk.foo.Bar";
+const ANOTHER_FQN = "@winglang/sdk.another.Another";
 
 test("new() allows derived classes to inject a different implementation", () => {
   const app = new MyApp();
@@ -34,7 +34,7 @@ test("new() defaults to just creating an instance", () => {
 test("newAbstract() throws if there is no implementation", () => {
   const app = new MyApp();
   expect(() => app.newAbstract(ANOTHER_FQN, app, "bar")).toThrow(
-    /Unable to create an instance of abstract type \"@lib\/another.Another\" for this target/
+    /Resource \"@winglang\/sdk\.another.Another\" is not yet implemented for "awscdk" target\. Please refer to the roadmap https:\/\/github\.com\/orgs\/winglang\/projects\/3\/views\/1\?filterQuery=another\.Another/
   );
 });
 
@@ -59,6 +59,7 @@ class MyApp extends App {
   public outdir: string = "outdir";
   public isTestEnvironment: boolean = true;
   public readonly _tokens: Tokens;
+  public readonly _target = "awscdk";
 
   constructor() {
     super(undefined as any, "MyApp", { entrypointDir: __dirname });

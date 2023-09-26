@@ -24,7 +24,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     this.timeout = props.timeout ?? Duration.fromSeconds(10);
     this.retentionPeriod = props.retentionPeriod ?? Duration.fromHours(1);
 
-    if (this.retentionPeriod < this.timeout) {
+    if (this.retentionPeriod.seconds < this.timeout.seconds) {
       throw new Error(
         "Retention period must be greater than or equal to timeout"
       );
