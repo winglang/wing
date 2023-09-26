@@ -19,23 +19,3 @@ class HttpServer {
 }
 
 module.exports = new HttpServer();
-
-// let server;
-
-// exports.startHttpServer = async function(body) {
-//   return new Promise((resolve, reject) => {
-//     console.log("starting http server...");
-//     server = http.createServer();
-//     server.on("request", (_, res) => res.end(body));
-//     server.on("error", reject);
-//     server.on("listening", () => resolve(server.address().port));
-//     server.listen();
-//   });
-// };
-
-// exports.stopHttpServer = async function() {
-//   return new Promise((resolve, _) => {
-//     console.log("stopping http server...");
-//     server.close(resolve);
-//   });
-// };
