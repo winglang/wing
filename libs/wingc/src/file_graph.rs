@@ -44,10 +44,11 @@ impl FileGraph {
 		self.path_to_node_index.contains_key(path)
 	}
 
-	/// Returns a list of the direct dependencies of the given file
+	/// Returns a list of the direct dependencies of the given file.
 	/// (does not include all transitive dependencies)
+	/// The file path must be relative to the root of the file graph.
 	pub fn dependencies_of(&self, path: &Utf8Path) -> Vec<&Utf8PathBuf> {
-		let node_index = self.path_to_node_index.get(path).unwrap();
+		let node_index = self.path_to_node_index.get(path).expect("path not in graph");
 		self
 			.graph
 			.edges(*node_index)
