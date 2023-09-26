@@ -38,7 +38,7 @@ environment:
 - [Docker]
   - Needed to build the grammar as WASM for the web-based playground and to run unit tests
 
-Installation:s
+Installation:
 
 ```sh
 git clone https://github.com/winglang/wing
