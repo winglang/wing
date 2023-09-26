@@ -56,7 +56,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       timestamp: new Date().toISOString(),
     });
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    fnClient.invoke("");
+    await fnClient.invoke("");
     this.running = true;
   }
 
@@ -81,7 +81,6 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     });
 
     await fnClient.invoke("");
-
     this.running = false;
   }
 }
