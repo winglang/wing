@@ -187,7 +187,7 @@ $ wing test [entrypoint...]
 
 For example ([test_bucket.test.w](https://github.com/winglang/wing/tree/main/examples/tests/valid/test_bucket.test.w)):
 
-:::default entrypoint...
+:::note Default Entrypoint(s)
 
 It's possible to execute `wing test` without specifying any entrypoint, in which case the CLI looks for all files ending with `.test.w` in the current directory.
 
