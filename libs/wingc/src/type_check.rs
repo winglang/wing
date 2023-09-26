@@ -4419,7 +4419,7 @@ impl<'a> TypeChecker<'a> {
 						self.spanned_error(
 							&stmt.map(|s| s.span.clone()).unwrap_or_default(),
 							format!(
-								"Cannot find module \"{}\" in source directory: {}",
+								"Cannot find jsii module \"{}\" in source directory: {}",
 								library_name, type_error
 							),
 						);

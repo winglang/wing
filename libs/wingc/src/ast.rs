@@ -426,7 +426,9 @@ pub struct Interface {
 pub enum BringSource {
 	BuiltinModule(Symbol),
 	JsiiModule(Symbol),
+	/// Refers to a relative path to a file
 	WingFile(Symbol),
+	/// Refers to a relative path to a file
 	Directory(Symbol),
 }
 

@@ -345,7 +345,7 @@ pub fn compile(
 		.to_path_buf();
 
 	// Verify that the project dir is absolute
-	if !is_project_dir_absolute(&project_dir) {
+	if !is_absolute_path(&project_dir) {
 		report_diagnostic(Diagnostic {
 			message: format!("Project directory must be absolute: {}", project_dir),
 			span: None,
@@ -402,15 +402,15 @@ pub fn compile(
 	return Ok(CompilerOutput {});
 }
 
-fn is_project_dir_absolute(project_dir: &Utf8PathBuf) -> bool {
-	if project_dir.starts_with("/") {
+pub fn is_absolute_path(path: &Utf8Path) -> bool {
+	if path.starts_with("/") {
 		return true;
 	}
 
-	let project_dir = project_dir.as_str();
 	// Check if this is a Windows path instead by checking if the second char is a colon
 	// Note: Cannot use Utf8Path::is_absolute() because it doesn't work with Windows paths on WASI
-	if project_dir.len() < 2 || project_dir.chars().nth(1).expect("Project dir has second character") != ':' {
+	let chars = path.as_str().chars().collect::<Vec<char>>();
+	if chars.len() < 2 || chars[1] != ':' {
 		return false;
 	}
 

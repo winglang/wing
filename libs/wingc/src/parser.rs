@@ -18,7 +18,7 @@ use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpa
 use crate::file_graph::FileGraph;
 use crate::files::Files;
 use crate::type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
-use crate::{dbg_panic, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
+use crate::{dbg_panic, is_absolute_path, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
 
 // A custom struct could be used to better maintain metadata and issue tracking, though ideally
 // this is meant to serve as a bandaide to be removed once wing is further developed.
@@ -768,14 +768,21 @@ impl<'s> Parser<'s> {
 			None
 		};
 
+		let module_path = Utf8Path::new(&module_name.name[1..module_name.name.len() - 1]);
+		if is_absolute_path(&module_path) {
+			return self.with_error(
+				format!("Cannot bring \"{}\" since it is not a relative path", module_path),
+				statement_node,
+			);
+		}
+
 		if module_name.name.starts_with("\".") && module_name.name.ends_with("\"") {
-			let module_path = Utf8Path::new(&module_name.name[1..module_name.name.len() - 1]);
 			let source_path = normalize_path(module_path, Some(&Utf8Path::new(&self.source_name)));
 			if source_path == Utf8Path::new(&self.source_name) {
 				return self.with_error("Cannot bring a module into itself", statement_node);
 			}
 			if !source_path.exists() {
-				return self.with_error(format!("Cannot find module \"{}\"", source_path), statement_node);
+				return self.with_error(format!("Cannot find module \"{}\"", module_path), statement_node);
 			}
 
 			// case: .w file
@@ -783,7 +790,7 @@ impl<'s> Parser<'s> {
 				return self.with_error(
 					format!(
 						"Cannot bring module \"{}\": entrypoint files cannot be imported",
-						source_path
+						module_path
 					),
 					statement_node,
 				);
@@ -792,7 +799,7 @@ impl<'s> Parser<'s> {
 			if source_path.is_file() {
 				if source_path.extension() != Some("w") {
 					return self.with_error(
-						format!("Cannot bring \"{}\": not a recognized file type", source_path),
+						format!("Cannot bring \"{}\": not a recognized file type", module_path),
 						statement_node,
 					);
 				}
@@ -847,7 +854,7 @@ impl<'s> Parser<'s> {
 
 			// case: path does not satisfy is_file or is_dir (is this possible?)
 			return self.with_error(
-				format!("Cannot bring \"{}\": not a recognized file type", source_path),
+				format!("Cannot bring \"{}\": not a recognized file type", module_path),
 				statement_node,
 			);
 		}
