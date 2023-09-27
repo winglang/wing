@@ -6,3 +6,6 @@ bring "./non-existent.w" as bar;
 
 bring "/hello.w" as baz;
 // ^ error: Cannot bring "/hello.w" as it is not a relative path
+
+bring "./bring_local_dir.test.w" as qux;
+// ^ error: Cannot bring "./main.w": entrypoint files cannot be imported

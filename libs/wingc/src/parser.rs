@@ -794,7 +794,8 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_bring_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
-		let module_name = self.node_symbol(&statement_node.child_by_field_name("module_name").unwrap())?;
+		let module_name_node = self.get_child_field(&statement_node, "module_name")?;
+		let module_name = self.node_symbol(&module_name_node)?;
 		let alias = if let Some(identifier) = statement_node.child_by_field_name("alias") {
 			Some(self.check_reserved_symbol(&identifier)?)
 		} else {
@@ -805,27 +806,24 @@ impl<'s> Parser<'s> {
 		if is_absolute_path(&module_path) {
 			return self.with_error(
 				format!("Cannot bring \"{}\" since it is not a relative path", module_path),
-				statement_node,
+				&module_name_node,
 			);
 		}
 
 		if module_name.name.starts_with("\".") && module_name.name.ends_with("\"") {
 			let source_path = normalize_path(module_path, Some(&Utf8Path::new(&self.source_name)));
 			if source_path == Utf8Path::new(&self.source_name) {
-				return self.with_error("Cannot bring a module into itself", statement_node);
+				return self.with_error("Cannot bring a module into itself", &module_name_node);
 			}
 			if !source_path.exists() {
-				return self.with_error(format!("Cannot find module \"{}\"", module_path), statement_node);
+				return self.with_error(format!("Cannot find module \"{}\"", module_path), &module_name_node);
 			}
 
 			// case: .w file
-			if source_path.ends_with("/main.w") || source_path.ends_with(".main.w\"") || source_path.ends_with(".test.w\"") {
+			if is_entrypoint_file(&source_path) {
 				return self.with_error(
-					format!(
-						"Cannot bring module \"{}\": entrypoint files cannot be imported",
-						module_path
-					),
-					statement_node,
+					format!("Cannot bring module \"{}\" since it is an entrypoint file", module_path),
+					&module_name_node,
 				);
 			}
 
@@ -833,7 +831,7 @@ impl<'s> Parser<'s> {
 				if source_path.extension() != Some("w") {
 					return self.with_error(
 						format!("Cannot bring \"{}\": not a recognized file type", module_path),
-						statement_node,
+						&module_name_node,
 					);
 				}
 
@@ -888,7 +886,7 @@ impl<'s> Parser<'s> {
 			// case: path does not satisfy is_file or is_dir (is this possible?)
 			return self.with_error(
 				format!("Cannot bring \"{}\": not a recognized file type", module_path),
-				statement_node,
+				&module_name_node,
 			);
 		}
 
