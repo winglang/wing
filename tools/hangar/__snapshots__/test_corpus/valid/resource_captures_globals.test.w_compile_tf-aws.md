@@ -72,7 +72,7 @@ module.exports = function({  }) {
 
 ## inflight.MyResource-1.js
 ```js
-module.exports = function({ $Another, $_globalArrayOfStr_at_0__, $_globalMapOfNum___a__, $_globalSetOfStr_has__a___, $globalAnother, $globalAnother_first_myResource, $globalAnother_myField, $globalBool, $globalBucket, $globalNum, $globalStr }) {
+module.exports = function({ $Another, $__obj__args_______if__obj_args______undefined__throw_new_Error__Object_does_not_contain_the_key____args______return_obj_args_____globalMapOfNum___a__, $_globalArrayOfStr_at_0__, $_globalSetOfStr_has__a___, $globalAnother, $globalAnother_first_myResource, $globalAnother_myField, $globalBool, $globalBucket, $globalNum, $globalStr }) {
   class MyResource {
     constructor({ $this_localTopic }) {
       this.$this_localTopic = $this_localTopic;
@@ -84,7 +84,7 @@ module.exports = function({ $Another, $_globalArrayOfStr_at_0__, $_globalMapOfNu
       {((cond) => {if (!cond) throw new Error("assertion failed: globalBool == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($globalBool,true)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: globalNum == 42")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($globalNum,42)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: globalArrayOfStr.at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($_globalArrayOfStr_at_0__,"hello")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalMapOfNum.get(\"a\") == -5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($_globalMapOfNum___a__,(-5))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalMapOfNum.get(\"a\") == -5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($__obj__args_______if__obj_args______undefined__throw_new_Error__Object_does_not_contain_the_key____args______return_obj_args_____globalMapOfNum___a__,(-5))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: globalSetOfStr.has(\"a\")")})($_globalSetOfStr_has__a___)};
       {((cond) => {if (!cond) throw new Error("assertion failed: globalAnother.myField == \"hello!\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($globalAnother_myField,"hello!")))};
       (await $globalAnother_first_myResource.put("key","value"));
@@ -462,8 +462,8 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("./inflight.MyResource-1.js")({
             $Another: ${context._lift(Another)},
+            $__obj__args_______if__obj_args______undefined__throw_new_Error__Object_does_not_contain_the_key____args______return_obj_args_____globalMapOfNum___a__: ${context._lift(((obj, args) => { if (obj[args] === undefined) throw new Error(`Object does not contain the key "${args}"`); return obj[args] })(globalMapOfNum, "a"))},
             $_globalArrayOfStr_at_0__: ${context._lift((globalArrayOfStr.at(0)))},
-            $_globalMapOfNum___a__: ${context._lift((globalMapOfNum)["a"])},
             $_globalSetOfStr_has__a___: ${context._lift((globalSetOfStr.has("a")))},
             $globalAnother: ${context._lift(globalAnother)},
             $globalAnother_first_myResource: ${context._lift(globalAnother.first.myResource)},
@@ -495,8 +495,8 @@ class $Root extends $stdlib.std.Resource {
           MyResource._registerBindObject(this.localTopic, host, []);
         }
         if (ops.includes("myPut")) {
+          MyResource._registerBindObject(((obj, args) => { if (obj[args] === undefined) throw new Error(`Object does not contain the key "${args}"`); return obj[args] })(globalMapOfNum, "a"), host, []);
           MyResource._registerBindObject((globalArrayOfStr.at(0)), host, []);
-          MyResource._registerBindObject((globalMapOfNum)["a"], host, []);
           MyResource._registerBindObject((globalSetOfStr.has("a")), host, []);
           MyResource._registerBindObject(Another, host, ["myStaticMethod"]);
           MyResource._registerBindObject(globalAnother, host, ["myMethod"]);

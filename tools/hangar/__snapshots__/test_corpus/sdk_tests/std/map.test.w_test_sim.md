@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ map.test.wsim (no tests)
+pass ─ map.test.wsim » root/env0/test:get()
  
  
 Tests 1 passed (1)

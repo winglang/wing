@@ -30,7 +30,7 @@ module.exports = function({ $api_url, $http_Util }) {
     async handle() {
       const url = ($api_url + "/path");
       const response = (await $http_Util.get(url));
-      {((cond) => {if (!cond) throw new Error("assertion failed: response.headers.get(\"access-control-allow-origin\") == \"*\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((response.headers)["access-control-allow-origin"],"*")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: response.headers.get(\"access-control-allow-origin\") == \"*\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Object does not contain the key "${args}"`); return obj[args] })(response.headers, "access-control-allow-origin"),"*")))};
     }
   }
   return $Closure2;

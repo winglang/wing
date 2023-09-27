@@ -31,11 +31,19 @@ module.exports = function({ $apiDefaultCors_url, $http_Util, $t_Assert }) {
       const response = (await $http_Util.get(($apiDefaultCors_url + "/users")));
       const headers = response.headers;
       (await $t_Assert.equalNum(response.status,200));
-      (await $t_Assert.equalStr((headers)["access-control-allow-origin"],"*"));
-      (await $t_Assert.equalStr((headers)["access-control-allow-credentials"],"false"));
-      (await $t_Assert.equalStr((headers)["access-control-expose-headers"],""));
-      (await $t_Assert.isNil((headers)["access-control-allow-headers"]));
-      (await $t_Assert.isNil((headers)["access-control-allow-methods"]));
+      (await $t_Assert.equalStr(((obj, args) => { if (obj[args] === undefined) throw new Error(`Object does not contain the key "${args}"`); return obj[args] })(headers, "access-control-allow-origin"),"*"));
+      (await $t_Assert.equalStr(((obj, args) => { if (obj[args] === undefined) throw new Error(`Object does not contain the key "${args}"`); return obj[args] })(headers, "access-control-allow-credentials"),"false"));
+      (await $t_Assert.equalStr(((obj, args) => { if (obj[args] === undefined) throw new Error(`Object does not contain the key "${args}"`); return obj[args] })(headers, "access-control-expose-headers"),""));
+      const ALLOW_HEADERS_DOES_NOT_EXIST_ERROR = "Object does not contain the key \"access-control-allow-headers\"";
+      (await $t_Assert.assertThrows(ALLOW_HEADERS_DOES_NOT_EXIST_ERROR,async () => {
+        ((obj, args) => { if (obj[args] === undefined) throw new Error(`Object does not contain the key "${args}"`); return obj[args] })(headers, "access-control-allow-headers");
+      }
+      ));
+      const ALLOW_METHODS_DOES_NOT_EXIST_ERROR = "Object does not contain the key \"access-control-allow-methods\"";
+      (await $t_Assert.assertThrows(ALLOW_METHODS_DOES_NOT_EXIST_ERROR,async () => {
+        ((obj, args) => { if (obj[args] === undefined) throw new Error(`Object does not contain the key "${args}"`); return obj[args] })(headers, "access-control-allow-methods");
+      }
+      ));
     }
   }
   return $Closure2;
@@ -56,11 +64,19 @@ module.exports = function({ $apiDefaultCors_url, $http_HttpMethod, $http_Util, $
       const response = (await $http_Util.fetch(($apiDefaultCors_url + "/users"),({"method": $http_HttpMethod.OPTIONS})));
       const headers = response.headers;
       (await $t_Assert.equalNum(response.status,204));
-      (await $t_Assert.equalStr((headers)["access-control-allow-headers"],"Content-Type,Authorization,X-Requested-With"));
-      (await $t_Assert.equalStr((headers)["access-control-allow-methods"],"GET,POST,PUT,DELETE,HEAD,OPTIONS"));
-      (await $t_Assert.equalStr((headers)["access-control-allow-origin"],"*"));
-      (await $t_Assert.isNil((headers)["access-control-allow-credentials"]));
-      (await $t_Assert.isNil((headers)["access-control-expose-headers"]));
+      (await $t_Assert.equalStr(((obj, args) => { if (obj[args] === undefined) throw new Error(`Object does not contain the key "${args}"`); return obj[args] })(headers, "access-control-allow-headers"),"Content-Type,Authorization,X-Requested-With"));
+      (await $t_Assert.equalStr(((obj, args) => { if (obj[args] === undefined) throw new Error(`Object does not contain the key "${args}"`); return obj[args] })(headers, "access-control-allow-methods"),"GET,POST,PUT,DELETE,HEAD,OPTIONS"));
+      (await $t_Assert.equalStr(((obj, args) => { if (obj[args] === undefined) throw new Error(`Object does not contain the key "${args}"`); return obj[args] })(headers, "access-control-allow-origin"),"*"));
+      const ALLOW_CREDENTIALS_DOES_NOT_EXIST_ERROR = "Object does not contain the key \"access-control-allow-credentials\"";
+      (await $t_Assert.assertThrows(ALLOW_CREDENTIALS_DOES_NOT_EXIST_ERROR,async () => {
+        ((obj, args) => { if (obj[args] === undefined) throw new Error(`Object does not contain the key "${args}"`); return obj[args] })(headers, "access-control-allow-credentials");
+      }
+      ));
+      const EXPOSE_HEADERS_DOES_NOT_EXIST_ERROR = "Object does not contain the key \"access-control-expose-headers\"";
+      (await $t_Assert.assertThrows(EXPOSE_HEADERS_DOES_NOT_EXIST_ERROR,async () => {
+        ((obj, args) => { if (obj[args] === undefined) throw new Error(`Object does not contain the key "${args}"`); return obj[args] })(headers, "access-control-expose-headers");
+      }
+      ));
     }
   }
   return $Closure3;
@@ -81,16 +97,6 @@ module.exports = function({  }) {
         throw new Error(String.raw({ raw: ["expected: ", " got: ", ""] }, b, a));
       }
     }
-    static async isNil(a) {
-      try {
-        {((cond) => {if (!cond) throw new Error("assertion failed: a == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(a,undefined)))};
-      }
-      catch ($error_e) {
-        const e = $error_e.message;
-        {console.log(e)};
-        throw new Error(String.raw({ raw: ["expected '", "' to be nil"] }, a));
-      }
-    }
     static async equalNum(a, b) {
       try {
         {((cond) => {if (!cond) throw new Error("assertion failed: a == b")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(a,b)))};
@@ -100,6 +106,18 @@ module.exports = function({  }) {
         {console.log(e)};
         throw new Error(String.raw({ raw: ["expected: ", " got: ", ""] }, b, a));
       }
+    }
+    static async assertThrows(expected, block) {
+      let error = false;
+      try {
+        (await block());
+      }
+      catch ($error_actual) {
+        const actual = $error_actual.message;
+        {((cond) => {if (!cond) throw new Error("assertion failed: actual == expected")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(actual,expected)))};
+        error = true;
+      }
+      {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
     }
   }
   return Assert;
@@ -326,7 +344,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _getInflightOps() {
-      return ["equalStr", "isNil", "equalNum", "$inflight_init"];
+      return ["equalStr", "equalNum", "assertThrows", "$inflight_init"];
     }
   }
   return { Assert };

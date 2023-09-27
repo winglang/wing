@@ -13,16 +13,6 @@ module.exports = function({  }) {
         throw new Error(String.raw({ raw: ["expected: ", " got: ", ""] }, b, a));
       }
     }
-    static async isNil(a) {
-      try {
-        {((cond) => {if (!cond) throw new Error("assertion failed: a == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(a,undefined)))};
-      }
-      catch ($error_e) {
-        const e = $error_e.message;
-        {console.log(e)};
-        throw new Error(String.raw({ raw: ["expected '", "' to be nil"] }, a));
-      }
-    }
     static async equalNum(a, b) {
       try {
         {((cond) => {if (!cond) throw new Error("assertion failed: a == b")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(a,b)))};
@@ -32,6 +22,18 @@ module.exports = function({  }) {
         {console.log(e)};
         throw new Error(String.raw({ raw: ["expected: ", " got: ", ""] }, b, a));
       }
+    }
+    static async assertThrows(expected, block) {
+      let error = false;
+      try {
+        (await block());
+      }
+      catch ($error_actual) {
+        const actual = $error_actual.message;
+        {((cond) => {if (!cond) throw new Error("assertion failed: actual == expected")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(actual,expected)))};
+        error = true;
+      }
+      {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
     }
   }
   return Assert;
@@ -103,7 +105,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["equalStr", "isNil", "equalNum", "$inflight_init"];
+        return ["equalStr", "equalNum", "assertThrows", "$inflight_init"];
       }
     }
   }

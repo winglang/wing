@@ -13,7 +13,7 @@ module.exports = function({ $body, $cloud_HttpMethod, $std_Json }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: req.method == cloud.HttpMethod.POST")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.method,$cloud_HttpMethod.POST)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.path == \"/path\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.path,"/path")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.body == Json.stringify(body)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.body,((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$body]))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.headers?.get(\"content-type\") == \"application/json\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((req.headers)["content-type"],"application/json")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.headers?.get(\"content-type\") == \"application/json\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Object does not contain the key "${args}"`); return obj[args] })(req.headers, "content-type"),"application/json")))};
       return ({"status": 200,"body": req.body});
     }
   }
