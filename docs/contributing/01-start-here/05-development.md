@@ -120,14 +120,16 @@ If you wish to install it manually, you may do so by running `scripts/setup_wasi
 
 ## 🧪 How do I run tests?
 
-End-to-end tests are hosted under `./tools/hangar`. To get started, first ensure you can [build
+End-to-end tests are hosted under `tools/hangar`. To get started, first ensure you can [build
 wing](#-how-do-i-build-wing).
 
 To run the tests (and update snapshots), run the following command from anywhere in the monorepo:
 
 ```sh
-pnpm turbo test --filter=hangar
+pnpm turbo wing:e2e
 ```
+
+(This is a helpful shortcut for `pnpm turbo test --filter=hangar`)
 
 ### Test Meta-Comments
 
@@ -153,8 +155,10 @@ This is useful if, for example, the test requires docker. In our CI only linux s
 Benchmark files are located in `examples/tests/valid/benchmarks`. To run the benchmarks, run the following command from anywhere in the monorepo:
 
 ```sh
-pnpm turbo bench
+pnpm turbo wing:bench
 ```
+
+(This is a helpful shortcut for `pnpm turbo bench --filter=hangar`)
 
 In CI, if these benchmarks regress too far from the current `main` branch, the build will fail.
 
