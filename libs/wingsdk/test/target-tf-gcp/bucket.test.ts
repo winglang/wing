@@ -11,7 +11,7 @@ import {
 
 const GCP_APP_OPTS = {
   projectId: "my-project",
-  storageLocation: "US",
+  region: "us-central1",
   entrypointDir: __dirname,
 };
 

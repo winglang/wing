@@ -283,7 +283,7 @@ impl<'s> Parser<'s> {
 			for stmt in &scope.statements {
 				if !is_valid_module_statement(&stmt) {
 					self.add_error_from_span(
-						"Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with `.main.w` to make this an entrypoint file.",
+						"Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with `.main.w` or `.test.w` to make this an entrypoint file.",
 						stmt.span(),
 					);
 				}
@@ -752,9 +752,12 @@ impl<'s> Parser<'s> {
 					statement_node,
 				);
 			}
-			if source_path.ends_with(".main.w\"") {
+			if source_path.ends_with(".main.w\"") || source_path.ends_with(".test.w\"") {
 				return self.with_error(
-					format!("Cannot bring module \"{}\": main files cannot be brought", source_path),
+					format!(
+						"Cannot bring module \"{}\": main/test files cannot be brought",
+						source_path
+					),
 					statement_node,
 				);
 			}
@@ -2151,11 +2154,10 @@ impl<'s> Parser<'s> {
 }
 
 fn is_entrypoint_file(path: &Utf8Path) -> bool {
-	path.file_name() == Some("main.w")
-		|| path
-			.file_name()
-			.map(|s| s.to_string().ends_with(".main.w"))
-			.unwrap_or(false)
+	path
+		.file_name()
+		.map(|s| s == "main.w" || s.ends_with(".main.w") || s.ends_with(".test.w"))
+		.unwrap_or(false)
 }
 
 fn is_valid_module_statement(stmt: &Stmt) -> bool {

@@ -1,8 +1,8 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
 import { Bucket } from "../../src/cloud";
+import { Testing } from "../../src/simulator";
 import * as tfaws from "../../src/target-tf-aws";
-import { Testing } from "../../src/testing";
 import {
   mkdtemp,
   tfResourcesOf,

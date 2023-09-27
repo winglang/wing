@@ -109,6 +109,4 @@ test("website with invalid path should throw error", () => {
     );
     app.synth();
   }).toThrowError('key must have a .json suffix. (current: "txt")');
-
-  // THEN
 });

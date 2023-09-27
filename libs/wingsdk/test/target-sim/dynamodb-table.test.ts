@@ -236,11 +236,51 @@ test("scan", async () => {
 
   await client.putItem({ id: "1", age: 50 } as any);
   await client.putItem({ id: "2", loc: "US" } as any);
-  const items = await client.scan();
-  expect(items).toEqual([
+  const result = await client.scan();
+  expect(result.items).toEqual([
     { id: "1", age: 50 },
     { id: "2", loc: "US" },
   ]);
+
+  await s.stop();
+});
+
+test("query", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const t = ex.DynamodbTable._newDynamodbTable(app, "query_table", {
+    name: "query_table",
+    attributeDefinitions: { id: "S", age: "N" } as any,
+    hashKey: "id",
+    rangeKey: "age",
+  });
+  const s = await app.startSimulator();
+  const client = s.getResource("/query_table") as ex.IDynamodbTableClient;
+
+  await client.putItem({ id: "1", age: 2 } as any);
+  await client.putItem({ id: "1", age: 1 } as any);
+  await client.putItem({ id: "2", age: 3 } as any);
+  await client.putItem({ id: "2", age: 1 } as any);
+  {
+    const result = await client.query({
+      keyConditionExpression: "id = :id",
+      expressionAttributeValues: { ":id": "1" } as any,
+    });
+    expect(result.items).toEqual([
+      { id: "1", age: 1 },
+      { id: "1", age: 2 },
+    ]);
+  }
+  {
+    const result = await client.query({
+      keyConditionExpression: "id = :id",
+      expressionAttributeValues: { ":id": "2" } as any,
+    });
+    expect(result.items).toEqual([
+      { id: "2", age: 1 },
+      { id: "2", age: 3 },
+    ]);
+  }
 
   await s.stop();
 });
