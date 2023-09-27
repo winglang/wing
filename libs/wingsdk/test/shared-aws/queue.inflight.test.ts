@@ -101,9 +101,12 @@ test("push - sad path empty message", async () => {
 
   // THEN
   await expect(() => client.push(MESSAGE)).rejects.toThrowError(
-      /Empty messages are not allowed/
+    /Empty messages are not allowed/
   );
-  expect(sqsMock, "never invoked").toHaveReceivedCommandTimes(SendMessageCommand, 0);
+  expect(sqsMock, "never invoked").toHaveReceivedCommandTimes(
+    SendMessageCommand,
+    0
+  );
 });
 
 test("push - sad path unknown error", async () => {
