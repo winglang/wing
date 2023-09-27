@@ -87,7 +87,7 @@ test("website is serving dynamic content", async () => {
 
   // THEN
   await s.stop();
-  expect(await configPage.json()).toEqual(fileContent);
+  expect(await configPage.text()).toEqual(fileContent);
 });
 
 test("addJson throws an error for no json path", async () => {

@@ -90,7 +90,7 @@ test("website with addFile", () => {
     tfResourcesWithProperty(output, "aws_s3_object", { key: "/index.html" })
   ).not.toBeUndefined();
   expect(
-    tfResourcesWithProperty(output, "aws_s3_object", { key: "config.json" })
+    tfResourcesWithProperty(output, "aws_s3_object", { key: "addition.html" })
   ).not.toBeUndefined();
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
