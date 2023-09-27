@@ -9,7 +9,7 @@ interface ProcessedBenchData {
   name: string;
 }
 
-function avgBenches(benchList: any[]): Record<string, ProcessedBenchData> {
+function avgBenches(benchList: any[]): Record<string, ProcessedBenchData | undefined> {
   const benchValues: Record<string, ProcessedBenchData[]> = {};
   for (const bench of benchList) {
     for (const item of bench) {
@@ -86,16 +86,16 @@ export async function compareBenchmarks(
     const oldData = previousBench[itemName];
 
     differences[itemName] = {};
-    differences[itemName].moeBefore = oldData.moe ?? NaN;
-    differences[itemName].meanBefore = oldData.mean ?? NaN;
+    differences[itemName].moeBefore = oldData?.moe ?? NaN;
+    differences[itemName].meanBefore = oldData?.mean ?? NaN;
 
-    differences[itemName].moeAfter = newData.moe;
-    differences[itemName].meanAfter = newData;
+    differences[itemName].moeAfter = newData?.moe ?? NaN;
+    differences[itemName].meanAfter = newData?.mean ?? NaN;
 
     differences[itemName].meanDiff =
-      Math.round((newData.mean - oldData.mean) * 100) / 100;
+      Math.round((differences[itemName].meanAfter - differences[itemName].meanBefore) * 100) / 100;
     differences[itemName].meanPercentDiff =
-      Math.round(((newData.mean - oldData.mean) / oldData.mean) * 10000) / 100;
+      Math.round(((differences[itemName].meanAfter - differences[itemName].meanBefore) / differences[itemName].meanBefore) * 10000) / 100;
   }
 
   // create a markdown table of the differences
