@@ -13,6 +13,14 @@ new std.Test(inflight () => {
     }
   };
 
+  let var error = false;
+  try {
+    q.push("Foo", "");
+  } catch e {
+    error = true;
+  }
+  assert(error);
+
   q.push("Foo");
   
   assert(util.waitUntil((): bool => {

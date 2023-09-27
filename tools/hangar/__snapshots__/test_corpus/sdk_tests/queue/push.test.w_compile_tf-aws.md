@@ -11,6 +11,15 @@ module.exports = function({ $q, $std_Duration, $util_Util }) {
     }
     async handle() {
       const obj = ({"k1": 1,"k2": "hello","k3": true,"k4": ({"k1": [1, "a", true, ({})]})});
+      let error = false;
+      try {
+        (await $q.push("Foo",""));
+      }
+      catch ($error_e) {
+        const e = $error_e.message;
+        error = true;
+      }
+      {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
       (await $q.push("Foo"));
       {((cond) => {if (!cond) throw new Error("assertion failed: util.waitUntil((): bool => {\n    return q.approxSize() == 1;\n  })")})((await $util_Util.waitUntil(async () => {
         return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $q.approxSize()),1));
