@@ -308,10 +308,10 @@ Duration <DURATION>"
 
 exports[`bring_local_dir.test.w 1`] = `
 "error: Cannot bring \\"/subdir\\" since it is not a relative path
-  --> ../../../examples/tests/invalid/bring_local_dir.test.w:4:1
+  --> ../../../examples/tests/invalid/bring_local_dir.test.w:4:7
   |
 4 | bring \\"/subdir\\" as baz;
-  | ^^^^^^^^^^^^^^^^^^^^^^^ Cannot bring \\"/subdir\\" since it is not a relative path
+  |       ^^^^^^^^^ Cannot bring \\"/subdir\\" since it is not a relative path
 
 
 error: Symbol \\"Foo\\" has multiple definitions in \\"../../../examples/tests/invalid/subdir/inner\\"
@@ -337,24 +337,31 @@ Duration <DURATION>"
 
 exports[`bring_local_self.test.w 1`] = `
 "error: Cannot find module \\"./bring_local_self.main.w\\"
-  --> ../../../examples/tests/invalid/bring_local_self.test.w:1:1
+  --> ../../../examples/tests/invalid/bring_local_self.test.w:1:7
   |
 1 | bring \\"./bring_local_self.main.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot find module \\"./bring_local_self.main.w\\"
+  |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot find module \\"./bring_local_self.main.w\\"
 
 
 error: Cannot find module \\"./non-existent.w\\"
-  --> ../../../examples/tests/invalid/bring_local_self.test.w:4:1
+  --> ../../../examples/tests/invalid/bring_local_self.test.w:4:7
   |
 4 | bring \\"./non-existent.w\\" as bar;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot find module \\"./non-existent.w\\"
+  |       ^^^^^^^^^^^^^^^^^^ Cannot find module \\"./non-existent.w\\"
 
 
 error: Cannot bring \\"/hello.w\\" since it is not a relative path
-  --> ../../../examples/tests/invalid/bring_local_self.test.w:7:1
+  --> ../../../examples/tests/invalid/bring_local_self.test.w:7:7
   |
 7 | bring \\"/hello.w\\" as baz;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^ Cannot bring \\"/hello.w\\" since it is not a relative path
+  |       ^^^^^^^^^^ Cannot bring \\"/hello.w\\" since it is not a relative path
+
+
+error: Cannot bring module \\"./bring_local_dir.test.w\\" since it is an entrypoint file
+   --> ../../../examples/tests/invalid/bring_local_self.test.w:10:7
+   |
+10 | bring \\"./bring_local_dir.test.w\\" as qux;
+   |       ^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot bring module \\"./bring_local_dir.test.w\\" since it is an entrypoint file
 
 
  
