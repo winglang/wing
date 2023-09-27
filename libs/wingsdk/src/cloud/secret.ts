@@ -37,12 +37,12 @@ export abstract class Secret extends Resource {
   public static _newSecret(
     scope: Construct,
     id: string,
-    props: SecretProps = {}
+    props: SecretProps
   ): Secret {
     return App.of(scope).newAbstract(SECRET_FQN, scope, id, props);
   }
 
-  constructor(scope: Construct, id: string, props: SecretProps = {}) {
+  constructor(scope: Construct, id: string, props: SecretProps) {
     super(scope, id);
 
     Node.of(this).title = "Secret";
@@ -60,8 +60,7 @@ export abstract class Secret extends Resource {
 /**
  * Options when getting a secret value
  */
-export interface 
-GetSecretValueOptions {
+export interface GetSecretValueOptions {
   /**
    * Whether to cache the value
    *
@@ -101,3 +100,4 @@ export enum SecretInflightMethods {
   /** `Secret.valueJson` */
   VALUE_JSON = "valueJson",
 }
+s;
