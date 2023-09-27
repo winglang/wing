@@ -6,6 +6,8 @@ import { RandomProvider } from "../.gen/providers/random/provider";
 import { BUCKET_FQN, FUNCTION_FQN } from "../cloud";
 import { AppProps as CdktfAppProps } from "../core";
 import { CdktfApp } from "../shared-tf/app";
+import { Table } from "./table";
+import { TABLE_FQN } from "../ex";
 
 /**
  * GCP App props.
@@ -21,6 +23,11 @@ export interface AppProps extends CdktfAppProps {
    * @see https://cloud.google.com/functions/docs/locations
    */
   readonly region: string;
+
+  /**
+  * Should environment variable be overriden
+  */
+  readonly overrideEnv?: boolean;
 }
 
 /**
@@ -43,21 +50,31 @@ export class App extends CdktfApp {
   constructor(props: AppProps) {
     super(props);
 
-    this.projectId = props.projectId ?? process.env.GOOGLE_PROJECT_ID;
+    let projectId: string | undefined = props.projectId;
+    if (projectId === undefined && !props.overrideEnv) {
+      projectId = process.env.GOOGLE_PROJECT_ID
+    }
     // Using env variable for location is work around until we are
     // able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
-    if (this.projectId === undefined) {
+    if (projectId === undefined) {
       throw new Error(
         "A Google Cloud project ID must be specified through the GOOGLE_PROJECT_ID environment variable."
       );
     }
+    this.projectId = projectId;
 
     this.region = props.region ?? process.env.GOOGLE_REGION;
-    if (this.region === undefined) {
+    let region: string | undefined = props.region;
+    if (region === undefined && !props.overrideEnv) {
+      region = process.env.GOOGLE_REGION
+    }
+
+    if (region === undefined) {
       throw new Error(
         "A Google Cloud region must be specified through the GOOGLE_REGION environment variable."
       );
     }
+    this.region = region;
 
     new GoogleProvider(this, "google", {
       project: this.projectId,
@@ -86,6 +103,8 @@ export class App extends CdktfApp {
         return new Bucket(scope, id, args[0]);
       case FUNCTION_FQN:
         return new Function(scope, id, args[0], args[1]);
+      case TABLE_FQN:
+        return new Table(scope, id, args[0]);
     }
 
     return undefined;

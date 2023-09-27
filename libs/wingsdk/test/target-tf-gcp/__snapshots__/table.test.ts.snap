@@ -1,0 +1,24 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`create a table 1`] = `
+{
+  "resource": {
+    "google_bigtable_table": {
+      "my_table": {
+        "column_family": [
+          {
+            "family": "name",
+          },
+        ],
+        "instance_name": "my_table-c8dce022",
+        "name": "my_table-\${random_id.my_table_Id_2F48DF82.hex}",
+      },
+    },
+    "random_id": {
+      "my_table_Id_2F48DF82": {
+        "byte_length": 4,
+      },
+    },
+  },
+}
+`;
