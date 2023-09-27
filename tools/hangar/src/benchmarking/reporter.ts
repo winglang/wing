@@ -37,7 +37,7 @@ export default class WingJsonReporter
 
     if (previousReportSource) {
       const differences = await compareBenchmarks(
-        lastReportPath,
+        previousReportSource,
         currentReportPath
       );
 

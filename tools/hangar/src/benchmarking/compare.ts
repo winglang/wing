@@ -1,9 +1,6 @@
 import { readFileSync, appendFileSync } from "fs";
 import { parseRoundedJson } from "./util";
-import {
-  getBenchForBranch,
-  upsertPRComment,
-} from "./github";
+import { getBenchForBranch, upsertPRComment } from "./github";
 import { createTable } from "./table_report";
 
 function avgBenches(benchList: any[]): Record<string, any> {
@@ -71,11 +68,11 @@ export async function compareBenchmarks(
       Math.round(((newMean - oldMean) / oldMean) * 10000) / 100;
   }
 
-  const formatNumber = (num: number | typeof NaN | undefined) => {
+  const formatNumber = (num: number | typeof NaN | undefined, unit: string) => {
     if (num === undefined || isNaN(num)) {
       return "...";
     }
-    return num.toFixed(2);
+    return num.toFixed(2) + unit;
   };
 
   // create a markdown table of the differences
@@ -83,11 +80,13 @@ export async function compareBenchmarks(
   markdown += `| :-- | --: | --: | --: |\n`;
   for (const key in differences) {
     const diff = differences[key];
-    markdown += `| ${key} | ${formatNumber(diff.meanBefore)}ms | ${formatNumber(
-      diff.meanAfter
-    )}ms | ${formatNumber(diff.meanDiff)}ms (${formatNumber(
-      diff.meanPercentDiff
-    )}%) |\n`;
+    markdown += `| ${key} | ${formatNumber(
+      diff.meanBefore,
+      "ms"
+    )} | ${formatNumber(diff.meanAfter, "ms")} | ${formatNumber(
+      diff.meanDiff,
+      "ms"
+    )} (${formatNumber(diff.meanPercentDiff, "%")}) |\n`;
   }
 
   console.table(differences);
@@ -103,8 +102,8 @@ export async function compareBenchmarks(
 
     appendFileSync(githubStepSummaryFile, markdown);
 
-    // if we're in a PR, add a comment to the PR
     const prNumber = parseInt(process.env.BENCH_PR ?? "");
+
     if (prNumber) {
       const comment = `\
 ## Benchmarks
@@ -123,7 +122,10 @@ ${markdown}
 
 </details>
 
-###### Updated at ${new Date().toUTCString()} (UTC)
+###### Last Updated (UTC) ${new Date()
+        .toISOString()
+        .slice(0, 16)
+        .replace("T", " ")}
 `;
       await upsertPRComment(prNumber, comment);
     }
