@@ -3,25 +3,41 @@ import { parseRoundedJson } from "./util";
 import { getBenchForBranch, upsertPRComment } from "./github";
 import { createTable } from "./table_report";
 
-function avgBenches(benchList: any[]): Record<string, any> {
-  const mainBenchMeanOfMeans: Record<string, any> = {};
+interface ProcessedBenchData {
+  mean: number;
+  moe: number;
+  name: string;
+}
+
+function avgBenches(benchList: any[]): Record<string, ProcessedBenchData> {
+  const benchValues: Record<string, ProcessedBenchData[]> = {};
   for (const bench of benchList) {
     for (const item of bench) {
-      if (!mainBenchMeanOfMeans[item.name]) {
-        mainBenchMeanOfMeans[item.name] = [];
+      if (!benchValues[item.name]) {
+        benchValues[item.name] = [];
       }
-      mainBenchMeanOfMeans[item.name].push(item["mean"]);
+      const data = {
+        name: item.name,
+        mean: item["mean"],
+        moe: item["moe"],
+      };
+      benchValues[item.name].push(data);
     }
   }
-  for (const key in mainBenchMeanOfMeans) {
-    const sum = mainBenchMeanOfMeans[key].reduce(
-      (a: number, b: number) => a + b,
-      0
-    );
-    mainBenchMeanOfMeans[key] = sum / mainBenchMeanOfMeans[key].length;
+
+  const returnData: Record<string, ProcessedBenchData> = {};
+  for (const key in benchValues) {
+    const data = benchValues[key];
+    const mean = data.reduce((acc, cur) => acc + cur.mean, 0) / data.length;
+    const moe = data.reduce((acc, cur) => acc + cur.moe, 0) / data.length;
+    returnData[key] = {
+      name: key,
+      mean,
+      moe,
+    };
   }
 
-  return mainBenchMeanOfMeans;
+  return returnData;
 }
 
 function getLocalBench(filename: string) {
@@ -54,45 +70,54 @@ export async function compareBenchmarks(
 
   console.log(`${previousSource} => ${targetSource}`);
 
-  const differences: Record<string, any> = {};
-
-  for (const [itemName, newMean] of Object.entries(targetBench)) {
-    const oldMean = previousBench[itemName];
-
-    differences[itemName] = {};
-    differences[itemName].meanBefore = oldMean ?? NaN;
-    differences[itemName].meanAfter = newMean;
-    differences[itemName].meanDiff =
-      Math.round((newMean - oldMean) * 100) / 100;
-    differences[itemName].meanPercentDiff =
-      Math.round(((newMean - oldMean) / oldMean) * 10000) / 100;
-  }
-
-  const formatNumber = (num: number | typeof NaN | undefined, unit: string) => {
+  const fmtNum = (num: number | typeof NaN | undefined, unit: string = "") => {
     if (num === undefined || isNaN(num)) {
       return "...";
-    } else if (unit === "%") {
-      return Math.round(num * 10) / 10 + unit;
+    } else if (unit === "%" || unit === "") {
+      return Math.round(num * 100) / 100 + unit;
     } else {
       return Math.round(num) + unit;
     }
   };
+
+  const differences: Record<string, any> = {};
+
+  for (const [itemName, newData] of Object.entries(targetBench)) {
+    const oldData = previousBench[itemName];
+
+    differences[itemName] = {};
+    differences[itemName].moeBefore = oldData.moe ?? NaN;
+    differences[itemName].meanBefore = oldData.mean ?? NaN;
+
+    differences[itemName].moeAfter = newData.moe;
+    differences[itemName].meanAfter = newData;
+
+    differences[itemName].meanDiff =
+      Math.round((newData.mean - oldData.mean) * 100) / 100;
+    differences[itemName].meanPercentDiff =
+      Math.round(((newData.mean - oldData.mean) / oldData.mean) * 10000) / 100;
+  }
 
   // create a markdown table of the differences
   let markdown = `| Benchmark | Before | After | Change |\n`;
   markdown += `| :-- | --: | --: | --: |\n`;
   for (const key in differences) {
     const diff = differences[key];
-    const changeText = !!diff.meanPercentDiff
-      ? `${formatNumber(diff.meanDiff, "ms")} (${formatNumber(
-          diff.meanPercentDiff,
-          "%"
-        )})`
+    let changeText = !!diff.meanPercentDiff
+      ? `${fmtNum(diff.meanDiff, "ms")} (${fmtNum(diff.meanPercentDiff, "%")})`
       : "...";
-    markdown += `| ${key} | ${formatNumber(
-      diff.meanBefore,
-      "ms"
-    )} | ${formatNumber(diff.meanAfter, "ms")} | ${changeText} |\n`;
+
+    if (diff.meanDiff > 0) {
+      changeText = `+${changeText}🟥`;
+    } else if (diff.meanDiff <= 0) {
+      changeText = `${changeText}🟩`;
+    }
+
+    markdown += `| ${key} | ${fmtNum(diff.meanBefore, "ms")}±${fmtNum(
+      diff.moeBefore
+    )} | ${fmtNum(diff.meanAfter, "ms")}±${fmtNum(
+      diff.moeAfter
+    )} | ${changeText} |\n`;
   }
 
   console.table(differences);

@@ -6,9 +6,12 @@
 
 import { appendFileSync } from "fs";
 
-export const DEFAULT_COLUMNS = ["name", "mean", "min", "max", "totalTime", "samples"];
+export const DEFAULT_COLUMNS = ["name", "mean", "min", "max", "moe", "sd"];
 
-export function createTable(object: object[], columns: string[] = DEFAULT_COLUMNS) {
+export function createTable(
+  object: object[],
+  columns: string[] = DEFAULT_COLUMNS
+) {
   const base = "|";
   // Create columns
   let outputString = columns.join(base);
