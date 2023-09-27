@@ -307,7 +307,7 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
 }
 `;
 
-exports[`Testing ReactApp > website with addEnvironmentVariable 1`] = `
+exports[`Testing ReactApp > website with addEnvironment 1`] = `
 {
   "data": {
     "aws_iam_policy_document": {
@@ -449,7 +449,7 @@ window.wingEnv = {
 }
 `;
 
-exports[`Testing ReactApp > website with addEnvironmentVariable 2`] = `
+exports[`Testing ReactApp > website with addEnvironment 2`] = `
 {
   "tree": {
     "children": {

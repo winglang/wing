@@ -8,11 +8,8 @@ import {
   ReactAppSchema,
 } from "./schema-resources";
 import { IReactAppClient, WING_JS } from "../ex";
+import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
 import { TraceType } from "../std";
-import {
-  ISimulatorContext,
-  ISimulatorResourceInstance,
-} from "../testing/simulator";
 
 export class ReactApp implements IReactAppClient, ISimulatorResourceInstance {
   private readonly context: ISimulatorContext;

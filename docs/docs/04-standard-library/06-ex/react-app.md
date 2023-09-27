@@ -44,7 +44,7 @@ let website = new ex.ReactApp(
 
 ### Using wing variables within react code
 
-`ex.ReactApp` allows you to pass preflight arguments from wing to the React app using `addEnvironmentVariable` method:
+`ex.ReactApp` allows you to pass preflight arguments from wing to the React app using `addEnvironment` method:
 
 ```ts
 bring cloud;
@@ -54,8 +54,8 @@ bring ex;
 let api = new cloud.Api();
 let website = new ex.ReactApp(projectPath: "./client", isDevRun: util.tryEnv("ENV") == "dev");
 
-website.addEnvironmentVariable("apiUrl", api.url);
-website.addEnvironmentVariable("another", "some string variable");
+website.addEnvironment("apiUrl", api.url);
+website.addEnvironment("another", "some string variable");
 
 ```
 
@@ -63,7 +63,7 @@ Then in the React app use `window.wingEnv`:
 (accessible after adding `<script src="./wing.js"></script>` to the index file)
 
 ```ts
-const { apiUrl } = window.wingEnv;
+const {apiUrl} = window.wingEnv;
 const users = await fetch(apiUrl + "/users");
 ```
 
@@ -86,9 +86,5 @@ AWS implementations of `ex.ReactApp` uses the [Website resource](../01-cloud/web
 ### GCP (`tf-gcp`)
 
 🚧 Not supported yet (tracking issue: [#4221](https://github.com/winglang/wing/issues/4221))
+
 # API Reference <a name="API Reference" id="api-reference"></a>
-
-
-
-
-

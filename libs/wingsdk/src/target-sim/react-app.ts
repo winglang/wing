@@ -5,8 +5,8 @@ import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import * as ex from "../ex";
+import { BaseResourceSchema } from "../simulator";
 import { IInflightHost } from "../std";
-import { BaseResourceSchema } from "../testing/simulator";
 
 const DEFAULT_START_COMMAND = "npm run start";
 export class ReactApp extends ex.ReactApp implements ISimulatorResource {

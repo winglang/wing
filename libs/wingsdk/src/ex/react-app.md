@@ -44,7 +44,7 @@ let website = new ex.ReactApp(
 
 ### Using wing variables within react code
 
-`ex.ReactApp` allows you to pass preflight arguments from wing to the React app using `addEnvironmentVariable` method:
+`ex.ReactApp` allows you to pass preflight arguments from wing to the React app using `addEnvironment` method:
 
 ```ts
 bring cloud;
@@ -54,8 +54,8 @@ bring ex;
 let api = new cloud.Api();
 let website = new ex.ReactApp(projectPath: "./client", isDevRun: util.tryEnv("ENV") == "dev");
 
-website.addEnvironmentVariable("apiUrl", api.url);
-website.addEnvironmentVariable("another", "some string variable");
+website.addEnvironment("apiUrl", api.url);
+website.addEnvironment("another", "some string variable");
 
 ```
 

@@ -97,7 +97,7 @@ window.wingEnv = {};`);
       isDevRun: false,
     });
 
-    website.addEnvironmentVariable("key", "value");
+    website.addEnvironment("key", "value");
 
     // WHEN
     const s = await app.startSimulator();

@@ -143,7 +143,7 @@ export abstract class ReactApp extends Resource {
    * @param key the key to add
    * @param value the value to add
    */
-  public addEnvironmentVariable(key: string, value: string) {
+  public addEnvironment(key: string, value: string) {
     this._environmentVariables.set(key, value);
   }
 

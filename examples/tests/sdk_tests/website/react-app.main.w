@@ -18,8 +18,8 @@ let website = new ex.ReactApp(
 );
 
 let preflightVariable = "preflight variable";
-website.addEnvironmentVariable("apiUrl", api.url);
-website.addEnvironmentVariable("anotherEnvVar", preflightVariable);
+website.addEnvironment("apiUrl", api.url);
+website.addEnvironment("anotherEnvVar", preflightVariable);
 
 test "website is working" {
   assert(http.get(website.url).ok);
