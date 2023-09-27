@@ -74,7 +74,7 @@ export abstract class Service extends Resource implements IInflightHost {
 
     // indicates that we are calling the inflight constructor and the
     // inflight "handle" method on the handler resource.
-    handler._registerBind(this, ["onStart", "onStop", "$inflight_init"]);
+    handler._registerBind(this, ["handle", "$inflight_init"]);
 
     const inflightClient = handler._toInflight();
     const lines = new Array<string>();
@@ -86,12 +86,8 @@ export abstract class Service extends Resource implements IInflightHost {
     lines.push("  return $obj;");
     lines.push("};");
 
-    lines.push("exports.onStart = async function() {");
-    lines.push("  return (await $initOnce()).onStart();");
-    lines.push("};");
-
-    lines.push("exports.onStop = async function() {");
-    lines.push(`  return (await $initOnce()).onStop();`);
+    lines.push("exports.handle = async function() {");
+    lines.push("  return (await $initOnce()).handle();");
     lines.push("};");
 
     const assetName = ResourceNames.generateName(this, {
@@ -130,7 +126,11 @@ export abstract class Service extends Resource implements IInflightHost {
 
   /** @internal */
   public _getInflightOps(): string[] {
-    return [ServiceInflightMethods.START, ServiceInflightMethods.STOP];
+    return [
+      ServiceInflightMethods.START,
+      ServiceInflightMethods.STOP,
+      ServiceInflightMethods.STARTED,
+    ];
   }
 }
 
@@ -148,11 +148,18 @@ export interface IServiceClient {
    * @inflight
    */
   start(): Promise<void>;
+
   /**
    * Stop the service
    * @inflight
    */
   stop(): Promise<void>;
+
+  /**
+   * Indicates whether the service is started.
+   * @inflight
+   */
+  started(): Promise<boolean>;
 }
 
 /**
@@ -172,16 +179,42 @@ export interface IServiceHandlerClient {
    *
    * DO NOT BLOCK! This handler should return as quickly as possible. If you need to run a long
    * running process, start it asynchronously.
-   */
-  onStart(): Promise<void>;
-
-  /**
-   * Handler to run in order to stop the service. This is where you implement the shutdown logic of
-   * the service, stop any activities, and clean up any resources.
    *
-   * @default - no special activity at shutdown
+   *
+   * @returns an optional function that can be used to cleanup any resources when the service is
+   * stopped.
+   *
+   * @example
+   *
+   * bring cloud;
+   *
+   * new cloud.Service(inflight () => {
+   *   log("starting service...");
+   *   return () => {
+   *     log("stoping service...");
+   *   };
+   * });
+   *
    */
-  onStop?(): Promise<void>;
+  handle(): Promise<IServiceStopHandler | undefined>;
+}
+
+/**
+ * @inflight `@winglang/sdk.cloud.IServiceStopHandlerClient`
+ */
+export interface IServiceStopHandler extends IResource {}
+
+/**
+ * Inflight client for `IServiceStopHandler`.
+ */
+export interface IServiceStopHandlerClient {
+  /**
+   * Handler to run when the service stops. This is where you implement the cleanup logic of
+   * the service, stop any activities asychronously.
+   *
+   * @inflight
+   */
+  handle(): Promise<void>;
 }
 
 /**
@@ -191,4 +224,5 @@ export interface IServiceHandlerClient {
 export enum ServiceInflightMethods {
   START = "start",
   STOP = "stop",
+  STARTED = "started",
 }

@@ -4,27 +4,21 @@ bring http;
 
 // hack: only supported in the "sim" target for now
 if util.env("WING_TARGET") == "sim" {
-
-
   let b = new cloud.Bucket();
   let startCounter = new cloud.Counter();
   let status = "status";
   let started = "started";
   let stopped = "stopped";
 
-  class MyServiceHandler impl cloud.IServiceHandler {
-    pub inflight onStart() {
-      b.put(status, started);
-      startCounter.inc();
-    }
+  let s = new cloud.Service(inflight () => {
+    b.put(status, started);
+    startCounter.inc();
 
-    pub inflight onStop() {
+    return () => {
       b.put(status, stopped);
       startCounter.dec();
-    }
-  }
-
-  let s = new cloud.Service(new MyServiceHandler(), autoStart: false);
+    };
+  }, autoStart: false);
 
   test "does not start automatically if autoStart is false" {
     assert(!b.tryGet(status)?);

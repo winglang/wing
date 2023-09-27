@@ -4,7 +4,7 @@ import {
   ServiceAttributes,
   ServiceSchema,
 } from "./schema-resources";
-import { IServiceClient } from "../cloud";
+import { IServiceClient, IServiceStopHandlerClient } from "../cloud";
 import { Sandbox } from "../shared/sandbox";
 import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
 import { TraceType } from "../std";
@@ -15,6 +15,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
   private readonly autoStart: boolean;
   private readonly sandbox: Sandbox;
   private running: boolean = false;
+  private onStop?: IServiceStopHandlerClient;
 
   constructor(props: ServiceSchema["props"], context: ISimulatorContext) {
     this.context = context;
@@ -54,7 +55,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       return;
     }
 
-    await this.sandbox.call("onStart");
+    this.onStop = await this.sandbox.call("handle");
     this.running = true;
   }
 
@@ -64,6 +65,21 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       return;
     }
 
-    await this.sandbox.call("onStop");
+    if (this.onStop) {
+      // wing has a quirk where it will return either a function or an object that implements
+      // "handle", depending on whether the closure is defined in an inflight context or preflight
+      // context. so we need to handle both options here. (in wing this is handled by the compiler).
+      if (typeof(this.onStop) === "function") {
+        await (this.onStop as any)();
+      } else {
+        await this.onStop.handle();
+      }
+    }
+
+    this.running = false;
+  }
+
+  public async started(): Promise<boolean> {
+    return this.running;
   }
 }

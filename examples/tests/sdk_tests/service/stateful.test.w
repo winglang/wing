@@ -4,7 +4,7 @@ bring http;
 
 // hack: only supported in the "sim" target for now
 if util.env("WING_TARGET") == "sim" {
-  class MyService impl cloud.IServiceHandler {
+  class MyService {
     b: cloud.Bucket;
     body: str;
 
@@ -15,41 +15,29 @@ if util.env("WING_TARGET") == "sim" {
       this.body = body;
 
       // it's idiomatic to just pass `this` here and implement the callbacks on the current object.
-      this.s = new cloud.Service(this);
-    }
-
-    inflight var state: num;
-
-    inflight init() {
-      this.state = 123;
-    }
-
-    pub inflight onStart() {
-      log("starting service");
-      util.sleep(1s);
-      this.b.put("ready", "true");
-      let port = MyService.startServer(this.body);
-      log("listening on port ${port}");
-      this.state = 456;
-      this.b.put("port", "${port}");
-    }
-
-    pub inflight onStop() {
-      log("stopping service");
-      log("state is: ${this.state}");
-
-      // make sure inflight state is presistent across onStart/onStop
-      assert(this.state == 456);
-      MyService.stopServer();
+      this.s = new cloud.Service(inflight () => {
+        log("starting service");
+        util.sleep(1s);
+        this.b.put("ready", "true");
+        let port = MyService.startServer(this.body);
+        log("listening on port ${port}");
+        let state = 456;
+        this.b.put("port", "${port}");
+  
+        return () => {
+          log("stopping service");
+          log("state is: ${state}");
+    
+          // make sure inflight state is presistent across onStart/onStop
+          assert(state == 456);
+          MyService.stopServer();
+        };
+      });
     }
 
     pub inflight access() {
       // when access() is called we expect the service to have completed initialization
       this.b.get("ready");
-
-      // this state belongs to the inflight client created for the test cloud function
-      // and not to the service, so we expect it to stay 123.
-      assert(this.state == 123);
     }
 
     pub inflight port(): num {
