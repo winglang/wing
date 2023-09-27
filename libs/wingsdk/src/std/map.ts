@@ -39,10 +39,10 @@ export class Map {
    * If the value that is associated to the provided key is an object, then you will get a reference
    * to that object and any change made to that object will effectively modify it inside the map.
    *
-   * @macro ($self$)[$args$]
+   * @macro ((obj, args) => { if (obj[args] === undefined) throw new Error(`Object does not contain the key "${args}"`); return obj[args] })($self$, $args$)
    *
    * @param key The key of the element to return.
-   * @returns The element associated with the specified key, or undefined if the key can't be found
+   * @returns The element associated with the specified key, or key does not exist error
    */
   public get(key: string): T1 {
     key;
@@ -162,10 +162,10 @@ export class MutMap {
    * If the value that is associated to the provided key is an object, then you will get a reference
    * to that object and any change made to that object will effectively modify it inside the map.
    *
-   * @macro ($self$)[$args$]
+   * @macro ((obj, args) => { if (obj[args] === undefined) throw new Error(`Object does not contain the key "${args}"`); return obj[args] })($self$, $args$)
    *
    * @param key The key of the element to return.
-   * @returns The element associated with the specified key, or undefined if the key can't be found
+   * @returns The element associated with the specified key, or key does not exist error
    */
   public get(key: string): T1 {
     key;
