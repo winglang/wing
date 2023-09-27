@@ -12,15 +12,6 @@ inflight class Assert {
     }
   }
 
-  pub static isNil(a: str?): bool {
-    try {
-      assert(a == nil);
-    } catch e {
-      log(e);
-      throw("expected '${a}' to be nil");
-    }
-  }
-
   pub static equalNum(a: num, b: num): bool{
     try {
       assert(a == b);
@@ -28,5 +19,16 @@ inflight class Assert {
       log(e);
       throw("expected: ${b} got: ${a}");
     }
+  }
+
+  pub static assertThrows(expected: str, block: (): void) {
+    let var error = false;
+    try {
+      block();
+    } catch actual {
+      assert(actual == expected);
+      error = true;
+    }
+    assert(error);
   }
 }

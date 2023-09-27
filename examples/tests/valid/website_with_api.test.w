@@ -70,8 +70,15 @@ let headers = response.headers;
   t.Assert.equalStr(headers.get("access-control-expose-headers"), "Content-Type");
   t.Assert.equalStr(headers.get("access-control-allow-credentials"), "false");
 
-  t.Assert.isNil(headers.get("access-control-allow-headers"));
-  t.Assert.isNil(headers.get("access-control-allow-methods"));
+  let ALLOW_HEADERS_DOES_NOT_EXIST_ERROR = "Object does not contain the key \"access-control-allow-headers\"";
+  t.Assert.assertThrows(ALLOW_HEADERS_DOES_NOT_EXIST_ERROR, () => {
+    headers.get("access-control-allow-headers");
+  });
+
+  let ALLOW_METHODS_DOES_NOT_EXIST_ERROR = "Object does not contain the key \"access-control-allow-methods\"";
+  t.Assert.assertThrows(ALLOW_METHODS_DOES_NOT_EXIST_ERROR, () => {
+    headers.get("access-control-allow-methods");
+  });
 }
 
 test "OPTIONS /users" {

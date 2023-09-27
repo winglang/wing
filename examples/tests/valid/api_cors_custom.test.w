@@ -33,8 +33,15 @@ test "GET /users has cors headers" {
   t.Assert.equalStr(headers.get("access-control-expose-headers"), "Content-Type");
 
   // OPTIONS cors headers are not set
-  t.Assert.isNil(headers.get("access-control-allow-headers"));
-  t.Assert.isNil(headers.get("access-control-allow-methods"));
+  let ALLOW_HEADERS_DOES_NOT_EXIST_ERROR = "Object does not contain the key \"access-control-allow-headers\"";
+  t.Assert.assertThrows(ALLOW_HEADERS_DOES_NOT_EXIST_ERROR, () => {
+    headers.get("access-control-allow-headers");
+  });
+
+  let ALLOW_METHODS_DOES_NOT_EXIST_ERROR = "Object does not contain the key \"access-control-allow-methods\"";
+  t.Assert.assertThrows(ALLOW_METHODS_DOES_NOT_EXIST_ERROR, () => {
+    headers.get("access-control-allow-methods");
+  });
 }
 
 test "OPTIONS /users has cors headers" {
@@ -52,8 +59,15 @@ test "OPTIONS /users has cors headers" {
   t.Assert.equalStr(headers.get("access-control-allow-origin"), "winglang.io");
 
   // Other cors headers are not set
-  t.Assert.isNil(headers.get("access-control-expose-headers"));
-  t.Assert.isNil(headers.get("access-control-allow-credentials"));
+  let ALLOW_CREDENTIALS_DOES_NOT_EXIST_ERROR = "Object does not contain the key \"access-control-allow-credentials\"";
+  t.Assert.assertThrows(ALLOW_CREDENTIALS_DOES_NOT_EXIST_ERROR, () => {
+    headers.get("access-control-allow-credentials");
+  });
+
+  let EXPOSE_HEADERS_DOES_NOT_EXIST_ERROR = "Object does not contain the key \"access-control-expose-headers\"";
+  t.Assert.assertThrows(EXPOSE_HEADERS_DOES_NOT_EXIST_ERROR, () => {
+    headers.get("access-control-expose-headers");
+  });
 }
 
 test "OPTIONS /users responds with proper headers for requested" {
