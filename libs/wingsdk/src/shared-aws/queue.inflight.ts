@@ -5,6 +5,7 @@ import {
   GetQueueAttributesCommand,
   ReceiveMessageCommand,
   InvalidMessageContents,
+  DeleteMessageCommand,
 } from "@aws-sdk/client-sqs";
 import { IQueueClient } from "../cloud";
 
@@ -54,14 +55,25 @@ export class QueueClient implements IQueueClient {
   }
 
   public async pop(): Promise<string | undefined> {
-    const command = new ReceiveMessageCommand({
+    const receiveCommand = new ReceiveMessageCommand({
       QueueUrl: this.queueUrl,
       MaxNumberOfMessages: 1,
     });
-    const data = await this.client.send(command);
+    const data = await this.client.send(receiveCommand);
     if (!data.Messages) {
       return undefined;
     }
-    return data.Messages[0].Body;
+
+    const message = data.Messages[0];
+
+    if (message.ReceiptHandle) {
+      const deleteCommand = new DeleteMessageCommand({
+        QueueUrl: this.queueUrl,
+        ReceiptHandle: message.ReceiptHandle,
+      });
+      await this.client.send(deleteCommand);
+    }
+
+    return message.Body;
   }
 }

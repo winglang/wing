@@ -5,6 +5,8 @@ import {
   SQSClient,
   ReceiveMessageCommand,
   InvalidMessageContents,
+  DeleteMessageCommand,
+  ReceiveMessageCommandOutput,
 } from "@aws-sdk/client-sqs";
 import { mockClient } from "aws-sdk-client-mock";
 import { test, expect, beforeEach } from "vitest";
@@ -148,12 +150,14 @@ test("pop - happy path", async () => {
   // GIVEN
   const QUEUE_URL = "QUEUE_URL";
   const MESSAGE = "MESSAGE";
-  const ONE_MSG_RESPONSE = {
+  const ONE_MSG_RESPONSE: ReceiveMessageCommandOutput = {
     Messages: [
       {
         Body: MESSAGE,
+        ReceiptHandle: "RECEIPT_HANDLE",
       },
     ],
+    $metadata: {},
   };
   const NO_MSG_RESPONSE = {};
 
@@ -170,4 +174,59 @@ test("pop - happy path", async () => {
   // THEN
   expect(firstPopResponse).toEqual(MESSAGE);
   expect(secondPopResponse).toBeUndefined();
+  expect(sqsMock).toHaveReceivedCommandTimes(ReceiveMessageCommand, 2);
+  expect(sqsMock).toHaveReceivedCommandTimes(DeleteMessageCommand, 1);
+});
+
+test("pop - happy path w/o message receipt", async () => {
+  // GIVEN
+  const QUEUE_URL = "QUEUE_URL";
+  const MESSAGE = "MESSAGE";
+  const ONE_MSG_RESPONSE: ReceiveMessageCommandOutput = {
+    Messages: [
+      {
+        Body: MESSAGE,
+        ReceiptHandle: undefined, // <- no receipt handle, unusual but it's fine
+      },
+    ],
+    $metadata: {},
+  };
+  const NO_MSG_RESPONSE = {};
+
+  sqsMock
+    .on(ReceiveMessageCommand, { QueueUrl: QUEUE_URL })
+    .resolvesOnce(ONE_MSG_RESPONSE)
+    .resolves(NO_MSG_RESPONSE);
+
+  // WHEN
+  const client = new QueueClient(QUEUE_URL);
+  const firstPopResponse = await client.pop();
+  const secondPopResponse = await client.pop();
+
+  // THEN
+  expect(firstPopResponse).toEqual(MESSAGE);
+  expect(secondPopResponse).toBeUndefined();
+  expect(sqsMock).toHaveReceivedCommandTimes(ReceiveMessageCommand, 2);
+  expect(sqsMock).toHaveReceivedCommandTimes(DeleteMessageCommand, 0); // <- delete message command skipped
+});
+
+test("pop - happy path w/ no message in the queue", async () => {
+  // GIVEN
+  const QUEUE_URL = "QUEUE_URL";
+  const NO_MSG_RESPONSE = {};
+
+  sqsMock
+    .on(ReceiveMessageCommand, { QueueUrl: QUEUE_URL })
+    .resolves(NO_MSG_RESPONSE);
+
+  // WHEN
+  const client = new QueueClient(QUEUE_URL);
+  const firstPopResponse = await client.pop();
+  const secondPopResponse = await client.pop();
+
+  // THEN
+  expect(firstPopResponse).toBeUndefined();
+  expect(secondPopResponse).toBeUndefined();
+  expect(sqsMock).toHaveReceivedCommandTimes(ReceiveMessageCommand, 2);
+  expect(sqsMock).toHaveReceivedCommandTimes(DeleteMessageCommand, 0);
 });
