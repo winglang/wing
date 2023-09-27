@@ -11,15 +11,22 @@ module.exports = function({ $q, $std_Duration, $util_Util }) {
     }
     async handle() {
       const obj = ({"k1": 1,"k2": "hello","k3": true,"k4": ({"k1": [1, "a", true, ({})]})});
-      let error = false;
       try {
-        (await $q.push("Foo",""));
+        (await $q.push(""));
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
       catch ($error_e) {
         const e = $error_e.message;
-        error = true;
+        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Empty messages are not allowed\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"Empty messages are not allowed")))};
       }
-      {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
+      try {
+        (await $q.push("Foo",""));
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+      }
+      catch ($error_e) {
+        const e = $error_e.message;
+        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Empty messages are not allowed\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"Empty messages are not allowed")))};
+      }
       (await $q.push("Foo"));
       {((cond) => {if (!cond) throw new Error("assertion failed: util.waitUntil((): bool => {\n    return q.approxSize() == 1;\n  })")})((await $util_Util.waitUntil(async () => {
         return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $q.approxSize()),1));

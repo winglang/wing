@@ -13,13 +13,19 @@ new std.Test(inflight () => {
     }
   };
 
-  let var error = false;
+  try {
+    q.push("");
+    assert(false);
+  } catch e {
+    assert(e == "Empty messages are not allowed");
+  }
+
   try {
     q.push("Foo", "");
+    assert(false);
   } catch e {
-    error = true;
+    assert(e == "Empty messages are not allowed");
   }
-  assert(error);
 
   q.push("Foo");
   
