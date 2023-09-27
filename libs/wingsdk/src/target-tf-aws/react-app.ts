@@ -5,7 +5,6 @@ import { Construct } from "constructs";
 import { Website } from "./website";
 import { core } from "..";
 
-import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
 import { Connections } from "../core";
 import * as ex from "../ex";
@@ -57,14 +56,11 @@ export class ReactApp extends ex.ReactApp {
       null,
       2
     )};`;
-
-    new S3Object(this._websiteHost as Website, `File--${ex.WING_JS}`, {
-      dependsOn: [(this._websiteHost as Website).bucket],
+    (this._websiteHost as Website).addFile(
+      ex.WING_JS,
       content,
-      bucket: (this._websiteHost as Website).bucket.bucket,
-      contentType: "text/javascript",
-      key: ex.WING_JS,
-    });
+      "text/javascript"
+    );
   }
 
   /** @internal */

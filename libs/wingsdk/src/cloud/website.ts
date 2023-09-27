@@ -91,7 +91,27 @@ export abstract class Website extends Resource {
    * @param path the file path it will be uploaded as
    * @param data the data to write to the file
    */
-  public abstract addJson(path: string, data: Json): string;
+  public addJson(path: string, data: Json): string {
+    if (!path.endsWith(".json")) {
+      throw new Error(
+        `key must have a .json suffix. (current: "${path.split(".").pop()}")`
+      );
+    }
+    return this.addFile(path, JSON.stringify(data), "application/json");
+  }
+
+  /**
+   * Add a file with custom value during the website's deployment.
+   * If the path conflicts with file path from the website's static assets, an error will be thrown.
+   * @param path the file path it will be uploaded as
+   * @param data the data to write to the file
+   * @param contentType the file content-type
+   */
+  public abstract addFile(
+    path: string,
+    data: string,
+    contentType: string
+  ): string;
 }
 
 /**

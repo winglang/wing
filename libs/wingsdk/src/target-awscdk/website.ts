@@ -8,7 +8,6 @@ import { Construct } from "constructs";
 import { createEncryptedBucket } from "./bucket";
 import { core } from "..";
 import * as cloud from "../cloud";
-import { Json } from "../std";
 
 const INDEX_FILE = "index.html";
 
@@ -63,16 +62,11 @@ export class Website extends cloud.Website {
     return this._url;
   }
 
-  public addJson(path: string, data: Json): string {
-    if (!path.endsWith(".json")) {
-      throw new Error(
-        `key must have a .json suffix. (current: "${path.split(".").pop()}")`
-      );
-    }
-
+  public addFile(path: string, data: string, contentType: string): string {
     new BucketDeployment(this, `S3Object-${path}`, {
       destinationBucket: this.bucket,
-      sources: [Source.data(this.formatPath(path), JSON.stringify(data))],
+      contentType: contentType,
+      sources: [Source.data(this.formatPath(path), data)],
     });
 
     return `${this.url}/${path}`;

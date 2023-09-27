@@ -79,5 +79,5 @@ test("addJson throws an error for no json path", async () => {
 
   expect(() => {
     website.addJson(jsonPath, Object(jsonConfig));
-  }).toThrowError('key must have a .json suffix: (current: "not a json Path")');
+  }).toThrowError('key must have a .json suffix. (current: "not a json Path")');
 });

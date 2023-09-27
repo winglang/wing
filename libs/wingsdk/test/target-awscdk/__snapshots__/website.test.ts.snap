@@ -654,6 +654,9 @@ exports[`website with add_json 1`] = `
         "SourceObjectKeys": [
           "4e01e7ac8332f9f4abf6b788e201b87736d83fcdd80359e311421af4569cd419.zip",
         ],
+        "SystemMetadata": {
+          "content-type": "application/json",
+        },
       },
       "Type": "Custom::CDKBucketDeployment",
       "UpdateReplacePolicy": "Delete",

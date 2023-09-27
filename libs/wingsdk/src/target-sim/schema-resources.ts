@@ -232,6 +232,8 @@ export interface RedisSchema extends BaseResourceSchema {
   readonly props: {};
 }
 
+export type FileRoutes = Record<string, { data: string; contentType: string }>;
+
 /** Schema for cloud.Website */
 export interface WebsiteSchema extends BaseResourceSchema {
   readonly type: typeof WEBSITE_TYPE;
@@ -239,7 +241,7 @@ export interface WebsiteSchema extends BaseResourceSchema {
     /** Path to the directory where all static files are hosted from */
     staticFilesPath: string;
     /** Map of `.json` file paths to dynamic content inserted from preflight */
-    jsonRoutes: Record<string, Json>;
+    fileRoutes: FileRoutes;
   };
 }
 
