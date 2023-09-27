@@ -25,6 +25,7 @@ env:
   CARGO_TERM_COLOR: always
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+  SAME_REPO_PR: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository }}
 
 jobs:
   build:
@@ -182,17 +183,19 @@ jobs:
         run: pnpm install --ignore-scripts --frozen-lockfile --filter hangar --filter examples-valid --filter examples-invalid
 
       - name: Run E2E Benchmarks
-        run: pnpm bench
+        env:
+          BENCH_FAIL_THRESHOLD_PERCENT: "50"
+          BENCH_COMPARE_PREVIOUS: "${{ github.event_name == 'pull_request' && 'main' || '' }}"
+          GITHUB_TOKEN: ${{ env.SAME_REPO_PR == 'true' && secrets.PROJEN_GITHUB_TOKEN || secrets.GITHUB_TOKEN  }}
+          BENCH_PR: "${{ env.SAME_REPO_PR == 'true' && github.event.pull_request.number || '' }}"
         working-directory: tools/hangar
+        run: pnpm bench
 
       - name: Upload Report JSON
         uses: actions/upload-artifact@v3
         with:
           name: benchmarks
           path: tools/hangar/results/report.json
-
-      - name: Create Markdown report
-        run: scripts/benchmark_json_to_table.mjs
 
   e2e-test:
     name: "E2E / ${{ matrix.runner }} + Node${{ matrix.node }} [${{ matrix.shard }}]"

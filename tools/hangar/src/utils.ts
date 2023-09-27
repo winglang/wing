@@ -6,7 +6,7 @@ import { join, extname, relative, resolve, dirname, basename } from "path";
 
 export interface RunWingCommandOptions {
   cwd: string;
-  wingFile: string;
+  wingFile?: string;
   args: string[];
   expectFailure: boolean;
   plugins?: string[];
@@ -17,7 +17,13 @@ export async function runWingCommand(options: RunWingCommandOptions) {
   const plugins = options.plugins ? ["--plugins", ...options.plugins] : [];
   const out = await execa(
     wingBin,
-    ["--no-update-check", "--no-analytics", ...options.args, options.wingFile, ...plugins],
+    [
+      "--no-update-check",
+      "--no-analytics",
+      ...options.args,
+      options.wingFile ?? "",
+      ...plugins,
+    ],
     {
       cwd: options.cwd,
       reject: false,
@@ -38,9 +44,10 @@ export async function runWingCommand(options: RunWingCommandOptions) {
     }
   }
 
-  out.stderr = sanitizeOutput(out.stderr);
-  out.stdout = sanitizeOutput(out.stdout);
-  return out;
+  return {
+    stderr: sanitizeOutput(out.stderr),
+    stdout: sanitizeOutput(out.stdout),
+  };
 }
 
 function sanitizeOutput(output: string) {
