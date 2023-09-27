@@ -191,7 +191,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct FunctionProps\n```\n---\nOptions for `Function`.\n### Fields\n- `env?` — Environment variables to pass to the function.\n- `memory?` — The amount of memory to allocate to the function, in MB.\n- `timeout?` — The maximum amount of time the function can run."
+    value: "```wing\nstruct FunctionProps\n```\n---\nOptions for `Function`.\n### Fields\n- `env?` — Environment variables to pass to the function.\n- `logRetentionDays?` — Specifies the number of days that function logs will be kept.\n- `memory?` — The amount of memory to allocate to the function, in MB.\n- `timeout?` — The maximum amount of time the function can run."
   sortText: hh|FunctionProps
 - label: GetSecretValueOptions
   kind: 22
@@ -203,7 +203,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct OnDeployProps extends FunctionProps\n```\n---\nOptions for `OnDeploy`.\n### Fields\n- `env?` — Map<str>?\n- `executeAfter?` — Execute this trigger only after these resources have been provisioned.\n- `executeBefore?` — Adds this trigger as a dependency on other constructs.\n- `memory?` — num?\n- `timeout?` — duration?"
+    value: "```wing\nstruct OnDeployProps extends FunctionProps\n```\n---\nOptions for `OnDeploy`.\n### Fields\n- `env?` — Map<str>?\n- `executeAfter?` — Execute this trigger only after these resources have been provisioned.\n- `executeBefore?` — Adds this trigger as a dependency on other constructs.\n- `logRetentionDays?` — num?\n- `memory?` — num?\n- `timeout?` — duration?"
   sortText: hh|OnDeployProps
 - label: QueueProps
   kind: 22
@@ -215,13 +215,13 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct QueueSetConsumerProps extends FunctionProps\n```\n---\nOptions for Queue.setConsumer.\n### Fields\n- `batchSize?` — The maximum number of messages to send to subscribers at once.\n- `env?` — Map<str>?\n- `memory?` — num?\n- `timeout?` — duration?"
+    value: "```wing\nstruct QueueSetConsumerProps extends FunctionProps\n```\n---\nOptions for Queue.setConsumer.\n### Fields\n- `batchSize?` — The maximum number of messages to send to subscribers at once.\n- `env?` — Map<str>?\n- `logRetentionDays?` — num?\n- `memory?` — num?\n- `timeout?` — duration?"
   sortText: hh|QueueSetConsumerProps
 - label: ScheduleOnTickProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ScheduleOnTickProps extends FunctionProps\n```\n---\nOptions for Schedule.onTick.\n### Fields\n- `env?` — Map<str>?\n- `memory?` — num?\n- `timeout?` — duration?"
+    value: "```wing\nstruct ScheduleOnTickProps extends FunctionProps\n```\n---\nOptions for Schedule.onTick.\n### Fields\n- `env?` — Map<str>?\n- `logRetentionDays?` — num?\n- `memory?` — num?\n- `timeout?` — duration?"
   sortText: hh|ScheduleOnTickProps
 - label: ScheduleProps
   kind: 22
@@ -239,7 +239,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ServiceOnStartProps extends FunctionProps\n```\n---\nOptions for Service.onStart.\n### Fields\n- `env?` — Map<str>?\n- `memory?` — num?\n- `timeout?` — duration?"
+    value: "```wing\nstruct ServiceOnStartProps extends FunctionProps\n```\n---\nOptions for Service.onStart.\n### Fields\n- `env?` — Map<str>?\n- `logRetentionDays?` — num?\n- `memory?` — num?\n- `timeout?` — duration?"
   sortText: hh|ServiceOnStartProps
 - label: ServiceProps
   kind: 22
@@ -251,7 +251,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct TopicOnMessageProps extends FunctionProps\n```\n---\nOptions for `Topic.onMessage`.\n### Fields\n- `env?` — Map<str>?\n- `memory?` — num?\n- `timeout?` — duration?"
+    value: "```wing\nstruct TopicOnMessageProps extends FunctionProps\n```\n---\nOptions for `Topic.onMessage`.\n### Fields\n- `env?` — Map<str>?\n- `logRetentionDays?` — num?\n- `memory?` — num?\n- `timeout?` — duration?"
   sortText: hh|TopicOnMessageProps
 - label: TopicProps
   kind: 22

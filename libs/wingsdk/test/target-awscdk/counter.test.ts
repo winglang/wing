@@ -70,7 +70,7 @@ test("function with a counter binding", () => {
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::DynamoDB::Table", 1);
   template.resourceCountIs("AWS::IAM::Role", 2);
-  template.resourceCountIs("AWS::IAM::Policy", 1);
+  template.resourceCountIs("AWS::IAM::Policy", 2);
   template.resourceCountIs("AWS::Lambda::Function", 2);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });

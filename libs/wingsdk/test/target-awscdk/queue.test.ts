@@ -72,7 +72,7 @@ async handle(event) {
   template.resourceCountIs("AWS::SQS::Queue", 1);
   template.resourceCountIs("AWS::Lambda::Function", 2);
   template.resourceCountIs("AWS::IAM::Role", 2);
-  template.resourceCountIs("AWS::IAM::Policy", 1);
+  template.resourceCountIs("AWS::IAM::Policy", 2);
   template.resourceCountIs("AWS::Lambda::EventSourceMapping", 1);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });

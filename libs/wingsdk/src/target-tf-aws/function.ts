@@ -176,16 +176,20 @@ export class Function extends cloud.Function implements IAwsFunction {
 
     const name = ResourceNames.generateName(this, FUNCTION_NAME_OPTS);
 
-    new CloudwatchLogGroup(this, "CloudwatchLogGroup", {
-      name: `/aws/lambda/${name}`,
-      retentionInDays: 30,
-    });
-
     // validate memory size
     if (props.memory && (props.memory < 128 || props.memory > 10240)) {
       throw new Error(
         "Memory for AWS Lambda function should be in between 128 and 10240"
       );
+    }
+
+    if (!props.logRetentionDays || props.logRetentionDays >= 0) {
+      new CloudwatchLogGroup(this, "CloudwatchLogGroup", {
+        name: `/aws/lambda/${name}`,
+        retentionInDays: props.logRetentionDays ?? 30,
+      });
+    } else {
+      // Negative value means Infinite retention
     }
 
     // Create Lambda function
