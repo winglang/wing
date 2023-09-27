@@ -12,8 +12,8 @@ import {
   beforeAll,
 } from "vitest";
 import * as ex from "../../src/ex";
+import { Simulator } from "../../src/simulator";
 import { ApiAttributes } from "../../src/target-sim/schema-resources";
-import { Simulator } from "../../src/testing";
 import { SimApp } from "../sim-app";
 
 function getWebsiteUrl(s: Simulator, path: string): string {
