@@ -16,7 +16,7 @@ import {
   NameOptions,
   ResourceNames,
 } from "../shared/resource-names";
-import { IResource } from "../std";
+import { Duration, IResource } from "../std";
 
 /**
  * Function names are limited to 32 characters.
@@ -113,17 +113,17 @@ export class Function extends cloud.Function {
       })
     );
 
-    if (props.timeout) {
-      // Write host.json file to set function timeout (must be set in root of function app)
-      // https://learn.microsoft.com/en-us/azure/azure-functions/functions-host-json
-      // this means that timeout is set for all functions in the function app
-      fs.writeFileSync(
-        `${codeDir}/host.json`,
-        JSON.stringify({
-          functionTimeout: `${props.timeout.hours}:${props.timeout.minutes}:${props.timeout.seconds}`,
-        })
-      );
-    }
+    const timeout = props.timeout ?? Duration.fromMinutes(1);
+
+    // Write host.json file to set function timeout (must be set in root of function app)
+    // https://learn.microsoft.com/en-us/azure/azure-functions/functions-host-json
+    // this means that timeout is set for all functions in the function app
+    fs.writeFileSync(
+      `${codeDir}/host.json`,
+      JSON.stringify({
+        functionTimeout: `${timeout.hours}:${timeout.minutes}:${timeout.seconds}`,
+      })
+    );
 
     // Create zip asset from function code
     const asset = new TerraformAsset(this, "Asset", {
