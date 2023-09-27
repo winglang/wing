@@ -31,7 +31,6 @@
   },
   "dependencies": {
     "@segment/analytics-node": "^1.1.0",
-    "@types/glob": "^8.1.0",
     "@wingconsole/app": "workspace:^",
     "@wingconsole/server": "workspace:^",
     "@winglang/compiler": "workspace:^",
@@ -41,7 +40,7 @@
     "commander": "^10.0.1",
     "compare-versions": "^5.0.3",
     "debug": "^4.3.4",
-    "glob": "^10.3.6",
+    "glob": "^10.3.10",
     "nanoid": "^3.3.6",
     "open": "^8.4.2",
     "ora": "^5.4.1",
