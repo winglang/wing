@@ -428,7 +428,7 @@ pub enum BringSource {
 	JsiiModule(Symbol),
 	/// Refers to a relative path to a file
 	WingFile(Symbol),
-	/// Refers to a relative path to a file
+	/// Refers to a relative path to a directory
 	Directory(Symbol),
 }
 
