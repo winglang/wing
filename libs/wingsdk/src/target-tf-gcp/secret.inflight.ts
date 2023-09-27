@@ -23,12 +23,10 @@ export class SecretClient implements ISecretClient {
       throw new Error("Secret has no value");
     }
 
-    if (version.payload?.data instanceof Buffer) {
-      this.secretValue = version.payload.data.toString("utf-8");
-    } else {
-      throw new Error("Secret payload is not a Buffer or doesn't exist");
-    }
+    // Extract the payload as a string.
+    this.secretValue = version.payload.data.toString();
 
+    // console.info(`Payload: ${this.secretValue}`);
     return this.secretValue;
   }
 
