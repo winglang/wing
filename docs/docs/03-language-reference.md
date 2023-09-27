@@ -1771,6 +1771,29 @@ bring cloud; // from cloud bring * as cloud;
 bring "cdktf" as cdktf; // from "cdktf" bring * as cdktf;
 ```
 
+To import an individual Wing file as a module, you can specify its path relative
+to the current file:
+
+```TS
+bring "./my-module.w" as myModule;
+```
+
+It's also possible to import a directory as a module. The module will contain all
+public types defined in the directory's files. If the directory has subdirectories,
+they will be available under the corresponding names.
+
+```TS
+bring "./my-module" as myModule;
+
+// from ./my-module/submodule/my-class.w
+new myModule.submodule.MyClass();
+```
+
+The following features are not yet implemented, but we are planning to add them in the future:
+
+* Specify types as public using `pub` - see https://github.com/winglang/wing/issues/4294 to track.
+* Specify types as public within the current project or library, and private outside, using `internal` - see https://github.com/winglang/wing/issues/4156 to track.
+
 [`▲ top`][top]
 
 ---
