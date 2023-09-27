@@ -307,6 +307,7 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 		self.visit_symbol(&node.name);
 
 		self.visit_function_definition(&node.initializer);
+		self.visit_function_definition(&node.inflight_initializer);
 
 		let scope = if let FunctionBody::Statements(statements) = &node.initializer.body {
 			statements
@@ -777,6 +778,26 @@ j.get("hello").get("world");
 		r#"
 { hi: { inner: [1, 2, 3] } }
         //^
+"#
+	);
+
+	test_hover_list!(
+		inflight_init,
+		r#"
+struct Data {
+	field: str;
+}
+
+class T {
+	init() {
+		Data { field: "" };
+	}
+
+	inflight init() {
+		Data { field: "" };
+		//^
+	}
+}
 "#
 	);
 }
