@@ -59,7 +59,44 @@ test("website with invalid path should throw error", () => {
   // THEN
 });
 
-test("website with add_json", () => {
+test("website with addFile", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const website = cloud.Website._newWebsite(app, "Website", {
+    path: path.resolve(__dirname, "../test-files/website"),
+  });
+  website.addFile("addition.html", "<html>Hello world!</html>", "text/html");
+  const output = app.synth();
+
+  // THEN
+  expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudfront_distribution",
+    "aws_cloudfront_origin_access_control",
+    "aws_s3_bucket",
+    "aws_s3_bucket_policy",
+    "aws_s3_bucket_website_configuration",
+    "aws_s3_object",
+  ]);
+  expect(tfResourcesOfCount(output, "aws_s3_object")).toEqual(4);
+  expect(
+    tfResourcesWithProperty(output, "aws_s3_object", {
+      key: "/inner-folder/a.html",
+    })
+  ).not.toBeUndefined();
+  expect(
+    tfResourcesWithProperty(output, "aws_s3_object", { key: "/b.html" })
+  ).not.toBeUndefined();
+  expect(
+    tfResourcesWithProperty(output, "aws_s3_object", { key: "/index.html" })
+  ).not.toBeUndefined();
+  expect(
+    tfResourcesWithProperty(output, "aws_s3_object", { key: "config.json" })
+  ).not.toBeUndefined();
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("website with addJson", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const website = cloud.Website._newWebsite(app, "Website", {

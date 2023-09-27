@@ -69,6 +69,27 @@ test("website is serving dynamic json content", async () => {
   expect(await configPage.json()).toEqual(jsonConfig);
 });
 
+test("website is serving dynamic content", async () => {
+  // GIVEN
+  const fileContent = "<html>hello world!</html>";
+  const route = "addition.html";
+  const app = new SimApp();
+  const website = cloud.Website._newWebsite(app, "website", {
+    path: resolve(__dirname, "../test-files/website"),
+  });
+  website.addFile(route, fileContent, "text/html");
+
+  // WHEN
+  const s = await app.startSimulator();
+  const websiteUrl = getWebsiteUrl(s, "/website");
+
+  const configPage = await fetch(`${websiteUrl}/${route}`);
+
+  // THEN
+  await s.stop();
+  expect(await configPage.json()).toEqual(fileContent);
+});
+
 test("addJson throws an error for no json path", async () => {
   const jsonConfig = { version: "3.3.5" };
   const jsonPath = "not a json Path";
