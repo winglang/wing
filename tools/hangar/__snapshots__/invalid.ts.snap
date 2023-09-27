@@ -365,11 +365,11 @@ Duration <DURATION>"
 `;
 
 exports[`bring_non_std_construct.test.w 1`] = `
-"error: Expected 1 positional argument(s) but got 0
+"error: Expected between 1 and 2 arguments but got 0
   --> ../../../examples/tests/invalid/bring_non_std_construct.test.w:8:1
   |
 8 | new cdktf.S3Backend();
-  | ^^^^^^^^^^^^^^^^^^^^^ Expected 1 positional argument(s) but got 0
+  | ^^^^^^^^^^^^^^^^^^^^^ Expected between 1 and 2 arguments but got 0
 
 
 error: Cannot set id of non-standard preflight class \\"S3Backend\\" using \`as\`
@@ -508,18 +508,18 @@ error: Expected 0 named arguments for func at ../../../examples/tests/invalid/cl
    | ^^^^^^^^^^^^^^^^^^ Expected 0 named arguments for func at ../../../examples/tests/invalid/class.test.w:13:1
 
 
-error: Expected 1 positional argument(s) but got 0
+error: Expected 1 arguments but got 0
    --> ../../../examples/tests/invalid/class.test.w:19:1
    |
 19 | new C10(); 
-   | ^^^^^^^^^ Expected 1 positional argument(s) but got 0
+   | ^^^^^^^^^ Expected 1 arguments but got 0
 
 
-error: Expected 1 positional argument(s) but got 0
+error: No named arguments expected
    --> ../../../examples/tests/invalid/class.test.w:22:1
    |
 22 | new C10(foo: \\"bar\\"); 
-   | ^^^^^^^^^^^^^^^^^^^ Expected 1 positional argument(s) but got 0
+   | ^^^^^^^^^^^^^^^^^^^ No named arguments expected
 
 
 error: No named arguments expected
@@ -599,11 +599,11 @@ error: Unknown symbol \\"C11\\"
    |                   ^^^ Unknown symbol \\"C11\\"
 
 
-error: Expected 1 positional argument(s) but got 0
+error: Expected 1 arguments but got 0
     --> ../../../examples/tests/invalid/class.test.w:157:5
     |
 157 |     super();
-    |     ^^^^^^^^ Expected 1 positional argument(s) but got 0
+    |     ^^^^^^^^ Expected 1 arguments but got 0
 
 
 error: Expected 1 arguments but got 2
@@ -613,11 +613,11 @@ error: Expected 1 arguments but got 2
     |     ^^^^^^^^^^^^^^^^^^^^^^^^ Expected 1 arguments but got 2
 
 
-error: Expected 1 positional argument(s) but got 0
+error: Expected 1 arguments but got 0
     --> ../../../examples/tests/invalid/class.test.w:132:5
     |
 132 |     super();
-    |     ^^^^^^^^ Expected 1 positional argument(s) but got 0
+    |     ^^^^^^^^ Expected 1 arguments but got 0
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -1034,6 +1034,65 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`function_call_variadic.test.w 1`] = `
+"error: Expected type to be \\"str\\", but got \\"num\\" instead
+  --> ../../../examples/tests/invalid/function_call_variadic.test.w:5:6
+  |
+5 | func(1, 2, 3); // should fail for obvious reasons
+  |      ^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+  --> ../../../examples/tests/invalid/function_call_variadic.test.w:5:9
+  |
+5 | func(1, 2, 3); // should fail for obvious reasons
+  |         ^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+  --> ../../../examples/tests/invalid/function_call_variadic.test.w:5:12
+  |
+5 | func(1, 2, 3); // should fail for obvious reasons
+  |            ^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`function_call_variadic_array.test.w 1`] = `
+"error: Expected type to be \\"str\\", but got \\"Array<str>\\" instead
+  --> ../../../examples/tests/invalid/function_call_variadic_array.test.w:5:6
+  |
+5 | func([\\"a\\", \\"b\\", \\"c\\"]); // should fail and inform that the parameter is variadic
+  |      ^^^^^^^^^^^^^^^ Expected type to be \\"str\\", but got \\"Array<str>\\" instead
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`function_call_variadic_min_arity.test.w 1`] = `
+"error: Expected between 2 and 3 arguments but got 0
+  --> ../../../examples/tests/invalid/function_call_variadic_min_arity.test.w:7:1
+  |
+7 | func(); // variadic signatures should still require min positional arity
+  | ^^^^^^ Expected between 2 and 3 arguments but got 0
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`function_type.test.w 1`] = `
 "error: Expected function return type
   --> ../../../examples/tests/invalid/function_type.test.w:2:26
@@ -1078,11 +1137,11 @@ error: Variadic parameters must always be the last parameter in a function.
   |              ^^^^ Variadic parameters must always be the last parameter in a function.
 
 
-error: Expected type to be num, but got bool instead.
+error: Expected type to be \\"num\\", but got \\"bool\\" instead
   --> ../../../examples/tests/invalid/function_variadic_definition.test.w:8:7
   |
 8 | f3(1, true, 2);
-  |       ^^^^ Expected type to be num, but got bool instead.
+  |       ^^^^ Expected type to be \\"num\\", but got \\"bool\\" instead
 
 
 error: Variadic parameters must be type Array or MutArray.
@@ -1099,11 +1158,11 @@ error: No named arguments expected
    | ^^^^^^^^^^^^^^ No named arguments expected
 
 
-error: Expected type to be Bucket, but got bool instead.
+error: Expected type to be \\"Bucket\\", but got \\"bool\\" instead
    --> ../../../examples/tests/invalid/function_variadic_definition.test.w:24:21
    |
 24 | funcBucket(bucket1, true, bucket2);
-   |                     ^^^^ Expected type to be Bucket, but got bool instead.
+   |                     ^^^^ Expected type to be \\"Bucket\\", but got \\"bool\\" instead
 
 
  
@@ -2501,11 +2560,11 @@ error: \\"notAField\\" is not a field of \\"ApiResponse\\"
    | \\\\-^ \\"notAField\\" is not a field of \\"ApiResponse\\"
 
 
-error: Expected 2 positional argument(s) but got 1
+error: Expected 2 arguments but got 1
    --> ../../../examples/tests/invalid/struct_expansion.test.w:11:3
    |
 11 |   bucket1.put(file: \\"file.txt\\", \\"data\\");
-   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected 2 positional argument(s) but got 1
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected 2 arguments but got 1
 
 
  
