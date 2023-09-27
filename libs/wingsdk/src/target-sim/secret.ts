@@ -14,7 +14,7 @@ import { IInflightHost } from "../std";
  */
 export class Secret extends cloud.Secret implements ISimulatorResource {
   private readonly name: string;
-  constructor(scope: Construct, id: string, props: cloud.SecretProps = {}) {
+  constructor(scope: Construct, id: string, props: cloud.SecretProps) {
     super(scope, id, props);
 
     this.name =

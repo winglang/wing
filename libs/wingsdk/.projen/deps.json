@@ -244,6 +244,10 @@
       "type": "bundled"
     },
     {
+      "name": "@google-cloud/secret-manager",
+      "type": "bundled"
+    },
+    {
       "name": "@types/aws-lambda",
       "type": "bundled"
     },

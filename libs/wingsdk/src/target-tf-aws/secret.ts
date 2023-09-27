@@ -24,7 +24,7 @@ const NAME_OPTS: NameOptions = {
 export class Secret extends cloud.Secret {
   private readonly secret: DataAwsSecretsmanagerSecret | SecretsmanagerSecret;
 
-  constructor(scope: Construct, id: string, props: cloud.SecretProps = {}) {
+  constructor(scope: Construct, id: string, props: cloud.SecretProps) {
     super(scope, id, props);
 
     if (props.name) {

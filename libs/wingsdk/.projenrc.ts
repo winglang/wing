@@ -95,6 +95,8 @@ const project = new cdk.JsiiProject({
     "@azure/storage-blob@12.14.0",
     "@azure/identity@3.1.3",
     "@azure/core-paging",
+    // gcp client dependencies
+    "@google-cloud/secret-manager",
     // simulator dependencies
     "express",
     "uuid",

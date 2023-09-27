@@ -129,6 +129,7 @@
     "@azure/core-paging",
     "@azure/identity",
     "@azure/storage-blob",
+    "@google-cloud/secret-manager",
     "@types/aws-lambda",
     "aws-cdk-lib",
     "cdktf",
