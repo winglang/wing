@@ -55,6 +55,9 @@ export class Queue
     return this.context.withTrace({
       message: `Push (messages=${messages}).`,
       activity: async () => {
+        if (messages.includes("")) {
+          throw new Error("Empty messages are not allowed");
+        }
         for (const message of messages) {
           this.messages.push(new QueueMessage(this.retentionPeriod, message));
         }
