@@ -21,7 +21,7 @@ export interface SecretProps {
    *
    * @default - a new secret is provisioned with a generated name
    */
-  readonly name?: string;
+  readonly name: string;
 }
 
 /**
@@ -60,7 +60,8 @@ export abstract class Secret extends Resource {
 /**
  * Options when getting a secret value
  */
-export interface GetSecretValueOptions {
+export interface 
+GetSecretValueOptions {
   /**
    * Whether to cache the value
    *
