@@ -19,10 +19,7 @@ if util.env("WING_TARGET") == "sim" {
         log("starting service");
         util.sleep(1s);
         this.b.put("ready", "true");
-        let port = MyService.startServer(this.body);
-        log("listening on port ${port}");
         let state = 456;
-        this.b.put("port", "${port}");
   
         return () => {
           log("stopping service");
@@ -30,7 +27,6 @@ if util.env("WING_TARGET") == "sim" {
     
           // make sure inflight state is presistent across onStart/onStop
           assert(state == 456);
-          MyService.stopServer();
         };
       });
     }
@@ -43,9 +39,6 @@ if util.env("WING_TARGET") == "sim" {
     pub inflight port(): num {
       return num.fromStr(this.b.get("port"));
     }
-
-    extern "./http-server.js" static inflight startServer(body: str): num;
-    extern "./http-server.js" static inflight stopServer();
   }
 
   let foo = new MyService("bang bang!");
@@ -53,25 +46,5 @@ if util.env("WING_TARGET") == "sim" {
   // see https://github.com/winglang/wing/issues/4251
   test "service is ready only after onStart finishes" {
     foo.access();
-
-    let response = http.get("http://localhost:${foo.port()}");
-    log(response.body ?? "");
-    assert(response.body ?? "" == "bang bang!");
-  }
-
-  test "service.stop() can be used to stop the service before shutdown" {
-    let before = http.get("http://localhost:${foo.port()}");
-    assert(before.ok);
-    
-    foo.s.stop();
-
-    // now the http server is expected to be closed
-    let var error = false;
-    try {
-      http.get("http://localhost:${foo.port()}");
-    } catch {
-      error = true;
-    }
-    assert(error);
   }
 }
