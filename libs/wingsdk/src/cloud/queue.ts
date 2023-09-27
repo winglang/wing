@@ -89,7 +89,7 @@ export interface QueueSetConsumerProps extends FunctionProps {
 export interface IQueueClient {
   /**
    * Push one or more messages to the queue.
-   * @param messages Payload to send to the queue.
+   * @param messages Payload to send to the queue. Each message must be non-empty.
    * @inflight
    */
   push(...messages: string[]): Promise<void>;
