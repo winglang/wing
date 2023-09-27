@@ -15,6 +15,9 @@ export class SecretClient implements ISecretClient {
       return this.secretValue;
     }
 
+    // const name = 'projects/my-project/secrets/my-secret/versions/5';
+    // const name = 'projects/my-project/secrets/my-secret/versions/latest';
+
     const [version] = await this.client.accessSecretVersion({
       name: this.secretId,
     });
