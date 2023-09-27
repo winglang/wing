@@ -1792,6 +1792,7 @@ new myModule.submodule.MyClass();
 The following features are not yet implemented, but we are planning to add them in the future:
 
 * Specify types as public using `pub` - see https://github.com/winglang/wing/issues/4294 to track.
+* Specify types as public within the current project or library, and private outside, using `internal` - see https://github.com/winglang/wing/issues/4156 to track.
 
 [`▲ top`][top]
 
