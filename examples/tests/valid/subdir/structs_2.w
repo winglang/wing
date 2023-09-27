@@ -1,3 +1,3 @@
-struct MyStruct2 {
+struct MyStruct {
   val: str;
 }
