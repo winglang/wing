@@ -280,6 +280,8 @@ test("messages are not requeued if the function fails after retention timeout", 
       "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
       "Subscriber error - returning 1 messages to queue: ERROR",
       "1 messages pushed back to queue after visibility timeout.",
+      "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
+      "Subscriber error - returning 1 messages to queue: ERROR",
       "wingsdk.cloud.Queue deleted.",
     ]
   `);
