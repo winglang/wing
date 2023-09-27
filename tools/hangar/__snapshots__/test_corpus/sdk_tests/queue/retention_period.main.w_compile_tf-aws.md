@@ -121,7 +121,7 @@ class $Root extends $stdlib.std.Resource {
     let timeout = (std.Duration.fromSeconds(30));
     let retentionPeriod = (std.Duration.fromSeconds(60));
     const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue",{ timeout: timeout, retentionPeriod: retentionPeriod });
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:retentionPeriod",new $Closure1(this,"$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"retentionPeriod",new $Closure1(this,"$Closure1"),{ timeout: (std.Duration.fromSeconds(120)) });
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
