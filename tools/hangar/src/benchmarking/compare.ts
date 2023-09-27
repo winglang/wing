@@ -71,8 +71,11 @@ export async function compareBenchmarks(
   const formatNumber = (num: number | typeof NaN | undefined, unit: string) => {
     if (num === undefined || isNaN(num)) {
       return "...";
+    } else if (unit === "%") {
+      return Math.round(num * 10) / 10 + unit;
+    } else {
+      return Math.round(num) + unit;
     }
-    return num.toFixed(2) + unit;
   };
 
   // create a markdown table of the differences
@@ -80,13 +83,16 @@ export async function compareBenchmarks(
   markdown += `| :-- | --: | --: | --: |\n`;
   for (const key in differences) {
     const diff = differences[key];
+    const changeText = !!diff.meanPercentDiff
+      ? `${formatNumber(diff.meanDiff, "ms")} (${formatNumber(
+          diff.meanPercentDiff,
+          "%"
+        )})`
+      : "...";
     markdown += `| ${key} | ${formatNumber(
       diff.meanBefore,
       "ms"
-    )} | ${formatNumber(diff.meanAfter, "ms")} | ${formatNumber(
-      diff.meanDiff,
-      "ms"
-    )} (${formatNumber(diff.meanPercentDiff, "%")}) |\n`;
+    )} | ${formatNumber(diff.meanAfter, "ms")} | ${changeText} |\n`;
   }
 
   console.table(differences);

@@ -38,19 +38,14 @@ export function createTable(object: object[], columns: string[] = DEFAULT_COLUMN
 }
 
 function formatDataTypes(value: any): string {
-  if (value === undefined) {
-    return "";
-  } else if (value === null) {
-    return "{null}";
+  if (value === undefined || value === null) {
+    return "...";
   } else if (value instanceof Array) {
-    const mapped = value.map(formatDataTypes);
-    return "[ " + mapped.join(", ") + " ]";
+    return "[ " + value.map(formatDataTypes).join(", ") + " ]";
   } else if (typeof value === "number") {
-    // Round to 2 decimal places
-    return `${Math.round(value * 100) / 100}`;
+    return `${Math.round(value)}ms`;
   } else if (value instanceof Object) {
-    const mapped = Object.values(value).map(formatDataTypes);
-    return JSON.stringify(mapped);
+    return JSON.stringify(Object.values(value).map(formatDataTypes));
   }
   return value;
 }
