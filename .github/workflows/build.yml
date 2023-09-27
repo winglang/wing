@@ -370,25 +370,30 @@ jobs:
       - name: Login to NPM registry
         run: npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
 
-      - name: Publish npm packages
-        working-directory: dist
+      - name: Publish NPM packages
+        uses: nick-fields/retry@v2
         env:
           PACKAGE_VERSION: ${{ needs.build.outputs.version }}
-        run: |
-          PACKAGES=("@winglang/sdk" "@winglang/compiler" "@wingconsole/design-system" "@wingconsole/ui" "@wingconsole/server" "@wingconsole/app" "winglang")
-          for PACKAGE in "${PACKAGES[@]}"; do
-            # Check if already published
-            VERSION_FOUND=$(npm view "$PACKAGE@$PACKAGE_VERSION" version || true)
-            if [ "$VERSION_FOUND" = "$PACKAGE_VERSION" ]; then
-              echo "$PACKAGE@$PACKAGE_VERSION already published, skipping"
-              continue
-            fi
+        with:
+          max_attempts: 7
+          retry_on: error
+          timeout_minutes: 5
+          command: |
+            cd dist
+            PACKAGES=("@winglang/sdk" "@winglang/compiler" "@wingconsole/design-system" "@wingconsole/ui" "@wingconsole/server" "@wingconsole/app" "winglang")
+            for PACKAGE in "${PACKAGES[@]}"; do
+              # Check if already published
+              VERSION_FOUND=$(npm view "$PACKAGE@$PACKAGE_VERSION" version --verbose || true)
+              if [ "$VERSION_FOUND" = "$PACKAGE_VERSION" ]; then
+                echo "$PACKAGE@$PACKAGE_VERSION already published, skipping"
+                continue
+              fi
 
-            # remove "@" and replace "/" with "-"
-            TARBALL=$(echo "$PACKAGE-$PACKAGE_VERSION.tgz" | sed 's/@//g' | sed 's/\//-/g')
+              # remove "@" and replace "/" with "-"
+              TARBALL=$(echo "$PACKAGE-$PACKAGE_VERSION.tgz" | sed 's/@//g' | sed 's/\//-/g')
 
-            npm publish "$TARBALL" --access public
-          done
+              npm publish "$TARBALL" --access public --verbose
+            done
 
       - name: Publish Extension to Visual Studio Marketplace
         if: needs.build.outputs.vscode-wing-changed == 'true'
