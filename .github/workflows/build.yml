@@ -265,6 +265,13 @@ jobs:
           name: ${{ steps.diff.outputs.diff_name }}
           path: ${{ steps.diff.outputs.diff_name }}
 
+  aws-sdk-spec-test:
+    needs:
+      - build
+    if: github.event_name == 'push'
+    uses: ./.github/workflows/tf-aws-test.yml
+    secrets: inherit
+
   console-preview:
     name: "Console Preview"
     runs-on: ubuntu-latest
@@ -301,13 +308,13 @@ jobs:
           flyctl deploy . --config ./apps/wing-console/console/app/preview/fly.toml --app "$APP_NAME" --image-label latest --vm-memory 512 --strategy immediate
           flyctl scale count 1 --yes --app "$APP_NAME"
           echo "deploytime=$(TZ=UTC date +'%Y-%m-%d %H:%M')" >> $GITHUB_OUTPUT
-        
+
       - name: Post preview comment
         uses: thollander/actions-comment-pull-request@v2
         with:
           message: |
             Console preview environment is available at https://${{env.APP_NAME}}.fly.dev :rocket:
-            
+
             *Updated (UTC): ${{steps.deploy-fly.outputs.deploytime }}*
           comment_tag: Console preview environment
           GITHUB_TOKEN: ${{secrets.PROJEN_GITHUB_TOKEN}}
@@ -321,6 +328,7 @@ jobs:
       - e2e-test
       - benchmark
       - test
+      - aws-sdk-spec-test
     steps:
       - name: Check failure
         if: needs.build.result == 'failure' || needs.e2e-test.result == 'failure' || needs.benchmark.result == 'failure' || needs.test.result == 'failure'
