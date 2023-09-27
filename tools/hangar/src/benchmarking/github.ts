@@ -2,8 +2,9 @@ import { Octokit } from "octokit";
 import { unzipSync } from "fflate";
 import { parseRoundedJson } from "./util";
 
-export const CURRENT_REPO_OWNER = "winglang";
-export const CURRENT_REPO_NAME = "wing";
+export const CURRENT_REPO_FULL = process.env.GITHUB_REPOSITORY ?? "winglang/wing";
+export const CURRENT_REPO_OWNER = CURRENT_REPO_FULL.split("/")[0];
+export const CURRENT_REPO_NAME = CURRENT_REPO_FULL.split("/")[1];
 
 export const CURRENT_REPO = {
   owner: CURRENT_REPO_OWNER,
