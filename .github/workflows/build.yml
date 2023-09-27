@@ -375,9 +375,9 @@ jobs:
         env:
           PACKAGE_VERSION: ${{ needs.build.outputs.version }}
         with:
-          max_attempts: 5
+          max_attempts: 7
           retry_on: error
-          timeout_minutes: 10
+          timeout_minutes: 5
           command: |
             cd dist
             PACKAGES=("@winglang/sdk" "@winglang/compiler" "@wingconsole/design-system" "@wingconsole/ui" "@wingconsole/server" "@wingconsole/app" "winglang")
