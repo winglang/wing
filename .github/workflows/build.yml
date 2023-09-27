@@ -25,7 +25,7 @@ env:
   CARGO_TERM_COLOR: always
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-  SAME_REPO_PR: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository }}
+  IS_SAME_REPO_PR: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository }}
 
 jobs:
   build:
@@ -186,8 +186,8 @@ jobs:
         env:
           BENCH_FAIL_THRESHOLD_PERCENT: "50"
           BENCH_COMPARE_PREVIOUS: "${{ github.event_name == 'pull_request' && 'main' || '' }}"
-          GITHUB_TOKEN: ${{ env.SAME_REPO_PR == 'true' && secrets.PROJEN_GITHUB_TOKEN || secrets.GITHUB_TOKEN  }}
-          BENCH_PR: "${{ env.SAME_REPO_PR == 'true' && github.event.pull_request.number || '' }}"
+          GITHUB_TOKEN: ${{ env.IS_SAME_REPO_PR == 'true' && secrets.PROJEN_GITHUB_TOKEN || secrets.GITHUB_TOKEN  }}
+          BENCH_PR: "${{ env.IS_SAME_REPO_PR == 'true' && github.event.pull_request.number || '' }}"
         working-directory: tools/hangar
         run: pnpm bench
 
