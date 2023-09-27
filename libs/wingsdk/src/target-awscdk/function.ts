@@ -46,6 +46,7 @@ export class Function extends cloud.Function implements IAwsFunction {
         : Duration.minutes(1),
       memorySize: props.memory ? props.memory : undefined,
       architecture: Architecture.ARM_64,
+      logRetention: 30,
     });
 
     this.arn = this.function.functionArn;

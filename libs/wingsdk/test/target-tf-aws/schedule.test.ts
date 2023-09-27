@@ -24,6 +24,7 @@ test("schedule behavior with rate", () => {
   expect(tfResourcesOf(output)).toEqual([
     "aws_cloudwatch_event_rule", // main schedule event
     "aws_cloudwatch_event_target", // schedule target
+    "aws_cloudwatch_log_group", // log group for function
     "aws_iam_role", // role for function
     "aws_iam_role_policy", // policy for role
     "aws_iam_role_policy_attachment", // execution policy for role
@@ -63,6 +64,7 @@ test("schedule behavior with cron", () => {
   expect(tfResourcesOf(output)).toEqual([
     "aws_cloudwatch_event_rule", // main schedule event
     "aws_cloudwatch_event_target", // schedule target
+    "aws_cloudwatch_log_group", // log group for function
     "aws_iam_role", // role for function
     "aws_iam_role_policy", // policy for role
     "aws_iam_role_policy_attachment", // execution policy for role
@@ -108,6 +110,7 @@ test("schedule with two functions", () => {
   expect(tfResourcesOf(output)).toEqual([
     "aws_cloudwatch_event_rule", // main schedule event
     "aws_cloudwatch_event_target", // schedule target
+    "aws_cloudwatch_log_group", // log group for function
     "aws_iam_role", // role for function
     "aws_iam_role_policy", // policy for role
     "aws_iam_role_policy_attachment", // execution policy for role

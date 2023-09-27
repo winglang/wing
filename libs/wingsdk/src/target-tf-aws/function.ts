@@ -2,6 +2,7 @@ import { resolve } from "path";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
+import { CloudwatchLogGroup } from "../.gen/providers/aws/cloudwatch-log-group";
 import { IamRole } from "../.gen/providers/aws/iam-role";
 import { IamRolePolicy } from "../.gen/providers/aws/iam-role-policy";
 import { IamRolePolicyAttachment } from "../.gen/providers/aws/iam-role-policy-attachment";
@@ -174,6 +175,11 @@ export class Function extends cloud.Function implements IAwsFunction {
     });
 
     const name = ResourceNames.generateName(this, FUNCTION_NAME_OPTS);
+
+    new CloudwatchLogGroup(this, "CloudwatchLogGroup", {
+      name: `/aws/lambda/${name}`,
+      retentionInDays: 30,
+    });
 
     // validate memory size
     if (props.memory && (props.memory < 128 || props.memory > 10240)) {

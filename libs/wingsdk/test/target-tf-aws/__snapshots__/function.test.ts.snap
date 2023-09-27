@@ -8,6 +8,12 @@ exports[`basic function 1`] = `
     },
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "Function_CloudwatchLogGroup_ABDCF4C4": {
+        "name": "/aws/lambda/Function-c852aba6",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "Function_IamRole_678BE84C": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -90,6 +96,14 @@ exports[`basic function 2`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
+                  },
+                  "CloudwatchLogGroup": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CloudwatchLogGroup",
+                    "path": "root/Default/Function/CloudwatchLogGroup",
                   },
                   "Default": {
                     "constructInfo": {
@@ -231,6 +245,12 @@ exports[`basic function with environment variables 1`] = `
     },
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "Function_CloudwatchLogGroup_ABDCF4C4": {
+        "name": "/aws/lambda/Function-c852aba6",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "Function_IamRole_678BE84C": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -315,6 +335,14 @@ exports[`basic function with environment variables 2`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
+                  },
+                  "CloudwatchLogGroup": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CloudwatchLogGroup",
+                    "path": "root/Default/Function/CloudwatchLogGroup",
                   },
                   "Default": {
                     "constructInfo": {
@@ -456,6 +484,12 @@ exports[`basic function with memory size specified 1`] = `
     },
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "Function_CloudwatchLogGroup_ABDCF4C4": {
+        "name": "/aws/lambda/Function-c852aba6",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "Function_IamRole_678BE84C": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -539,6 +573,14 @@ exports[`basic function with memory size specified 2`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
+                  },
+                  "CloudwatchLogGroup": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CloudwatchLogGroup",
+                    "path": "root/Default/Function/CloudwatchLogGroup",
                   },
                   "Default": {
                     "constructInfo": {
@@ -680,6 +722,12 @@ exports[`basic function with timeout explicitly set 1`] = `
     },
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "Function_CloudwatchLogGroup_ABDCF4C4": {
+        "name": "/aws/lambda/Function-c852aba6",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "Function_IamRole_678BE84C": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -762,6 +810,14 @@ exports[`basic function with timeout explicitly set 2`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
+                  },
+                  "CloudwatchLogGroup": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CloudwatchLogGroup",
+                    "path": "root/Default/Function/CloudwatchLogGroup",
                   },
                   "Default": {
                     "constructInfo": {
@@ -903,6 +959,12 @@ exports[`function name valid 1`] = `
     },
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "The-Mighty_Function-01_CloudwatchLogGroup_BC84FFD4": {
+        "name": "/aws/lambda/The-Mighty_Function-01-c86057f3",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "The-Mighty_Function-01_IamRole_590EA29B": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -998,6 +1060,14 @@ exports[`function name valid 2`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/The-Mighty_Function-01/Asset",
+                  },
+                  "CloudwatchLogGroup": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CloudwatchLogGroup",
+                    "path": "root/Default/The-Mighty_Function-01/CloudwatchLogGroup",
                   },
                   "Default": {
                     "constructInfo": {
@@ -1126,6 +1196,12 @@ exports[`replace invalid character from function name 1`] = `
     },
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "TheMightyFunction_CloudwatchLogGroup_E141F677": {
+        "name": "/aws/lambda/The-Mighty-Function-c86ccf73",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "TheMightyFunction_IamRole_5421E649": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -1221,6 +1297,14 @@ exports[`replace invalid character from function name 2`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/The%Mighty$Function/Asset",
+                  },
+                  "CloudwatchLogGroup": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CloudwatchLogGroup",
+                    "path": "root/Default/The%Mighty$Function/CloudwatchLogGroup",
                   },
                   "Default": {
                     "constructInfo": {

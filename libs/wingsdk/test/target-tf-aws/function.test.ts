@@ -15,6 +15,7 @@ test("basic function", () => {
   const output = app.synth();
 
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group", // log group for Lambda
     "aws_iam_role", // role for Lambda
     "aws_iam_role_policy", // policy for role
     "aws_iam_role_policy_attachment", // execution policy for role
@@ -107,6 +108,7 @@ test("basic function with memory size specified", () => {
   const output = app.synth();
 
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group", // log group for Lambda
     "aws_iam_role", // role for Lambda
     "aws_iam_role_policy", // policy for role
     "aws_iam_role_policy_attachment", // execution policy for role
