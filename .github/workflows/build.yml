@@ -379,6 +379,7 @@ jobs:
           retry_on: error
           timeout_minutes: 10
           command: |
+            cd dist
             PACKAGES=("@winglang/sdk" "@winglang/compiler" "@wingconsole/design-system" "@wingconsole/ui" "@wingconsole/server" "@wingconsole/app" "winglang")
             for PACKAGE in "${PACKAGES[@]}"; do
               # Check if already published
