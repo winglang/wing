@@ -2522,7 +2522,7 @@ impl<'a> TypeChecker<'a> {
 
 		if arg_count < min_args || arg_count > max_args {
 			let err_text = if min_args == max_args {
-				format!("Expected {} arguments but got {}", min_args, arg_count)
+				format!("Expected {} argument(s) but got {}", min_args, arg_count)
 			} else {
 				format!(
 					"Expected between {} and {} arguments but got {}",

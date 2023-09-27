@@ -494,11 +494,11 @@ error: Preflight field \\"x\\" is not initialized
   |    ^ Preflight field \\"x\\" is not initialized
 
 
-error: Expected 0 arguments but got 1
+error: Expected 0 argument(s) but got 1
   --> ../../../examples/tests/invalid/class.test.w:9:1
   |
 9 | new C2(1);
-  | ^^^^^^^^^ Expected 0 arguments but got 1
+  | ^^^^^^^^^ Expected 0 argument(s) but got 1
 
 
 error: Expected 0 named arguments for func at ../../../examples/tests/invalid/class.test.w:13:1
@@ -508,11 +508,11 @@ error: Expected 0 named arguments for func at ../../../examples/tests/invalid/cl
    | ^^^^^^^^^^^^^^^^^^ Expected 0 named arguments for func at ../../../examples/tests/invalid/class.test.w:13:1
 
 
-error: Expected 1 arguments but got 0
+error: Expected 1 argument(s) but got 0
    --> ../../../examples/tests/invalid/class.test.w:19:1
    |
 19 | new C10(); 
-   | ^^^^^^^^^ Expected 1 arguments but got 0
+   | ^^^^^^^^^ Expected 1 argument(s) but got 0
 
 
 error: No named arguments expected
@@ -599,25 +599,25 @@ error: Unknown symbol \\"C11\\"
    |                   ^^^ Unknown symbol \\"C11\\"
 
 
-error: Expected 1 arguments but got 0
+error: Expected 1 argument(s) but got 0
     --> ../../../examples/tests/invalid/class.test.w:157:5
     |
 157 |     super();
-    |     ^^^^^^^^ Expected 1 arguments but got 0
+    |     ^^^^^^^^ Expected 1 argument(s) but got 0
 
 
-error: Expected 1 arguments but got 2
+error: Expected 1 argument(s) but got 2
     --> ../../../examples/tests/invalid/class.test.w:141:5
     |
 141 |     super(someNum, someStr);
-    |     ^^^^^^^^^^^^^^^^^^^^^^^^ Expected 1 arguments but got 2
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^ Expected 1 argument(s) but got 2
 
 
-error: Expected 1 arguments but got 0
+error: Expected 1 argument(s) but got 0
     --> ../../../examples/tests/invalid/class.test.w:132:5
     |
 132 |     super();
-    |     ^^^^^^^^ Expected 1 arguments but got 0
+    |     ^^^^^^^^ Expected 1 argument(s) but got 0
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -2560,11 +2560,11 @@ error: \\"notAField\\" is not a field of \\"ApiResponse\\"
    | \\\\-^ \\"notAField\\" is not a field of \\"ApiResponse\\"
 
 
-error: Expected 2 arguments but got 1
+error: Expected 2 argument(s) but got 1
    --> ../../../examples/tests/invalid/struct_expansion.test.w:11:3
    |
 11 |   bucket1.put(file: \\"file.txt\\", \\"data\\");
-   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected 2 arguments but got 1
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected 2 argument(s) but got 1
 
 
  
