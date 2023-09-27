@@ -1,3 +1,4 @@
+import { URL as NodeUrl, format } from "url";
 import { InflightClient } from "../core";
 
 /**
@@ -146,6 +147,27 @@ export interface Response {
   readonly body?: string;
 }
 
+export interface Url {
+  readonly href: string;
+  readonly protocol: string;
+  readonly host: string;
+  readonly hostname: string;
+  readonly port: string;
+  readonly pathname: string;
+  readonly search: string;
+  readonly hash: string;
+  readonly origin: string;
+  readonly username: string;
+  readonly password: string;
+}
+
+export interface FormatUrlOptions {
+  readonly auth?: boolean;
+  readonly fragment?: boolean;
+  readonly search?: boolean;
+  readonly unicode?: boolean;
+}
+
 /**
  * Default options to attach to any request
  */
@@ -269,6 +291,61 @@ export class Util {
       ...options,
       method: HttpMethod.DELETE,
     });
+  }
+
+  /**
+   * Parses the input URL String using WHATWG URL API and returns an URL Struct.
+   * @param urlString The URL String to be parsed.
+   * @throws Will throw an error if the input String is not a valid URL.
+   * @inflight
+   * @returns An URL Struct.
+   */
+  public static parseUrl(urlString: string): Url {
+    try {
+      const nodeUrl = new NodeUrl(urlString);
+      return {
+        href: nodeUrl.href,
+        protocol: nodeUrl.protocol,
+        host: nodeUrl.host,
+        hostname: nodeUrl.hostname,
+        port: nodeUrl.port,
+        pathname: nodeUrl.pathname,
+        search: nodeUrl.search,
+        hash: nodeUrl.hash,
+        origin: nodeUrl.origin,
+        username: nodeUrl.username,
+        password: nodeUrl.password,
+      };
+    } catch (error) {
+      throw new Error(`Invalid URL: ${urlString}`);
+    }
+  }
+
+  /**
+   * Formats a URL Struct into a String
+   * @param url The URL Struct to be formatted.
+   * @throws Will throw an error if the input URL has invalid fields.
+   * @inflight
+   * @returns A formatted URL String.
+   */
+  public static formatUrl(url: Url, options?: FormatUrlOptions): string {
+    try {
+      const nodeUrl = new NodeUrl(url.href);
+      return format(nodeUrl, {
+        auth: options?.auth,
+        fragment: options?.fragment,
+        search: options?.search,
+        unicode: options?.unicode,
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(`Unable to format URL Struct: ${error.message}`);
+      } else {
+        throw new Error(
+          "Unable to format URL Struct: An unknown error occurred"
+        );
+      }
+    }
   }
 
   private static async _formatResponse(
