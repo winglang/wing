@@ -156,21 +156,7 @@ Benchmark files are located in `examples/tests/valid/benchmarks`. To run the ben
 pnpm turbo bench
 ```
 
-Benchmark files should ideally have a meta-comment with the `cases` key. For example:
-
-```ts
-/*\
-cases:
-  - target: sim
-    maxMeanTime: 900
-  - target: tf-aws
-    maxMeanTime: 1000
-\*/
-```
-
-Given each of these cases, the current purpose is to provide a maxMeanTime (milliseconds) per compilation target.
-If the average time for compiling to this target takes longer than the maxMeanTime, the test will fail.
-Note: In CI, tests likely run much slower than on your local machine, so you may need to observe the CI results to determine the correct maxMeanTime.
+In CI, if these benchmarks regress too far from the current `main` branch, the build will fail.
 
 ## How do I work only on the compiler?
 
