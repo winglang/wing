@@ -649,6 +649,85 @@ async handle(message) {
 }
 `;
 
+exports[`push rejects empty message 1`] = `
+[
+  "wingsdk.cloud.TestRunner created.",
+  "wingsdk.cloud.Queue created.",
+  "Push (messages=).",
+  "wingsdk.cloud.Queue deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
+]
+`;
+
+exports[`push rejects empty message 2`] = `
+{
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_queue",
+        "props": {
+          "retentionPeriod": 3600,
+          "timeout": 10,
+        },
+        "type": "wingsdk.cloud.Queue",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "cloud.TestRunner": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.2.70",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
+        "my_queue": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.2.70",
+          },
+          "display": {
+            "description": "A distributed message queue",
+            "title": "Queue",
+          },
+          "id": "my_queue",
+          "path": "root/my_queue",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.2.70",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
 exports[`queue batch size of 2, purge the queue 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",

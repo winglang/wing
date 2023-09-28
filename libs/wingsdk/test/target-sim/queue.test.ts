@@ -370,3 +370,23 @@ test("pop from empty queue returns nothing", async () => {
   await s.stop();
   expect(popped).toBeUndefined();
 });
+
+test("push rejects empty message", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Queue._newQueue(app, "my_queue");
+
+  // WHEN
+  const s = await app.startSimulator();
+  const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
+
+  // THEN
+  await expect(() => queueClient.push("")).rejects.toThrowError(
+    /Empty messages are not allowed/
+  );
+  await s.stop();
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(s.listTraces()[2].data.status).toEqual("failure");
+  expect(app.snapshot()).toMatchSnapshot();
+});
