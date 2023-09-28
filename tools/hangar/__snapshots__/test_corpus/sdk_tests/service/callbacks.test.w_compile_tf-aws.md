@@ -2,7 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
-module.exports = function({ $b, $status }) {
+module.exports = function({ $b, $startCounter, $started, $status, $stopped }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -10,7 +10,13 @@ module.exports = function({ $b, $status }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: !b.tryGet(status)?")})((!(((await $b.tryGet($status))) != null)))};
+      (await $b.put($status,$started));
+      (await $startCounter.inc());
+      return async () => {
+        (await $b.put($status,$stopped));
+        (await $startCounter.dec());
+      }
+      ;
     }
   }
   return $Closure1;
@@ -20,8 +26,26 @@ module.exports = function({ $b, $status }) {
 
 ## inflight.$Closure2-1.js
 ```js
-module.exports = function({ $b, $s, $startCounter, $started, $status }) {
+module.exports = function({ $b, $status }) {
   class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: !b.tryGet(status)?")})((!(((await $b.tryGet($status))) != null)))};
+    }
+  }
+  return $Closure2;
+}
+
+```
+
+## inflight.$Closure3-1.js
+```js
+module.exports = function({ $b, $s, $startCounter, $started, $status }) {
+  class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -35,15 +59,15 @@ module.exports = function({ $b, $s, $startCounter, $started, $status }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: startCounter.peek() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $startCounter.peek()),1)))};
     }
   }
-  return $Closure2;
+  return $Closure3;
 }
 
 ```
 
-## inflight.$Closure3-1.js
+## inflight.$Closure4-1.js
 ```js
 module.exports = function({ $b, $s, $startCounter, $status, $stopped }) {
-  class $Closure3 {
+  class $Closure4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -61,27 +85,7 @@ module.exports = function({ $b, $s, $startCounter, $status, $stopped }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: b.get(status) == stopped")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.get($status)),$stopped)))};
     }
   }
-  return $Closure3;
-}
-
-```
-
-## inflight.MyServiceHandler-1.js
-```js
-module.exports = function({ $b, $startCounter, $started, $status, $stopped }) {
-  class MyServiceHandler {
-    constructor({  }) {
-    }
-    async onStart() {
-      (await $b.put($status,$started));
-      (await $startCounter.inc());
-    }
-    async onStop() {
-      (await $b.put($status,$stopped));
-      (await $startCounter.dec());
-    }
-  }
-  return MyServiceHandler;
+  return $Closure4;
 }
 
 ```
@@ -137,52 +141,6 @@ class $Root extends $stdlib.std.Resource {
       const status = "status";
       const started = "started";
       const stopped = "stopped";
-      class MyServiceHandler extends $stdlib.std.Resource {
-        constructor(scope, id, ) {
-          super(scope, id);
-        }
-        static _toInflightType(context) {
-          return `
-            require("./inflight.MyServiceHandler-1.js")({
-              $b: ${context._lift(b)},
-              $startCounter: ${context._lift(startCounter)},
-              $started: ${context._lift(started)},
-              $status: ${context._lift(status)},
-              $stopped: ${context._lift(stopped)},
-            })
-          `;
-        }
-        _toInflight() {
-          return `
-            (await (async () => {
-              const MyServiceHandlerClient = ${MyServiceHandler._toInflightType(this)};
-              const client = new MyServiceHandlerClient({
-              });
-              if (client.$inflight_init) { await client.$inflight_init(); }
-              return client;
-            })())
-          `;
-        }
-        _getInflightOps() {
-          return ["onStart", "onStop", "$inflight_init"];
-        }
-        _registerBind(host, ops) {
-          if (ops.includes("onStart")) {
-            MyServiceHandler._registerBindObject(b, host, ["put"]);
-            MyServiceHandler._registerBindObject(startCounter, host, ["inc"]);
-            MyServiceHandler._registerBindObject(started, host, []);
-            MyServiceHandler._registerBindObject(status, host, []);
-          }
-          if (ops.includes("onStop")) {
-            MyServiceHandler._registerBindObject(b, host, ["put"]);
-            MyServiceHandler._registerBindObject(startCounter, host, ["dec"]);
-            MyServiceHandler._registerBindObject(status, host, []);
-            MyServiceHandler._registerBindObject(stopped, host, []);
-          }
-          super._registerBind(host, ops);
-        }
-      }
-      const s = this.node.root.newAbstract("@winglang/sdk.cloud.Service",this,"cloud.Service",new MyServiceHandler(this,"MyServiceHandler"),{ autoStart: false });
       class $Closure1 extends $stdlib.std.Resource {
         constructor(scope, id, ) {
           super(scope, id);
@@ -192,7 +150,10 @@ class $Root extends $stdlib.std.Resource {
           return `
             require("./inflight.$Closure1-1.js")({
               $b: ${context._lift(b)},
+              $startCounter: ${context._lift(startCounter)},
+              $started: ${context._lift(started)},
               $status: ${context._lift(status)},
+              $stopped: ${context._lift(stopped)},
             })
           `;
         }
@@ -212,13 +173,16 @@ class $Root extends $stdlib.std.Resource {
         }
         _registerBind(host, ops) {
           if (ops.includes("handle")) {
-            $Closure1._registerBindObject(b, host, ["tryGet"]);
+            $Closure1._registerBindObject(b, host, ["put"]);
+            $Closure1._registerBindObject(startCounter, host, ["dec", "inc"]);
+            $Closure1._registerBindObject(started, host, []);
             $Closure1._registerBindObject(status, host, []);
+            $Closure1._registerBindObject(stopped, host, []);
           }
           super._registerBind(host, ops);
         }
       }
-      this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:does not start automatically if autoStart is false",new $Closure1(this,"$Closure1"));
+      const s = this.node.root.newAbstract("@winglang/sdk.cloud.Service",this,"cloud.Service",new $Closure1(this,"$Closure1"),{ autoStart: false });
       class $Closure2 extends $stdlib.std.Resource {
         constructor(scope, id, ) {
           super(scope, id);
@@ -228,9 +192,6 @@ class $Root extends $stdlib.std.Resource {
           return `
             require("./inflight.$Closure2-1.js")({
               $b: ${context._lift(b)},
-              $s: ${context._lift(s)},
-              $startCounter: ${context._lift(startCounter)},
-              $started: ${context._lift(started)},
               $status: ${context._lift(status)},
             })
           `;
@@ -252,15 +213,12 @@ class $Root extends $stdlib.std.Resource {
         _registerBind(host, ops) {
           if (ops.includes("handle")) {
             $Closure2._registerBindObject(b, host, ["tryGet"]);
-            $Closure2._registerBindObject(s, host, ["start"]);
-            $Closure2._registerBindObject(startCounter, host, ["peek"]);
-            $Closure2._registerBindObject(started, host, []);
             $Closure2._registerBindObject(status, host, []);
           }
           super._registerBind(host, ops);
         }
       }
-      this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:start() calls onStart() idempotently",new $Closure2(this,"$Closure2"));
+      this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:does not start automatically if autoStart is false",new $Closure2(this,"$Closure2"));
       class $Closure3 extends $stdlib.std.Resource {
         constructor(scope, id, ) {
           super(scope, id);
@@ -272,8 +230,8 @@ class $Root extends $stdlib.std.Resource {
               $b: ${context._lift(b)},
               $s: ${context._lift(s)},
               $startCounter: ${context._lift(startCounter)},
+              $started: ${context._lift(started)},
               $status: ${context._lift(status)},
-              $stopped: ${context._lift(stopped)},
             })
           `;
         }
@@ -293,16 +251,58 @@ class $Root extends $stdlib.std.Resource {
         }
         _registerBind(host, ops) {
           if (ops.includes("handle")) {
-            $Closure3._registerBindObject(b, host, ["get", "tryGet"]);
-            $Closure3._registerBindObject(s, host, ["start", "stop"]);
+            $Closure3._registerBindObject(b, host, ["tryGet"]);
+            $Closure3._registerBindObject(s, host, ["start"]);
             $Closure3._registerBindObject(startCounter, host, ["peek"]);
+            $Closure3._registerBindObject(started, host, []);
             $Closure3._registerBindObject(status, host, []);
-            $Closure3._registerBindObject(stopped, host, []);
           }
           super._registerBind(host, ops);
         }
       }
-      this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:stop() calls onStop()",new $Closure3(this,"$Closure3"));
+      this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:start() calls onStart() idempotently",new $Closure3(this,"$Closure3"));
+      class $Closure4 extends $stdlib.std.Resource {
+        constructor(scope, id, ) {
+          super(scope, id);
+          (std.Node.of(this)).hidden = true;
+        }
+        static _toInflightType(context) {
+          return `
+            require("./inflight.$Closure4-1.js")({
+              $b: ${context._lift(b)},
+              $s: ${context._lift(s)},
+              $startCounter: ${context._lift(startCounter)},
+              $status: ${context._lift(status)},
+              $stopped: ${context._lift(stopped)},
+            })
+          `;
+        }
+        _toInflight() {
+          return `
+            (await (async () => {
+              const $Closure4Client = ${$Closure4._toInflightType(this)};
+              const client = new $Closure4Client({
+              });
+              if (client.$inflight_init) { await client.$inflight_init(); }
+              return client;
+            })())
+          `;
+        }
+        _getInflightOps() {
+          return ["handle", "$inflight_init"];
+        }
+        _registerBind(host, ops) {
+          if (ops.includes("handle")) {
+            $Closure4._registerBindObject(b, host, ["get", "tryGet"]);
+            $Closure4._registerBindObject(s, host, ["start", "stop"]);
+            $Closure4._registerBindObject(startCounter, host, ["peek"]);
+            $Closure4._registerBindObject(status, host, []);
+            $Closure4._registerBindObject(stopped, host, []);
+          }
+          super._registerBind(host, ops);
+        }
+      }
+      this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:stop() calls onStop()",new $Closure4(this,"$Closure4"));
     }
   }
 }
