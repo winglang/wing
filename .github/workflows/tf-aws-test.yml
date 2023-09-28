@@ -5,10 +5,10 @@ on:
     inputs:
       repo:
         type: string
-        default: ${{github.repository}}
+        default: winglang/wing
       ref:
         type: string
-        default: ${{github.ref}}
+        default: main
 
 env:
   AWS_REGION: "us-east-1"
