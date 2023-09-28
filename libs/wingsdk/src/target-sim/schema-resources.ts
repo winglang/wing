@@ -90,9 +90,9 @@ export interface ServiceSchema extends BaseResourceSchema {
   readonly type: typeof SERVICE_TYPE;
   readonly props: {
     /** The source code of the service */
-    sourceCodeFile: string;
+    readonly sourceCodeFile: string;
     /** Whether the service should start when sim starts */
-    autoStart: boolean;
+    readonly autoStart: boolean;
     /** A map of environment variables to run the function with. */
     readonly environmentVariables: Record<string, string>;
   };
