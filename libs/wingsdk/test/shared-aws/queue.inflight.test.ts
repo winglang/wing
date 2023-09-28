@@ -93,6 +93,24 @@ test("push - sad path invalid message", async () => {
   );
 });
 
+test("push - sad path empty message", async () => {
+  // GIVEN
+  const QUEUE_URL = "QUEUE_URL";
+  const MESSAGE = "";
+
+  // WHEN
+  const client = new QueueClient(QUEUE_URL);
+
+  // THEN
+  await expect(() => client.push(MESSAGE)).rejects.toThrowError(
+    /Empty messages are not allowed/
+  );
+  expect(sqsMock, "never invoked").toHaveReceivedCommandTimes(
+    SendMessageCommand,
+    0
+  );
+});
+
 test("push - sad path unknown error", async () => {
   // GIVEN
   const QUEUE_URL = "QUEUE_URL";

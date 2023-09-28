@@ -16,6 +16,9 @@ export class QueueClient implements IQueueClient {
   ) {}
 
   public async push(...messages: string[]): Promise<void> {
+    if (messages.includes("")) {
+      throw new Error("Empty messages are not allowed");
+    }
     const messagePromises = messages.map(async (message) => {
       try {
         const command = new SendMessageCommand({
