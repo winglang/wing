@@ -18,7 +18,6 @@ env:
   LOCAL_BUILD: ${{ github.workflow == 'build'}}
   # indicates if we should run
   MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
-  USER: ${{ toJson(github) }}
 
 jobs:
   auth:
@@ -26,9 +25,14 @@ jobs:
     steps:
       - name: check if allowed to run
         if: ${{ env.MANUAL == 'true' }}
-        run: |
-          echo ${{env.USER}}
-          exit 1
+        uses: tspascoal/get-user-teams-membership@v2
+        id: checkUserMember
+        with:
+          username: ${{ github.actor }}
+          team: "maintainers"
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+      - name: print result
+        run: echo ${{ steps.checkUserMember.outputs.isTeamMember }}
 
   setup:
     needs: auth
