@@ -21,6 +21,7 @@ env:
   REPO: ${{inputs.repo || github.repository}}
   REF: ${{inputs.ref || github.ref}}
   ALLOWED_USERS: ("tsuf239" "MarkMcCulloh" "eladb" "revitalbarletz" "ShaiBer" "Chriscbr" "hasanaburayyan" "staycoolcall911" "ekeren")
+  PNPM_VERSION: "8.6.3"
 
 jobs:
   setup:
@@ -62,11 +63,16 @@ jobs:
           repository: ${{env.REPO}}
           ref: ${{env.REF}}
 
+      - name: Setup pnpm
+        if: ${{ env.MANUAL ==  'true' }}
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
       - name: Setup Node.js v18
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: pnpm
 
       ##################### install a local wing version #########################
       - name: Download Dist Artifacts
