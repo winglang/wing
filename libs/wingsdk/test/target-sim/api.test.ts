@@ -191,19 +191,20 @@ test("api doesn't allow ambiguous routes", () => {
   // GIVEN
   const app = new SimApp();
   const api = cloud.Api._newApi(app, "my_api");
+  const path = "/api/hello/{name}";
   const inflightGet = Testing.makeHandler(
     app,
     "Handler",
     INFLIGHT_CODE_ECHO_BODY
   );
-  api.get("/api/hello/{name}", inflightGet);
+  api.get(path, inflightGet);
 
   // WHEN
-  const path = "/api/{name}/hello";
+  const ambiguousPath = "/api/{name}/hello";
 
   // THEN
-  expect(() => api.get(path, inflightGet)).toThrowError(
-    `Endpoint for path '${path}' and method 'GET' is ambiguous`
+  expect(() => api.get(ambiguousPath, inflightGet)).toThrowError(
+    `Endpoint for path '${ambiguousPath}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '${path}'`
   );
 });
 
@@ -211,19 +212,20 @@ test("api doesn't allow ambiguous routes containing only variables", () => {
   // GIVEN
   const app = new SimApp();
   const api = cloud.Api._newApi(app, "my_api");
+  const path = "/{age}";
   const inflightGet = Testing.makeHandler(
     app,
     "Handler",
     INFLIGHT_CODE_ECHO_BODY
   );
-  api.get("/{age}", inflightGet);
+  api.get(path, inflightGet);
 
   // WHEN
-  const path = "/{name}";
+  const ambiguousPath = "/{name}";
 
   // THEN
-  expect(() => api.get(path, inflightGet)).toThrowError(
-    `Endpoint for path '${path}' and method 'GET' is ambiguous`
+  expect(() => api.get(ambiguousPath, inflightGet)).toThrowError(
+    `Endpoint for path '${ambiguousPath}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '${path}'`
   );
 });
 
@@ -231,19 +233,20 @@ test("api doesn't allow ambiguous routes containing different number of varaible
   // GIVEN
   const app = new SimApp();
   const api = cloud.Api._newApi(app, "my_api");
+  const path = "/{param}/{something}";
   const inflightGet = Testing.makeHandler(
     app,
     "Handler",
     INFLIGHT_CODE_ECHO_BODY
   );
-  api.get("/{param}/{something}", inflightGet);
+  api.get(path, inflightGet);
 
   // WHEN
-  const path = "/path/{something}";
+  const ambiguousPath = "/path/{something}";
 
   // THEN
-  expect(() => api.get(path, inflightGet)).toThrowError(
-    `Endpoint for path '${path}' and method 'GET' is ambiguous`
+  expect(() => api.get(ambiguousPath, inflightGet)).toThrowError(
+    `Endpoint for path '${ambiguousPath}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '${path}'`
   );
 });
 

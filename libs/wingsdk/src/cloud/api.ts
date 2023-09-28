@@ -398,10 +398,13 @@ export abstract class Api extends Resource {
    * @returns A boolean value indicating if provided path and method are ambiguous.
    * @internal
    */
-  protected _isPathAndMethodAmbiguous(path: string, method: string): boolean {
+  protected _findAmbiguousPath(
+    path: string,
+    method: string
+  ): string | undefined {
     const existingPaths = Object.keys(this.apiSpec.paths);
 
-    return !!existingPaths.find(
+    return existingPaths.find(
       (existingPath) =>
         !!this.apiSpec.paths[existingPath][method.toLowerCase()] &&
         this._arePathsAmbiguous(existingPath, path)
@@ -489,9 +492,10 @@ export abstract class Api extends Resource {
         `Endpoint for path '${path}' and method '${method}' already exists`
       );
     }
-    if (this._isPathAndMethodAmbiguous(path, method)) {
+    const ambiguousPath = this._findAmbiguousPath(path, method);
+    if (!!ambiguousPath) {
       throw new Error(
-        `Endpoint for path '${path}' and method '${method}' is ambiguous`
+        `Endpoint for path '${path}' and method '${method}' is ambiguous - it conflicts with existing endpoint for path '${ambiguousPath}'`
       );
     }
     const operationId = `${method.toLowerCase()}${
