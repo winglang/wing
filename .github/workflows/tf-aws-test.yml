@@ -5,8 +5,10 @@ on:
     inputs:
       repo:
         type: string
+        default: ${{github.repository}}
       ref:
         type: string
+        default: ${{github.ref}}
 
 env:
   AWS_REGION: "us-east-1"
