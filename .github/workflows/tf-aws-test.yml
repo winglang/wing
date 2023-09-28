@@ -16,30 +16,27 @@ env:
   # this variable indicates wheater to use wing cli from a local version (using the current repo code)
   # or use the latest remote npm version
   LOCAL_BUILD: ${{ github.workflow == 'build'}}
-  # indicates if we should run
+  # indicates if the action triggered from a workflow_dispatch
   MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
+  REPO: ${{inputs.repo || github.repository}}
+  REF: ${{inputs.ref || github.ref}}
+  ALLOWED_USERS: ("tsuf239" "MarkMcCulloh" "eladb" "revitalbarletz" "ShaiBer" "Chriscbr" "hasanaburayyan" "staycoolcall911" "ekeren")
 
 jobs:
-  auth:
+  setup:
     runs-on: ubuntu-latest
     steps:
       - name: check if allowed to run
-        if: ${{ env.MANUAL == 'true' }}
-        uses: tspascoal/get-user-teams-membership@v2
-        id: checkUserMember
-        with:
-          username: ${{ github.actor }}
-          team: "maintainers"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: print result
-        run: echo ${{ steps.checkUserMember.outputs.isTeamMember }}
-
-  setup:
-    needs: auth
-    runs-on: ubuntu-latest
-    steps:
+        if: ${{ env.MANUAL == 'true' && !contains(env.ALLOWED_USERS, github.actor)}}
+        run: |
+          echo "User ${{github.actor}} is not allowed to dispatch this action."
+          exit 1
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          repository: ${{env.REPO}}
+          ref: ${{env.REF}}
+
       - name: Get list of directories and save them to the output
         id: setdirs
         shell: bash
@@ -61,6 +58,9 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          repository: ${{env.REPO}}
+          ref: ${{env.REF}}
 
       - name: Setup Node.js v18
         uses: actions/setup-node@v3
