@@ -1,10 +1,25 @@
 import { Construct } from "constructs";
+import { App } from "./app";
 import {
   BigtableTable,
   BigtableTableConfig,
   BigtableTableColumnFamily,
 } from "../.gen/providers/google/bigtable-table";
-import { Id } from "../.gen/providers/random/id";
+import {
+  BigtableInstance,
+  BigtableInstanceCluster,
+  BigtableInstanceConfig,
+} from "../.gen/providers/google/bigtable-instance";
+/*
+import {
+  BigtableInstanceIamMember,
+  BigtableInstanceIamMemberConfig,
+} from "../.gen/providers/google/bigtable-instance-iam-member";
+import {
+  BigtableTableIamMember,
+  BigtableTableIamMemberConfig,
+} from "../.gen/providers/google/bigtable-table-iam-member";
+*/
 import * as ex from "../ex";
 import {
   ResourceNames,
@@ -31,10 +46,14 @@ const TABLE_NAME_OPTS: NameOptions = {
   includeHash: false,
 };
 
+
+/*
 const INSTANCE_NAME_OPTS: NameOptions = {
   maxLen: 30,
-  disallowedRegex: /([^a-z0-9.\-\_]+)/g,
+  disallowedRegex: /([a-z][a-z0-9\-]+[a-z0-9])/g,
+  sep: undefined,
 };
+*/
 
 /**
  * GCP implementation of `ex.Table`.
@@ -45,33 +64,68 @@ export class Table extends ex.Table {
   constructor(scope: Construct, id: string, props: ex.TableProps = {}) {
     super(scope, id, props);
 
-    const tableName = ResourceNames.generateName(this, TABLE_NAME_OPTS);
-    const instanceName = ResourceNames.generateName(this, INSTANCE_NAME_OPTS);
+    const app = App.of(this) as App;
 
-    const randomId = new Id(this, "Id", {
-      byteLength: 4, // 4 bytes = 8 hex characters
-    });
+    const tableName = ResourceNames.generateName(this, TABLE_NAME_OPTS);
+    // const instanceName = ResourceNames.generateName(this, INSTANCE_NAME_OPTS);
+
 
     const columnsFamily: BigtableTableColumnFamily[] = [];
     for (let key in this.columns) {
       columnsFamily.push({ family: key });
     }
 
-    const config: BigtableTableConfig = {
-      name: tableName + `-${randomId.hex}`,
-      instanceName: instanceName,
+    const instanceCluster: BigtableInstanceCluster = {
+      clusterId: 'my-wing-cluster',
+      numNodes: 1,
+      storageType: 'HDD',
+      zone: 'us-central1-a',
+    }
+
+    /*
+    const instanceIamConfig: BigtableInstanceIamMemberConfig = {
+      instance: instanceName,
+      member: 'allUsers', // https://cloud.google.com/billing/docs/reference/rest/v1/Policy#Binding
+      role: 'roles/bigtable.admin',
+    }
+    new BigtableInstanceIamMember(this, "InstanceIam", instanceIamConfig);
+    */
+
+    const instanceConfig: BigtableInstanceConfig = {
+      name: 'rampampam123',
+      cluster: [instanceCluster],
+    }
+
+    let instance = new BigtableInstance(this, "Instance", instanceConfig);
+
+
+    const tableConfig: BigtableTableConfig = {
+      name: tableName,
+      instanceName: instance.name,
       columnFamily: columnsFamily,
+      project: app.projectId,
     };
 
-    new BigtableTable(this, "Default", config);
+    new BigtableTable(this, "Default", tableConfig);
+
+    /*
+    const bigtableIamConfig: BigtableTableIamMemberConfig = {
+      instance: instance.name,
+      member: 'allUsers', // https://cloud.google.com/billing/docs/reference/rest/v1/Policy#Binding
+      role: 'roles/bigtable.admin',
+      table: table.name,
+    }
+
+    new BigtableTableIamMember(this, "BigtableIam", bigtableIamConfig);
+    */
   }
 
-  public addRow(key: string, row: Json): void {
-    throw new Error(`Can not insert ${row} at given ${key}`);
+  public addRow(_key: string, _row: Json): void {
+    throw new Error("Method not implemented.");
   }
 
   public bind(_host: IInflightHost, _ops: string[]): void {
-    throw new Error("Method not implemented.")
+    throw new Error("Method not implemented.");
   }
 
   public _toInflight(): string {

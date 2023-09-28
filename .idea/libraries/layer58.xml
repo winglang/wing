@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="layer58">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/apps/vscode-wing/node_modules/winglang/node_modules/@winglang/compiler/node_modules/@winglang/sdk/node_modules/@aws-cdk/asset-node-proxy-agent-v6/lib/layer.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

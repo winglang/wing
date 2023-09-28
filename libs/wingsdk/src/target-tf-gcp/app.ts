@@ -1,13 +1,13 @@
 import { Construct } from "constructs";
 import { Bucket } from "./bucket";
 import { Function } from "./function";
+import { Table } from "./table";
 import { GoogleProvider } from "../.gen/providers/google/provider";
 import { RandomProvider } from "../.gen/providers/random/provider";
 import { BUCKET_FQN, FUNCTION_FQN } from "../cloud";
 import { AppProps as CdktfAppProps } from "../core";
-import { CdktfApp } from "../shared-tf/app";
-import { Table } from "./table";
 import { TABLE_FQN } from "../ex";
+import { CdktfApp } from "../shared-tf/app";
 
 /**
  * GCP App props.
@@ -25,8 +25,8 @@ export interface AppProps extends CdktfAppProps {
   readonly region: string;
 
   /**
-  * Should environment variable be overriden
-  */
+   * Should environment variable be overriden
+   */
   readonly overrideEnv?: boolean;
 }
 
@@ -52,7 +52,7 @@ export class App extends CdktfApp {
 
     let projectId: string | undefined = props.projectId;
     if (projectId === undefined && !props.overrideEnv) {
-      projectId = process.env.GOOGLE_PROJECT_ID
+      projectId = process.env.GOOGLE_PROJECT_ID;
     }
     // Using env variable for location is work around until we are
     // able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
@@ -66,7 +66,7 @@ export class App extends CdktfApp {
     this.region = props.region ?? process.env.GOOGLE_REGION;
     let region: string | undefined = props.region;
     if (region === undefined && !props.overrideEnv) {
-      region = process.env.GOOGLE_REGION
+      region = process.env.GOOGLE_REGION;
     }
 
     if (region === undefined) {
@@ -84,11 +84,7 @@ export class App extends CdktfApp {
 
     if (props.rootConstruct) {
       const Root = props.rootConstruct;
-      if (this.isTestEnvironment) {
-        throw new Error("wing test not supported for tf-gcp target yet");
-      } else {
-        new Root(this, "Default");
-      }
+      new Root(this, "Default");
     }
   }
 

@@ -12,6 +12,7 @@ exports[`create a table 1`] = `
         ],
         "instance_name": "my_table-c8dce022",
         "name": "my_table-\${random_id.my_table_Id_2F48DF82.hex}",
+        "project": "my-project",
       },
     },
     "random_id": {

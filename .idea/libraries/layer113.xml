@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="layer113">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/apps/wing-console/console/server/node_modules/@winglang/compiler/node_modules/@winglang/sdk/node_modules/@aws-cdk/asset-kubectl-v20/lib/layer.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

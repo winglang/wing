@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="layer226">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/apps/vscode-wing/node_modules/winglang/node_modules/@wingconsole/app/node_modules/@wingconsole/server/node_modules/@winglang/compiler/node_modules/@winglang/wingc/node_modules/@winglang/sdk/node_modules/@aws-cdk/asset-awscli-v1/lib/layer.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

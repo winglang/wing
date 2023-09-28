@@ -9,6 +9,7 @@ import { generateTmpDir, withSpinner } from "../util";
 import { Target } from "@winglang/compiler";
 import { nanoid } from "nanoid";
 import { readFile, rm, rmSync } from "fs";
+import { TestRunnerClient } from "@winglang/sdk/lib/shared-aws/test-runner.inflight";
 
 const log = debug("wing:test");
 
@@ -105,16 +106,14 @@ function printResults(
   // prints a summary of how many tests passed and failed
   results.push(" ");
   results.push(
-    `${chalk.dim("Tests")}${failingTestsNumber ? chalk.red(` ${failingTestsNumber} failed`) : ""}${
-      failingTestsNumber && passingTestsNumber ? chalk.dim(" |") : ""
+    `${chalk.dim("Tests")}${failingTestsNumber ? chalk.red(` ${failingTestsNumber} failed`) : ""}${failingTestsNumber && passingTestsNumber ? chalk.dim(" |") : ""
     }${passingTestsNumber ? chalk.green(` ${passingTestsNumber} passed`) : ""} ${chalk.dim(
       `(${failingTestsNumber + passingTestsNumber})`
     )}`
   );
   // prints a summary of how many tests files passed and failed
   results.push(
-    `${chalk.dim("Test Files")}${failing.length ? chalk.red(` ${failing.length} failed`) : ""}${
-      failing.length && passing.length ? chalk.dim(" |") : ""
+    `${chalk.dim("Test Files")}${failing.length ? chalk.red(` ${failing.length} failed`) : ""}${failing.length && passing.length ? chalk.dim(" |") : ""
     }${passing.length ? chalk.green(` ${passing.length} passed`) : ""} ${chalk.dim(
       `(${totalSum})`
     )}`
@@ -149,6 +148,8 @@ async function testOne(entrypoint: string, options: TestOptions) {
       return await testSimulator(synthDir, options);
     case Target.TF_AWS:
       return await testTfAws(synthDir, options);
+    case Target.TF_GCP:
+      return await testTfGcp(synthDir, options);
     case Target.AWSCDK:
       return await testAwsCdk(synthDir, options);
     default:
@@ -375,9 +376,6 @@ async function testTfAws(synthDir: string, options: TestOptions): Promise<std.Te
 
     const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
       const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_ARNS);
-      const { TestRunnerClient } = await import(
-        "@winglang/sdk/lib/shared-aws/test-runner.inflight"
-      );
       const testRunner = new TestRunnerClient(testArns);
 
       const tests = await testRunner.listTests();
@@ -410,6 +408,10 @@ async function testTfAws(synthDir: string, options: TestOptions): Promise<std.Te
       noCleanUp(synthDir);
     }
   }
+}
+
+async function testTfGcp(_synthDir: string, _options: TestOptions): Promise<std.TestResult[] | void> {
+  throw new Error("GCP tests are not yet supported");
 }
 
 async function cleanupTf(synthDir: string) {
