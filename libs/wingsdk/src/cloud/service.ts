@@ -163,7 +163,7 @@ export interface IServiceClient {
 }
 
 /**
- * A resource with an inflight "onStart()" and "onStop()" methods.
+ * Executed when a `cloud.Service` is started.
  *
  * @inflight `@winglang/sdk.cloud.IServiceHandlerClient`
  */
@@ -200,6 +200,8 @@ export interface IServiceHandlerClient {
 }
 
 /**
+ * Executed when a `cloud.Service` is stopped.
+ *
  * @inflight `@winglang/sdk.cloud.IServiceStopHandlerClient`
  */
 export interface IServiceStopHandler extends IResource {}
