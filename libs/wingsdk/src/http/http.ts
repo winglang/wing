@@ -356,7 +356,7 @@ export class Util {
   }
 
   /**
-   * Formats a URL Struct into a String
+   * Serializes an URL Struct to a String.
    * @param url The URL Struct to be formatted.
    * @throws Will throw an error if the input URL has invalid fields.
    * @inflight
