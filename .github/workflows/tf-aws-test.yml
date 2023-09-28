@@ -15,7 +15,7 @@ env:
   NODE_VERSION: "18.16.0"
   # this variable indicates wheater to use wing cli from a local version (using the current repo code)
   # or use the latest remote npm version
-  LOCAL_BUILD: ${{ github.workflow == 'build'}}
+  LOCAL_BUILD: ${{ github.workflow == 'build' && github.event_name == 'workflow_dispatch'}}
   # indicates if the action triggered from a workflow_dispatch
   MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
   REPO: ${{inputs.repo || github.repository}}
@@ -26,7 +26,7 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     steps:
-      - name: check if allowed to run
+      - name: cancel run if not allowed
         if: ${{ env.MANUAL == 'true' && !contains(env.ALLOWED_USERS, github.actor)}}
         run: |
           echo "User ${{github.actor}} is not allowed to dispatch this action."
@@ -66,6 +66,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
 
       ##################### install a local wing version #########################
       - name: Download Dist Artifacts
@@ -86,7 +87,7 @@ jobs:
 
       #################### install a remote wing version ########################
       - name: Install winglang globally
-        if: ${{ env.LOCAL_BUILD == 'false' }}
+        if: ${{ env.LOCAL_BUILD == 'false' && env.MANUAL == 'false'}}
         uses: nick-fields/retry@v2
         with:
           max_attempts: 3
@@ -115,11 +116,14 @@ jobs:
           retry_on: error
           timeout_minutes: 30
           command: |
-            if  ${{ env.LOCAL_BUILD == 'false' }}
+            if  ${{ env.MANUAL == 'true' }}
             then
+              pnpm wing test -t sim ${{ matrix.test.directory }}/*.w
+            elif ${{ env.LOCAL_BUILD == 'false'}}
+            then 
               wing test -t sim ${{ matrix.test.directory }}/*.w
             else
-              ./localwing/node_modules/.bin/wing test -t sim ${{ matrix.test.directory }}/*.w
+            ./localwing/node_modules/.bin/wing test -t sim ${{ matrix.test.directory }}/*.w
             fi
 
       - name: Output Terraform log
