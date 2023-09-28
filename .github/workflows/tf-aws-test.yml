@@ -17,8 +17,8 @@ env:
   # or use the latest remote npm version
   LOCAL_BUILD: ${{ github.workflow == 'build'}}
   # indicates if we should run
-  MANUAL: ${{ github.event == 'workflow_dispatch' }}
-  USER: ${{ toJson(github.actor) }}
+  MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
+  USER: ${{ toJson(github) }}
 
 jobs:
   auth:
@@ -113,9 +113,9 @@ jobs:
           command: |
             if  ${{ env.LOCAL_BUILD == 'false' }}
             then
-              wing test -t tf-aws ${{ matrix.test.directory }}/*.w
+              wing test -t sim ${{ matrix.test.directory }}/*.w
             else
-              ./localwing/node_modules/.bin/wing test -t tf-aws ${{ matrix.test.directory }}/*.w
+              ./localwing/node_modules/.bin/wing test -t sim ${{ matrix.test.directory }}/*.w
             fi
 
       - name: Output Terraform log
