@@ -103,21 +103,28 @@ export async function compareBenchmarks(
   markdown += `| :-- | --: | --: | --: |\n`;
   for (const key in differences) {
     const diff = differences[key];
+    let prependSign = "";
+    let appendColor = "";
+    if (diff.meanDiff > 0) {
+      prependSign = "+";
+      appendColor = "🟥";
+    } else if (diff.meanDiff <= 0) {
+      appendColor = "🟩";
+    }
     let changeText = !!diff.meanPercentDiff
-      ? `${fmtNum(diff.meanDiff, "ms")} (${fmtNum(diff.meanPercentDiff, "%")})`
+      ? `${prependSign}${fmtNum(diff.meanDiff, "ms")} (${prependSign}${fmtNum(diff.meanPercentDiff, "%")})${appendColor}`
       : "...";
 
-    if (diff.meanDiff > 0) {
-      changeText = `+${changeText}🟥`;
-    } else if (diff.meanDiff <= 0) {
-      changeText = `${changeText}🟩`;
+    let beforeText = fmtNum(diff.meanBefore, "ms");
+    if(!isNaN(diff.meanBefore)) {
+      beforeText += `±${fmtNum(diff.moeBefore)}`;
+    }
+    let afterText = fmtNum(diff.meanAfter, "ms");
+    if(!isNaN(diff.meanAfter)) {
+      afterText += `±${fmtNum(diff.moeAfter)}`;
     }
 
-    markdown += `| ${key} | ${fmtNum(diff.meanBefore, "ms")}±${fmtNum(
-      diff.moeBefore
-    )} | ${fmtNum(diff.meanAfter, "ms")}±${fmtNum(
-      diff.moeAfter
-    )} | ${changeText} |\n`;
+    markdown += `| ${key} | ${beforeText} | ${afterText} | ${changeText} |\n`;
   }
 
   console.table(differences);
