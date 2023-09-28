@@ -45,7 +45,7 @@ export abstract class Service extends Resource implements IInflightHost {
     scope: Construct,
     id: string,
     handler: IServiceHandler,
-    props: ServiceProps
+    props: ServiceProps = {}
   ): Service {
     return App.of(scope).newAbstract(SERVICE_FQN, scope, id, handler, props);
   }

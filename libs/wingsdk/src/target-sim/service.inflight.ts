@@ -69,7 +69,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       // wing has a quirk where it will return either a function or an object that implements
       // "handle", depending on whether the closure is defined in an inflight context or preflight
       // context. so we need to handle both options here. (in wing this is handled by the compiler).
-      if (typeof(this.onStop) === "function") {
+      if (typeof this.onStop === "function") {
         await (this.onStop as any)();
       } else {
         await this.onStop.handle();
