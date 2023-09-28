@@ -1,9 +1,9 @@
 ---
-title: Wing Cloud Preview Environments
+title: "#3696 Wing Cloud Preview Environments"
 description: This document describes an MVP for the first Wing Cloud product - Wing Cloud Preview Environments.
 ---
 
-# #3696 - Wing Cloud Preview Environments
+# Wing Cloud Preview Environments
 
 - **Author(s)**: @ainvoner, @skyrpex
 - **Submission Date**: 2023-08-03
