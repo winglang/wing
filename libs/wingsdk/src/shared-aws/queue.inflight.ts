@@ -75,6 +75,12 @@ export class QueueClient implements IQueueClient {
         ReceiptHandle: message.ReceiptHandle,
       });
       await this.client.send(deleteCommand);
+    } else {
+      console.warn(
+        `No receipt handle found, message not deleted. Message: ${JSON.stringify(
+          message
+        )}`
+      );
     }
 
     return message.Body;
