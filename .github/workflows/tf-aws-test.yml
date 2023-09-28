@@ -30,7 +30,7 @@ jobs:
         with:
           username: ${{ github.actor }}
           team: "maintainers"
-          GITHUB_TOKEN: ${{ secrets.PAT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: print result
         run: echo ${{ steps.checkUserMember.outputs.isTeamMember }}
 
