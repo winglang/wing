@@ -1,12 +1,14 @@
 name: SDK Spec AWS Tests
 on:
-  release:
-    types:
-      - published
+  workflow_call: {}
   workflow_dispatch: {}
 
 env:
   AWS_REGION: "us-east-1"
+  NODE_VERSION: "18.16.0"
+  # this variable indicates wheater to use wing cli from a local version (using the current repo code)
+  # or use the latest remote npm version
+  LOCAL_BUILD: ${{ github.workflow == 'build'}}
 
 jobs:
   setup:
@@ -14,20 +16,16 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-      - name: Get list of directories
+      - name: Get list of directories and save them to the output
         id: setdirs
         shell: bash
         run: |
           dirs=$(ls -d examples/tests/sdk_tests/*/ | sed 's/\/$//' | grep -v "external" | jq -R -s -c 'split("\n")[:-1]')
           processed_dirs=$(echo "{ \"directory\": $dirs }" | jq -c '[ .directory[] | {directory: ., name: (split("/") | last)}]')
           wrapped_dirs=$(echo "{ \"test\": $processed_dirs }" | jq -c .)
-          echo "DIRS=$wrapped_dirs" >> $GITHUB_ENV
-      - name: Pass environment variable to output
-        id: passenv
-        run: |
-          echo "::set-output name=dirs::$DIRS"
+          echo "dirs=$wrapped_dirs" >> $GITHUB_OUTPUT
     outputs:
-      tests: ${{ steps.passenv.outputs.dirs }}
+      tests: ${{ steps.setdirs.outputs.dirs }}
 
   test-tf-aws:
     needs: setup
@@ -39,21 +37,44 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+
       - name: Setup Node.js v18
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: ${{ env.NODE_VERSION }}
+
+      ##################### install a local wing version #########################
+      - name: Download Dist Artifacts
+        if: ${{ env.LOCAL_BUILD ==  'true' }}
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: dist
+
+      - name: Install Wing from Dist
+        if: ${{ env.LOCAL_BUILD ==  'true' }}
+        run: |
+          mkdir localwing
+          cd localwing
+          npm init --yes
+          npm install ../dist/*-[0-9]*.[0-9]*.[0-9]*.tgz
+          ./node_modules/.bin/wing --version
+
+      #################### install a remote wing version ########################
       - name: Install winglang globally
+        if: ${{ env.LOCAL_BUILD == 'false' }}
         uses: nick-fields/retry@v2
         with:
           max_attempts: 3
           retry_on: error
           timeout_minutes: 5
           command: npm install -g winglang
+      ########################################################################
       - name: Installing external js modules
         run: |
           cd examples/tests/sdk_tests
           npm install
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -68,8 +89,15 @@ jobs:
         with:
           max_attempts: 3
           retry_on: error
-          timeout_minutes: 20
-          command: wing test -t tf-aws ${{ matrix.test.directory }}/*.w
+          timeout_minutes: 30
+          command: |
+            if  ${{ env.LOCAL_BUILD == 'false' }}
+            then
+              wing test -t tf-aws ${{ matrix.test.directory }}/*.w
+            else
+              ./localwing/node_modules/.bin/wing test -t tf-aws ${{ matrix.test.directory }}/*.w
+            fi
+
       - name: Output Terraform log
         if: failure()
         run: cat ${{ runner.workspace }}/terraform.log

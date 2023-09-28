@@ -78,6 +78,12 @@ export class DynamodbTable extends ex.DynamodbTable {
         resources: [this.table.arn],
       });
     }
+    if (ops.includes(ex.DynamodbTableInflightMethods.QUERY)) {
+      host.addPolicyStatements({
+        actions: ["dynamodb:Query"],
+        resources: [this.table.arn],
+      });
+    }
     if (ops.includes(ex.DynamodbTableInflightMethods.TRANSACT_WRITE_ITEMS)) {
       host.addPolicyStatements({
         actions: ["dynamodb:PutItem"],

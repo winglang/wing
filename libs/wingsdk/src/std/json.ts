@@ -9,6 +9,16 @@ export interface JsonStringifyOptions {
 }
 
 /**
+ * Json entry representation
+ */
+export interface JsonEntry {
+  /** The entry key */
+  readonly key: string;
+  /** The entry value */
+  readonly value: Json;
+}
+
+/**
  * Immutable Json
  */
 export class Json {
@@ -48,14 +58,11 @@ export class Json {
   /**
    * Returns the entries from the Json.
    *
-   * @macro (Object.entries($args$))
-   *
    * @param json map to get the entries from
-   * @returns the entries as Array<Json> consisting of enumerable [key, value] pairs
+   * @returns the entries as Array<JsonEntry>
    */
-  public static entries(json: Json): Json[] {
-    json;
-    throw new Error("Macro");
+  public static entries(json: Json): JsonEntry[] {
+    return Object.entries(json).map(([key, value]) => ({ key, value }));
   }
 
   /**

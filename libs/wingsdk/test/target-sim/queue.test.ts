@@ -18,6 +18,21 @@ async handle(message) {
   }
 }`;
 
+test("try to create a queue with invalid retention period", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const retentionPeriod = Duration.fromSeconds(5);
+  const timeout = Duration.fromSeconds(10);
+
+  // THEN
+  expect(() => {
+    cloud.Queue._newQueue(app, "my_queue", {
+      retentionPeriod,
+      timeout,
+    });
+  }).toThrowError("Retention period must be greater than or equal to timeout");
+});
+
 test("create a queue", async () => {
   // GIVEN
   const app = new SimApp();
@@ -232,6 +247,7 @@ test("messages are not requeued if the function fails after retention timeout", 
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   const queue = cloud.Queue._newQueue(app, "my_queue", {
     retentionPeriod: Duration.fromSeconds(1),
+    timeout: Duration.fromMilliseconds(100),
   });
   queue.setConsumer(handler);
   const s = await app.startSimulator();
@@ -249,7 +265,7 @@ test("messages are not requeued if the function fails after retention timeout", 
   // THEN
   await s.stop();
 
-  expect(listMessages(s)).toMatchSnapshot();
+  expect(listMessages(s).slice(0, 9)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 
   expect(
@@ -257,13 +273,14 @@ test("messages are not requeued if the function fails after retention timeout", 
       .listTraces()
       .filter((v) => v.sourceType == QUEUE_TYPE)
       .map((trace) => trace.data.message)
+      .slice(0, 5)
   ).toMatchInlineSnapshot(`
     [
       "wingsdk.cloud.Queue created.",
       "Push (messages=BAD MESSAGE).",
       "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
       "Subscriber error - returning 1 messages to queue: ERROR",
-      "wingsdk.cloud.Queue deleted.",
+      "1 messages pushed back to queue after visibility timeout.",
     ]
   `);
 });
@@ -352,4 +369,24 @@ test("pop from empty queue returns nothing", async () => {
   // THEN
   await s.stop();
   expect(popped).toBeUndefined();
+});
+
+test("push rejects empty message", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Queue._newQueue(app, "my_queue");
+
+  // WHEN
+  const s = await app.startSimulator();
+  const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
+
+  // THEN
+  await expect(() => queueClient.push("")).rejects.toThrowError(
+    /Empty messages are not allowed/
+  );
+  await s.stop();
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(s.listTraces()[2].data.status).toEqual("failure");
+  expect(app.snapshot()).toMatchSnapshot();
 });

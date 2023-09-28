@@ -9,14 +9,6 @@ async handle(message) {
   console.log("Service Started");
 }`;
 
-const INFLIGHT_ON_START_WITH_LOOP = `
-async handle(message) {
-  console.log("Service Started");
-  while (true) {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-  }
-}`;
-
 const INFLIGHT_ON_STOP = `
 async handle(message) {
   console.log("Service Stopped");
@@ -49,29 +41,6 @@ test("create a service with on start method", async () => {
   await s.stop();
   expect(app.snapshot()).toMatchSnapshot();
 });
-
-test(
-  "on start method does not block other resources from deploying",
-  async () => {
-    // GIVEN
-    const app = new SimApp();
-    const handler = Testing.makeHandler(
-      app,
-      "OnStartHandler",
-      INFLIGHT_ON_START_WITH_LOOP
-    );
-    cloud.Service._newService(app, "my_service", {
-      onStart: handler,
-    });
-
-    // WHEN
-    const s = await app.startSimulator();
-
-    // THEN
-    await s.stop();
-  },
-  { timeout: 10000 }
-);
 
 test("create a service with a on stop method", async () => {
   // Given

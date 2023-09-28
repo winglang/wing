@@ -52,8 +52,6 @@ test("website with invalid path should throw error", () => {
   }).toThrowError(
     "ENOENT: no such file or directory, scandir '/absolute/non-existent'"
   );
-
-  // THEN
 });
 
 test("website with add_json", () => {
@@ -103,6 +101,4 @@ test("website with invalid path should throw error", () => {
     );
     app.synth();
   }).toThrowError('key must have a .json suffix. (current: "txt")');
-
-  // THEN
 });
