@@ -2053,14 +2053,14 @@ All string declaration variants are multi-line.
 #### 6.2.1 Normal strings "..."
 
 The string inside the double quotes is processed, and all notations of form
-`${<expression>}` are substituted from their respective scopes. The behavior is
+`{<expression>}` are substituted from their respective scopes. The behavior is
 similar to `` `text ${sub.prop}` `` notation in JavaScript.  
 Processing unicode escape sequences happens in these strings.  
-`"` can be escaped with backslash `\` inside string substitutions.
+`"` and `{` can be escaped with backslash `\` inside string substitutions.
 
 > ```TS
 > let name = "World";
-> let s = "Hello, ${name}!";
+> let s = "Hello, {name}!";
 > let l = s.length;
 > ```
 
