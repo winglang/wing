@@ -156,17 +156,6 @@ test("start and stop service", async () => {
 test("consecutive start and stop service", async () => {
   // GIVEN
   const app = new SimApp();
-  const onStartHandler = Testing.makeHandler(
-    app,
-    "OnStartHandler",
-    INFLIGHT_ON_START
-  );
-  const onStopHandler = Testing.makeHandler(
-    app,
-    "OnStopHandler",
-    INFLIGHT_ON_STOP
-  );
-
   cloud.Service._newService(
     app,
     "my_service",
