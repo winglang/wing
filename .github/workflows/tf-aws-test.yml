@@ -18,7 +18,7 @@ env:
   LOCAL_BUILD: ${{ github.workflow == 'build'}}
   # indicates if we should run
   MANUAL: ${{ github.event == 'workflow_dispatch' }}
-  USER: ${{ fromJson(github.actor) }}
+  USER: ${{ toJson(github.actor) }}
 
 jobs:
   auth:
@@ -29,6 +29,7 @@ jobs:
         run: |
           echo ${{env.USER}}
           exit 1
+
   setup:
     needs: auth
     runs-on: ubuntu-latest
