@@ -1,7 +1,12 @@
 name: SDK Spec AWS Tests
 on:
   workflow_call: {}
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      repo:
+        type: string
+      ref:
+        type: string
 
 env:
   AWS_REGION: "us-east-1"
@@ -9,8 +14,19 @@ env:
   # this variable indicates wheater to use wing cli from a local version (using the current repo code)
   # or use the latest remote npm version
   LOCAL_BUILD: ${{ github.workflow == 'build'}}
+  # indicates if we should run
+  MANUAL: ${{ github.event == 'workflow_dispatch' }}
+  USER: ${{ fromJson(github.user) }}
 
 jobs:
+  auth:
+    runs-on: ubuntu-latest
+    steps:
+      - name: check if allowed to run
+        if: ${{ env.MANUAL == 'true' }}
+        run: |
+          echo ${{env.USER}}
+          exit 1
   setup:
     runs-on: ubuntu-latest
     steps:
