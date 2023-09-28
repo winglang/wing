@@ -291,3 +291,6 @@ test "inflight schema usage" {
   s.validate(jMyStruct);
   assert(schema.asStr() == Json.stringify(expectedSchema));
 }
+
+// Check that imported files can use .fromJson on structs defined within them
+new otherExternalStructs.UsesStructInImportedFile();
