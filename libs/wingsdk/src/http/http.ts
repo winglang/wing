@@ -147,24 +147,58 @@ export interface Response {
   readonly body?: string;
 }
 
+/**
+ * An URL following WHATWG URL Standard.
+ */
 export interface Url {
+  /** The entire URL. */
   readonly href: string;
+
+  /** The URL's protocol. */
   readonly protocol: string;
+
+  /** The URL's host. */
   readonly host: string;
+
+  /** The URL's hostname. */
   readonly hostname: string;
+
+  /** The URL's port. */
   readonly port: string;
+
+  /** The URL's pathname. */
   readonly pathname: string;
+
+  /** The URL's search. */
   readonly search: string;
+
+  /** The URL's fragment. */
   readonly hash: string;
+
+  /** The URL's origin. */
   readonly origin: string;
+
+  /** The URL's username. */
   readonly username: string;
+
+  /** The URL’s password. */
   readonly password: string;
 }
 
+/**
+ * Options for serializing a WHATWG URL to a String.
+ */
 export interface FormatUrlOptions {
+  /** Whether the formatted URL should include the username and password. */
   readonly auth?: boolean;
+
+  /** Whether the formatted URL should include the fragment identifier. */
   readonly fragment?: boolean;
+
+  /** Whether the formatted URL should include the search query. */
   readonly search?: boolean;
+
+  /** Whether the formatted URL should represent Unicode characters for the host component. */
   readonly unicode?: boolean;
 }
 
