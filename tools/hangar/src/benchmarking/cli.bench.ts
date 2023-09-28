@@ -33,7 +33,7 @@ describe("compile", async () => {
         },
         {
           warmupIterations: 1,
-          iterations: 10,
+          iterations: 15,
           time: 0,
           setup: async (f) => {
             f.opts.beforeEach = async () => {
