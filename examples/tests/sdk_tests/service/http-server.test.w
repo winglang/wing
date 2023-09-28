@@ -24,7 +24,6 @@ if util.env("WING_TARGET") == "sim" {
       this.b = new cloud.Bucket();
       this.body = body;
 
-      // it's idiomatic to just pass `this` here and implement the callbacks on the current object.
       this.s = new cloud.Service(inflight () => {
         log("starting service");
         let server = MyService.createServer(this.body);
