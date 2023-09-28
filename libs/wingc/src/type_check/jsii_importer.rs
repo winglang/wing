@@ -201,9 +201,12 @@ impl<'a> JsiiImporter<'a> {
 				)
 			}
 		} else {
+			let ns_env = self
+				.wing_types
+				.add_symbol_env(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0));
 			let ns = self.wing_types.add_namespace(Namespace {
 				name: assembly.to_string(),
-				env: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0),
+				envs: vec![ns_env],
 				loaded: false,
 				module_path: ResolveSource::ExternalModule(assembly.to_string()),
 			});
@@ -229,7 +232,12 @@ impl<'a> JsiiImporter<'a> {
 				.as_namespace_ref()
 				.unwrap();
 
-			if let Some(symb) = parent_ns.env.lookup_mut(&namespace_name.into(), None) {
+			if let Some(symb) = parent_ns
+				.envs
+				.get_mut(0)
+				.unwrap()
+				.lookup_mut(&namespace_name.into(), None)
+			{
 				if let SymbolKind::Namespace(_) = symb {
 					// do nothing
 				} else {
@@ -240,6 +248,9 @@ impl<'a> JsiiImporter<'a> {
 					)
 				}
 			} else {
+				let ns_env = self
+					.wing_types
+					.add_symbol_env(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0));
 				// Special case for the SDK, we are able to alias the namespace
 				let module_path = if assembly == WINGSDK_ASSEMBLY_NAME {
 					format!("{}/{}", lookup_vec.join("/"), namespace_name)
@@ -249,12 +260,14 @@ impl<'a> JsiiImporter<'a> {
 
 				let ns = self.wing_types.add_namespace(Namespace {
 					name: namespace_name.to_string(),
-					env: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0),
+					envs: vec![ns_env],
 					loaded: false,
 					module_path: ResolveSource::ExternalModule(module_path),
 				});
 				parent_ns
-					.env
+					.envs
+					.get_mut(0)
+					.unwrap()
 					.define(
 						&Symbol::global(namespace_name),
 						SymbolKind::Namespace(ns),
@@ -953,9 +966,12 @@ impl<'a> JsiiImporter<'a> {
 				.lookup(&assembly.name.as_str().into(), None)
 				.is_none()
 			{
+				let ns_env = self
+					.wing_types
+					.add_symbol_env(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0));
 				let ns = self.wing_types.add_namespace(Namespace {
 					name: assembly.name.clone(),
-					env: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0),
+					envs: vec![ns_env],
 					loaded: false,
 					module_path: ResolveSource::ExternalModule(assembly.name.clone()),
 				});
@@ -1022,7 +1038,9 @@ impl<'a> JsiiImporter<'a> {
 			.0
 			.as_namespace_ref()
 			.unwrap();
-		ns.env
+		ns.envs
+			.get_mut(0)
+			.unwrap()
 			.define(&symbol, SymbolKind::Type(type_ref), StatementIdx::Top)
 			.expect(&format!("Invalid JSII library: failed to define type {}", fqn));
 	}
