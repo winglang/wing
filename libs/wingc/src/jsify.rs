@@ -210,6 +210,7 @@ impl<'a> JSifier<'a> {
 			output.close("};");
 			output.close("};");
 		} else {
+			output.add_code(self.jsify_struct_schemas());
 			output.add_code(js);
 			let exports = get_public_symbols(&scope);
 			output.line(format!(

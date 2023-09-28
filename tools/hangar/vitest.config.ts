@@ -6,7 +6,7 @@ export default defineConfig({
     exclude: [...configDefaults.exclude, "**/tmp/**"],
     reporters: ["verbose"],
     benchmark: {
-      reporters: ["default", "json"],
+      reporters: ["default", "./src/benchmarking/reporter" as any],
       outputFile: {
         json: join(__dirname, "results", "report.json"),
       },
