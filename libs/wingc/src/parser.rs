@@ -180,10 +180,13 @@ pub fn parse_wing_project(
 			continue;
 		}
 
+		// Parse the file or directory
 		let dependent_wing_paths = match file_or_dir_path.is_dir() {
 			true => parse_wing_directory(&file_or_dir_path, files, file_graph, tree_sitter_trees, asts),
 			false => parse_wing_file(&file_or_dir_path, None, files, file_graph, tree_sitter_trees, asts),
 		};
+
+		// Add the dependent files to the stack of files to parse
 		unparsed_files.extend(dependent_wing_paths);
 	}
 
@@ -239,6 +242,7 @@ fn parse_wing_file(
 
 	let tree_sitter_root = tree_sitter_tree.root_node();
 
+	// Parse the source text into an AST
 	let parser = Parser::new(&source_text.as_bytes(), source_path.to_owned());
 	let (scope, dependent_wing_paths) = parser.parse(&tree_sitter_root);
 
@@ -262,7 +266,17 @@ fn parse_wing_directory(
 	for entry in fs::read_dir(&source_path).expect("read_dir call failed") {
 		let entry = entry.unwrap();
 		let path = Utf8PathBuf::from_path_buf(entry.path()).expect("invalid utf8 path");
-		if path.is_dir() || path.extension() == Some("w") {
+
+		// If it's a directory and its name is not node_modules or .git or ending in .tmp, add it
+		// or if it's a file and its extension is .w, add it
+		//
+		// TODO: skip directories that don't contain any .w files anywhere in their subtree
+		if (path.is_dir()
+			&& path.file_name() != Some("node_modules")
+			&& path.file_name() != Some(".git")
+			&& path.extension() != Some("tmp"))
+			|| path.extension() == Some("w")
+		{
 			files_and_dirs.push(path);
 		}
 	}
@@ -270,7 +284,7 @@ fn parse_wing_directory(
 	// Sort the files and directories so that we always visit them in the same order
 	files_and_dirs.sort();
 
-	// Parse the file here (since it doesn't exist)
+	// Create a fake AST (since the directory doesn't have any source code to parse)
 	let mut tree_sitter_parser = tree_sitter::Parser::new();
 	tree_sitter_parser.set_language(tree_sitter_wing::language()).unwrap();
 	let tree_sitter_tree = tree_sitter_parser.parse("", None).unwrap();
@@ -2238,7 +2252,7 @@ impl<'s> Parser<'s> {
 	}
 }
 
-fn is_entrypoint_file(path: &Utf8Path) -> bool {
+pub fn is_entrypoint_file(path: &Utf8Path) -> bool {
 	path
 		.file_name()
 		.map(|s| s == "main.w" || s.ends_with(".main.w") || s.ends_with(".test.w"))
