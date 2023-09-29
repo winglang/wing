@@ -2,7 +2,8 @@
 // They should not be consumed directly by users.
 // TODO: This should be an interface, currently Wing does not support interface JSII imports
 
-import { Json } from "./json";
+import { Json, JsonValidationOptions } from "./json";
+import { JsonSchema } from "./json_schema";
 import { InflightClient } from "../core";
 
 /**
@@ -20,14 +21,19 @@ export class String {
   /**
    * Parse string from Json.
    *
-   * @macro ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })($args$)
-   *
    * @param json to create string from.
    * @returns a string.
    */
-  public static fromJson(json: Json): string {
-    json;
-    throw new Error("Macro");
+  public static fromJson(
+    json: Json,
+    validationOptions?: JsonValidationOptions
+  ): string {
+    const schema = JsonSchema._createJsonSchema({
+      id: "string",
+      type: "string",
+    } as any);
+    schema.validate(json, validationOptions);
+    return json as any;
   }
 
   private constructor() {}

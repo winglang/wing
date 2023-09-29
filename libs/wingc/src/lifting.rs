@@ -131,6 +131,14 @@ impl<'a> LiftVisitor<'a> {
 			},
 		);
 
+		// if is_udt_struct_type(node, self.ctx.current_env().unwrap()) {
+		// 	let type_ = resolve_user_defined_type(node, self.ctx.current_env().unwrap(), 0);
+		// 	let schema_generator = JsonSchemaGenerator::new();
+		// 	udt_js = format!("$stdlib.std.Struct._createJsonSchema({})", schema_generator
+		// 		.create_from_struct(type_.unwrap().as_struct().unwrap())
+		// 		.to_string());
+		// }
+
 		let current_env = self.ctx.current_env().expect("an env");
 		if let Some(SymbolKind::Namespace(root_namespace)) = current_env.lookup(&node.root, None) {
 			let type_path = node.field_path_str();
