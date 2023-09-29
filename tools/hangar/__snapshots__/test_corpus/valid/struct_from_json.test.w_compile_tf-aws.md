@@ -103,6 +103,27 @@ module.exports = function({ $MyStruct, $_schema_asStr___, $expectedSchema, $jMyS
 
 ```
 
+## inflight.$Closure5-2.js
+```js
+module.exports = function({ $Student, $std_Boolean, $std_Number, $std_String }) {
+  class $Closure5 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      (await $std_String.fromJson(10,{ unsafe: true }));
+      (await $std_Boolean.fromJson(10,{ unsafe: true }));
+      (await $std_Number.fromJson("cool",{ unsafe: true }));
+      ((json, validateOptions) => ($Student._fromJson(json, validateOptions)))(({"obviously": "not a student"}),{ unsafe: true });
+    }
+  }
+  return $Closure5;
+}
+
+```
+
 ## inflight.UsesStructInImportedFile-1.js
 ```js
 module.exports = function({  }) {
@@ -302,6 +323,36 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    class $Closure5 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        (std.Node.of(this)).hidden = true;
+      }
+      static _toInflightType(context) {
+        return `
+          require("./inflight.$Closure5-2.js")({
+            $Student: ${context._lift(Student)},
+            $std_Boolean: ${context._lift($stdlib.core.toLiftableModuleType(std.Boolean, "@winglang/sdk/std", "Boolean"))},
+            $std_Number: ${context._lift($stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"))},
+            $std_String: ${context._lift($stdlib.core.toLiftableModuleType(std.String, "@winglang/sdk/std", "String"))},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure5Client = ${$Closure5._toInflightType(this)};
+            const client = new $Closure5Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
+      }
+    }
     const j = ({"public": false});
     const x = ((json, validateOptions) => (cloud_BucketProps._fromJson(json, validateOptions)))(j);
     {((cond) => {if (!cond) throw new Error("assertion failed: x.public == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x.public,false)))};
@@ -419,6 +470,11 @@ class $Root extends $stdlib.std.Resource {
     const expectedSchema = ({"id": "/MyStruct","type": "object","properties": ({"m1": ({"type": "object","properties": ({"val": ({"type": "number"})}),"required": ["val"]}),"m2": ({"type": "object","properties": ({"val": ({"type": "string"})}),"required": ["val"]})}),"required": ["m1", "m2"]});
     {((cond) => {if (!cond) throw new Error("assertion failed: schema.asStr() == Json.stringify(expectedSchema)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((schema.asStr()),((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([expectedSchema]))))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight schema usage",new $Closure4(this,"$Closure4"));
+    (std.String.fromJson(10,{ unsafe: true }));
+    (std.Boolean.fromJson(10,{ unsafe: true }));
+    (std.Number.fromJson("cool",{ unsafe: true }));
+    ((json, validateOptions) => (Student._fromJson(json, validateOptions)))(({"obviously": "not a student"}),{ unsafe: true });
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:unsafe flight",new $Closure5(this,"$Closure5"));
     new otherExternalStructs.UsesStructInImportedFile(this,"otherExternalStructs.UsesStructInImportedFile");
   }
 }
