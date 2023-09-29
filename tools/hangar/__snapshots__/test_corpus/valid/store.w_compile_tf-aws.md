@@ -1,37 +1,5 @@
 # [store.w](../../../../../examples/tests/valid/store.w) | compile | tf-aws
 
-## Point.Struct.js
-```js
-module.exports = function(stdStruct) {
-  class Point {
-    static jsonSchema() {
-      return {
-        id: "/Point",
-        type: "object",
-        properties: {
-          x: { type: "number" },
-          y: { type: "number" },
-        },
-        required: [
-          "x",
-          "y",
-        ],
-        $defs: {
-        }
-      }
-    }
-    static fromJson(obj) {
-      return stdStruct._validate(obj, this.jsonSchema())
-    }
-    static _toInflightType(context) {
-      return `require("./Point.Struct.js")(${ context._lift(stdStruct) })`;
-    }
-  }
-  return Point;
-};
-
-```
-
 ## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $__parent_this_1_b }) {
@@ -122,6 +90,7 @@ module.exports = function({ $stdlib }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -235,7 +204,6 @@ class $Root extends $stdlib.std.Resource {
         return tmp;
       })({})
     ;
-    const Point = require("./Point.Struct.js")($stdlib.std.Struct);
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

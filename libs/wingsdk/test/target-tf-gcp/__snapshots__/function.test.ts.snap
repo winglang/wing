@@ -1,0 +1,744 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`basic function 1`] = `
+{
+  "resource": {
+    "google_cloudfunctions_function": {
+      "Function_DefaultFunction_81B206D7": {
+        "available_memory_mb": 128,
+        "description": "This function was created by Wing",
+        "entry_point": "handler",
+        "environment_variables": {},
+        "name": "function-c852aba6",
+        "project": "my-project",
+        "region": "us-central1",
+        "runtime": "nodejs16",
+        "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
+        "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
+        "timeout": 60,
+        "trigger_http": true,
+      },
+    },
+    "google_storage_bucket": {
+      "Function_FunctionBucket_CD7D2793": {
+        "location": "us-central1",
+        "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
+        "public_access_prevention": "enforced",
+        "uniform_bucket_level_access": true,
+      },
+    },
+    "google_storage_bucket_object": {
+      "Function_FunctionObjectBucket_A7CD2097": {
+        "bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
+        "name": "objects",
+        "source": "<source>",
+      },
+    },
+    "random_id": {
+      "Function_FunctionBucket_Id_216676D0": {
+        "byte_length": 4,
+      },
+    },
+  },
+}
+`;
+
+exports[`basic function 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Function": {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformAsset",
+                      "version": "0.17.0",
+                    },
+                    "id": "Asset",
+                    "path": "root/Default/Function/Asset",
+                  },
+                  "DefaultFunction": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "DefaultFunction",
+                    "path": "root/Default/Function/DefaultFunction",
+                  },
+                  "FunctionBucket": {
+                    "children": {
+                      "Default": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "Default",
+                        "path": "root/Default/Function/FunctionBucket/Default",
+                      },
+                      "Id": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "Id",
+                        "path": "root/Default/Function/FunctionBucket/Id",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.70",
+                    },
+                    "display": {
+                      "description": "A cloud object store",
+                      "title": "Bucket",
+                    },
+                    "id": "FunctionBucket",
+                    "path": "root/Default/Function/FunctionBucket",
+                  },
+                  "FunctionObjectBucket": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "FunctionObjectBucket",
+                    "path": "root/Default/Function/FunctionObjectBucket",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "A cloud function (FaaS)",
+                  "title": "Function",
+                },
+                "id": "Function",
+                "path": "root/Default/Function",
+              },
+              "Handler": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "An inflight resource",
+                  "hidden": true,
+                  "title": "Inflight",
+                },
+                "id": "Handler",
+                "path": "root/Default/Handler",
+              },
+              "google": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.17.0",
+                },
+                "id": "google",
+                "path": "root/Default/google",
+              },
+              "random": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.17.0",
+                },
+                "id": "random",
+                "path": "root/Default/random",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.2.70",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.17.0",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.17.0",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.17.0",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`basic function with environment variables 1`] = `
+{
+  "resource": {
+    "google_cloudfunctions_function": {
+      "Function_DefaultFunction_81B206D7": {
+        "available_memory_mb": 128,
+        "description": "This function was created by Wing",
+        "entry_point": "handler",
+        "environment_variables": {
+          "BOOM": "BAM",
+          "FOO": "BAR",
+        },
+        "name": "function-c852aba6",
+        "project": "my-project",
+        "region": "us-central1",
+        "runtime": "nodejs16",
+        "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
+        "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
+        "timeout": 60,
+        "trigger_http": true,
+      },
+    },
+    "google_storage_bucket": {
+      "Function_FunctionBucket_CD7D2793": {
+        "location": "us-central1",
+        "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
+        "public_access_prevention": "enforced",
+        "uniform_bucket_level_access": true,
+      },
+    },
+    "google_storage_bucket_object": {
+      "Function_FunctionObjectBucket_A7CD2097": {
+        "bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
+        "name": "objects",
+        "source": "<source>",
+      },
+    },
+    "random_id": {
+      "Function_FunctionBucket_Id_216676D0": {
+        "byte_length": 4,
+      },
+    },
+  },
+}
+`;
+
+exports[`basic function with environment variables 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Function": {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformAsset",
+                      "version": "0.17.0",
+                    },
+                    "id": "Asset",
+                    "path": "root/Default/Function/Asset",
+                  },
+                  "DefaultFunction": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "DefaultFunction",
+                    "path": "root/Default/Function/DefaultFunction",
+                  },
+                  "FunctionBucket": {
+                    "children": {
+                      "Default": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "Default",
+                        "path": "root/Default/Function/FunctionBucket/Default",
+                      },
+                      "Id": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "Id",
+                        "path": "root/Default/Function/FunctionBucket/Id",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.70",
+                    },
+                    "display": {
+                      "description": "A cloud object store",
+                      "title": "Bucket",
+                    },
+                    "id": "FunctionBucket",
+                    "path": "root/Default/Function/FunctionBucket",
+                  },
+                  "FunctionObjectBucket": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "FunctionObjectBucket",
+                    "path": "root/Default/Function/FunctionObjectBucket",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "A cloud function (FaaS)",
+                  "title": "Function",
+                },
+                "id": "Function",
+                "path": "root/Default/Function",
+              },
+              "Handler": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "An inflight resource",
+                  "hidden": true,
+                  "title": "Inflight",
+                },
+                "id": "Handler",
+                "path": "root/Default/Handler",
+              },
+              "google": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.17.0",
+                },
+                "id": "google",
+                "path": "root/Default/google",
+              },
+              "random": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.17.0",
+                },
+                "id": "random",
+                "path": "root/Default/random",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.2.70",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.17.0",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.17.0",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.17.0",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`basic function with memory beyond the allowed range 1`] = `"Memory must be between 128 and 8192 MB for GCP Cloud Functions"`;
+
+exports[`basic function with memory size specified 1`] = `
+{
+  "resource": {
+    "google_cloudfunctions_function": {
+      "Function_DefaultFunction_81B206D7": {
+        "available_memory_mb": 256,
+        "description": "This function was created by Wing",
+        "entry_point": "handler",
+        "environment_variables": {},
+        "name": "function-c852aba6",
+        "project": "my-project",
+        "region": "us-central1",
+        "runtime": "nodejs16",
+        "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
+        "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
+        "timeout": 60,
+        "trigger_http": true,
+      },
+    },
+    "google_storage_bucket": {
+      "Function_FunctionBucket_CD7D2793": {
+        "location": "us-central1",
+        "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
+        "public_access_prevention": "enforced",
+        "uniform_bucket_level_access": true,
+      },
+    },
+    "google_storage_bucket_object": {
+      "Function_FunctionObjectBucket_A7CD2097": {
+        "bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
+        "name": "objects",
+        "source": "<source>",
+      },
+    },
+    "random_id": {
+      "Function_FunctionBucket_Id_216676D0": {
+        "byte_length": 4,
+      },
+    },
+  },
+}
+`;
+
+exports[`basic function with memory size specified 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Function": {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformAsset",
+                      "version": "0.17.0",
+                    },
+                    "id": "Asset",
+                    "path": "root/Default/Function/Asset",
+                  },
+                  "DefaultFunction": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "DefaultFunction",
+                    "path": "root/Default/Function/DefaultFunction",
+                  },
+                  "FunctionBucket": {
+                    "children": {
+                      "Default": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "Default",
+                        "path": "root/Default/Function/FunctionBucket/Default",
+                      },
+                      "Id": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "Id",
+                        "path": "root/Default/Function/FunctionBucket/Id",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.70",
+                    },
+                    "display": {
+                      "description": "A cloud object store",
+                      "title": "Bucket",
+                    },
+                    "id": "FunctionBucket",
+                    "path": "root/Default/Function/FunctionBucket",
+                  },
+                  "FunctionObjectBucket": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "FunctionObjectBucket",
+                    "path": "root/Default/Function/FunctionObjectBucket",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "A cloud function (FaaS)",
+                  "title": "Function",
+                },
+                "id": "Function",
+                "path": "root/Default/Function",
+              },
+              "Handler": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "An inflight resource",
+                  "hidden": true,
+                  "title": "Inflight",
+                },
+                "id": "Handler",
+                "path": "root/Default/Handler",
+              },
+              "google": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.17.0",
+                },
+                "id": "google",
+                "path": "root/Default/google",
+              },
+              "random": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.17.0",
+                },
+                "id": "random",
+                "path": "root/Default/random",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.2.70",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.17.0",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.17.0",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.17.0",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`basic function with timeout beyond the allowed range 1`] = `"Timeout must be between 1 and 540 seconds for GCP Cloud Functions"`;
+
+exports[`basic function with timeout explicitly set 1`] = `
+{
+  "resource": {
+    "google_cloudfunctions_function": {
+      "Function_DefaultFunction_81B206D7": {
+        "available_memory_mb": 128,
+        "description": "This function was created by Wing",
+        "entry_point": "handler",
+        "environment_variables": {},
+        "name": "function-c852aba6",
+        "project": "my-project",
+        "region": "us-central1",
+        "runtime": "nodejs16",
+        "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
+        "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
+        "timeout": 30,
+        "trigger_http": true,
+      },
+    },
+    "google_storage_bucket": {
+      "Function_FunctionBucket_CD7D2793": {
+        "location": "us-central1",
+        "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
+        "public_access_prevention": "enforced",
+        "uniform_bucket_level_access": true,
+      },
+    },
+    "google_storage_bucket_object": {
+      "Function_FunctionObjectBucket_A7CD2097": {
+        "bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
+        "name": "objects",
+        "source": "<source>",
+      },
+    },
+    "random_id": {
+      "Function_FunctionBucket_Id_216676D0": {
+        "byte_length": 4,
+      },
+    },
+  },
+}
+`;
+
+exports[`basic function with timeout explicitly set 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Function": {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformAsset",
+                      "version": "0.17.0",
+                    },
+                    "id": "Asset",
+                    "path": "root/Default/Function/Asset",
+                  },
+                  "DefaultFunction": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "DefaultFunction",
+                    "path": "root/Default/Function/DefaultFunction",
+                  },
+                  "FunctionBucket": {
+                    "children": {
+                      "Default": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "Default",
+                        "path": "root/Default/Function/FunctionBucket/Default",
+                      },
+                      "Id": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "Id",
+                        "path": "root/Default/Function/FunctionBucket/Id",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.70",
+                    },
+                    "display": {
+                      "description": "A cloud object store",
+                      "title": "Bucket",
+                    },
+                    "id": "FunctionBucket",
+                    "path": "root/Default/Function/FunctionBucket",
+                  },
+                  "FunctionObjectBucket": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "FunctionObjectBucket",
+                    "path": "root/Default/Function/FunctionObjectBucket",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "A cloud function (FaaS)",
+                  "title": "Function",
+                },
+                "id": "Function",
+                "path": "root/Default/Function",
+              },
+              "Handler": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "An inflight resource",
+                  "hidden": true,
+                  "title": "Inflight",
+                },
+                "id": "Handler",
+                "path": "root/Default/Handler",
+              },
+              "google": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.17.0",
+                },
+                "id": "google",
+                "path": "root/Default/google",
+              },
+              "random": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.17.0",
+                },
+                "id": "random",
+                "path": "root/Default/random",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.2.70",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.17.0",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.17.0",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.17.0",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;

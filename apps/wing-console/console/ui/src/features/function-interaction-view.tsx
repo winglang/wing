@@ -12,6 +12,7 @@ export const FunctionInteractionView = ({
 
   return (
     <FunctionInteraction
+      resourceId={resourcePath}
       onInvokeClick={invokeFunction}
       isLoading={isLoading}
       response={response}

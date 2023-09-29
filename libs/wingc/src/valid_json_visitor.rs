@@ -26,7 +26,7 @@ impl<'a> ValidJsonVisitor<'a> {
 
 impl<'a> Visit<'_> for ValidJsonVisitor<'a> {
 	fn visit_expr(&mut self, expr: &Expr) {
-		if let Some(t) = self.types.try_get_expr_type(expr) {
+		if let Some(t) = self.types.try_get_expr_type(expr.id) {
 			// if the type is json with known values, then we may need to validate that the values are legal json values
 			if let Type::Json(Some(JsonData { kind, expression_id })) = &*t {
 				// if this json expr is not being cast to something else, then it must be a legal json value

@@ -124,7 +124,7 @@ exports[`basic function 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.69",
+                      "version": "10.2.70",
                     },
                     "display": {
                       "description": "A cloud object store",
@@ -144,7 +144,7 @@ exports[`basic function 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -156,7 +156,7 @@ exports[`basic function 2`] = `
               "Handler": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -201,7 +201,7 @@ exports[`basic function 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.69",
+              "version": "10.2.70",
             },
             "id": "Default",
             "path": "root/Default",
@@ -360,7 +360,7 @@ exports[`basic function with environment variables 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.69",
+                      "version": "10.2.70",
                     },
                     "display": {
                       "description": "A cloud object store",
@@ -380,7 +380,7 @@ exports[`basic function with environment variables 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -392,7 +392,7 @@ exports[`basic function with environment variables 2`] = `
               "Handler": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -437,7 +437,7 @@ exports[`basic function with environment variables 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.69",
+              "version": "10.2.70",
             },
             "id": "Default",
             "path": "root/Default",
@@ -558,7 +558,7 @@ exports[`replace invalid character from function name 2`] = `
               "Handler": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -639,7 +639,7 @@ exports[`replace invalid character from function name 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.69",
+                      "version": "10.2.70",
                     },
                     "display": {
                       "description": "A cloud object store",
@@ -659,7 +659,7 @@ exports[`replace invalid character from function name 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -671,7 +671,7 @@ exports[`replace invalid character from function name 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.69",
+              "version": "10.2.70",
             },
             "id": "Default",
             "path": "root/Default",

@@ -117,7 +117,8 @@ module.exports = grammar({
         $.enum_definition,
         $.try_catch_statement,
         $.compiler_dbg_env,
-        $.super_constructor_statement
+        $.super_constructor_statement,
+        $.throw_statement,
       ),
 
     import_statement: ($) =>
@@ -148,13 +149,19 @@ module.exports = grammar({
     return_statement: ($) =>
       seq("return", optional(field("expression", $.expression)), $._semicolon),
 
+    throw_statement: ($) =>
+      seq("throw", optional(field("expression", $.expression)), $._semicolon),
+
+    assignment_operator: ($) => choice("=", "+=", "-="),
+
     variable_assignment_statement: ($) =>
       seq(
         field("name", alias($.reference, $.lvalue)),
-        "=",
+        field("operator", $.assignment_operator),
         field("value", $.expression),
         $._semicolon
       ),
+
 
     expression_statement: ($) => seq($.expression, $._semicolon),
 
@@ -281,7 +288,19 @@ module.exports = grammar({
         "=",
         field("value", $.expression),
         field("block", $.block),
+        repeat(field("elif_let_block", $.elif_let_block)),
         optional(seq("else", field("else_block", $.block)))
+      ),
+
+    elif_let_block: ($) =>
+      seq(
+        "elif",
+        "let",
+        optional(field("reassignable", $.reassignable)),
+        field("name", $.identifier),
+        "=",
+        field("value", $.expression),
+        field("block", $.block)
       ),
 
     if_statement: ($) =>
@@ -513,7 +532,7 @@ module.exports = grammar({
 
     async_modifier: ($) => "async",
 
-    access_modifier: ($) => choice("public", "private", "protected"),
+    access_modifier: ($) => choice("pub", "protected", "internal"),
 
     variadic: ($) => "...",
 

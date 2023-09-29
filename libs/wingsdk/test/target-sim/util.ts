@@ -1,8 +1,8 @@
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
+import { Simulator } from "../../src/simulator";
 import { Trace } from "../../src/std";
-import { Simulator } from "../../src/testing";
 
 export function readJsonSync(file: string) {
   return JSON.parse(readFileSync(file, "utf-8"));

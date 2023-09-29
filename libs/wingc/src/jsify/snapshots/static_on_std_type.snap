@@ -23,7 +23,7 @@ module.exports = function({ $std_Json, $std_String }) {
       return $obj;
     }
     async handle() {
-      {console.log(((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })("hello"))};
+      {console.log((await $std_String.fromJson("hello")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.values(Json {}).length == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((Object.values(({}))).length,0)))};
     }
   }
@@ -35,6 +35,7 @@ module.exports = function({ $std_Json, $std_String }) {
 
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -49,8 +50,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $std_Json: ${context._lift(std.Json)},
-            $std_String: ${context._lift(std.String)},
+            $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+            $std_String: ${context._lift($stdlib.core.toLiftableModuleType(std.String, "@winglang/sdk/std", "String"))},
           })
         `;
       }

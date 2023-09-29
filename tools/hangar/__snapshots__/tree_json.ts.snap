@@ -127,14 +127,6 @@ exports[`tree.json for an app with many resources 1`] = `
                             "id": "Default",
                             "path": "root/Default/Default/BigPublisher/b2/Default",
                           },
-                          "Encryption": {
-                            "constructInfo": {
-                              "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
-                            },
-                            "id": "Encryption",
-                            "path": "root/Default/Default/BigPublisher/b2/Encryption",
-                          },
                           "S3BucketNotification": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
@@ -294,14 +286,6 @@ exports[`tree.json for an app with many resources 1`] = `
                             },
                             "id": "Default",
                             "path": "root/Default/Default/BigPublisher/cloud.Bucket/Default",
-                          },
-                          "Encryption": {
-                            "constructInfo": {
-                              "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
-                            },
-                            "id": "Encryption",
-                            "path": "root/Default/Default/BigPublisher/cloud.Bucket/Encryption",
                           },
                         },
                         "constructInfo": {
@@ -599,14 +583,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         "id": "Default",
                         "path": "root/Default/Default/cloud.Bucket/Default",
                       },
-                      "Encryption": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
-                        },
-                        "id": "Encryption",
-                        "path": "root/Default/Default/cloud.Bucket/Encryption",
-                      },
                     },
                     "constructInfo": {
                       "fqn": "@winglang/sdk.cloud.Bucket",
@@ -620,70 +596,6 @@ exports[`tree.json for an app with many resources 1`] = `
                     "path": "root/Default/Default/cloud.Bucket",
                   },
                   "test:dependency cycles": {
-                    "children": {
-                      "Handler": {
-                        "children": {
-                          "Asset": {
-                            "constructInfo": {
-                              "fqn": "cdktf.TerraformAsset",
-                              "version": "0.17.0",
-                            },
-                            "id": "Asset",
-                            "path": "root/Default/Default/test:dependency cycles/Handler/Asset",
-                          },
-                          "Default": {
-                            "constructInfo": {
-                              "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
-                            },
-                            "id": "Default",
-                            "path": "root/Default/Default/test:dependency cycles/Handler/Default",
-                          },
-                          "IamRole": {
-                            "constructInfo": {
-                              "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
-                            },
-                            "id": "IamRole",
-                            "path": "root/Default/Default/test:dependency cycles/Handler/IamRole",
-                          },
-                          "IamRolePolicy": {
-                            "constructInfo": {
-                              "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
-                            },
-                            "id": "IamRolePolicy",
-                            "path": "root/Default/Default/test:dependency cycles/Handler/IamRolePolicy",
-                          },
-                          "IamRolePolicyAttachment": {
-                            "constructInfo": {
-                              "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
-                            },
-                            "id": "IamRolePolicyAttachment",
-                            "path": "root/Default/Default/test:dependency cycles/Handler/IamRolePolicyAttachment",
-                          },
-                          "S3Object": {
-                            "constructInfo": {
-                              "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
-                            },
-                            "id": "S3Object",
-                            "path": "root/Default/Default/test:dependency cycles/Handler/S3Object",
-                          },
-                        },
-                        "constructInfo": {
-                          "fqn": "@winglang/sdk.cloud.Function",
-                          "version": "0.0.0",
-                        },
-                        "display": {
-                          "description": "A cloud function (FaaS)",
-                          "title": "Function",
-                        },
-                        "id": "Handler",
-                        "path": "root/Default/Default/test:dependency cycles/Handler",
-                      },
-                    },
                     "constructInfo": {
                       "fqn": "@winglang/sdk.std.Test",
                       "version": "0.0.0",
@@ -696,70 +608,6 @@ exports[`tree.json for an app with many resources 1`] = `
                     "path": "root/Default/Default/test:dependency cycles",
                   },
                   "test:test": {
-                    "children": {
-                      "Handler": {
-                        "children": {
-                          "Asset": {
-                            "constructInfo": {
-                              "fqn": "cdktf.TerraformAsset",
-                              "version": "0.17.0",
-                            },
-                            "id": "Asset",
-                            "path": "root/Default/Default/test:test/Handler/Asset",
-                          },
-                          "Default": {
-                            "constructInfo": {
-                              "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
-                            },
-                            "id": "Default",
-                            "path": "root/Default/Default/test:test/Handler/Default",
-                          },
-                          "IamRole": {
-                            "constructInfo": {
-                              "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
-                            },
-                            "id": "IamRole",
-                            "path": "root/Default/Default/test:test/Handler/IamRole",
-                          },
-                          "IamRolePolicy": {
-                            "constructInfo": {
-                              "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
-                            },
-                            "id": "IamRolePolicy",
-                            "path": "root/Default/Default/test:test/Handler/IamRolePolicy",
-                          },
-                          "IamRolePolicyAttachment": {
-                            "constructInfo": {
-                              "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
-                            },
-                            "id": "IamRolePolicyAttachment",
-                            "path": "root/Default/Default/test:test/Handler/IamRolePolicyAttachment",
-                          },
-                          "S3Object": {
-                            "constructInfo": {
-                              "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
-                            },
-                            "id": "S3Object",
-                            "path": "root/Default/Default/test:test/Handler/S3Object",
-                          },
-                        },
-                        "constructInfo": {
-                          "fqn": "@winglang/sdk.cloud.Function",
-                          "version": "0.0.0",
-                        },
-                        "display": {
-                          "description": "A cloud function (FaaS)",
-                          "title": "Function",
-                        },
-                        "id": "Handler",
-                        "path": "root/Default/Default/test:test/Handler",
-                      },
-                    },
                     "constructInfo": {
                       "fqn": "@winglang/sdk.std.Test",
                       "version": "0.0.0",

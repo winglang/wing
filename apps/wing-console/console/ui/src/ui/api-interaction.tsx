@@ -9,6 +9,7 @@ import {
   useKeyValueList,
   useTheme,
 } from "@wingconsole/design-system";
+import { createPersistentState } from "@wingconsole/use-persistent-state";
 import classNames from "classnames";
 import { useCallback, useEffect, useId, useState } from "react";
 
@@ -27,6 +28,7 @@ import { ApiResponseBodyPanel } from "./api-response-body-panel.js";
 import { ApiResponseHeadersPanel } from "./api-response-headers-panel.js";
 
 export interface ApiInteractionProps {
+  resourceId: string;
   appMode: AppMode;
   apiResponse?: ApiResponse;
   schemaData: any;
@@ -35,6 +37,7 @@ export interface ApiInteractionProps {
 }
 
 export const ApiInteraction = ({
+  resourceId,
   appMode,
   apiResponse,
   callFetch,
@@ -42,18 +45,25 @@ export const ApiInteraction = ({
   isLoading,
 }: ApiInteractionProps) => {
   const { theme } = useTheme();
+
+  const { usePersistentState } = createPersistentState(resourceId);
   const bodyId = useId();
 
-  const [url, setUrl] = useState<string>("");
+  const [url, setUrl] = useState("");
   const [routes, setRoutes] = useState<ApiRoute[]>([]);
-  const [currentRoute, setCurrentRoute] = useState<string>("");
-  const [currentMethod, setCurrentMethod] = useState<string>("GET");
-  const [body, setBody] = useState<string>("");
-  const [currentHeaderKey, setCurrentHeaderKey] = useState<string>("");
+
   const [valuesList, setValuesList] = useState<string[]>([]);
 
-  const [currentOptionsTab, setCurrentOptionsTab] = useState("headers");
-  const [currentResponseTab, setCurrentResponseTab] = useState("body");
+  const [currentHeaderKey, setCurrentHeaderKey] = usePersistentState("");
+  const [currentRoute, setCurrentRoute] = usePersistentState("");
+
+  const [currentMethod, setCurrentMethod] = usePersistentState("GET");
+  const [body, setBody] = usePersistentState("");
+
+  const [currentOptionsTab, setCurrentOptionsTab] =
+    usePersistentState("headers");
+  const [currentResponseTab, setCurrentResponseTab] =
+    usePersistentState("body");
 
   const {
     items: headers,
@@ -61,7 +71,9 @@ export const ApiInteraction = ({
     removeItem: removeHeader,
     editItem: editHeader,
     removeAll: removeAllHeaders,
-  } = useKeyValueList();
+  } = useKeyValueList({
+    useState: usePersistentState,
+  });
 
   const {
     items: queryParameters,
@@ -70,14 +82,18 @@ export const ApiInteraction = ({
     editItem: editQueryParameter,
     setItems: setQueryParameters,
     removeAll: removeAllQueryParameters,
-  } = useKeyValueList();
+  } = useKeyValueList({
+    useState: usePersistentState,
+  });
 
   const {
     items: pathVariables,
     editItem: editPathVariable,
     setItems: setPathVariables,
     removeAll: removeAllPathVariables,
-  } = useKeyValueList();
+  } = useKeyValueList({
+    useState: usePersistentState,
+  });
 
   const resetApiState = () => {
     setCurrentRoute("");
@@ -94,7 +110,7 @@ export const ApiInteraction = ({
     if (!url || !currentMethod || !currentRoute) {
       return;
     }
-    await callFetch({
+    callFetch({
       url,
       route: currentRoute,
       variables: pathVariables,
@@ -179,7 +195,7 @@ export const ApiInteraction = ({
     if (!schemaData) {
       return;
     }
-    resetApiState();
+
     setUrl(schemaData.url);
     const routes = getRoutesFromOpenApi(schemaData.openApiSpec);
     setRoutes(routes);
@@ -318,6 +334,7 @@ export const ApiInteraction = ({
                             Query params
                           </div>
                         )}
+
                         <KeyValueList
                           items={queryParameters}
                           onAddItem={addQueryParameter}
@@ -331,6 +348,7 @@ export const ApiInteraction = ({
                           <div className={classNames("text-sm", theme.text2)}>
                             Path variables
                           </div>
+
                           <KeyValueList
                             items={pathVariables}
                             onEditItem={editPathVariable}

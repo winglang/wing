@@ -27,7 +27,7 @@ const runApiTest = async (
   expect(result).toEqual(response);
 };
 
-describe(`${__dirname}/index.w`, () => {
+describe(`${__dirname}/main.w`, () => {
   test("get method", async ({ page }) => {
     await runApiTest(page, "GET", "/test-get", "Hello GET!");
   });

@@ -17,7 +17,7 @@ export function TopResizableWidget(props: TopResizableWidgetProps) {
     <div className={classNames("relative", className)} ref={resizeTarget}>
       <div
         className={classNames(
-          "absolute inset-x-0 -top-0.5 h-1 cursor-row-resize transition-colors ease-in-out hover:bg-sky-500 z-20",
+          "absolute inset-x-0 -top-[2.5px] h-1 cursor-row-resize transition-colors ease-in-out hover:bg-sky-500 z-20",
           "cursor-row-resize",
         )}
         onPointerDown={(event) => {

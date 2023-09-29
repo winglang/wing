@@ -1,6 +1,0 @@
-{
-  "registry.terraform.io/hashicorp/aws": "4.65.0",
-  "registry.terraform.io/hashicorp/random": "3.5.1",
-  "registry.terraform.io/hashicorp/azurerm": "3.54.0",
-  "registry.terraform.io/hashicorp/google": "4.63.1"
-}

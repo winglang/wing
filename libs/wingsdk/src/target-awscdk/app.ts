@@ -14,6 +14,7 @@ import { Secret } from "./secret";
 import { TestRunner } from "./test-runner";
 import { CdkTokens } from "./tokens";
 import { Topic } from "./topic";
+import { Website } from "./website";
 
 import {
   BUCKET_FQN,
@@ -24,6 +25,7 @@ import {
   SECRET_FQN,
   TOPIC_FQN,
   SCHEDULE_FQN,
+  WEBSITE_FQN,
 } from "../cloud";
 import {
   App as CoreApp,
@@ -53,6 +55,8 @@ export class App extends CoreApp {
   public readonly outdir: string;
   public readonly isTestEnvironment: boolean;
   public readonly _tokens: CdkTokens;
+
+  public readonly _target = "awscdk";
 
   private readonly cdkApp: cdk.App;
   private readonly cdkStack: cdk.Stack;
@@ -178,6 +182,9 @@ export class App extends CoreApp {
 
       case ON_DEPLOY_FQN:
         return new OnDeploy(scope, id, args[0], args[1]);
+
+      case WEBSITE_FQN:
+        return new Website(scope, id, args[0]);
     }
     return undefined;
   }

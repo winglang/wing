@@ -1,7 +1,8 @@
-use itertools::Itertools;
 use std::env;
 use std::fs::read_dir;
-use std::path::Path;
+
+use camino::Utf8Path;
+use itertools::Itertools;
 use tempfile;
 
 use crate::{
@@ -51,8 +52,9 @@ pub fn compile_fail(code: &str) -> String {
 /// Compiles `code` and returns the capture scanner results as a string that can be snapshotted
 fn compile_code(code: &str) -> String {
 	let outdir = tempfile::tempdir().unwrap();
+	let outdir_path = Utf8Path::from_path(outdir.path()).unwrap();
 
-	let source_path = Path::new("main.w");
+	let source_path = Utf8Path::new("main.w");
 
 	// NOTE: this is needed for debugging to work regardless of where you run the test
 	env::set_current_dir(env!("CARGO_MANIFEST_DIR")).unwrap();
@@ -60,7 +62,7 @@ fn compile_code(code: &str) -> String {
 	// convert tabs to 2 spaces
 	let code = code.replace("\t", "  ");
 
-	let result = compile(source_path, code.clone(), Some(outdir.path()), Some(outdir.path()));
+	let result = compile(source_path, code.clone(), Some(outdir_path), Some(outdir_path));
 
 	let mut snap = vec![];
 

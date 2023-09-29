@@ -35,11 +35,11 @@ log("${jsonHomogeneousArrayValue}");
 ```js playground
 let x: num = 42;
 let jsonNum = Json x;
-log("${j}"); // 42
+log("${jsonNum}"); // 42
 
 let chars = Array<str>["a", "b"];
 let jsonChars = Json chars;
-log("${chars}"); // ["a","b"]
+log("${jsonChars}"); // ["a","b"]
 
 let jsonComplex = Json { "first": x, "second": chars };
 log("${jsonComplex}"); // {"first": 42, "second": ["a","b"]}
@@ -115,4 +115,17 @@ let j = Json {
 log(j.get("k").asBool());
 ```
 
-Future support for converting to structs and other types: [#2188](https://github.com/winglang/wing/issues/2118)
+## Safely convert to structs
+```js playground
+struct Foo {
+  val1: str;
+  val2: num;
+}
+
+let jFoo = {
+  val1: "cool",
+  val2: 21
+};
+
+let foo = Foo.fromJson(jFoo);
+```

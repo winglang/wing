@@ -2,7 +2,7 @@
   "name": "examples-invalid",
   "dependencies": {
     "cdktf": "0.17.0",
-    "constructs": "^10",
+    "constructs": "^10.2.70",
     "jsii-code-samples": "1.7.0"
   },
   "volta": {

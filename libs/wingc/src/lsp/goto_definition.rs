@@ -2,6 +2,8 @@ use crate::lsp::sync::PROJECT_DATA;
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 use tree_sitter::Point;
 
+use super::sync::check_utf8;
+
 #[no_mangle]
 pub unsafe extern "C" fn wingc_on_goto_definition(ptr: u32, len: u32) -> u64 {
 	let parse_string = ptr_to_string(ptr, len);
@@ -19,7 +21,7 @@ pub fn on_goto_definition(params: lsp_types::GotoDefinitionParams) -> Vec<lsp_ty
 	PROJECT_DATA.with(|project_data| {
 		let project_data = project_data.borrow();
 		let uri = params.text_document_position_params.text_document.uri;
-		let file = uri.to_file_path().ok().expect("LSP only works on real filesystems");
+		let file = check_utf8(uri.to_file_path().expect("LSP only works on real filesystems"));
 		let wing_source = project_data.files.get_file(&file).unwrap().as_bytes();
 
 		let point = Point::new(

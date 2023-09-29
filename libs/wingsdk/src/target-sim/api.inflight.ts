@@ -17,11 +17,11 @@ import {
   parseHttpMethod,
   sanitizeParamLikeObject,
 } from "../cloud";
-import { TraceType } from "../std";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
-} from "../testing/simulator";
+} from "../simulator/simulator";
+import { TraceType } from "../std";
 
 const LOCALHOST_ADDRESS = "127.0.0.1";
 
@@ -38,6 +38,7 @@ export class Api
     props;
     this.routes = [];
     this.context = context;
+    const { corsHeaders } = props;
 
     // Set up an express server that handles the routes.
     this.app = express();
@@ -46,6 +47,30 @@ export class Api
     // matching the limit to aws api gateway's payload size limit:
     // https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html
     this.app.use(express.text({ limit: "10mb", type: "*/*" }));
+
+    // Set up CORS headers for options requests.
+    if (corsHeaders) {
+      this.app.use((req, res, next) => {
+        const method =
+          req.method && req.method.toUpperCase && req.method.toUpperCase();
+
+        if (method === "OPTIONS") {
+          for (const [key, value] of Object.entries(
+            corsHeaders.optionsResponse
+          )) {
+            res.setHeader(key, value);
+          }
+          res.status(204).send();
+        } else {
+          for (const [key, value] of Object.entries(
+            corsHeaders.defaultResponse
+          )) {
+            res.setHeader(key, value);
+          }
+          next();
+        }
+      });
+    }
   }
 
   public async addEventSubscription(
@@ -155,6 +180,7 @@ export class Api
   public async cleanup(): Promise<void> {
     this.addTrace(`Closing server on ${this.url}`);
     this.server?.close();
+    this.server?.closeAllConnections();
   }
 
   private addTrace(message: string): void {

@@ -1,8 +1,8 @@
 use crate::{
 	ast::{
 		ArgList, BringSource, CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
-		FunctionSignature, Interface, InterpolatedStringPart, Literal, NewExpr, Reference, Scope, Stmt, StmtKind, Symbol,
-		TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		FunctionSignature, IfLet, Interface, InterpolatedStringPart, Literal, NewExpr, Reference, Scope, Stmt, StmtKind,
+		Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -97,9 +97,10 @@ where
 		StmtKind::Bring { source, identifier } => {
 			match &source {
 				BringSource::BuiltinModule(name) => v.visit_symbol(name),
-				BringSource::WingLibrary { name, root_file: _ } => v.visit_symbol(name),
-				BringSource::JsiiLibrary(name) => v.visit_symbol(name),
-				BringSource::WingModule(name) => v.visit_symbol(name),
+				BringSource::WingLibrary(name) => v.visit_symbol(name),
+				BringSource::JsiiModule(name) => v.visit_symbol(name),
+				BringSource::WingFile(name) => v.visit_symbol(name),
+				BringSource::Directory(name) => v.visit_symbol(name),
 			}
 			if let Some(identifier) = identifier {
 				v.visit_symbol(identifier);
@@ -132,16 +133,22 @@ where
 			v.visit_scope(statements);
 		}
 		StmtKind::Break | StmtKind::Continue => {}
-		StmtKind::IfLet {
+		StmtKind::IfLet(IfLet {
 			value,
 			statements,
 			reassignable: _,
 			var_name,
+			elif_statements,
 			else_statements,
-		} => {
+		}) => {
 			v.visit_symbol(var_name);
 			v.visit_expr(value);
 			v.visit_scope(statements);
+			for elif in elif_statements {
+				v.visit_symbol(&elif.var_name);
+				v.visit_expr(&elif.value);
+				v.visit_scope(&elif.statements);
+			}
 			if let Some(statements) = else_statements {
 				v.visit_scope(statements);
 			}
@@ -165,7 +172,11 @@ where
 		StmtKind::Expression(expr) => {
 			v.visit_expr(&expr);
 		}
-		StmtKind::Assignment { variable, value } => {
+		StmtKind::Assignment {
+			kind: _,
+			variable,
+			value,
+		} => {
 			v.visit_reference(variable);
 			v.visit_expr(value);
 		}
@@ -173,6 +184,9 @@ where
 			if let Some(expr) = expr {
 				v.visit_expr(expr);
 			}
+		}
+		StmtKind::Throw(expr) => {
+			v.visit_expr(expr);
 		}
 		StmtKind::Scope(scope) => {
 			v.visit_scope(scope);
@@ -243,7 +257,7 @@ where
 	}
 
 	if let Some(extend) = &node.parent {
-		v.visit_expr(&extend);
+		v.visit_user_defined_type(extend);
 	}
 
 	for implement in &node.implements {
@@ -271,7 +285,7 @@ pub fn visit_new_expr<'ast, V>(v: &mut V, node: &'ast NewExpr)
 where
 	V: Visit<'ast> + ?Sized,
 {
-	v.visit_expr(&node.class);
+	v.visit_user_defined_type(&node.class);
 	v.visit_args(&node.arg_list);
 	if let Some(id) = &node.obj_id {
 		v.visit_expr(&id);
@@ -403,11 +417,8 @@ where
 			v.visit_expr(object);
 			v.visit_symbol(property);
 		}
-		Reference::TypeReference(type_) => {
-			v.visit_user_defined_type(type_);
-		}
-		Reference::TypeMember { typeobject, property } => {
-			v.visit_expr(typeobject);
+		Reference::TypeMember { type_name, property } => {
+			v.visit_user_defined_type(type_name);
 			v.visit_symbol(property);
 		}
 	}
@@ -482,12 +493,7 @@ where
 			}
 			v.visit_type_annotation(&f.return_type);
 		}
-		TypeAnnotationKind::UserDefined(t) => {
-			v.visit_symbol(&t.root);
-			for field in &t.fields {
-				v.visit_symbol(field);
-			}
-		}
+		TypeAnnotationKind::UserDefined(t) => v.visit_user_defined_type(t),
 	}
 }
 

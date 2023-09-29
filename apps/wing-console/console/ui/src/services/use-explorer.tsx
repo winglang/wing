@@ -44,6 +44,7 @@ export const useExplorer = () => {
 
   const setSelectedNode = trpc["app.selectNode"].useMutation();
   const selectedNode = trpc["app.selectedNode"].useQuery();
+  const nodeIds = trpc["app.nodeIds"].useQuery();
 
   const onSelectedItemsChange = useCallback(
     (selectedItems: string[]) => {
@@ -60,11 +61,19 @@ export const useExplorer = () => {
       return;
     }
     setItems([createTreeMenuItemFromExplorerTreeItem(tree.data)]);
-
-    setSelectedNode.mutate({
-      resourcePath: "root",
-    });
   }, [tree.data, setItems]);
+
+  useEffect(() => {
+    if (!nodeIds.data) {
+      return;
+    }
+
+    if (!selectedNode.data || !nodeIds.data?.includes(selectedNode.data)) {
+      setSelectedNode.mutate({
+        resourcePath: "root",
+      });
+    }
+  }, [selectedNode.data, nodeIds.data]);
 
   useEffect(() => {
     if (!selectedNode.data) {

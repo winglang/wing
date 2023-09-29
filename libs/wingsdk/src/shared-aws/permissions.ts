@@ -46,7 +46,7 @@ export function calculateQueuePermissions(
 
   if (ops.includes(cloud.QueueInflightMethods.POP)) {
     policies.push({
-      actions: ["sqs:ReceiveMessage"],
+      actions: ["sqs:ReceiveMessage", "sqs:DeleteMessage"],
       resources: [arn],
     });
   }

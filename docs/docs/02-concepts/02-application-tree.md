@@ -4,7 +4,7 @@ title: Application tree
 ---
 
 Instances of preflight classes in Wing are identified by a unique name.
-The name is used to identify the resource in the Wing Console, and is typically used for determining the logical name of the resource in the target provisioning engine (such as Terraform or CloudFormation), and the physical name of the resource in the target cloud provider (such as AWS, Azure, or GCP).
+The name is used to identify the resource in the Wing Console, and is used to determine the logical name assigned to the resource in the infrastructure provisioning engine (such as Terraform or CloudFormation), and the physical name of the resource in the target cloud provider (such as AWS, Azure, or GCP).
 
 The default name of a resource is the name of the class. The name can be overridden using the `as` syntax:
 

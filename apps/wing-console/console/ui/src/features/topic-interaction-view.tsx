@@ -20,5 +20,10 @@ export const TopicInteractionView = ({ resourcePath }: TopicViewProps) => {
     showNotification("Message published", { body: message, type: "success" });
   };
 
-  return <TopicInteraction onPublishClick={handlePublish} />;
+  return (
+    <TopicInteraction
+      resourceId={resourcePath}
+      onPublishClick={handlePublish}
+    />
+  );
 };

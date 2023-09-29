@@ -3,16 +3,17 @@
   "extends": ["//"],
   "pipeline": {
     "compile": {
+      "dependsOn": ["@winglang/wingii#compile", "@winglang/tree-sitter-wing#compile"],
       "outputs": [
         "../../target/wasm32-wasi/release/wingc.wasm",
         "../../target/wasm32-wasi/release/libwingc.*"
       ]
     },
     "test": {
-      "dependsOn": ["compile", "examples-valid#topo", "examples-invalid#topo"]
+      "dependsOn": ["compile", "@winglang/sdk#compile", "examples-valid#topo", "examples-invalid#topo"]
     },
     "dev": {
-      "cache": false
+      "dependsOn": ["@winglang/sdk#compile"]
     }
   }
 }

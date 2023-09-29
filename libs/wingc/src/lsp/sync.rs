@@ -1,3 +1,4 @@
+use camino::{Utf8Path, Utf8PathBuf};
 use indexmap::IndexMap;
 use lsp_types::{DidChangeTextDocumentParams, DidOpenTextDocumentParams};
 use wingii::type_system::TypeSystem;
@@ -28,9 +29,9 @@ pub struct ProjectData {
 	/// A graph that tracks the dependencies between files
 	pub file_graph: FileGraph,
 	/// tree-sitter trees
-	pub trees: IndexMap<PathBuf, Tree>,
+	pub trees: IndexMap<Utf8PathBuf, Tree>,
 	/// AST for each file
-	pub asts: IndexMap<PathBuf, Scope>,
+	pub asts: IndexMap<Utf8PathBuf, Scope>,
 	/// The JSII imports for the file. This is saved so we can load JSII types (for autocompletion for example)
 	/// which don't exist explicitly in the source.
 	pub jsii_imports: Vec<JsiiImportSpec>,
@@ -134,6 +135,8 @@ fn partial_compile(
 	// Reset diagnostics before new compilation (`partial_compile` can be called multiple times)
 	reset_diagnostics();
 
+	let source_path = Utf8Path::from_path(source_path).expect("invalid unicide path");
+
 	let topo_sorted_files = parse_wing_project(
 		&source_path,
 		source_text,
@@ -164,7 +167,14 @@ fn partial_compile(
 	// Wing files, then move on to files that depend on those, etc.)
 	for file in &topo_sorted_files {
 		let mut scope = project_data.asts.get_mut(file).expect("matching AST not found");
-		type_check(&mut scope, &mut types, &file, jsii_types, &mut jsii_imports);
+		type_check(
+			&mut scope,
+			&mut types,
+			&file,
+			&project_data.file_graph,
+			jsii_types,
+			&mut jsii_imports,
+		);
 
 		// Validate the type checker didn't miss anything - see `TypeCheckAssert` for details
 		let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
@@ -180,7 +190,13 @@ fn partial_compile(
 	// source_file will never be "" because it is the path to the file being compiled and lsp does not allow empty paths
 	let project_dir = source_path.parent().expect("Empty filename");
 
-	let jsifier = JSifier::new(&mut types, &project_data.files, &source_path, &project_dir);
+	let jsifier = JSifier::new(
+		&mut types,
+		&project_data.files,
+		&project_data.file_graph,
+		&source_path,
+		&project_dir,
+	);
 	for file in &topo_sorted_files {
 		let mut lift = LiftVisitor::new(&jsifier);
 		let scope = project_data.asts.remove(file).expect("matching AST not found");
@@ -189,6 +205,10 @@ fn partial_compile(
 	}
 
 	// no need to JSify in the LSP
+}
+
+pub fn check_utf8(path: PathBuf) -> Utf8PathBuf {
+	path.try_into().expect("invalid unicode path")
 }
 
 #[cfg(test)]

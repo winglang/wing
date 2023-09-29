@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/usr/bin/env bash
+
 scriptdir=$(cd $(dirname $0) && pwd)
 workdir="$HOME/.winglang-docsite"
 docsdir=$(cd $scriptdir/../docs && pwd)

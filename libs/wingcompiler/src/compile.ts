@@ -101,6 +101,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   // in the future we may look for a unified approach
   process.env["WING_TARGET"] = options.target;
   process.env["WING_IS_TEST"] = testing.toString();
+  process.env["WING_PLUGIN_PATHS"] = resolvePluginPaths(options.plugins ?? []);
 
   const tempProcess: { env: Record<string, string | undefined> } = { env: { ...process.env } };
 
@@ -197,7 +198,6 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     console,
     __dirname: workDir,
     __filename: artifactPath,
-    $plugins: resolvePluginPaths(options.plugins ?? []),
     // since the SDK is loaded in the outer VM, we need these to be the same class instance,
     // otherwise "instanceof" won't work between preflight code and the SDK. this is needed e.g. in
     // `serializeImmutableData` which has special cases for serializing these types.
@@ -240,12 +240,12 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
  * if absolute path is not provided.
  *
  * @param plugins list of plugin paths (absolute or relative)
- * @returns list of absolute plugin paths or relative to cwd
+ * @returns list of absolute plugin paths or relative to cwd, joined by ";"
  */
-function resolvePluginPaths(plugins: string[]): string[] {
+function resolvePluginPaths(plugins: string[]): string {
   const resolvedPluginPaths: string[] = [];
   for (const plugin of plugins) {
     resolvedPluginPaths.push(resolve(process.cwd(), plugin));
   }
-  return resolvedPluginPaths;
+  return resolvedPluginPaths.join(";");
 }

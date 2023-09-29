@@ -106,18 +106,6 @@ exports[`default website behavior 1`] = `
         "policy": "\${data.aws_iam_policy_document.Website_AllowDistributionReadOnly_24CFF6C0.json}",
       },
     },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "Website_Encryption_5BBFE612": {
-        "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256",
-            },
-          },
-        ],
-      },
-    },
     "aws_s3_bucket_website_configuration": {
       "Website_BucketWebsiteConfiguration_58F891B4": {
         "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
@@ -202,14 +190,6 @@ exports[`default website behavior 2`] = `
                     "id": "DistributionS3BucketPolicy",
                     "path": "root/Default/Website/DistributionS3BucketPolicy",
                   },
-                  "Encryption": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "Encryption",
-                    "path": "root/Default/Website/Encryption",
-                  },
                   "File--b.html": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -237,7 +217,7 @@ exports[`default website behavior 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A static website",
@@ -267,7 +247,7 @@ exports[`default website behavior 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -280,7 +260,7 @@ exports[`default website behavior 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.69",
+              "version": "10.2.70",
             },
             "id": "Default",
             "path": "root/Default",
@@ -419,18 +399,6 @@ exports[`website with add_json 1`] = `
         "policy": "\${data.aws_iam_policy_document.Website_AllowDistributionReadOnly_24CFF6C0.json}",
       },
     },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "Website_Encryption_5BBFE612": {
-        "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256",
-            },
-          },
-        ],
-      },
-    },
     "aws_s3_bucket_website_configuration": {
       "Website_BucketWebsiteConfiguration_58F891B4": {
         "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
@@ -524,14 +492,6 @@ exports[`website with add_json 2`] = `
                     "id": "DistributionS3BucketPolicy",
                     "path": "root/Default/Website/DistributionS3BucketPolicy",
                   },
-                  "Encryption": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "Encryption",
-                    "path": "root/Default/Website/Encryption",
-                  },
                   "File--b.html": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -567,7 +527,7 @@ exports[`website with add_json 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A static website",
@@ -597,7 +557,7 @@ exports[`website with add_json 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -610,7 +570,7 @@ exports[`website with add_json 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.69",
+              "version": "10.2.70",
             },
             "id": "Default",
             "path": "root/Default",

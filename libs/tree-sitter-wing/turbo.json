@@ -3,7 +3,7 @@
   "extends": ["//"],
   "pipeline": {
     "build:generate": {
-      "inputs": ["grammar.js", "src/scanner.c"],
+      "inputs": ["!*.wasm", "*", "grammar.js", "src/scanner.c"],
       "outputs": ["src/**", "!src/scanner.c", "bindings/**", "binding.gyp"]
     },
     "build:wasm": {
@@ -11,7 +11,8 @@
       "outputs": ["tree-sitter-wing.wasm"]
     },
     "compile": {
-      "dependsOn": ["build:wasm"]
+      "dependsOn": ["build:generate"],
+      "inputs": [""]
     },
     "test": {
       "inputs": ["test/**"],

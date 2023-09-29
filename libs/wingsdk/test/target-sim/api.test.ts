@@ -1,8 +1,8 @@
 import { test, expect } from "vitest";
 import { listMessages } from "./util";
 import * as cloud from "../../src/cloud";
+import { Simulator, Testing } from "../../src/simulator";
 import { ApiAttributes } from "../../src/target-sim/schema-resources";
-import { Simulator, Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
 
 // Handler that responds to a request with a fixed string
@@ -99,6 +99,62 @@ test("api with one GET route with request params", async () => {
 
   expect(response.status).toEqual(200);
   expect(await response.json()).toEqual({ name: "tsuf" });
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("api with 'name' parameter", async () => {
+  // GIVEN
+  const ROUTE = "/{name}";
+
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api");
+  const inflight = Testing.makeHandler(
+    app,
+    "Handler",
+    INFLIGHT_CODE_ECHO_PARAMS
+  );
+  api.get(ROUTE, inflight);
+
+  // WHEN
+  const s = await app.startSimulator();
+  const apiUrl = getApiUrl(s, "/my_api");
+  const response = await fetch(`${apiUrl}/akhil`, { method: "GET" });
+
+  // THEN
+  await s.stop();
+
+  expect(response.status).toEqual(200);
+  expect(await response.json()).toEqual({ name: "akhil" });
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("api with 'name' & 'age' parameter", async () => {
+  // GIVEN
+  const ROUTE = "/{name}/{age}";
+
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api");
+  const inflight = Testing.makeHandler(
+    app,
+    "Handler",
+    INFLIGHT_CODE_ECHO_PARAMS
+  );
+  api.get(ROUTE, inflight);
+
+  // WHEN
+  const s = await app.startSimulator();
+  const apiUrl = getApiUrl(s, "/my_api");
+  const response = await fetch(`${apiUrl}/akhil/23`, { method: "GET" });
+
+  // THEN
+  await s.stop();
+
+  expect(response.status).toEqual(200);
+  expect(await response.json()).toEqual({ name: "akhil", age: "23" });
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
@@ -512,4 +568,123 @@ test("no response body", async () => {
 
   expect(response.status).toEqual(200);
   expect(response.bodyUsed).toBeFalsy();
+});
+
+test("404 handler", async () => {
+  const RESPONSE = "boom";
+  // GIVEN
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "Api");
+  api.post(
+    "/test",
+    Testing.makeHandler(app, "Handler", INFLIGHT_CODE(RESPONSE))
+  );
+
+  // WHEN
+  const s = await app.startSimulator();
+
+  const apiUrl = getApiUrl(s, "/Api");
+  const response = await fetch(apiUrl + "/does-not-exist", {
+    method: "POST",
+    body: "hello world, this is a string",
+  });
+
+  // THEN
+  await s.stop();
+
+  const body = await response.text();
+
+  expect(response.status).toEqual(404);
+  expect(body).toContain("Error");
+});
+
+test("api with CORS defaults", async () => {
+  // GIVEN
+  const ROUTE = "/hello";
+  const RESPONSE = "boom";
+
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api", { cors: true });
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE(RESPONSE));
+  api.get(ROUTE, inflight);
+
+  // WHEN
+  const s = await app.startSimulator();
+  const apiUrl = getApiUrl(s, "/my_api");
+  const response = await fetch(apiUrl + ROUTE, { method: "GET" });
+
+  // THEN
+  await s.stop();
+
+  expect(response.status).toEqual(200);
+  expect(await response.text()).toEqual(RESPONSE);
+  expect(response.headers.get("access-control-allow-origin")).toEqual("*");
+  expect(response.headers.get("access-control-allow-credentials")).toEqual(
+    "false"
+  );
+});
+
+test("api with custom CORS settings", async () => {
+  // GIVEN
+  const ROUTE = "/hello";
+  const RESPONSE = "boom";
+
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api", {
+    cors: true,
+    corsOptions: {
+      allowOrigin: ["https://example.com"],
+      allowCredentials: true,
+      exposeHeaders: ["x-wingnuts"],
+    },
+  });
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE(RESPONSE));
+  api.get(ROUTE, inflight);
+
+  // WHEN
+  const s = await app.startSimulator();
+  const apiUrl = getApiUrl(s, "/my_api");
+  const response = await fetch(apiUrl + ROUTE, { method: "GET" });
+
+  // THEN
+  await s.stop();
+
+  expect(response.status).toEqual(200);
+  expect(await response.text()).toEqual(RESPONSE);
+  expect(response.headers.get("access-control-allow-origin")).toEqual(
+    "https://example.com"
+  );
+  expect(response.headers.get("access-control-allow-credentials")).toEqual(
+    "true"
+  );
+  expect(response.headers.get("access-control-expose-headers")).toEqual(
+    "x-wingnuts"
+  );
+});
+
+test("api with CORS settings responds to OPTIONS request", async () => {
+  // GIVEN
+  const ROUTE = "/hello";
+
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api", {
+    cors: true,
+  });
+
+  // WHEN
+  const s = await app.startSimulator();
+  const apiUrl = getApiUrl(s, "/my_api");
+  const response = await fetch(apiUrl + ROUTE, { method: "OPTIONS" });
+
+  // THEN
+  await s.stop();
+
+  expect(response.status).toEqual(204);
+  expect(response.headers.get("access-control-allow-headers")).toEqual(
+    "Content-Type,Authorization,X-Requested-With"
+  );
+  expect(response.headers.get("access-control-allow-methods")).toEqual(
+    "GET,POST,PUT,DELETE,HEAD,OPTIONS"
+  );
+  expect(response.headers.get("access-control-max-age")).toEqual("300");
 });

@@ -7,7 +7,9 @@
     "insta.yaml",
     ".github/workflows/build.yml",
     "scripts/*",
-    "patches/*"
+    "patches/*",
+    "tools/bump-pack/**",
+    "!tools/bump-pack/node_modules/**"
   ],
   "pipeline": {
     "default": {
@@ -25,7 +27,9 @@
         "*.lock",
         "src/**/*.rs",
         "!src/**/*.test.ts",
-        "src/**/*.ts"
+        "!src/**/*.test.tsx",
+        "src/**/*.ts",
+        "src/**/*.tsx"
       ]
     },
     "test": {
@@ -39,7 +43,9 @@
         "*.lock",
         "src/**/*.rs",
         "src/**/*.ts",
+        "src/**/*.tsx",
         "src/**/*.test.ts",
+        "src/**/*.test.tsx",
         "test/**"
       ],
       "outputs": ["**/__snapshots__/**", "**/*.snap"]
@@ -71,6 +77,7 @@
         "*.lock",
         "src/**/*.rs",
         "src/**/*.ts",
+        "src/**/*.tsx",
         "test/**"
       ]
     },
@@ -84,16 +91,27 @@
         "*.lock",
         "src/**/*.rs",
         "src/**/*.ts",
+        "src/**/*.tsx",
         "test/**"
       ]
     },
     "package": {
       "dependsOn": ["compile", "post-compile"],
       "env": ["PROJEN_BUMP_VERSION"],
-      "inputs": [""]
+      "inputs": ["*.md", "LICENSE"]
     },
     "topo": {
       "dependsOn": ["^topo"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "wing:e2e": {
+      "dependsOn": ["hangar#test"]
+    },
+    "wing:bench": {
+      "dependsOn": ["hangar#bench"]
     }
   }
 }

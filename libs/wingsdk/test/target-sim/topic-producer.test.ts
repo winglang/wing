@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { test, expect } from "vitest";
 import { listMessages } from "./util";
 import * as cloud from "../../src/cloud";
-import { Testing } from "../../src/testing";
+import { Testing } from "../../src/simulator";
 import { SimApp } from "../sim-app";
 
 test("publishing messages to topic", async () => {

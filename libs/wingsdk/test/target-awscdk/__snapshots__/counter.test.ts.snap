@@ -125,6 +125,9 @@ exports[`dec() policy statement 2`] = `
         "FunctionServiceRole675BB04A",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
@@ -363,6 +366,9 @@ exports[`function with a counter binding 2`] = `
         "FunctionServiceRole675BB04A",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
@@ -535,6 +541,9 @@ exports[`inc() policy statement 2`] = `
         "FunctionServiceRole675BB04A",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
@@ -707,6 +716,9 @@ exports[`peek() policy statement 2`] = `
         "FunctionServiceRole675BB04A",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
@@ -879,6 +891,9 @@ exports[`set() policy statement 2`] = `
         "FunctionServiceRole675BB04A",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",

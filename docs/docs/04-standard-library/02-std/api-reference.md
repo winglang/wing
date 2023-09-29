@@ -192,7 +192,7 @@ Boolean.
 ##### `fromJson` <a name="fromJson" id="@winglang/sdk.std.Boolean.fromJson"></a>
 
 ```wing
-bool.fromJson(json: Json);
+bool.fromJson(json: Json, options?: JsonValidationOptions);
 ```
 
 Parse a boolean from Json.
@@ -202,6 +202,12 @@ Parse a boolean from Json.
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 to parse boolean from.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.std.Boolean.fromJson.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.JsonValidationOptions">JsonValidationOptions</a>
 
 ---
 
@@ -687,7 +693,7 @@ Immutable Json.
 | <code><a href="#@winglang/sdk.std.Json.asBool">asBool</a></code> | Convert Json element to boolean if possible. |
 | <code><a href="#@winglang/sdk.std.Json.asNum">asNum</a></code> | Convert Json element to number if possible. |
 | <code><a href="#@winglang/sdk.std.Json.asStr">asStr</a></code> | Convert Json element to string if possible. |
-| <code><a href="#@winglang/sdk.std.Json.get">get</a></code> | Returns a specified element from the Json. |
+| <code><a href="#@winglang/sdk.std.Json.get">get</a></code> | Returns the value associated with the specified Json key. |
 | <code><a href="#@winglang/sdk.std.Json.getAt">getAt</a></code> | Returns a specified element at a given index from Json Array. |
 | <code><a href="#@winglang/sdk.std.Json.tryAsBool">tryAsBool</a></code> | Convert Json element to boolean if possible. |
 | <code><a href="#@winglang/sdk.std.Json.tryAsNum">tryAsNum</a></code> | Convert Json element to number if possible. |
@@ -727,13 +733,13 @@ Convert Json element to string if possible.
 get(key: str): Json
 ```
 
-Returns a specified element from the Json.
+Returns the value associated with the specified Json key.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Json.get.parameter.key"></a>
 
 - *Type:* str
 
-The key of the element to return.
+The key of the Json property.
 
 ---
 
@@ -816,8 +822,9 @@ The index of the element in the Json Array to return.
 | <code><a href="#@winglang/sdk.std.Json.deepCopy">deepCopy</a></code> | Creates an immutable deep copy of the Json. |
 | <code><a href="#@winglang/sdk.std.Json.deepCopyMut">deepCopyMut</a></code> | Creates a mutable deep copy of the Json. |
 | <code><a href="#@winglang/sdk.std.Json.delete">delete</a></code> | Deletes a key in a given Json. |
+| <code><a href="#@winglang/sdk.std.Json.entries">entries</a></code> | Returns the entries from the Json. |
 | <code><a href="#@winglang/sdk.std.Json.has">has</a></code> | Checks if a Json object has a given key. |
-| <code><a href="#@winglang/sdk.std.Json.keys">keys</a></code> | Returns the keys from the Json object. |
+| <code><a href="#@winglang/sdk.std.Json.keys">keys</a></code> | Returns the keys from the Json. |
 | <code><a href="#@winglang/sdk.std.Json.parse">parse</a></code> | Parse a string into a Json. |
 | <code><a href="#@winglang/sdk.std.Json.stringify">stringify</a></code> | Formats Json as string. |
 | <code><a href="#@winglang/sdk.std.Json.tryParse">tryParse</a></code> | Try to parse a string into a Json. |
@@ -881,6 +888,22 @@ the key to delete.
 
 ---
 
+##### `entries` <a name="entries" id="@winglang/sdk.std.Json.entries"></a>
+
+```wing
+Json.entries(json: Json);
+```
+
+Returns the entries from the Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.entries.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+map to get the entries from.
+
+---
+
 ##### `has` <a name="has" id="@winglang/sdk.std.Json.has"></a>
 
 ```wing
@@ -911,13 +934,13 @@ The key to check.
 Json.keys(json: any);
 ```
 
-Returns the keys from the Json object.
+Returns the keys from the Json.
 
 ###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.keys.parameter.json"></a>
 
 - *Type:* any
 
-to get keys from.
+map to get the keys from.
 
 ---
 
@@ -987,9 +1010,73 @@ Returns the values from the Json.
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
-to get values from.
+map to get the values from.
 
 ---
+
+
+
+### JsonSchema <a name="JsonSchema" id="@winglang/sdk.std.JsonSchema"></a>
+
+Struct Schema.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.JsonSchema.Initializer"></a>
+
+```wing
+new JsonSchema(schema: Json);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.JsonSchema.Initializer.parameter.schema">schema</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | *No description.* |
+
+---
+
+##### `schema`<sup>Required</sup> <a name="schema" id="@winglang/sdk.std.JsonSchema.Initializer.parameter.schema"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.JsonSchema.asStr">asStr</a></code> | Retrieve the json schema as a string. |
+| <code><a href="#@winglang/sdk.std.JsonSchema.validate">validate</a></code> | Attempt to validate a json object against the schema. |
+
+---
+
+##### `asStr` <a name="asStr" id="@winglang/sdk.std.JsonSchema.asStr"></a>
+
+```wing
+asStr(): str
+```
+
+Retrieve the json schema as a string.
+
+##### `validate` <a name="validate" id="@winglang/sdk.std.JsonSchema.validate"></a>
+
+```wing
+validate(obj: Json, options?: JsonValidationOptions): void
+```
+
+Attempt to validate a json object against the schema.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.std.JsonSchema.validate.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+the Json object to validate.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.std.JsonSchema.validate.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.JsonValidationOptions">JsonValidationOptions</a>
+
+---
+
 
 
 
@@ -1099,7 +1186,9 @@ Mutable Array.
 | <code><a href="#@winglang/sdk.std.MutArray.join">join</a></code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
 | <code><a href="#@winglang/sdk.std.MutArray.lastIndexOf">lastIndexOf</a></code> | Returns the index of the last occurrence of searchElement found. |
 | <code><a href="#@winglang/sdk.std.MutArray.pop">pop</a></code> | Remove value from end of array. |
+| <code><a href="#@winglang/sdk.std.MutArray.popAt">popAt</a></code> | Removes value from the given index of an array. |
 | <code><a href="#@winglang/sdk.std.MutArray.push">push</a></code> | Add value to end of array. |
+| <code><a href="#@winglang/sdk.std.MutArray.removeFirst">removeFirst</a></code> | Removes first occurence of a given value in an array. |
 | <code><a href="#@winglang/sdk.std.MutArray.set">set</a></code> | Sets a new value at the given index of an array. |
 
 ---
@@ -1241,6 +1330,22 @@ pop(): <T>
 
 Remove value from end of array.
 
+##### `popAt` <a name="popAt" id="@winglang/sdk.std.MutArray.popAt"></a>
+
+```wing
+popAt(index: num): <T>
+```
+
+Removes value from the given index of an array.
+
+###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.MutArray.popAt.parameter.index"></a>
+
+- *Type:* num
+
+the index to remove the value at.
+
+---
+
 ##### `push` <a name="push" id="@winglang/sdk.std.MutArray.push"></a>
 
 ```wing
@@ -1254,6 +1359,22 @@ Add value to end of array.
 - *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
 
 value to add.
+
+---
+
+##### `removeFirst` <a name="removeFirst" id="@winglang/sdk.std.MutArray.removeFirst"></a>
+
+```wing
+removeFirst(value: <T>): bool
+```
+
+Removes first occurence of a given value in an array.
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutArray.removeFirst.parameter.value"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
+
+the value to remove.
 
 ---
 
@@ -1314,7 +1435,7 @@ Mutable Json.
 | <code><a href="#@winglang/sdk.std.MutJson.asBool">asBool</a></code> | Convert Json element to boolean if possible. |
 | <code><a href="#@winglang/sdk.std.MutJson.asNum">asNum</a></code> | Convert Json element to number if possible. |
 | <code><a href="#@winglang/sdk.std.MutJson.asStr">asStr</a></code> | Convert Json element to string if possible. |
-| <code><a href="#@winglang/sdk.std.MutJson.get">get</a></code> | Returns a specified element from the Json. |
+| <code><a href="#@winglang/sdk.std.MutJson.get">get</a></code> | Returns the value associated with the specified Json key. |
 | <code><a href="#@winglang/sdk.std.MutJson.getAt">getAt</a></code> | Returns a specified element at a given index from MutJson Array. |
 | <code><a href="#@winglang/sdk.std.MutJson.set">set</a></code> | Adds or updates an element in MutJson with a specific key and value. |
 | <code><a href="#@winglang/sdk.std.MutJson.setAt">setAt</a></code> | Set element in MutJson Array with a specific key and value. |
@@ -1356,13 +1477,13 @@ Convert Json element to string if possible.
 get(key: str): MutJson
 ```
 
-Returns a specified element from the Json.
+Returns the value associated with the specified Json key.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutJson.get.parameter.key"></a>
 
 - *Type:* str
 
-The key of the element to return.
+The key of the Json property.
 
 ---
 
@@ -1784,7 +1905,7 @@ metadata describing how one construct is related to another construct.
 ##### `addDependency` <a name="addDependency" id="@winglang/sdk.std.Node.addDependency"></a>
 
 ```wing
-addDependency(deps: IDependable): void
+addDependency(...deps: Array<IDependable>): void
 ```
 
 Add an ordering dependency on another construct.
@@ -2242,7 +2363,7 @@ Number.
 ##### `fromJson` <a name="fromJson" id="@winglang/sdk.std.Number.fromJson"></a>
 
 ```wing
-num.fromJson(json: Json);
+num.fromJson(json: Json, options?: JsonValidationOptions);
 ```
 
 Parse a number from Json.
@@ -2252,6 +2373,12 @@ Parse a number from Json.
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 to parse number from.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.std.Number.fromJson.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.JsonValidationOptions">JsonValidationOptions</a>
 
 ---
 
@@ -2567,7 +2694,7 @@ Returns this string in upper case.
 ##### `fromJson` <a name="fromJson" id="@winglang/sdk.std.String.fromJson"></a>
 
 ```wing
-str.fromJson(json: Json);
+str.fromJson(json: Json, options?: JsonValidationOptions);
 ```
 
 Parse string from Json.
@@ -2577,6 +2704,12 @@ Parse string from Json.
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 to create string from.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.std.String.fromJson.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.JsonValidationOptions">JsonValidationOptions</a>
 
 ---
 
@@ -2611,6 +2744,7 @@ Shared behavior for all structs.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.std.Struct.fromJson">fromJson</a></code> | Converts a Json to a Struct. |
+| <code><a href="#@winglang/sdk.std.Struct.schema">schema</a></code> | Retrieve the schema for this struct. |
 | <code><a href="#@winglang/sdk.std.Struct.tryFromJson">tryFromJson</a></code> | Converts a Json to a Struct, returning nil if the Json is not valid. |
 
 ---
@@ -2618,7 +2752,7 @@ Shared behavior for all structs.
 ##### `fromJson` <a name="fromJson" id="@winglang/sdk.std.Struct.fromJson"></a>
 
 ```wing
-Struct.fromJson(json: Json);
+Struct.fromJson(json: Json, options?: JsonValidationOptions);
 ```
 
 Converts a Json to a Struct.
@@ -2628,6 +2762,20 @@ Converts a Json to a Struct.
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 ---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.std.Struct.fromJson.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.JsonValidationOptions">JsonValidationOptions</a>
+
+---
+
+##### `schema` <a name="schema" id="@winglang/sdk.std.Struct.schema"></a>
+
+```wing
+Struct.schema();
+```
+
+Retrieve the schema for this struct.
 
 ##### `tryFromJson` <a name="tryFromJson" id="@winglang/sdk.std.Struct.tryFromJson"></a>
 
@@ -2824,6 +2972,49 @@ Year.
 
 ---
 
+### JsonEntry <a name="JsonEntry" id="@winglang/sdk.std.JsonEntry"></a>
+
+Json entry representation.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.std.JsonEntry.Initializer"></a>
+
+```wing
+let JsonEntry = JsonEntry{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.JsonEntry.property.key">key</a></code> | <code>str</code> | The entry key. |
+| <code><a href="#@winglang/sdk.std.JsonEntry.property.value">value</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The entry value. |
+
+---
+
+##### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.JsonEntry.property.key"></a>
+
+```wing
+key: str;
+```
+
+- *Type:* str
+
+The entry key.
+
+---
+
+##### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.JsonEntry.property.value"></a>
+
+```wing
+value: Json;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+The entry value.
+
+---
+
 ### JsonStringifyOptions <a name="JsonStringifyOptions" id="@winglang/sdk.std.JsonStringifyOptions"></a>
 
 Options for stringify() method.
@@ -2851,6 +3042,36 @@ indent: num;
 - *Type:* num
 
 Indentation spaces number.
+
+---
+
+### JsonValidationOptions <a name="JsonValidationOptions" id="@winglang/sdk.std.JsonValidationOptions"></a>
+
+Options for validating Json.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.std.JsonValidationOptions.Initializer"></a>
+
+```wing
+let JsonValidationOptions = JsonValidationOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.JsonValidationOptions.property.unsafe">unsafe</a></code> | <code>bool</code> | Unsafe mode to skip validation (may lead to runtime errors). |
+
+---
+
+##### `unsafe`<sup>Optional</sup> <a name="unsafe" id="@winglang/sdk.std.JsonValidationOptions.property.unsafe"></a>
+
+```wing
+unsafe: bool;
+```
+
+- *Type:* bool
+
+Unsafe mode to skip validation (may lead to runtime errors).
 
 ---
 

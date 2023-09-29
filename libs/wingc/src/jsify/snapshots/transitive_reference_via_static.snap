@@ -10,13 +10,13 @@ source: libs/wingc/src/jsify/tests.rs
     let b = new cloud.Bucket();
     
     class MyType {
-      static inflight putInBucket() {
+      pub static inflight putInBucket() {
         b.put("in", "bucket");
       }
     }
 
     class YourType {
-      inflight putIndirect() {
+      pub inflight putIndirect() {
         MyType.putInBucket();
       }
     }
@@ -80,6 +80,7 @@ module.exports = function({ $MyType }) {
 
 ```js
 const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;

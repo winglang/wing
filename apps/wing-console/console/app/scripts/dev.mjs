@@ -18,7 +18,7 @@ const options = parseArgs({
 const consoleServer = await createConsoleServer({
   wingfile:
     options.values.wingfile ??
-    fileURLToPath(new URL("../demo/index.w", import.meta.url)),
+    fileURLToPath(new URL("../demo/main.w", import.meta.url)),
   requestedPort: 1214,
   log: {
     info: console.log,

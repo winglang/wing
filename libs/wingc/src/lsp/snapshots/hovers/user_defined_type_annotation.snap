@@ -1,0 +1,14 @@
+---
+source: libs/wingc/src/lsp/hover.rs
+---
+contents:
+  kind: markdown
+  value: "```wing\nclass Foo\n```\n---"
+range:
+  start:
+    line: 2
+    character: 7
+  end:
+    line: 2
+    character: 10
+

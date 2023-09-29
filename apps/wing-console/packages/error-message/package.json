@@ -16,7 +16,7 @@
   "devDependencies": {
     "@wingconsole/eslint-plugin": "workspace:^",
     "@wingconsole/tsconfig": "workspace:^",
-    "typescript": "^5.1.3"
+    "typescript": "^5.2.2"
   },
   "volta": {
     "extends": "../../../../package.json"

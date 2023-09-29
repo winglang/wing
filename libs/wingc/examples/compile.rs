@@ -1,7 +1,8 @@
 // Compiles a source file and prints any errors to stderr.
 // This should only be used for testing wingc directly.
 
-use std::{env, fs, path::Path, process};
+use camino::{Utf8Path, Utf8PathBuf};
+use std::{env, fs, process};
 use wingc::{compile, diagnostic::get_diagnostics};
 
 pub fn main() {
@@ -11,15 +12,15 @@ pub fn main() {
 		panic!("Usage: cargo run --example compile <source_file>");
 	}
 
-	let source_path = &args[1];
-	let source_path = Path::new(source_path);
-	let source_text = fs::read_to_string(source_path).unwrap();
+	let source_path = Utf8Path::new(&args[1]).canonicalize_utf8().unwrap();
+	let source_text = fs::read_to_string(&source_path).unwrap();
+	let target_dir: Utf8PathBuf = env::current_dir().unwrap().join("target").try_into().unwrap();
 
 	let results = compile(
-		source_path,
+		&source_path,
 		source_text,
-		Some(env::current_dir().unwrap().join("target").as_path()),
-		Some(source_path.canonicalize().unwrap().parent().unwrap()),
+		Some(&target_dir),
+		Some(source_path.parent().unwrap()),
 	);
 	if results.is_err() {
 		let mut diags = get_diagnostics();

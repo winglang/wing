@@ -6,9 +6,7 @@
       "outputs": ["lib/**"]
     },
     "dev": {
-      "dependsOn": ["compile"],
-      "cache": false,
-      "persistent": true
+      "dependsOn": ["compile"]
     },
     "package": {
       "inputs": ["syntaxes/**", "resources/**"],

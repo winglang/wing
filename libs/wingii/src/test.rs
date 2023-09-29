@@ -1,10 +1,12 @@
 use super::*;
-use rand::Rng;
-use serde_json::json;
+
 use std::env;
 use std::fs;
 use std::fs::File;
-use std::path::PathBuf;
+
+use camino::Utf8PathBuf;
+use rand::Rng;
+use serde_json::json;
 
 #[cfg(test)]
 mod tests {
@@ -35,7 +37,7 @@ mod tests {
 	#[test]
 	fn can_load_assembly_from_single_file() {
 		let (name, assembly_path) = create_temp_assembly();
-		let assembly = spec::load_assembly_from_file(&name, assembly_path.to_str().unwrap(), None, &None).unwrap();
+		let assembly = spec::load_assembly_from_file(&name, &assembly_path, None, &None).unwrap();
 		assert_eq!(assembly.name, "jsii-test-dep");
 		remove_temp_assembly(assembly_path);
 	}
@@ -44,7 +46,7 @@ mod tests {
 	fn can_load_assembly_from_single_file_compressed() {
 		let (name, assembly_path) = create_temp_gz_assembly();
 
-		let assembly = spec::load_assembly_from_file(&name, assembly_path.to_str().unwrap(), Some("gzip"), &None).unwrap();
+		let assembly = spec::load_assembly_from_file(&name, &assembly_path, Some("gzip"), &None).unwrap();
 		assert_eq!(assembly.name, "jsii-test-dep");
 		remove_temp_assembly(assembly_path);
 	}
@@ -53,7 +55,7 @@ mod tests {
 	fn can_load_assembly_from_redirect_manifest() {
 		let (name, assembly_path) = create_temp_redirect_assembly();
 
-		let assembly = spec::load_assembly_from_file(&name, assembly_path.to_str().unwrap(), None, &None).unwrap();
+		let assembly = spec::load_assembly_from_file(&name, &assembly_path, None, &None).unwrap();
 		assert_eq!(assembly.name, "jsii-test-dep");
 		remove_temp_assembly(assembly_path);
 	}
@@ -65,7 +67,7 @@ mod tests {
 
 		// Load the assembly and verify a cache file was created
 		let dummy_version = Some("1.2.3".to_string());
-		let assembly = spec::load_assembly_from_file(&name, assembly_path.to_str().unwrap(), None, &dummy_version).unwrap();
+		let assembly = spec::load_assembly_from_file(&name, &assembly_path, None, &dummy_version).unwrap();
 		let fingerprint = spec::get_manifest_fingerprint(&name, &assembly_path, &dummy_version).unwrap();
 		let cached_assembly = spec::try_load_from_cache(&assembly_path, &fingerprint).unwrap();
 		assert_eq!(assembly, cached_assembly);
@@ -77,7 +79,7 @@ mod tests {
 
 		// Wait a bit and load the assembly again
 		std::thread::sleep(std::time::Duration::from_millis(2));
-		_ = spec::load_assembly_from_file(&name, assembly_path.to_str().unwrap(), None, &dummy_version).unwrap();
+		_ = spec::load_assembly_from_file(&name, &assembly_path, None, &dummy_version).unwrap();
 
 		// Verify there's only a single cache file in the directory
 		let cache_files = fs::read_dir(assembly_path.parent().unwrap())
@@ -96,7 +98,7 @@ mod tests {
 		std::thread::sleep(std::time::Duration::from_millis(2));
 		filetime::set_file_mtime(&assembly_path, filetime::FileTime::now()).unwrap();
 
-		_ = spec::load_assembly_from_file(&name, assembly_path.to_str().unwrap(), None, &dummy_version).unwrap();
+		_ = spec::load_assembly_from_file(&name, &assembly_path, None, &dummy_version).unwrap();
 
 		// Verify there's still only a single cache file in the directory but it has a different timestamp
 		let cache_files = fs::read_dir(assembly_path.parent().unwrap())
@@ -127,7 +129,7 @@ mod tests {
 
 		// Load the assembly and verify a cache file was created
 		let dummy_version = Some("1.2.3".to_string());
-		let assembly = spec::load_assembly_from_file(&name, assembly_path.to_str().unwrap(), None, &dummy_version).unwrap();
+		let assembly = spec::load_assembly_from_file(&name, &assembly_path, None, &dummy_version).unwrap();
 		let fingerprint = spec::get_manifest_fingerprint(&name, &target_assembly_path, &dummy_version).unwrap();
 		let cached_assembly = spec::try_load_from_cache(&target_assembly_path, &fingerprint).unwrap();
 		assert_eq!(assembly, cached_assembly);
@@ -135,7 +137,7 @@ mod tests {
 		remove_temp_assembly(assembly_path);
 	}
 
-	fn create_temp_gz_assembly() -> (String, PathBuf) {
+	fn create_temp_gz_assembly() -> (String, Utf8PathBuf) {
 		let (name, assembly_path_pre) = create_temp_assembly();
 
 		// gzip the file
@@ -149,11 +151,11 @@ mod tests {
 		(name, assembly_path)
 	}
 
-	fn create_temp_redirect_assembly() -> (String, PathBuf) {
+	fn create_temp_redirect_assembly() -> (String, Utf8PathBuf) {
 		// Create the actual gzipped assembly
 		let (name, assembly_path) = create_temp_gz_assembly();
 		// Create the redirect manifest
-		let target_file = assembly_path.file_name().unwrap().to_str().unwrap();
+		let target_file = assembly_path.file_name().unwrap();
 		let redirect_assembly = json!({
 			"schema": "jsii/file-redirect",
 			"compression": "gzip",
@@ -168,7 +170,7 @@ mod tests {
 	#[test]
 	fn can_load_assembly_from_file() {
 		let (name, assembly_path) = create_temp_assembly();
-		let assembly = spec::load_assembly_from_file(&name, &assembly_path.to_str().unwrap(), None, &None).unwrap();
+		let assembly = spec::load_assembly_from_file(&name, &assembly_path, None, &None).unwrap();
 		assert_eq!(assembly.name, "jsii-test-dep");
 		remove_temp_assembly(assembly_path);
 	}
@@ -176,11 +178,11 @@ mod tests {
 	#[test]
 	fn can_load_constructs_assembly_with_type_system() {
 		let mut type_system = TypeSystem::new();
-		let fixture_path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+		let fixture_path = Utf8PathBuf::from(env!("CARGO_MANIFEST_DIR"))
 			.join("src")
 			.join("fixtures")
 			.join("constructs");
-		let name = type_system.load_module(fixture_path.to_str().unwrap()).unwrap();
+		let name = type_system.load_module(&fixture_path).unwrap();
 		assert_eq!(name, "constructs");
 		let assembly = type_system.find_assembly(&name).unwrap();
 		assert_eq!(assembly.name, "constructs");
@@ -189,11 +191,11 @@ mod tests {
 	#[test]
 	fn can_query_basic_types() {
 		let mut type_system = TypeSystem::new();
-		let fixture_path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+		let fixture_path = Utf8PathBuf::from(env!("CARGO_MANIFEST_DIR"))
 			.join("src")
 			.join("fixtures")
 			.join("constructs");
-		let name = type_system.load_module(fixture_path.to_str().unwrap()).unwrap();
+		let name = type_system.load_module(&fixture_path).unwrap();
 		assert_eq!(name, "constructs");
 		// find class with fqn "constructs.Construct"
 		let construct = type_system.find_class(&FQN::from("constructs.Construct")).unwrap();
@@ -210,13 +212,13 @@ mod tests {
 	}
 }
 
-fn create_temp_assembly() -> (String, PathBuf) {
+fn create_temp_assembly() -> (String, Utf8PathBuf) {
 	let temp_dir = env::temp_dir();
-	let mut temp_assembly_dir = temp_dir.clone();
+	let mut temp_dir = Utf8PathBuf::from_path_buf(temp_dir).expect("invalid unicode path");
 	let mut rng = rand::thread_rng();
-	temp_assembly_dir.push(format!("ass-{}", rng.gen::<u32>()));
-	fs::create_dir(&temp_assembly_dir).unwrap();
-	let assembly_path = temp_assembly_dir.join(spec::SPEC_FILE_NAME);
+	temp_dir.push(format!("ass-{}", rng.gen::<u32>()));
+	fs::create_dir(&temp_dir).unwrap();
+	let assembly_path = temp_dir.join(spec::SPEC_FILE_NAME);
 	let name = "jsii-test-dep".to_string();
 	let assembly = json!({
 		"schema": "jsii/0.10.0",
@@ -243,6 +245,6 @@ fn create_temp_assembly() -> (String, PathBuf) {
 	(name, assembly_path)
 }
 
-fn remove_temp_assembly(assembly_path: PathBuf) {
+fn remove_temp_assembly(assembly_path: Utf8PathBuf) {
 	fs::remove_dir_all(assembly_path.parent().unwrap()).unwrap();
 }

@@ -57,6 +57,9 @@ exports[`schedule behavior with cron 1`] = `
         "ScheduleSetConsumerc185c7e3ServiceRoleAA894847",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
@@ -194,6 +197,9 @@ exports[`schedule behavior with rate 1`] = `
         "ScheduleSetConsumerc185c7e3ServiceRoleAA894847",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
@@ -359,6 +365,9 @@ exports[`schedule with two functions 1`] = `
         "ScheduleSetConsumer6e1b4252ServiceRole88F787AF",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
@@ -413,6 +422,9 @@ exports[`schedule with two functions 1`] = `
         "ScheduleSetConsumerc185c7e3ServiceRoleAA894847",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",

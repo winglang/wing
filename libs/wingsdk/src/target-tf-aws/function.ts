@@ -208,6 +208,7 @@ export class Function extends cloud.Function implements IAwsFunction {
         ? props.timeout.seconds
         : Duration.fromMinutes(0.5).seconds,
       memorySize: props.memory ? props.memory : undefined,
+      architectures: ["arm64"],
     });
 
     this.arn = this.function.arn;
@@ -228,12 +229,10 @@ export class Function extends cloud.Function implements IAwsFunction {
     }
 
     if (ops.includes(cloud.FunctionInflightMethods.INVOKE)) {
-      host.addPolicyStatements([
-        {
-          actions: ["lambda:InvokeFunction"],
-          resources: [`${this.function.arn}`],
-        },
-      ]);
+      host.addPolicyStatements({
+        actions: ["lambda:InvokeFunction"],
+        resources: [`${this.function.arn}`],
+      });
     }
 
     // The function name needs to be passed through an environment variable since
@@ -268,7 +267,7 @@ export class Function extends cloud.Function implements IAwsFunction {
   /**
    * Add a policy statement to the Lambda role.
    */
-  public addPolicyStatements(statements: PolicyStatement[]) {
+  public addPolicyStatements(...statements: PolicyStatement[]) {
     // we do lazy initialization here because addPolicyStatements() might be called through the
     // constructor chain of the Function base class which means that our constructor might not have
     // been called yet... yes, ugly.

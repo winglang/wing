@@ -1,7 +1,7 @@
 import { basename, resolve, sep } from "path";
 import { compile, CompileOptions } from "./compile";
 import chalk from "chalk";
-import { std, testing } from "@winglang/sdk";
+import { std, simulator } from "@winglang/sdk";
 import * as cp from "child_process";
 import debug from "debug";
 import { promisify } from "util";
@@ -247,7 +247,7 @@ function noCleanUp(synthDir: string) {
 }
 
 async function testSimulator(synthDir: string, options: TestOptions) {
-  const s = new testing.Simulator({ simfile: synthDir });
+  const s = new simulator.Simulator({ simfile: synthDir });
   const { clean } = options;
   await s.start();
 

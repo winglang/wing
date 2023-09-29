@@ -24,7 +24,7 @@ exports[`create an OnDeploy 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "f852bfab94a36947a0c426b4c9aa55f31d1ba844ac1c6c40af84b941fd4ae8bb.zip",
+          "S3Key": "e62535c1e251fa24f7bee044e96b427fb5e8b87bb32c1c6fe04758589f959275.zip",
         },
         "Handler": "__entrypoint__.handler",
         "MemorySize": 128,
@@ -34,7 +34,7 @@ exports[`create an OnDeploy 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs14.x",
+        "Runtime": "nodejs18.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -98,6 +98,9 @@ exports[`create an OnDeploy 1`] = `
         "myondeployFunctionServiceRole7277F8BB",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
@@ -116,7 +119,7 @@ exports[`create an OnDeploy 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "myondeployFunctionCurrentVersion6BC23754dc8a690e8db1c57e1302de9438f9dfa2": {
+    "myondeployFunctionCurrentVersion6BC23754495ffbfe7093f6d76e062790f78856b0": {
       "Properties": {
         "FunctionName": {
           "Ref": "myondeployFunction47551748",
@@ -158,15 +161,18 @@ exports[`create an OnDeploy 1`] = `
     "myondeployTrigger63552203": {
       "DeletionPolicy": "Delete",
       "Properties": {
+        "ExecuteOnHandlerChange": true,
         "HandlerArn": {
-          "Ref": "myondeployFunctionCurrentVersion6BC23754dc8a690e8db1c57e1302de9438f9dfa2",
+          "Ref": "myondeployFunctionCurrentVersion6BC23754495ffbfe7093f6d76e062790f78856b0",
         },
+        "InvocationType": "RequestResponse",
         "ServiceToken": {
           "Fn::GetAtt": [
             "AWSCDKTriggerCustomResourceProviderCustomResourceProviderHandler97BECD91",
             "Arn",
           ],
         },
+        "Timeout": "120000",
       },
       "Type": "Custom::Trigger",
       "UpdateReplacePolicy": "Delete",
@@ -226,7 +232,7 @@ exports[`execute OnDeploy after other resources 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "f852bfab94a36947a0c426b4c9aa55f31d1ba844ac1c6c40af84b941fd4ae8bb.zip",
+          "S3Key": "e62535c1e251fa24f7bee044e96b427fb5e8b87bb32c1c6fe04758589f959275.zip",
         },
         "Handler": "__entrypoint__.handler",
         "MemorySize": 128,
@@ -236,7 +242,7 @@ exports[`execute OnDeploy after other resources 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs14.x",
+        "Runtime": "nodejs18.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -322,6 +328,9 @@ exports[`execute OnDeploy after other resources 1`] = `
         "myondeployFunctionServiceRole7277F8BB",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
@@ -340,7 +349,7 @@ exports[`execute OnDeploy after other resources 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "myondeployFunctionCurrentVersion6BC23754dc8a690e8db1c57e1302de9438f9dfa2": {
+    "myondeployFunctionCurrentVersion6BC23754495ffbfe7093f6d76e062790f78856b0": {
       "Properties": {
         "FunctionName": {
           "Ref": "myondeployFunction47551748",
@@ -385,15 +394,18 @@ exports[`execute OnDeploy after other resources 1`] = `
         "mybucketD601CBAA",
       ],
       "Properties": {
+        "ExecuteOnHandlerChange": true,
         "HandlerArn": {
-          "Ref": "myondeployFunctionCurrentVersion6BC23754dc8a690e8db1c57e1302de9438f9dfa2",
+          "Ref": "myondeployFunctionCurrentVersion6BC23754495ffbfe7093f6d76e062790f78856b0",
         },
+        "InvocationType": "RequestResponse",
         "ServiceToken": {
           "Fn::GetAtt": [
             "AWSCDKTriggerCustomResourceProviderCustomResourceProviderHandler97BECD91",
             "Arn",
           ],
         },
+        "Timeout": "120000",
       },
       "Type": "Custom::Trigger",
       "UpdateReplacePolicy": "Delete",
@@ -453,7 +465,7 @@ exports[`execute OnDeploy before other resources 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "f852bfab94a36947a0c426b4c9aa55f31d1ba844ac1c6c40af84b941fd4ae8bb.zip",
+          "S3Key": "e62535c1e251fa24f7bee044e96b427fb5e8b87bb32c1c6fe04758589f959275.zip",
         },
         "Handler": "__entrypoint__.handler",
         "MemorySize": 128,
@@ -463,7 +475,7 @@ exports[`execute OnDeploy before other resources 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs14.x",
+        "Runtime": "nodejs18.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -552,6 +564,9 @@ exports[`execute OnDeploy before other resources 1`] = `
         "myondeployFunctionServiceRole7277F8BB",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
@@ -570,7 +585,7 @@ exports[`execute OnDeploy before other resources 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "myondeployFunctionCurrentVersion6BC23754dc8a690e8db1c57e1302de9438f9dfa2": {
+    "myondeployFunctionCurrentVersion6BC23754495ffbfe7093f6d76e062790f78856b0": {
       "Properties": {
         "FunctionName": {
           "Ref": "myondeployFunction47551748",
@@ -612,15 +627,18 @@ exports[`execute OnDeploy before other resources 1`] = `
     "myondeployTrigger63552203": {
       "DeletionPolicy": "Delete",
       "Properties": {
+        "ExecuteOnHandlerChange": true,
         "HandlerArn": {
-          "Ref": "myondeployFunctionCurrentVersion6BC23754dc8a690e8db1c57e1302de9438f9dfa2",
+          "Ref": "myondeployFunctionCurrentVersion6BC23754495ffbfe7093f6d76e062790f78856b0",
         },
+        "InvocationType": "RequestResponse",
         "ServiceToken": {
           "Fn::GetAtt": [
             "AWSCDKTriggerCustomResourceProviderCustomResourceProviderHandler97BECD91",
             "Arn",
           ],
         },
+        "Timeout": "120000",
       },
       "Type": "Custom::Trigger",
       "UpdateReplacePolicy": "Delete",

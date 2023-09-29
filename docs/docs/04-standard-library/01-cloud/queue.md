@@ -20,6 +20,7 @@ sidebar_position: 1
 
 The `cloud.Queue` resource represents a data structure for holding a list of messages.
 Queues are typically used to decouple producers of data and the consumers of said data in distributed systems.
+Queues by default are not FIFO (first in, first out) - so the order of messages is not guaranteed.
 
 ## Usage
 
@@ -170,7 +171,7 @@ Purge all of the messages in the queue.
 ##### `push` <a name="push" id="@winglang/sdk.cloud.IQueueClient.push"></a>
 
 ```wing
-inflight push(messages: str): void
+inflight push(...messages: Array<str>): void
 ```
 
 Push one or more messages to the queue.
@@ -180,6 +181,8 @@ Push one or more messages to the queue.
 - *Type:* str
 
 Payload to send to the queue.
+
+Each message must be non-empty.
 
 ---
 

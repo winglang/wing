@@ -1,6 +1,6 @@
 import { test, expect } from "vitest";
+import { Testing } from "../../src/simulator";
 import { Test } from "../../src/std";
-import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
 
 const INFLIGHT_CODE = `

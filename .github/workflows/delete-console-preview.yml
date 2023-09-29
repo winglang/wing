@@ -1,0 +1,28 @@
+name: Delete Console Preview
+
+on:
+  pull_request:
+    types:
+      - closed
+
+env:
+  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+  FLY_VERSION: "0.1.80"
+  APP_NAME: wing-console-pr-${{github.event.number}}
+
+jobs:
+  destroy:
+    name: "Destroy"
+    runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository && !startsWith(github.head_ref, 'mergify/merge-queue/') }}
+    steps:
+      - name: Install flyctl
+        uses: superfly/flyctl-actions/setup-flyctl@1.4
+        with:
+          version: ${{env.FLY_VERSION}}
+
+      - name: Delete preview environment
+        run: |
+          if flyctl status --app "$APP_NAME"; then
+            flyctl apps destroy "$APP_NAME" -y
+          fi

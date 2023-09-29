@@ -39,6 +39,9 @@ exports[`schedule behavior with cron 1`] = `
     },
     "aws_lambda_function": {
       "Schedule-OnTick-c5395e41": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Schedule-OnTick-c5395e41-c861b8f8",
@@ -102,7 +105,7 @@ exports[`schedule behavior with cron 2`] = `
               "Handler": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -133,7 +136,7 @@ exports[`schedule behavior with cron 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud schedule to trigger events at regular intervals",
@@ -203,7 +206,7 @@ exports[`schedule behavior with cron 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -215,7 +218,7 @@ exports[`schedule behavior with cron 2`] = `
               "Schedule-OnTickHandler-c5395e41": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "hidden": true,
@@ -244,7 +247,7 @@ exports[`schedule behavior with cron 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -257,7 +260,7 @@ exports[`schedule behavior with cron 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.69",
+              "version": "10.2.70",
             },
             "id": "Default",
             "path": "root/Default",
@@ -329,6 +332,9 @@ exports[`schedule behavior with rate 1`] = `
     },
     "aws_lambda_function": {
       "Schedule-OnTick-c5395e41": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Schedule-OnTick-c5395e41-c861b8f8",
@@ -392,7 +398,7 @@ exports[`schedule behavior with rate 2`] = `
               "Handler": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -423,7 +429,7 @@ exports[`schedule behavior with rate 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud schedule to trigger events at regular intervals",
@@ -493,7 +499,7 @@ exports[`schedule behavior with rate 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -505,7 +511,7 @@ exports[`schedule behavior with rate 2`] = `
               "Schedule-OnTickHandler-c5395e41": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "hidden": true,
@@ -534,7 +540,7 @@ exports[`schedule behavior with rate 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -547,7 +553,7 @@ exports[`schedule behavior with rate 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.69",
+              "version": "10.2.70",
             },
             "id": "Default",
             "path": "root/Default",
@@ -634,6 +640,9 @@ exports[`schedule with two functions 1`] = `
     },
     "aws_lambda_function": {
       "Schedule-OnTick-0a615500": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Schedule-OnTick-0a615500-c8fd8480",
@@ -653,6 +662,9 @@ exports[`schedule with two functions 1`] = `
         },
       },
       "Schedule-OnTick-7b33bcba": {
+        "architectures": [
+          "arm64",
+        ],
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Schedule-OnTick-7b33bcba-c86000d7",
@@ -728,7 +740,7 @@ exports[`schedule with two functions 2`] = `
               "Handler1": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -741,7 +753,7 @@ exports[`schedule with two functions 2`] = `
               "Handler2": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -780,7 +792,7 @@ exports[`schedule with two functions 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud schedule to trigger events at regular intervals",
@@ -850,7 +862,7 @@ exports[`schedule with two functions 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -920,7 +932,7 @@ exports[`schedule with two functions 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -932,7 +944,7 @@ exports[`schedule with two functions 2`] = `
               "Schedule-OnTickHandler-0a615500": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "hidden": true,
@@ -943,7 +955,7 @@ exports[`schedule with two functions 2`] = `
               "Schedule-OnTickHandler-7b33bcba": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "hidden": true,
@@ -972,7 +984,7 @@ exports[`schedule with two functions 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -985,7 +997,7 @@ exports[`schedule with two functions 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.69",
+              "version": "10.2.70",
             },
             "id": "Default",
             "path": "root/Default",

@@ -9,8 +9,18 @@ import {
 
 export class ApiOnRequestHandlerClient {
   private readonly handler: IApiEndpointHandlerClient;
-  constructor({ handler }: { handler: IApiEndpointHandlerClient }) {
+  private readonly corsHeaders?: Record<string, string>;
+  constructor({
+    handler,
+    args,
+  }: {
+    handler: IApiEndpointHandlerClient;
+    args?: {
+      corsHeaders?: Record<string, string>;
+    };
+  }) {
     this.handler = handler;
+    this.corsHeaders = args?.corsHeaders;
   }
   public async handle(
     request: APIGatewayProxyEvent
@@ -18,7 +28,7 @@ export class ApiOnRequestHandlerClient {
     const apiRequest: ApiRequest = mapApigatewayEventToCloudApiRequest(request);
     const apiResponse: ApiResponse = await this.handler.handle(apiRequest);
     const apiGatewayResponse: APIGatewayProxyResult =
-      mapCloudApiResponseToApigatewayResponse(apiResponse);
+      mapCloudApiResponseToApigatewayResponse(apiResponse, this.corsHeaders);
     return apiGatewayResponse;
   }
 }
@@ -29,13 +39,15 @@ export class ApiOnRequestHandlerClient {
  * @returns API Gateway response
  */
 function mapCloudApiResponseToApigatewayResponse(
-  resp: ApiResponse
+  resp: ApiResponse,
+  corsHeaders?: Record<string, string>
 ): APIGatewayProxyResult {
   return {
     statusCode: resp.status,
     body: resp.body ?? "",
     headers: {
       "Content-Type": "application/json",
+      ...corsHeaders,
       ...resp.headers,
     },
   };

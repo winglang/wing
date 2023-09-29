@@ -1,6 +1,6 @@
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { applyWSSHandler } from "@trpc/server/adapters/ws";
-import { testing } from "@winglang/sdk";
+import { simulator } from "@winglang/sdk";
 import cors from "cors";
 import type Emittery from "emittery";
 import express from "express";
@@ -22,7 +22,7 @@ import { getWingVersion } from "./utils/getWingVersion.js";
 import type { LogInterface } from "./utils/LogInterface.js";
 
 export interface CreateExpressServerOptions {
-  simulatorInstance(): Promise<testing.Simulator>;
+  simulatorInstance(): Promise<simulator.Simulator>;
   consoleLogger: ConsoleLogger;
   errorMessage(): string | undefined;
   emitter: Emittery<{
@@ -35,6 +35,7 @@ export interface CreateExpressServerOptions {
   requestedPort?: number;
   appState(): State;
   hostUtils?: HostUtils;
+  expressApp?: express.Express;
   onExpressCreated?: (app: express.Express) => void;
   wingfile: string;
   requireAcceptTerms?: boolean;
@@ -55,6 +56,7 @@ export const createExpressServer = async ({
   requestedPort,
   appState,
   hostUtils,
+  expressApp,
   onExpressCreated,
   wingfile,
   requireAcceptTerms = false,
@@ -63,7 +65,7 @@ export const createExpressServer = async ({
   setSelectedNode,
   testsStateManager,
 }: CreateExpressServerOptions) => {
-  const app = express();
+  const app = expressApp ?? express();
   app.use(cors());
 
   const { router } = mergeAllRouters();
