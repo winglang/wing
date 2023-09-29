@@ -105,8 +105,6 @@ impl JsonSchemaGenerator {
 
 		let cleaned = code.to_string().replace("\n", "").replace(" ", "");
 
-		code = CodeMaker::default();
-		code.line(cleaned);
-		code
+		CodeMaker::one_line(cleaned)
 	}
 }
