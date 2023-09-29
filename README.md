@@ -58,7 +58,7 @@ let bucket = new cloud.Bucket();
 
 queue.setConsumer(inflight (message: str) => {
   let i = counter.inc();
-  bucket.put("file-${i}.txt", message);
+  bucket.put("file-{i}.txt", message);
 });
 ```
 

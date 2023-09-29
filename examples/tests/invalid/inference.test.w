@@ -24,7 +24,7 @@ let clonedArray = emptyArray.copyMut();
 
 let stringInterpolationCannotBeInferred = (nice) => {
 //  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^ Unable to infer type
-  return "Hello, ${nice}";
+  return "Hello, {nice}";
 };
 
 let stringArray2 = [].copyMut();

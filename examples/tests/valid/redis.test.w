@@ -36,5 +36,5 @@ test "testing Redis" {
     return r.get("hello") != nil;
   });
 
-  assert("world!" == "${r.get("hello")}");
+  assert("world!" == "{r.get("hello")}");
 }

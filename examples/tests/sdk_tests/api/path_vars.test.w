@@ -27,7 +27,7 @@ api.get("/path/{name}/{age}", handler_two);
 
 test "test" {
   let username = "tsuf";
-  let res: http.Response = http.get("${api.url}/users/${username}");
+  let res: http.Response = http.get("{api.url}/users/{username}");
 
 
   assert(res.status == 200);
@@ -36,7 +36,7 @@ test "test" {
 
 test "test2" {
   let username = "akhil";
-  let res: http.Response = http.get("${api.url}/path/${username}");
+  let res: http.Response = http.get("{api.url}/path/{username}");
 
 
   assert(res.status == 200);
@@ -45,7 +45,7 @@ test "test2" {
 
 test "test3" {
   let username = "akhil";
-  let res: http.Response = http.get("${api.url}/users/permission/${username}");
+  let res: http.Response = http.get("{api.url}/users/permission/{username}");
 
 
   assert(res.status == 200);
@@ -55,7 +55,7 @@ test "test3" {
 test "test4" {
   let username = "akhil";
   let age = "23";
-  let res: http.Response = http.get("${api.url}/path/${username}/${age}");
+  let res: http.Response = http.get("{api.url}/path/{username}/{age}");
 
 
   assert(res.status == 200);

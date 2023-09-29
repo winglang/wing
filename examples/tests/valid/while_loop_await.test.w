@@ -8,7 +8,7 @@ let handler = inflight (body: str): str => {
         return j+1;
     };
     while iterator(i) < 3 {
-        log("${i}");
+        log("{i}");
     }
 };
 

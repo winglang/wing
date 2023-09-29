@@ -4,19 +4,19 @@ let other = new cloud.Bucket() as "other";
 let b = new cloud.Bucket() as "b";
 
 b.onDelete(inflight (key: str) => {
-    log("deleted ${key}");
+    log("deleted {key}");
 });
 
 b.onUpdate(inflight (key: str) => {
-    log("updated ${key}");
+    log("updated {key}");
 });
 
 b.onCreate(inflight (key:str) => {
-    log("created ${key}");
+    log("created {key}");
 });
 
 b.onEvent(inflight (key: str, event: cloud.BucketEventType) => {   
-    other.put("last_${event}_key", key); 
+    other.put("last_{event}_key", key); 
 });
 
 other.onEvent(inflight (key: str) => {

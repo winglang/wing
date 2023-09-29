@@ -8,7 +8,7 @@ inflight class Assert {
     try {
       assert(a == b);
     } catch e {
-      throw("expected: ${b} got: ${a}");
+      throw("expected: {b} got: {a}");
     }
   }
 
@@ -17,7 +17,7 @@ inflight class Assert {
       assert(a == nil);
     } catch e {
       log(e);
-      throw("expected '${a}' to be nil");
+      throw("expected '{a}' to be nil");
     }
   }
 
@@ -26,7 +26,7 @@ inflight class Assert {
       assert(a == b);
     } catch e {
       log(e);
-      throw("expected: ${b} got: ${a}");
+      throw("expected: {b} got: {a}");
     }
   }
 }
