@@ -4,7 +4,12 @@ import {
   BlobServiceClient,
   ContainerClient,
 } from "@azure/storage-blob";
-import { BucketDeleteOptions, IBucketClient, SignedUrlOptions } from "../cloud";
+import {
+  BucketDeleteOptions,
+  IBucketClient,
+  SignedUrlOptions,
+  ObjectMetadata,
+} from "../cloud";
 import { Json } from "../std";
 
 export class BucketClient implements IBucketClient {
@@ -223,6 +228,14 @@ export class BucketClient implements IBucketClient {
     return encodeURI(
       `https://${this.storageAccount}.blob.core.windows.net/${this.bucketName}/${key}`
     );
+  }
+
+  /**
+   * Get the metadata of an object in the bucket.
+   * @param key Key of the object.
+   */
+  public async metadata(key: string): Promise<ObjectMetadata> {
+    return Promise.reject(`metadata is not implemented: (key=${key})`);
   }
 
   /**

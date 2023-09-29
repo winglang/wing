@@ -68,6 +68,18 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: metadata
+  kind: 2
+  detail: "inflight (key: str): ObjectMetadata"
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight metadata: inflight (key: str): ObjectMetadata\n```\n---\nGet the metadata of an object in the bucket."
+  sortText: ff|metadata
+  insertText: metadata($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: publicUrl
   kind: 2
   detail: "inflight (key: str): str"

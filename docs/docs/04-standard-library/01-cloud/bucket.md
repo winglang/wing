@@ -166,6 +166,7 @@ new cloud.Bucket(props?: BucketProps);
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.get">get</a></code> | Retrieve an object from the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.getJson">getJson</a></code> | Retrieve a Json object from the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.list">list</a></code> | Retrieve existing objects keys from the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.metadata">metadata</a></code> | Get the metadata of an object in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.publicUrl">publicUrl</a></code> | Returns a url to the given file. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.putJson">putJson</a></code> | Put a Json object in the bucket. |
@@ -398,6 +399,22 @@ Retrieve existing objects keys from the bucket.
 - *Type:* str
 
 Limits the response to keys that begin with the specified prefix.
+
+---
+
+##### `metadata` <a name="metadata" id="@winglang/sdk.cloud.IBucketClient.metadata"></a>
+
+```wing
+inflight metadata(key: str): ObjectMetadata
+```
+
+Get the metadata of an object in the bucket.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.metadata.parameter.key"></a>
+
+- *Type:* str
+
+Key of the object.
 
 ---
 
@@ -752,6 +769,64 @@ duration: duration;
 - *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 
 The duration for the signed url to expire.
+
+---
+
+### ObjectMetadata <a name="ObjectMetadata" id="@winglang/sdk.cloud.ObjectMetadata"></a>
+
+Metadata of a bucket object.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ObjectMetadata.Initializer"></a>
+
+```wing
+bring cloud;
+
+let ObjectMetadata = cloud.ObjectMetadata{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ObjectMetadata.property.lastModified">lastModified</a></code> | <code><a href="#@winglang/sdk.std.Datetime">datetime</a></code> | The time the object was last modified. |
+| <code><a href="#@winglang/sdk.cloud.ObjectMetadata.property.size">size</a></code> | <code>num</code> | The size of the object in bytes. |
+| <code><a href="#@winglang/sdk.cloud.ObjectMetadata.property.contentType">contentType</a></code> | <code>str</code> | The content type of the object, if it is known. |
+
+---
+
+##### `lastModified`<sup>Required</sup> <a name="lastModified" id="@winglang/sdk.cloud.ObjectMetadata.property.lastModified"></a>
+
+```wing
+lastModified: datetime;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Datetime">datetime</a>
+
+The time the object was last modified.
+
+---
+
+##### `size`<sup>Required</sup> <a name="size" id="@winglang/sdk.cloud.ObjectMetadata.property.size"></a>
+
+```wing
+size: num;
+```
+
+- *Type:* num
+
+The size of the object in bytes.
+
+---
+
+##### `contentType`<sup>Optional</sup> <a name="contentType" id="@winglang/sdk.cloud.ObjectMetadata.property.contentType"></a>
+
+```wing
+contentType: str;
+```
+
+- *Type:* str
+
+The content type of the object, if it is known.
 
 ---
 

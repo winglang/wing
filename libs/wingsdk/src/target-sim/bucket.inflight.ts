@@ -10,6 +10,7 @@ import {
   IBucketClient,
   ITopicClient,
   SignedUrlOptions,
+  ObjectMetadata,
 } from "../cloud";
 import {
   ISimulatorContext,
@@ -219,6 +220,14 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         );
       },
     });
+  }
+
+  /**
+   * Get the metadata of an object in the bucket.
+   * @param key Key of the object.
+   */
+  public async metadata(key: string): Promise<ObjectMetadata> {
+    return Promise.reject(`metadata is not implemented: (key=${key})`);
   }
 
   private async addFile(key: string, value: string): Promise<void> {

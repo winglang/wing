@@ -16,8 +16,9 @@ import {
   __Client,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { BucketDeleteOptions, IBucketClient, SignedUrlOptions } from "../cloud";
-import { Json } from "../std";
+import { BucketDeleteOptions, IBucketClient, SignedUrlOptions, ObjectMetadata } from "../cloud";
+import { Datetime, Json } from "../std";
+
 export class BucketClient implements IBucketClient {
   constructor(
     private readonly bucketName: string,
@@ -295,6 +296,30 @@ export class BucketClient implements IBucketClient {
       throw new Error(
         `Unable to generate signed url for key ${key} : ${error as Error}`
       );
+    }
+  }
+
+  /**
+   * Get the metadata of an object in the bucket.
+   * @param key Key of the object.
+   */
+  public async metadata(key: string): Promise<ObjectMetadata> {
+    const command = new HeadObjectCommand({
+      Bucket: this.bucketName,
+      Key: key,
+    });
+    try {
+      const resp = await this.s3Client.send(command);
+      return {
+        contentType: resp.ContentType,
+        lastModified: Datetime.fromIso(resp.LastModified!.toISOString()),
+        size: resp.ContentLength!,
+      };
+    } catch (error) {
+      if ((error as Error).name === "NotFound") {
+        return Promise.reject(`Object does not exist (key=${key}).`);
+      }
+      throw error;
     }
   }
 
