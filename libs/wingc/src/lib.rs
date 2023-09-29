@@ -31,10 +31,9 @@ use wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 use wingii::type_system::TypeSystem;
 
 use crate::docs::Docs;
-use crate::parser::normalize_path;
 use std::alloc::{alloc, dealloc, Layout};
 
-use std::mem;
+use std::{fs, mem};
 
 use crate::ast::Phase;
 use crate::type_check::symbol_env::SymbolEnv;
@@ -161,26 +160,38 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	let args = ptr_to_string(ptr, len);
 
 	let split = args.split(";").collect::<Vec<&str>>();
-	if split.len() != 3 {
-		report_diagnostic(Diagnostic {
-			message: format!("Expected 3 arguments to wingc_compile, got {}", split.len()),
-			span: None,
-		});
-		return WASM_RETURN_ERROR;
-	}
-	let source_path = Utf8Path::new(split[0]);
-	let output_dir = split.get(1).map(|s| Utf8Path::new(s)).unwrap();
-	let absolute_project_dir = split.get(2).map(|s| Utf8Path::new(s)).unwrap();
+	let source_file = Utf8Path::new(split[0]);
+	let output_dir = split.get(1).map(|s| Utf8Path::new(s));
+	let absolute_project_dir = split.get(2).map(|s| Utf8Path::new(s));
 
-	if !source_path.exists() {
+	if !source_file.exists() {
 		report_diagnostic(Diagnostic {
-			message: format!("Source path cannot be found: {}", source_path),
+			message: format!("Source file cannot be found: {}", source_file),
 			span: None,
 		});
 		return WASM_RETURN_ERROR;
 	}
 
-	let results = compile(source_path, None, output_dir, absolute_project_dir);
+	if source_file.is_dir() {
+		report_diagnostic(Diagnostic {
+			message: format!("Source path must be a file (not a directory): {}", source_file),
+			span: None,
+		});
+		return WASM_RETURN_ERROR;
+	}
+
+	let source_text = match fs::read_to_string(&source_file) {
+		Ok(text) => text,
+		Err(e) => {
+			report_diagnostic(Diagnostic {
+				message: format!("Could not read file \"{}\": {}", source_file, e),
+				span: None,
+			});
+			return WASM_RETURN_ERROR;
+		}
+	};
+
+	let results = compile(source_file, source_text, output_dir, absolute_project_dir);
 	if results.is_err() {
 		WASM_RETURN_ERROR
 	} else {
@@ -268,11 +279,13 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 
 pub fn compile(
 	source_path: &Utf8Path,
-	source_text: Option<String>,
-	out_dir: &Utf8Path,
-	absolute_project_root: &Utf8Path,
+	source_text: String,
+	out_dir: Option<&Utf8Path>,
+	absolute_project_root: Option<&Utf8Path>,
 ) -> Result<CompilerOutput, ()> {
-	let source_path = normalize_path(source_path, None);
+	let file_name = source_path.file_name().unwrap();
+	let default_out_dir = Utf8PathBuf::from(format!("{}.out", file_name));
+	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
 
 	// -- PARSING PHASE --
 	let mut files = Files::new();
@@ -331,7 +344,9 @@ pub fn compile(
 		json_checker.check(&scope);
 	}
 
-	let project_dir = absolute_project_root;
+	let project_dir = absolute_project_root
+		.unwrap_or(source_path.parent().unwrap())
+		.to_path_buf();
 
 	// Verify that the project dir is absolute
 	if !is_absolute_path(&project_dir) {
@@ -435,11 +450,13 @@ mod sanity {
 				fs::remove_dir_all(&out_dir).expect("remove out dir");
 			}
 
+			let test_text = fs::read_to_string(&test_file).expect("read test file");
+
 			let result = compile(
 				&test_file,
-				None,
-				&out_dir,
-				test_file.canonicalize_utf8().unwrap().parent().unwrap(),
+				test_text,
+				Some(&out_dir),
+				Some(test_file.canonicalize_utf8().unwrap().parent().unwrap()),
 			);
 
 			if result.is_err() {

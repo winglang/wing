@@ -7,8 +7,6 @@ import {
   sanitize_json_paths,
 } from "./utils";
 
-const TERRAFORM_JSON_FILENAME = "main.tf.json";
-
 export async function compileTest(
   sourceDir: string,
   wingFile: string,
@@ -23,6 +21,7 @@ export async function compileTest(
     `${wingBasename.replace(".w", "")}.tfaws`
   );
   await fs.rm(targetDir, { recursive: true, force: true });
+  const tf_json = join(targetDir, "main.tf.json");
 
   const filePath = join(sourceDir, wingBasename);
   await runWingCommand({
@@ -33,11 +32,9 @@ export async function compileTest(
     env,
   });
 
-  if (isEntrypointFile(filePath)) {
-    const tf_json = join(targetDir, TERRAFORM_JSON_FILENAME);
-    const npx_tfJson = sanitize_json_paths(tf_json);
-    fileMap[TERRAFORM_JSON_FILENAME] = JSON.stringify(npx_tfJson, null, 2);
-  }
+  const npx_tfJson = sanitize_json_paths(tf_json);
+
+  fileMap["main.tf.json"] = JSON.stringify(npx_tfJson, null, 2);
 
   // which files to include from the .wing directory
   const dotWing = join(targetDir, ".wing");
@@ -70,12 +67,6 @@ export async function testTest(
   const fileMap: Record<string, string> = {};
   const args = ["test", "-t", "sim"];
   const testDir = join(tmpDir, `${wingFile}_sim`);
-
-  // only entrypoint files have tests (for now)
-  if (!isEntrypointFile(wingFile)) {
-    return;
-  }
-
   await fs.mkdir(testDir, { recursive: true });
 
   const relativeWingFile = relative(testDir, join(sourceDir, wingFile));
@@ -92,13 +83,4 @@ export async function testTest(
   fileMap["stdout.log"] = out.stdout;
 
   await createMarkdownSnapshot(fileMap, filePath, "test", "sim");
-}
-
-function isEntrypointFile(path: string) {
-  return (
-    path.endsWith(".main.w") ||
-    path.endsWith(".test.w") ||
-    path.endsWith("/main.w") ||
-    path === "main.w"
-  );
 }
