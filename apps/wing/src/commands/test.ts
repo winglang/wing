@@ -34,8 +34,8 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
 
   if (expandedEntrypoints.length === 0) {
     // Check if it's the default entrypoint
-    if (entrypoints[0] === "*.w") {
-      throw new Error("No '.w' files found in current directory.");
+    if (entrypoints[0] === "*.test.w") {
+      throw new Error("No '.test.w' files found in current directory.");
     }
     throw new Error("No matching files found in current directory.");
   }
