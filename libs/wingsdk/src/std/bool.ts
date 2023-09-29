@@ -13,15 +13,12 @@ export class Boolean {
    * @param json to parse boolean from.
    * @returns a boolean.
    */
-  public static fromJson(
-    json: Json,
-    validationOptions?: JsonValidationOptions
-  ): boolean {
+  public static fromJson(json: Json, options?: JsonValidationOptions): boolean {
     const schema = JsonSchema._createJsonSchema({
       id: "bool",
       type: "boolean",
     } as any);
-    schema.validate(json, validationOptions);
+    schema.validate(json, options);
     return json as any;
   }
 

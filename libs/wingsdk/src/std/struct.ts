@@ -21,12 +21,9 @@ export class Struct {
    *
    * @macro ((json, validateOptions) => ($self$._fromJson(json, validateOptions)))($args$)
    */
-  public static fromJson(
-    json: Json,
-    validateOptions?: JsonValidationOptions
-  ): T1 {
+  public static fromJson(json: Json, options?: JsonValidationOptions): T1 {
     json;
-    validateOptions;
+    options;
     throw new Error("Macro");
   }
 

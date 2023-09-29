@@ -24,15 +24,12 @@ export class String {
    * @param json to create string from.
    * @returns a string.
    */
-  public static fromJson(
-    json: Json,
-    validationOptions?: JsonValidationOptions
-  ): string {
+  public static fromJson(json: Json, options?: JsonValidationOptions): string {
     const schema = JsonSchema._createJsonSchema({
       id: "string",
       type: "string",
     } as any);
-    schema.validate(json, validationOptions);
+    schema.validate(json, options);
     return json as any;
   }
 

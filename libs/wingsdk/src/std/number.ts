@@ -13,15 +13,12 @@ export class Number {
    * @param json to parse number from.
    * @returns a number.
    */
-  public static fromJson(
-    json: Json,
-    validationOptions?: JsonValidationOptions
-  ): number {
+  public static fromJson(json: Json, options?: JsonValidationOptions): number {
     const schema = JsonSchema._createJsonSchema({
       id: "num",
       type: "number",
     } as any);
-    schema.validate(json, validationOptions);
+    schema.validate(json, options);
     return json as any;
   }
 

@@ -192,7 +192,7 @@ Boolean.
 ##### `fromJson` <a name="fromJson" id="@winglang/sdk.std.Boolean.fromJson"></a>
 
 ```wing
-bool.fromJson(json: Json, validationOptions?: JsonValidationOptions);
+bool.fromJson(json: Json, options?: JsonValidationOptions);
 ```
 
 Parse a boolean from Json.
@@ -205,7 +205,7 @@ to parse boolean from.
 
 ---
 
-###### `validationOptions`<sup>Optional</sup> <a name="validationOptions" id="@winglang/sdk.std.Boolean.fromJson.parameter.validationOptions"></a>
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.std.Boolean.fromJson.parameter.options"></a>
 
 - *Type:* <a href="#@winglang/sdk.std.JsonValidationOptions">JsonValidationOptions</a>
 
@@ -2363,7 +2363,7 @@ Number.
 ##### `fromJson` <a name="fromJson" id="@winglang/sdk.std.Number.fromJson"></a>
 
 ```wing
-num.fromJson(json: Json, validationOptions?: JsonValidationOptions);
+num.fromJson(json: Json, options?: JsonValidationOptions);
 ```
 
 Parse a number from Json.
@@ -2376,7 +2376,7 @@ to parse number from.
 
 ---
 
-###### `validationOptions`<sup>Optional</sup> <a name="validationOptions" id="@winglang/sdk.std.Number.fromJson.parameter.validationOptions"></a>
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.std.Number.fromJson.parameter.options"></a>
 
 - *Type:* <a href="#@winglang/sdk.std.JsonValidationOptions">JsonValidationOptions</a>
 
@@ -2694,7 +2694,7 @@ Returns this string in upper case.
 ##### `fromJson` <a name="fromJson" id="@winglang/sdk.std.String.fromJson"></a>
 
 ```wing
-str.fromJson(json: Json, validationOptions?: JsonValidationOptions);
+str.fromJson(json: Json, options?: JsonValidationOptions);
 ```
 
 Parse string from Json.
@@ -2707,7 +2707,7 @@ to create string from.
 
 ---
 
-###### `validationOptions`<sup>Optional</sup> <a name="validationOptions" id="@winglang/sdk.std.String.fromJson.parameter.validationOptions"></a>
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.std.String.fromJson.parameter.options"></a>
 
 - *Type:* <a href="#@winglang/sdk.std.JsonValidationOptions">JsonValidationOptions</a>
 
@@ -2752,7 +2752,7 @@ Shared behavior for all structs.
 ##### `fromJson` <a name="fromJson" id="@winglang/sdk.std.Struct.fromJson"></a>
 
 ```wing
-Struct.fromJson(json: Json, validateOptions?: JsonValidationOptions);
+Struct.fromJson(json: Json, options?: JsonValidationOptions);
 ```
 
 Converts a Json to a Struct.
@@ -2763,7 +2763,7 @@ Converts a Json to a Struct.
 
 ---
 
-###### `validateOptions`<sup>Optional</sup> <a name="validateOptions" id="@winglang/sdk.std.Struct.fromJson.parameter.validateOptions"></a>
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.std.Struct.fromJson.parameter.options"></a>
 
 - *Type:* <a href="#@winglang/sdk.std.JsonValidationOptions">JsonValidationOptions</a>
 
