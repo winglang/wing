@@ -3059,7 +3059,7 @@ let JsonValidationOptions = JsonValidationOptions{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.JsonValidationOptions.property.unsafe">unsafe</a></code> | <code>bool</code> | Unsafe mode to skip validation. |
+| <code><a href="#@winglang/sdk.std.JsonValidationOptions.property.unsafe">unsafe</a></code> | <code>bool</code> | Unsafe mode to skip validation (may lead to runtime errors). |
 
 ---
 
@@ -3071,7 +3071,7 @@ unsafe: bool;
 
 - *Type:* bool
 
-Unsafe mode to skip validation.
+Unsafe mode to skip validation (may lead to runtime errors).
 
 ---
 
