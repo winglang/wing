@@ -399,8 +399,7 @@ Same as with primitives, it is possible to opt-out of validation using `unsafe: 
 ```js
 let p = Json { first: "Wing", phone: 1234 };
 let x = Contact.fromJson(p, unsafe: true);
-assert(x.last.len > 0);
-// RUNTIME ERROR: Cannot read properties of undefined (reading 'length')
+assert(x.last.len > 0); // RUNTIME ERROR
 ```
 
 ##### 1.1.4.8 Serialization
