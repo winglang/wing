@@ -25,13 +25,13 @@ export async function pack(options: PackageOptions): Promise<string> {
   }
 
   // check there is at least one source file
-  const sourceFiles = fs.readdirSync(process.cwd()).filter((f) => f.endsWith(".w"));
+  const currentDir = process.cwd();
+  const sourceFiles = fs.readdirSync(currentDir).filter((f) => f.endsWith(".w"));
   if (sourceFiles.length === 0) {
     throw new Error(`No Wing source files (.w) found in the current directory.`);
   }
 
   // check package.json exists
-  const currentDir = process.cwd();
   const pkgJsonPath = path.join(currentDir, "package.json");
   if (!fs.existsSync(pkgJsonPath)) {
     throw new Error(`No package.json found in the current directory. Run \`npm init\` first.`);
