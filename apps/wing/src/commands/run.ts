@@ -36,7 +36,7 @@ export async function run(entrypoint?: string, options?: RunOptions) {
   const openBrowser = options?.open ?? true;
 
   if (!entrypoint) {
-    const wingFiles = await glob("{main,*.main,*.test}.w");
+    const wingFiles = await glob("{main,*.main}.w");
     if (wingFiles.length !== 1) {
       throw new Error("Please specify which file you want to run");
     }

@@ -20,7 +20,7 @@ vi.mock("@wingconsole/app", () => {
   };
 });
 
-test("wing it runs the only file named 'main.w'", async () => {
+test("wing it runs the only file named main.w", async () => {
   const workdir = await mkdtemp(join(tmpdir(), "-wing-it-test"));
   const prevdir = process.cwd();
   try {
@@ -41,7 +41,7 @@ test("wing it runs the only file named 'main.w'", async () => {
   }
 });
 
-test("wing it runs the only '.main.w' file", async () => {
+test("wing it runs the only file ending with .main.w", async () => {
   const workdir = await mkdtemp(join(tmpdir(), "-wing-it-test"));
   const prevdir = process.cwd();
   try {
@@ -62,7 +62,7 @@ test("wing it runs the only '.main.w' file", async () => {
   }
 });
 
-test("wing it runs the only '.test.w' file", async () => {
+test("wing it doesn't run the only file ending with .test.w", async () => {
   const workdir = await mkdtemp(join(tmpdir(), "-wing-it-test"));
   const prevdir = process.cwd();
   try {
@@ -70,20 +70,13 @@ test("wing it runs the only '.test.w' file", async () => {
 
     writeFileSync("foo.test.w", "bring cloud;");
 
-    await run();
-    expect(createConsoleApp).toBeCalledWith({
-      wingfile: resolve("foo.test.w"),
-      requestedPort: 3000,
-      hostUtils: expect.anything(),
-      requireAcceptTerms: false,
-    });
-    expect(open).toBeCalledWith("http://localhost:3000/");
+    await expect(run).rejects.toThrow("Please specify which file you want to run");
   } finally {
     process.chdir(prevdir);
   }
 });
 
-test("wing it throws error for a directory with a non-entrypoint '.w' file", async () => {
+test("wing it throws error for a directory with a non-entrypoint file", async () => {
   const workdir = await mkdtemp(join(tmpdir(), "-wing-it-test"));
   const prevdir = process.cwd();
   try {
@@ -103,8 +96,8 @@ test("wing it throws error for a directory with more than one entrypoint file", 
   try {
     process.chdir(workdir);
 
+    writeFileSync("main.w", "bring cloud;");
     writeFileSync("foo.main.w", "bring cloud;");
-    writeFileSync("bar.test.w", "bring cloud;");
 
     await expect(run).rejects.toThrow("Please specify which file you want to run");
   } finally {
