@@ -125,7 +125,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
         output.push(
           "--------------------------------- STACK TRACE ---------------------------------"
         );
-        output.push(error.stack ?? "");
+        output.push(causedBy.stack ?? "");
       }
 
       throw new Error(output.join("\n"));
