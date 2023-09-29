@@ -52,6 +52,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: \"{1+1}\" == \"2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", ""] }, (1 + 1)),"2")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: \"\\{1+1}\" == \"\\{1+1}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("\{1+1}","\{1+1}")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: \"\\{1+1}\" != \"2\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })("\{1+1}","2")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"\\{1+1}\" != \"\\{2}\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })("\{1+1}","\{2}")))};
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

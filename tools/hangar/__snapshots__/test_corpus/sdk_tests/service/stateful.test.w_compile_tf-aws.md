@@ -16,7 +16,7 @@ module.exports = function({ $__parent_this_1_b, $std_Duration, $util_Util }) {
       const state = 456;
       return async () => {
         {console.log("stopping service")};
-        {console.log(String.raw({ raw: ["state is: ", ""] }, state))};
+        {console.log(String.raw({ raw: ["state is: $", ""] }, state))};
         {((cond) => {if (!cond) throw new Error("assertion failed: state == 456")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(state,456)))};
       }
       ;
