@@ -9,7 +9,7 @@ let user = "guy";
 let _id = "12345";
 
 api.put("/path/\{id}/nn/\{user}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
-  let path = "/path/\{_id}/nn/\{user}";
+  let path = "/path/{_id}/nn/{user}";
   assert(req.method == cloud.HttpMethod.PUT);
   assert(req.vars?.get("id") == _id);
   assert(req.vars?.get("user") == user);
@@ -26,7 +26,7 @@ api.put("/path/\{id}/nn/\{user}", inflight (req: cloud.ApiRequest): cloud.ApiRes
 
 
 test "http.put and http.fetch can preform a call to an api" {
-    let url = "{api.url}/path/\{_id}/nn/\{user}";
+    let url = "{api.url}/path/{_id}/nn/{user}";
     let response: http.Response = http.put(url, headers: { "content-type" => "application/json" }, body: Json.stringify(body));
     let fetchResponse: http.Response = http.put(url, method: http.HttpMethod.PUT, headers: { "content-type" => "application/json" }, body: Json.stringify(body));
 
