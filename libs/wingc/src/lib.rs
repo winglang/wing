@@ -17,6 +17,7 @@ use files::Files;
 use fold::Fold;
 use indexmap::IndexMap;
 use jsify::JSifier;
+
 use lifting::LiftVisitor;
 use parser::parse_wing_project;
 use struct_schema::StructSchemaVisitor;
@@ -52,6 +53,7 @@ mod file_graph;
 mod files;
 pub mod fold;
 pub mod jsify;
+pub mod json_schema_generator;
 mod lifting;
 pub mod lsp;
 pub mod parser;
