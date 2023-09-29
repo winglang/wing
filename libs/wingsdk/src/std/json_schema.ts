@@ -40,8 +40,12 @@ export class JsonSchema {
    * @throws an error if the json object is not valid
    */
   public validate(obj: Json, options?: JsonValidationOptions) {
+    if (options?.unsafe) {
+      return; // skip validation
+    }
+
     const result = this.validator.validate(obj, this.jsonSchema);
-    if (result.errors.length > 0 && !options?.unsafe) {
+    if (result.errors.length > 0) {
       throw new Error(
         `unable to parse ${this.jsonSchema.id.replace(
           "/",

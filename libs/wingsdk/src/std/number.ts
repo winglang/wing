@@ -1,4 +1,5 @@
-import { Json } from "./json";
+import { Json, JsonValidationOptions } from "./json";
+import { JsonSchema } from "./json_schema";
 import { InflightClient } from "../core";
 
 /**
@@ -9,14 +10,19 @@ export class Number {
   /**
    * Parse a number from Json.
    *
-   * @macro ((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })($args$)
-   *
    * @param json to parse number from.
    * @returns a number.
    */
-  public static fromJson(json: Json): number {
-    json;
-    throw new Error("Macro");
+  public static fromJson(
+    json: Json,
+    validationOptions?: JsonValidationOptions
+  ): number {
+    const schema = JsonSchema._createJsonSchema({
+      id: "num",
+      type: "number",
+    } as any);
+    schema.validate(json, validationOptions);
+    return json as any;
   }
 
   /**

@@ -1,4 +1,5 @@
-import { Json } from "./json";
+import { Json, JsonValidationOptions } from "./json";
+import { JsonSchema } from "./json_schema";
 import { InflightClient } from "../core";
 
 /**
@@ -12,13 +13,16 @@ export class Boolean {
    * @param json to parse boolean from.
    * @returns a boolean.
    */
-  public static fromJson(json: Json): boolean {
-    if (typeof json !== "boolean") {
-      throw new Error(
-        "unable to parse " + typeof json + " " + json + " as a boolean"
-      );
-    }
-    return JSON.parse(JSON.stringify(json));
+  public static fromJson(
+    json: Json,
+    validationOptions?: JsonValidationOptions
+  ): boolean {
+    const schema = JsonSchema._createJsonSchema({
+      id: "bool",
+      type: "boolean",
+    } as any);
+    schema.validate(json, validationOptions);
+    return json as any;
   }
 
   /**

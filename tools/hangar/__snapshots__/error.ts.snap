@@ -1,7 +1,8 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`bool_from_json.test.w 1`] = `
-"ERROR: unable to parse number 123 as a boolean
+"ERROR: unable to parse bool:
+- instance is not of a type(s) boolean
 
 ../../../examples/tests/error/target/test/bool_from_json.test.wsim.[REDACTED].tmp/.wing/preflight.js:9
        super(scope, id);
@@ -35,12 +36,13 @@ Duration <DURATION>"
 `;
 
 exports[`number_from_json.test.w 1`] = `
-"ERROR: unable to parse string apples as a number
+"ERROR: unable to parse num:
+- instance is not of a type(s) number
 
 ../../../examples/tests/error/target/test/number_from_json.test.wsim.[REDACTED].tmp/.wing/preflight.js:9
        super(scope, id);
        const j = ({\\"a\\": \\"apples\\"});
->>     const a = ((args) => { if (typeof args !== \\"number\\") {throw new Error(\\"unable to parse \\" + typeof args + \\" \\" + args + \\" as a number\\")}; return JSON.parse(JSON.stringify(args)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(\`Json property \\"\${args}\\" does not exist\`); return obj[args] })(j, \\"a\\"));
+>>     const a = (std.Number.fromJson(((obj, args) => { if (obj[args] === undefined) throw new Error(\`Json property \\"\${args}\\" does not exist\`); return obj[args] })(j, \\"a\\")));
      }
    }
 

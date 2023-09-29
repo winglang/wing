@@ -192,7 +192,7 @@ Boolean.
 ##### `fromJson` <a name="fromJson" id="@winglang/sdk.std.Boolean.fromJson"></a>
 
 ```wing
-bool.fromJson(json: Json);
+bool.fromJson(json: Json, validationOptions?: JsonValidationOptions);
 ```
 
 Parse a boolean from Json.
@@ -202,6 +202,12 @@ Parse a boolean from Json.
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 to parse boolean from.
+
+---
+
+###### `validationOptions`<sup>Optional</sup> <a name="validationOptions" id="@winglang/sdk.std.Boolean.fromJson.parameter.validationOptions"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.JsonValidationOptions">JsonValidationOptions</a>
 
 ---
 
@@ -2357,7 +2363,7 @@ Number.
 ##### `fromJson` <a name="fromJson" id="@winglang/sdk.std.Number.fromJson"></a>
 
 ```wing
-num.fromJson(json: Json);
+num.fromJson(json: Json, validationOptions?: JsonValidationOptions);
 ```
 
 Parse a number from Json.
@@ -2367,6 +2373,12 @@ Parse a number from Json.
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 to parse number from.
+
+---
+
+###### `validationOptions`<sup>Optional</sup> <a name="validationOptions" id="@winglang/sdk.std.Number.fromJson.parameter.validationOptions"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.JsonValidationOptions">JsonValidationOptions</a>
 
 ---
 
