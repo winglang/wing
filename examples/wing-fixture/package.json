@@ -23,12 +23,10 @@
     "url": "git+https://github.com/winglang/wing.git"
   },
   "scripts": {
-    "package": "npm pack"
+    "package": "wing pack"
   },
   "private": true,
-  "wing": {
-    "entrypoint": "lib.w"
-  },
+  "wing": true,
   "volta": {
     "extends": "../../package.json"
   }
