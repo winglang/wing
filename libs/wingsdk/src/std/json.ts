@@ -12,7 +12,7 @@ export interface JsonStringifyOptions {
  * Options for validating Json
  */
 export interface JsonValidationOptions {
-  /** Unsafe mode to ignore errors */
+  /** Unsafe mode to skip validation */
   readonly unsafe?: boolean;
 }
 
