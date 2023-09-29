@@ -134,11 +134,8 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 ///
 /// Expects an initial Wing file to be parsed. For Wing's CLI, this is usually
 /// the file the user asked to compile, and in the case of the LSP, the file that was
-/// just opened or changed.
-///
-/// If `init_text` is `None`, then the file will be read from disk. Otherwise, the
-/// provided text will be used as the source text for the file. This is useful for
-/// the LSP, where the text may not be saved to the disk yet, and for unit tests.
+/// just opened or changed. The file's path and text can be passed through `init_path` and
+/// `init_text`, respectively.
 ///
 /// Internally it parses the initial file, and then recursively parse all of the files that
 /// it depends on, storing all results in the `files`, `file_graph`, `tree_sitter_trees`,
@@ -149,19 +146,32 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 /// files that come before it in the ordering.
 pub fn parse_wing_project(
 	init_path: &Utf8Path,
-	init_text: Option<String>,
+	init_text: String,
 	files: &mut Files,
 	file_graph: &mut FileGraph,
 	tree_sitter_trees: &mut IndexMap<Utf8PathBuf, tree_sitter::Tree>,
 	asts: &mut IndexMap<Utf8PathBuf, Scope>,
 ) -> Vec<Utf8PathBuf> {
-	// Parse the initial path (even if we have already seen it before)
-	let dependent_wing_paths = match init_path.is_dir() {
-		true => parse_wing_directory(&init_path, files, file_graph, tree_sitter_trees, asts),
-		false => parse_wing_file(&init_path, init_text, files, file_graph, tree_sitter_trees, asts),
-	};
+	// Parse the initial file (even if we have already seen it before)
+	let (tree_sitter_tree, ast, dependent_wing_paths) = parse_wing_file(init_path, &init_text);
 
-	// Store a stack of files that still need parsing
+	// Update our files collection with the new source text. For a fresh compilation,
+	// this will be the first time we've seen this file. In the LSP we might already have
+	// text from a previous compilation, so we'll replace the contents.
+	files.update_file(&init_path, init_text);
+
+	// Update our collections of trees and ASTs and our file graph
+	update_trees_and_graph(
+		init_path,
+		tree_sitter_tree,
+		ast,
+		&dependent_wing_paths,
+		tree_sitter_trees,
+		asts,
+		file_graph,
+	);
+
+	// Store a stack (Vec) of which files still need parsing
 	let mut unparsed_files = dependent_wing_paths;
 
 	// Parse all remaining files in the project
@@ -180,13 +190,64 @@ pub fn parse_wing_project(
 			continue;
 		}
 
-		// Parse the file or directory
-		let dependent_wing_paths = match file_or_dir_path.is_dir() {
-			true => parse_wing_directory(&file_or_dir_path, files, file_graph, tree_sitter_trees, asts),
-			false => parse_wing_file(&file_or_dir_path, None, files, file_graph, tree_sitter_trees, asts),
-		};
+		// Handle directories specially
+		if file_or_dir_path.is_dir() {
+			// Collect a list of all files and subdirectories in the directory
+			let mut files_and_dirs = Vec::new();
+			for entry in fs::read_dir(&file_or_dir_path).expect("read_dir call failed") {
+				let entry = entry.unwrap();
+				let path = Utf8PathBuf::from_path_buf(entry.path()).expect("invalid utf8 path");
+				if path.is_dir() || path.extension() == Some("w") {
+					files_and_dirs.push(path);
+				}
+			}
 
-		// Add the dependent files to the stack of files to parse
+			// Sort the files and directories so that we always visit them in the same order
+			files_and_dirs.sort();
+
+			// Parse the file here (since it doesn't exist)
+			let mut tree_sitter_parser = tree_sitter::Parser::new();
+			tree_sitter_parser.set_language(tree_sitter_wing::language()).unwrap();
+			let tree_sitter_tree = tree_sitter_parser.parse("", None).unwrap();
+			let ast = Scope::empty();
+			let dependent_wing_paths = files_and_dirs;
+
+			// Update our collections of trees and ASTs and our file graph
+			update_trees_and_graph(
+				&file_or_dir_path,
+				tree_sitter_tree,
+				ast,
+				&dependent_wing_paths,
+				tree_sitter_trees,
+				asts,
+				file_graph,
+			);
+
+			// Add all children files and directories to the list of files to parse
+			unparsed_files.extend(dependent_wing_paths);
+
+			continue;
+		}
+
+		let file_text = fs::read_to_string(&file_or_dir_path).unwrap_or(String::new());
+		files.add_file(&file_or_dir_path, file_text.clone()).unwrap();
+		files.get_file(&file_or_dir_path).unwrap();
+
+		// Parse the file
+		let (tree_sitter_tree, ast, dependent_wing_paths) = parse_wing_file(&file_or_dir_path, &file_text);
+
+		// Update our collections of trees and ASTs and our file graph
+		update_trees_and_graph(
+			&file_or_dir_path,
+			tree_sitter_tree,
+			ast,
+			&dependent_wing_paths,
+			tree_sitter_trees,
+			asts,
+			file_graph,
+		);
+
+		// Add the file's dependencies to the list of files to parse
 		unparsed_files.extend(dependent_wing_paths);
 	}
 
@@ -211,24 +272,22 @@ pub fn parse_wing_project(
 	}
 }
 
-fn parse_wing_file(
-	source_path: &Utf8Path,
-	source_text: Option<String>,
-	files: &mut Files,
-	file_graph: &mut FileGraph,
+fn update_trees_and_graph(
+	file_or_dir_path: &Utf8Path,
+	tree_sitter_tree: tree_sitter::Tree,
+	ast: Scope,
+	dependent_wing_paths: &[Utf8PathBuf],
 	tree_sitter_trees: &mut IndexMap<Utf8PathBuf, tree_sitter::Tree>,
 	asts: &mut IndexMap<Utf8PathBuf, Scope>,
-) -> Vec<Utf8PathBuf> {
-	let source_text = match source_text {
-		Some(text) => text,
-		None => fs::read_to_string(source_path).expect("read_to_string call failed"),
-	};
+	file_graph: &mut FileGraph,
+) {
+	// Update our collections of trees and ASTs and our file graph
+	tree_sitter_trees.insert(file_or_dir_path.to_owned(), tree_sitter_tree);
+	asts.insert(file_or_dir_path.to_owned(), ast);
+	file_graph.update_file(file_or_dir_path, &dependent_wing_paths);
+}
 
-	// Update our files collection with the new source text. On a fresh compilation,
-	// this will be the first time we've seen this file. In the LSP we might already have
-	// text from a previous compilation, so we'll replace the contents.
-	files.update_file(&source_path, source_text.clone());
-
+fn parse_wing_file(source_path: &Utf8Path, source_text: &str) -> (tree_sitter::Tree, Scope, Vec<Utf8PathBuf>) {
 	let language = tree_sitter_wing::language();
 	let mut tree_sitter_parser = tree_sitter::Parser::new();
 	tree_sitter_parser.set_language(language).unwrap();
@@ -242,62 +301,9 @@ fn parse_wing_file(
 
 	let tree_sitter_root = tree_sitter_tree.root_node();
 
-	// Parse the source text into an AST
 	let parser = Parser::new(&source_text.as_bytes(), source_path.to_owned());
 	let (scope, dependent_wing_paths) = parser.parse(&tree_sitter_root);
-
-	// Update our collections of trees and ASTs and our file graph
-	tree_sitter_trees.insert(source_path.to_owned(), tree_sitter_tree);
-	asts.insert(source_path.to_owned(), scope);
-	file_graph.update_file(source_path, &dependent_wing_paths);
-
-	dependent_wing_paths
-}
-
-fn parse_wing_directory(
-	source_path: &Utf8Path,
-	files: &mut Files,
-	file_graph: &mut FileGraph,
-	tree_sitter_trees: &mut IndexMap<Utf8PathBuf, tree_sitter::Tree>,
-	asts: &mut IndexMap<Utf8PathBuf, Scope>,
-) -> Vec<Utf8PathBuf> {
-	// Collect a list of all files and subdirectories in the directory
-	let mut files_and_dirs = Vec::new();
-	for entry in fs::read_dir(&source_path).expect("read_dir call failed") {
-		let entry = entry.unwrap();
-		let path = Utf8PathBuf::from_path_buf(entry.path()).expect("invalid utf8 path");
-
-		// If it's a directory and its name is not node_modules or .git or ending in .tmp, add it
-		// or if it's a file and its extension is .w, add it
-		//
-		// TODO: skip directories that don't contain any .w files anywhere in their subtree
-		if (path.is_dir()
-			&& path.file_name() != Some("node_modules")
-			&& path.file_name() != Some(".git")
-			&& path.extension() != Some("tmp"))
-			|| path.extension() == Some("w")
-		{
-			files_and_dirs.push(path);
-		}
-	}
-
-	// Sort the files and directories so that we always visit them in the same order
-	files_and_dirs.sort();
-
-	// Create a fake AST (since the directory doesn't have any source code to parse)
-	let mut tree_sitter_parser = tree_sitter::Parser::new();
-	tree_sitter_parser.set_language(tree_sitter_wing::language()).unwrap();
-	let tree_sitter_tree = tree_sitter_parser.parse("", None).unwrap();
-	let scope = Scope::empty();
-	let dependent_wing_paths = files_and_dirs;
-
-	// Update our collections of trees and ASTs and our file graph
-	files.update_file(&source_path, "".to_string());
-	tree_sitter_trees.insert(source_path.to_owned(), tree_sitter_tree);
-	asts.insert(source_path.to_owned(), scope);
-	file_graph.update_file(source_path, &dependent_wing_paths);
-
-	dependent_wing_paths
+	(tree_sitter_tree, scope, dependent_wing_paths)
 }
 
 /// Parses a single Wing source file.
@@ -2252,7 +2258,7 @@ impl<'s> Parser<'s> {
 	}
 }
 
-pub fn is_entrypoint_file(path: &Utf8Path) -> bool {
+fn is_entrypoint_file(path: &Utf8Path) -> bool {
 	path
 		.file_name()
 		.map(|s| s == "main.w" || s.ends_with(".main.w") || s.ends_with(".test.w"))

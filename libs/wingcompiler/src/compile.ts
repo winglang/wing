@@ -1,6 +1,6 @@
 import * as vm from "vm";
 
-import { promises as fs, lstatSync } from "fs";
+import { promises as fs } from "fs";
 import { basename, dirname, join, resolve } from "path";
 import * as os from "os";
 
@@ -58,26 +58,13 @@ function resolveSynthDir(
   entrypoint: string,
   target: Target,
   testing: boolean = false,
-  tmp: boolean = false,
-  log?: (...args: any[]) => void
+  tmp: boolean = false
 ) {
   const targetDirSuffix = DEFAULT_SYNTH_DIR_SUFFIX[target];
   if (!targetDirSuffix) {
     throw new Error(`unsupported target ${target}`);
   }
-
-  let entrypointName;
-  try {
-    const isDirectory = lstatSync(entrypoint).isDirectory();
-    if (isDirectory) {
-      entrypointName = basename(resolve(entrypoint));
-    } else {
-      entrypointName = basename(entrypoint, ".w");
-    }
-  } catch (err) {
-    log?.(err);
-    throw new Error("Source file cannot be found");
-  }
+  const entrypointName = basename(entrypoint, ".w");
   const tmpSuffix = tmp ? `.${Date.now().toString().slice(-6)}.tmp` : "";
   const lastPart = `${entrypointName}.${targetDirSuffix}${tmpSuffix}`;
   if (testing) {
@@ -186,42 +173,6 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     throw new CompileError(errors);
   }
 
-  if (isEntrypointFile(entrypoint)) {
-    await runPreflightCodeInVm(workDir, wingDir, tempProcess, log);
-  }
-
-  if (os.platform() === "win32") {
-    // Windows doesn't really support fully atomic moves.
-    // So we just copy the directory instead.
-    // Also only using sync methods to avoid possible async fs issues.
-    await fs.rm(synthDir, { recursive: true, force: true });
-    await fs.mkdir(synthDir, { recursive: true });
-    await copyDir(tmpSynthDir, synthDir);
-    await fs.rm(tmpSynthDir, { recursive: true, force: true });
-  } else {
-    // Move the temporary directory to the final target location in an atomic operation
-    await copyDir(tmpSynthDir, synthDir);
-    await fs.rm(tmpSynthDir, { recursive: true, force: true });
-  }
-
-  return synthDir;
-}
-
-function isEntrypointFile(path: string) {
-  return (
-    path.endsWith(".main.w") ||
-    path.endsWith(".test.w") ||
-    path.endsWith("/main.w") ||
-    path === "main.w"
-  );
-}
-
-async function runPreflightCodeInVm(
-  workDir: string,
-  wingDir: string,
-  tempProcess: { env: Record<string, string | undefined> },
-  log?: (...args: any[]) => void
-): Promise<void> {
   const artifactPath = resolve(workDir, WINGC_PREFLIGHT);
   log?.("reading artifact from %s", artifactPath);
   const artifact = await fs.readFile(artifactPath, "utf-8");
@@ -266,6 +217,22 @@ async function runPreflightCodeInVm(
   } catch (error) {
     throw new PreflightError(error as any, artifactPath, artifact);
   }
+
+  if (os.platform() === "win32") {
+    // Windows doesn't really support fully atomic moves.
+    // So we just copy the directory instead.
+    // Also only using sync methods to avoid possible async fs issues.
+    await fs.rm(synthDir, { recursive: true, force: true });
+    await fs.mkdir(synthDir, { recursive: true });
+    await copyDir(tmpSynthDir, synthDir);
+    await fs.rm(tmpSynthDir, { recursive: true, force: true });
+  } else {
+    // Move the temporary directory to the final target location in an atomic operation
+    await copyDir(tmpSynthDir, synthDir);
+    await fs.rm(tmpSynthDir, { recursive: true, force: true });
+  }
+
+  return synthDir;
 }
 
 /**

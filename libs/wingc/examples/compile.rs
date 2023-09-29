@@ -2,7 +2,7 @@
 // This should only be used for testing wingc directly.
 
 use camino::{Utf8Path, Utf8PathBuf};
-use std::{env, process};
+use std::{env, fs, process};
 use wingc::{compile, diagnostic::get_diagnostics};
 
 pub fn main() {
@@ -13,9 +13,15 @@ pub fn main() {
 	}
 
 	let source_path = Utf8Path::new(&args[1]).canonicalize_utf8().unwrap();
+	let source_text = fs::read_to_string(&source_path).unwrap();
 	let target_dir: Utf8PathBuf = env::current_dir().unwrap().join("target").try_into().unwrap();
 
-	let results = compile(&source_path, None, &target_dir, source_path.parent().unwrap());
+	let results = compile(
+		&source_path,
+		source_text,
+		Some(&target_dir),
+		Some(source_path.parent().unwrap()),
+	);
 	if results.is_err() {
 		let mut diags = get_diagnostics();
 		// Sort error messages by line number (ascending)
