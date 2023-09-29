@@ -14,7 +14,7 @@ use crate::files::Files;
 use crate::fold::Fold;
 use crate::jsify::JSifier;
 use crate::lifting::LiftVisitor;
-use crate::parser::parse_wing_project;
+use crate::parser::{normalize_path, parse_wing_project};
 use crate::type_check;
 use crate::type_check::jsii_importer::JsiiImportSpec;
 use crate::type_check_assert::TypeCheckAssert;
@@ -136,10 +136,11 @@ fn partial_compile(
 	reset_diagnostics();
 
 	let source_path = Utf8Path::from_path(source_path).expect("invalid unicide path");
+	let source_path = normalize_path(source_path, None);
 
 	let topo_sorted_files = parse_wing_project(
 		&source_path,
-		source_text,
+		Some(source_text),
 		&mut project_data.files,
 		&mut project_data.file_graph,
 		&mut project_data.trees,
