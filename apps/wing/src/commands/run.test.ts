@@ -20,7 +20,7 @@ vi.mock("@wingconsole/app", () => {
   };
 });
 
-test("wing it runs the only file named main.w", async () => {
+test("wing it runs the only entrypoint file named main.w", async () => {
   const workdir = await mkdtemp(join(tmpdir(), "-wing-it-test"));
   const prevdir = process.cwd();
   try {
@@ -41,7 +41,7 @@ test("wing it runs the only file named main.w", async () => {
   }
 });
 
-test("wing it runs the only file ending with .main.w", async () => {
+test("wing it runs the only entrypoint file ending with .main.w", async () => {
   const workdir = await mkdtemp(join(tmpdir(), "-wing-it-test"));
   const prevdir = process.cwd();
   try {
@@ -62,7 +62,7 @@ test("wing it runs the only file ending with .main.w", async () => {
   }
 });
 
-test("wing it doesn't run the only file ending with .test.w", async () => {
+test("wing it doesn't run the only entrypoint file ending with .test.w", async () => {
   const workdir = await mkdtemp(join(tmpdir(), "-wing-it-test"));
   const prevdir = process.cwd();
   try {
