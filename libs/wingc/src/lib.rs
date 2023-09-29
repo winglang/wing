@@ -159,9 +159,16 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	let args = ptr_to_string(ptr, len);
 
 	let split = args.split(";").collect::<Vec<&str>>();
+	if split.len() != 3 {
+		report_diagnostic(Diagnostic {
+			message: format!("Expected 3 arguments to wingc_compile, got {}", split.len()),
+			span: None,
+		});
+		return WASM_RETURN_ERROR;
+	}
 	let source_path = Utf8Path::new(split[0]);
-	let output_dir = split.get(1).map(|s| Utf8Path::new(s));
-	let absolute_project_dir = split.get(2).map(|s| Utf8Path::new(s));
+	let output_dir = split.get(1).map(|s| Utf8Path::new(s)).unwrap();
+	let absolute_project_dir = split.get(2).map(|s| Utf8Path::new(s)).unwrap();
 
 	if !source_path.exists() {
 		report_diagnostic(Diagnostic {
@@ -260,13 +267,10 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 pub fn compile(
 	source_path: &Utf8Path,
 	source_text: Option<String>,
-	out_dir: Option<&Utf8Path>,
-	absolute_project_root: Option<&Utf8Path>,
+	out_dir: &Utf8Path,
+	absolute_project_root: &Utf8Path,
 ) -> Result<CompilerOutput, ()> {
 	let source_path = normalize_path(source_path, None);
-	let file_name = source_path.file_name().unwrap_or("default"); // TODO: make out_dir required instead
-	let default_out_dir = Utf8PathBuf::from(format!("{}.out", file_name));
-	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
 
 	// -- PARSING PHASE --
 	let mut files = Files::new();
@@ -325,9 +329,7 @@ pub fn compile(
 		json_checker.check(&scope);
 	}
 
-	let project_dir = absolute_project_root
-		.unwrap_or(source_path.parent().unwrap())
-		.to_path_buf();
+	let project_dir = absolute_project_root;
 
 	// Verify that the project dir is absolute
 	if !is_absolute_path(&project_dir) {
@@ -434,8 +436,8 @@ mod sanity {
 			let result = compile(
 				&test_file,
 				None,
-				Some(&out_dir),
-				Some(test_file.canonicalize_utf8().unwrap().parent().unwrap()),
+				&out_dir,
+				test_file.canonicalize_utf8().unwrap().parent().unwrap(),
 			);
 
 			if result.is_err() {
