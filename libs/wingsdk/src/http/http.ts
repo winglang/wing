@@ -365,12 +365,7 @@ export class Util {
   public static formatUrl(url: Url, options?: FormatUrlOptions): string {
     try {
       const nodeUrl = new NodeUrl(url.href);
-      return format(nodeUrl, {
-        auth: options?.auth,
-        fragment: options?.fragment,
-        search: options?.search,
-        unicode: options?.unicode,
-      });
+      return format(nodeUrl, options);
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(`Unable to format URL Struct: ${error.message}`);
