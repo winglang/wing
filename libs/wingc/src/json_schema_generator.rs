@@ -3,7 +3,7 @@ use crate::{
 	type_check::{symbol_env::SymbolEnv, Struct, Type, UnsafeRef},
 };
 
-pub(crate) struct JsonSchemaGenerator {}
+pub(crate) struct JsonSchemaGenerator;
 
 impl JsonSchemaGenerator {
 	pub fn new() -> Self {
