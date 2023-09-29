@@ -16,7 +16,7 @@ import {
   ISimulatorContext,
   ISimulatorResourceInstance,
 } from "../simulator/simulator";
-import { Json } from "../std";
+import { Datetime, Json } from "../std";
 
 export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   private readonly objectKeys: Set<string>;
@@ -225,9 +225,28 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   /**
    * Get the metadata of an object in the bucket.
    * @param key Key of the object.
+   * @throws if the object does not exist.
    */
   public async metadata(key: string): Promise<ObjectMetadata> {
-    return Promise.reject(`metadata is not implemented: (key=${key})`);
+    return this.context.withTrace({
+      message: `Metadata (key=${key}).`,
+      activity: async () => {
+        const hash = this.hashKey(key);
+        const filename = join(this._fileDir, hash);
+        try {
+          const filestat = await fs.promises.stat(filename, {
+            bigint: false,
+          });
+          return {
+            size: filestat.size,
+            lastModified: Datetime.fromIso(filestat.mtime.toISOString()),
+            // fs does not provide a way to get the content-type
+          };
+        } catch (e) {
+          throw new Error(`Object does not exist (key=${key}).`);
+        }
+      },
+    });
   }
 
   private async addFile(key: string, value: string): Promise<void> {

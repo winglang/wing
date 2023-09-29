@@ -368,6 +368,7 @@ export interface IBucketClient {
   /**
    * Get the metadata of an object in the bucket.
    * @param key Key of the object.
+   * @Throws if there is no object with the given key.
    * @inflight
    */
   metadata(key: string): Promise<ObjectMetadata>;

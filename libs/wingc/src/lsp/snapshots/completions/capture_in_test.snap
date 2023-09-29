@@ -73,7 +73,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "inflight (key: str): ObjectMetadata"
   documentation:
     kind: markdown
-    value: "```wing\ninflight metadata: inflight (key: str): ObjectMetadata\n```\n---\nGet the metadata of an object in the bucket."
+    value: "```wing\ninflight metadata: inflight (key: str): ObjectMetadata\n```\n---\nGet the metadata of an object in the bucket.\n\n\n*@Throws* *if there is no object with the given key.*"
   sortText: ff|metadata
   insertText: metadata($0)
   insertTextFormat: 2

@@ -232,6 +232,7 @@ export class BucketClient implements IBucketClient {
 
   /**
    * Get the metadata of an object in the bucket.
+   * @throws if the object does not exist.
    * @param key Key of the object.
    */
   public async metadata(key: string): Promise<ObjectMetadata> {
