@@ -292,5 +292,20 @@ test "inflight schema usage" {
   assert(schema.asStr() == Json.stringify(expectedSchema));
 }
 
+// Testing usafe parsing mode
+str.fromJson(10, unsafe: true);
+bool.fromJson(10, unsafe: true);
+num.fromJson("cool", unsafe: true);
+
+Student.fromJson({obviously: "not a student"}, unsafe: true);
+
+test "unsafe flight" {
+  str.fromJson(10, unsafe: true);
+  bool.fromJson(10, unsafe: true);
+  num.fromJson("cool", unsafe: true);
+  
+  Student.fromJson({obviously: "not a student"}, unsafe: true);
+}
+
 // Check that imported files can use .fromJson on structs defined within them
 new otherExternalStructs.UsesStructInImportedFile();
