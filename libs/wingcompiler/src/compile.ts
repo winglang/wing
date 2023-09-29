@@ -186,8 +186,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     throw new CompileError(errors);
   }
 
-  // don't run preflight code if compiling a directory
-  if (entrypoint.endsWith(".w")) {
+  if (isEntrypointFile(entrypoint)) {
     await runPreflightCodeInVm(workDir, wingDir, tempProcess, log);
   }
 
@@ -206,6 +205,15 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   }
 
   return synthDir;
+}
+
+function isEntrypointFile(path: string) {
+  return (
+    path.endsWith(".main.w") ||
+    path.endsWith(".test.w") ||
+    path.endsWith("/main.w") ||
+    path === "main.w"
+  );
 }
 
 async function runPreflightCodeInVm(
