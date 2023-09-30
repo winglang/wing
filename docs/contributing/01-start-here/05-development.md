@@ -73,6 +73,12 @@ pnpm build
 It will compile, lint, test and package all modules.
 
 ## 🏠 What's the recommended development workflow?
+:::info
+When testing your changes to Wing, locally it may be helpful to be able to easily invoke your local version of the Wing CLI.
+In which case adding a shell alias may be helpful for instance on Linux and Mac you could add: 
+
+`alias mywing=/<PATH_TO_WING_REPO>/apps/wing/bin/wing` to your shell's rc file.
+:::
 
 The `pnpm wing` command can be executed from the root of the repository in order to build and run the
 compiler, SDK (standard library) and the Wing CLI. Turbo is configured to make sure only the changed components are built
@@ -84,6 +90,13 @@ To get full diagnostics, use these exports:
 export NODE_OPTIONS=--stack-trace-limit=100
 export RUST_BACKTRACE=full
 ```
+
+Or if you just want to compile your changes and run a local version of the Wing CLI:
+
+```sh
+pnpm compile --filter=winglang
+```
+
 
 Now, you can edit a source file anywhere across the stack and run the compiler with arguments.
 For example:

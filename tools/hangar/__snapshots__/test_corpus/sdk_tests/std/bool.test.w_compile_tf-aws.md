@@ -19,7 +19,7 @@ module.exports = function({ $PARSE_ERROR, $std_Boolean, $std_Json }) {
       }
       catch ($error_s) {
         const s = $error_s.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: s == PARSE_ERROR")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s,$PARSE_ERROR)))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: s.contains(PARSE_ERROR)")})(s.includes($PARSE_ERROR))};
       }
     }
   }
@@ -112,12 +112,12 @@ class $Root extends $stdlib.std.Resource {
       }
       catch ($error_actual) {
         const actual = $error_actual.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: actual == expected")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(actual,expected)))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: actual.contains(expected)")})(actual.includes(expected))};
         error = true;
       }
       {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
     });
-    const PARSE_ERROR = "unable to parse number 123 as a boolean";
+    const PARSE_ERROR = "unable to parse bool";
     const t = (std.Boolean.fromJson((JSON.parse("true"))));
     {((cond) => {if (!cond) throw new Error("assertion failed: t == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(t,true)))};
     (assertThrows(PARSE_ERROR,(() => {
