@@ -19,6 +19,7 @@ use crate::{
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
 	file_graph::FileGraph,
 	files::Files,
+	parser::is_entrypoint_file,
 	type_check::{
 		is_udt_struct_type,
 		lifts::{Liftable, Lifts},
@@ -72,8 +73,8 @@ pub struct JSifier<'a> {
 	source_file_graph: &'a FileGraph,
 	/// Root of the project, used for resolving extern modules
 	absolute_project_root: &'a Utf8Path,
-	/// The entrypoint file of the Wing application.
-	entrypoint_file_path: &'a Utf8Path,
+	/// The path that compilation started at (file or directory)
+	compilation_init_path: &'a Utf8Path,
 }
 
 /// Preflight classes have two types of host binding methods:
@@ -89,7 +90,7 @@ impl<'a> JSifier<'a> {
 		types: &'a mut Types,
 		source_files: &'a Files,
 		source_file_graph: &'a FileGraph,
-		entrypoint_file_path: &'a Utf8Path,
+		compilation_init_path: &'a Utf8Path,
 		absolute_project_root: &'a Utf8Path,
 	) -> Self {
 		let output_files = Files::default();
@@ -97,7 +98,7 @@ impl<'a> JSifier<'a> {
 			types,
 			source_files,
 			source_file_graph,
-			entrypoint_file_path,
+			compilation_init_path,
 			absolute_project_root,
 			referenced_struct_schemas: RefCell::new(BTreeMap::new()),
 			inflight_file_counter: RefCell::new(0),
@@ -141,10 +142,11 @@ impl<'a> JSifier<'a> {
 
 		let mut output = CodeMaker::default();
 
-		let is_entrypoint_file = source_path == self.entrypoint_file_path;
+		let is_compilation_init = source_path == self.compilation_init_path;
+		let is_entrypoint = is_entrypoint_file(source_path);
 		let is_directory = source_path.is_dir();
 
-		if is_entrypoint_file {
+		if is_entrypoint {
 			output.line(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
 			output.line(format!(
 				"const {} = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);",
@@ -163,7 +165,7 @@ impl<'a> JSifier<'a> {
 		output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
 		output.add_code(imports);
 
-		if is_entrypoint_file {
+		if is_entrypoint {
 			let mut root_class = CodeMaker::default();
 			root_class.open(format!("class {} extends {} {{", ROOT_CLASS, STDLIB_CORE_RESOURCE));
 			root_class.open(format!("{JS_CONSTRUCTOR}(scope, id) {{"));
@@ -175,7 +177,7 @@ impl<'a> JSifier<'a> {
 
 			output.add_code(root_class);
 			output.line("const $App = $stdlib.core.App.for(process.env.WING_TARGET);".to_string());
-			let app_name = self.entrypoint_file_path.file_stem().unwrap();
+			let app_name = source_path.file_stem().unwrap();
 			output.line(format!(
 				"new $App({{ outdir: {}, name: \"{}\", rootConstruct: {}, plugins: {}, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }}).synth();",
 				OUTDIR_VAR, app_name, ROOT_CLASS, PLUGINS_VAR, ENV_WING_IS_TEST
@@ -221,7 +223,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		// Generate a name for the JS file this preflight code will be written to
-		let preflight_file_name = if is_entrypoint_file {
+		let preflight_file_name = if is_compilation_init {
 			PREFLIGHT_FILE_NAME.to_string()
 		} else {
 			// remove all non-alphanumeric characters
