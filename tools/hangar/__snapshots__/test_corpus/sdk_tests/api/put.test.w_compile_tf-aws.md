@@ -344,7 +344,7 @@ class $Root extends $stdlib.std.Resource {
     const body = ({"cat": "Tion"});
     const user = "guy";
     const _id = "12345";
-    (api.put("/path/{id}/nn/{user}",new $Closure1(this,"$Closure1")));
+    (api.put("/path/\{id}/nn/\{user}",new $Closure1(this,"$Closure1")));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:http.put and http.fetch can preform a call to an api",new $Closure2(this,"$Closure2"));
   }
 }

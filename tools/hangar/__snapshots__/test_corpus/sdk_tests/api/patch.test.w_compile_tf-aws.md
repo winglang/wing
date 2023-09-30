@@ -335,7 +335,7 @@ class $Root extends $stdlib.std.Resource {
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
     const body = ({"cat": "Tion"});
     const _id = "12345";
-    (api.patch("/path/{id}",new $Closure1(this,"$Closure1")));
+    (api.patch("/path/\{id}",new $Closure1(this,"$Closure1")));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:http.patch and http.fetch can preform a call to an api",new $Closure2(this,"$Closure2"));
   }
 }
