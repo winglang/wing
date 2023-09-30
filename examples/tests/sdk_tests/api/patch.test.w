@@ -7,7 +7,7 @@ let api = new cloud.Api();
 let body = Json {"cat": "Tion"};
 let _id = "12345";
 
-api.patch("/path/{id}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+api.patch("/path/\{id}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   assert(req.method == cloud.HttpMethod.PATCH);
 
   assert(req.vars?.get("id") == _id);
