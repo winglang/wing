@@ -59,7 +59,6 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
       log,
       color: coloring,
       target: options?.target || wingCompiler.Target.SIM,
-      targetDir: options?.targetDir || "./target",
     });
   } catch (error) {
     if (error instanceof wingCompiler.CompileError) {
