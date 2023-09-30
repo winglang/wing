@@ -49,6 +49,24 @@ export interface TableProps {
    * @default undefined
    */
   readonly initialRows?: { [key: string]: Json };
+
+  /**
+  * The table's instance storage type
+  * @default undefined 
+  */
+  readonly storageType?: string;
+
+  /**
+  * the table's instance id 
+  * @default undefined 
+  */
+  readonly clusterId?: string;
+
+  /**
+  * the table's instance number of nodes
+  * @default undefined 
+  */
+  readonly numNodes?: number;
 }
 
 /**

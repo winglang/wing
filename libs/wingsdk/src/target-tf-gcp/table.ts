@@ -53,10 +53,15 @@ export class Table extends ex.Table {
       columnsFamily.push({ family: key });
     }
 
+    let clusterId = props.clusterId;
+    if (!props.clusterId) {
+      clusterId = "default"; // ???
+    }
+
     const instanceCluster: BigtableInstanceCluster = {
-      clusterId: 'my-wing-cluster', // TODO(wiktor.zajac) where should I specify this config?
-      numNodes: 1,
-      storageType: 'HDD',
+      clusterId: clusterId!,
+      numNodes: props.numNodes,
+      storageType: props.storageType,
       zone: app.zone,
     }
 
