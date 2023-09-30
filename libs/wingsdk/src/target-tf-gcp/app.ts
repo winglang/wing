@@ -25,9 +25,16 @@ export interface AppProps extends CdktfAppProps {
   readonly region: string;
 
   /**
+   * The Google Cloud zone, used for all resources.
+   * @see https://cloud.google.com/functions/docs/locations
+   */
+  readonly zone: string;
+
+  /**
    * Should environment variable be overriden
    */
   readonly overrideEnv?: boolean;
+
 }
 
 /**
@@ -44,6 +51,9 @@ export class App extends CdktfApp {
    * The Google Cloud region, used for all resources.
    */
   public readonly region: string;
+
+  // TODO(wiktor.zajac) verify if it should be here
+  public readonly zone: string;
 
   public readonly _target = "tf-gcp";
 
@@ -75,6 +85,14 @@ export class App extends CdktfApp {
       );
     }
     this.region = region;
+
+    let zone: string | undefined = props.zone;
+    if (zone === undefined && !props.overrideEnv) {
+      throw new Error(
+        "A Google Cloud zone must be specified through the GOOGLE_ZONE environment variable.",
+      );
+    }
+    this.zone = zone;
 
     new GoogleProvider(this, "google", {
       project: this.projectId,

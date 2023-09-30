@@ -10,16 +10,6 @@ import {
   BigtableInstanceCluster,
   BigtableInstanceConfig,
 } from "../.gen/providers/google/bigtable-instance";
-/*
-import {
-  BigtableInstanceIamMember,
-  BigtableInstanceIamMemberConfig,
-} from "../.gen/providers/google/bigtable-instance-iam-member";
-import {
-  BigtableTableIamMember,
-  BigtableTableIamMemberConfig,
-} from "../.gen/providers/google/bigtable-table-iam-member";
-*/
 import * as ex from "../ex";
 import {
   ResourceNames,
@@ -28,17 +18,6 @@ import {
 } from "../shared/resource-names";
 import { IInflightHost, Json } from "../std";
 
-/*
- * Table names must be between 1 and 50 characters. We reserve 9 characters for
- * a random ID, so the maximum length is 41.
- *
- * Must only contain
- * hyphens, underscores, periods, letters and numbers.
- *
- * We skip generating a hash since we need to append a random string to the
- * bucket name to make it globally unique.
- *
- */
 const TABLE_NAME_OPTS: NameOptions = {
   maxLen: 41,
   case: CaseConventions.LOWERCASE,
@@ -47,13 +26,12 @@ const TABLE_NAME_OPTS: NameOptions = {
 };
 
 
-/*
+// TODO(wiktor.zajac)  proper name opts
 const INSTANCE_NAME_OPTS: NameOptions = {
   maxLen: 30,
   disallowedRegex: /([a-z][a-z0-9\-]+[a-z0-9])/g,
   sep: undefined,
 };
-*/
 
 /**
  * GCP implementation of `ex.Table`.
@@ -67,7 +45,7 @@ export class Table extends ex.Table {
     const app = App.of(this) as App;
 
     const tableName = ResourceNames.generateName(this, TABLE_NAME_OPTS);
-    // const instanceName = ResourceNames.generateName(this, INSTANCE_NAME_OPTS);
+    const instanceName = ResourceNames.generateName(this, INSTANCE_NAME_OPTS);
 
 
     const columnsFamily: BigtableTableColumnFamily[] = [];
@@ -76,24 +54,16 @@ export class Table extends ex.Table {
     }
 
     const instanceCluster: BigtableInstanceCluster = {
-      clusterId: 'my-wing-cluster',
+      clusterId: 'my-wing-cluster', // TODO(wiktor.zajac) where should I specify this config?
       numNodes: 1,
       storageType: 'HDD',
-      zone: 'us-central1-a',
+      zone: app.zone,
     }
 
-    /*
-    const instanceIamConfig: BigtableInstanceIamMemberConfig = {
-      instance: instanceName,
-      member: 'allUsers', // https://cloud.google.com/billing/docs/reference/rest/v1/Policy#Binding
-      role: 'roles/bigtable.admin',
-    }
-    new BigtableInstanceIamMember(this, "InstanceIam", instanceIamConfig);
-    */
 
     const instanceConfig: BigtableInstanceConfig = {
-      name: 'rampampam123',
-      cluster: [instanceCluster],
+      name: instanceName,
+      cluster: [instanceCluster], // TODO(wiktor.zajac) should we allow for more clusters?
     }
 
     let instance = new BigtableInstance(this, "Instance", instanceConfig);
@@ -108,20 +78,10 @@ export class Table extends ex.Table {
 
     new BigtableTable(this, "Default", tableConfig);
 
-    /*
-    const bigtableIamConfig: BigtableTableIamMemberConfig = {
-      instance: instance.name,
-      member: 'allUsers', // https://cloud.google.com/billing/docs/reference/rest/v1/Policy#Binding
-      role: 'roles/bigtable.admin',
-      table: table.name,
-    }
-
-    new BigtableTableIamMember(this, "BigtableIam", bigtableIamConfig);
-    */
   }
 
   public addRow(_key: string, _row: Json): void {
-    throw new Error("Method not implemented.");
+    throw new Error("Method is not supported as preflight for GCP target.");
   }
 
   public bind(_host: IInflightHost, _ops: string[]): void {
