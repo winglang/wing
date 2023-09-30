@@ -46,7 +46,6 @@ cd wing
 pnpm install
 ```
 
-![Bird High Five](https://i.giphy.com/media/TgrXouvj1MwKoREXap/200w.gif)
 
 :::note Turbo Commands
 [Turbo] commands in this document are structured as
