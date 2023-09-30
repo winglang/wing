@@ -1,7 +1,8 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`bool_from_json.test.w 1`] = `
-"ERROR: unable to parse number 123 as a boolean
+"ERROR: unable to parse bool:
+- instance is not of a type(s) boolean
 
 target/test/bool_from_json.test.wsim.[REDACTED].tmp/.wing/preflight.js:9
        super(scope, id);
@@ -35,12 +36,13 @@ Duration <DURATION>"
 `;
 
 exports[`number_from_json.test.w 1`] = `
-"ERROR: unable to parse string apples as a number
+"ERROR: unable to parse num:
+- instance is not of a type(s) number
 
 target/test/number_from_json.test.wsim.[REDACTED].tmp/.wing/preflight.js:9
        super(scope, id);
        const j = ({\\"a\\": \\"apples\\"});
->>     const a = ((args) => { if (typeof args !== \\"number\\") {throw new Error(\\"unable to parse \\" + typeof args + \\" \\" + args + \\" as a number\\")}; return JSON.parse(JSON.stringify(args)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(\`Json property \\"\${args}\\" does not exist\`); return obj[args] })(j, \\"a\\"));
+>>     const a = (std.Number.fromJson(((obj, args) => { if (obj[args] === undefined) throw new Error(\`Json property \\"\${args}\\" does not exist\`); return obj[args] })(j, \\"a\\")));
      }
    }
 
@@ -98,12 +100,13 @@ Duration <DURATION>"
 `;
 
 exports[`string_from_json.test.w 1`] = `
-"ERROR: unable to parse number 123 as a string
+"ERROR: unable to parse string:
+- instance is not of a type(s) string
 
 target/test/string_from_json.test.wsim.[REDACTED].tmp/.wing/preflight.js:9
        super(scope, id);
        const j = ({\\"a\\": 123});
->>     const a = ((args) => { if (typeof args !== \\"string\\") {throw new Error(\\"unable to parse \\" + typeof args + \\" \\" + args + \\" as a string\\")}; return JSON.parse(JSON.stringify(args)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(\`Json property \\"\${args}\\" does not exist\`); return obj[args] })(j, \\"a\\"));
+>>     const a = (std.String.fromJson(((obj, args) => { if (obj[args] === undefined) throw new Error(\`Json property \\"\${args}\\" does not exist\`); return obj[args] })(j, \\"a\\")));
      }
    }
 
@@ -121,7 +124,7 @@ exports[`struct_from_json_1.test.w 1`] = `
 target/test/struct_from_json_1.test.wsim.[REDACTED].tmp/.wing/preflight.js:10
        const Person = $stdlib.std.Struct._createJsonSchema({id:\\"/Person\\",type:\\"object\\",properties:{age:{type:\\"number\\"},name:{type:\\"string\\"},},required:[\\"age\\",\\"name\\",]});
        const j = ({\\"name\\": \\"cool\\",\\"age\\": \\"not a number\\"});
->>     (Person._fromJson(j));
+>>     ((json, validateOptions) => (Person._fromJson(json, validateOptions)))(j);
      }
    }
 
@@ -140,7 +143,7 @@ exports[`struct_from_json_2.test.w 1`] = `
 target/test/struct_from_json_2.test.wsim.[REDACTED].tmp/.wing/preflight.js:10
        const Student = $stdlib.std.Struct._createJsonSchema({id:\\"/Student\\",type:\\"object\\",properties:{advisor:{type:\\"object\\",properties:{age:{type:\\"number\\"},id:{type:\\"string\\"},name:{type:\\"string\\"},},required:[\\"age\\",\\"id\\",\\"name\\",]},age:{type:\\"number\\"},name:{type:\\"string\\"},},required:[\\"advisor\\",\\"age\\",\\"name\\",]});
        const missingAdvisor = ({\\"name\\": \\"cool\\",\\"age\\": \\"not a number\\"});
->>     (Student._fromJson(missingAdvisor));
+>>     ((json, validateOptions) => (Student._fromJson(json, validateOptions)))(missingAdvisor);
      }
    }
 
@@ -159,7 +162,7 @@ exports[`struct_from_json_3.test.w 1`] = `
 target/test/struct_from_json_3.test.wsim.[REDACTED].tmp/.wing/preflight.js:10
        const Student = $stdlib.std.Struct._createJsonSchema({id:\\"/Student\\",type:\\"object\\",properties:{advisors:{type:\\"array\\",items:{type:\\"object\\",properties:{age:{type:\\"number\\"},id:{type:\\"string\\"},name:{type:\\"string\\"},},required:[\\"age\\",\\"id\\",\\"name\\",]}},age:{type:\\"number\\"},name:{type:\\"string\\"},},required:[\\"advisors\\",\\"age\\",\\"name\\",]});
        const invalidAdvisorInArray = ({\\"name\\": \\"cool\\",\\"age\\": \\"not a number\\",\\"advisors\\": [({\\"id\\": \\"advisor1\\",\\"name\\": \\"Bob\\",\\"age\\": 34}), ({\\"id\\": 10,\\"name\\": \\"Jacob\\",\\"age\\": 45})]});
->>     (Student._fromJson(invalidAdvisorInArray));
+>>     ((json, validateOptions) => (Student._fromJson(json, validateOptions)))(invalidAdvisorInArray);
      }
    }
 
@@ -177,7 +180,7 @@ exports[`struct_from_json_4.test.w 1`] = `
 target/test/struct_from_json_4.test.wsim.[REDACTED].tmp/.wing/preflight.js:10
        const Student = $stdlib.std.Struct._createJsonSchema({id:\\"/Student\\",type:\\"object\\",properties:{advisors:{type:\\"array\\",uniqueItems:true,items:{type:\\"object\\",properties:{age:{type:\\"number\\"},id:{type:\\"string\\"},name:{type:\\"string\\"},},required:[\\"age\\",\\"id\\",\\"name\\",]}},age:{type:\\"number\\"},name:{type:\\"string\\"},},required:[\\"advisors\\",\\"age\\",\\"name\\",]});
        const invalidAdvisorInArray = ({\\"name\\": \\"cool\\",\\"age\\": 22,\\"advisors\\": [({\\"id\\": \\"advisor1\\",\\"name\\": \\"Bob\\",\\"age\\": 34}), ({\\"id\\": \\"advisor1\\",\\"name\\": \\"Bob\\",\\"age\\": 34})]});
->>     (Student._fromJson(invalidAdvisorInArray));
+>>     ((json, validateOptions) => (Student._fromJson(json, validateOptions)))(invalidAdvisorInArray);
      }
    }
 
@@ -195,7 +198,7 @@ exports[`struct_from_json_5.test.w 1`] = `
 target/test/struct_from_json_5.test.wsim.[REDACTED].tmp/.wing/preflight.js:10
        const Foo = $stdlib.std.Struct._createJsonSchema({id:\\"/Foo\\",type:\\"object\\",properties:{names:{type:\\"object\\",patternProperties:{\\".*\\":{type:\\"string\\"}}},},required:[\\"names\\",]});
        const jFoo = ({\\"names\\": ({\\"a\\": \\"Amanda\\",\\"b\\": \\"Barry\\",\\"c\\": 10})});
->>     (Foo._fromJson(jFoo));
+>>     ((json, validateOptions) => (Foo._fromJson(json, validateOptions)))(jFoo);
      }
    }
 

@@ -23,7 +23,7 @@ module.exports = function({ $std_Json, $std_String }) {
       return $obj;
     }
     async handle() {
-      {console.log(((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })("hello"))};
+      {console.log((await $std_String.fromJson("hello")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.values(Json {}).length == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((Object.values(({}))).length,0)))};
     }
   }

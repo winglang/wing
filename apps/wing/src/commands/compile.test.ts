@@ -9,6 +9,7 @@ import { mkdtemp } from "fs/promises";
 import { tmpdir } from "os";
 
 const exampleDir = resolve("../../examples/tests/valid");
+const exampleSmallDir = resolve("../../examples/tests/valid/subdir2");
 const exampleFilePath = join(exampleDir, "captures.test.w");
 
 describe(
@@ -77,6 +78,26 @@ describe(
       return expect(compile("non-existent-file.w", { target: Target.SIM })).rejects.toThrowError(
         /Source file cannot be found/
       );
+    });
+
+    test("should be able to compile a directory", async () => {
+      const artifactDir = await compile(exampleSmallDir, {
+        target: Target.SIM,
+        targetDir: `${await generateTmpDir()}/target`,
+      });
+
+      const stats = await stat(artifactDir);
+      expect(stats.isDirectory()).toBeTruthy();
+    });
+
+    test("should be able to compile a directory to tf-aws", async () => {
+      const artifactDir = await compile(exampleSmallDir, {
+        target: Target.TF_AWS,
+        targetDir: `${await generateTmpDir()}/target`,
+      });
+
+      const stats = await stat(artifactDir);
+      expect(stats.isDirectory()).toBeTruthy();
     });
 
     // https://github.com/winglang/wing/issues/2081
