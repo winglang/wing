@@ -258,7 +258,7 @@ Duration <DURATION>"
 exports[`ambiguous_api_paths.test.w 1`] = `
 "ERROR: Endpoint for path '/test/{variable}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '/test/path'
 
-../../../examples/tests/invalid/target/test/ambiguous_api_paths.test.wsim.853869.tmp/.wing/preflight.js:38
+../../../examples/tests/invalid/target/test/ambiguous_api_paths.test.wsim.209910.tmp/.wing/preflight.js:38
        const handler = new $Closure1(this,\\"$Closure1\\");
        (api.get(\\"/test/path\\",handler));
 >>     (api.get(\\"/test/{variable}\\",handler));
