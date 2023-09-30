@@ -140,8 +140,8 @@ module.exports = function({ $std_Json }) {
       const obj = ({"a": 1,"b": 2});
       const stringified = ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([obj]);
       const stringifiedIndent = ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([obj,{ indent: 2 }]);
-      {((cond) => {if (!cond) throw new Error("assertion failed: stringified == \"{\\\"a\\\":1,\\\"b\\\":2}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(stringified,"{\"a\":1,\"b\":2}")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: stringifiedIndent == \"{\\n  \\\"a\\\": 1,\\n  \\\"b\\\": 2\\n}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(stringifiedIndent,"{\n  \"a\": 1,\n  \"b\": 2\n}")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: stringified == \"\\{\\\"a\\\":1,\\\"b\\\":2}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(stringified,"\{\"a\":1,\"b\":2}")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: stringifiedIndent == \"\\{\\n  \\\"a\\\": 1,\\n  \\\"b\\\": 2\\n}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(stringifiedIndent,"\{\n  \"a\": 1,\n  \"b\": 2\n}")))};
     }
   }
   return $Closure5;

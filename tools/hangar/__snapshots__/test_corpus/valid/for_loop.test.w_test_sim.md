@@ -2,30 +2,30 @@
 
 ## stdout.log
 ```log
-wing: 1
-wing: 2
-wing: 3
-lang: 1
-lang: 2
-lang: 3
-dang: 1
-dang: 2
-dang: 3
-wing: 1
-wing: 2
-lang: 1
-lang: 2
-dang: 1
-dang: 2
-wing: 1
-wing: 2
-wing: 3
-lang: 1
-lang: 2
-lang: 3
-dang: 1
-dang: 2
-dang: 3
+{word}: {number}
+{word}: {number}
+{word}: {number}
+{word}: {number}
+{word}: {number}
+{word}: {number}
+{word}: {number}
+{word}: {number}
+{word}: {number}
+{word}: {number}
+{word}: {number}
+{word}: {number}
+{word}: {number}
+{word}: {number}
+{word}: {number}
+{word}: {number}
+{word}: {number}
+{word}: {number}
+{word}: {number}
+{word}: {number}
+{word}: {number}
+{word}: {number}
+{word}: {number}
+{word}: {number}
 ---
 for x in 0..0 { ... }
 there's no value to iterate
