@@ -632,10 +632,10 @@ class $Root extends $stdlib.std.Resource {
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
     const handler = new $Closure1(this,"$Closure1");
     const handler_two = new $Closure2(this,"$Closure2");
-    (api.get("/users/{name}",handler));
-    (api.get("/path/{name}",handler));
-    (api.get("/users/permission/{name}",handler));
-    (api.get("/path/{name}/{age}",handler_two));
+    (api.get("/users/\{name}",handler));
+    (api.get("/path/\{name}",handler));
+    (api.get("/users/permission/\{name}",handler));
+    (api.get("/path/\{name}/\{age}",handler_two));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure3(this,"$Closure3"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test2",new $Closure4(this,"$Closure4"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test3",new $Closure5(this,"$Closure5"));
