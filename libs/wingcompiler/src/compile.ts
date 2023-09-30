@@ -212,6 +212,7 @@ function isEntrypointFile(path: string) {
     path.endsWith(".main.w") ||
     path.endsWith(".test.w") ||
     path.endsWith("/main.w") ||
+    path.endsWith("\\main.w") ||
     path === "main.w"
   );
 }
