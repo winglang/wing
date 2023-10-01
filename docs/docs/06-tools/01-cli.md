@@ -65,12 +65,6 @@ The following targets are supported:
 * `tf-aws` - Terraform/AWS
 * `tf-azure` - Terraform/Azure
 
-:::note Default Target
-
-It's possible to execute `wing compile` without specifying any target, in which case the CLI defaults to `sim` target.
-
-:::
-
 ### `sim` Target
 
 The Wing program is going to be compiled for the Wing simulator (`.wsim`).
