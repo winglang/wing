@@ -1,5 +1,5 @@
 import { describe, test, expect, beforeEach, afterEach } from "vitest";
-import { renderTestReport, filterTests } from "./test";
+import { renderTestReport, filterTests, pickOneTestPerEnvironment } from "./test";
 
 import { TestResult, TraceType } from "@winglang/sdk/lib/std";
 import chalk from "chalk";
@@ -37,7 +37,7 @@ describe("printing test reports", () => {
 
 describe("test options", () => {
   test("--test-filter <regex>", () => {
-    const filteredTests = filterTests(EXAMPLE_UNFILTERED_TESTS, "get");
+    const filteredTests = pickOneTestPerEnvironment(filterTests(EXAMPLE_UNFILTERED_TESTS, "get"));
 
     expect(filteredTests.length).toBe(2);
     expect(filteredTests[0]).toBe("root/env0/test:get()");

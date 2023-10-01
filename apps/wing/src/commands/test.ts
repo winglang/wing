@@ -274,7 +274,9 @@ async function testSimulator(synthDir: string, options: TestOptions) {
 
   const testRunner = s.getResource("root/cloud.TestRunner") as std.ITestRunnerClient;
   const tests = await testRunner.listTests();
-  const filteredTests = pickOneTestPerEnvironment(filterTests(tests, testFilter));
+  const filteredTests = testFilter
+    ? pickOneTestPerEnvironment(filterTests(tests, testFilter))
+    : pickOneTestPerEnvironment(tests);
   const results = new Array<std.TestResult>();
   // TODO: run these tests in parallel
   for (const path of filteredTests) {
@@ -315,7 +317,9 @@ async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.T
       const testRunner = new TestRunnerClient(testArns);
 
       const tests = await testRunner.listTests();
-      const filteredTests = pickOneTestPerEnvironment(filterTests(tests, testFilter));
+      const filteredTests = testFilter
+        ? pickOneTestPerEnvironment(filterTests(tests, testFilter))
+        : pickOneTestPerEnvironment(tests);
       return [testRunner, filteredTests];
     });
 
@@ -402,7 +406,9 @@ async function testTfAws(synthDir: string, options: TestOptions): Promise<std.Te
       const testRunner = new TestRunnerClient(testArns);
 
       const tests = await testRunner.listTests();
-      const filteredTests = pickOneTestPerEnvironment(filterTests(tests, testFilter));
+      const filteredTests = testFilter
+        ? pickOneTestPerEnvironment(filterTests(tests, testFilter))
+        : pickOneTestPerEnvironment(tests);
       return [testRunner, filteredTests];
     });
 
@@ -465,7 +471,7 @@ async function terraformOutput(synthDir: string, name: string) {
   return parsed[name].value;
 }
 
-function pickOneTestPerEnvironment(testPaths: string[]) {
+export function pickOneTestPerEnvironment(testPaths: string[]) {
   // Given a list of test paths like so:
   //
   // root/Default/env0/a/b/test:test1
