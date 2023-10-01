@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ doubler.test.wsim » root/env0/test:f(2) == 8
+pass ─ doubler.test.wsim (no tests)
  
  
 Tests 1 passed (1)

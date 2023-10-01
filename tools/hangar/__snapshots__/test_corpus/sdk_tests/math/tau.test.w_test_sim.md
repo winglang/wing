@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ tau.test.wsim » root/env0/test:TAU
+pass ─ tau.test.wsim (no tests)
  
  
 Tests 1 passed (1)

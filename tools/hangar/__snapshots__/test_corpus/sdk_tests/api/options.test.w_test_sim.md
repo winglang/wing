@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ options.test.wsim » root/env0/test:http.fetch can preform a call to an api to CONNECT, HEAD and OPTIONS
+pass ─ options.test.wsim (no tests)
  
  
 Tests 1 passed (1)

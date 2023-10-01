@@ -2,13 +2,10 @@
 
 ## stdout.log
 ```log
-pass ┌ http-server.test.wsim » root/env0/test:http server is started with the service
-     └ bang bang!
-pass ┌ http-server.test.wsim » root/env1/test:service.stop() closes the http server  
-     └ closing server...
+pass ─ http-server.test.wsim (no tests)
  
  
-Tests 2 passed (2)
+Tests 1 passed (1)
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

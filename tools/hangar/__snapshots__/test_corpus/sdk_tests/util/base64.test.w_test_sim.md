@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ base64.test.wsim » root/env0/test:inflight base64
+pass ─ base64.test.wsim (no tests)
  
  
 Tests 1 passed (1)

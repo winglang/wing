@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ atan2.test.wsim » root/env0/test:inflight arc tangent 2
+pass ─ atan2.test.wsim (no tests)
  
  
 Tests 1 passed (1)

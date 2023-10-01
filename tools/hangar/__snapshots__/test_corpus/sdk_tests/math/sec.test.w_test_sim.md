@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ sec.test.wsim » root/env0/test:inflight secant
+pass ─ sec.test.wsim (no tests)
  
  
 Tests 1 passed (1)

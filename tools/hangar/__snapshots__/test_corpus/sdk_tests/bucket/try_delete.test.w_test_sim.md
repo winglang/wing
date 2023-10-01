@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ try_delete.test.wsim » root/env0/test:tryDelete
+pass ─ try_delete.test.wsim (no tests)
  
  
 Tests 1 passed (1)

@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ capture_in_binary.test.wsim » root/env0/test:binary expressions
+pass ─ capture_in_binary.test.wsim (no tests)
  
  
 Tests 1 passed (1)

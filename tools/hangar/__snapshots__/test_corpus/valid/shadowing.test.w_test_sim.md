@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ shadowing.test.wsim » root/env0/test:capture shadow interaction
+pass ─ shadowing.test.wsim (no tests)
  
  
 Tests 1 passed (1)

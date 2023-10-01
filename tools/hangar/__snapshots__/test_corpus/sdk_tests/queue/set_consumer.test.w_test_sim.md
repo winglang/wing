@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ set_consumer.test.wsim » root/env0/test:setConsumer
+pass ─ set_consumer.test.wsim (no tests)
  
  
 Tests 1 passed (1)

@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ bucket_keys.test.wsim » root/env0/test:test
+pass ─ bucket_keys.test.wsim (no tests)
  
  
 Tests 1 passed (1)

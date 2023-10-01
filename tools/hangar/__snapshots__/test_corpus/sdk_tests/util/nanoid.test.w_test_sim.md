@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ nanoid.test.wsim » root/env0/test:inflight nanoid
+pass ─ nanoid.test.wsim (no tests)
  
  
 Tests 1 passed (1)

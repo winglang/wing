@@ -2,11 +2,10 @@
 
 ## stdout.log
 ```log
-pass ─ nil.test.wsim » root/env0/test:nil return                
-pass ─ nil.test.wsim » root/env1/test:optional instance variable
+pass ─ nil.test.wsim (no tests)
  
  
-Tests 2 passed (2)
+Tests 1 passed (1)
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

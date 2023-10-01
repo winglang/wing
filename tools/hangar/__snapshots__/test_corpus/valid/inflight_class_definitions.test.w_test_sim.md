@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ inflight_class_definitions.test.wsim » root/env0/test:test
+pass ─ inflight_class_definitions.test.wsim (no tests)
  
  
 Tests 1 passed (1)

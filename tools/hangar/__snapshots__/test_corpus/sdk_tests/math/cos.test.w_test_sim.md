@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ cos.test.wsim » root/env0/test:inflight cosine
+pass ─ cos.test.wsim (no tests)
  
  
 Tests 1 passed (1)

@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ hypot.test.wsim » root/env0/test:inflight hypot
+pass ─ hypot.test.wsim (no tests)
  
  
 Tests 1 passed (1)

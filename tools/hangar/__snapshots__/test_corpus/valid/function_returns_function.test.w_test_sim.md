@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ function_returns_function.test.wsim » root/env0/test:inflight functions can return other inflight functions
+pass ─ function_returns_function.test.wsim (no tests)
  
  
 Tests 1 passed (1)

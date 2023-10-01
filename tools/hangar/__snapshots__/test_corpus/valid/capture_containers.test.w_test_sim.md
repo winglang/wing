@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ capture_containers.test.wsim » root/env0/test:capture_containers
+pass ─ capture_containers.test.wsim (no tests)
  
  
 Tests 1 passed (1)

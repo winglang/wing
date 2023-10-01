@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ capture_reassignable.test.wsim » root/env0/test:main
+pass ─ capture_reassignable.test.wsim (no tests)
  
  
 Tests 1 passed (1)

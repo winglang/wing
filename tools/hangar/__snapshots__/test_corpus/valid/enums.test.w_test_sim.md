@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ enums.test.wsim » root/env0/test:inflight
+pass ─ enums.test.wsim (no tests)
  
  
 Tests 1 passed (1)

@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ delete.test.wsim » root/env0/test:http.delete and http.fetch can preform a call to an api
+pass ─ delete.test.wsim (no tests)
  
  
 Tests 1 passed (1)

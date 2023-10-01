@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ api.test.wsim » root/env0/test:api url
+pass ─ api.test.wsim (no tests)
  
  
 Tests 1 passed (1)

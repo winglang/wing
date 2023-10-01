@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ json_bucket.test.wsim » root/env0/test:put
+pass ─ json_bucket.test.wsim (no tests)
  
  
 Tests 1 passed (1)

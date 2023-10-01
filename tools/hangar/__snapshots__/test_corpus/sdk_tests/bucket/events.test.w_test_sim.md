@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ events.test.wsim » root/env0/hitCount is incremented according to the bucket event
+pass ─ events.test.wsim (no tests)
  
  
 Tests 1 passed (1)
