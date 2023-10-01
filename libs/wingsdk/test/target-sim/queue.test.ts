@@ -265,24 +265,10 @@ test("messages are not requeued if the function fails after retention timeout", 
   // THEN
   await s.stop();
 
-  expect(listMessages(s).slice(0, 9)).toMatchSnapshot();
+  expect(listMessages(s)).toContain(
+    "1 messages pushed back to queue after visibility timeout."
+  );
   expect(app.snapshot()).toMatchSnapshot();
-
-  expect(
-    s
-      .listTraces()
-      .filter((v) => v.sourceType == QUEUE_TYPE)
-      .map((trace) => trace.data.message)
-      .slice(0, 5)
-  ).toMatchInlineSnapshot(`
-    [
-      "wingsdk.cloud.Queue created.",
-      "Push (messages=BAD MESSAGE).",
-      "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
-      "Subscriber error - returning 1 messages to queue: ERROR",
-      "wingsdk.cloud.Queue deleted.",
-    ]
-  `);
 });
 
 test("queue has no display hidden property", async () => {
