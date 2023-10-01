@@ -7,9 +7,11 @@ on:
       repo:
         type: string
         default: winglang/wing
+        description: "Full repo name (owner/name)"
       ref:
         type: string
         default: main
+        description: "Ref to checkout. Must be present in the repo input."
 
 env:
   AWS_REGION: "us-east-1"
