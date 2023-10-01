@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ purge.test.wsim » root/env0/test:purge
+pass ─ purge.test.wsim (no tests)
  
  
 Tests 1 passed (1)

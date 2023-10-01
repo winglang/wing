@@ -2,8 +2,7 @@
 
 ## stdout.log
 ```log
-pass ┌ minimal.test.wsim » root/env0/test:start and stop
-     └ stopping!
+pass ─ minimal.test.wsim (no tests)
  
  
 Tests 1 passed (1)

@@ -2,11 +2,10 @@
 
 ## stdout.log
 ```log
-pass ─ peek.test.wsim » root/env0/test:peek    
-pass ─ peek.test.wsim » root/env1/test:key peek
+pass ─ peek.test.wsim (no tests)
  
  
-Tests 2 passed (2)
+Tests 1 passed (1)
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

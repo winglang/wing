@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ asin.test.wsim » root/env0/test:inflight arc sine
+pass ─ asin.test.wsim (no tests)
  
  
 Tests 1 passed (1)

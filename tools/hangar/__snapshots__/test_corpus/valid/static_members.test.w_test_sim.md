@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ static_members.test.wsim » root/env0/test:test
+pass ─ static_members.test.wsim (no tests)
  
  
 Tests 1 passed (1)

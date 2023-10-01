@@ -4,15 +4,10 @@
 ```log
 preflight log
 preflight log
-pass ┌ print.test.wsim » root/env0/test:log1
-     │ inflight log 1.1
-     └ inflight log 1.2
-pass ┌ print.test.wsim » root/env1/test:log2
-     │ inflight log 2.1
-     └ inflight log 2.2
+pass ─ print.test.wsim (no tests)
  
  
-Tests 2 passed (2)
+Tests 1 passed (1)
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

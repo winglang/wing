@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ public_url.test.wsim » root/env0/test:publicUrl
+pass ─ public_url.test.wsim (no tests)
  
  
 Tests 1 passed (1)

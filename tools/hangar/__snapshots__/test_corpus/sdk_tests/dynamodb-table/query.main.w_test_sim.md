@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ query.main.wsim » root/env0/test:query
+pass ─ query.main.wsim (no tests)
  
  
 Tests 1 passed (1)

@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ test_without_bring.test.wsim » root/env0/test:hello test
+pass ─ test_without_bring.test.wsim (no tests)
  
  
 Tests 1 passed (1)

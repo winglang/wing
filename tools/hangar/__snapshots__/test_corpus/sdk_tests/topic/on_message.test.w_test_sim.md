@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ on_message.test.wsim » root/env0/test:onMessage
+pass ─ on_message.test.wsim (no tests)
  
  
 Tests 1 passed (1)

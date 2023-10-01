@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ datetime.test.wsim » root/env0/test:inflight datetime
+pass ─ datetime.test.wsim (no tests)
  
  
 Tests 1 passed (1)

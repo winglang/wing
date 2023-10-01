@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ acos.test.wsim » root/env0/test:inflight arc cosine
+pass ─ acos.test.wsim (no tests)
  
  
 Tests 1 passed (1)

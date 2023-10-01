@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ upsert.test.wsim » root/env0/test:upsert
+pass ─ upsert.test.wsim (no tests)
  
  
 Tests 1 passed (1)

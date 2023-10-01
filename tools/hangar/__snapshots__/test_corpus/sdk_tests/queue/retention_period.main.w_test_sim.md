@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ retention_period.main.wsim » root/env0/retentionPeriod
+pass ─ retention_period.main.wsim (no tests)
  
  
 Tests 1 passed (1)

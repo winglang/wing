@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ lift_expr_with_this.test.wsim » root/env0/test:test
+pass ─ lift_expr_with_this.test.wsim (no tests)
  
  
 Tests 1 passed (1)

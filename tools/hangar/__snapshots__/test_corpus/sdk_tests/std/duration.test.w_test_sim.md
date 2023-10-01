@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ duration.test.wsim » root/env0/test:duration
+pass ─ duration.test.wsim (no tests)
  
  
 Tests 1 passed (1)

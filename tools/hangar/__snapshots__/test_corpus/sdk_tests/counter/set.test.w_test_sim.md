@@ -2,11 +2,10 @@
 
 ## stdout.log
 ```log
-pass ─ set.test.wsim » root/env0/test:set    
-pass ─ set.test.wsim » root/env1/test:key set
+pass ─ set.test.wsim (no tests)
  
  
-Tests 2 passed (2)
+Tests 1 passed (1)
 Test Files 1 passed (1)
 Duration <DURATION>
 ```
