@@ -240,8 +240,6 @@ The requirement to support **building** and **hot reloading** of containers also
 cases such as web applications and serverless functions implemented using non-Wing stacks. Basically
 every time Wing needs to use some external build artifact.
 
-Ideally, we will have 
-
 This means that Wing needs to intimately understand the build process of the project. It needs to
 understand the relationship between the Dockerfile and its source code (and invalidate the it as
 needed both in "build" and in "watch"), and the same thing for a web application.
