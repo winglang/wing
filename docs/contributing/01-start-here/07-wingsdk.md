@@ -10,13 +10,13 @@ This topic includes contribution guidelines related to the Wing SDK, the package
 
 The SDK resides in `libs/wingsdk`. It's written in TypeScript, and is published to npm.
 
+From within the SDK directory you can build it using `pnpm build`. You can also just run the tests with `pnpm test`.
+
 The SDK is built using a couple of extra libraries and tools:
 
 * [CDK for Terraform] ("cdktf") is a framework for defining Terraform infrastructure. The SDK uses it to generate the Terraform files that users deploy.
 * [JSII] is a tool we used to compile the SDK. JSII is a wrapper over TypeScript that makes it possible to use the SDK in other languages like Python, Java, C#, and Go. This is made possible through extra type checks. In practice, the main difference from ordinary TypeScript is that you cannot use advanced TypeScript types like `Partial` or generics in public APIs.
 * [Projen] is a tool used to manage project configuration files. It uses the `.projenrc.ts` file to generate `package.json` and other files. You can modify it and run `pnpm projen` to regenerate the resources. If you are not touching configuration files, you can totally ignore this.
-
-Everything in the SDK can be built by running `pnpm build` from `libs/wingsdk`. You can also run `pnpm test` to just run tests.
 
 In order to work on the source code, you will need to the build at least once so that TypeScript bindings for Terraform resources will be automatically generated.
 These files are not checked in because they are quite large.
