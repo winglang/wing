@@ -1,6 +1,6 @@
 name: Enhancement 🚀
 description: Suggest a new feature or other improvement
-labels: ["✨ enhancement"]
+labels: ["✨ enhancement","needs-discussion"]
 body:
 - type: markdown
   attributes:
@@ -35,16 +35,6 @@ body:
     placeholder: |
       Any thoughts regarding how this should be implemented?
 - type: dropdown
-  id: impl-ready
-  attributes:
-    label: "Ready for implementation?"
-    description: "Does this issue contain enough info to start implementation or does it need further discussion?"
-    options:
-    - "Yes"
-    - "No"
-  validations:
-    required: true
-- type: dropdown
   id: Component
   attributes:
     label: Component
@@ -75,3 +65,8 @@ body:
       <!-- Please keep this note for the community -->
       * Please vote by adding a 👍 reaction to the issue to help us prioritize.
       * If you are interested to work on this issue, please leave a comment.
+      * For issues labeled needs-discussion, please begin by understanding the
+      requirements. 
+      * Pose questions in a comment, inquire on Slack #dev
+      channel, or bring it up in a community meeting (preferably informing us
+      before the meeting).

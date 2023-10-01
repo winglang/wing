@@ -37,16 +37,6 @@ body:
     label: "Is there a workaround?"
     placeholder: "What's the workaround to avoid this issue?"
 - type: dropdown
-  id: impl-ready
-  attributes:
-    label: "Ready for implementation?"
-    description: "Does this issue contain enough info to start implementation or does it need further discussion?"
-    options:
-    - "Yes"
-    - "No"
-  validations:
-    required: true
-- type: dropdown
   id: Component
   attributes:
     label: "Component"
