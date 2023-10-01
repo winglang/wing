@@ -33,11 +33,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
   const expandedEntrypoints = await glob(entrypoints);
 
   if (expandedEntrypoints.length === 0) {
-    // Check if it's the default entrypoint
-    if (entrypoints[0] === "*.test.w") {
-      throw new Error("No '.test.w' files found in current directory.");
-    }
-    throw new Error("No matching files found in current directory.");
+    throw new Error(`No matching files found in current directory. (${entrypoints.join(", ")})`);
   }
 
   const startTime = Date.now();
