@@ -70,20 +70,6 @@ exports[`create a queue 2`] = `
 `;
 
 exports[`messages are not requeued if the function fails after retention timeout 1`] = `
-[
-  "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Function created.",
-  "wingsdk.cloud.Queue created.",
-  "wingsdk.sim.EventMapping created.",
-  "Push (messages=BAD MESSAGE).",
-  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
-  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
-  "Subscriber error - returning 1 messages to queue: ERROR",
-  "1 messages pushed back to queue after visibility timeout.",
-]
-`;
-
-exports[`messages are not requeued if the function fails after retention timeout 2`] = `
 {
   ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
