@@ -27,6 +27,10 @@
       "type": "build"
     },
     {
+      "name": "@types/stream-buffers",
+      "type": "build"
+    },
+    {
       "name": "@types/uuid",
       "type": "build"
     },
@@ -122,6 +126,11 @@
       "type": "build"
     },
     {
+      "name": "mock-gcs",
+      "version": "^1.0.0",
+      "type": "build"
+    },
+    {
       "name": "nanoid",
       "type": "build"
     },
@@ -141,6 +150,11 @@
     {
       "name": "standard-version",
       "version": "^9",
+      "type": "build"
+    },
+    {
+      "name": "stream-buffers",
+      "version": "^3.0.2",
       "type": "build"
     },
     {
@@ -241,6 +255,11 @@
     {
       "name": "@azure/storage-blob",
       "version": "12.14.0",
+      "type": "bundled"
+    },
+    {
+      "name": "@google-cloud/storage",
+      "version": "6.12.0",
       "type": "bundled"
     },
     {

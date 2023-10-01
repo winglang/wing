@@ -5,6 +5,7 @@ import { App } from "./app";
 import { Bucket } from "./bucket";
 import { CloudfunctionsFunction } from "../.gen/providers/google/cloudfunctions-function";
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
+// import { StorageBucket } from "../.gen/providers/google/storage-bucket";
 import * as cloud from "../cloud";
 import { createBundle } from "../shared/bundling";
 import {
@@ -13,12 +14,19 @@ import {
   ResourceNames,
 } from "../shared/resource-names";
 import { IInflightHost } from "../std";
+// import { StorageBucketIamBinding } from "../.gen/providers/google/storage-bucket-iam-binding";
+import { StorageBucketIamMember } from "../.gen/providers/google/storage-bucket-iam-member";
 
 const FUNCTION_NAME_OPTS: NameOptions = {
   maxLen: 32,
   disallowedRegex: /[^a-z0-9]+/g,
   case: CaseConventions.LOWERCASE,
 };
+
+enum StorageBucketPermissions {
+  READ = "roles/storage.objectViewer",
+  READWRITE = "roles/storage.objectAdmin",
+}
 
 /**
  * GCP implementation of `cloud.Function`.
@@ -28,6 +36,7 @@ const FUNCTION_NAME_OPTS: NameOptions = {
 
 export class Function extends cloud.Function {
   private readonly function: CloudfunctionsFunction;
+  private readonly bucketPermission: Map<string, StorageBucketIamMember> = new Map<string, StorageBucketIamMember>();
 
   constructor(
     scope: Construct,
@@ -106,6 +115,37 @@ export class Function extends cloud.Function {
     throw new Error(
       "cloud.Function cannot be used as an Inflight resource on GCP yet"
     );
+  }
+
+  public addBucketPermission(
+    bucket: Bucket,
+    permission: StorageBucketPermissions
+  ): void {
+
+    const app = App.of(this) as App;
+
+    if (this.bucketPermission.has(bucket.bucket.name + permission)) {
+      throw new Error(
+        `Bucket ${bucket.bucket.name} for permission ${permission} already has a permission set`
+      );
+    }
+
+    if (permission === StorageBucketPermissions.READ) {
+      let newPermission = new StorageBucketIamMember(this, "BucketPermissionToRead", {
+        bucket: bucket.bucket.name,
+        role: "roles/storage.objectViewer",
+        member: `projectViewer:${app.projectId}`,
+      });
+      this.bucketPermission.set(bucket.bucket.name + StorageBucketPermissions.READ, newPermission);
+    }
+    else if (permission === StorageBucketPermissions.READWRITE) {
+      let newPermission = new StorageBucketIamMember(this, "BucketPermissionToWrite", {
+        bucket: bucket.bucket.name,
+        role: "roles/storage.objectAdmin",
+        member: `projectEditor:${app.projectId}`,
+      });
+      this.bucketPermission.set(bucket.bucket.name + StorageBucketPermissions.READWRITE, newPermission);
+    }
   }
 
   public bind(_host: IInflightHost, _ops: string[]): void {
