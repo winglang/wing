@@ -267,7 +267,7 @@ export function filterTests(tests: string[], regexString?: string): string[] {
 
 async function testSimulator(synthDir: string, options: TestOptions) {
   const s = new simulator.Simulator({ simfile: synthDir });
-  const { clean } = options;
+  const { clean, filter } = options;
   await s.start();
 
   const testRunner = s.getResource("root/cloud.TestRunner") as std.ITestRunnerClient;
