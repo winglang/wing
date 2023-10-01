@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ pi.test.wsim (no tests)
+pass ─ pi.test.wsim » root/env0/test:PI
  
  
 Tests 1 passed (1)

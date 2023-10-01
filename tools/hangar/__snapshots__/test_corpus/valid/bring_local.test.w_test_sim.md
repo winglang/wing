@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ bring_local.test.wsim (no tests)
+pass ─ bring_local.test.wsim » root/env0/test:add data to store
  
  
 Tests 1 passed (1)

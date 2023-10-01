@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ inflight_class_outside_inflight_closure.test.wsim (no tests)
+pass ─ inflight_class_outside_inflight_closure.test.wsim » root/env0/test:inflight class outside inflight closure
  
  
 Tests 1 passed (1)

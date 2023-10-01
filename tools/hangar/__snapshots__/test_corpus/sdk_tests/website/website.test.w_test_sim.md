@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ website.test.wsim (no tests)
+pass ─ website.test.wsim » root/env0/test:access files on the website
  
  
 Tests 1 passed (1)

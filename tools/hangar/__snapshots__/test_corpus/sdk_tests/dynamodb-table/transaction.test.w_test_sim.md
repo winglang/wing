@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ transaction.test.wsim (no tests)
+pass ─ transaction.test.wsim » root/env0/test:transactWriteItems
  
  
 Tests 1 passed (1)

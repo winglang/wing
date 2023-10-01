@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ acsc.test.wsim (no tests)
+pass ─ acsc.test.wsim » root/env0/test:inflight arc cosecant
  
  
 Tests 1 passed (1)

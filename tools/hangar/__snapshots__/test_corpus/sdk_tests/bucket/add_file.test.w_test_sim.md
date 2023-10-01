@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ add_file.test.wsim (no tests)
+pass ─ add_file.test.wsim » root/env0/test:addObject
  
  
 Tests 1 passed (1)

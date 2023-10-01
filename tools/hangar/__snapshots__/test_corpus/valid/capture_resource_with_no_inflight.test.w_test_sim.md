@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ capture_resource_with_no_inflight.test.wsim (no tests)
+pass ─ capture_resource_with_no_inflight.test.wsim » root/env0/test:test
  
  
 Tests 1 passed (1)

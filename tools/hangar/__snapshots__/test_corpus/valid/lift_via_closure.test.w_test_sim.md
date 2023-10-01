@@ -2,10 +2,13 @@
 
 ## stdout.log
 ```log
-pass ─ lift_via_closure.test.wsim (no tests)
+pass ─ lift_via_closure.test.wsim » root/env0/test:call synthetic closure class as a function
+pass ┌ lift_via_closure.test.wsim » root/env1/test:call non-synthetic closure as a function  
+     │ handle called
+     └ putFile called
  
  
-Tests 1 passed (1)
+Tests 2 passed (2)
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

@@ -2,10 +2,11 @@
 
 ## stdout.log
 ```log
-pass ─ website_with_api.test.wsim (no tests)
+pass ─ website_with_api.test.wsim » root/env0/test:GET --users    
+pass ─ website_with_api.test.wsim » root/env1/test:OPTIONS --users
  
  
-Tests 1 passed (1)
+Tests 2 passed (2)
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

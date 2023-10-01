@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ angular_conversion.test.wsim (no tests)
+pass ─ angular_conversion.test.wsim » root/env0/test:inflight angular conversions
  
  
 Tests 1 passed (1)

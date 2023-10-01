@@ -2,10 +2,12 @@
 
 ## stdout.log
 ```log
-pass ─ initial.test.wsim (no tests)
+pass ─ initial.test.wsim » root/env0/test:initial:default       
+pass ─ initial.test.wsim » root/env1/test:initial:positive-value
+pass ─ initial.test.wsim » root/env2/test:initial:negative-value
  
  
-Tests 1 passed (1)
+Tests 3 passed (3)
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

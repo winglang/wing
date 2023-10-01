@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ bool.test.wsim (no tests)
+pass ─ bool.test.wsim » root/env0/test:fromJson()
  
  
 Tests 1 passed (1)

@@ -2,10 +2,11 @@
 
 ## stdout.log
 ```log
-pass ─ capture_tokens.test.wsim (no tests)
+pass ─ capture_tokens.test.wsim » root/env0/test:inflight class  
+pass ─ capture_tokens.test.wsim » root/env1/test:inflight globals
  
  
-Tests 1 passed (1)
+Tests 2 passed (2)
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

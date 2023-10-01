@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ closure_class.test.wsim (no tests)
+pass ─ closure_class.test.wsim » root/env0/test:test
  
  
 Tests 1 passed (1)
