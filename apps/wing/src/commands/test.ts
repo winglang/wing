@@ -25,7 +25,10 @@ const generateTestName = (path: string) => path.split(sep).slice(-2).join("/");
  * Options for the `test` command.
  */
 export interface TestOptions extends CompileOptions {
+  /** Whether to keep the build output. */
   clean: boolean;
+
+  /** String representing a RegEx used for test filtering. */
   filter?: string;
 }
 
