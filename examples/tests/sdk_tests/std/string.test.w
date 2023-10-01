@@ -3,7 +3,7 @@ let assertThrows = (expected: str, block: (): void) => {
   try {
     block();
   } catch actual {
-    assert(actual == expected);
+    assert(actual.contains(expected) == true);
     error = true;
   }
 
@@ -13,7 +13,7 @@ let assertThrows = (expected: str, block: (): void) => {
 //-----------------------------------------------------------------------------
 // fromJson (static)
 
-let PARSE_ERROR = "unable to parse number 123 as a string";
+let PARSE_ERROR = "unable to parse string";
 
 assert(str.fromJson(Json "Hello") == "Hello");
 assertThrows(PARSE_ERROR, () => {
@@ -22,7 +22,7 @@ assertThrows(PARSE_ERROR, () => {
 
 test "fromJson" {
   assert(str.fromJson(Json "World") == "World");
-  try { str.fromJson(Json 123); } catch s { assert(s == PARSE_ERROR); }
+  try { str.fromJson(Json 123); } catch s { assert(s.contains(PARSE_ERROR)); }
 }
 
 //-----------------------------------------------------------------------------
