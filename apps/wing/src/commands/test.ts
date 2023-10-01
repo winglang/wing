@@ -250,12 +250,10 @@ function noCleanUp(synthDir: string) {
   );
 }
 
-export function filterTests(tests: Array<string>, regexString?: string): Array<string> {
-  let filteredTests: Array<string> = [];
-
+export function filterTests(tests: string[], regexString?: string): string[] {
   if (regexString) {
     const regex = new RegExp(regexString);
-    filteredTests = tests.filter((test) => {
+    tests = tests.filter((test) => {
       // Extract test name from the string
       // root/env0/test:<testName>
       const firstColonIndex = test.indexOf(":");
@@ -264,7 +262,7 @@ export function filterTests(tests: Array<string>, regexString?: string): Array<s
     });
   }
 
-  return filteredTests;
+  return tests;
 }
 
 async function testSimulator(synthDir: string, options: TestOptions) {
