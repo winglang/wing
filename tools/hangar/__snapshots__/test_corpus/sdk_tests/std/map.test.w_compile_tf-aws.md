@@ -10,12 +10,7 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      const trilogies = ({"PT": 2,"OT": 1,"ST": 3});
-      {((cond) => {if (!cond) throw new Error("assertion failed: trilogies.size() == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(trilogies).length,3)))};
-      const mutTrilogies = ({"PT": 2,"OT": 1,"ST": 3});
-      {((cond) => {if (!cond) throw new Error("assertion failed: mutTrilogies.size() == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(mutTrilogies).length,3)))};
-      (delete (mutTrilogies)["ST"]);
-      {((cond) => {if (!cond) throw new Error("assertion failed: mutTrilogies.size() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(mutTrilogies).length,2)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Map<str>{} == MutMap<str>{}")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(({}),({}))))};
     }
   }
   return $Closure1;
@@ -33,6 +28,47 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
+      const senate = ({"chancellor": "palpatine"});
+      ((obj, args) => { obj[args[0]] = args[1]; })(senate, ["senator","organa"]);
+      {((cond) => {if (!cond) throw new Error("assertion failed: senate.get(\"senator\") == \"organa\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((senate)["senator"],"organa")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: senate.size() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(senate).length,2)))};
+    }
+  }
+  return $Closure10;
+}
+
+```
+
+## inflight.$Closure11-1.js
+```js
+module.exports = function({  }) {
+  class $Closure11 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      const position = ({"librarian": "jocasta"});
+      ((map) => { for(const k in map){delete map[k]}; })(position);
+      {((cond) => {if (!cond) throw new Error("assertion failed: position.size() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(position).length,0)))};
+    }
+  }
+  return $Closure11;
+}
+
+```
+
+## inflight.$Closure12-1.js
+```js
+module.exports = function({  }) {
+  class $Closure12 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
       const sithTriumvirate = ({"traya": "lord of betrayal","nihilus": "lord of hunger","sion": "lord of pain"});
       (delete (sithTriumvirate)["nihilus"]);
       {((cond) => {if (!cond) throw new Error("assertion failed: sithTriumvirate.size() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(sithTriumvirate).length,2)))};
@@ -40,7 +76,7 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: sithTriumvirate == MutMap<str> { \"traya\" => \"lord of betrayal\" }")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(sithTriumvirate,({"traya": "lord of betrayal"}))))};
     }
   }
-  return $Closure10;
+  return $Closure12;
 }
 
 ```
@@ -55,14 +91,16 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      const greeting = ({"hello": "there!"});
-      {((cond) => {if (!cond) throw new Error("assertion failed: greeting.get(\"hello\") == \"there!\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((greeting)["hello"],"there!")))};
-      const general = (greeting)["grievous"];
-      {((cond) => {if (!cond) throw new Error("assertion failed: general == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(general,undefined)))};
-      const mutGreeting = ({"general": "kenobi"});
-      {((cond) => {if (!cond) throw new Error("assertion failed: mutGreeting.get(\"general\") == \"kenobi\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((mutGreeting)["general"],"kenobi")))};
-      const Viceroy = (mutGreeting)["gunray"];
-      {((cond) => {if (!cond) throw new Error("assertion failed: Viceroy == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Viceroy,undefined)))};
+      const apprentices = ({"plagueis": "sidious","dooku": "ventress"});
+      (delete (apprentices)["plagueis"]);
+      {((cond) => {if (!cond) throw new Error("assertion failed: apprentices.size() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(apprentices).length,1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: apprentices.copy() == Map<str> {\"dooku\" => \"ventress\"}")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(({...(apprentices)}),({"dooku": "ventress"}))))};
+      ((obj, args) => { obj[args[0]] = args[1]; })(apprentices, ["sidious","dooku"]);
+      {((cond) => {if (!cond) throw new Error("assertion failed: apprentices.get(\"sidious\")  == \"dooku\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((apprentices)["sidious"],"dooku")))};
+      ((obj, args) => { obj[args[0]] = args[1]; })(apprentices, ["sidious","maul"]);
+      {((cond) => {if (!cond) throw new Error("assertion failed: apprentices.get(\"sidious\") == \"maul\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((apprentices)["sidious"],"maul")))};
+      ((map) => { for(const k in map){delete map[k]}; })(apprentices);
+      {((cond) => {if (!cond) throw new Error("assertion failed: apprentices == MutMap<str>{}")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(apprentices,({}))))};
     }
   }
   return $Closure2;
@@ -80,15 +118,12 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      const legion501 = ({"fives": "CT-5555","rex": "CT-7567","appo": "CC-1119","jesse": "CT-5597"});
-      {((cond) => {if (!cond) throw new Error("assertion failed: legion501.has(\"fives\") == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("fives" in (legion501)),true)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: legion501.has(\"rex\") == legion501.has(\"jesse\")")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("rex" in (legion501)),("jesse" in (legion501)))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: legion501.has(\"cody\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("cody" in (legion501)),false)))};
-      const padawans = ({"ahsoka": "anakin","anakin": "kenobi","kenobi": "qui gon","qui gon": "dooku","dooku": "yoda"});
-      {((cond) => {if (!cond) throw new Error("assertion failed: padawans.has(\"anakin\") == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("anakin" in (padawans)),true)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: padawans.has(\"qui gon\") == padawans.has(\"dooku\") == padawans.has(\"anakin\")")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("qui gon" in (padawans)),("dooku" in (padawans)))),("anakin" in (padawans)))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: padawans.has(\"windu\") == padawans.has(\"sifo dyas\")")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("windu" in (padawans)),("sifo dyas" in (padawans)))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: padawans.has(\"revan\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("revan" in (padawans)),false)))};
+      const trilogies = ({"PT": 2,"OT": 1,"ST": 3});
+      {((cond) => {if (!cond) throw new Error("assertion failed: trilogies.size() == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(trilogies).length,3)))};
+      const mutTrilogies = ({"PT": 2,"OT": 1,"ST": 3});
+      {((cond) => {if (!cond) throw new Error("assertion failed: mutTrilogies.size() == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(mutTrilogies).length,3)))};
+      (delete (mutTrilogies)["ST"]);
+      {((cond) => {if (!cond) throw new Error("assertion failed: mutTrilogies.size() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(mutTrilogies).length,2)))};
     }
   }
   return $Closure3;
@@ -100,6 +135,57 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure4 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      const greeting = ({"hello": "there!"});
+      {((cond) => {if (!cond) throw new Error("assertion failed: greeting.get(\"hello\") == \"there!\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((greeting)["hello"],"there!")))};
+      const general = (greeting)["grievous"];
+      {((cond) => {if (!cond) throw new Error("assertion failed: general == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(general,undefined)))};
+      const mutGreeting = ({"general": "kenobi"});
+      {((cond) => {if (!cond) throw new Error("assertion failed: mutGreeting.get(\"general\") == \"kenobi\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((mutGreeting)["general"],"kenobi")))};
+      const Viceroy = (mutGreeting)["gunray"];
+      {((cond) => {if (!cond) throw new Error("assertion failed: Viceroy == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Viceroy,undefined)))};
+    }
+  }
+  return $Closure4;
+}
+
+```
+
+## inflight.$Closure5-1.js
+```js
+module.exports = function({  }) {
+  class $Closure5 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      const legion501 = ({"fives": "CT-5555","rex": "CT-7567","appo": "CC-1119","jesse": "CT-5597"});
+      {((cond) => {if (!cond) throw new Error("assertion failed: legion501.has(\"fives\") == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("fives" in (legion501)),true)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: legion501.has(\"rex\") == legion501.has(\"jesse\")")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("rex" in (legion501)),("jesse" in (legion501)))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: legion501.has(\"cody\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("cody" in (legion501)),false)))};
+      const padawans = ({"ahsoka": "anakin","anakin": "kenobi","kenobi": "qui gon","qui gon": "dooku","dooku": "yoda"});
+      {((cond) => {if (!cond) throw new Error("assertion failed: padawans.has(\"anakin\") == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("anakin" in (padawans)),true)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: padawans.has(\"qui gon\") == padawans.has(\"dooku\") == padawans.has(\"anakin\")")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("qui gon" in (padawans)),("dooku" in (padawans)))),("anakin" in (padawans)))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: padawans.has(\"windu\") == padawans.has(\"sifo dyas\")")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("windu" in (padawans)),("sifo dyas" in (padawans)))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: padawans.has(\"revan\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("revan" in (padawans)),false)))};
+    }
+  }
+  return $Closure5;
+}
+
+```
+
+## inflight.$Closure6-1.js
+```js
+module.exports = function({  }) {
+  class $Closure6 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -122,15 +208,15 @@ module.exports = function({  }) {
       }
     }
   }
-  return $Closure4;
+  return $Closure6;
 }
 
 ```
 
-## inflight.$Closure5-1.js
+## inflight.$Closure7-1.js
 ```js
 module.exports = function({  }) {
-  class $Closure5 {
+  class $Closure7 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -153,48 +239,6 @@ module.exports = function({  }) {
       }
     }
   }
-  return $Closure5;
-}
-
-```
-
-## inflight.$Closure6-1.js
-```js
-module.exports = function({  }) {
-  class $Closure6 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async handle() {
-      const ruleOfTwo = ({"master": "apprentice"});
-      const mutRuleOfTwo = {...(ruleOfTwo)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: mutRuleOfTwo.copy() == ruleOfTwo")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(({...(mutRuleOfTwo)}),ruleOfTwo)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: mutRuleOfTwo.delete(\"master\") == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((delete (mutRuleOfTwo)["master"]),true)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: mutRuleOfTwo.size() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(mutRuleOfTwo).length,0)))};
-    }
-  }
-  return $Closure6;
-}
-
-```
-
-## inflight.$Closure7-1.js
-```js
-module.exports = function({  }) {
-  class $Closure7 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async handle() {
-      const authority = ({"republic": "senate","empire": "emperor"});
-      const immutAuthority = ({...(authority)});
-      {((cond) => {if (!cond) throw new Error("assertion failed: immutAuthority.copyMut() == authority")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })({...(immutAuthority)},authority)))};
-    }
-  }
   return $Closure7;
 }
 
@@ -210,10 +254,11 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      const senate = ({"chancellor": "palpatine"});
-      ((obj, args) => { obj[args[0]] = args[1]; })(senate, ["senator","organa"]);
-      {((cond) => {if (!cond) throw new Error("assertion failed: senate.get(\"senator\") == \"organa\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((senate)["senator"],"organa")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: senate.size() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(senate).length,2)))};
+      const ruleOfTwo = ({"master": "apprentice"});
+      const mutRuleOfTwo = {...(ruleOfTwo)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mutRuleOfTwo.copy() == ruleOfTwo")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(({...(mutRuleOfTwo)}),ruleOfTwo)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mutRuleOfTwo.delete(\"master\") == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((delete (mutRuleOfTwo)["master"]),true)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mutRuleOfTwo.size() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(mutRuleOfTwo).length,0)))};
     }
   }
   return $Closure8;
@@ -231,9 +276,9 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      const position = ({"librarian": "jocasta"});
-      ((map) => { for(const k in map){delete map[k]}; })(position);
-      {((cond) => {if (!cond) throw new Error("assertion failed: position.size() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(position).length,0)))};
+      const authority = ({"republic": "senate","empire": "emperor"});
+      const immutAuthority = ({...(authority)});
+      {((cond) => {if (!cond) throw new Error("assertion failed: immutAuthority.copyMut() == authority")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })({...(immutAuthority)},authority)))};
     }
   }
   return $Closure9;
@@ -543,6 +588,58 @@ class $Root extends $stdlib.std.Resource {
         return ["handle", "$inflight_init"];
       }
     }
+    class $Closure11 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        (std.Node.of(this)).hidden = true;
+      }
+      static _toInflightType(context) {
+        return `
+          require("./inflight.$Closure11-1.js")({
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure11Client = ${$Closure11._toInflightType(this)};
+            const client = new $Closure11Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
+      }
+    }
+    class $Closure12 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        (std.Node.of(this)).hidden = true;
+      }
+      static _toInflightType(context) {
+        return `
+          require("./inflight.$Closure12-1.js")({
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure12Client = ${$Closure12._toInflightType(this)};
+            const client = new $Closure12Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
+      }
+    }
     const m = ({"hello": 123,"world": 99});
     const mkeys = Object.keys(m);
     {((cond) => {if (!cond) throw new Error("assertion failed: mkeys.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mkeys.length,2)))};
@@ -552,13 +649,26 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: mvalues.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mvalues.length,2)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: mvalues.at(0) == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((mvalues.at(0)),123)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: mvalues.at(1) == 99")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((mvalues.at(1)),99)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: Map<str>{} == MutMap<str>{}")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(({}),({}))))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:equality",new $Closure1(this,"$Closure1"));
+    const apprentices = ({"plagueis": "sidious","dooku": "ventress"});
+    (delete (apprentices)["plagueis"]);
+    {((cond) => {if (!cond) throw new Error("assertion failed: apprentices.size() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(apprentices).length,1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: apprentices.copy() == Map<str> {\"dooku\" => \"ventress\"}")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(({...(apprentices)}),({"dooku": "ventress"}))))};
+    ((obj, args) => { obj[args[0]] = args[1]; })(apprentices, ["sidious","dooku"]);
+    {((cond) => {if (!cond) throw new Error("assertion failed: apprentices.get(\"sidious\")  == \"dooku\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((apprentices)["sidious"],"dooku")))};
+    ((obj, args) => { obj[args[0]] = args[1]; })(apprentices, ["sidious","maul"]);
+    {((cond) => {if (!cond) throw new Error("assertion failed: apprentices.get(\"sidious\") == \"maul\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((apprentices)["sidious"],"maul")))};
+    ((map) => { for(const k in map){delete map[k]}; })(apprentices);
+    {((cond) => {if (!cond) throw new Error("assertion failed: apprentices == MutMap<str>{}")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(apprentices,({}))))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:mutability",new $Closure2(this,"$Closure2"));
     const trilogies = ({"PT": 2,"OT": 1,"ST": 3});
     {((cond) => {if (!cond) throw new Error("assertion failed: trilogies.size() == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(trilogies).length,3)))};
     const mutTrilogies = ({"PT": 2,"OT": 1,"ST": 3});
     {((cond) => {if (!cond) throw new Error("assertion failed: mutTrilogies.size() == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(mutTrilogies).length,3)))};
     (delete (mutTrilogies)["ST"]);
     {((cond) => {if (!cond) throw new Error("assertion failed: mutTrilogies.size() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(mutTrilogies).length,2)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:size()",new $Closure1(this,"$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:size()",new $Closure3(this,"$Closure3"));
     const greeting = ({"hello": "there!"});
     {((cond) => {if (!cond) throw new Error("assertion failed: greeting.get(\"hello\") == \"there!\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((greeting)["hello"],"there!")))};
     const general = (greeting)["grievous"];
@@ -567,7 +677,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: mutGreeting.get(\"general\") == \"kenobi\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((mutGreeting)["general"],"kenobi")))};
     const Viceroy = (mutGreeting)["gunray"];
     {((cond) => {if (!cond) throw new Error("assertion failed: Viceroy == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Viceroy,undefined)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:get()",new $Closure2(this,"$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:get()",new $Closure4(this,"$Closure4"));
     const legion501 = ({"fives": "CT-5555","rex": "CT-7567","appo": "CC-1119","jesse": "CT-5597"});
     {((cond) => {if (!cond) throw new Error("assertion failed: legion501.has(\"fives\") == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("fives" in (legion501)),true)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: legion501.has(\"rex\") == legion501.has(\"jesse\")")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("rex" in (legion501)),("jesse" in (legion501)))))};
@@ -577,7 +687,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: padawans.has(\"qui gon\") == padawans.has(\"dooku\") == padawans.has(\"anakin\")")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("qui gon" in (padawans)),("dooku" in (padawans)))),("anakin" in (padawans)))))};
     {((cond) => {if (!cond) throw new Error("assertion failed: padawans.has(\"windu\") == padawans.has(\"sifo dyas\")")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("windu" in (padawans)),("sifo dyas" in (padawans)))))};
     {((cond) => {if (!cond) throw new Error("assertion failed: padawans.has(\"revan\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("revan" in (padawans)),false)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:has()",new $Closure3(this,"$Closure3"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:has()",new $Closure5(this,"$Closure5"));
     const forceUsers = ({"sith": ["malak", "vader", "bane"],"jedi": ["sunrider", "bastila", "bindo"]});
     const userKeys = Object.values(forceUsers);
     const valArr = [["malak", "vader", "bane"], ["sunrider", "bastila", "bindo"]];
@@ -592,7 +702,7 @@ class $Root extends $stdlib.std.Resource {
     for (const i of $stdlib.std.Range.of(0, saberformNames.length, false)) {
       {((cond) => {if (!cond) throw new Error("assertion failed: saberformNames.at(i) == nameArr.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((saberformNames.at(i)),(nameArr.at(i)))))};
     }
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:values()",new $Closure4(this,"$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:values()",new $Closure6(this,"$Closure6"));
     const lightsaberColorMap = ({"red": "sith","blue": "jedi"});
     const lightsaberColors = Object.keys(lightsaberColorMap);
     const colorArr = ["red", "blue"];
@@ -607,32 +717,32 @@ class $Root extends $stdlib.std.Resource {
     for (const i of $stdlib.std.Range.of(0, mandalorianKeys.length, false)) {
       {((cond) => {if (!cond) throw new Error("assertion failed: mandalorianKeys.at(i) == keysArr.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((mandalorianKeys.at(i)),(keysArr.at(i)))))};
     }
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:keys()",new $Closure5(this,"$Closure5"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:keys()",new $Closure7(this,"$Closure7"));
     const ruleOfTwo = ({"master": "apprentice"});
     const mutRuleOfTwo = {...(ruleOfTwo)};
     {((cond) => {if (!cond) throw new Error("assertion failed: mutRuleOfTwo.copy() == ruleOfTwo")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(({...(mutRuleOfTwo)}),ruleOfTwo)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: mutRuleOfTwo.delete(\"master\") == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((delete (mutRuleOfTwo)["master"]),true)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: mutRuleOfTwo.size() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(mutRuleOfTwo).length,0)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:copyMut()",new $Closure6(this,"$Closure6"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:copyMut()",new $Closure8(this,"$Closure8"));
     const authority = ({"republic": "senate","empire": "emperor"});
     const immutAuthority = ({...(authority)});
     {((cond) => {if (!cond) throw new Error("assertion failed: immutAuthority.copyMut() == authority")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })({...(immutAuthority)},authority)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:copy()",new $Closure7(this,"$Closure7"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:copy()",new $Closure9(this,"$Closure9"));
     const senate = ({"chancellor": "palpatine"});
     ((obj, args) => { obj[args[0]] = args[1]; })(senate, ["senator","organa"]);
     {((cond) => {if (!cond) throw new Error("assertion failed: senate.get(\"senator\") == \"organa\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((senate)["senator"],"organa")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: senate.size() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(senate).length,2)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:set()",new $Closure8(this,"$Closure8"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:set()",new $Closure10(this,"$Closure10"));
     const position = ({"librarian": "jocasta"});
     ((map) => { for(const k in map){delete map[k]}; })(position);
     {((cond) => {if (!cond) throw new Error("assertion failed: position.size() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(position).length,0)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:clear()",new $Closure9(this,"$Closure9"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:clear()",new $Closure11(this,"$Closure11"));
     const sithTriumvirate = ({"traya": "lord of betrayal","nihilus": "lord of hunger","sion": "lord of pain"});
     (delete (sithTriumvirate)["nihilus"]);
     {((cond) => {if (!cond) throw new Error("assertion failed: sithTriumvirate.size() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(sithTriumvirate).length,2)))};
     (delete (sithTriumvirate)["sion"]);
     {((cond) => {if (!cond) throw new Error("assertion failed: sithTriumvirate == MutMap<str> { \"traya\" => \"lord of betrayal\" }")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(sithTriumvirate,({"traya": "lord of betrayal"}))))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:delete()",new $Closure10(this,"$Closure10"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:delete()",new $Closure12(this,"$Closure12"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
