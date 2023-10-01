@@ -105,12 +105,12 @@ export abstract class Website extends Resource {
    * If the path conflicts with file path from the website's static assets, an error will be thrown.
    * @param path the file path it will be uploaded as
    * @param data the data to write to the file
-   * @param contentType the file content-type
+   * @param options configure the file's options
    */
   public abstract addFile(
     path: string,
     data: string,
-    contentType: string
+    options: AddFileOptions | undefined,
   ): string;
 }
 
