@@ -57,5 +57,3 @@ test "duration" {
   assert(86400s == 1d);
   assert(31536000s == 1y);
 }
-
-// TODO: https://github.com/winglang/wing/issues/2785
