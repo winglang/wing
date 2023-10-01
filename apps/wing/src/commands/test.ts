@@ -259,7 +259,7 @@ export function filterTests(tests: string[], regexString?: string): string[] {
     });
   }
 
-  return pickOneTestPerEnvironment(tests);
+  return tests;
 }
 
 async function testSimulator(synthDir: string, options: TestOptions) {
@@ -310,7 +310,8 @@ async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.T
       const testRunner = new TestRunnerClient(testArns);
 
       const tests = await testRunner.listTests();
-      return [testRunner, filterTests(tests, filter)];
+      const filteredTests = filterTests(tests, filter);
+      return [testRunner, pickOneTestPerEnvironment(filteredTests)];
     });
 
     const results = await withSpinner("Running tests...", async () => {
@@ -396,7 +397,8 @@ async function testTfAws(synthDir: string, options: TestOptions): Promise<std.Te
       const testRunner = new TestRunnerClient(testArns);
 
       const tests = await testRunner.listTests();
-      return [testRunner, filterTests(tests, filter)];
+      const filteredTests = filterTests(tests, filter);
+      return [testRunner, pickOneTestPerEnvironment(filteredTests)];
     });
 
     const results = await withSpinner("Running tests...", async () => {
