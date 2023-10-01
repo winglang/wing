@@ -15,6 +15,8 @@
   <a href="https://www.winglang.io/contributing/">Contribute 💖</a>
 </p>
 
+> 🚧 This is a pre-release, please see our [project status](https://www.winglang.io/contributing/status) for more details.
+
 ###  Features
 
 - 💅 Syntax highlighting
