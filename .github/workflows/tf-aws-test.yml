@@ -16,7 +16,7 @@ env:
   NODE_VERSION: "18.16.0"
   # this variable indicates wheater to use wing cli from a local version (using the current repo code)
   # or use the latest remote npm version
-  LOCAL_BUILD: ${{ github.workflow == 'build' && github.event_name == 'workflow_dispatch'}}
+  LOCAL_BUILD: ${{ github.workflow == 'build' }}
   # indicates if the action triggered from a workflow_dispatch
   MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
   REPO: ${{inputs.repo || github.repository}}
