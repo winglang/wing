@@ -186,6 +186,10 @@ impl UserDefinedType {
 	pub fn full_path_str(&self) -> String {
 		self.full_path().iter().join(".")
 	}
+
+	pub fn field_path_str(&self) -> String {
+		self.fields.iter().join(".")
+	}
 }
 
 impl Display for UserDefinedType {
@@ -297,6 +301,8 @@ pub struct FunctionDefinition {
 	pub signature: FunctionSignature,
 	/// Whether this function is static or not. In case of a closure, this is always true.
 	pub is_static: bool,
+	/// Function's access modifier. In case of a closure, this is always public.
+	pub access_modifier: AccessModifier,
 	pub span: WingSpan,
 }
 
@@ -310,14 +316,13 @@ pub struct Stmt {
 #[derive(Debug)]
 pub enum UtilityFunctions {
 	Log,
-	Throw,
 	Assert,
 }
 
 impl UtilityFunctions {
 	/// Returns all utility functions.
 	pub fn all() -> Vec<UtilityFunctions> {
-		vec![UtilityFunctions::Log, UtilityFunctions::Throw, UtilityFunctions::Assert]
+		vec![UtilityFunctions::Log, UtilityFunctions::Assert]
 	}
 }
 
@@ -325,7 +330,6 @@ impl Display for UtilityFunctions {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
 			UtilityFunctions::Log => write!(f, "log"),
-			UtilityFunctions::Throw => write!(f, "throw"),
 			UtilityFunctions::Assert => write!(f, "assert"),
 		}
 	}
@@ -422,7 +426,27 @@ pub struct Interface {
 pub enum BringSource {
 	BuiltinModule(Symbol),
 	JsiiModule(Symbol),
+	/// Refers to a relative path to a file
 	WingFile(Symbol),
+	/// Refers to a relative path to a directory
+	Directory(Symbol),
+}
+
+#[derive(Debug)]
+pub enum AssignmentKind {
+	Assign,
+	AssignIncr,
+	AssignDecr,
+}
+
+#[derive(Debug)]
+pub struct IfLet {
+	pub reassignable: bool,
+	pub var_name: Symbol,
+	pub value: Expr,
+	pub statements: Scope,
+	pub elif_statements: Vec<ElifLetBlock>,
+	pub else_statements: Option<Scope>,
 }
 
 #[derive(Debug)]
@@ -449,14 +473,7 @@ pub enum StmtKind {
 		condition: Expr,
 		statements: Scope,
 	},
-	IfLet {
-		reassignable: bool,
-		var_name: Symbol,
-		value: Expr,
-		statements: Scope,
-		elif_statements: Vec<ElifLetBlock>,
-		else_statements: Option<Scope>,
-	},
+	IfLet(IfLet),
 	If {
 		condition: Expr,
 		statements: Scope,
@@ -469,6 +486,7 @@ pub enum StmtKind {
 	Throw(Expr),
 	Expression(Expr),
 	Assignment {
+		kind: AssignmentKind,
 		variable: Reference,
 		value: Expr,
 	},
@@ -505,6 +523,24 @@ pub struct ClassField {
 	pub reassignable: bool,
 	pub phase: Phase,
 	pub is_static: bool,
+	pub access_modifier: AccessModifier,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum AccessModifier {
+	Private,
+	Public,
+	Protected,
+}
+
+impl Display for AccessModifier {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match self {
+			AccessModifier::Private => write!(f, "private"),
+			AccessModifier::Public => write!(f, "public"),
+			AccessModifier::Protected => write!(f, "protected"),
+		}
+	}
 }
 
 #[derive(Debug)]

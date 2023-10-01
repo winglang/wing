@@ -1,7 +1,7 @@
 use crate::{
 	ast::{
 		ArgList, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Expr, ExprKind,
-		FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface, InterpolatedString,
+		FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, IfLet, Interface, InterpolatedString,
 		InterpolatedStringPart, Literal, NewExpr, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation,
 		TypeAnnotationKind, UserDefinedType,
 	},
@@ -86,6 +86,7 @@ where
 				BringSource::BuiltinModule(name) => BringSource::BuiltinModule(f.fold_symbol(name)),
 				BringSource::JsiiModule(name) => BringSource::JsiiModule(f.fold_symbol(name)),
 				BringSource::WingFile(name) => BringSource::WingFile(f.fold_symbol(name)),
+				BringSource::Directory(name) => BringSource::Directory(f.fold_symbol(name)),
 			},
 			identifier: identifier.map(|id| f.fold_symbol(id)),
 		},
@@ -113,14 +114,14 @@ where
 			condition: f.fold_expr(condition),
 			statements: f.fold_scope(statements),
 		},
-		StmtKind::IfLet {
+		StmtKind::IfLet(IfLet {
 			value,
 			statements,
 			reassignable,
 			var_name,
 			elif_statements,
 			else_statements,
-		} => StmtKind::IfLet {
+		}) => StmtKind::IfLet(IfLet {
 			value: f.fold_expr(value),
 			statements: f.fold_scope(statements),
 			reassignable,
@@ -135,7 +136,7 @@ where
 				})
 				.collect(),
 			else_statements: else_statements.map(|statements| f.fold_scope(statements)),
-		},
+		}),
 		StmtKind::If {
 			condition,
 			statements,
@@ -158,7 +159,8 @@ where
 		StmtKind::Return(value) => StmtKind::Return(value.map(|value| f.fold_expr(value))),
 		StmtKind::Throw(value) => StmtKind::Throw(f.fold_expr(value)),
 		StmtKind::Expression(expr) => StmtKind::Expression(f.fold_expr(expr)),
-		StmtKind::Assignment { variable, value } => StmtKind::Assignment {
+		StmtKind::Assignment { kind, variable, value } => StmtKind::Assignment {
+			kind,
 			variable: f.fold_reference(variable),
 			value: f.fold_expr(value),
 		},
@@ -232,6 +234,7 @@ where
 		reassignable: node.reassignable,
 		phase: node.phase,
 		is_static: node.is_static,
+		access_modifier: node.access_modifier,
 	}
 }
 
@@ -407,6 +410,7 @@ where
 		signature: f.fold_function_signature(node.signature),
 		is_static: node.is_static,
 		span: node.span,
+		access_modifier: node.access_modifier,
 	}
 }
 

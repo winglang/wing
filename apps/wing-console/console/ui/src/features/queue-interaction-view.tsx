@@ -8,6 +8,10 @@ export interface QueueViewProps {
 export const QueueInteractionView = ({ resourcePath }: QueueViewProps) => {
   const { isLoading, pushMessage } = useQueue({ resourcePath });
   return (
-    <QueueInteraction isLoading={isLoading} onPushMessageClick={pushMessage} />
+    <QueueInteraction
+      resourceId={resourcePath}
+      isLoading={isLoading}
+      onPushMessageClick={pushMessage}
+    />
   );
 };

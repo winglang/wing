@@ -1,6 +1,11 @@
 import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
-import { useCallback, useEffect, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState as useReactState,
+  useState,
+} from "react";
 
 import { Button } from "./button.js";
 import { Combobox } from "./combobox.js";
@@ -11,7 +16,13 @@ export interface KeyValueItem {
   value: string;
 }
 
-export const useKeyValueList = () => {
+export interface UseKeyValueListOptions {
+  useState?: typeof useReactState;
+}
+
+export const useKeyValueList = ({
+  useState = useReactState,
+}: UseKeyValueListOptions) => {
   const [items, setItems] = useState<KeyValueItem[]>([]);
 
   const addItem = useCallback((item: KeyValueItem) => {
@@ -86,7 +97,7 @@ export const KeyValueList = ({
       return;
     }
     setEditItems([...items, { key: "", value: "" }]);
-  }, [readonly, items]);
+  }, [readonly, items, onAddItem]);
 
   const onItemChange = (index: number, item: KeyValueItem) => {
     if (index === items.length) {

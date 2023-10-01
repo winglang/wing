@@ -51,7 +51,7 @@ being managed by CloudFormation, either because you've removed it from the
 CDK application or because you've made a change that requires the resource
 to be replaced.
 
-The resource can be deleted (\`RemovalPolicy.DELETE\`), or left in your AWS
+The resource can be deleted (\`RemovalPolicy.DESTROY\`), or left in your AWS
 account for data recovery and cleanup later (\`RemovalPolicy.RETAIN\`).",
               "summary": "Apply the given removal policy to this resource.",
             },
@@ -84,7 +84,9 @@ account for data recovery and cleanup later (\`RemovalPolicy.RETAIN\`).",
           Object {
             "displayName": "addEventNotification",
             "docs": Object {
-              "example": "   bucket.addEventNotification(EventType.OnObjectCreated, myLambda, 'home/myusername/*')",
+              "example": "   declare const myLambda: lambda.Function;
+   const bucket = new s3.Bucket(this, 'MyBucket');
+   bucket.addEventNotification(s3.EventType.OBJECT_CREATED, new s3n.LambdaDestination(myLambda), {prefix: 'home/myusername/*'});",
               "links": Array [
                 "https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html",
               ],
@@ -163,13 +165,13 @@ for details about allowed filter rules.",
                 },
               },
             ],
-            "usage": "addEventNotification(event: EventType, dest: IBucketNotificationDestination, filters: NotificationKeyFilter): void",
+            "usage": "addEventNotification(event: EventType, dest: IBucketNotificationDestination, ...filters: Array<NotificationKeyFilter>): void",
           },
           Object {
             "displayName": "addObjectCreatedNotification",
             "docs": Object {
               "remarks": "This is identical to calling
-\`onEvent(EventType.ObjectCreated)\`.",
+\`onEvent(EventType.OBJECT_CREATED)\`.",
               "summary": "Subscribes a destination to receive notifications when an object is created in the bucket.",
             },
             "fqn": "construct-library.GreeterBucket.addObjectCreatedNotification",
@@ -220,13 +222,13 @@ for details about allowed filter rules.",
                 },
               },
             ],
-            "usage": "addObjectCreatedNotification(dest: IBucketNotificationDestination, filters: NotificationKeyFilter): void",
+            "usage": "addObjectCreatedNotification(dest: IBucketNotificationDestination, ...filters: Array<NotificationKeyFilter>): void",
           },
           Object {
             "displayName": "addObjectRemovedNotification",
             "docs": Object {
               "remarks": "This is identical to calling
-\`onEvent(EventType.ObjectRemoved)\`.",
+\`onEvent(EventType.OBJECT_REMOVED)\`.",
               "summary": "Subscribes a destination to receive notifications when an object is removed from the bucket.",
             },
             "fqn": "construct-library.GreeterBucket.addObjectRemovedNotification",
@@ -277,12 +279,17 @@ for details about allowed filter rules.",
                 },
               },
             ],
-            "usage": "addObjectRemovedNotification(dest: IBucketNotificationDestination, filters: NotificationKeyFilter): void",
+            "usage": "addObjectRemovedNotification(dest: IBucketNotificationDestination, ...filters: Array<NotificationKeyFilter>): void",
           },
           Object {
             "displayName": "addToResourcePolicy",
             "docs": Object {
-              "summary": "Adds a statement to the resource policy for a principal (i.e. account/role/service) to perform actions on this bucket and/or it's contents. Use \`bucketArn\` and \`arnForObjects(keys)\` to obtain ARNs for this bucket or objects.",
+              "remarks": "Note that the policy statement may or may not be added to the policy.
+For example, when an \`IBucket\` is created from an existing bucket,
+it's not possible to tell whether the bucket already has a policy
+attached, let alone to re-use that policy to add more statements to it.
+So it's safest to do nothing in these cases.",
+              "summary": "Adds a statement to the resource policy for a principal (i.e. account/role/service) to perform actions on this bucket and/or its contents. Use \`bucketArn\` and \`arnForObjects(keys)\` to obtain ARNs for this bucket or objects.",
             },
             "fqn": "construct-library.GreeterBucket.addToResourcePolicy",
             "id": "construct-library.GreeterBucket.addToResourcePolicy",
@@ -290,7 +297,9 @@ for details about allowed filter rules.",
               Object {
                 "default": undefined,
                 "displayName": "permission",
-                "docs": Object {},
+                "docs": Object {
+                  "summary": "the policy statement to be added to the bucket's policy.",
+                },
                 "fqn": "construct-library.GreeterBucket.addToResourcePolicy.parameter.permission",
                 "id": "construct-library.GreeterBucket.addToResourcePolicy.parameter.permission",
                 "optional": undefined,
@@ -399,7 +408,11 @@ as needed. For example, you can add a condition that will restrict access only
 to an IPv4 range like this:
 
      const grant = bucket.grantPublicAccess();
-     grant.resourceStatement!.addCondition(‘IpAddress’, { “aws:SourceIp”: “54.240.143.0/24” });",
+     grant.resourceStatement!.addCondition(‘IpAddress’, { “aws:SourceIp”: “54.240.143.0/24” });
+
+Note that if this \`IBucket\` refers to an existing bucket, possibly not
+managed by CloudFormation, this method will have no effect, since it's
+impossible to modify the policy of an existing bucket.",
               "summary": "Allows unrestricted access to objects from this bucket.",
             },
             "fqn": "construct-library.GreeterBucket.grantPublicAccess",
@@ -433,7 +446,7 @@ to an IPv4 range like this:
                 },
               },
             ],
-            "usage": "grantPublicAccess(allowedActions: str, keyPrefix?: str): Grant",
+            "usage": "grantPublicAccess(...allowedActions: Array<str>, keyPrefix?: str): Grant",
           },
           Object {
             "displayName": "grantPut",
@@ -799,9 +812,9 @@ that captures the event. This method will not create the Trail.",
           Object {
             "displayName": "s3UrlForObject",
             "docs": Object {
-              "example": "s3://bucket/key",
-              "remarks": "For example:",
-              "summary": "The S3 URL of an S3 object.",
+              "remarks": "- \`s3://onlybucket\`
+- \`s3://bucket/key\`",
+              "summary": "The S3 URL of an S3 object. For example:.",
             },
             "fqn": "construct-library.GreeterBucket.s3UrlForObject",
             "id": "construct-library.GreeterBucket.s3UrlForObject",
@@ -825,12 +838,65 @@ bucket is returned.",
             "usage": "s3UrlForObject(key?: str): str",
           },
           Object {
+            "displayName": "transferAccelerationUrlForObject",
+            "docs": Object {
+              "remarks": "Specify \`dualStack: true\` at the options
+for dual-stack endpoint (connect to the bucket over IPv6). For example:
+
+- \`https://bucket.s3-accelerate.amazonaws.com\`
+- \`https://bucket.s3-accelerate.amazonaws.com/key\`",
+              "summary": "The https Transfer Acceleration URL of an S3 object.",
+            },
+            "fqn": "construct-library.GreeterBucket.transferAccelerationUrlForObject",
+            "id": "construct-library.GreeterBucket.transferAccelerationUrlForObject",
+            "parameters": Array [
+              Object {
+                "default": undefined,
+                "displayName": "key",
+                "docs": Object {
+                  "remarks": "If not specified, the URL of the
+bucket is returned.",
+                  "summary": "The S3 key of the object.",
+                },
+                "fqn": "construct-library.GreeterBucket.transferAccelerationUrlForObject.parameter.key",
+                "id": "construct-library.GreeterBucket.transferAccelerationUrlForObject.parameter.key",
+                "optional": true,
+                "type": Object {
+                  "formattingPattern": "str",
+                },
+              },
+              Object {
+                "default": undefined,
+                "displayName": "options",
+                "docs": Object {
+                  "summary": "Options for generating URL.",
+                },
+                "fqn": "construct-library.GreeterBucket.transferAccelerationUrlForObject.parameter.options",
+                "id": "construct-library.GreeterBucket.transferAccelerationUrlForObject.parameter.options",
+                "optional": true,
+                "type": Object {
+                  "formattingPattern": "%",
+                  "types": Array [
+                    Object {
+                      "displayName": "TransferAccelerationUrlOptions",
+                      "fqn": "@aws-cdk/aws-s3.TransferAccelerationUrlOptions",
+                      "id": "@aws-cdk/aws-s3.TransferAccelerationUrlOptions",
+                      "packageName": "@aws-cdk/aws-s3",
+                      "packageVersion": "99.99.99",
+                    },
+                  ],
+                },
+              },
+            ],
+            "usage": "transferAccelerationUrlForObject(key?: str, options?: TransferAccelerationUrlOptions): str",
+          },
+          Object {
             "displayName": "urlForObject",
             "docs": Object {
-              "example": "https://s3.cn-north-1.amazonaws.com.cn/china-bucket/mykey",
-              "remarks": "Specify \`regional: false\` at the options
-for non-regional URLs. For example:",
-              "summary": "The https URL of an S3 object.",
+              "remarks": "- \`https://s3.us-west-1.amazonaws.com/onlybucket\`
+- \`https://s3.us-west-1.amazonaws.com/bucket/key\`
+- \`https://s3.cn-north-1.amazonaws.com.cn/china-bucket/mykey\`",
+              "summary": "The https URL of an S3 object. Specify \`regional: false\` at the options for non-regional URLs. For example:.",
             },
             "fqn": "construct-library.GreeterBucket.urlForObject",
             "id": "construct-library.GreeterBucket.urlForObject",
@@ -856,10 +922,11 @@ bucket is returned.",
           Object {
             "displayName": "virtualHostedUrlForObject",
             "docs": Object {
-              "example": "https://china-bucket.s3.cn-north-1.amazonaws.com.cn/mykey",
-              "remarks": "Specify \`regional: false\` at
-the options for non-regional URL. For example:",
-              "summary": "The virtual hosted-style URL of an S3 object.",
+              "remarks": "- \`https://only-bucket.s3.us-west-1.amazonaws.com\`
+- \`https://bucket.s3.us-west-1.amazonaws.com/key\`
+- \`https://bucket.s3.amazonaws.com/key\`
+- \`https://china-bucket.s3.cn-north-1.amazonaws.com.cn/mykey\`",
+              "summary": "The virtual hosted-style URL of an S3 object. Specify \`regional: false\` at the options for non-regional URL. For example:.",
             },
             "fqn": "construct-library.GreeterBucket.virtualHostedUrlForObject",
             "id": "construct-library.GreeterBucket.virtualHostedUrlForObject",
@@ -1398,6 +1465,32 @@ GreeterBucket.fromBucketAttributes(attrs: BucketAttributes);",
 
 GreeterBucket.fromBucketName(bucketName: str);",
           },
+          Object {
+            "displayName": "validateBucketName",
+            "docs": Object {
+              "summary": "Thrown an exception if the given bucket name is not valid.",
+            },
+            "fqn": "construct-library.GreeterBucket.validateBucketName",
+            "id": "construct-library.GreeterBucket.validateBucketName",
+            "parameters": Array [
+              Object {
+                "default": undefined,
+                "displayName": "physicalName",
+                "docs": Object {
+                  "summary": "name of the bucket.",
+                },
+                "fqn": "construct-library.GreeterBucket.validateBucketName.parameter.physicalName",
+                "id": "construct-library.GreeterBucket.validateBucketName.parameter.physicalName",
+                "optional": undefined,
+                "type": Object {
+                  "formattingPattern": "str",
+                },
+              },
+            ],
+            "usage": "bring { GreeterBucket } from \\"construct-library\\";
+
+GreeterBucket.validateBucketName(physicalName: str);",
+          },
         ],
       },
     ],
@@ -1458,7 +1551,7 @@ new GreeterBucket(props?: BucketProps);
 | <code><a href=\\"#construct-library.GreeterBucket.addEventNotification\\">addEventNotification</a></code> | Adds a bucket notification event destination. |
 | <code><a href=\\"#construct-library.GreeterBucket.addObjectCreatedNotification\\">addObjectCreatedNotification</a></code> | Subscribes a destination to receive notifications when an object is created in the bucket. |
 | <code><a href=\\"#construct-library.GreeterBucket.addObjectRemovedNotification\\">addObjectRemovedNotification</a></code> | Subscribes a destination to receive notifications when an object is removed from the bucket. |
-| <code><a href=\\"#construct-library.GreeterBucket.addToResourcePolicy\\">addToResourcePolicy</a></code> | Adds a statement to the resource policy for a principal (i.e. account/role/service) to perform actions on this bucket and/or it's contents. Use \`bucketArn\` and \`arnForObjects(keys)\` to obtain ARNs for this bucket or objects. |
+| <code><a href=\\"#construct-library.GreeterBucket.addToResourcePolicy\\">addToResourcePolicy</a></code> | Adds a statement to the resource policy for a principal (i.e. account/role/service) to perform actions on this bucket and/or its contents. Use \`bucketArn\` and \`arnForObjects(keys)\` to obtain ARNs for this bucket or objects. |
 | <code><a href=\\"#construct-library.GreeterBucket.arnForObjects\\">arnForObjects</a></code> | Returns an ARN that represents all objects within the bucket that match the key pattern specified. |
 | <code><a href=\\"#construct-library.GreeterBucket.grantDelete\\">grantDelete</a></code> | Grants s3:DeleteObject* permission to an IAM principal for objects in this bucket. |
 | <code><a href=\\"#construct-library.GreeterBucket.grantPublicAccess\\">grantPublicAccess</a></code> | Allows unrestricted access to objects from this bucket. |
@@ -1470,9 +1563,10 @@ new GreeterBucket(props?: BucketProps);
 | <code><a href=\\"#construct-library.GreeterBucket.onCloudTrailEvent\\">onCloudTrailEvent</a></code> | Define a CloudWatch event that triggers when something happens to this repository. |
 | <code><a href=\\"#construct-library.GreeterBucket.onCloudTrailPutObject\\">onCloudTrailPutObject</a></code> | Defines an AWS CloudWatch event that triggers when an object is uploaded to the specified paths (keys) in this bucket using the PutObject API call. |
 | <code><a href=\\"#construct-library.GreeterBucket.onCloudTrailWriteObject\\">onCloudTrailWriteObject</a></code> | Defines an AWS CloudWatch event that triggers when an object at the specified paths (keys) in this bucket are written to. |
-| <code><a href=\\"#construct-library.GreeterBucket.s3UrlForObject\\">s3UrlForObject</a></code> | The S3 URL of an S3 object. |
-| <code><a href=\\"#construct-library.GreeterBucket.urlForObject\\">urlForObject</a></code> | The https URL of an S3 object. |
-| <code><a href=\\"#construct-library.GreeterBucket.virtualHostedUrlForObject\\">virtualHostedUrlForObject</a></code> | The virtual hosted-style URL of an S3 object. |
+| <code><a href=\\"#construct-library.GreeterBucket.s3UrlForObject\\">s3UrlForObject</a></code> | The S3 URL of an S3 object. For example:. |
+| <code><a href=\\"#construct-library.GreeterBucket.transferAccelerationUrlForObject\\">transferAccelerationUrlForObject</a></code> | The https Transfer Acceleration URL of an S3 object. |
+| <code><a href=\\"#construct-library.GreeterBucket.urlForObject\\">urlForObject</a></code> | The https URL of an S3 object. Specify \`regional: false\` at the options for non-regional URLs. For example:. |
+| <code><a href=\\"#construct-library.GreeterBucket.virtualHostedUrlForObject\\">virtualHostedUrlForObject</a></code> | The virtual hosted-style URL of an S3 object. Specify \`regional: false\` at the options for non-regional URL. For example:. |
 | <code><a href=\\"#construct-library.GreeterBucket.addCorsRule\\">addCorsRule</a></code> | Adds a cross-origin access configuration for objects in an Amazon S3 bucket. |
 | <code><a href=\\"#construct-library.GreeterBucket.addInventory\\">addInventory</a></code> | Add an inventory configuration. |
 | <code><a href=\\"#construct-library.GreeterBucket.addLifecycleRule\\">addLifecycleRule</a></code> | Add a lifecycle rule to the bucket. |
@@ -1494,7 +1588,7 @@ being managed by CloudFormation, either because you've removed it from the
 CDK application or because you've made a change that requires the resource
 to be replaced.
 
-The resource can be deleted (\`RemovalPolicy.DELETE\`), or left in your AWS
+The resource can be deleted (\`RemovalPolicy.DESTROY\`), or left in your AWS
 account for data recovery and cleanup later (\`RemovalPolicy.RETAIN\`).
 
 ###### \`policy\`<sup>Required</sup> <a name=\\"policy\\" id=\\"construct-library.GreeterBucket.applyRemovalPolicy.parameter.policy\\"></a>
@@ -1506,7 +1600,7 @@ account for data recovery and cleanup later (\`RemovalPolicy.RETAIN\`).
 ##### \`addEventNotification\` <a name=\\"addEventNotification\\" id=\\"construct-library.GreeterBucket.addEventNotification\\"></a>
 
 \`\`\`wing
-addEventNotification(event: EventType, dest: IBucketNotificationDestination, filters: NotificationKeyFilter): void
+addEventNotification(event: EventType, dest: IBucketNotificationDestination, ...filters: Array<NotificationKeyFilter>): void
 \`\`\`
 
 Adds a bucket notification event destination.
@@ -1516,7 +1610,9 @@ Adds a bucket notification event destination.
 *Example*
 
 \`\`\`wing
-   bucket.addEventNotification(EventType.OnObjectCreated, myLambda, 'home/myusername/*')
+   declare const myLambda: lambda.Function;
+   const bucket = new s3.Bucket(this, 'MyBucket');
+   bucket.addEventNotification(s3.EventType.OBJECT_CREATED, new s3n.LambdaDestination(myLambda), {prefix: 'home/myusername/*'});
 \`\`\`
 
 
@@ -1551,13 +1647,13 @@ for details about allowed filter rules.
 ##### \`addObjectCreatedNotification\` <a name=\\"addObjectCreatedNotification\\" id=\\"construct-library.GreeterBucket.addObjectCreatedNotification\\"></a>
 
 \`\`\`wing
-addObjectCreatedNotification(dest: IBucketNotificationDestination, filters: NotificationKeyFilter): void
+addObjectCreatedNotification(dest: IBucketNotificationDestination, ...filters: Array<NotificationKeyFilter>): void
 \`\`\`
 
 Subscribes a destination to receive notifications when an object is created in the bucket.
 
 This is identical to calling
-\`onEvent(EventType.ObjectCreated)\`.
+\`onEvent(EventType.OBJECT_CREATED)\`.
 
 ###### \`dest\`<sup>Required</sup> <a name=\\"dest\\" id=\\"construct-library.GreeterBucket.addObjectCreatedNotification.parameter.dest\\"></a>
 
@@ -1578,13 +1674,13 @@ Filters (see onEvent).
 ##### \`addObjectRemovedNotification\` <a name=\\"addObjectRemovedNotification\\" id=\\"construct-library.GreeterBucket.addObjectRemovedNotification\\"></a>
 
 \`\`\`wing
-addObjectRemovedNotification(dest: IBucketNotificationDestination, filters: NotificationKeyFilter): void
+addObjectRemovedNotification(dest: IBucketNotificationDestination, ...filters: Array<NotificationKeyFilter>): void
 \`\`\`
 
 Subscribes a destination to receive notifications when an object is removed from the bucket.
 
 This is identical to calling
-\`onEvent(EventType.ObjectRemoved)\`.
+\`onEvent(EventType.OBJECT_REMOVED)\`.
 
 ###### \`dest\`<sup>Required</sup> <a name=\\"dest\\" id=\\"construct-library.GreeterBucket.addObjectRemovedNotification.parameter.dest\\"></a>
 
@@ -1608,11 +1704,19 @@ Filters (see onEvent).
 addToResourcePolicy(permission: PolicyStatement): AddToResourcePolicyResult
 \`\`\`
 
-Adds a statement to the resource policy for a principal (i.e. account/role/service) to perform actions on this bucket and/or it's contents. Use \`bucketArn\` and \`arnForObjects(keys)\` to obtain ARNs for this bucket or objects.
+Adds a statement to the resource policy for a principal (i.e. account/role/service) to perform actions on this bucket and/or its contents. Use \`bucketArn\` and \`arnForObjects(keys)\` to obtain ARNs for this bucket or objects.
+
+Note that the policy statement may or may not be added to the policy.
+For example, when an \`IBucket\` is created from an existing bucket,
+it's not possible to tell whether the bucket already has a policy
+attached, let alone to re-use that policy to add more statements to it.
+So it's safest to do nothing in these cases.
 
 ###### \`permission\`<sup>Required</sup> <a name=\\"permission\\" id=\\"construct-library.GreeterBucket.addToResourcePolicy.parameter.permission\\"></a>
 
 - *Type:* @aws-cdk/aws-iam.PolicyStatement
+
+the policy statement to be added to the bucket's policy.
 
 ---
 
@@ -1663,7 +1767,7 @@ Restrict the permission to a certain key pattern (default '*').
 ##### \`grantPublicAccess\` <a name=\\"grantPublicAccess\\" id=\\"construct-library.GreeterBucket.grantPublicAccess\\"></a>
 
 \`\`\`wing
-grantPublicAccess(allowedActions: str, keyPrefix?: str): Grant
+grantPublicAccess(...allowedActions: Array<str>, keyPrefix?: str): Grant
 \`\`\`
 
 Allows unrestricted access to objects from this bucket.
@@ -1682,6 +1786,10 @@ to an IPv4 range like this:
 
      const grant = bucket.grantPublicAccess();
      grant.resourceStatement!.addCondition(‘IpAddress’, { “aws:SourceIp”: “54.240.143.0/24” });
+
+Note that if this \`IBucket\` refers to an existing bucket, possibly not
+managed by CloudFormation, this method will have no effect, since it's
+impossible to modify the policy of an existing bucket.
 
 ###### \`allowedActions\`<sup>Required</sup> <a name=\\"allowedActions\\" id=\\"construct-library.GreeterBucket.grantPublicAccess.parameter.allowedActions\\"></a>
 
@@ -1915,16 +2023,10 @@ Options for adding the rule.
 s3UrlForObject(key?: str): str
 \`\`\`
 
-The S3 URL of an S3 object.
+The S3 URL of an S3 object. For example:.
 
-For example:
-
-*Example*
-
-\`\`\`wing
-s3://bucket/key
-\`\`\`
-
+\`s3://onlybucket\`
+- \`s3://bucket/key\`
 
 ###### \`key\`<sup>Optional</sup> <a name=\\"key\\" id=\\"construct-library.GreeterBucket.s3UrlForObject.parameter.key\\"></a>
 
@@ -1937,23 +2039,50 @@ bucket is returned.
 
 ---
 
+##### \`transferAccelerationUrlForObject\` <a name=\\"transferAccelerationUrlForObject\\" id=\\"construct-library.GreeterBucket.transferAccelerationUrlForObject\\"></a>
+
+\`\`\`wing
+transferAccelerationUrlForObject(key?: str, options?: TransferAccelerationUrlOptions): str
+\`\`\`
+
+The https Transfer Acceleration URL of an S3 object.
+
+Specify \`dualStack: true\` at the options
+for dual-stack endpoint (connect to the bucket over IPv6). For example:
+
+- \`https://bucket.s3-accelerate.amazonaws.com\`
+- \`https://bucket.s3-accelerate.amazonaws.com/key\`
+
+###### \`key\`<sup>Optional</sup> <a name=\\"key\\" id=\\"construct-library.GreeterBucket.transferAccelerationUrlForObject.parameter.key\\"></a>
+
+- *Type:* str
+
+The S3 key of the object.
+
+If not specified, the URL of the
+bucket is returned.
+
+---
+
+###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"construct-library.GreeterBucket.transferAccelerationUrlForObject.parameter.options\\"></a>
+
+- *Type:* @aws-cdk/aws-s3.TransferAccelerationUrlOptions
+
+Options for generating URL.
+
+---
+
 ##### \`urlForObject\` <a name=\\"urlForObject\\" id=\\"construct-library.GreeterBucket.urlForObject\\"></a>
 
 \`\`\`wing
 urlForObject(key?: str): str
 \`\`\`
 
-The https URL of an S3 object.
+The https URL of an S3 object. Specify \`regional: false\` at the options for non-regional URLs. For example:.
 
-Specify \`regional: false\` at the options
-for non-regional URLs. For example:
-
-*Example*
-
-\`\`\`wing
-https://s3.cn-north-1.amazonaws.com.cn/china-bucket/mykey
-\`\`\`
-
+\`https://s3.us-west-1.amazonaws.com/onlybucket\`
+- \`https://s3.us-west-1.amazonaws.com/bucket/key\`
+- \`https://s3.cn-north-1.amazonaws.com.cn/china-bucket/mykey\`
 
 ###### \`key\`<sup>Optional</sup> <a name=\\"key\\" id=\\"construct-library.GreeterBucket.urlForObject.parameter.key\\"></a>
 
@@ -1972,17 +2101,12 @@ bucket is returned.
 virtualHostedUrlForObject(key?: str, options?: VirtualHostedStyleUrlOptions): str
 \`\`\`
 
-The virtual hosted-style URL of an S3 object.
+The virtual hosted-style URL of an S3 object. Specify \`regional: false\` at the options for non-regional URL. For example:.
 
-Specify \`regional: false\` at
-the options for non-regional URL. For example:
-
-*Example*
-
-\`\`\`wing
-https://china-bucket.s3.cn-north-1.amazonaws.com.cn/mykey
-\`\`\`
-
+\`https://only-bucket.s3.us-west-1.amazonaws.com\`
+- \`https://bucket.s3.us-west-1.amazonaws.com/key\`
+- \`https://bucket.s3.amazonaws.com/key\`
+- \`https://china-bucket.s3.cn-north-1.amazonaws.com.cn/mykey\`
 
 ###### \`key\`<sup>Optional</sup> <a name=\\"key\\" id=\\"construct-library.GreeterBucket.virtualHostedUrlForObject.parameter.key\\"></a>
 
@@ -2081,6 +2205,7 @@ greet(): void
 | <code><a href=\\"#construct-library.GreeterBucket.fromBucketArn\\">fromBucketArn</a></code> | *No description.* |
 | <code><a href=\\"#construct-library.GreeterBucket.fromBucketAttributes\\">fromBucketAttributes</a></code> | Creates a Bucket construct that represents an external bucket. |
 | <code><a href=\\"#construct-library.GreeterBucket.fromBucketName\\">fromBucketName</a></code> | *No description.* |
+| <code><a href=\\"#construct-library.GreeterBucket.validateBucketName\\">validateBucketName</a></code> | Thrown an exception if the given bucket name is not valid. |
 
 ---
 
@@ -2146,6 +2271,24 @@ GreeterBucket.fromBucketName(bucketName: str);
 ###### \`bucketName\`<sup>Required</sup> <a name=\\"bucketName\\" id=\\"construct-library.GreeterBucket.fromBucketName.parameter.bucketName\\"></a>
 
 - *Type:* str
+
+---
+
+##### \`validateBucketName\` <a name=\\"validateBucketName\\" id=\\"construct-library.GreeterBucket.validateBucketName\\"></a>
+
+\`\`\`wing
+bring { GreeterBucket } from \\"construct-library\\";
+
+GreeterBucket.validateBucketName(physicalName: str);
+\`\`\`
+
+Thrown an exception if the given bucket name is not valid.
+
+###### \`physicalName\`<sup>Required</sup> <a name=\\"physicalName\\" id=\\"construct-library.GreeterBucket.validateBucketName.parameter.physicalName\\"></a>
+
+- *Type:* str
+
+name of the bucket.
 
 ---
 

@@ -28,7 +28,7 @@ class Foo  {
     log("at inflight init");
   }
 
-  inflight doStuff() {
+  pub inflight doStuff() {
     // all code is async and runs on the cloud
     log("field3[0]='${this.field3.at(0)}'");
     util.sleep(1s);
@@ -55,7 +55,7 @@ interface IProfile {
 }
 
 inflight class WingPerson impl IProfile {
-  inflight name(): str {
+  pub inflight name(): str {
     return "Fairy Wing";
   }
 }
@@ -84,10 +84,10 @@ class BucketBasedKeyValueStore impl IKVStore {
   init() {
     this.bucket = new cloud.Bucket();
   }
-  inflight get(key: str): Json {
+  pub inflight get(key: str): Json {
     return this.bucket.getJson(key);
   }
-  inflight set(key: str, value: Json): void {
+  pub inflight set(key: str, value: Json): void {
     this.bucket.putJson(key, value);
   }
 }
@@ -108,10 +108,10 @@ class BucketBasedKeyValueStore impl IKVStore {
   init() {
     this.bucket = new cloud.Bucket();
   }
-  inflight get(key: str): Json {
+  pub inflight get(key: str): Json {
     return this.bucket.getJson(key);
   }
-  inflight set(key: str, value: Json): void {
+  pub inflight set(key: str, value: Json): void {
     this.bucket.putJson(key, value);
   }
 }
@@ -127,10 +127,10 @@ class TableBasedKeyValueStore impl IKVStore {
       }
     );
   }
-  inflight get(key: str): Json {
+  pub inflight get(key: str): Json {
     return this.table.get(key);
   }
-  inflight set(key: str, value: Json): str {
+  pub inflight set(key: str, value: Json): str {
     this.table.insert(key, value);
   }
 }

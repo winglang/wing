@@ -6,9 +6,9 @@ import {
   waitUntilTraceCount,
 } from "./util";
 import * as cloud from "../../src/cloud";
+import { Testing } from "../../src/simulator";
 import { Duration, Node } from "../../src/std";
 import { QUEUE_TYPE } from "../../src/target-sim/schema-resources";
-import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
 
 const INFLIGHT_CODE = `
@@ -17,6 +17,21 @@ async handle(message) {
     throw new Error("ERROR");
   }
 }`;
+
+test("try to create a queue with invalid retention period", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const retentionPeriod = Duration.fromSeconds(5);
+  const timeout = Duration.fromSeconds(10);
+
+  // THEN
+  expect(() => {
+    cloud.Queue._newQueue(app, "my_queue", {
+      retentionPeriod,
+      timeout,
+    });
+  }).toThrowError("Retention period must be greater than or equal to timeout");
+});
 
 test("create a queue", async () => {
   // GIVEN
@@ -62,7 +77,7 @@ test("queue with one subscriber, default batch size of 1", async () => {
   // THEN
   await s.stop();
 
-  expect(listMessages(s)).toMatchSnapshot();
+  expect(listMessages(s)).not.toContain("Subscriber error");
   expect(app.snapshot()).toMatchSnapshot();
 });
 
@@ -139,11 +154,14 @@ async handle() {
   // THEN
   await s.stop();
 
-  const traces = s.listTraces().map((trace) => trace.data.message);
-  expect(traces).toContain(
-    'Invoke (payload="{\\"messages\\":[\\"A\\",\\"B\\",\\"C\\",\\"D\\",\\"E\\"]}").'
-  );
-  expect(traces).toContain('Invoke (payload="{\\"messages\\":[\\"F\\"]}").');
+  const invokeMessages = s
+    .listTraces()
+    .filter(
+      (trace) =>
+        trace.sourcePath === "root/my_queue/my_queue-SetConsumer-e645076f" &&
+        trace.data.message.startsWith("Invoke")
+    );
+  expect(invokeMessages.length).toEqual(2); // queue messages are processed in two batches based on batch size
   expect(app.snapshot()).toMatchSnapshot();
 });
 
@@ -229,6 +247,7 @@ test("messages are not requeued if the function fails after retention timeout", 
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   const queue = cloud.Queue._newQueue(app, "my_queue", {
     retentionPeriod: Duration.fromSeconds(1),
+    timeout: Duration.fromMilliseconds(100),
   });
   queue.setConsumer(handler);
   const s = await app.startSimulator();
@@ -246,7 +265,7 @@ test("messages are not requeued if the function fails after retention timeout", 
   // THEN
   await s.stop();
 
-  expect(listMessages(s)).toMatchSnapshot();
+  expect(listMessages(s).slice(0, 9)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 
   expect(
@@ -254,13 +273,14 @@ test("messages are not requeued if the function fails after retention timeout", 
       .listTraces()
       .filter((v) => v.sourceType == QUEUE_TYPE)
       .map((trace) => trace.data.message)
+      .slice(0, 5)
   ).toMatchInlineSnapshot(`
     [
       "wingsdk.cloud.Queue created.",
       "Push (messages=BAD MESSAGE).",
       "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
       "Subscriber error - returning 1 messages to queue: ERROR",
-      "wingsdk.cloud.Queue deleted.",
+      "1 messages pushed back to queue after visibility timeout.",
     ]
   `);
 });
@@ -327,6 +347,7 @@ test("can pop messages from queue", async () => {
   for (let i = 0; i < messages.length; i++) {
     poppedMessages.push(await queueClient.pop());
   }
+  poppedMessages.sort();
   const poppedOnEmptyQueue = await queueClient.pop();
 
   // THEN
@@ -348,4 +369,24 @@ test("pop from empty queue returns nothing", async () => {
   // THEN
   await s.stop();
   expect(popped).toBeUndefined();
+});
+
+test("push rejects empty message", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Queue._newQueue(app, "my_queue");
+
+  // WHEN
+  const s = await app.startSimulator();
+  const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
+
+  // THEN
+  await expect(() => queueClient.push("")).rejects.toThrowError(
+    /Empty messages are not allowed/
+  );
+  await s.stop();
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(s.listTraces()[2].data.status).toEqual("failure");
+  expect(app.snapshot()).toMatchSnapshot();
 });

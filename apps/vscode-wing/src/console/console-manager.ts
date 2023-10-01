@@ -2,11 +2,12 @@ import {
   window,
   WebviewPanel,
   commands,
-  OutputChannel,
   TreeView,
   ViewColumn,
   Uri,
   ExtensionContext,
+  Position,
+  Range,
 } from "vscode";
 
 import {
@@ -19,6 +20,7 @@ import {
 } from "./explorer-providers/TestsExplorerProvider";
 import { type Client } from "./services/client";
 import { VIEW_TYPE_CONSOLE } from "../constants";
+import { Loggers } from "../logging";
 
 export interface ConsoleInstance {
   id: string;
@@ -35,11 +37,11 @@ export interface ConsoleManager {
   setActiveInstance: (instanceId: string) => Promise<void>;
   activeInstances: () => boolean;
   getActiveInstanceId: () => string | undefined;
+  stopAll: () => Promise<void>;
 }
 
 export const createConsoleManager = (
-  context: ExtensionContext,
-  logger: OutputChannel
+  context: ExtensionContext
 ): ConsoleManager => {
   const instances: Record<string, ConsoleInstance> = {};
   const resourcesExplorer = new ResourcesExplorerProvider();
@@ -113,7 +115,7 @@ export const createConsoleManager = (
     const logs = await instance.client.getLogs({ time: logsTimestamp });
 
     logs.forEach((log) => {
-      logger.appendLine(`[${log.level}] ${log.message}`);
+      Loggers.console.appendLine(`[${log.level}] ${log.message}`);
     });
     logsTimestamp = Date.now();
   };
@@ -134,7 +136,9 @@ export const createConsoleManager = (
   };
 
   const addInstance = async (instance: ConsoleInstance) => {
-    logger.appendLine(`Wing Console is running at http://${instance.url}`);
+    Loggers.console.appendLine(
+      `Wing Console is running at http://${instance.url}`
+    );
 
     instance.client.onInvalidateQuery({
       onData: async (key) => {
@@ -153,9 +157,45 @@ export const createConsoleManager = (
         }, 300);
       },
       onError: (err) => {
-        logger.appendLine(err);
+        Loggers.console.appendLine(err);
       },
     });
+
+    instance.client.onOpenFileInEditor({
+      onData: async (data) => {
+        const path = data?.path;
+        const line = data?.line - 1 || 0;
+        const column = data?.column || 0;
+
+        const openEditor = window.visibleTextEditors.find((editor) => {
+          return editor.document.uri.fsPath === path;
+        });
+
+        if (!openEditor || !openEditor.viewColumn) {
+          await commands.executeCommand(
+            "vscode.open",
+            Uri.file(path),
+            new Position(line, column)
+          );
+          return;
+        }
+
+        await commands.executeCommand("workbench.action.focusFirstEditorGroup");
+        for (let i = 0; i < openEditor.viewColumn - 1; i++) {
+          await commands.executeCommand("workbench.action.focusNextGroup");
+        }
+        await window.showTextDocument(openEditor.document, {
+          selection: new Range(
+            new Position(line, column),
+            new Position(line, column)
+          ),
+        });
+      },
+      onError: (err) => {
+        Loggers.console.appendLine(err);
+      },
+    });
+
     instances[instance.id] = instance;
 
     await setActiveInstance(instance.id);
@@ -197,7 +237,7 @@ export const createConsoleManager = (
           await closeInstance(id);
         });
       });
-      logger.show();
+      Loggers.console.show();
     }
 
     webviewPanel.title = `${instance.wingfile} - [console]`;
@@ -244,11 +284,6 @@ export const createConsoleManager = (
     });
 
     context.subscriptions.push(webviewPanel, explorerView, testsExplorerView);
-
-    const node = await resourcesExplorer.getChildren();
-    if (node[0]?.id) {
-      await explorerView?.reveal(new ResourceItem(node[0].id));
-    }
     activeInstanceId = instanceId;
   };
 
@@ -257,7 +292,9 @@ export const createConsoleManager = (
     if (!instance) {
       return;
     }
-    logger.appendLine(`Closing Console instance: '${instance.wingfile}'`);
+    Loggers.console.appendLine(
+      `Closing Console instance: '${instance.wingfile}'`
+    );
 
     instance.client.close();
     instance.onDidClose();
@@ -284,6 +321,11 @@ export const createConsoleManager = (
     },
     getActiveInstanceId: () => {
       return activeInstanceId;
+    },
+    stopAll: async () => {
+      Object.keys(instances).forEach(async (id) => {
+        await closeInstance(id);
+      });
     },
   };
 };

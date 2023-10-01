@@ -1,4 +1,4 @@
-import { spawn } from "child_process";
+import { execSync, spawn } from "child_process";
 import path from "path";
 import fetch from "node-fetch";
 
@@ -6,19 +6,19 @@ const globalAny = global as any;
 globalAny.fetch = fetch;
 globalAny.WebSocket = ws;
 
-import { ExtensionContext, window, workspace, OutputChannel } from "vscode";
+import { ExtensionContext, window, workspace } from "vscode";
 import ws from "ws";
 import { type ConsoleManager, createConsoleManager } from "./console-manager";
 import { createClient } from "./services/client";
-import { getWingBinAndArgs } from "../bin-helper";
+import { Loggers } from "../logging";
 
 export class WingConsoleManager {
   consoleManager: ConsoleManager;
 
-  logger: OutputChannel = window.createOutputChannel("Wing Console");
+  wingBin: string | undefined;
 
   constructor(public readonly context: ExtensionContext) {
-    this.consoleManager = createConsoleManager(this.context, this.logger);
+    this.consoleManager = createConsoleManager(this.context);
 
     window.onDidChangeActiveTextEditor(async (editor) => {
       const instanceId = editor?.document.uri.fsPath;
@@ -48,6 +48,14 @@ export class WingConsoleManager {
     });
   }
 
+  public setWingBin(wingBin: string) {
+    this.wingBin = wingBin;
+  }
+
+  public async stop() {
+    await this.consoleManager.stopAll();
+  }
+
   public async openConsole() {
     // get the current active file
     const editor = window.activeTextEditor;
@@ -67,21 +75,45 @@ export class WingConsoleManager {
     }
 
     // TODO: Use createConsoleApp from "bin-helper" instead of spawn to open the console after fixing after fixing https://github.com/winglang/wing/issues/3678
-    const args = await getWingBinAndArgs(this.context);
-    if (!args) {
+    if (!this.wingBin) {
+      Loggers.default.appendLine(
+        `Unable to open console: no wing binary found`
+      );
       return;
     }
+    const cp = spawn(
+      this.wingBin,
+      ["it", "--no-open", "--no-update-check", wingfilePath],
+      {
+        stdio: ["ignore", "pipe", "pipe"],
+        windowsHide: true,
+        shell: false,
+        detached: process.platform !== "win32",
+      }
+    );
 
-    args.push("it", "--no-open", wingfilePath);
+    const onDidClose = () => {
+      if (process.platform === "win32") {
+        try {
+          execSync(`taskkill /pid ${cp.pid} /T /F`);
+        } catch (error) {
+          Loggers.default.appendLine(
+            `Failed to kill the process with taskkill: ${error}`
+          );
 
-    const cp = spawn(args[0]!, args.slice(1), {
-      stdio: ["ignore", "pipe", "pipe"],
-      windowsHide: true,
-      shell: false,
-    });
+          cp.kill();
+        }
+      } else {
+        if (cp.pid) {
+          process.kill(-cp.pid, "SIGTERM");
+        }
+      }
+    };
 
     cp.on("error", async (err) => {
+      Loggers.default.appendLine(err.toString());
       if (err) {
+        Loggers.default.appendLine(`Wing Console Closed: ${err}`);
         this.consoleManager.closeInstance(wingfilePath);
       }
     });
@@ -99,11 +131,11 @@ export class WingConsoleManager {
         wingfile,
         url,
         client: createClient(url),
-        onDidClose: () => {
-          cp.kill();
-        },
+        onDidClose,
       });
     });
+
+    process.once("exit", onDidClose);
   }
 
   public async openFile() {

@@ -7,8 +7,8 @@ import { QueueSchema, QUEUE_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
+import { BaseResourceSchema } from "../simulator/simulator";
 import { Duration, IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
-import { BaseResourceSchema } from "../testing/simulator";
 
 /**
  * Simulator implementation of `cloud.Queue`.
@@ -24,7 +24,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     this.timeout = props.timeout ?? Duration.fromSeconds(10);
     this.retentionPeriod = props.retentionPeriod ?? Duration.fromHours(1);
 
-    if (this.retentionPeriod < this.timeout) {
+    if (this.retentionPeriod.seconds < this.timeout.seconds) {
       throw new Error(
         "Retention period must be greater than or equal to timeout"
       );

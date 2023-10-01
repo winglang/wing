@@ -5,10 +5,10 @@ import { validTestDir } from "./paths";
 import { runWingCommand } from "./utils";
 
 test("tree.json for an app with many resources", async () => {
-  const app = "resource.w";
+  const app = "resource.test.w";
   const appFile = path.join(validTestDir, app);
   const args = ["compile", "--target", "tf-aws"];
-  const targetDir = path.join(validTestDir, "target", "resource.tfaws");
+  const targetDir = path.join(validTestDir, "target", "resource.test.tfaws");
 
   await runWingCommand({
     cwd: validTestDir,

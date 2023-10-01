@@ -3,9 +3,9 @@ import { ISimulatorResource } from "./resource";
 import { TestRunnerSchema, TEST_RUNNER_TYPE } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import { BaseResourceSchema } from "../simulator/simulator";
 import * as std from "../std";
 import { IInflightHost } from "../std";
-import { BaseResourceSchema } from "../testing/simulator";
 
 /**
  * Simulator implementation of `cloud.TestRunner`.
@@ -39,7 +39,9 @@ export class TestRunner extends std.TestRunner implements ISimulatorResource {
   public _preSynthesize(): void {
     // add a dependency on each test function
     for (const test of this.findTests()) {
-      this.node.addDependency(test._fn);
+      if (test._fn) {
+        this.node.addDependency(test._fn);
+      }
     }
 
     super._preSynthesize();
@@ -48,7 +50,9 @@ export class TestRunner extends std.TestRunner implements ISimulatorResource {
   private getTestFunctionHandles(): Record<string, string> {
     const handles: Record<string, string> = {};
     for (const test of this.findTests()) {
-      handles[test.node.path] = simulatorHandleToken(test._fn);
+      if (test._fn) {
+        handles[test.node.path] = simulatorHandleToken(test._fn);
+      }
     }
     return handles;
   }

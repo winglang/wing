@@ -1,8 +1,8 @@
 use crate::{
 	ast::{
 		ArgList, BringSource, CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
-		FunctionSignature, Interface, InterpolatedStringPart, Literal, NewExpr, Reference, Scope, Stmt, StmtKind, Symbol,
-		TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		FunctionSignature, IfLet, Interface, InterpolatedStringPart, Literal, NewExpr, Reference, Scope, Stmt, StmtKind,
+		Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -99,6 +99,7 @@ where
 				BringSource::BuiltinModule(name) => v.visit_symbol(name),
 				BringSource::JsiiModule(name) => v.visit_symbol(name),
 				BringSource::WingFile(name) => v.visit_symbol(name),
+				BringSource::Directory(name) => v.visit_symbol(name),
 			}
 			if let Some(identifier) = identifier {
 				v.visit_symbol(identifier);
@@ -131,14 +132,14 @@ where
 			v.visit_scope(statements);
 		}
 		StmtKind::Break | StmtKind::Continue => {}
-		StmtKind::IfLet {
+		StmtKind::IfLet(IfLet {
 			value,
 			statements,
 			reassignable: _,
 			var_name,
 			elif_statements,
 			else_statements,
-		} => {
+		}) => {
 			v.visit_symbol(var_name);
 			v.visit_expr(value);
 			v.visit_scope(statements);
@@ -170,7 +171,11 @@ where
 		StmtKind::Expression(expr) => {
 			v.visit_expr(&expr);
 		}
-		StmtKind::Assignment { variable, value } => {
+		StmtKind::Assignment {
+			kind: _,
+			variable,
+			value,
+		} => {
 			v.visit_reference(variable);
 			v.visit_expr(value);
 		}

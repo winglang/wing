@@ -37,6 +37,18 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: entries
+  kind: 2
+  detail: "(json: Json): Array<JsonEntry>"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic entries: (json: Json): Array<JsonEntry>\n```\n---\nReturns the entries from the Json.\n\n\n### Returns\nthe entries as Array<JsonEntry>"
+  sortText: ff|entries
+  insertText: entries($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: has
   kind: 2
   detail: "(json: Json, key: str): bool"
@@ -54,7 +66,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(json: any): Array<str>"
   documentation:
     kind: markdown
-    value: "```wing\nstatic keys: (json: any): Array<str>\n```\n---\nReturns the keys from the Json object.\n\n\n### Returns\nthe keys from the Json object as string array"
+    value: "```wing\nstatic keys: (json: any): Array<str>\n```\n---\nReturns the keys from the Json.\n\n\n### Returns\nthe keys as Array<String>"
   sortText: ff|keys
   insertText: keys($0)
   insertTextFormat: 2
@@ -102,7 +114,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(json: Json): Array<Json>"
   documentation:
     kind: markdown
-    value: "```wing\nstatic values: (json: Json): Array<Json>\n```\n---\nReturns the values from the Json.\n\n\n### Returns\nthe values from the Json as array of Json"
+    value: "```wing\nstatic values: (json: Json): Array<Json>\n```\n---\nReturns the values from the Json.\n\n\n### Returns\nthe values as Array<Json>"
   sortText: ff|values
   insertText: values($0)
   insertTextFormat: 2

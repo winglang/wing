@@ -12,11 +12,8 @@ export interface IAwsFunction {
 
   /**
    * Add policy statements to the function's IAM role.
-   *
-   * TODO: update this to accept a variadic parameter (...policies)
-   * https://github.com/winglang/wing/issues/397
    */
-  addPolicyStatements(policies: PolicyStatement[]): void;
+  addPolicyStatements(...policies: PolicyStatement[]): void;
 }
 
 /**

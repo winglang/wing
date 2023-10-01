@@ -1,7 +1,8 @@
-// used by bring_local_normalization.w
+// used by:
+// - bring_local_normalization.test.w
 
 class Baz {
-  static baz(): str {
+  pub static baz(): str {
     return "baz";
   }
 }

@@ -6,7 +6,7 @@ source: libs/wingc/src/jsify/tests.rs
 ```w
 
     class Foo {
-      inflight bar() {}
+      pub inflight bar() {}
     }
 
     let f = new Foo();

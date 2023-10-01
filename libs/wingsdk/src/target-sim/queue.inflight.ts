@@ -8,11 +8,11 @@ import {
   FunctionHandle,
 } from "./schema-resources";
 import { IFunctionClient, IQueueClient } from "../cloud";
-import { TraceType } from "../std";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
-} from "../testing/simulator";
+} from "../simulator/simulator";
+import { TraceType } from "../std";
 
 export class Queue
   implements IQueueClient, ISimulatorResourceInstance, IEventPublisher
@@ -55,6 +55,9 @@ export class Queue
     return this.context.withTrace({
       message: `Push (messages=${messages}).`,
       activity: async () => {
+        if (messages.includes("")) {
+          throw new Error("Empty messages are not allowed");
+        }
         for (const message of messages) {
           this.messages.push(new QueueMessage(this.retentionPeriod, message));
         }
@@ -84,7 +87,11 @@ export class Queue
     return this.context.withTrace({
       message: `Pop ().`,
       activity: async () => {
-        const message = this.messages.shift();
+        // extract a random message from the queue
+        const message = this.messages.splice(
+          Math.floor(Math.random() * this.messages.length),
+          1
+        )[0];
         return message?.payload;
       },
     });
@@ -94,14 +101,35 @@ export class Queue
     let processedMessages = false;
     do {
       processedMessages = false;
+      // Remove messages that have expired
+      const currentTime = new Date();
+      this.messages.forEach(async (message, index) => {
+        if (message.retentionTimeout < currentTime) {
+          await this.context.withTrace({
+            activity: async () => this.messages.splice(index, 1),
+            message: `Removing expired message (message=${message.payload}).`,
+          });
+        }
+      });
       // Randomize the order of subscribers to avoid user code making
       // assumptions on the order that subscribers process messages.
       for (const subscriber of new RandomArrayIterator(this.subscribers)) {
-        const messages = this.messages.splice(0, subscriber.batchSize);
+        // Extract random messages from the queue
+        const messages = new Array<QueueMessage>();
+        for (let i = 0; i < subscriber.batchSize; i++) {
+          const message = this.messages.splice(
+            Math.floor(Math.random() * this.messages.length),
+            1
+          )[0];
+          if (message) {
+            messages.push(message);
+          }
+        }
         const messagesPayload = messages.map((m) => m.payload);
         if (messagesPayload.length === 0) {
           continue;
         }
+
         const fnClient = this.context.findInstance(
           subscriber.functionHandle!
         ) as IFunctionClient & ISimulatorResourceInstance;

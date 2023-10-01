@@ -6,7 +6,8 @@ import { Target } from "@winglang/compiler";
 import { generateTmpDir } from "src/util";
 
 const exampleDir = resolve("../../examples/tests/valid");
-const exampleFilePath = join(exampleDir, "captures.w");
+const exampleSmallDir = resolve("../../examples/tests/valid/subdir2");
+const exampleFilePath = join(exampleDir, "captures.test.w");
 
 describe(
   "compile command tests",
@@ -45,6 +46,26 @@ describe(
       );
     });
 
+    test("should be able to compile a directory", async () => {
+      const artifactDir = await compile(exampleSmallDir, {
+        target: Target.SIM,
+        targetDir: `${await generateTmpDir()}/target`,
+      });
+
+      const stats = await stat(artifactDir);
+      expect(stats.isDirectory()).toBeTruthy();
+    });
+
+    test("should be able to compile a directory to tf-aws", async () => {
+      const artifactDir = await compile(exampleSmallDir, {
+        target: Target.TF_AWS,
+        targetDir: `${await generateTmpDir()}/target`,
+      });
+
+      const stats = await stat(artifactDir);
+      expect(stats.isDirectory()).toBeTruthy();
+    });
+
     // https://github.com/winglang/wing/issues/2081
     test("should be able to compile extern file from same directory", async () => {
       // temporarily change cwd to the example directory
@@ -53,7 +74,7 @@ describe(
         process.chdir(exampleDir);
 
         // because we changed to the example directory, we can just pass the filename
-        const outDir = await compile("extern_implementation.w", {
+        const outDir = await compile("extern_implementation.test.w", {
           target: Target.SIM,
           targetDir: `${await generateTmpDir()}/target`,
         });

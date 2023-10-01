@@ -18,7 +18,7 @@ source: libs/wingc/src/jsify/tests.rs
         };
       }
     
-      inflight foo(): str {
+      pub inflight foo(): str {
         return this.closure("anything");
       }
     }

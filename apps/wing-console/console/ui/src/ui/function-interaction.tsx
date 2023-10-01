@@ -4,24 +4,29 @@ import {
   TextArea,
   useTheme,
 } from "@wingconsole/design-system";
+import { createPersistentState } from "@wingconsole/use-persistent-state";
 import classNames from "classnames";
 import { useId, useState } from "react";
 
 import { useFunction } from "../services/use-function.js";
 
 export interface FunctionInteractionProps {
+  resourceId: string;
   onInvokeClick: (payload: string) => void;
   isLoading: boolean;
   response: string;
 }
 export const FunctionInteraction = ({
+  resourceId,
   onInvokeClick,
   isLoading,
   response,
 }: FunctionInteractionProps) => {
   const { theme } = useTheme();
 
-  const [payload, setPayload] = useState("");
+  const { usePersistentState } = createPersistentState(resourceId);
+
+  const [payload, setPayload] = usePersistentState("");
   const payloadElementId = useId();
   const responseElementId = useId();
 

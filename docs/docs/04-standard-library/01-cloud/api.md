@@ -467,6 +467,137 @@ let ApiConnectProps = cloud.ApiConnectProps{ ... };
 ```
 
 
+### ApiCorsOptions <a name="ApiCorsOptions" id="@winglang/sdk.cloud.ApiCorsOptions"></a>
+
+Cors Options for `Api`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiCorsOptions.Initializer"></a>
+
+```wing
+bring cloud;
+
+let ApiCorsOptions = cloud.ApiCorsOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.allowCredentials">allowCredentials</a></code> | <code>bool</code> | Whether to allow credentials. |
+| <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.allowHeaders">allowHeaders</a></code> | <code>MutArray&lt;str&gt;</code> | The list of allowed headers. |
+| <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.allowMethods">allowMethods</a></code> | <code>MutArray&lt;<a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a>&gt;</code> | The list of allowed methods. |
+| <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.allowOrigin">allowOrigin</a></code> | <code>MutArray&lt;str&gt;</code> | The list of allowed allowOrigin. |
+| <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.exposeHeaders">exposeHeaders</a></code> | <code>MutArray&lt;str&gt;</code> | The list of exposed headers. |
+| <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.maxAge">maxAge</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | How long the browser should cache preflight request results. |
+
+---
+
+##### `allowCredentials`<sup>Optional</sup> <a name="allowCredentials" id="@winglang/sdk.cloud.ApiCorsOptions.property.allowCredentials"></a>
+
+```wing
+allowCredentials: bool;
+```
+
+- *Type:* bool
+- *Default:* false
+
+Whether to allow credentials.
+
+---
+
+##### `allowHeaders`<sup>Optional</sup> <a name="allowHeaders" id="@winglang/sdk.cloud.ApiCorsOptions.property.allowHeaders"></a>
+
+```wing
+allowHeaders: MutArray<str>;
+```
+
+- *Type:* MutArray&lt;str&gt;
+- *Default:* ["Content-Type", "Authorization"]
+
+The list of allowed headers.
+
+---
+
+*Example*
+
+```wing
+["Content-Type"]
+```
+
+
+##### `allowMethods`<sup>Optional</sup> <a name="allowMethods" id="@winglang/sdk.cloud.ApiCorsOptions.property.allowMethods"></a>
+
+```wing
+allowMethods: MutArray<HttpMethod>;
+```
+
+- *Type:* MutArray&lt;<a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a>&gt;
+- *Default:* [HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.PATCH, HttpMethod.DELETE, HttpMethod.HEAD, HttpMethod.OPTIONS]
+
+The list of allowed methods.
+
+---
+
+*Example*
+
+```wing
+[HttpMethod.GET, HttpMethod.POST]
+```
+
+
+##### `allowOrigin`<sup>Optional</sup> <a name="allowOrigin" id="@winglang/sdk.cloud.ApiCorsOptions.property.allowOrigin"></a>
+
+```wing
+allowOrigin: MutArray<str>;
+```
+
+- *Type:* MutArray&lt;str&gt;
+- *Default:* ["*"]
+
+The list of allowed allowOrigin.
+
+---
+
+*Example*
+
+```wing
+["https://example.com"]
+```
+
+
+##### `exposeHeaders`<sup>Optional</sup> <a name="exposeHeaders" id="@winglang/sdk.cloud.ApiCorsOptions.property.exposeHeaders"></a>
+
+```wing
+exposeHeaders: MutArray<str>;
+```
+
+- *Type:* MutArray&lt;str&gt;
+- *Default:* []
+
+The list of exposed headers.
+
+---
+
+*Example*
+
+```wing
+["Content-Type"]
+```
+
+
+##### `maxAge`<sup>Optional</sup> <a name="maxAge" id="@winglang/sdk.cloud.ApiCorsOptions.property.maxAge"></a>
+
+```wing
+maxAge: duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+- *Default:* 300 seconds
+
+How long the browser should cache preflight request results.
+
+---
+
 ### ApiDeleteProps <a name="ApiDeleteProps" id="@winglang/sdk.cloud.ApiDeleteProps"></a>
 
 Options for Api put endpoint.
@@ -555,6 +686,60 @@ Options for `Api`.
 bring cloud;
 
 let ApiProps = cloud.ApiProps{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ApiProps.property.cors">cors</a></code> | <code>bool</code> | Options for configuring the API's CORS behavior across all routes. |
+| <code><a href="#@winglang/sdk.cloud.ApiProps.property.corsOptions">corsOptions</a></code> | <code><a href="#@winglang/sdk.cloud.ApiCorsOptions">ApiCorsOptions</a></code> | Options for configuring the API's CORS behavior across all routes. |
+
+---
+
+##### `cors`<sup>Optional</sup> <a name="cors" id="@winglang/sdk.cloud.ApiProps.property.cors"></a>
+
+```wing
+cors: bool;
+```
+
+- *Type:* bool
+- *Default:* false, CORS configuration is disabled
+
+Options for configuring the API's CORS behavior across all routes.
+
+Options can also be overridden on a per-route basis. (not yet implemented)
+When enabled this will add CORS headers with default options.
+Can be customized by passing `corsOptions`
+
+---
+
+*Example*
+
+```wing
+true
+```
+
+
+##### `corsOptions`<sup>Optional</sup> <a name="corsOptions" id="@winglang/sdk.cloud.ApiProps.property.corsOptions"></a>
+
+```wing
+corsOptions: ApiCorsOptions;
+```
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiCorsOptions">ApiCorsOptions</a>
+- *Default:* Default CORS options are applied when `cors` is set to `true` allowOrigin: ["*"], allowMethods: [ HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.HEAD, HttpMethod.OPTIONS, ], allowHeaders: ["Content-Type", "Authorization"], exposeHeaders: [], allowCredentials: false,
+
+Options for configuring the API's CORS behavior across all routes.
+
+Options can also be overridden on a per-route basis. (not yet implemented)
+
+---
+
+*Example*
+
+```wing
+{ allowOrigin: ["https://example.com"] }
 ```
 
 

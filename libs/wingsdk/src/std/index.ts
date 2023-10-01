@@ -4,6 +4,7 @@ export * from "./datetime";
 export * from "./duration";
 export * from "./generics";
 export * from "./json";
+export * from "./json_schema";
 export * from "./map";
 export * from "./node";
 export * from "./number";

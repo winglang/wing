@@ -9,7 +9,7 @@ use crate::{
 		lifts::{Liftable, Lifts},
 		resolve_user_defined_type,
 		symbol_env::LookupResult,
-		ClassLike, TypeRef, CLOSURE_CLASS_HANDLE_METHOD,
+		ClassLike, ResolveSource, SymbolKind, TypeRef, CLOSURE_CLASS_HANDLE_METHOD,
 	},
 	visit::{self, Visit},
 	visit_context::{VisitContext, VisitorWithContext},
@@ -123,14 +123,26 @@ impl<'a> LiftVisitor<'a> {
 	}
 
 	fn jsify_udt(&mut self, node: &UserDefinedType) -> String {
-		let res = self.jsify.jsify_user_defined_type(
+		let udt_js = self.jsify.jsify_user_defined_type(
 			&node,
 			&mut JSifyContext {
 				lifts: None,
 				visit_ctx: &mut self.ctx,
 			},
 		);
-		res
+
+		let current_env = self.ctx.current_env().expect("an env");
+		if let Some(SymbolKind::Namespace(root_namespace)) = current_env.lookup(&node.root, None) {
+			let type_path = node.field_path_str();
+			let module_path = match &root_namespace.module_path {
+				ResolveSource::WingFile => "",
+				ResolveSource::ExternalModule(p) => p,
+			};
+			format!("$stdlib.core.toLiftableModuleType({udt_js}, \"{module_path}\", \"{type_path}\")")
+		} else {
+			// Non-namespaced reference, should be a wing type with a helper to lift it
+			udt_js
+		}
 	}
 }
 
@@ -215,7 +227,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 
 				let mut lifts = v.lifts_stack.pop().unwrap();
 				let is_field = code.contains("this."); // TODO: starts_with?
-				lifts.lift(v.ctx.current_method(), property, &code, is_field);
+				lifts.lift(v.ctx.current_method().map(|(m,_)|m), property, &code, is_field);
 				lifts.capture(&Liftable::Expr(node.id), &code, is_field);
 				v.lifts_stack.push(lifts);
 				return;
@@ -273,7 +285,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			}
 
 			let mut lifts = self.lifts_stack.pop().unwrap();
-			lifts.lift(self.ctx.current_method(), property, &code, false);
+			lifts.lift(self.ctx.current_method().map(|(m, _)| m), property, &code, false);
 			self.lifts_stack.push(lifts);
 		}
 
@@ -299,8 +311,8 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 		match &node.body {
 			FunctionBody::Statements(scope) => {
 				self.ctx.push_function_definition(
-					&node.name,
-					&node.signature.phase,
+					node.name.as_ref(),
+					&node.signature,
 					self.jsify.types.get_scope_env(&scope),
 				);
 
@@ -336,22 +348,13 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			return;
 		}
 
-		// extract the "env" from the class initializer and push it to the context
-		// because this is the environment in which we want to resolve references
-		// as oppose to the environment of the class definition itself.
-		let init_env = if let FunctionBody::Statements(ref s) = node.initializer.body {
-			Some(self.jsify.types.get_scope_env(&s))
-		} else {
-			None
-		};
-
 		let udt = UserDefinedType {
 			root: node.name.clone(),
 			fields: vec![],
 			span: node.name.span.clone(),
 		};
 
-		self.ctx.push_class(udt.clone(), &node.phase, init_env);
+		self.ctx.push_class(udt.clone(), &node.phase);
 
 		self.lifts_stack.push(Lifts::new());
 

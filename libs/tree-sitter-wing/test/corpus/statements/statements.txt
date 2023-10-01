@@ -72,6 +72,10 @@ Variable assignment
 let x: num = 1;
 x = 2;
 
+let var z = 1;
+z += 2;
+z -= 1;
+
 let var y = "hello";
 
 --------------------------------------------------------------------------------
@@ -84,6 +88,21 @@ let var y = "hello";
   (variable_assignment_statement
     name: (lvalue
       (reference_identifier))
+    operator: (assignment_operator)
+    value: (number))
+  (variable_definition_statement
+    reassignable: (reassignable)
+    name: (identifier)
+    value: (number))
+  (variable_assignment_statement
+    name: (lvalue
+      (reference_identifier))
+    operator: (assignment_operator)
+    value: (number))
+  (variable_assignment_statement
+    name: (lvalue
+      (reference_identifier))
+    operator: (assignment_operator)
     value: (number))
   (variable_definition_statement
     reassignable: (reassignable)
@@ -95,6 +114,22 @@ If
 ================================================================================
 
 if false {}
+
+--------------------------------------------------------------------------------
+
+(source
+  (if_statement
+    condition: (bool)
+    block: (block)))
+
+================================================================================
+If Newline Block
+================================================================================
+
+if false 
+{
+  
+}
 
 --------------------------------------------------------------------------------
 

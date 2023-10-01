@@ -45,15 +45,35 @@ new cloud.Function(inflight () => {
 
 ### Simulator (`sim`)
 
-The sim implementation of `cloud.Function` uses JavaScript's function
+The sim implementation of `cloud.Function` runs the inflight code as a JavaScript function.
 
 ### AWS (`tf-aws` and `awscdk`)
 
-The AWS implementation of `cloud.Function` uses [Amazon Lambda](https://aws.amazon.com/lambda/).
+The AWS implementation of `cloud.Function` uses [AWS Lambda](https://aws.amazon.com/lambda/).
+
+To add extra IAM permissions to the function, you can use the `aws.Function` class as shown below.
+
+```ts playground
+bring aws;
+bring cloud;
+
+let f = new cloud.Function(inflight () => {
+  log("Hello world!");
+});
+if let lambdaFn = aws.Function.from(f) {
+  lambdaFn.addPolicyStatements(
+    aws.PolicyStatement {
+      actions: ["ses:sendEmail"],
+      effect: aws.Effect.ALLOW,
+      resources: ["*"],
+    },
+  );
+}
+```
 
 ### Azure (`tf-azure`)
 
-The Azure implementation of `cloud.Function` uses [Azure Function](https://azure.microsoft.com/en-us/products/function).
+The Azure implementation of `cloud.Function` uses [Azure Functions](https://azure.microsoft.com/en-us/products/functions).
 
 🚧 `invoke` API is not supported yet (tracking issue: [#1371](https://github.com/winglang/wing/issues/1371))
 

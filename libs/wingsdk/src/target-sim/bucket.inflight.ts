@@ -9,13 +9,13 @@ import {
   BucketEventType,
   IBucketClient,
   ITopicClient,
+  SignedUrlOptions
 } from "../cloud";
-import { Json  } from "../std";
-import { SignedUrlOptions } from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
-} from "../testing/simulator";
+} from "../simulator/simulator";
+import { Json } from "../std";
 
 export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   private readonly objectKeys: Set<string>;

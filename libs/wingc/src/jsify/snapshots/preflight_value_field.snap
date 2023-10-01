@@ -6,8 +6,8 @@ source: libs/wingc/src/jsify/tests.rs
 ```w
 
     class MyType {
-      name: str;
-      last: str;
+      pub name: str;
+      pub last: str;
 
       init() {
         this.name = "hello";

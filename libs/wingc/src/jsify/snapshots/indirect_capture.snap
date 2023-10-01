@@ -16,7 +16,7 @@ source: libs/wingc/src/jsify/tests.rs
         b.list();
       }
 
-      inflight goo() {
+      pub inflight goo() {
         this.foo();
       }
     }

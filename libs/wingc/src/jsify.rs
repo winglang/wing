@@ -6,19 +6,22 @@ use const_format::formatcp;
 use indexmap::{IndexMap, IndexSet};
 use itertools::Itertools;
 
-use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, vec};
+use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, collections::BTreeMap, vec};
 
 use crate::{
 	ast::{
-		ArgList, BinaryOperator, BringSource, CalleeKind, Class as AstClass, ElifLetBlock, Expr, ExprKind, FunctionBody,
-		FunctionDefinition, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, StructField,
-		Symbol, TypeAnnotationKind, UnaryOperator, UserDefinedType,
+		ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, ElifLetBlock, Expr, ExprKind,
+		FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt,
+		StmtKind, Symbol, UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic, debug,
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
+	file_graph::FileGraph,
 	files::Files,
+	parser::is_entrypoint_file,
 	type_check::{
+		is_udt_struct_type,
 		lifts::{Liftable, Lifts},
 		resolve_super_method, resolve_user_defined_type,
 		symbol_env::SymbolEnv,
@@ -53,6 +56,8 @@ pub struct JSifier<'a> {
 	pub types: &'a mut Types,
 	/// Store the output files here.
 	pub output_files: RefCell<Files>,
+	/// Stored struct schemas that are referenced in the code.
+	pub referenced_struct_schemas: RefCell<BTreeMap<String, CodeMaker>>,
 	/// Counter for generating unique preflight file names.
 	preflight_file_counter: RefCell<usize>,
 
@@ -65,10 +70,11 @@ pub struct JSifier<'a> {
 	/// e.g. "bucket.w" -> "preflight.bucket-1.js"
 	preflight_file_map: RefCell<IndexMap<Utf8PathBuf, String>>,
 	source_files: &'a Files,
+	source_file_graph: &'a FileGraph,
 	/// Root of the project, used for resolving extern modules
 	absolute_project_root: &'a Utf8Path,
-	/// The entrypoint file of the Wing application.
-	entrypoint_file_path: &'a Utf8Path,
+	/// The path that compilation started at (file or directory)
+	compilation_init_path: &'a Utf8Path,
 }
 
 /// Preflight classes have two types of host binding methods:
@@ -83,15 +89,18 @@ impl<'a> JSifier<'a> {
 	pub fn new(
 		types: &'a mut Types,
 		source_files: &'a Files,
-		entrypoint_file_path: &'a Utf8Path,
+		source_file_graph: &'a FileGraph,
+		compilation_init_path: &'a Utf8Path,
 		absolute_project_root: &'a Utf8Path,
 	) -> Self {
 		let output_files = Files::default();
 		Self {
 			types,
 			source_files,
-			entrypoint_file_path,
+			source_file_graph,
+			compilation_init_path,
 			absolute_project_root,
+			referenced_struct_schemas: RefCell::new(BTreeMap::new()),
 			inflight_file_counter: RefCell::new(0),
 			inflight_file_map: RefCell::new(IndexMap::new()),
 			preflight_file_counter: RefCell::new(0),
@@ -133,9 +142,11 @@ impl<'a> JSifier<'a> {
 
 		let mut output = CodeMaker::default();
 
-		let is_entrypoint_file = source_path == self.entrypoint_file_path;
+		let is_compilation_init = source_path == self.compilation_init_path;
+		let is_entrypoint = is_entrypoint_file(source_path);
+		let is_directory = source_path.is_dir();
 
-		if is_entrypoint_file {
+		if is_entrypoint {
 			output.line(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
 			output.line(format!(
 				"const {} = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);",
@@ -154,23 +165,54 @@ impl<'a> JSifier<'a> {
 		output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
 		output.add_code(imports);
 
-		if is_entrypoint_file {
+		if is_entrypoint {
 			let mut root_class = CodeMaker::default();
 			root_class.open(format!("class {} extends {} {{", ROOT_CLASS, STDLIB_CORE_RESOURCE));
 			root_class.open(format!("{JS_CONSTRUCTOR}(scope, id) {{"));
 			root_class.line("super(scope, id);");
+			root_class.add_code(self.jsify_struct_schemas());
 			root_class.add_code(js);
 			root_class.close("}");
 			root_class.close("}");
 
 			output.add_code(root_class);
 			output.line("const $App = $stdlib.core.App.for(process.env.WING_TARGET);".to_string());
-			let app_name = self.entrypoint_file_path.file_stem().unwrap();
+			let app_name = source_path.file_stem().unwrap();
 			output.line(format!(
 				"new $App({{ outdir: {}, name: \"{}\", rootConstruct: {}, plugins: {}, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }}).synth();",
 				OUTDIR_VAR, app_name, ROOT_CLASS, PLUGINS_VAR, ENV_WING_IS_TEST
 			));
+		} else if is_directory {
+			let directory_children = self.source_file_graph.dependencies_of(source_path);
+			let preflight_file_map = self.preflight_file_map.borrow();
+
+			// supposing a directory has two files and two subdirectories in it,
+			// we generate code like this:
+			// ```
+			// return {
+			//   inner_directory1: require("./preflight.inner-directory1.js")({ $stdlib }),
+			//   inner_directory2: require("./preflight.inner-directory2.js")({ $stdlib }),
+			//   ...require("./preflight.inner-file1.js")({ $stdlib }),
+			//   ...require("./preflight.inner-file2.js")({ $stdlib }),
+			// };
+			// ```
+			output.open("return {");
+			for file in directory_children {
+				let preflight_file_name = preflight_file_map.get(file).expect("no emitted JS file found");
+				if file.is_dir() {
+					let directory_name = file.file_stem().unwrap();
+					output.line(format!(
+						"{}: require(\"./{}\")({{ {} }}),",
+						directory_name, preflight_file_name, STDLIB
+					));
+				} else {
+					output.line(format!("...require(\"./{}\")({{ {} }}),", preflight_file_name, STDLIB));
+				}
+			}
+			output.close("};");
+			output.close("};");
 		} else {
+			output.add_code(self.jsify_struct_schemas());
 			output.add_code(js);
 			let exports = get_public_symbols(&scope);
 			output.line(format!(
@@ -181,7 +223,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		// Generate a name for the JS file this preflight code will be written to
-		let preflight_file_name = if is_entrypoint_file {
+		let preflight_file_name = if is_compilation_init {
 			PREFLIGHT_FILE_NAME.to_string()
 		} else {
 			// remove all non-alphanumeric characters
@@ -213,6 +255,23 @@ impl<'a> JSifier<'a> {
 			Ok(()) => {}
 			Err(err) => report_diagnostic(err.into()),
 		}
+	}
+
+	fn jsify_struct_schemas(&self) -> CodeMaker {
+		// For each struct schema that is referenced in the code
+		// (this is determined by the StructSchemaVisitor before jsification starts)
+		// we write an inline call to stdlib struct class to instantiate the schema object
+		// preflight root class.
+		let mut code = CodeMaker::default();
+		for (name, schema_code) in self.referenced_struct_schemas.borrow().iter() {
+			let flat_name = name.replace(".", "_");
+
+			code.line(format!(
+				"const {flat_name} = $stdlib.std.Struct._createJsonSchema({});",
+				schema_code.to_string().replace("\n", "").replace(" ", "")
+			));
+		}
+		code
 	}
 
 	fn jsify_scope_body(&self, scope: &Scope, ctx: &mut JSifyContext) -> CodeMaker {
@@ -282,59 +341,27 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_type(&self, typ: &TypeAnnotationKind, ctx: &mut JSifyContext) -> Option<String> {
+	pub fn jsify_type(typ: &Type) -> Option<String> {
 		match typ {
-			TypeAnnotationKind::UserDefined(t) => Some(self.jsify_user_defined_type(&t, ctx)),
-			TypeAnnotationKind::String => Some("string".to_string()),
-			TypeAnnotationKind::Number => Some("number".to_string()),
-			TypeAnnotationKind::Bool => Some("boolean".to_string()),
-			TypeAnnotationKind::Array(t) => {
-				if let Some(inner) = self.jsify_type(&t.kind, ctx) {
+			Type::Struct(t) => Some(t.name.name.clone()),
+			Type::String => Some("string".to_string()),
+			Type::Number => Some("number".to_string()),
+			Type::Boolean => Some("boolean".to_string()),
+			Type::Array(t) => {
+				if let Some(inner) = Self::jsify_type(&t) {
 					Some(format!("{}[]", inner))
 				} else {
 					None
 				}
 			}
-			TypeAnnotationKind::Optional(t) => {
-				if let Some(inner) = self.jsify_type(&t.kind, ctx) {
+			Type::Optional(t) => {
+				if let Some(inner) = Self::jsify_type(&t) {
 					Some(format!("{}?", inner))
 				} else {
 					None
 				}
 			}
 			_ => None,
-		}
-	}
-
-	fn jsify_struct_field_to_json_schema_type(&self, typ: &TypeAnnotationKind, ctx: &mut JSifyContext) -> String {
-		match typ {
-			TypeAnnotationKind::Bool | TypeAnnotationKind::Number | TypeAnnotationKind::String => {
-				format!("type: \"{}\"", self.jsify_type(typ, ctx).unwrap())
-			}
-			TypeAnnotationKind::UserDefined(udt) => {
-				format!("\"$ref\": \"#/$defs/{}\"", udt.root.name)
-			}
-			TypeAnnotationKind::Json => "type: \"object\"".to_string(),
-			TypeAnnotationKind::Map(t) => {
-				let map_type = self.jsify_type(&t.kind, ctx);
-				// Ensure all keys are of some type
-				format!(
-					"type: \"object\", patternProperties: {{ \".*\": {{ type: \"{}\" }} }}",
-					map_type.unwrap_or("null".to_string())
-				)
-			}
-			TypeAnnotationKind::Array(t) | TypeAnnotationKind::Set(t) => {
-				format!(
-					"type: \"array\", {} items: {{ {} }}",
-					match typ {
-						TypeAnnotationKind::Set(_) => "uniqueItems: true,".to_string(),
-						_ => "".to_string(),
-					},
-					self.jsify_struct_field_to_json_schema_type(&t.kind, ctx)
-				)
-			}
-			TypeAnnotationKind::Optional(t) => self.jsify_struct_field_to_json_schema_type(&t.kind, ctx),
-			_ => "type: \"null\"".to_string(),
 		}
 	}
 
@@ -345,6 +372,11 @@ impl<'a> JSifier<'a> {
 					return t.clone();
 				}
 			}
+		}
+
+		if is_udt_struct_type(udt, ctx.visit_ctx.current_env().unwrap()) {
+			// For struct type, we emit the name as a flattened string. I.E. mylib.MyStruct becomes mylib_MyStruct
+			return udt.full_path_str().replace(".", "_");
 		}
 		udt.full_path_str()
 	}
@@ -655,128 +687,6 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	pub fn jsify_struct_properties(
-		&self,
-		fields: &Vec<StructField>,
-		extends: &Vec<UserDefinedType>,
-		ctx: &mut JSifyContext,
-	) -> CodeMaker {
-		let mut code = CodeMaker::default();
-
-		// Any parents we need to get their properties
-		for e in extends {
-			code.line(format!(
-				"...require(\"{}\")().jsonSchema().properties,",
-				struct_filename(&e.root.name)
-			))
-		}
-
-		for field in fields {
-			code.line(format!(
-				"{}: {{ {} }},",
-				field.name.name,
-				self.jsify_struct_field_to_json_schema_type(&field.member_type.kind, ctx)
-			));
-		}
-
-		code
-	}
-
-	pub fn jsify_struct(
-		&self,
-		name: &Symbol,
-		fields: &Vec<StructField>,
-		extends: &Vec<UserDefinedType>,
-		_env: &SymbolEnv,
-		ctx: &mut JSifyContext,
-	) -> CodeMaker {
-		// To allow for struct validation at runtime this will generate a JS class that has a static
-		// getValidator method that will create a json schema validator.
-		let mut code = CodeMaker::default();
-
-		code.open("module.exports = function(stdStruct) {".to_string());
-		code.open(format!("class {} {{", name));
-
-		// create schema
-		let mut required: Vec<String> = vec![]; // fields that are required
-		let mut dependencies: Vec<String> = vec![]; // schemas that need added to validator
-
-		code.open("static jsonSchema() {".to_string());
-		code.open("return {");
-		code.line(format!("id: \"/{}\",", name));
-		code.line("type: \"object\",".to_string());
-
-		code.open("properties: {");
-
-		code.add_code(self.jsify_struct_properties(fields, extends, ctx));
-
-		// determine which fields are required, and which schemas need to be added to validator
-		for field in fields {
-			let dep = extract_struct_field_schema_dependency(&field.member_type.kind, &field.name.name);
-			if let Some(req) = dep.0 {
-				required.push(req);
-			}
-			if let Some(dep) = dep.1 {
-				dependencies.push(dep);
-			}
-		}
-		code.close("},");
-
-		// Add all required field names to schema
-		code.open("required: [");
-		for name in required {
-			code.line(format!("\"{}\",", name));
-		}
-
-		// pull in all required fields from parent structs
-		for e in extends {
-			code.line(format!(
-				"...require(\"{}\")().jsonSchema().required,",
-				struct_filename(&e.root.name)
-			));
-		}
-
-		code.close("],");
-
-		// create definitions for sub schemas
-		code.open("$defs: {");
-		for dep in &dependencies {
-			code.line(format!(
-				"\"{}\": {{ type: \"object\", \"properties\": require(\"{}\")().jsonSchema().properties }},",
-				dep,
-				struct_filename(&dep)
-			));
-		}
-		for e in extends {
-			code.line(format!(
-				"...require(\"{}\")().jsonSchema().$defs,",
-				struct_filename(&e.root.name)
-			));
-		}
-		code.close("}");
-
-		code.close("}");
-		code.close("}");
-
-		// create _validate() function
-		code.open("static fromJson(obj) {");
-		code.line("return stdStruct._validate(obj, this.jsonSchema())");
-		code.close("}");
-
-		// create _toInflightType function that just requires the generated struct file
-		code.open("static _toInflightType(context) {".to_string());
-		code.line(format!(
-			"return `require(\"{}\")(${{ context._lift(stdStruct) }})`;",
-			struct_filename(&name.name)
-		));
-		code.close("}");
-		code.close("}");
-		code.line(format!("return {};", name));
-		code.close("};");
-
-		code
-	}
-
 	// To avoid a performance penalty when evaluating assignments made in the elif statement,
 	// it was necessary to nest the if statements.
 	//
@@ -872,6 +782,17 @@ impl<'a> JSifier<'a> {
 						STDLIB,
 					))
 				}
+				BringSource::Directory(name) => {
+					let preflight_file_map = self.preflight_file_map.borrow();
+					let preflight_file_name = preflight_file_map.get(Utf8Path::new(&name.name)).unwrap();
+					CodeMaker::one_line(format!(
+						"const {} = require(\"./{}\")({{ {} }});",
+						// checked during type checking
+						identifier.as_ref().expect("bring wing file requires an alias"),
+						preflight_file_name,
+						STDLIB,
+					))
+				}
 			},
 			StmtKind::SuperConstructor { arg_list } => {
 				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
@@ -916,14 +837,14 @@ impl<'a> JSifier<'a> {
 			}
 			StmtKind::Break => CodeMaker::one_line("break;"),
 			StmtKind::Continue => CodeMaker::one_line("continue;"),
-			StmtKind::IfLet {
+			StmtKind::IfLet(IfLet {
 				reassignable,
 				value,
 				statements,
 				var_name,
 				elif_statements,
 				else_statements,
-			} => {
+			}) => {
 				let mut code = CodeMaker::default();
 				// To enable shadowing variables in if let statements, the following does some scope trickery
 				// take for example the following wing code:
@@ -1012,11 +933,21 @@ impl<'a> JSifier<'a> {
 				code
 			}
 			StmtKind::Expression(e) => CodeMaker::one_line(format!("{};", self.jsify_expression(e, ctx))),
-			StmtKind::Assignment { variable, value } => CodeMaker::one_line(format!(
-				"{} = {};",
-				self.jsify_reference(variable, ctx),
-				self.jsify_expression(value, ctx)
-			)),
+
+			StmtKind::Assignment { kind, variable, value } => {
+				let operator = match kind {
+					AssignmentKind::Assign => "=",
+					AssignmentKind::AssignIncr => "+=",
+					AssignmentKind::AssignDecr => "-=",
+				};
+
+				CodeMaker::one_line(format!(
+					"{} {} {};",
+					self.jsify_reference(variable, ctx),
+					operator,
+					self.jsify_expression(value, ctx)
+				))
+			}
 			StmtKind::Scope(scope) => {
 				let mut code = CodeMaker::default();
 				if !scope.statements.is_empty() {
@@ -1039,20 +970,9 @@ impl<'a> JSifier<'a> {
 				// This is a no-op in JS
 				CodeMaker::default()
 			}
-			StmtKind::Struct { name, fields, extends } => {
-				let mut code = self.jsify_struct(name, fields, extends, env, ctx);
-				// Emits struct class file
-				self.emit_struct_file(name, code, ctx);
-
-				// Reset the code maker for code to be inserted in preflight.js
-				code = CodeMaker::default();
-				code.line(format!(
-					"const {} = require(\"{}\")({}.std.Struct);",
-					name,
-					struct_filename(&name.name),
-					STDLIB
-				));
-				code
+			StmtKind::Struct { .. } => {
+				// Struct schemas are emitted before jsification phase
+				CodeMaker::default()
 			}
 			StmtKind::Enum { name, values } => {
 				let mut code = CodeMaker::default();
@@ -1431,17 +1351,9 @@ impl<'a> JSifier<'a> {
 		class_code
 	}
 
-	fn emit_struct_file(&self, name: &Symbol, struct_code: CodeMaker, _ctx: &mut JSifyContext) {
-		let mut code = CodeMaker::default();
-		code.add_code(struct_code);
-		match self
-			.output_files
-			.borrow_mut()
-			.add_file(struct_filename(&name.name), code.to_string())
-		{
-			Ok(()) => {}
-			Err(err) => report_diagnostic(err.into()),
-		}
+	pub fn add_referenced_struct_schema(&self, struct_name: String, schema: CodeMaker) {
+		let mut struct_schemas = self.referenced_struct_schemas.borrow_mut();
+		struct_schemas.insert(struct_name, schema);
 	}
 
 	fn emit_inflight_file(&self, class: &AstClass, inflight_class_code: CodeMaker, ctx: &mut JSifyContext) {
@@ -1602,29 +1514,6 @@ impl<'a> JSifier<'a> {
 	}
 }
 
-// This helper determines what requirement and dependency to add to the struct schema based
-// on the type annotation of the field.
-// I.E. if a struct has a field named "foo" with a type "OtherStruct", then we want to add
-// the field "foo" as a required  and the struct "OtherStruct" as a dependency. so the result is
-// a tuple (required, dependency)
-fn extract_struct_field_schema_dependency(
-	typ: &TypeAnnotationKind,
-	field_name: &String,
-) -> (Option<String>, Option<String>) {
-	match typ {
-		TypeAnnotationKind::UserDefined(udt) => (Some(field_name.clone()), Some(udt.root.name.clone())),
-		TypeAnnotationKind::Array(t) | TypeAnnotationKind::Set(t) | TypeAnnotationKind::Map(t) => {
-			extract_struct_field_schema_dependency(&t.kind, field_name)
-		}
-		TypeAnnotationKind::Optional(t) => {
-			let deps = extract_struct_field_schema_dependency(&t.kind, field_name);
-			// We never want to add an optional to the required block
-			(None, deps.1)
-		}
-		_ => (Some(field_name.clone()), None),
-	}
-}
-
 fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 	let mut symbols = Vec::new();
 
@@ -1635,7 +1524,7 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 			StmtKind::Let { .. } => {}
 			StmtKind::ForLoop { .. } => {}
 			StmtKind::While { .. } => {}
-			StmtKind::IfLet { .. } => {}
+			StmtKind::IfLet(IfLet { .. }) => {}
 			StmtKind::If { .. } => {}
 			StmtKind::Break => {}
 			StmtKind::Continue => {}
@@ -1649,9 +1538,7 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 			}
 			// interfaces are bringable, but there's nothing to emit
 			StmtKind::Interface(_) => {}
-			StmtKind::Struct { name, .. } => {
-				symbols.push(name.clone());
-			}
+			StmtKind::Struct { .. } => {}
 			StmtKind::Enum { name, .. } => {
 				symbols.push(name.clone());
 			}
@@ -1661,10 +1548,6 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 	}
 
 	symbols
-}
-
-fn struct_filename(s: &String) -> String {
-	format!("./{}.Struct.js", s)
 }
 
 fn lookup_span(span: &WingSpan, files: &Files) -> String {

@@ -118,8 +118,13 @@ export async function load(options: WingCompilerLoadOptions) {
       }
 
       const fullPath = `/${file}`;
-      const fileStat = await fs.promises.stat(fullPath);
+      const fileStat = await fs.promises.stat(fullPath)?.catch((err) => {
+        log?.(`Failed to stat "${fullPath}": ${err}`);
+        return undefined;
+      });
       if (
+        // ignore anything we can't stat (e.g. broken symlinks)
+        fileStat &&
         // include directories and symlinks to directories
         fileStat.isDirectory() &&
         // on mac only preopen directories within the root device

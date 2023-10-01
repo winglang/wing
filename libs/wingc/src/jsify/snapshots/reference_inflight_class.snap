@@ -6,7 +6,7 @@ source: libs/wingc/src/jsify/tests.rs
 ```w
 
     inflight class Foo {
-      static a(): str { return "a"; }
+      pub static a(): str { return "a"; }
     }
 
     test "test" {

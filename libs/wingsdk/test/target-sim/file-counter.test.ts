@@ -2,8 +2,8 @@ import { Construct } from "constructs";
 import { test, expect } from "vitest";
 import { waitUntilTraceCount } from "./util";
 import * as cloud from "../../src/cloud";
+import { Testing } from "../../src/simulator";
 import { IResource, Trace } from "../../src/std";
-import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
 
 test("can create sequential files in a bucket", async () => {

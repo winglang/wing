@@ -8,7 +8,7 @@ source: libs/wingc/src/jsify/tests.rs
     let x = "hello";
 
     class Base {
-      bar() {
+      protected bar() {
         log(x);
       }
     }

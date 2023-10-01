@@ -9,7 +9,7 @@ resource CachableFunction extends cloud.Function {
         this._cache = new cloud.Bucket();
     }
 
-    public override inflight invoke(event: any): any {
+    pub override inflight invoke(event: any): any {
         let key = hashof(event);
         let cached = this._cache.try_get(key);
         if cached {

@@ -5,7 +5,7 @@ struct CountingSemaphoreProps {
 }
 
 resource CountingSemaphore {
-  public limit: num;
+  pub limit: num;
   _counter: cloud.Counter;
 
   // need some ttl solution here,
@@ -19,7 +19,7 @@ resource CountingSemaphore {
   // some stable unique instance id is wanted in the inflight context
   // so that a resource instance can be properly claimed and later released
   // when used in conjunction with a key-value store
-  public inflight try_acquire(): bool {
+  pub inflight try_acquire(): bool {
     if this.is_at_capacity() {
       return false;
     }
@@ -35,7 +35,7 @@ resource CountingSemaphore {
   // probably key-value store is wanted,
   // so that a specific resource instance can be released
   // rather than naively releasing a count
-  public inflight release() {
+  pub inflight release() {
     if this._counter.peek() <= 0 {
       return;
     }
@@ -43,7 +43,7 @@ resource CountingSemaphore {
     this._counter.dec();
   }
 
-  public inflight is_at_capacity(): bool {
+  pub inflight is_at_capacity(): bool {
     return this._counter.peek() >= this.limit;
   }
 }

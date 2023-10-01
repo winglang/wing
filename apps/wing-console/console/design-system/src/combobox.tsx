@@ -61,7 +61,7 @@ export const Combobox = ({
     }
     setFiltered(
       items.filter((item) => {
-        return item.label?.toLowerCase().includes(value.toLowerCase());
+        return item.label?.toLowerCase().includes(value?.toLowerCase());
       }),
     );
   }, [items, value, filter]);

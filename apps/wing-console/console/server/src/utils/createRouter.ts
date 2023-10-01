@@ -1,5 +1,5 @@
 import { initTRPC } from "@trpc/server";
-import { testing } from "@winglang/sdk";
+import { simulator } from "@winglang/sdk";
 import type Emittery from "emittery";
 
 import { Config } from "../config.js";
@@ -68,8 +68,14 @@ export interface TestsStateManager {
   setTest: (test: TestItem) => void;
 }
 
+export interface FileLink {
+  path: string;
+  line?: number;
+  column?: number;
+}
+
 export interface RouterContext {
-  simulator(): Promise<testing.Simulator>;
+  simulator(): Promise<simulator.Simulator>;
   appDetails(): Promise<{
     wingVersion: string | undefined;
   }>;
@@ -77,6 +83,7 @@ export interface RouterContext {
   emitter: Emittery<{
     invalidateQuery: string | undefined;
     trace: Trace;
+    openFileInEditor: FileLink;
   }>;
   appState(): State;
   logger: ConsoleLogger;

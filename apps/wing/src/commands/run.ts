@@ -49,19 +49,27 @@ export async function run(entrypoint?: string, options?: RunOptions) {
   entrypoint = resolve(entrypoint);
   debug("opening the wing console with:" + entrypoint);
 
-  const { port } = await createConsoleApp({
+  const { port, close } = await createConsoleApp({
     wingfile: entrypoint,
     requestedPort,
     hostUtils: {
-      async openExternal(url) {
+      async openExternal(url: string) {
         await open(url);
       },
     },
-    requireAcceptTerms: true,
+    requireAcceptTerms: !!process.stdin.isTTY,
   });
   const url = `http://localhost:${port}/`;
   if (openBrowser) {
     await open(url);
   }
   console.log(`The Wing Console is running at ${url}`);
+
+  const onExit = async (exitCode: number) => {
+    await close(() => process.exit(exitCode));
+  };
+
+  process.once("exit", async (c) => await onExit(c));
+  process.once("SIGTERM", async () => await onExit(0));
+  process.once("SIGINT", async () => await onExit(0));
 }

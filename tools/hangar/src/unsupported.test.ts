@@ -7,7 +7,7 @@ import { tmpDir } from "./paths";
 // checks that if a resource is not supported for a certain target an error is emitted
 test("unsupported resource in target", async ({ expect }) => {
   const workdir = await mkdtemp(join(tmpDir, "wing-test"));
-  const entrypoint = join(workdir, "test.w");
+  const entrypoint = join(workdir, "main.w");
 
   // for now, GCP doesn't support schedules. at some point we will need to update this test
   await writeFile(
@@ -30,14 +30,13 @@ test("unsupported resource in target", async ({ expect }) => {
   });
 
   expect(sanitizeOutput(result.stderr)).toMatchInlineSnapshot(`
-    "ERROR: Unable to create an instance of abstract type \\"@winglang/sdk.cloud.Schedule\\" for this target
+    "ERROR: A Google Cloud region must be specified through the GOOGLE_REGION environment variable.
 
-    target/test.tfgcp.[REDACTED].tmp/.wing/preflight.js:9
-         constructor(scope, id) {
-           super(scope, id);
-    >>     this.node.root.newAbstract(\\"@winglang/sdk.cloud.Schedule\\",this,\\"cloud.Schedule\\");
-         }
+    target/main.tfgcp.[REDACTED].tmp/.wing/preflight.js:13
        }
+       const $App = $stdlib.core.App.for<PATH>;
+    >> new $App({ outdir: $outdir, name: \\"main\\", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+       
     "
   `);
 });

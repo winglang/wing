@@ -3,8 +3,8 @@ import { ISimulatorResource } from "./resource";
 import { CounterSchema, COUNTER_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
+import { BaseResourceSchema } from "../simulator/simulator";
 import { IInflightHost } from "../std";
-import { BaseResourceSchema } from "../testing/simulator";
 
 /**
  * Simulator implementation of `cloud.Counter`.

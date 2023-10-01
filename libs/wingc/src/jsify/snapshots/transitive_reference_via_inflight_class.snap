@@ -10,7 +10,7 @@ source: libs/wingc/src/jsify/tests.rs
     let b = new cloud.Bucket();
 
     inflight class MyInflightClass {
-      putInBucket() {
+      pub putInBucket() {
         b.put("in", "bucket");
       }
     }

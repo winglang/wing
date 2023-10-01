@@ -46,12 +46,12 @@ We will use the `tf-aws` target to tell the compiler to bind all of our resource
 to the default set of AWS resources and use Terraform as the provisioning engine.
 
 ```sh
-wing compile --target tf-aws hello.w
+wing compile --target tf-aws main.w
 ```
 
 ## Examine the output
 
-Our `target` directory now contains a `hello.tfaws` directory which has all of the Terraform configuration for this application.
+Our `target` directory now contains a `main.tfaws` directory which has all of the Terraform configuration for this application.
 
 ## Initialize Terraform state
 
@@ -69,7 +69,7 @@ Let's change the working directory to where our Terraform configuration is and
 initialize the state file:
 
 ```sh
-cd ./target/hello.tfaws
+cd ./target/main.tfaws
 export AWS_REGION=us-east-1 # or any other region
 terraform init
 ```
