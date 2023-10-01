@@ -16,6 +16,40 @@ assert(mvalues.length == 2);
 assert(mvalues.at(0) == 123);
 assert(mvalues.at(1) == 99);
 
+// container types are equal regardless of the mutability if they have the same
+// content but in all scenraios the type is specified for better readability
+
+assert(Map<str>{} == MutMap<str>{});
+
+test "equality"{
+    assert(Map<str>{} == MutMap<str>{});
+}
+
+
+let apprentices = MutMap<str> { "plagueis" => "sidious", "dooku" => "ventress" };
+apprentices.delete("plagueis");
+assert(apprentices.size() == 1);
+assert(apprentices.copy() == Map<str> {"dooku" => "ventress"});
+apprentices.set("sidious", "dooku");
+assert(apprentices.get("sidious")  == "dooku");
+apprentices.set("sidious", "maul");
+assert(apprentices.get("sidious") == "maul");
+apprentices.clear();
+assert(apprentices == MutMap<str>{});
+
+test "mutability" {
+    let apprentices = MutMap<str> { "plagueis" => "sidious", "dooku" => "ventress" };
+    apprentices.delete("plagueis");
+    assert(apprentices.size() == 1);
+    assert(apprentices.copy() == Map<str> {"dooku" => "ventress"});
+    apprentices.set("sidious", "dooku");
+    assert(apprentices.get("sidious")  == "dooku");
+    apprentices.set("sidious", "maul");
+    assert(apprentices.get("sidious") == "maul");
+    apprentices.clear();
+    assert(apprentices == MutMap<str>{});
+}
+
 
 let trilogies = { "PT" => 2, "OT" => 1, "ST" => 3 };
 assert(trilogies.size() == 3);
