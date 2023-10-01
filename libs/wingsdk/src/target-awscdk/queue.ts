@@ -8,7 +8,7 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
-import { IInflightHost, Node, Duration as WingDuration } from "../std";
+import { IInflightHost, Node, Duration as StdDuration } from "../std";
 
 /**
  * AWS implementation of `cloud.Queue`.
@@ -17,11 +17,11 @@ import { IInflightHost, Node, Duration as WingDuration } from "../std";
  */
 export class Queue extends cloud.Queue {
   private readonly queue: SQSQueue;
-  private readonly timeout: WingDuration;
+  private readonly timeout: StdDuration;
 
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
-    this.timeout = props.timeout ?? WingDuration.fromSeconds(30);
+    this.timeout = props.timeout ?? StdDuration.fromSeconds(30);
 
     this.queue = new SQSQueue(this, "Default", {
       visibilityTimeout: props.timeout
