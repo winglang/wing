@@ -272,7 +272,7 @@ async function testSimulator(synthDir: string, options: TestOptions) {
 
   const testRunner = s.getResource("root/cloud.TestRunner") as std.ITestRunnerClient;
   const tests = await testRunner.listTests();
-  const filteredTests = filterTests(tests, filter);
+  const filteredTests = pickOneTestPerEnvironment(filterTests(tests, filter));
   const results = new Array<std.TestResult>();
   // TODO: run these tests in parallel
   for (const path of filteredTests) {
@@ -313,8 +313,8 @@ async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.T
       const testRunner = new TestRunnerClient(testArns);
 
       const tests = await testRunner.listTests();
-      const filteredTests = filterTests(tests, filter);
-      return [testRunner, pickOneTestPerEnvironment(filteredTests)];
+      const filteredTests = pickOneTestPerEnvironment(filterTests(tests, filter));
+      return [testRunner, filteredTests];
     });
 
     const results = await withSpinner("Running tests...", async () => {
@@ -400,8 +400,8 @@ async function testTfAws(synthDir: string, options: TestOptions): Promise<std.Te
       const testRunner = new TestRunnerClient(testArns);
 
       const tests = await testRunner.listTests();
-      const filteredTests = filterTests(tests, filter);
-      return [testRunner, pickOneTestPerEnvironment(filteredTests)];
+      const filteredTests = pickOneTestPerEnvironment(filterTests(tests, filter));
+      return [testRunner, filteredTests];
     });
 
     const results = await withSpinner("Running tests...", async () => {
