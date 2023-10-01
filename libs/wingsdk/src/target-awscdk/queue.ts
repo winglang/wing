@@ -8,7 +8,7 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
-import { IInflightHost, Node } from "../std";
+import { IInflightHost, Node, Duration as WingDuration } from "../std";
 
 /**
  * AWS implementation of `cloud.Queue`.
@@ -17,9 +17,11 @@ import { IInflightHost, Node } from "../std";
  */
 export class Queue extends cloud.Queue {
   private readonly queue: SQSQueue;
+  private readonly timeout: WingDuration;
 
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
+    this.timeout = props.timeout ?? WingDuration.fromSeconds(30);
 
     this.queue = new SQSQueue(this, "Default", {
       visibilityTimeout: props.timeout
@@ -51,7 +53,10 @@ export class Queue extends cloud.Queue {
       this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-SetConsumer-${hash}`,
       functionHandler,
-      props
+      {
+        ...props,
+        timeout: this.timeout,
+      }
     );
 
     // TODO: remove this constraint by adding generic permission APIs to cloud.Function
