@@ -58,8 +58,8 @@ By default, `wing compile` will look for exactly one file named `main.w` or endi
 
 :::
 
-The `--target` option is **required**, and specifies the target platform to compile for. The
-following targets are supported:
+The --target option specifies the target platform to compile for. The default target is `sim`.
+The following targets are supported:
 
 * `sim` - [Wing Simulator](#sim-target)
 * `tf-aws` - Terraform/AWS
