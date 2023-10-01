@@ -36,7 +36,7 @@ jobs:
         with:
           username: ${{ github.actor }}
           team: "maintainers"
-          GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_GROUPS_READ_TOKEN }}
       - name: cancel run if not allowed
         if: ${{ env.MANUAL == 'true' && steps.testUserGroup.outputs.isTeamMember == 'false'}}
         run: |
