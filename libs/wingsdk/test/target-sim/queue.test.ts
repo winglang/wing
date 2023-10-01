@@ -259,12 +259,11 @@ test("messages are not requeued if the function fails after retention timeout", 
     s,
     (trace) =>
       trace.data.message ==
-      "Subscriber error - returning 1 messages to queue: ERROR"
+      "1 messages pushed back to queue after visibility timeout."
   );
 
   // THEN
   await s.stop();
-
   expect(listMessages(s)).toContain(
     "1 messages pushed back to queue after visibility timeout."
   );
