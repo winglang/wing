@@ -38,7 +38,7 @@ const BUCKET_NAME_OPTS: NameOptions = {
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
 export class Bucket extends cloud.Bucket {
-  private readonly bucket: StorageBucket;
+  public readonly bucket: StorageBucket;
 
   constructor(scope: Construct, id: string, props: cloud.BucketProps = {}) {
     super(scope, id, props);
@@ -57,7 +57,7 @@ export class Bucket extends cloud.Bucket {
 
     this.bucket = new StorageBucket(this, "Default", {
       name: bucketName + "-" + randomId.hex,
-      location: (App.of(this) as App).storageLocation,
+      location: (App.of(this) as App).region,
       // recommended by GCP: https://cloud.google.com/storage/docs/uniform-bucket-level-access#should-you-use
       uniformBucketLevelAccess: true,
       publicAccessPrevention: props.public ? "inherited" : "enforced",

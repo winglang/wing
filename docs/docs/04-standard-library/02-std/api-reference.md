@@ -192,7 +192,7 @@ Boolean.
 ##### `fromJson` <a name="fromJson" id="@winglang/sdk.std.Boolean.fromJson"></a>
 
 ```wing
-bool.fromJson(json: Json);
+bool.fromJson(json: Json, options?: JsonValidationOptions);
 ```
 
 Parse a boolean from Json.
@@ -202,6 +202,12 @@ Parse a boolean from Json.
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 to parse boolean from.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.std.Boolean.fromJson.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.JsonValidationOptions">JsonValidationOptions</a>
 
 ---
 
@@ -1052,7 +1058,7 @@ Retrieve the json schema as a string.
 ##### `validate` <a name="validate" id="@winglang/sdk.std.JsonSchema.validate"></a>
 
 ```wing
-validate(obj: Json): void
+validate(obj: Json, options?: JsonValidationOptions): void
 ```
 
 Attempt to validate a json object against the schema.
@@ -1062,6 +1068,12 @@ Attempt to validate a json object against the schema.
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 the Json object to validate.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.std.JsonSchema.validate.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.JsonValidationOptions">JsonValidationOptions</a>
 
 ---
 
@@ -2351,7 +2363,7 @@ Number.
 ##### `fromJson` <a name="fromJson" id="@winglang/sdk.std.Number.fromJson"></a>
 
 ```wing
-num.fromJson(json: Json);
+num.fromJson(json: Json, options?: JsonValidationOptions);
 ```
 
 Parse a number from Json.
@@ -2361,6 +2373,12 @@ Parse a number from Json.
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 to parse number from.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.std.Number.fromJson.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.JsonValidationOptions">JsonValidationOptions</a>
 
 ---
 
@@ -2676,7 +2694,7 @@ Returns this string in upper case.
 ##### `fromJson` <a name="fromJson" id="@winglang/sdk.std.String.fromJson"></a>
 
 ```wing
-str.fromJson(json: Json);
+str.fromJson(json: Json, options?: JsonValidationOptions);
 ```
 
 Parse string from Json.
@@ -2686,6 +2704,12 @@ Parse string from Json.
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 to create string from.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.std.String.fromJson.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.JsonValidationOptions">JsonValidationOptions</a>
 
 ---
 
@@ -2728,7 +2752,7 @@ Shared behavior for all structs.
 ##### `fromJson` <a name="fromJson" id="@winglang/sdk.std.Struct.fromJson"></a>
 
 ```wing
-Struct.fromJson(json: Json);
+Struct.fromJson(json: Json, options?: JsonValidationOptions);
 ```
 
 Converts a Json to a Struct.
@@ -2736,6 +2760,12 @@ Converts a Json to a Struct.
 ###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Struct.fromJson.parameter.json"></a>
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.std.Struct.fromJson.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.JsonValidationOptions">JsonValidationOptions</a>
 
 ---
 
@@ -2942,6 +2972,49 @@ Year.
 
 ---
 
+### JsonEntry <a name="JsonEntry" id="@winglang/sdk.std.JsonEntry"></a>
+
+Json entry representation.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.std.JsonEntry.Initializer"></a>
+
+```wing
+let JsonEntry = JsonEntry{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.JsonEntry.property.key">key</a></code> | <code>str</code> | The entry key. |
+| <code><a href="#@winglang/sdk.std.JsonEntry.property.value">value</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The entry value. |
+
+---
+
+##### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.JsonEntry.property.key"></a>
+
+```wing
+key: str;
+```
+
+- *Type:* str
+
+The entry key.
+
+---
+
+##### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.JsonEntry.property.value"></a>
+
+```wing
+value: Json;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+The entry value.
+
+---
+
 ### JsonStringifyOptions <a name="JsonStringifyOptions" id="@winglang/sdk.std.JsonStringifyOptions"></a>
 
 Options for stringify() method.
@@ -2969,6 +3042,36 @@ indent: num;
 - *Type:* num
 
 Indentation spaces number.
+
+---
+
+### JsonValidationOptions <a name="JsonValidationOptions" id="@winglang/sdk.std.JsonValidationOptions"></a>
+
+Options for validating Json.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.std.JsonValidationOptions.Initializer"></a>
+
+```wing
+let JsonValidationOptions = JsonValidationOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.JsonValidationOptions.property.unsafe">unsafe</a></code> | <code>bool</code> | Unsafe mode to skip validation (may lead to runtime errors). |
+
+---
+
+##### `unsafe`<sup>Optional</sup> <a name="unsafe" id="@winglang/sdk.std.JsonValidationOptions.property.unsafe"></a>
+
+```wing
+unsafe: bool;
+```
+
+- *Type:* bool
+
+Unsafe mode to skip validation (may lead to runtime errors).
 
 ---
 

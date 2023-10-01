@@ -23,32 +23,27 @@ jobs:
           - 18
           - 20
         install_command:
-          - npm install -g winglang
+          - npm install -g winglang@latest
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
-      - name: Get Latest Wing Version
-        id: get-version
-        shell: bash
-        run: |
-          echo version=$(npm view winglang version) >> $GITHUB_OUTPUT
       - name: Install Wing
         run: |
-          ${{ matrix.install_command }}@${{ steps.get-version.outputs.version }}
-      - name: Download examples/tests/valid/test_bucket.main.w
+          ${{ matrix.install_command }}
+      - name: Download examples/tests/valid/test_bucket.test.w
         run: |
-          curl -L https://raw.githubusercontent.com/winglang/wing/main/examples/tests/valid/test_bucket.main.w > test_bucket.main.w
-          cat test_bucket.main.w
+          curl -L https://raw.githubusercontent.com/winglang/wing/main/examples/tests/valid/test_bucket.test.w > test_bucket.test.w
+          cat test_bucket.test.w
       - name: Run Test
         run: |
-          wing test test_bucket.main.w
-      - name: Download examples/tests/valid/hello.main.w
+          wing test test_bucket.test.w
+      - name: Download examples/tests/valid/hello.test.w
         run: |
-          curl -L https://raw.githubusercontent.com/winglang/wing/main/examples/tests/valid/hello.main.w > hello.main.w
-          cat hello.main.w
+          curl -L https://raw.githubusercontent.com/winglang/wing/main/examples/tests/valid/hello.test.w > hello.test.w
+          cat hello.test.w
       - name: Run Compile
         run: |
-          wing compile hello.main.w -t tf-aws
+          wing compile hello.test.w -t tf-aws

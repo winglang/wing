@@ -17,7 +17,9 @@ use crate::{
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic, debug,
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
+	file_graph::FileGraph,
 	files::Files,
+	parser::is_entrypoint_file,
 	type_check::{
 		is_udt_struct_type,
 		lifts::{Liftable, Lifts},
@@ -68,10 +70,11 @@ pub struct JSifier<'a> {
 	/// e.g. "bucket.w" -> "preflight.bucket-1.js"
 	preflight_file_map: RefCell<IndexMap<Utf8PathBuf, String>>,
 	source_files: &'a Files,
+	source_file_graph: &'a FileGraph,
 	/// Root of the project, used for resolving extern modules
 	absolute_project_root: &'a Utf8Path,
-	/// The entrypoint file of the Wing application.
-	entrypoint_file_path: &'a Utf8Path,
+	/// The path that compilation started at (file or directory)
+	compilation_init_path: &'a Utf8Path,
 }
 
 /// Preflight classes have two types of host binding methods:
@@ -86,14 +89,16 @@ impl<'a> JSifier<'a> {
 	pub fn new(
 		types: &'a mut Types,
 		source_files: &'a Files,
-		entrypoint_file_path: &'a Utf8Path,
+		source_file_graph: &'a FileGraph,
+		compilation_init_path: &'a Utf8Path,
 		absolute_project_root: &'a Utf8Path,
 	) -> Self {
 		let output_files = Files::default();
 		Self {
 			types,
 			source_files,
-			entrypoint_file_path,
+			source_file_graph,
+			compilation_init_path,
 			absolute_project_root,
 			referenced_struct_schemas: RefCell::new(BTreeMap::new()),
 			inflight_file_counter: RefCell::new(0),
@@ -137,9 +142,11 @@ impl<'a> JSifier<'a> {
 
 		let mut output = CodeMaker::default();
 
-		let is_entrypoint_file = source_path == self.entrypoint_file_path;
+		let is_compilation_init = source_path == self.compilation_init_path;
+		let is_entrypoint = is_entrypoint_file(source_path);
+		let is_directory = source_path.is_dir();
 
-		if is_entrypoint_file {
+		if is_entrypoint {
 			output.line(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
 			output.line(format!(
 				"const {} = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);",
@@ -158,7 +165,7 @@ impl<'a> JSifier<'a> {
 		output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
 		output.add_code(imports);
 
-		if is_entrypoint_file {
+		if is_entrypoint {
 			let mut root_class = CodeMaker::default();
 			root_class.open(format!("class {} extends {} {{", ROOT_CLASS, STDLIB_CORE_RESOURCE));
 			root_class.open(format!("{JS_CONSTRUCTOR}(scope, id) {{"));
@@ -170,12 +177,42 @@ impl<'a> JSifier<'a> {
 
 			output.add_code(root_class);
 			output.line("const $App = $stdlib.core.App.for(process.env.WING_TARGET);".to_string());
-			let app_name = self.entrypoint_file_path.file_stem().unwrap();
+			let app_name = source_path.file_stem().unwrap();
 			output.line(format!(
 				"new $App({{ outdir: {}, name: \"{}\", rootConstruct: {}, plugins: {}, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }}).synth();",
 				OUTDIR_VAR, app_name, ROOT_CLASS, PLUGINS_VAR, ENV_WING_IS_TEST
 			));
+		} else if is_directory {
+			let directory_children = self.source_file_graph.dependencies_of(source_path);
+			let preflight_file_map = self.preflight_file_map.borrow();
+
+			// supposing a directory has two files and two subdirectories in it,
+			// we generate code like this:
+			// ```
+			// return {
+			//   inner_directory1: require("./preflight.inner-directory1.js")({ $stdlib }),
+			//   inner_directory2: require("./preflight.inner-directory2.js")({ $stdlib }),
+			//   ...require("./preflight.inner-file1.js")({ $stdlib }),
+			//   ...require("./preflight.inner-file2.js")({ $stdlib }),
+			// };
+			// ```
+			output.open("return {");
+			for file in directory_children {
+				let preflight_file_name = preflight_file_map.get(file).expect("no emitted JS file found");
+				if file.is_dir() {
+					let directory_name = file.file_stem().unwrap();
+					output.line(format!(
+						"{}: require(\"./{}\")({{ {} }}),",
+						directory_name, preflight_file_name, STDLIB
+					));
+				} else {
+					output.line(format!("...require(\"./{}\")({{ {} }}),", preflight_file_name, STDLIB));
+				}
+			}
+			output.close("};");
+			output.close("};");
 		} else {
+			output.add_code(self.jsify_struct_schemas());
 			output.add_code(js);
 			let exports = get_public_symbols(&scope);
 			output.line(format!(
@@ -186,7 +223,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		// Generate a name for the JS file this preflight code will be written to
-		let preflight_file_name = if is_entrypoint_file {
+		let preflight_file_name = if is_compilation_init {
 			PREFLIGHT_FILE_NAME.to_string()
 		} else {
 			// remove all non-alphanumeric characters
@@ -735,6 +772,17 @@ impl<'a> JSifier<'a> {
 					name
 				)),
 				BringSource::WingFile(name) => {
+					let preflight_file_map = self.preflight_file_map.borrow();
+					let preflight_file_name = preflight_file_map.get(Utf8Path::new(&name.name)).unwrap();
+					CodeMaker::one_line(format!(
+						"const {} = require(\"./{}\")({{ {} }});",
+						// checked during type checking
+						identifier.as_ref().expect("bring wing file requires an alias"),
+						preflight_file_name,
+						STDLIB,
+					))
+				}
+				BringSource::Directory(name) => {
 					let preflight_file_map = self.preflight_file_map.borrow();
 					let preflight_file_name = preflight_file_map.get(Utf8Path::new(&name.name)).unwrap();
 					CodeMaker::one_line(format!(

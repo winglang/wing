@@ -182,6 +182,8 @@ Push one or more messages to the queue.
 
 Payload to send to the queue.
 
+Each message must be non-empty.
+
 ---
 
 

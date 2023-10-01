@@ -53,7 +53,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Service\n```\n---\nA long-running service."
+    value: "```wing\nclass Service impl IInflightHost\n```\n---\nA long-running service."
   sortText: gg|Service
 - label: Topic
   kind: 7
@@ -77,7 +77,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ApiCorsOptions\n```\n---\nCors Options for `Api`.\n### Fields\n- `allowCredentials?` — Whether to allow credentials.\n- `allowHeaders?` — The list of allowed headers.\n- `allowMethods?` — The list of allowed methods.\n- `allowOrigin?` — The list of allowed allowOrigin.\n- `exposeHeaders?` — The list of exposed headers."
+    value: "```wing\nstruct ApiCorsOptions\n```\n---\nCors Options for `Api`.\n### Fields\n- `allowCredentials?` — Whether to allow credentials.\n- `allowHeaders?` — The list of allowed headers.\n- `allowMethods?` — The list of allowed methods.\n- `allowOrigin?` — The list of allowed allowOrigin.\n- `exposeHeaders?` — The list of exposed headers.\n- `maxAge?` — How long the browser should cache preflight request results."
   sortText: hh|ApiCorsOptions
 - label: ApiDeleteProps
   kind: 22
@@ -245,7 +245,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ServiceProps\n```\n---\nOptions for `Service`.\n### Fields\n- `autoStart?` — Whether the service should start automatically.\n- `onStart` — Handler to run with the service starts.\n- `onStop?` — Handler to run with the service stops."
+    value: "```wing\nstruct ServiceProps\n```\n---\nOptions for `Service`.\n### Fields\n- `autoStart?` — Whether the service should start automatically.\n- `env?` — Environment variables to pass to the function."
   sortText: hh|ServiceProps
 - label: TopicOnMessageProps
   kind: 22
@@ -389,20 +389,32 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IServiceClient\n```\n---\nInflight interface for `Service`.\n### Methods\n- `start` — Start the service.\n- `stop` — Stop the service."
+    value: "```wing\ninterface IServiceClient\n```\n---\nInflight interface for `Service`.\n### Methods\n- `start` — Start the service.\n- `started` — Indicates whether the service is started.\n- `stop` — Stop the service."
   sortText: ii|IServiceClient
-- label: IServiceOnEventClient
+- label: IServiceHandler
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IServiceOnEventClient\n```\n---\nInflight client for `IServiceOnEventHandler`.\n### Methods\n- `handle` — Function that will be called for service events."
-  sortText: ii|IServiceOnEventClient
-- label: IServiceOnEventHandler
+    value: "```wing\ninterface IServiceHandler extends IResource\n```\n---\nExecuted when a `cloud.Service` is started.\n### Methods\n- `bind` — `preflight (host: IInflightHost, ops: Array<str>): void`\n- `handle` — Handler to run when the service starts.\n- `node` — `Node`"
+  sortText: ii|IServiceHandler
+- label: IServiceHandlerClient
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IServiceOnEventHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `ServiceProps.on_start` || `ServiceProps.on_stop`.\n### Methods\n- `bind` — `preflight (host: IInflightHost, ops: Array<str>): void`\n- `handle` — Function that will be called for service events.\n- `node` — `Node`"
-  sortText: ii|IServiceOnEventHandler
+    value: "```wing\ninterface IServiceHandlerClient\n```\n---\nInflight client for `IServiceHandler`.\n### Methods\n- `handle` — Handler to run when the service starts."
+  sortText: ii|IServiceHandlerClient
+- label: IServiceStopHandler
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IServiceStopHandler extends IResource\n```\n---\nExecuted when a `cloud.Service` is stopped.\n### Methods\n- `bind` — `preflight (host: IInflightHost, ops: Array<str>): void`\n- `handle` — Handler to run when the service stops.\n- `node` — `Node`"
+  sortText: ii|IServiceStopHandler
+- label: IServiceStopHandlerClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IServiceStopHandlerClient\n```\n---\nInflight client for `IServiceStopHandler`.\n### Methods\n- `handle` — Handler to run when the service stops."
+  sortText: ii|IServiceStopHandlerClient
 - label: ITopicClient
   kind: 8
   documentation:

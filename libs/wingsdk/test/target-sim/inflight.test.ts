@@ -1,7 +1,7 @@
 import { test, expect } from "vitest";
 import { treeJsonOf } from "./util";
+import { Testing } from "../../src/simulator";
 import { Node } from "../../src/std";
-import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
 
 const INFLIGHT_CODE = `

@@ -33,7 +33,7 @@ const CDKTF_PROVIDERS = [
   "google@~>4.63.1",
 ];
 
-const PUBLIC_MODULES = ["std", "http", "util", "aws", "ex"];
+const PUBLIC_MODULES = ["std", "http", "util", "aws", "ex", "math", "regex"];
 
 const CLOUD_DOCS_PREFIX = "../../docs/docs/04-standard-library/01-cloud/";
 

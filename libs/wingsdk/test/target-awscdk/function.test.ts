@@ -1,9 +1,9 @@
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import { Function } from "../../src/cloud";
+import { Testing } from "../../src/simulator";
 import { Duration } from "../../src/std";
 import * as awscdk from "../../src/target-awscdk";
-import { Testing } from "../../src/testing";
 import { mkdtemp, awscdkSanitize } from "../util";
 
 const CDK_APP_OPTS = {
@@ -27,7 +27,7 @@ test("basic function", () => {
     Match.objectLike({
       Handler: "index.handler",
       Runtime: "nodejs18.x",
-      Timeout: 30,
+      Timeout: 60,
     })
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
@@ -52,7 +52,7 @@ test("basic function with environment variables", () => {
     Match.objectLike({
       Handler: "index.handler",
       Runtime: "nodejs18.x",
-      Timeout: 30,
+      Timeout: 60,
       Environment: {
         Variables: {
           BOOM: "BAM",

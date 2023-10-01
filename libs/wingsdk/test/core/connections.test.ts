@@ -1,7 +1,7 @@
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import { Connections } from "../../src/core";
-import { Testing } from "../../src/testing";
+import { Testing } from "../../src/simulator";
 import { SimApp } from "../sim-app";
 
 test("create a bucket", async () => {

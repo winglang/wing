@@ -250,7 +250,7 @@ export const DefaultLayout = ({
         />
       )}
 
-      <div className={classNames(USE_EXTERNAL_THEME_COLOR, "fixed inset-0")}>
+      <div className="fixed inset-0">
         <div className={classNames("w-full h-full", theme.bg1)} />
       </div>
 

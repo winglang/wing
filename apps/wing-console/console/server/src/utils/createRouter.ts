@@ -1,5 +1,5 @@
 import { initTRPC } from "@trpc/server";
-import { testing } from "@winglang/sdk";
+import { simulator } from "@winglang/sdk";
 import type Emittery from "emittery";
 
 import { Config } from "../config.js";
@@ -75,7 +75,7 @@ export interface FileLink {
 }
 
 export interface RouterContext {
-  simulator(): Promise<testing.Simulator>;
+  simulator(): Promise<simulator.Simulator>;
   appDetails(): Promise<{
     wingVersion: string | undefined;
   }>;

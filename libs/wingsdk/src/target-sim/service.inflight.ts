@@ -1,24 +1,40 @@
+import { resolve } from "path";
 import {
   SERVICE_TYPE,
   ServiceAttributes,
   ServiceSchema,
 } from "./schema-resources";
-import { IFunctionClient, IServiceClient } from "../cloud";
+import { IServiceClient, IServiceStopHandlerClient } from "../cloud";
+import { Sandbox } from "../shared/sandbox";
+import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
 import { TraceType } from "../std";
-import { ISimulatorContext, ISimulatorResourceInstance } from "../testing";
 
 export class Service implements IServiceClient, ISimulatorResourceInstance {
   private readonly context: ISimulatorContext;
-  private readonly onStartHandler: string;
-  private readonly onStopHandler?: string;
+  private readonly entrypoint: string;
   private readonly autoStart: boolean;
+  private readonly sandbox: Sandbox;
   private running: boolean = false;
+  private onStop?: IServiceStopHandlerClient;
 
   constructor(props: ServiceSchema["props"], context: ISimulatorContext) {
     this.context = context;
-    this.onStartHandler = props.onStartHandler;
-    this.onStopHandler = props.onStopHandler;
+    this.entrypoint = resolve(context.simdir, props.sourceCodeFile);
     this.autoStart = props.autoStart;
+    this.sandbox = new Sandbox(this.entrypoint, {
+      env: props.environmentVariables,
+      context: { $simulator: this.context },
+      log: (_level, message) => {
+        this.context.addTrace({
+          data: { message },
+          type: TraceType.LOG,
+          sourcePath: this.context.resourcePath,
+          sourceType: SERVICE_TYPE,
+          timestamp: new Date().toISOString(),
+        });
+      },
+    });
+
     props;
   }
 
@@ -39,49 +55,31 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       return;
     }
 
-    const fnClient = this.context.findInstance(
-      this.onStartHandler
-    ) as ISimulatorResourceInstance & IFunctionClient;
-    if (!fnClient) {
-      throw new Error("No function client found!");
-    }
-
-    this.context.addTrace({
-      type: TraceType.RESOURCE,
-      data: {
-        message: `Starting service (onStartHandler=${this.onStartHandler}).`,
-      },
-      sourcePath: this.context.resourcePath,
-      sourceType: SERVICE_TYPE,
-      timestamp: new Date().toISOString(),
-    });
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    fnClient.invoke("");
+    this.onStop = await this.sandbox.call("handle");
     this.running = true;
   }
 
   public async stop(): Promise<void> {
     // Do nothing if service is already stopped.
-    if (!this.running || !this.onStopHandler) {
+    if (!this.running) {
       return;
     }
 
-    const fnClient = this.context.findInstance(
-      this.onStopHandler!
-    ) as ISimulatorResourceInstance & IFunctionClient;
-
-    this.context.addTrace({
-      type: TraceType.RESOURCE,
-      data: {
-        message: `Stopping service (onStopHandler=${this.onStopHandler}).`,
-      },
-      sourcePath: this.context.resourcePath,
-      sourceType: SERVICE_TYPE,
-      timestamp: new Date().toISOString(),
-    });
-
-    await fnClient.invoke("");
+    if (this.onStop) {
+      // wing has a quirk where it will return either a function or an object that implements
+      // "handle", depending on whether the closure is defined in an inflight context or preflight
+      // context. so we need to handle both options here. (in wing this is handled by the compiler).
+      if (typeof this.onStop === "function") {
+        await (this.onStop as any)();
+      } else {
+        await this.onStop.handle();
+      }
+    }
 
     this.running = false;
+  }
+
+  public async started(): Promise<boolean> {
+    return this.running;
   }
 }

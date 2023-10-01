@@ -1,9 +1,9 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
+import { Testing } from "../../src/simulator";
 import { Duration } from "../../src/std";
 import * as tfaws from "../../src/target-tf-aws";
-import { Testing } from "../../src/testing";
 import {
   mkdtemp,
   sanitizeCode,

@@ -16,13 +16,14 @@ use crate::ast::{
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, TypeError, WingSpan};
 use crate::docs::Docs;
+use crate::file_graph::FileGraph;
 use crate::type_check::symbol_env::SymbolEnvKind;
 use crate::visit_context::{VisitContext, VisitorWithContext};
 use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
-	dbg_panic, debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_JSON,
-	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_RESOURCE, WINGSDK_SET,
-	WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
+	dbg_panic, debug, GLOBAL_SYMBOLS, UTIL_CLASS_NAME, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES,
+	WINGSDK_DURATION, WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET,
+	WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
@@ -31,7 +32,7 @@ use indexmap::{IndexMap, IndexSet};
 use itertools::{izip, Itertools};
 use jsii_importer::JsiiImporter;
 
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::fmt::{Debug, Display};
 use std::iter::FilterMap;
 use symbol_env::{StatementIdx, SymbolEnv};
@@ -266,13 +267,24 @@ pub struct Namespace {
 	pub name: String,
 
 	#[derivative(Debug = "ignore")]
-	pub env: SymbolEnv,
+	pub envs: Vec<SymbolEnvRef>,
 
 	// Indicate whether all the types in this namespace have been loaded, this is part of our
 	// lazy loading mechanism and is used by the lsp's autocomplete in case we need to load
 	// the types after initial compilation.
 	#[derivative(Debug = "ignore")]
 	pub loaded: bool,
+
+	/// Where we can resolve this namespace from
+	pub module_path: ResolveSource,
+}
+
+#[derive(Debug)]
+pub enum ResolveSource {
+	/// A wing file within the source tree for this compilation.
+	WingFile,
+	/// External JSII module. This string will be the spec of the module, either a path or a npm package name.
+	ExternalModule(String),
 }
 
 pub type NamespaceRef = UnsafeRef<Namespace>;
@@ -1249,6 +1261,23 @@ struct ResolvedExpression {
 	phase: Phase,
 }
 
+/// In Wing projects that have both files and directories, type information is stored like so:
+///
+/// "src/subdir/inner/widget.w" -> SymbolEnv { "Widget": TypeRef } = SE1
+/// "src/subdir/inner/" -> Namespace { envs: [SE1] } = NS1
+/// "src/subdir/foo.w" -> SymbolEnv { "Foo": TypeRef } = SE2
+/// "src/subdir/bar.w" -> SymbolEnv { "Bar": TypeRef } = SE3
+/// "src/subdir/" -> Namespace { envs: [SE2, SE3, SymbolEnv { "inner": NS1 }] } = NS2
+///
+/// Then when a file at "src/main.w" has a statement `bring "./subdir" as subdir;`,
+/// it retrieves NS2 from the types.source_file_envs map and adds it to the main file's symbol environment
+/// under the symbol "subdir".
+enum SymbolEnvOrNamespace {
+	SymbolEnv(SymbolEnvRef),
+	Namespace(NamespaceRef),
+	Error(Diagnostic),
+}
+
 /// File-unique identifier for each necessary inference while type checking. This is an index of the Types.inferences vec.
 /// There will always be an entry for each InferenceId.
 pub type InferenceId = usize;
@@ -1259,8 +1288,10 @@ pub struct Types {
 	types: Vec<Box<Type>>,
 	namespaces: Vec<Box<Namespace>>,
 	symbol_envs: Vec<Box<SymbolEnv>>,
-	/// A map from source file name to the symbol environment for that file (and whether that file is safe to bring)
-	source_file_envs: IndexMap<Utf8PathBuf, SymbolEnvRef>,
+	/// A map from source paths to type information about that path
+	/// If it's a file, we save its symbol environment, and if it's a directory, we save a namespace that points to
+	/// all of the symbol environments of the files (or subdirectories) in that directory
+	source_file_envs: IndexMap<Utf8PathBuf, SymbolEnvOrNamespace>,
 	pub libraries: SymbolEnv,
 	numeric_idx: usize,
 	string_idx: usize,
@@ -1620,6 +1651,9 @@ pub struct TypeChecker<'a> {
 	/// The path to the source file being type checked.
 	source_path: &'a Utf8Path,
 
+	/// The file graph of the compilation.
+	file_graph: &'a FileGraph,
+
 	/// JSII Manifest descriptions to be imported.
 	/// May be reused between compilations
 	jsii_imports: &'a mut Vec<JsiiImportSpec>,
@@ -1636,6 +1670,7 @@ impl<'a> TypeChecker<'a> {
 	pub fn new(
 		types: &'a mut Types,
 		source_path: &'a Utf8Path,
+		file_graph: &'a FileGraph,
 		jsii_types: &'a mut TypeSystem,
 		jsii_imports: &'a mut Vec<JsiiImportSpec>,
 	) -> Self {
@@ -1644,6 +1679,7 @@ impl<'a> TypeChecker<'a> {
 			inner_scopes: vec![],
 			jsii_types,
 			source_path,
+			file_graph,
 			jsii_imports,
 			is_in_mut_json: false,
 			ctx: VisitContext::new(),
@@ -1932,7 +1968,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Type check args against constructor
-				let init_method_name = if env.phase == Phase::Preflight {
+				let init_method_name = if env.phase == Phase::Preflight || class_env.phase == Phase::Independent {
 					CLASS_INIT_NAME
 				} else {
 					CLASS_INFLIGHT_INIT_NAME
@@ -2130,7 +2166,7 @@ impl<'a> TypeChecker<'a> {
 			}
 			ExprKind::ArrayLiteral { type_, items } => {
 				// Infer type based on either the explicit type or the value in one of the items
-				let (container_type, mut element_type) = if let Some(type_) = type_ {
+				let (mut container_type, mut element_type) = if let Some(type_) = type_ {
 					let container_type = self.resolve_type_annotation(type_, env);
 					let element_type = match *container_type {
 						Type::Array(t) | Type::MutArray(t) => t,
@@ -2159,6 +2195,15 @@ impl<'a> TypeChecker<'a> {
 				for item in items {
 					let (t, _) = self.type_check_exp(item, env);
 
+					if t.is_json() && !matches!(*element_type, Type::Json(Some(..))) {
+						// This is an array of JSON, change the element type to reflect that
+						let json_data = JsonData {
+							expression_id: exp.id,
+							kind: JsonDataKind::List(vec![]),
+						};
+						element_type = self.types.add_type(Type::Json(Some(json_data)));
+					}
+
 					// Augment the json list data with the new element type
 					if let Type::Json(Some(JsonData { ref mut kind, .. })) = &mut *element_type {
 						if let JsonDataKind::List(ref mut json_list) = kind {
@@ -2182,11 +2227,15 @@ impl<'a> TypeChecker<'a> {
 					}
 				}
 
+				if let Type::Array(ref mut inner) | Type::MutArray(ref mut inner) = &mut *container_type {
+					*inner = element_type;
+				}
+
 				(container_type, env.phase)
 			}
 			ExprKind::MapLiteral { fields, type_ } => {
 				// Infer type based on either the explicit type or the value in one of the fields
-				let (container_type, mut element_type) = if let Some(type_) = type_ {
+				let (mut container_type, mut element_type) = if let Some(type_) = type_ {
 					let container_type = self.resolve_type_annotation(type_, env);
 					let element_type = match *container_type {
 						Type::Map(t) | Type::MutMap(t) => t,
@@ -2205,17 +2254,43 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Verify all types are the same as the inferred type
-				for field in fields.values() {
+				for (sym, field) in fields {
 					let (t, _) = self.type_check_exp(field, env);
+					if t.is_json() && !matches!(*element_type, Type::Json(Some(..))) {
+						// This is an field of JSON, change the element type to reflect that
+						let json_data = JsonData {
+							expression_id: exp.id,
+							kind: JsonDataKind::Fields(IndexMap::new()),
+						};
+						element_type = self.types.add_type(Type::Json(Some(json_data)));
+					}
+
+					// Augment the json list data with the new element type
+					if let Type::Json(Some(JsonData { ref mut kind, .. })) = &mut *element_type {
+						if let JsonDataKind::Fields(ref mut fields) = kind {
+							fields.insert(
+								sym.clone(),
+								SpannedTypeInfo {
+									type_: t,
+									span: field.span(),
+								},
+							);
+						}
+					}
+
 					self.validate_type(t, element_type, field);
 					element_type = self.types.maybe_unwrap_inference(element_type);
+				}
+
+				if let Type::Map(ref mut inner) | Type::MutMap(ref mut inner) = &mut *container_type {
+					*inner = element_type;
 				}
 
 				(container_type, env.phase)
 			}
 			ExprKind::SetLiteral { type_, items } => {
 				// Infer type based on either the explicit type or the value in one of the items
-				let (container_type, mut element_type) = if let Some(type_) = type_ {
+				let (mut container_type, mut element_type) = if let Some(type_) = type_ {
 					let container_type = self.resolve_type_annotation(type_, env);
 					let element_type = match *container_type {
 						Type::Set(t) | Type::MutSet(t) => t,
@@ -2236,8 +2311,32 @@ impl<'a> TypeChecker<'a> {
 				// Verify all types are the same as the inferred type
 				for item in items {
 					let (t, _) = self.type_check_exp(item, env);
+
+					if t.is_json() && !matches!(*element_type, Type::Json(Some(..))) {
+						// this is an set of JSON, change the element type to reflect that
+						let json_data = JsonData {
+							expression_id: exp.id,
+							kind: JsonDataKind::List(vec![]),
+						};
+						element_type = self.types.add_type(Type::Json(Some(json_data)));
+					}
+
+					// Augment the json list data with the new element type
+					if let Type::Json(Some(JsonData { ref mut kind, .. })) = &mut *element_type {
+						if let JsonDataKind::List(ref mut json_list) = kind {
+							json_list.push(SpannedTypeInfo {
+								type_: t,
+								span: item.span(),
+							});
+						}
+					}
+
 					self.validate_type(t, element_type, item);
 					element_type = self.types.maybe_unwrap_inference(element_type);
+				}
+
+				if let Type::Set(ref mut inner) | Type::MutSet(ref mut inner) = &mut *container_type {
+					*inner = element_type;
 				}
 
 				(container_type, env.phase)
@@ -2645,6 +2744,84 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
+	/// If possible, structurally check the given type as a Json against the expected type.
+	///
+	/// returns true if validation occurred, false otherwise
+	pub fn validate_type_json(&mut self, actual_type: TypeRef, expected_type: TypeRef, span: &impl Spanned) -> bool {
+		let mut json_type = actual_type;
+		let expected_type = self.types.maybe_unwrap_inference(expected_type);
+		let expected_type_unwrapped = expected_type.maybe_unwrap_option();
+
+		if expected_type_unwrapped.is_json() {
+			// No need for fancy type checking against Json
+			return false;
+		}
+
+		let inner_expected = expected_type_unwrapped.collection_item_type();
+		if let Some(inner_expected) = inner_expected {
+			if let Some(inner_actual) = actual_type.collection_item_type() {
+				if matches!(*inner_actual, Type::Json(Some(_))) {
+					// If the outer collection type doesn't match then don't bother
+					// We can just check the collection enum variant to make sure they match exactly (subtyping isn't relevant here)
+					if std::mem::discriminant(&**expected_type_unwrapped) != std::mem::discriminant(&*actual_type) {
+						return false;
+					}
+					json_type = inner_actual;
+				} else {
+					// The expected type is a collection and the actual type is a collection of non-json
+					// In case the actual type is a nested collection, we must recurse here
+					return self.validate_type_json(inner_actual, inner_expected, span);
+				}
+			}
+		}
+
+		let Type::Json(Some(data)) = &*json_type else {
+			// We don't have any json data to validate
+			return false;
+		};
+
+		if expected_type_unwrapped.is_struct()
+			|| expected_type_unwrapped.is_immutable_collection()
+			|| expected_type_unwrapped.is_json_legal_value()
+		{
+			// We don't need to check the json-legality of this expr later because we know it's either legal or it's being used as a struct/map
+			self.types.json_literal_casts.insert(data.expression_id, expected_type);
+		}
+
+		match &data.kind {
+			JsonDataKind::Type(t) => {
+				// The expected type is some sort of primitive
+				self.validate_type(t.type_, expected_type, span);
+				true
+			}
+			JsonDataKind::Fields(fields) => {
+				if expected_type_unwrapped.is_struct() {
+					self.validate_structural_type(fields, expected_type_unwrapped, span);
+					true
+				} else if let Some(inner_expected) = inner_expected {
+					// The expected type is a Map
+					for field_info in fields.values() {
+						self.validate_type(field_info.type_, inner_expected, &field_info.span);
+					}
+					true
+				} else {
+					false
+				}
+			}
+			JsonDataKind::List(list) => {
+				if let Some(inner_expected) = inner_expected {
+					// The expected type is an Array or Set
+					for t in list {
+						self.validate_type(t.type_, inner_expected, &t.span);
+					}
+					true
+				} else {
+					false
+				}
+			}
+		}
+	}
+
 	/// Validate that the given type is a subtype (or same) as the expected type. If not, add an error
 	/// to the diagnostics.
 	///
@@ -2660,10 +2837,10 @@ impl<'a> TypeChecker<'a> {
 		assert!(expected_types.len() > 0);
 		let first_expected_type = expected_types[0];
 		let mut return_type = actual_type;
-		let span = span.span();
 
 		// To avoid ambiguity, only do inference if there is one expected type
 		if expected_types.len() == 1 {
+			let span = span.span();
 			// First check if the actual type is an inference that can be replaced with the expected type
 			if self.add_new_inference(&actual_type, &first_expected_type, &span) {
 				// Update the type we validate and return
@@ -2692,79 +2869,16 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		// If the expected type is Json and the actual type is a Json legal value then we're good
-		if expected_types.iter().any(|t| t.is_json()) {
+		if expected_types.iter().any(|t| t.maybe_unwrap_option().is_json()) {
 			if return_type.is_json_legal_value() {
 				return return_type;
 			}
-		}
-
-		// if the actual type is an empty array of json, it can be assigned to any array
-		let mut json_type = return_type;
-		if let Type::Array(inner) = **return_type.maybe_unwrap_option() {
-			if let Type::Json(Some(JsonData {
-				kind: JsonDataKind::List(list),
-				..
-			})) = &*inner
+		} else {
+			if expected_types
+				.iter()
+				.any(|t| self.validate_type_json(actual_type, *t, span))
 			{
-				if list.is_empty() && expected_types.iter().all(|t| matches!(**t, Type::Array(_))) {
-					return return_type;
-				}
-				json_type = inner;
-			}
-		}
-		if let Type::Map(inner) = **return_type.maybe_unwrap_option() {
-			if let Type::Json(Some(JsonData {
-				kind: JsonDataKind::Fields(field),
-				..
-			})) = &*inner
-			{
-				if field.is_empty() && expected_types.iter().all(|t| matches!(**t, Type::Map(_))) {
-					return return_type;
-				}
-				json_type = inner;
-			}
-		}
-
-		// if the actual type is a Json with known data, we can attempt to structurally type check
-		if expected_types.len() == 1 && json_type.is_json() {
-			let expected_type = self.types.maybe_unwrap_inference(first_expected_type);
-			let expected_type_unwrapped = expected_type.maybe_unwrap_option();
-			if expected_type_unwrapped.is_json() {
-				return actual_type;
-			}
-			if let Type::Json(Some(data)) = &**json_type.maybe_unwrap_option() {
-				if expected_type_unwrapped.is_json_legal_value()
-					|| expected_type_unwrapped.is_struct()
-					|| expected_type_unwrapped.is_immutable_collection()
-				{
-					// we don't need to check the json-ability of this expr later because we know it's legal or it's being used as a struct/map
-					self.types.json_literal_casts.insert(data.expression_id, expected_type);
-				}
-				match &data.kind {
-					JsonDataKind::Type(t) => {
-						self.validate_type(t.type_, expected_type, &span);
-						return return_type;
-					}
-					JsonDataKind::Fields(fields) => {
-						if expected_type_unwrapped.is_struct() {
-							self.validate_structural_type(fields, expected_type_unwrapped, &span);
-							return return_type;
-						} else if let Type::Map(expected_map) = &**expected_type_unwrapped {
-							for field_info in fields.values() {
-								self.validate_type(field_info.type_, *expected_map, &field_info.span);
-							}
-							return return_type;
-						}
-					}
-					JsonDataKind::List(list) => {
-						if let Type::Array(expected_inner) = **expected_type_unwrapped {
-							for t in list {
-								self.validate_type(t.type_, expected_inner, &t.span);
-							}
-							return return_type;
-						}
-					}
-				};
+				return return_type;
 			}
 		}
 
@@ -2783,7 +2897,7 @@ impl<'a> TypeChecker<'a> {
 		if return_type.is_nil() && expected_types.len() == 1 {
 			message = format!("{message} (hint: to allow \"nil\" assignment use optional type: \"{first_expected_type}?\")");
 		}
-		if json_type.maybe_unwrap_option().is_json() {
+		if return_type.maybe_unwrap_option().is_json() {
 			// known json data is statically known
 			message = format!("{message} (hint: use {first_expected_type}.fromJson() to convert dynamic Json)");
 		}
@@ -2796,14 +2910,101 @@ impl<'a> TypeChecker<'a> {
 		first_expected_type
 	}
 
-	pub fn type_check_file(&mut self, source_path: &Utf8Path, scope: &Scope) {
+	pub fn type_check_file_or_dir(&mut self, source_path: &Utf8Path, scope: &Scope) {
 		CompilationContext::set(CompilationPhase::TypeChecking, &scope.span);
 		self.type_check_scope(scope);
 
-		// Save the module's symbol environment to `self.types.source_file_envs`
+		if source_path.is_dir() {
+			self.type_check_dir(source_path);
+			return;
+		}
+
+		// Save the file's symbol environment to `self.types.source_file_envs`
 		// (replacing any existing ones if there was already a SymbolEnv from a previous compilation)
 		let scope_env = self.types.get_scope_env(scope);
-		self.types.source_file_envs.insert(source_path.to_owned(), scope_env);
+		self
+			.types
+			.source_file_envs
+			.insert(source_path.to_owned(), SymbolEnvOrNamespace::SymbolEnv(scope_env));
+	}
+
+	pub fn type_check_dir(&mut self, source_path: &Utf8Path) {
+		// Get a list of all children paths (files or directories) through the file graph
+		let children = self.file_graph.dependencies_of(source_path);
+
+		// Obtain each child's symbol environment or namespace
+		// If it's a namespace (i.e. it's a directory), wrap it in a symbol env
+		let mut child_envs = vec![];
+		for child_path in children.iter() {
+			match self.types.source_file_envs.get(*child_path) {
+				Some(SymbolEnvOrNamespace::SymbolEnv(env)) => {
+					child_envs.push(*env);
+				}
+				Some(SymbolEnvOrNamespace::Namespace(ns)) => {
+					let mut new_env = SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Independent, 0);
+					new_env
+						.define(
+							&Symbol::global(child_path.file_stem().unwrap().to_string()),
+							SymbolKind::Namespace(*ns),
+							StatementIdx::Top,
+						)
+						.unwrap();
+					let wrapper_env = self.types.add_symbol_env(new_env);
+					child_envs.push(wrapper_env);
+				}
+				Some(SymbolEnvOrNamespace::Error(diagnostic)) => {
+					self
+						.types
+						.source_file_envs
+						.insert(source_path.to_owned(), SymbolEnvOrNamespace::Error(diagnostic.clone()));
+					return;
+				}
+				None => {
+					self.types.source_file_envs.insert(
+						source_path.to_owned(),
+						SymbolEnvOrNamespace::Error(Diagnostic {
+							message: format!("Could not bring \"{}\" due to cyclic bring statements", source_path,),
+							span: None,
+						}),
+					);
+					return;
+				}
+			};
+		}
+
+		// Check that there aren't multiply-defined symbols in the directory
+		let mut seen_symbols = HashSet::new();
+		for child_env in &child_envs {
+			for key in child_env.symbol_map.keys() {
+				// ignore globals
+				if GLOBAL_SYMBOLS.contains(&key.as_str()) {
+					continue;
+				}
+
+				if seen_symbols.contains(key) {
+					self.types.source_file_envs.insert(
+						source_path.to_owned(),
+						SymbolEnvOrNamespace::Error(Diagnostic {
+							message: format!("Symbol \"{}\" has multiple definitions in \"{}\"", key, source_path),
+							span: None,
+						}),
+					);
+					return;
+				}
+				seen_symbols.insert(key.clone());
+			}
+		}
+
+		let ns = self.types.add_namespace(Namespace {
+			name: source_path.file_stem().unwrap().to_string(),
+			envs: child_envs,
+			loaded: true,
+			module_path: ResolveSource::WingFile,
+		});
+		self
+			.types
+			.source_file_envs
+			.insert(source_path.to_owned(), SymbolEnvOrNamespace::Namespace(ns));
 	}
 
 	fn type_check_scope(&mut self, scope: &Scope) {
@@ -3596,7 +3797,17 @@ impl<'a> TypeChecker<'a> {
 			}
 			BringSource::WingFile(name) => {
 				let brought_env = match self.types.source_file_envs.get(Utf8Path::new(&name.name)) {
-					Some(env) => *env,
+					Some(SymbolEnvOrNamespace::SymbolEnv(env)) => *env,
+					Some(SymbolEnvOrNamespace::Namespace(_)) => {
+						panic!("Expected a symbol environment to be associated with the file")
+					}
+					Some(SymbolEnvOrNamespace::Error(diagnostic)) => {
+						report_diagnostic(Diagnostic {
+							span: Some(stmt.span()),
+							..diagnostic.clone()
+						});
+						return;
+					}
 					None => {
 						self.spanned_error(
 							stmt,
@@ -3607,12 +3818,43 @@ impl<'a> TypeChecker<'a> {
 				};
 				let ns = self.types.add_namespace(Namespace {
 					name: name.name.to_string(),
-					env: SymbolEnv::new(Some(brought_env.get_ref()), SymbolEnvKind::Scope, brought_env.phase, 0),
+					envs: vec![brought_env],
 					loaded: true,
+					module_path: ResolveSource::WingFile,
 				});
 				if let Err(e) = env.define(
 					identifier.as_ref().unwrap(),
 					SymbolKind::Namespace(ns),
+					StatementIdx::Top,
+				) {
+					self.type_error(e);
+				}
+				return;
+			}
+			BringSource::Directory(name) => {
+				let brought_ns = match self.types.source_file_envs.get(Utf8Path::new(&name.name)) {
+					Some(SymbolEnvOrNamespace::SymbolEnv(_)) => {
+						panic!("Expected a namespace to be associated with the directory")
+					}
+					Some(SymbolEnvOrNamespace::Namespace(ns)) => ns,
+					Some(SymbolEnvOrNamespace::Error(diagnostic)) => {
+						report_diagnostic(Diagnostic {
+							span: Some(stmt.span()),
+							..diagnostic.clone()
+						});
+						return;
+					}
+					None => {
+						self.spanned_error(
+							stmt,
+							format!("Could not type check \"{}\" due to cyclic bring statements", name),
+						);
+						return;
+					}
+				};
+				if let Err(e) = env.define(
+					identifier.as_ref().unwrap(),
+					SymbolKind::Namespace(*brought_ns),
 					StatementIdx::Top,
 				) {
 					self.type_error(e);
@@ -4178,7 +4420,7 @@ impl<'a> TypeChecker<'a> {
 						self.spanned_error(
 							&stmt.map(|s| s.span.clone()).unwrap_or_default(),
 							format!(
-								"Cannot find module \"{}\" in source directory: {}",
+								"Cannot find jsii module \"{}\" in source directory: {}",
 								library_name, type_error
 							),
 						);
@@ -4574,7 +4816,7 @@ impl<'a> TypeChecker<'a> {
 				if let SymbolKind::Namespace(_) = symbol_kind {
 					let mut new_udt = base_udt.clone();
 					new_udt.fields.push(Symbol {
-						name: "Util".to_string(),
+						name: UTIL_CLASS_NAME.to_string(),
 						span: base_udt.span.clone(),
 					});
 
@@ -5167,6 +5409,10 @@ where
 {
 	let (message, span) = match lookup_result {
 		LookupResult::NotFound(s) => (format!("Unknown symbol \"{s}\""), s.span()),
+		LookupResult::MultipleFound => (
+			format!("Ambiguous symbol \"{looked_up_object}\""),
+			looked_up_object.span(),
+		),
 		LookupResult::DefinedLater => (
 			format!("Symbol \"{looked_up_object}\" used before being defined"),
 			looked_up_object.span(),

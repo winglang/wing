@@ -1,8 +1,8 @@
 import { test, expect } from "vitest";
 import { listMessages } from "./util";
 import * as cloud from "../../src/cloud";
+import { Simulator, Testing } from "../../src/simulator";
 import { ApiAttributes } from "../../src/target-sim/schema-resources";
-import { Simulator, Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
 
 // Handler that responds to a request with a fixed string
@@ -686,4 +686,5 @@ test("api with CORS settings responds to OPTIONS request", async () => {
   expect(response.headers.get("access-control-allow-methods")).toEqual(
     "GET,POST,PUT,DELETE,HEAD,OPTIONS"
   );
+  expect(response.headers.get("access-control-max-age")).toEqual("300");
 });

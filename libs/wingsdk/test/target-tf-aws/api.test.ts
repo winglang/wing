@@ -1,7 +1,7 @@
 import { test, expect } from "vitest";
+import { Testing } from "../../src/simulator";
 import * as tfaws from "../../src/target-tf-aws";
 import { Api, Function } from "../../src/target-tf-aws";
-import { Testing } from "../../src/testing";
 import { mkdtemp, tfResourcesOfCount } from "../util";
 
 const INFLIGHT_CODE = `async handle(name) { return "Hello, World"; }`;

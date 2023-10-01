@@ -3,9 +3,9 @@ import { ISimulatorResource } from "./resource";
 import { TestRunnerSchema, TEST_RUNNER_TYPE } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import { BaseResourceSchema } from "../simulator/simulator";
 import * as std from "../std";
 import { IInflightHost } from "../std";
-import { BaseResourceSchema } from "../testing/simulator";
 
 /**
  * Simulator implementation of `cloud.TestRunner`.

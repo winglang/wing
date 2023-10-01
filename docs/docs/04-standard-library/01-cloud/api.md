@@ -488,6 +488,7 @@ let ApiCorsOptions = cloud.ApiCorsOptions{ ... };
 | <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.allowMethods">allowMethods</a></code> | <code>MutArray&lt;<a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a>&gt;</code> | The list of allowed methods. |
 | <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.allowOrigin">allowOrigin</a></code> | <code>MutArray&lt;str&gt;</code> | The list of allowed allowOrigin. |
 | <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.exposeHeaders">exposeHeaders</a></code> | <code>MutArray&lt;str&gt;</code> | The list of exposed headers. |
+| <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.maxAge">maxAge</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | How long the browser should cache preflight request results. |
 
 ---
 
@@ -583,6 +584,19 @@ The list of exposed headers.
 ["Content-Type"]
 ```
 
+
+##### `maxAge`<sup>Optional</sup> <a name="maxAge" id="@winglang/sdk.cloud.ApiCorsOptions.property.maxAge"></a>
+
+```wing
+maxAge: duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+- *Default:* 300 seconds
+
+How long the browser should cache preflight request results.
+
+---
 
 ### ApiDeleteProps <a name="ApiDeleteProps" id="@winglang/sdk.cloud.ApiDeleteProps"></a>
 

@@ -1,8 +1,8 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
 import { Function } from "../../src/cloud";
+import { Testing } from "../../src/simulator";
 import * as tfazure from "../../src/target-tf-azure";
-import { Testing } from "../../src/testing";
 import { mkdtemp, tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
