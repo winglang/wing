@@ -23,7 +23,6 @@ env:
   MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
   REPO: ${{ inputs.repo || github.repository }}
   REF: ${{ inputs.ref || github.ref }}
-  ALLOWED_USERS: ("tsuf239" "MarkMcCulloh" "eladb" "revitalbarletz" "ShaiBer" "Chriscbr" "hasanaburayyan" "staycoolcall911" "ekeren")
   PNPM_VERSION: "8.6.3"
 
 jobs:
