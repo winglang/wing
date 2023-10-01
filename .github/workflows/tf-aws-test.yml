@@ -32,12 +32,13 @@ jobs:
       - name: test if is maintainer
         uses: tspascoal/get-user-teams-membership@v2
         id: testUserGroup
+        if: ${{ env.MANUAL == 'true' }}
         with:
           username: ${{ github.actor }}
           team: "maintainers"
           GITHUB_TOKEN: ${{ secrets.GH_GROUPS_READ_TOKEN }}
       - name: cancel run if not allowed
-        if: ${{ env.MANUAL == 'true' && steps.testUserGroup.outputs.isTeamMember == 'false'}}
+        if: ${{ env.MANUAL == 'true' && steps.testUserGroup.outputs.isTeamMember == 'false' }}
         run: |
           echo "User ${{github.actor}} is not allowed to dispatch this action."
           exit 1
