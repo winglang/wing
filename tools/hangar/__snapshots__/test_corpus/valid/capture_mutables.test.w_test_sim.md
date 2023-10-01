@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ capture_mutables.test.wsim (no tests)
+pass ─ capture_mutables.test.wsim » root/env0/test:main
  
  
 Tests 1 passed (1)

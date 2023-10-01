@@ -2,7 +2,15 @@
 
 ## stdout.log
 ```log
-pass ─ logging.test.wsim (no tests)
+pass ┌ logging.test.wsim » root/env0/test:logging
+     │ hello world
+     │ log inside f1
+     │ log inside f2
+     │ log inside f1
+     │ hello world
+     │ log inside f1
+     │ log inside f2
+     └ log inside f1
  
  
 Tests 1 passed (1)

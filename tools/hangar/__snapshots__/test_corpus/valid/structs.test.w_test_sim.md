@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ structs.test.wsim (no tests)
+pass ─ structs.test.wsim » root/env0/test:struct definitions are phase independant
  
  
 Tests 1 passed (1)

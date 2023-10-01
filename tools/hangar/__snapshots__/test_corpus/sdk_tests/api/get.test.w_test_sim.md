@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ get.test.wsim (no tests)
+pass ─ get.test.wsim » root/env0/test:http.get and http.fetch can preform a call to an api
  
  
 Tests 1 passed (1)

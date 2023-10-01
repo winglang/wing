@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ redis.test.wsim (no tests)
+pass ─ redis.test.wsim » root/env0/test:testing Redis
  
  
 Tests 1 passed (1)

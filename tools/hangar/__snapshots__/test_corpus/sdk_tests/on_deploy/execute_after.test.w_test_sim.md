@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ execute_after.test.wsim (no tests)
+pass ─ execute_after.test.wsim » root/env0/test:counter
  
  
 Tests 1 passed (1)

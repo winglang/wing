@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ try_get.test.wsim (no tests)
+pass ─ try_get.test.wsim » root/env0/test:tryGet
  
  
 Tests 1 passed (1)

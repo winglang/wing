@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ optionals.test.wsim (no tests)
+pass ─ optionals.test.wsim » root/env0/test:t
  
  
 Tests 1 passed (1)

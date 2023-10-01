@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ sqrt.test.wsim (no tests)
+pass ─ sqrt.test.wsim » root/env0/test:inflight square root
  
  
 Tests 1 passed (1)

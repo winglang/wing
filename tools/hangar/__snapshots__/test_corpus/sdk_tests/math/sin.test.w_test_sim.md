@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ sin.test.wsim (no tests)
+pass ─ sin.test.wsim » root/env0/test:inflight sine
  
  
 Tests 1 passed (1)

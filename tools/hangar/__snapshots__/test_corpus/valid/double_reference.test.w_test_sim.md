@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ double_reference.test.wsim (no tests)
+pass ─ double_reference.test.wsim » root/env0/test:hello
  
  
 Tests 1 passed (1)

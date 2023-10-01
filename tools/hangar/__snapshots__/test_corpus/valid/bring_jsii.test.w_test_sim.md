@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ bring_jsii.test.wsim (no tests)
+pass ─ bring_jsii.test.wsim » root/env0/test:sayHello
  
  
 Tests 1 passed (1)

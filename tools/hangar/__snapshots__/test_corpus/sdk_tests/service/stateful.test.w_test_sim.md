@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ stateful.test.wsim (no tests)
+pass ─ stateful.test.wsim » root/env0/test:service is ready only after onStart finishes
  
  
 Tests 1 passed (1)
