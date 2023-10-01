@@ -38,7 +38,7 @@ $ wing run|it [entrypoint]
 
 :::note Default Entrypoint
 
-It's possible to execute `wing run|it` without specifying any entrypoint, in which case the CLI looks for exactly one file named `main.w` or ending with `.main.w` in the current directory. If no files or more than one file are found, the CLI throws an error.
+By default, `wing run|it` will look for exactly one file named `main.w` or ending with `.main.w`
 
 :::
 
