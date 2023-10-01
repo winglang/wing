@@ -36,7 +36,16 @@ describe("printing test reports", () => {
 });
 
 describe("test options", () => {
-  test("--test-filter <regex>", () => {
+  test("wing test (no filter)", () => {
+    const filteredTests = pickOneTestPerEnvironment(filterTests(EXAMPLE_UNFILTERED_TESTS));
+
+    expect(filteredTests.length).toBe(3);
+    expect(filteredTests[0]).toBe("root/env0/test:get()");
+    expect(filteredTests[1]).toBe("root/env1/test:get:At()");
+    expect(filteredTests[2]).toBe("root/env2/test:stringify()");
+  });
+
+  test("wing test --test-filter <regex>", () => {
     const filteredTests = pickOneTestPerEnvironment(filterTests(EXAMPLE_UNFILTERED_TESTS, "get"));
 
     expect(filteredTests.length).toBe(2);

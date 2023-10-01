@@ -250,19 +250,19 @@ function noCleanUp(synthDir: string) {
   );
 }
 
-export function filterTests(tests: string[], regexString?: string): string[] {
+export function filterTests(tests: Array<string>, regexString?: string): Array<string> {
   if (regexString) {
     const regex = new RegExp(regexString);
-    tests = tests.filter((test) => {
+    return tests.filter((test) => {
       // Extract test name from the string
       // root/env0/test:<testName>
       const firstColonIndex = test.indexOf(":");
       const testName = test.substring(firstColonIndex + 1);
       return testName ? regex.test(testName) : false;
     });
+  } else {
+    return tests;
   }
-
-  return tests;
 }
 
 async function testSimulator(synthDir: string, options: TestOptions) {
@@ -272,9 +272,7 @@ async function testSimulator(synthDir: string, options: TestOptions) {
 
   const testRunner = s.getResource("root/cloud.TestRunner") as std.ITestRunnerClient;
   const tests = await testRunner.listTests();
-  const filteredTests = testFilter
-    ? pickOneTestPerEnvironment(filterTests(tests, testFilter))
-    : pickOneTestPerEnvironment(tests);
+  const filteredTests = pickOneTestPerEnvironment(filterTests(tests, testFilter));
   const results = new Array<std.TestResult>();
   // TODO: run these tests in parallel
   for (const path of filteredTests) {
@@ -315,9 +313,7 @@ async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.T
       const testRunner = new TestRunnerClient(testArns);
 
       const tests = await testRunner.listTests();
-      const filteredTests = testFilter
-        ? pickOneTestPerEnvironment(filterTests(tests, testFilter))
-        : pickOneTestPerEnvironment(tests);
+      const filteredTests = pickOneTestPerEnvironment(filterTests(tests, testFilter));
       return [testRunner, filteredTests];
     });
 
@@ -404,9 +400,7 @@ async function testTfAws(synthDir: string, options: TestOptions): Promise<std.Te
       const testRunner = new TestRunnerClient(testArns);
 
       const tests = await testRunner.listTests();
-      const filteredTests = testFilter
-        ? pickOneTestPerEnvironment(filterTests(tests, testFilter))
-        : pickOneTestPerEnvironment(tests);
+      const filteredTests = pickOneTestPerEnvironment(filterTests(tests, testFilter));
       return [testRunner, filteredTests];
     });
 
