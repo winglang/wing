@@ -24,7 +24,7 @@ const getInstallArgs = async () => {
       "install",
       "--no-package-lock",
       "--install-links=false",
-      process.env.HANGAR_WING_VERSION
+      process.env.HANGAR_WINGLANG_PACKAGE!
     ];
   }
 
