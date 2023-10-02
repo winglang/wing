@@ -86,6 +86,7 @@ where
 				BringSource::BuiltinModule(name) => BringSource::BuiltinModule(f.fold_symbol(name)),
 				BringSource::JsiiModule(name) => BringSource::JsiiModule(f.fold_symbol(name)),
 				BringSource::WingFile(name) => BringSource::WingFile(f.fold_symbol(name)),
+				BringSource::Directory(name) => BringSource::Directory(f.fold_symbol(name)),
 			},
 			identifier: identifier.map(|id| f.fold_symbol(id)),
 		},

@@ -10,13 +10,13 @@ This topic includes contribution guidelines related to the Wing SDK, the package
 
 The SDK resides in `libs/wingsdk`. It's written in TypeScript, and is published to npm.
 
+From within the SDK directory you can build it using `pnpm build`. You can also just run the tests with `pnpm test`.
+
 The SDK is built using a couple of extra libraries and tools:
 
 * [CDK for Terraform] ("cdktf") is a framework for defining Terraform infrastructure. The SDK uses it to generate the Terraform files that users deploy.
 * [JSII] is a tool we used to compile the SDK. JSII is a wrapper over TypeScript that makes it possible to use the SDK in other languages like Python, Java, C#, and Go. This is made possible through extra type checks. In practice, the main difference from ordinary TypeScript is that you cannot use advanced TypeScript types like `Partial` or generics in public APIs.
 * [Projen] is a tool used to manage project configuration files. It uses the `.projenrc.ts` file to generate `package.json` and other files. You can modify it and run `pnpm projen` to regenerate the resources. If you are not touching configuration files, you can totally ignore this.
-
-Everything in the SDK can be built by running `pnpm build` from `libs/wingsdk`. You can also run `pnpm test` to just run tests.
 
 In order to work on the source code, you will need to the build at least once so that TypeScript bindings for Terraform resources will be automatically generated.
 These files are not checked in because they are quite large.
@@ -65,7 +65,7 @@ One that has finished, you can run `pnpm build` and the new bindings should be g
 
 A resource in the SDK has several parts:
 
-* A preflight [polycon](https://github.com/winglang/polycons) API that is shared across all cloud targets. Resource polycons are defined in `src/cloud`. For example, [`src/cloud/bucket.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/src/cloud/bucket.ts).
+* A set of base APIs that must be implemented by all cloud targets. Typically the resource's preflight APIs correspond to a base class in TypeScript, and the resource's inflight APIs correspond to an interface in TypeScript. These are defined in `src/cloud` or `src/ex`. For example, [`src/cloud/bucket.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/src/cloud/bucket.ts).
 * An interface representing the inflight API common across all cloud targets. By convention, if the resource is named like `Gizmo`, the inflight interface should be named `IGizmoClient`. This is usually in the same file as the preflight API.
 * A simulator implementation in `src/sim`. This includes:
   * A schema with information to simulate the resource and display the resource in the Wing console. Currently these are in [`src/sim/schema-resources.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/src/sim/schema-resources.ts).
@@ -137,23 +137,12 @@ Constructs with the same parent are required to have different ids.
 
 When a tree of constructs all implement a method like `toTerraform()`, then it is possible to traverse the construct tree and aggregate the result of calling the method on each construct in order to synthesize a result or artifact.
 
-### Polycons
+### Target-specific classes
 
-In order to model resources that are implemented differently for each cloud provider, the SDK also uses [polycons](https://github.com/winglang/polycons), a [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) framework designed to work with constructs.
+In order to model resources that are implemented differently for each compiler target, the SDK uses a form of [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection).
 
-Using polycons, the SDK resources are structured as follows:
-
-* Each resource has a polycon class defined in the `cloud` namespace with the API that is shared across all cloud implementations (e.g. `cloud.Bucket`).
-  In order to work with polycons, any shared properties and methods expected to exist on all classes must be defined on a base clase like `cloud.BucketBase`, and then we have `cloud.Bucket` extending `cloud.BucketBase`.
-  Each polycon also has a unique polycon type name needed for polycons to perform dependency injection on them.
-* Each cloud target can implement a polycon by defining a class that extends the polycon base class (e.g. `tfaws.Bucket` extends `cloud.BucketBase`).
-* Each cloud target defines a [polycon factory](https://github.com/winglang/polycons/blob/main/API.md#ipolyconfactory-) that defines the concrete mapping from polycon type names to polycon implementations.
-* Each cloud target has a unique `App` construct that specifies logic for synthesizing a one or more types of constructs.
-  It also registers the cloud target's polycon factory to that node on the construct tree.
-
-Through polycons, when a user writes `new cloud.Bucket()` within the scope of an AWS `App`, the constructor of `cloud.Bucket` will automatically look up the polycon factory associated with the construct tree, and call the factory's `resolve` method to produce the class instance specific to that cloud target (`new tfaws.Bucket()`), and return that back to the caller.
-
-Each `App` class has an automatically registered polycon factory, but it's possible to pass a custom factory in `new App(...)` that builds on top of (or overrides) the original factory to support more polycons, or different resolution behavior.
+Each target has its own internal class named `App`, and the `App` class implements a method named `tryNew` that is responsible for taking the fully name of a class (like `@winglang/sdk.cloud.Bucket`) and instantiating the relevant class for that target (like `@winglang/sdk.tfaws.Bucket`).
+See [src/target-tf-aws/app.ts](https://github.com/winglang/wing/blob/6d29256892c6362b823c9369f3ec0560ee69697a/libs/wingsdk/src/target-tf-aws/app.ts#L75-L81) for an example.
 
 ### Inflights
 

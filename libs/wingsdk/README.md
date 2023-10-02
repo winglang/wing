@@ -37,7 +37,7 @@ Then use `wing compile` to compile your program to different clouds. Run `wing c
 
 ### As a TypeScript/JavaScript Library
 
-The Wing SDK can be used just like ordinary [CDK for TF Constructs](https://github.com/hashicorp/terraform-cdk), with the distinctions that the resources are polymorphic and their concrete implementations are determined at synth time. See [Polycons](https://github.com/winglang/polycons) for more details.
+The Wing SDK can be used just like ordinary [CDK for TF Constructs](https://github.com/hashicorp/terraform-cdk).
 
 ```ts
 import { Construct } from "constructs";

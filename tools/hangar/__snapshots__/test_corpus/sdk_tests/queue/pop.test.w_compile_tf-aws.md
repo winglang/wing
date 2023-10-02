@@ -2,7 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
-module.exports = function({ $q }) {
+module.exports = function({ $q, $timeout, $util_Util }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -13,6 +13,7 @@ module.exports = function({ $q }) {
       (await $q.push("Foo","Bar"));
       const first = (await $q.pop());
       const second = (await $q.pop());
+      (await $util_Util.sleep($timeout));
       const third = (await $q.pop());
       {((cond) => {if (!cond) throw new Error("assertion failed: first == \"Foo\" || first == \"Bar\"")})(((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(first,"Foo")) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(first,"Bar"))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: second == \"Foo\" || second == \"Bar\"")})(((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(second,"Foo")) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(second,"Bar"))))};
@@ -62,7 +63,8 @@ module.exports = function({ $q }) {
             "uniqueId": "cloudQueue"
           }
         },
-        "name": "cloud-Queue-c86e03d8"
+        "name": "cloud-Queue-c86e03d8",
+        "visibility_timeout_seconds": 3
       }
     }
   }
@@ -77,6 +79,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
+const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -89,6 +92,8 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("./inflight.$Closure1-1.js")({
             $q: ${context._lift(q)},
+            $timeout: ${context._lift(timeout)},
+            $util_Util: ${context._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }
@@ -109,11 +114,13 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(q, host, ["pop", "push"]);
+          $Closure1._registerBindObject(timeout, host, []);
         }
         super._registerBind(host, ops);
       }
     }
-    const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
+    const timeout = (std.Duration.fromSeconds(3));
+    const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue",{ timeout: timeout });
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:pop",new $Closure1(this,"$Closure1"));
   }
 }

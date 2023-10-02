@@ -9,6 +9,7 @@ import { Json } from "../std";
 
 export class BucketClient implements IBucketClient {
   private readonly bucketName: string;
+  private readonly storageAccount: string;
   private readonly blobServiceClient: BlobServiceClient;
   private readonly containerClient: ContainerClient;
   private readonly _public: boolean;
@@ -23,6 +24,7 @@ export class BucketClient implements IBucketClient {
   ) {
     this._public = isPublic;
     this.bucketName = bucketName;
+    this.storageAccount = storageAccount;
     this.blobServiceClient =
       blobServiceClient ??
       new BlobServiceClient(
@@ -199,8 +201,18 @@ export class BucketClient implements IBucketClient {
    * @Throws if the file is not public or if object does not exist.
    */
   public async publicUrl(key: string): Promise<string> {
-    this._public; // a little help for implementing public_url later on
-    throw new Error(`publicUrl is not supported yet. (key=${key})`);
+    if (!this._public) {
+      throw new Error("Cannot provide public url for a non-public bucket");
+    }
+    if (!(await this.exists(key))) {
+      throw new Error(
+        `Cannot provide public url for a non-existent key (key=${key})`
+      );
+    }
+
+    return encodeURI(
+      `https://${this.storageAccount}.blob.core.windows.net/${this.bucketName}/${key}`
+    );
   }
 
   /**

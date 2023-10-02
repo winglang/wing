@@ -257,7 +257,7 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.from_cron-OnTick-cdafee6e_S3Object_0845743D.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
@@ -287,7 +287,7 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.from_rate-OnTick-86898773_S3Object_68EB6CB9.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
