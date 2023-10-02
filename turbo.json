@@ -106,6 +106,12 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "wing:e2e": {
+      "dependsOn": ["hangar#test"]
+    },
+    "wing:bench": {
+      "dependsOn": ["hangar#bench"]
     }
   }
 }

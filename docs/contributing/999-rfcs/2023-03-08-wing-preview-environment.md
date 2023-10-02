@@ -1,9 +1,9 @@
 ---
-title: Wing Cloud Preview Environments
+title: "#3696 Wing Cloud Preview Environments"
 description: This document describes an MVP for the first Wing Cloud product - Wing Cloud Preview Environments.
 ---
 
-# #3696 - Wing Cloud Preview Environments
+# Wing Cloud Preview Environments
 
 - **Author(s)**: @ainvoner, @skyrpex
 - **Submission Date**: 2023-08-03
@@ -90,7 +90,7 @@ PR comment example (only one entry point will be supported):
 
 | Entry Point     | Status                                                                           | Preview                                                       | Tests                                                                                                                                                  | Updated (UTC)       |
 | --------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------- |
-| main.w          | ✅ Ready ([logs](https://wing.cloud/dashboard/-account/-project/-branch/logs/build/))      | [Visit Preview](https://wing.cloud/dashboard/-account/-project/-branch) | ✅ [sanity](https://wing.cloud/dashboard/-account/-project/-branch/logs/tests/sanity) <br> ✅ [E2E](https://wing.cloud/dashboard/-account/-project/-branch/logs/tests/E2E) | Jul 31, 2023 8:01am |
+| main.w          | ✅ Ready ([logs](https://wing.cloud/dashboard/-account/-project/-branch/logs/build/))      | [Visit Preview](https://wing.cloud/dashboard/-account/-project/-branch) | ✅ [sanity](https://wing.cloud/dashboard/-account/-project/-branch/logs/tests/sanity) <br /> ✅ [E2E](https://wing.cloud/dashboard/-account/-project/-branch/logs/tests/E2E) | Jul 31, 2023 8:01am |
 | failed.main.w   | ❌ Failed ([logs](https://wing.cloud/dashboard/-account/-project/-branch/logs/build/))     |                                                               |                                                                                                                                                        | Jul 31, 2023 8:01am |
 | building.main.w | 🔄 Building ([logs](https://wing.cloud/dashboard/-account/-project/-branch/logs/build/))   |                                                               |                                                                                                                                                        | Jul 31, 2023 8:01am |
 | stale.main.w    | ⏸️ Stale ([lean more](https://wing.cloud/dashboard/-account/-project/-branch/logs/build/)) |                                                               |                                                                                                                                                        | Jul 31, 2023 8:01am |
