@@ -22,6 +22,7 @@ documents. Suggested priorities are marked inline as "(P1)", "(P2)" or "(P3)".
 
 > Reqtag: `c:workload`
 
+A "workload" describes a unit of scalable deployment. It's akin to a K8S's deployment + service + ingress, or ECS's task or fly.io's machine or ControlPlane's workload.
 Wing must support defining **containerized workloads** implemented through user-defined container
 images. Images may either be pulled from a container registry or built from a `Dockerfile` within
 the project directory.
