@@ -1,21 +1,53 @@
 name: SDK Spec AWS Tests
+run-name: SDK Spec AWS Tests (${{ inputs.repo || github.repository }}/${{inputs.ref || github.ref}})
 on:
   workflow_call: {}
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      repo:
+        type: string
+        default: winglang/wing
+        description: "Full repo name (owner/name)"
+      ref:
+        type: string
+        default: main
+        description: "Ref to checkout. Must be present in the repo input."
 
 env:
   AWS_REGION: "us-east-1"
   NODE_VERSION: "18.16.0"
   # this variable indicates wheater to use wing cli from a local version (using the current repo code)
   # or use the latest remote npm version
-  LOCAL_BUILD: ${{ github.workflow == 'build'}}
+  LOCAL_BUILD: ${{ github.workflow == 'build' }}
+  # indicates if the action triggered from a workflow_dispatch
+  MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
+  REPO: ${{ inputs.repo || github.repository }}
+  REF: ${{ inputs.ref || github.ref }}
+  PNPM_VERSION: "8.6.3"
 
 jobs:
   setup:
     runs-on: ubuntu-latest
     steps:
+      - name: test if is maintainer
+        uses: tspascoal/get-user-teams-membership@v2
+        id: testUserGroup
+        if: ${{ env.MANUAL == 'true' }}
+        with:
+          username: ${{ github.actor }}
+          team: "maintainers"
+          GITHUB_TOKEN: ${{ secrets.GH_GROUPS_READ_TOKEN }}
+      - name: cancel run if not allowed
+        if: ${{ env.MANUAL == 'true' && steps.testUserGroup.outputs.isTeamMember == 'false' }}
+        run: |
+          echo "User ${{github.actor}} is not allowed to dispatch this action."
+          exit 1
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          repository: ${{env.REPO}}
+          ref: ${{env.REF}}
+
       - name: Get list of directories and save them to the output
         id: setdirs
         shell: bash
@@ -37,6 +69,15 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          repository: ${{env.REPO}}
+          ref: ${{env.REF}}
+
+      - name: Setup pnpm
+        if: ${{ env.MANUAL ==  'true' }}
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node.js v18
         uses: actions/setup-node@v3
@@ -62,7 +103,7 @@ jobs:
 
       #################### install a remote wing version ########################
       - name: Install winglang globally
-        if: ${{ env.LOCAL_BUILD == 'false' }}
+        if: ${{ env.LOCAL_BUILD == 'false' && env.MANUAL == 'false'}}
         uses: nick-fields/retry@v2
         with:
           max_attempts: 3
@@ -91,11 +132,15 @@ jobs:
           retry_on: error
           timeout_minutes: 30
           command: |
-            if  ${{ env.LOCAL_BUILD == 'false' }}
+            if  ${{ env.MANUAL == 'true' }}
             then
+              pnpm install
+              pnpm wing test -t tf-aws ${{ matrix.test.directory }}/*.w
+            elif ${{ env.LOCAL_BUILD == 'false'}}
+            then 
               wing test -t tf-aws ${{ matrix.test.directory }}/*.w
             else
-              ./localwing/node_modules/.bin/wing test -t tf-aws ${{ matrix.test.directory }}/*.w
+            ./localwing/node_modules/.bin/wing test -t tf-aws ${{ matrix.test.directory }}/*.w
             fi
 
       - name: Output Terraform log
