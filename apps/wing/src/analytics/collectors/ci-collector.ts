@@ -5,7 +5,7 @@ export interface CIData {
 }
 
 // Map of CI environment variable identifiers to CI names
-const CI_ENV: {[key: string]: string} = {
+const CI_ENV: { [key: string]: string } = {
   // https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
   GITHUB_ACTIONS: "GITHUB_ACTIONS",
   // https://docs.gitlab.com/ee/ci/variables/predefined_variables.html
@@ -22,13 +22,13 @@ const CI_ENV: {[key: string]: string} = {
   TEAMCITY_VERSION: "TEAMCITY",
   // https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-variables.html
   CODEBUILD_BUILD_ID: "CODEBUILD",
-}
+};
 
 export class CICollector extends Collector {
   async collect(): Promise<CIData | undefined> {
     for (const e in CI_ENV) {
       if (e in process.env) {
-        return {name: CI_ENV[`${e}`]}
+        return { name: CI_ENV[`${e}`] };
       }
     }
     return undefined;

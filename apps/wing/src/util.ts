@@ -82,4 +82,5 @@ export const currentPackage: {
   name: string;
   version: string;
   engines: { node: string };
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
 } = require("../package.json");
