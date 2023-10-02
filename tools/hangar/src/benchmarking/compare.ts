@@ -101,7 +101,7 @@ export async function compareBenchmarks(
     differences[itemName].maxSD = Math.max(
       newData?.sd ?? NaN,
       oldData?.sd ?? NaN
-    );
+    ) * 1.5;
 
     differences[itemName].meanDiff =
       Math.round(
@@ -180,6 +180,12 @@ export async function compareBenchmarks(
 <summary>Comparison to Baseline ${colors}</summary>
 
 ${markdown}
+
+⬜ Within 1.5 standard deviations
+🟩 Faster, Above 1.5 standard deviations
+🟥 Slower, Above 1.5 standard deviations
+
+_Benchmarks may vary outside of normal expectations, especially when running in GitHub Actions CI._
 
 </details>
 
