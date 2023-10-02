@@ -110,7 +110,7 @@ export class BucketClient implements IBucketClient {
    */
   public async tryGet(key: string): Promise<string | undefined> {
     if (await this.exists(key)) {
-      return this.get(key);
+      return await this.get(key);
     }
 
     return undefined;
