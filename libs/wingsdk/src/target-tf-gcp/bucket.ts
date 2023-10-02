@@ -1,5 +1,6 @@
 import { Construct } from "constructs";
 import { App } from "./app";
+import { Function as GCPFunction } from "./function";
 import { StorageBucket } from "../.gen/providers/google/storage-bucket";
 import { StorageBucketIamMember } from "../.gen/providers/google/storage-bucket-iam-member";
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
@@ -31,6 +32,11 @@ const BUCKET_NAME_OPTS: NameOptions = {
   disallowedRegex: /([^a-z0-9_\-]+)/g,
   includeHash: false,
 };
+
+enum StorageBucketPermissions {
+  READ = "roles/storage.objectViewer",
+  READWRITE = "roles/storage.objectAdmin",
+}
 
 /**
  * GCP implementation of `cloud.Bucket`.
@@ -81,9 +87,26 @@ export class Bucket extends cloud.Bucket {
     });
   }
 
-  public bind(_inflightHost: IInflightHost, _ops: string[]): void {
-    // TODO: support functions once tfgcp functions are implemented
-    throw new Error("Method not implemented.");
+  public bind(host: IInflightHost, ops: string[]): void {
+    if (!(host instanceof GCPFunction)) {
+      throw new Error("buckets can only be bound by tfgcp.Function for now");
+    }
+
+    if (
+      ops.includes(cloud.BucketInflightMethods.GET) ||
+      ops.includes(cloud.BucketInflightMethods.LIST) ||
+      ops.includes(cloud.BucketInflightMethods.GET_JSON)
+    ) {
+      host.addBucketPermission(this, StorageBucketPermissions.READ);
+    } else if (
+      ops.includes(cloud.BucketInflightMethods.DELETE) ||
+      ops.includes(cloud.BucketInflightMethods.PUT) ||
+      ops.includes(cloud.BucketInflightMethods.PUT_JSON)
+    ) {
+      host.addBucketPermission(this, StorageBucketPermissions.READWRITE);
+    }
+
+    super.bind(host, ops);
   }
 
   /** @internal */

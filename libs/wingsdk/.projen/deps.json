@@ -122,6 +122,11 @@
       "type": "build"
     },
     {
+      "name": "mock-gcs",
+      "version": "^1.0.0",
+      "type": "build"
+    },
+    {
       "name": "nanoid",
       "type": "build"
     },
@@ -241,6 +246,11 @@
     {
       "name": "@azure/storage-blob",
       "version": "12.14.0",
+      "type": "bundled"
+    },
+    {
+      "name": "@google-cloud/storage",
+      "version": "6.12.0",
       "type": "bundled"
     },
     {
