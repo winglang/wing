@@ -39,10 +39,11 @@ export class Map {
    * If the value that is associated to the provided key is an object, then you will get a reference
    * to that object and any change made to that object will effectively modify it inside the map.
    *
-   * @macro ($self$)[$args$]
+   * @macro ((map, key) => { if (!(key in map)) { throw new Error("no value found for key '" + key + "'"); } return map[key]; })($self$, $args$)
    *
    * @param key The key of the element to return.
-   * @returns The element associated with the specified key, or undefined if the key can't be found
+   * @returns The element associated with the specified key
+   * @throws If the key can't be found
    */
   public get(key: string): T1 {
     key;
@@ -92,6 +93,19 @@ export class Map {
    * @returns an array of type T containing the values of this map
    */
   public values(): Array {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Returns a specified element from the map, or nil if the key can't be found
+   * 
+   * @macro ($self$)[$args$]
+   * 
+   * @param key The key of the element to return.
+   * @returns the specified element from the map, or nil if the key can't be found
+   */
+  public tryGet(key: string): T1 | undefined {
+    key;
     throw new Error("Macro");
   }
 }
@@ -162,10 +176,11 @@ export class MutMap {
    * If the value that is associated to the provided key is an object, then you will get a reference
    * to that object and any change made to that object will effectively modify it inside the map.
    *
-   * @macro ($self$)[$args$]
+   * @macro ((map, key) => { if (!(key in map)) { throw new Error("no value found for key '" + key + "'"); } return map[key]; })($self$, $args$)
    *
    * @param key The key of the element to return.
-   * @returns The element associated with the specified key, or undefined if the key can't be found
+   * @returns The element associated with the specified key
+   * @throws If the key can't be found
    */
   public get(key: string): T1 {
     key;
@@ -219,6 +234,19 @@ export class MutMap {
    * @returns an array containing of type T the values of this map
    */
   public values(): Array {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Returns a specified element from the map, or nil if the key can't be found
+   * 
+   * @macro ($self$)[$args$]
+   * 
+   * @param key The key of the element to return.
+   * @returns the specified element from the map, or nil if the key can't be found
+   */
+  public tryGet(key: string): T1 | undefined {
+    key;
     throw new Error("Macro");
   }
 }
