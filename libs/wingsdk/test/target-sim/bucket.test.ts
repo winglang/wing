@@ -708,7 +708,6 @@ test("tryDelete objects from bucket", async () => {
 
 
 // Deceided to seperate this feature in a different release,(see https://github.com/winglang/wing/issues/4143)
-// project.package.addPackageResolutions("@types/babel__traverse@7.18.2");
 
 
 // test("Given a bucket when reaching to a non existent key, signed url it should throw an error", async () => {
