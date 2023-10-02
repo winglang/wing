@@ -91,7 +91,7 @@ container registry.
 > image hasn't changed.
 >
 
-### Container runtime environment
+### Workload runtime environment
 
 > Reqtag: `c:environment`
 
@@ -110,7 +110,6 @@ The following is a non-exhaustive list of capabilities we will need to support:
 * Readiness probe (P1)
 * Sidecar containers (P2)
 * Volumes (P2)
-* Autoscaling (P1)
 * etc...
 
 Additional work is required to determine the correct surface area for this API. We recommend to try
@@ -146,6 +145,16 @@ backend to run containerized workloads:
 The default behavior for `tf-aws` should be to create a dedicated EKS cluster for the app (P1) but
 users should be able to point to an existing EKS cluster through platform configuration options
 (P2).
+
+## Autoscaling
+
+> Reqtag: `c:autoscaling`
+
+It should be possible to define autoscaling parameters for a workload. 
+
+Further research is needed to determine the desired degrees of freedom and default behavior. Ideally the default should "just work" and scale up and down elastically based on best practices and common metrics.
+
+
 
 ## Preflight object bindings
 
