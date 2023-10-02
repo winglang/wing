@@ -6,10 +6,13 @@ import { createTable } from "./table_report";
 interface ProcessedBenchData {
   mean: number;
   moe: number;
+  sd: number;
   name: string;
 }
 
-function avgBenches(benchList: any[]): Record<string, ProcessedBenchData | undefined> {
+function avgBenches(
+  benchList: any[]
+): Record<string, ProcessedBenchData | undefined> {
   const benchValues: Record<string, ProcessedBenchData[]> = {};
   for (const bench of benchList) {
     for (const item of bench) {
@@ -20,6 +23,7 @@ function avgBenches(benchList: any[]): Record<string, ProcessedBenchData | undef
         name: item.name,
         mean: item["mean"],
         moe: item["moe"],
+        sd: item["sd"],
       };
       benchValues[item.name].push(data);
     }
@@ -30,10 +34,12 @@ function avgBenches(benchList: any[]): Record<string, ProcessedBenchData | undef
     const data = benchValues[key];
     const mean = data.reduce((acc, cur) => acc + cur.mean, 0) / data.length;
     const moe = data.reduce((acc, cur) => acc + cur.moe, 0) / data.length;
+    const sd = data.reduce((acc, cur) => acc + cur.sd, 0) / data.length;
     returnData[key] = {
       name: key,
       mean,
       moe,
+      sd,
     };
   }
 
@@ -92,15 +98,29 @@ export async function compareBenchmarks(
     differences[itemName].moeAfter = newData?.moe ?? NaN;
     differences[itemName].meanAfter = newData?.mean ?? NaN;
 
+    differences[itemName].maxSD = Math.max(
+      newData?.sd ?? NaN,
+      oldData?.sd ?? NaN
+    );
+
     differences[itemName].meanDiff =
-      Math.round((differences[itemName].meanAfter - differences[itemName].meanBefore) * 100) / 100;
+      Math.round(
+        (differences[itemName].meanAfter - differences[itemName].meanBefore) *
+          100
+      ) / 100;
     differences[itemName].meanPercentDiff =
-      Math.round(((differences[itemName].meanAfter - differences[itemName].meanBefore) / differences[itemName].meanBefore) * 10000) / 100;
+      Math.round(
+        ((differences[itemName].meanAfter - differences[itemName].meanBefore) /
+          differences[itemName].meanBefore) *
+          10000
+      ) / 100;
   }
 
   // create a markdown table of the differences
   let markdown = `| Benchmark | Before | After | Change |\n`;
   markdown += `| :-- | --: | --: | --: |\n`;
+  let colors = "";
+
   for (const key in differences) {
     const diff = differences[key];
     let prependSign = "";
@@ -112,20 +132,25 @@ export async function compareBenchmarks(
       appendColor = "🟩";
     }
 
-    if (Math.abs(diff.meanDiff) <= Math.max(diff.moeBefore, diff.moeAfter)) {
+    if (Math.abs(diff.meanDiff) <= diff.maxSD) {
       appendColor = "⬜";
     }
 
+    colors += appendColor;
+
     let changeText = !!diff.meanPercentDiff
-      ? `${prependSign}${fmtNum(diff.meanDiff, "ms")} (${prependSign}${fmtNum(diff.meanPercentDiff, "%")})${appendColor}`
+      ? `${prependSign}${fmtNum(diff.meanDiff, "ms")} (${prependSign}${fmtNum(
+          diff.meanPercentDiff,
+          "%"
+        )})${appendColor}`
       : "...";
 
     let beforeText = fmtNum(diff.meanBefore, "ms");
-    if(!isNaN(diff.meanBefore)) {
+    if (!isNaN(diff.meanBefore)) {
       beforeText += `±${fmtNum(diff.moeBefore)}`;
     }
     let afterText = fmtNum(diff.meanAfter, "ms");
-    if(!isNaN(diff.meanAfter)) {
+    if (!isNaN(diff.meanAfter)) {
       afterText += `±${fmtNum(diff.moeAfter)}`;
     }
 
@@ -152,7 +177,7 @@ export async function compareBenchmarks(
 ## Benchmarks
 
 <details>
-<summary>Comparison to Baseline</summary>
+<summary>Comparison to Baseline ${colors}</summary>
 
 ${markdown}
 
