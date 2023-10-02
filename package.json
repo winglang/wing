@@ -4,7 +4,7 @@
   "devDependencies": {
     "bump-pack": "workspace:^",
     "generate-workspace": "workspace:^",
-    "turbo": "^1.10.13"
+    "turbo": "^1.10.14"
   },
   "scripts": {
     "build": "turbo compile post-compile lint eslint test package",

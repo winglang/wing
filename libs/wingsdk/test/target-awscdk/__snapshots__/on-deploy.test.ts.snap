@@ -115,11 +115,11 @@ exports[`create an OnDeploy 1`] = `
           ],
         },
         "Runtime": "nodejs18.x",
-        "Timeout": 30,
+        "Timeout": 60,
       },
       "Type": "AWS::Lambda::Function",
     },
-    "myondeployFunctionCurrentVersion6BC23754495ffbfe7093f6d76e062790f78856b0": {
+    "myondeployFunctionCurrentVersion6BC23754a188fe5d8f20d876aab6d4da7e10ca3d": {
       "Properties": {
         "FunctionName": {
           "Ref": "myondeployFunction47551748",
@@ -163,7 +163,7 @@ exports[`create an OnDeploy 1`] = `
       "Properties": {
         "ExecuteOnHandlerChange": true,
         "HandlerArn": {
-          "Ref": "myondeployFunctionCurrentVersion6BC23754495ffbfe7093f6d76e062790f78856b0",
+          "Ref": "myondeployFunctionCurrentVersion6BC23754a188fe5d8f20d876aab6d4da7e10ca3d",
         },
         "InvocationType": "RequestResponse",
         "ServiceToken": {
@@ -345,11 +345,11 @@ exports[`execute OnDeploy after other resources 1`] = `
           ],
         },
         "Runtime": "nodejs18.x",
-        "Timeout": 30,
+        "Timeout": 60,
       },
       "Type": "AWS::Lambda::Function",
     },
-    "myondeployFunctionCurrentVersion6BC23754495ffbfe7093f6d76e062790f78856b0": {
+    "myondeployFunctionCurrentVersion6BC23754a188fe5d8f20d876aab6d4da7e10ca3d": {
       "Properties": {
         "FunctionName": {
           "Ref": "myondeployFunction47551748",
@@ -396,7 +396,7 @@ exports[`execute OnDeploy after other resources 1`] = `
       "Properties": {
         "ExecuteOnHandlerChange": true,
         "HandlerArn": {
-          "Ref": "myondeployFunctionCurrentVersion6BC23754495ffbfe7093f6d76e062790f78856b0",
+          "Ref": "myondeployFunctionCurrentVersion6BC23754a188fe5d8f20d876aab6d4da7e10ca3d",
         },
         "InvocationType": "RequestResponse",
         "ServiceToken": {
@@ -581,11 +581,11 @@ exports[`execute OnDeploy before other resources 1`] = `
           ],
         },
         "Runtime": "nodejs18.x",
-        "Timeout": 30,
+        "Timeout": 60,
       },
       "Type": "AWS::Lambda::Function",
     },
-    "myondeployFunctionCurrentVersion6BC23754495ffbfe7093f6d76e062790f78856b0": {
+    "myondeployFunctionCurrentVersion6BC23754a188fe5d8f20d876aab6d4da7e10ca3d": {
       "Properties": {
         "FunctionName": {
           "Ref": "myondeployFunction47551748",
@@ -629,7 +629,7 @@ exports[`execute OnDeploy before other resources 1`] = `
       "Properties": {
         "ExecuteOnHandlerChange": true,
         "HandlerArn": {
-          "Ref": "myondeployFunctionCurrentVersion6BC23754495ffbfe7093f6d76e062790f78856b0",
+          "Ref": "myondeployFunctionCurrentVersion6BC23754a188fe5d8f20d876aab6d4da7e10ca3d",
         },
         "InvocationType": "RequestResponse",
         "ServiceToken": {

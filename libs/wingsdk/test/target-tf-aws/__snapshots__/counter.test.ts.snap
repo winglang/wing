@@ -300,7 +300,7 @@ exports[`dec() policy statement 1`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -602,7 +602,7 @@ exports[`function with a counter binding 2`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -861,7 +861,7 @@ exports[`inc() policy statement 1`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -1120,7 +1120,7 @@ exports[`peek() policy statement 1`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -1501,7 +1501,7 @@ exports[`set() policy statement 1`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
