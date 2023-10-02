@@ -14,11 +14,6 @@ export interface IInflightHost extends IResource {
    * Adds an environment variable to the host.
    */
   addEnvironment(name: string, value: string): void;
-
-  /**
-   * Returns the set of environment variables for this host.
-   */
-  get env(): Record<string, string>;
 }
 
 /**
