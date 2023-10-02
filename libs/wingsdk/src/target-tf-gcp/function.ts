@@ -4,6 +4,7 @@ import { Construct } from "constructs";
 import { App } from "./app";
 import { Bucket } from "./bucket";
 import { CloudfunctionsFunction } from "../.gen/providers/google/cloudfunctions-function";
+import { StorageBucketIamMember } from "../.gen/providers/google/storage-bucket-iam-member";
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
 import * as cloud from "../cloud";
 import { createBundle } from "../shared/bundling";
@@ -13,7 +14,6 @@ import {
   ResourceNames,
 } from "../shared/resource-names";
 import { IInflightHost } from "../std";
-import { StorageBucketIamMember } from "../.gen/providers/google/storage-bucket-iam-member";
 
 const FUNCTION_NAME_OPTS: NameOptions = {
   maxLen: 32,
@@ -34,7 +34,8 @@ enum StorageBucketPermissions {
 
 export class Function extends cloud.Function {
   private readonly function: CloudfunctionsFunction;
-  private readonly bucketPermission: Map<string, StorageBucketIamMember> = new Map<string, StorageBucketIamMember>();
+  private readonly bucketPermission: Map<string, StorageBucketIamMember> =
+    new Map<string, StorageBucketIamMember>();
 
   constructor(
     scope: Construct,
@@ -119,7 +120,6 @@ export class Function extends cloud.Function {
     bucket: Bucket,
     permission: StorageBucketPermissions
   ): void {
-
     const app = App.of(this) as App;
 
     // check if the permission is already set
@@ -129,20 +129,33 @@ export class Function extends cloud.Function {
 
     // as gcp bucket has unique name, we can use bucket name in map as unique id along with permission
     if (permission === StorageBucketPermissions.READ) {
-      let newReadPermission = new StorageBucketIamMember(this, "BucketPermissionToRead", {
-        bucket: bucket.bucket.name,
-        role: "roles/storage.objectViewer",
-        member: `projectViewer:${app.projectId}`,
-      });
-      this.bucketPermission.set(`${bucket.bucket.name}-${StorageBucketPermissions.READ}`, newReadPermission);
-    }
-    else if (permission === StorageBucketPermissions.READWRITE) {
-      let newReadWritePermission = new StorageBucketIamMember(this, "BucketPermissionToWrite", {
-        bucket: bucket.bucket.name,
-        role: "roles/storage.objectAdmin",
-        member: `projectEditor:${app.projectId}`,
-      });
-      this.bucketPermission.set(`${bucket.bucket.name}-${StorageBucketPermissions.READWRITE}`, newReadWritePermission);
+      let newReadPermission = new StorageBucketIamMember(
+        this,
+        "BucketPermissionToRead",
+        {
+          bucket: bucket.bucket.name,
+          role: "roles/storage.objectViewer",
+          member: `projectViewer:${app.projectId}`,
+        }
+      );
+      this.bucketPermission.set(
+        `${bucket.bucket.name}-${StorageBucketPermissions.READ}`,
+        newReadPermission
+      );
+    } else if (permission === StorageBucketPermissions.READWRITE) {
+      let newReadWritePermission = new StorageBucketIamMember(
+        this,
+        "BucketPermissionToWrite",
+        {
+          bucket: bucket.bucket.name,
+          role: "roles/storage.objectAdmin",
+          member: `projectEditor:${app.projectId}`,
+        }
+      );
+      this.bucketPermission.set(
+        `${bucket.bucket.name}-${StorageBucketPermissions.READWRITE}`,
+        newReadWritePermission
+      );
     }
   }
 

@@ -1,5 +1,6 @@
 import { Construct } from "constructs";
 import { App } from "./app";
+import { Function as GCPFunction } from "./function";
 import { StorageBucket } from "../.gen/providers/google/storage-bucket";
 import { StorageBucketIamMember } from "../.gen/providers/google/storage-bucket-iam-member";
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
@@ -11,7 +12,6 @@ import {
   ResourceNames,
 } from "../shared/resource-names";
 import { IInflightHost } from "../std";
-import { Function as GCPFunction } from "./function";
 
 /**
  * Bucket names must be between 3 and 63 characters. We reserve 9 characters for
@@ -92,14 +92,17 @@ export class Bucket extends cloud.Bucket {
       throw new Error("buckets can only be bound by tfgcp.Function for now");
     }
 
-    if (ops.includes(cloud.BucketInflightMethods.GET) ||
+    if (
+      ops.includes(cloud.BucketInflightMethods.GET) ||
       ops.includes(cloud.BucketInflightMethods.LIST) ||
-      ops.includes(cloud.BucketInflightMethods.GET_JSON)) {
+      ops.includes(cloud.BucketInflightMethods.GET_JSON)
+    ) {
       host.addBucketPermission(this, StorageBucketPermissions.READ);
-    }
-    else if (ops.includes(cloud.BucketInflightMethods.DELETE) ||
+    } else if (
+      ops.includes(cloud.BucketInflightMethods.DELETE) ||
       ops.includes(cloud.BucketInflightMethods.PUT) ||
-      ops.includes(cloud.BucketInflightMethods.PUT_JSON)) {
+      ops.includes(cloud.BucketInflightMethods.PUT_JSON)
+    ) {
       host.addBucketPermission(this, StorageBucketPermissions.READWRITE);
     }
 

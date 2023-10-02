@@ -8,7 +8,12 @@ export class BucketClient implements IBucketClient {
   private storage: Storage;
   private bucket: Bucket;
 
-  constructor(bucketName: string, isPublic: boolean = false, storage: Storage, projectId: string = process.env.GCP_PROJECT_ID || "wingsdk-test") {
+  constructor(
+    bucketName: string,
+    isPublic: boolean = false,
+    storage: Storage,
+    projectId: string = process.env.GCP_PROJECT_ID || "wingsdk-test"
+  ) {
     this._public = isPublic;
     this.bucketName = bucketName;
     this.storage = storage ? storage : new Storage({ projectId: projectId });
@@ -97,8 +102,10 @@ export class BucketClient implements IBucketClient {
    */
   public async getJson(key: string): Promise<Json> {
     try {
-      if (!await this.exists(key)) {
-        throw new Error(`Cannot get JSON object that does not exist. (key=${key})`);
+      if (!(await this.exists(key))) {
+        throw new Error(
+          `Cannot get JSON object that does not exist. (key=${key})`
+        );
       }
       return JSON.parse(await this.get(key));
     } catch (error) {
@@ -129,11 +136,16 @@ export class BucketClient implements IBucketClient {
    * @param key Key of the object
    * @param opts Option object supporting additional strategies to delete item from a bucket
    */
-  public async delete(key: string, opts: BucketDeleteOptions = {}): Promise<void> {
+  public async delete(
+    key: string,
+    opts: BucketDeleteOptions = {}
+  ): Promise<void> {
     const mustExist = opts.mustExist === undefined ? true : opts.mustExist;
     try {
       if (mustExist && !(await this.exists(key))) {
-        throw new Error(`Cannot delete object that does not exist. (key=${key})`);
+        throw new Error(
+          `Cannot delete object that does not exist. (key=${key})`
+        );
       }
       await this.bucket.file(key).delete();
     } catch (error) {
@@ -182,8 +194,10 @@ export class BucketClient implements IBucketClient {
       throw new Error(`Cannot provide public URL for a non-public bucket`);
     }
     try {
-      if (!await this.exists(key)) {
-        throw new Error(`Cannot get public URL for a non-existent object. (key=${key})`);
+      if (!(await this.exists(key))) {
+        throw new Error(
+          `Cannot get public URL for a non-existent object. (key=${key})`
+        );
       }
       return `https://storage.googleapis.com/${this.bucketName}/${key}`;
     } catch (error) {

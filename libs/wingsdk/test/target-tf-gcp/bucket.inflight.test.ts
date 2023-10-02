@@ -1,7 +1,7 @@
 import { MockStorage } from "mock-gcs";
-import { BucketClient } from "../../src/target-tf-gcp/bucket.inflight";
 import { vi, test, beforeEach, expect } from "vitest";
 import { Duration } from "../../src/std";
+import { BucketClient } from "../../src/target-tf-gcp/bucket.inflight";
 
 vi.mock("@google-cloud/storage", () => ({
   Storage: MockStorage,
@@ -27,7 +27,7 @@ test("put object to bucket", async () => {
 test("putJson an object into the bucket", async () => {
   const BUCKET_NAME = "test-bucket";
   const KEY = "test-file-1";
-  const VALUE = { "cool": "beans" };
+  const VALUE = { cool: "beans" };
 
   const storage = new MockStorage();
 
@@ -67,7 +67,7 @@ test("get a non-existent object from the bucket", async () => {
 test("getJson an object from the bucket", async () => {
   const BUCKET_NAME = "test-bucket";
   const KEY = "test-file-1";
-  const VALUE = { "cool": "beans" };
+  const VALUE = { cool: "beans" };
 
   const storage = new MockStorage();
   storage.bucket(BUCKET_NAME).put(KEY, JSON.stringify(VALUE));
@@ -114,9 +114,9 @@ test("delete object from the bucket with mustExist option", async () => {
 
   const client = new BucketClient(BUCKET_NAME, false, storage as any);
 
-  await expect(() => client.delete(NON_EXISTENT_KEY, { mustExist: true })).rejects.toThrowError(
-    `Failed to delete object. (key=${NON_EXISTENT_KEY})`
-  );
+  await expect(() =>
+    client.delete(NON_EXISTENT_KEY, { mustExist: true })
+  ).rejects.toThrowError(`Failed to delete object. (key=${NON_EXISTENT_KEY})`);
 });
 
 test("delete a non-existent object from the bucket with mustExist option", async () => {
@@ -127,9 +127,9 @@ test("delete a non-existent object from the bucket with mustExist option", async
 
   const client = new BucketClient(BUCKET_NAME, false, storage as any);
 
-  await expect(() => client.delete(NON_EXISTENT_KEY, { mustExist: true })).rejects.toThrowError(
-    `Failed to delete object. (key=${NON_EXISTENT_KEY})`
-  );
+  await expect(() =>
+    client.delete(NON_EXISTENT_KEY, { mustExist: true })
+  ).rejects.toThrowError(`Failed to delete object. (key=${NON_EXISTENT_KEY})`);
 });
 
 test("Given a non public bucket when reaching to a key public url it should throw an error", async () => {
@@ -155,7 +155,7 @@ test("Given a public bucket when reaching to a non existent key, public url it s
   await expect(() => client.publicUrl(KEY)).rejects.toThrowError(
     `Failed to get public URL. (key=${KEY})`
   );
-})
+});
 
 test("Given a public bucket, when giving one of its keys, we should get its public url", async () => {
   const BUCKET_NAME = "test-bucket";
@@ -183,7 +183,7 @@ test("check that an object exists in the bucket", async () => {
   const res = await client.exists(KEY);
 
   expect(res).toBe(true);
-})
+});
 
 test("check that an object doesn't exist in the bucket", async () => {
   const BUCKET_NAME = "test-bucket";
@@ -195,7 +195,7 @@ test("check that an object doesn't exist in the bucket", async () => {
   const res = await client.exists(KEY);
 
   expect(res).toBe(false);
-})
+});
 
 test("tryGet an existing object from the bucket", async () => {
   const BUCKET_NAME = "test-bucket";
@@ -209,7 +209,7 @@ test("tryGet an existing object from the bucket", async () => {
   const res = await client.tryGet(KEY);
 
   expect(res).toBe(VALUE);
-})
+});
 
 test("tryGet a non-existent object from the bucket", async () => {
   const BUCKET_NAME = "test-bucket";
@@ -226,7 +226,7 @@ test("tryGet a non-existent object from the bucket", async () => {
 test("tryGetJson an existing object from the bucket", async () => {
   const BUCKET_NAME = "test-bucket";
   const KEY = "test-file-1";
-  const VALUE = { "cool": "beans" };
+  const VALUE = { cool: "beans" };
 
   const storage = new MockStorage();
   storage.bucket(BUCKET_NAME).put(KEY, JSON.stringify(VALUE));
@@ -262,7 +262,7 @@ test("tryGetJson an existing non-Json object from the bucket", async () => {
   await expect(() => client.tryGetJson(KEY)).rejects.toThrowError(
     `Failed to tryGet JSON object. (key=${KEY})`
   );
-})
+});
 
 test("tryDelete an existing object from the bucket", async () => {
   const BUCKET_NAME = "test-bucket";
@@ -289,4 +289,3 @@ test("tryDelete a non-existent object from the bucket", async () => {
 
   expect(res).toBe(false);
 });
-
