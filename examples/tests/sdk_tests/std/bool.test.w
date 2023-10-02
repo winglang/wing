@@ -3,14 +3,14 @@ let assertThrows = (expected: str, block: (): void) => {
   try {
     block();
   } catch actual {
-    assert(actual == expected);
+    assert(actual.contains(expected));
     error = true;
   }
 
   assert(error);
 };
 
-let PARSE_ERROR = "unable to parse number 123 as a boolean";
+let PARSE_ERROR = "unable to parse bool";
 
 //-----------------------------------------------------------------------------
 // fromJson
@@ -32,5 +32,5 @@ test "fromJson()" {
   let f = bool.fromJson(Json.parse("false"));
   assert(f == false);
 
-  try { bool.fromJson(Json 123); } catch s { assert(s == PARSE_ERROR); }
+  try { bool.fromJson(Json 123); } catch s { assert(s.contains(PARSE_ERROR)); }
 }
