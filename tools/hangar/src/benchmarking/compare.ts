@@ -111,6 +111,11 @@ export async function compareBenchmarks(
     } else if (diff.meanDiff <= 0) {
       appendColor = "🟩";
     }
+
+    if (Math.abs(diff.meanDiff) <= Math.max(diff.moeBefore, diff.moeAfter)) {
+      appendColor = "⬜";
+    }
+
     let changeText = !!diff.meanPercentDiff
       ? `${prependSign}${fmtNum(diff.meanDiff, "ms")} (${prependSign}${fmtNum(diff.meanPercentDiff, "%")})${appendColor}`
       : "...";
@@ -147,16 +152,16 @@ export async function compareBenchmarks(
 ## Benchmarks
 
 <details>
-<summary>Results</summary>
+<summary>Comparison to Baseline</summary>
 
-${createTable(targetResult[0])}
+${markdown}
 
 </details>
 
 <details>
-<summary>Comparison to ${previousSource}</summary>
+<summary>Results</summary>
 
-${markdown}
+${createTable(targetResult[0])}
 
 </details>
 
