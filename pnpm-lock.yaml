@@ -1204,9 +1204,6 @@ importers:
       '@types/node':
         specifier: ^18
         version: 18.17.13
-      '@types/stream-buffers':
-        specifier: ^3.0.5
-        version: 3.0.5
       '@types/uuid':
         specifier: ^9.0.3
         version: 9.0.3
@@ -1285,9 +1282,6 @@ importers:
       standard-version:
         specifier: ^9
         version: 9.5.0
-      stream-buffers:
-        specifier: ^3.0.2
-        version: 3.0.2
       ts-node:
         specifier: ^10.9.1
         version: 10.9.1(@types/node@18.17.13)(typescript@4.9.5)
@@ -9454,12 +9448,6 @@ packages:
     resolution: {integrity: sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==}
     dev: true
 
-  /@types/stream-buffers@3.0.5:
-    resolution: {integrity: sha512-mEKCVRgR+0fM3FUcywARE6J50sz++u/KQL5sBMJKFzLTyX/WsKN2THr7vMic6fWoFfT454LXOnJYUMp8ANNBMw==}
-    dependencies:
-      '@types/node': 18.17.13
-    dev: true
-
   /@types/triple-beam@1.3.2:
     resolution: {integrity: sha512-txGIh+0eDFzKGC25zORnswy+br1Ha7hj5cMVwKIU7+s0U2AxxJru/jZSMU6OC9MJWP6+pc/hc6ZjyZShpsyY2g==}
     requiresBuild: true
@@ -12816,7 +12804,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20230926
+      typescript: 5.3.0-dev.20231002
     dev: true
 
   /dset@3.1.2:
@@ -22013,8 +22001,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20230911:
-    resolution: {integrity: sha512-2iI2l7OuGvU668gBje+JQKE8bsf7SH8w8ScwUkENHCcrbaDpXa/Oqfuwq5gdFM7SfVfp5p6c8kHZRMvL+kabJg==}
+  /typescript@5.3.0-dev.20231002:
+    resolution: {integrity: sha512-TQXM13rrDgID8W4Ok4KDQAqwLUjLcAXL+NKv0zJiIEQfa0bOM0yoRiSgvcjaCJ4lZT4bScrq3vHspVM2x8rkOQ==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
