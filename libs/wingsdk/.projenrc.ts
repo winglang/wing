@@ -114,8 +114,6 @@ const project = new cdk.JsiiProject({
     "@types/aws-lambda",
     "@types/fs-extra",
     "@types/mime-types",
-    "@types/stream-buffers",
-    "stream-buffers@^3.0.2",
     "mock-gcs@^1.0.0",
     "@types/express",
     "aws-sdk-client-mock",

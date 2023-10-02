@@ -1,6 +1,5 @@
 import { MockStorage } from "mock-gcs";
 import { vi, test, beforeEach, expect } from "vitest";
-import { Duration } from "../../src/std";
 import { BucketClient } from "../../src/target-tf-gcp/bucket.inflight";
 
 vi.mock("@google-cloud/storage", () => ({

@@ -27,10 +27,6 @@
       "type": "build"
     },
     {
-      "name": "@types/stream-buffers",
-      "type": "build"
-    },
-    {
       "name": "@types/uuid",
       "type": "build"
     },
@@ -150,11 +146,6 @@
     {
       "name": "standard-version",
       "version": "^9",
-      "type": "build"
-    },
-    {
-      "name": "stream-buffers",
-      "version": "^3.0.2",
       "type": "build"
     },
     {
