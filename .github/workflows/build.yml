@@ -184,13 +184,14 @@ jobs:
 
       - name: Run Baseline Benchmarks
         working-directory: tools/hangar
+        if: github.event_name == 'pull_request'
         env:
           HANGAR_WINGLANG_PACKAGE: "winglang@latest"
         run: pnpm bench
 
-      - name: Run E2E Benchmarks
+      - name: Run Benchmarks
         env:
-          BENCH_FAIL_THRESHOLD_PERCENT: "50"
+          BENCH_FAIL_THRESHOLD_PERCENT: "25"
           GITHUB_TOKEN: ${{ env.IS_SAME_REPO_PR == 'true' && secrets.PROJEN_GITHUB_TOKEN || secrets.GITHUB_TOKEN  }}
           BENCH_PR: "${{ env.IS_SAME_REPO_PR == 'true' && github.event.pull_request.number || '' }}"
         working-directory: tools/hangar
