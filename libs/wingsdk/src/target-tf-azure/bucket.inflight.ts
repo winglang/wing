@@ -202,7 +202,7 @@ export class BucketClient implements IBucketClient {
   ): Promise<string> {
     options;
     throw new Error(
-      `signed_url is not implemented yet for tf-azure (key=${key})`
+      `signedUrl is not implemented yet for tf-azure (key=${key})`
     );
   }
 

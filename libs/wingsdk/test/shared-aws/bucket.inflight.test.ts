@@ -555,7 +555,7 @@ test("Given a bucket when reaching to a non existent key, signed url it should t
   }
   // THEN
   expect(error?.message).toBe(
-    "Cannot provide signed url for a non-existent key (key=${KEY})"
+    `Cannot provide signed url for a non-existent key (key=${KEY})`
   );
 });
 
@@ -563,7 +563,6 @@ test("Given a bucket, when giving one of its keys, we should get its signed url"
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "sampletext.Pdf";
-  const REGION = "us-east-2";
   const VALUE = "VALUE";
 
   s3Mock.on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({
@@ -580,8 +579,9 @@ test("Given a bucket, when giving one of its keys, we should get its signed url"
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
-  const response = await client.signedUrl(KEY);
+  const signedUrl = await client.signedUrl(KEY);
+  const res = await fetch(signedUrl);
 
   // THEN
-  expect(response).contains("https://s3.amazonaws.com");
+  expect(await res.text()).toBe(VALUE);
 });
