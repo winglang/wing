@@ -250,7 +250,7 @@ exports[`function with a queue binding 3`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Queue-SetConsumer-5cb7e554_S3Object_074547A5.key}",
-        "timeout": 60,
+        "timeout": "\${aws_sqs_queue.Queue.visibility_timeout_seconds}",
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
