@@ -18,8 +18,7 @@ For windows we recommend to set the tools up within WSL as some of the scripts
 don't support windows and expect unix tooling.
 
 Some Guides:
-- [💡 Setup WSL](https://learn.microsoft.com/en-us/windows/wsl/install#install-wsl-command)
-- [💡 Which WSL version to use?](https://learn.microsoft.com/en-us/windows/wsl/compare-versions#comparing-wsl-1-and-wsl-2)
+- [💡 Setup WSL 2](https://learn.microsoft.com/en-us/windows/wsl/install#install-wsl-command)
 - [💡 Setup build essentials for rust](https://stackoverflow.com/questions/52445961/how-do-i-fix-the-rust-error-linker-cc-not-found-for-debian-on-windows-10)
 - [💡 Enable systemd to install docker without the need of Docker Desktop](https://devblogs.microsoft.com/commandline/systemd-support-is-now-available-in-wsl/#how-can-you-get-systemd-on-your-machine)
 :::
@@ -100,7 +99,7 @@ Now, you can edit a source file anywhere across the stack and run the compiler w
 For example:
 
 ```sh
-pnpm wing -- test examples/tests/valid/captures.w
+pnpm wing -- test examples/tests/valid/captures.test.w
 ```
 
 This command runs the full Wing CLI with the given arguments. Turbo will ensure the CLI build is updated.
