@@ -1,4 +1,5 @@
 import { Fn, Token } from "cdktf";
+import { Function } from "../cloud";
 import { Tokens } from "../core/tokens";
 import { IInflightHost } from "../std";
 
@@ -28,6 +29,10 @@ export class CdkTfTokens extends Tokens {
    * CDKTF tokens are bounded as Json values.
    */
   public bindValue(host: IInflightHost, value: any) {
+    if (!(host instanceof Function)) {
+      throw new Error(`Tokens can only be bound by a Function for now`);
+    }
+
     const envName = this.envName(JSON.stringify(value));
     const envValue = Fn.jsonencode(value);
     // the same token might be bound multiple times by different variables/inflight contexts
