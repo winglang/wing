@@ -1,4 +1,3 @@
-import { Function, Service } from "../cloud";
 import { Tokens } from "../core/tokens";
 import { IInflightHost, IResource } from "../std";
 
@@ -61,12 +60,6 @@ export class SimTokens extends Tokens {
    * Binds the given token to the host.
    */
   public bindValue(host: IInflightHost, value: any) {
-    if (!(host instanceof Function) && !(host instanceof Service)) {
-      throw new Error(
-        `Tokens can only be bound by a Function or a Service for now`
-      );
-    }
-
     switch (typeof value) {
       case "string":
         const envName = this.envName(value);
