@@ -26,3 +26,7 @@ s1.someRandomMethod();
 
 let a: Array<str> = MutArray<str>[];
 //                  ^^^^^^^^^^^^^^^ Expected type to be "Array<str>", but got "MutArray<str>" instead
+
+let mm1: MutMap<num> = { "a" => 1, "b" => 2, "c" => 3 };
+let mm2 = MutMap<num> { "a" => 1, "b" => 2, "c" => 3 };
+let mm3 = mm2.copyMut();

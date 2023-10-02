@@ -854,6 +854,20 @@ error: Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
    |                     ^^^^^^^^^^^^^^^ Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
 
 
+error: Expected type to be \\"MutMap<num>\\", but got \\"Map<num>\\" instead
+   --> ../../../examples/tests/invalid/container_types.test.w:30:24
+   |
+30 | let mm1: MutMap<num> = { \\"a\\" => 1, \\"b\\" => 2, \\"c\\" => 3 };
+   |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"MutMap<num>\\", but got \\"Map<num>\\" instead
+
+
+error: Unknown symbol \\"copyMut\\"
+   --> ../../../examples/tests/invalid/container_types.test.w:32:15
+   |
+32 | let mm3 = mm2.copyMut();
+   |               ^^^^^^^ Unknown symbol \\"copyMut\\"
+
+
  
  
 Tests 1 failed (1)
@@ -1162,6 +1176,48 @@ exports[`immutable_container_types.test.w 1`] = `
   |
 3 | m1.set(\\"a\\", \\"bye\\");
   |    ^^^ Unknown symbol \\"set\\"
+
+
+error: Expected type to be \\"Map<str>\\", but got \\"MutMap<str>\\" instead
+  --> ../../../examples/tests/invalid/immutable_container_types.test.w:6:20
+  |
+6 | let m2: Map<str> = MutMap<str> {};
+  |                    ^^^^^^^^^^^^^^ Expected type to be \\"Map<str>\\", but got \\"MutMap<str>\\" instead
+
+
+error: Expected type to be \\"bool\\", but got \\"str\\" instead
+  --> ../../../examples/tests/invalid/immutable_container_types.test.w:7:29
+  |
+7 | let m3 = Map<bool> { \\"a\\" => \\"A\\" };
+  |                             ^^^ Expected type to be \\"bool\\", but got \\"str\\" instead
+
+
+error: Unknown symbol \\"set\\"
+  --> ../../../examples/tests/invalid/immutable_container_types.test.w:9:4
+  |
+9 | m4.set(\\"2\\", 3);
+  |    ^^^ Unknown symbol \\"set\\"
+
+
+error: Unknown symbol \\"copy\\"
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:10:13
+   |
+10 | let m5 = m4.copy();
+   |             ^^^^ Unknown symbol \\"copy\\"
+
+
+error: Unknown symbol \\"delete\\"
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:11:4
+   |
+11 | m4.delete(\\"1\\");
+   |    ^^^^^^ Unknown symbol \\"delete\\"
+
+
+error: Unknown symbol \\"clear\\"
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:12:4
+   |
+12 | m4.clear();
+   |    ^^^^^ Unknown symbol \\"clear\\"
 
 
  
