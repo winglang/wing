@@ -43,7 +43,7 @@ test("get an object from bucket", async () => {
   const VALUE = "test-content-1";
 
   const storage = new MockStorage();
-  storage.bucket(BUCKET_NAME).put(KEY, VALUE);
+  await storage.bucket(BUCKET_NAME).put(KEY, VALUE);
 
   const client = new BucketClient(BUCKET_NAME, false, storage as any);
   const data = await client.get(KEY);
@@ -70,7 +70,7 @@ test("getJson an object from the bucket", async () => {
   const VALUE = { cool: "beans" };
 
   const storage = new MockStorage();
-  storage.bucket(BUCKET_NAME).put(KEY, JSON.stringify(VALUE));
+  await storage.bucket(BUCKET_NAME).put(KEY, JSON.stringify(VALUE));
 
   const client = new BucketClient(BUCKET_NAME, false, storage as any);
   const res = await client.getJson(KEY);
@@ -82,9 +82,9 @@ test("list objects in bucket", async () => {
   const BUCKET_NAME = "test-bucket";
 
   const storage = new MockStorage();
-  storage.bucket(BUCKET_NAME).put("test-file-1", "test-content-1");
-  storage.bucket(BUCKET_NAME).put("test-file-2", "test-content-2");
-  storage.bucket(BUCKET_NAME).put("test-file-3", "test-content-3");
+  await storage.bucket(BUCKET_NAME).put("test-file-1", "test-content-1");
+  await storage.bucket(BUCKET_NAME).put("test-file-2", "test-content-2");
+  await storage.bucket(BUCKET_NAME).put("test-file-3", "test-content-3");
 
   const client = new BucketClient(BUCKET_NAME, false, storage as any);
   const res = await client.list();
@@ -98,7 +98,7 @@ test("delete object from bucket", async () => {
   const VALUE = "test-content-1";
 
   const storage = new MockStorage();
-  storage.bucket(BUCKET_NAME).put(KEY, VALUE);
+  await storage.bucket(BUCKET_NAME).put(KEY, VALUE);
 
   const client = new BucketClient(BUCKET_NAME, false, storage as any);
   const res = await client.delete(KEY);
@@ -163,7 +163,7 @@ test("Given a public bucket, when giving one of its keys, we should get its publ
   const VALUE = "test-content-1";
 
   const storage = new MockStorage();
-  storage.bucket(BUCKET_NAME).put(KEY, VALUE);
+  await storage.bucket(BUCKET_NAME).put(KEY, VALUE);
 
   const client = new BucketClient(BUCKET_NAME, true, storage as any);
   const res = await client.publicUrl(KEY);
@@ -177,7 +177,7 @@ test("check that an object exists in the bucket", async () => {
   const VALUE = "test-content-1";
 
   const storage = new MockStorage();
-  storage.bucket(BUCKET_NAME).put(KEY, VALUE);
+  await storage.bucket(BUCKET_NAME).put(KEY, VALUE);
 
   const client = new BucketClient(BUCKET_NAME, false, storage as any);
   const res = await client.exists(KEY);
@@ -203,7 +203,7 @@ test("tryGet an existing object from the bucket", async () => {
   const VALUE = "test-content-1";
 
   const storage = new MockStorage();
-  storage.bucket(BUCKET_NAME).put(KEY, VALUE);
+  await storage.bucket(BUCKET_NAME).put(KEY, VALUE);
 
   const client = new BucketClient(BUCKET_NAME, false, storage as any);
   const res = await client.tryGet(KEY);
@@ -229,7 +229,7 @@ test("tryGetJson an existing object from the bucket", async () => {
   const VALUE = { cool: "beans" };
 
   const storage = new MockStorage();
-  storage.bucket(BUCKET_NAME).put(KEY, JSON.stringify(VALUE));
+  await storage.bucket(BUCKET_NAME).put(KEY, JSON.stringify(VALUE));
 
   const client = new BucketClient(BUCKET_NAME, false, storage as any);
   const res = await client.tryGetJson(KEY);
@@ -255,7 +255,7 @@ test("tryGetJson an existing non-Json object from the bucket", async () => {
   const NON_JSON_VALUE = "test-content-1";
 
   const storage = new MockStorage();
-  storage.bucket(BUCKET_NAME).put(KEY, NON_JSON_VALUE);
+  await storage.bucket(BUCKET_NAME).put(KEY, NON_JSON_VALUE);
 
   const client = new BucketClient(BUCKET_NAME, false, storage as any);
 
@@ -270,7 +270,7 @@ test("tryDelete an existing object from the bucket", async () => {
   const VALUE = "test-content-1";
 
   const storage = new MockStorage();
-  storage.bucket(BUCKET_NAME).put(KEY, VALUE);
+  await storage.bucket(BUCKET_NAME).put(KEY, VALUE);
 
   const client = new BucketClient(BUCKET_NAME, false, storage as any);
   const res = await client.tryDelete(KEY);
