@@ -86,6 +86,7 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/types@3.398.0",
     "@aws-sdk/util-stream-node@3.350.0",
     "@aws-sdk/util-utf8-node@3.259.0",
+    "@aws-sdk/s3-request-presigner@3.405.0",
     "@types/aws-lambda",
     // the following 2 deps are required by @aws-sdk/util-utf8-node
     "@aws-sdk/util-buffer-from@3.208.0",
@@ -104,7 +105,6 @@ const project = new cdk.JsiiProject({
     // shared client dependencies
     "ioredis",
     "jsonschema",
-    "@aws-sdk/s3-request-presigner",
   ],
   devDeps: [
     `@cdktf/provider-aws@^15.0.0`, // only for testing Wing plugins

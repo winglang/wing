@@ -706,9 +706,7 @@ test("tryDelete objects from bucket", async () => {
   expect(nonExistentObjectTryDelete).toEqual(false);
 });
 
-
 // Deceided to seperate this feature in a different release,(see https://github.com/winglang/wing/issues/4143)
-
 
 // test("Given a bucket when reaching to a non existent key, signed url it should throw an error", async () => {
 //   //GIVEN
@@ -734,7 +732,6 @@ test("tryDelete objects from bucket", async () => {
 //   // THEN
 //   await s.stop();
 // });
-
 
 // test("Given a bucket, when giving one of its keys, we should get it's signed url", async () => {
 //   // GIVEN

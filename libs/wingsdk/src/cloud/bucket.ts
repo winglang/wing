@@ -249,12 +249,12 @@ export abstract class Bucket extends Resource {
 /**
  * Interface for signed url options
  */
-export interface SignedUrlOptions{
+export interface SignedUrlOptions {
   /**
    * The duration for the signed url to expire
    */
 
-   readonly duration?: Duration;
+  readonly duration?: Duration;
 }
 
 /** Interface for delete method inside `Bucket` */
@@ -266,7 +266,6 @@ export interface BucketDeleteOptions {
    */
   readonly mustExist?: boolean;
 }
-
 
 /**
  * Inflight interface for `Bucket`.
@@ -472,5 +471,5 @@ export enum BucketInflightMethods {
   /** `Bucket.tryDelete` */
   TRY_DELETE = "tryDelete",
 
-  SIGNED_URL = "signedUrl"
+  SIGNED_URL = "signedUrl",
 }

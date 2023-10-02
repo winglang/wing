@@ -9,7 +9,7 @@ import {
   BucketEventType,
   IBucketClient,
   ITopicClient,
-  SignedUrlOptions
+  SignedUrlOptions,
 } from "../cloud";
 import {
   ISimulatorContext,
@@ -209,18 +209,17 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     });
   }
 
-public async signedUrl(key: string, options?:SignedUrlOptions){
-  const expiryTimeInSeconds:string= String((options?.duration?.seconds|| 86400));
-  return this.context.withTrace({
-    message: `Signed URL (key=${key})`,
-    activity: async () =>{
-      throw new Error(
-        `signed_url is not implemented yet for sim (key=${key})`
-      );
-    }
-  });
-}
-
+  public async signedUrl(key: string, options?: SignedUrlOptions) {
+    options;
+    return this.context.withTrace({
+      message: `Signed URL (key=${key})`,
+      activity: async () => {
+        throw new Error(
+          `signed_url is not implemented yet for sim (key=${key})`
+        );
+      },
+    });
+  }
 
   private async addFile(key: string, value: string): Promise<void> {
     const actionType: BucketEventType = this.objectKeys.has(key)

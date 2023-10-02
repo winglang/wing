@@ -10,7 +10,7 @@ import {
   S3Client,
   NoSuchKey,
 } from "@aws-sdk/client-s3";
-import { HttpAuthLocation, SdkStream } from "@aws-sdk/types";
+import { SdkStream } from "@aws-sdk/types";
 import { sdkStreamMixin } from "@aws-sdk/util-stream-node";
 import { mockClient } from "aws-sdk-client-mock";
 import { test, expect, beforeEach } from "vitest";
@@ -82,7 +82,6 @@ test("get an object from the bucket", async () => {
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
   const response = await client.get(KEY);
-
 
   // THEN
   expect(response).toEqual(VALUE);
@@ -543,7 +542,6 @@ test("Given a bucket when reaching to a non existent key, signed url it should t
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "KEY";
 
-  
   s3Mock
     .on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
     .rejects({ name: "NotFound" });
@@ -566,7 +564,7 @@ test("Given a bucket, when giving one of its keys, we should get its signed url"
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "sampletext.Pdf";
   const REGION = "us-east-2";
-  const VALUE="VALUE";
+  const VALUE = "VALUE";
 
   s3Mock.on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({
     Body: createMockStream(VALUE),
@@ -585,11 +583,5 @@ test("Given a bucket, when giving one of its keys, we should get its signed url"
   const response = await client.signedUrl(KEY);
 
   // THEN
-  expect(response).contains(
-    'https://s3.amazonaws.com'
-  );
-
+  expect(response).contains("https://s3.amazonaws.com");
 });
-
-
-
