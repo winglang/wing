@@ -1,152 +1,13 @@
 import { MockStorage } from "mock-gcs";
-import { Storage } from "@google-cloud/storage";
 import { BucketClient } from "../../src/target-tf-gcp/bucket.inflight";
 import { vi, test, beforeEach, expect } from "vitest";
-// import type { CreateWriteStreamOptions, GetSignedUrlConfig } from '@google-cloud/storage';
-// import streamBuffers from 'stream-buffers';
-
-// export class MockStorage {
-//   public buckets: object;
-
-//   public constructor() {
-//     this.buckets = {};
-//   }
-
-//   public bucket(name: string): MockBucket {
-//     if (this.buckets[name] === undefined) {
-//       this.buckets[name] = new MockBucket(name);
-//     }
-//     return this.buckets[name];
-//   }
-// }
-
-// export class MockBucket {
-//   public name: string;
-
-//   public files: object;
-
-//   public constructor(name: string) {
-//     this.name = name;
-//     this.files = {};
-//   }
-
-//   public upload(name: string, options: any): MockFile[] {
-//     return [this.file(name)];
-//   }
-
-//   public file(name: string): MockFile {
-//     if (this.files[name] === undefined) {
-//       this.files[name] = new MockFile(name);
-//     }
-//     return this.files[name];
-//   }
-// }
-
-// interface Metadata {
-//   metadata?: object;
-// }
-
-// export class MockFile {
-//   public name: string;
-
-//   public path?: string;
-
-//   public contents: Buffer;
-
-//   public metadata: {
-//     metadata?: object;
-//   };
-
-//   public constructor(name: string, path?: string) {
-//     this.name = name;
-//     this.path = path;
-//     this.contents = Buffer.alloc(0);
-//     this.metadata = {};
-//   }
-
-//   public get(): [MockFile, any] {
-//     return [this, this.metadata];
-//   }
-
-//   public async delete(): Promise<void> {
-//     return Promise.resolve();
-//   }
-
-//   public exists(): [boolean, any] {
-//     return [true, this.metadata];
-//   }
-
-//   public setMetadata(metadata: Metadata): void {
-//     const customMetadata = { ...this.metadata.metadata, ...metadata.metadata };
-//     this.metadata = { ...this.metadata, ...metadata, metadata: customMetadata };
-//   }
-
-//   public async getSignedUrl(options?: GetSignedUrlConfig): Promise<string> {
-//     return Promise.resolve('https://example.com');
-//   }
-
-//   public createReadStream(): any {
-//     const readable = new streamBuffers.ReadableStreamBuffer();
-//     readable.put(this.contents);
-//     readable.stop();
-//     return readable;
-//   }
-
-//   public createWriteStream(options?: CreateWriteStreamOptions): any {
-//     const writable = new streamBuffers.WritableStreamBuffer();
-//     writable.on('finish', () => {
-//       const contents = writable.getContents();
-//       if (contents instanceof Buffer) {
-//         this.contents = contents;
-//       } else {
-//         throw new Error('Invalid contents type');
-//       }
-//     });
-//     return writable;
-//   }
-// }
 
 vi.mock("@google-cloud/storage", () => ({
   Storage: MockStorage,
 }));
 
-type TestPath = "happy" | "sad" | "happyJson" | "sadJson";
-let TEST_PATH: TestPath;
-
 beforeEach(() => {
-  vi.clearAllMocks;
-  TEST_PATH = "happy";
-});
-
-// test("check if file exists", async () => {
-//   const storage = new MockStorage();
-//   const bucket = storage.bucket("test-bucket");
-
-//   bucket.put("test-file-1", "test-content-1");
-//   bucket.put("test-file-2", "test-content-2");
-
-//   const client = new BucketClient("test-bucket", false, storage as any);
-//   const exists = await client.get("test-file-2");
-//   // const data = storage.bucket("test-bucket").file("test-file-1").contents.toString();
-//   expect(exists).toBe("test-content-1");
-// });
-
-test("get object from bucket", async () => {
-
-  const BUCKET_NAME = "test-bucket";
-  const KEY = "test-file-1";
-  const VALUE = "test-content-1";
-
-  const storage = new MockStorage();
-  // const bucket = storage.bucket(BUCKET_NAME);
-
-  storage.bucket(BUCKET_NAME).put(KEY, VALUE);
-  // bucket.put("test-file-2", "test-content-2");
-
-  const client = new BucketClient(BUCKET_NAME, false, storage as any);
-  const exists = await client.get(KEY);
-
-  expect(exists).toBe(VALUE);
+  vi.resetAllMocks;
 });
 
 test("put object to bucket", async () => {
@@ -156,13 +17,285 @@ test("put object to bucket", async () => {
 
   const storage = new MockStorage();
 
-  // putting the object to the bucket before creating the client
-  storage.bucket(BUCKET_NAME).put(KEY, VALUE);
-
   const client = new BucketClient(BUCKET_NAME, false, storage as any);
   const res = await client.put(KEY, VALUE);
 
-  // expect equal to error
   expect(res).toBe(undefined);
 });
 
+test("putJson an object into the bucket", async () => {
+  const BUCKET_NAME = "test-bucket";
+  const KEY = "test-file-1";
+  const VALUE = { "cool": "beans" };
+
+  const storage = new MockStorage();
+
+  const client = new BucketClient(BUCKET_NAME, false, storage as any);
+  const res = await client.putJson(KEY, VALUE as any);
+
+  expect(res).toBe(undefined);
+});
+
+test("get an object from bucket", async () => {
+  const BUCKET_NAME = "test-bucket";
+  const KEY = "test-file-1";
+  const VALUE = "test-content-1";
+
+  const storage = new MockStorage();
+  storage.bucket(BUCKET_NAME).put(KEY, VALUE);
+
+  const client = new BucketClient(BUCKET_NAME, false, storage as any);
+  const data = await client.get(KEY);
+
+  expect(data).toBe(VALUE);
+});
+
+test("get a non-existent object from the bucket", async () => {
+  const BUCKET_NAME = "test-bucket";
+  const NON_EXISTENT_KEY = "NON_EXISTENT_KEY";
+
+  const storage = new MockStorage();
+
+  const client = new BucketClient(BUCKET_NAME, false, storage as any);
+
+  await expect(() => client.get(NON_EXISTENT_KEY)).rejects.toThrowError(
+    `Failed to get object. (key=${NON_EXISTENT_KEY})`
+  );
+});
+
+test("getJson an object from the bucket", async () => {
+  const BUCKET_NAME = "test-bucket";
+  const KEY = "test-file-1";
+  const VALUE = { "cool": "beans" };
+
+  const storage = new MockStorage();
+  storage.bucket(BUCKET_NAME).put(KEY, JSON.stringify(VALUE));
+
+  const client = new BucketClient(BUCKET_NAME, false, storage as any);
+  const res = await client.getJson(KEY);
+
+  expect(res).toEqual(VALUE);
+});
+
+test("list objects in bucket", async () => {
+  const BUCKET_NAME = "test-bucket";
+
+  const storage = new MockStorage();
+  storage.bucket(BUCKET_NAME).put("test-file-1", "test-content-1");
+  storage.bucket(BUCKET_NAME).put("test-file-2", "test-content-2");
+  storage.bucket(BUCKET_NAME).put("test-file-3", "test-content-3");
+
+  const client = new BucketClient(BUCKET_NAME, false, storage as any);
+  const res = await client.list();
+
+  expect(res).toEqual(["test-file-1", "test-file-2", "test-file-3"]);
+});
+
+test("delete object from bucket", async () => {
+  const BUCKET_NAME = "test-bucket";
+  const KEY = "test-file-1";
+  const VALUE = "test-content-1";
+
+  const storage = new MockStorage();
+  storage.bucket(BUCKET_NAME).put(KEY, VALUE);
+
+  const client = new BucketClient(BUCKET_NAME, false, storage as any);
+  const res = await client.delete(KEY);
+
+  expect(res).toBe(undefined);
+});
+
+test("delete object from the bucket with mustExist option", async () => {
+  const BUCKET_NAME = "test-bucket";
+
+  const storage = new MockStorage();
+
+  const client = new BucketClient(BUCKET_NAME, false, storage as any);
+
+  await expect(() => client.delete("NON_EXISTENT_KEY", { mustExist: true })).rejects.toThrowError(
+    `Failed to delete object. (key=NON_EXISTENT_KEY)`
+  );
+});
+
+test("delete a non-existent object from the bucket with mustExist option", async () => {
+  const BUCKET_NAME = "test-bucket";
+  const NON_EXISTENT_KEY = "NON_EXISTENT_KEY";
+
+  const storage = new MockStorage();
+
+  const client = new BucketClient(BUCKET_NAME, false, storage as any);
+
+  await expect(() => client.delete(NON_EXISTENT_KEY, { mustExist: true })).rejects.toThrowError(
+    `Failed to delete object. (key=${NON_EXISTENT_KEY})`
+  );
+});
+
+test("Given a non public bucket when reaching to a key public url it should throw an error", async () => {
+  const BUCKET_NAME = "test-bucket";
+
+  const storage = new MockStorage();
+
+  const client = new BucketClient(BUCKET_NAME, false, storage as any);
+
+  await expect(() => client.publicUrl("test-file-1")).rejects.toThrowError(
+    "Cannot provide public URL for a non-public bucket"
+  );
+});
+
+test("Given a public bucket when reaching to a non existent key, public url it should throw an error", async () => {
+  const BUCKET_NAME = "test-bucket";
+
+  const storage = new MockStorage();
+
+  const client = new BucketClient(BUCKET_NAME, true, storage as any);
+
+  await expect(() => client.publicUrl("test-file-1")).rejects.toThrowError(
+    "Failed to get public URL. (key=test-file-1)"
+  );
+})
+
+test("Given a public bucket, when giving one of its keys, we should get its public url", async () => {
+  const BUCKET_NAME = "test-bucket";
+
+  const storage = new MockStorage();
+  storage.bucket(BUCKET_NAME).put("test-file-1", "test-content-1");
+
+  const client = new BucketClient(BUCKET_NAME, true, storage as any);
+  const res = await client.publicUrl("test-file-1");
+
+  expect(res).toEqual(`https://storage.googleapis.com/${BUCKET_NAME}/test-file-1`);
+});
+
+test("check that an object exists in the bucket", async () => {
+  const BUCKET_NAME = "test-bucket";
+
+  const storage = new MockStorage();
+  storage.bucket(BUCKET_NAME).put("test-file-1", "test-content-1");
+
+  const client = new BucketClient(BUCKET_NAME, false, storage as any);
+  const res = await client.exists("test-file-1");
+
+  expect(res).toBe(true);
+})
+
+test("check that an object doesn't exist in the bucket", async () => {
+  const BUCKET_NAME = "test-bucket";
+
+  const storage = new MockStorage();
+
+  const client = new BucketClient(BUCKET_NAME, false, storage as any);
+  const res = await client.exists("test-file-1");
+
+  expect(res).toBe(false);
+})
+
+test("tryGet an existing object from the bucket", async () => {
+  const BUCKET_NAME = "test-bucket";
+
+  const storage = new MockStorage();
+  storage.bucket(BUCKET_NAME).put("test-file-1", "test-content-1");
+
+  const client = new BucketClient(BUCKET_NAME, false, storage as any);
+  const res = await client.tryGet("test-file-1");
+
+  expect(res).toBe("test-content-1");
+})
+
+test("tryGet a non-existent object from the bucket", async () => {
+  const BUCKET_NAME = "test-bucket";
+
+  const storage = new MockStorage();
+
+  const client = new BucketClient(BUCKET_NAME, false, storage as any);
+
+  await expect(() => client.tryGet("test-file-1")).rejects.toThrowError(
+    "Failed to tryGet object. (key=test-file-1)"
+  );
+});
+
+test("tryGet object from the bucket throws an unknown error", async () => {
+  const BUCKET_NAME = "test-bucket";
+
+  const storage = new MockStorage();
+
+  const client = new BucketClient(BUCKET_NAME, false, storage as any);
+
+  await expect(() => client.tryGet("test-file-1")).rejects.toThrowError(
+    "Failed to tryGet object. (key=test-file-1)"
+  );
+})
+
+test("tryGetJson an existing object from the bucket", async () => {
+  const BUCKET_NAME = "test-bucket";
+
+  const storage = new MockStorage();
+  storage.bucket(BUCKET_NAME).put("test-file-1", JSON.stringify({ "cool": "beans" }));
+
+  const client = new BucketClient(BUCKET_NAME, false, storage as any);
+  const res = await client.tryGetJson("test-file-1");
+
+  expect(res).toEqual({ "cool": "beans" });
+});
+
+test("tryGetJson a non-existent object from the bucket", async () => {
+  const BUCKET_NAME = "test-bucket";
+
+  const storage = new MockStorage();
+
+  const client = new BucketClient(BUCKET_NAME, false, storage as any);
+
+  await expect(() => client.tryGetJson("test-file-1")).rejects.toThrowError(
+    "Failed to tryGet JSON object. (key=test-file-1)"
+  );
+});
+
+test("tryGetJson object from the bucket throws an unknown error", async () => {
+  const BUCKET_NAME = "test-bucket";
+
+  const storage = new MockStorage();
+
+  const client = new BucketClient(BUCKET_NAME, false, storage as any);
+
+  await expect(() => client.tryGetJson("test-file-1")).rejects.toThrowError(
+    "Failed to tryGet JSON object. (key=test-file-1)"
+  );
+})
+
+test("tryGetJson an existing non-Json object from the bucket", async () => {
+  const BUCKET_NAME = "test-bucket";
+
+  const storage = new MockStorage();
+  storage.bucket(BUCKET_NAME).put("test-file-1", "test-content-1");
+
+  const client = new BucketClient(BUCKET_NAME, false, storage as any);
+
+  await expect(() => client.tryGetJson("test-file-1")).rejects.toThrowError(
+    "Failed to get JSON object. (key=test-file-1)"
+  );
+})
+
+test("tryDelete an existing object from the bucket", async () => {
+  const BUCKET_NAME = "test-bucket";
+  const KEY = "test-file-1";
+  const VALUE = "test-content-1";
+
+  const storage = new MockStorage();
+  storage.bucket(BUCKET_NAME).put(KEY, VALUE);
+
+  const client = new BucketClient(BUCKET_NAME, false, storage as any);
+  const res = await client.tryDelete(KEY);
+
+  expect(res).toBe(true);
+});
+
+test("tryDelete a non-existent object from the bucket", async () => {
+  const BUCKET_NAME = "test-bucket";
+  const NON_EXISTENT_KEY = "NON_EXISTENT_KEY";
+
+  const storage = new MockStorage();
+
+  const client = new BucketClient(BUCKET_NAME, false, storage as any);
+  const res = await client.tryDelete(NON_EXISTENT_KEY);
+
+  expect(res).toBe(false);
+});

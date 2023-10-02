@@ -26,10 +26,6 @@ export class BucketClient implements IBucketClient {
 
   public async put(key: string, body: string): Promise<void> {
     try {
-      if (await this.exists(key)) {
-        throw new Error(`Object already exists. (key=${key})`);
-        return;
-      }
       await this.bucket.file(key).save(body);
     } catch (error) {
       throw new Error(`Failed to put object. (key=${key})`);
@@ -37,8 +33,11 @@ export class BucketClient implements IBucketClient {
   }
 
   public async putJson(key: string, body: Json): Promise<void> {
-    await this.put(key, JSON.stringify(body, null, 2));
-    // throw new Error(`putJson is not supported yet. (key=${key})`);
+    try {
+      await this.put(key, JSON.stringify(body, null, 2));
+    } catch (error) {
+      throw new Error(`Failed to put JSON object. (key=${key})`);
+    }
   }
 
   public async get(key: string): Promise<string> {
@@ -51,58 +50,92 @@ export class BucketClient implements IBucketClient {
   }
 
   public async tryGet(key: string): Promise<string | undefined> {
-    if (await this.exists(key)) {
+    try {
+      if (!await this.exists(key)) {
+        throw new Error(`Cannot get object that does not exist. (key=${key})`);
+      }
       return this.get(key);
+    } catch (error) {
+      throw new Error(`Failed to tryGet object. (key=${key})`);
     }
-    return undefined;
-    // throw new Error(`tryGet is not supported yet. (key=${key})`);
   }
 
   public async getJson(key: string): Promise<Json> {
-    return JSON.parse(await this.get(key));
-    // throw new Error(`getJson is not supported yet. (key=${key})`);
+    try {
+      return JSON.parse(await this.get(key));
+    } catch (error) {
+      throw new Error(`Failed to get JSON object. (key=${key})`);
+    }
   }
 
   public async tryGetJson(key: string): Promise<Json | undefined> {
-    if (await this.exists(key)) {
+    try {
+      if (!await this.exists(key)) {
+        throw new Error(`Cannot get object that does not exist. (key=${key})`);
+      }
       return this.getJson(key);
+    } catch (error) {
+      throw new Error(`Failed to tryGet JSON object. (key=${key})`);
     }
-    return undefined;
-    // throw new Error(`tryGetJson is not supported yet. (key=${key})`);
   }
 
   public async delete(key: string, opts: BucketDeleteOptions = {}): Promise<void> {
-    const mustExist = opts.mustExist ?? false;
+    const mustExist = opts.mustExist === undefined ? true : opts.mustExist;
     try {
-      await this.storage.bucket(this.bucketName).file(key).delete();
-    } catch (err) {
-      if (!mustExist && err) {
-        return;
+      if (mustExist && !(await this.exists(key))) {
+        throw new Error(`Cannot delete object that does not exist. (key=${key})`);
       }
-      throw err;
+      await this.bucket.file(key).delete();
+    } catch (error) {
+      throw new Error(`Failed to delete object. (key=${key})`);
     }
-    // throw new Error(`delete is not supported yet. (key=${key})`);
   }
 
   public async tryDelete(key: string): Promise<boolean> {
-    if (await this.exists(key)) {
-      await this.delete(key);
-      return true;
+    try {
+      if (await this.exists(key)) {
+        await this.delete(key);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      throw new Error(`Failed to tryDelete object. (key=${key})`);
     }
-    return false;
-    // throw new Error(`tryDelete is not supported yet. (key=${key})`);
   }
 
   public async list(prefix?: string): Promise<string[]> {
-    const [files] = await this.storage.bucket(this.bucketName).getFiles({
-      prefix,
-    });
-    return files.map((file) => file.name);
-    // throw new Error(`list is not supported yet. (prefix=${prefix})`);
+    try {
+      const [files] = await this.bucket.getFiles({ prefix });
+      return files.map((file) => file.name);
+    } catch (error) {
+      throw new Error(`Failed to list objects. (prefix=${prefix})`);
+    }
   }
 
   public async publicUrl(key: string): Promise<string> {
-    this._public; // a little help for implementing public_url later on
-    throw new Error(`publicUrl is not supported yet. (key=${key})`);
+    if (!this._public) {
+      throw new Error(`Cannot provide public URL for a non-public bucket`);
+    }
+    try {
+      if(!await this.exists(key)) {
+        throw new Error(`Cannot get public URL for a non-existent object. (key=${key})`);
+      }
+      return `https://storage.googleapis.com/${this.bucketName}/${key}`;
+    } catch (error) {
+      throw new Error(`Failed to get public URL. (key=${key})`);
+    }
+  }
+
+  public async signedUrl(key: string, opts: { action: "read" | "write", expiresIn: number }): Promise<string> {
+    try {
+      const action = opts.action === "read" ? "read" : "write";
+      const [url] = await this.bucket.file(key).getSignedUrl({
+        action,
+        expires: Date.now() + opts.expiresIn * 1000,
+      });
+      return url;
+    } catch (error) {
+      throw new Error(`Failed to get signed URL. (key=${key})`);
+    }
   }
 }
