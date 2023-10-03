@@ -20,7 +20,7 @@ import { Json, Node, Resource } from "../std";
 export const DYNAMODB_TABLE_FQN = fqnForType("ex.DynamodbTable");
 
 /**
- * Options for `DynamodbTable`.
+ * Properties for `DynamodbTable`.
  */
 export interface DynamodbTableProps {
   /**
