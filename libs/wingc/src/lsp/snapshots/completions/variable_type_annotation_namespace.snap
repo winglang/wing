@@ -65,8 +65,14 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Website\n```\n---\nA cloud static website."
+    value: "```wing\nclass Website impl IWebsite\n```\n---\nA cloud static website."
   sortText: gg|Website
+- label: AddFileOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct AddFileOptions\n```\n---\nOptions for adding a file with custom value during the website's deployment.\n### Fields\n- `contentType?` — File's content type."
+  sortText: hh|AddFileOptions
 - label: ApiConnectProps
   kind: 22
   documentation:
@@ -445,6 +451,12 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\ninterface ITopicOnMessageHandlerClient\n```\n---\nInflight client for `ITopicOnMessageHandler`.\n### Methods\n- `handle` — Function that will be called when a message is received from the topic."
   sortText: ii|ITopicOnMessageHandlerClient
+- label: IWebsite
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IWebsite\n```\n---\nBase interface for a website.\n### Methods\n- `url` — The website URL."
+  sortText: ii|IWebsite
 - label: IWebsiteClient
   kind: 8
   documentation:
