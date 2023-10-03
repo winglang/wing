@@ -56,6 +56,12 @@ exports[`captures tokens 2`] = `
         "stage_name": "prod",
       },
     },
+    "aws_cloudwatch_log_group": {
+      "Api_Api-OnRequest-c5395e41_CloudwatchLogGroup_79C714F7": {
+        "name": "/aws/lambda/Api-OnRequest-c5395e41-c8f26cae",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "Api_Api-OnRequest-c5395e41_IamRole_9427E0ED": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",

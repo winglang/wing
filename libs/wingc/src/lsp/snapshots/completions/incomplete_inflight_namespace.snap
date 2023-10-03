@@ -191,7 +191,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct FunctionProps\n```\n---\nOptions for `Function`.\n### Fields\n- `env?` — Environment variables to pass to the function.\n- `memory?` — The amount of memory to allocate to the function, in MB.\n- `timeout?` — The maximum amount of time the function can run."
+    value: "```wing\nstruct FunctionProps\n```\n---\nOptions for `Function`.\n### Fields\n- `env?` — Environment variables to pass to the function.\n- `logRetentionDays?` — Specifies the number of days that function logs will be kept.\n- `memory?` — The amount of memory to allocate to the function, in MB.\n- `timeout?` — The maximum amount of time the function can run."
   sortText: hh|FunctionProps
 - label: GetSecretValueOptions
   kind: 22
@@ -203,7 +203,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct OnDeployProps extends FunctionProps\n```\n---\nOptions for `OnDeploy`.\n### Fields\n- `env?` — Map<str>?\n- `executeAfter?` — Execute this trigger only after these resources have been provisioned.\n- `executeBefore?` — Adds this trigger as a dependency on other constructs.\n- `memory?` — num?\n- `timeout?` — duration?"
+    value: "```wing\nstruct OnDeployProps extends FunctionProps\n```\n---\nOptions for `OnDeploy`.\n### Fields\n- `env?` — Map<str>?\n- `executeAfter?` — Execute this trigger only after these resources have been provisioned.\n- `executeBefore?` — Adds this trigger as a dependency on other constructs.\n- `logRetentionDays?` — num?\n- `memory?` — num?\n- `timeout?` — duration?"
   sortText: hh|OnDeployProps
 - label: QueueProps
   kind: 22
@@ -215,13 +215,13 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct QueueSetConsumerProps extends FunctionProps\n```\n---\nOptions for Queue.setConsumer.\n### Fields\n- `batchSize?` — The maximum number of messages to send to subscribers at once.\n- `env?` — Map<str>?\n- `memory?` — num?\n- `timeout?` — duration?"
+    value: "```wing\nstruct QueueSetConsumerProps extends FunctionProps\n```\n---\nOptions for Queue.setConsumer.\n### Fields\n- `batchSize?` — The maximum number of messages to send to subscribers at once.\n- `env?` — Map<str>?\n- `logRetentionDays?` — num?\n- `memory?` — num?\n- `timeout?` — duration?"
   sortText: hh|QueueSetConsumerProps
 - label: ScheduleOnTickProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ScheduleOnTickProps extends FunctionProps\n```\n---\nOptions for Schedule.onTick.\n### Fields\n- `env?` — Map<str>?\n- `memory?` — num?\n- `timeout?` — duration?"
+    value: "```wing\nstruct ScheduleOnTickProps extends FunctionProps\n```\n---\nOptions for Schedule.onTick.\n### Fields\n- `env?` — Map<str>?\n- `logRetentionDays?` — num?\n- `memory?` — num?\n- `timeout?` — duration?"
   sortText: hh|ScheduleOnTickProps
 - label: ScheduleProps
   kind: 22
@@ -239,7 +239,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ServiceOnStartProps extends FunctionProps\n```\n---\nOptions for Service.onStart.\n### Fields\n- `env?` — Map<str>?\n- `memory?` — num?\n- `timeout?` — duration?"
+    value: "```wing\nstruct ServiceOnStartProps extends FunctionProps\n```\n---\nOptions for Service.onStart.\n### Fields\n- `env?` — Map<str>?\n- `logRetentionDays?` — num?\n- `memory?` — num?\n- `timeout?` — duration?"
   sortText: hh|ServiceOnStartProps
 - label: ServiceProps
   kind: 22
@@ -247,11 +247,17 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstruct ServiceProps\n```\n---\nOptions for `Service`.\n### Fields\n- `autoStart?` — Whether the service should start automatically.\n- `env?` — Environment variables to pass to the function."
   sortText: hh|ServiceProps
+- label: SignedUrlOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct SignedUrlOptions\n```\n---\nInterface for signed url options.\n### Fields\n- `duration?` — The duration for the signed url to expire."
+  sortText: hh|SignedUrlOptions
 - label: TopicOnMessageProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct TopicOnMessageProps extends FunctionProps\n```\n---\nOptions for `Topic.onMessage`.\n### Fields\n- `env?` — Map<str>?\n- `memory?` — num?\n- `timeout?` — duration?"
+    value: "```wing\nstruct TopicOnMessageProps extends FunctionProps\n```\n---\nOptions for `Topic.onMessage`.\n### Fields\n- `env?` — Map<str>?\n- `logRetentionDays?` — num?\n- `memory?` — num?\n- `timeout?` — duration?"
   sortText: hh|TopicOnMessageProps
 - label: TopicProps
   kind: 22
@@ -287,7 +293,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IBucketClient\n```\n---\nInflight interface for `Bucket`.\n### Methods\n- `delete` — Delete an existing object using a key from the bucket.\n- `exists` — Check if an object exists in the bucket.\n- `get` — Retrieve an object from the bucket.\n- `getJson` — Retrieve a Json object from the bucket.\n- `list` — Retrieve existing objects keys from the bucket.\n- `publicUrl` — Returns a url to the given file.\n- `put` — Put an object in the bucket.\n- `putJson` — Put a Json object in the bucket.\n- `tryDelete` — Delete an object from the bucket if it exists.\n- `tryGet` — Get an object from the bucket if it exists.\n- `tryGetJson` — Gets an object from the bucket if it exists, parsing it as Json."
+    value: "```wing\ninterface IBucketClient\n```\n---\nInflight interface for `Bucket`.\n### Methods\n- `delete` — Delete an existing object using a key from the bucket.\n- `exists` — Check if an object exists in the bucket.\n- `get` — Retrieve an object from the bucket.\n- `getJson` — Retrieve a Json object from the bucket.\n- `list` — Retrieve existing objects keys from the bucket.\n- `publicUrl` — Returns a url to the given file.\n- `put` — Put an object in the bucket.\n- `putJson` — Put a Json object in the bucket.\n- `signedUrl` — Returns a signed url to the given file.\n- `tryDelete` — Delete an object from the bucket if it exists.\n- `tryGet` — Get an object from the bucket if it exists.\n- `tryGetJson` — Gets an object from the bucket if it exists, parsing it as Json."
   sortText: ii|IBucketClient
 - label: IBucketEventHandler
   kind: 8

@@ -62,6 +62,18 @@ module.exports = function({  }) {
     ]
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "Foo_cloudFunction_CloudwatchLogGroup_B531638C": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Foo/cloud.Function/CloudwatchLogGroup",
+            "uniqueId": "Foo_cloudFunction_CloudwatchLogGroup_B531638C"
+          }
+        },
+        "name": "/aws/lambda/cloud-Function-c8858302",
+        "retention_in_days": 30
+      }
+    },
     "aws_iam_role": {
       "Foo_cloudFunction_IamRole_037E9FB3": {
         "//": {

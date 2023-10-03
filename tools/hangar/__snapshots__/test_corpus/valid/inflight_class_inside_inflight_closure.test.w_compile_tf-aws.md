@@ -114,6 +114,18 @@ module.exports = function({  }) {
     ]
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "PreflightClass_cloudFunction_CloudwatchLogGroup_0BDDEF5D": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/PreflightClass/cloud.Function/CloudwatchLogGroup",
+            "uniqueId": "PreflightClass_cloudFunction_CloudwatchLogGroup_0BDDEF5D"
+          }
+        },
+        "name": "/aws/lambda/cloud-Function-c8db99e3",
+        "retention_in_days": 30
+      }
+    },
     "aws_iam_role": {
       "PreflightClass_cloudFunction_IamRole_60AD4A3B": {
         "//": {
