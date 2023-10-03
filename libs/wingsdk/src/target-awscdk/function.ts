@@ -36,6 +36,13 @@ export class Function extends cloud.Function implements IAwsFunction {
     // bundled code is guaranteed to be in a fresh directory
     const bundle = createBundle(this.entrypoint);
 
+    const logRetentionDays =
+      props.logRetentionDays === undefined
+        ? 30
+        : props.logRetentionDays < 0
+        ? undefined // Negative value means Infinite retention
+        : props.logRetentionDays;
+
     this.function = new CdkFunction(this, "Default", {
       handler: "index.handler",
       code: Code.fromAsset(resolve(bundle.directory)),
@@ -46,6 +53,7 @@ export class Function extends cloud.Function implements IAwsFunction {
         : Duration.minutes(1),
       memorySize: props.memory ? props.memory : undefined,
       architecture: Architecture.ARM_64,
+      logRetention: logRetentionDays,
     });
 
     this.arn = this.function.functionArn;

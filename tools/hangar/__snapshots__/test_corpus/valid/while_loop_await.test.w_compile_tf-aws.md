@@ -55,6 +55,18 @@ module.exports = function({  }) {
     ]
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "cloudQueue-SetConsumer-cdafee6e_CloudwatchLogGroup_F895C874": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Queue-SetConsumer-cdafee6e/CloudwatchLogGroup",
+            "uniqueId": "cloudQueue-SetConsumer-cdafee6e_CloudwatchLogGroup_F895C874"
+          }
+        },
+        "name": "/aws/lambda/cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
+        "retention_in_days": 30
+      }
+    },
     "aws_iam_role": {
       "cloudQueue-SetConsumer-cdafee6e_IamRole_2548D828": {
         "//": {

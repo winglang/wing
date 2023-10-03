@@ -30,6 +30,10 @@ test("basic function", () => {
       Timeout: 60,
     })
   );
+  expect(
+    Object.keys(template.findResources("Custom::LogRetention")).length,
+    "should have LogRetention"
+  ).toEqual(1);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
@@ -103,5 +107,37 @@ test("basic function with memory size specified", () => {
       MemorySize: 512,
     })
   );
+  expect(awscdkSanitize(template)).toMatchSnapshot();
+});
+
+test("basic function with custom log retention", () => {
+  // GIVEN
+  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  Function._newFunction(app, "Function", inflight, { logRetentionDays: 7 });
+  const output = app.synth();
+
+  // THEN
+  const template = Template.fromJSON(JSON.parse(output));
+  expect(
+    Object.keys(template.findResources("Custom::LogRetention")).length,
+    "should have LogRetention"
+  ).toEqual(1);
+  expect(awscdkSanitize(template)).toMatchSnapshot();
+});
+
+test("basic function with infinite log retention", () => {
+  // GIVEN
+  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  Function._newFunction(app, "Function", inflight, { logRetentionDays: -1 });
+  const output = app.synth();
+
+  // THEN
+  const template = Template.fromJSON(JSON.parse(output));
+  expect(
+    Object.keys(template.findResources("Custom::LogRetention")).length,
+    "should NOT have LogRetention"
+  ).toEqual(0);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });

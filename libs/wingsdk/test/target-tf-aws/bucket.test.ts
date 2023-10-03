@@ -160,6 +160,7 @@ test("bucket with onCreate method", () => {
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group", // log group for subscriber
     "aws_iam_role",
     "aws_iam_role_policy",
     "aws_iam_role_policy_attachment",
@@ -198,6 +199,7 @@ test("bucket with onDelete method", () => {
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group", // log group for subscriber
     "aws_iam_role",
     "aws_iam_role_policy",
     "aws_iam_role_policy_attachment",
@@ -236,6 +238,7 @@ test("bucket with onUpdate method", () => {
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group", // log group for subscriber
     "aws_iam_role",
     "aws_iam_role_policy",
     "aws_iam_role_policy_attachment",
@@ -274,6 +277,7 @@ test("bucket with onEvent method", () => {
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group", // log group for subscriber
     "aws_iam_role",
     "aws_iam_role_policy",
     "aws_iam_role_policy_attachment",

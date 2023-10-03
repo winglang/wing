@@ -32,6 +32,13 @@ export interface FunctionProps {
    * @default 128
    */
   readonly memory?: number;
+
+  /**
+   * Specifies the number of days that function logs will be kept.
+   * Setting negative value means logs will not expire.
+   * @default 30
+   */
+  readonly logRetentionDays?: number;
 }
 
 /**
