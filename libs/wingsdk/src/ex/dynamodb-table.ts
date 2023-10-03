@@ -1,10 +1,13 @@
 import {
+  BatchGetItemCommand,
+  BatchWriteItemCommand,
   DeleteItemCommand,
   DynamoDBClient,
   GetItemCommand,
   PutItemCommand,
   QueryCommand,
   ScanCommand,
+  TransactWriteItem,
   TransactWriteItemsCommand,
   UpdateItemCommand,
 } from "@aws-sdk/client-dynamodb";
@@ -95,6 +98,9 @@ export abstract class DynamodbTable extends Resource {
  * Options for `DynamodbTable.putItem`.
  */
 export interface DynamodbTablePutItemOptions {
+  /**
+   * A map of attribute names to `AttributeValue` objects, representing the primary key of the item to retrieve.
+   */
   readonly item: Json;
 
   /**
@@ -135,8 +141,19 @@ export interface DynamodbTablePutItemOptions {
 }
 
 export interface DynamodbTablePutItemResult {
+  /**
+   * The attribute values as they appeared before the PutItem operation, but only if `ReturnValues` is specified as `"ALL_OLD"` in the request.
+   */
   readonly attributes?: Json;
+
+  /**
+   * The capacity units consumed by the PutItem operation.
+   */
   readonly consumedCapacity?: Json;
+
+  /**
+   * Information about item collections, if any, that were affected by the PutItem operation.
+   */
   readonly itemCollectionMetrics?: Json;
 }
 
@@ -145,9 +162,9 @@ export interface DynamodbTablePutItemResult {
  */
 export interface DynamodbTableUpdateItemOptions {
   /**
-   * A map of attribute names to `AttributeValue` objects, representing the primary key of the item to retrieve.
+   * The primary key of the item to be updated. Each element consists of an attribute name and a value for that attribute.
    *
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html#API_GetItem_RequestSyntax
+   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html#DDB-UpdateItem-request-Key
    */
   readonly key: Json;
 
@@ -158,10 +175,46 @@ export interface DynamodbTableUpdateItemOptions {
   readonly updateExpression?: string;
 
   /**
+   * One or more substitution tokens for attribute names in an expression.
+   * @default undefined
+   */
+  readonly expressionAttributeNames?: Json;
+
+  /**
    * One or more values that can be substituted in an expression.
    * @default undefined
    */
   readonly expressionAttributeValues?: Json;
+
+  /**
+   * A condition that must be satisfied in order for a conditional update to succeed.
+   * @default undefined
+   */
+  readonly conditionExpression?: string;
+
+  /**
+   * Determines the level of detail about either provisioned or on-demand throughput consumption.
+   * @default "NONE"
+   */
+  readonly returnConsumedCapacity?: "INDEXES" | "TOTAL" | "NONE";
+
+  /**
+   * Determines whether item collection metrics are returned.
+   * @default "NONE"
+   */
+  readonly returnItemCollectionMetrics?: "SIZE" | "NONE";
+
+  /**
+   * Use ReturnValuesOnConditionCheckFailure to get the item attributes if the Update condition fails.
+   * @default "NONE"
+   */
+  readonly returnValuesOnConditionCheckFailure?: "ALL_OLD" | "NONE";
+
+  /**
+   * Use ReturnValues to get the item attributes if the Update operation succeeds.
+   * @default "NONE"
+   */
+  readonly returnValues?: "ALL_OLD" | "NONE";
 }
 
 export interface DynamodbTableUpdateItemResult {
@@ -549,16 +602,36 @@ export interface DynamodbTransactWriteItemUpdateOptions {
    * The item to update.
    */
   readonly key: Json;
+
   /**
    * An expression that defines one or more attributes to be updated.
    * @default undefined
    */
   readonly updateExpression?: string;
+
+  /**
+   * A condition that must be satisfied in order for an operation to succeed.
+   * @default undefined
+   */
+  readonly conditionExpression?: string;
+
+  /**
+   * One or more substitution tokens for attribute names in an expression.
+   * @default undefined
+   */
+  readonly expressionAttributeNames?: Json;
+
   /**
    * One or more values that can be substituted in an expression.
    * @default undefined
    */
   readonly expressionAttributeValues?: Json;
+
+  /**
+   * Determines the level of detail about either provisioned or on-demand throughput consumption.
+   * @default "NONE"
+   */
+  readonly returnValuesOnConditionCheckFailure?: "ALL_OLD" | "NONE";
 }
 
 /**
@@ -569,6 +642,173 @@ export interface DynamodbTransactWriteItemDeleteOptions {
    * The item to delete.
    */
   readonly key: Json;
+
+  /**
+   * A condition that must be satisfied in order for an operation to succeed.
+   * @default undefined
+   */
+  readonly conditionExpression?: string;
+
+  /**
+   * One or more substitution tokens for attribute names in an expression.
+   * @default undefined
+   */
+  readonly expressionAttributeNames?: Json;
+
+  /**
+   * One or more values that can be substituted in an expression.
+   * @default undefined
+   */
+  readonly expressionAttributeValues?: Json;
+
+  /**
+   * Determines the level of detail about either provisioned or on-demand throughput consumption.
+   * @default "NONE"
+   */
+  readonly returnValuesOnConditionCheckFailure?: "ALL_OLD" | "NONE";
+}
+
+/**
+ * Options for transact write item's condition check operation.
+ */
+export interface DynamodbTransactWriteItemConditionCheckOptions {
+  /**
+   * The item to check.
+   */
+  readonly key: Json;
+
+  /**
+   * A condition that must be satisfied in order for an operation to succeed.
+   * @default undefined
+   */
+  readonly conditionExpression?: string;
+
+  /**
+   * One or more substitution tokens for attribute names in an expression.
+   * @default undefined
+   */
+  readonly expressionAttributeNames?: Json;
+
+  /**
+   * One or more values that can be substituted in an expression.
+   * @default undefined
+   */
+  readonly expressionAttributeValues?: Json;
+
+  /**
+   * Determines the level of detail about either provisioned or on-demand throughput consumption.
+   * @default "NONE"
+   */
+  readonly returnValuesOnConditionCheckFailure?: "ALL_OLD" | "NONE";
+}
+
+export interface DynamodbTableBatchGetItemRequestItem {
+  /**
+   * The primary key attribute values that define the items and the attributes associated with the items.
+   */
+  readonly keys: Json[];
+
+  /**
+   * The consistency of a read operation.
+   * @default false
+   */
+  readonly consistentRead?: boolean;
+
+  /**
+   * One or more substitution tokens for attribute names in an expression.
+   * @default undefined
+   */
+  readonly expressionAttributeNames?: Json;
+
+  /**
+   * A string that identifies one or more attributes to retrieve from the table.
+   * @default undefined
+   */
+  readonly projectionExpression?: string;
+}
+
+export interface DynamodbTableBatchGetItemOptions {
+  /**
+   * Describes one or more items to retrieve from that table.
+   */
+  readonly requestItem: DynamodbTableBatchGetItemRequestItem;
+
+  /**
+   * Determines the level of detail about either provisioned or on-demand throughput consumption.
+   *
+   * @default "NONE"
+   */
+  readonly returnConsumedCapacity?: "INDEXES" | "TOTAL" | "NONE";
+}
+
+export interface DynamodbTableBatchGetItemResult {
+  readonly consumedCapacity?: Json;
+  readonly responses?: Json[];
+  readonly unprocessedKeys?: DynamodbTableBatchGetItemRequestItem;
+}
+
+export interface DynamodbTableBatchWriteItemDeleteRequestOptions {
+  /**
+   * A map of attribute names to `AttributeValue` objects, representing the primary key of the item to delete.
+   */
+  readonly key: Json;
+}
+
+export interface DynamodbTableBatchWriteItemPutRequestOptions {
+  /**
+   * A map of attribute name to attribute values, representing the primary key of an item to be processed by `PutItem`.
+   */
+  readonly item: Json;
+}
+
+// export type DynamodbTableBatchWriteItemRequestItem =
+//   | {
+//       readonly deleteRequest: DynamodbTableBatchWriteItemDeleteRequestOptions;
+//     }
+//   | {
+//       readonly putRequest: DynamodbTableBatchWriteItemPutRequestOptions;
+//     };
+export interface DynamodbTableBatchWriteItemRequestItem {
+  readonly deleteRequest?: DynamodbTableBatchWriteItemDeleteRequestOptions;
+  readonly putRequest?: DynamodbTableBatchWriteItemPutRequestOptions;
+}
+
+export interface DynamodbTableBatchWriteItemOptions {
+  readonly requestItems: DynamodbTableBatchWriteItemRequestItem[];
+
+  /**
+   * Determines the level of detail about either provisioned or on-demand throughput consumption.
+   *
+   * @default "NONE"
+   */
+  readonly returnConsumedCapacity?: "INDEXES" | "TOTAL" | "NONE";
+
+  /**
+   * Determines whether item collection metrics are returned.
+   *
+   * @default "NONE"
+   */
+  readonly returnItemCollectionMetrics?: "SIZE" | "NONE";
+}
+
+export interface DynamodbTableBatchWriteItemResult {
+  /**
+   * The unprocessed items from the batch write operation.
+   * @default undefined
+   */
+  readonly unprocessedItems?: DynamodbTableBatchWriteItemRequestItem[];
+
+  /**
+   * The capacity units consumed by the BatchWriteItem operation.
+   * @default undefined
+   */
+  readonly consumedCapacity?: Json;
+
+  /**
+   * The number of items deleted by the BatchWriteItem operation.
+   * @default undefined
+   */
+  readonly itemCollectionMetrics?: Json;
 }
 
 /**
@@ -579,14 +819,21 @@ export interface DynamodbTransactWriteItem {
    * A request to perform a put operation.
    */
   readonly put?: DynamodbTransactWriteItemPutProps;
+
   /**
    * A request to perform a update operation.
    */
   readonly update?: DynamodbTransactWriteItemUpdateOptions;
+
   /**
    * A request to perform a delete operation.
    */
   readonly delete?: DynamodbTransactWriteItemDeleteOptions;
+
+  /**
+   * A request to perform a condition check operation.
+   */
+  readonly conditionCheck?: DynamodbTransactWriteItemConditionCheckOptions;
 }
 
 /**
@@ -614,7 +861,7 @@ export interface IDynamodbTableClient {
    * @param options dynamodb PutItem options.
    * @inflight
    */
-  putItem(options?: DynamodbTablePutItemOptions): Promise<void>;
+  putItem(options: DynamodbTablePutItemOptions): Promise<void>;
 
   /**
    * Get an item from the table.
@@ -622,7 +869,7 @@ export interface IDynamodbTableClient {
    * @inflight
    */
   updateItem(
-    options?: DynamodbTableUpdateItemOptions
+    options: DynamodbTableUpdateItemOptions
   ): Promise<DynamodbTableUpdateItemResult>;
 
   /**
@@ -668,6 +915,24 @@ export interface IDynamodbTableClient {
   transactWriteItems(
     options: DynamodbTransactWriteItemsOptions
   ): Promise<DynamodbTableTransactWriteItemsResult>;
+
+  /**
+   * Return the attributes of one or more items.
+   * @param options options for the batch get item operation.
+   * @inflight
+   */
+  batchGetItem(
+    options: DynamodbTableBatchGetItemOptions
+  ): Promise<DynamodbTableBatchGetItemResult>;
+
+  /**
+   * Put or delete multiple items.
+   * @param options options for the batch write item operation.
+   * @inflight
+   */
+  batchWriteItem(
+    options: DynamodbTableBatchWriteItemOptions
+  ): Promise<DynamodbTableBatchWriteItemResult>;
 }
 
 /**
@@ -689,6 +954,10 @@ export enum DynamodbTableInflightMethods {
   QUERY = "query",
   /** `DynamodbTable.transactWriteItems` */
   TRANSACT_WRITE_ITEMS = "transactWriteItems",
+  /** `DynamodbTable.batchGetItem` */
+  BATCH_GET_ITEM = "batchGetItem",
+  /** `DynamodbTable.batchWriteItem` */
+  BATCH_Write_ITEM = "batchWriteItem",
 }
 
 /**
@@ -739,6 +1008,15 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
         ExpressionAttributeValues: options?.expressionAttributeValues
           ? marshall(options?.expressionAttributeValues)
           : undefined,
+        ExpressionAttributeNames: options?.expressionAttributeNames as
+          | Record<string, string>
+          | undefined,
+        ConditionExpression: options?.conditionExpression,
+        ReturnConsumedCapacity: options?.returnConsumedCapacity,
+        ReturnItemCollectionMetrics: options?.returnItemCollectionMetrics,
+        ReturnValues: options?.returnValues,
+        ReturnValuesOnConditionCheckFailure:
+          options?.returnValuesOnConditionCheckFailure,
       })
     );
     return {
@@ -876,7 +1154,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
   ): Promise<DynamodbTableTransactWriteItemsResult> {
     const client = await this._rawClient();
 
-    const items = options.transactItems.map((item) => {
+    const items = options.transactItems.map<TransactWriteItem>((item) => {
       if (item.put) {
         return {
           Put: {
@@ -890,10 +1168,16 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
           Update: {
             TableName: this.tableName,
             Key: marshall(item.update.key),
+            ConditionExpression: item.update.conditionExpression,
             UpdateExpression: item.update.updateExpression,
+            ExpressionAttributeNames: item.update.expressionAttributeNames as
+              | Record<string, string>
+              | undefined,
             ExpressionAttributeValues: item.update.expressionAttributeValues
               ? marshall(item.update.expressionAttributeValues)
               : undefined,
+            ReturnValuesOnConditionCheckFailure:
+              item.update.returnValuesOnConditionCheckFailure,
           },
         };
       } else if (item.delete) {
@@ -901,11 +1185,36 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
           Delete: {
             TableName: this.tableName,
             Key: marshall(item.delete.key),
+            ConditionExpression: item.delete.conditionExpression,
+            ExpressionAttributeNames: item.delete.expressionAttributeNames as
+              | Record<string, string>
+              | undefined,
+            ExpressionAttributeValues: item.delete.expressionAttributeValues
+              ? marshall(item.delete.expressionAttributeValues)
+              : undefined,
+            ReturnValuesOnConditionCheckFailure:
+              item.delete.returnValuesOnConditionCheckFailure,
+          },
+        };
+      } else if (item.conditionCheck) {
+        return {
+          ConditionCheck: {
+            TableName: this.tableName,
+            Key: marshall(item.conditionCheck.key),
+            ConditionExpression: item.conditionCheck.conditionExpression,
+            ExpressionAttributeNames: item.conditionCheck
+              .expressionAttributeNames as Record<string, string> | undefined,
+            ExpressionAttributeValues: item.conditionCheck
+              .expressionAttributeValues
+              ? marshall(item.conditionCheck.expressionAttributeValues)
+              : undefined,
+            ReturnValuesOnConditionCheckFailure:
+              item.conditionCheck.returnValuesOnConditionCheckFailure,
           },
         };
       } else {
         throw Error(
-          "A write transact item must define either `put`, `update` or `delete`."
+          "A write transact item must define either `put`, `update`, `delete` or `conditionCheck`."
         );
       }
     });
@@ -919,6 +1228,102 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
     return {
       consumedCapacity: result.ConsumedCapacity as Json | undefined,
       itemCollectionMetrics: result.ItemCollectionMetrics as Json | undefined,
+    };
+  }
+
+  public async batchGetItem(
+    options: DynamodbTableBatchGetItemOptions
+  ): Promise<DynamodbTableBatchGetItemResult> {
+    const client = await this._rawClient();
+    const result = await client.send(
+      new BatchGetItemCommand({
+        RequestItems: {
+          [this.tableName]: {
+            Keys: options.requestItem.keys.map((key) => marshall(key)),
+            ConsistentRead: options.requestItem.consistentRead,
+            ExpressionAttributeNames: options.requestItem
+              .expressionAttributeNames as Record<string, string> | undefined,
+            ProjectionExpression: options.requestItem.projectionExpression,
+          },
+        },
+        ReturnConsumedCapacity: options.returnConsumedCapacity,
+      })
+    );
+    const unprocessedKeys = result.UnprocessedKeys?.[this.tableName];
+    return {
+      consumedCapacity: result.ConsumedCapacity as Json | undefined,
+      responses: result.Responses
+        ? result.Responses[this.tableName].map(
+            (item) => unmarshall(item) as Json
+          )
+        : undefined,
+      unprocessedKeys: unprocessedKeys
+        ? {
+            keys: unprocessedKeys.Keys!.map((key) => unmarshall(key) as Json),
+            consistentRead: unprocessedKeys.ConsistentRead,
+            expressionAttributeNames:
+              unprocessedKeys.ExpressionAttributeNames as Json | undefined,
+            projectionExpression: unprocessedKeys.ProjectionExpression,
+          }
+        : undefined,
+    };
+  }
+
+  public async batchWriteItem(
+    options: DynamodbTableBatchWriteItemOptions
+  ): Promise<DynamodbTableBatchWriteItemResult> {
+    const client = await this._rawClient();
+    const result = await client.send(
+      new BatchWriteItemCommand({
+        RequestItems: {
+          [this.tableName]: options.requestItems.map((item) => {
+            if (item.deleteRequest) {
+              return {
+                DeleteRequest: {
+                  Key: marshall(item.deleteRequest.key),
+                },
+              };
+            } else if (item.putRequest) {
+              return {
+                PutRequest: {
+                  Item: marshall(item.putRequest.item),
+                },
+              };
+            } else {
+              throw Error(
+                "A batch write item must define either `deleteRequest` or `putRequest`."
+              );
+            }
+          }),
+        },
+        ReturnConsumedCapacity: options.returnConsumedCapacity,
+        ReturnItemCollectionMetrics: options.returnItemCollectionMetrics,
+      })
+    );
+    return {
+      consumedCapacity: result.ConsumedCapacity as Json | undefined,
+      itemCollectionMetrics: result.ItemCollectionMetrics as Json | undefined,
+      unprocessedItems: result.UnprocessedItems
+        ? result.UnprocessedItems[
+            this.tableName
+          ].map<DynamodbTableBatchWriteItemRequestItem>((item) => {
+            if (item.PutRequest) {
+              return {
+                putRequest: {
+                  item: unmarshall(item.PutRequest.Item!) as Json,
+                },
+              };
+            } else if (item.DeleteRequest) {
+              return {
+                deleteRequest: {
+                  key: unmarshall(item.DeleteRequest.Key!) as Json,
+                },
+              };
+            } else {
+              throw Error("Invalid batch write item.");
+            }
+          })
+        : undefined,
     };
   }
 }
