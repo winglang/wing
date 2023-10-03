@@ -130,7 +130,7 @@ test("basic function with memory size specified", () => {
 });
 
 test("basic function with custom log retention", () => {
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   Function._newFunction(app, "Function", inflight, { logRetentionDays: 7 });
   const output = app.synth();
@@ -149,7 +149,7 @@ test("basic function with custom log retention", () => {
 });
 
 test("basic function with infinite log retention", () => {
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   Function._newFunction(app, "Function", inflight, { logRetentionDays: -1 });
   const output = app.synth();
