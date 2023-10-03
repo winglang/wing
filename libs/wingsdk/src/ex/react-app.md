@@ -1,5 +1,5 @@
 ---
-title: React Website
+title: React App
 id: react-website
 description: A built-in resource for creating deployable websites using the React framework.
 keywords: [Website, React, deployment, build]
