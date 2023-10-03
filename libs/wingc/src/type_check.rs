@@ -5,8 +5,8 @@ pub mod lifts;
 pub mod symbol_env;
 
 use crate::ast::{
-	self, AccessModifier, AssignmentKind, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition, IfLet,
-	NewExpr, TypeAnnotationKind,
+	self, AccessModifier, AssignmentKind, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition, IfLet, New,
+	TypeAnnotationKind,
 };
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter as AstFunctionParameter,
@@ -1914,7 +1914,7 @@ impl<'a> TypeChecker<'a> {
 				(vi.type_, phase)
 			}
 			ExprKind::New(new_expr) => {
-				let NewExpr {
+				let New {
 					class,
 					obj_id,
 					arg_list,

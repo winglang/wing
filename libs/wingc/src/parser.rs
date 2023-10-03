@@ -10,8 +10,8 @@ use tree_sitter_traversal::{traverse, Order};
 use crate::ast::{
 	AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
 	ElifBlock, ElifLetBlock, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
-	IfLet, Interface, InterpolatedString, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Spanned,
-	Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
+	IfLet, Interface, InterpolatedString, InterpolatedStringPart, Literal, New, Phase, Reference, Scope, Spanned, Stmt,
+	StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan};
@@ -1710,7 +1710,7 @@ impl<'s> Parser<'s> {
 				};
 
 				Ok(Expr::new(
-					ExprKind::New(NewExpr {
+					ExprKind::New(New {
 						class: class_udt,
 						obj_id,
 						arg_list: arg_list?,
@@ -2233,7 +2233,7 @@ impl<'s> Parser<'s> {
 
 		let type_span = self.node_span(&statement_node.child(0).unwrap());
 		Ok(StmtKind::Expression(Expr::new(
-			ExprKind::New(NewExpr {
+			ExprKind::New(New {
 				class: UserDefinedType {
 					root: Symbol::global(WINGSDK_STD_MODULE),
 					fields: vec![Symbol::global(WINGSDK_TEST_CLASS_NAME)],

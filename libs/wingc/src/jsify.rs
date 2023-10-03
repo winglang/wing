@@ -11,7 +11,7 @@ use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, collections::BTreeMap, v
 use crate::{
 	ast::{
 		ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, ElifLetBlock, Expr, ExprKind,
-		FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt,
+		FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, Literal, New, Phase, Reference, Scope, Stmt,
 		StmtKind, Symbol, UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
@@ -416,8 +416,8 @@ impl<'a> JSifier<'a> {
 			_ => "",
 		};
 		match &expression.kind {
-			ExprKind::New(new_expr) => {
-				let NewExpr { class, obj_id, arg_list, obj_scope } = new_expr;
+			ExprKind::New(new) => {
+				let New { class, obj_id, arg_list, obj_scope } = new;
 
 				let expression_type = self.types.get_expr_type(&expression);
 				let is_preflight_class = expression_type.is_preflight_class();
@@ -464,7 +464,13 @@ impl<'a> JSifier<'a> {
 						format!("this.node.root.new(\"{}\",{},{})", fqn, ctor, args)
 					}
 				} else {
-					format!("new {}({})", ctor, args)
+					// If we're inflight and this new expression evaluates to a type with an inflight init then
+					// make sure it's called before we return the object.
+					if ctx.visit_ctx.current_phase() == Phase::Inflight && expression_type.as_class().expect("a class").get_method(&Symbol::global(CLASS_INFLIGHT_INIT_NAME)).is_some() {
+						format!("await (async (o) => {{ await o.{CLASS_INFLIGHT_INIT_NAME}({args}); return o; }})(new {ctor}())")
+					} else {
+						format!("new {}({})", ctor, args)
+					}
 				}
 			}
 			ExprKind::Literal(lit) => match lit {
@@ -798,7 +804,7 @@ impl<'a> JSifier<'a> {
 				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
 				match ctx.visit_ctx.current_phase() {
 					Phase::Preflight => CodeMaker::one_line(format!("super(scope,id,{});", args)),
-					_ => CodeMaker::one_line(format!("super({});", args)),
+					_ => CodeMaker::one_line(format!("await super.{CLASS_INFLIGHT_INIT_NAME}({});", args)),
 				}
 			}
 			StmtKind::Let {
@@ -1053,19 +1059,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		let (name, arrow) = match &func_def.name {
-			Some(name) => {
-				let mut result = name.name.clone();
-
-				// if this is an inflight class, we need to rename the constructor to "constructor" because
-				// it's "just a class" basically.
-				if let Some(class) = class {
-					if result == CLASS_INFLIGHT_INIT_NAME && class.phase == Phase::Inflight {
-						result = JS_CONSTRUCTOR.to_string();
-					}
-				}
-
-				(result, " ".to_string())
-			}
+			Some(name) => (name.name.clone(), " ".to_string()),
 			None => ("".to_string(), " => ".to_string()),
 		};
 

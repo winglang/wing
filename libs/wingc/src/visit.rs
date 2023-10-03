@@ -1,7 +1,7 @@
 use crate::{
 	ast::{
 		ArgList, BringSource, CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
-		FunctionSignature, IfLet, Interface, InterpolatedStringPart, Literal, NewExpr, Reference, Scope, Stmt, StmtKind,
+		FunctionSignature, IfLet, Interface, InterpolatedStringPart, Literal, New, Reference, Scope, Stmt, StmtKind,
 		Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
@@ -48,7 +48,7 @@ pub trait Visit<'ast> {
 	fn visit_expr(&mut self, node: &'ast Expr) {
 		visit_expr(self, node);
 	}
-	fn visit_new_expr(&mut self, node: &'ast NewExpr) {
+	fn visit_new_expr(&mut self, node: &'ast New) {
 		visit_new_expr(self, node);
 	}
 	fn visit_literal(&mut self, node: &'ast Literal) {
@@ -280,7 +280,7 @@ where
 	}
 }
 
-pub fn visit_new_expr<'ast, V>(v: &mut V, node: &'ast NewExpr)
+pub fn visit_new_expr<'ast, V>(v: &mut V, node: &'ast New)
 where
 	V: Visit<'ast> + ?Sized,
 {
