@@ -1,6 +1,6 @@
 ---
 title: React App
-id: react-website
+id: react-app
 description: A built-in resource for creating deployable websites using the React framework.
 keywords: [Website, React, deployment, build]
 sidebar_position: 1
