@@ -225,6 +225,18 @@ module.exports = function({ $api_url, $http_Util, $preflightVariable, $website_u
         "signing_protocol": "sigv4"
       }
     },
+    "aws_cloudwatch_log_group": {
+      "cloudApi_cloudApi-OnRequest-cdafee6e_CloudwatchLogGroup_B50BDB26": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-cdafee6e/CloudwatchLogGroup",
+            "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_CloudwatchLogGroup_B50BDB26"
+          }
+        },
+        "name": "/aws/lambda/cloud-Api-OnRequest-cdafee6e-c8147384",
+        "retention_in_days": 30
+      }
+    },
     "aws_iam_role": {
       "cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442": {
         "//": {
@@ -284,7 +296,7 @@ module.exports = function({ $api_url, $http_Util, $preflightVariable, $website_u
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudApi_cloudApi-OnRequest-cdafee6e_S3Object_5DAAA0EF.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
