@@ -135,5 +135,8 @@ export interface AddFileOptions {
  * Base interface for a website
  */
 export interface IWebsite {
+  /**
+   * The website URL
+   */
   readonly url: string;
 }
