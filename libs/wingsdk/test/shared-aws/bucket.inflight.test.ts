@@ -10,12 +10,12 @@ import {
   S3Client,
   NoSuchKey,
 } from "@aws-sdk/client-s3";
+import * as s3RequestPresigner from "@aws-sdk/s3-request-presigner/dist-cjs/getSignedUrl";
 import { SdkStream } from "@aws-sdk/types";
 import { sdkStreamMixin } from "@aws-sdk/util-stream-node";
 import { mockClient } from "aws-sdk-client-mock";
 import { test, expect, beforeEach, vi, Mock } from "vitest";
 import { BucketClient } from "../../src/shared-aws/bucket.inflight";
-import * as s3RequestPresigner from "@aws-sdk/s3-request-presigner/dist-cjs/getSignedUrl";
 
 const s3Mock = mockClient(S3Client);
 
