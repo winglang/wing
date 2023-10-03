@@ -29,6 +29,18 @@ exports[`Plugin examples > AWS target plugins > permission-boundary.js 1`] = `
     ],
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "cloudQueue-SetConsumer-cdafee6e_CloudwatchLogGroup_F895C874": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Queue-SetConsumer-cdafee6e/CloudwatchLogGroup",
+            "uniqueId": "cloudQueue-SetConsumer-cdafee6e_CloudwatchLogGroup_F895C874",
+          },
+        },
+        "name": "/aws/lambda/cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "cloudQueue-SetConsumer-cdafee6e_IamRole_2548D828": {
         "//": {
@@ -188,6 +200,18 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
     ],
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "cloudQueue-SetConsumer-cdafee6e_CloudwatchLogGroup_F895C874": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Queue-SetConsumer-cdafee6e/CloudwatchLogGroup",
+            "uniqueId": "cloudQueue-SetConsumer-cdafee6e_CloudwatchLogGroup_F895C874",
+          },
+        },
+        "name": "/aws/lambda/cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_policy": {
       "ReplicaCodePolicy": {
         "//": {
@@ -534,6 +558,18 @@ exports[`Plugin examples > AWS target plugins > tf-backend.js > azurerm backend 
     ],
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "cloudQueue-SetConsumer-cdafee6e_CloudwatchLogGroup_F895C874": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Queue-SetConsumer-cdafee6e/CloudwatchLogGroup",
+            "uniqueId": "cloudQueue-SetConsumer-cdafee6e_CloudwatchLogGroup_F895C874",
+          },
+        },
+        "name": "/aws/lambda/cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "cloudQueue-SetConsumer-cdafee6e_IamRole_2548D828": {
         "//": {
@@ -692,6 +728,18 @@ exports[`Plugin examples > AWS target plugins > tf-backend.js > gcp backend 1`] 
     ],
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "cloudQueue-SetConsumer-cdafee6e_CloudwatchLogGroup_F895C874": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Queue-SetConsumer-cdafee6e/CloudwatchLogGroup",
+            "uniqueId": "cloudQueue-SetConsumer-cdafee6e_CloudwatchLogGroup_F895C874",
+          },
+        },
+        "name": "/aws/lambda/cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "cloudQueue-SetConsumer-cdafee6e_IamRole_2548D828": {
         "//": {
@@ -850,6 +898,18 @@ exports[`Plugin examples > AWS target plugins > tf-backend.js > s3 backend 1`] =
     ],
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "cloudQueue-SetConsumer-cdafee6e_CloudwatchLogGroup_F895C874": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Queue-SetConsumer-cdafee6e/CloudwatchLogGroup",
+            "uniqueId": "cloudQueue-SetConsumer-cdafee6e_CloudwatchLogGroup_F895C874",
+          },
+        },
+        "name": "/aws/lambda/cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "cloudQueue-SetConsumer-cdafee6e_IamRole_2548D828": {
         "//": {

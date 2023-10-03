@@ -66,6 +66,28 @@ module.exports = function({  }) {
     ]
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "cloudQueue-SetConsumer-86898773_CloudwatchLogGroup_389C274F": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Queue-SetConsumer-86898773/CloudwatchLogGroup",
+            "uniqueId": "cloudQueue-SetConsumer-86898773_CloudwatchLogGroup_389C274F"
+          }
+        },
+        "name": "/aws/lambda/cloud-Queue-SetConsumer-86898773-c8cecfb3",
+        "retention_in_days": 30
+      },
+      "cloudTopic-OnMessage-cdafee6e_CloudwatchLogGroup_DF1BF72A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Topic-OnMessage-cdafee6e/CloudwatchLogGroup",
+            "uniqueId": "cloudTopic-OnMessage-cdafee6e_CloudwatchLogGroup_DF1BF72A"
+          }
+        },
+        "name": "/aws/lambda/cloud-Topic-OnMessage-cdafee6e-c814de3f",
+        "retention_in_days": 30
+      }
+    },
     "aws_iam_role": {
       "cloudQueue-SetConsumer-86898773_IamRole_36B46149": {
         "//": {
