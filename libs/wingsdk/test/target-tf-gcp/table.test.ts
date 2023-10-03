@@ -20,6 +20,9 @@ test("create a table", () => {
   });
   const output = app.synth();
 
-  expect(tfResourcesOf(output)).toEqual(["google_bigtable_instance", "google_bigtable_table"]);
+  expect(tfResourcesOf(output)).toEqual([
+    "google_bigtable_instance",
+    "google_bigtable_table",
+  ]);
   expect(tfSanitize(output)).toMatchSnapshot();
 });

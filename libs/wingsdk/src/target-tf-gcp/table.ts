@@ -1,16 +1,16 @@
 import { Construct } from "constructs";
 import { App } from "./app";
 import {
-  BigtableTable,
-  BigtableTableConfig,
-  BigtableTableColumnFamily,
-} from "../.gen/providers/google/bigtable-table";
-import {
   BigtableInstance,
   BigtableInstanceCluster,
   BigtableInstanceClusterAutoscalingConfig,
   BigtableInstanceConfig,
 } from "../.gen/providers/google/bigtable-instance";
+import {
+  BigtableTable,
+  BigtableTableConfig,
+  BigtableTableColumnFamily,
+} from "../.gen/providers/google/bigtable-table";
 import * as ex from "../ex";
 import {
   ResourceNames,
@@ -22,14 +22,13 @@ import { IInflightHost, Json } from "../std";
 const TABLE_NAME_OPTS: NameOptions = {
   maxLen: 22,
   disallowedRegex: /[a-z0-9\-\.\_]+/g,
-  sep: 'A',
+  sep: "A",
 };
-
 
 const INSTANCE_NAME_OPTS: NameOptions = {
   maxLen: 22,
   disallowedRegex: /[a-z0-9\-\.\_]+/g,
-  sep: 'A',
+  sep: "A",
   case: CaseConventions.LOWERCASE,
 };
 
@@ -47,7 +46,6 @@ export class Table extends ex.Table {
     const tableName = ResourceNames.generateName(this, TABLE_NAME_OPTS);
     const instanceName = ResourceNames.generateName(this, INSTANCE_NAME_OPTS);
 
-
     const columnsFamily: BigtableTableColumnFamily[] = [];
     for (let key in this.columns) {
       columnsFamily.push({ family: key });
@@ -60,25 +58,23 @@ export class Table extends ex.Table {
 
     const autoscalingConfig: BigtableInstanceClusterAutoscalingConfig = {
       minNodes: props.minNodes ?? 1,
-      maxNodes: props.maxNodes ?? 1 ,
+      maxNodes: props.maxNodes ?? 1,
       cpuTarget: props.cpuTarget ?? 10,
-     }
+    };
 
     const instanceCluster: BigtableInstanceCluster = {
       clusterId: clusterId!,
       storageType: props.storageType,
       zone: app.zone,
-      autoscalingConfig: autoscalingConfig, 
-    }
-
+      autoscalingConfig: autoscalingConfig,
+    };
 
     const instanceConfig: BigtableInstanceConfig = {
       name: instanceName,
       cluster: [instanceCluster],
-    }
+    };
 
     let instance = new BigtableInstance(this, "Instance", instanceConfig);
-
 
     const tableConfig: BigtableTableConfig = {
       name: tableName,
@@ -88,7 +84,6 @@ export class Table extends ex.Table {
     };
 
     new BigtableTable(this, "Default", tableConfig);
-
   }
 
   public addRow(_key: string, _row: Json): void {

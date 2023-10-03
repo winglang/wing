@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="archive64">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/examples/tests/valid/target/bucket_events.tfaws/assets/b_b-onupdate-OnMessage-2dce4026_Asset_F4ADE941/742C0DE081DD5239F11725A936841851/archive.zip!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

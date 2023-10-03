@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="archive370">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/examples/tests/valid/target/inflight_class_inside_inflight_closure.tfaws/assets/PreflightClass_cloudFunction_Asset_E71A8658/5C6A2B8B126964ADEA116FDECC36C60C/archive.zip!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="layer70">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/node_modules/.pnpm/@aws-cdk+asset-awscli-v1@2.2.200/node_modules/@aws-cdk/asset-awscli-v1/lib/layer.zip!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

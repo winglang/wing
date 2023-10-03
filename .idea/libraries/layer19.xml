@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="layer19">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/tools/hangar/node_modules/@wingconsole/server/node_modules/@winglang/compiler/node_modules/@winglang/wingc/node_modules/@winglang/sdk/node_modules/@aws-cdk/asset-awscli-v1/lib/layer.zip!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

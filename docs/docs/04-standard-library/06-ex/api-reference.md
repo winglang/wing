@@ -2036,10 +2036,29 @@ let TableProps = ex.TableProps{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@winglang/sdk.ex.TableProps.property.clusterId">clusterId</a></code> | <code>str</code> | The table's instance id. |
 | <code><a href="#@winglang/sdk.ex.TableProps.property.columns">columns</a></code> | <code>MutMap&lt;<a href="#@winglang/sdk.ex.ColumnType">ColumnType</a>&gt;</code> | The table's columns. |
+| <code><a href="#@winglang/sdk.ex.TableProps.property.cpuTarget">cpuTarget</a></code> | <code>num</code> | The table's instance target cpu utilization for autoscaling. |
 | <code><a href="#@winglang/sdk.ex.TableProps.property.initialRows">initialRows</a></code> | <code>MutMap&lt;<a href="#@winglang/sdk.std.Json">Json</a>&gt;</code> | The table's initial rows. |
+| <code><a href="#@winglang/sdk.ex.TableProps.property.labels">labels</a></code> | <code>MutMap&lt;str&gt;</code> | The tabel's instance labels. |
+| <code><a href="#@winglang/sdk.ex.TableProps.property.maxNodes">maxNodes</a></code> | <code>num</code> | The table's instance maximal number of nodes, used in autoscaling. |
+| <code><a href="#@winglang/sdk.ex.TableProps.property.minNodes">minNodes</a></code> | <code>num</code> | The table's instance minimal number of nodes, used in autoscaling. |
 | <code><a href="#@winglang/sdk.ex.TableProps.property.name">name</a></code> | <code>str</code> | The table's name. |
 | <code><a href="#@winglang/sdk.ex.TableProps.property.primaryKey">primaryKey</a></code> | <code>str</code> | The table's primary key. |
+| <code><a href="#@winglang/sdk.ex.TableProps.property.storageType">storageType</a></code> | <code>str</code> | The table's instance storage type. |
+
+---
+
+##### `clusterId`<sup>Optional</sup> <a name="clusterId" id="@winglang/sdk.ex.TableProps.property.clusterId"></a>
+
+```wing
+clusterId: str;
+```
+
+- *Type:* str
+- *Default:* undefined
+
+The table's instance id.
 
 ---
 
@@ -2056,6 +2075,19 @@ The table's columns.
 
 ---
 
+##### `cpuTarget`<sup>Optional</sup> <a name="cpuTarget" id="@winglang/sdk.ex.TableProps.property.cpuTarget"></a>
+
+```wing
+cpuTarget: num;
+```
+
+- *Type:* num
+- *Default:* 10
+
+The table's instance target cpu utilization for autoscaling.
+
+---
+
 ##### `initialRows`<sup>Optional</sup> <a name="initialRows" id="@winglang/sdk.ex.TableProps.property.initialRows"></a>
 
 ```wing
@@ -2066,6 +2098,45 @@ initialRows: MutMap<Json>;
 - *Default:* undefined
 
 The table's initial rows.
+
+---
+
+##### `labels`<sup>Optional</sup> <a name="labels" id="@winglang/sdk.ex.TableProps.property.labels"></a>
+
+```wing
+labels: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+- *Default:* undefined
+
+The tabel's instance labels.
+
+---
+
+##### `maxNodes`<sup>Optional</sup> <a name="maxNodes" id="@winglang/sdk.ex.TableProps.property.maxNodes"></a>
+
+```wing
+maxNodes: num;
+```
+
+- *Type:* num
+- *Default:* 1
+
+The table's instance maximal number of nodes, used in autoscaling.
+
+---
+
+##### `minNodes`<sup>Optional</sup> <a name="minNodes" id="@winglang/sdk.ex.TableProps.property.minNodes"></a>
+
+```wing
+minNodes: num;
+```
+
+- *Type:* num
+- *Default:* 1
+
+The table's instance minimal number of nodes, used in autoscaling.
 
 ---
 
@@ -2095,6 +2166,19 @@ The table's primary key.
 
 No two rows can have the same value for the
 primary key.
+
+---
+
+##### `storageType`<sup>Optional</sup> <a name="storageType" id="@winglang/sdk.ex.TableProps.property.storageType"></a>
+
+```wing
+storageType: str;
+```
+
+- *Type:* str
+- *Default:* undefined
+
+The table's instance storage type.
 
 ---
 

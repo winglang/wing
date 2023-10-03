@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="layer171">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/node_modules/.pnpm/@aws-cdk+asset-kubectl-v20@2.1.2/node_modules/@aws-cdk/asset-kubectl-v20/lib/layer.zip!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

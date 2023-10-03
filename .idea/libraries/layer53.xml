@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="layer53">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/tools/hangar/tmp/node_modules/winglang/node_modules/@winglang/compiler/node_modules/@winglang/wingc/node_modules/@winglang/sdk/node_modules/@aws-cdk/asset-kubectl-v20/lib/layer.zip!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

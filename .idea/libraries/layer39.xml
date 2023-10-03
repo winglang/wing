@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="layer39">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/examples/tests/valid/node_modules/@aws-cdk/asset-kubectl-v20/lib/layer.zip!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

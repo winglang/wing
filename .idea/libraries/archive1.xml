@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="archive1">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/examples/tests/sdk_tests/on_deploy/target/execute_after.tfaws/assets/testcounter_Handler_Asset_7C68BFC5/BF062F6469E691935E29FAFD37546DBB/archive.zip!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

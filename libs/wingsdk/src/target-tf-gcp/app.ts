@@ -34,7 +34,6 @@ export interface AppProps extends CdktfAppProps {
    * Should environment variable be overriden
    */
   readonly overrideEnv?: boolean;
-
 }
 
 /**

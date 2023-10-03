@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="layer123">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/apps/wing-console/console/app/node_modules/@wingconsole/ui/node_modules/@wingconsole/server/node_modules/@winglang/sdk/node_modules/@aws-cdk/asset-node-proxy-agent-v6/lib/layer.zip!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
