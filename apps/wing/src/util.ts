@@ -1,6 +1,8 @@
 import { copyFileSync, promises as fsPromise } from "fs";
 import { tmpdir } from "os";
 import { join } from "path";
+import { promisify } from "util";
+import * as cp from "child_process";
 
 /**
  * Normalize windows paths to be posix-like.
@@ -49,6 +51,14 @@ export async function copyDir(src: string, dest: string) {
 
     entry.isDirectory() ? await copyDir(srcPath, destPath) : copyFileSync(srcPath, destPath);
   }
+}
+
+/**
+ * Execute a command and return its stdout.
+ */
+export async function exec(command: string): Promise<string> {
+  const output = await promisify(cp.exec)(command);
+  return output.stdout.trim();
 }
 
 /**

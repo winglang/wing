@@ -8,11 +8,6 @@
     "url": "https://wing.cloud",
     "organization": true
   },
-  "files": [
-    "**/*.js",
-    "**/*.w",
-    "!/target/**"
-  ],
   "license": "MIT",
   "engines": {
     "node": ">=v18.0.0"
@@ -21,9 +16,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/winglang/wing.git"
-  },
-  "scripts": {
-    "package": "wing pack"
   },
   "private": true,
   "wing": true,
