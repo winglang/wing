@@ -365,11 +365,11 @@ Duration <DURATION>"
 `;
 
 exports[`bring_non_std_construct.test.w 1`] = `
-"error: Expected between 1 and 2 arguments but got 0
+"error: Expected between 1 and 2 positional arguments or named arguments for the last parameter but got 0
   --> ../../../examples/tests/invalid/bring_non_std_construct.test.w:8:1
   |
 8 | new cdktf.S3Backend();
-  | ^^^^^^^^^^^^^^^^^^^^^ Expected between 1 and 2 arguments but got 0
+  | ^^^^^^^^^^^^^^^^^^^^^ Expected between 1 and 2 positional arguments or named arguments for the last parameter but got 0
 
 
 error: Cannot set id of non-standard preflight class \\"S3Backend\\" using \`as\`
@@ -494,25 +494,25 @@ error: Preflight field \\"x\\" is not initialized
   |    ^ Preflight field \\"x\\" is not initialized
 
 
-error: Expected 0 argument(s) but got 1
+error: Expected 0 positional argument(s) but got 1
   --> ../../../examples/tests/invalid/class.test.w:9:1
   |
 9 | new C2(1);
-  | ^^^^^^^^^ Expected 0 argument(s) but got 1
+  | ^^^^^^^^^ Expected 0 positional argument(s) but got 1
 
 
-error: Expected 0 named arguments for func at ../../../examples/tests/invalid/class.test.w:13:1
+error: No named arguments expected
    --> ../../../examples/tests/invalid/class.test.w:13:1
    |
 13 | new C9(token: \\"1\\");
-   | ^^^^^^^^^^^^^^^^^^ Expected 0 named arguments for func at ../../../examples/tests/invalid/class.test.w:13:1
+   | ^^^^^^^^^^^^^^^^^^ No named arguments expected
 
 
-error: Expected 1 argument(s) but got 0
+error: Expected 1 positional argument(s) but got 0
    --> ../../../examples/tests/invalid/class.test.w:19:1
    |
 19 | new C10(); 
-   | ^^^^^^^^^ Expected 1 argument(s) but got 0
+   | ^^^^^^^^^ Expected 1 positional argument(s) but got 0
 
 
 error: No named arguments expected
@@ -520,6 +520,13 @@ error: No named arguments expected
    |
 22 | new C10(foo: \\"bar\\"); 
    | ^^^^^^^^^^^^^^^^^^^ No named arguments expected
+
+
+error: Expected 1 positional argument(s) but got 0
+   --> ../../../examples/tests/invalid/class.test.w:22:1
+   |
+22 | new C10(foo: \\"bar\\"); 
+   | ^^^^^^^^^^^^^^^^^^^ Expected 1 positional argument(s) but got 0
 
 
 error: No named arguments expected
@@ -599,25 +606,25 @@ error: Unknown symbol \\"C11\\"
    |                   ^^^ Unknown symbol \\"C11\\"
 
 
-error: Expected 1 argument(s) but got 0
+error: Expected 1 positional argument(s) but got 0
     --> ../../../examples/tests/invalid/class.test.w:157:5
     |
 157 |     super();
-    |     ^^^^^^^^ Expected 1 argument(s) but got 0
+    |     ^^^^^^^^ Expected 1 positional argument(s) but got 0
 
 
-error: Expected 1 argument(s) but got 2
+error: Expected 1 positional argument(s) but got 2
     --> ../../../examples/tests/invalid/class.test.w:141:5
     |
 141 |     super(someNum, someStr);
-    |     ^^^^^^^^^^^^^^^^^^^^^^^^ Expected 1 argument(s) but got 2
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^ Expected 1 positional argument(s) but got 2
 
 
-error: Expected 1 argument(s) but got 0
+error: Expected 1 positional argument(s) but got 0
     --> ../../../examples/tests/invalid/class.test.w:132:5
     |
 132 |     super();
-    |     ^^^^^^^^ Expected 1 argument(s) but got 0
+    |     ^^^^^^^^ Expected 1 positional argument(s) but got 0
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -1079,11 +1086,11 @@ Duration <DURATION>"
 `;
 
 exports[`function_call_variadic_min_arity.test.w 1`] = `
-"error: Expected between 2 and 3 arguments but got 0
+"error: Expected 2 positional argument(s) + variadic args but got 0
   --> ../../../examples/tests/invalid/function_call_variadic_min_arity.test.w:7:1
   |
 7 | func(); // variadic signatures should still require min positional arity
-  | ^^^^^^ Expected between 2 and 3 arguments but got 0
+  | ^^^^^^ Expected 2 positional argument(s) + variadic args but got 0
 
 
  
@@ -2524,11 +2531,11 @@ error: \\"bublic\\" is not a field of \\"BucketProps\\"
   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \\"bublic\\" is not a field of \\"BucketProps\\"
 
 
-error: Expected between 0 and 1 arguments but got 2
+error: Expected either a positional argument or named arguments for the last parameter, but got both
   --> ../../../examples/tests/invalid/struct_expansion.test.w:7:15
   |
 7 | let bucket2 = new cloud.Bucket(2, public: true);
-  |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected between 0 and 1 arguments but got 2
+  |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected either a positional argument or named arguments for the last parameter, but got both
 
 
 error: Expected type to be \\"BucketProps?\\", but got \\"num\\" instead
@@ -2560,11 +2567,11 @@ error: \\"notAField\\" is not a field of \\"ApiResponse\\"
    | \\\\-^ \\"notAField\\" is not a field of \\"ApiResponse\\"
 
 
-error: Expected 2 argument(s) but got 1
+error: Expected 2 positional argument(s) but got 1
    --> ../../../examples/tests/invalid/struct_expansion.test.w:11:3
    |
 11 |   bucket1.put(file: \\"file.txt\\", \\"data\\");
-   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected 2 argument(s) but got 1
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected 2 positional argument(s) but got 1
 
 
  
