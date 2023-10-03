@@ -8,6 +8,7 @@ import {
 import {
   BigtableInstance,
   BigtableInstanceCluster,
+  BigtableInstanceClusterAutoscalingConfig,
   BigtableInstanceConfig,
 } from "../.gen/providers/google/bigtable-instance";
 import * as ex from "../ex";
@@ -19,18 +20,17 @@ import {
 import { IInflightHost, Json } from "../std";
 
 const TABLE_NAME_OPTS: NameOptions = {
-  maxLen: 41,
-  case: CaseConventions.LOWERCASE,
-  disallowedRegex: /([^a-z0-9.\-\_]+)/g,
-  includeHash: false,
+  maxLen: 22,
+  disallowedRegex: /[a-z0-9\-\.\_]+/g,
+  sep: 'A',
 };
 
 
-// TODO(wiktor.zajac)  proper name opts
 const INSTANCE_NAME_OPTS: NameOptions = {
-  maxLen: 30,
-  disallowedRegex: /([a-z][a-z0-9\-]+[a-z0-9])/g,
-  sep: undefined,
+  maxLen: 22,
+  disallowedRegex: /[a-z0-9\-\.\_]+/g,
+  sep: 'A',
+  case: CaseConventions.LOWERCASE,
 };
 
 /**
@@ -55,7 +55,13 @@ export class Table extends ex.Table {
 
     let clusterId = props.clusterId;
     if (!props.clusterId) {
-      clusterId = "default"; // ???
+      clusterId = "default";
+    }
+
+    const autoscalingConfig: BigtableInstanceClusterAutoscalingConfig = {
+      minNodes: 1,
+      maxNodes: 3,
+      cpuTarget: 10,
     }
 
     const instanceCluster: BigtableInstanceCluster = {
@@ -63,12 +69,13 @@ export class Table extends ex.Table {
       numNodes: props.numNodes,
       storageType: props.storageType,
       zone: app.zone,
+      autoscalingConfig: autoscalingConfig, 
     }
 
 
     const instanceConfig: BigtableInstanceConfig = {
       name: instanceName,
-      cluster: [instanceCluster], // TODO(wiktor.zajac) should we allow for more clusters?
+      cluster: [instanceCluster],
     }
 
     let instance = new BigtableInstance(this, "Instance", instanceConfig);

@@ -62,10 +62,10 @@ export class App extends CdktfApp {
 
     let projectId: string | undefined = props.projectId;
     if (projectId === undefined && !props.overrideEnv) {
+      // Using env variable for location is work around until we are
+      // able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
       projectId = process.env.GOOGLE_PROJECT_ID;
     }
-    // Using env variable for location is work around until we are
-    // able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
     if (projectId === undefined) {
       throw new Error(
         "A Google Cloud project ID must be specified through the GOOGLE_PROJECT_ID environment variable."
@@ -73,7 +73,6 @@ export class App extends CdktfApp {
     }
     this.projectId = projectId;
 
-    this.region = props.region ?? process.env.GOOGLE_REGION;
     let region: string | undefined = props.region;
     if (region === undefined && !props.overrideEnv) {
       region = process.env.GOOGLE_REGION;
@@ -88,6 +87,9 @@ export class App extends CdktfApp {
 
     let zone: string | undefined = props.zone;
     if (zone === undefined && !props.overrideEnv) {
+      zone = process.env.GOOGLE_ZONE;
+    }
+    if (zone === undefined) {
       throw new Error(
         "A Google Cloud zone must be specified through the GOOGLE_ZONE environment variable.",
       );
