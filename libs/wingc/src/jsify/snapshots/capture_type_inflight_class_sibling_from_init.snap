@@ -41,11 +41,11 @@ module.exports = function({  }) {
       class Bar {
         async func() {
           x;
-          await (async (o) => { await o.$inflight_init(); return o; })(new Foo());
+          (await (async (o) => { await o.$inflight_init(); return o; })(new Foo()));
         }
         async $inflight_init() {
           x;
-          await (async (o) => { await o.$inflight_init(); return o; })(new Foo());
+          (await (async (o) => { await o.$inflight_init(); return o; })(new Foo()));
         }
       }
     }
