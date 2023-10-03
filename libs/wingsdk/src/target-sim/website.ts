@@ -18,8 +18,15 @@ export class Website extends cloud.Website implements ISimulatorResource {
     return simulatorAttrToken(this, "url");
   }
 
-  public addFile(path: string, data: string, contentType: string): string {
-    this.fileRoutes[path] = { data, contentType };
+  public addFile(
+    path: string,
+    data: string,
+    options?: cloud.AddFileOptions
+  ): string {
+    this.fileRoutes[path] = {
+      data,
+      contentType: options?.contentType ?? "text/plain",
+    };
 
     return `${this.url}/${path}`;
   }

@@ -133,12 +133,16 @@ export class Website extends cloud.Website {
     return this._url;
   }
 
-  public addFile(path: string, data: string, contentType: string): string {
+  public addFile(
+    path: string,
+    data: string,
+    options?: cloud.AddFileOptions
+  ): string {
     new S3Object(this, `File-${path}`, {
       dependsOn: [this.bucket],
       content: data,
       bucket: this.bucket.bucket,
-      contentType,
+      contentType: options?.contentType ?? "text/plain",
       key: this.formatPath(path),
     });
 

@@ -1,7 +1,7 @@
 import { existsSync } from "fs";
 import { isAbsolute, join, resolve } from "path";
 import { Construct } from "constructs";
-import { WebsiteOptions, Website } from "../cloud/website";
+import { WebsiteOptions, IWebsite } from "../cloud/website";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { Resource, Node } from "../std";
@@ -9,7 +9,9 @@ import { Resource, Node } from "../std";
 const DEFAULT_BUILD_FOLDER = "/build";
 export const DEFAULT_REACT_APP_BUILD_COMMAND = "npm run build";
 const DEFAULT_PORT = 3001;
-
+/**
+ * The file to write the wing environment to
+ */
 export const WING_JS = "wing.js";
 
 /**
@@ -54,7 +56,7 @@ export interface ReactAppProps {
    * A port to start a local build of the React app on.
    * @default 3001
    */
-  readonly localPort?: string | number;
+  readonly localPort?: number;
 }
 
 /**
@@ -94,7 +96,7 @@ export abstract class ReactApp extends Resource {
   /**
    * @internal
    */
-  protected _websiteHost?: Website | { url: string };
+  protected abstract _websiteHost: IWebsite;
 
   /**
    * @internal
@@ -128,7 +130,7 @@ export abstract class ReactApp extends Resource {
    * Website's url
    */
   public get url(): string {
-    return (this._websiteHost as Website | { url: string }).url;
+    return this._websiteHost.url;
   }
 
   /**

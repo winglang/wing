@@ -655,7 +655,7 @@ exports[`website with addFile 1`] = `
           "803aede88e4c15f39e9b66e31f223e9a0d9062505c6de33e352e494e1c665949.zip",
         ],
         "SystemMetadata": {
-          "content-type": "text/html",
+          "content-type": "tesxt/plain",
         },
       },
       "Type": "Custom::CDKBucketDeployment",

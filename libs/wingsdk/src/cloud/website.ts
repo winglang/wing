@@ -37,7 +37,7 @@ export interface WebsiteOptions {
  *
  * @inflight `@winglang/sdk.cloud.IWebsiteClient`
  */
-export abstract class Website extends Resource {
+export abstract class Website extends Resource implements IWebsite {
   /**
    * Create a new website.
    * @internal
@@ -97,7 +97,9 @@ export abstract class Website extends Resource {
         `key must have a .json suffix. (current: "${path.split(".").pop()}")`
       );
     }
-    return this.addFile(path, JSON.stringify(data), "application/json");
+    return this.addFile(path, JSON.stringify(data), {
+      contentType: "application/json",
+    });
   }
 
   /**
@@ -110,7 +112,7 @@ export abstract class Website extends Resource {
   public abstract addFile(
     path: string,
     data: string,
-    options: AddFileOptions | undefined,
+    options: AddFileOptions
   ): string;
 }
 
@@ -118,3 +120,20 @@ export abstract class Website extends Resource {
  * Inflight methods and members of `cloud.Website`.
  */
 export interface IWebsiteClient {}
+
+/**
+ * Options for adding a file with custom value during the website's deployment.
+ */
+export interface AddFileOptions {
+  /**
+   * File's content type
+   */
+  readonly contentType?: string;
+}
+
+/**
+ * Base interface for a website
+ */
+export interface IWebsite {
+  readonly url: string;
+}

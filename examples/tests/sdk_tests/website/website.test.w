@@ -13,7 +13,7 @@ let indexFile = Util.readFile("./website/website/index.html");
 let otherFile = Util.readFile("./website/website/inner-folder/other.html");
 
 w.addJson("config.json", config);
-w.addFile("another-file.html", htmlContent, "text/html");
+w.addFile("another-file.html", htmlContent, contentType: "text/html");
 
 
 // asserting the website path exists and points to the right folder

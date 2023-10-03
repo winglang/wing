@@ -15,14 +15,19 @@ import * as ex from "../ex";
  * @inflight `@winglang/sdk.cloud.IReactAppClient`
  */
 export class ReactApp extends ex.ReactApp {
+  private _host: cloud.IWebsite;
   constructor(scope: Construct, id: string, props: ex.ReactAppProps) {
     super(scope, id, props);
-    this._createWebsiteHost(
+    this._host = this._createWebsiteHost(
       props.buildCommand ?? ex.DEFAULT_REACT_APP_BUILD_COMMAND
     );
   }
 
-  private _createWebsiteHost(command: string) {
+  protected get _websiteHost(): cloud.IWebsite {
+    return this._host;
+  }
+
+  private _createWebsiteHost(command: string): cloud.IWebsite {
     execSync(command, {
       cwd: this._projectPath,
       maxBuffer: 10 * 1024 * 1024,
@@ -32,7 +37,7 @@ export class ReactApp extends ex.ReactApp {
       unlinkSync(join(this._buildPath, ex.WING_JS));
     }
 
-    this._websiteHost = cloud.Website._newWebsite(
+    const host: cloud.IWebsite = cloud.Website._newWebsite(
       this,
       `${this.node.id}-host`,
       {
@@ -41,12 +46,14 @@ export class ReactApp extends ex.ReactApp {
       }
     );
 
-    this.node.addDependency(this._websiteHost);
+    this.node.addDependency(host);
     Connections.of(this).add({
       source: this,
-      target: this._websiteHost as Website,
+      target: host as Website,
       name: `host`,
     });
+
+    return host;
   }
 
   public _preSynthesize(): void {
@@ -56,11 +63,9 @@ export class ReactApp extends ex.ReactApp {
       null,
       2
     )};`;
-    (this._websiteHost as Website).addFile(
-      ex.WING_JS,
-      content,
-      "text/javascript"
-    );
+    (this._websiteHost as Website).addFile(ex.WING_JS, content, {
+      contentType: "text/javascript",
+    });
   }
 
   /** @internal */

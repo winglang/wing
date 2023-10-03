@@ -62,10 +62,14 @@ export class Website extends cloud.Website {
     return this._url;
   }
 
-  public addFile(path: string, data: string, contentType: string): string {
+  public addFile(
+    path: string,
+    data: string,
+    options?: cloud.AddFileOptions
+  ): string {
     new BucketDeployment(this, `S3Object-${path}`, {
       destinationBucket: this.bucket,
-      contentType: contentType,
+      contentType: options?.contentType ?? "tesxt/plain",
       sources: [Source.data(this.formatPath(path), data)],
     });
 

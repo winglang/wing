@@ -10,6 +10,7 @@ import { IInflightHost } from "../std";
 
 const DEFAULT_START_COMMAND = "npm run start";
 export class ReactApp extends ex.ReactApp implements ISimulatorResource {
+  private _host?: cloud.IWebsite;
   private readonly _startCommand: string;
   constructor(scope: Construct, id: string, props: ex.ReactAppProps) {
     super(scope, id, props);
@@ -20,14 +21,10 @@ export class ReactApp extends ex.ReactApp implements ISimulatorResource {
 
     if (!this._isDevRun) {
       // In the future we can create an host (proxy like) for the development one if needed
-      this._websiteHost = cloud.Website._newWebsite(
-        this,
-        `${this.node.id}-host`,
-        {
-          ...this._hostProps,
-          path: this._buildPath,
-        }
-      );
+      this._host = cloud.Website._newWebsite(this, `${this.node.id}-host`, {
+        ...this._hostProps,
+        path: this._buildPath,
+      });
 
       this.node.addDependency(this._websiteHost);
       core.Connections.of(this).add({
@@ -35,9 +32,11 @@ export class ReactApp extends ex.ReactApp implements ISimulatorResource {
         target: this._websiteHost as cloud.Website,
         name: `host`,
       });
-    } else {
-      this._websiteHost = { url: `http://localhost:${this._localPort}` };
     }
+  }
+
+  protected get _websiteHost(): cloud.IWebsite {
+    return this._host ?? { url: `http://localhost:${this._localPort}` };
   }
 
   public toSimulator(): BaseResourceSchema {

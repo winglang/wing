@@ -152,7 +152,7 @@ window.wingEnv = {
     ex.ReactApp._newReactApp(app, "website", {
       projectPath: resolve(__dirname, "../test-files/react-website"),
       isDevRun: true,
-      localPort: "4032",
+      localPort: 4032,
     });
 
     // WHEN
