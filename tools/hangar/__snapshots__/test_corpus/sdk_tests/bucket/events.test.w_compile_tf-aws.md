@@ -207,6 +207,68 @@ module.exports = function({ $Source, $b, $checkHitCount, $util_Util, $wait }) {
     ]
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "cloudBucket_cloudBucket-oncreate-OnMessage-42558af0_CloudwatchLogGroup_D99603FC": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Bucket/cloud.Bucket-oncreate-OnMessage-42558af0/CloudwatchLogGroup",
+            "uniqueId": "cloudBucket_cloudBucket-oncreate-OnMessage-42558af0_CloudwatchLogGroup_D99603FC"
+          }
+        },
+        "name": "/aws/lambda/cloud-Bucket-oncreate-OnMessage-42558af0-c840cda8",
+        "retention_in_days": 30
+      },
+      "cloudBucket_cloudBucket-oncreate-OnMessage-47274dc3_CloudwatchLogGroup_7CACB761": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Bucket/cloud.Bucket-oncreate-OnMessage-47274dc3/CloudwatchLogGroup",
+            "uniqueId": "cloudBucket_cloudBucket-oncreate-OnMessage-47274dc3_CloudwatchLogGroup_7CACB761"
+          }
+        },
+        "name": "/aws/lambda/cloud-Bucket-oncreate-OnMessage-47274dc3-c82ffa0f",
+        "retention_in_days": 30
+      },
+      "cloudBucket_cloudBucket-ondelete-OnMessage-4b0506cb_CloudwatchLogGroup_5EAEF4A0": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Bucket/cloud.Bucket-ondelete-OnMessage-4b0506cb/CloudwatchLogGroup",
+            "uniqueId": "cloudBucket_cloudBucket-ondelete-OnMessage-4b0506cb_CloudwatchLogGroup_5EAEF4A0"
+          }
+        },
+        "name": "/aws/lambda/cloud-Bucket-ondelete-OnMessage-4b0506cb-c82c9ed0",
+        "retention_in_days": 30
+      },
+      "cloudBucket_cloudBucket-ondelete-OnMessage-cd5c55f4_CloudwatchLogGroup_BB14579F": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Bucket/cloud.Bucket-ondelete-OnMessage-cd5c55f4/CloudwatchLogGroup",
+            "uniqueId": "cloudBucket_cloudBucket-ondelete-OnMessage-cd5c55f4_CloudwatchLogGroup_BB14579F"
+          }
+        },
+        "name": "/aws/lambda/cloud-Bucket-ondelete-OnMessage-cd5c55f4-c8549dac",
+        "retention_in_days": 30
+      },
+      "cloudBucket_cloudBucket-onupdate-OnMessage-39d17a37_CloudwatchLogGroup_19BE1ECB": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Bucket/cloud.Bucket-onupdate-OnMessage-39d17a37/CloudwatchLogGroup",
+            "uniqueId": "cloudBucket_cloudBucket-onupdate-OnMessage-39d17a37_CloudwatchLogGroup_19BE1ECB"
+          }
+        },
+        "name": "/aws/lambda/cloud-Bucket-onupdate-OnMessage-39d17a37-c8aa477a",
+        "retention_in_days": 30
+      },
+      "cloudBucket_cloudBucket-onupdate-OnMessage-ff1f5e53_CloudwatchLogGroup_C7950F76": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Bucket/cloud.Bucket-onupdate-OnMessage-ff1f5e53/CloudwatchLogGroup",
+            "uniqueId": "cloudBucket_cloudBucket-onupdate-OnMessage-ff1f5e53_CloudwatchLogGroup_C7950F76"
+          }
+        },
+        "name": "/aws/lambda/cloud-Bucket-onupdate-OnMessage-ff1f5e53-c810f519",
+        "retention_in_days": 30
+      }
+    },
     "aws_dynamodb_table": {
       "cloudCounter": {
         "//": {

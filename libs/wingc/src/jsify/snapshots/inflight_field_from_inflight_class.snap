@@ -24,7 +24,7 @@ module.exports = function({  }) {
     async getField() {
       return this.field;
     }
-    constructor() {
+    async $inflight_init() {
       this.field = "hi";
     }
   }
