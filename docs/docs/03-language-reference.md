@@ -313,7 +313,14 @@ For each `fromJson()`, there is a `tryFromJson()` method which returns an option
 indicates if parsing was successful or not:
 ```js
 let s = str.tryFromJson(myJson) ?? "invalid string";
-``````
+```
+
+Use `unsafe: true` to disable this check at your own risk:
+```js
+let trustMe = 123;
+let x = num.fromJson(trustMe, unsafe: true);
+assert(x == 123);
+```
 
 ##### 1.1.4.6 Mutability
 
@@ -386,6 +393,13 @@ Contact.fromJson(p);
 // RUNTIME ERROR: unable to parse Contact:
 // - field "last" is required and missing
 // - field "phone" is expected to be a string, got number.
+```
+
+Same as with primitives, it is possible to opt-out of validation using `unsafe: true`:
+```js
+let p = Json { first: "Wing", phone: 1234 };
+let x = Contact.fromJson(p, unsafe: true);
+assert(x.last.len > 0); // RUNTIME ERROR
 ```
 
 ##### 1.1.4.8 Serialization
@@ -1770,6 +1784,29 @@ bring util; // from util bring * as util;
 bring cloud; // from cloud bring * as cloud;
 bring "cdktf" as cdktf; // from "cdktf" bring * as cdktf;
 ```
+
+To import an individual Wing file as a module, you can specify its path relative
+to the current file:
+
+```TS
+bring "./my-module.w" as myModule;
+```
+
+It's also possible to import a directory as a module. The module will contain all
+public types defined in the directory's files. If the directory has subdirectories,
+they will be available under the corresponding names.
+
+```TS
+bring "./my-module" as myModule;
+
+// from ./my-module/submodule/my-class.w
+new myModule.submodule.MyClass();
+```
+
+The following features are not yet implemented, but we are planning to add them in the future:
+
+* Specify types as public using `pub` - see https://github.com/winglang/wing/issues/4294 to track.
+* Specify types as public within the current project or library, and private outside, using `internal` - see https://github.com/winglang/wing/issues/4156 to track.
 
 [`▲ top`][top]
 

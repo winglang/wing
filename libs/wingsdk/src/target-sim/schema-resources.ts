@@ -90,12 +90,12 @@ export interface QueueSchema extends BaseResourceSchema {
 export interface ServiceSchema extends BaseResourceSchema {
   readonly type: typeof SERVICE_TYPE;
   readonly props: {
-    /** Function that should be called when service is started */
-    onStartHandler: FunctionHandle;
-    /** Function that is called when service is stopped */
-    onStopHandler?: FunctionHandle;
+    /** The source code of the service */
+    readonly sourceCodeFile: string;
     /** Whether the service should start when sim starts */
-    autoStart: boolean;
+    readonly autoStart: boolean;
+    /** A map of environment variables to run the function with. */
+    readonly environmentVariables: Record<string, string>;
   };
 }
 
