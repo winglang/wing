@@ -13,14 +13,15 @@ import {
   S3Client,
   GetObjectOutput,
   NoSuchKey,
+  __Client,
 } from "@aws-sdk/client-s3";
-import { BucketDeleteOptions, IBucketClient } from "../cloud";
-import { Duration, Json } from "../std";
-
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { BucketDeleteOptions, IBucketClient, SignedUrlOptions } from "../cloud";
+import { Json } from "../std";
 export class BucketClient implements IBucketClient {
   constructor(
     private readonly bucketName: string,
-    private readonly s3Client = new S3Client({})
+    private readonly s3Client: S3Client = new S3Client({})
   ) {}
 
   /**
@@ -264,16 +265,37 @@ export class BucketClient implements IBucketClient {
   }
 
   /**
-   * Returns a signed url to the given file. This URL can be used by anyone to
-   * access the file until the link expires (defaults to 24 hours).
+   * Returns a signed url to the given file.
+   * @Throws if object does not exist.
+   * @inflight
    * @param key The key to reach
-   * @param duration Time until expires
+   *    @param duration Time until expires
    */
-  public async signed_url(key: string, duration?: Duration): Promise<string> {
-    // for signed_url take a look here: https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/s3-example-creating-buckets.html#s3-create-presigendurl-get
-    throw new Error(
-      `signed_url is not implemented yet (key=${key}, duration=${duration})`
-    );
+
+  public async signedUrl(
+    key: string,
+    options?: SignedUrlOptions
+  ): Promise<string> {
+    if (!(await this.exists(key))) {
+      throw new Error(
+        `Cannot provide signed url for a non-existent key (key=${key})`
+      );
+    }
+    const expiryTimeInSeconds: number = options?.duration?.seconds || 86400;
+    const command: GetObjectCommand = new GetObjectCommand({
+      Bucket: this.bucketName,
+      Key: key,
+    });
+    try {
+      const signedUrl: string = await getSignedUrl(this.s3Client, command, {
+        expiresIn: expiryTimeInSeconds,
+      });
+      return signedUrl;
+    } catch (error) {
+      throw new Error(
+        `Unable to generate signed url for key ${key} : ${error as Error}`
+      );
+    }
   }
 
   private async getLocation(): Promise<string> {
