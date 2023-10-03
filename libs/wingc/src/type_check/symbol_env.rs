@@ -95,6 +95,8 @@ pub enum LookupResult<'a> {
 	Found(reference([a], [SymbolKind]), SymbolLookupInfo),
 	/// The symbol was not found in the environment, contains the name of the symbol or part of it that was not found
 	NotFound(Symbol),
+	/// A symbol with a matching name was found in multiple environments.
+	MultipleFound,
 	/// The symbol exists in the environment but it's not defined yet (based on the statement
 	/// index passed to the lookup)
 	DefinedLater,
@@ -112,6 +114,7 @@ impl<'a> LookupResult<'a> {
 		match self {
 			LookupResult::Found(kind, info) => (kind, info),
 			LookupResult::NotFound(x) => panic!("LookupResult::unwrap({x}) called on LookupResult::NotFound"),
+			LookupResult::MultipleFound => panic!("LookupResult::unwrap() called on LookupResult::MultipleFound"),
 			LookupResult::DefinedLater => panic!("LookupResult::unwrap() called on LookupResult::DefinedLater"),
 			LookupResult::ExpectedNamespace(symbol) => panic!(
 				"LookupResult::unwrap() called on LookupResult::ExpectedNamespace({:?})",
@@ -283,9 +286,9 @@ impl SymbolEnv {
 
 	#[allow(clippy::needless_arbitrary_self_type)]
 	#[duplicate_item(
-		lookup_nested LookupResult lookup_ext as_namespace reference(type) SymbolLookupInfo;
-		[lookup_nested] [LookupResult] [lookup_ext] [as_namespace] [& type] [SymbolLookupInfo];
-		[lookup_nested_mut] [LookupResultMut] [lookup_ext_mut] [as_namespace_mut] [&mut type] [SymbolLookupInfoMut];
+		lookup_nested LookupResult lookup_ext as_namespace reference(type) SymbolLookupInfo vec_iter;
+		[lookup_nested] [LookupResult] [lookup_ext] [as_namespace] [& type] [SymbolLookupInfo] [iter];
+		[lookup_nested_mut] [LookupResultMut] [lookup_ext_mut] [as_namespace_mut] [&mut type] [SymbolLookupInfoMut] [iter_mut];
 	)]
 	/// Lookup a symbol in the environment, returning a `LookupResult`. The symbol name may be a
 	/// nested symbol (e.g. `foo.bar`) if `nested_vec` is larger than 1.
@@ -318,14 +321,26 @@ impl SymbolEnv {
 				return LookupResult::ExpectedNamespace(prev_symb.clone());
 			};
 
-			let lookup_result = ns.env.lookup_ext(next_symb, statement_idx);
-			prev_symb = *next_symb;
-
-			if let LookupResult::Found(k, i) = lookup_result {
+			// Look up the result in each env. If there are multiple results, throw a special error
+			// otherwise proceed normally
+			let mut lookup_result: Option<LookupResult> = None;
+			for env in ns.envs.vec_iter() {
+				let partial_result = env.lookup_ext(next_symb, statement_idx);
+				if matches!(partial_result, LookupResult::Found(_, _)) {
+					if lookup_result.is_none() {
+						lookup_result = Some(partial_result);
+					} else {
+						return LookupResult::MultipleFound;
+					}
+				}
+			}
+			if let Some(LookupResult::Found(k, i)) = lookup_result {
 				res = (k, i);
 			} else {
-				return lookup_result;
+				return LookupResult::NotFound((*next_symb).clone());
 			}
+
+			prev_symb = *next_symb;
 		}
 		let (kind, lookup_info) = res;
 		LookupResult::Found(kind, lookup_info)
@@ -553,32 +568,36 @@ mod tests {
 		);
 
 		// Create namespaces
+		let mut ns1_env = types.add_symbol_env(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Independent, 0));
+		let mut ns2_env = types.add_symbol_env(SymbolEnv::new(
+			Some(ns1_env),
+			SymbolEnvKind::Scope,
+			Phase::Independent,
+			0,
+		));
 		let ns1 = types.add_namespace(Namespace {
 			name: "ns1".to_string(),
-			env: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Independent, 0),
+			envs: vec![ns1_env],
 			loaded: false,
 			module_path: ResolveSource::WingFile,
 		});
 		let ns2 = types.add_namespace(Namespace {
 			name: "ns2".to_string(),
-			env: SymbolEnv::new(Some(ns1.env.get_ref()), SymbolEnvKind::Scope, Phase::Independent, 0),
+			envs: vec![ns2_env],
 			loaded: false,
 			module_path: ResolveSource::WingFile,
 		});
 
 		// Define ns2 in n1's env
 		assert!(matches!(
-			ns1
-				.env
-				.get_ref()
-				.define(&Symbol::global("ns2"), SymbolKind::Namespace(ns2), StatementIdx::Top),
+			ns1_env.define(&Symbol::global("ns2"), SymbolKind::Namespace(ns2), StatementIdx::Top),
 			Ok(())
 		));
 
 		// Define a variable in n2's env
 		let sym = Symbol::global("ns2_var");
 		assert!(matches!(
-			ns2.env.get_ref().define(
+			ns2_env.define(
 				&sym,
 				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
 				StatementIdx::Top,
@@ -589,7 +608,7 @@ mod tests {
 		// Define a variable in n1's env
 		let sym = Symbol::global("ns1_var");
 		assert!(matches!(
-			ns1.env.get_ref().define(
+			ns1_env.define(
 				&sym,
 				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
 				StatementIdx::Top,

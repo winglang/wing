@@ -16,13 +16,14 @@ use crate::ast::{
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, TypeError, WingSpan};
 use crate::docs::Docs;
+use crate::file_graph::FileGraph;
 use crate::type_check::symbol_env::SymbolEnvKind;
 use crate::visit_context::{VisitContext, VisitorWithContext};
 use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
-	dbg_panic, debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_JSON,
-	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_RESOURCE, WINGSDK_SET,
-	WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
+	dbg_panic, debug, GLOBAL_SYMBOLS, UTIL_CLASS_NAME, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES,
+	WINGSDK_DURATION, WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET,
+	WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
@@ -32,7 +33,7 @@ use itertools::{izip, Itertools};
 use jsii_importer::JsiiImporter;
 
 use std::cmp;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::fmt::{Debug, Display};
 use std::iter::FilterMap;
 use symbol_env::{StatementIdx, SymbolEnv};
@@ -267,7 +268,7 @@ pub struct Namespace {
 	pub name: String,
 
 	#[derivative(Debug = "ignore")]
-	pub env: SymbolEnv,
+	pub envs: Vec<SymbolEnvRef>,
 
 	// Indicate whether all the types in this namespace have been loaded, this is part of our
 	// lazy loading mechanism and is used by the lsp's autocomplete in case we need to load
@@ -1262,6 +1263,23 @@ struct ResolvedExpression {
 	phase: Phase,
 }
 
+/// In Wing projects that have both files and directories, type information is stored like so:
+///
+/// "src/subdir/inner/widget.w" -> SymbolEnv { "Widget": TypeRef } = SE1
+/// "src/subdir/inner/" -> Namespace { envs: [SE1] } = NS1
+/// "src/subdir/foo.w" -> SymbolEnv { "Foo": TypeRef } = SE2
+/// "src/subdir/bar.w" -> SymbolEnv { "Bar": TypeRef } = SE3
+/// "src/subdir/" -> Namespace { envs: [SE2, SE3, SymbolEnv { "inner": NS1 }] } = NS2
+///
+/// Then when a file at "src/main.w" has a statement `bring "./subdir" as subdir;`,
+/// it retrieves NS2 from the types.source_file_envs map and adds it to the main file's symbol environment
+/// under the symbol "subdir".
+enum SymbolEnvOrNamespace {
+	SymbolEnv(SymbolEnvRef),
+	Namespace(NamespaceRef),
+	Error(Diagnostic),
+}
+
 /// File-unique identifier for each necessary inference while type checking. This is an index of the Types.inferences vec.
 /// There will always be an entry for each InferenceId.
 pub type InferenceId = usize;
@@ -1272,8 +1290,10 @@ pub struct Types {
 	types: Vec<Box<Type>>,
 	namespaces: Vec<Box<Namespace>>,
 	symbol_envs: Vec<Box<SymbolEnv>>,
-	/// A map from source file name to the symbol environment for that file (and whether that file is safe to bring)
-	source_file_envs: IndexMap<Utf8PathBuf, SymbolEnvRef>,
+	/// A map from source paths to type information about that path
+	/// If it's a file, we save its symbol environment, and if it's a directory, we save a namespace that points to
+	/// all of the symbol environments of the files (or subdirectories) in that directory
+	source_file_envs: IndexMap<Utf8PathBuf, SymbolEnvOrNamespace>,
 	pub libraries: SymbolEnv,
 	numeric_idx: usize,
 	string_idx: usize,
@@ -1633,6 +1653,9 @@ pub struct TypeChecker<'a> {
 	/// The path to the source file being type checked.
 	source_path: &'a Utf8Path,
 
+	/// The file graph of the compilation.
+	file_graph: &'a FileGraph,
+
 	/// JSII Manifest descriptions to be imported.
 	/// May be reused between compilations
 	jsii_imports: &'a mut Vec<JsiiImportSpec>,
@@ -1649,6 +1672,7 @@ impl<'a> TypeChecker<'a> {
 	pub fn new(
 		types: &'a mut Types,
 		source_path: &'a Utf8Path,
+		file_graph: &'a FileGraph,
 		jsii_types: &'a mut TypeSystem,
 		jsii_imports: &'a mut Vec<JsiiImportSpec>,
 	) -> Self {
@@ -1657,6 +1681,7 @@ impl<'a> TypeChecker<'a> {
 			inner_scopes: vec![],
 			jsii_types,
 			source_path,
+			file_graph,
 			jsii_imports,
 			is_in_mut_json: false,
 			ctx: VisitContext::new(),
@@ -2856,14 +2881,101 @@ impl<'a> TypeChecker<'a> {
 		first_expected_type
 	}
 
-	pub fn type_check_file(&mut self, source_path: &Utf8Path, scope: &Scope) {
+	pub fn type_check_file_or_dir(&mut self, source_path: &Utf8Path, scope: &Scope) {
 		CompilationContext::set(CompilationPhase::TypeChecking, &scope.span);
 		self.type_check_scope(scope);
 
-		// Save the module's symbol environment to `self.types.source_file_envs`
+		if source_path.is_dir() {
+			self.type_check_dir(source_path);
+			return;
+		}
+
+		// Save the file's symbol environment to `self.types.source_file_envs`
 		// (replacing any existing ones if there was already a SymbolEnv from a previous compilation)
 		let scope_env = self.types.get_scope_env(scope);
-		self.types.source_file_envs.insert(source_path.to_owned(), scope_env);
+		self
+			.types
+			.source_file_envs
+			.insert(source_path.to_owned(), SymbolEnvOrNamespace::SymbolEnv(scope_env));
+	}
+
+	pub fn type_check_dir(&mut self, source_path: &Utf8Path) {
+		// Get a list of all children paths (files or directories) through the file graph
+		let children = self.file_graph.dependencies_of(source_path);
+
+		// Obtain each child's symbol environment or namespace
+		// If it's a namespace (i.e. it's a directory), wrap it in a symbol env
+		let mut child_envs = vec![];
+		for child_path in children.iter() {
+			match self.types.source_file_envs.get(*child_path) {
+				Some(SymbolEnvOrNamespace::SymbolEnv(env)) => {
+					child_envs.push(*env);
+				}
+				Some(SymbolEnvOrNamespace::Namespace(ns)) => {
+					let mut new_env = SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Independent, 0);
+					new_env
+						.define(
+							&Symbol::global(child_path.file_stem().unwrap().to_string()),
+							SymbolKind::Namespace(*ns),
+							StatementIdx::Top,
+						)
+						.unwrap();
+					let wrapper_env = self.types.add_symbol_env(new_env);
+					child_envs.push(wrapper_env);
+				}
+				Some(SymbolEnvOrNamespace::Error(diagnostic)) => {
+					self
+						.types
+						.source_file_envs
+						.insert(source_path.to_owned(), SymbolEnvOrNamespace::Error(diagnostic.clone()));
+					return;
+				}
+				None => {
+					self.types.source_file_envs.insert(
+						source_path.to_owned(),
+						SymbolEnvOrNamespace::Error(Diagnostic {
+							message: format!("Could not bring \"{}\" due to cyclic bring statements", source_path,),
+							span: None,
+						}),
+					);
+					return;
+				}
+			};
+		}
+
+		// Check that there aren't multiply-defined symbols in the directory
+		let mut seen_symbols = HashSet::new();
+		for child_env in &child_envs {
+			for key in child_env.symbol_map.keys() {
+				// ignore globals
+				if GLOBAL_SYMBOLS.contains(&key.as_str()) {
+					continue;
+				}
+
+				if seen_symbols.contains(key) {
+					self.types.source_file_envs.insert(
+						source_path.to_owned(),
+						SymbolEnvOrNamespace::Error(Diagnostic {
+							message: format!("Symbol \"{}\" has multiple definitions in \"{}\"", key, source_path),
+							span: None,
+						}),
+					);
+					return;
+				}
+				seen_symbols.insert(key.clone());
+			}
+		}
+
+		let ns = self.types.add_namespace(Namespace {
+			name: source_path.file_stem().unwrap().to_string(),
+			envs: child_envs,
+			loaded: true,
+			module_path: ResolveSource::WingFile,
+		});
+		self
+			.types
+			.source_file_envs
+			.insert(source_path.to_owned(), SymbolEnvOrNamespace::Namespace(ns));
 	}
 
 	fn type_check_scope(&mut self, scope: &Scope) {
@@ -3656,7 +3768,17 @@ impl<'a> TypeChecker<'a> {
 			}
 			BringSource::WingFile(name) => {
 				let brought_env = match self.types.source_file_envs.get(Utf8Path::new(&name.name)) {
-					Some(env) => *env,
+					Some(SymbolEnvOrNamespace::SymbolEnv(env)) => *env,
+					Some(SymbolEnvOrNamespace::Namespace(_)) => {
+						panic!("Expected a symbol environment to be associated with the file")
+					}
+					Some(SymbolEnvOrNamespace::Error(diagnostic)) => {
+						report_diagnostic(Diagnostic {
+							span: Some(stmt.span()),
+							..diagnostic.clone()
+						});
+						return;
+					}
 					None => {
 						self.spanned_error(
 							stmt,
@@ -3667,13 +3789,43 @@ impl<'a> TypeChecker<'a> {
 				};
 				let ns = self.types.add_namespace(Namespace {
 					name: name.name.to_string(),
-					env: SymbolEnv::new(Some(brought_env.get_ref()), SymbolEnvKind::Scope, brought_env.phase, 0),
+					envs: vec![brought_env],
 					loaded: true,
 					module_path: ResolveSource::WingFile,
 				});
 				if let Err(e) = env.define(
 					identifier.as_ref().unwrap(),
 					SymbolKind::Namespace(ns),
+					StatementIdx::Top,
+				) {
+					self.type_error(e);
+				}
+				return;
+			}
+			BringSource::Directory(name) => {
+				let brought_ns = match self.types.source_file_envs.get(Utf8Path::new(&name.name)) {
+					Some(SymbolEnvOrNamespace::SymbolEnv(_)) => {
+						panic!("Expected a namespace to be associated with the directory")
+					}
+					Some(SymbolEnvOrNamespace::Namespace(ns)) => ns,
+					Some(SymbolEnvOrNamespace::Error(diagnostic)) => {
+						report_diagnostic(Diagnostic {
+							span: Some(stmt.span()),
+							..diagnostic.clone()
+						});
+						return;
+					}
+					None => {
+						self.spanned_error(
+							stmt,
+							format!("Could not type check \"{}\" due to cyclic bring statements", name),
+						);
+						return;
+					}
+				};
+				if let Err(e) = env.define(
+					identifier.as_ref().unwrap(),
+					SymbolKind::Namespace(*brought_ns),
 					StatementIdx::Top,
 				) {
 					self.type_error(e);
@@ -4239,7 +4391,7 @@ impl<'a> TypeChecker<'a> {
 						self.spanned_error(
 							&stmt.map(|s| s.span.clone()).unwrap_or_default(),
 							format!(
-								"Cannot find module \"{}\" in source directory: {}",
+								"Cannot find jsii module \"{}\" in source directory: {}",
 								library_name, type_error
 							),
 						);
@@ -4635,7 +4787,7 @@ impl<'a> TypeChecker<'a> {
 				if let SymbolKind::Namespace(_) = symbol_kind {
 					let mut new_udt = base_udt.clone();
 					new_udt.fields.push(Symbol {
-						name: "Util".to_string(),
+						name: UTIL_CLASS_NAME.to_string(),
 						span: base_udt.span.clone(),
 					});
 
@@ -5228,6 +5380,10 @@ where
 {
 	let (message, span) = match lookup_result {
 		LookupResult::NotFound(s) => (format!("Unknown symbol \"{s}\""), s.span()),
+		LookupResult::MultipleFound => (
+			format!("Ambiguous symbol \"{looked_up_object}\""),
+			looked_up_object.span(),
+		),
 		LookupResult::DefinedLater => (
 			format!("Symbol \"{looked_up_object}\" used before being defined"),
 			looked_up_object.span(),

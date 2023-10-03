@@ -421,7 +421,7 @@ exports[`bucket with onCreate method 1`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.my_bucket_my_bucket-oncreate-OnMessage-7b961f4d_S3Object_AA8B2734.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -823,7 +823,7 @@ exports[`bucket with onDelete method 1`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.my_bucket_my_bucket-ondelete-OnMessage-1de1a361_S3Object_2203B527.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -1247,7 +1247,7 @@ exports[`bucket with onEvent method 1`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.my_bucket_my_bucket-oncreate-OnMessage-7b961f4d_S3Object_AA8B2734.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -1269,7 +1269,7 @@ exports[`bucket with onEvent method 1`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.my_bucket_my_bucket-ondelete-OnMessage-1de1a361_S3Object_2203B527.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -1291,7 +1291,7 @@ exports[`bucket with onEvent method 1`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.my_bucket_my_bucket-onupdate-OnMessage-46c07356_S3Object_0B6EDB66.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -2015,7 +2015,7 @@ exports[`bucket with onUpdate method 1`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.my_bucket_my_bucket-onupdate-OnMessage-46c07356_S3Object_0B6EDB66.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],

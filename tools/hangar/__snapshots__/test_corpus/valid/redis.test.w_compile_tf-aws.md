@@ -253,7 +253,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudQueue-SetConsumer-cdafee6e_S3Object_8868B9FB.key}",
-        "timeout": 3,
+        "timeout": "${aws_sqs_queue.cloudQueue.visibility_timeout_seconds}",
         "vpc_config": {
           "security_group_ids": [
             "${aws_security_group.exRedis_securityGroup_3948C3F2.id}"
