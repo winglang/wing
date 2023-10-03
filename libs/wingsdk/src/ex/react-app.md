@@ -41,7 +41,7 @@ let website = new ex.ReactApp(
 When `ReactApp` is compiled to the `sim` target, by default it runs the start command (default: `npm start`) inside `projectPath` to serve your app in development mode on a local port.
 
 If the `CI` environment variable is set OR if `ReactApp` is compiled to any other target, it will run the build command (default: `npm build`) inside of the `projectPath` to build the React app for production to `buildDir` and serve the app. 
-### Using wing variables within react code
+### Using Wing variables within react code
 
 `ex.ReactApp` allows you to pass preflight string values from Wing to the React app using `addEnvironment` method:
 
