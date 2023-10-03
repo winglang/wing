@@ -29,6 +29,8 @@ module.exports = function({  }) {
   class Base {
     constructor({  }) {
     }
+    async $inflight_init() {
+    }
   }
   return Base;
 }
@@ -45,6 +47,8 @@ module.exports = function({ $Base }) {
     }
     async foo() {
       this.$this_f;
+    }
+    async $inflight_init() {
     }
   }
   return Derived;

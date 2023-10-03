@@ -30,6 +30,8 @@ module.exports = function({ $util_Util, $x }) {
       }
       ,{ interval: $x }));
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

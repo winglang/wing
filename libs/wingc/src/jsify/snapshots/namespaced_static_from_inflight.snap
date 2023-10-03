@@ -25,6 +25,8 @@ module.exports = function({ $util_Util }) {
     async handle() {
       (await $util_Util.tryEnv("PATH"));
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

@@ -35,6 +35,8 @@ module.exports = function({ $MyType }) {
     async handle() {
       {console.log((await $MyType.staticMethod()))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -50,6 +52,8 @@ module.exports = function({ $b }) {
     static async staticMethod() {
       (await $b.list());
       return "foo";
+    }
+    async $inflight_init() {
     }
   }
   return MyType;

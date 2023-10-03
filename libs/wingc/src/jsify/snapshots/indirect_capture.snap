@@ -41,6 +41,8 @@ module.exports = function({ $f }) {
     async handle() {
       (await $f.goo());
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -58,6 +60,8 @@ module.exports = function({ $b }) {
     }
     async goo() {
       (await this.foo());
+    }
+    async $inflight_init() {
     }
   }
   return Capture;

@@ -33,7 +33,11 @@ module.exports = function({  }) {
         async dang() {
           i = (i + 1);
         }
+        async $inflight_init() {
+        }
       }
+    }
+    async $inflight_init() {
     }
   }
   return $Closure1;

@@ -36,6 +36,8 @@ module.exports = function({  }) {
         static async foo() {
           {console.log("hello")};
         }
+        async $inflight_init() {
+        }
       }
       class B {
         async $inflight_init() {
@@ -43,6 +45,8 @@ module.exports = function({  }) {
         }
       }
       (await A.foo());
+    }
+    async $inflight_init() {
     }
   }
   return $Closure1;

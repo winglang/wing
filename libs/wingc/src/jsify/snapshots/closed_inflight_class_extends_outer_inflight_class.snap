@@ -26,8 +26,12 @@ module.exports = function({ $Base }) {
     }
     async handle() {
       class Derived extends $Base {
+        async $inflight_init() {
+        }
       }
       await (async (o) => { await o.$inflight_init(); return o; })(new Derived());
+    }
+    async $inflight_init() {
     }
   }
   return $Closure1;
@@ -39,6 +43,8 @@ module.exports = function({ $Base }) {
 ```js
 module.exports = function({  }) {
   class Base {
+    async $inflight_init() {
+    }
   }
   return Base;
 }

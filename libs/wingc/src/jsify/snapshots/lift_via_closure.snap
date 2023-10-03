@@ -32,6 +32,8 @@ module.exports = function({ $bucket }) {
     async handle() {
       (await $bucket.put("hello","world"));
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -49,6 +51,8 @@ module.exports = function({ $fn }) {
     }
     async handle() {
       (await $fn());
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;

@@ -26,6 +26,8 @@ module.exports = function({ $jsonObj1, $std_Json }) {
     async handle() {
       {console.log(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$jsonObj1]))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
