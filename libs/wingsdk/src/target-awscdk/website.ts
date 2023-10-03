@@ -69,7 +69,7 @@ export class Website extends cloud.Website {
   ): string {
     new BucketDeployment(this, `S3Object-${path}`, {
       destinationBucket: this.bucket,
-      contentType: options?.contentType ?? "tesxt/plain",
+      contentType: options?.contentType ?? "text/plain",
       sources: [Source.data(this.formatPath(path), data)],
     });
 
