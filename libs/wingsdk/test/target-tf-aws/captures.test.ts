@@ -50,6 +50,7 @@ describe("function with bucket binding", () => {
     expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
 
     expect(tfResourcesOf(output)).toEqual([
+      "aws_cloudwatch_log_group",
       "aws_iam_role",
       "aws_iam_role_policy",
       "aws_iam_role_policy_attachment",
@@ -142,6 +143,7 @@ test("function with a function binding", () => {
   expect(sanitizeCode(inflight2._toInflight())).toMatchSnapshot();
 
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group",
     "aws_iam_role",
     "aws_iam_role_policy",
     "aws_iam_role_policy_attachment",
@@ -168,6 +170,7 @@ test("two functions reusing the same IFunctionHandler", () => {
   const output = app.synth();
 
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group",
     "aws_iam_role",
     "aws_iam_role_policy",
     "aws_iam_role_policy_attachment",
@@ -208,6 +211,7 @@ test("function with a queue binding", () => {
   expect(sanitizeCode(processor._toInflight())).toMatchSnapshot();
 
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group",
     "aws_iam_role",
     "aws_iam_role_policy",
     "aws_iam_role_policy_attachment",

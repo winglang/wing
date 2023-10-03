@@ -54,6 +54,7 @@ test("function with a counter binding", () => {
 
   expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group", // log group for function
     "aws_dynamodb_table", // table for the counter
     "aws_iam_role", // role for function
     "aws_iam_role_policy", // policy for role

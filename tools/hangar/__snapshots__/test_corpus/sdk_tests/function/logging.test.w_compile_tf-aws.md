@@ -104,6 +104,28 @@ module.exports = function({  }) {
     ]
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "f1_CloudwatchLogGroup_9EB92E4A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/f1/CloudwatchLogGroup",
+            "uniqueId": "f1_CloudwatchLogGroup_9EB92E4A"
+          }
+        },
+        "name": "/aws/lambda/f1-c8545025",
+        "retention_in_days": 30
+      },
+      "f2_CloudwatchLogGroup_D231AE41": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/f2/CloudwatchLogGroup",
+            "uniqueId": "f2_CloudwatchLogGroup_D231AE41"
+          }
+        },
+        "name": "/aws/lambda/f2-c812cd39",
+        "retention_in_days": 30
+      }
+    },
     "aws_iam_role": {
       "f1_IamRole_FD68C58F": {
         "//": {
