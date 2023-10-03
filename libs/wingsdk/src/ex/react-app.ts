@@ -22,7 +22,7 @@ export const REACT_APP_FQN = fqnForType("ex.ReactApp");
 /**
  * Options for `ReactApp`.
  */
-export interface ReactAppProps {
+export interface ReactAppProps extends WebsiteOptions {
   /**
    * The path to the React app root folder- can be absolute or relative to the wing folder
    */
@@ -47,11 +47,6 @@ export interface ReactAppProps {
    * @default true
    */
   readonly isDevRun?: boolean;
-  /**
-   * Additional properties to run the website host with
-   * @default {}
-   */
-  readonly hostProps?: WebsiteOptions;
   /**
    * A port to start a local build of the React app on.
    * @default 3001
@@ -116,7 +111,7 @@ export abstract class ReactApp extends Resource {
     Node.of(this).description = "A deployable React App";
 
     this._projectPath = this._parsePath(scope, props.projectPath);
-    this._hostProps = props.hostProps;
+    this._hostProps = { domain: props.domain };
     this._buildPath = join(this._projectPath, buildDir);
     this._isDevRun = props.isDevRun ?? true;
     this._localPort = props.localPort ?? DEFAULT_PORT;

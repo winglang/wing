@@ -231,7 +231,10 @@ export interface RedisSchema extends BaseResourceSchema {
   readonly type: typeof REDIS_TYPE;
   readonly props: {};
 }
-
+/**
+ * Custom routes created in preflight.
+ * Each contains the data to send to the user and a contentType header.
+ */
 export type FileRoutes = Record<string, { data: string; contentType: string }>;
 
 /** Schema for cloud.Website */
@@ -240,7 +243,7 @@ export interface WebsiteSchema extends BaseResourceSchema {
   readonly props: {
     /** Path to the directory where all static files are hosted from */
     staticFilesPath: string;
-    /** Map of `.json` file paths to dynamic content inserted from preflight */
+    /** Map of "files" contains dynamic content inserted from preflight */
     fileRoutes: FileRoutes;
   };
 }

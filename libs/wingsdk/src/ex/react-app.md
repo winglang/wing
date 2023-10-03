@@ -33,14 +33,14 @@ let website = new ex.ReactApp(
   buildDir: "/dist" // default is "/build"
   startCommand: "pnpm start" // default is "npm start"
   buildCommand: "pnpm build" // default is "npm build"
-  hostProps: {} // properties that apply to the react app host, which is a `cloud.Website` resource
   localPort: 4000 // default is 3001
  );
 ```
 
 When `ReactApp` is compiled to the `sim` target, by default it runs the start command (default: `npm start`) inside `projectPath` to serve your app in development mode on a local port.
 
-If the `CI` environment variable is set OR if `ReactApp` is compiled to any other target, it will run the build command (default: `npm build`) inside of the `projectPath` to build the React app for production to `buildDir` and serve the app. 
+If the `CI` environment variable is set OR if `ReactApp` is compiled to any other target, it will run the build command (default: `npm build`) inside of the `projectPath` to build the React app for production to `buildDir` and serve the app.
+
 ### Using wing variables within react code
 
 `ex.ReactApp` allows you to pass preflight arguments from wing to the React app using `addEnvironment` method:
