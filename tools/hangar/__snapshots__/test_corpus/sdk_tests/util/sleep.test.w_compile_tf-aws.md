@@ -16,6 +16,8 @@ module.exports = function({ $JSHelper, $oneHundredMiliseconds, $util_Util }) {
       const delta = (end - start);
       {((cond) => {if (!cond) throw new Error("assertion failed: delta >= 100")})((delta >= 100))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -30,6 +32,8 @@ module.exports = function({  }) {
     }
     static async getTime() {
       return (require("<ABSOLUTE_PATH>/sleep-helper.js")["getTime"])()
+    }
+    async $inflight_init() {
     }
   }
   return JSHelper;

@@ -12,6 +12,8 @@ module.exports = function({ $body }) {
     async handle(req) {
       return ({"status": 200,"body": $body});
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -31,6 +33,8 @@ module.exports = function({ $api_url, $http_Util }) {
       const url = ($api_url + "/path");
       const response = (await $http_Util.get(url));
       {((cond) => {if (!cond) throw new Error("assertion failed: response.headers.get(\"access-control-allow-origin\") == \"*\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((response.headers)["access-control-allow-origin"],"*")))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;

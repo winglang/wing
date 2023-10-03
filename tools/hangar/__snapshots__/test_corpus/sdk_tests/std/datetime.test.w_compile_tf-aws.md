@@ -33,6 +33,8 @@ module.exports = function({ $_d4_toUtc____hours, $d4_hours, $d4_timezone, $math_
       const afterSleep = (await $std_Datetime.systemNow());
       {((cond) => {if (!cond) throw new Error("assertion failed: afterSleep.timestampMs - beforeSleep.timestampMs > 0")})(((afterSleep.timestampMs - beforeSleep.timestampMs) > 0))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

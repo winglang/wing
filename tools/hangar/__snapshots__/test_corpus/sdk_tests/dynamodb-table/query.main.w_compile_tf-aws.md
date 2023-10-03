@@ -21,6 +21,8 @@ module.exports = function({ $t1 }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: result.items.at(1).get(\"k2\") == \"value2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })((await result.items.at(1)), "k2"),"value2")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: result.items.at(1).get(\"k3\") == \"other-value2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })((await result.items.at(1)), "k3"),"other-value2")))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

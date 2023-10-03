@@ -12,6 +12,8 @@ module.exports = function({  }) {
     async handle() {
       {console.log("hello, world")};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -29,6 +31,8 @@ module.exports = function({  }) {
     }
     async handle() {
       {console.log("hello, world")};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;

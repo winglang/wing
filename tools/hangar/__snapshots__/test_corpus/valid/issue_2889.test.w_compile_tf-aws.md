@@ -13,6 +13,8 @@ module.exports = function({ $std_Json }) {
       const issues = (JSON.parse("[{\"foo\": \"bar\"}, {\"foo\": \"baz\"}, {\"foo\": \"qux\"}]"));
       return ({"status": 200,"headers": ({"Content-Type": "application/json"}),"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([issues])});
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -33,6 +35,8 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
       const body = (JSON.parse((res.body ?? "")));
       const a1 = ((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(body, 0);
       {((cond) => {if (!cond) throw new Error("assertion failed: a1.get(\"foo\") == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(a1, "foo"),"bar")))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;

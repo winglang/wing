@@ -23,6 +23,8 @@ module.exports = function({ $counter }) {
       const r3 = (await $counter.inc());
       {((cond) => {if (!cond) throw new Error("assertion failed: r3 == 12")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(r3,12)))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -52,6 +54,8 @@ module.exports = function({ $counter }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 12")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counter.peek(key)),12)))};
       const r3 = (await $counter.inc(undefined,key));
       {((cond) => {if (!cond) throw new Error("assertion failed: r3 == 12")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(r3,12)))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;

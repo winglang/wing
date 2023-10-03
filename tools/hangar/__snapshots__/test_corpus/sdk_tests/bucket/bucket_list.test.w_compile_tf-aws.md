@@ -28,6 +28,8 @@ module.exports = function({ $b }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: objs.length == 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(objs.length,4)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: objs2.length == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(objs2.length,3)))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

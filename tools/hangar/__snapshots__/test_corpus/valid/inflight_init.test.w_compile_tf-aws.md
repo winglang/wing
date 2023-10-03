@@ -1,8 +1,8 @@
-# [extern_implementation.test.w](../../../../../examples/tests/valid/extern_implementation.test.w) | compile | tf-aws
+# [inflight_init.test.w](../../../../../examples/tests/valid/inflight_init.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.js
 ```js
-module.exports = function({ $f }) {
+module.exports = function({ $Foo }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -10,7 +10,8 @@ module.exports = function({ $f }) {
       return $obj;
     }
     async handle() {
-      (await $f.call());
+      const f = (await (async (o) => { await o.$inflight_init(5); return o; })(new $Foo()));
+      {((cond) => {if (!cond) throw new Error("assertion failed: f.field1 == 6 && f.field2 == 5")})(((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f.field1,6)) && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f.field2,5))))};
     }
     async $inflight_init() {
     }
@@ -22,7 +23,7 @@ module.exports = function({ $f }) {
 
 ## inflight.$Closure2-1.js
 ```js
-module.exports = function({ $Foo }) {
+module.exports = function({ $FooChild }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -30,7 +31,8 @@ module.exports = function({ $Foo }) {
       return $obj;
     }
     async handle() {
-      (await $Foo.print("hey there"));
+      const f = (await (async (o) => { await o.$inflight_init(); return o; })(new $FooChild()));
+      {((cond) => {if (!cond) throw new Error("assertion failed: f.field1 == 6 && f.field2 == 5 && f.field3 == 4")})((((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f.field1,6)) && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f.field2,5))) && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f.field3,4))))};
     }
     async $inflight_init() {
     }
@@ -44,30 +46,29 @@ module.exports = function({ $Foo }) {
 ```js
 module.exports = function({  }) {
   class Foo {
-    constructor({  }) {
+    async get_six() {
+      return 6;
     }
-    static async regexInflight(pattern, text) {
-      return (require("<ABSOLUTE_PATH>/external_js.js")["regexInflight"])(pattern, text)
-    }
-    static async getUuid() {
-      return (require("<ABSOLUTE_PATH>/external_js.js")["getUuid"])()
-    }
-    static async getData() {
-      return (require("<ABSOLUTE_PATH>/external_js.js")["getData"])()
-    }
-    static async print(msg) {
-      return (require("<ABSOLUTE_PATH>/external_js.js")["print"])(msg)
-    }
-    async call() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: Foo.regexInflight(\"[a-z]+-\\\\d+\", \"abc-123\")")})((await Foo.regexInflight("[a-z]+-\\d+","abc-123")))};
-      const uuid = (await Foo.getUuid());
-      {((cond) => {if (!cond) throw new Error("assertion failed: uuid.length == 36")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(uuid.length,36)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: Foo.getData() == \"Cool data!\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await Foo.getData()),"Cool data!")))};
-    }
-    async $inflight_init() {
+    async $inflight_init(f2) {
+      this.field1 = (await this.get_six());
+      this.field2 = f2;
     }
   }
   return Foo;
+}
+
+```
+
+## inflight.FooChild-1.js
+```js
+module.exports = function({ $Foo }) {
+  class FooChild extends $Foo {
+    async $inflight_init() {
+      await super.$inflight_init(5);
+      this.field3 = 4;
+    }
+  }
+  return FooChild;
 }
 
 ```
@@ -111,19 +112,12 @@ const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
-const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-      }
-      static getGreeting(name) {
-        return (require("<ABSOLUTE_PATH>/external_js.js")["getGreeting"])(name)
-      }
-      static v4() {
-        return (require("<ABSOLUTE_PATH>/index.js")["v4"])()
       }
       static _toInflightType(context) {
         return `
@@ -143,11 +137,43 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["regexInflight", "getUuid", "getData", "print", "call", "$inflight_init"];
+        return ["field1", "field2", "get_six", "$inflight_init"];
       }
       _registerBind(host, ops) {
-        if (ops.includes("call")) {
-          Foo._registerBindObject(Foo, host, ["getData", "getUuid", "regexInflight"]);
+        if (ops.includes("$inflight_init")) {
+          Foo._registerBindObject(this, host, ["field1", "field2", "get_six"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class FooChild extends Foo {
+      constructor(scope, id, ) {
+        super(scope, id);
+      }
+      static _toInflightType(context) {
+        return `
+          require("./inflight.FooChild-1.js")({
+            $Foo: ${context._lift(Foo)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const FooChildClient = ${FooChild._toInflightType(this)};
+            const client = new FooChildClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      _getInflightOps() {
+        return ["field3", "$inflight_init"];
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          FooChild._registerBindObject(this, host, ["field3"]);
         }
         super._registerBind(host, ops);
       }
@@ -160,7 +186,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $f: ${context._lift(f)},
+            $Foo: ${context._lift(Foo)},
           })
         `;
       }
@@ -178,12 +204,6 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerBindObject(f, host, ["call"]);
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
@@ -193,7 +213,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure2-1.js")({
-            $Foo: ${context._lift(Foo)},
+            $FooChild: ${context._lift(FooChild)},
           })
         `;
       }
@@ -211,22 +231,13 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure2._registerBindObject(Foo, host, ["print"]);
-        }
-        super._registerBind(host, ops);
-      }
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: Foo.getGreeting(\"Wingding\") == \"Hello, Wingding!\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((Foo.getGreeting("Wingding")),"Hello, Wingding!")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: Foo.v4().length == 36")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((Foo.v4()).length,36)))};
-    const f = new Foo(this,"Foo");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:call",new $Closure1(this,"$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:console",new $Closure2(this,"$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight class init",new $Closure1(this,"$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight calls parent's init",new $Closure2(this,"$Closure2"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "extern_implementation.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+new $App({ outdir: $outdir, name: "inflight_init.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

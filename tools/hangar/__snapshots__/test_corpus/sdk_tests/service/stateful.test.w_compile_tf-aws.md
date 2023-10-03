@@ -21,6 +21,8 @@ module.exports = function({ $__parent_this_1_b, $std_Duration, $util_Util }) {
       }
       ;
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -38,6 +40,8 @@ module.exports = function({ $foo }) {
     }
     async handle() {
       (await $foo.access());
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;
@@ -57,6 +61,8 @@ module.exports = function({ $std_Number }) {
     }
     async port() {
       return ((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return parseInt(args) })((await this.$this_b.get("port")));
+    }
+    async $inflight_init() {
     }
   }
   return MyService;

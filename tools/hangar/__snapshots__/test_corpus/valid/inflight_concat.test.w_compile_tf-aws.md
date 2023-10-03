@@ -10,6 +10,8 @@ module.exports = function({  }) {
     async foo() {
       {console.log(this.$_this_s1_concat___world___)};
     }
+    async $inflight_init() {
+    }
   }
   return R;
 }

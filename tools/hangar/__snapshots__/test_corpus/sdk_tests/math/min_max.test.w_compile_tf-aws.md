@@ -13,6 +13,8 @@ module.exports = function({ $math_Util, $myArray }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.min(myArray) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.min($myArray)),1)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.max(myArray) == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.max($myArray)),5)))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

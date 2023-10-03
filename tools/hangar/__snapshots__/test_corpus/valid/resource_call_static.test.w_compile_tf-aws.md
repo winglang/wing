@@ -12,6 +12,8 @@ module.exports = function({ $Another }) {
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $Another.myStaticMethod()),0)))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -26,6 +28,8 @@ module.exports = function({ $globalCounter }) {
     }
     static async myStaticMethod() {
       return (await $globalCounter.peek());
+    }
+    async $inflight_init() {
     }
   }
   return Another;
