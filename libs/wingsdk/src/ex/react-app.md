@@ -29,7 +29,7 @@ bring util;
 
 let website = new ex.ReactApp(
   projectPath: "./client",
-  isDevRun: false // `true`` by default. will run the start command if true, and the build command if not
+  isDevRun: false // `true` by default. Will run the start command if true, and the build command if not
   buildDir: "/dist" // default is "/build"
   startCommand: "pnpm start" // default is "npm start"
   buildCommand: "pnpm build" // default is "npm build"
