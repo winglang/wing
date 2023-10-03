@@ -112,4 +112,38 @@ test "duration" {
   assert(duration.fromYears(1).hours == 1y.hours);
   assert(duration.fromYears(1).days == 1y.days);
   assert(duration.fromYears(1).months == 1y.months);
+
+  // Testing negative values
+  assert(-12ms.seconds == -12 / 1000);
+  assert(-12s.seconds == -12);
+  assert(-12m.seconds == -12 * 60);
+  assert(-12h.seconds == -12 * 60 * 60);
+  assert(-12d.seconds == -12 * 60 * 60 * 24);
+  assert(-12mo.seconds == (-12 * 60 * 60 * 24 * 365) / 12);
+  assert(-12y.seconds == -12 * 60 * 60 * 24 * 365);
+
+  assert(duration.fromMilliseconds(-10).seconds == -10ms.seconds);
+  assert(duration.fromMinutes(-10).seconds == -10m.seconds);
+  assert(duration.fromSeconds(-10).seconds == -10s.seconds);
+  assert(duration.fromHours(-10).seconds == -10h.seconds);
+  assert(duration.fromDays(-10).seconds == -10d.seconds);
+  assert(duration.fromMonths(-10).seconds == -10mo.seconds);
+  assert(duration.fromYears(-10).seconds == -10y.seconds);
+
+  // Testing zero
+  assert(0ms.seconds == 0);
+  assert(0s.seconds == 0);
+  assert(0m.seconds == 0);
+  assert(0h.seconds == 0);
+  assert(0d.seconds == 0);
+  assert(0mo.seconds == 0);
+  assert(0y.seconds == 0);
+
+  assert(duration.fromMilliseconds(0).seconds == 0ms.seconds);
+  assert(duration.fromMinutes(0).seconds == 0m.seconds);
+  assert(duration.fromSeconds(0).seconds == 0s.seconds);
+  assert(duration.fromHours(0).seconds == 0h.seconds);
+  assert(duration.fromDays(0).seconds == 0d.seconds);
+  assert(duration.fromMonths(0).seconds == 0mo.seconds);
+  assert(duration.fromYears(0).seconds == 0y.seconds);
 }
