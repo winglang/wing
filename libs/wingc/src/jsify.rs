@@ -1333,12 +1333,8 @@ impl<'a> JSifier<'a> {
 			class_code.line(self.jsify_function(Some(class), def, &mut ctx));
 		}
 
-		// emit the $inflight_init function (if it has a body).
-		if let FunctionBody::Statements(s) = &class.inflight_initializer.body {
-			if !s.statements.is_empty() {
-				class_code.line(self.jsify_function(Some(class), &class.inflight_initializer, &mut ctx));
-			}
-		}
+		// emit the $inflight_init function
+  	class_code.line(self.jsify_function(Some(class), &class.inflight_initializer, &mut ctx));
 
 		class_code.close("}");
 		ctx.visit_ctx.pop_phase();
