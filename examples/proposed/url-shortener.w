@@ -61,7 +61,7 @@ class UrlShortenerApi {
       let id = this.shortener.getId(requestUrl);
 
       // return the shortened url
-      let shortenedUrl = "{this.api.url}/u/{id}";
+      let shortenedUrl = "{this.api.url}/u/\{id}";
       log("Shortened URL: {shortenedUrl}");
       return cloud.ApiResponse {
         status: 200,
@@ -71,7 +71,7 @@ class UrlShortenerApi {
       };
     });
 
-    this.api.get("/u/{id}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+    this.api.get("/u/\{id}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
       let id = req.vars.get("id");
       let fullUrl = this.shortener.getUrl(id);
 
