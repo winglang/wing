@@ -81,7 +81,7 @@ pub type TypeRef = UnsafeRef<Type>;
 
 #[derive(Debug)]
 pub enum SymbolKind {
-	Type(TypeRef), // TODO: <- deprecated since we treat types as a VeriableInfo of kind VariableKind::Type
+	Type(TypeRef),
 	Variable(VariableInfo),
 	Namespace(NamespaceRef),
 }
@@ -2740,7 +2740,7 @@ impl<'a> TypeChecker<'a> {
 		{
 			self.validate_type_binary_equality(*inner_actual, *inner_expected, span)
 		} else {
-			self.validate_type_in(actual_type, &[expected_type], span)
+			self.validate_type(actual_type, expected_type, span)
 		}
 	}
 
