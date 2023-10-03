@@ -132,6 +132,28 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
         "rule": "${aws_cloudwatch_event_rule.from_rate_Schedule_5B82E706.name}"
       }
     },
+    "aws_cloudwatch_log_group": {
+      "from_cron-OnTick-cdafee6e_CloudwatchLogGroup_D199F007": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/from_cron-OnTick-cdafee6e/CloudwatchLogGroup",
+            "uniqueId": "from_cron-OnTick-cdafee6e_CloudwatchLogGroup_D199F007"
+          }
+        },
+        "name": "/aws/lambda/from_cron-OnTick-cdafee6e-c8a82a50",
+        "retention_in_days": 30
+      },
+      "from_rate-OnTick-86898773_CloudwatchLogGroup_2B9D330F": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/from_rate-OnTick-86898773/CloudwatchLogGroup",
+            "uniqueId": "from_rate-OnTick-86898773_CloudwatchLogGroup_2B9D330F"
+          }
+        },
+        "name": "/aws/lambda/from_rate-OnTick-86898773-c8fb9fa6",
+        "retention_in_days": 30
+      }
+    },
     "aws_dynamodb_table": {
       "c1": {
         "//": {
@@ -257,7 +279,7 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.from_cron-OnTick-cdafee6e_S3Object_0845743D.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
@@ -287,7 +309,7 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.from_rate-OnTick-86898773_S3Object_68EB6CB9.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []

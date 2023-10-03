@@ -62,6 +62,18 @@ module.exports = function({  }) {
     ]
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "Foo_cloudFunction_CloudwatchLogGroup_B531638C": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Foo/cloud.Function/CloudwatchLogGroup",
+            "uniqueId": "Foo_cloudFunction_CloudwatchLogGroup_B531638C"
+          }
+        },
+        "name": "/aws/lambda/cloud-Function-c8858302",
+        "retention_in_days": 30
+      }
+    },
     "aws_iam_role": {
       "Foo_cloudFunction_IamRole_037E9FB3": {
         "//": {
@@ -121,7 +133,7 @@ module.exports = function({  }) {
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.Foo_cloudFunction_S3Object_B910EE1D.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []

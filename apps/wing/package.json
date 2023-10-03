@@ -26,7 +26,7 @@
     "copy-root-assets": "cp ../../logo/demo.gif ./logo/demo.gif",
     "watch": "tsc --watch",
     "test": "vitest run",
-    "dev": "pnpm build && ./bin/wing",
+    "dev": "./bin/wing",
     "package": "bump-pack -b"
   },
   "dependencies": {

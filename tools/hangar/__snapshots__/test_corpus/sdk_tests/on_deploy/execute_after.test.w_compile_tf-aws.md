@@ -98,6 +98,7 @@ module.exports = function({ $counter }) {
           "aws_iam_role.init1_Function_IamRole_3B884CB0",
           "aws_iam_role_policy.init1_Function_IamRolePolicy_19694F39",
           "aws_iam_role_policy_attachment.init1_Function_IamRolePolicyAttachment_96AFCA54",
+          "aws_cloudwatch_log_group.init1_Function_CloudwatchLogGroup_8ECB5A4E",
           "aws_lambda_function.init1_Function_9744E65A",
           "data.aws_lambda_invocation.init1_Invocation_64AF0CEF"
         ],
@@ -117,6 +118,28 @@ module.exports = function({ $counter }) {
     ]
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "init1_Function_CloudwatchLogGroup_8ECB5A4E": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/init1/Function/CloudwatchLogGroup",
+            "uniqueId": "init1_Function_CloudwatchLogGroup_8ECB5A4E"
+          }
+        },
+        "name": "/aws/lambda/Function-c899c2a8",
+        "retention_in_days": 30
+      },
+      "init2_Function_CloudwatchLogGroup_7C2853C0": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/init2/Function/CloudwatchLogGroup",
+            "uniqueId": "init2_Function_CloudwatchLogGroup_7C2853C0"
+          }
+        },
+        "name": "/aws/lambda/Function-c86c3d88",
+        "retention_in_days": 30
+      }
+    },
     "aws_dynamodb_table": {
       "cloudCounter": {
         "//": {
@@ -225,7 +248,7 @@ module.exports = function({ $counter }) {
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.init1_Function_S3Object_EFA6F99F.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
@@ -255,7 +278,7 @@ module.exports = function({ $counter }) {
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.init2_Function_S3Object_8A53C74F.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []

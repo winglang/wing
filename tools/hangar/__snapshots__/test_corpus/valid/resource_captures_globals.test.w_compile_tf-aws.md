@@ -146,6 +146,18 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
     ]
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "MyResource_cloudTopic-OnMessage-f10eb240_CloudwatchLogGroup_D9692C7E": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-f10eb240/CloudwatchLogGroup",
+            "uniqueId": "MyResource_cloudTopic-OnMessage-f10eb240_CloudwatchLogGroup_D9692C7E"
+          }
+        },
+        "name": "/aws/lambda/cloud-Topic-OnMessage-f10eb240-c8df2c86",
+        "retention_in_days": 30
+      }
+    },
     "aws_dynamodb_table": {
       "MyResource_cloudCounter_0782991D": {
         "//": {
@@ -243,7 +255,7 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.MyResource_cloudTopic-OnMessage-f10eb240_S3Object_B244E1DD.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []

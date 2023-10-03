@@ -1,5 +1,5 @@
 import { Construct } from "constructs";
-import { IInflightHost, IResource, Resource } from "./resource";
+import { IResource, Resource } from "./resource";
 import { Function, FUNCTION_FQN, FunctionProps } from "../cloud/function";
 import { fqnForType } from "../constants";
 import { App } from "../core";
@@ -24,7 +24,7 @@ export interface TestProps extends FunctionProps {}
  * @inflight `@winglang/sdk.cloud.ITestClient`
  * @skipDocs
  */
-export class Test extends Resource implements IInflightHost {
+export class Test extends Resource {
   /**
    * Creates a new std.Test instance through the app.
    * @internal
