@@ -9,6 +9,7 @@ import {
   BucketEventType,
   IBucketClient,
   ITopicClient,
+  SignedUrlOptions,
 } from "../cloud";
 import {
   ISimulatorContext,
@@ -204,6 +205,18 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         }
 
         return url.pathToFileURL(filePath).href;
+      },
+    });
+  }
+
+  public async signedUrl(key: string, options?: SignedUrlOptions) {
+    options;
+    return this.context.withTrace({
+      message: `Signed URL (key=${key})`,
+      activity: async () => {
+        throw new Error(
+          `signedUrl is not implemented yet for sim (key=${key})`
+        );
       },
     });
   }

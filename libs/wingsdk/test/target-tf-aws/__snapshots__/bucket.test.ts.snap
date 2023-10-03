@@ -387,6 +387,12 @@ exports[`bucket with onCreate method 1`] = `
     },
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "my_bucket_my_bucket-oncreate-OnMessage-7b961f4d_CloudwatchLogGroup_6917D6E9": {
+        "name": "/aws/lambda/my_bucket-oncreate-OnMessage-7b961f4d-c81311dd",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "my_bucket_my_bucket-oncreate-OnMessage-7b961f4d_IamRole_7FA5AA01": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -651,6 +657,14 @@ exports[`bucket with onCreate method 2`] = `
                         "id": "Asset",
                         "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d/Asset",
                       },
+                      "CloudwatchLogGroup": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "CloudwatchLogGroup",
+                        "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d/CloudwatchLogGroup",
+                      },
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
@@ -789,6 +803,12 @@ exports[`bucket with onDelete method 1`] = `
     },
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "my_bucket_my_bucket-ondelete-OnMessage-1de1a361_CloudwatchLogGroup_FFDFBC6C": {
+        "name": "/aws/lambda/my_bucket-ondelete-OnMessage-1de1a361-c89e08bf",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "my_bucket_my_bucket-ondelete-OnMessage-1de1a361_IamRole_94D9A7C9": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -1053,6 +1073,14 @@ exports[`bucket with onDelete method 2`] = `
                         "id": "Asset",
                         "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361/Asset",
                       },
+                      "CloudwatchLogGroup": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "CloudwatchLogGroup",
+                        "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361/CloudwatchLogGroup",
+                      },
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
@@ -1191,6 +1219,20 @@ exports[`bucket with onEvent method 1`] = `
     },
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "my_bucket_my_bucket-oncreate-OnMessage-7b961f4d_CloudwatchLogGroup_6917D6E9": {
+        "name": "/aws/lambda/my_bucket-oncreate-OnMessage-7b961f4d-c81311dd",
+        "retention_in_days": 30,
+      },
+      "my_bucket_my_bucket-ondelete-OnMessage-1de1a361_CloudwatchLogGroup_FFDFBC6C": {
+        "name": "/aws/lambda/my_bucket-ondelete-OnMessage-1de1a361-c89e08bf",
+        "retention_in_days": 30,
+      },
+      "my_bucket_my_bucket-onupdate-OnMessage-46c07356_CloudwatchLogGroup_7D60006A": {
+        "name": "/aws/lambda/my_bucket-onupdate-OnMessage-46c07356-c844b8ba",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "my_bucket_my_bucket-oncreate-OnMessage-7b961f4d_IamRole_7FA5AA01": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -1583,6 +1625,14 @@ exports[`bucket with onEvent method 2`] = `
                         "id": "Asset",
                         "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d/Asset",
                       },
+                      "CloudwatchLogGroup": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "CloudwatchLogGroup",
+                        "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d/CloudwatchLogGroup",
+                      },
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
@@ -1713,6 +1763,14 @@ exports[`bucket with onEvent method 2`] = `
                         "id": "Asset",
                         "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361/Asset",
                       },
+                      "CloudwatchLogGroup": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "CloudwatchLogGroup",
+                        "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361/CloudwatchLogGroup",
+                      },
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
@@ -1842,6 +1900,14 @@ exports[`bucket with onEvent method 2`] = `
                         },
                         "id": "Asset",
                         "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356/Asset",
+                      },
+                      "CloudwatchLogGroup": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "CloudwatchLogGroup",
+                        "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356/CloudwatchLogGroup",
                       },
                       "Default": {
                         "constructInfo": {
@@ -1981,6 +2047,12 @@ exports[`bucket with onUpdate method 1`] = `
     },
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "my_bucket_my_bucket-onupdate-OnMessage-46c07356_CloudwatchLogGroup_7D60006A": {
+        "name": "/aws/lambda/my_bucket-onupdate-OnMessage-46c07356-c844b8ba",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "my_bucket_my_bucket-onupdate-OnMessage-46c07356_IamRole_4FC47AD3": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -2244,6 +2316,14 @@ exports[`bucket with onUpdate method 2`] = `
                         },
                         "id": "Asset",
                         "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356/Asset",
+                      },
+                      "CloudwatchLogGroup": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "CloudwatchLogGroup",
+                        "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356/CloudwatchLogGroup",
                       },
                       "Default": {
                         "constructInfo": {
