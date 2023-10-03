@@ -15,6 +15,7 @@ test("basic function", () => {
   const output = app.synth();
 
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group", // log group for Lambda
     "aws_iam_role", // role for Lambda
     "aws_iam_role_policy", // policy for role
     "aws_iam_role_policy_attachment", // execution policy for role
@@ -22,6 +23,15 @@ test("basic function", () => {
     "aws_s3_bucket", // S3 bucket for code
     "aws_s3_object", // S3 object for code
   ]);
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(
+      output,
+      "aws_cloudwatch_log_group",
+      {
+        retention_in_days: 30,
+      }
+    )
+  ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
@@ -107,6 +117,7 @@ test("basic function with memory size specified", () => {
   const output = app.synth();
 
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group", // log group for Lambda
     "aws_iam_role", // role for Lambda
     "aws_iam_role_policy", // policy for role
     "aws_iam_role_policy_attachment", // execution policy for role
@@ -114,6 +125,41 @@ test("basic function with memory size specified", () => {
     "aws_s3_bucket", // S3 bucket for code
     "aws_s3_object", // S3 object for code
   ]);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("basic function with custom log retention", () => {
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  Function._newFunction(app, "Function", inflight, { logRetentionDays: 7 });
+  const output = app.synth();
+
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(
+      output,
+      "aws_cloudwatch_log_group",
+      {
+        retention_in_days: 7,
+      }
+    )
+  ).toEqual(true);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("basic function with infinite log retention", () => {
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  Function._newFunction(app, "Function", inflight, { logRetentionDays: -1 });
+  const output = app.synth();
+
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(
+      output,
+      "aws_cloudwatch_log_group"
+    )
+  ).toEqual(false);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
