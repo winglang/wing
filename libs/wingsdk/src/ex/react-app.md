@@ -41,9 +41,9 @@ When `ReactApp` is compiled to the `sim` target, by default it runs the start co
 
 If the `CI` environment variable is set OR if `ReactApp` is compiled to any other target, it will run the build command (default: `npm build`) inside of the `projectPath` to build the React app for production to `buildDir` and serve the app.
 
-### Using wing variables within react code
+### Using Wing variables within react code
 
-`ex.ReactApp` allows you to pass preflight arguments from wing to the React app using `addEnvironment` method:
+`ex.ReactApp` allows you to pass preflight string values from Wing to the React app using `addEnvironment` method:
 
 ```ts
 bring cloud;
