@@ -36,6 +36,8 @@ module.exports = function({ $b }) {
     async handle() {
       (await $b.put("dirty","x"));
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -47,6 +49,8 @@ module.exports = function({ $b }) {
 module.exports = function({  }) {
   class Foo {
     constructor({  }) {
+    }
+    async $inflight_init() {
     }
   }
   return Foo;

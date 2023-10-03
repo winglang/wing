@@ -29,6 +29,8 @@ module.exports = function({ $MyEnum, $x }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: MyEnum.B != MyEnum.C")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($MyEnum.B,$MyEnum.C)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: x == MyEnum.C")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($x,$MyEnum.C)))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

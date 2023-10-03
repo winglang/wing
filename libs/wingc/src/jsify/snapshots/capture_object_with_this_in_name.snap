@@ -26,6 +26,8 @@ module.exports = function({ $bucket_this }) {
     async handle() {
       (await $bucket_this.put("this","is not a field"));
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

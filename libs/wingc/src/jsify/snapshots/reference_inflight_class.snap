@@ -28,6 +28,8 @@ module.exports = function({ $Foo }) {
     async handle() {
       {console.log((await $Foo.a()))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -40,6 +42,8 @@ module.exports = function({  }) {
   class Foo {
     static async a() {
       return "a";
+    }
+    async $inflight_init() {
     }
   }
   return Foo;

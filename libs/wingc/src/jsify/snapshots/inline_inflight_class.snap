@@ -35,6 +35,8 @@ module.exports = function({ $__parent_this_1_b }) {
     async handle() {
       (await $__parent_this_1_b.put("in","bucket"));
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -46,6 +48,8 @@ module.exports = function({ $__parent_this_1_b }) {
 module.exports = function({  }) {
   class Foo {
     constructor({  }) {
+    }
+    async $inflight_init() {
     }
   }
   return Foo;

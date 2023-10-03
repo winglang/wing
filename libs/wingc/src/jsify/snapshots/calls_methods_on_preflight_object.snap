@@ -29,6 +29,8 @@ module.exports = function({ $b }) {
       (await $b.put("hello","world"));
       (await $b.list());
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

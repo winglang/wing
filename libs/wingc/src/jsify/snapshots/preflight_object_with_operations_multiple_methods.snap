@@ -33,6 +33,8 @@ module.exports = function({ $b }) {
     async list() {
       (await $b.list());
     }
+    async $inflight_init() {
+    }
   }
   return Foo;
 }

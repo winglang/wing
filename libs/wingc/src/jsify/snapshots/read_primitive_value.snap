@@ -26,6 +26,8 @@ module.exports = function({ $x }) {
     async handle() {
       {console.log($x)};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

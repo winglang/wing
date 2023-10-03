@@ -25,6 +25,8 @@ module.exports = function({ $api_url }) {
     async handle() {
       {console.log($api_url)};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

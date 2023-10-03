@@ -31,6 +31,8 @@ module.exports = function({ $_arr_at_0__, $arr_length }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: arr.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($arr_length,2)))};
       (await $_arr_at_0__.put("hello","world"));
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

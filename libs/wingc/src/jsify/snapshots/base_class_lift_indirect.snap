@@ -39,6 +39,8 @@ module.exports = function({  }) {
       (await this.$this_b.put("hello","world"));
       (await this.$this_b.list());
     }
+    async $inflight_init() {
+    }
   }
   return Base;
 }
@@ -54,6 +56,8 @@ module.exports = function({ $Base }) {
     }
     async foo() {
       (await this.put());
+    }
+    async $inflight_init() {
     }
   }
   return Derived;

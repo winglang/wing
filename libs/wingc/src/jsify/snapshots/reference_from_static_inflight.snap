@@ -25,6 +25,8 @@ module.exports = function({ $s }) {
     static async staticMethod() {
       return $s;
     }
+    async $inflight_init() {
+    }
   }
   return MyType;
 }

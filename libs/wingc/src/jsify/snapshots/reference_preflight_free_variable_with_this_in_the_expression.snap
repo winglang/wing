@@ -33,6 +33,8 @@ module.exports = function({ $b }) {
     async method() {
       (await $b.put(this.$this_name,"value"));
     }
+    async $inflight_init() {
+    }
   }
   return Foo;
 }

@@ -27,6 +27,8 @@ module.exports = function({ $x }) {
       const y = 2;
       ($x + y);
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

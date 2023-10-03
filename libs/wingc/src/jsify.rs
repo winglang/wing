@@ -1334,7 +1334,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		// emit the $inflight_init function
-  	class_code.line(self.jsify_function(Some(class), &class.inflight_initializer, &mut ctx));
+		class_code.line(self.jsify_function(Some(class), &class.inflight_initializer, &mut ctx));
 
 		class_code.close("}");
 		ctx.visit_ctx.pop_phase();

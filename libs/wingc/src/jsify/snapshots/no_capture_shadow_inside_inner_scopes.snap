@@ -38,6 +38,8 @@ module.exports = function({  }) {
         (await arr.push(i));
       }
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

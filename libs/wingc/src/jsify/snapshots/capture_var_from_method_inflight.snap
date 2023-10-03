@@ -30,7 +30,11 @@ module.exports = function({  }) {
         async getX() {
           return x;
         }
+        async $inflight_init() {
+        }
       }
+    }
+    async $inflight_init() {
     }
   }
   return $Closure1;

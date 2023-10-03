@@ -34,6 +34,8 @@ module.exports = function({ $a_bucky }) {
     async handle() {
       (await $a_bucky.list());
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -45,6 +47,8 @@ module.exports = function({ $a_bucky }) {
 module.exports = function({  }) {
   class A {
     constructor({  }) {
+    }
+    async $inflight_init() {
     }
   }
   return A;

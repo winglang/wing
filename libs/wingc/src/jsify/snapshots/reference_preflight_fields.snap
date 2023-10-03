@@ -46,6 +46,8 @@ module.exports = function({  }) {
       (await this.$this_b.put("hello","world"));
       (await this.$this_b.get("aaa"));
     }
+    async $inflight_init() {
+    }
   }
   return MyType;
 }
