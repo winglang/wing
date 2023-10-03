@@ -119,7 +119,7 @@ export class App extends core.App {
         return new Schedule(scope, id, args[0]);
 
       case SERVICE_FQN:
-        return new Service(scope, id, args[0]);
+        return new Service(scope, id, args[0], args[1]);
 
       case ON_DEPLOY_FQN:
         return new OnDeploy(scope, id, args[0], args[1]);

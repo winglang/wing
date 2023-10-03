@@ -39,6 +39,7 @@ impl Visit<'_> for DocumentSymbolVisitor {
 						// so we don't need to add a symbol for the module itself
 						BringSource::JsiiModule(_) => {}
 						BringSource::WingFile(_) => {}
+						BringSource::Directory(_) => {}
 					};
 				}
 			}

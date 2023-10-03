@@ -205,6 +205,11 @@
       "type": "bundled"
     },
     {
+      "name": "@aws-sdk/s3-request-presigner",
+      "version": "3.405.0",
+      "type": "bundled"
+    },
+    {
       "name": "@aws-sdk/types",
       "version": "3.398.0",
       "type": "bundled"

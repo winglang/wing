@@ -99,6 +99,7 @@ where
 				BringSource::BuiltinModule(name) => v.visit_symbol(name),
 				BringSource::JsiiModule(name) => v.visit_symbol(name),
 				BringSource::WingFile(name) => v.visit_symbol(name),
+				BringSource::Directory(name) => v.visit_symbol(name),
 			}
 			if let Some(identifier) = identifier {
 				v.visit_symbol(identifier);

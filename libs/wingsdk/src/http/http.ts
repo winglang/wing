@@ -1,3 +1,4 @@
+import { URL as NodeUrl, format } from "url";
 import { InflightClient } from "../core";
 
 /**
@@ -147,6 +148,61 @@ export interface Response {
 }
 
 /**
+ * An URL following WHATWG URL Standard.
+ */
+export interface Url {
+  /** The entire URL. */
+  readonly href: string;
+
+  /** The URL's protocol. */
+  readonly protocol: string;
+
+  /** The URL's host. */
+  readonly host: string;
+
+  /** The URL's hostname. */
+  readonly hostname: string;
+
+  /** The URL's port. */
+  readonly port: string;
+
+  /** The URL's pathname. */
+  readonly pathname: string;
+
+  /** The URL's search. */
+  readonly search: string;
+
+  /** The URL's fragment. */
+  readonly hash: string;
+
+  /** The URL's origin. */
+  readonly origin: string;
+
+  /** The URL's username. */
+  readonly username: string;
+
+  /** The URL’s password. */
+  readonly password: string;
+}
+
+/**
+ * Options for serializing a WHATWG URL to a String.
+ */
+export interface FormatUrlOptions {
+  /** Whether the formatted URL should include the username and password. */
+  readonly auth?: boolean;
+
+  /** Whether the formatted URL should include the fragment identifier. */
+  readonly fragment?: boolean;
+
+  /** Whether the formatted URL should include the search query. */
+  readonly search?: boolean;
+
+  /** Whether the formatted URL should represent Unicode characters for the host component. */
+  readonly unicode?: boolean;
+}
+
+/**
  * Default options to attach to any request
  */
 const defaultOptions: RequestOptions = {
@@ -269,6 +325,56 @@ export class Util {
       ...options,
       method: HttpMethod.DELETE,
     });
+  }
+
+  /**
+   * Parses the input URL String using WHATWG URL API and returns an URL Struct.
+   * @param urlString The URL String to be parsed.
+   * @throws Will throw an error if the input String is not a valid URL.
+   * @inflight
+   * @returns An URL Struct.
+   */
+  public static parseUrl(urlString: string): Url {
+    try {
+      const nodeUrl = new NodeUrl(urlString);
+      return {
+        href: nodeUrl.href,
+        protocol: nodeUrl.protocol,
+        host: nodeUrl.host,
+        hostname: nodeUrl.hostname,
+        port: nodeUrl.port,
+        pathname: nodeUrl.pathname,
+        search: nodeUrl.search,
+        hash: nodeUrl.hash,
+        origin: nodeUrl.origin,
+        username: nodeUrl.username,
+        password: nodeUrl.password,
+      };
+    } catch (error) {
+      throw new Error(`Invalid URL: ${urlString}`);
+    }
+  }
+
+  /**
+   * Serializes an URL Struct to a String.
+   * @param url The URL Struct to be formatted.
+   * @throws Will throw an error if the input URL has invalid fields.
+   * @inflight
+   * @returns A formatted URL String.
+   */
+  public static formatUrl(url: Url, options?: FormatUrlOptions): string {
+    try {
+      const nodeUrl = new NodeUrl(url.href);
+      return format(nodeUrl, options);
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(`Unable to format URL Struct: ${error.message}`);
+      } else {
+        throw new Error(
+          "Unable to format URL Struct: An unknown error occurred"
+        );
+      }
+    }
   }
 
   private static async _formatResponse(

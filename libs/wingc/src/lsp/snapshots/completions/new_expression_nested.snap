@@ -104,7 +104,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Service\n```\n---\nA long-running service."
+    value: "```wing\nclass Service impl IInflightHost\n```\n---\nA long-running service."
   sortText: gg|Service
   insertText: Service($0)
   insertTextFormat: 2
