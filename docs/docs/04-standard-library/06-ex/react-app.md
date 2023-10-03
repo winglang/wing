@@ -1,6 +1,6 @@
 ---
-title: React Website
-id: react-website
+title: React App
+id: react-app
 description: A built-in resource for creating deployable websites using the React framework.
 keywords: [Website, React, deployment, build]
 sidebar_position: 1
@@ -29,7 +29,7 @@ bring util;
 
 let website = new ex.ReactApp(
   projectPath: "./client",
-  isDevRun: false // `true`` by default. will run the start command if true, and the build command if not
+  isDevRun: false // `true` by default. Will run the start command if true, and the build command if not
   buildDir: "/dist" // default is "/build"
   startCommand: "pnpm start" // default is "npm start"
   buildCommand: "pnpm build" // default is "npm build"
