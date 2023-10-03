@@ -59,14 +59,13 @@ export class Table extends ex.Table {
     }
 
     const autoscalingConfig: BigtableInstanceClusterAutoscalingConfig = {
-      minNodes: 1,
-      maxNodes: 3,
-      cpuTarget: 10,
-    }
+      minNodes: props.minNodes ?? 1,
+      maxNodes: props.maxNodes ?? 1 ,
+      cpuTarget: props.cpuTarget ?? 10,
+     }
 
     const instanceCluster: BigtableInstanceCluster = {
       clusterId: clusterId!,
-      numNodes: props.numNodes,
       storageType: props.storageType,
       zone: app.zone,
       autoscalingConfig: autoscalingConfig, 

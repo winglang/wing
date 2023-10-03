@@ -7,5 +7,5 @@ let table = new ex.Table(
     columns: { 
       "gender" => ex.ColumnType.STRING,
       "role" => ex.ColumnType.STRING 
-    } 
+    }
 );

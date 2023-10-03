@@ -63,10 +63,30 @@ export interface TableProps {
   readonly clusterId?: string;
 
   /**
-  * the table's instance number of nodes
+  * the table's instance minimal number of nodes, used in autoscaling
+  * @default 1 
+  */
+  readonly minNodes?: number;
+
+
+  /**
+  * the table's instance maximal number of nodes, used in autoscaling
+  * @default 1 
+  */
+  readonly maxNodes?: number;
+
+  /**
+  * the table's instance target cpu utilization for autoscaling
+  * @default 10 
+  */
+  readonly cpuTarget?: number
+
+
+  /**
+  * the tabel's instance labels 
   * @default undefined 
   */
-  readonly numNodes?: number;
+  readonly labels?: {[key: string]: string}
 }
 
 /**

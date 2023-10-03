@@ -84,17 +84,7 @@ export class App extends CdktfApp {
       );
     }
     this.region = region;
-
-    let zone: string | undefined = props.zone;
-    if (zone === undefined && !props.overrideEnv) {
-      zone = process.env.GOOGLE_ZONE;
-    }
-    if (zone === undefined) {
-      throw new Error(
-        "A Google Cloud zone must be specified through the GOOGLE_ZONE environment variable.",
-      );
-    }
-    this.zone = zone;
+    this.zone = props.zone ?? process.env.GOOGLE_ZONE;
 
     new GoogleProvider(this, "google", {
       project: this.projectId,
