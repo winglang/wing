@@ -20,6 +20,8 @@ module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_a
       {((cond) => {if (!cond) throw new Error("assertion failed: arrOfMap.at(0).has(\"bang\")")})($__bang__in___arrOfMap_at_0____)};
       {((cond) => {if (!cond) throw new Error("assertion failed: j.get(\"b\") == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($__obj__args_______if__obj_args______undefined__throw_new_Error__Json_property____args___does_not_exist____return_obj_args_____j___b__,"world")))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

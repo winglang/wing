@@ -12,6 +12,8 @@ module.exports = function({  }) {
     async handle(key) {
       {console.log(String.raw({ raw: ["deleted ", ""] }, key))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -29,6 +31,8 @@ module.exports = function({  }) {
     }
     async handle(key) {
       {console.log(String.raw({ raw: ["updated ", ""] }, key))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;
@@ -48,6 +52,8 @@ module.exports = function({  }) {
     async handle(key) {
       {console.log(String.raw({ raw: ["created ", ""] }, key))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure3;
 }
@@ -66,6 +72,8 @@ module.exports = function({ $other }) {
     async handle(key, event) {
       (await $other.put(String.raw({ raw: ["last_", "_key"] }, event),key));
     }
+    async $inflight_init() {
+    }
   }
   return $Closure4;
 }
@@ -83,6 +91,8 @@ module.exports = function({  }) {
     }
     async handle(key) {
       {console.log("other bucket event called!")};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure5;
@@ -105,6 +115,8 @@ module.exports = function({ $b }) {
       (await $b.put("b","100"));
       (await $b.put("c","1"));
       (await $b.delete("c"));
+    }
+    async $inflight_init() {
     }
   }
   return $Closure6;

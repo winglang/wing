@@ -10,7 +10,9 @@ module.exports = function({ $Foo }) {
       return $obj;
     }
     async handle() {
-      return ({"foo": new $Foo()});
+      return ({"foo": (await (async (o) => { await o.$inflight_init(); return o; })(new $Foo()))});
+    }
+    async $inflight_init() {
     }
   }
   return $Closure1;
@@ -31,6 +33,8 @@ module.exports = function({ $getBar }) {
       const bar = (await $getBar());
       {((cond) => {if (!cond) throw new Error("assertion failed: bar.foo.get() == 42")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await bar.foo.get()),42)))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure2;
 }
@@ -43,6 +47,8 @@ module.exports = function({  }) {
   class Foo {
     async get() {
       return 42;
+    }
+    async $inflight_init() {
     }
   }
   return Foo;

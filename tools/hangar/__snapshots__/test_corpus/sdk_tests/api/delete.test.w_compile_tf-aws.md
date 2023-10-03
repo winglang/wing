@@ -16,6 +16,8 @@ module.exports = function({ $cloud_HttpMethod }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: req.path == \"/path\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.path,"/path")))};
       return ({"status": 200,"body": (req.query)["page"]});
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -41,6 +43,8 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.body == \"6\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(fetchResponse.body,"6")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.status == 200")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(fetchResponse.status,200)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.url == url")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(fetchResponse.url,url)))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;

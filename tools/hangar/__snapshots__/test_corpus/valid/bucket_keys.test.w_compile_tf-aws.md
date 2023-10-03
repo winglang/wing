@@ -22,6 +22,8 @@ module.exports = function({ $b }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: objs.at(3) == \"foo/bar/\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await objs.at(3)),"foo/bar/")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: objs.at(4) == \"foo/bar/baz\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await objs.at(4)),"foo/bar/baz")))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

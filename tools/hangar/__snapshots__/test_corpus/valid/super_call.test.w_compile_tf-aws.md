@@ -10,8 +10,10 @@ module.exports = function({ $InflightB }) {
       return $obj;
     }
     async handle() {
-      const b = new $InflightB();
+      const b = (await (async (o) => { await o.$inflight_init(); return o; })(new $InflightB()));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.description() == \"InflightB extends InflightA\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await b.description()),"InflightB extends InflightA")))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure1;
@@ -31,6 +33,8 @@ module.exports = function({ $extended }) {
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: extended.do() == \"value\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $extended.do()),"value")))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure2;
 }
@@ -42,6 +46,8 @@ module.exports = function({ $extended }) {
 module.exports = function({  }) {
   class A {
     constructor({  }) {
+    }
+    async $inflight_init() {
     }
   }
   return A;
@@ -55,6 +61,8 @@ module.exports = function({ $A }) {
   class B extends $A {
     constructor({  }) {
       super({  });
+    }
+    async $inflight_init() {
     }
   }
   return B;
@@ -71,6 +79,8 @@ module.exports = function({ $b }) {
     async do() {
       return (await $b.get("k"));
     }
+    async $inflight_init() {
+    }
   }
   return BaseClass;
 }
@@ -83,6 +93,8 @@ module.exports = function({ $B }) {
   class C extends $B {
     constructor({  }) {
       super({  });
+    }
+    async $inflight_init() {
     }
   }
   return C;
@@ -97,6 +109,8 @@ module.exports = function({ $C }) {
     constructor({  }) {
       super({  });
     }
+    async $inflight_init() {
+    }
   }
   return D;
 }
@@ -109,6 +123,8 @@ module.exports = function({ $D }) {
   class E extends $D {
     constructor({  }) {
       super({  });
+    }
+    async $inflight_init() {
     }
   }
   return E;
@@ -127,6 +143,8 @@ module.exports = function({ $BaseClass, $b }) {
       (await $b.put("k","value"));
       return (await super.do());
     }
+    async $inflight_init() {
+    }
   }
   return ExtendedClass;
 }
@@ -140,6 +158,8 @@ module.exports = function({  }) {
     async description() {
       return "InflightA";
     }
+    async $inflight_init() {
+    }
   }
   return InflightA;
 }
@@ -152,6 +172,8 @@ module.exports = function({ $InflightA }) {
   class InflightB extends $InflightA {
     async description() {
       return String.raw({ raw: ["InflightB extends ", ""] }, (await super.description()));
+    }
+    async $inflight_init() {
     }
   }
   return InflightB;

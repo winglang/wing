@@ -17,11 +17,15 @@ module.exports = function({ $NotGoo }) {
         async anotherMethod() {
           {console.log("also fine")};
         }
+        async $inflight_init() {
+        }
       }
-      const y = new YesGoo();
+      const y = (await (async (o) => { await o.$inflight_init(); return o; })(new YesGoo()));
       {((cond) => {if (!cond) throw new Error("assertion failed: y.handle() == 456")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await y.handle()),456)))};
-      const x = new $NotGoo();
+      const x = (await (async (o) => { await o.$inflight_init(); return o; })(new $NotGoo()));
       {((cond) => {if (!cond) throw new Error("assertion failed: x.handle() == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await x.handle()),123)))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure1;
@@ -35,6 +39,8 @@ module.exports = function({  }) {
   class NotGoo {
     async handle() {
       return 123;
+    }
+    async $inflight_init() {
     }
   }
   return NotGoo;

@@ -13,6 +13,8 @@ module.exports = function({ $b, $fileName }) {
       const x = (await $b.getJson($fileName));
       {((cond) => {if (!cond) throw new Error("assertion failed: x.get(\"persons\").getAt(0).get(\"fears\").getAt(1) == \"failure\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(x, "persons"), 0), "fears"), 1),"failure")))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -31,6 +33,8 @@ module.exports = function({ $b, $fileName, $getJson, $j }) {
     async handle() {
       (await $b.putJson($fileName,$j));
       (await $getJson.invoke(""));
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;

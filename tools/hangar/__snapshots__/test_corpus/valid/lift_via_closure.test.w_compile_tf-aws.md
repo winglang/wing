@@ -12,6 +12,8 @@ module.exports = function({ $bucket2 }) {
     async handle() {
       (await $bucket2.put("hello","world"));
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -29,6 +31,8 @@ module.exports = function({ $fn }) {
     }
     async handle() {
       (await $fn());
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;
@@ -50,6 +54,8 @@ module.exports = function({ $bucket2, $fn2, $fn2_bucket }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: fn2.bucket.get(\"hello\") == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fn2_bucket.get("hello")),"world")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: fn2.listFiles().length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fn2.listFiles()).length,1)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: bucket2.get(\"b2\") == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $bucket2.get("b2")),"world")))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure3;
@@ -78,6 +84,8 @@ module.exports = function({ $bucket2 }) {
     async listFiles() {
       (await $bucket2.put("b2","world"));
       return (await this.$this_bucket.list());
+    }
+    async $inflight_init() {
     }
   }
   return MyClosure;

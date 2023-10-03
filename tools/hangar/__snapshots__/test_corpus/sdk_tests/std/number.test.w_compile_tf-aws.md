@@ -12,6 +12,8 @@ module.exports = function({ $std_Number }) {
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: num.fromJson(Json 123) == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $std_Number.fromJson(123)),123)))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -29,6 +31,8 @@ module.exports = function({ $std_Number }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: num.fromStr(\"888\") == 888")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return parseInt(args) })("888"),888)))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;

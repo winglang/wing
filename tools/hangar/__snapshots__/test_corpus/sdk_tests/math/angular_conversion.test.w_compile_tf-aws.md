@@ -23,6 +23,8 @@ module.exports = function({ $math_Util }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.radiansToDegrees(math.PI / 4) == 45")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.radiansToDegrees(($math_Util.PI / 4))),45)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.radiansToDegrees(math.PI / 6)) == 30")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round((await $math_Util.radiansToDegrees(($math_Util.PI / 6))))),30)))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

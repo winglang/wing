@@ -15,6 +15,8 @@ module.exports = function({ $math_Util }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.hypot([3, 4, 5]), decimalPlaces: 2) == 7.07")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round((await $math_Util.hypot([3, 4, 5])),{ decimalPlaces: 2 })),7.07)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.hypot([-5]) == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.hypot([(-5)])),5)))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

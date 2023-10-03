@@ -13,6 +13,8 @@ module.exports = function({ $foo }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: foo.returnNil(true)? == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((((await $foo.returnNil(true))) != null),true)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: foo.returnNil(false)? == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((((await $foo.returnNil(false))) != null),false)))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -36,6 +38,8 @@ module.exports = function({ $foo }) {
       (await $foo.setOptionalValue(undefined));
       {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((((await $foo.getOptionalValue())) != null),false)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue() == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $foo.getOptionalValue()),undefined)))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;

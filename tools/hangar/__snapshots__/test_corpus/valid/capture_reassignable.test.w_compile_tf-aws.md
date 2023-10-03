@@ -12,6 +12,8 @@ module.exports = function({ $x }) {
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: x == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($x,5)))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -29,6 +31,8 @@ module.exports = function({ $handler }) {
     }
     async handle() {
       (await $handler());
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;
