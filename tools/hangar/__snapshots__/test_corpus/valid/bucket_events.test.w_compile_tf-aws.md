@@ -142,6 +142,98 @@ module.exports = function({ $b }) {
     ]
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "b_b-oncreate-OnMessage-1d3b2039_CloudwatchLogGroup_8FFC7F16": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/b/b-oncreate-OnMessage-1d3b2039/CloudwatchLogGroup",
+            "uniqueId": "b_b-oncreate-OnMessage-1d3b2039_CloudwatchLogGroup_8FFC7F16"
+          }
+        },
+        "name": "/aws/lambda/b-oncreate-OnMessage-1d3b2039-c8a821e7",
+        "retention_in_days": 30
+      },
+      "b_b-oncreate-OnMessage-a729fee3_CloudwatchLogGroup_4B419017": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/b/b-oncreate-OnMessage-a729fee3/CloudwatchLogGroup",
+            "uniqueId": "b_b-oncreate-OnMessage-a729fee3_CloudwatchLogGroup_4B419017"
+          }
+        },
+        "name": "/aws/lambda/b-oncreate-OnMessage-a729fee3-c81091e7",
+        "retention_in_days": 30
+      },
+      "b_b-ondelete-OnMessage-4b2cd998_CloudwatchLogGroup_20713640": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/b/b-ondelete-OnMessage-4b2cd998/CloudwatchLogGroup",
+            "uniqueId": "b_b-ondelete-OnMessage-4b2cd998_CloudwatchLogGroup_20713640"
+          }
+        },
+        "name": "/aws/lambda/b-ondelete-OnMessage-4b2cd998-c8718454",
+        "retention_in_days": 30
+      },
+      "b_b-ondelete-OnMessage-b83da9f8_CloudwatchLogGroup_E154ADD8": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/b/b-ondelete-OnMessage-b83da9f8/CloudwatchLogGroup",
+            "uniqueId": "b_b-ondelete-OnMessage-b83da9f8_CloudwatchLogGroup_E154ADD8"
+          }
+        },
+        "name": "/aws/lambda/b-ondelete-OnMessage-b83da9f8-c80fdb5a",
+        "retention_in_days": 30
+      },
+      "b_b-onupdate-OnMessage-2dce4026_CloudwatchLogGroup_C7418EC8": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/b/b-onupdate-OnMessage-2dce4026/CloudwatchLogGroup",
+            "uniqueId": "b_b-onupdate-OnMessage-2dce4026_CloudwatchLogGroup_C7418EC8"
+          }
+        },
+        "name": "/aws/lambda/b-onupdate-OnMessage-2dce4026-c8164eef",
+        "retention_in_days": 30
+      },
+      "b_b-onupdate-OnMessage-b03e6c67_CloudwatchLogGroup_32CDCE27": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/b/b-onupdate-OnMessage-b03e6c67/CloudwatchLogGroup",
+            "uniqueId": "b_b-onupdate-OnMessage-b03e6c67_CloudwatchLogGroup_32CDCE27"
+          }
+        },
+        "name": "/aws/lambda/b-onupdate-OnMessage-b03e6c67-c81eb9cc",
+        "retention_in_days": 30
+      },
+      "other_other-oncreate-OnMessage-2b1e14fd_CloudwatchLogGroup_C1E56AD9": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/other/other-oncreate-OnMessage-2b1e14fd/CloudwatchLogGroup",
+            "uniqueId": "other_other-oncreate-OnMessage-2b1e14fd_CloudwatchLogGroup_C1E56AD9"
+          }
+        },
+        "name": "/aws/lambda/other-oncreate-OnMessage-2b1e14fd-c8a9cff0",
+        "retention_in_days": 30
+      },
+      "other_other-ondelete-OnMessage-9bef38d2_CloudwatchLogGroup_B0943848": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/other/other-ondelete-OnMessage-9bef38d2/CloudwatchLogGroup",
+            "uniqueId": "other_other-ondelete-OnMessage-9bef38d2_CloudwatchLogGroup_B0943848"
+          }
+        },
+        "name": "/aws/lambda/other-ondelete-OnMessage-9bef38d2-c8c0555a",
+        "retention_in_days": 30
+      },
+      "other_other-onupdate-OnMessage-bffa2a20_CloudwatchLogGroup_22FF7D38": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/other/other-onupdate-OnMessage-bffa2a20/CloudwatchLogGroup",
+            "uniqueId": "other_other-onupdate-OnMessage-bffa2a20_CloudwatchLogGroup_22FF7D38"
+          }
+        },
+        "name": "/aws/lambda/other-onupdate-OnMessage-bffa2a20-c85595aa",
+        "retention_in_days": 30
+      }
+    },
     "aws_iam_role": {
       "b_b-oncreate-OnMessage-1d3b2039_IamRole_BD50D914": {
         "//": {

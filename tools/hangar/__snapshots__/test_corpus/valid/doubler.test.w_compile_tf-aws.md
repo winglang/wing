@@ -135,6 +135,18 @@ module.exports = function({  }) {
     ]
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "Doubler2_cloudFunction_CloudwatchLogGroup_517BCD05": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Doubler2/cloud.Function/CloudwatchLogGroup",
+            "uniqueId": "Doubler2_cloudFunction_CloudwatchLogGroup_517BCD05"
+          }
+        },
+        "name": "/aws/lambda/cloud-Function-c8d4b6f0",
+        "retention_in_days": 30
+      }
+    },
     "aws_iam_role": {
       "Doubler2_cloudFunction_IamRole_3E4BED38": {
         "//": {
