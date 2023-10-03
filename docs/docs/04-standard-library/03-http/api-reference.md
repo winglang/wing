@@ -25,7 +25,9 @@ The Http class is used for calling different HTTP methods and requesting and sen
 | --- | --- |
 | <code><a href="#@winglang/sdk.http.Util.delete">delete</a></code> | Executes a DELETE request to a specified URL and provides a formatted response. |
 | <code><a href="#@winglang/sdk.http.Util.fetch">fetch</a></code> | Executes a HTTP request to a specified URL and provides a formatted response. |
+| <code><a href="#@winglang/sdk.http.Util.formatUrl">formatUrl</a></code> | Serializes an URL Struct to a String. |
 | <code><a href="#@winglang/sdk.http.Util.get">get</a></code> | Executes a GET request to a specified URL and provides a formatted response. |
+| <code><a href="#@winglang/sdk.http.Util.parseUrl">parseUrl</a></code> | Parses the input URL String using WHATWG URL API and returns an URL Struct. |
 | <code><a href="#@winglang/sdk.http.Util.patch">patch</a></code> | Executes a PATCH request to a specified URL and provides a formatted response. |
 | <code><a href="#@winglang/sdk.http.Util.post">post</a></code> | Executes a POST request to a specified URL and provides a formatted response. |
 | <code><a href="#@winglang/sdk.http.Util.put">put</a></code> | Executes a PUT request to a specified URL and provides a formatted response. |
@@ -86,6 +88,30 @@ Optional parameters for customizing the HTTP request.
 
 ---
 
+##### `formatUrl` <a name="formatUrl" id="@winglang/sdk.http.Util.formatUrl"></a>
+
+```wing
+bring http;
+
+inflight http.formatUrl(url: Url, options?: FormatUrlOptions);
+```
+
+Serializes an URL Struct to a String.
+
+###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.formatUrl.parameter.url"></a>
+
+- *Type:* <a href="#@winglang/sdk.http.Url">Url</a>
+
+The URL Struct to be formatted.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.formatUrl.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.http.FormatUrlOptions">FormatUrlOptions</a>
+
+---
+
 ##### `get` <a name="get" id="@winglang/sdk.http.Util.get"></a>
 
 ```wing
@@ -109,6 +135,24 @@ The target URL for the GET request.
 - *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
 
 Optional parameters for customizing the GET request.
+
+---
+
+##### `parseUrl` <a name="parseUrl" id="@winglang/sdk.http.Util.parseUrl"></a>
+
+```wing
+bring http;
+
+inflight http.parseUrl(urlString: str);
+```
+
+Parses the input URL String using WHATWG URL API and returns an URL Struct.
+
+###### `urlString`<sup>Required</sup> <a name="urlString" id="@winglang/sdk.http.Util.parseUrl.parameter.urlString"></a>
+
+- *Type:* str
+
+The URL String to be parsed.
 
 ---
 
@@ -193,6 +237,77 @@ ptional parameters for customizing the PUT request.
 
 
 ## Structs <a name="Structs" id="Structs"></a>
+
+### FormatUrlOptions <a name="FormatUrlOptions" id="@winglang/sdk.http.FormatUrlOptions"></a>
+
+Options for serializing a WHATWG URL to a String.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.http.FormatUrlOptions.Initializer"></a>
+
+```wing
+bring http;
+
+let FormatUrlOptions = http.FormatUrlOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.http.FormatUrlOptions.property.auth">auth</a></code> | <code>bool</code> | Whether the formatted URL should include the username and password. |
+| <code><a href="#@winglang/sdk.http.FormatUrlOptions.property.fragment">fragment</a></code> | <code>bool</code> | Whether the formatted URL should include the fragment identifier. |
+| <code><a href="#@winglang/sdk.http.FormatUrlOptions.property.search">search</a></code> | <code>bool</code> | Whether the formatted URL should include the search query. |
+| <code><a href="#@winglang/sdk.http.FormatUrlOptions.property.unicode">unicode</a></code> | <code>bool</code> | Whether the formatted URL should represent Unicode characters for the host component. |
+
+---
+
+##### `auth`<sup>Optional</sup> <a name="auth" id="@winglang/sdk.http.FormatUrlOptions.property.auth"></a>
+
+```wing
+auth: bool;
+```
+
+- *Type:* bool
+
+Whether the formatted URL should include the username and password.
+
+---
+
+##### `fragment`<sup>Optional</sup> <a name="fragment" id="@winglang/sdk.http.FormatUrlOptions.property.fragment"></a>
+
+```wing
+fragment: bool;
+```
+
+- *Type:* bool
+
+Whether the formatted URL should include the fragment identifier.
+
+---
+
+##### `search`<sup>Optional</sup> <a name="search" id="@winglang/sdk.http.FormatUrlOptions.property.search"></a>
+
+```wing
+search: bool;
+```
+
+- *Type:* bool
+
+Whether the formatted URL should include the search query.
+
+---
+
+##### `unicode`<sup>Optional</sup> <a name="unicode" id="@winglang/sdk.http.FormatUrlOptions.property.unicode"></a>
+
+```wing
+unicode: bool;
+```
+
+- *Type:* bool
+
+Whether the formatted URL should represent Unicode characters for the host component.
+
+---
 
 ### RequestOptions <a name="RequestOptions" id="@winglang/sdk.http.RequestOptions"></a>
 
@@ -383,6 +498,168 @@ body: str;
 - *Type:* str
 
 A string representation of the body contents.
+
+---
+
+### Url <a name="Url" id="@winglang/sdk.http.Url"></a>
+
+An URL following WHATWG URL Standard.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.http.Url.Initializer"></a>
+
+```wing
+bring http;
+
+let Url = http.Url{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.http.Url.property.hash">hash</a></code> | <code>str</code> | The URL's fragment. |
+| <code><a href="#@winglang/sdk.http.Url.property.host">host</a></code> | <code>str</code> | The URL's host. |
+| <code><a href="#@winglang/sdk.http.Url.property.hostname">hostname</a></code> | <code>str</code> | The URL's hostname. |
+| <code><a href="#@winglang/sdk.http.Url.property.href">href</a></code> | <code>str</code> | The entire URL. |
+| <code><a href="#@winglang/sdk.http.Url.property.origin">origin</a></code> | <code>str</code> | The URL's origin. |
+| <code><a href="#@winglang/sdk.http.Url.property.password">password</a></code> | <code>str</code> | The URL’s password. |
+| <code><a href="#@winglang/sdk.http.Url.property.pathname">pathname</a></code> | <code>str</code> | The URL's pathname. |
+| <code><a href="#@winglang/sdk.http.Url.property.port">port</a></code> | <code>str</code> | The URL's port. |
+| <code><a href="#@winglang/sdk.http.Url.property.protocol">protocol</a></code> | <code>str</code> | The URL's protocol. |
+| <code><a href="#@winglang/sdk.http.Url.property.search">search</a></code> | <code>str</code> | The URL's search. |
+| <code><a href="#@winglang/sdk.http.Url.property.username">username</a></code> | <code>str</code> | The URL's username. |
+
+---
+
+##### `hash`<sup>Required</sup> <a name="hash" id="@winglang/sdk.http.Url.property.hash"></a>
+
+```wing
+hash: str;
+```
+
+- *Type:* str
+
+The URL's fragment.
+
+---
+
+##### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.http.Url.property.host"></a>
+
+```wing
+host: str;
+```
+
+- *Type:* str
+
+The URL's host.
+
+---
+
+##### `hostname`<sup>Required</sup> <a name="hostname" id="@winglang/sdk.http.Url.property.hostname"></a>
+
+```wing
+hostname: str;
+```
+
+- *Type:* str
+
+The URL's hostname.
+
+---
+
+##### `href`<sup>Required</sup> <a name="href" id="@winglang/sdk.http.Url.property.href"></a>
+
+```wing
+href: str;
+```
+
+- *Type:* str
+
+The entire URL.
+
+---
+
+##### `origin`<sup>Required</sup> <a name="origin" id="@winglang/sdk.http.Url.property.origin"></a>
+
+```wing
+origin: str;
+```
+
+- *Type:* str
+
+The URL's origin.
+
+---
+
+##### `password`<sup>Required</sup> <a name="password" id="@winglang/sdk.http.Url.property.password"></a>
+
+```wing
+password: str;
+```
+
+- *Type:* str
+
+The URL’s password.
+
+---
+
+##### `pathname`<sup>Required</sup> <a name="pathname" id="@winglang/sdk.http.Url.property.pathname"></a>
+
+```wing
+pathname: str;
+```
+
+- *Type:* str
+
+The URL's pathname.
+
+---
+
+##### `port`<sup>Required</sup> <a name="port" id="@winglang/sdk.http.Url.property.port"></a>
+
+```wing
+port: str;
+```
+
+- *Type:* str
+
+The URL's port.
+
+---
+
+##### `protocol`<sup>Required</sup> <a name="protocol" id="@winglang/sdk.http.Url.property.protocol"></a>
+
+```wing
+protocol: str;
+```
+
+- *Type:* str
+
+The URL's protocol.
+
+---
+
+##### `search`<sup>Required</sup> <a name="search" id="@winglang/sdk.http.Url.property.search"></a>
+
+```wing
+search: str;
+```
+
+- *Type:* str
+
+The URL's search.
+
+---
+
+##### `username`<sup>Required</sup> <a name="username" id="@winglang/sdk.http.Url.property.username"></a>
+
+```wing
+username: str;
+```
+
+- *Type:* str
+
+The URL's username.
 
 ---
 

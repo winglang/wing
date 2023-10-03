@@ -182,10 +182,16 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --ignore-scripts --frozen-lockfile --filter hangar --filter examples-valid --filter examples-invalid
 
-      - name: Run E2E Benchmarks
+      - name: Run Baseline Benchmarks
+        working-directory: tools/hangar
+        if: github.event_name == 'pull_request'
         env:
-          BENCH_FAIL_THRESHOLD_PERCENT: "50"
-          BENCH_COMPARE_PREVIOUS: "${{ github.event_name == 'pull_request' && 'main' || '' }}"
+          HANGAR_WINGLANG_PACKAGE: "winglang@latest"
+        run: pnpm bench
+
+      - name: Run Benchmarks
+        env:
+          BENCH_FAIL_THRESHOLD_PERCENT: "25"
           GITHUB_TOKEN: ${{ env.IS_SAME_REPO_PR == 'true' && secrets.PROJEN_GITHUB_TOKEN || secrets.GITHUB_TOKEN  }}
           BENCH_PR: "${{ env.IS_SAME_REPO_PR == 'true' && github.event.pull_request.number || '' }}"
         working-directory: tools/hangar
