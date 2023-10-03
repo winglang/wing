@@ -103,7 +103,7 @@ export abstract class Website extends Resource implements IWebsite {
   }
 
   /**
-   * Add a file with custom value during the website's deployment.
+   * Add a file to the website during deployment.
    * If the path conflicts with file path from the website's static assets, an error will be thrown.
    * @param path the file path it will be uploaded as
    * @param data the data to write to the file
