@@ -467,7 +467,7 @@ impl<'a> JSifier<'a> {
 					// If we're inflight and this new expression evaluates to a type with an inflight init then
 					// make sure it's called before we return the object.
 					if ctx.visit_ctx.current_phase() == Phase::Inflight && expression_type.as_class().expect("a class").get_method(&Symbol::global(CLASS_INFLIGHT_INIT_NAME)).is_some() {
-						format!("await (async (o) => {{ await o.{CLASS_INFLIGHT_INIT_NAME}({args}); return o; }})(new {ctor}())")
+						format!("(await (async (o) => {{ await o.{CLASS_INFLIGHT_INIT_NAME}({args}); return o; }})(new {ctor}()))")
 					} else {
 						format!("new {}({})", ctor, args)
 					}
@@ -1334,7 +1334,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		// emit the $inflight_init function
-  	class_code.line(self.jsify_function(Some(class), &class.inflight_initializer, &mut ctx));
+		class_code.line(self.jsify_function(Some(class), &class.inflight_initializer, &mut ctx));
 
 		class_code.close("}");
 		ctx.visit_ctx.pop_phase();
