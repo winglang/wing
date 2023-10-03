@@ -5,8 +5,7 @@ import { Topic } from "./topic";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Json, IResource, Node, Resource } from "../std";
-import { Duration } from "../std";
+import { Json, IResource, Node, Resource, Duration } from "../std";
 
 /**
  * Global identifier for `Bucket`.

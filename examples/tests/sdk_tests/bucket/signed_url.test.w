@@ -21,7 +21,6 @@ test "signedUrl for non existent key" {
     try{
       let signedUrl = testBucket.signedUrl("file.txt");
     } catch e {
-
       error = e;
     }
 

@@ -13,8 +13,9 @@ import {
 import { SdkStream } from "@aws-sdk/types";
 import { sdkStreamMixin } from "@aws-sdk/util-stream-node";
 import { mockClient } from "aws-sdk-client-mock";
-import { test, expect, beforeEach } from "vitest";
+import { test, expect, beforeEach, vi, Mock } from "vitest";
 import { BucketClient } from "../../src/shared-aws/bucket.inflight";
+import * as s3RequestPresigner from "@aws-sdk/s3-request-presigner/dist-cjs/getSignedUrl";
 
 const s3Mock = mockClient(S3Client);
 
@@ -561,6 +562,7 @@ test("Given a bucket when reaching to a non existent key, signed url it should t
 
 test("Given a bucket, when giving one of its keys, we should get its signed url", async () => {
   // GIVEN
+
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "sampletext.Pdf";
   const VALUE = "VALUE";
@@ -577,11 +579,14 @@ test("Given a bucket, when giving one of its keys, we should get its signed url"
     VersionId: "null",
   });
 
+  const signedUrlFn = vi
+    .spyOn(s3RequestPresigner, "getSignedUrl")
+    .mockResolvedValue(VALUE);
+
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
   const signedUrl = await client.signedUrl(KEY);
-  const res = await fetch(signedUrl);
-
   // THEN
-  expect(await res.text()).toBe(VALUE);
+  expect(signedUrlFn).toBeCalledTimes(1);
+  expect(signedUrl).toBe(VALUE);
 });
