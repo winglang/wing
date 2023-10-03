@@ -97,9 +97,7 @@ For a more in-depth look at Wing's features and benefits, check out our [documen
 
 ## Getting started 🛠️
 
-> 🚧 Wing is still in alpha, and not recommended for production use. But we're excited for anyone to take part in shaping our 
-> roadmap and contributing in any way. Our [project status](https://www.winglang.io/contributing/status) page includes more information about 
-> stability and roadmap.
+> 🚧 This is a pre-release, please see our [project status](https://www.winglang.io/contributing/status) for more details.
 
 If you'd just like to dip your feet in the water and see what Wing is all about, you can try it out in our [online playground](https://www.winglang.io/play/) or walk through the [interactive tour](https://www.winglang.io/learn/).
 

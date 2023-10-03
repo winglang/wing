@@ -25,6 +25,18 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: formatUrl
+  kind: 2
+  detail: "inflight (url: Url, options: FormatUrlOptions?): str"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic inflight formatUrl: inflight (url: Url, options: FormatUrlOptions?): str\n```\n---\nSerializes an URL Struct to a String.\n\n\n### Returns\nA formatted URL String.\n\n*@throws* *Will throw an error if the input URL has invalid fields.*"
+  sortText: ff|formatUrl
+  insertText: formatUrl($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: get
   kind: 2
   detail: "inflight (url: str, options: RequestOptions?): Response"
@@ -33,6 +45,18 @@ source: libs/wingc/src/lsp/completions.rs
     value: "```wing\nstatic inflight get: inflight (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a GET request to a specified URL and provides a formatted response.\n\n\n### Returns\nthe formatted response of the call"
   sortText: ff|get
   insertText: get($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: parseUrl
+  kind: 2
+  detail: "inflight (urlString: str): Url"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic inflight parseUrl: inflight (urlString: str): Url\n```\n---\nParses the input URL String using WHATWG URL API and returns an URL Struct.\n\n\n### Returns\nAn URL Struct.\n\n*@throws* *Will throw an error if the input String is not a valid URL.*"
+  sortText: ff|parseUrl
+  insertText: parseUrl($0)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -79,6 +103,12 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nclass Util\n```\n---\nThe Http class is used for calling different HTTP methods and requesting and sending information online,  as well as testing public accessible resources."
   sortText: gg|Util
+- label: FormatUrlOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct FormatUrlOptions\n```\n---\nOptions for serializing a WHATWG URL to a String.\n### Fields\n- `auth?` — Whether the formatted URL should include the username and password.\n- `fragment?` — Whether the formatted URL should include the fragment identifier.\n- `search?` — Whether the formatted URL should include the search query.\n- `unicode?` — Whether the formatted URL should represent Unicode characters for the host component."
+  sortText: hh|FormatUrlOptions
 - label: RequestOptions
   kind: 22
   documentation:
@@ -91,6 +121,12 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstruct Response\n```\n---\nThe response to a HTTP request.\n### Fields\n- `body?` — A string representation of the body contents.\n- `headers` — The map of header information associated with the response.\n- `ok` — A boolean indicating whether the response was successful (status in the range 200 – 299) or not.\n- `status` — The status code of the response.\n- `url` — The URL of the response."
   sortText: hh|Response
+- label: Url
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct Url\n```\n---\nAn URL following WHATWG URL Standard.\n### Fields\n- `hash` — The URL's fragment.\n- `host` — The URL's host.\n- `hostname` — The URL's hostname.\n- `href` — The entire URL.\n- `origin` — The URL's origin.\n- `password` — The URL’s password.\n- `pathname` — The URL's pathname.\n- `port` — The URL's port.\n- `protocol` — The URL's protocol.\n- `search` — The URL's search.\n- `username` — The URL's username."
+  sortText: hh|Url
 - label: HttpMethod
   kind: 13
   documentation:

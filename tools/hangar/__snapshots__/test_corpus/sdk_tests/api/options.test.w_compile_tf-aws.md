@@ -166,6 +166,38 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
         "stage_name": "prod"
       }
     },
+    "aws_cloudwatch_log_group": {
+      "cloudApi_cloudApi-OnRequest-3fc9280c_CloudwatchLogGroup_B2849792": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-3fc9280c/CloudwatchLogGroup",
+            "uniqueId": "cloudApi_cloudApi-OnRequest-3fc9280c_CloudwatchLogGroup_B2849792"
+          }
+        },
+        "name": "/aws/lambda/cloud-Api-OnRequest-3fc9280c-c8d3ecf9",
+        "retention_in_days": 30
+      },
+      "cloudApi_cloudApi-OnRequest-86898773_CloudwatchLogGroup_B4816A53": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-86898773/CloudwatchLogGroup",
+            "uniqueId": "cloudApi_cloudApi-OnRequest-86898773_CloudwatchLogGroup_B4816A53"
+          }
+        },
+        "name": "/aws/lambda/cloud-Api-OnRequest-86898773-c8ed6547",
+        "retention_in_days": 30
+      },
+      "cloudApi_cloudApi-OnRequest-cdafee6e_CloudwatchLogGroup_B50BDB26": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-cdafee6e/CloudwatchLogGroup",
+            "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_CloudwatchLogGroup_B50BDB26"
+          }
+        },
+        "name": "/aws/lambda/cloud-Api-OnRequest-cdafee6e-c8147384",
+        "retention_in_days": 30
+      }
+    },
     "aws_iam_role": {
       "cloudApi_cloudApi-OnRequest-3fc9280c_IamRole_EBC99528": {
         "//": {
@@ -283,7 +315,7 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudApi_cloudApi-OnRequest-3fc9280c_S3Object_EC722CF3.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
@@ -312,7 +344,7 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudApi_cloudApi-OnRequest-86898773_S3Object_12D28469.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
@@ -341,7 +373,7 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudApi_cloudApi-OnRequest-cdafee6e_S3Object_5DAAA0EF.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []

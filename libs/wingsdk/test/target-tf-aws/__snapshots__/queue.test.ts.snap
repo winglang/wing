@@ -238,6 +238,12 @@ exports[`queue with a consumer function 2`] = `
     },
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "Queue-SetConsumer-c5395e41_CloudwatchLogGroup_0EA18100": {
+        "name": "/aws/lambda/Queue-SetConsumer-c5395e41-c80c3bf7",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "Queue-SetConsumer-c5395e41_IamRole_75E61A87": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -279,7 +285,7 @@ exports[`queue with a consumer function 2`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Queue-SetConsumer-c5395e41_S3Object_D8D7B631.key}",
-        "timeout": 30,
+        "timeout": "\${aws_sqs_queue.Queue.visibility_timeout_seconds}",
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -376,6 +382,14 @@ exports[`queue with a consumer function 3`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Queue-SetConsumer-c5395e41/Asset",
+                  },
+                  "CloudwatchLogGroup": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CloudwatchLogGroup",
+                    "path": "root/Default/Queue-SetConsumer-c5395e41/CloudwatchLogGroup",
                   },
                   "Default": {
                     "constructInfo": {

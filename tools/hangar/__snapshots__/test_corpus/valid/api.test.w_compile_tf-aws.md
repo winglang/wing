@@ -191,6 +191,28 @@ module.exports = function({  }) {
         "stage_name": "prod"
       }
     },
+    "aws_cloudwatch_log_group": {
+      "A_cloudApi_cloudApi-OnRequest-73c5308f_CloudwatchLogGroup_8DCA65B1": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/A/cloud.Api/cloud.Api-OnRequest-73c5308f/CloudwatchLogGroup",
+            "uniqueId": "A_cloudApi_cloudApi-OnRequest-73c5308f_CloudwatchLogGroup_8DCA65B1"
+          }
+        },
+        "name": "/aws/lambda/cloud-Api-OnRequest-73c5308f-c85168bb",
+        "retention_in_days": 30
+      },
+      "cloudApi_cloudApi-OnRequest-cdafee6e_CloudwatchLogGroup_B50BDB26": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-cdafee6e/CloudwatchLogGroup",
+            "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_CloudwatchLogGroup_B50BDB26"
+          }
+        },
+        "name": "/aws/lambda/cloud-Api-OnRequest-cdafee6e-c8147384",
+        "retention_in_days": 30
+      }
+    },
     "aws_dynamodb_table": {
       "cloudCounter": {
         "//": {
@@ -299,7 +321,7 @@ module.exports = function({  }) {
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.A_cloudApi_cloudApi-OnRequest-73c5308f_S3Object_1BF80DF3.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
@@ -329,7 +351,7 @@ module.exports = function({  }) {
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudApi_cloudApi-OnRequest-cdafee6e_S3Object_5DAAA0EF.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []

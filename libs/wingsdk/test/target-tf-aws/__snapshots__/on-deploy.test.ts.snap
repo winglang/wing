@@ -17,6 +17,12 @@ exports[`create an OnDeploy 1`] = `
     },
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "my_on_deploy_Function_CloudwatchLogGroup_A6EB6F36": {
+        "name": "/aws/lambda/Function-c88c90bc",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "my_on_deploy_Function_IamRole_76DF13CA": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -51,7 +57,7 @@ exports[`create an OnDeploy 1`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.my_on_deploy_Function_S3Object_69D52AC4.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -145,6 +151,14 @@ exports[`create an OnDeploy 2`] = `
                         },
                         "id": "Asset",
                         "path": "root/Default/my_on_deploy/Function/Asset",
+                      },
+                      "CloudwatchLogGroup": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "CloudwatchLogGroup",
+                        "path": "root/Default/my_on_deploy/Function/CloudwatchLogGroup",
                       },
                       "Default": {
                         "constructInfo": {
@@ -273,6 +287,12 @@ exports[`execute OnDeploy after other resources 1`] = `
     },
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "my_on_deploy_Function_CloudwatchLogGroup_A6EB6F36": {
+        "name": "/aws/lambda/Function-c88c90bc",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "my_on_deploy_Function_IamRole_76DF13CA": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -307,7 +327,7 @@ exports[`execute OnDeploy after other resources 1`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.my_on_deploy_Function_S3Object_69D52AC4.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -427,6 +447,14 @@ exports[`execute OnDeploy after other resources 2`] = `
                         },
                         "id": "Asset",
                         "path": "root/Default/my_on_deploy/Function/Asset",
+                      },
+                      "CloudwatchLogGroup": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "CloudwatchLogGroup",
+                        "path": "root/Default/my_on_deploy/Function/CloudwatchLogGroup",
                       },
                       "Default": {
                         "constructInfo": {
@@ -553,6 +581,12 @@ exports[`execute OnDeploy before other resources 1`] = `
     },
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "my_on_deploy_Function_CloudwatchLogGroup_A6EB6F36": {
+        "name": "/aws/lambda/Function-c88c90bc",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "my_on_deploy_Function_IamRole_76DF13CA": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -587,7 +621,7 @@ exports[`execute OnDeploy before other resources 1`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.my_on_deploy_Function_S3Object_69D52AC4.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -710,6 +744,14 @@ exports[`execute OnDeploy before other resources 2`] = `
                         },
                         "id": "Asset",
                         "path": "root/Default/my_on_deploy/Function/Asset",
+                      },
+                      "CloudwatchLogGroup": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "CloudwatchLogGroup",
+                        "path": "root/Default/my_on_deploy/Function/CloudwatchLogGroup",
                       },
                       "Default": {
                         "constructInfo": {
