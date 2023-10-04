@@ -150,7 +150,7 @@ async function main() {
     .description(
       "Compiles a Wing program and runs all functions with the word 'test' or start with 'test:' in their resource identifiers"
     )
-    .argument("[entrypoint...]", "all files to test (globs are supported)", ["*.test.w"])
+    .argument("[entrypoint...]", "all files to test (globs are supported)")
     .addOption(
       new Option("-t, --target <target>", "Target platform")
         .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])

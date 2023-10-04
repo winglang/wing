@@ -30,10 +30,11 @@ export interface TestOptions extends CompileOptions {
 }
 
 export async function test(entrypoints: string[], options: TestOptions): Promise<number> {
-  const expandedEntrypoints = await glob(entrypoints);
+  const patterns = entrypoints.length === 0 ? ["*.test.w"] : entrypoints;
+  const expandedEntrypoints = await glob(patterns);
 
   if (expandedEntrypoints.length === 0) {
-    throw new Error(`No matching files found in current directory. (${entrypoints.join(", ")})`);
+    throw new Error(`No matching files found for patterns: (${patterns.join(", ")})`);
   }
 
   const startTime = Date.now();
