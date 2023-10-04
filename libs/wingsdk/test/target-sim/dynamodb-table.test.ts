@@ -361,17 +361,15 @@ test("batch get item", async () => {
       keys: [
         {
           id: "1",
-          age: 30,
         } as any,
         {
           id: "2",
-          age: 80,
         } as any,
       ],
     },
   });
   expect(responses).toEqual([
-    { id: "1", age: 30 },
+    { id: "1", age: 50 },
     { id: "2", age: 80 },
   ]);
 
