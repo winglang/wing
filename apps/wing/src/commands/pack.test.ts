@@ -116,7 +116,6 @@ async function extractTarball(src: string, outdir: string): Promise<Record<strin
       if (stat.isDirectory()) {
         await readDir(join(dir, file));
       } else {
-        console.error(dir, file);
         contents[join(dir, file)] = (await fs.readFile(path)).toString();
       }
     }
