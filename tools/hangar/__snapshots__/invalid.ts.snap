@@ -1554,6 +1554,9 @@ exports[`inflight_reassign.test.w 1`] = `
 error: Variable is not reassignable
   --> ../../../examples/tests/invalid/inflight_reassign.test.w:8:3
   |
+2 | let ylet = 123;
+  |     ---- Variable is defined here (try adding \\"var\\" in front)
+  .
 8 |   ylet = 456;
   |   ^^^^ Variable is not reassignable
 
@@ -2159,6 +2162,9 @@ error: Cannot call an optional function
 error: Variable is not reassignable
    --> ../../../examples/tests/invalid/optionals.test.w:53:3
    |
+50 | if let hi = hi {
+   |        -- Variable is defined here (try adding \\"var\\" in front)
+   .
 53 |   hi = \\"bye\\";
    |   ^^ Variable is not reassignable
 
@@ -2242,6 +2248,8 @@ exports[`reassign_to_nonreassignable.test.w 1`] = `
 "error: Variable is not reassignable
   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.test.w:3:1
   |
+2 | let x = 5;
+  |     - Variable is defined here (try adding \\"var\\" in front)
 3 | x = x + 1;
   | ^ Variable is not reassignable
 
@@ -2249,6 +2257,8 @@ exports[`reassign_to_nonreassignable.test.w 1`] = `
 error: Variable is not reassignable
    --> ../../../examples/tests/invalid/reassign_to_nonreassignable.test.w:42:3
    |
+41 | let f = (arg: num):num => {
+   |          --- Variable is defined here (try adding \\"var\\" in front)
 42 |   arg = 0;
    |   ^^^ Variable is not reassignable
 
@@ -2256,6 +2266,9 @@ error: Variable is not reassignable
 error: Variable is not reassignable
    --> ../../../examples/tests/invalid/reassign_to_nonreassignable.test.w:35:5
    |
+16 |   inflight inflightF: num;
+   |            --------- Variable is defined here (try adding \\"var\\" in front)
+   .
 35 |     this.inflightF = this.inflightF + 1;
    |     ^^^^^^^^^^^^^^ Variable is not reassignable
 
@@ -2263,6 +2276,9 @@ error: Variable is not reassignable
 error: Variable is not reassignable
    --> ../../../examples/tests/invalid/reassign_to_nonreassignable.test.w:28:5
    |
+14 |   f: num;
+   |   - Variable is defined here (try adding \\"var\\" in front)
+   .
 28 |     this.f = this.f + 1;
    |     ^^^^^^ Variable is not reassignable
 
@@ -2270,6 +2286,9 @@ error: Variable is not reassignable
 error: Variable is not reassignable
    --> ../../../examples/tests/invalid/reassign_to_nonreassignable.test.w:30:5
    |
+ 6 |   pub inflight inner: num;
+   |                ----- Variable is defined here (try adding \\"var\\" in front)
+   .
 30 |     this.innerR.inner = 2;
    |     ^^^^^^^^^^^^^^^^^ Variable is not reassignable
 
