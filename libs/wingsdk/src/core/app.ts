@@ -135,6 +135,10 @@ export abstract class App extends Construct {
 
   constructor(scope: Construct, id: string, props: AppProps) {
     super(scope, id);
+    if (!props.entrypointDir) {
+      throw new Error("Missing environment variable: WING_SOURCE_DIR");
+    }
+
     this.entrypointDir = props.entrypointDir;
   }
 

@@ -7,6 +7,7 @@ test("throw error when no projectId provided", () => {
   const props = {
     outdir: mkdtemp(),
     projectId: undefined as any,
+    storageLocation: "US",
     region: "us-central1",
     entrypointDir: __dirname,
   };
@@ -22,6 +23,7 @@ test("can read projectId from environment variable", () => {
   const props = {
     outdir: mkdtemp(),
     projectId: undefined as any,
+    storageLocation: "US",
     region: "us-central1",
     entrypointDir: __dirname,
   };
@@ -39,6 +41,7 @@ test("throw error when no region provided", () => {
   const props = {
     outdir: mkdtemp(),
     projectId: "projectId",
+    storageLocation: undefined as any,
     region: undefined as any,
     entrypointDir: __dirname,
   };
@@ -54,6 +57,7 @@ test("can read region from environment variable", () => {
   const props = {
     outdir: mkdtemp(),
     projectId: "projectId",
+    storageLocation: undefined as any,
     region: undefined as any,
     entrypointDir: __dirname,
   };
