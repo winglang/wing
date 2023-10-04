@@ -1161,9 +1161,9 @@ Duration <DURATION>"
 
 exports[`function_call_variadic_min_arity.test.w 1`] = `
 "error: Expected 2 positional argument(s) + variadic args but got 0
-  --> ../../../examples/tests/invalid/function_call_variadic_min_arity.test.w:7:1
+  --> ../../../examples/tests/invalid/function_call_variadic_min_arity.test.w:5:1
   |
-7 | func(); // variadic signatures should still require min positional arity
+5 | func(); // variadic signatures should still require min positional arity
   | ^^^^^^ Expected 2 positional argument(s) + variadic args but got 0
 
 
