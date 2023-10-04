@@ -51,7 +51,9 @@ export async function runWingCommand(options: RunWingCommandOptions) {
 }
 
 function sanitizeOutput(output: string) {
-  return output.replace(/\d+m[\d.]+s/g, "<DURATION>");
+  return output
+    .replace(/\d+m[\d.]+s/g, "<DURATION>")
+    .replace(/(?<=wsim.)\d+(?=.tmp)/g, "[REDACTED]");
 }
 
 export function sanitize_json_paths(path: string) {

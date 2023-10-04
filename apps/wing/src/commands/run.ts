@@ -1,8 +1,8 @@
 import { readdirSync, existsSync } from "fs";
-import { debug } from "debug";
 import { resolve } from "path";
-import open from "open";
 import { createConsoleApp } from "@wingconsole/app";
+import { debug } from "debug";
+import open from "open";
 import { parseNumericString } from "../util";
 
 /**
@@ -69,7 +69,7 @@ export async function run(entrypoint?: string, options?: RunOptions) {
     await close(() => process.exit(exitCode));
   };
 
-  process.once("exit", async (c) => await onExit(c));
-  process.once("SIGTERM", async () => await onExit(0));
-  process.once("SIGINT", async () => await onExit(0));
+  process.once("exit", async (c) => onExit(c));
+  process.once("SIGTERM", async () => onExit(0));
+  process.once("SIGINT", async () => onExit(0));
 }

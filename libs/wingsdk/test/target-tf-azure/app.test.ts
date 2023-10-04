@@ -4,7 +4,11 @@ import { mkdtemp } from "../util";
 
 test("throw error when no location provided", () => {
   // GIVEN
-  const props = { outdir: mkdtemp(), location: undefined as any };
+  const props = {
+    outdir: mkdtemp(),
+    location: undefined as any,
+    entrypointDir: __dirname,
+  };
 
   // THEN
   expect(() => new tfazure.App(props)).toThrow(
@@ -14,7 +18,11 @@ test("throw error when no location provided", () => {
 
 test("can read location from environment variable", () => {
   // GIVEN
-  const props = { outdir: mkdtemp(), location: undefined as any };
+  const props = {
+    outdir: mkdtemp(),
+    location: undefined as any,
+    entrypointDir: __dirname,
+  };
   const expectedLocation = "East US";
   process.env.AZURE_LOCATION = expectedLocation;
   let app: tfazure.App;

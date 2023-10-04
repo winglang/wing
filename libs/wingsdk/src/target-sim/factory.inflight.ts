@@ -15,6 +15,7 @@ import {
   SCHEDULE_TYPE,
   SERVICE_TYPE,
   ON_DEPLOY_TYPE,
+  REACT_APP_TYPE,
   DYNAMODB_TABLE_TYPE,
 } from "./schema-resources";
 import type {
@@ -68,6 +69,9 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
       case WEBSITE_TYPE:
         const Website = require("./website.inflight").Website;
         return new Website(props, context);
+      case REACT_APP_TYPE:
+        const ReactApp = require("./react-app.inflight").ReactApp;
+        return new ReactApp(props, context);
       case SECRET_TYPE:
         const Secret = require("./secret.inflight").Secret;
         return new Secret(props, context);
