@@ -6,6 +6,7 @@ import { DynamodbTable } from "./dynamodb-table";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
+import { ReactApp } from "./react-app";
 import { Redis } from "./redis";
 import { Schedule } from "./schedule";
 import { Secret } from "./secret";
@@ -37,7 +38,7 @@ import {
   WEBSITE_FQN,
 } from "../cloud";
 import { AppProps } from "../core";
-import { TABLE_FQN, REDIS_FQN, DYNAMODB_TABLE_FQN } from "../ex";
+import { TABLE_FQN, REDIS_FQN, REACT_APP_FQN, DYNAMODB_TABLE_FQN } from "../ex";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { CdktfApp } from "../shared-tf/app";
 import { TEST_RUNNER_FQN } from "../std";
@@ -121,6 +122,8 @@ export class App extends CdktfApp {
       case ON_DEPLOY_FQN:
         return new OnDeploy(scope, id, args[0], args[1]);
 
+      case REACT_APP_FQN:
+        return new ReactApp(scope, id, args[0]);
       case DYNAMODB_TABLE_FQN:
         return new DynamodbTable(scope, id, args[0]);
     }

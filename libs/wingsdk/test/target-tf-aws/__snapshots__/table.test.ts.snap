@@ -50,6 +50,12 @@ exports[`function with a table binding 2`] = `
     },
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "Function_CloudwatchLogGroup_ABDCF4C4": {
+        "name": "/aws/lambda/Function-c852aba6",
+        "retention_in_days": 30,
+      },
+    },
     "aws_dynamodb_table": {
       "Table": {
         "attribute": [
@@ -148,6 +154,14 @@ exports[`function with a table binding 3`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
+                  },
+                  "CloudwatchLogGroup": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CloudwatchLogGroup",
+                    "path": "root/Default/Function/CloudwatchLogGroup",
                   },
                   "Default": {
                     "constructInfo": {

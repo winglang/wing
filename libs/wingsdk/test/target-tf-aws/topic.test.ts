@@ -15,7 +15,7 @@ import {
 
 test("default topic behavior", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   cloud.Topic._newTopic(app, "Topic");
   const output = app.synth();
 
@@ -27,7 +27,7 @@ test("default topic behavior", () => {
 
 test("topic with subscriber function", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const topic = cloud.Topic._newTopic(app, "Topic");
   const subscriber = Testing.makeHandler(
     app,
@@ -41,6 +41,7 @@ test("topic with subscriber function", () => {
   // THEN
   expect(sanitizeCode(subscriber._toInflight())).toMatchSnapshot();
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group", // log group for subscriber function
     "aws_iam_role", // role for subscriber function
     "aws_iam_role_policy", // policy for subscriber function role
     "aws_iam_role_policy_attachment", // execution policy for subscriber role
@@ -57,7 +58,7 @@ test("topic with subscriber function", () => {
 
 test("topic with multiple subscribers", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const topic = cloud.Topic._newTopic(app, "Topic");
   const subOne = Testing.makeHandler(
     app,
@@ -93,7 +94,7 @@ test("topic with multiple subscribers", () => {
 
 test("topic name valid", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const topic = cloud.Topic._newTopic(app, "The-Spectacular_Topic-01");
   const output = app.synth();
 
@@ -109,7 +110,7 @@ test("topic name valid", () => {
 
 test("replace invalid character from queue name", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const topic = cloud.Topic._newTopic(app, "The%Spectacular@Topic");
   const output = app.synth();
 
@@ -125,7 +126,7 @@ test("replace invalid character from queue name", () => {
 
 test("topic with subscriber function timeout", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const topic = cloud.Topic._newTopic(app, "Topic");
   const subscriber = Testing.makeHandler(
     app,
