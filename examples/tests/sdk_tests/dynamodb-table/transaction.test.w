@@ -54,7 +54,7 @@ test "transactWriteItems" {
   assert(r.item?.get("k3")?.asStr() == "not-other-value1");
 
   r = t1.getItem({ key: { "k1": "key2", "k2": "value2" } });
-  assert(r.tryGet("item")?.tryGet("k1") == nil);
+  assert(r.item?.tryGet("k1") == nil);
 
   r = t1.getItem({ key: { "k1": "key3", "k2": "value3" } });
   assert(r.item?.get("k1")?.asStr() == "key3");
