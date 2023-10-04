@@ -5,7 +5,7 @@ const publicDir = path.join(__dirname, "public");
 const buildDir = path.join(__dirname, "build");
 const buildPublicDir =path.join(buildDir, "public");
 
-if (!fs.existsSync(buildDir)) {
+if (!fs.existsSync(publicDir)) {
   fs.mkdirSync(publicDir, { recursive: true });
 }
 
