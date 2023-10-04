@@ -5,6 +5,9 @@
     "test": {
       "dependsOn": ["^compile", "examples-valid#topo"]
     },
+    "eslint": {
+      "dependsOn": ["^compile"]
+    },
     "compile": {
       "outputs": ["dist/**"]
     },

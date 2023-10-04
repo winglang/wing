@@ -20,6 +20,12 @@ exports[`schedule behavior with cron 1`] = `
         "rule": "\${aws_cloudwatch_event_rule.Schedule_15669BF1.name}",
       },
     },
+    "aws_cloudwatch_log_group": {
+      "Schedule-OnTick-c5395e41_CloudwatchLogGroup_582BD7D1": {
+        "name": "/aws/lambda/Schedule-OnTick-c5395e41-c861b8f8",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "Schedule-OnTick-c5395e41_IamRole_014E0D2D": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -154,6 +160,14 @@ exports[`schedule behavior with cron 2`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Schedule-OnTick-c5395e41/Asset",
+                  },
+                  "CloudwatchLogGroup": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CloudwatchLogGroup",
+                    "path": "root/Default/Schedule-OnTick-c5395e41/CloudwatchLogGroup",
                   },
                   "Default": {
                     "constructInfo": {
@@ -313,6 +327,12 @@ exports[`schedule behavior with rate 1`] = `
         "rule": "\${aws_cloudwatch_event_rule.Schedule_15669BF1.name}",
       },
     },
+    "aws_cloudwatch_log_group": {
+      "Schedule-OnTick-c5395e41_CloudwatchLogGroup_582BD7D1": {
+        "name": "/aws/lambda/Schedule-OnTick-c5395e41-c861b8f8",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "Schedule-OnTick-c5395e41_IamRole_014E0D2D": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -447,6 +467,14 @@ exports[`schedule behavior with rate 2`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Schedule-OnTick-c5395e41/Asset",
+                  },
+                  "CloudwatchLogGroup": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CloudwatchLogGroup",
+                    "path": "root/Default/Schedule-OnTick-c5395e41/CloudwatchLogGroup",
                   },
                   "Default": {
                     "constructInfo": {
@@ -608,6 +636,16 @@ exports[`schedule with two functions 1`] = `
       "Schedule_ScheduleTarget-7b33bcba_A92DF656": {
         "arn": "\${aws_lambda_function.Schedule-OnTick-7b33bcba.qualified_arn}",
         "rule": "\${aws_cloudwatch_event_rule.Schedule_15669BF1.name}",
+      },
+    },
+    "aws_cloudwatch_log_group": {
+      "Schedule-OnTick-0a615500_CloudwatchLogGroup_2E9B471C": {
+        "name": "/aws/lambda/Schedule-OnTick-0a615500-c8fd8480",
+        "retention_in_days": 30,
+      },
+      "Schedule-OnTick-7b33bcba_CloudwatchLogGroup_D13A3FA1": {
+        "name": "/aws/lambda/Schedule-OnTick-7b33bcba-c86000d7",
+        "retention_in_days": 30,
       },
     },
     "aws_iam_role": {
@@ -811,6 +849,14 @@ exports[`schedule with two functions 2`] = `
                     "id": "Asset",
                     "path": "root/Default/Schedule-OnTick-0a615500/Asset",
                   },
+                  "CloudwatchLogGroup": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CloudwatchLogGroup",
+                    "path": "root/Default/Schedule-OnTick-0a615500/CloudwatchLogGroup",
+                  },
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -880,6 +926,14 @@ exports[`schedule with two functions 2`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Schedule-OnTick-7b33bcba/Asset",
+                  },
+                  "CloudwatchLogGroup": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CloudwatchLogGroup",
+                    "path": "root/Default/Schedule-OnTick-7b33bcba/CloudwatchLogGroup",
                   },
                   "Default": {
                     "constructInfo": {

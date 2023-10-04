@@ -13,5 +13,5 @@ export interface AnalyticEvent {
     os: OSData;
     node: NodeData;
     ci?: CIData;
-  }
+  };
 }

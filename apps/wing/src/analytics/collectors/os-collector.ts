@@ -1,5 +1,5 @@
-import { Collector } from "./collector";
 import os from "os";
+import { Collector } from "./collector";
 
 export interface OSData {
   arch: string;
@@ -13,6 +13,6 @@ export class OSCollector extends Collector {
       arch: os.arch(),
       platform: os.platform(),
       release: os.release(),
-    }
+    };
   }
 }

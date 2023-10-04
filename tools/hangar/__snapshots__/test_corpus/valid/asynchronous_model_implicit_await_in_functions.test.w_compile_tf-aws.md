@@ -66,6 +66,28 @@ module.exports = function({ $strToStr }) {
     ]
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "func_CloudwatchLogGroup_A63DB99C": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/func/CloudwatchLogGroup",
+            "uniqueId": "func_CloudwatchLogGroup_A63DB99C"
+          }
+        },
+        "name": "/aws/lambda/func-c8cf78f6",
+        "retention_in_days": 30
+      },
+      "strToStr_CloudwatchLogGroup_41D3ADB9": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/strToStr/CloudwatchLogGroup",
+            "uniqueId": "strToStr_CloudwatchLogGroup_41D3ADB9"
+          }
+        },
+        "name": "/aws/lambda/strToStr-c8d5081f",
+        "retention_in_days": 30
+      }
+    },
     "aws_iam_role": {
       "func_IamRole_EED2D17C": {
         "//": {
