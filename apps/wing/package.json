@@ -21,7 +21,7 @@
   },
   "scripts": {
     "build": "tsc && pnpm copy-root-readme",
-    "eslint": "eslint --ext .ts src",
+    "eslint": "eslint --fix --ext .ts src",
     "compile": "tsc",
     "copy-root-readme": "cp ../../README.md ./README.md && pnpm copy-root-assets",
     "copy-root-assets": "cp ../../logo/demo.gif ./logo/demo.gif",
