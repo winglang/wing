@@ -339,3 +339,41 @@ test("write transaction", async () => {
 
   await s.stop();
 });
+
+test("batch get item", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const t = ex.DynamodbTable._newDynamodbTable(app, "batch_get_item_table", {
+    name: "batch_get_item_table",
+    attributeDefinitions: { id: "S" } as any,
+    hashKey: "id",
+  });
+  const s = await app.startSimulator();
+  const client = s.getResource(
+    "/batch_get_item_table"
+  ) as ex.IDynamodbTableClient;
+
+  await client.putItem({ item: { id: "1", age: 50 } as any });
+  await client.putItem({ item: { id: "2", age: 80 } as any });
+
+  const { responses } = await client.batchGetItem({
+    requestItem: {
+      keys: [
+        {
+          id: "1",
+          age: 30,
+        } as any,
+        {
+          id: "2",
+          age: 80,
+        } as any,
+      ],
+    },
+  });
+  expect(responses).toEqual([
+    { id: "1", age: 30 },
+    { id: "2", age: 80 },
+  ]);
+
+  await s.stop();
+});

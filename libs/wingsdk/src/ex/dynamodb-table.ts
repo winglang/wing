@@ -90,6 +90,8 @@ export abstract class DynamodbTable extends Resource {
       DynamodbTableInflightMethods.SCAN,
       DynamodbTableInflightMethods.QUERY,
       DynamodbTableInflightMethods.TRANSACT_WRITE_ITEMS,
+      DynamodbTableInflightMethods.BATCH_GET_ITEM,
+      DynamodbTableInflightMethods.BATCH_WRITE_ITEM,
     ];
   }
 }
@@ -99,25 +101,22 @@ export abstract class DynamodbTable extends Resource {
  */
 export interface DynamodbTablePutItemOptions {
   /**
-   * A map of attribute names to `AttributeValue` objects, representing the primary key of the item to retrieve.
+   * The values of the item to be put.
    */
   readonly item: Json;
 
   /**
    * A condition that must be satisfied in order for an operation to succeed.
-   * @default undefined
    */
   readonly conditionExpression?: string;
 
   /**
    * One or more substitution tokens for attribute names in an expression.
-   * @default undefined
    */
   readonly expressionAttributeNames?: Json;
 
   /**
    * One or more values that can be substituted in an expression.
-   * @default undefined
    */
   readonly expressionAttributeValues?: Json;
 
@@ -165,33 +164,27 @@ export interface DynamodbTablePutItemResult {
  */
 export interface DynamodbTableUpdateItemOptions {
   /**
-   * The primary key of the item to be updated. Each element consists of an attribute name and a value for that attribute.
-   *
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html#DDB-UpdateItem-request-Key
+   * The primary key of the item to be updated.
    */
   readonly key: Json;
 
   /**
    * An expression that defines one or more attributes to be updated.
-   * @default undefined
    */
   readonly updateExpression?: string;
 
   /**
    * One or more substitution tokens for attribute names in an expression.
-   * @default undefined
    */
   readonly expressionAttributeNames?: Json;
 
   /**
    * One or more values that can be substituted in an expression.
-   * @default undefined
    */
   readonly expressionAttributeValues?: Json;
 
   /**
    * A condition that must be satisfied in order for a conditional update to succeed.
-   * @default undefined
    */
   readonly conditionExpression?: string;
 
@@ -245,7 +238,7 @@ export interface DynamodbTableUpdateItemResult {
  */
 export interface DynamodbTableDeleteItemOptions {
   /**
-   * A map of attribute names to `AttributeValue` objects, representing the primary key of the item to delete.
+   * The primary key of the item to be deleted.
    */
   readonly key: Json;
 
@@ -314,9 +307,7 @@ export interface DynamodbTableDeleteItemResult {
  */
 export interface DynamodbTableGetItemOptions {
   /**
-   * A map of attribute names to `AttributeValue` objects, representing the primary key of the item to retrieve.
-   *
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html#API_GetItem_RequestSyntax
+   * The primary key of the item to be retrieved.
    */
   readonly key: Json;
 
@@ -324,23 +315,18 @@ export interface DynamodbTableGetItemOptions {
    * Determines the read consistency model: If set to true, then the operation uses strongly consistent reads; otherwise, the operation uses eventually consistent reads.
    *
    * @default false
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html#DDB-GetItem-request-ConsistentRead
    */
   readonly consistentRead?: boolean;
 
   /**
    * One or more substitution tokens for attribute names in an expression.
    *
-   * @default undefined
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html#DDB-GetItem-request-ExpressionAttributeNames
    */
   readonly expressionAttributeNames?: Json;
 
   /**
    * A string that identifies one or more attributes to retrieve from the table.
    *
-   * @default undefined
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html#DDB-GetItem-request-ProjectionExpression
    */
   readonly projectionExpression?: string;
 
@@ -348,7 +334,6 @@ export interface DynamodbTableGetItemOptions {
    * Determines the level of detail about either provisioned or on-demand throughput consumption.
    *
    * @default "NONE"
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html#DDB-GetItem-request-ReturnConsumedCapacity
    */
   readonly returnConsumedCapacity?: "INDEXES" | "TOTAL" | "NONE";
 }
@@ -356,7 +341,6 @@ export interface DynamodbTableGetItemOptions {
 /**
  * Result for `DynamodbTable.getItem`.
  *
- * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#API_Scan_ResponseSyntax
  */
 export interface DynamodbTableGetItemResult {
   /**
@@ -378,47 +362,36 @@ export interface DynamodbTableScanOptions {
    * Determines the read consistency model: If set to true, then the operation uses strongly consistent reads; otherwise, the operation uses eventually consistent reads.
    *
    * @default false
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ConsistentRead
    */
   readonly consistentRead?: boolean;
 
   /**
    * The primary key of the first item that this operation will evaluate.
    *
-   * @default undefined
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ExclusiveStartKey
    */
   readonly exclusiveStartKey?: Json;
 
   /**
    * One or more substitution tokens for attribute names in an expression.
    *
-   * @default undefined
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ExpressionAttributeNames
    */
   readonly expressionAttributeNames?: Json;
 
   /**
    * One or more values that can be substituted in an expression.
    *
-   * @default undefined
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ExpressionAttributeValues
    */
   readonly expressionAttributeValues?: Json;
 
   /**
    * A string that contains conditions that DynamoDB applies after the Query operation, but before the data is returned to you.
    *
-   * @default undefined
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-FilterExpression
    */
   readonly filterExpression?: string;
 
   /**
    * The name of an index to query.
    *
-   * @default undefined
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-IndexName
    */
   readonly indexName?: string;
 
@@ -426,16 +399,12 @@ export interface DynamodbTableScanOptions {
    * The maximum number of items to evaluate (not necessarily the number of matching items).
    *
    * @minimum 1
-   * @default undefined
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-Limit
    */
   readonly limit?: number;
 
   /**
    * A string that identifies one or more attributes to retrieve from the table.
    *
-   * @default undefined
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ProjectionExpression
    */
   readonly projectionExpression?: string;
 
@@ -443,7 +412,6 @@ export interface DynamodbTableScanOptions {
    * Determines the level of detail about either provisioned or on-demand throughput consumption.
    *
    * @default "NONE"
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ReturnConsumedCapacity
    */
   readonly returnConsumedCapacity?: "INDEXES" | "TOTAL" | "NONE";
 
@@ -453,15 +421,12 @@ export interface DynamodbTableScanOptions {
    * @minimum 0
    * @maximum 999999
    * @default 0
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-Segment
    */
   readonly segment?: number;
 
   /**
    * The attributes to be returned in the result.
    *
-   * @default undefined
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-Select
    */
   readonly select?:
     | "ALL_ATTRIBUTES"
@@ -475,14 +440,12 @@ export interface DynamodbTableScanOptions {
    * @minimum 1
    * @maximum 1000000
    * @default 1
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-TotalSegments
    */
   readonly totalSegments?: number;
 }
 
 /**
  * Result for `DynamodbTable.scan`.
- * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#API_Scan_ResponseSyntax
  */
 export interface DynamodbTableScanResult {
   /**
@@ -519,54 +482,42 @@ export interface DynamodbTableQueryOptions {
    * Determines the read consistency model: If set to true, then the operation uses strongly consistent reads; otherwise, the operation uses eventually consistent reads.
    *
    * @default false
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-ConsistentRead
    */
   readonly consistentRead?: boolean;
 
   /**
    * The primary key of the first item that this operation will evaluate.
    *
-   * @default undefined
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-ExclusiveStartKey
    */
   readonly exclusiveStartKey?: Json;
 
   /**
    * One or more substitution tokens for attribute names in an expression.
    *
-   * @default undefined
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-ExpressionAttributeNames
    */
   readonly expressionAttributeNames?: Json;
 
   /**
    * One or more values that can be substituted in an expression.
    *
-   * @default undefined
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-ExpressionAttributeValues
    */
   readonly expressionAttributeValues?: Json;
 
   /**
    * A string that contains conditions that DynamoDB applies after the Query operation, but before the data is returned to you.
    *
-   * @default undefined
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-FilterExpression
    */
   readonly filterExpression?: string;
 
   /**
    * The name of an index to query.
    *
-   * @default undefined
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-IndexName
    */
   readonly indexName?: string;
 
   /**
    * The condition that specifies the key values for items to be retrieved by the Query action.
    *
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-KeyConditionExpression
    */
   readonly keyConditionExpression: string;
 
@@ -574,16 +525,12 @@ export interface DynamodbTableQueryOptions {
    * The maximum number of items to evaluate (not necessarily the number of matching items).
    *
    * @minimum 1
-   * @default undefined
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-Limit
    */
   readonly limit?: number;
 
   /**
    * A string that identifies one or more attributes to retrieve from the table.
    *
-   * @default undefined
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-ProjectionExpression
    */
   readonly projectionExpression?: string;
 
@@ -591,7 +538,6 @@ export interface DynamodbTableQueryOptions {
    * Determines the level of detail about either provisioned or on-demand throughput consumption.
    *
    * @default "NONE"
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-ReturnConsumedCapacity
    */
   readonly returnConsumedCapacity?: "INDEXES" | "TOTAL" | "NONE";
 
@@ -599,15 +545,12 @@ export interface DynamodbTableQueryOptions {
    * Specifies the order for index traversal.
    *
    * @default true
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-ScanIndexForward
    */
   readonly scanIndexForward?: boolean;
 
   /**
    * The attributes to be returned in the result.
    *
-   * @default undefined
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-Select
    */
   readonly select?:
     | "ALL_ATTRIBUTES"
@@ -619,7 +562,6 @@ export interface DynamodbTableQueryOptions {
 /**
  * Result for `DynamodbTable.query`.
  *
- * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#API_Scan_ResponseSyntax
  */
 export interface DynamodbTableQueryResult {
   /**
@@ -657,7 +599,7 @@ export interface DynamodbTransactWriteItemPutProps {
    */
   readonly item: Json;
   /**
-   * A condition that must be satisfied in order for an operation to succeed.
+   * A condition that must be satisfied in order for the operation to succeed.
    * @default undefined
    */
   readonly conditionExpression?: string;
@@ -668,31 +610,27 @@ export interface DynamodbTransactWriteItemPutProps {
  */
 export interface DynamodbTransactWriteItemUpdateOptions {
   /**
-   * The item to update.
+   * The primary key of the item to be updated.
    */
   readonly key: Json;
 
   /**
    * An expression that defines one or more attributes to be updated.
-   * @default undefined
    */
   readonly updateExpression?: string;
 
   /**
    * A condition that must be satisfied in order for an operation to succeed.
-   * @default undefined
    */
   readonly conditionExpression?: string;
 
   /**
    * One or more substitution tokens for attribute names in an expression.
-   * @default undefined
    */
   readonly expressionAttributeNames?: Json;
 
   /**
    * One or more values that can be substituted in an expression.
-   * @default undefined
    */
   readonly expressionAttributeValues?: Json;
 
@@ -708,25 +646,22 @@ export interface DynamodbTransactWriteItemUpdateOptions {
  */
 export interface DynamodbTransactWriteItemDeleteOptions {
   /**
-   * The item to delete.
+   * The primary key of the item to be deleted.
    */
   readonly key: Json;
 
   /**
    * A condition that must be satisfied in order for an operation to succeed.
-   * @default undefined
    */
   readonly conditionExpression?: string;
 
   /**
    * One or more substitution tokens for attribute names in an expression.
-   * @default undefined
    */
   readonly expressionAttributeNames?: Json;
 
   /**
    * One or more values that can be substituted in an expression.
-   * @default undefined
    */
   readonly expressionAttributeValues?: Json;
 
@@ -742,25 +677,22 @@ export interface DynamodbTransactWriteItemDeleteOptions {
  */
 export interface DynamodbTransactWriteItemConditionCheckOptions {
   /**
-   * The item to check.
+   * The primary key of the item to be checked.
    */
   readonly key: Json;
 
   /**
    * A condition that must be satisfied in order for an operation to succeed.
-   * @default undefined
    */
   readonly conditionExpression?: string;
 
   /**
    * One or more substitution tokens for attribute names in an expression.
-   * @default undefined
    */
   readonly expressionAttributeNames?: Json;
 
   /**
    * One or more values that can be substituted in an expression.
-   * @default undefined
    */
   readonly expressionAttributeValues?: Json;
 
@@ -788,13 +720,11 @@ export interface DynamodbTableBatchGetItemRequestItem {
 
   /**
    * One or more substitution tokens for attribute names in an expression.
-   * @default undefined
    */
   readonly expressionAttributeNames?: Json;
 
   /**
    * A string that identifies one or more attributes to retrieve from the table.
-   * @default undefined
    */
   readonly projectionExpression?: string;
 }
@@ -841,7 +771,7 @@ export interface DynamodbTableBatchGetItemResult {
  */
 export interface DynamodbTableBatchWriteItemDeleteRequestOptions {
   /**
-   * A map of attribute names to `AttributeValue` objects, representing the primary key of the item to delete.
+   * The primary key of the item to be deleted.
    */
   readonly key: Json;
 }
@@ -996,7 +926,6 @@ export interface IDynamodbTableClient {
    * Delete an item from the table.
    * @param options dynamodb DeleteItem options.
    * @inflight
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteItem.html
    */
   deleteItem(
     options: DynamodbTableDeleteItemOptions
@@ -1006,7 +935,6 @@ export interface IDynamodbTableClient {
    * Get an item from the table.
    * @param options options for the getItem operation.
    * @inflight
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html
    */
   getItem(
     options: DynamodbTableGetItemOptions
@@ -1023,7 +951,6 @@ export interface IDynamodbTableClient {
    * Return all items with a given partition key value.
    * @param options options for the query operation.
    * @inflight
-   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html
    */
   query(options: DynamodbTableQueryOptions): Promise<DynamodbTableQueryResult>;
 
@@ -1077,7 +1004,7 @@ export enum DynamodbTableInflightMethods {
   /** `DynamodbTable.batchGetItem` */
   BATCH_GET_ITEM = "batchGetItem",
   /** `DynamodbTable.batchWriteItem` */
-  BATCH_Write_ITEM = "batchWriteItem",
+  BATCH_WRITE_ITEM = "batchWriteItem",
 }
 
 /**

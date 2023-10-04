@@ -91,8 +91,6 @@ inflight deleteItem(options: DynamodbTableDeleteItemOptions): DynamodbTableDelet
 
 Delete an item from the table.
 
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteItem.html](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteItem.html)
-
 ###### `options`<sup>Required</sup> <a name="options" id="@winglang/sdk.ex.IDynamodbTableClient.deleteItem.parameter.options"></a>
 
 - *Type:* <a href="#@winglang/sdk.ex.DynamodbTableDeleteItemOptions">DynamodbTableDeleteItemOptions</a>
@@ -108,8 +106,6 @@ inflight getItem(options: DynamodbTableGetItemOptions): DynamodbTableGetItemResu
 ```
 
 Get an item from the table.
-
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html)
 
 ###### `options`<sup>Required</sup> <a name="options" id="@winglang/sdk.ex.IDynamodbTableClient.getItem.parameter.options"></a>
 
@@ -142,8 +138,6 @@ inflight query(options: DynamodbTableQueryOptions): DynamodbTableQueryResult
 ```
 
 Return all items with a given partition key value.
-
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html)
 
 ###### `options`<sup>Required</sup> <a name="options" id="@winglang/sdk.ex.IDynamodbTableClient.query.parameter.options"></a>
 
@@ -514,7 +508,6 @@ expressionAttributeNames: Json;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-- *Default:* undefined
 
 One or more substitution tokens for attribute names in an expression.
 
@@ -527,7 +520,6 @@ projectionExpression: str;
 ```
 
 - *Type:* str
-- *Default:* undefined
 
 A string that identifies one or more attributes to retrieve from the table.
 
@@ -607,7 +599,7 @@ let DynamodbTableBatchWriteItemDeleteRequestOptions = ex.DynamodbTableBatchWrite
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableBatchWriteItemDeleteRequestOptions.property.key">key</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | A map of attribute names to `AttributeValue` objects, representing the primary key of the item to delete. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableBatchWriteItemDeleteRequestOptions.property.key">key</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The primary key of the item to be deleted. |
 
 ---
 
@@ -619,7 +611,7 @@ key: Json;
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
-A map of attribute names to `AttributeValue` objects, representing the primary key of the item to delete.
+The primary key of the item to be deleted.
 
 ---
 
@@ -834,7 +826,7 @@ let DynamodbTableDeleteItemOptions = ex.DynamodbTableDeleteItemOptions{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableDeleteItemOptions.property.key">key</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | A map of attribute names to `AttributeValue` objects, representing the primary key of the item to delete. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableDeleteItemOptions.property.key">key</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The primary key of the item to be deleted. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableDeleteItemOptions.property.conditionExpression">conditionExpression</a></code> | <code>str</code> | A condition that must be satisfied in order for an operation to succeed. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableDeleteItemOptions.property.expressionAttributeNames">expressionAttributeNames</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | One or more substitution tokens for attribute names in an expression. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableDeleteItemOptions.property.expressionAttributeValues">expressionAttributeValues</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | One or more values that can be substituted in an expression. |
@@ -853,7 +845,7 @@ key: Json;
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
-A map of attribute names to `AttributeValue` objects, representing the primary key of the item to delete.
+The primary key of the item to be deleted.
 
 ---
 
@@ -1019,7 +1011,7 @@ let DynamodbTableGetItemOptions = ex.DynamodbTableGetItemOptions{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableGetItemOptions.property.key">key</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | A map of attribute names to `AttributeValue` objects, representing the primary key of the item to retrieve. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableGetItemOptions.property.key">key</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The primary key of the item to be retrieved. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableGetItemOptions.property.consistentRead">consistentRead</a></code> | <code>bool</code> | Determines the read consistency model: If set to true, then the operation uses strongly consistent reads; |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableGetItemOptions.property.expressionAttributeNames">expressionAttributeNames</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | One or more substitution tokens for attribute names in an expression. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableGetItemOptions.property.projectionExpression">projectionExpression</a></code> | <code>str</code> | A string that identifies one or more attributes to retrieve from the table. |
@@ -1035,9 +1027,7 @@ key: Json;
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
-A map of attribute names to `AttributeValue` objects, representing the primary key of the item to retrieve.
-
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html#API_GetItem_RequestSyntax](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html#API_GetItem_RequestSyntax)
+The primary key of the item to be retrieved.
 
 ---
 
@@ -1054,8 +1044,6 @@ Determines the read consistency model: If set to true, then the operation uses s
 
 otherwise, the operation uses eventually consistent reads.
 
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html#DDB-GetItem-request-ConsistentRead](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html#DDB-GetItem-request-ConsistentRead)
-
 ---
 
 ##### `expressionAttributeNames`<sup>Optional</sup> <a name="expressionAttributeNames" id="@winglang/sdk.ex.DynamodbTableGetItemOptions.property.expressionAttributeNames"></a>
@@ -1065,11 +1053,8 @@ expressionAttributeNames: Json;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-- *Default:* undefined
 
 One or more substitution tokens for attribute names in an expression.
-
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html#DDB-GetItem-request-ExpressionAttributeNames](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html#DDB-GetItem-request-ExpressionAttributeNames)
 
 ---
 
@@ -1080,11 +1065,8 @@ projectionExpression: str;
 ```
 
 - *Type:* str
-- *Default:* undefined
 
 A string that identifies one or more attributes to retrieve from the table.
-
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html#DDB-GetItem-request-ProjectionExpression](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html#DDB-GetItem-request-ProjectionExpression)
 
 ---
 
@@ -1099,15 +1081,11 @@ returnConsumedCapacity: str;
 
 Determines the level of detail about either provisioned or on-demand throughput consumption.
 
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html#DDB-GetItem-request-ReturnConsumedCapacity](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html#DDB-GetItem-request-ReturnConsumedCapacity)
-
 ---
 
 ### DynamodbTableGetItemResult <a name="DynamodbTableGetItemResult" id="@winglang/sdk.ex.DynamodbTableGetItemResult"></a>
 
 Result for `DynamodbTable.getItem`.
-
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#API_Scan_ResponseSyntax](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#API_Scan_ResponseSyntax)
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.ex.DynamodbTableGetItemResult.Initializer"></a>
 
@@ -1240,7 +1218,7 @@ let DynamodbTablePutItemOptions = ex.DynamodbTablePutItemOptions{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.ex.DynamodbTablePutItemOptions.property.item">item</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | A map of attribute names to `AttributeValue` objects, representing the primary key of the item to retrieve. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTablePutItemOptions.property.item">item</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The values of the item to be put. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTablePutItemOptions.property.conditionExpression">conditionExpression</a></code> | <code>str</code> | A condition that must be satisfied in order for an operation to succeed. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTablePutItemOptions.property.expressionAttributeNames">expressionAttributeNames</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | One or more substitution tokens for attribute names in an expression. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTablePutItemOptions.property.expressionAttributeValues">expressionAttributeValues</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | One or more values that can be substituted in an expression. |
@@ -1258,7 +1236,7 @@ item: Json;
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
-A map of attribute names to `AttributeValue` objects, representing the primary key of the item to retrieve.
+The values of the item to be put.
 
 ---
 
@@ -1269,7 +1247,6 @@ conditionExpression: str;
 ```
 
 - *Type:* str
-- *Default:* undefined
 
 A condition that must be satisfied in order for an operation to succeed.
 
@@ -1282,7 +1259,6 @@ expressionAttributeNames: Json;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-- *Default:* undefined
 
 One or more substitution tokens for attribute names in an expression.
 
@@ -1295,7 +1271,6 @@ expressionAttributeValues: Json;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-- *Default:* undefined
 
 One or more values that can be substituted in an expression.
 
@@ -1439,8 +1414,6 @@ keyConditionExpression: str;
 
 The condition that specifies the key values for items to be retrieved by the Query action.
 
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-KeyConditionExpression](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-KeyConditionExpression)
-
 ---
 
 ##### `consistentRead`<sup>Optional</sup> <a name="consistentRead" id="@winglang/sdk.ex.DynamodbTableQueryOptions.property.consistentRead"></a>
@@ -1456,8 +1429,6 @@ Determines the read consistency model: If set to true, then the operation uses s
 
 otherwise, the operation uses eventually consistent reads.
 
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-ConsistentRead](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-ConsistentRead)
-
 ---
 
 ##### `exclusiveStartKey`<sup>Optional</sup> <a name="exclusiveStartKey" id="@winglang/sdk.ex.DynamodbTableQueryOptions.property.exclusiveStartKey"></a>
@@ -1467,11 +1438,8 @@ exclusiveStartKey: Json;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-- *Default:* undefined
 
 The primary key of the first item that this operation will evaluate.
-
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-ExclusiveStartKey](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-ExclusiveStartKey)
 
 ---
 
@@ -1482,11 +1450,8 @@ expressionAttributeNames: Json;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-- *Default:* undefined
 
 One or more substitution tokens for attribute names in an expression.
-
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-ExpressionAttributeNames](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-ExpressionAttributeNames)
 
 ---
 
@@ -1497,11 +1462,8 @@ expressionAttributeValues: Json;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-- *Default:* undefined
 
 One or more values that can be substituted in an expression.
-
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-ExpressionAttributeValues](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-ExpressionAttributeValues)
 
 ---
 
@@ -1512,11 +1474,8 @@ filterExpression: str;
 ```
 
 - *Type:* str
-- *Default:* undefined
 
 A string that contains conditions that DynamoDB applies after the Query operation, but before the data is returned to you.
-
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-FilterExpression](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-FilterExpression)
 
 ---
 
@@ -1527,11 +1486,8 @@ indexName: str;
 ```
 
 - *Type:* str
-- *Default:* undefined
 
 The name of an index to query.
-
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-IndexName](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-IndexName)
 
 ---
 
@@ -1542,11 +1498,8 @@ limit: num;
 ```
 
 - *Type:* num
-- *Default:* undefined
 
 The maximum number of items to evaluate (not necessarily the number of matching items).
-
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-Limit](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-Limit)
 
 ---
 
@@ -1557,11 +1510,8 @@ projectionExpression: str;
 ```
 
 - *Type:* str
-- *Default:* undefined
 
 A string that identifies one or more attributes to retrieve from the table.
-
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-ProjectionExpression](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-ProjectionExpression)
 
 ---
 
@@ -1576,8 +1526,6 @@ returnConsumedCapacity: str;
 
 Determines the level of detail about either provisioned or on-demand throughput consumption.
 
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-ReturnConsumedCapacity](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-ReturnConsumedCapacity)
-
 ---
 
 ##### `scanIndexForward`<sup>Optional</sup> <a name="scanIndexForward" id="@winglang/sdk.ex.DynamodbTableQueryOptions.property.scanIndexForward"></a>
@@ -1591,8 +1539,6 @@ scanIndexForward: bool;
 
 Specifies the order for index traversal.
 
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-ScanIndexForward](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-ScanIndexForward)
-
 ---
 
 ##### `select`<sup>Optional</sup> <a name="select" id="@winglang/sdk.ex.DynamodbTableQueryOptions.property.select"></a>
@@ -1602,19 +1548,14 @@ select: str;
 ```
 
 - *Type:* str
-- *Default:* undefined
 
 The attributes to be returned in the result.
-
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-Select](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-Select)
 
 ---
 
 ### DynamodbTableQueryResult <a name="DynamodbTableQueryResult" id="@winglang/sdk.ex.DynamodbTableQueryResult"></a>
 
 Result for `DynamodbTable.query`.
-
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#API_Scan_ResponseSyntax](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#API_Scan_ResponseSyntax)
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.ex.DynamodbTableQueryResult.Initializer"></a>
 
@@ -1740,8 +1681,6 @@ Determines the read consistency model: If set to true, then the operation uses s
 
 otherwise, the operation uses eventually consistent reads.
 
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ConsistentRead](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ConsistentRead)
-
 ---
 
 ##### `exclusiveStartKey`<sup>Optional</sup> <a name="exclusiveStartKey" id="@winglang/sdk.ex.DynamodbTableScanOptions.property.exclusiveStartKey"></a>
@@ -1751,11 +1690,8 @@ exclusiveStartKey: Json;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-- *Default:* undefined
 
 The primary key of the first item that this operation will evaluate.
-
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ExclusiveStartKey](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ExclusiveStartKey)
 
 ---
 
@@ -1766,11 +1702,8 @@ expressionAttributeNames: Json;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-- *Default:* undefined
 
 One or more substitution tokens for attribute names in an expression.
-
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ExpressionAttributeNames](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ExpressionAttributeNames)
 
 ---
 
@@ -1781,11 +1714,8 @@ expressionAttributeValues: Json;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-- *Default:* undefined
 
 One or more values that can be substituted in an expression.
-
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ExpressionAttributeValues](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ExpressionAttributeValues)
 
 ---
 
@@ -1796,11 +1726,8 @@ filterExpression: str;
 ```
 
 - *Type:* str
-- *Default:* undefined
 
 A string that contains conditions that DynamoDB applies after the Query operation, but before the data is returned to you.
-
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-FilterExpression](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-FilterExpression)
 
 ---
 
@@ -1811,11 +1738,8 @@ indexName: str;
 ```
 
 - *Type:* str
-- *Default:* undefined
 
 The name of an index to query.
-
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-IndexName](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-IndexName)
 
 ---
 
@@ -1826,11 +1750,8 @@ limit: num;
 ```
 
 - *Type:* num
-- *Default:* undefined
 
 The maximum number of items to evaluate (not necessarily the number of matching items).
-
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-Limit](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-Limit)
 
 ---
 
@@ -1841,11 +1762,8 @@ projectionExpression: str;
 ```
 
 - *Type:* str
-- *Default:* undefined
 
 A string that identifies one or more attributes to retrieve from the table.
-
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ProjectionExpression](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ProjectionExpression)
 
 ---
 
@@ -1860,8 +1778,6 @@ returnConsumedCapacity: str;
 
 Determines the level of detail about either provisioned or on-demand throughput consumption.
 
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ReturnConsumedCapacity](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ReturnConsumedCapacity)
-
 ---
 
 ##### `segment`<sup>Optional</sup> <a name="segment" id="@winglang/sdk.ex.DynamodbTableScanOptions.property.segment"></a>
@@ -1875,8 +1791,6 @@ segment: num;
 
 For a parallel Scan request, Segment identifies an individual segment to be scanned by an application worker.
 
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-Segment](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-Segment)
-
 ---
 
 ##### `select`<sup>Optional</sup> <a name="select" id="@winglang/sdk.ex.DynamodbTableScanOptions.property.select"></a>
@@ -1886,11 +1800,8 @@ select: str;
 ```
 
 - *Type:* str
-- *Default:* undefined
 
 The attributes to be returned in the result.
-
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-Select](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-Select)
 
 ---
 
@@ -1905,15 +1816,11 @@ totalSegments: num;
 
 For a parallel Scan request, TotalSegments represents the total number of segments into which the Scan operation will be divided.
 
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-TotalSegments](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-TotalSegments)
-
 ---
 
 ### DynamodbTableScanResult <a name="DynamodbTableScanResult" id="@winglang/sdk.ex.DynamodbTableScanResult"></a>
 
 Result for `DynamodbTable.scan`.
-
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#API_Scan_ResponseSyntax](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#API_Scan_ResponseSyntax)
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.ex.DynamodbTableScanResult.Initializer"></a>
 
@@ -2091,10 +1998,6 @@ key: Json;
 
 The primary key of the item to be updated.
 
-Each element consists of an attribute name and a value for that attribute.
-
-> [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html#DDB-UpdateItem-request-Key](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html#DDB-UpdateItem-request-Key)
-
 ---
 
 ##### `conditionExpression`<sup>Optional</sup> <a name="conditionExpression" id="@winglang/sdk.ex.DynamodbTableUpdateItemOptions.property.conditionExpression"></a>
@@ -2104,7 +2007,6 @@ conditionExpression: str;
 ```
 
 - *Type:* str
-- *Default:* undefined
 
 A condition that must be satisfied in order for a conditional update to succeed.
 
@@ -2117,7 +2019,6 @@ expressionAttributeNames: Json;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-- *Default:* undefined
 
 One or more substitution tokens for attribute names in an expression.
 
@@ -2130,7 +2031,6 @@ expressionAttributeValues: Json;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-- *Default:* undefined
 
 One or more values that can be substituted in an expression.
 
@@ -2195,7 +2095,6 @@ updateExpression: str;
 ```
 
 - *Type:* str
-- *Default:* undefined
 
 An expression that defines one or more attributes to be updated.
 
@@ -2346,7 +2245,7 @@ let DynamodbTransactWriteItemConditionCheckOptions = ex.DynamodbTransactWriteIte
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemConditionCheckOptions.property.key">key</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The item to check. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemConditionCheckOptions.property.key">key</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The primary key of the item to be checked. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemConditionCheckOptions.property.conditionExpression">conditionExpression</a></code> | <code>str</code> | A condition that must be satisfied in order for an operation to succeed. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemConditionCheckOptions.property.expressionAttributeNames">expressionAttributeNames</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | One or more substitution tokens for attribute names in an expression. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemConditionCheckOptions.property.expressionAttributeValues">expressionAttributeValues</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | One or more values that can be substituted in an expression. |
@@ -2362,7 +2261,7 @@ key: Json;
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
-The item to check.
+The primary key of the item to be checked.
 
 ---
 
@@ -2373,7 +2272,6 @@ conditionExpression: str;
 ```
 
 - *Type:* str
-- *Default:* undefined
 
 A condition that must be satisfied in order for an operation to succeed.
 
@@ -2386,7 +2284,6 @@ expressionAttributeNames: Json;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-- *Default:* undefined
 
 One or more substitution tokens for attribute names in an expression.
 
@@ -2399,7 +2296,6 @@ expressionAttributeValues: Json;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-- *Default:* undefined
 
 One or more values that can be substituted in an expression.
 
@@ -2434,7 +2330,7 @@ let DynamodbTransactWriteItemDeleteOptions = ex.DynamodbTransactWriteItemDeleteO
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemDeleteOptions.property.key">key</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The item to delete. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemDeleteOptions.property.key">key</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The primary key of the item to be deleted. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemDeleteOptions.property.conditionExpression">conditionExpression</a></code> | <code>str</code> | A condition that must be satisfied in order for an operation to succeed. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemDeleteOptions.property.expressionAttributeNames">expressionAttributeNames</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | One or more substitution tokens for attribute names in an expression. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemDeleteOptions.property.expressionAttributeValues">expressionAttributeValues</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | One or more values that can be substituted in an expression. |
@@ -2450,7 +2346,7 @@ key: Json;
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
-The item to delete.
+The primary key of the item to be deleted.
 
 ---
 
@@ -2461,7 +2357,6 @@ conditionExpression: str;
 ```
 
 - *Type:* str
-- *Default:* undefined
 
 A condition that must be satisfied in order for an operation to succeed.
 
@@ -2474,7 +2369,6 @@ expressionAttributeNames: Json;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-- *Default:* undefined
 
 One or more substitution tokens for attribute names in an expression.
 
@@ -2487,7 +2381,6 @@ expressionAttributeValues: Json;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-- *Default:* undefined
 
 One or more values that can be substituted in an expression.
 
@@ -2523,7 +2416,7 @@ let DynamodbTransactWriteItemPutProps = ex.DynamodbTransactWriteItemPutProps{ ..
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemPutProps.property.item">item</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The item to put. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemPutProps.property.conditionExpression">conditionExpression</a></code> | <code>str</code> | A condition that must be satisfied in order for an operation to succeed. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemPutProps.property.conditionExpression">conditionExpression</a></code> | <code>str</code> | A condition that must be satisfied in order for the operation to succeed. |
 
 ---
 
@@ -2548,7 +2441,7 @@ conditionExpression: str;
 - *Type:* str
 - *Default:* undefined
 
-A condition that must be satisfied in order for an operation to succeed.
+A condition that must be satisfied in order for the operation to succeed.
 
 ---
 
@@ -2600,7 +2493,7 @@ let DynamodbTransactWriteItemUpdateOptions = ex.DynamodbTransactWriteItemUpdateO
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemUpdateOptions.property.key">key</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The item to update. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemUpdateOptions.property.key">key</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The primary key of the item to be updated. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemUpdateOptions.property.conditionExpression">conditionExpression</a></code> | <code>str</code> | A condition that must be satisfied in order for an operation to succeed. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemUpdateOptions.property.expressionAttributeNames">expressionAttributeNames</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | One or more substitution tokens for attribute names in an expression. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemUpdateOptions.property.expressionAttributeValues">expressionAttributeValues</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | One or more values that can be substituted in an expression. |
@@ -2617,7 +2510,7 @@ key: Json;
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
-The item to update.
+The primary key of the item to be updated.
 
 ---
 
@@ -2628,7 +2521,6 @@ conditionExpression: str;
 ```
 
 - *Type:* str
-- *Default:* undefined
 
 A condition that must be satisfied in order for an operation to succeed.
 
@@ -2641,7 +2533,6 @@ expressionAttributeNames: Json;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-- *Default:* undefined
 
 One or more substitution tokens for attribute names in an expression.
 
@@ -2654,7 +2545,6 @@ expressionAttributeValues: Json;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-- *Default:* undefined
 
 One or more values that can be substituted in an expression.
 
@@ -2680,7 +2570,6 @@ updateExpression: str;
 ```
 
 - *Type:* str
-- *Default:* undefined
 
 An expression that defines one or more attributes to be updated.
 
