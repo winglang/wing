@@ -285,12 +285,12 @@ importers:
       '@winglang/sdk':
         specifier: workspace:^
         version: link:../../libs/wingsdk
+      annotate-snippets:
+        specifier: ^0.1.2
+        version: 0.1.2
       chalk:
         specifier: ^4.1.2
         version: 4.1.2
-      codespan-wasm:
-        specifier: 0.4.0
-        version: 0.4.0
       commander:
         specifier: ^10.0.1
         version: 10.0.1
@@ -10328,6 +10328,10 @@ packages:
       require-from-string: 2.0.2
       uri-js: 4.4.1
 
+  /annotate-snippets@0.1.2:
+    resolution: {integrity: sha512-RutipKd250U53qVOLHmFD2c+44CPtJnI8Ld/2jl/OI3DurkBL2YQvdieh+dvJaP4tCaRUKbyTXBhA/dv+ntI4A==}
+    dev: false
+
   /ansi-align@3.0.1:
     resolution: {integrity: sha512-IOfwwBF5iczOjp/WeY4YxyjqAFMQoZufdQWDd19SEExbVLNXqvpzSJ/M7Za4/sCPmQ0+GRquoA7bGcINcxew6w==}
     dependencies:
@@ -12768,7 +12772,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20231002
+      typescript: 5.3.0-dev.20231003
     dev: true
 
   /dset@3.1.2:
@@ -21820,8 +21824,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20231002:
-    resolution: {integrity: sha512-TQXM13rrDgID8W4Ok4KDQAqwLUjLcAXL+NKv0zJiIEQfa0bOM0yoRiSgvcjaCJ4lZT4bScrq3vHspVM2x8rkOQ==}
+  /typescript@5.3.0-dev.20231003:
+    resolution: {integrity: sha512-OyUdPjo1wNYs+PVDr9ARcEPs0aOqdxterOFzQzWK6DR4tsadKPbrOx8JgTOvSUwhkNOxBOEh7BonqV2uNsTxvA==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

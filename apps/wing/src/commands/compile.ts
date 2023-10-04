@@ -3,7 +3,7 @@ import { relative } from "path";
 
 import chalk from "chalk";
 import debug from "debug";
-import { CHARS_ASCII, emitDiagnostic, File, Label } from "codespan-wasm";
+import { Annotation, FormatOptions, Slice, annotateSnippet } from "annotate-snippets";
 import * as wingCompiler from "@winglang/compiler";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
@@ -55,38 +55,50 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
 
       for (const error of errors) {
         const { message, span } = error;
-        let files: File[] = [];
-        let labels: Label[] = [];
 
         // file_id might be "" if the span is synthetic (see #2521)
+        const slices: Slice[] = [];
         if (span?.file_id) {
           // `span` should only be null if source file couldn't be read etc.
           const source = await fsPromise.readFile(span.file_id, "utf8");
-          const start = byteOffsetFromLineAndColumn(source, span.start.line, span.start.col);
-          const end = byteOffsetFromLineAndColumn(source, span.end.line, span.end.col);
-          files.push({ name: span.file_id, source });
-          labels.push({
-            fileId: span.file_id,
-            rangeStart: start,
-            rangeEnd: end,
-            message,
-            style: "primary",
+          const sourceFragment = sliceByLines(source, span.start.line, span.end.line);
+          const start = byteOffsetFromLineAndColumn(sourceFragment, 0, span.start.col);
+          let end = byteOffsetFromLineAndColumn(
+            sourceFragment,
+            span.end.line - span.start.line,
+            span.end.col
+          );
+          if (end === start) {
+            // avoid zero-length slices
+            end += 1;
+          }
+          slices.push({
+            annotations: [
+              {
+                annotationType: "error",
+                label: "",
+                range: [start, end],
+              },
+            ],
+            fold: false,
+            lineStart: span.start.line + 1,
+            source: sourceFragment,
+            origin: span.file_id,
           });
         }
 
-        const diagnosticText = emitDiagnostic(
-          files,
-          {
-            message,
-            severity: "error",
-            labels,
-          },
-          {
-            chars: CHARS_ASCII,
-          },
-          coloring
-        );
-        result.push(diagnosticText);
+        const title: Annotation = {
+          annotationType: "error",
+          label: message,
+        };
+        const footer: Annotation[] = [];
+        const options: FormatOptions = {
+          anonymizedLineNumbers: false,
+          color: true,
+        };
+
+        const diagnosticText = annotateSnippet(title, footer, slices, options);
+        result.push(diagnosticText + "\n");
       }
       throw new Error(result.join("\n"));
     } else if (error instanceof wingCompiler.PreflightError) {
@@ -153,6 +165,19 @@ function annotatePreflightError(error: Error): Error {
   }
 
   return error;
+}
+
+function sliceByLines(source: string, startLine: number, endLine: number) {
+  const lines = source.split("\n");
+  let startOffset = 0;
+  for (let i = 0; i < startLine; i++) {
+    startOffset += lines[i].length + 1;
+  }
+  let endOffset = startOffset;
+  for (let i = startLine; i <= endLine; i++) {
+    endOffset += lines[i].length + 1;
+  }
+  return source.substring(startOffset, endOffset);
 }
 
 function byteOffsetFromLineAndColumn(source: string, line: number, column: number) {
