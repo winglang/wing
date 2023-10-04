@@ -6,10 +6,10 @@ import { Target } from "@winglang/compiler";
 import { std, simulator } from "@winglang/sdk";
 import chalk from "chalk";
 import debug from "debug";
+import { glob } from "glob";
 import { nanoid } from "nanoid";
 import { compile, CompileOptions } from "./compile";
 import { generateTmpDir, withSpinner } from "../util";
-import { glob } from "glob";
 
 const log = debug("wing:test");
 

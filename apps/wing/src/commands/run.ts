@@ -2,9 +2,9 @@ import { existsSync } from "fs";
 import { resolve } from "path";
 import { createConsoleApp } from "@wingconsole/app";
 import { debug } from "debug";
+import { glob } from "glob";
 import open from "open";
 import { parseNumericString } from "../util";
-import { glob } from "glob";
 
 /**
  * Options for the `run` command.
