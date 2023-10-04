@@ -93,15 +93,11 @@ export abstract class Bucket extends Resource {
     encoding: BufferEncoding = "utf-8"
   ): void {
     const app = App.of(this);
-    if (isAbsolute(path)) {
-      path = path;
-    } else {
-      if (!app.entrypointDir) {
-        throw new Error("Missing environment variable: WING_SOURCE_DIR");
-      }
-      path = resolve(app.entrypointDir, path);
-    }
-    const data = fs.readFileSync(path, { encoding: encoding });
+
+    const data = fs.readFileSync(
+      isAbsolute(path) ? path : resolve(app.entrypointDir, path),
+      { encoding: encoding }
+    );
 
     this.addObject(key, data);
   }
