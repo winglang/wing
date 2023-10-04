@@ -1,5 +1,6 @@
 import * as cp from "child_process";
 import { readFile, rm, rmSync } from "fs";
+import * as os from "os";
 import { basename, resolve, sep } from "path";
 import { promisify } from "util";
 import { Target } from "@winglang/compiler";
@@ -30,12 +31,18 @@ export interface TestOptions extends CompileOptions {
 }
 
 export async function test(entrypoints: string[], options: TestOptions): Promise<number> {
-  const patterns =
-    entrypoints.length === 0
-      ? ["*.test.w"]
-      : entrypoints.map((entrypoint) => entrypoint.replace(/\\/g, "/"));
-  const expandedEntrypoints = await glob(patterns);
+  let patterns;
 
+  if (entrypoints.length === 0) {
+    patterns = ["*.test.w"];
+  } else {
+    patterns =
+      os.platform() === "win32"
+        ? entrypoints.map((entrypoint) => entrypoint.replace(/\\/g, "/"))
+        : entrypoints;
+  }
+
+  const expandedEntrypoints = await glob(patterns);
   if (expandedEntrypoints.length === 0) {
     throw new Error(`No matching files found for patterns: [${patterns.join(", ")}]`);
   }
