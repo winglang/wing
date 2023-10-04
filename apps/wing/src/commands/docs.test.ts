@@ -1,6 +1,6 @@
 import open from "open";
-import { docs } from "./docs";
 import { vi, test, expect } from "vitest";
+import { docs } from "./docs";
 
 vi.mock("open");
 
