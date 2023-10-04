@@ -15,7 +15,7 @@ const INFLIGHT_CODE = `async handle() { console.log("Hello world!"); }`;
 
 test("create an OnDeploy", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   cloud.OnDeploy._newOnDeploy(app, "my_on_deploy", handler);
   const output = app.synth();
@@ -28,7 +28,7 @@ test("create an OnDeploy", () => {
 
 test("execute OnDeploy after other resources", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = cloud.Bucket._newBucket(app, "my_bucket");
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   cloud.OnDeploy._newOnDeploy(app, "my_on_deploy", handler, {
@@ -48,7 +48,7 @@ test("execute OnDeploy after other resources", () => {
 
 test("execute OnDeploy before other resources", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = cloud.Bucket._newBucket(app, "my_bucket");
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   cloud.OnDeploy._newOnDeploy(app, "my_on_deploy", handler, {
