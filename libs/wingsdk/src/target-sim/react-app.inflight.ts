@@ -1,4 +1,4 @@
-import { ChildProcess, exec } from "child_process";
+import { ChildProcess, ExecOptions, exec } from "child_process";
 import { writeFileSync } from "fs";
 import { join } from "path";
 import { promisify } from "util";
@@ -38,9 +38,10 @@ export class ReactApp implements IReactAppClient, ISimulatorResourceInstance {
 window.wingEnv = ${JSON.stringify(this.environmentVariables, null, 2)};`
     );
 
-    const options = {
+    const options: ExecOptions = {
       cwd: this.path,
       maxBuffer: 10 * 1024 * 1024,
+      windowsHide: true,
     };
 
     if (this.useBuildCommand) {
