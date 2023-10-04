@@ -218,7 +218,7 @@ test("delete item", async () => {
   await client.putItem({ item: { id: "1", age: 50 } as any });
   await client.deleteItem({ key: { id: "1" } as any });
   let joe = await client.getItem({ key: { id: "1" } as any });
-  expect(joe.item).toEqual({});
+  expect(joe.item).toBeUndefined();
 
   // will not throw
   await client.deleteItem({ key: { id: "1" } as any });
@@ -332,7 +332,7 @@ test("write transaction", async () => {
   expect(item1.item).toEqual({ id: "1", age: 51 });
 
   let item2 = await client.getItem({ key: { id: "2" } as any });
-  expect(item2.item).toEqual({});
+  expect(item2.item).toBeUndefined();
 
   let item3 = await client.getItem({ key: { id: "3" } as any });
   expect(item3.item).toEqual({ id: "3", age: 30 });

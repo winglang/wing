@@ -35,7 +35,7 @@ test("function with a table binding", () => {
     app,
     "Handler",
     `async handle(event) {
-  await this.my_table.putItem({ id: "test" });
+  await this.my_table.putItem({ item: { id: "test" } });
   await this.my_table.scan();
 }`,
     {

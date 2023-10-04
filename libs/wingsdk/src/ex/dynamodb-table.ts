@@ -367,7 +367,7 @@ export interface DynamodbTableGetItemResult {
   /**
    * A map of attribute names to `AttributeValue` objects, as specified by `ProjectionExpression`.
    */
-  readonly item: Json;
+  readonly item?: Json;
 }
 
 /**
@@ -979,7 +979,9 @@ export interface IDynamodbTableClient {
    * @param options dynamodb PutItem options.
    * @inflight
    */
-  putItem(options: DynamodbTablePutItemOptions): Promise<void>;
+  putItem(
+    options: DynamodbTablePutItemOptions
+  ): Promise<DynamodbTablePutItemResult>;
 
   /**
    * Get an item from the table.
@@ -1093,9 +1095,11 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
    */
   public abstract _rawClient(): Promise<DynamoDBClient>;
 
-  public async putItem(options: DynamodbTablePutItemOptions): Promise<void> {
+  public async putItem(
+    options: DynamodbTablePutItemOptions
+  ): Promise<DynamodbTablePutItemResult> {
     const client = await this._rawClient();
-    await client.send(
+    const response = await client.send(
       new PutItemCommand({
         TableName: this.tableName,
         Item: marshall(options.item),
@@ -1112,6 +1116,13 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
           options?.returnValuesOnConditionCheckFailure,
       })
     );
+    return {
+      attributes: response.Attributes
+        ? (unmarshall(response.Attributes) as Json)
+        : undefined,
+      consumedCapacity: response.ConsumedCapacity as Json | undefined,
+      itemCollectionMetrics: response.ItemCollectionMetrics as Json | undefined,
+    };
   }
 
   public async updateItem(
@@ -1138,7 +1149,9 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
       })
     );
     return {
-      attributes: result.Attributes as Json | undefined,
+      attributes: result.Attributes
+        ? (unmarshall(result.Attributes) as Json)
+        : undefined,
       consumedCapacity: result.ConsumedCapacity as Json | undefined,
       itemCollectionMetrics: result.ItemCollectionMetrics as Json | undefined,
     };
@@ -1167,7 +1180,9 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
       })
     );
     return {
-      attributes: result.Attributes as Json | undefined,
+      attributes: result.Attributes
+        ? (unmarshall(result.Attributes) as Json)
+        : undefined,
       consumedCapacity: result.ConsumedCapacity as Json | undefined,
       itemCollectionMetrics: result.ItemCollectionMetrics as Json | undefined,
     };
@@ -1191,7 +1206,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
     );
     return {
       consumedCapacity: result.ConsumedCapacity as Json | undefined,
-      item: result.Item ? (unmarshall(result.Item) as Json) : ({} as Json),
+      item: result.Item ? (unmarshall(result.Item) as Json) : undefined,
     };
   }
 

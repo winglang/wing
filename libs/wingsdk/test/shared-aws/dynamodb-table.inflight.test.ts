@@ -46,9 +46,9 @@ describe("inflight table tests", () => {
     };
     dynamoMock.on(PutItemCommand, expectedRequest).resolves(mockResponse);
     // WHEN
-    const response = await client.putItem(row as any);
+    const response = await client.putItem({ item: row as any });
     // THEN
-    expect(response).toEqual(undefined);
+    expect(response.attributes).toEqual(undefined);
     expect(dynamoMock).toHaveReceivedCommandWith(
       PutItemCommand,
       expectedRequest
@@ -73,14 +73,16 @@ describe("inflight table tests", () => {
     };
     dynamoMock.on(UpdateItemCommand, expectedRequest).resolves(mockResponse);
     // WHEN
-    const response = await client.updateItem({ id: key } as any, {
+    const response = await client.updateItem({
+      key: { id: key } as any,
       updateExpression: `SET somenumber = :somenumber`,
       expressionAttributeValues: {
         ":somenumber": row.somenumber,
       } as any,
+      returnValues: "ALL_OLD",
     });
     // THEN
-    expect(response).toEqual({ id: key });
+    expect(response.attributes).toEqual({ id: key });
     expect(dynamoMock).toHaveReceivedCommandWith(
       UpdateItemCommand,
       expectedRequest
@@ -98,9 +100,8 @@ describe("inflight table tests", () => {
     };
     dynamoMock.on(DeleteItemCommand, expectedRequest).resolves(mockResponse);
     // WHEN
-    const response = await client.deleteItem({ id: row.id } as any);
+    await client.deleteItem({ key: { id: row.id } as any });
     // THEN
-    expect(response).toEqual(undefined);
     expect(dynamoMock).toHaveReceivedCommandWith(
       DeleteItemCommand,
       expectedRequest
@@ -118,9 +119,9 @@ describe("inflight table tests", () => {
     };
     dynamoMock.on(GetItemCommand, expectedRequest).resolves(mockResponse);
     // WHEN
-    const response = await client.getItem({ id: key } as any);
+    const response = await client.getItem({ key: { id: key } as any });
     // THEN
-    expect(response).toEqual({});
+    expect(response.item).toBeUndefined();
     expect(dynamoMock).toHaveReceivedCommandWith(
       GetItemCommand,
       expectedRequest
@@ -144,9 +145,9 @@ describe("inflight table tests", () => {
     };
     dynamoMock.on(GetItemCommand, expectedRequest).resolves(mockResponse);
     // WHEN
-    const response = await client.getItem({ id: key } as any);
+    const response = await client.getItem({ key: { id: key } as any });
     // THEN
-    expect(response).toEqual({ id: key, somenumber: row.somenumber });
+    expect(response.item).toEqual({ id: key, somenumber: row.somenumber });
     expect(dynamoMock).toHaveReceivedCommandWith(
       GetItemCommand,
       expectedRequest
