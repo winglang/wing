@@ -6,7 +6,6 @@ import { Target } from "@winglang/compiler";
 import { std, simulator } from "@winglang/sdk";
 import chalk from "chalk";
 import debug from "debug";
-import { glob } from "glob";
 import { nanoid } from "nanoid";
 import { compile, CompileOptions } from "./compile";
 import { generateTmpDir, withSpinner } from "../util";
@@ -30,12 +29,6 @@ export interface TestOptions extends CompileOptions {
 }
 
 export async function test(entrypoints: string[], options: TestOptions): Promise<number> {
-  const expandedEntrypoints = await glob(entrypoints);
-
-  if (expandedEntrypoints.length === 0) {
-    throw new Error(`No matching files found in current directory. (${entrypoints.join(", ")})`);
-  }
-
   const startTime = Date.now();
   const results: { testName: string; results: std.TestResult[] }[] = [];
   const testFile = async (entrypoint: string) => {
@@ -51,7 +44,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
       });
     }
   };
-  await Promise.all(expandedEntrypoints.map(testFile));
+  await Promise.all(entrypoints.map(testFile));
   printResults(results, Date.now() - startTime);
 
   // if we have any failures, exit with 1
