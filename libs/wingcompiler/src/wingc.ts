@@ -181,7 +181,7 @@ export async function load(options: WingCompilerLoadOptions) {
     wasi_snapshot_preview1: wasi.wasiImport,
     env: {
       // This function is used only by the lsp
-      send_diagnostic: () => { },
+      send_diagnostic: () => {},
     },
     ...(options.imports ?? {}),
   } as any;
@@ -226,6 +226,21 @@ export interface WingDiagnostic {
     };
     file_id: string;
   };
+  annotations: {
+    message: string;
+    span: {
+      start: {
+        line: number;
+        col: number;
+      };
+      end: {
+        line: number;
+        col: number;
+      };
+      file_id: string;
+    };
+    kind: "error" | "warning" | "info" | "note" | "help";
+  }[];
 }
 
 /**

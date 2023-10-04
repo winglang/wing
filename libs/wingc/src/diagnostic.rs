@@ -187,7 +187,29 @@ impl PartialOrd for WingSpan {
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize)]
 pub struct Diagnostic {
 	pub message: String,
+	pub annotations: Vec<DiagnosticAnnotation>,
 	pub span: Option<WingSpan>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize)]
+pub struct DiagnosticAnnotation {
+	pub message: String,
+	pub span: WingSpan,
+	pub kind: DiagnosticAnnotationKind,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize)]
+pub enum DiagnosticAnnotationKind {
+	#[serde(rename = "error")]
+	Error,
+	#[serde(rename = "warning")]
+	Warning,
+	#[serde(rename = "info")]
+	Info,
+	#[serde(rename = "note")]
+	Note,
+	#[serde(rename = "help")]
+	Help,
 }
 
 impl std::fmt::Display for Diagnostic {
@@ -283,6 +305,7 @@ pub fn reset_diagnostics() {
 pub struct TypeError {
 	pub message: String,
 	pub span: WingSpan,
+	pub annotations: Vec<DiagnosticAnnotation>,
 }
 
 impl std::fmt::Display for TypeError {

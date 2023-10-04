@@ -110,6 +110,7 @@ pub fn set_custom_panic_hook() {
 				CompilationContext::get_phase()
 			),
 			span: Some(CompilationContext::get_span()),
+			annotations: vec![],
 		})
 	}));
 }
