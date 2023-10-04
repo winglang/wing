@@ -260,11 +260,11 @@ function noCleanUp(synthDir: string) {
 export function filterTests(tests: Array<string>, regexString?: string): Array<string> {
   if (regexString) {
     const regex = new RegExp(regexString);
-    return tests.filter((test) => {
+    return tests.filter((t) => {
       // Extract test name from the string
       // root/env0/test:<testName>
-      const firstColonIndex = test.indexOf(":");
-      const testName = test.substring(firstColonIndex + 1);
+      const firstColonIndex = t.indexOf(":");
+      const testName = t.substring(firstColonIndex + 1);
       return testName ? regex.test(testName) : false;
     });
   } else {
@@ -319,8 +319,8 @@ async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.T
       );
       const runner = new TestRunnerClient(testArns);
 
-      const tests = await runner.listTests();
-      const filteredTests = pickOneTestPerEnvironment(filterTests(tests, testFilter));
+      const allTests = await runner.listTests();
+      const filteredTests = pickOneTestPerEnvironment(filterTests(allTests, testFilter));
       return [runner, filteredTests];
     });
 
@@ -406,8 +406,8 @@ async function testTfAws(synthDir: string, options: TestOptions): Promise<std.Te
       );
       const runner = new TestRunnerClient(testArns);
 
-      const tests = await runner.listTests();
-      const filteredTests = pickOneTestPerEnvironment(filterTests(tests, testFilter));
+      const allTests = await runner.listTests();
+      const filteredTests = pickOneTestPerEnvironment(filterTests(allTests, testFilter));
       return [runner, filteredTests];
     });
 
