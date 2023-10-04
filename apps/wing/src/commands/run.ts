@@ -1,7 +1,8 @@
-import { readdirSync, existsSync } from "fs";
+import { existsSync } from "fs";
 import { resolve } from "path";
 import { createConsoleApp } from "@wingconsole/app";
 import { debug } from "debug";
+import { glob } from "glob";
 import open from "open";
 import { parseNumericString } from "../util";
 
@@ -35,7 +36,7 @@ export async function run(entrypoint?: string, options?: RunOptions) {
   const openBrowser = options?.open ?? true;
 
   if (!entrypoint) {
-    const wingFiles = readdirSync(".").filter((item) => item.endsWith(".w"));
+    const wingFiles = await glob("{main,*.main}.w");
     if (wingFiles.length !== 1) {
       throw new Error("Please specify which file you want to run");
     }
