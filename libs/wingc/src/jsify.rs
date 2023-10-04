@@ -771,7 +771,17 @@ impl<'a> JSifier<'a> {
 					identifier.as_ref().expect("bring jsii module requires an alias"),
 					name
 				)),
-				BringSource::WingLibrary(_) => todo!(),
+				BringSource::WingLibrary(_, module_dir) => {
+					let preflight_file_map = self.preflight_file_map.borrow();
+					let preflight_file_name = preflight_file_map.get(module_dir).unwrap();
+					CodeMaker::one_line(format!(
+						"const {} = require(\"./{}\")({{ {} }});",
+						// checked during type checking
+						identifier.as_ref().expect("bring wing file requires an alias"),
+						preflight_file_name,
+						STDLIB,
+					))
+				}
 				BringSource::WingFile(name) => {
 					let preflight_file_map = self.preflight_file_map.borrow();
 					let preflight_file_name = preflight_file_map.get(Utf8Path::new(&name.name)).unwrap();

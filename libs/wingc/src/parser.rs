@@ -275,7 +275,7 @@ fn parse_wing_directory(
 			&& path.file_name() != Some("node_modules")
 			&& path.file_name() != Some(".git")
 			&& path.extension() != Some("tmp"))
-			|| path.extension() == Some("w")
+			|| path.extension() == Some("w") && !is_entrypoint_file(&path)
 		{
 			files_and_dirs.push(path);
 		}
@@ -906,13 +906,16 @@ impl<'s> Parser<'s> {
 			if is_wing_library(&Utf8Path::new(&module_dir)) {
 				return if let Some(alias) = alias {
 					// make sure the Wing library is also parsed
-					self.referenced_wing_paths.borrow_mut().push(module_dir);
+					self.referenced_wing_paths.borrow_mut().push(module_dir.clone());
 
 					Ok(StmtKind::Bring {
-						source: BringSource::WingLibrary(Symbol {
-							name: module_name_parsed,
-							span: module_name.span,
-						}),
+						source: BringSource::WingLibrary(
+							Symbol {
+								name: module_name_parsed,
+								span: module_name.span,
+							},
+							module_dir,
+						),
 						identifier: Some(alias),
 					})
 				} else {

@@ -2,6 +2,7 @@ use std::fmt::{Debug, Display};
 use std::hash::{Hash, Hasher};
 use std::sync::atomic::{AtomicUsize, Ordering};
 
+use camino::Utf8PathBuf;
 use indexmap::{Equivalent, IndexMap, IndexSet};
 use itertools::Itertools;
 
@@ -425,7 +426,8 @@ pub struct Interface {
 #[derive(Debug)]
 pub enum BringSource {
 	BuiltinModule(Symbol),
-	WingLibrary(Symbol),
+	/// The name of the library, and the path to the library (usually inside node_modules)
+	WingLibrary(Symbol, Utf8PathBuf),
 	JsiiModule(Symbol),
 	/// Refers to a relative path to a file
 	WingFile(Symbol),
