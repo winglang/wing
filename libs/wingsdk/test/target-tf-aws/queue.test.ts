@@ -73,6 +73,7 @@ async handle(event) {
   expect(sanitizeCode(processorFn._toInflight())).toMatchSnapshot();
 
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group", // log group for function
     "aws_iam_role", // role for function
     "aws_iam_role_policy", // policy for role
     "aws_iam_role_policy_attachment", // execution policy for role

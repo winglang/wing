@@ -25,6 +25,12 @@ exports[`inflight function uses a logger 2`] = `
     },
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "Function_CloudwatchLogGroup_ABDCF4C4": {
+        "name": "/aws/lambda/Function-c852aba6",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "Function_IamRole_678BE84C": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",

@@ -53,6 +53,7 @@ test("function with a table binding", () => {
 
   expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group", // log group for Lambda
     "aws_dynamodb_table", // main table
     "aws_iam_role", // role for function
     "aws_iam_role_policy", // policy for role

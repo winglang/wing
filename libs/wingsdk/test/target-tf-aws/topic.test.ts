@@ -41,6 +41,7 @@ test("topic with subscriber function", () => {
   // THEN
   expect(sanitizeCode(subscriber._toInflight())).toMatchSnapshot();
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group", // log group for subscriber function
     "aws_iam_role", // role for subscriber function
     "aws_iam_role_policy", // policy for subscriber function role
     "aws_iam_role_policy_attachment", // execution policy for subscriber role
