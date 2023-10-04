@@ -13,8 +13,6 @@ module.exports = function({ $jj, $std_Json }) {
       const ss = ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$jj]);
       {((cond) => {if (!cond) throw new Error("assertion failed: ss == \"{\\\"a\\\":123,\\\"b\\\":{\\\"c\\\":456,\\\"d\\\":789}}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(ss,"{\"a\":123,\"b\":{\"c\":456,\"d\":789}}")))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -34,8 +32,6 @@ module.exports = function({ $std_Json }) {
       const hasCheck = ({"a": "hello","b": "wing"});
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.has(hasCheck, \"a\") == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return args[0].hasOwnProperty(args[1]); })([hasCheck,"a"]),true)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.has(hasCheck, \"c\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return args[0].hasOwnProperty(args[1]); })([hasCheck,"c"]),false)))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure2;

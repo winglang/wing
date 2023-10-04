@@ -16,8 +16,6 @@ module.exports = function({  }) {
         {console.log(String.raw({ raw: ["", ""] }, x))};
       }
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -34,8 +32,6 @@ module.exports = function({  }) {
       for (const p of ["hello"]) {
         {console.log(p)};
       }
-    }
-    async $inflight_init() {
     }
   }
   return Foo;

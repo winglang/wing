@@ -26,8 +26,6 @@ module.exports = function({ $bucket1, $bucket2, $bucket3 }) {
         {console.log(error)};
       }
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -45,8 +43,6 @@ module.exports = function({ $headers }) {
     }
     async handle(req) {
       return ({"status": 200,"headers": $headers,"body": "Hello, world!"});
-    }
-    async $inflight_init() {
     }
   }
   return $Closure2;

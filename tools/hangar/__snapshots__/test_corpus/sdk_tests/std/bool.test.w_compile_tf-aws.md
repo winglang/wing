@@ -22,8 +22,6 @@ module.exports = function({ $PARSE_ERROR, $std_Boolean, $std_Json }) {
         {((cond) => {if (!cond) throw new Error("assertion failed: s.contains(PARSE_ERROR)")})(s.includes($PARSE_ERROR))};
       }
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

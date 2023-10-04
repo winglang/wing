@@ -14,8 +14,6 @@ module.exports = function({ $config, $http_Util, $indexFile, $otherFile, $std_Js
       {((cond) => {if (!cond) throw new Error("assertion failed: http.get(w.url + \"/inner-folder/other.html\").body == otherFile")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get(($w_url + "/inner-folder/other.html"))).body,$otherFile)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: http.get(w.url + \"/config.json\").body == Json.stringify(config)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get(($w_url + "/config.json"))).body,((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$config]))))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -27,8 +25,6 @@ module.exports = function({ $config, $http_Util, $indexFile, $otherFile, $std_Js
 module.exports = function({  }) {
   class Util {
     constructor({  }) {
-    }
-    async $inflight_init() {
     }
   }
   return Util;

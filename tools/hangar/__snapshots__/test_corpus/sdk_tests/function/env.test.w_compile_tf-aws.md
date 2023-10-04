@@ -14,8 +14,6 @@ module.exports = function({ $util_Util }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: util.env(\"FOO2\") == \"baz\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $util_Util.env("FOO2")),"baz")))};
       return "ok";
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -33,8 +31,6 @@ module.exports = function({ $f1 }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: f1.invoke(\"\") == \"ok\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $f1.invoke("")),"ok")))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure2;

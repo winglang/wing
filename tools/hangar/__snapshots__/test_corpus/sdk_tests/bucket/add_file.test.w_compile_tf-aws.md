@@ -14,8 +14,6 @@ module.exports = function({ $b }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: b.get(\"file1.txt\") == \"test1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.get("file1.txt")),"test1")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: b.get(\"file2.txt\") == \"test2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.get("file2.txt")),"test2")))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

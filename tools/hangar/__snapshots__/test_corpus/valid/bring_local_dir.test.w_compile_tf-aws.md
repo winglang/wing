@@ -6,8 +6,6 @@ module.exports = function({  }) {
   class Bar {
     constructor({  }) {
     }
-    async $inflight_init() {
-    }
   }
   return Bar;
 }
@@ -20,8 +18,6 @@ module.exports = function({  }) {
   class Foo {
     constructor({  }) {
     }
-    async $inflight_init() {
-    }
   }
   return Foo;
 }
@@ -33,8 +29,6 @@ module.exports = function({  }) {
 module.exports = function({  }) {
   class Widget {
     constructor({  }) {
-    }
-    async $inflight_init() {
     }
   }
   return Widget;

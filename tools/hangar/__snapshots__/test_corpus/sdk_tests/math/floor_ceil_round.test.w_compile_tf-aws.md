@@ -22,8 +22,6 @@ module.exports = function({ $__x_, $__y_, $math_Util, $x, $y }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 4) == 2.7183")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round($math_Util.E,{ decimalPlaces: 4 })),2.7183)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 5) == 2.71828")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round($math_Util.E,{ decimalPlaces: 5 })),2.71828)))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

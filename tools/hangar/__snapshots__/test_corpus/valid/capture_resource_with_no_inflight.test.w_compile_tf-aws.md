@@ -13,8 +13,6 @@ module.exports = function({ $a, $a_field }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: \"hey\" == a.field")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("hey",$a_field)))};
       (await $a.bar());
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -32,8 +30,6 @@ module.exports = function({  }) {
       (await this.$this_counter.inc());
     }
     async bar() {
-    }
-    async $inflight_init() {
     }
   }
   return A;

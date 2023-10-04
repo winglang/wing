@@ -33,8 +33,6 @@ module.exports = function({  }) {
         throw new Error(String.raw({ raw: ["expected: ", " got: ", ""] }, b, a));
       }
     }
-    async $inflight_init() {
-    }
   }
   return Assert;
 }

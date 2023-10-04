@@ -12,8 +12,6 @@ module.exports = function({ $r }) {
     async handle() {
       (await $r.foo());
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -32,8 +30,6 @@ module.exports = function({ $MyResource, $api_url, $url }) {
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(url)")})((await $MyResource.isValidUrl($url)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(api.url)")})((await $MyResource.isValidUrl($api_url)))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure2;
@@ -55,8 +51,6 @@ module.exports = function({  }) {
     async foo() {
       {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(this.url)")})((await MyResource.isValidUrl(this.$this_url)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(this.api.url)")})((await MyResource.isValidUrl(this.$this_api_url)))};
-    }
-    async $inflight_init() {
     }
   }
   return MyResource;

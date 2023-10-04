@@ -13,8 +13,6 @@ module.exports = function({ $JSHelperInflight, $util_Util }) {
       const data = (await $util_Util.uuidv4());
       {((cond) => {if (!cond) throw new Error("assertion failed: JSHelperInflight.validateUUIDv4(data) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $JSHelperInflight.validateUUIDv4(data)),true)))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -26,8 +24,6 @@ module.exports = function({ $JSHelperInflight, $util_Util }) {
 module.exports = function({  }) {
   class JSHelper {
     constructor({  }) {
-    }
-    async $inflight_init() {
     }
   }
   return JSHelper;
@@ -43,8 +39,6 @@ module.exports = function({  }) {
     }
     static async validateUUIDv4(uuidv4) {
       return (require("<ABSOLUTE_PATH>/uuidv4-helper.js")["validateUUIDv4"])(uuidv4)
-    }
-    async $inflight_init() {
     }
   }
   return JSHelperInflight;

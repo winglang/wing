@@ -34,8 +34,6 @@ module.exports = function({ $http_Util }) {
       }
       ));
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -80,8 +78,6 @@ module.exports = function({ $http_Util }) {
         (await $http_Util.formatUrl(invalidUrlStruct));
       }
       ));
-    }
-    async $inflight_init() {
     }
   }
   return $Closure2;

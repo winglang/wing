@@ -24,8 +24,6 @@ module.exports = function({ $t1 }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: r.get(\"k2\").asStr() == \"value3\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(r, "k2")),"value3")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: r.get(\"k3\").asStr() == \"other-value3\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(r, "k3")),"other-value3")))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

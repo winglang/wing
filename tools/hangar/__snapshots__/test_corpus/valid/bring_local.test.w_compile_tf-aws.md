@@ -12,8 +12,6 @@ module.exports = function({ $__parent_this_1_b }) {
     async handle() {
       (await $__parent_this_1_b.put("data.txt","<empty>"));
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -32,8 +30,6 @@ module.exports = function({ $store }) {
     async handle() {
       (await $store.store("foo"));
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -45,8 +41,6 @@ module.exports = function({ $store }) {
 module.exports = function({  }) {
   class Q {
     constructor({  }) {
-    }
-    async $inflight_init() {
     }
   }
   return Q;
@@ -64,8 +58,6 @@ module.exports = function({  }) {
     async store(data) {
       (await this.$this_b.put("data.txt",data));
     }
-    async $inflight_init() {
-    }
   }
   return Store;
 }
@@ -77,8 +69,6 @@ module.exports = function({  }) {
 module.exports = function({  }) {
   class Triangle {
     constructor({  }) {
-    }
-    async $inflight_init() {
     }
   }
   return Triangle;
@@ -92,8 +82,6 @@ module.exports = function({  }) {
   class Util {
     constructor({  }) {
     }
-    async $inflight_init() {
-    }
   }
   return Util;
 }
@@ -105,8 +93,6 @@ module.exports = function({  }) {
 module.exports = function({  }) {
   class Util {
     constructor({  }) {
-    }
-    async $inflight_init() {
     }
   }
   return Util;

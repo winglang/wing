@@ -10,9 +10,7 @@ module.exports = function({ $Foo }) {
       return $obj;
     }
     async handle() {
-      (await (async (o) => { await o.$inflight_init(); return o; })(new $Foo()));
-    }
-    async $inflight_init() {
+      (await (async () => {const o = new $Foo(); if ('$inflight_init' in o) { await o.$inflight_init(); } return o; })());
     }
   }
   return $Closure1;
@@ -24,8 +22,6 @@ module.exports = function({ $Foo }) {
 ```js
 module.exports = function({  }) {
   class Foo {
-    async $inflight_init() {
-    }
   }
   return Foo;
 }

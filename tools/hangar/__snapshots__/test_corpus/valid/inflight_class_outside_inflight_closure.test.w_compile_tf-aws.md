@@ -10,10 +10,8 @@ module.exports = function({ $BinaryOperation }) {
       return $obj;
     }
     async handle() {
-      const op = (await (async (o) => { await o.$inflight_init(10,20); return o; })(new $BinaryOperation()));
+      const op = (await (async () => {const o = new $BinaryOperation(); if ('$inflight_init' in o) { await o.$inflight_init(10,20); } return o; })());
       {((cond) => {if (!cond) throw new Error("assertion failed: op.add() == 30")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await op.add()),30)))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure1;

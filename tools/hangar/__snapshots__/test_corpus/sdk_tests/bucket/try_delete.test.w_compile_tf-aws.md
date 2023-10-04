@@ -22,8 +22,6 @@ module.exports = function({ $b }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.txt\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.tryDelete("file2.txt")),false)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.json\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.tryDelete("file2.json")),false)))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

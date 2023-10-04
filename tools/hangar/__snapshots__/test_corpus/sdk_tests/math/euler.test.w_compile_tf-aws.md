@@ -12,8 +12,6 @@ module.exports = function({ $math_Util }) {
     async handle(interestRate, currentVal) {
       return (currentVal * ($math_Util.E ** interestRate));
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -31,8 +29,6 @@ module.exports = function({ $compoundOneYear, $interest, $math_Util, $value }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.round(compoundOneYear(interest, value), decimalPlaces: 2) == 105.13")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round((await $compoundOneYear($interest,$value)),{ decimalPlaces: 2 })),105.13)))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure2;

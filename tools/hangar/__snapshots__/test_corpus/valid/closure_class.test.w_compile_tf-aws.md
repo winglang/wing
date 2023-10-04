@@ -13,8 +13,6 @@ module.exports = function({ $fn }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: fn() == 42")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fn()),42)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: fn.another() == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fn.another()),"hello")))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -35,8 +33,6 @@ module.exports = function({  }) {
     }
     async handle() {
       return 42;
-    }
-    async $inflight_init() {
     }
   }
   return MyClosure;

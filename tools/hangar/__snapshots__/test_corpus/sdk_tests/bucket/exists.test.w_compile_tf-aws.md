@@ -18,8 +18,6 @@ module.exports = function({ $b }) {
       (await $b.delete("test1.txt"));
       {((cond) => {if (!cond) throw new Error("assertion failed: !b.exists(\"test1.txt\")")})((!(await $b.exists("test1.txt"))))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

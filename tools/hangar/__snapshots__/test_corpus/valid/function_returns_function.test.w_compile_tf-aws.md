@@ -22,8 +22,6 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: wingInflightFn()")})((await wingInflightFn()))};
       {((cond) => {if (!cond) throw new Error("assertion failed: !dingInflightFn()")})((!(await dingInflightFn())))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

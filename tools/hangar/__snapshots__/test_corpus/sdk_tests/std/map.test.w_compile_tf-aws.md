@@ -12,8 +12,6 @@ module.exports = function({  }) {
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: Map<str>{} == MutMap<str>{}")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(({}),({}))))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -35,8 +33,6 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: senate.get(\"senator\") == \"organa\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((senate)["senator"],"organa")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: senate.size() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(senate).length,2)))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure10;
 }
@@ -56,8 +52,6 @@ module.exports = function({  }) {
       const position = ({"librarian": "jocasta"});
       ((map) => { for(const k in map){delete map[k]}; })(position);
       {((cond) => {if (!cond) throw new Error("assertion failed: position.size() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(position).length,0)))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure11;
@@ -80,8 +74,6 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: sithTriumvirate.size() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(sithTriumvirate).length,2)))};
       (delete (sithTriumvirate)["sion"]);
       {((cond) => {if (!cond) throw new Error("assertion failed: sithTriumvirate == MutMap<str> { \"traya\" => \"lord of betrayal\" }")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(sithTriumvirate,({"traya": "lord of betrayal"}))))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure12;
@@ -110,8 +102,6 @@ module.exports = function({  }) {
       ((map) => { for(const k in map){delete map[k]}; })(apprentices);
       {((cond) => {if (!cond) throw new Error("assertion failed: apprentices == MutMap<str>{}")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(apprentices,({}))))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure2;
 }
@@ -134,8 +124,6 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: mutTrilogies.size() == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(mutTrilogies).length,3)))};
       (delete (mutTrilogies)["ST"]);
       {((cond) => {if (!cond) throw new Error("assertion failed: mutTrilogies.size() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(mutTrilogies).length,2)))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure3;
@@ -162,8 +150,6 @@ module.exports = function({  }) {
       const Viceroy = (mutGreeting)["gunray"];
       {((cond) => {if (!cond) throw new Error("assertion failed: Viceroy == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Viceroy,undefined)))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure4;
 }
@@ -189,8 +175,6 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: padawans.has(\"qui gon\") == padawans.has(\"dooku\") == padawans.has(\"anakin\")")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("qui gon" in (padawans)),("dooku" in (padawans)))),("anakin" in (padawans)))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: padawans.has(\"windu\") == padawans.has(\"sifo dyas\")")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("windu" in (padawans)),("sifo dyas" in (padawans)))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: padawans.has(\"revan\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("revan" in (padawans)),false)))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure5;
@@ -223,8 +207,6 @@ module.exports = function({  }) {
         {((cond) => {if (!cond) throw new Error("assertion failed: saberformNames.at(i) == nameArr.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await saberformNames.at(i)),(await nameArr.at(i)))))};
       }
     }
-    async $inflight_init() {
-    }
   }
   return $Closure6;
 }
@@ -256,8 +238,6 @@ module.exports = function({  }) {
         {((cond) => {if (!cond) throw new Error("assertion failed: mandalorianKeys.at(i) == keysArr.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await mandalorianKeys.at(i)),(await keysArr.at(i)))))};
       }
     }
-    async $inflight_init() {
-    }
   }
   return $Closure7;
 }
@@ -280,8 +260,6 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: mutRuleOfTwo.delete(\"master\") == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((delete (mutRuleOfTwo)["master"]),true)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: mutRuleOfTwo.size() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(mutRuleOfTwo).length,0)))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure8;
 }
@@ -301,8 +279,6 @@ module.exports = function({  }) {
       const authority = ({"republic": "senate","empire": "emperor"});
       const immutAuthority = ({...(authority)});
       {((cond) => {if (!cond) throw new Error("assertion failed: immutAuthority.copyMut() == authority")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })({...(immutAuthority)},authority)))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure9;

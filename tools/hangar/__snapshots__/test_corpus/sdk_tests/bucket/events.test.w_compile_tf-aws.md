@@ -12,8 +12,6 @@ module.exports = function({ $idsCounter, $table }) {
     async handle(key, operation, source) {
       (await $table.insert(String.raw({ raw: ["", ""] }, (await $idsCounter.inc())),({"key": key,"operation": operation,"source": String.raw({ raw: ["", ""] }, source)})));
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -31,8 +29,6 @@ module.exports = function({ $Source, $logHistory }) {
     }
     async handle(key) {
       (await $logHistory(key,"onDelete()",$Source.anyEvent));
-    }
-    async $inflight_init() {
     }
   }
   return $Closure2;
@@ -52,8 +48,6 @@ module.exports = function({ $Source, $logHistory }) {
     async handle(key) {
       (await $logHistory(key,"onUpdate()",$Source.anyEvent));
     }
-    async $inflight_init() {
-    }
   }
   return $Closure3;
 }
@@ -72,8 +66,6 @@ module.exports = function({ $Source, $logHistory }) {
     async handle(key) {
       (await $logHistory(key,"onCreate()",$Source.anyEvent));
     }
-    async $inflight_init() {
-    }
   }
   return $Closure4;
 }
@@ -91,8 +83,6 @@ module.exports = function({ $Source, $logHistory }) {
     }
     async handle(key, event) {
       (await $logHistory(key,String.raw({ raw: ["", "()"] }, event),$Source.onEvent));
-    }
-    async $inflight_init() {
     }
   }
   return $Closure5;
@@ -120,8 +110,6 @@ module.exports = function({ $std_Duration, $util_Util }) {
       }
       return false;
     }
-    async $inflight_init() {
-    }
   }
   return $Closure6;
 }
@@ -148,8 +136,6 @@ module.exports = function({ $table }) {
         return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(count,opts.count));
       }
       ;
-    }
-    async $inflight_init() {
     }
   }
   return $Closure7;
@@ -184,8 +170,6 @@ module.exports = function({ $Source, $b, $checkHitCount, $util_Util, $wait }) {
         {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"onUpdate()\", source: Source.onEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "b", type: "onUpdate()", source: $Source.onEvent, count: 1 })))))};
         {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"onDelete()\", source: Source.onEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "c", type: "onDelete()", source: $Source.onEvent, count: 1 })))))};
       }
-    }
-    async $inflight_init() {
     }
   }
   return $Closure8;

@@ -13,8 +13,6 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: [\"hello\"].length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(["hello"].length,1)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: MutArray<str>[\"hello\"].length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(["hello"].length,1)))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -36,8 +34,6 @@ module.exports = function({  }) {
       const joinedString = (await i.join(separator));
       const expectedString = (((await i.at(0)) + separator) + (await i.at(1)));
       {((cond) => {if (!cond) throw new Error("assertion failed: joinedString == expectedString")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(joinedString,expectedString)))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure10;
@@ -61,8 +57,6 @@ module.exports = function({  }) {
       const expectedString = (((await i.at(0)) + separator) + (await i.at(1)));
       {((cond) => {if (!cond) throw new Error("assertion failed: joinedString == expectedString")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(joinedString,expectedString)))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure11;
 }
@@ -83,8 +77,6 @@ module.exports = function({  }) {
       const p = [...(o)];
       {((cond) => {if (!cond) throw new Error("assertion failed: o.length == p.length")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(o.length,p.length)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: o.at(0) == p.at(0)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await o.at(0)),(await p.at(0)))))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure12;
@@ -107,8 +99,6 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: q.length == r.length")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(q.length,r.length)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: q.at(0) == r.at(0)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await q.at(0)),(await r.at(0)))))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure13;
 }
@@ -129,8 +119,6 @@ module.exports = function({  }) {
       const s = ["hello", lastStr, lastStr];
       {((cond) => {if (!cond) throw new Error("assertion failed: s.lastIndexOf(lastStr) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s.lastIndexOf(lastStr),2)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: s.lastIndexOf(\"something\") == -1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s.lastIndexOf("something"),(-1))))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure14;
@@ -174,8 +162,6 @@ module.exports = function({  }) {
         ((obj, args) => { if (args[0] < 0 || args[0] >= mutArr.length) throw new Error("Index out of bounds"); obj[args[0]] = args[1]; })(mutArr, [5,11]);
       }
       ));
-    }
-    async $inflight_init() {
     }
   }
   return $Closure15;
@@ -226,8 +212,6 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.length == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mutArr.length,5)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.at(4) == 25")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await mutArr.at(4)),25)))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure16;
 }
@@ -253,8 +237,6 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: r2 == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(r2,false)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.length == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mutArr.length,3)))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure17;
 }
@@ -273,8 +255,6 @@ module.exports = function({  }) {
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: [\"hello\"].at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await ["hello"].at(0)),"hello")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: MutArray<str>[\"hello\", \"world\"].at(1) == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await ["hello", "world"].at(1)),"world")))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure2;
@@ -302,8 +282,6 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: item == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(item,"world")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: a.length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(a.length,1)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: a.at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await a.at(0)),"hello")))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure3;
@@ -349,8 +327,6 @@ module.exports = function({  }) {
       }
       ));
     }
-    async $inflight_init() {
-    }
   }
   return $Closure4;
 }
@@ -373,8 +349,6 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: d.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d.length,2)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: d.at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await d.at(0)),"hello")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: d.at(1) == \"wing\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await d.at(1)),"wing")))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure5;
@@ -401,8 +375,6 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: mergedArray.at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await mergedArray.at(0)),"hello")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: mergedArray.at(1) == \"wing\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await mergedArray.at(1)),"wing")))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure6;
 }
@@ -426,8 +398,6 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: h.contains(\"wing\")")})(h.includes("wing"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: !h.contains(\"NotThere\")")})((!h.includes("NotThere")))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure7;
 }
@@ -448,8 +418,6 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: g.indexOf(\"wing\") == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(g.indexOf("wing"),1)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: g.indexOf(\"notThere\") == -1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(g.indexOf("notThere"),(-1))))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure8;
 }
@@ -469,8 +437,6 @@ module.exports = function({  }) {
       const g = ["hello", "wing"];
       {((cond) => {if (!cond) throw new Error("assertion failed: g.indexOf(\"wing\") == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(g.indexOf("wing"),1)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: g.indexOf(\"notThere\") == -1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(g.indexOf("notThere"),(-1))))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure9;

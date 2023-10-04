@@ -21,8 +21,6 @@ module.exports = function({ $MyService, $__parent_this_1_b, $__parent_this_1_bod
       }
       ;
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -42,8 +40,6 @@ module.exports = function({ $foo, $http_Util }) {
       const response = (await $http_Util.get(String.raw({ raw: ["http://localhost:", ""] }, (await $foo.port()))));
       {console.log((response.body ?? ""))};
       {((cond) => {if (!cond) throw new Error("assertion failed: response.body ?? \"\" == \"bang bang!\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((response.body ?? ""),"bang bang!")))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure2;
@@ -73,8 +69,6 @@ module.exports = function({ $foo, $foo_s, $http_Util }) {
       }
       {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure3;
 }
@@ -93,8 +87,6 @@ module.exports = function({ $std_Number }) {
     }
     static async createServer(body) {
       return (require("<ABSOLUTE_PATH>/http-server.js")["createServer"])(body)
-    }
-    async $inflight_init() {
     }
   }
   return MyService;

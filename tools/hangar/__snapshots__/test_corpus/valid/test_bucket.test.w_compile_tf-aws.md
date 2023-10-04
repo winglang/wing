@@ -14,8 +14,6 @@ module.exports = function({ $b }) {
       (await $b.put("hello.txt","world"));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.list()).length,1)))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -34,8 +32,6 @@ module.exports = function({ $b }) {
     async handle() {
       (await $b.put("hello.txt","world"));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.get(\"hello.txt\") == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.get("hello.txt")),"world")))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure2;

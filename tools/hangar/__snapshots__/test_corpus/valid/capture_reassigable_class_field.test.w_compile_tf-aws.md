@@ -11,8 +11,6 @@ module.exports = function({  }) {
     }
     async handle(k) {
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -30,8 +28,6 @@ module.exports = function({ $counter }) {
     }
     async handle(key) {
       (await $counter.inc(1,key));
-    }
-    async $inflight_init() {
     }
   }
   return $Closure2;
@@ -63,8 +59,6 @@ module.exports = function({ $counter, $kv, $util_Util }) {
       }
       )))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure3;
 }
@@ -85,8 +79,6 @@ module.exports = function({  }) {
     }
     async set(key, value) {
       (await this.$this_bucket.putJson(key,value));
-    }
-    async $inflight_init() {
     }
   }
   return KeyValueStore;

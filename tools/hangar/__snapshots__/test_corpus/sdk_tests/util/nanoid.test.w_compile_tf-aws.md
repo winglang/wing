@@ -25,8 +25,6 @@ module.exports = function({ $util_Util }) {
         }
       }
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

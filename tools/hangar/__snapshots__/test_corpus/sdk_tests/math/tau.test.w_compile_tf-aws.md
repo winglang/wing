@@ -15,8 +15,6 @@ module.exports = function({ $math_Util }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.TAU * 3 / 4 == math.PI * 3 / 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((($math_Util.TAU * 3) / 4),(($math_Util.PI * 3) / 2))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.TAU == math.PI * 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($math_Util.TAU,($math_Util.PI * 2))))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

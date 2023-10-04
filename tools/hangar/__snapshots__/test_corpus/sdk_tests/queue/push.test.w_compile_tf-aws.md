@@ -46,8 +46,6 @@ module.exports = function({ $q, $std_Duration, $util_Util }) {
       }
       )))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

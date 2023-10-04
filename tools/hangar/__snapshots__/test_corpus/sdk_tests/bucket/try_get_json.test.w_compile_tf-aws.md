@@ -22,8 +22,6 @@ module.exports = function({ $b, $std_Json }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGetJson(\"file1.json\") == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.tryGetJson("file1.json")),undefined)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGetJson(\"file2.json\") == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.tryGetJson("file2.json")),undefined)))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

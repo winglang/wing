@@ -12,8 +12,6 @@ module.exports = function({ $std_Json, $usersTable }) {
     async handle(req) {
       return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"users": (await $usersTable.list())})]),"status": 200});
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -36,8 +34,6 @@ module.exports = function({ $std_Json, $usersTable }) {
       }
       (await $usersTable.insert(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id")]),body));
       return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"user": ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id")})]),"status": 201});
-    }
-    async $inflight_init() {
     }
   }
   return $Closure2;
@@ -64,8 +60,6 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert })
       (await $t_Assert.isNil((headers)["access-control-allow-headers"]));
       (await $t_Assert.isNil((headers)["access-control-allow-methods"]));
     }
-    async $inflight_init() {
-    }
   }
   return $Closure3;
 }
@@ -87,8 +81,6 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert })
       (await $t_Assert.equalNum(response.status,204));
       (await $t_Assert.equalStr((headers)["access-control-allow-methods"],"GET,POST,OPTIONS"));
       (await $t_Assert.equalStr((headers)["access-control-allow-headers"],"Content-Type"));
-    }
-    async $inflight_init() {
     }
   }
   return $Closure4;
@@ -128,8 +120,6 @@ module.exports = function({  }) {
         {console.log(e)};
         throw new Error(String.raw({ raw: ["expected: ", " got: ", ""] }, b, a));
       }
-    }
-    async $inflight_init() {
     }
   }
   return Assert;

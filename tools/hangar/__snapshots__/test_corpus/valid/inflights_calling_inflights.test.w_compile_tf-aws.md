@@ -12,8 +12,6 @@ module.exports = function({ $globalBucket }) {
     async handle(event, file) {
       (await $globalBucket.put(file,event));
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -31,8 +29,6 @@ module.exports = function({ $storeInBucket }) {
     }
     async handle(event) {
       (await $storeInBucket(event,"file1"));
-    }
-    async $inflight_init() {
     }
   }
   return $Closure2;
@@ -53,8 +49,6 @@ module.exports = function({ $func1, $globalBucket }) {
       (await $func1.invoke("hi1"));
       {((cond) => {if (!cond) throw new Error("assertion failed: globalBucket.get(\"file1\") == \"hi1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $globalBucket.get("file1")),"hi1")))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure3;
 }
@@ -73,8 +67,6 @@ module.exports = function({ $globalBucket }) {
     async handle(s) {
       (await $globalBucket.list());
       return "hello";
-    }
-    async $inflight_init() {
     }
   }
   return $Closure4;
@@ -95,8 +87,6 @@ module.exports = function({ $x }) {
       const val = (await $x.foo());
       {((cond) => {if (!cond) throw new Error("assertion failed: val == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(val,"hello")))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure5;
 }
@@ -112,8 +102,6 @@ module.exports = function({  }) {
     }
     async foo() {
       return (await this.$this_closure("anything"));
-    }
-    async $inflight_init() {
     }
   }
   return MyResource;

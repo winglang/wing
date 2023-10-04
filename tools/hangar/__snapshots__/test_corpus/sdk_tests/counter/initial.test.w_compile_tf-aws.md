@@ -12,8 +12,6 @@ module.exports = function({ $counterA }) {
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: counterA.peek() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counterA.peek()),0)))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -32,8 +30,6 @@ module.exports = function({ $counterB }) {
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: counterB.peek() == 500")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counterB.peek()),500)))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure2;
 }
@@ -51,8 +47,6 @@ module.exports = function({ $counterC }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: counterC.peek() == -198")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counterC.peek()),(-198))))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure3;

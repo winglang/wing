@@ -15,8 +15,6 @@ module.exports = function({ $cloud_HttpMethod, $path }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: req.body?.length == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.body?.length,0)))};
       return ({"status": 204});
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -38,8 +36,6 @@ module.exports = function({ $cloud_HttpMethod, $path }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: req.body?.length == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.body?.length,0)))};
       return ({"status": 204});
     }
-    async $inflight_init() {
-    }
   }
   return $Closure2;
 }
@@ -57,8 +53,6 @@ module.exports = function({  }) {
     }
     async handle(req) {
       return ({"status": 204});
-    }
-    async $inflight_init() {
     }
   }
   return $Closure3;
@@ -81,8 +75,6 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
       const head = (await $http_Util.fetch(url,{ method: $http_HttpMethod.HEAD }));
       {((cond) => {if (!cond) throw new Error("assertion failed: options.status == 204")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(options.status,204)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: options.url == url")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(options.url,url)))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure4;
