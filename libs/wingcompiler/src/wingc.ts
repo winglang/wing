@@ -239,7 +239,7 @@ export interface WingDiagnostic {
       };
       file_id: string;
     };
-    kind: "error" | "warning" | "info" | "note" | "help";
+    kind: "error" | "warning" | "note" | "help";
   }[];
 }
 
