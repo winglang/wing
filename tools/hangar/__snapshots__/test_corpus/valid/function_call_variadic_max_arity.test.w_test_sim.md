@@ -2,7 +2,6 @@
 
 ## stdout.log
 ```log
-hello
 pass ─ function_call_variadic_max_arity.test.wsim (no tests)
  
  

@@ -2,7 +2,6 @@
 
 ## stdout.log
 ```log
-hello
 pass ─ function_call_variadic_sub_types.test.wsim (no tests)
  
  

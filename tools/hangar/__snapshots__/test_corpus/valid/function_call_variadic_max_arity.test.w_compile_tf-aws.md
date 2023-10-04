@@ -39,12 +39,11 @@ const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
-const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     const func = ((n, b, ...events) => {
-      {console.log("hello")};
+      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(-1) == \"d\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((events.at((-1))),"d")))};
     });
     (func(1,true,"a","b","c","d"));
   }
