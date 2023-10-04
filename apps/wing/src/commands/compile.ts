@@ -103,7 +103,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
               annotation.span.end.col
             );
             sourceAnnotations.push({
-              annotationType: annotation.kind, // TODO: is this lowercase?
+              annotationType: annotation.kind,
               label: annotation.message,
               range: [start, end],
             });
@@ -124,7 +124,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
         const footer: Annotation[] = [];
         const options: FormatOptions = {
           anonymizedLineNumbers: false,
-          color: true,
+          color: coloring,
         };
 
         const diagnosticText = annotateSnippet(title, footer, slices, options);
@@ -217,8 +217,11 @@ function byteOffsetFromLineAndColumn(source: string, line: number, column: numbe
     offset += lines[i].length + 1;
   }
 
-  // Convert char offset to byte offset
-  const encoder = new TextEncoder();
-  const srouce_bytes = encoder.encode(source.substring(0, offset));
-  return srouce_bytes.length + column;
+  const buf = Buffer.from(source, "utf8");
+  const str = buf.subarray(0, offset + column).toString("utf8");
+
+  // using iterable spread to count the number of code points
+  // "😱".length == 2
+  // [..."😱"].length == 1
+  return [...str].length;
 }
