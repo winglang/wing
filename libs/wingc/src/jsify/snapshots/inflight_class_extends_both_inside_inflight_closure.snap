@@ -24,15 +24,9 @@ module.exports = function({  }) {
     }
     async handle() {
       class A {
-        async $inflight_init() {
-        }
       }
       class B extends A {
-        async $inflight_init() {
-        }
       }
-    }
-    async $inflight_init() {
     }
   }
   return $Closure1;

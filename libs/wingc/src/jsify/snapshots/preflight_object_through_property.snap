@@ -35,8 +35,6 @@ module.exports = function({ $t_b }) {
     async handle() {
       (await $t_b.put("hello","world"));
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -48,8 +46,6 @@ module.exports = function({ $t_b }) {
 module.exports = function({  }) {
   class MyType {
     constructor({  }) {
-    }
-    async $inflight_init() {
     }
   }
   return MyType;

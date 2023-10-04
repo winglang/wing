@@ -27,8 +27,6 @@ module.exports = function({  }) {
     async bar() {
       (await Foo.static_method());
     }
-    async $inflight_init() {
-    }
   }
   return Foo;
 }

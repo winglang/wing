@@ -27,8 +27,6 @@ module.exports = function({ $q }) {
     static async addToQueue(m) {
       (await $q.push(m));
     }
-    async $inflight_init() {
-    }
   }
   return MyType;
 }

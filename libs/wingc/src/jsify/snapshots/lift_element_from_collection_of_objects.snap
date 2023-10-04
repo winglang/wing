@@ -27,8 +27,6 @@ module.exports = function({ $_a_at_0__ }) {
     async handle() {
       (await $_a_at_0__.put("hello","world"));
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

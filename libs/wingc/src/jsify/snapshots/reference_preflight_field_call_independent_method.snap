@@ -30,8 +30,6 @@ module.exports = function({  }) {
     async method() {
       this.$_this_arr_at_1__;
     }
-    async $inflight_init() {
-    }
   }
   return Foo;
 }

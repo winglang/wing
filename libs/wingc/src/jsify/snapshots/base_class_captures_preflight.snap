@@ -28,8 +28,6 @@ module.exports = function({  }) {
   class Base {
     constructor({  }) {
     }
-    async $inflight_init() {
-    }
   }
   return Base;
 }
@@ -42,8 +40,6 @@ module.exports = function({ $Base }) {
   class Derived extends $Base {
     constructor({  }) {
       super({  });
-    }
-    async $inflight_init() {
     }
   }
   return Derived;

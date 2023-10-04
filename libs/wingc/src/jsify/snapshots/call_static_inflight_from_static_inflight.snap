@@ -27,8 +27,6 @@ module.exports = function({  }) {
     static async foo() {
       {console.log("hello")};
     }
-    async $inflight_init() {
-    }
   }
   return A;
 }
@@ -41,8 +39,6 @@ module.exports = function({ $A }) {
   class B {
     static async bar() {
       (await $A.foo());
-    }
-    async $inflight_init() {
     }
   }
   return B;

@@ -15,8 +15,6 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 module.exports = function({  }) {
   class A {
-    async $inflight_init() {
-    }
   }
   return A;
 }
@@ -27,8 +25,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ $A }) {
   class B extends $A {
-    async $inflight_init() {
-    }
   }
   return B;
 }

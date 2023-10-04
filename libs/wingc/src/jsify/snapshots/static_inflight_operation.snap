@@ -33,8 +33,6 @@ module.exports = function({ $A }) {
     async handle() {
       (await $A.myop());
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -49,8 +47,6 @@ module.exports = function({ $b }) {
     }
     static async myop() {
       (await $b.list());
-    }
-    async $inflight_init() {
     }
   }
   return A;

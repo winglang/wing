@@ -35,8 +35,6 @@ module.exports = function({ $b }) {
       }
       ;
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

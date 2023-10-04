@@ -29,8 +29,6 @@ module.exports = function({  }) {
   class Base {
     constructor({  }) {
     }
-    async $inflight_init() {
-    }
   }
   return Base;
 }
@@ -47,8 +45,6 @@ module.exports = function({ $Base }) {
     }
     async foo() {
       (await this.$this_b.put("hello","world"));
-    }
-    async $inflight_init() {
     }
   }
   return Derived;

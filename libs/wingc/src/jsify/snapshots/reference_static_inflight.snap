@@ -28,8 +28,6 @@ module.exports = function({ $MyType }) {
     async handle() {
       {console.log((await $MyType.myStaticMethod()))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -43,8 +41,6 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     static async myStaticMethod() {
-    }
-    async $inflight_init() {
     }
   }
   return MyType;

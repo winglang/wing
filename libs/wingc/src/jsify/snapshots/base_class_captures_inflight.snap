@@ -31,8 +31,6 @@ module.exports = function({ $x }) {
     async bar() {
       {console.log($x)};
     }
-    async $inflight_init() {
-    }
   }
   return Base;
 }
@@ -48,8 +46,6 @@ module.exports = function({ $Base }) {
     }
     async foo() {
       (await this.bar());
-    }
-    async $inflight_init() {
     }
   }
   return Derived;

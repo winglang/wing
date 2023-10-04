@@ -41,8 +41,6 @@ module.exports = function({ $t }) {
     async handle() {
       (await $t.putIndirect());
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -58,8 +56,6 @@ module.exports = function({ $b }) {
     static async putInBucket() {
       (await $b.put("in","bucket"));
     }
-    async $inflight_init() {
-    }
   }
   return MyType;
 }
@@ -74,8 +70,6 @@ module.exports = function({ $MyType }) {
     }
     async putIndirect() {
       (await $MyType.putInBucket());
-    }
-    async $inflight_init() {
     }
   }
   return YourType;

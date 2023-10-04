@@ -29,8 +29,6 @@ module.exports = function({  }) {
     async foo() {
       (await this.$this_bucket_this.put("hello","world"));
     }
-    async $inflight_init() {
-    }
   }
   return A;
 }

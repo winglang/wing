@@ -45,8 +45,6 @@ module.exports = function({ $t }) {
     async handle() {
       (await $t.checkIfEmpty());
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -67,8 +65,6 @@ module.exports = function({  }) {
       if ((await this.isEmpty())) {
         {console.log("empty!")};
       }
-    }
-    async $inflight_init() {
     }
   }
   return MyType;

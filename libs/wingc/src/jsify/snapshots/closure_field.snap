@@ -46,8 +46,6 @@ module.exports = function({ $globalBucket }) {
       (await $globalBucket.list());
       return "hello";
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -67,8 +65,6 @@ module.exports = function({ $x }) {
       const val = (await $x.foo());
       {((cond) => {if (!cond) throw new Error("assertion failed: val == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(val,"hello")))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure2;
 }
@@ -84,8 +80,6 @@ module.exports = function({  }) {
     }
     async foo() {
       return (await this.$this_closure("anything"));
-    }
-    async $inflight_init() {
     }
   }
   return MyResource;

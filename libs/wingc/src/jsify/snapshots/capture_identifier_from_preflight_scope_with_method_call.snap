@@ -29,8 +29,6 @@ module.exports = function({ $f }) {
     async handle() {
       (await $f.bar());
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -44,8 +42,6 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async bar() {
-    }
-    async $inflight_init() {
     }
   }
   return Foo;

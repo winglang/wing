@@ -28,8 +28,6 @@ module.exports = function({ $Foo }) {
     async handle() {
       (await $Foo.bars());
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -44,8 +42,6 @@ module.exports = function({  }) {
     }
     static async bars() {
       return "bar";
-    }
-    async $inflight_init() {
     }
   }
   return Foo;
