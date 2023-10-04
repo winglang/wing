@@ -65,8 +65,14 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Website\n```\n---\nA cloud static website."
+    value: "```wing\nclass Website impl IWebsite\n```\n---\nA cloud static website."
   sortText: gg|Website
+- label: AddFileOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct AddFileOptions\n```\n---\nOptions for adding a file with custom value during the website's deployment.\n### Fields\n- `contentType?` — File's content type."
+  sortText: hh|AddFileOptions
 - label: ApiConnectProps
   kind: 22
   documentation:
@@ -265,11 +271,17 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstruct TopicProps\n```\n---\nOptions for `Topic`."
   sortText: hh|TopicProps
+- label: WebsiteOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct WebsiteOptions\n```\n---\nOptions for `Website`, and `ReactApp`.\n### Fields\n- `domain?` — The website's custom domain name."
+  sortText: hh|WebsiteOptions
 - label: WebsiteProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct WebsiteProps\n```\n---\nOptions for `Website`.\n### Fields\n- `domain?` — The website's custom domain name.\n- `path` — Local path to the website's static files, relative to the Wing source file or absolute."
+    value: "```wing\nstruct WebsiteProps extends WebsiteOptions\n```\n---\nOptions for `Website`.\n### Fields\n- `domain?` — str?\n- `path` — Local path to the website's static files, relative to the Wing source file or absolute."
   sortText: hh|WebsiteProps
 - label: IApiClient
   kind: 8
@@ -439,6 +451,12 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\ninterface ITopicOnMessageHandlerClient\n```\n---\nInflight client for `ITopicOnMessageHandler`.\n### Methods\n- `handle` — Function that will be called when a message is received from the topic."
   sortText: ii|ITopicOnMessageHandlerClient
+- label: IWebsite
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IWebsite\n```\n---\nBase interface for a website.\n### Methods\n- `url` — The website URL."
+  sortText: ii|IWebsite
 - label: IWebsiteClient
   kind: 8
   documentation:

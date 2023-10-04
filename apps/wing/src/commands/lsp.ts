@@ -1,3 +1,4 @@
+import * as wingCompiler from "@winglang/compiler";
 import {
   createConnection,
   InitializeParams,
@@ -9,8 +10,6 @@ import {
   DocumentUri,
   Location,
 } from "vscode-languageserver/node";
-
-import * as wingCompiler from "@winglang/compiler";
 
 export async function lsp() {
   let wingc = await wingCompiler.load({
@@ -54,7 +53,7 @@ export async function lsp() {
       }
     } catch (e) {
       // set status in ide
-      connection.sendDiagnostics({
+      void connection.sendDiagnostics({
         uri: args.textDocument.uri,
         diagnostics: [
           {
@@ -157,19 +156,19 @@ export async function lsp() {
 
     // purposely not awaiting these calls, notifications are fire-and-forget
     for (const [uri, diagnostics] of allDiagnostics.entries()) {
-      connection.sendDiagnostics({ uri, diagnostics });
+      void connection.sendDiagnostics({ uri, diagnostics });
     }
   }
 
   connection.onDidOpenTextDocument(async (params) => {
-    handle_event_and_update_diagnostics(
+    void handle_event_and_update_diagnostics(
       "wingc_on_did_open_text_document",
       params,
       params.textDocument.uri
     );
   });
   connection.onDidChangeTextDocument(async (params) => {
-    handle_event_and_update_diagnostics(
+    void handle_event_and_update_diagnostics(
       "wingc_on_did_change_text_document",
       params,
       params.textDocument.uri

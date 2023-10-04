@@ -13,8 +13,8 @@ chance you'll encounter missing pieces, rough edges, performance issues and even
 god forbid, bugs 🐞.
 
 Please don't hesitate to ping us at ${chalk.blueBright.bold.underline(
-      "https://t.winglang.io/slack"
-    )} or file an issue at
+  "https://t.winglang.io/slack"
+)} or file an issue at
 ${chalk.blueBright.bold.underline(
   "https://github.com/winglang/wing"
 )}. We promise to do our best to respond quickly and help out.
@@ -59,7 +59,7 @@ export function optionallyDisplayDisclaimer(existingStorage?: AnalyticsStorage) 
       storage.saveConfig(analyticsConfig);
     }
   } catch (error) {
-    // Incase there was any reason the config could not be loaded, 
+    // Incase there was any reason the config could not be loaded,
     // just display to be super transparent :)
     displayDisclaimer();
   }

@@ -1,10 +1,10 @@
 import { promises as fsPromise } from "fs";
 import { relative } from "path";
 
-import chalk from "chalk";
-import debug from "debug";
-import { CHARS_ASCII, emitDiagnostic, File, Label } from "codespan-wasm";
 import * as wingCompiler from "@winglang/compiler";
+import chalk from "chalk";
+import { CHARS_ASCII, emitDiagnostic, File, Label } from "codespan-wasm";
+import debug from "debug";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)
@@ -50,11 +50,11 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   } catch (error) {
     if (error instanceof wingCompiler.CompileError) {
       // This is a bug in the user's code. Print the compiler diagnostics.
-      const errors = error.diagnostics;
+      const diagnostics = error.diagnostics;
       const result = [];
 
-      for (const error of errors) {
-        const { message, span, annotations } = error;
+      for (const diagnostic of diagnostics) {
+        const { message, span, annotations } = diagnostic;
         let files: File[] = [];
         let labels: Label[] = [];
 

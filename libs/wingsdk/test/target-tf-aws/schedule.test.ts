@@ -8,7 +8,7 @@ import { mkdtemp, tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 test("schedule behavior with rate", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const fn = Testing.makeHandler(
     app,
     "Handler",
@@ -48,7 +48,7 @@ test("schedule behavior with rate", () => {
 
 test("schedule behavior with cron", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const fn = Testing.makeHandler(
     app,
     "Handler",
@@ -88,7 +88,7 @@ test("schedule behavior with cron", () => {
 
 test("schedule with two functions", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const fn1 = Testing.makeHandler(
     app,
     "Handler1",
@@ -125,7 +125,7 @@ test("schedule with two functions", () => {
 
 test("schedule with rate and cron simultaneously", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
 
   // THEN
   expect(() =>
@@ -138,7 +138,7 @@ test("schedule with rate and cron simultaneously", () => {
 
 test("cron with more than five values", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
 
   // THEN
   expect(() =>
@@ -152,7 +152,7 @@ test("cron with more than five values", () => {
 
 test("schedule without rate or cron", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
 
   // THEN
   expect(() => cloud.Schedule._newSchedule(app, "Schedule")).toThrow(
@@ -162,7 +162,7 @@ test("schedule without rate or cron", () => {
 
 test("schedule with rate less than 1 minute", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
 
   // THEN
   expect(() =>

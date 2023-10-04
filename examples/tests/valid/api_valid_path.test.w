@@ -54,15 +54,15 @@ testInvalidPath("/{no.dots.here}");
 
 
 // valid paths
-testValidPath("/test");
+testValidPath("/test/path");
 testValidPath("/test/alphanumer1cPa_th");
 testValidPath("/test/regular/path");
 testValidPath("/test/pa-th/{with}/two/{variable_s}/f?bla=5&b=6");
 testValidPath("/test/param/is/{last}");
-testValidPath("/test/{param}");
+testValidPath("/test/path/{param}");
 testValidPath("/{param}");
 testValidPath("/t/{param}");
 testValidPath("/test/regular/path/{param}");
 testValidPath("/test/segment1/{param1}/segment2?query1=value1?query2=value2");
 testValidPath("/test/segment1/segment2?query=value1&query2=value2");
-testValidPath("/test.withDots");
+testValidPath("/test/path.withDots");
