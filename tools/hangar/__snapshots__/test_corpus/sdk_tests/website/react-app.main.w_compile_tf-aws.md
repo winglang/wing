@@ -531,7 +531,7 @@ class $Root extends $stdlib.std.Resource {
       {
         projectPath: "./react-website",
         buildDir: "/build/public",
-        isDevRun: false,
+        useBuildCommand: false,
       }
     );
     const preflightVariable = "preflight variable";

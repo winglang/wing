@@ -10,7 +10,7 @@ const DEFAULT_BUILD_FOLDER = "/build";
 export const DEFAULT_REACT_APP_BUILD_COMMAND = "npm run build";
 const DEFAULT_PORT = 3001;
 /**
- * The file to write the wing environment to
+ * The file that contains the wing environment variables. Will be written into the project files.
  */
 export const WING_JS = "wing.js";
 
@@ -44,9 +44,9 @@ export interface ReactAppProps extends WebsiteOptions {
   readonly buildCommand?: string;
   /**
    * In sim, if `true` - will use the start command, and if `false` - the build command
-   * @default true
+   * @default false
    */
-  readonly isDevRun?: boolean;
+  readonly useBuildCommand?: boolean;
   /**
    * A port to start a local build of the React app on.
    * @default 3001
@@ -87,7 +87,7 @@ export abstract class ReactApp extends Resource {
   /**
    * @internal
    */
-  protected readonly _isDevRun: boolean;
+  protected readonly _useBuildCommand: boolean;
   /**
    * @internal
    */
@@ -113,7 +113,7 @@ export abstract class ReactApp extends Resource {
     this._projectPath = this._parsePath(scope, props.projectPath);
     this._hostProps = { domain: props.domain };
     this._buildPath = join(this._projectPath, buildDir);
-    this._isDevRun = props.isDevRun ?? true;
+    this._useBuildCommand = props.useBuildCommand ?? false;
     this._localPort = props.localPort ?? DEFAULT_PORT;
 
     if (!existsSync(this._projectPath)) {

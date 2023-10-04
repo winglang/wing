@@ -113,13 +113,13 @@ describe("Testing ReactApp", () => {
     });
   });
 
-  test("website with isDevRun=true still uses build command", () => {
+  test("website with useBuildCommand=false still uses build command", () => {
     // GIVEN
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     // this isn't a React App, but a website with a package json and a build command
     const website = ex.ReactApp._newReactApp(app, "Website", {
       projectPath: "../test-files/react-website",
-      isDevRun: true,
+      useBuildCommand: false,
     });
 
     // THEN

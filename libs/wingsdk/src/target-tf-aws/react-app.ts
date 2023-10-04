@@ -2,7 +2,6 @@ import { execSync } from "child_process";
 import { existsSync, unlinkSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
-import { Website } from "./website";
 import { core } from "..";
 
 import * as cloud from "../cloud";
@@ -15,7 +14,7 @@ import * as ex from "../ex";
  * @inflight `@winglang/sdk.cloud.IReactAppClient`
  */
 export class ReactApp extends ex.ReactApp {
-  private _host: cloud.IWebsite;
+  private _host: cloud.Website;
   constructor(scope: Construct, id: string, props: ex.ReactAppProps) {
     super(scope, id, props);
     this._host = this._createWebsiteHost(
@@ -23,11 +22,11 @@ export class ReactApp extends ex.ReactApp {
     );
   }
 
-  protected get _websiteHost(): cloud.IWebsite {
+  protected get _websiteHost(): cloud.Website {
     return this._host;
   }
 
-  private _createWebsiteHost(command: string): cloud.IWebsite {
+  private _createWebsiteHost(command: string): cloud.Website {
     execSync(command, {
       cwd: this._projectPath,
       maxBuffer: 10 * 1024 * 1024,
@@ -37,7 +36,7 @@ export class ReactApp extends ex.ReactApp {
       unlinkSync(join(this._buildPath, ex.WING_JS));
     }
 
-    const host: cloud.IWebsite = cloud.Website._newWebsite(
+    const host: cloud.Website = cloud.Website._newWebsite(
       this,
       `${this.node.id}-host`,
       {
@@ -49,7 +48,7 @@ export class ReactApp extends ex.ReactApp {
     this.node.addDependency(host);
     Connections.of(this).add({
       source: this,
-      target: host as Website,
+      target: host,
       name: `host`,
     });
 
@@ -63,7 +62,7 @@ export class ReactApp extends ex.ReactApp {
       null,
       2
     )};`;
-    (this._websiteHost as Website).addFile(ex.WING_JS, content, {
+    this._websiteHost.addFile(ex.WING_JS, content, {
       contentType: "text/javascript",
     });
   }

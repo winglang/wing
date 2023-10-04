@@ -254,7 +254,7 @@ export interface ReactAppSchema extends BaseResourceSchema {
     path: string;
     startCommand: string;
     environmentVariables: Record<string, string>;
-    isDevRun: boolean;
+    useBuildCommand: boolean;
     url: string;
   };
 }

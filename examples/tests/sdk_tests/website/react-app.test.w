@@ -14,7 +14,7 @@ api.get("/", inflight () => {
 let website = new ex.ReactApp(
   projectPath: "./react-website", 
   buildDir: "/build/public",
-  isDevRun: false // builds the website
+  useBuildCommand: true // builds the website
 );
 
 let preflightVariable = "preflight variable";

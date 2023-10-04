@@ -29,7 +29,7 @@ bring util;
 
 let website = new ex.ReactApp(
   projectPath: "./client",
-  isDevRun: false // `true` by default. Will run the start command if true, and the build command if not
+  useBuildCommand: true // `false` by default. Will run the build command if true, and the start command if not
   buildDir: "/dist" // default is "/build"
   startCommand: "pnpm start" // default is "npm start"
   buildCommand: "pnpm build" // default is "npm build"
@@ -39,7 +39,7 @@ let website = new ex.ReactApp(
 
 When `ReactApp` is compiled to the `sim` target, by default it runs the start command (default: `npm start`) inside `projectPath` to serve your app in development mode on a local port.
 
-If the `CI` environment variable is set OR if `ReactApp` is compiled to any other target, it will run the build command (default: `npm build`) inside of the `projectPath` to build the React app for production to `buildDir` and serve the app.
+If the `useBuildCommand` environment variable is set OR if `ReactApp` is compiled to any other target, it will run the build command (default: `npm build`) inside of the `projectPath` to build the React app for production to `buildDir` and serve the app.
 
 ### Using Wing variables within react code
 
@@ -72,7 +72,7 @@ Currently, we can only pass preflight string variables to the React app environm
 
 ### Simulator (`sim`)
 
-sim implementations of `ex.ReactApp` is using either the [Website resource](../01-cloud/website.md) (when `isDevRun` is `false`) or starts React development server when `true`.
+sim implementations of `ex.ReactApp` is using either the [Website resource](../01-cloud/website.md) (when `useBuildCommand` is `true`) or starts React development server when `false`.
 
 ### AWS (`tf-aws` and `awscdk`)
 

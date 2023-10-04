@@ -16,7 +16,7 @@ export class ReactApp implements IReactAppClient, ISimulatorResourceInstance {
   private readonly startCommand: string;
   private readonly path: string;
   private readonly environmentVariables: Record<string, string>;
-  private readonly isDevRun: boolean;
+  private readonly useBuildCommand: boolean;
   private childProcess?: ChildProcess;
   private url: string;
 
@@ -25,7 +25,7 @@ export class ReactApp implements IReactAppClient, ISimulatorResourceInstance {
     this.path = props.path;
     this.startCommand = props.startCommand;
     this.environmentVariables = props.environmentVariables;
-    this.isDevRun = props.isDevRun;
+    this.useBuildCommand = props.useBuildCommand;
     this.url = props.url;
   }
 
@@ -43,7 +43,20 @@ window.wingEnv = ${JSON.stringify(this.environmentVariables, null, 2)};`
       maxBuffer: 10 * 1024 * 1024,
     };
 
-    if (this.isDevRun) {
+    if (this.useBuildCommand) {
+      // when we build before deployment, the waiting is necessary
+      const { stderr, stdout } = await promisify(exec)(
+        this.startCommand,
+        options
+      );
+
+      if (stderr) {
+        throw new Error(stderr);
+      }
+      if (stdout) {
+        this.addTrace(stdout);
+      }
+    } else {
       // react usually offer hot reloading-
       // we're waiting for execution ending since it's ending only when manually terminating the process
       this.childProcess = exec(
@@ -58,19 +71,6 @@ window.wingEnv = ${JSON.stringify(this.environmentVariables, null, 2)};`
           }
         }
       );
-    } else {
-      // when we build before deployment, the waiting is necessary
-      const { stderr, stdout } = await promisify(exec)(
-        this.startCommand,
-        options
-      );
-
-      if (stderr) {
-        throw new Error(stderr);
-      }
-      if (stdout) {
-        this.addTrace(stdout);
-      }
     }
 
     return {

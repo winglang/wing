@@ -14,7 +14,7 @@ const CDKTF_PROVIDERS = [
 const PUBLIC_MODULES = ["std", "http", "util", "aws", "math", "regex"];
 
 const CLOUD_DOCS_PREFIX = "../../docs/docs/04-standard-library/01-cloud/";
-const EX_DOCS_PREFIX = "../../docs/docs/04-standard-library/06-ex/";
+const EX_DOCS_PREFIX = "../../docs/docs/04-standard-library/02-ex/";
 
 // defines the list of dependencies required for each compilation target that is not built into the
 // compiler (like Terraform targets).
@@ -260,7 +260,7 @@ docgen.exec(`cp -r src/ex/*.md ${EX_DOCS_PREFIX}`);
 
 // generate api reference for each submodule
 for (const mod of PUBLIC_MODULES) {
-  const prefix = docsPrefix(PUBLIC_MODULES.indexOf(mod) + 2, mod);
+  const prefix = docsPrefix(PUBLIC_MODULES.indexOf(mod) + 3, mod);
   const docsPath = prefix + "/api-reference.md";
   docgen.exec(`jsii-docgen -o API.md -l wing --submodule ${mod}`);
   docgen.exec(`mkdir -p ${prefix}`);

@@ -15,11 +15,13 @@ export class ReactApp extends ex.ReactApp implements ISimulatorResource {
   constructor(scope: Construct, id: string, props: ex.ReactAppProps) {
     super(scope, id, props);
 
-    this._startCommand = this._isDevRun
-      ? `PORT=${this._localPort} ${props.startCommand ?? DEFAULT_START_COMMAND}`
-      : props.buildCommand ?? ex.DEFAULT_REACT_APP_BUILD_COMMAND;
+    this._startCommand = this._useBuildCommand
+      ? props.buildCommand ?? ex.DEFAULT_REACT_APP_BUILD_COMMAND
+      : `PORT=${this._localPort} ${
+          props.startCommand ?? DEFAULT_START_COMMAND
+        }`;
 
-    if (!this._isDevRun) {
+    if (this._useBuildCommand) {
       // In the future we can create an host (proxy like) for the development one if needed
       this._host = cloud.Website._newWebsite(this, `${this.node.id}-host`, {
         ...this._hostProps,
@@ -49,7 +51,7 @@ export class ReactApp extends ex.ReactApp implements ISimulatorResource {
         environmentVariables: Object.fromEntries(
           this._environmentVariables.entries()
         ),
-        isDevRun: this._isDevRun,
+        useBuildCommand: this._useBuildCommand,
         url: this.url,
       },
       attrs: {},

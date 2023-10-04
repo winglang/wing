@@ -496,7 +496,7 @@ class $Root extends $stdlib.std.Resource {
       {
         projectPath: "./react-website",
         outDir: "/build/public",
-        isDevRun: ((a, b) => {
+        useBuildCommand: ((a, b) => {
           try {
             return require("assert").deepStrictEqual(a, b) === undefined;
           } catch {
