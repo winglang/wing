@@ -8,6 +8,6 @@ export class NodeCollector extends Collector {
   async collect(): Promise<NodeData> {
     return {
       version: process.version,
-    }
+    };
   }
 }

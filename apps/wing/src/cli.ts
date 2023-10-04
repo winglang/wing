@@ -1,10 +1,9 @@
+import { Command, Option } from "commander";
 import { satisfies } from "compare-versions";
 
-import { Command, Option } from "commander";
-
 import { collectCommandAnalytics } from "./analytics/collect";
-import { exportAnalytics } from "./analytics/export";
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
+import { exportAnalytics } from "./analytics/export";
 import { currentPackage } from "./util";
 export const PACKAGE_VERSION = currentPackage.version;
 let analyticsExportFile: Promise<string | undefined>;
