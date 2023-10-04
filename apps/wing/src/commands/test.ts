@@ -30,7 +30,10 @@ export interface TestOptions extends CompileOptions {
 }
 
 export async function test(entrypoints: string[], options: TestOptions): Promise<number> {
-  const patterns = entrypoints.length === 0 ? ["*.test.w"] : entrypoints;
+  const patterns =
+    entrypoints.length === 0
+      ? ["*.test.w"]
+      : entrypoints.map((entrypoint) => entrypoint.replace(/\\/g, "/"));
   const expandedEntrypoints = await glob(patterns);
 
   if (expandedEntrypoints.length === 0) {
