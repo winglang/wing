@@ -165,7 +165,7 @@ async function main() {
 
   program
     .command("pack")
-    .description("Package a Wing module as a shareable npm library")
+    .description("Package the current directory into an npm library (gzipped tarball).")
     .addOption(new Option("-o --outdir <outdir>", "Output directory").default("."))
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("pack"));
