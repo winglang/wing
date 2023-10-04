@@ -140,19 +140,22 @@ export interface DynamodbTablePutItemOptions {
   readonly returnValuesOnConditionCheckFailure?: "ALL_OLD" | "NONE";
 }
 
+/**
+ * Result for `DynamodbTable.putItem`.
+ */
 export interface DynamodbTablePutItemResult {
   /**
-   * The attribute values as they appeared before the PutItem operation, but only if `ReturnValues` is specified as `"ALL_OLD"` in the request.
+   * The attribute values as they appeared before the operation, but only if `ReturnValues` is specified as `"ALL_OLD"` in the request.
    */
   readonly attributes?: Json;
 
   /**
-   * The capacity units consumed by the PutItem operation.
+   * The capacity units consumed by the operation.
    */
   readonly consumedCapacity?: Json;
 
   /**
-   * Information about item collections, if any, that were affected by the PutItem operation.
+   * Information about item collections, if any, that were affected by the operation.
    */
   readonly itemCollectionMetrics?: Json;
 }
@@ -217,26 +220,92 @@ export interface DynamodbTableUpdateItemOptions {
   readonly returnValues?: "ALL_OLD" | "NONE";
 }
 
+/**
+ * Result for `DynamodbTable.updateItem`.
+ */
 export interface DynamodbTableUpdateItemResult {
+  /**
+   * The capacity units consumed by the operation.
+   */
   readonly consumedCapacity?: Json;
+
+  /**
+   * Information about item collections, if any, that were affected by the operation.
+   */
   readonly itemCollectionMetrics?: Json;
+
+  /**
+   * The attribute values as they appeared before the operation, but only if `ReturnValues` is specified as `"ALL_OLD"` in the request.
+   */
   readonly attributes?: Json;
 }
 
+/**
+ * Options for `DynamodbTable.deleteItem`.
+ */
 export interface DynamodbTableDeleteItemOptions {
+  /**
+   * A map of attribute names to `AttributeValue` objects, representing the primary key of the item to delete.
+   */
   readonly key: Json;
+
+  /**
+   * A condition that must be satisfied in order for an operation to succeed.
+   */
   readonly conditionExpression?: string;
+
+  /**
+   * One or more substitution tokens for attribute names in an expression.
+   */
   readonly expressionAttributeNames?: Json;
+
+  /**
+   * One or more values that can be substituted in an expression.
+   */
   readonly expressionAttributeValues?: Json;
+
+  /**
+   * Determines the level of detail about either provisioned or on-demand throughput consumption.
+   * @default "NONE"
+   */
   readonly returnConsumedCapacity?: "INDEXES" | "TOTAL" | "NONE";
+
+  /**
+   * Determines whether item collection metrics are returned.
+   * @default "NONE"
+   */
   readonly returnItemCollectionMetrics?: "SIZE" | "NONE";
+
+  /**
+   * Whether to return the item attributes as they appeared before they were deleted.
+   * @default "NONE"
+   */
   readonly returnValues?: "NONE" | "ALL_OLD";
+
+  /**
+   * Whether to return the item attributes if the condition fails.
+   * @default "NONE"
+   */
   readonly returnValuesOnConditionCheckFailure?: "ALL_OLD" | "NONE";
 }
 
+/**
+ * Result for `DynamodbTable.deleteItem`.
+ */
 export interface DynamodbTableDeleteItemResult {
+  /**
+   * The capacity units consumed by the operation.
+   */
   readonly consumedCapacity?: Json;
+
+  /**
+   * Information about item collections, if any, that were affected by the operation.
+   */
   readonly itemCollectionMetrics?: Json;
+
+  /**
+   * The attribute values as they appeared before the operation, but only if `ReturnValues` is specified as `"ALL_OLD"` in the request.
+   */
   readonly attributes?: Json;
 }
 
@@ -291,7 +360,7 @@ export interface DynamodbTableGetItemOptions {
  */
 export interface DynamodbTableGetItemResult {
   /**
-   * The capacity units consumed by the GetItem operation.
+   * The capacity units consumed by the operation.
    */
   readonly consumedCapacity?: Json;
 
@@ -417,7 +486,7 @@ export interface DynamodbTableScanOptions {
  */
 export interface DynamodbTableScanResult {
   /**
-   * The capacity units consumed by the Scan operation.
+   * The capacity units consumed by the operation.
    */
   readonly consumedCapacity?: Json;
 
@@ -554,7 +623,7 @@ export interface DynamodbTableQueryOptions {
  */
 export interface DynamodbTableQueryResult {
   /**
-   * The capacity units consumed by the Query operation.
+   * The capacity units consumed by the operation.
    */
   readonly consumedCapacity?: Json;
 
@@ -702,6 +771,9 @@ export interface DynamodbTransactWriteItemConditionCheckOptions {
   readonly returnValuesOnConditionCheckFailure?: "ALL_OLD" | "NONE";
 }
 
+/**
+ * Options for `DynamodbTable.batchGetItem` request item.
+ */
 export interface DynamodbTableBatchGetItemRequestItem {
   /**
    * The primary key attribute values that define the items and the attributes associated with the items.
@@ -727,6 +799,9 @@ export interface DynamodbTableBatchGetItemRequestItem {
   readonly projectionExpression?: string;
 }
 
+/**
+ * Options for `DynamodbTable.batchGetItem`.
+ */
 export interface DynamodbTableBatchGetItemOptions {
   /**
    * Describes one or more items to retrieve from that table.
@@ -741,12 +816,29 @@ export interface DynamodbTableBatchGetItemOptions {
   readonly returnConsumedCapacity?: "INDEXES" | "TOTAL" | "NONE";
 }
 
+/**
+ * Result for `DynamodbTable.batchGetItem`.
+ */
 export interface DynamodbTableBatchGetItemResult {
+  /**
+   * The capacity units consumed by the operation.
+   */
   readonly consumedCapacity?: Json;
+
+  /**
+   * The list of items that are returned, with the attributes requested.
+   */
   readonly responses?: Json[];
+
+  /**
+   * A list of keys that were not processed.
+   */
   readonly unprocessedKeys?: DynamodbTableBatchGetItemRequestItem;
 }
 
+/**
+ * Options for `DynamodbTable.batchWriteItem`'s delete request.
+ */
 export interface DynamodbTableBatchWriteItemDeleteRequestOptions {
   /**
    * A map of attribute names to `AttributeValue` objects, representing the primary key of the item to delete.
@@ -754,6 +846,9 @@ export interface DynamodbTableBatchWriteItemDeleteRequestOptions {
   readonly key: Json;
 }
 
+/**
+ * Options for `DynamodbTable.batchWriteItem`'s put request.
+ */
 export interface DynamodbTableBatchWriteItemPutRequestOptions {
   /**
    * A map of attribute name to attribute values, representing the primary key of an item to be processed by `PutItem`.
@@ -761,19 +856,28 @@ export interface DynamodbTableBatchWriteItemPutRequestOptions {
   readonly item: Json;
 }
 
-// export type DynamodbTableBatchWriteItemRequestItem =
-//   | {
-//       readonly deleteRequest: DynamodbTableBatchWriteItemDeleteRequestOptions;
-//     }
-//   | {
-//       readonly putRequest: DynamodbTableBatchWriteItemPutRequestOptions;
-//     };
+/**
+ * Options for `DynamodbTable.batchWriteItem` request item.
+ */
 export interface DynamodbTableBatchWriteItemRequestItem {
+  /**
+   * A request to perform a delete operation.
+   */
   readonly deleteRequest?: DynamodbTableBatchWriteItemDeleteRequestOptions;
+
+  /**
+   * A request to perform a put operation.
+   */
   readonly putRequest?: DynamodbTableBatchWriteItemPutRequestOptions;
 }
 
+/**
+ * Options for `DynamodbTable.batchWriteItem`.
+ */
 export interface DynamodbTableBatchWriteItemOptions {
+  /**
+   * A list of operations to be performed (`DeleteRequest` or `PutRequest`).
+   */
   readonly requestItems: DynamodbTableBatchWriteItemRequestItem[];
 
   /**
@@ -791,22 +895,22 @@ export interface DynamodbTableBatchWriteItemOptions {
   readonly returnItemCollectionMetrics?: "SIZE" | "NONE";
 }
 
+/**
+ * Result for `DynamodbTable.batchWriteItem`.
+ */
 export interface DynamodbTableBatchWriteItemResult {
   /**
-   * The unprocessed items from the batch write operation.
-   * @default undefined
+   * The unprocessed items from the operation.
    */
   readonly unprocessedItems?: DynamodbTableBatchWriteItemRequestItem[];
 
   /**
-   * The capacity units consumed by the BatchWriteItem operation.
-   * @default undefined
+   * The capacity units consumed by the operation.
    */
   readonly consumedCapacity?: Json;
 
   /**
-   * The number of items deleted by the BatchWriteItem operation.
-   * @default undefined
+   * Information about item collections, if any, that were affected by the operation.
    */
   readonly itemCollectionMetrics?: Json;
 }
@@ -846,9 +950,23 @@ export interface DynamodbTransactWriteItemsOptions {
   readonly transactItems: DynamodbTransactWriteItem[];
 }
 
+/**
+ * Result for `DynamodbTable.transactWriteItems`.
+ */
 export interface DynamodbTableTransactWriteItemsResult {
+  /**
+   * The capacity units consumed by the operation.
+   */
   readonly consumedCapacity?: Json;
+
+  /**
+   * Information about item collections, if any, that were affected by the operation.
+   */
   readonly itemCollectionMetrics?: Json;
+
+  /**
+   * The attribute values as they appeared before the operation, but only if `ReturnValues` is specified as `"ALL_OLD"` in the request.
+   */
   readonly attributes?: Json;
 }
 
