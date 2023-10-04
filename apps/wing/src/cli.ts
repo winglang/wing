@@ -1,12 +1,10 @@
+import { Command, Option } from "commander";
 import { satisfies } from "compare-versions";
 
-import { Command, Option } from "commander";
-
 import { collectCommandAnalytics } from "./analytics/collect";
-import { exportAnalytics } from "./analytics/export";
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
+import { exportAnalytics } from "./analytics/export";
 import { currentPackage } from "./util";
-
 export const PACKAGE_VERSION = currentPackage.version;
 let analyticsExportFile: Promise<string | undefined>;
 
@@ -134,7 +132,7 @@ async function main() {
   program
     .command("compile")
     .description("Compiles a Wing program")
-    .argument("<entrypoint>", "program .w entrypoint")
+    .argument("[entrypoint]", "program .w entrypoint")
     .addOption(
       new Option("-t, --target <target>", "Target platform")
         .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])
@@ -151,7 +149,7 @@ async function main() {
     .description(
       "Compiles a Wing program and runs all functions with the word 'test' or start with 'test:' in their resource identifiers"
     )
-    .argument("<entrypoint...>", "all entrypoints to test")
+    .argument("[entrypoint...]", "all files to test (globs are supported)", ["*.test.w"])
     .addOption(
       new Option("-t, --target <target>", "Target platform")
         .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])
