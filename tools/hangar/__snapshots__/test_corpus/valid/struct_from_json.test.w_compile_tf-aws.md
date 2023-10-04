@@ -13,8 +13,6 @@ module.exports = function({ $cloud_BucketProps, $j }) {
       const x = ((json, validateOptions) => ($cloud_BucketProps._fromJson(json, validateOptions)))($j);
       {((cond) => {if (!cond) throw new Error("assertion failed: x.public == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x.public,false)))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -54,8 +52,6 @@ module.exports = function({ $Student }) {
         }
       }
     }
-    async $inflight_init() {
-    }
   }
   return $Closure2;
 }
@@ -81,8 +77,6 @@ module.exports = function({ $Student, $jStudent1 }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: studentInflight1.dob.day == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(studentInflight1.dob.day,10)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: studentInflight1.dob.year == 2005")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(studentInflight1.dob.year,2005)))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure3;
 }
@@ -102,8 +96,6 @@ module.exports = function({ $MyStruct, $_schema_asStr___, $expectedSchema, $jMyS
       const s = ($MyStruct);
       (await s.validate($jMyStruct));
       {((cond) => {if (!cond) throw new Error("assertion failed: schema.asStr() == Json.stringify(expectedSchema)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($_schema_asStr___,((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$expectedSchema]))))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure4;
@@ -126,8 +118,6 @@ module.exports = function({ $Student, $std_Boolean, $std_Number, $std_String }) 
       (await $std_Number.fromJson("cool",{ unsafe: true }));
       ((json, validateOptions) => ($Student._fromJson(json, validateOptions)))(({"obviously": "not a student"}),{ unsafe: true });
     }
-    async $inflight_init() {
-    }
   }
   return $Closure5;
 }
@@ -139,8 +129,6 @@ module.exports = function({ $Student, $std_Boolean, $std_Number, $std_String }) 
 module.exports = function({  }) {
   class UsesStructInImportedFile {
     constructor({  }) {
-    }
-    async $inflight_init() {
     }
   }
   return UsesStructInImportedFile;

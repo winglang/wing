@@ -12,8 +12,6 @@ module.exports = function({ $counter }) {
     async handle() {
       (await $counter.set(10));
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -32,8 +30,6 @@ module.exports = function({ $counter }) {
     async handle() {
       (await $counter.inc());
     }
-    async $inflight_init() {
-    }
   }
   return $Closure2;
 }
@@ -51,8 +47,6 @@ module.exports = function({ $counter }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 11")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counter.peek()),11)))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure3;

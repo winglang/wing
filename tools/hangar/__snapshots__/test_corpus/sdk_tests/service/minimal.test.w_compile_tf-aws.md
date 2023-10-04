@@ -16,8 +16,6 @@ module.exports = function({  }) {
       }
       ;
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -37,8 +35,6 @@ module.exports = function({ $s }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: s.started()")})((await $s.started()))};
       (await $s.stop());
       {((cond) => {if (!cond) throw new Error("assertion failed: !s.started()")})((!(await $s.started())))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure2;

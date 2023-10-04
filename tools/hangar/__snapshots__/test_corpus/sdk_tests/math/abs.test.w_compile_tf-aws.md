@@ -13,8 +13,6 @@ module.exports = function({ $math_Util, $x, $y }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.abs(x - y) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.abs(($x - $y))),2)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.abs(y - x) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.abs(($y - $x))),2)))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

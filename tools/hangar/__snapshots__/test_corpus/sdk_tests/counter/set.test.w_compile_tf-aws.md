@@ -20,8 +20,6 @@ module.exports = function({ $counter }) {
       (await $counter.set(88));
       {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 88")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counter.peek()),88)))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -48,8 +46,6 @@ module.exports = function({ $counter }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 12")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counter.peek(key)),12)))};
       (await $counter.set(88,key));
       {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 88")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counter.peek(key)),88)))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure2;

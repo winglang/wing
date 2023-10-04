@@ -38,8 +38,6 @@ module.exports = function({ $table }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: result.get(COLUMN_NAME) == COLUMN_VALUE")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(result, COLUMN_NAME),COLUMN_VALUE)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: table.tryGet(NON_EXISTENT_KEY) == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $table.tryGet(NON_EXISTENT_KEY)),undefined)))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

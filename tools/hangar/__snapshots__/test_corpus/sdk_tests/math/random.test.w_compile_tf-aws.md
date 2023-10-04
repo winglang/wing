@@ -13,8 +13,6 @@ module.exports = function({ $math_Util }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.random() >= 0")})(((await $math_Util.random()) >= 0))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.random() < 1")})(((await $math_Util.random()) < 1))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

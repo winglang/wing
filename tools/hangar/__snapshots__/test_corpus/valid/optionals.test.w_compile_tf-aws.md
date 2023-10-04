@@ -15,8 +15,6 @@ module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutO
         (await $payloadWithBucket_c?.put?.("x.txt","something"));
       }
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -28,8 +26,6 @@ module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutO
 module.exports = function({  }) {
   class Node {
     constructor({  }) {
-    }
-    async $inflight_init() {
     }
   }
   return Node;
@@ -44,8 +40,6 @@ module.exports = function({ $Super }) {
     constructor({  }) {
       super({  });
     }
-    async $inflight_init() {
-    }
   }
   return Sub;
 }
@@ -59,8 +53,6 @@ module.exports = function({ $Super }) {
     constructor({  }) {
       super({  });
     }
-    async $inflight_init() {
-    }
   }
   return Sub1;
 }
@@ -72,8 +64,6 @@ module.exports = function({ $Super }) {
 module.exports = function({  }) {
   class Super {
     constructor({  }) {
-    }
-    async $inflight_init() {
     }
   }
   return Super;

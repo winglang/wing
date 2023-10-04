@@ -12,8 +12,6 @@ module.exports = function({  }) {
     async handle() {
       return ({"body": "api test","status": 200});
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -32,8 +30,6 @@ module.exports = function({ $api_url, $b, $http_Util }) {
     async handle() {
       const result = (await $http_Util.get($api_url));
       (await $b.put("service.txt",(result.body ?? "")));
-    }
-    async $inflight_init() {
     }
   }
   return $Closure2;
@@ -56,8 +52,6 @@ module.exports = function({ $b, $util_Util }) {
       }
       ));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.get(\"service.txt\") == \"api test\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.get("service.txt")),"api test")))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure3;

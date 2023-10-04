@@ -12,8 +12,6 @@ module.exports = function({ $c }) {
     async handle() {
       (await $c.inc());
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -31,8 +29,6 @@ module.exports = function({ $c }) {
     }
     async handle() {
       (await $c.inc());
-    }
-    async $inflight_init() {
     }
   }
   return $Closure2;
@@ -64,8 +60,6 @@ module.exports = function({ $predicate, $std_Duration, $t, $util_Util }) {
       }
       {((cond) => {if (!cond) throw new Error("assertion failed: predicate.test()")})((await $predicate.test()))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure3;
 }
@@ -81,8 +75,6 @@ module.exports = function({  }) {
     }
     async test() {
       return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await this.$this_c.peek()),10));
-    }
-    async $inflight_init() {
     }
   }
   return Predicate;

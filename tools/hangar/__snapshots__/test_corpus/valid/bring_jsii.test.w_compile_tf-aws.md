@@ -14,8 +14,6 @@ module.exports = function({ $greeting, $stuff_HelloWorld }) {
       const helloInflight = new $stuff_HelloWorld();
       {((cond) => {if (!cond) throw new Error("assertion failed: helloInflight.sayHello(\"wingnuts\") == greeting")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await helloInflight.sayHello("wingnuts")),$greeting)))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

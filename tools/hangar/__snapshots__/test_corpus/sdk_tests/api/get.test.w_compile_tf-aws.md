@@ -16,8 +16,6 @@ module.exports = function({ $body, $cloud_HttpMethod }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: req.headers?.get(\"content-type\") == \"application/json\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((req.headers)["content-type"],"application/json")))};
       return ({"status": 200,"body": $body});
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -47,8 +45,6 @@ module.exports = function({ $api_url, $body, $http_HttpMethod, $http_Util }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponseNoMethod.body == body")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(fetchResponseNoMethod.body,$body)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponseNoMethod.status == 200")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(fetchResponseNoMethod.status,200)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponseNoMethod.url == url")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(fetchResponseNoMethod.url,url)))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure2;

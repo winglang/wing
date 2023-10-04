@@ -11,8 +11,6 @@ module.exports = function({  }) {
     }
     async handle(x) {
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -30,8 +28,6 @@ module.exports = function({  }) {
     }
     async handle(x) {
     }
-    async $inflight_init() {
-    }
   }
   return $Closure2;
 }
@@ -47,8 +43,6 @@ module.exports = function({  }) {
     async my_method3(x) {
     }
     async my_method4(x) {
-    }
-    async $inflight_init() {
     }
   }
   return C;

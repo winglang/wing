@@ -31,8 +31,6 @@ module.exports = function({ $regex_Util }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: matches9 == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(matches9,false)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: matches10 == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(matches10,false)))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

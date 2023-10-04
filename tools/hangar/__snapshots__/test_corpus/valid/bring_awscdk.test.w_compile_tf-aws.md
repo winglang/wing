@@ -6,8 +6,6 @@ module.exports = function({  }) {
   class CdkDockerImageFunction {
     constructor({  }) {
     }
-    async $inflight_init() {
-    }
   }
   return CdkDockerImageFunction;
 }

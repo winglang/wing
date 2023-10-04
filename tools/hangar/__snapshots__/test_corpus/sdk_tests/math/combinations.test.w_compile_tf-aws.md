@@ -12,8 +12,6 @@ module.exports = function({ $math_Util, $population, $subset }) {
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.combinations(population, subset) == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.combinations($population,$subset)),10)))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

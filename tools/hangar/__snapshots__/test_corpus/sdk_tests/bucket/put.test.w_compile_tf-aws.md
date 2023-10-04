@@ -24,8 +24,6 @@ module.exports = function({ $b }) {
       const third = (await $b.get("test2.txt"));
       {((cond) => {if (!cond) throw new Error("assertion failed: third == \"Baz\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(third,"Baz")))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

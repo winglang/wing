@@ -18,8 +18,6 @@ module.exports = function({ $b }) {
       (await $b.delete("test1.txt"));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGet(\"test1.txt\") == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.tryGet("test1.txt")),undefined)))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

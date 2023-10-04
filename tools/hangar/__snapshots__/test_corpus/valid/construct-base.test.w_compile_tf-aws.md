@@ -6,8 +6,6 @@ module.exports = function({  }) {
   class WingResource {
     constructor({  }) {
     }
-    async $inflight_init() {
-    }
   }
   return WingResource;
 }

@@ -15,8 +15,6 @@ module.exports = function({ $math_Util }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.tan(1) == 1.5574077246549023")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.tan(1)),1.5574077246549023)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.tan(math.PI / 4) == 0.9999999999999999")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.tan(($math_Util.PI / 4))),0.9999999999999999)))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

@@ -15,8 +15,6 @@ module.exports = function({ $math_Util }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.atan(0) == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.atan(0)),0)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.atan(1) == 0.7853981633974483")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.atan(1)),0.7853981633974483)))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

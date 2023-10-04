@@ -13,8 +13,6 @@ module.exports = function({  }) {
       {console.log("inflight log 1.1")};
       {console.log("inflight log 1.2")};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -33,8 +31,6 @@ module.exports = function({  }) {
     async handle() {
       {console.log("inflight log 2.1")};
       {console.log("inflight log 2.2")};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure2;

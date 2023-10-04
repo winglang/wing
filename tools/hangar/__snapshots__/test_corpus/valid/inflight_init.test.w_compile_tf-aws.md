@@ -10,10 +10,8 @@ module.exports = function({ $Foo }) {
       return $obj;
     }
     async handle() {
-      const f = (await (async (o) => { await o.$inflight_init(5); return o; })(new $Foo()));
+      const f = (await (async () => {const o = new $Foo(); if ('$inflight_init' in o) { await o.$inflight_init(5); } return o; })());
       {((cond) => {if (!cond) throw new Error("assertion failed: f.field1 == 6 && f.field2 == 5")})(((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f.field1,6)) && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f.field2,5))))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure1;
@@ -31,10 +29,8 @@ module.exports = function({ $FooChild }) {
       return $obj;
     }
     async handle() {
-      const f = (await (async (o) => { await o.$inflight_init(); return o; })(new $FooChild()));
+      const f = (await (async () => {const o = new $FooChild(); if ('$inflight_init' in o) { await o.$inflight_init(); } return o; })());
       {((cond) => {if (!cond) throw new Error("assertion failed: f.field1 == 6 && f.field2 == 5 && f.field3 == 4")})((((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f.field1,6)) && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f.field2,5))) && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f.field3,4))))};
-    }
-    async $inflight_init() {
     }
   }
   return $Closure2;

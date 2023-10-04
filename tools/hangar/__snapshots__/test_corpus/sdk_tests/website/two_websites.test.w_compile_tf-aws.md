@@ -13,8 +13,6 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: http.get(w1.url).ok")})((await $http_Util.get($w1_url)).ok)};
       {((cond) => {if (!cond) throw new Error("assertion failed: http.get(w2.url).ok")})((await $http_Util.get($w2_url)).ok)};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

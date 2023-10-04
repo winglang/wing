@@ -12,8 +12,6 @@ module.exports = function({ $x }) {
     async handle() {
       (await $x.handle("hello world!"));
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -32,8 +30,6 @@ module.exports = function({  }) {
     async handle(msg) {
       return;
     }
-    async $inflight_init() {
-    }
   }
   return A;
 }
@@ -48,8 +44,6 @@ module.exports = function({  }) {
     }
     async eat() {
       return;
-    }
-    async $inflight_init() {
     }
   }
   return Dog;
@@ -67,8 +61,6 @@ module.exports = function({ $Dog }) {
     async eat() {
       return;
     }
-    async $inflight_init() {
-    }
   }
   return Terrier;
 }
@@ -83,8 +75,6 @@ module.exports = function({  }) {
     }
     async method2(x) {
       return x;
-    }
-    async $inflight_init() {
     }
   }
   return r;

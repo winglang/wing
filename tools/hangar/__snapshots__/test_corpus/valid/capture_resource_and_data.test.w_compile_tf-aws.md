@@ -15,8 +15,6 @@ module.exports = function({ $data_size, $queue, $res }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: res.get(\"file.txt\") == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $res.get("file.txt")),"world")))};
       (await $queue.push("spirulina"));
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

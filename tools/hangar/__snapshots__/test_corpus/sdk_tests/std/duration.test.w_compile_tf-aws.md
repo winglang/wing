@@ -40,8 +40,6 @@ module.exports = function({ $std_Duration }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: 86400s == 1d")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $std_Duration.fromSeconds(86400)),(await $std_Duration.fromSeconds(86400)))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: 31536000s == 1y")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $std_Duration.fromSeconds(31536000)),(await $std_Duration.fromSeconds(31536000)))))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

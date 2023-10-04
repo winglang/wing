@@ -6,8 +6,6 @@ module.exports = function({  }) {
   class Animal {
     constructor({  }) {
     }
-    async $inflight_init() {
-    }
   }
   return Animal;
 }
@@ -21,8 +19,6 @@ module.exports = function({ $Animal }) {
     constructor({  }) {
       super({  });
     }
-    async $inflight_init() {
-    }
   }
   return Cat;
 }
@@ -35,8 +31,6 @@ module.exports = function({ $Animal }) {
   class Dog extends $Animal {
     constructor({  }) {
       super({  });
-    }
-    async $inflight_init() {
     }
   }
   return Dog;

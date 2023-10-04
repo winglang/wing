@@ -12,8 +12,6 @@ module.exports = function({ $bucket }) {
     async handle(message) {
       (await $bucket.put("wing.txt",String.raw({ raw: ["Hello, ", ""] }, message)));
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

@@ -13,8 +13,6 @@ module.exports = function({  }) {
       const s2 = ({"a": "foo"});
       {((cond) => {if (!cond) throw new Error("assertion failed: s2.a == \"foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s2.a,"foo")))};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -30,8 +28,6 @@ module.exports = function({  }) {
     }
     async getStuff() {
       return this.$this_data_field0;
-    }
-    async $inflight_init() {
     }
   }
   return Foo;

@@ -12,8 +12,6 @@ module.exports = function({  }) {
     async handle(input) {
       {console.log("log inside f1")};
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -33,8 +31,6 @@ module.exports = function({ $f1 }) {
       (await $f1.invoke(""));
       {console.log("log inside f2")};
       (await $f1.invoke(""));
-    }
-    async $inflight_init() {
     }
   }
   return $Closure2;
@@ -57,8 +53,6 @@ module.exports = function({ $Util, $f2 }) {
       (await $Util.logging());
       (await $f2.invoke(""));
     }
-    async $inflight_init() {
-    }
   }
   return $Closure3;
 }
@@ -73,8 +67,6 @@ module.exports = function({  }) {
     }
     static async logging() {
       return (require("<ABSOLUTE_PATH>/logging.js")["logging"])()
-    }
-    async $inflight_init() {
     }
   }
   return Util;

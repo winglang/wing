@@ -12,8 +12,6 @@ module.exports = function({ $fn }) {
     async handle() {
       (await $fn());
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -32,8 +30,6 @@ module.exports = function({  }) {
     }
     async handle() {
       (await this.$this_q.push("hello"));
-    }
-    async $inflight_init() {
     }
   }
   return MyClosure;
