@@ -62,7 +62,7 @@ describe("wing pack", () => {
     const outdir = await generateTmpDir();
     process.chdir(projectDir);
 
-    await expect(async () => pack({ outdir })).rejects.toThrow(/Expected ';'/);
+    await expect(pack({ outdir })).rejects.toThrow(/Expected ';'/);
     await expectNoTarball(outdir);
   });
 
