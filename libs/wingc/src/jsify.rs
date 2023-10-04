@@ -464,10 +464,10 @@ impl<'a> JSifier<'a> {
 						format!("this.node.root.new(\"{}\",{},{})", fqn, ctor, args)
 					}
 				} else {
-					// If we're inflight and this new expression evaluates to a type with an inflight init then
+					// If we're inflight and this new expression evaluates to a type with an inflight init (that's not empty)
 					// make sure it's called before we return the object.
 					if ctx.visit_ctx.current_phase() == Phase::Inflight && expression_type.as_class().expect("a class").get_method(&Symbol::global(CLASS_INFLIGHT_INIT_NAME)).is_some() {
-						format!("(await (async (o) => {{ await o.{CLASS_INFLIGHT_INIT_NAME}({args}); return o; }})(new {ctor}()))")
+						format!("(await (async () => {{const o = new {ctor}(); if ('{CLASS_INFLIGHT_INIT_NAME}' in o) {{ await o.{CLASS_INFLIGHT_INIT_NAME}({args}); }} return o; }})())")
 					} else {
 						format!("new {}({})", ctor, args)
 					}
