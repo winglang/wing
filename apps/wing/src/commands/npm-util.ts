@@ -1,4 +1,4 @@
-import { exec } from "src/util";
+import { exec } from "../util";
 
 export async function checkNpmVersion(): Promise<string> {
   try {
