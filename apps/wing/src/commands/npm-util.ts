@@ -2,7 +2,7 @@ import { exec } from "../util";
 
 export async function checkNpmVersion(): Promise<string> {
   try {
-    return exec("npm --version");
+    return await exec("npm --version");
   } catch (e) {
     if (process.env.DEBUG) {
       console.error(e);

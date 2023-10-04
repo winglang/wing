@@ -1,8 +1,8 @@
+import * as cp from "child_process";
 import { copyFileSync, promises as fsPromise } from "fs";
 import { tmpdir } from "os";
 import { join } from "path";
 import { promisify } from "util";
-import * as cp from "child_process";
 
 /**
  * Normalize windows paths to be posix-like.
