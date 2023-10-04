@@ -1,5 +1,6 @@
 let func = (...events: Array<Json>) => {
-  log("hello");
+  assert(events.at(0) == "str");
+  assert(events.at(1) == "str");
 };
 
 let jsonStr = Json "str";
