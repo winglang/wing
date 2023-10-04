@@ -12,6 +12,8 @@ module.exports = function({ $r }) {
     async handle(message) {
       (await $r.set("hello",message));
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -41,6 +43,8 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
       }
       ));
       {((cond) => {if (!cond) throw new Error("assertion failed: \"world!\" == \"${r.get(\"hello\")}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("world!",String.raw({ raw: ["", ""] }, (await $r.get("hello"))))))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;

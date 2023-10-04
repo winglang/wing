@@ -12,6 +12,8 @@ module.exports = function({  }) {
     async handle() {
       return 1;
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -31,6 +33,8 @@ module.exports = function({ $foo }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: foo.callFn(true) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $foo.callFn(true)),1)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: foo.callFn(false) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $foo.callFn(false)),2)))};
       (await $foo.callFn2());
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;

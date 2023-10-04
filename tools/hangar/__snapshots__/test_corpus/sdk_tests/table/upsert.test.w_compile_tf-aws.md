@@ -45,6 +45,8 @@ module.exports = function({ $table }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: table.get(\"peach\").get(\"role\") == \"princess\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })((await $table.get("peach")), "role"),"princess")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: table.get(\"peach\").get(\"gender\") == \"female\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })((await $table.get("peach")), "gender"),"female")))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

@@ -12,6 +12,8 @@ module.exports = function({  }) {
     async handle(m) {
       return String.raw({ raw: ["Hello ", "!"] }, m);
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -33,6 +35,8 @@ module.exports = function({ $handler, $std_Json, $std_Number }) {
       const z = (await $handler(y));
       return ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([z]);
     }
+    async $inflight_init() {
+    }
   }
   return $Closure2;
 }
@@ -50,6 +54,8 @@ module.exports = function({  }) {
     }
     async handle(x) {
       return (x * 2);
+    }
+    async $inflight_init() {
     }
   }
   return $Closure3;
@@ -70,6 +76,8 @@ module.exports = function({ $f }) {
       const result = (await $f.invoke("2"));
       {((cond) => {if (!cond) throw new Error("assertion failed: result == \"8\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(result,"8")))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure4;
 }
@@ -87,6 +95,8 @@ module.exports = function({  }) {
       (await this.$this_func.handle(message));
       (await this.$this_func.handle(message));
     }
+    async $inflight_init() {
+    }
   }
   return Doubler;
 }
@@ -98,6 +108,8 @@ module.exports = function({  }) {
 module.exports = function({  }) {
   class Doubler2 {
     constructor({  }) {
+    }
+    async $inflight_init() {
     }
   }
   return Doubler2;

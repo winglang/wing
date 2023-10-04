@@ -14,6 +14,8 @@ module.exports = function({ $bucket, $counter }) {
       const key = String.raw({ raw: ["myfile-", ".txt"] }, "hi");
       (await $bucket.put(key,body));
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

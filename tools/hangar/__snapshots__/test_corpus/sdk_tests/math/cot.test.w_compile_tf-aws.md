@@ -15,6 +15,8 @@ module.exports = function({ $math_Util }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.cot(math.PI * 3 / 4)) == -1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round((await $math_Util.cot((($math_Util.PI * 3) / 4))))),(-1))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.cot(-0) == -math.INF")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.cot((-0))),(-$math_Util.INF))))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

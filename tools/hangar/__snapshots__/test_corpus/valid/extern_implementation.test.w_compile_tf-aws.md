@@ -12,6 +12,8 @@ module.exports = function({ $f }) {
     async handle() {
       (await $f.call());
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -29,6 +31,8 @@ module.exports = function({ $Foo }) {
     }
     async handle() {
       (await $Foo.print("hey there"));
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;
@@ -59,6 +63,8 @@ module.exports = function({  }) {
       const uuid = (await Foo.getUuid());
       {((cond) => {if (!cond) throw new Error("assertion failed: uuid.length == 36")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(uuid.length,36)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Foo.getData() == \"Cool data!\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await Foo.getData()),"Cool data!")))};
+    }
+    async $inflight_init() {
     }
   }
   return Foo;

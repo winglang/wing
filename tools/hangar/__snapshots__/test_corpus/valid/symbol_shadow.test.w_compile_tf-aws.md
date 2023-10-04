@@ -12,6 +12,8 @@ module.exports = function({ $s }) {
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: s == \"inner\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($s,"inner")))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -30,6 +32,8 @@ module.exports = function({ $s }) {
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: s == \"inResource\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($s,"inResource")))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure2;
 }
@@ -47,6 +51,8 @@ module.exports = function({ $s }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: s == \"top\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($s,"top")))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure3;
@@ -67,6 +73,8 @@ module.exports = function({  }) {
       const s = "insideInflight";
       {((cond) => {if (!cond) throw new Error("assertion failed: s == \"insideInflight\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s,"insideInflight")))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure4;
 }
@@ -78,6 +86,8 @@ module.exports = function({  }) {
 module.exports = function({  }) {
   class A {
     constructor({  }) {
+    }
+    async $inflight_init() {
     }
   }
   return A;

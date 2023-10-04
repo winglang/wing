@@ -30,6 +30,8 @@ module.exports = function({ $math_Util }) {
         {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be between -1 and 1, inclusive.\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"Input value must be between -1 and 1, inclusive.")))};
       }
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

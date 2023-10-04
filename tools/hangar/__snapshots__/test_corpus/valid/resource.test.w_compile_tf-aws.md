@@ -17,6 +17,8 @@ module.exports = function({ $bucket, $res, $res_foo }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: res.foo.inflightField == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($res_foo.inflightField,123)))};
       (await $res.testTypeAccess());
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -34,6 +36,8 @@ module.exports = function({ $__parent_this_2_b }) {
     }
     async handle() {
       (await $__parent_this_2_b.put("foo1.txt","bar"));
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;
@@ -53,6 +57,8 @@ module.exports = function({ $__parent_this_3_b }) {
     async handle() {
       (await $__parent_this_3_b.put("foo2.txt","bar"));
     }
+    async $inflight_init() {
+    }
   }
   return $Closure3;
 }
@@ -70,6 +76,8 @@ module.exports = function({ $__parent_this_4_q }) {
     }
     async handle() {
       (await $__parent_this_4_q.push("foo"));
+    }
+    async $inflight_init() {
     }
   }
   return $Closure4;
@@ -89,6 +97,8 @@ module.exports = function({ $bigOlPublisher }) {
     async handle() {
       (await $bigOlPublisher.publish("foo"));
       const count = (await $bigOlPublisher.getObjectCount());
+    }
+    async $inflight_init() {
     }
   }
   return $Closure5;
@@ -121,6 +131,8 @@ module.exports = function({ $Foo, $MyEnum }) {
         {((cond) => {if (!cond) throw new Error("assertion failed: this.e == MyEnum.B")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.$this_e,$MyEnum.B)))};
       }
     }
+    async $inflight_init() {
+    }
   }
   return Bar;
 }
@@ -145,6 +157,8 @@ module.exports = function({  }) {
     async getObjectCount() {
       return (await this.$this_b.list()).length;
     }
+    async $inflight_init() {
+    }
   }
   return BigPublisher;
 }
@@ -156,6 +170,8 @@ module.exports = function({  }) {
 module.exports = function({  }) {
   class Dummy {
     constructor({  }) {
+    }
+    async $inflight_init() {
     }
   }
   return Dummy;
@@ -195,6 +211,8 @@ module.exports = function({  }) {
 module.exports = function({  }) {
   class ScopeAndIdTestClass {
     constructor({  }) {
+    }
+    async $inflight_init() {
     }
   }
   return ScopeAndIdTestClass;

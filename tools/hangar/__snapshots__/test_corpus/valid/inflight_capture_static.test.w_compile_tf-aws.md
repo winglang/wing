@@ -12,6 +12,8 @@ module.exports = function({ $Preflight }) {
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: Preflight.staticMethod(123) == \"foo-123\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $Preflight.staticMethod(123)),"foo-123")))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -29,6 +31,8 @@ module.exports = function({ $OuterInflight }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: OuterInflight.staticMethod(\"hello\") == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $OuterInflight.staticMethod("hello")),5)))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;
@@ -50,8 +54,12 @@ module.exports = function({  }) {
         static async staticMethod() {
           return "hello";
         }
+        async $inflight_init() {
+        }
       }
       {((cond) => {if (!cond) throw new Error("assertion failed: InnerInflight.staticMethod() == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await InnerInflight.staticMethod()),"hello")))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure3;
@@ -80,6 +88,8 @@ module.exports = function({ $util_Util }) {
         }
       }
     }
+    async $inflight_init() {
+    }
   }
   return $Closure4;
 }
@@ -92,6 +102,8 @@ module.exports = function({  }) {
   class OuterInflight {
     static async staticMethod(b) {
       return b.length;
+    }
+    async $inflight_init() {
     }
   }
   return OuterInflight;
@@ -107,6 +119,8 @@ module.exports = function({  }) {
     }
     static async staticMethod(a) {
       return String.raw({ raw: ["foo-", ""] }, a);
+    }
+    async $inflight_init() {
     }
   }
   return Preflight;

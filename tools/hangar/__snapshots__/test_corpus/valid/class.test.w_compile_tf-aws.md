@@ -15,6 +15,8 @@ module.exports = function({ $c5 }) {
       (await $c5.set(111));
       {((cond) => {if (!cond) throw new Error("assertion failed: c5.y == 111")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($c5.y,111)))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -35,6 +37,8 @@ module.exports = function({ $student_hrlyWage, $student_major, $student_name }) 
       {((cond) => {if (!cond) throw new Error("assertion failed: student.major == \"MySpace\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($student_major,"MySpace")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: student.hrlyWage == 38")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($student_hrlyWage,38)))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure2;
 }
@@ -53,6 +57,8 @@ module.exports = function({ $ta_hrlyWage }) {
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: ta.hrlyWage == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($ta_hrlyWage,10)))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure3;
 }
@@ -69,8 +75,10 @@ module.exports = function({ $B }) {
       return $obj;
     }
     async handle() {
-      const b = new $B("ba");
+      const b = (await (async (o) => { await o.$inflight_init("ba"); return o; })(new $B()));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.sound == \"ba\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(b.sound,"ba")))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure4;
@@ -82,7 +90,7 @@ module.exports = function({ $B }) {
 ```js
 module.exports = function({  }) {
   class A {
-    constructor(sound) {
+    async $inflight_init(sound) {
       this.sound = sound;
     }
   }
@@ -95,8 +103,8 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ $A }) {
   class B extends $A {
-    constructor(sound) {
-      super(sound);
+    async $inflight_init(sound) {
+      await super.$inflight_init(sound);
     }
   }
   return B;
@@ -111,6 +119,8 @@ module.exports = function({ $Boom }) {
     constructor({  }) {
       super({  });
     }
+    async $inflight_init() {
+    }
   }
   return Bam;
 }
@@ -122,6 +132,8 @@ module.exports = function({ $Boom }) {
 module.exports = function({  }) {
   class Bar {
     constructor({  }) {
+    }
+    async $inflight_init() {
     }
   }
   return Bar;
@@ -136,6 +148,8 @@ module.exports = function({ $Bar }) {
     constructor({  }) {
       super({  });
     }
+    async $inflight_init() {
+    }
   }
   return Baz;
 }
@@ -147,6 +161,8 @@ module.exports = function({ $Bar }) {
 module.exports = function({  }) {
   class Boom {
     constructor({  }) {
+    }
+    async $inflight_init() {
     }
   }
   return Boom;
@@ -160,6 +176,8 @@ module.exports = function({  }) {
   class C1 {
     constructor({  }) {
     }
+    async $inflight_init() {
+    }
   }
   return C1;
 }
@@ -171,6 +189,8 @@ module.exports = function({  }) {
 module.exports = function({  }) {
   class C2 {
     constructor({  }) {
+    }
+    async $inflight_init() {
     }
   }
   return C2;
@@ -184,6 +204,8 @@ module.exports = function({  }) {
   class C3 {
     constructor({  }) {
     }
+    async $inflight_init() {
+    }
   }
   return C3;
 }
@@ -195,6 +217,8 @@ module.exports = function({  }) {
 module.exports = function({  }) {
   class C4 {
     constructor({  }) {
+    }
+    async $inflight_init() {
     }
   }
   return C4;
@@ -230,6 +254,8 @@ module.exports = function({ $Bar }) {
     }
     async doStuff(h) {
     }
+    async $inflight_init() {
+    }
   }
   return Foo;
 }
@@ -243,6 +269,8 @@ module.exports = function({ $Student }) {
     constructor({  }) {
       super({  });
     }
+    async $inflight_init() {
+    }
   }
   return PaidStudent;
 }
@@ -254,6 +282,8 @@ module.exports = function({ $Student }) {
 module.exports = function({  }) {
   class Person {
     constructor({  }) {
+    }
+    async $inflight_init() {
     }
   }
   return Person;
@@ -268,6 +298,8 @@ module.exports = function({ $Person }) {
     constructor({  }) {
       super({  });
     }
+    async $inflight_init() {
+    }
   }
   return Student;
 }
@@ -280,6 +312,8 @@ module.exports = function({ $PaidStudent }) {
   class TeacherAid extends $PaidStudent {
     constructor({  }) {
       super({  });
+    }
+    async $inflight_init() {
     }
   }
   return TeacherAid;

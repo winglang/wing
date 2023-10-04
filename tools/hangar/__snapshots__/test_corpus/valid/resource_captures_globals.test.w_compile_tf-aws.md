@@ -12,6 +12,8 @@ module.exports = function({ $res }) {
     async handle() {
       (await $res.myPut());
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -29,6 +31,8 @@ module.exports = function({ $Another }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $Another.myStaticMethod()),0)))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;
@@ -64,6 +68,8 @@ module.exports = function({  }) {
   class First {
     constructor({  }) {
     }
+    async $inflight_init() {
+    }
   }
   return First;
 }
@@ -91,6 +97,8 @@ module.exports = function({ $Another, $_globalArrayOfStr_at_0__, $_globalMapOfNu
       {((cond) => {if (!cond) throw new Error("assertion failed: globalAnother.myMethod() > 0")})(((await $globalAnother.myMethod()) > 0))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() > 0")})(((await $Another.myStaticMethod()) > 0))};
     }
+    async $inflight_init() {
+    }
   }
   return MyResource;
 }
@@ -109,6 +117,8 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
     async handle() {
       (await $globalCounter.inc());
       (await $_parentThis_localCounter.inc());
+    }
+    async $inflight_init() {
     }
   }
   return R;

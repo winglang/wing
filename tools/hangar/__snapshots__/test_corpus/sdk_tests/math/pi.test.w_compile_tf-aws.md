@@ -12,6 +12,8 @@ module.exports = function({ $math_Util }) {
     async handle(radius) {
       return ((2 * $math_Util.PI) * radius);
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -29,6 +31,8 @@ module.exports = function({ $circumference, $math_Util, $r }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.round(circumference(r), decimalPlaces: 2) == 62.83")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round((await $circumference($r)),{ decimalPlaces: 2 })),62.83)))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;

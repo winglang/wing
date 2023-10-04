@@ -12,6 +12,8 @@ module.exports = function({ $std_Json }) {
     async handle(req) {
       return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"user": (req.vars)["name"]})]),"headers": ({"content-type": "application/json"}),"status": 200});
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -29,6 +31,8 @@ module.exports = function({ $std_Json }) {
     }
     async handle(req) {
       return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"user": (req.vars)["name"],"age": (req.vars)["age"]})]),"headers": ({"content-type": "application/json"}),"status": 200});
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;
@@ -51,6 +55,8 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: res.status == 200")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(res.status,200)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.parse(res.body ?? \"\").get(\"user\") == username")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })((JSON.parse((res.body ?? ""))), "user"),username)))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure3;
 }
@@ -72,6 +78,8 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: res.status == 200")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(res.status,200)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.parse(res.body ?? \"\").get(\"user\") == username")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })((JSON.parse((res.body ?? ""))), "user"),username)))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure4;
 }
@@ -92,6 +100,8 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
       const res = (await $http_Util.get(String.raw({ raw: ["", "/users/permission/", ""] }, $api_url, username)));
       {((cond) => {if (!cond) throw new Error("assertion failed: res.status == 200")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(res.status,200)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.parse(res.body ?? \"\").get(\"user\") == username")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })((JSON.parse((res.body ?? ""))), "user"),username)))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure5;
@@ -115,6 +125,8 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: res.status == 200")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(res.status,200)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.parse(res.body ?? \"\").get(\"user\") == username")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })((JSON.parse((res.body ?? ""))), "user"),username)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.parse(res.body ?? \"\").get(\"age\") == age")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })((JSON.parse((res.body ?? ""))), "age"),age)))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure6;

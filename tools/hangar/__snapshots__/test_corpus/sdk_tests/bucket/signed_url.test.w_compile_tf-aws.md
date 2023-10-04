@@ -17,6 +17,8 @@ module.exports = function({ $http_Util, $testBucket, $util_Util }) {
         {((cond) => {if (!cond) throw new Error("assertion failed: http.get(signedUrl).body ==  \"Foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get(signedUrl)).body,"Foo")))};
       }
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -44,6 +46,8 @@ module.exports = function({ $testBucket, $util_Util }) {
         }
         {((cond) => {if (!cond) throw new Error("assertion failed: error == \"Cannot provide signed url for a non-existent key (key=file.txt)\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(error,"Cannot provide signed url for a non-existent key (key=file.txt)")))};
       }
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;

@@ -20,6 +20,8 @@ module.exports = function({ $bar }) {
       (await result.push(foo));
       return [...(result)];
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -41,6 +43,8 @@ module.exports = function({ $fn }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: result.at(0) == \"hola!\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await result.at(0)),"hola!")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: result.at(1) == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await result.at(1)),"world")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: result.at(2) == \"bang\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await result.at(2)),"bang")))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;

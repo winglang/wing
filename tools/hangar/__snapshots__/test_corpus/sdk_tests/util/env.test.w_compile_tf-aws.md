@@ -14,6 +14,8 @@ module.exports = function({ $NIL, $RANDOM, $util_Util }) {
       const noValue = ((await $util_Util.tryEnv($RANDOM)) ?? $NIL);
       {((cond) => {if (!cond) throw new Error("assertion failed: noValue == NIL")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(noValue,$NIL)))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

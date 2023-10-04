@@ -14,6 +14,8 @@ module.exports = function({ $__s1_split_______at_1__, $_s1_concat_s2__, $s1_inde
       {console.log($__s1_split_______at_1__)};
       {console.log($_s1_concat_s2__)};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

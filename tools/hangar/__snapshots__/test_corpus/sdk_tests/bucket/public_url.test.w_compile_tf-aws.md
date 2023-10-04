@@ -36,6 +36,8 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
       }
       ));
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

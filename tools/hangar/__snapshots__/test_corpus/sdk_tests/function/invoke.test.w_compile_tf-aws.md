@@ -15,6 +15,8 @@ module.exports = function({ $util_Util }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: target?")})(((target) != null))};
       return String.raw({ raw: ["", "-response"] }, input);
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -34,6 +36,8 @@ module.exports = function({ $f }) {
       {console.log("log inside test")};
       const x = (await $f.invoke("hello"));
       {((cond) => {if (!cond) throw new Error("assertion failed: x == \"hello-response\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x,"hello-response")))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;

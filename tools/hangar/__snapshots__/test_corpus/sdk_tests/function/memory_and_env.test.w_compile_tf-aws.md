@@ -12,6 +12,8 @@ module.exports = function({ $c }) {
     async handle() {
       (await $c.inc());
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -30,6 +32,8 @@ module.exports = function({ $c, $util_Util }) {
     async handle() {
       (await $c.inc());
       {((cond) => {if (!cond) throw new Error("assertion failed: util.env(\"catName\") == \"Tion\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $util_Util.env("catName")),"Tion")))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;
@@ -52,6 +56,8 @@ module.exports = function({ $c, $f1, $f2 }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $c.peek()),1)))};
       (await $f2.invoke(""));
       {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $c.peek()),2)))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure3;

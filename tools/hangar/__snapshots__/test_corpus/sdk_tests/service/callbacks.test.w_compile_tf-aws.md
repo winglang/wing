@@ -18,6 +18,8 @@ module.exports = function({ $b, $startCounter, $started, $status, $stopped }) {
       }
       ;
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -35,6 +37,8 @@ module.exports = function({ $b, $status }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: !b.tryGet(status)?")})((!(((await $b.tryGet($status))) != null)))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;
@@ -57,6 +61,8 @@ module.exports = function({ $b, $s, $startCounter, $started, $status }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: startCounter.peek() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $startCounter.peek()),1)))};
       (await $s.start());
       {((cond) => {if (!cond) throw new Error("assertion failed: startCounter.peek() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $startCounter.peek()),1)))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure3;
@@ -83,6 +89,8 @@ module.exports = function({ $b, $s, $startCounter, $status, $stopped }) {
       (await $s.stop());
       {((cond) => {if (!cond) throw new Error("assertion failed: startCounter.peek() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $startCounter.peek()),0)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: b.get(status) == stopped")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.get($status)),$stopped)))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure4;

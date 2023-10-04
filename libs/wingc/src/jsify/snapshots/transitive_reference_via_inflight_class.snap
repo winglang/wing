@@ -33,7 +33,7 @@ module.exports = function({ $MyInflightClass }) {
       return $obj;
     }
     async handle() {
-      const obj = await (async (o) => { await o.$inflight_init(); return o; })(new $MyInflightClass());
+      const obj = (await (async (o) => { await o.$inflight_init(); return o; })(new $MyInflightClass()));
       (await obj.putInBucket());
     }
     async $inflight_init() {

@@ -12,6 +12,8 @@ module.exports = function({  }) {
     async handle(request) {
       return ({"body": request.body,"status": 200});
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

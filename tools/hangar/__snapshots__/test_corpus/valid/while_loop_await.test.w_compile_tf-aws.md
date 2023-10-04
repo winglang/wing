@@ -19,6 +19,8 @@ module.exports = function({  }) {
         {console.log(String.raw({ raw: ["", ""] }, i))};
       }
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

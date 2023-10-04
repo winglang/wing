@@ -21,6 +21,8 @@ module.exports = function({ $JSHelper, $util_Util }) {
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -47,6 +49,8 @@ module.exports = function({ $JSHelper, $oneSecond, $util_Util }) {
       else {
         {((cond) => {if (!cond) throw new Error("assertion failed: JSHelper.getTime() - start > 1 * 1000")})((((await $JSHelper.getTime()) - start) > (1 * 1000)))};
       }
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;
@@ -78,6 +82,8 @@ module.exports = function({ $JSHelper, $invokeCounter, $oneSecond, $util_Util })
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
     }
+    async $inflight_init() {
+    }
   }
   return $Closure3;
 }
@@ -108,6 +114,8 @@ module.exports = function({ $JSHelper, $fiveSeconds, $invokeCounter, $oneSecond,
         {((cond) => {if (!cond) throw new Error("assertion failed: invokeCount > 3 && invokeCount < 7")})(((invokeCount > 3) && (invokeCount < 7)))};
       }
     }
+    async $inflight_init() {
+    }
   }
   return $Closure4;
 }
@@ -136,6 +144,8 @@ module.exports = function({ $invokeCounter, $util_Util }) {
         {((cond) => {if (!cond) throw new Error("assertion failed: invokeCounter.peek() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $invokeCounter.peek()),1)))};
       }
     }
+    async $inflight_init() {
+    }
   }
   return $Closure5;
 }
@@ -150,6 +160,8 @@ module.exports = function({  }) {
     }
     static async getTime() {
       return (require("<ABSOLUTE_PATH>/sleep-helper.js")["getTime"])()
+    }
+    async $inflight_init() {
     }
   }
   return JSHelper;

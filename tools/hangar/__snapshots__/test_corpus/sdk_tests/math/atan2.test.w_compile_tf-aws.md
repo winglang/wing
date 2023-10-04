@@ -18,6 +18,8 @@ module.exports = function({ $math_Util }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(1, -1) == math.PI * 3 / 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.atan2(1,(-1))),(($math_Util.PI * 3) / 4))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(0, 0) == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.atan2(0,0)),0)))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

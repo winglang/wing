@@ -6,6 +6,8 @@ module.exports = function({  }) {
   class Baz {
     constructor({  }) {
     }
+    async $inflight_init() {
+    }
   }
   return Baz;
 }

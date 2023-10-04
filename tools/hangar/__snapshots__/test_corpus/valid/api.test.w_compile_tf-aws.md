@@ -15,6 +15,8 @@ module.exports = function({ $counter, $std_Json }) {
       const resp = ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([bodyResponse]),"headers": ({"content-type": "application/json"}),"status": 200});
       return resp;
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -33,6 +35,8 @@ module.exports = function({ $api_url }) {
     async handle() {
       const url = $api_url;
       {((cond) => {if (!cond) throw new Error("assertion failed: url.startsWith(\"http\")")})(url.startsWith("http"))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;
@@ -53,6 +57,8 @@ module.exports = function({ $__parent_this_3_api_url }) {
       const text = String.raw({ raw: ["", "/endpoint2"] }, $__parent_this_3_api_url);
       return ({"status": 200,"body": text});
     }
+    async $inflight_init() {
+    }
   }
   return $Closure3;
 }
@@ -64,6 +70,8 @@ module.exports = function({ $__parent_this_3_api_url }) {
 module.exports = function({  }) {
   class A {
     constructor({  }) {
+    }
+    async $inflight_init() {
     }
   }
   return A;

@@ -17,10 +17,14 @@ module.exports = function({  }) {
         static async staticInflightMethod() {
           return "Static inflight method";
         }
+        async $inflight_init() {
+        }
       }
-      const inflightClass = new InflightClass();
+      const inflightClass = (await (async (o) => { await o.$inflight_init(); return o; })(new InflightClass()));
       {((cond) => {if (!cond) throw new Error("assertion failed: inflightClass.inflightMethod() == \"Inflight method\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await inflightClass.inflightMethod()),"Inflight method")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: InflightClass.staticInflightMethod() == \"Static inflight method\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await InflightClass.staticInflightMethod()),"Static inflight method")))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure1;
@@ -36,6 +40,8 @@ module.exports = function({  }) {
     }
     static async get123() {
       return 123;
+    }
+    async $inflight_init() {
     }
   }
   return Foo;

@@ -14,9 +14,13 @@ module.exports = function({  }) {
         async foo() {
           return "c1";
         }
+        async $inflight_init() {
+        }
       }
-      const c = new C();
+      const c = (await (async (o) => { await o.$inflight_init(); return o; })(new C()));
       {((cond) => {if (!cond) throw new Error("assertion failed: c.foo() == \"c1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await c.foo()),"c1")))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure1;
@@ -34,7 +38,9 @@ module.exports = function({ $F }) {
       return $obj;
     }
     async handle() {
-      return (await new $F().foo());
+      return (await (await (async (o) => { await o.$inflight_init(); return o; })(new $F())).foo());
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;
@@ -53,11 +59,13 @@ module.exports = function({ $B, $a, $d, $fn, $innerD }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: a.goo() == \"a2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $a.goo()),"a2")))};
-      const b = new $B();
+      const b = (await (async (o) => { await o.$inflight_init(); return o; })(new $B()));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.foo() == \"b1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await b.foo()),"b1")))};
       (await $fn());
       {((cond) => {if (!cond) throw new Error("assertion failed: d.callInner() == \"f1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $d.callInner()),"f1")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: innerD() == \"f1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $innerD()),"f1")))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure3;
@@ -74,6 +82,8 @@ module.exports = function({  }) {
     async goo() {
       return "a2";
     }
+    async $inflight_init() {
+    }
   }
   return A;
 }
@@ -86,6 +96,8 @@ module.exports = function({  }) {
   class B {
     async foo() {
       return "b1";
+    }
+    async $inflight_init() {
     }
   }
   return B;
@@ -103,6 +115,8 @@ module.exports = function({  }) {
     async callInner() {
       return (await this.$this_inner());
     }
+    async $inflight_init() {
+    }
   }
   return D;
 }
@@ -114,6 +128,8 @@ module.exports = function({  }) {
 module.exports = function({  }) {
   class E {
     constructor({  }) {
+    }
+    async $inflight_init() {
     }
   }
   return E;
@@ -127,6 +143,8 @@ module.exports = function({  }) {
   class F {
     async foo() {
       return "f1";
+    }
+    async $inflight_init() {
     }
   }
   return F;

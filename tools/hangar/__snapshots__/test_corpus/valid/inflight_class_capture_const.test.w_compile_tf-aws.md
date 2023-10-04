@@ -10,8 +10,10 @@ module.exports = function({ $Foo, $myConst }) {
       return $obj;
     }
     async handle() {
-      const x = new $Foo();
+      const x = (await (async (o) => { await o.$inflight_init(); return o; })(new $Foo()));
       {((cond) => {if (!cond) throw new Error("assertion failed: x.getValue() == myConst")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await x.getValue()),$myConst)))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure1;
@@ -25,6 +27,8 @@ module.exports = function({ $myConst }) {
   class Foo {
     async getValue() {
       return $myConst;
+    }
+    async $inflight_init() {
     }
   }
   return Foo;

@@ -14,6 +14,8 @@ module.exports = function({ $y }) {
       const y = "z";
       {((cond) => {if (!cond) throw new Error("assertion failed: y == \"z\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y,"z")))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

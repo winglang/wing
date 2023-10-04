@@ -37,6 +37,8 @@ module.exports = function({  }) {
       }
       ));
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -77,6 +79,8 @@ module.exports = function({  }) {
       }
       ));
     }
+    async $inflight_init() {
+    }
   }
   return $Closure2;
 }
@@ -98,6 +102,8 @@ module.exports = function({  }) {
       ((obj, args) => { obj[args[0]] = args[1]; })(mutObj, ["z",3]);
       {((cond) => {if (!cond) throw new Error("assertion failed: mutObj.get(\"x\") == -1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(mutObj, "x"),(-1))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: mutObj.get(\"z\") == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(mutObj, "z"),3)))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure3;
@@ -121,6 +127,8 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: mutJsonArray.getAt(0) == -1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(mutJsonArray, 0),(-1))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: mutJsonArray.getAt(3) == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(mutJsonArray, 3),3)))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure4;
 }
@@ -142,6 +150,8 @@ module.exports = function({ $std_Json }) {
       const stringifiedIndent = ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([obj,{ indent: 2 }]);
       {((cond) => {if (!cond) throw new Error("assertion failed: stringified == \"{\\\"a\\\":1,\\\"b\\\":2}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(stringified,"{\"a\":1,\"b\":2}")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: stringifiedIndent == \"{\\n  \\\"a\\\": 1,\\n  \\\"b\\\": 2\\n}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(stringifiedIndent,"{\n  \"a\": 1,\n  \"b\": 2\n}")))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure5;
@@ -169,6 +179,8 @@ module.exports = function({ $std_Json }) {
         {((cond) => {if (!cond) throw new Error("assertion failed: e.value == values.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e.value,(await values.at(i)))))};
         i += 1;
       }
+    }
+    async $inflight_init() {
     }
   }
   return $Closure6;

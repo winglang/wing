@@ -17,6 +17,8 @@ module.exports = function({ $q, $retentionPeriod, $util_Util }) {
       }
       )))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

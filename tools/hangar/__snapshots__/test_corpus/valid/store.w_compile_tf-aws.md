@@ -12,6 +12,8 @@ module.exports = function({ $__parent_this_1_b }) {
     async handle() {
       (await $__parent_this_1_b.put("data.txt","<empty>"));
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -28,6 +30,8 @@ module.exports = function({  }) {
     async store(data) {
       (await this.$this_b.put("data.txt",data));
     }
+    async $inflight_init() {
+    }
   }
   return Store;
 }
@@ -39,6 +43,8 @@ module.exports = function({  }) {
 module.exports = function({  }) {
   class Util {
     constructor({  }) {
+    }
+    async $inflight_init() {
     }
   }
   return Util;

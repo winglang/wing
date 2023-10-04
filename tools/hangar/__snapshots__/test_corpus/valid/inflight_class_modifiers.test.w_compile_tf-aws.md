@@ -6,7 +6,7 @@ module.exports = function({  }) {
   class C {
     async method() {
     }
-    constructor() {
+    async $inflight_init() {
       this.field = 12;
     }
   }

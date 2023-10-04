@@ -12,6 +12,8 @@ module.exports = function({  }) {
     async handle(req) {
       return ({"body": "hello world","status": 200});
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -36,6 +38,8 @@ module.exports = function({ $api_url, $http_Util, $t_Assert }) {
       (await $t_Assert.equalStr((headers)["access-control-expose-headers"],"Content-Type"));
       (await $t_Assert.isNil((headers)["access-control-allow-headers"]));
       (await $t_Assert.isNil((headers)["access-control-allow-methods"]));
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;
@@ -62,6 +66,8 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert })
       (await $t_Assert.isNil((headers)["access-control-expose-headers"]));
       (await $t_Assert.isNil((headers)["access-control-allow-credentials"]));
     }
+    async $inflight_init() {
+    }
   }
   return $Closure3;
 }
@@ -84,6 +90,8 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert })
       (await $t_Assert.equalStr((headers)["access-control-allow-methods"],"GET,POST,OPTIONS"));
       (await $t_Assert.equalStr((headers)["access-control-allow-headers"],"Content-Type,Authorization,X-Custom-Header"));
       (await $t_Assert.equalStr((headers)["access-control-allow-origin"],"winglang.io"));
+    }
+    async $inflight_init() {
     }
   }
   return $Closure4;
@@ -123,6 +131,8 @@ module.exports = function({  }) {
         {console.log(e)};
         throw new Error(String.raw({ raw: ["expected: ", " got: ", ""] }, b, a));
       }
+    }
+    async $inflight_init() {
     }
   }
   return Assert;

@@ -12,6 +12,8 @@ module.exports = function({  }) {
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

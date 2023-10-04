@@ -12,6 +12,8 @@ module.exports = function({ $c1 }) {
     async handle() {
       (await $c1.inc());
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -29,6 +31,8 @@ module.exports = function({ $c2 }) {
     }
     async handle() {
       (await $c2.inc());
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;
@@ -51,6 +55,8 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
       (await $util_Util.sleep((await $std_Duration.fromSeconds(66))));
       {((cond) => {if (!cond) throw new Error("assertion failed: c1.peek() >= 1")})(((await $c1.peek()) >= 1))};
       {((cond) => {if (!cond) throw new Error("assertion failed: c2.peek() >= 1")})(((await $c2.peek()) >= 1))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure3;

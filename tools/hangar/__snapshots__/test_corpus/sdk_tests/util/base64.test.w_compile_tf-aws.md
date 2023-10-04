@@ -20,6 +20,8 @@ module.exports = function({ $util_Util }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: base64Decode == string")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(base64Decode,string)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: base64urlDecode == string")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(base64urlDecode,string)))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

@@ -12,6 +12,8 @@ module.exports = function({ $__parent_this_1 }) {
     async handle() {
       (await $__parent_this_1.bar());
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -25,6 +27,8 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async bar() {
+    }
+    async $inflight_init() {
     }
   }
   return Foo;

@@ -17,6 +17,8 @@ module.exports = function({ $math_Util }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(math.PI) == -1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.cos($math_Util.PI)),(-1))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(math.PI * 2) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.cos(($math_Util.PI * 2))),1)))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

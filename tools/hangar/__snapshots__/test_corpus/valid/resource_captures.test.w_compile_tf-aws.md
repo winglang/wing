@@ -22,6 +22,8 @@ module.exports = function({ $r }) {
       (await $r.testUserDefinedResource());
       (await $r.testInflightField());
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -40,6 +42,8 @@ module.exports = function({  }) {
     async anotherFunc() {
       return "42";
     }
+    async $inflight_init() {
+    }
   }
   return Another;
 }
@@ -51,6 +55,8 @@ module.exports = function({  }) {
 module.exports = function({  }) {
   class First {
     constructor({  }) {
+    }
+    async $inflight_init() {
     }
   }
   return First;

@@ -14,13 +14,17 @@ module.exports = function({ $Bar, $Foo, $foo }) {
         static async zoo() {
           return 3;
         }
+        async $inflight_init() {
+        }
       }
-      const bar = new $Bar();
+      const bar = (await (async (o) => { await o.$inflight_init(); return o; })(new $Bar()));
       {((cond) => {if (!cond) throw new Error("assertion failed: Foo.foo() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $Foo.foo()),1)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Bar.bar() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $Bar.bar()),2)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Zoo.zoo() == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await Zoo.zoo()),3)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: foo.callThis() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $foo.callThis()),1)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: bar.callThis() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await bar.callThis()),2)))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure1;
@@ -37,6 +41,8 @@ module.exports = function({  }) {
     }
     async callThis() {
       return (await Bar.bar());
+    }
+    async $inflight_init() {
     }
   }
   return Bar;
@@ -58,6 +64,8 @@ module.exports = function({  }) {
     }
     async callThis() {
       return (await Foo.bar());
+    }
+    async $inflight_init() {
     }
   }
   return Foo;

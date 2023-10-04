@@ -15,6 +15,8 @@ module.exports = function({ $Object_keys_m__length, $aCloned_length, $a_length, 
       {((cond) => {if (!cond) throw new Error("assertion failed: m.size() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($Object_keys_m__length,1)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: aCloned.length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($aCloned_length,1)))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -32,6 +34,8 @@ module.exports = function({ $handler }) {
     }
     async handle() {
       (await $handler());
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;

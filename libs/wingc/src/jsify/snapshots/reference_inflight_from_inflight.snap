@@ -38,7 +38,7 @@ module.exports = function({ $Foo }) {
       return $obj;
     }
     async handle() {
-      const f = await (async (o) => { await o.$inflight_init(); return o; })(new $Foo());
+      const f = (await (async (o) => { await o.$inflight_init(); return o; })(new $Foo()));
     }
     async $inflight_init() {
     }

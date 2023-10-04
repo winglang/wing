@@ -13,6 +13,8 @@ module.exports = function({  }) {
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: foo_this.value == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.$foo_this_value,"hello")))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -24,6 +26,8 @@ module.exports = function({  }) {
 module.exports = function({  }) {
   class Foo {
     constructor({  }) {
+    }
+    async $inflight_init() {
     }
   }
   return Foo;

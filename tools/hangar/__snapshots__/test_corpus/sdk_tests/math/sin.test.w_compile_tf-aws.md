@@ -16,6 +16,8 @@ module.exports = function({ $math_Util }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.sin(-5) == 0.9589242746631385")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.sin((-5))),0.9589242746631385)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.sin(math.PI / 2) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.sin(($math_Util.PI / 2))),1)))};
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }

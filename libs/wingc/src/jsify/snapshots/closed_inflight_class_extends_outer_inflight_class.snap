@@ -29,7 +29,7 @@ module.exports = function({ $Base }) {
         async $inflight_init() {
         }
       }
-      await (async (o) => { await o.$inflight_init(); return o; })(new Derived());
+      (await (async (o) => { await o.$inflight_init(); return o; })(new Derived()));
     }
     async $inflight_init() {
     }

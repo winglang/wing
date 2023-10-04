@@ -33,7 +33,7 @@ module.exports = function({  }) {
       }
       class Bar {
         async myMethod() {
-          await (async (o) => { await o.$inflight_init(); return o; })(new Foo());
+          (await (async (o) => { await o.$inflight_init(); return o; })(new Foo()));
         }
         async $inflight_init() {
         }

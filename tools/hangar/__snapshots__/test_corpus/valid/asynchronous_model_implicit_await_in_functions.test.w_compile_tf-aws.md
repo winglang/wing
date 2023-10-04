@@ -11,6 +11,8 @@ module.exports = function({  }) {
     }
     async handle(s) {
     }
+    async $inflight_init() {
+    }
   }
   return $Closure1;
 }
@@ -29,6 +31,8 @@ module.exports = function({ $strToStr }) {
     async handle(s) {
       (await $strToStr.invoke("one"));
       {console.log((await $strToStr.invoke("two")))};
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;
