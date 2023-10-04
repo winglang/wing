@@ -34,7 +34,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
   const expandedEntrypoints = await glob(patterns);
 
   if (expandedEntrypoints.length === 0) {
-    throw new Error(`No matching files found for patterns: (${patterns.join(", ")})`);
+    throw new Error(`No matching files found for patterns: [${patterns.join(", ")}]`);
   }
 
   const startTime = Date.now();
