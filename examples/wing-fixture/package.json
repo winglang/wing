@@ -18,6 +18,7 @@
     "url": "git+https://github.com/winglang/wing.git"
   },
   "private": true,
+  "wing": true,
   "volta": {
     "extends": "../../package.json"
   }
