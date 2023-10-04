@@ -1,11 +1,11 @@
 import { promises as fsPromise } from "fs";
-import { glob } from "glob";
 import { relative } from "path";
 
 import * as wingCompiler from "@winglang/compiler";
 import chalk from "chalk";
 import { CHARS_ASCII, emitDiagnostic, File, Label } from "codespan-wasm";
 import debug from "debug";
+import { glob } from "glob";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)

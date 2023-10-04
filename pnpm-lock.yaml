@@ -488,7 +488,7 @@ importers:
         version: 4.0.4(vite@4.4.9)
       '@vitest/coverage-c8':
         specifier: ^0.31.4
-        version: 0.31.4(vitest@0.32.4)
+        version: 0.31.4(vitest@0.34.5)
       '@wingconsole/eslint-plugin':
         specifier: workspace:^
         version: link:../../tools/eslint-plugin
@@ -9974,7 +9974,7 @@ packages:
       vitest: 0.31.4(happy-dom@9.20.3)
     dev: true
 
-  /@vitest/coverage-c8@0.31.4(vitest@0.32.4):
+  /@vitest/coverage-c8@0.31.4(vitest@0.34.5):
     resolution: {integrity: sha512-VPx368m4DTcpA/P0v3YdVxl4QOSh1DbUcXURLRvDShrIB5KxOgfzw4Bn2R8AhAe/GyiWW/FIsJ/OJdYXCCiC1w==}
     deprecated: v8 coverage is moved to @vitest/coverage-v8 package
     peerDependencies:
@@ -9985,7 +9985,7 @@ packages:
       magic-string: 0.30.3
       picocolors: 1.0.0
       std-env: 3.4.3
-      vitest: 0.32.4
+      vitest: 0.34.5
     dev: true
 
   /@vitest/coverage-v8@0.32.4(vitest@0.32.4):
@@ -12947,7 +12947,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20231003
+      typescript: 5.3.0-dev.20231004
     dev: true
 
   /dset@3.1.2:
@@ -22182,8 +22182,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20231003:
-    resolution: {integrity: sha512-OyUdPjo1wNYs+PVDr9ARcEPs0aOqdxterOFzQzWK6DR4tsadKPbrOx8JgTOvSUwhkNOxBOEh7BonqV2uNsTxvA==}
+  /typescript@5.3.0-dev.20231004:
+    resolution: {integrity: sha512-deMSPmvpUJCz9hHInrVQeHJoYCI1tFP7qeUEKh6WouazlvGnLMbyyAHyKNfOBDjU2die9qfjwqtch3DF2aV4vQ==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
