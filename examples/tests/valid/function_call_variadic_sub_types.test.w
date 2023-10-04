@@ -1,5 +1,3 @@
-bring cloud;
-
 let func = (...events: Array<Json>) => {
   log("hello");
 };
