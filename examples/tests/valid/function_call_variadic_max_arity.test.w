@@ -1,5 +1,3 @@
-bring cloud;
-
 let func = (n: num, b: bool, ...events: Array<Json>) => {
   assert(events.at(-1) == "d");
 };
