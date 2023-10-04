@@ -40,26 +40,9 @@ export async function pack(options: PackageOptions): Promise<string> {
       path.join(userDir, "node_modules"),
       path.join(userDir, ".git"),
     ];
-    const copyDir = async (src: string, dest: string) => {
-      if (excludePaths.includes(src)) {
-        return;
-      }
-
-      await fs.mkdir(dest, { recursive: true });
-      let entries = await fs.readdir(src, { withFileTypes: true });
-
-      for (let entry of entries) {
-        let srcPath = path.join(src, entry.name);
-        let destPath = path.join(dest, entry.name);
-
-        entry.isDirectory()
-          ? await copyDir(srcPath, destPath)
-          : await fs.copyFile(srcPath, destPath);
-      }
-    };
 
     // copy the user's directory to the staging directory
-    await copyDir(userDir, workdir);
+    await copyDir(userDir, workdir, excludePaths);
 
     // check package.json exists
     const pkgJsonPath = path.join(workdir, "package.json");
@@ -75,13 +58,6 @@ export async function pack(options: PackageOptions): Promise<string> {
       if (pkgJson[field] === undefined) {
         throw new Error(`Missing required field "${field}" in package.json.`);
       }
-    }
-
-    // validate "wing" field
-    if (pkgJson.wing === undefined) {
-      throw new Error(
-        `Missing required field "wing" in package.json. See winglang.io/docs/libraries.`
-      );
     }
 
     // check that Wing source files will be included in the tarball
@@ -115,6 +91,9 @@ export async function pack(options: PackageOptions): Promise<string> {
     // add "wing" to "engines"
     pkgJson.engines = { wing: "*" };
 
+    // add "wing" top-level field
+    pkgJson.wing = true;
+
     // write package.json
     await fs.writeFile(pkgJsonPath, JSON.stringify(pkgJson, null, 2) + "\n");
 
@@ -127,6 +106,24 @@ export async function pack(options: PackageOptions): Promise<string> {
     console.log("Created tarball:", tarballName);
     return path.join(outdir, tarballName);
   });
+}
+
+async function copyDir(src: string, dest: string, excludePaths: string[]) {
+  if (excludePaths.includes(src)) {
+    return;
+  }
+
+  await fs.mkdir(dest, { recursive: true });
+  let entries = await fs.readdir(src, { withFileTypes: true });
+
+  for (let entry of entries) {
+    let srcPath = path.join(src, entry.name);
+    let destPath = path.join(dest, entry.name);
+
+    entry.isDirectory()
+      ? await copyDir(srcPath, destPath, excludePaths)
+      : await fs.copyFile(srcPath, destPath);
+  }
 }
 
 /**
