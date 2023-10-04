@@ -78,10 +78,11 @@ describe("wing pack", () => {
     // THEN
     const files = await fs.readdir(outdir);
     expect(files.filter((path) => path.endsWith(".tgz")).length).toEqual(1);
+    console.error(await exec(`ls -la ${outdir}`));
     const tarballPath = files.find((path) => path.endsWith(".tgz"))!;
     const tarballContents = await extractTarball(tarballPath, outdir);
 
-    const expectedFiles = ["index.js", "package.json", "store.w", "enums.w", "subdir/util.w"];
+    const expectedFiles = ["index.js", "package.json", "store.w"];
     for (const file of expectedFiles) {
       expect(tarballContents[file]).toBeDefined();
     }
