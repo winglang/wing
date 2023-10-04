@@ -36,7 +36,7 @@
     "@winglang/compiler": "workspace:^",
     "@winglang/sdk": "workspace:^",
     "chalk": "^4.1.2",
-    "annotate-snippets": "^0.1.2",
+    "codespan-wasm": "0.4.0",
     "commander": "^10.0.1",
     "compare-versions": "^5.0.3",
     "debug": "^4.3.4",

@@ -7,6 +7,7 @@ import {
   Diagnostic,
   Range,
   DocumentUri,
+  Location,
 } from "vscode-languageserver/node";
 
 import * as wingCompiler from "@winglang/compiler";
@@ -131,7 +132,17 @@ export async function lsp() {
         const diagnosticUri = "file://" + rd.span.file_id;
         const diag = Diagnostic.create(
           Range.create(rd.span.start.line, rd.span.start.col, rd.span.end.line, rd.span.end.col),
-          rd.message
+          rd.message,
+          undefined,
+          undefined,
+          undefined,
+          rd.annotations.map((a) => ({
+            location: Location.create(
+              "file://" + a.span.file_id,
+              Range.create(a.span.start.line, a.span.start.col, a.span.end.line, a.span.end.col)
+            ),
+            message: a.message,
+          }))
         );
 
         if (!allDiagnostics.has(diagnosticUri)) {

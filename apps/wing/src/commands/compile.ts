@@ -3,13 +3,7 @@ import { relative } from "path";
 
 import chalk from "chalk";
 import debug from "debug";
-import {
-  Annotation,
-  FormatOptions,
-  Slice,
-  SourceAnnotation,
-  annotateSnippet,
-} from "annotate-snippets";
+import { CHARS_ASCII, emitDiagnostic, File, Label } from "codespan-wasm";
 import * as wingCompiler from "@winglang/compiler";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
@@ -61,74 +55,60 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
 
       for (const error of errors) {
         const { message, span, annotations } = error;
+        let files: File[] = [];
+        let labels: Label[] = [];
 
         // file_id might be "" if the span is synthetic (see #2521)
-        const slices: Slice[] = [];
         if (span?.file_id) {
           // `span` should only be null if source file couldn't be read etc.
           const source = await fsPromise.readFile(span.file_id, "utf8");
-          const minLine = Math.min(span.start.line, ...annotations.map((a) => a.span.start.line));
-          const maxLine = Math.max(span.end.line, ...annotations.map((a) => a.span.end.line));
-          const sourceFragment = sliceByLines(source, minLine, maxLine);
-          const start = byteOffsetFromLineAndColumn(
-            sourceFragment,
-            span.start.line - minLine,
-            span.start.col
-          );
-          let end = byteOffsetFromLineAndColumn(
-            sourceFragment,
-            span.end.line - minLine,
-            span.end.col
-          );
-          if (end === start) {
-            // avoid zero-length slices
-            end += 1;
-          }
-
-          const sourceAnnotations: SourceAnnotation[] = [];
-          sourceAnnotations.push({
-            annotationType: "error",
-            label: message,
-            range: [start, end],
-          });
-          for (const annotation of annotations) {
-            const start = byteOffsetFromLineAndColumn(
-              sourceFragment,
-              annotation.span.start.line - minLine,
-              annotation.span.start.col
-            );
-            const end = byteOffsetFromLineAndColumn(
-              sourceFragment,
-              annotation.span.end.line - minLine,
-              annotation.span.end.col
-            );
-            sourceAnnotations.push({
-              annotationType: annotation.kind,
-              label: annotation.message,
-              range: [start, end],
-            });
-          }
-          slices.push({
-            annotations: sourceAnnotations,
-            fold: true,
-            lineStart: minLine + 1,
-            source: sourceFragment,
-            origin: span.file_id,
+          const start = byteOffsetFromLineAndColumn(source, span.start.line, span.start.col);
+          const end = byteOffsetFromLineAndColumn(source, span.end.line, span.end.col);
+          files.push({ name: span.file_id, source });
+          labels.push({
+            fileId: span.file_id,
+            rangeStart: start,
+            rangeEnd: end,
+            message,
+            style: "primary",
           });
         }
 
-        const title: Annotation = {
-          annotationType: "error",
-          label: message,
-        };
-        const footer: Annotation[] = [];
-        const options: FormatOptions = {
-          anonymizedLineNumbers: false,
-          color: coloring,
-        };
+        for (const annotation of annotations) {
+          const source = await fsPromise.readFile(annotation.span.file_id, "utf8");
+          const start = byteOffsetFromLineAndColumn(
+            source,
+            annotation.span.start.line,
+            annotation.span.start.col
+          );
+          const end = byteOffsetFromLineAndColumn(
+            source,
+            annotation.span.end.line,
+            annotation.span.end.col
+          );
+          files.push({ name: annotation.span.file_id, source });
+          labels.push({
+            fileId: annotation.span.file_id,
+            rangeStart: start,
+            rangeEnd: end,
+            message: annotation.message,
+            style: "secondary",
+          });
+        }
 
-        const diagnosticText = annotateSnippet(title, footer, slices, options);
-        result.push(diagnosticText + "\n");
+        const diagnosticText = emitDiagnostic(
+          files,
+          {
+            message,
+            severity: "error",
+            labels,
+          },
+          {
+            chars: CHARS_ASCII,
+          },
+          coloring
+        );
+        result.push(diagnosticText);
       }
       throw new Error(result.join("\n"));
     } else if (error instanceof wingCompiler.PreflightError) {
@@ -197,19 +177,6 @@ function annotatePreflightError(error: Error): Error {
   return error;
 }
 
-function sliceByLines(source: string, startLine: number, endLine: number) {
-  const lines = source.split("\n");
-  let startOffset = 0;
-  for (let i = 0; i < startLine; i++) {
-    startOffset += lines[i].length + 1;
-  }
-  let endOffset = startOffset;
-  for (let i = startLine; i <= endLine; i++) {
-    endOffset += lines[i].length + 1;
-  }
-  return source.substring(startOffset, endOffset);
-}
-
 function byteOffsetFromLineAndColumn(source: string, line: number, column: number) {
   const lines = source.split("\n");
   let offset = 0;
@@ -217,11 +184,8 @@ function byteOffsetFromLineAndColumn(source: string, line: number, column: numbe
     offset += lines[i].length + 1;
   }
 
-  const buf = Buffer.from(source, "utf8");
-  const str = buf.subarray(0, offset + column).toString("utf8");
-
-  // using iterable spread to count the number of code points
-  // "😱".length == 2
-  // [..."😱"].length == 1
-  return [...str].length;
+  // Convert char offset to byte offset
+  const encoder = new TextEncoder();
+  const srouce_bytes = encoder.encode(source.substring(0, offset));
+  return srouce_bytes.length + column;
 }
