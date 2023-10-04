@@ -1,6 +1,6 @@
 import { Storage, Bucket } from "@google-cloud/storage";
-import { BucketDeleteOptions, IBucketClient } from "../cloud";
-import { Duration, Json } from "../std";
+import { BucketDeleteOptions, IBucketClient, SignedUrlOptions } from "../cloud";
+import { Json } from "../std";
 
 export class BucketClient implements IBucketClient {
   private _public: boolean;
@@ -211,7 +211,10 @@ export class BucketClient implements IBucketClient {
    * @param key The key to reach
    * @param duration Time until expires
    */
-  public async signedUrl(key: string, _duration?: Duration): Promise<string> {
+  public async signedUrl(
+    key: string,
+    _options?: SignedUrlOptions
+  ): Promise<string> {
     try {
       throw new Error("Not implemented");
     } catch (error) {
