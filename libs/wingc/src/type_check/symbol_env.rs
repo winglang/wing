@@ -4,7 +4,7 @@ use duplicate::duplicate_item;
 
 use crate::{
 	ast::{Phase, Symbol},
-	diagnostic::{DiagnosticAnnotation, DiagnosticAnnotationKind, TypeError, WingSpan},
+	diagnostic::{DiagnosticAnnotation, TypeError, WingSpan},
 	type_check::{SymbolKind, Type, TypeRef},
 };
 use std::fmt::Debug;
@@ -215,7 +215,6 @@ impl SymbolEnv {
 				span: symbol.span.clone(),
 				message: format!("Symbol \"{}\" already defined in this scope", symbol.name),
 				annotations: vec![DiagnosticAnnotation {
-					kind: DiagnosticAnnotationKind::Warning,
 					message: format!("previous definition of \"{}\"", symbol.name),
 					span: self.symbol_map[&symbol.name].1.clone(),
 				}],

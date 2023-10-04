@@ -239,7 +239,6 @@ export interface WingDiagnostic {
       };
       file_id: string;
     };
-    kind: "error" | "warning" | "note" | "help";
   }[];
 }
 

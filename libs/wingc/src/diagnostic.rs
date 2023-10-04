@@ -195,21 +195,6 @@ pub struct Diagnostic {
 pub struct DiagnosticAnnotation {
 	pub message: String,
 	pub span: WingSpan,
-	pub kind: DiagnosticAnnotationKind,
-}
-
-// Choices based on the ones available through `codespan_reporting`
-// https://docs.rs/codespan-reporting/0.11.1/codespan_reporting/diagnostic/enum.Severity.html
-#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize)]
-pub enum DiagnosticAnnotationKind {
-	#[serde(rename = "error")]
-	Error,
-	#[serde(rename = "warning")]
-	Warning,
-	#[serde(rename = "note")]
-	Note,
-	#[serde(rename = "help")]
-	Help,
 }
 
 impl std::fmt::Display for Diagnostic {

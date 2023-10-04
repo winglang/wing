@@ -14,9 +14,7 @@ use crate::ast::{
 	TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
-use crate::diagnostic::{
-	report_diagnostic, Diagnostic, DiagnosticAnnotation, DiagnosticAnnotationKind, TypeError, WingSpan,
-};
+use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticAnnotation, TypeError, WingSpan};
 use crate::docs::Docs;
 use crate::file_graph::FileGraph;
 use crate::type_check::symbol_env::SymbolEnvKind;
@@ -3896,7 +3894,6 @@ impl<'a> TypeChecker<'a> {
 				annotations: vec![DiagnosticAnnotation {
 					message: "Variable is defined here (try adding \"var\" in front)".to_string(),
 					span: var.name.span(),
-					kind: DiagnosticAnnotationKind::Note,
 				}],
 			});
 		} else if var_phase == Phase::Preflight && env.phase == Phase::Inflight {
@@ -5442,7 +5439,6 @@ where
 			message: format!("Symbol \"{looked_up_object}\" used before being defined"),
 			span: looked_up_object.span(),
 			annotations: vec![DiagnosticAnnotation {
-				kind: DiagnosticAnnotationKind::Warning,
 				message: format!("\"{}\" defined later here", looked_up_object),
 				span,
 			}],
