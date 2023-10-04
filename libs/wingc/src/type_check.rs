@@ -3890,7 +3890,15 @@ impl<'a> TypeChecker<'a> {
 		let (var, var_phase) = self.resolve_reference(&variable, env);
 
 		if !var.type_.is_unresolved() && !var.reassignable {
-			self.spanned_error(variable, "Variable is not reassignable".to_string());
+			report_diagnostic(Diagnostic {
+				message: "Variable is not reassignable".to_string(),
+				span: Some(variable.span()),
+				annotations: vec![DiagnosticAnnotation {
+					message: "Variable is defined here (try adding \"var\" in front)".to_string(),
+					span: var.name.span(),
+					kind: DiagnosticAnnotationKind::Note,
+				}],
+			});
 		} else if var_phase == Phase::Preflight && env.phase == Phase::Inflight {
 			self.spanned_error(variable, "Variable cannot be reassigned from inflight".to_string());
 		}
