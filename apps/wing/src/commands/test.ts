@@ -6,9 +6,8 @@ import { Target } from "@winglang/compiler";
 import { std, simulator } from "@winglang/sdk";
 import chalk from "chalk";
 import debug from "debug";
-import { nanoid } from "nanoid";
-import { readFile, rm, rmSync } from "fs";
 import { glob } from "glob";
+import { nanoid } from "nanoid";
 import { compile, CompileOptions } from "./compile";
 import { generateTmpDir, withSpinner } from "../util";
 
