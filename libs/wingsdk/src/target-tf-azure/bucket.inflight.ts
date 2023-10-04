@@ -4,7 +4,7 @@ import {
   BlobServiceClient,
   ContainerClient,
 } from "@azure/storage-blob";
-import { BucketDeleteOptions, IBucketClient } from "../cloud";
+import { BucketDeleteOptions, IBucketClient, SignedUrlOptions } from "../cloud";
 import { Json } from "../std";
 
 export class BucketClient implements IBucketClient {
@@ -194,6 +194,16 @@ export class BucketClient implements IBucketClient {
     }
 
     return list;
+  }
+
+  public async signedUrl(
+    key: string,
+    options?: SignedUrlOptions
+  ): Promise<string> {
+    options;
+    throw new Error(
+      `signedUrl is not implemented yet for tf-azure (key=${key})`
+    );
   }
 
   /**

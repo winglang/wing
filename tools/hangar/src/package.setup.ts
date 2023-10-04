@@ -19,6 +19,15 @@ const shellEnv = {
 };
 
 const getInstallArgs = async () => {
+  if(process.env.HANGAR_WINGLANG_PACKAGE) {
+    return [
+      "install",
+      "--no-package-lock",
+      "--install-links=false",
+      process.env.HANGAR_WINGLANG_PACKAGE!
+    ];
+  }
+
   if (process.env.CI) {
     const tarballsDir = path.resolve(`${__dirname}/../../../dist`);
     const tarballs = (await fs.readdir(tarballsDir))

@@ -1,12 +1,11 @@
-import open from "open";
-import { createConsoleApp } from "@wingconsole/app";
-import { run } from "./run";
-import { mkdtemp } from "fs/promises";
-import { join } from "path";
-import { tmpdir } from "os";
 import { mkdirSync, writeFileSync } from "fs";
-import { resolve } from "path";
+import { mkdtemp } from "fs/promises";
+import { tmpdir } from "os";
+import { join, resolve } from "path";
+import { createConsoleApp } from "@wingconsole/app";
+import open from "open";
 import { vi, test, expect } from "vitest";
+import { run } from "./run";
 
 vi.mock("open");
 
