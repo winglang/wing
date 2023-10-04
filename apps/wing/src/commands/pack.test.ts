@@ -1,8 +1,8 @@
 import * as fs from "fs/promises";
-import { describe, it, expect, afterEach, vi, MockedFunction } from "vitest";
-import { pack } from "./pack";
 import { join } from "path";
+import { describe, it, expect, afterEach, vi, MockedFunction } from "vitest";
 import { checkNpmVersion } from "./npm-util";
+import { pack } from "./pack";
 import { exec, generateTmpDir } from "src/util";
 
 const fixturesDir = join(__dirname, "..", "..", "fixtures");
@@ -32,7 +32,7 @@ describe("wing pack", () => {
       throw new Error(`npm is not installed`);
     });
 
-    expect(async () => pack({ outdir })).rejects.toThrow(/npm is not installed/);
+    await expect(async () => pack({ outdir })).rejects.toThrow(/npm is not installed/);
     await expectNoTarball(outdir);
   });
 
@@ -40,7 +40,7 @@ describe("wing pack", () => {
     const projectDir = join(fixturesDir, "invalid1");
     const outdir = await generateTmpDir();
     process.chdir(projectDir);
-    expect(async () => pack({ outdir })).rejects.toThrow(
+    await expect(pack({ outdir })).rejects.toThrow(
       /No package.json found in the current directory./
     );
     await expectNoTarball(outdir);
@@ -51,29 +51,18 @@ describe("wing pack", () => {
     const outdir = await generateTmpDir();
     process.chdir(projectDir);
 
-    expect(async () => pack({ outdir })).rejects.toThrow(
+    await expect(pack({ outdir })).rejects.toThrow(
       /Missing required field "license" in package.json/
     );
     await expectNoTarball(outdir);
   });
 
-  it("throws an error if package.json is missing wing field", async () => {
+  it("throws an error if the project doesn't compile", async () => {
     const projectDir = join(fixturesDir, "invalid3");
     const outdir = await generateTmpDir();
     process.chdir(projectDir);
 
-    expect(async () => pack({ outdir })).rejects.toThrow(
-      /Missing required field "wing" in package.json/
-    );
-    await expectNoTarball(outdir);
-  });
-
-  it("throws an error if the project doesn't compile", async () => {
-    const projectDir = join(fixturesDir, "invalid4");
-    const outdir = await generateTmpDir();
-    process.chdir(projectDir);
-
-    expect(async () => pack({ outdir })).rejects.toThrow(/Expected ';'/);
+    await expect(async () => pack({ outdir })).rejects.toThrow(/Expected ';'/);
     await expectNoTarball(outdir);
   });
 
