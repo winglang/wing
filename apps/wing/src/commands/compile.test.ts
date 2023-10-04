@@ -1,12 +1,11 @@
-import { readdir, stat, writeFile } from "fs/promises";
+import { writeFileSync } from "fs";
+import { readdir, stat, writeFile, mkdtemp } from "fs/promises";
+import { tmpdir } from "os";
 import { join, resolve } from "path";
 import { Target } from "@winglang/compiler";
 import { describe, test, expect } from "vitest";
 import { compile } from "./compile";
 import { generateTmpDir } from "src/util";
-import { writeFileSync } from "fs";
-import { mkdtemp } from "fs/promises";
-import { tmpdir } from "os";
 
 const exampleDir = resolve("../../examples/tests/valid");
 const exampleSmallDir = resolve("../../examples/tests/valid/subdir2");
