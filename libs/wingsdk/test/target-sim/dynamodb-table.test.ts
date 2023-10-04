@@ -375,3 +375,98 @@ test("batch get item", async () => {
 
   await s.stop();
 });
+
+test("batch write item", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const t = ex.DynamodbTable._newDynamodbTable(app, "batch_write_item_table", {
+    name: "batch_write_item_table",
+    attributeDefinitions: { id: "S" } as any,
+    hashKey: "id",
+  });
+  const s = await app.startSimulator();
+  const client = s.getResource(
+    "/batch_write_item_table"
+  ) as ex.IDynamodbTableClient;
+
+  // WHEN
+  await client.batchWriteItem({
+    requestItems: [
+      {
+        putRequest: {
+          item: {
+            id: "1",
+            age: 50,
+          } as any,
+        },
+      },
+      {
+        putRequest: {
+          item: {
+            id: "2",
+            age: 80,
+          } as any,
+        },
+      },
+    ],
+  });
+
+  // THEN
+  {
+    const { responses } = await client.batchGetItem({
+      requestItem: {
+        keys: [
+          {
+            id: "1",
+          } as any,
+          {
+            id: "2",
+          } as any,
+        ],
+      },
+    });
+    expect(responses).toEqual([
+      { id: "1", age: 50 },
+      { id: "2", age: 80 },
+    ]);
+  }
+
+  // WHEN
+  await client.batchWriteItem({
+    requestItems: [
+      {
+        deleteRequest: {
+          key: {
+            id: "1",
+          } as any,
+        },
+      },
+      {
+        deleteRequest: {
+          key: {
+            id: "2",
+          } as any,
+        },
+      },
+    ],
+  });
+
+  // THEN
+  {
+    const { responses } = await client.batchGetItem({
+      requestItem: {
+        keys: [
+          {
+            id: "1",
+          } as any,
+          {
+            id: "2",
+          } as any,
+        ],
+      },
+    });
+    expect(responses).toEqual([]);
+  }
+
+  await s.stop();
+});

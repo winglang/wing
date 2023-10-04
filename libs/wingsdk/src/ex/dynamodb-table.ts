@@ -1366,7 +1366,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
       unprocessedItems: result.UnprocessedItems
         ? result.UnprocessedItems[
             this.tableName
-          ].map<DynamodbTableBatchWriteItemRequestItem>((item) => {
+          ]?.map<DynamodbTableBatchWriteItemRequestItem>((item) => {
             if (item.PutRequest) {
               return {
                 putRequest: {
