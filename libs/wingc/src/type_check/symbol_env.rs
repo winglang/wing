@@ -17,6 +17,12 @@ use super::{UnsafeRef, VariableInfo};
 
 pub type SymbolEnvRef = UnsafeRef<SymbolEnv>;
 
+impl Debug for SymbolEnvRef {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		write!(f, "{:?}", &**self)
+	}
+}
+
 pub struct SymbolEnv {
 	// We use a BTreeMaps here so that we can iterate over the symbols in a deterministic order (snapshot tests)
 	pub(crate) symbol_map: BTreeMap<String, (StatementIdx, WingSpan, SymbolKind)>,
