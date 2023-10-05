@@ -40,12 +40,15 @@ pub unsafe extern "C" fn wingc_on_completion(ptr: u32, len: u32) -> u64 {
 
 /// Using tree-sitter data only, check if there should be no valid completions at this position.
 /// This allows for quick short-circuits to avoid visiting the AST for unambiguous cases.
-fn check_for_non_completion_ts(interesting_node: &Node) -> bool {
+/// Returns true if there should be no completions, false otherwise
+fn check_ts_to_completions(interesting_node: &Node) -> bool {
 	let interesting_node_kind = interesting_node.kind();
-	dbg!(interesting_node);
 
 	let mut no_completions = match interesting_node_kind {
 		"comment" => true,
+
+		// Loose backslash? Get outta here
+		"\\" => true,
 
 		// Strings are just strings
 		// TODO Remove this for https://github.com/winglang/wing/issues/4420
@@ -69,6 +72,9 @@ fn check_for_non_completion_ts(interesting_node: &Node) -> bool {
 		// No completions are valid immediately following a closing brace
 		")" | "}" | "]" => true,
 
+		// There will always be options following a colon
+		":" => return false,
+
 		_ => false,
 	};
 
@@ -84,6 +90,7 @@ fn check_for_non_completion_ts(interesting_node: &Node) -> bool {
 				if let Some(first_child) = parent.child(0) {
 					match first_child.kind() {
 						"for" => matches!(interesting_node_kind, "in" | "identifier"),
+						"let" => true,
 						_ => false,
 					}
 				} else {
@@ -145,7 +152,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			);
 			let node_to_complete_kind = node_to_complete.kind();
 
-			if check_for_non_completion_ts(&node_to_complete) {
+			if check_ts_to_completions(&node_to_complete) {
 				return vec![];
 			}
 
@@ -1584,6 +1591,15 @@ bring "" as
 	        //^
 "#,
 		assert!(bring_alias.is_empty())
+	);
+
+	test_completion_list!(
+		definition_identifier_partial,
+		r#"
+let a
+   //^
+"#,
+		assert!(definition_identifier_partial.is_empty())
 	);
 
 	test_completion_list!(
