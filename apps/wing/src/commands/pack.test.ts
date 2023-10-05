@@ -1,41 +1,17 @@
 import * as fs from "fs/promises";
 import { join } from "path";
-import { describe, it, expect, afterEach, vi, MockedFunction } from "vitest";
-import { checkNpmVersion } from "./npm-util";
+import { describe, it, expect, afterEach, vi } from "vitest";
 import { pack } from "./pack";
 import { exec, generateTmpDir } from "src/util";
 
 const fixturesDir = join(__dirname, "..", "..", "fixtures");
 const goodFixtureDir = join(__dirname, "..", "..", "..", "..", "examples", "wing-fixture");
 
-vi.mock("./npm-util", () => {
-  return {
-    checkNpmVersion: vi.fn(async () => {
-      return "7.20.5";
-    }),
-  };
-});
-
 console.log = vi.fn();
 
 describe("wing pack", () => {
   afterEach(() => {
     vi.restoreAllMocks();
-  });
-
-  it("throws an error npm is not installed", async () => {
-    const projectDir = join(fixturesDir, "invalid1");
-    const outdir = await generateTmpDir();
-    process.chdir(projectDir);
-
-    (checkNpmVersion as MockedFunction<typeof checkNpmVersion>).mockImplementationOnce(async () => {
-      throw new Error(`npm is not installed`);
-    });
-
-    await expect(async () => pack({ outfile: join(outdir, "tarball.tgz") })).rejects.toThrow(
-      /npm is not installed/
-    );
-    await expectNoTarball(outdir);
   });
 
   it("throws an error if a project is missing package.json", async () => {
@@ -68,7 +44,7 @@ describe("wing pack", () => {
     await expectNoTarball(outdir);
   });
 
-  it("packages a valid Wing project", async () => {
+  it("packages a valid Wing project to a default path", async () => {
     // GIVEN
     const outdir = await generateTmpDir();
     // copy everything to the output directory to sandbox this test
@@ -96,7 +72,7 @@ describe("wing pack", () => {
     expect(pkgJson.wing).toEqual(true);
   });
 
-  it("packages a valid Wing project to a specified path", async () => {
+  it("packages a valid Wing project to a user-specified path", async () => {
     // GIVEN
     const projectDir = goodFixtureDir;
     const outdir = await generateTmpDir();

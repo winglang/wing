@@ -1,12 +1,13 @@
-import * as cp from "child_process";
 import { constants } from "fs";
 import * as fs from "fs/promises";
 import * as os from "os";
 import * as path from "path";
 import { resolve } from "path";
+import Arborist from "@npmcli/arborist";
 import { Target } from "@winglang/compiler";
+import packlist from "npm-packlist";
+import * as tar from "tar";
 import { compile } from "./compile";
-import { checkNpmVersion } from "./npm-util";
 
 // TODO: add --dry-run option?
 // TODO: let the user specify library's supported targets in package.json, and compile to each before packaging
@@ -24,11 +25,8 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
   console.log('Compiling to the "sim" target...');
 
   // TODO: workaround for https://github.com/winglang/wing/issues/4431
-  await compile(".", { target: Target.SIM });
-  // await compile(path.join("..", path.basename(process.cwd())), { target: Target.SIM });
-
-  // check npm is installed
-  await checkNpmVersion();
+  // await compile(".", { target: Target.SIM });
+  await compile(path.join("..", path.basename(process.cwd())), { target: Target.SIM });
 
   const userDir = process.cwd();
   const outfile = options.outfile ? resolve(options.outfile) : undefined;
@@ -99,18 +97,25 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
     await fs.writeFile(pkgJsonPath, JSON.stringify(pkgJson, null, 2) + "\n");
 
     // make the tarball
-    const command = `npm pack --json --pack-destination "${outdir}"`;
-    const output = cp.execSync(command, { stdio: "pipe" });
-    const parsedOutput = JSON.parse(output.toString());
-    const tarballName = parsedOutput[0].filename;
-    if (outfile) {
-      await fs.rename(path.join(outdir, tarballName), outfile);
-      console.log("Created tarball:", outfile);
-      return path.join(outdir, outfile);
-    } else {
-      console.log("Created tarball:", tarballName);
-      return path.join(outdir, tarballName);
-    }
+    const arborist = new Arborist({ path: workdir });
+    const tree = await arborist.loadActual();
+    const pkg = tree.package;
+    const tarballPath = outfile ?? path.join(outdir, `${pkg.name}-${pkg.version}.tgz`);
+    const files = await packlist(tree);
+    await tar.create(
+      {
+        gzip: true,
+        file: tarballPath,
+        cwd: workdir,
+        prefix: "package/",
+        portable: true,
+        noPax: true,
+      },
+      files
+    );
+
+    console.log("Created tarball:", tarballPath);
+    return tarballPath;
   });
 }
 

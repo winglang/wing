@@ -31,6 +31,9 @@
     "package": "bump-pack -b"
   },
   "dependencies": {
+    "@npmcli/arborist": "^7.2.0",
+    "npm-packlist": "^8.0.0",
+    "tar": "^6.2.0",
     "@segment/analytics-node": "^1.1.0",
     "@wingconsole/app": "workspace:^",
     "@wingconsole/server": "workspace:^",
@@ -52,6 +55,9 @@
     "@types/debug": "^4.1.8",
     "@types/node": "^18.17.13",
     "@types/node-persist": "^3.1.4",
+    "@types/npmcli__arborist": "^5.6.2",
+    "@types/npm-packlist": "^7.0.1",
+    "@types/tar": "^6.1.6",
     "@types/semver-utils": "^1.1.1",
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
