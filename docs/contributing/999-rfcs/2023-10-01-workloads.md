@@ -22,10 +22,15 @@ documents. Suggested priorities are marked inline as "(P1)", "(P2)" or "(P3)".
 
 > Reqtag: `c:workload`
 
-A "workload" describes a unit of scalable deployment. It's akin to a K8S's deployment + service + ingress, or ECS's task or fly.io's machine or ControlPlane's workload.
-Wing must support defining **containerized workloads** implemented through user-defined container
+A "workload" describes a unit of scalable deployment. It can be mapped to a Kubernetes `Deployment`
++ `Service` (and maybe `Ingress`), or to ECS's "task" (or task definition) or fly.io's "Mßachine" or
+ControlPlane's "Workload".
+
+Wing should support defining **containerized workloads** implemented through user-defined container
 images. Images may either be pulled from a container registry or built from a `Dockerfile` within
 the project directory.
+
+> NOTE: This RFC focuses on 
 
 ### Simulator implementation (P1)
 
@@ -35,14 +40,17 @@ When using Docker images, the Wing simulator will need to take care of seamlessl
 pulling the container image and maintaining it's lifecycle and cleanup via a local docker
 installation.
 
-If docker is not installed, an error should provide useful instructions on how to install it.
+If docker is not installed or there is a problem pulling an image from an external registry, an
+error should provide useful instructions on how to install it.
 
 ### Hot reloading for fast local iteration (P1)
 
 > Reqtag: `c:hot-reloading`
 
 When developing a Wing application which references a locally defined container image, we would like
-to support live updates which to instantly reload the program when the source changes.
+to support live updates which to instantly reload the program when the image source changes. This
+might require Wing to have a more intimate understanding of the anatomy of the build process of the
+image.
 
 >
 > **Implementation Note:** Rebuilding the image every time will likely not be good enough and some
@@ -65,8 +73,9 @@ It should be possible to attach a debugger to a containerized workload (P2).
 When referencing a local container image, `wing compile` should take care of building the image
 using `docker build`.
 
-> **Implementation Note:** Since `docker build` is potentially expensive, we should implement a
-> source hash-based mechanism to avoid building if the docker source context hasn't changed.
+> **Implementation Note:** Our implementation should make sure that we leverage caching as much as
+> possible to ensure we avoid building new docker images if not needed. This could leverage docker's
+> built in [cache](https://docs.docker.com/build/cache/) or a source-based hash mechanism.
 
 ### Publishing images during deployment (P1)
 
@@ -138,14 +147,29 @@ Wing platform providers should be able to use one of these container orchestrati
 backend to run containerized workloads:
 
 1. EKS/GKE/AKS (P1)
-2. [ECS](https://aws.amazon.com/ecs/)
+2. [ECS](https://aws.amazon.com/ecs/) (P2)
 3. Helm (basically Kubernetes `Deployment`, `Service` and `Ingress` resources)
 4. [fly.io](https://fly.io)
 5. [ControlPlane](https://github.com/controlplane-com/terraform-provider-cpln/blob/main/docs/resources/workload.md#nestedblock--options)
 
-The default behavior for `tf-aws` should be to create a dedicated EKS cluster for the app (P1) but
-users should be able to point to an existing EKS cluster through platform configuration options
-(P2).
+> NOTE: We are prioritizing the Kubernetes solutions given the popularity of Kubernetes in the
+> industry and the ability to reuse some of the logic across cloud providers. There will be variance
+> both in how the clusters are provisioned and likely some additional tweaks to the Kubernetes
+> manifests themselves. We want to tackle these challenges early given it will take time to
+> stabilize our implementations and get it to production-grade.
+
+## Cluster
+
+> Reqtag: `c:cluster`
+
+When using Kubernetes, the default behavior for `tf-aws` should be to create a dedicated EKS cluster
+for each app (P1).
+
+In production environments we expect that multiple applications will be deployed into a single
+Kubernetes cluster (e.g. on AWS, a single EKS cluster will host multiple applications), so it should
+be possible to configure the `tf-aws` platform (using a values file for example) to point to an
+existing EKS cluster. In this case, the Wing Terraform output will only apply the manifest into this
+cluster (and not provision the EKS cluster itself).
 
 ## Autoscaling
 
@@ -153,9 +177,9 @@ users should be able to point to an existing EKS cluster through platform config
 
 It should be possible to define autoscaling parameters for a workload. 
 
-Further research is needed to determine the desired degrees of freedom and default behavior. Ideally the default should "just work" and scale up and down elastically based on best practices and common metrics.
-
-
+Further research is needed to determine the desired degrees of freedom and default behavior. Ideally
+the default should "just work" and scale up and down elastically based on best practices and common
+metrics.
 
 ## Preflight object bindings
 
@@ -214,9 +238,9 @@ this resource, which is obviously a major gap.
 
 Once we have support for containerized workloads, it should be possible to implement this resource
 by synthesizing a Node.js docker image with the inflight closure code and a small wrapper (which
-invokes the start/stop callbacks), and deploy it as a container. Technically we would be able to
-remove the simulator implementation at that moment, because the simulator implementation of the
-container should be sufficient.
+invokes the start/stop callbacks), and pass it this image to the container workload resource.
+Technically we would be able to remove the simulator implementation at that moment, because the
+simulator implementation of the container should be sufficient.
 
 This will also allow us to extend the `cloud.Service` API and support the various container
 capabilities such as exposing ports and adding API routes.
