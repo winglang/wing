@@ -9,6 +9,7 @@ import { compile } from "./compile";
 import { checkNpmVersion } from "./npm-util";
 
 // TODO: add --dry-run option?
+// TODO: let the user specify library's supported targets in package.json, and compile to each before packaging
 // TODO: print information about the generated library? (e.g. size, dependencies, number of public APIs)
 
 export interface PackageOptions {
@@ -20,7 +21,6 @@ export interface PackageOptions {
 
 export async function pack(options: PackageOptions = {}): Promise<string> {
   // check that the library compiles to the "sim" target
-  // TODO: let the user specify all supported targets in package.json
   console.log('Compiling to the "sim" target...');
 
   // ugly hack
