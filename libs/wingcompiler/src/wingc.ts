@@ -226,6 +226,20 @@ export interface WingDiagnostic {
     };
     file_id: string;
   };
+  annotations: {
+    message: string;
+    span: {
+      start: {
+        line: number;
+        col: number;
+      };
+      end: {
+        line: number;
+        col: number;
+      };
+      file_id: string;
+    };
+  }[];
 }
 
 /**

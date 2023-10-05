@@ -165,6 +165,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 		report_diagnostic(Diagnostic {
 			message: format!("Expected 3 arguments to wingc_compile, got {}", split.len()),
 			span: None,
+			annotations: vec![],
 		});
 		return WASM_RETURN_ERROR;
 	}
@@ -176,6 +177,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 		report_diagnostic(Diagnostic {
 			message: format!("Source path cannot be found: {}", source_path),
 			span: None,
+			annotations: vec![],
 		});
 		return WASM_RETURN_ERROR;
 	}
@@ -338,6 +340,7 @@ pub fn compile(
 		report_diagnostic(Diagnostic {
 			message: format!("Project directory must be absolute: {}", project_dir),
 			span: None,
+			annotations: vec![],
 		});
 		return Err(());
 	}

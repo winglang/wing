@@ -203,6 +203,7 @@ pub fn parse_wing_project(
 					formatted_cycle.trim_end()
 				),
 				span: None,
+				annotations: vec![],
 			});
 
 			// return a list of all files just so we can continue type-checking
@@ -359,6 +360,7 @@ impl<'s> Parser<'s> {
 		let diag = Diagnostic {
 			message: message.to_string(),
 			span: Some(span),
+			annotations: vec![],
 		};
 		report_diagnostic(diag);
 	}
@@ -367,6 +369,7 @@ impl<'s> Parser<'s> {
 		let diag = Diagnostic {
 			message: message.to_string(),
 			span: Some(self.node_span(node)),
+			annotations: vec![],
 		};
 		report_diagnostic(diag);
 
@@ -1041,6 +1044,7 @@ impl<'s> Parser<'s> {
 							message: "Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668"
 								.to_string(),
 							span: Some(self.node_span(&class_element)),
+							annotations: vec![],
 						});
 					}
 
@@ -2160,6 +2164,7 @@ impl<'s> Parser<'s> {
 				let diag = Diagnostic {
 					message: "Expected ';'".to_string(),
 					span: Some(self.node_span(&target_node)),
+					annotations: vec![],
 				};
 				report_diagnostic(diag);
 			} else if node.kind() == "AUTOMATIC_BLOCK" {
@@ -2180,6 +2185,7 @@ impl<'s> Parser<'s> {
 					let diag = Diagnostic {
 						message: format!("Expected '{}'", node.kind()),
 						span: Some(self.node_span(&target_node)),
+						annotations: vec![],
 					};
 					report_diagnostic(diag);
 				}
