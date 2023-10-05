@@ -387,8 +387,6 @@ jobs:
           max_attempts: 7
           timeout_minutes: 5
           command: |
-            set -o pipefail
-
             cd dist
             PACKAGES=("@winglang/sdk" "@winglang/compiler" "@wingconsole/design-system" "@wingconsole/ui" "@wingconsole/server" "@wingconsole/app" "winglang")
             for PACKAGE in "${PACKAGES[@]}"; do
@@ -403,6 +401,11 @@ jobs:
               TARBALL=$(echo "$PACKAGE-$PACKAGE_VERSION.tgz" | sed 's/@//g' | sed 's/\//-/g')
 
               npm publish "$TARBALL" --access public --verbose
+
+              if [ $? -ne 0 ]; then
+                echo "Publishing $PACKAGE failed, exiting"
+                exit 1
+              fi
             done
 
       - name: Publish Extension to Visual Studio Marketplace
