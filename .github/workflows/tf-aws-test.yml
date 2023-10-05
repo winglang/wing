@@ -64,6 +64,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
+      max-parallel: 10
       matrix: ${{ fromJson(needs.setup.outputs.tests) }}
     name: ${{ matrix.test.name }}
     steps:
