@@ -77,9 +77,8 @@ impl<'a> HoverVisitor<'a> {
 		}
 	}
 
-	fn visit_type_with_member(&mut self, obj_type: TypeRef, property: &'a Symbol) {
+	fn visit_type_with_member(&mut self, obj_type: TypeRef, property: &'a Symbol, total_span: WingSpan) {
 		if property.span.contains(&self.position) {
-			let new_span = self.current_expr.unwrap().span.clone();
 			match &**obj_type.maybe_unwrap_option() {
 				Type::Optional(_) | Type::Anything | Type::Void | Type::Nil | Type::Unresolved | Type::Inferred(_) => {}
 
@@ -98,7 +97,7 @@ impl<'a> HoverVisitor<'a> {
 					if let Some((std_type, ..)) = self.types.get_std_class(&obj_type.to_string()) {
 						if let Some(c) = std_type.as_type() {
 							if let Some(c) = c.as_class() {
-								self.found = Some((new_span, docs_from_classlike_property(c, property)));
+								self.found = Some((total_span, docs_from_classlike_property(c, property)));
 							}
 						}
 					}
@@ -106,18 +105,18 @@ impl<'a> HoverVisitor<'a> {
 
 				Type::Function(_) | Type::Enum(_) => {
 					self.found = Some((
-						new_span,
+						total_span,
 						Some(self.types.get_expr_type(self.current_expr.unwrap()).render_docs()),
 					));
 				}
 				Type::Class(c) => {
-					self.found = Some((new_span, docs_from_classlike_property(c, property)));
+					self.found = Some((total_span, docs_from_classlike_property(c, property)));
 				}
 				Type::Interface(c) => {
-					self.found = Some((new_span, docs_from_classlike_property(c, property)));
+					self.found = Some((total_span, docs_from_classlike_property(c, property)));
 				}
 				Type::Struct(c) => {
-					self.found = Some((new_span, docs_from_classlike_property(c, property)));
+					self.found = Some((total_span, docs_from_classlike_property(c, property)));
 				}
 			}
 		}
@@ -391,13 +390,25 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 				if object.span.contains(&self.position) {
 					self.visit_expr(object)
 				} else {
-					self.visit_type_with_member(self.types.get_expr_type(object), property)
+					let total_span = WingSpan {
+						file_id: property.span.file_id.clone(),
+						start: object.span.start,
+						end: property.span.end,
+					};
+
+					self.visit_type_with_member(self.types.get_expr_type(object), property, total_span)
 				}
 			}
 			Reference::TypeMember { type_name, property } => {
 				if type_name.span.contains(&self.position) {
 					self.visit_user_defined_type(type_name)
 				} else {
+					let total_span = WingSpan {
+						file_id: property.span.file_id.clone(),
+						start: type_name.span.start,
+						end: property.span.end,
+					};
+
 					self.visit_type_with_member(
 						resolve_user_defined_type(
 							type_name,
@@ -406,6 +417,7 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 						)
 						.unwrap_or(self.types.error()),
 						property,
+						total_span,
 					)
 				}
 			}
@@ -789,6 +801,20 @@ class T {
 		Data { field: "" };
 		//^
 	}
+}
+"#
+	);
+
+	test_hover_list!(
+		class_init_this_field,
+		r#"
+class T {
+  stuff: num;
+
+  init() {
+    this.stuff = 1;
+         //^
+  }
 }
 "#
 	);
