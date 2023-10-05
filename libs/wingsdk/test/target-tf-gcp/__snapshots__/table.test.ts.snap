@@ -13,7 +13,7 @@ exports[`create a table 1`] = `
               "min_nodes": 1,
             },
             "cluster_id": "default",
-            "storage_type": "ssd",
+            "storage_type": "SSD",
           },
         ],
         "name": "aac8dce022",

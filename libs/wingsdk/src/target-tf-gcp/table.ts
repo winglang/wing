@@ -59,7 +59,7 @@ export class Table extends ex.Table {
 
     const instanceCluster: BigtableInstanceCluster = {
       clusterId: "default",
-      storageType: "ssd",
+      storageType: "SSD",
       zone: app.zone,
       autoscalingConfig: autoscalingConfig,
     };
