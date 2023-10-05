@@ -14,7 +14,7 @@ use crate::ast::{
 	TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
-use crate::diagnostic::{report_diagnostic, Diagnostic, TypeError, WingSpan};
+use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticAnnotation, TypeError, WingSpan};
 use crate::docs::Docs;
 use crate::file_graph::FileGraph;
 use crate::type_check::symbol_env::SymbolEnvKind;
@@ -1458,6 +1458,7 @@ impl Types {
 				report_diagnostic(Diagnostic {
 					message: format!("Inferred type {new_type} conflicts with already inferred type {existing_type}"),
 					span: Some(span.clone()),
+					annotations: vec![],
 				});
 				existing_type_option.replace(error);
 				return;
@@ -1739,6 +1740,7 @@ impl<'a> TypeChecker<'a> {
 		report_diagnostic(Diagnostic {
 			message: message.into(),
 			span: Some(spanned.span()),
+			annotations: vec![],
 		});
 
 		(self.make_error_variable_info(), Phase::Independent)
@@ -1748,6 +1750,7 @@ impl<'a> TypeChecker<'a> {
 		report_diagnostic(Diagnostic {
 			message: message.into(),
 			span: Some(spanned.span()),
+			annotations: vec![],
 		});
 	}
 
@@ -1755,14 +1758,20 @@ impl<'a> TypeChecker<'a> {
 		report_diagnostic(Diagnostic {
 			message: message.into(),
 			span: None,
+			annotations: vec![],
 		});
 	}
 
 	fn type_error(&self, type_error: TypeError) -> TypeRef {
-		let TypeError { message, span } = type_error;
+		let TypeError {
+			message,
+			span,
+			annotations,
+		} = type_error;
 		report_diagnostic(Diagnostic {
 			message,
 			span: Some(span),
+			annotations,
 		});
 
 		self.types.error()
@@ -2484,6 +2493,7 @@ impl<'a> TypeChecker<'a> {
 					self.type_error(TypeError {
 						message: "Panic expression".to_string(),
 						span: exp.span.clone(),
+						annotations: vec![],
 					}),
 					env.phase,
 				)
@@ -2901,10 +2911,7 @@ impl<'a> TypeChecker<'a> {
 			// known json data is statically known
 			message = format!("{message} (hint: use {first_expected_type}.fromJson() to convert dynamic Json)");
 		}
-		report_diagnostic(Diagnostic {
-			message,
-			span: Some(span.span()),
-		});
+		self.spanned_error(span, message);
 
 		// Evaluate to one of the expected types
 		first_expected_type
@@ -2965,6 +2972,7 @@ impl<'a> TypeChecker<'a> {
 						SymbolEnvOrNamespace::Error(Diagnostic {
 							message: format!("Could not bring \"{}\" due to cyclic bring statements", source_path,),
 							span: None,
+							annotations: vec![],
 						}),
 					);
 					return;
@@ -2987,6 +2995,7 @@ impl<'a> TypeChecker<'a> {
 						SymbolEnvOrNamespace::Error(Diagnostic {
 							message: format!("Symbol \"{}\" has multiple definitions in \"{}\"", key, source_path),
 							span: None,
+							annotations: vec![],
 						}),
 					);
 					return;
@@ -3035,7 +3044,7 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		for symbol_data in env.symbol_map.values_mut() {
-			if let SymbolKind::Variable(ref mut var_info) = symbol_data.1 {
+			if let SymbolKind::Variable(ref mut var_info) = symbol_data.2 {
 				// Update any possible inferred types in this variable.
 				// This must be called before checking for un-inferred types because some variable were not used in this scope so they did not get a chance to get updated.
 				self.update_known_inferences(&mut var_info.type_, &var_info.name.span);
@@ -3879,7 +3888,14 @@ impl<'a> TypeChecker<'a> {
 		let (var, var_phase) = self.resolve_reference(&variable, env);
 
 		if !var.type_.is_unresolved() && !var.reassignable {
-			self.spanned_error(variable, "Variable is not reassignable".to_string());
+			report_diagnostic(Diagnostic {
+				message: "Variable is not reassignable".to_string(),
+				span: Some(variable.span()),
+				annotations: vec![DiagnosticAnnotation {
+					message: "defined here (try adding \"var\" in front)".to_string(),
+					span: var.name.span(),
+				}],
+			});
 		} else if var_phase == Phase::Preflight && env.phase == Phase::Inflight {
 			self.spanned_error(variable, "Variable cannot be reassigned from inflight".to_string());
 		}
@@ -4084,10 +4100,10 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		if !cond_type.is_option() {
-			report_diagnostic(Diagnostic {
-				message: format!("Expected type to be optional, but got \"{}\" instead", cond_type),
-				span: Some(value.span()),
-			});
+			self.spanned_error(
+				value,
+				format!("Expected type to be optional, but got \"{}\" instead", cond_type),
+			)
 		}
 
 		// Technically we only allow if let statements to be used with optionals
@@ -5248,20 +5264,17 @@ impl<'a> TypeChecker<'a> {
 			if parent_class.phase == phase {
 				(Some(parent_type), Some(parent_class.env.get_ref()))
 			} else {
-				report_diagnostic(Diagnostic {
-					message: format!(
+				self.spanned_error(
+					parent,
+					format!(
 						"Class \"{}\" is an {} class and cannot extend {} class \"{}\"",
 						name, phase, parent_class.phase, parent_class.name
 					),
-					span: Some(parent.span.clone()),
-				});
+				);
 				(None, None)
 			}
 		} else {
-			report_diagnostic(Diagnostic {
-				message: format!("Expected \"{}\" to be a class", parent),
-				span: Some(parent.span.clone()),
-			});
+			self.spanned_error(parent, format!("Expected \"{}\" to be a class", parent));
 			(None, None)
 		}
 	}
@@ -5289,6 +5302,7 @@ fn add_parent_members_to_struct_env(
 					name.name, parent_type
 				),
 				span: name.span.clone(),
+				annotations: vec![],
 			});
 		};
 		// Add each member of current parent to the struct's environment (if it wasn't already added by a previous parent)
@@ -5309,6 +5323,7 @@ fn add_parent_members_to_struct_env(
 							"Struct \"{}\" extends \"{}\" which introduces a conflicting member \"{}\" ({} != {})",
 							name, parent_type, parent_member_name, member_type, member_type
 						),
+						annotations: vec![],
 					});
 				}
 			} else {
@@ -5352,6 +5367,7 @@ fn add_parent_members_to_iface_env(
 					name.name, parent_type
 				),
 				span: name.span.clone(),
+				annotations: vec![],
 			});
 		};
 		// Add each member of current parent to the interface's environment (if it wasn't already added by a previous parent)
@@ -5367,11 +5383,12 @@ fn add_parent_members_to_iface_env(
 					.type_;
 				if !existing_type.is_same_type_as(&member_type) {
 					return Err(TypeError {
-						span: name.span.clone(),
 						message: format!(
 							"Interface \"{}\" extends \"{}\" but has a conflicting member \"{}\" ({} != {})",
 							name, parent_type, parent_member_name, member_type, member_type
 						),
+						span: name.span.clone(),
+						annotations: vec![],
 					});
 				}
 			} else {
@@ -5407,23 +5424,32 @@ fn lookup_result_to_type_error<T>(lookup_result: LookupResult, looked_up_object:
 where
 	T: Spanned + Display,
 {
-	let (message, span) = match lookup_result {
-		LookupResult::NotFound(s) => (format!("Unknown symbol \"{s}\""), s.span()),
-		LookupResult::MultipleFound => (
-			format!("Ambiguous symbol \"{looked_up_object}\""),
-			looked_up_object.span(),
-		),
-		LookupResult::DefinedLater => (
-			format!("Symbol \"{looked_up_object}\" used before being defined"),
-			looked_up_object.span(),
-		),
-		LookupResult::ExpectedNamespace(ns_name) => (
-			format!("Expected \"{ns_name}\" in \"{looked_up_object}\" to be a namespace"),
-			ns_name.span(),
-		),
+	match lookup_result {
+		LookupResult::NotFound(s) => TypeError {
+			message: format!("Unknown symbol \"{s}\""),
+			span: s.span(),
+			annotations: vec![],
+		},
+		LookupResult::MultipleFound => TypeError {
+			message: format!("Ambiguous symbol \"{looked_up_object}\""),
+			span: looked_up_object.span(),
+			annotations: vec![],
+		},
+		LookupResult::DefinedLater(span) => TypeError {
+			message: format!("Symbol \"{looked_up_object}\" used before being defined"),
+			span: looked_up_object.span(),
+			annotations: vec![DiagnosticAnnotation {
+				message: "defined later here".to_string(),
+				span,
+			}],
+		},
+		LookupResult::ExpectedNamespace(ns_name) => TypeError {
+			message: format!("Expected \"{ns_name}\" in \"{looked_up_object}\" to be a namespace"),
+			span: ns_name.span(),
+			annotations: vec![],
+		},
 		LookupResult::Found(..) => panic!("Expected a lookup error, but found a successful lookup"),
-	};
-	TypeError { message, span }
+	}
 }
 
 /// Resolves a user defined type (e.g. `Foo.Bar.Baz`) to a type reference
@@ -5446,6 +5472,7 @@ pub fn resolve_user_defined_type(
 			Err(TypeError {
 				message: format!("Expected \"{}\" to be a type but it's a {symb_kind}", symb.name),
 				span: symb.span.clone(),
+				annotations: vec![],
 			})
 		}
 	} else {
@@ -5475,6 +5502,7 @@ pub fn resolve_super_method(method: &Symbol, env: &SymbolEnv, types: &Types) -> 
 					"`super` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474"
 						.to_string(),
 				span: method.span.clone(),
+				annotations: vec![],
 			});
 		}
 		// Get the parent type of "this" (if it's a preflight class that's directly derived from `std.Resource` it's an implicit derive so we'll treat it as if there's no parent)
@@ -5493,12 +5521,14 @@ pub fn resolve_super_method(method: &Symbol, env: &SymbolEnv, types: &Types) -> 
 						parent_type, method
 					),
 					span: method.span.clone(),
+					annotations: vec![],
 				})
 			}
 		} else {
 			Err(TypeError {
 				message: format!("Cannot call super method because class {} has no parent", type_),
 				span: method.span.clone(),
+				annotations: vec![],
 			})
 		}
 	} else {
@@ -5510,6 +5540,7 @@ pub fn resolve_super_method(method: &Symbol, env: &SymbolEnv, types: &Types) -> 
 			})
 			.to_string(),
 			span: method.span.clone(),
+			annotations: vec![],
 		})
 	}
 }

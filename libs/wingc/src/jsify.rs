@@ -404,6 +404,7 @@ impl<'a> JSifier<'a> {
 					report_diagnostic(Diagnostic {
 						message: "Cannot reference an inflight value from within a preflight expression".to_string(),
 						span: Some(expression.span.clone()),
+						annotations: vec![],
 					});
 
 					return "<ERROR>".to_string();
@@ -1083,6 +1084,7 @@ impl<'a> JSifier<'a> {
 							report_diagnostic(Diagnostic {
 								message: format!("Failed to resolve extern \"{external_spec}\": {err}"),
 								span: Some(func_def.span.clone()),
+								annotations: vec![],
 							});
 							format!("/* unresolved: \"{external_spec}\" */")
 						}

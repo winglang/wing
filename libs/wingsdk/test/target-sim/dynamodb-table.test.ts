@@ -44,9 +44,9 @@ test("put item", async () => {
   const client = s.getResource("/put_table") as ex.IDynamodbTableClient;
 
   const expectedValue = { id: "1", name: "Joe Doe", age: 50 };
-  await client.putItem(expectedValue as any);
-  const result = await client.getItem({ id: "1" } as any);
-  expect(result).toEqual(expectedValue);
+  await client.putItem({ item: expectedValue as any });
+  const result = await client.getItem({ key: { id: "1" } as any });
+  expect(result.item).toEqual(expectedValue);
 
   expect(s.getResourceConfig("/put_table")).toEqual({
     attrs: {
@@ -80,9 +80,9 @@ test("get item", async () => {
   const client = s.getResource("/get_table") as ex.IDynamodbTableClient;
 
   const expectedValue = { id: "1", name: "Joe Doe", age: 50 };
-  await client.putItem(expectedValue as any);
-  const joe = await client.getItem({ id: "1" } as any);
-  expect(joe).toEqual(expectedValue);
+  await client.putItem({ item: expectedValue as any });
+  const joe = await client.getItem({ key: { id: "1" } as any });
+  expect(joe.item).toEqual(expectedValue);
 
   expect(s.getResourceConfig("/get_table")).toEqual({
     attrs: {
@@ -116,15 +116,16 @@ test("update item", async () => {
   const client = s.getResource("/update_table") as ex.IDynamodbTableClient;
 
   const expectedValue = { id: "1", name: "Joe Doe", age: 50 };
-  await client.putItem(expectedValue as any);
-  let joe = await client.getItem({ id: "1" } as any);
-  expect(joe).toEqual(expectedValue);
-  await client.updateItem({ id: "1" } as any, {
+  await client.putItem({ item: expectedValue as any });
+  let joe = await client.getItem({ key: { id: "1" } as any });
+  expect(joe.item).toEqual(expectedValue);
+  await client.updateItem({
+    key: { id: "1" } as any,
     updateExpression: "set age = :age",
     expressionAttributeValues: { ":age": 51 } as any,
   });
-  joe = await client.getItem({ id: "1" } as any);
-  expect(joe).toEqual({ id: "1", name: "Joe Doe", age: 51 });
+  joe = await client.getItem({ key: { id: "1" } as any });
+  expect(joe.item).toEqual({ id: "1", name: "Joe Doe", age: 51 });
 
   expect(s.getResourceConfig("/update_table")).toEqual({
     attrs: {
@@ -157,16 +158,17 @@ test("inserting the same id twice", async () => {
   const s = await app.startSimulator();
   const client = s.getResource("/put_twice_table") as ex.IDynamodbTableClient;
 
-  await client.putItem({ id: "1", name: "Joe Doe" } as any);
-  let joe = await client.getItem({ id: "1" } as any);
-  expect(joe).toEqual({ id: "1", name: "Joe Doe" });
+  await client.putItem({ item: { id: "1", name: "Joe Doe" } as any });
+  let joe = await client.getItem({ key: { id: "1" } as any });
+  expect(joe.item).toEqual({ id: "1", name: "Joe Doe" });
 
-  await client.putItem({ id: "1", name: "Joe Doe II" } as any);
-  joe = await client.getItem({ id: "1" } as any);
-  expect(joe).toEqual({ id: "1", name: "Joe Doe II" });
+  await client.putItem({ item: { id: "1", name: "Joe Doe II" } as any });
+  joe = await client.getItem({ key: { id: "1" } as any });
+  expect(joe.item).toEqual({ id: "1", name: "Joe Doe II" });
 
   await expect(() =>
-    client.putItem({ id: "1", name: "Joe Doe III" } as any, {
+    client.putItem({
+      item: { id: "1", name: "Joe Doe III" } as any,
       conditionExpression: "attribute_not_exists(id)",
     })
   ).rejects.toThrow(/The conditional request failed/);
@@ -191,12 +193,13 @@ test("update non-existent item", async () => {
     "/update_non_existing_table"
   ) as ex.IDynamodbTableClient;
 
-  await client.updateItem({ id: "1" } as any, {
+  await client.updateItem({
+    key: { id: "1" } as any,
     updateExpression: "set age = :age",
     expressionAttributeValues: { ":age": 50 } as any,
   });
-  const joe = await client.getItem({ id: "1" } as any);
-  expect(joe).toEqual({ id: "1", age: 50 });
+  const joe = await client.getItem({ key: { id: "1" } as any });
+  expect(joe.item).toEqual({ id: "1", age: 50 });
 
   await s.stop();
 });
@@ -212,13 +215,13 @@ test("delete item", async () => {
   const s = await app.startSimulator();
   const client = s.getResource("/delete_table") as ex.IDynamodbTableClient;
 
-  await client.putItem({ id: "1", age: 50 } as any);
-  await client.deleteItem({ id: "1" } as any);
-  let joe = await client.getItem({ id: "1" } as any);
-  expect(joe).toEqual({});
+  await client.putItem({ item: { id: "1", age: 50 } as any });
+  await client.deleteItem({ key: { id: "1" } as any });
+  let joe = await client.getItem({ key: { id: "1" } as any });
+  expect(joe.item).toBeUndefined();
 
   // will not throw
-  await client.deleteItem({ id: "1" } as any);
+  await client.deleteItem({ key: { id: "1" } as any });
 
   await s.stop();
 });
@@ -234,8 +237,8 @@ test("scan", async () => {
   const s = await app.startSimulator();
   const client = s.getResource("/scan_table") as ex.IDynamodbTableClient;
 
-  await client.putItem({ id: "1", age: 50 } as any);
-  await client.putItem({ id: "2", loc: "US" } as any);
+  await client.putItem({ item: { id: "1", age: 50 } as any });
+  await client.putItem({ item: { id: "2", loc: "US" } as any });
   const result = await client.scan();
   expect(result.items).toEqual([
     { id: "1", age: 50 },
@@ -257,10 +260,10 @@ test("query", async () => {
   const s = await app.startSimulator();
   const client = s.getResource("/query_table") as ex.IDynamodbTableClient;
 
-  await client.putItem({ id: "1", age: 2 } as any);
-  await client.putItem({ id: "1", age: 1 } as any);
-  await client.putItem({ id: "2", age: 3 } as any);
-  await client.putItem({ id: "2", age: 1 } as any);
+  await client.putItem({ item: { id: "1", age: 2 } as any });
+  await client.putItem({ item: { id: "1", age: 1 } as any });
+  await client.putItem({ item: { id: "2", age: 3 } as any });
+  await client.putItem({ item: { id: "2", age: 1 } as any });
   {
     const result = await client.query({
       keyConditionExpression: "id = :id",
@@ -285,21 +288,91 @@ test("query", async () => {
   await s.stop();
 });
 
-test("write transaction", async () => {
+test("transact get items", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = ex.DynamodbTable._newDynamodbTable(app, "write_transact_table", {
-    name: "write_transact_table",
-    attributeDefinitions: { id: "S" } as any,
-    hashKey: "id",
-  });
+  const t = ex.DynamodbTable._newDynamodbTable(
+    app,
+    "transact_get_items_table",
+    {
+      name: "transact_get_items_table",
+      attributeDefinitions: { id: "S" } as any,
+      hashKey: "id",
+    }
+  );
   const s = await app.startSimulator();
   const client = s.getResource(
-    "/write_transact_table"
+    "/transact_get_items_table"
   ) as ex.IDynamodbTableClient;
 
-  await client.putItem({ id: "1", age: 50 } as any);
-  await client.putItem({ id: "2", age: 80 } as any);
+  // WHEN
+  await client.batchWriteItem({
+    requestItems: [
+      {
+        putRequest: {
+          item: {
+            id: "1",
+            age: 50,
+          } as any,
+        },
+      },
+      {
+        putRequest: {
+          item: {
+            id: "2",
+            age: 80,
+          } as any,
+        },
+      },
+    ],
+  });
+
+  // THEN
+  const { responses } = await client.transactGetItems({
+    transactItems: [
+      {
+        get: {
+          key: {
+            id: "1",
+          } as any,
+        },
+      },
+      {
+        get: {
+          key: {
+            id: "2",
+          } as any,
+        },
+      },
+    ],
+  });
+  expect(responses).toEqual([
+    { item: { id: "1", age: 50 } },
+    { item: { id: "2", age: 80 } },
+  ]);
+
+  await s.stop();
+});
+
+test("transact write items", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const t = ex.DynamodbTable._newDynamodbTable(
+    app,
+    "transact_write_items_table",
+    {
+      name: "transact_write_items_table",
+      attributeDefinitions: { id: "S" } as any,
+      hashKey: "id",
+    }
+  );
+  const s = await app.startSimulator();
+  const client = s.getResource(
+    "/transact_write_items_table"
+  ) as ex.IDynamodbTableClient;
+
+  await client.putItem({ item: { id: "1", age: 50 } as any });
+  await client.putItem({ item: { id: "2", age: 80 } as any });
   await client.transactWriteItems({
     transactItems: [
       {
@@ -325,14 +398,145 @@ test("write transaction", async () => {
     ],
   });
 
-  let item1 = await client.getItem({ id: "1" } as any);
-  expect(item1).toEqual({ id: "1", age: 51 });
+  let item1 = await client.getItem({ key: { id: "1" } as any });
+  expect(item1.item).toEqual({ id: "1", age: 51 });
 
-  let item2 = await client.getItem({ id: "2" } as any);
-  expect(item2).toEqual({});
+  let item2 = await client.getItem({ key: { id: "2" } as any });
+  expect(item2.item).toBeUndefined();
 
-  let item3 = await client.getItem({ id: "3" } as any);
-  expect(item3).toEqual({ id: "3", age: 30 });
+  let item3 = await client.getItem({ key: { id: "3" } as any });
+  expect(item3.item).toEqual({ id: "3", age: 30 });
+
+  await s.stop();
+});
+
+test("batch get item", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const t = ex.DynamodbTable._newDynamodbTable(app, "batch_get_item_table", {
+    name: "batch_get_item_table",
+    attributeDefinitions: { id: "S" } as any,
+    hashKey: "id",
+  });
+  const s = await app.startSimulator();
+  const client = s.getResource(
+    "/batch_get_item_table"
+  ) as ex.IDynamodbTableClient;
+
+  await client.putItem({ item: { id: "1", age: 50 } as any });
+  await client.putItem({ item: { id: "2", age: 80 } as any });
+
+  const { responses } = await client.batchGetItem({
+    requestItem: {
+      keys: [
+        {
+          id: "1",
+        } as any,
+        {
+          id: "2",
+        } as any,
+      ],
+    },
+  });
+  expect(responses).toEqual([
+    { id: "1", age: 50 },
+    { id: "2", age: 80 },
+  ]);
+
+  await s.stop();
+});
+
+test("batch write item", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const t = ex.DynamodbTable._newDynamodbTable(app, "batch_write_item_table", {
+    name: "batch_write_item_table",
+    attributeDefinitions: { id: "S" } as any,
+    hashKey: "id",
+  });
+  const s = await app.startSimulator();
+  const client = s.getResource(
+    "/batch_write_item_table"
+  ) as ex.IDynamodbTableClient;
+
+  // WHEN
+  await client.batchWriteItem({
+    requestItems: [
+      {
+        putRequest: {
+          item: {
+            id: "1",
+            age: 50,
+          } as any,
+        },
+      },
+      {
+        putRequest: {
+          item: {
+            id: "2",
+            age: 80,
+          } as any,
+        },
+      },
+    ],
+  });
+
+  // THEN
+  {
+    const { responses } = await client.batchGetItem({
+      requestItem: {
+        keys: [
+          {
+            id: "1",
+          } as any,
+          {
+            id: "2",
+          } as any,
+        ],
+      },
+    });
+    expect(responses).toEqual([
+      { id: "1", age: 50 },
+      { id: "2", age: 80 },
+    ]);
+  }
+
+  // WHEN
+  await client.batchWriteItem({
+    requestItems: [
+      {
+        deleteRequest: {
+          key: {
+            id: "1",
+          } as any,
+        },
+      },
+      {
+        deleteRequest: {
+          key: {
+            id: "2",
+          } as any,
+        },
+      },
+    ],
+  });
+
+  // THEN
+  {
+    const { responses } = await client.batchGetItem({
+      requestItem: {
+        keys: [
+          {
+            id: "1",
+          } as any,
+          {
+            id: "2",
+          } as any,
+        ],
+      },
+    });
+    expect(responses).toEqual([]);
+  }
 
   await s.stop();
 });

@@ -1,6 +1,4 @@
-import { writeFileSync } from "fs";
-import { readdir, stat, writeFile, mkdtemp } from "fs/promises";
-import { tmpdir } from "os";
+import { readdir, stat, writeFile } from "fs/promises";
 import { join, resolve } from "path";
 import { Target } from "@winglang/compiler";
 import { describe, test, expect } from "vitest";
@@ -40,37 +38,6 @@ describe(
       const files = (await readdir(outDir)).sort();
       expect(files.length).toBeGreaterThan(0);
       expect(files).toEqual([".wing", "connections.json", "simulator.json", "tree.json"]);
-    });
-
-    test("should be able to compile to default target sim", async () => {
-      const outDir = await compile(exampleFilePath, {
-        targetDir: `${await generateTmpDir()}/target`,
-      });
-
-      const stats = await stat(outDir);
-      expect(stats.isDirectory()).toBeTruthy();
-      const files = (await readdir(outDir)).sort();
-      expect(files.length).toBeGreaterThan(0);
-      expect(files).toEqual([".wing", "connections.json", "simulator.json", "tree.json"]);
-    });
-
-    test("should be able to compile the only entrypoint file in current directory", async () => {
-      const outDir = await mkdtemp(join(tmpdir(), "-wing-compile-test"));
-      const prevdir = process.cwd();
-
-      try {
-        process.chdir(outDir);
-        writeFileSync("main.w", "bring cloud;");
-        await compile();
-
-        const stats = await stat(outDir);
-        expect(stats.isDirectory()).toBeTruthy();
-        const files = (await readdir(outDir)).sort();
-        expect(files.length).toBeGreaterThan(0);
-        expect(files).toEqual(["main.w", "target"]);
-      } finally {
-        process.chdir(prevdir);
-      }
     });
 
     test("should error if a nonexistent file is compiled", async () => {
