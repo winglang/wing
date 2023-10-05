@@ -1,13 +1,13 @@
-import {describe, test, expect, beforeEach } from "vitest";
+import { describe, test, expect, beforeEach } from "vitest";
 import { CICollector } from "./ci-collector";
 
 describe("ci collector tests", () => {
   const originialEnvironment = process.env;
 
   beforeEach(() => {
-    // Restore the environment back to where it was before any of the 
+    // Restore the environment back to where it was before any of the
     // tests manipulated it
-    process.env = { ...originialEnvironment }
+    process.env = { ...originialEnvironment };
   });
 
   test("should return undefined when no ci environment is detected", async () => {
@@ -20,7 +20,7 @@ describe("ci collector tests", () => {
 
     // THEN
     expect(ciData).toBeUndefined();
-  })
+  });
 
   describe("should return correct CI environment name", () => {
     let collector: CICollector;
@@ -36,7 +36,7 @@ describe("ci collector tests", () => {
       process.env.GITHUB_ACTIONS = "1";
 
       // THEN
-      expect(await collector.collect()).toEqual({name: "GITHUB_ACTIONS"})
+      expect(await collector.collect()).toEqual({ name: "GITHUB_ACTIONS" });
     });
 
     test("when in Gitlab ci", async () => {
@@ -44,7 +44,7 @@ describe("ci collector tests", () => {
       process.env.GITLAB_CI = "1";
 
       // THEN
-      expect(await collector.collect()).toEqual({name: "GITLAB_CI"})
+      expect(await collector.collect()).toEqual({ name: "GITLAB_CI" });
     });
 
     test("when in Jekins", async () => {
@@ -52,7 +52,7 @@ describe("ci collector tests", () => {
       process.env.JENKINS_URL = "1";
 
       // THEN
-      expect(await collector.collect()).toEqual({name: "JENKINS"})
+      expect(await collector.collect()).toEqual({ name: "JENKINS" });
     });
 
     test("when in Circleci", async () => {
@@ -60,7 +60,7 @@ describe("ci collector tests", () => {
       process.env.CIRCLECI = "1";
 
       // THEN
-      expect(await collector.collect()).toEqual({name: "CIRCLECI"})
+      expect(await collector.collect()).toEqual({ name: "CIRCLECI" });
     });
 
     test("when in Bitbucket", async () => {
@@ -68,7 +68,7 @@ describe("ci collector tests", () => {
       process.env.BITBUCKET_BUILD_NUMBER = "1";
 
       // THEN
-      expect(await collector.collect()).toEqual({name: "BITBUCKET"})
+      expect(await collector.collect()).toEqual({ name: "BITBUCKET" });
     });
 
     test("when in Azure Devops", async () => {
@@ -76,7 +76,7 @@ describe("ci collector tests", () => {
       process.env.BUILD_BUILDID = "1";
 
       // THEN
-      expect(await collector.collect()).toEqual({name: "AZURE_DEVOPS"})
+      expect(await collector.collect()).toEqual({ name: "AZURE_DEVOPS" });
     });
 
     test("when in Teamcity", async () => {
@@ -84,7 +84,7 @@ describe("ci collector tests", () => {
       process.env.TEAMCITY_VERSION = "1";
 
       // THEN
-      expect(await collector.collect()).toEqual({name: "TEAMCITY"})
+      expect(await collector.collect()).toEqual({ name: "TEAMCITY" });
     });
 
     test("when in AWS Codebuild", async () => {
@@ -92,7 +92,7 @@ describe("ci collector tests", () => {
       process.env.CODEBUILD_BUILD_ID = "1";
 
       // THEN
-      expect(await collector.collect()).toEqual({name: "CODEBUILD"})
+      expect(await collector.collect()).toEqual({ name: "CODEBUILD" });
     });
-  })
+  });
 });

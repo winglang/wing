@@ -1,10 +1,10 @@
 import { promises as fsPromise } from "fs";
 import { relative } from "path";
 
-import chalk from "chalk";
-import debug from "debug";
-import { CHARS_ASCII, emitDiagnostic, File, Label } from "codespan-wasm";
 import * as wingCompiler from "@winglang/compiler";
+import chalk from "chalk";
+import { CHARS_ASCII, emitDiagnostic, File, Label } from "codespan-wasm";
+import debug from "debug";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)
@@ -74,11 +74,11 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   } catch (error) {
     if (error instanceof wingCompiler.CompileError) {
       // This is a bug in the user's code. Print the compiler diagnostics.
-      const errors = error.diagnostics;
+      const diagnostics = error.diagnostics;
       const result = [];
 
-      for (const error of errors) {
-        const { message, span } = error;
+      for (const diagnostic of diagnostics) {
+        const { message, span, annotations } = diagnostic;
         let files: File[] = [];
         let labels: Label[] = [];
 
@@ -95,6 +95,28 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
             rangeEnd: end,
             message,
             style: "primary",
+          });
+        }
+
+        for (const annotation of annotations) {
+          const source = await fsPromise.readFile(annotation.span.file_id, "utf8");
+          const start = byteOffsetFromLineAndColumn(
+            source,
+            annotation.span.start.line,
+            annotation.span.start.col
+          );
+          const end = byteOffsetFromLineAndColumn(
+            source,
+            annotation.span.end.line,
+            annotation.span.end.col
+          );
+          files.push({ name: annotation.span.file_id, source });
+          labels.push({
+            fileId: annotation.span.file_id,
+            rangeStart: start,
+            rangeEnd: end,
+            message: annotation.message,
+            style: "secondary",
           });
         }
 

@@ -1,3 +1,4 @@
+import * as wingCompiler from "@winglang/compiler";
 import {
   createConnection,
   InitializeParams,
@@ -7,9 +8,8 @@ import {
   Diagnostic,
   Range,
   DocumentUri,
+  Location,
 } from "vscode-languageserver/node";
-
-import * as wingCompiler from "@winglang/compiler";
 
 export async function lsp() {
   let wingc = await wingCompiler.load({
@@ -53,7 +53,7 @@ export async function lsp() {
       }
     } catch (e) {
       // set status in ide
-      connection.sendDiagnostics({
+      void connection.sendDiagnostics({
         uri: args.textDocument.uri,
         diagnostics: [
           {
@@ -131,7 +131,17 @@ export async function lsp() {
         const diagnosticUri = "file://" + rd.span.file_id;
         const diag = Diagnostic.create(
           Range.create(rd.span.start.line, rd.span.start.col, rd.span.end.line, rd.span.end.col),
-          rd.message
+          rd.message,
+          undefined,
+          undefined,
+          undefined,
+          rd.annotations.map((a) => ({
+            location: Location.create(
+              "file://" + a.span.file_id,
+              Range.create(a.span.start.line, a.span.start.col, a.span.end.line, a.span.end.col)
+            ),
+            message: a.message,
+          }))
         );
 
         if (!allDiagnostics.has(diagnosticUri)) {
@@ -146,19 +156,19 @@ export async function lsp() {
 
     // purposely not awaiting these calls, notifications are fire-and-forget
     for (const [uri, diagnostics] of allDiagnostics.entries()) {
-      connection.sendDiagnostics({ uri, diagnostics });
+      void connection.sendDiagnostics({ uri, diagnostics });
     }
   }
 
   connection.onDidOpenTextDocument(async (params) => {
-    handle_event_and_update_diagnostics(
+    void handle_event_and_update_diagnostics(
       "wingc_on_did_open_text_document",
       params,
       params.textDocument.uri
     );
   });
   connection.onDidChangeTextDocument(async (params) => {
-    handle_event_and_update_diagnostics(
+    void handle_event_and_update_diagnostics(
       "wingc_on_did_change_text_document",
       params,
       params.textDocument.uri

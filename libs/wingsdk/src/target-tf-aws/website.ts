@@ -17,7 +17,6 @@ import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import * as aws from "../shared-aws";
-import { Json } from "../std";
 
 const INDEX_FILE = "index.html";
 
@@ -27,7 +26,7 @@ const INDEX_FILE = "index.html";
  * @inflight `@winglang/sdk.cloud.IWebsiteClient`
  */
 export class Website extends cloud.Website {
-  private readonly bucket: S3Bucket;
+  public readonly bucket: S3Bucket;
   private readonly _url: string;
 
   constructor(scope: Construct, id: string, props: aws.AwsWebsiteProps) {
@@ -159,18 +158,16 @@ export class Website extends cloud.Website {
     return this._url;
   }
 
-  public addJson(path: string, data: Json): string {
-    if (!path.endsWith(".json")) {
-      throw new Error(
-        `key must have a .json suffix. (current: "${path.split(".").pop()}")`
-      );
-    }
-
+  public addFile(
+    path: string,
+    data: string,
+    options?: cloud.AddFileOptions
+  ): string {
     new S3Object(this, `File-${path}`, {
       dependsOn: [this.bucket],
-      content: JSON.stringify(data),
+      content: data,
       bucket: this.bucket.bucket,
-      contentType: "application/json",
+      contentType: options?.contentType ?? "text/plain",
       key: this.formatPath(path),
     });
 

@@ -361,6 +361,57 @@ export abstract class Api extends Resource {
   }
 
   /**
+   * Checks if two given paths are ambiguous.
+   * @param pathA
+   * @param pathB
+   * @returns A boolean value indicating if provided paths are ambiguous.
+   * @internal
+   */
+  protected _arePathsAmbiguous(pathA: string, pathB: string): boolean {
+    const partsA = pathA.split("/");
+    const partsB = pathB.split("/");
+
+    if (partsA.length !== partsB.length) {
+      return false;
+    }
+
+    for (let i = 0; i < partsA.length; i++) {
+      const partA = partsA[i];
+      const partB = partsB[i];
+
+      if (
+        partA !== partB &&
+        !partA.match(/^{.+?}$/) &&
+        !partB.match(/^{.+?}$/)
+      ) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  /**
+   * Checks if provided path and method are ambigous with paths and methods already defined in the api spec.
+   * @param path Path to be checked
+   * @param method HTTP method
+   * @returns A boolean value indicating if provided path and method are ambiguous.
+   * @internal
+   */
+  protected _findAmbiguousPath(
+    path: string,
+    method: string
+  ): string | undefined {
+    const existingPaths = Object.keys(this.apiSpec.paths);
+
+    return existingPaths.find(
+      (existingPath) =>
+        !!this.apiSpec.paths[existingPath][method.toLowerCase()] &&
+        this._arePathsAmbiguous(existingPath, path)
+    );
+  }
+
+  /**
    * Generates the OpenAPI schema for CORS headers based on the provided CORS options.
    * @param corsOptions The CORS options to generate the schema from.
    * @returns An object representing the OpenAPI schema for CORS headers.
@@ -439,6 +490,12 @@ export abstract class Api extends Resource {
     if (this.apiSpec.paths[path]?.[method.toLowerCase()]) {
       throw new Error(
         `Endpoint for path '${path}' and method '${method}' already exists`
+      );
+    }
+    const ambiguousPath = this._findAmbiguousPath(path, method);
+    if (!!ambiguousPath) {
+      throw new Error(
+        `Endpoint for path '${path}' and method '${method}' is ambiguous - it conflicts with existing endpoint for path '${ambiguousPath}'`
       );
     }
     const operationId = `${method.toLowerCase()}${
