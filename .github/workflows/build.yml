@@ -385,7 +385,6 @@ jobs:
           PACKAGE_VERSION: ${{ needs.build.outputs.version }}
         with:
           max_attempts: 7
-          retry_on: any
           timeout_minutes: 5
           command: |
             set -o pipefail
