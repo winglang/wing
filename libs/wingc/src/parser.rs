@@ -897,7 +897,7 @@ impl<'s> Parser<'s> {
 					self
 						.with_error::<Node>(
 							format!(
-								"Unable to load \"{}\": Module not found in \"{}\"",
+								"Unable to load {}: Module not found in \"{}\"",
 								module_name, self.source_name
 							),
 							&statement_node,
