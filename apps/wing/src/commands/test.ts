@@ -1,15 +1,14 @@
-import { basename, resolve, sep } from "path";
-import { compile, CompileOptions } from "./compile";
-import chalk from "chalk";
-import { std, simulator } from "@winglang/sdk";
 import * as cp from "child_process";
-import debug from "debug";
-import { promisify } from "util";
-import { generateTmpDir, withSpinner } from "../util";
-import { Target } from "@winglang/compiler";
-import { nanoid } from "nanoid";
 import { readFile, rm, rmSync } from "fs";
-import { TestRunnerClient } from "@winglang/sdk/lib/shared-aws/test-runner.inflight";
+import { basename, resolve, sep } from "path";
+import { promisify } from "util";
+import { Target } from "@winglang/compiler";
+import { std, simulator } from "@winglang/sdk";
+import chalk from "chalk";
+import debug from "debug";
+import { nanoid } from "nanoid";
+import { compile, CompileOptions } from "./compile";
+import { generateTmpDir, withSpinner } from "../util";
 
 const log = debug("wing:test");
 
@@ -49,8 +48,8 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
   printResults(results, Date.now() - startTime);
 
   // if we have any failures, exit with 1
-  for (const test of results) {
-    for (const r of test.results) {
+  for (const testSuite of results) {
+    for (const r of testSuite.results) {
       if (r.error) {
         return 1;
       }
@@ -80,20 +79,20 @@ function printResults(
   const areErrors = failing.length > 0 && totalSum > 1;
   const showTitle = totalSum > 1;
 
-  const results = [];
+  const res = [];
 
   if (showTitle) {
     // prints a list of the tests names with an icon
-    results.push(`Results:`);
-    results.push(...passing.map(({ testName }) => `    ${chalk.green("✓")} ${testName}`));
-    results.push(...failing.map(({ testName }) => `    ${chalk.red("×")} ${testName}`));
+    res.push(`Results:`);
+    res.push(...passing.map(({ testName }) => `    ${chalk.green("✓")} ${testName}`));
+    res.push(...failing.map(({ testName }) => `    ${chalk.red("×")} ${testName}`));
   }
 
   if (areErrors) {
     // prints error messages form failed tests
-    results.push(" ");
-    results.push("Errors:");
-    results.push(
+    res.push(" ");
+    res.push("Errors:");
+    res.push(
       ...failing.map(({ testName, results }) =>
         [
           `At ${testName}`,
@@ -104,29 +103,31 @@ function printResults(
   }
 
   // prints a summary of how many tests passed and failed
-  results.push(" ");
-  results.push(
-    `${chalk.dim("Tests")}${failingTestsNumber ? chalk.red(` ${failingTestsNumber} failed`) : ""}${failingTestsNumber && passingTestsNumber ? chalk.dim(" |") : ""
+  res.push(" ");
+  res.push(
+    `${chalk.dim("Tests")}${failingTestsNumber ? chalk.red(` ${failingTestsNumber} failed`) : ""}${
+      failingTestsNumber && passingTestsNumber ? chalk.dim(" |") : ""
     }${passingTestsNumber ? chalk.green(` ${passingTestsNumber} passed`) : ""} ${chalk.dim(
       `(${failingTestsNumber + passingTestsNumber})`
     )}`
   );
   // prints a summary of how many tests files passed and failed
-  results.push(
-    `${chalk.dim("Test Files")}${failing.length ? chalk.red(` ${failing.length} failed`) : ""}${failing.length && passing.length ? chalk.dim(" |") : ""
+  res.push(
+    `${chalk.dim("Test Files")}${failing.length ? chalk.red(` ${failing.length} failed`) : ""}${
+      failing.length && passing.length ? chalk.dim(" |") : ""
     }${passing.length ? chalk.green(` ${passing.length} passed`) : ""} ${chalk.dim(
       `(${totalSum})`
     )}`
   );
 
   // prints the test duration
-  results.push(
+  res.push(
     `${chalk.dim("Duration")} ${Math.floor(durationInSeconds / 60)}m${(
       durationInSeconds % 60
     ).toFixed(2)}s`
   );
 
-  console.log(results.filter((value) => !!value).join("\n"));
+  console.log(res.filter((value) => !!value).join("\n"));
 }
 
 async function testOne(entrypoint: string, options: TestOptions) {
@@ -145,13 +146,11 @@ async function testOne(entrypoint: string, options: TestOptions) {
 
   switch (options.target) {
     case Target.SIM:
-      return await testSimulator(synthDir, options);
+      return testSimulator(synthDir, options);
     case Target.TF_AWS:
-      return await testTfAws(synthDir, options);
-    case Target.TF_GCP:
-      return await testTfGcp(synthDir, options);
+      return testTfAws(synthDir, options);
     case Target.AWSCDK:
-      return await testAwsCdk(synthDir, options);
+      return testAwsCdk(synthDir, options);
     default:
       throw new Error(`unsupported target ${options.target}`);
   }
@@ -185,13 +184,13 @@ export function renderTestReport(entrypoint: string, results: std.TestResult[]):
     const details = new Array<string>();
 
     // add any log messages that were emitted during the test
-    for (const log of result.traces) {
+    for (const trace of result.traces) {
       // only show detailed traces if we are in debug mode
-      if (log.type === "resource" && process.env.DEBUG) {
-        details.push(chalk.gray("[trace] " + log.data.message));
+      if (trace.type === "resource" && process.env.DEBUG) {
+        details.push(chalk.gray("[trace] " + trace.data.message));
       }
-      if (log.type === "log") {
-        details.push(chalk.gray(log.data.message));
+      if (trace.type === "log") {
+        details.push(chalk.gray(trace.data.message));
       }
     }
 
@@ -279,7 +278,7 @@ async function testSimulator(synthDir: string, options: TestOptions) {
 async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.TestResult[]> {
   const { clean } = options;
   try {
-    isAwsCdkInstalled(synthDir);
+    await isAwsCdkInstalled(synthDir);
 
     await withSpinner("cdk deploy", () => awsCdkDeploy(synthDir));
 
@@ -293,18 +292,18 @@ async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.T
       const { TestRunnerClient } = await import(
         "@winglang/sdk/lib/shared-aws/test-runner.inflight"
       );
-      const testRunner = new TestRunnerClient(testArns);
+      const runner = new TestRunnerClient(testArns);
 
-      const tests = await testRunner.listTests();
-      return [testRunner, pickOneTestPerEnvironment(tests)];
+      const allTests = await runner.listTests();
+      return [runner, pickOneTestPerEnvironment(allTests)];
     });
 
     const results = await withSpinner("Running tests...", async () => {
-      const results = new Array<std.TestResult>();
+      const res = new Array<std.TestResult>();
       for (const path of tests) {
-        results.push(await testRunner.runTest(path));
+        res.push(await testRunner.runTest(path));
       }
-      return results;
+      return res;
     });
 
     const testReport = renderTestReport(synthDir, results);
@@ -370,24 +369,27 @@ async function testTfAws(synthDir: string, options: TestOptions): Promise<std.Te
       );
     }
 
-    await withSpinner("terraform init", async () => await terraformInit(synthDir));
+    await withSpinner("terraform init", async () => terraformInit(synthDir));
 
     await withSpinner("terraform apply", () => terraformApply(synthDir));
 
     const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
       const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_ARNS);
-      const testRunner = new TestRunnerClient(testArns);
+      const { TestRunnerClient } = await import(
+        "@winglang/sdk/lib/shared-aws/test-runner.inflight"
+      );
+      const runner = new TestRunnerClient(testArns);
 
-      const tests = await testRunner.listTests();
-      return [testRunner, pickOneTestPerEnvironment(tests)];
+      const allTests = await runner.listTests();
+      return [runner, pickOneTestPerEnvironment(allTests)];
     });
 
     const results = await withSpinner("Running tests...", async () => {
-      const results = new Array<std.TestResult>();
+      const res = new Array<std.TestResult>();
       for (const path of tests) {
-        results.push(await testRunner.runTest(path));
+        res.push(await testRunner.runTest(path));
       }
-      return results;
+      return res;
     });
 
     const testReport = renderTestReport(synthDir, results);
@@ -408,10 +410,6 @@ async function testTfAws(synthDir: string, options: TestOptions): Promise<std.Te
       noCleanUp(synthDir);
     }
   }
-}
-
-async function testTfGcp(_synthDir: string, _options: TestOptions): Promise<std.TestResult[] | void> {
-  throw new Error("GCP tests are not yet supported");
 }
 
 async function cleanupTf(synthDir: string) {
@@ -472,17 +470,17 @@ function pickOneTestPerEnvironment(testPaths: string[]) {
   for (const testPath of testPaths) {
     const testSuffix = testPath.substring(testPath.indexOf("env") + 1); // "<env #>/<path to test>"
     const env = testSuffix.substring(0, testSuffix.indexOf("/")); // "<env #>"
-    const test = testSuffix.substring(testSuffix.indexOf("/") + 1); // "<path to test>"
+    const testName = testSuffix.substring(testSuffix.indexOf("/") + 1); // "<path to test>"
 
     if (envs.has(env)) {
       continue;
     }
 
-    if (tests.has(test)) {
+    if (tests.has(testName)) {
       continue;
     }
 
-    tests.set(test, testPath);
+    tests.set(testName, testPath);
     envs.add(env);
   }
 

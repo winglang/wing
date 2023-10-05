@@ -9,6 +9,14 @@ export interface JsonStringifyOptions {
 }
 
 /**
+ * Options for validating Json
+ */
+export interface JsonValidationOptions {
+  /** Unsafe mode to skip validation (may lead to runtime errors) */
+  readonly unsafe?: boolean;
+}
+
+/**
  * Json entry representation
  */
 export interface JsonEntry {

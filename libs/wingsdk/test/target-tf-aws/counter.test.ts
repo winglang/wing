@@ -54,6 +54,7 @@ test("function with a counter binding", () => {
 
   expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group", // log group for function
     "aws_dynamodb_table", // table for the counter
     "aws_iam_role", // role for function
     "aws_iam_role_policy", // policy for role
@@ -67,7 +68,7 @@ test("function with a counter binding", () => {
 });
 
 test("inc() policy statement", () => {
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const counter = cloud.Counter._newCounter(app, "Counter");
   const inflight = Testing.makeHandler(
     app,
@@ -92,7 +93,7 @@ test("inc() policy statement", () => {
 });
 
 test("dec() policy statement", () => {
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const counter = cloud.Counter._newCounter(app, "Counter");
   const inflight = Testing.makeHandler(
     app,
@@ -117,7 +118,7 @@ test("dec() policy statement", () => {
 });
 
 test("peek() policy statement", () => {
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const counter = cloud.Counter._newCounter(app, "Counter");
   const inflight = Testing.makeHandler(
     app,
@@ -142,7 +143,7 @@ test("peek() policy statement", () => {
 });
 
 test("set() policy statement", () => {
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const counter = cloud.Counter._newCounter(app, "Counter");
   const inflight = Testing.makeHandler(
     app,
@@ -167,7 +168,7 @@ test("set() policy statement", () => {
 
 test("counter name valid", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const counter = cloud.Counter._newCounter(app, "The.Amazing-Counter_01");
   const output = app.synth();
 
@@ -186,7 +187,7 @@ test("counter name valid", () => {
 
 test("replace invalid character from counter name", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const counter = cloud.Counter._newCounter(app, "The*Amazing%Counter@01");
   const output = app.synth();
 

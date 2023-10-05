@@ -8,6 +8,7 @@ import { DynamodbTable } from "./dynamodb-table";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
+import { ReactApp } from "./react-app";
 import { Redis } from "./redis";
 import { isSimulatorResource } from "./resource";
 import { Schedule } from "./schedule";
@@ -34,7 +35,7 @@ import {
 import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
-import { TABLE_FQN, REDIS_FQN, DYNAMODB_TABLE_FQN } from "../ex";
+import { TABLE_FQN, REDIS_FQN, DYNAMODB_TABLE_FQN, REACT_APP_FQN } from "../ex";
 import { WingSimulatorSchema } from "../simulator/simulator";
 import { TEST_RUNNER_FQN } from "../std";
 
@@ -110,6 +111,9 @@ export class App extends core.App {
       case WEBSITE_FQN:
         return new Website(scope, id, args[0]);
 
+      case REACT_APP_FQN:
+        return new ReactApp(scope, id, args[0]);
+
       case SECRET_FQN:
         return new Secret(scope, id, args[0]);
 
@@ -117,7 +121,7 @@ export class App extends core.App {
         return new Schedule(scope, id, args[0]);
 
       case SERVICE_FQN:
-        return new Service(scope, id, args[0]);
+        return new Service(scope, id, args[0], args[1]);
 
       case ON_DEPLOY_FQN:
         return new OnDeploy(scope, id, args[0], args[1]);

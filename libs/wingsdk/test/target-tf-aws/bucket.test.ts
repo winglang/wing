@@ -82,8 +82,8 @@ test("bucket with two preflight files", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
-  bucket.addFile("file1.txt", "../testFiles/test1.txt");
-  bucket.addFile("file2.txt", "../testFiles/test2.txt");
+  bucket.addFile("file1.txt", "../test-files/test1.txt");
+  bucket.addFile("file2.txt", "../test-files/test2.txt");
   const output = app.synth();
 
   // THEN
@@ -160,6 +160,7 @@ test("bucket with onCreate method", () => {
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group", // log group for subscriber
     "aws_iam_role",
     "aws_iam_role_policy",
     "aws_iam_role_policy_attachment",
@@ -198,6 +199,7 @@ test("bucket with onDelete method", () => {
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group", // log group for subscriber
     "aws_iam_role",
     "aws_iam_role_policy",
     "aws_iam_role_policy_attachment",
@@ -236,6 +238,7 @@ test("bucket with onUpdate method", () => {
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group", // log group for subscriber
     "aws_iam_role",
     "aws_iam_role_policy",
     "aws_iam_role_policy_attachment",
@@ -274,6 +277,7 @@ test("bucket with onEvent method", () => {
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group", // log group for subscriber
     "aws_iam_role",
     "aws_iam_role_policy",
     "aws_iam_role_policy_attachment",

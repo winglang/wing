@@ -169,6 +169,7 @@ new cloud.Bucket(props?: BucketProps);
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.publicUrl">publicUrl</a></code> | Returns a url to the given file. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.putJson">putJson</a></code> | Put a Json object in the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.signedUrl">signedUrl</a></code> | Returns a signed url to the given file. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.tryDelete">tryDelete</a></code> | Delete an object from the bucket if it exists. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGet">tryGet</a></code> | Get an object from the bucket if it exists. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGetJson">tryGetJson</a></code> | Gets an object from the bucket if it exists, parsing it as Json. |
@@ -462,6 +463,30 @@ Json object that we want to store into the bucket.
 
 ---
 
+##### `signedUrl` <a name="signedUrl" id="@winglang/sdk.cloud.IBucketClient.signedUrl"></a>
+
+```wing
+inflight signedUrl(key: str, options?: SignedUrlOptions): str
+```
+
+Returns a signed url to the given file.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.signedUrl.parameter.key"></a>
+
+- *Type:* str
+
+The key to access the cloud object.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.IBucketClient.signedUrl.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.SignedUrlOptions">SignedUrlOptions</a>
+
+The signedUrlOptions where you can provide the configurations of the signed url.
+
+---
+
 ##### `tryDelete` <a name="tryDelete" id="@winglang/sdk.cloud.IBucketClient.tryDelete"></a>
 
 ```wing
@@ -695,6 +720,38 @@ public: bool;
 - *Default:* false
 
 Whether the bucket's objects should be publicly accessible.
+
+---
+
+### SignedUrlOptions <a name="SignedUrlOptions" id="@winglang/sdk.cloud.SignedUrlOptions"></a>
+
+Interface for signed url options.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.SignedUrlOptions.Initializer"></a>
+
+```wing
+bring cloud;
+
+let SignedUrlOptions = cloud.SignedUrlOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.SignedUrlOptions.property.duration">duration</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The duration for the signed url to expire. |
+
+---
+
+##### `duration`<sup>Optional</sup> <a name="duration" id="@winglang/sdk.cloud.SignedUrlOptions.property.duration"></a>
+
+```wing
+duration: duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+
+The duration for the signed url to expire.
 
 ---
 

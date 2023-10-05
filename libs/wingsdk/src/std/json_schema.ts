@@ -1,5 +1,5 @@
 import { Validator } from "jsonschema";
-import { Json } from "./json";
+import { Json, JsonValidationOptions } from "./json";
 import { InflightClient } from "../core";
 
 /**
@@ -39,7 +39,11 @@ export class JsonSchema {
    * @param obj the Json object to validate
    * @throws an error if the json object is not valid
    */
-  public validate(obj: Json) {
+  public validate(obj: Json, options?: JsonValidationOptions) {
+    if (options?.unsafe) {
+      return; // skip validation
+    }
+
     const result = this.validator.validate(obj, this.jsonSchema);
     if (result.errors.length > 0) {
       throw new Error(
@@ -61,8 +65,8 @@ export class JsonSchema {
   }
 
   /** @internal */
-  public _fromJson(obj: Json) {
-    this.validate(obj);
+  public _fromJson(obj: Json, validateOptions?: JsonValidationOptions) {
+    this.validate(obj, validateOptions);
     return obj;
   }
 

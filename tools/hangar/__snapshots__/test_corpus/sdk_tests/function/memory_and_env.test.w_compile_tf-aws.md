@@ -89,6 +89,28 @@ module.exports = function({ $c, $f1, $f2 }) {
     ]
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "envfn_CloudwatchLogGroup_15C53BE9": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/env fn/CloudwatchLogGroup",
+            "uniqueId": "envfn_CloudwatchLogGroup_15C53BE9"
+          }
+        },
+        "name": "/aws/lambda/env-fn-c8a226dd",
+        "retention_in_days": 30
+      },
+      "memoryfn_CloudwatchLogGroup_73EEAE8E": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/memory fn/CloudwatchLogGroup",
+            "uniqueId": "memoryfn_CloudwatchLogGroup_73EEAE8E"
+          }
+        },
+        "name": "/aws/lambda/memory-fn-c844bdf7",
+        "retention_in_days": 30
+      }
+    },
     "aws_dynamodb_table": {
       "cloudCounter": {
         "//": {
@@ -199,7 +221,7 @@ module.exports = function({ $c, $f1, $f2 }) {
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.envfn_S3Object_0080F00E.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
@@ -230,7 +252,7 @@ module.exports = function({ $c, $f1, $f2 }) {
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.memoryfn_S3Object_3B51C445.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []

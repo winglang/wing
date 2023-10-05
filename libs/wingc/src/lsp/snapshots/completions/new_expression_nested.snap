@@ -93,7 +93,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Service\n```\n---\nA long-running service."
+    value: "```wing\nclass Service impl IInflightHost\n```\n---\nA long-running service."
   sortText: gg|Service
   insertText: Service($0)
   insertTextFormat: 2
@@ -115,7 +115,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Website\n```\n---\nA cloud static website."
+    value: "```wing\nclass Website impl IWebsite\n```\n---\nA cloud static website."
   sortText: gg|Website
   insertText: Website($0)
   insertTextFormat: 2

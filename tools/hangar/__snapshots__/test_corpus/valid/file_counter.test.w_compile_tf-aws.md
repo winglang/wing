@@ -50,6 +50,18 @@ module.exports = function({ $bucket, $counter }) {
     ]
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "cloudQueue-SetConsumer-cdafee6e_CloudwatchLogGroup_F895C874": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Queue-SetConsumer-cdafee6e/CloudwatchLogGroup",
+            "uniqueId": "cloudQueue-SetConsumer-cdafee6e_CloudwatchLogGroup_F895C874"
+          }
+        },
+        "name": "/aws/lambda/cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
+        "retention_in_days": 30
+      }
+    },
     "aws_dynamodb_table": {
       "cloudCounter": {
         "//": {
@@ -143,7 +155,7 @@ module.exports = function({ $bucket, $counter }) {
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudQueue-SetConsumer-cdafee6e_S3Object_8868B9FB.key}",
-        "timeout": 30,
+        "timeout": "${aws_sqs_queue.cloudQueue.visibility_timeout_seconds}",
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []

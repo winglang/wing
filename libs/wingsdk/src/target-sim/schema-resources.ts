@@ -19,6 +19,7 @@ export const LOGGER_TYPE = "wingsdk.cloud.Logger";
 export const TEST_RUNNER_TYPE = "wingsdk.cloud.TestRunner";
 export const REDIS_TYPE = "wingsdk.redis.Redis"; // for backwards compat
 export const WEBSITE_TYPE = "wingsdk.cloud.Website";
+export const REACT_APP_TYPE = "wingsdk.ex.ReactApp";
 export const SECRET_TYPE = "wingsdk.cloud.Secret";
 export const SERVICE_TYPE = "wingsdk.cloud.Service";
 export const ON_DEPLOY_TYPE = "wingsdk.cloud.OnDeploy";
@@ -89,12 +90,12 @@ export interface QueueSchema extends BaseResourceSchema {
 export interface ServiceSchema extends BaseResourceSchema {
   readonly type: typeof SERVICE_TYPE;
   readonly props: {
-    /** Function that should be called when service is started */
-    onStartHandler: FunctionHandle;
-    /** Function that is called when service is stopped */
-    onStopHandler?: FunctionHandle;
+    /** The source code of the service */
+    readonly sourceCodeFile: string;
     /** Whether the service should start when sim starts */
-    autoStart: boolean;
+    readonly autoStart: boolean;
+    /** A map of environment variables to run the function with. */
+    readonly environmentVariables: Record<string, string>;
   };
 }
 
@@ -230,6 +231,11 @@ export interface RedisSchema extends BaseResourceSchema {
   readonly type: typeof REDIS_TYPE;
   readonly props: {};
 }
+/**
+ * Custom routes created in preflight.
+ * Each contains the data to send to the user and a contentType header.
+ */
+export type FileRoutes = Record<string, { data: string; contentType: string }>;
 
 /** Schema for cloud.Website */
 export interface WebsiteSchema extends BaseResourceSchema {
@@ -237,9 +243,23 @@ export interface WebsiteSchema extends BaseResourceSchema {
   readonly props: {
     /** Path to the directory where all static files are hosted from */
     staticFilesPath: string;
-    /** Map of `.json` file paths to dynamic content inserted from preflight */
-    jsonRoutes: Record<string, Json>;
+    /** Map of "files" contains dynamic content inserted from preflight */
+    fileRoutes: FileRoutes;
   };
+}
+
+export interface ReactAppSchema extends BaseResourceSchema {
+  readonly type: typeof REACT_APP_TYPE;
+  readonly props: {
+    path: string;
+    startCommand: string;
+    environmentVariables: Record<string, string>;
+    useBuildCommand: boolean;
+    url: string;
+  };
+}
+export interface ReactAppAttributes {
+  url: string;
 }
 
 export interface RedisAttributes {}
