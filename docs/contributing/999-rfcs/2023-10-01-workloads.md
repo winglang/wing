@@ -169,7 +169,7 @@ these bindings.
 We will also need a way for the code inside the container to be able to connect to the relevant
 inflight client instance and interact with the object.
 
-We can decompose this requirement into three:
+We can decompose this requirement into four:
 
 1. Call non-Wing services using native clients (P1) (e.g. use the Redis client in Go to interact with a
    Redis resource). In this case, the code inside the container just uses a native client to
