@@ -788,7 +788,10 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_bring_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
-		let module_name_node = self.get_child_field(&statement_node, "module_name")?;
+		let Some(module_name_node) = statement_node.child_by_field_name("module_name") else {
+			return self.with_error("Expected built-in module or \"external module\"", &statement_node.child(statement_node.child_count() - 1).unwrap_or(*statement_node));
+		};
+
 		let module_name = self.node_symbol(&module_name_node)?;
 		let alias = if let Some(identifier) = statement_node.child_by_field_name("alias") {
 			Some(self.check_reserved_symbol(&identifier)?)
@@ -796,7 +799,12 @@ impl<'s> Parser<'s> {
 			None
 		};
 
-		let module_path = Utf8Path::new(&module_name.name[1..module_name.name.len() - 1]);
+		let module_path = if module_name.name.len() > 1 {
+			Utf8Path::new(&module_name.name[1..module_name.name.len() - 1])
+		} else {
+			Utf8Path::new(&module_name.name)
+		};
+
 		if is_absolute_path(&module_path) {
 			return self.with_error(
 				format!("Cannot bring \"{}\" since it is not a relative path", module_path),

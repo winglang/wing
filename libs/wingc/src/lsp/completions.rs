@@ -20,7 +20,7 @@ use crate::type_check::{
 };
 use crate::visit::{visit_expr, visit_type_annotation, Visit};
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
-use crate::{UTIL_CLASS_NAME, WINGSDK_ASSEMBLY_NAME, WINGSDK_STD_MODULE};
+use crate::{UTIL_CLASS_NAME, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_STD_MODULE};
 
 use super::sync::check_utf8;
 
@@ -36,6 +36,65 @@ pub unsafe extern "C" fn wingc_on_completion(ptr: u32, len: u32) -> u64 {
 	} else {
 		WASM_RETURN_ERROR
 	}
+}
+
+/// Using tree-sitter data only, check if there should be no valid completions at this position.
+/// This allows for quick short-circuits to avoid visiting the AST for unambiguous cases.
+fn check_for_non_completion_ts(interesting_node: &Node) -> bool {
+	let interesting_node_kind = interesting_node.kind();
+	dbg!(interesting_node);
+
+	let mut no_completions = match interesting_node_kind {
+		"comment" => true,
+
+		// Strings are just strings
+		// TODO Remove this for https://github.com/winglang/wing/issues/4420
+		"string" | "\"" => true,
+
+		// After "for", we are expecting a variable name
+		"for" => true,
+
+		// we are at the end of an import statement and/or expecting an alias
+		"import_statement" | "as" => true,
+
+		// Starting a definition
+		"let" | "reassignable" => true,
+
+		// Following the keyword of a block-style declaration
+		"class" | "struct" | "interface" | "test" => true,
+
+		// Starting an inflight closure
+		"inflight_specifier" => true,
+
+		// No completions are valid immediately following a closing brace
+		")" | "}" | "]" => true,
+
+		_ => false,
+	};
+
+	if no_completions {
+		return no_completions;
+	}
+
+	if let Some(parent) = interesting_node.parent() {
+		let parent_kind = parent.kind();
+
+		no_completions = match parent_kind {
+			"ERROR" => {
+				if let Some(first_child) = parent.child(0) {
+					match first_child.kind() {
+						"for" => matches!(interesting_node_kind, "in" | "identifier"),
+						_ => false,
+					}
+				} else {
+					false
+				}
+			}
+			_ => false,
+		};
+	}
+
+	no_completions
 }
 
 pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse {
@@ -85,6 +144,30 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 				&root_ts_node,
 			);
 			let node_to_complete_kind = node_to_complete.kind();
+
+			if check_for_non_completion_ts(&node_to_complete) {
+				return vec![];
+			}
+
+			if matches!(node_to_complete.parent(), Some(p) if p.kind() == "import_statement")
+				&& matches!(node_to_complete_kind, "identifier" | "bring")
+			{
+				let mut modules = WINGSDK_BRINGABLE_MODULES
+					.map(|module| CompletionItem {
+						label: module.to_string(),
+						kind: Some(CompletionItemKind::MODULE),
+						..Default::default()
+					})
+					.to_vec();
+				modules.push(CompletionItem {
+					label: "\"module\"".to_string(),
+					insert_text: Some("\"$1\" as $2".to_string()),
+					kind: Some(CompletionItemKind::SNIPPET),
+					insert_text_format: Some(InsertTextFormat::SNIPPET),
+					..Default::default()
+				});
+				return modules;
+			}
 
 			let mut scope_visitor = ScopeVisitor::new(
 				node_to_complete.parent().map(|parent| WingSpan {
@@ -395,9 +478,6 @@ fn get_current_scope_completions(
 	let mut in_type = preceding_text.ends_with(':');
 
 	match node_to_complete.kind() {
-		// there are no possible completions that could follow ")"
-		")" => return vec![],
-
 		"set_literal" | "struct_literal" => {
 			in_type = false;
 		}
@@ -437,11 +517,6 @@ fn get_current_scope_completions(
 				kind: Some(CompletionItemKind::SNIPPET),
 				..Default::default()
 			});
-		}
-
-		// in block-style statements, there are no possible completions that can follow the keyword
-		"interface" | "struct" | "class" | "test" => {
-			return vec![];
 		}
 
 		_ => {}
@@ -1484,5 +1559,66 @@ struct Outer {
 let x: Outer = { bThing: {   } }
                          //^
 "#
+	);
+
+	test_completion_list!(
+		bring_suggestions,
+		r#"
+bring 
+    //^
+"#
+	);
+
+	test_completion_list!(
+		bring_suggestions_partial,
+		r#"
+bring c
+     //^
+"#
+	);
+
+	test_completion_list!(
+		bring_alias,
+		r#"
+bring "" as 
+	        //^
+"#,
+		assert!(bring_alias.is_empty())
+	);
+
+	test_completion_list!(
+		definition_identifier,
+		r#"
+let 
+  //^
+"#,
+		assert!(definition_identifier.is_empty())
+	);
+
+	test_completion_list!(
+		string_inner,
+		r#"
+let x = ""
+       //^
+"#,
+		assert!(string_inner.is_empty())
+	);
+
+	test_completion_list!(
+		for_in_inner,
+		r#"
+for x i
+     //^
+"#,
+		assert!(for_in_inner.is_empty())
+	);
+
+	test_completion_list!(
+		comment,
+		r#"
+let x = // hi 
+            //^
+"#,
+		assert!(comment.is_empty())
 	);
 }

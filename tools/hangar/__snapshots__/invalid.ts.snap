@@ -273,7 +273,14 @@ Duration <DURATION>"
 `;
 
 exports[`bring.test.w 1`] = `
-"error: Redundant bring of \\"std\\"
+"error: Expected built-in module or \\"external module\\"
+  --> ../../../examples/tests/invalid/bring.test.w:8:7
+  |
+8 | bring ;
+  |       ^ Expected built-in module or \\"external module\\"
+
+
+error: Redundant bring of \\"std\\"
   --> ../../../examples/tests/invalid/bring.test.w:1:1
   |
 1 | bring std;
@@ -292,6 +299,13 @@ error: \\"fs\\" is not a built-in module
   |
 6 | bring fs;
   | ^^^^^^^^^ \\"fs\\" is not a built-in module
+
+
+error: \\"c\\" is not a built-in module
+   --> ../../../examples/tests/invalid/bring.test.w:10:1
+   |
+10 | bring c;
+   | ^^^^^^^^ \\"c\\" is not a built-in module
 
 
  
