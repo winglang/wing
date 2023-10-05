@@ -11,8 +11,8 @@ export class FunctionClient implements IFunctionClient {
   ) {}
 
   /**
-   * Invoke the function, passing the given payload as an argument.
-   *  @returns the function returned payload only
+   * Invokes the function synchronously, passing the given payload as an argument.
+   *  @returns the function response payload.
    */
   public async invoke(payload: string): Promise<string> {
     const command = new InvokeCommand({
@@ -41,9 +41,27 @@ export class FunctionClient implements IFunctionClient {
   }
 
   /**
-   * Invoke the function, passing the given payload as an argument.
-   *
-   * @returns the function returned payload and logs
+   * Invokes the function asynchronously, passing the given payload as an argument.
+   * @returns immediately once the event has been handed off to AWS Lambda.
+   */
+  public async invokeAsync(payload: string): Promise<void> {
+    const command = new InvokeCommand({
+      FunctionName: this.functionArn,
+      Payload: fromUtf8(JSON.stringify(payload)),
+      InvocationType: "Event",
+    });
+    const response = await this.lambdaClient.send(command);
+
+    if (response.StatusCode !== 202) {
+      throw new Error(
+        `Failed to enqueue event. Received status code: ${response.StatusCode}`
+      );
+    }
+  }
+
+  /**
+   * Invokes the function synchronously, passing the given payload as an argument.
+   * @returns the function response payload with execution logs included.
    */
   public async invokeWithLogs(payload: string): Promise<[string, Trace[]]> {
     const command = new InvokeCommand({

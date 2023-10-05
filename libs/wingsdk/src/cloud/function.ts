@@ -116,7 +116,10 @@ export abstract class Function extends Resource implements IInflightHost {
 
   /** @internal */
   public _getInflightOps(): string[] {
-    return [FunctionInflightMethods.INVOKE];
+    return [
+      FunctionInflightMethods.INVOKE,
+      FunctionInflightMethods.INVOKE_ASYNC,
+    ];
   }
 
   /**
@@ -144,10 +147,16 @@ export abstract class Function extends Resource implements IInflightHost {
  */
 export interface IFunctionClient {
   /**
-   * Invoke the function asynchronously with a given payload.
+   * Invokes the function synchronously with a payload and waits for the result.
    * @inflight
    */
   invoke(payload: string): Promise<string>;
+
+  /**
+   * Invokes the function asynchronously with a payload and returns immediately.
+   * @inflight
+   */
+  invokeAsync(payload: string): Promise<void>;
 }
 
 /**
@@ -176,4 +185,6 @@ export interface IFunctionHandlerClient {
 export enum FunctionInflightMethods {
   /** `Function.invoke` */
   INVOKE = "invoke",
+  /** `Function.invokeAsync` */
+  INVOKE_ASYNC = "invokeAsync",
 }
