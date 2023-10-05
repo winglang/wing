@@ -90,7 +90,7 @@ fn check_ts_to_completions(interesting_node: &Node) -> bool {
 				if let Some(first_child) = parent.child(0) {
 					match first_child.kind() {
 						"for" => matches!(interesting_node_kind, "in" | "identifier"),
-						"let" => true,
+						"let" => !matches!(interesting_node_kind, "="),
 						_ => false,
 					}
 				} else {
