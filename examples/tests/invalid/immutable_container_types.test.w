@@ -10,3 +10,12 @@ m4.set("2", 3);
 let m5 = m4.copy();
 m4.delete("1");
 m4.clear();
+
+
+let s1: Set<Array<num>> = MutSet<Array<num>> {[1]};
+let s2 = Set<str> {"a", "b", "c"};
+s2.delete("a");
+s2.add("d");
+let s3 = s2.copy();
+s2.clear();
+let s4: Set<bool> = {[3]};

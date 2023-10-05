@@ -30,3 +30,9 @@ let a: Array<str> = MutArray<str>[];
 let mm1: MutMap<num> = { "a" => 1, "b" => 2, "c" => 3 };
 let mm2 = MutMap<num> { "a" => 1, "b" => 2, "c" => 3 };
 let mm3 = mm2.copyMut();
+
+
+let ss1: MutSet<str> = Set{"c"};
+let ss2: MutSet<num> = MutSet<num> {true};
+let ss3 = MutSet<bool> {false, true};
+let ss4 = ss3.copyMut();
