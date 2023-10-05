@@ -32,13 +32,6 @@ const INSTANCE_NAME_OPTS: NameOptions = {
   case: CaseConventions.LOWERCASE,
 };
 
-const CLUSTER_NAME_OPTS: NameOptions = {
-  maxLen: 22,
-  disallowedRegex: /[a-z0-9\-\.\_]+/g,
-  sep: "a",
-  case: CaseConventions.LOWERCASE,
-};
-
 /**
  * GCP implementation of `ex.Table`.
  *

@@ -29,11 +29,6 @@ export interface AppProps extends CdktfAppProps {
    * @see https://cloud.google.com/functions/docs/locations
    */
   readonly zone: string;
-
-  /**
-   * Should environment variable be overriden
-   */
-  readonly overrideEnv?: boolean;
 }
 
 /**
@@ -51,7 +46,9 @@ export class App extends CdktfApp {
    */
   public readonly region: string;
 
-  // TODO(wiktor.zajac) verify if it should be here
+  /**
+   * The Google Cloud zone.
+   */
   public readonly zone: string;
 
   public readonly _target = "tf-gcp";
@@ -59,30 +56,20 @@ export class App extends CdktfApp {
   constructor(props: AppProps) {
     super(props);
 
-    let projectId: string | undefined = props.projectId;
-    if (projectId === undefined && !props.overrideEnv) {
-      // Using env variable for location is work around until we are
-      // able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
-      projectId = process.env.GOOGLE_PROJECT_ID;
-    }
-    if (projectId === undefined) {
+	this.projectId = props.projectId ?? process.env.GOOGLE_PROJECT_ID;
+    if (this.projectId === undefined) {
       throw new Error(
         "A Google Cloud project ID must be specified through the GOOGLE_PROJECT_ID environment variable."
       );
     }
-    this.projectId = projectId;
 
-    let region: string | undefined = props.region;
-    if (region === undefined && !props.overrideEnv) {
-      region = process.env.GOOGLE_REGION;
-    }
-
-    if (region === undefined) {
+	this.region = props.region ?? process.env.GOOGLE_REGION;
+    if (this.region === undefined) {
       throw new Error(
         "A Google Cloud region must be specified through the GOOGLE_REGION environment variable."
       );
     }
-    this.region = region;
+
     this.zone = props.zone ?? process.env.GOOGLE_ZONE;
 
     new GoogleProvider(this, "google", {
