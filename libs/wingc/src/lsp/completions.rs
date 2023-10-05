@@ -585,7 +585,7 @@ fn get_current_scope_completions(
 			true
 		}
 	}) {
-		let symbol_kind = &symbol_data.1 .1;
+		let symbol_kind = &symbol_data.1 .2;
 
 		if let Some(completion) = format_symbol_kind_as_completion(symbol_data.0, symbol_kind) {
 			completions.push(completion);
@@ -806,7 +806,7 @@ fn get_completions_from_namespace(
 		.envs
 		.iter()
 		.flat_map(|env| env.symbol_map.iter())
-		.flat_map(|(name, symbol)| format_symbol_kind_as_completion(name, &symbol.1))
+		.flat_map(|(name, symbol)| format_symbol_kind_as_completion(name, &symbol.2))
 		.chain(util_completions.into_iter())
 		.collect()
 }

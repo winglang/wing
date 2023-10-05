@@ -42,12 +42,12 @@ export const formatWingError = async (error: unknown) => {
       const result = [];
 
       for (const error of errors) {
-        const { message, span } = error;
+        const { message, span, annotations } = error;
         let files: File[] = [];
         let labels: Label[] = [];
 
         // file_id might be "" if the span is synthetic (see #2521)
-        if (span !== null && span.file_id) {
+        if (span !== null && span !== undefined && span.file_id) {
           // `span` should only be null if source file couldn't be read etc.
           const source = await readFile(span.file_id, "utf8");
           const start = offsetFromLineAndColumn(
@@ -67,6 +67,28 @@ export const formatWingError = async (error: unknown) => {
             rangeEnd: end,
             message,
             style: "primary",
+          });
+        }
+
+        for (const annotation of annotations) {
+          const source = await readFile(annotation.span.file_id, "utf8");
+          const start = offsetFromLineAndColumn(
+            source,
+            annotation.span.start.line,
+            annotation.span.start.col,
+          );
+          const end = offsetFromLineAndColumn(
+            source,
+            annotation.span.end.line,
+            annotation.span.end.col,
+          );
+          files.push({ name: annotation.span.file_id, source });
+          labels.push({
+            fileId: annotation.span.file_id,
+            rangeStart: start,
+            rangeEnd: end,
+            message: annotation.message,
+            style: "secondary",
           });
         }
 

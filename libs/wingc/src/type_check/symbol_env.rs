@@ -4,7 +4,7 @@ use duplicate::duplicate_item;
 
 use crate::{
 	ast::{Phase, Symbol},
-	diagnostic::TypeError,
+	diagnostic::{DiagnosticAnnotation, TypeError, WingSpan},
 	type_check::{SymbolKind, Type, TypeRef},
 };
 use std::fmt::Debug;
@@ -19,7 +19,7 @@ pub type SymbolEnvRef = UnsafeRef<SymbolEnv>;
 
 pub struct SymbolEnv {
 	// We use a BTreeMaps here so that we can iterate over the symbols in a deterministic order (snapshot tests)
-	pub(crate) symbol_map: BTreeMap<String, (StatementIdx, SymbolKind)>,
+	pub(crate) symbol_map: BTreeMap<String, (StatementIdx, WingSpan, SymbolKind)>,
 	pub(crate) parent: Option<SymbolEnvRef>,
 
 	pub kind: SymbolEnvKind,
@@ -41,7 +41,7 @@ impl Display for SymbolEnv {
 		loop {
 			write!(f, "level {}: {{ ", level.to_string().bold())?;
 			let mut items = vec![];
-			for (name, (_, kind)) in &env.symbol_map {
+			for (name, (_, _, kind)) in &env.symbol_map {
 				let repr = match kind {
 					SymbolKind::Type(t) => format!("{} [type]", t).red(),
 					SymbolKind::Variable(v) => format!("{}", v.type_).blue(),
@@ -99,7 +99,7 @@ pub enum LookupResult<'a> {
 	MultipleFound,
 	/// The symbol exists in the environment but it's not defined yet (based on the statement
 	/// index passed to the lookup)
-	DefinedLater,
+	DefinedLater(WingSpan),
 	/// Expected a namespace in a nested lookup but found a different kind of symbol
 	ExpectedNamespace(Symbol),
 }
@@ -115,7 +115,7 @@ impl<'a> LookupResult<'a> {
 			LookupResult::Found(kind, info) => (kind, info),
 			LookupResult::NotFound(x) => panic!("LookupResult::unwrap({x}) called on LookupResult::NotFound"),
 			LookupResult::MultipleFound => panic!("LookupResult::unwrap() called on LookupResult::MultipleFound"),
-			LookupResult::DefinedLater => panic!("LookupResult::unwrap() called on LookupResult::DefinedLater"),
+			LookupResult::DefinedLater(_) => panic!("LookupResult::unwrap() called on LookupResult::DefinedLater"),
 			LookupResult::ExpectedNamespace(symbol) => panic!(
 				"LookupResult::unwrap() called on LookupResult::ExpectedNamespace({:?})",
 				symbol
@@ -214,10 +214,16 @@ impl SymbolEnv {
 			return Err(TypeError {
 				span: symbol.span.clone(),
 				message: format!("Symbol \"{}\" already defined in this scope", symbol.name),
+				annotations: vec![DiagnosticAnnotation {
+					message: "previous definition".to_string(),
+					span: self.symbol_map[&symbol.name].1.clone(),
+				}],
 			});
 		}
 
-		self.symbol_map.insert(symbol.name.clone(), (pos, kind));
+		self
+			.symbol_map
+			.insert(symbol.name.clone(), (pos, symbol.span.clone(), kind));
 
 		Ok(())
 	}
@@ -252,7 +258,7 @@ impl SymbolEnv {
 	/// cannot be a nested symbol (e.g. `foo.bar`), use `lookup_nested` for that.
 	/// TODO: perhaps make this private and switch to the nested version in all external calls
 	pub fn lookup_ext(self: reference([Self]), symbol: &Symbol, not_after_stmt_idx: Option<usize>) -> LookupResult {
-		if let Some((definition_idx, kind)) = self.symbol_map.map_get(&symbol.name) {
+		if let Some((definition_idx, span, kind)) = self.symbol_map.map_get(&symbol.name) {
 			// if found the symbol and it is defined before the statement index (or statement index is
 			// unspecified, which is likely not something we want to support), we found it
 			let lookup_index = not_after_stmt_idx.unwrap_or(usize::MAX);
@@ -262,7 +268,7 @@ impl SymbolEnv {
 			};
 
 			if lookup_index < definition_idx {
-				return LookupResult::DefinedLater;
+				return LookupResult::DefinedLater(span.clone());
 			}
 
 			return LookupResult::Found(
@@ -374,7 +380,7 @@ impl SymbolEnv {
 pub struct SymbolEnvIter<'a> {
 	seen_keys: HashSet<String>,
 	curr_env: &'a SymbolEnv,
-	curr_pos: btree_map::Iter<'a, String, (StatementIdx, SymbolKind)>,
+	curr_pos: btree_map::Iter<'a, String, (StatementIdx, WingSpan, SymbolKind)>,
 	with_ancestry: bool,
 }
 
@@ -393,7 +399,7 @@ impl<'a> Iterator for SymbolEnvIter<'a> {
 	type Item = (String, &'a SymbolKind, SymbolLookupInfo);
 
 	fn next(&mut self) -> Option<Self::Item> {
-		if let Some((name, (_, kind))) = self.curr_pos.next() {
+		if let Some((name, (_, _, kind))) = self.curr_pos.next() {
 			if self.seen_keys.contains(name) {
 				self.next()
 			} else {
@@ -522,7 +528,7 @@ mod tests {
 		// Lookup positionally visible variable using an index before it's defined
 		assert!(matches!(
 			parent_env.lookup_nested_str("parent_high_pos_var", Some(parent_high_pos_var_idx - 1)),
-			LookupResult::DefinedLater
+			LookupResult::DefinedLater(_)
 		));
 
 		// Lookup a globally visible parent var in the child env with a low statement index
@@ -540,7 +546,7 @@ mod tests {
 		// Lookup a positionally visible parent var defined after the child scope in the child env using a low statement index
 		assert!(matches!(
 			child_env.lookup_nested_str("parent_high_pos_var", Some(0)),
-			LookupResult::DefinedLater
+			LookupResult::DefinedLater(_)
 		));
 
 		// Lookup for a child var in the parent env

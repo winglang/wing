@@ -56,11 +56,12 @@ impl<'a> LiftVisitor<'a> {
 		if let Some(env) = self.ctx.current_env() {
 			if matches!(
 				env.lookup_ext(symbol, Some(self.ctx.current_stmt_idx())),
-				LookupResult::DefinedLater
+				LookupResult::DefinedLater(_)
 			) {
 				report_diagnostic(Diagnostic {
 					span: Some(symbol.span.clone()),
 					message: format!("Cannot access \"{symbol}\" because it is shadowed by another symbol with the same name"),
+					annotations: vec![],
 				});
 			}
 		}
@@ -215,6 +216,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 							expr_type.to_string()
 						),
 						span: Some(node.span.clone()),
+						annotations: vec![],
 					});
 
 					return;
@@ -279,6 +281,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 					message: format!(
 						"Cannot qualify access to a lifted type \"{udt_type}\" (see https://github.com/winglang/wing/issues/76 for more details)"),
 					span: Some(node.span.clone()),
+					annotations: vec![],
 				});
 
 				return;

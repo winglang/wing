@@ -10,14 +10,18 @@ let t1 = new ex.DynamodbTable(name: "test1", attributeDefinitions: { "k1": "S", 
 
 test "query" {
   t1.putItem({
-    "k1": "key1",
-    "k2": "value1",
-    "k3": "other-value1"
+    item: {
+      "k1": "key1",
+      "k2": "value1",
+      "k3": "other-value1"
+    }
   });
   t1.putItem({
-    "k1": "key1",
-    "k2": "value2",
-    "k3": "other-value2"
+    item: {
+      "k1": "key1",
+      "k2": "value2",
+      "k3": "other-value2"
+    }
   });
 
   let result = t1.query(

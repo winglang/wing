@@ -54,7 +54,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
       const result = [];
 
       for (const diagnostic of diagnostics) {
-        const { message, span } = diagnostic;
+        const { message, span, annotations } = diagnostic;
         let files: File[] = [];
         let labels: Label[] = [];
 
@@ -71,6 +71,28 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
             rangeEnd: end,
             message,
             style: "primary",
+          });
+        }
+
+        for (const annotation of annotations) {
+          const source = await fsPromise.readFile(annotation.span.file_id, "utf8");
+          const start = byteOffsetFromLineAndColumn(
+            source,
+            annotation.span.start.line,
+            annotation.span.start.col
+          );
+          const end = byteOffsetFromLineAndColumn(
+            source,
+            annotation.span.end.line,
+            annotation.span.end.col
+          );
+          files.push({ name: annotation.span.file_id, source });
+          labels.push({
+            fileId: annotation.span.file_id,
+            rangeStart: start,
+            rangeEnd: end,
+            message: annotation.message,
+            style: "secondary",
           });
         }
 
