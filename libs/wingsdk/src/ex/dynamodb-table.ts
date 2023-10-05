@@ -7,6 +7,8 @@ import {
   PutItemCommand,
   QueryCommand,
   ScanCommand,
+  TransactGetItem,
+  TransactGetItemsCommand,
   TransactWriteItem,
   TransactWriteItemsCommand,
   UpdateItemCommand,
@@ -320,13 +322,11 @@ export interface DynamodbTableGetItemOptions {
 
   /**
    * One or more substitution tokens for attribute names in an expression.
-   *
    */
   readonly expressionAttributeNames?: Json;
 
   /**
    * A string that identifies one or more attributes to retrieve from the table.
-   *
    */
   readonly projectionExpression?: string;
 
@@ -595,9 +595,10 @@ export interface DynamodbTableQueryResult {
  */
 export interface DynamodbTransactWriteItemPutProps {
   /**
-   * The item to put.
+   * The values of the item to be put.
    */
   readonly item: Json;
+
   /**
    * A condition that must be satisfied in order for the operation to succeed.
    * @default undefined
@@ -781,7 +782,7 @@ export interface DynamodbTableBatchWriteItemDeleteRequestOptions {
  */
 export interface DynamodbTableBatchWriteItemPutRequestOptions {
   /**
-   * A map of attribute name to attribute values, representing the primary key of an item to be processed by `PutItem`.
+   * The values of the item to be put.
    */
   readonly item: Json;
 }
@@ -901,6 +902,77 @@ export interface DynamodbTableTransactWriteItemsResult {
 }
 
 /**
+ * Options for `DynamodbTable.transactGetItems`'s get operation.
+ */
+export interface DynamodbTransactGetItemGetProps {
+  /**
+   * The primary key of the item to be retrieved.
+   */
+  readonly key: Json;
+
+  /**
+   * One or more substitution tokens for attribute names in an expression.
+   */
+  readonly expressionAttributeNames?: Json;
+
+  /**
+   * A string that identifies one or more attributes to retrieve from the table.
+   */
+  readonly projectionExpression?: string;
+}
+
+/**
+ * Dynamodb transact get operation.
+ */
+export interface DynamodbTransactGetItem {
+  /**
+   * A request to perform a get operation.
+   */
+  readonly get?: DynamodbTransactGetItemGetProps;
+}
+
+/**
+ * Options for `DynamodbTable.transactGetItems`.
+ */
+export interface DynamodbTransactGetItemsOptions {
+  /**
+   * An ordered array of up to 100 `DynamodbTransactGetItem` objects, each of which contains a `DynamodbTransactGetItem` structure.
+   */
+  readonly transactItems: DynamodbTransactGetItem[];
+
+  /**
+   * Determines the level of detail about either provisioned or on-demand throughput consumption.
+   * @default "NONE"
+   */
+  readonly returnConsumedCapacity?: "INDEXES" | "TOTAL" | "NONE";
+}
+
+/**
+ * Details of the requested item.
+ */
+export interface DynamodbTableTransactGetItemsResponseItem {
+  /**
+   * The values of the item.
+   */
+  readonly item: Json;
+}
+
+/**
+ * Result for `DynamodbTable.transactGetItems`.
+ */
+export interface DynamodbTableTransactGetItemsResult {
+  /**
+   * An ordered array of up to 100 `DynamodbTableTransactGetItemsResponseItem` objects.
+   */
+  readonly responses: DynamodbTableTransactGetItemsResponseItem[];
+
+  /**
+   * The capacity units consumed by the operation.
+   */
+  readonly consumedCapacity?: Json;
+}
+
+/**
  * Inflight interface for `DynamodbTable`.
  */
 export interface IDynamodbTableClient {
@@ -908,6 +980,7 @@ export interface IDynamodbTableClient {
    * Put an item into the table.
    * @param options dynamodb PutItem options.
    * @inflight
+   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_PutItem.html
    */
   putItem(
     options: DynamodbTablePutItemOptions
@@ -917,6 +990,7 @@ export interface IDynamodbTableClient {
    * Get an item from the table.
    * @param options dynamodb UpdateItem options.
    * @inflight
+   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html
    */
   updateItem(
     options: DynamodbTableUpdateItemOptions
@@ -926,6 +1000,7 @@ export interface IDynamodbTableClient {
    * Delete an item from the table.
    * @param options dynamodb DeleteItem options.
    * @inflight
+   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteItem.html
    */
   deleteItem(
     options: DynamodbTableDeleteItemOptions
@@ -935,6 +1010,7 @@ export interface IDynamodbTableClient {
    * Get an item from the table.
    * @param options options for the getItem operation.
    * @inflight
+   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html
    */
   getItem(
     options: DynamodbTableGetItemOptions
@@ -944,6 +1020,7 @@ export interface IDynamodbTableClient {
    * Return one or more items and item attributes by accessing every item in a table or a secondary index.
    * @param options options for the scan operation.
    * @inflight
+   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html
    */
   scan(options?: DynamodbTableScanOptions): Promise<DynamodbTableScanResult>;
 
@@ -951,13 +1028,25 @@ export interface IDynamodbTableClient {
    * Return all items with a given partition key value.
    * @param options options for the query operation.
    * @inflight
+   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html
    */
   query(options: DynamodbTableQueryOptions): Promise<DynamodbTableQueryResult>;
+
+  /**
+   * Perform a synchronous read operation that groups up to 100 item retrievals.
+   * @param options options for the query operation.
+   * @inflight
+   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactGetItems.html
+   */
+  transactGetItems(
+    options: DynamodbTransactGetItemsOptions
+  ): Promise<DynamodbTableTransactGetItemsResult>;
 
   /**
    * Perform a synchronous write operation that groups up to 100 action requests.
    * @param options options for the transact write items operation.
    * @inflight
+   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactWriteItems.html
    */
   transactWriteItems(
     options: DynamodbTransactWriteItemsOptions
@@ -967,6 +1056,7 @@ export interface IDynamodbTableClient {
    * Return the attributes of one or more items.
    * @param options options for the batch get item operation.
    * @inflight
+   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchGetItem.html
    */
   batchGetItem(
     options: DynamodbTableBatchGetItemOptions
@@ -976,6 +1066,7 @@ export interface IDynamodbTableClient {
    * Put or delete multiple items.
    * @param options options for the batch write item operation.
    * @inflight
+   * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html
    */
   batchWriteItem(
     options: DynamodbTableBatchWriteItemOptions
@@ -1206,6 +1297,44 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
         ? (unmarshall(result.LastEvaluatedKey) as Json)
         : undefined,
       scannedCount: result.ScannedCount!,
+    };
+  }
+
+  public async transactGetItems(
+    options: DynamodbTransactGetItemsOptions
+  ): Promise<DynamodbTableTransactGetItemsResult> {
+    const client = await this._rawClient();
+
+    const items = options.transactItems.map<TransactGetItem>((item) => {
+      if (item.get) {
+        return {
+          Get: {
+            TableName: this.tableName,
+            Key: marshall(item.get.key),
+            ProjectionExpression: item.get.projectionExpression,
+            ExpressionAttributeNames: item.get.expressionAttributeNames as
+              | Record<string, string>
+              | undefined,
+          },
+        };
+      } else {
+        throw Error("A get transact item must define `get`.");
+      }
+    });
+
+    const result = await client.send(
+      new TransactGetItemsCommand({
+        TransactItems: items,
+        ReturnConsumedCapacity: options.returnConsumedCapacity,
+      })
+    );
+
+    return {
+      consumedCapacity: result.ConsumedCapacity as Json | undefined,
+      responses:
+        result.Responses?.map((item) => ({
+          item: unmarshall(item.Item!) as Json,
+        })) ?? [],
     };
   }
 

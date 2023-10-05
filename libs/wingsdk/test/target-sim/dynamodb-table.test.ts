@@ -288,17 +288,87 @@ test("query", async () => {
   await s.stop();
 });
 
-test("write transaction", async () => {
+test("transact get items", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = ex.DynamodbTable._newDynamodbTable(app, "write_transact_table", {
-    name: "write_transact_table",
-    attributeDefinitions: { id: "S" } as any,
-    hashKey: "id",
-  });
+  const t = ex.DynamodbTable._newDynamodbTable(
+    app,
+    "transact_get_items_table",
+    {
+      name: "transact_get_items_table",
+      attributeDefinitions: { id: "S" } as any,
+      hashKey: "id",
+    }
+  );
   const s = await app.startSimulator();
   const client = s.getResource(
-    "/write_transact_table"
+    "/transact_get_items_table"
+  ) as ex.IDynamodbTableClient;
+
+  // WHEN
+  await client.batchWriteItem({
+    requestItems: [
+      {
+        putRequest: {
+          item: {
+            id: "1",
+            age: 50,
+          } as any,
+        },
+      },
+      {
+        putRequest: {
+          item: {
+            id: "2",
+            age: 80,
+          } as any,
+        },
+      },
+    ],
+  });
+
+  // THEN
+  const { responses } = await client.transactGetItems({
+    transactItems: [
+      {
+        get: {
+          key: {
+            id: "1",
+          } as any,
+        },
+      },
+      {
+        get: {
+          key: {
+            id: "2",
+          } as any,
+        },
+      },
+    ],
+  });
+  expect(responses).toEqual([
+    { id: "1", age: 50 },
+    { id: "2", age: 80 },
+  ]);
+
+  await s.stop();
+});
+
+test("transact write items", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const t = ex.DynamodbTable._newDynamodbTable(
+    app,
+    "transact_write_items_table",
+    {
+      name: "transact_write_items_table",
+      attributeDefinitions: { id: "S" } as any,
+      hashKey: "id",
+    }
+  );
+  const s = await app.startSimulator();
+  const client = s.getResource(
+    "/transact_write_items_table"
   ) as ex.IDynamodbTableClient;
 
   await client.putItem({ item: { id: "1", age: 50 } as any });
