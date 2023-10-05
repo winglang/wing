@@ -3892,7 +3892,7 @@ impl<'a> TypeChecker<'a> {
 				message: "Variable is not reassignable".to_string(),
 				span: Some(variable.span()),
 				annotations: vec![DiagnosticAnnotation {
-					message: "Variable is defined here (try adding \"var\" in front)".to_string(),
+					message: "defined here (try adding \"var\" in front)".to_string(),
 					span: var.name.span(),
 				}],
 			});
