@@ -10,14 +10,18 @@ let t1 = new ex.DynamodbTable(name: "test1", attributeDefinitions: { "k1": "S", 
 
 test "transactWriteItems" {
   t1.putItem({
-    "k1": "key1",
-    "k2": "value1",
-    "k3": "other-value1"
+    item: {
+      "k1": "key1",
+      "k2": "value1",
+      "k3": "other-value1"
+    }
   });
   t1.putItem({
-    "k1": "key2",
-    "k2": "value2",
-    "k3": "other-value2"
+    item: {
+      "k1": "key2",
+      "k2": "value2",
+      "k3": "other-value2"
+    }
   });
 
   t1.transactWriteItems(transactItems: [
@@ -44,16 +48,16 @@ test "transactWriteItems" {
     }
   ]);
 
-  let var r = t1.getItem({ "k1": "key1", "k2": "value1" });
-  assert(r.get("k1").asStr() == "key1");
-  assert(r.get("k2").asStr() == "value1");
-  assert(r.get("k3").asStr() == "not-other-value1");
+  let var r = t1.getItem({ key: { "k1": "key1", "k2": "value1" } });
+  assert(r.item?.get("k1")?.asStr() == "key1");
+  assert(r.item?.get("k2")?.asStr() == "value1");
+  assert(r.item?.get("k3")?.asStr() == "not-other-value1");
 
-  r = t1.getItem({ "k1": "key2", "k2": "value2" });
-  assert(r.tryGet("k1") == nil);
+  r = t1.getItem({ key: { "k1": "key2", "k2": "value2" } });
+  assert(r.item?.tryGet("k1") == nil);
 
-  r = t1.getItem({ "k1": "key3", "k2": "value3" });
-  assert(r.get("k1").asStr() == "key3");
-  assert(r.get("k2").asStr() == "value3");
-  assert(r.get("k3").asStr() == "other-value3");
+  r = t1.getItem({ key: { "k1": "key3", "k2": "value3" } });
+  assert(r.item?.get("k1")?.asStr() == "key3");
+  assert(r.item?.get("k2")?.asStr() == "value3");
+  assert(r.item?.get("k3")?.asStr() == "other-value3");
 }
