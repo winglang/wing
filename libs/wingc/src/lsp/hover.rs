@@ -78,7 +78,7 @@ impl<'a> HoverVisitor<'a> {
 	}
 
 	fn visit_type_with_member(&mut self, obj_type: TypeRef, property: &'a Symbol, total_span: WingSpan) {
-		if property.span.contains(&self.position) {
+		if property.span.contains_lsp_position(&self.position) {
 			match &**obj_type.maybe_unwrap_option() {
 				Type::Optional(_) | Type::Anything | Type::Void | Type::Nil | Type::Unresolved | Type::Inferred(_) => {}
 
@@ -206,7 +206,7 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 			return;
 		}
 
-		if node.span.contains(&self.position) {
+		if node.span.contains_lsp_position(&self.position) {
 			self.found = Some((node.span.clone(), self.lookup_docs(&node.name, None)));
 		}
 
@@ -227,7 +227,7 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 					.arg_list
 					.named_args
 					.iter()
-					.find(|a| a.0.span.contains(&self.position));
+					.find(|a| a.0.span.contains_lsp_position(&self.position));
 				if let Some((arg_name, ..)) = x {
 					// we need to get the struct type from the class constructor
 					let class_type = self.types.get_expr_type(node);
@@ -246,7 +246,10 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 				}
 			}
 			ExprKind::Call { arg_list, callee } => {
-				let x = arg_list.named_args.iter().find(|a| a.0.span.contains(&self.position));
+				let x = arg_list
+					.named_args
+					.iter()
+					.find(|a| a.0.span.contains_lsp_position(&self.position));
 				if let Some((arg_name, ..)) = x {
 					let env = self.types.get_scope_env(self.current_scope);
 					// we need to get the struct type from the callee
@@ -265,7 +268,7 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 			ExprKind::MapLiteral { fields, .. }
 			| ExprKind::JsonMapLiteral { fields }
 			| ExprKind::StructLiteral { fields, .. } => {
-				if let Some(f) = fields.iter().find(|f| f.0.span.contains(&self.position)) {
+				if let Some(f) = fields.iter().find(|f| f.0.span.contains_lsp_position(&self.position)) {
 					let field_name = f.0;
 					let type_ = self.types.maybe_unwrap_inference(self.types.get_expr_type(node));
 					let type_ = if let Some(type_) = self.types.get_type_from_json_cast(node.id) {
@@ -316,7 +319,7 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 
 		self.with_scope(&scope, |v| {
 			for field in &node.fields {
-				if field.name.span.contains(&v.position) {
+				if field.name.span.contains_lsp_position(&v.position) {
 					v.found = Some((
 						field.name.span.clone(),
 						v.lookup_docs(&node.name.name, Some(&field.name)),
@@ -327,7 +330,7 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 			}
 
 			for method in &node.methods {
-				if method.0.span.contains(&v.position) {
+				if method.0.span.contains_lsp_position(&v.position) {
 					v.found = Some((method.0.span.clone(), v.lookup_docs(&node.name.name, Some(&method.0))));
 				}
 				v.visit_function_definition(&method.1);
@@ -360,7 +363,7 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 			return;
 		}
 
-		if node.span.contains(&self.position) {
+		if node.span.contains_lsp_position(&self.position) {
 			// Only lookup string up to the position
 			let mut partial_path = vec![];
 			node.full_path().iter().for_each(|p| {
@@ -382,12 +385,12 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 
 		match node {
 			Reference::Identifier(sym) => {
-				if sym.span.contains(&self.position) {
+				if sym.span.contains_lsp_position(&self.position) {
 					self.found = Some((sym.span.clone(), self.lookup_docs(&sym.name, None)));
 				}
 			}
 			Reference::InstanceMember { object, property, .. } => {
-				if object.span.contains(&self.position) {
+				if object.span.contains_lsp_position(&self.position) {
 					self.visit_expr(object)
 				} else {
 					let total_span = WingSpan {
@@ -400,7 +403,7 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 				}
 			}
 			Reference::TypeMember { type_name, property } => {
-				if type_name.span.contains(&self.position) {
+				if type_name.span.contains_lsp_position(&self.position) {
 					self.visit_user_defined_type(type_name)
 				} else {
 					let total_span = WingSpan {

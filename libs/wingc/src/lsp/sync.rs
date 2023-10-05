@@ -244,7 +244,7 @@ pub mod test_utils {
 	///
 	pub fn load_file_with_contents(content: &str) -> TextDocumentPositionParams {
 		let temp_dir = tempfile::tempdir().expect("Failed to create temporary directory");
-		let filename = format!("{}.w", Uuid::new_v4());
+		let filename = format!("{}.main.w", Uuid::new_v4());
 		let file_path = temp_dir.path().join(&filename);
 		fs::write(&file_path, content).expect("Failed to write to temporary file");
 		let file_uri_string = format!("file:///{}", file_path.to_str().unwrap());
