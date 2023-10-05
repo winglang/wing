@@ -142,6 +142,16 @@ exports[`cloud.Domain for tf-aws > default domain behavior when passing values f
         "source": "<source>",
         "source_hash": "\${filemd5(<source>)}",
       },
+      "Website_File--indexhtml_864F8C36": {
+        "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
+        "content_type": "text/html; charset=utf-8",
+        "depends_on": [
+          "aws_s3_bucket.Website_WebsiteBucket_3C0321F0",
+        ],
+        "key": "/index.html",
+        "source": "<source>",
+        "source_hash": "\${filemd5(<source>)}",
+      },
       "Website_File--inner-folder--ahtml_7D20A7EF": {
         "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
         "content_type": "text/html; charset=utf-8",
@@ -226,6 +236,14 @@ exports[`cloud.Domain for tf-aws > default domain behavior when passing values f
                     },
                     "id": "File--b.html",
                     "path": "root/Default/Website/File--b.html",
+                  },
+                  "File--index.html": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "File--index.html",
+                    "path": "root/Default/Website/File--index.html",
                   },
                   "File--inner-folder--a.html": {
                     "constructInfo": {
@@ -472,6 +490,16 @@ exports[`cloud.Domain for tf-aws > default domain behavior when passing values o
         "source": "<source>",
         "source_hash": "\${filemd5(<source>)}",
       },
+      "Website_File--indexhtml_864F8C36": {
+        "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
+        "content_type": "text/html; charset=utf-8",
+        "depends_on": [
+          "aws_s3_bucket.Website_WebsiteBucket_3C0321F0",
+        ],
+        "key": "/index.html",
+        "source": "<source>",
+        "source_hash": "\${filemd5(<source>)}",
+      },
       "Website_File--inner-folder--ahtml_7D20A7EF": {
         "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
         "content_type": "text/html; charset=utf-8",
@@ -556,6 +584,14 @@ exports[`cloud.Domain for tf-aws > default domain behavior when passing values o
                     },
                     "id": "File--b.html",
                     "path": "root/Default/Website/File--b.html",
+                  },
+                  "File--index.html": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "File--index.html",
+                    "path": "root/Default/Website/File--index.html",
                   },
                   "File--inner-folder--a.html": {
                     "constructInfo": {

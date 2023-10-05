@@ -37,12 +37,12 @@ describe("cloud.Domain for tf-aws", () => {
     // GIVEN
     process.env.WING_VALUES =
       "root/Default/Domain.hostedZoneId=Z0111111111111111111F,root/Default/Domain.acmCertificateArn=arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee";
-    const app = new tfaws.App({ outdir: mkdtemp() });
+    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     const domain = cloud.Domain._newDomain(app, "Domain", {
       domainName: "www.example.com",
     });
     cloud.Website._newWebsite(app, "Website", {
-      path: path.resolve(__dirname, "website"),
+      path: path.resolve(__dirname, "../test-files/website"),
       domain: domain,
     });
     const output = app.synth();
@@ -74,12 +74,12 @@ describe("cloud.Domain for tf-aws", () => {
   test("default domain behavior when passing values from file", () => {
     // GIVEN
     process.env.WING_VALUES_FILE = __dirname + "/domain.values.yaml";
-    const app = new tfaws.App({ outdir: mkdtemp() });
+    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     const domain = cloud.Domain._newDomain(app, "Domain", {
       domainName: "www.example.com",
     });
     cloud.Website._newWebsite(app, "Website", {
-      path: path.resolve(__dirname, "website"),
+      path: path.resolve(__dirname, "../test-files/website"),
       domain: domain,
     });
     const output = app.synth();
@@ -111,7 +111,10 @@ describe("cloud.Domain for tf-aws", () => {
   test("default domain behavior without hostedZoneId and certificate information", () => {
     expect(() => {
       // GIVEN
-      const app = new tfaws.App({ outdir: mkdtemp() });
+      const app = new tfaws.App({
+        outdir: mkdtemp(),
+        entrypointDir: __dirname,
+      });
       cloud.Domain._newDomain(app, "Domain", {
         domainName: "www.example.com",
       });
