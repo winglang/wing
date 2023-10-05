@@ -5,6 +5,7 @@ import * as path from "path";
 import { resolve } from "path";
 import Arborist from "@npmcli/arborist";
 import { Target } from "@winglang/compiler";
+import { minimatch } from "minimatch";
 import packlist from "npm-packlist";
 import * as tar from "tar";
 import { compile } from "./compile";
@@ -32,16 +33,29 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
   const outfile = options.outfile ? resolve(options.outfile) : undefined;
   const outdir = outfile ? path.dirname(outfile) : userDir;
 
+  // check package.json exists
+  const originalPkgJsonPath = path.join(userDir, "package.json");
+  if (!(await exists(originalPkgJsonPath))) {
+    throw new Error(`No package.json found in the current directory. Run \`npm init\` first.`);
+  }
+
+  const originalPkgJson = JSON.parse(await fs.readFile(originalPkgJsonPath, "utf8"));
+  const originalPkgJsonFiles: Set<string> = new Set(originalPkgJson.files ?? []);
+
   // perform our work in a staging directory to avoid making a mess in the user's current directory
   return withTempDir(async (workdir) => {
-    const excludePaths = [
-      path.join(userDir, "target"),
-      path.join(userDir, "node_modules"),
-      path.join(userDir, ".git"),
+    const excludeGlobs = ["/target/**", "/node_modules/**", "/.git/**", "/.wing/**"];
+    const includeGlobs = [
+      ...originalPkgJsonFiles,
+      "README*",
+      "package.json",
+      "**/*.w",
+      "**/*.js",
+      "LICENSE*",
     ];
 
     // copy the user's directory to the staging directory
-    await copyDir(userDir, workdir, excludePaths);
+    await copyDir(userDir, workdir, excludeGlobs, includeGlobs);
 
     // check package.json exists
     const pkgJsonPath = path.join(workdir, "package.json");
@@ -119,22 +133,34 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
   });
 }
 
-async function copyDir(src: string, dest: string, excludePaths: string[]) {
-  if (excludePaths.includes(src)) {
-    return;
+async function copyDir(src: string, dest: string, excludeGlobs: string[], includeGlobs: string[]) {
+  const files = await fs.readdir(src);
+  for (const file of files) {
+    const srcPath = path.join(src, file);
+    const destPath = path.join(dest, file);
+    const stat = await fs.stat(srcPath);
+    if (stat.isDirectory()) {
+      if (shouldInclude(srcPath, excludeGlobs, includeGlobs)) {
+        await copyDir(srcPath, destPath, excludeGlobs, includeGlobs);
+      }
+    } else {
+      await fs.copyFile(srcPath, destPath);
+    }
   }
+}
 
-  await fs.mkdir(dest, { recursive: true });
-  let entries = await fs.readdir(src, { withFileTypes: true });
-
-  for (let entry of entries) {
-    let srcPath = path.join(src, entry.name);
-    let destPath = path.join(dest, entry.name);
-
-    entry.isDirectory()
-      ? await copyDir(srcPath, destPath, excludePaths)
-      : await fs.copyFile(srcPath, destPath);
+function shouldInclude(srcPath: string, excludeGlobs: string[], includeGlobs: string[]): boolean {
+  for (const glob of excludeGlobs) {
+    if (minimatch(srcPath, glob)) {
+      return false;
+    }
   }
+  for (const glob of includeGlobs) {
+    if (minimatch(srcPath, glob)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 /**

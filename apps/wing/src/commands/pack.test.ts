@@ -60,7 +60,7 @@ describe("wing pack", () => {
     const tarballPath = files.find((path) => path.endsWith(".tgz"))!;
     const tarballContents = await extractTarball(join(outdir, tarballPath), outdir);
 
-    const expectedFiles = ["index.js", "package.json", "store.w"];
+    const expectedFiles = ["index.js", "README.md", "package.json", "store.w"];
     for (const file of expectedFiles) {
       expect(tarballContents[file]).toBeDefined();
     }
@@ -87,7 +87,7 @@ describe("wing pack", () => {
     const tarballPath = files.find((path) => path.endsWith(".tgz"))!;
     const tarballContents = await extractTarball(join(outdir, tarballPath), outdir);
 
-    const expectedFiles = ["index.js", "package.json", "store.w"];
+    const expectedFiles = ["index.js", "README.md", "package.json", "store.w"];
     for (const file of expectedFiles) {
       expect(tarballContents[file]).toBeDefined();
     }
