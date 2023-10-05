@@ -5439,7 +5439,7 @@ where
 			message: format!("Symbol \"{looked_up_object}\" used before being defined"),
 			span: looked_up_object.span(),
 			annotations: vec![DiagnosticAnnotation {
-				message: format!("\"{}\" defined later here", looked_up_object),
+				message: "defined later here".to_string(),
 				span,
 			}],
 		},
