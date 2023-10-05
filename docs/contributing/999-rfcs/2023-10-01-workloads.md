@@ -107,7 +107,7 @@ The following is a non-exhaustive list of capabilities we will need to support:
   entrypoint) (P1)
 * CPU and memory requirements (in some normalized model such as vCPUs, GBs) (P2)
 * GPUs (P2)
-* Liveness probe
+* Liveness probe (P1)
 * Readiness probe (P1)
 * Sidecar containers (P2)
 * Volumes (P2)
