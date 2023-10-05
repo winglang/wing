@@ -144,11 +144,28 @@ export async function lsp() {
           }))
         );
 
+        // Add annotations as notes hinting back to the original diagnostic
+        const extraNotes = rd.annotations.map((a) =>
+          Diagnostic.create(
+            Range.create(a.span.start.line, a.span.start.col, a.span.end.line, a.span.end.col),
+            a.message,
+            DiagnosticSeverity.Hint,
+            undefined,
+            undefined,
+            [
+              {
+                location: Location.create(diagnosticUri, diag.range),
+                message: `(source) ${diag.message}`,
+              },
+            ]
+          )
+        );
+
         if (!allDiagnostics.has(diagnosticUri)) {
           allDiagnostics.set(diagnosticUri, []);
           seenFiles.add(diagnosticUri);
         }
-        allDiagnostics.get(diagnosticUri)!.push(diag);
+        allDiagnostics.get(diagnosticUri)!.push(diag, ...extraNotes);
       } else {
         // skip if diagnostic is not associated with any file
       }
