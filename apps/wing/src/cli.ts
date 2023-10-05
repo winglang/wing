@@ -112,7 +112,6 @@ async function main() {
     }
   }
 
-
   function addValue(value: string, previous: string[]) {
     previous.push(value);
     return previous;

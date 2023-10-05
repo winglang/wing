@@ -27,7 +27,7 @@ export interface CompileOptions {
   readonly plugins?: string[];
   /**
    * App root id
-   * 
+   *
    * @default "Default"
    */
   readonly rootId?: string;
@@ -37,7 +37,7 @@ export interface CompileOptions {
   readonly value?: string;
   /**
    * Path to the YAML file with specific platform values
-   * 
+   *
    * example of the file's content:
    * root/Default/Domain:
    *   hostedZoneId: Z0111111111111111111F
