@@ -22,13 +22,20 @@ import { IInflightHost, Json } from "../std";
 const TABLE_NAME_OPTS: NameOptions = {
   maxLen: 22,
   disallowedRegex: /[a-z0-9\-\.\_]+/g,
-  sep: "A",
+  sep: "a",
 };
 
 const INSTANCE_NAME_OPTS: NameOptions = {
   maxLen: 22,
   disallowedRegex: /[a-z0-9\-\.\_]+/g,
-  sep: "A",
+  sep: "a",
+  case: CaseConventions.LOWERCASE,
+};
+
+const CLUSTER_NAME_OPTS: NameOptions = {
+  maxLen: 22,
+  disallowedRegex: /[a-z0-9\-\.\_]+/g,
+  sep: "a",
   case: CaseConventions.LOWERCASE,
 };
 
@@ -51,20 +58,15 @@ export class Table extends ex.Table {
       columnsFamily.push({ family: key });
     }
 
-    let clusterId = props.clusterId;
-    if (!props.clusterId) {
-      clusterId = "default";
-    }
-
     const autoscalingConfig: BigtableInstanceClusterAutoscalingConfig = {
-      minNodes: props.minNodes ?? 1,
-      maxNodes: props.maxNodes ?? 1,
-      cpuTarget: props.cpuTarget ?? 10,
+      minNodes: 1,
+      maxNodes: 3,
+      cpuTarget: 35,
     };
 
     const instanceCluster: BigtableInstanceCluster = {
-      clusterId: clusterId!,
-      storageType: props.storageType,
+      clusterId: 'default',
+      storageType: 'ssd',
       zone: app.zone,
       autoscalingConfig: autoscalingConfig,
     };
@@ -87,7 +89,7 @@ export class Table extends ex.Table {
   }
 
   public addRow(_key: string, _row: Json): void {
-    throw new Error("Method is not supported as preflight for GCP target.");
+    throw new Error("Method is not supported as a preflight for the GCP target.");
   }
 
   public bind(_host: IInflightHost, _ops: string[]): void {

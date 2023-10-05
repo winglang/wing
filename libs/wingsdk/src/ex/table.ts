@@ -49,42 +49,6 @@ export interface TableProps {
    * @default undefined
    */
   readonly initialRows?: { [key: string]: Json };
-
-  /**
-   * The table's instance storage type
-   * @default undefined
-   */
-  readonly storageType?: string;
-
-  /**
-   * The table's instance id
-   * @default undefined
-   */
-  readonly clusterId?: string;
-
-  /**
-   * The table's instance minimal number of nodes, used in autoscaling
-   * @default 1
-   */
-  readonly minNodes?: number;
-
-  /**
-   * The table's instance maximal number of nodes, used in autoscaling
-   * @default 1
-   */
-  readonly maxNodes?: number;
-
-  /**
-   * The table's instance target cpu utilization for autoscaling
-   * @default 10
-   */
-  readonly cpuTarget?: number;
-
-  /**
-   * The tabel's instance labels
-   * @default undefined
-   */
-  readonly labels?: { [key: string]: string };
 }
 
 /**
