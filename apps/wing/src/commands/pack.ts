@@ -104,7 +104,7 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
     const parsedOutput = JSON.parse(output.toString());
     const tarballName = parsedOutput[0].filename;
     if (outfile) {
-      await fs.rename(tarballName, path.basename(outfile));
+      await fs.rename(path.join(outdir, tarballName), outfile);
       console.log("Created tarball:", outfile);
       return path.join(outdir, outfile);
     } else {
