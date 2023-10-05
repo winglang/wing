@@ -84,6 +84,8 @@ const project = new cdk.JsiiProject({
     // shared client dependencies
     "ioredis",
     "jsonschema",
+    // fs module dependency
+    "js-yaml@^4.1.0",
   ],
   devDeps: [
     `@cdktf/provider-aws@^15.0.0`, // only for testing Wing plugins
@@ -101,6 +103,7 @@ const project = new cdk.JsiiProject({
     "vitest",
     "@types/uuid",
     "@vitest/coverage-v8",
+    "@types/js-yaml@^4.0.6",
     "nanoid", // for ESM import test in target-sim/function.test.ts
     ...JSII_DEPS,
   ],

@@ -18,6 +18,11 @@
       "type": "build"
     },
     {
+      "name": "@types/js-yaml",
+      "version": "^4.0.6",
+      "type": "build"
+    },
+    {
       "name": "@types/mime-types",
       "type": "build"
     },
@@ -276,6 +281,11 @@
     },
     {
       "name": "ioredis",
+      "type": "bundled"
+    },
+    {
+      "name": "js-yaml",
+      "version": "^4.1.0",
       "type": "bundled"
     },
     {

@@ -1197,6 +1197,9 @@ importers:
       ioredis:
         specifier: ^5.3.2
         version: 5.3.2
+      js-yaml:
+        specifier: ^4.1.0
+        version: 4.1.0
       jsonschema:
         specifier: ^1.4.1
         version: 1.4.1
@@ -1222,6 +1225,9 @@ importers:
       '@types/fs-extra':
         specifier: ^11.0.1
         version: 11.0.1
+      '@types/js-yaml':
+        specifier: ^4.0.6
+        version: 4.0.6
       '@types/mime-types':
         specifier: ^2.1.1
         version: 2.1.1
@@ -9265,6 +9271,10 @@ packages:
       pretty-format: 29.6.3
     dev: true
 
+  /@types/js-yaml@4.0.6:
+    resolution: {integrity: sha512-ACTuifTSIIbyksx2HTon3aFtCKWcID7/h3XEmRpDYdMCXxPbl+m9GteOJeaAkiAta/NJaSFuA7ahZ0NkwajDSw==}
+    dev: true
+
   /@types/json-schema@7.0.12:
     resolution: {integrity: sha512-Hr5Jfhc9eYOQNPYO5WLDq/n4jqijdHNlDXjuAQkkt+mWdQR+XJToOHrsD4cPaMXpn6KO7y2+wM8AZEs8VpBLVA==}
 
@@ -12938,7 +12948,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20231003
+      typescript: 5.3.0-dev.20231005
     dev: true
 
   /dset@3.1.2:
@@ -22159,8 +22169,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20231003:
-    resolution: {integrity: sha512-OyUdPjo1wNYs+PVDr9ARcEPs0aOqdxterOFzQzWK6DR4tsadKPbrOx8JgTOvSUwhkNOxBOEh7BonqV2uNsTxvA==}
+  /typescript@5.3.0-dev.20231005:
+    resolution: {integrity: sha512-Twm3wBauTO94CSWbjXFMpsHsbaOUVssreq6pUo4wr8YsaIp0jim8EeCa9LfawFetQ+P4PODMmiM+uBhhWRVX0Q==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
