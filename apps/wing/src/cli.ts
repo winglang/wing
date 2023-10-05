@@ -164,6 +164,13 @@ async function main() {
     .action(runSubCommand("test"));
 
   program
+    .command("pack")
+    .description("Package the current directory into an npm library (gzipped tarball).")
+    .addOption(new Option("-o --out-file <filename>", "Output filename"))
+    .hook("preAction", collectAnalyticsHook)
+    .action(runSubCommand("pack"));
+
+  program
     .command("docs")
     .description("Open the Wing documentation")
     .hook("preAction", collectAnalyticsHook)

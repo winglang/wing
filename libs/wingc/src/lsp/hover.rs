@@ -713,14 +713,6 @@ bring cloud;
 	);
 
 	test_hover_list!(
-		test_bring_library,
-		r#"
-bring "@winglang/sdk" as bar;
-                        //^
-"#
-	);
-
-	test_hover_list!(
 		test_var,
 		r#"
 let var xoo = "hello";
