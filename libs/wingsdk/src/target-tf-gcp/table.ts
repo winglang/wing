@@ -41,6 +41,10 @@ export class Table extends ex.Table {
   constructor(scope: Construct, id: string, props: ex.TableProps = {}) {
     super(scope, id, props);
 
+    if (props.initialRows) {
+      throw new Error(`property initialRows is not supported for the GCP target`)
+    }
+
     const app = App.of(this) as App;
 
     const tableName = ResourceNames.generateName(this, TABLE_NAME_OPTS);
@@ -93,7 +97,7 @@ export class Table extends ex.Table {
 
   public _toInflight(): string {
     throw new Error(
-      "cloud.Function cannot be used as an Inflight resource on GCP yet"
+      "cloud.Table cannot be used inflight on GCP yet"
     );
   }
 }

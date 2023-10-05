@@ -70,7 +70,7 @@ export class App extends CdktfApp {
       );
     }
 
-    this.zone = props.zone ?? process.env.GOOGLE_ZONE;
+    this.zone = props.zone ?? `${this.region}-a`;
 
     new GoogleProvider(this, "google", {
       project: this.projectId,
@@ -80,7 +80,11 @@ export class App extends CdktfApp {
 
     if (props.rootConstruct) {
       const Root = props.rootConstruct;
-      new Root(this, "Default");
+      if (this.isTestEnvironment) {
+        throw new Error("wing test not supported for tf-gcp target yet");
+      } else {
+        new Root(this, "Default");
+      }
     }
   }
 
