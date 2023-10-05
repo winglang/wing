@@ -215,7 +215,7 @@ impl SymbolEnv {
 				span: symbol.span.clone(),
 				message: format!("Symbol \"{}\" already defined in this scope", symbol.name),
 				annotations: vec![DiagnosticAnnotation {
-					message: format!("previous definition of \"{}\"", symbol.name),
+					message: "previous definition".to_string(),
 					span: self.symbol_map[&symbol.name].1.clone(),
 				}],
 			});
