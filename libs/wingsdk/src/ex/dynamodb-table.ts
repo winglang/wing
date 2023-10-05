@@ -913,11 +913,13 @@ export interface DynamodbTransactGetItemGetProps {
 
   /**
    * One or more substitution tokens for attribute names in an expression.
+   * @default undefined
    */
   readonly expressionAttributeNames?: Json;
 
   /**
    * A string that identifies one or more attributes to retrieve from the table.
+   * @default undefined
    */
   readonly projectionExpression?: string;
 }
