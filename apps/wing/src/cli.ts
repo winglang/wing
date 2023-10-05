@@ -166,7 +166,7 @@ async function main() {
   program
     .command("pack")
     .description("Package the current directory into an npm library (gzipped tarball).")
-    .addOption(new Option("-o --outdir <outdir>", "Output directory").default("."))
+    .addOption(new Option("-o --out-file <filename>", "Output filename"))
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("pack"));
 

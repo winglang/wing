@@ -13,12 +13,12 @@ import { checkNpmVersion } from "./npm-util";
 
 export interface PackageOptions {
   /**
-   * Directory to to save the generated package to.
+   * Output filename.
    */
-  readonly outdir: string;
+  readonly outfile?: string;
 }
 
-export async function pack(options: PackageOptions): Promise<string> {
+export async function pack(options: PackageOptions = {}): Promise<string> {
   // check that the library compiles to the "sim" target
   // TODO: let the user specify all supported targets in package.json
   console.log('Compiling to the "sim" target...');
@@ -31,7 +31,8 @@ export async function pack(options: PackageOptions): Promise<string> {
   await checkNpmVersion();
 
   const userDir = process.cwd();
-  const outdir = resolve(options.outdir);
+  const outfile = options.outfile ? resolve(options.outfile) : undefined;
+  const outdir = outfile ? path.dirname(outfile) : userDir;
 
   // perform our work in a staging directory to avoid making a mess in the user's current directory
   return withTempDir(async (workdir) => {
@@ -97,14 +98,19 @@ export async function pack(options: PackageOptions): Promise<string> {
     // write package.json
     await fs.writeFile(pkgJsonPath, JSON.stringify(pkgJson, null, 2) + "\n");
 
-    // make tarball in the specified outdir
-    await fs.mkdir(outdir, { recursive: true });
+    // make the tarball
     const command = `npm pack --json --pack-destination "${outdir}"`;
     const output = cp.execSync(command, { stdio: "pipe" });
     const parsedOutput = JSON.parse(output.toString());
     const tarballName = parsedOutput[0].filename;
-    console.log("Created tarball:", tarballName);
-    return path.join(outdir, tarballName);
+    if (outfile) {
+      await fs.rename(tarballName, path.basename(outfile));
+      console.log("Created tarball:", outfile);
+      return path.join(outdir, outfile);
+    } else {
+      console.log("Created tarball:", tarballName);
+      return path.join(outdir, tarballName);
+    }
   });
 }
 

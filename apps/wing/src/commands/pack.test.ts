@@ -32,7 +32,9 @@ describe("wing pack", () => {
       throw new Error(`npm is not installed`);
     });
 
-    await expect(async () => pack({ outdir })).rejects.toThrow(/npm is not installed/);
+    await expect(async () => pack({ outfile: join(outdir, "tarball.tgz") })).rejects.toThrow(
+      /npm is not installed/
+    );
     await expectNoTarball(outdir);
   });
 
@@ -40,7 +42,7 @@ describe("wing pack", () => {
     const projectDir = join(fixturesDir, "invalid1");
     const outdir = await generateTmpDir();
     process.chdir(projectDir);
-    await expect(pack({ outdir })).rejects.toThrow(
+    await expect(pack({ outfile: join(outdir, "tarball.tgz") })).rejects.toThrow(
       /No package.json found in the current directory./
     );
     await expectNoTarball(outdir);
@@ -51,7 +53,7 @@ describe("wing pack", () => {
     const outdir = await generateTmpDir();
     process.chdir(projectDir);
 
-    await expect(pack({ outdir })).rejects.toThrow(
+    await expect(pack({ outfile: join(outdir, "tarball.tgz") })).rejects.toThrow(
       /Missing required field "license" in package.json/
     );
     await expectNoTarball(outdir);
@@ -62,18 +64,19 @@ describe("wing pack", () => {
     const outdir = await generateTmpDir();
     process.chdir(projectDir);
 
-    await expect(pack({ outdir })).rejects.toThrow(/Expected ';'/);
+    await expect(pack({ outfile: join(outdir, "tarball.tgz") })).rejects.toThrow(/Expected ';'/);
     await expectNoTarball(outdir);
   });
 
   it("packages a valid Wing project", async () => {
     // GIVEN
-    const projectDir = goodFixtureDir;
     const outdir = await generateTmpDir();
-    process.chdir(projectDir);
+    // copy everything to the output directory to sandbox this test
+    await exec(`cp -r ${goodFixtureDir}/* ${outdir}`);
+    process.chdir(outdir);
 
     // WHEN
-    await pack({ outdir });
+    await pack();
 
     // THEN
     const files = await fs.readdir(outdir);
@@ -90,6 +93,34 @@ describe("wing pack", () => {
     expect(pkgJson.name).toEqual("wing-fixture");
     expect(pkgJson.keywords.includes("winglang")).toBe(true);
     expect(pkgJson.engines.wing).toEqual("*");
+    expect(pkgJson.wing).toEqual(true);
+  });
+
+  it("packages a valid Wing project to a specified path", async () => {
+    // GIVEN
+    const projectDir = goodFixtureDir;
+    const outdir = await generateTmpDir();
+    process.chdir(projectDir);
+
+    // WHEN
+    await pack({ outfile: join(outdir, "tarball.tgz") });
+
+    // THEN
+    const files = await fs.readdir(outdir);
+    expect(files.filter((path) => path.endsWith(".tgz")).length).toEqual(1);
+    const tarballPath = files.find((path) => path.endsWith(".tgz"))!;
+    const tarballContents = await extractTarball(join(outdir, tarballPath), outdir);
+
+    const expectedFiles = ["index.js", "package.json", "store.w"];
+    for (const file of expectedFiles) {
+      expect(tarballContents[file]).toBeDefined();
+    }
+
+    const pkgJson = JSON.parse(tarballContents["package.json"]);
+    expect(pkgJson.name).toEqual("wing-fixture");
+    expect(pkgJson.keywords.includes("winglang")).toBe(true);
+    expect(pkgJson.engines.wing).toEqual("*");
+    expect(pkgJson.wing).toEqual(true);
   });
 });
 
