@@ -347,8 +347,8 @@ test("transact get items", async () => {
     ],
   });
   expect(responses).toEqual([
-    { id: "1", age: 50 },
-    { id: "2", age: 80 },
+    { item: { id: "1", age: 50 } },
+    { item: { id: "2", age: 80 } },
   ]);
 
   await s.stop();
