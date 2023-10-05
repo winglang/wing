@@ -148,14 +148,14 @@ export async function lsp() {
         const extraNotes = rd.annotations.map((a) =>
           Diagnostic.create(
             Range.create(a.span.start.line, a.span.start.col, a.span.end.line, a.span.end.col),
-            `Original: ${a.message}`,
+            a.message,
             DiagnosticSeverity.Hint,
             undefined,
             undefined,
             [
               {
                 location: Location.create(diagnosticUri, diag.range),
-                message: diag.message,
+                message: `(Source) ${diag.message}`,
               },
             ]
           )
