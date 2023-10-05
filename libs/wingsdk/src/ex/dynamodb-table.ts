@@ -91,6 +91,7 @@ export abstract class DynamodbTable extends Resource {
       DynamodbTableInflightMethods.GET_ITEM,
       DynamodbTableInflightMethods.SCAN,
       DynamodbTableInflightMethods.QUERY,
+      DynamodbTableInflightMethods.TRANSACT_GET_ITEMS,
       DynamodbTableInflightMethods.TRANSACT_WRITE_ITEMS,
       DynamodbTableInflightMethods.BATCH_GET_ITEM,
       DynamodbTableInflightMethods.BATCH_WRITE_ITEM,
@@ -1090,6 +1091,8 @@ export enum DynamodbTableInflightMethods {
   SCAN = "scan",
   /** `DynamodbTable.query` */
   QUERY = "query",
+  /** `DynamodbTable.transactGetItems` */
+  TRANSACT_GET_ITEMS = "transactGetItems",
   /** `DynamodbTable.transactWriteItems` */
   TRANSACT_WRITE_ITEMS = "transactWriteItems",
   /** `DynamodbTable.batchGetItem` */
