@@ -42,7 +42,9 @@ export class Table extends ex.Table {
     super(scope, id, props);
 
     if (props.initialRows) {
-      throw new Error(`property initialRows is not supported for the GCP target`)
+      throw new Error(
+        `property initialRows is not supported for the GCP target`
+      );
     }
 
     const app = App.of(this) as App;
@@ -96,8 +98,6 @@ export class Table extends ex.Table {
   }
 
   public _toInflight(): string {
-    throw new Error(
-      "cloud.Table cannot be used inflight on GCP yet"
-    );
+    throw new Error("cloud.Table cannot be used inflight on GCP yet");
   }
 }
