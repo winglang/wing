@@ -58,8 +58,8 @@ export class Table extends ex.Table {
     };
 
     const instanceCluster: BigtableInstanceCluster = {
-      clusterId: 'default',
-      storageType: 'ssd',
+      clusterId: "default",
+      storageType: "ssd",
       zone: app.zone,
       autoscalingConfig: autoscalingConfig,
     };
@@ -82,7 +82,9 @@ export class Table extends ex.Table {
   }
 
   public addRow(_key: string, _row: Json): void {
-    throw new Error("Method is not supported as a preflight for the GCP target.");
+    throw new Error(
+      "Method is not supported as a preflight for the GCP target."
+    );
   }
 
   public bind(_host: IInflightHost, _ops: string[]): void {

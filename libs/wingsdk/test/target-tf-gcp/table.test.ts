@@ -8,7 +8,6 @@ const GCP_APP_OPTS = {
   storageLocation: "US",
   entrypointDir: __dirname,
   region: "us-central1",
-  overrideEnv: true,
 };
 
 test("create a table", () => {

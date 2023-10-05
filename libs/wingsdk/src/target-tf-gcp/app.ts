@@ -56,14 +56,14 @@ export class App extends CdktfApp {
   constructor(props: AppProps) {
     super(props);
 
-	this.projectId = props.projectId ?? process.env.GOOGLE_PROJECT_ID;
+    this.projectId = props.projectId ?? process.env.GOOGLE_PROJECT_ID;
     if (this.projectId === undefined) {
       throw new Error(
         "A Google Cloud project ID must be specified through the GOOGLE_PROJECT_ID environment variable."
       );
     }
 
-	this.region = props.region ?? process.env.GOOGLE_REGION;
+    this.region = props.region ?? process.env.GOOGLE_REGION;
     if (this.region === undefined) {
       throw new Error(
         "A Google Cloud region must be specified through the GOOGLE_REGION environment variable."

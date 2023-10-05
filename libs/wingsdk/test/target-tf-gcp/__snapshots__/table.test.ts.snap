@@ -8,11 +8,12 @@ exports[`create a table 1`] = `
         "cluster": [
           {
             "autoscaling_config": {
-              "cpu_target": 10,
-              "max_nodes": 1,
+              "cpu_target": 35,
+              "max_nodes": 3,
               "min_nodes": 1,
             },
             "cluster_id": "default",
+            "storage_type": "ssd",
           },
         ],
         "name": "aac8dce022",
@@ -26,7 +27,7 @@ exports[`create a table 1`] = `
           },
         ],
         "instance_name": "\${google_bigtable_instance.my_table_Instance_531C1B73.name}",
-        "name": "AAc8dce022",
+        "name": "aac8dce022",
         "project": "my-project",
       },
     },
