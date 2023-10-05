@@ -155,7 +155,7 @@ export async function lsp() {
             [
               {
                 location: Location.create(diagnosticUri, diag.range),
-                message: `(Source) ${diag.message}`,
+                message: `(source) ${diag.message}`,
               },
             ]
           )
