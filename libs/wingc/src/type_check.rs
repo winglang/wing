@@ -5154,8 +5154,9 @@ impl<'a> TypeChecker<'a> {
 				let current_class_type = self
 					.resolve_user_defined_type(&current_class, env, self.ctx.current_stmt_idx())
 					.unwrap();
-				private_access = current_class_type.is_same_type_as(&property_defined_in);
-				protected_access = private_access || current_class_type.is_strict_subtype_of(&property_defined_in);
+				private_access = private_access || current_class_type.is_same_type_as(&property_defined_in);
+				protected_access =
+					protected_access || private_access || current_class_type.is_strict_subtype_of(&property_defined_in);
 				if private_access {
 					break;
 				}
