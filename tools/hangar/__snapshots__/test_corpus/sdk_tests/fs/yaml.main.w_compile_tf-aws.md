@@ -65,6 +65,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const fs = $stdlib.fs;
+const regex = $stdlib.regex;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -107,6 +108,14 @@ class $Root extends $stdlib.std.Resource {
     }
     const filename = "test-yaml.yaml";
     const data = ({"foo": "bar","arr": [1, 2, 3, "test", ({"foo": "bar"})]});
+    try {
+      (fs.Util.writeFile(filename,"invalid: {{ content }}, invalid"));
+      (fs.Util.readYaml(filename));
+    }
+    catch ($error_e) {
+      const e = $error_e.message;
+      {((cond) => {if (!cond) throw new Error("assertion failed: regex.match(\"^bad indentation\", e) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((regex.Util.match("^bad indentation",e)),true)))};
+    }
     (fs.Util.writeYaml(filename,data,data));
     {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(filename) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.exists(filename)),true)))};
     const objs = (fs.Util.readYaml(filename));

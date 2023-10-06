@@ -1,10 +1,18 @@
 bring fs;
+bring regex;
 
 let filename = "test-yaml.yaml";
 let data = Json {
     "foo": "bar", 
     "arr": [1, 2, 3, "test", { "foo": "bar" }]
 };
+
+try {
+    fs.writeFile(filename, "invalid: {{ content }}, invalid");
+    fs.readYaml(filename);
+} catch e {
+    assert(regex.match("^bad indentation", e) == true);
+}
 
 fs.writeYaml(filename, data, data);
 assert(fs.exists(filename) == true);

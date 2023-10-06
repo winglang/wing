@@ -208,9 +208,10 @@ export class Util {
     return Util.readFile(filepath, options);
   }
   /**
-   * Read the content of the file and convert it to JSON
+   * Read the contents of the file and convert it to JSON.
    * @param filepath The file path of the JSON file.
    * @returns The JSON object contained in the file.
+   * @throws Will throw if the content is not in valid JSON format.
    */
   public static readJson(filepath: string): Json {
     const text = Util.readFile(filepath);
@@ -220,6 +221,7 @@ export class Util {
    * Get the content of the file and convert it to JSON if the path exists, `undefined` otherwise.
    * @param filepath The file path of the JSON file.
    * @returns The JSON object contained in the file, `undefined` otherwise.
+   * @throws Will throw if the content is not in valid JSON format.
    */
   public static tryReadJson(filepath: string): Json | undefined {
     if (!Util.exists(filepath)) {
@@ -231,6 +233,7 @@ export class Util {
    * Convert all YAML objects from a single file into JSON objects.
    * @param filepath The file path of the YAML file.
    * @returns The JSON objects converted from YAML objects in the file.
+   * @throws Will throw if the content is not in valid YAML format.
    */
   public static readYaml(filepath: string): Json[] {
     const text = Util.readFile(filepath);
@@ -241,6 +244,7 @@ export class Util {
    * Convert all YAML objects from a single file into JSON objects if the path exists, `undefined` otherwise.
    * @param filepath The file path of the YAML file.
    * @returns The JSON objects converted from YAML objects in the file, `undefined` otherwise.
+   * @throws Will throw if the content is not in valid YAML format.
    */
   public static tryReadYaml(filepath: string): Json[] | undefined {
     if (!Util.exists(filepath)) {
