@@ -2,7 +2,7 @@
 source: libs/wingc/src/lsp/code_actions.rs
 ---
 - title: "Insert ';'"
-  kind: source.fixAll
+  kind: quickfix
   diagnostics:
     - range:
         start:
@@ -26,7 +26,7 @@ source: libs/wingc/src/lsp/code_actions.rs
           newText: ;
   isPreferred: true
 - title: "Insert ';'"
-  kind: quickfix
+  kind: source.fixAll
   diagnostics:
     - range:
         start:

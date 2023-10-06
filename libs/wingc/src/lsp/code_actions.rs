@@ -1,6 +1,6 @@
 use lsp_types::{
-	CodeAction, CodeActionKind, CodeActionOrCommand, CodeActionParams, Diagnostic, DiagnosticSeverity, TextEdit, Url,
-	WorkspaceEdit,
+	CodeAction, CodeActionKind, CodeActionOrCommand, CodeActionParams, CodeActionTriggerKind, Diagnostic,
+	DiagnosticSeverity, TextEdit, Url, WorkspaceEdit,
 };
 use std::collections::HashMap;
 
@@ -22,12 +22,38 @@ pub unsafe extern "C" fn wingc_on_code_action(ptr: u32, len: u32) -> u64 {
 }
 
 pub fn on_code_action(params: CodeActionParams) -> Vec<CodeActionOrCommand> {
-	let uri = params.text_document.uri;
-
-	let original_diagnostics = get_diagnostics();
 	let mut action_list = vec![];
+	let uri = params.text_document.uri;
+	let context = params.context;
+
+	if matches!(context.trigger_kind, Some(CodeActionTriggerKind::INVOKED)) && !context.diagnostics.is_empty() {
+		for diagnostic in context.diagnostics {
+			if let Some(mut action) = get_fix_for_diagnostic(uri.clone(), diagnostic) {
+				if let CodeActionOrCommand::CodeAction(action) = &mut action {
+					if action.kind == Some(CodeActionKind::SOURCE_FIX_ALL) {
+						action.kind = Some(CodeActionKind::QUICKFIX);
+					}
+				}
+
+				action_list.push(action);
+			}
+		}
+		return action_list;
+	}
+
+	let mut auto_insert_semicolons = vec![];
+
+	let file_id = uri.to_file_path().unwrap().to_str().unwrap().to_string();
+	let original_diagnostics = get_diagnostics();
 	for original_diagnostic in &original_diagnostics {
-		let mut action = get_fix_for_diagnostic(
+		let Some(original_span) = &original_diagnostic.span else {
+			continue;
+		};
+		if original_span.file_id != file_id {
+			continue;
+		}
+
+		let action = get_fix_for_diagnostic(
 			uri.clone(),
 			Diagnostic {
 				message: original_diagnostic.message.clone(),
@@ -36,9 +62,10 @@ pub fn on_code_action(params: CodeActionParams) -> Vec<CodeActionOrCommand> {
 				..Default::default()
 			},
 		);
-		if let Some(ref mut action) = action {
-			if let CodeActionOrCommand::CodeAction(action) = action {
-				if action.kind == Some(CodeActionKind::SOURCE_FIX_ALL) {
+		if let Some(mut action) = action {
+			if let CodeActionOrCommand::CodeAction(action) = &mut action {
+				if action.title == "Insert ';'" {
+					let mut add_autofix = true;
 					// ensure that this error doesn't intersect any other errors
 					for other_diagnostic in &original_diagnostics {
 						if other_diagnostic.message != original_diagnostic.message
@@ -48,23 +75,53 @@ pub fn on_code_action(params: CodeActionParams) -> Vec<CodeActionOrCommand> {
 								.unwrap()
 								.contains_span(&original_diagnostic.span.as_ref().unwrap())
 						{
-							action.kind = Some(CodeActionKind::QUICKFIX);
+							add_autofix = false;
 							break;
 						}
+					}
+					if add_autofix {
+						auto_insert_semicolons.push((
+							action.diagnostics.as_ref().unwrap()[0].clone(),
+							action.edit.as_ref().unwrap().changes.as_ref().unwrap().clone(),
+						));
 					}
 				}
 			}
 
-			action_list.push(action.clone());
+			action_list.push(action);
+		}
+	}
 
-			if let CodeActionOrCommand::CodeAction(action) = action {
-				if action.kind == Some(CodeActionKind::SOURCE_FIX_ALL) {
-					// add a quickfix clone of this action
-					action.kind = Some(CodeActionKind::QUICKFIX);
-					action_list.push(CodeActionOrCommand::CodeAction(action.clone()));
-				}
+	// if there are semicolons missing, add a fix all action to correct them all at once
+	if !auto_insert_semicolons.is_empty() {
+		let mut combined_changes = HashMap::new();
+		for changes in &auto_insert_semicolons {
+			for (file, edits) in &changes.1 {
+				combined_changes
+					.entry(file.clone())
+					.or_insert_with(|| vec![])
+					.extend(edits.clone());
 			}
 		}
+
+		action_list.push(CodeActionOrCommand::CodeAction(CodeAction {
+			title: "Insert ';'".to_string(),
+			kind: Some(CodeActionKind::SOURCE_FIX_ALL),
+			diagnostics: Some(
+				auto_insert_semicolons
+					.iter()
+					.map(|(diagnostic, _)| diagnostic)
+					.cloned()
+					.collect(),
+			),
+			edit: Some(WorkspaceEdit {
+				changes: Some(combined_changes),
+				..Default::default()
+			}),
+
+			is_preferred: Some(true),
+			..Default::default()
+		}));
 	}
 
 	action_list
@@ -83,12 +140,13 @@ fn get_fix_for_diagnostic(file: Url, diagnostic: Diagnostic) -> Option<CodeActio
 			);
 			Some(CodeActionOrCommand::CodeAction(CodeAction {
 				title: "Insert ';'".to_string(),
-				kind: Some(CodeActionKind::SOURCE_FIX_ALL),
+				kind: Some(CodeActionKind::QUICKFIX),
 				diagnostics: Some(vec![diagnostic.clone()]),
 				edit: Some(WorkspaceEdit {
 					changes: Some(change_hashmap),
 					..Default::default()
 				}),
+
 				is_preferred: Some(true),
 				..Default::default()
 			}))
@@ -156,12 +214,12 @@ mod tests {
 		r#"let x = 2"#,
 		assert!(insert_semicolon.len() == 2)
 		if let CodeActionOrCommand::CodeAction(action) = &insert_semicolon[0] {
-			assert!(action.kind == Some(CodeActionKind::SOURCE_FIX_ALL));
+			assert!(action.kind == Some(CodeActionKind::QUICKFIX));
 		} else {
 			panic!("Expected first action to CodeAction");
 		}
 		if let CodeActionOrCommand::CodeAction(action) = &insert_semicolon[1] {
-			assert!(action.kind == Some(CodeActionKind::QUICKFIX));
+			assert!(action.kind == Some(CodeActionKind::SOURCE_FIX_ALL));
 		} else {
 			panic!("Expected second action to CodeAction");
 		}
