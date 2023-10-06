@@ -273,7 +273,14 @@ Duration <DURATION>"
 `;
 
 exports[`bring.test.w 1`] = `
-"error: Redundant bring of \\"std\\"
+"error: Expected module specification (see https://www.winglang.io/docs/libraries)
+  --> ../../../examples/tests/invalid/bring.test.w:8:7
+  |
+8 | bring ;
+  |       ^ Expected module specification (see https://www.winglang.io/docs/libraries)
+
+
+error: Redundant bring of \\"std\\"
   --> ../../../examples/tests/invalid/bring.test.w:1:1
   |
 1 | bring std;
@@ -294,6 +301,13 @@ error: \\"fs\\" is not a built-in module
   | ^^^^^^^^^ \\"fs\\" is not a built-in module
 
 
+error: \\"c\\" is not a built-in module
+   --> ../../../examples/tests/invalid/bring.test.w:10:1
+   |
+10 | bring c;
+   | ^^^^^^^^ \\"c\\" is not a built-in module
+
+
  
  
 Tests 1 failed (1)
@@ -309,11 +323,11 @@ exports[`bring_jsii.test.w 1`] = `
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^ bring \\"jsii-code-samples\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
 
 
-error: Cannot find jsii module \\"foobar\\" in source directory: Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid\\"
+error: Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid/bring_jsii.test.w\\"
   --> ../../../examples/tests/invalid/bring_jsii.test.w:4:1
   |
 4 | bring \\"foobar\\" as baz;
-  | ^^^^^^^^^^^^^^^^^^^^^^ Cannot find jsii module \\"foobar\\" in source directory: Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid\\"
+  | ^^^^^^^^^^^^^^^^^^^^^^ Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid/bring_jsii.test.w\\"
 
 
  
