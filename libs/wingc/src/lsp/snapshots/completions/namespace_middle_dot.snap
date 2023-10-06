@@ -329,7 +329,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IFunctionClient\n```\n---\nInflight interface for `Function`.\n### Methods\n- `invoke` — Invoke the function asynchronously with a given payload."
+    value: "```wing\ninterface IFunctionClient\n```\n---\nInflight interface for `Function`.\n### Methods\n- `invoke` — Invokes the function synchronously with a payload and waits for the result."
   sortText: ii|IFunctionClient
 - label: IFunctionHandler
   kind: 8
