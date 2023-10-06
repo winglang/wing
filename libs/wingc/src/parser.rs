@@ -792,7 +792,7 @@ impl<'s> Parser<'s> {
 
 	fn build_bring_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
 		let Some(module_name_node) = statement_node.child_by_field_name("module_name") else {
-			return self.with_error("Expected built-in module or \"external module\"", &statement_node.child(statement_node.child_count() - 1).unwrap_or(*statement_node));
+			return self.with_error("Expected module specification (see https://www.winglang.io/docs/libraries)", &statement_node.child(statement_node.child_count() - 1).unwrap_or(*statement_node));
 		};
 
 		let module_name = self.node_symbol(&module_name_node)?;

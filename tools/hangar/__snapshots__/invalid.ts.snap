@@ -273,11 +273,11 @@ Duration <DURATION>"
 `;
 
 exports[`bring.test.w 1`] = `
-"error: Expected built-in module or \\"external module\\"
+"error: Expected module specification (see https://www.winglang.io/docs/libraries)
   --> ../../../examples/tests/invalid/bring.test.w:8:7
   |
 8 | bring ;
-  |       ^ Expected built-in module or \\"external module\\"
+  |       ^ Expected module specification (see https://www.winglang.io/docs/libraries)
 
 
 error: Redundant bring of \\"std\\"

@@ -6,6 +6,6 @@ bring cloud;
 bring fs;
 //    ^^^^^ "fs" is not a built-in module
 bring ;
-//^^^^^ Expected built-in module or "external module"
+//^^^^^ Expected module specification (see https://www.winglang.io/docs/libraries)
 bring c;
 //^^^^^^ "c" is not a built-in module
