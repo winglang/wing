@@ -192,14 +192,14 @@ let acronyms = MutSet<Map<str>> {{"SEL" => "Serial Experiments Lain", "NGE" => "
 let copyAcronyms = acronyms.copy();
 assert(copyAcronyms == {{"SEL" => "Serial Experiments Lain", "NGE" => "Neon Genesis Evangelion"}});
 acronyms.add({"DomeKano" => "Domestic na Kanojo"});
-let copyCopyAcronyms = copyAcronyms.copyMut().add({"DomeKano" => "Domestic na Kanojo"});
-assert(acronyms == copyCopyAcronyms);
+let copyAcronymsNew = acronyms.copy().copyMut();
+assert(copyAcronymsNew == acronyms);
 
 test "copy()" {
     let acronyms = MutSet<Map<str>> {{"SEL" => "Serial Experiments Lain", "NGE" => "Neon Genesis Evangelion"}};
     let copyAcronyms = acronyms.copy();
     assert(copyAcronyms == {{"SEL" => "Serial Experiments Lain", "NGE" => "Neon Genesis Evangelion"}});
     acronyms.add({"DomeKano" => "Domestic na Kanojo"});
-    let copyCopyAcronyms = copyAcronyms.copyMut().add({"DomeKano" => "Domestic na Kanojo"});
-    assert(acronyms == copyCopyAcronyms);
+    let copyAcronymsNew = acronyms.copy().copyMut();
+    assert(copyAcronymsNew == acronyms);
 }
