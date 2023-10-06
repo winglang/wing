@@ -17,9 +17,33 @@ const log = debug("wing:compile");
  * This is passed from Commander to the `compile` function.
  */
 export interface CompileOptions {
+  /**
+   * Target platform
+   */
   readonly target: wingCompiler.Target;
+  /**
+   * List of compiler plugins
+   */
   readonly plugins?: string[];
+  /**
+   * App root id
+   *
+   * @default "Default"
+   */
   readonly rootId?: string;
+  /**
+   * String with platform-specific values separated by commas
+   */
+  readonly value?: string;
+  /**
+   * Path to the YAML file with specific platform values
+   *
+   * example of the file's content:
+   * root/Default/Domain:
+   *   hostedZoneId: Z0111111111111111111F
+   *   acmCertificateArn: arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+   */
+  readonly values?: string;
   /**
    * Whether to run the compiler in `wing test` mode. This may create multiple
    * copies of the application resources in order to run tests in parallel.

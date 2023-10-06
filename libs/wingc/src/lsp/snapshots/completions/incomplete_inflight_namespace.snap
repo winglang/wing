@@ -19,6 +19,12 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nclass Counter\n```\n---\nA distributed atomic counter."
   sortText: gg|Counter
+- label: Domain
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Domain\n```\n---\nA cloud Domain."
+  sortText: gg|Domain
 - label: Function
   kind: 7
   documentation:
@@ -193,6 +199,12 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstruct CounterProps\n```\n---\nOptions for `Counter`.\n### Fields\n- `initial?` — The initial value of the counter."
   sortText: hh|CounterProps
+- label: DomainProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct DomainProps\n```\n---\nOptions for `Domain`.\n### Fields\n- `domainName` — The website's custom domain name."
+  sortText: hh|DomainProps
 - label: FunctionProps
   kind: 22
   documentation:
@@ -275,13 +287,13 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct WebsiteOptions\n```\n---\nOptions for `Website`, and `ReactApp`.\n### Fields\n- `domain?` — The website's custom domain name."
+    value: "```wing\nstruct WebsiteOptions\n```\n---\nOptions for `Website`, and `ReactApp`.\n### Fields\n- `domain?` — The website's custom domain object."
   sortText: hh|WebsiteOptions
 - label: WebsiteProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct WebsiteProps extends WebsiteOptions\n```\n---\nOptions for `Website`.\n### Fields\n- `domain?` — str?\n- `path` — Local path to the website's static files, relative to the Wing source file or absolute."
+    value: "```wing\nstruct WebsiteProps extends WebsiteOptions\n```\n---\nOptions for `Website`.\n### Fields\n- `domain?` — Domain?\n- `path` — Local path to the website's static files, relative to the Wing source file or absolute."
   sortText: hh|WebsiteProps
 - label: IApiClient
   kind: 8

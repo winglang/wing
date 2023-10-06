@@ -1238,6 +1238,9 @@ importers:
       uuid:
         specifier: ^8.3.2
         version: 8.3.2
+      yaml:
+        specifier: ^2.3.2
+        version: 2.3.2
     devDependencies:
       '@cdktf/provider-aws':
         specifier: ^15.0.0
