@@ -805,7 +805,7 @@ impl<'a> JSifier<'a> {
 				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
 				match ctx.visit_ctx.current_phase() {
 					Phase::Preflight => CodeMaker::one_line(format!("super(scope,id,{});", args)),
-					_ => CodeMaker::one_line(format!("await super.{CLASS_INFLIGHT_INIT_NAME}({});", args)),
+					_ => CodeMaker::one_line(format!("await super.{CLASS_INFLIGHT_INIT_NAME}?.({});", args)),
 				}
 			}
 			StmtKind::Let {

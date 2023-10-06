@@ -32,3 +32,25 @@ test "inflight calls parent's init" {
   // Make sure the init was called and the parent's init was called
   assert(f.field1 == 6 && f.field2 == 5 && f.field3 == 4);
 }
+
+test "inflight calls parent's init when non exists" {
+  // Note these are all inflight classes since we're in an inflight test context
+  class FooNoInit {
+    protected leet(): num {
+      return 1337;
+    }
+  }
+
+  class FooChild extends FooNoInit {
+    pub field: num;
+
+    init() {
+      super();
+      this.field = this.leet();
+    }
+  }
+
+  let f = new FooChild();
+  // Make sure the init was called and the parent's init was called
+  assert(f.field == 1337);
+}
