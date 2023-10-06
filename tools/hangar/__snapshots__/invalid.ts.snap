@@ -17,191 +17,191 @@ Duration <DURATION>"
 
 exports[`access_modifiers.test.w 1`] = `
 "error: Method \\"private_method\\" is private in \\"Foo\\" but it's an implementation of \\"SomeInterface\\". Interface members must be public.
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:40:3
+   --> ../../../examples/tests/invalid/access_modifiers.test.w:49:3
    |
-40 |   private_method() {}
+49 |   private_method() {}
    |   ^^^^^^^^^^^^^^ Method \\"private_method\\" is private in \\"Foo\\" but it's an implementation of \\"SomeInterface\\". Interface members must be public.
 
 
 error: Method \\"protected_method\\" is protected in \\"Foo\\" but it's an implementation of \\"SomeInterface\\". Interface members must be public.
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:38:13
+   --> ../../../examples/tests/invalid/access_modifiers.test.w:47:13
    |
-38 |   protected protected_method() {}
+47 |   protected protected_method() {}
    |             ^^^^^^^^^^^^^^^^ Method \\"protected_method\\" is protected in \\"Foo\\" but it's an implementation of \\"SomeInterface\\". Interface members must be public.
 
 
 error: Cannot override private method \\"method\\" of \\"Foo\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:49:3
+   --> ../../../examples/tests/invalid/access_modifiers.test.w:58:3
    |
-49 |   method() {
+58 |   method() {
    |   ^^^^^^ Cannot override private method \\"method\\" of \\"Foo\\"
 
 
 error: Cannot override private method \\"method\\" of \\"Bar\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:72:3
+   --> ../../../examples/tests/invalid/access_modifiers.test.w:81:3
    |
-72 |   method() {
+81 |   method() {
    |   ^^^^^^ Cannot override private method \\"method\\" of \\"Bar\\"
 
 
 error: Cannot access protected member \\"protected_field\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:100:9
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:109:9
     |
-100 | log(foo.protected_field);
+109 | log(foo.protected_field);
     |         ^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_field\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_field\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:102:9
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:111:9
     |
-102 | log(foo.private_field);
+111 | log(foo.private_field);
     |         ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Foo\\"
 
 
 error: Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:106:5
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:115:5
     |
-106 | Foo.protected_static_method();
+115 | Foo.protected_static_method();
     |     ^^^^^^^^^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:108:5
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:117:5
     |
-108 | Foo.private_static_method();
+117 | Foo.private_static_method();
     |     ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
 
 
 error: Cannot override public method \\"public_method\\" of \\"Foo\\" with a private method
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:148:3
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:157:3
     |
-148 |   public_method() {}
+157 |   public_method() {}
     |   ^^^^^^^^^^^^^ Cannot override public method \\"public_method\\" of \\"Foo\\" with a private method
 
 
 error: Cannot override protected method \\"protected_method\\" of \\"Foo\\" with a private method
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:150:3
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:159:3
     |
-150 |   protected_method() {}
+159 |   protected_method() {}
     |   ^^^^^^^^^^^^^^^^ Cannot override protected method \\"protected_method\\" of \\"Foo\\" with a private method
 
 
 error: Cannot override private method \\"private_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:152:3
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:161:3
     |
-152 |   private_method() {}
+161 |   private_method() {}
     |   ^^^^^^^^^^^^^^ Cannot override private method \\"private_method\\" of \\"Foo\\"
 
 
 error: Cannot override public method \\"public_method\\" of \\"Foo\\" with a protected method
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:157:13
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:166:13
     |
-157 |   protected public_method() {}
+166 |   protected public_method() {}
     |             ^^^^^^^^^^^^^ Cannot override public method \\"public_method\\" of \\"Foo\\" with a protected method
 
 
 error: Cannot override private method \\"private_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:160:13
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:169:13
     |
-160 |   protected private_method() {}
+169 |   protected private_method() {}
     |             ^^^^^^^^^^^^^^ Cannot override private method \\"private_method\\" of \\"Foo\\"
 
 
 error: Cannot override private method \\"private_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:167:7
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:176:7
     |
-167 |   pub private_method() {}
+176 |   pub private_method() {}
     |       ^^^^^^^^^^^^^^ Cannot override private method \\"private_method\\" of \\"Foo\\"
 
 
 error: Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:128:9
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:137:9
     |
-128 |     Foo.protected_static_method();
+137 |     Foo.protected_static_method();
     |         ^^^^^^^^^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:130:9
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:139:9
     |
-130 |     Foo.private_static_method();
+139 |     Foo.private_static_method();
     |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
 
 
 error: Cannot access protected member \\"protected_field\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:114:13
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:123:13
     |
-114 |     log(foo.protected_field);
+123 |     log(foo.protected_field);
     |             ^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_field\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_field\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:116:13
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:125:13
     |
-116 |     log(foo.private_field);
+125 |     log(foo.private_field);
     |             ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Foo\\"
 
 
 error: Cannot access protected member \\"protected_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:120:9
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:129:9
     |
-120 |     foo.protected_method();
+129 |     foo.protected_method();
     |         ^^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_method\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:122:9
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:131:9
     |
-122 |     foo.private_method();
+131 |     foo.private_method();
     |         ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:88:9
+   --> ../../../examples/tests/invalid/access_modifiers.test.w:97:9
    |
-88 |     Foo.private_static_method();
+97 |     Foo.private_static_method();
    |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Bar\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:93:9
-   |
-93 |     Bar.private_static_method();
-   |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Bar\\"
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:102:9
+    |
+102 |     Bar.private_static_method();
+    |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Bar\\"
 
 
 error: Cannot access private member \\"private_field\\" of \\"Baz\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:75:14
+   --> ../../../examples/tests/invalid/access_modifiers.test.w:84:14
    |
-75 |     log(this.private_field);
+84 |     log(this.private_field);
    |              ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Baz\\"
 
 
 error: Cannot access private member \\"private_method\\" of \\"Baz\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:80:10
+   --> ../../../examples/tests/invalid/access_modifiers.test.w:89:10
    |
-80 |     this.private_method();
+89 |     this.private_method();
    |          ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Baz\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:65:9
+   --> ../../../examples/tests/invalid/access_modifiers.test.w:74:9
    |
-65 |     Foo.private_static_method();
+74 |     Foo.private_static_method();
    |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_field\\" of \\"Bar\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:52:14
+   --> ../../../examples/tests/invalid/access_modifiers.test.w:61:14
    |
-52 |     log(this.private_field);
+61 |     log(this.private_field);
    |              ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Bar\\"
 
 
 error: Cannot access private member \\"private_method\\" of \\"Bar\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:57:10
+   --> ../../../examples/tests/invalid/access_modifiers.test.w:66:10
    |
-57 |     this.private_method();
+66 |     this.private_method();
    |          ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Bar\\"
 
 
@@ -273,7 +273,14 @@ Duration <DURATION>"
 `;
 
 exports[`bring.test.w 1`] = `
-"error: Redundant bring of \\"std\\"
+"error: Expected module specification (see https://www.winglang.io/docs/libraries)
+  --> ../../../examples/tests/invalid/bring.test.w:8:7
+  |
+8 | bring ;
+  |       ^ Expected module specification (see https://www.winglang.io/docs/libraries)
+
+
+error: Redundant bring of \\"std\\"
   --> ../../../examples/tests/invalid/bring.test.w:1:1
   |
 1 | bring std;
@@ -294,6 +301,13 @@ error: \\"fs\\" is not a built-in module
   | ^^^^^^^^^ \\"fs\\" is not a built-in module
 
 
+error: \\"c\\" is not a built-in module
+   --> ../../../examples/tests/invalid/bring.test.w:10:1
+   |
+10 | bring c;
+   | ^^^^^^^^ \\"c\\" is not a built-in module
+
+
  
  
 Tests 1 failed (1)
@@ -309,11 +323,11 @@ exports[`bring_jsii.test.w 1`] = `
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^ bring \\"jsii-code-samples\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
 
 
-error: Cannot find jsii module \\"foobar\\" in source directory: Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid\\"
+error: Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid/bring_jsii.test.w\\"
   --> ../../../examples/tests/invalid/bring_jsii.test.w:4:1
   |
 4 | bring \\"foobar\\" as baz;
-  | ^^^^^^^^^^^^^^^^^^^^^^ Cannot find jsii module \\"foobar\\" in source directory: Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid\\"
+  | ^^^^^^^^^^^^^^^^^^^^^^ Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid/bring_jsii.test.w\\"
 
 
  

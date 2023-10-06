@@ -96,7 +96,7 @@ module.exports = function({  }) {
 module.exports = function({ $A }) {
   class B extends $A {
     async $inflight_init(sound) {
-      await super.$inflight_init(sound);
+      await super.$inflight_init?.(sound);
     }
   }
   return B;
