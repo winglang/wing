@@ -25,7 +25,7 @@ module.exports = function({  }) {
     async handle() {
       class Foo {
       }
-      (await (async () => {const o = new Foo(); if ('$inflight_init' in o) { await o.$inflight_init(); } return o; })());
+      (await (async () => {const o = new Foo(); await o.$inflight_init?.(); return o; })());
     }
   }
   return $Closure1;
