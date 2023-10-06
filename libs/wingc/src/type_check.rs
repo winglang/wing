@@ -1272,7 +1272,8 @@ struct ResolvedExpression {
 /// Then when a file at "src/main.w" has a statement `bring "./subdir" as subdir;`,
 /// it retrieves NS2 from the types.source_file_envs map and adds it to the main file's symbol environment
 /// under the symbol "subdir".
-enum SymbolEnvOrNamespace {
+#[derive(Debug)]
+pub enum SymbolEnvOrNamespace {
 	SymbolEnv(SymbolEnvRef),
 	Namespace(NamespaceRef),
 	Error(Diagnostic),
@@ -3840,6 +3841,36 @@ impl<'a> TypeChecker<'a> {
 				}
 				return;
 			}
+			BringSource::WingLibrary(name, module_dir) => {
+				let brought_ns = match self.types.source_file_envs.get(module_dir) {
+					Some(SymbolEnvOrNamespace::SymbolEnv(_)) => {
+						panic!("Expected a namespace to be associated with the library")
+					}
+					Some(SymbolEnvOrNamespace::Namespace(ns)) => ns,
+					Some(SymbolEnvOrNamespace::Error(diagnostic)) => {
+						report_diagnostic(Diagnostic {
+							span: Some(stmt.span()),
+							..diagnostic.clone()
+						});
+						return;
+					}
+					None => {
+						self.spanned_error(
+							stmt,
+							format!("Could not type check \"{}\" due to cyclic bring statements", name),
+						);
+						return;
+					}
+				};
+				if let Err(e) = env.define(
+					identifier.as_ref().unwrap(),
+					SymbolKind::Namespace(*brought_ns),
+					StatementIdx::Top,
+				) {
+					self.type_error(e);
+				}
+				return;
+			}
 			BringSource::Directory(name) => {
 				let brought_ns = match self.types.source_file_envs.get(Utf8Path::new(&name.name)) {
 					Some(SymbolEnvOrNamespace::SymbolEnv(_)) => {
@@ -3871,7 +3902,7 @@ impl<'a> TypeChecker<'a> {
 				return;
 			}
 		}
-		self.add_module_to_env(env, library_name, namespace_filter, alias, Some(&stmt));
+		self.add_jsii_module_to_env(env, library_name, namespace_filter, alias, Some(&stmt));
 		// library_name is the name of the library we are importing from the JSII world
 		// namespace_filter describes what types we are importing from the library
 		// e.g. [] means we are importing everything from `mylib`
@@ -4391,7 +4422,7 @@ impl<'a> TypeChecker<'a> {
 		};
 	}
 
-	pub fn add_module_to_env(
+	pub fn add_jsii_module_to_env(
 		&mut self,
 		env: &mut SymbolEnv,
 		library_name: String,
