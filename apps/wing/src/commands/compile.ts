@@ -190,7 +190,7 @@ function annotatePreflightError(error: Error): Error {
     );
     newMessage.push('> new cloud.Bucket() as "MyBucket";');
     newMessage.push(
-      "For more information, see https://www.winglang.io/docs/language-guide/language-reference#33-preflight-classes"
+      "For more information, see https://www.winglang.io/docs/concepts/application-tree"
     );
 
     const newError = new Error(newMessage.join("\n\n"), { cause: error });
