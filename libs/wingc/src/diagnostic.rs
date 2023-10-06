@@ -10,6 +10,9 @@ pub type FileId = String;
 type Diagnostics = Vec<Diagnostic>;
 pub type DiagnosticResult<T> = Result<T, ()>;
 
+// error constant
+pub const ERR_EXPECTED_SEMICOLON: &str = "Expected ';'";
+
 /// Line and character location in a UTF8 Wing source file
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Serialize)]
 pub struct WingLocation {
@@ -116,7 +119,56 @@ impl Into<Range> for &WingSpan {
 }
 
 impl WingSpan {
-	pub fn contains(&self, position: &Position) -> bool {
+	/// Checks if the given span is contained within this span
+	pub fn contains_span(&self, position: &Self) -> bool {
+		let start = self.start;
+		let end = self.end;
+		let other_start = position.start;
+		let other_end = position.end;
+
+		if start.line == end.line && other_start.line == other_end.line {
+			other_start.col >= start.col && other_end.col <= end.col
+		} else if start.line == end.line {
+			other_start.col >= start.col
+				&& other_start.line == start.line
+				&& other_end.line == end.line
+				&& other_end.col <= end.col
+		} else if other_start.line == other_end.line {
+			other_start.line >= start.line
+				&& other_start.col >= start.col
+				&& other_end.line == end.line
+				&& other_end.col <= end.col
+		} else {
+			other_start.line >= start.line
+				&& other_start.col >= start.col
+				&& other_end.line <= end.line
+				&& other_end.col <= end.col
+		}
+	}
+
+	/// Checks if the given location is contained within this span
+	pub fn contains_location(&self, position: &WingLocation) -> bool {
+		let pos_line = position.line;
+		let pos_char = position.col;
+		let start = self.start;
+		let end = self.end;
+
+		if pos_line >= start.line && pos_line <= end.line {
+			if start.line == end.line && pos_line == start.line {
+				pos_char >= start.col && pos_char <= end.col
+			} else if pos_line == start.line {
+				pos_char >= start.col
+			} else if pos_line == end.line {
+				pos_char <= end.col
+			} else {
+				true
+			}
+		} else {
+			false
+		}
+	}
+
+	pub fn contains_lsp_position(&self, position: &Position) -> bool {
 		let pos_line = position.line;
 		let pos_char = position.character;
 		let start = self.start;
@@ -304,7 +356,7 @@ mod tests {
 	use super::*;
 
 	#[test]
-	fn wingspan_contains() {
+	fn wingspan_contains_lsp_position() {
 		let span = WingSpan {
 			start: WingLocation { line: 0, col: 0 },
 			end: WingLocation { line: 1, col: 10 },
@@ -314,8 +366,48 @@ mod tests {
 		let in_position = Position { line: 0, character: 5 };
 		let out_position = Position { line: 2, character: 5 };
 
-		assert!(span.contains(&in_position));
-		assert!(!span.contains(&out_position));
+		assert!(span.contains_lsp_position(&in_position));
+		assert!(!span.contains_lsp_position(&out_position));
+	}
+
+	#[test]
+	fn wingspan_contains_span() {
+		let file_id = "test";
+
+		let span = WingSpan {
+			start: WingLocation { line: 0, col: 0 },
+			end: WingLocation { line: 1, col: 10 },
+			file_id: file_id.to_string(),
+		};
+
+		let in_span = WingSpan {
+			start: WingLocation { line: 0, col: 5 },
+			end: WingLocation { line: 1, col: 5 },
+			file_id: file_id.to_string(),
+		};
+		let out_span = WingSpan {
+			start: WingLocation { line: 2, col: 0 },
+			end: WingLocation { line: 2, col: 5 },
+			file_id: file_id.to_string(),
+		};
+
+		assert!(span.contains_span(&in_span));
+		assert!(!span.contains_span(&out_span));
+	}
+
+	#[test]
+	fn wingspan_contains_location() {
+		let span = WingSpan {
+			start: WingLocation { line: 0, col: 0 },
+			end: WingLocation { line: 1, col: 10 },
+			file_id: "test".to_string(),
+		};
+
+		let in_location = WingLocation { line: 0, col: 5 };
+		let out_location = WingLocation { line: 2, col: 5 };
+
+		assert!(span.contains_location(&in_location));
+		assert!(!span.contains_location(&out_location));
 	}
 
 	#[test]

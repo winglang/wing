@@ -1000,7 +1000,7 @@ impl<'a> ScopeVisitor<'a> {
 
 impl<'a> Visit<'a> for ScopeVisitor<'a> {
 	fn visit_scope(&mut self, node: &'a Scope) {
-		if node.span.file_id != "" && node.span.contains(&self.exact_position.into()) {
+		if node.span.file_id != "" && node.span.contains_location(&self.exact_position) {
 			self.found_scope = node;
 
 			for statement in node.statements.iter() {
@@ -1033,7 +1033,7 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 		// (this is for cases like `(Json 5).`, since parentheses are not part of the span)
 		else if node.span.end <= self.target_span.start {
 			if let Some(parent) = &self.parent_span {
-				if parent.contains(&node.span.end.into()) {
+				if parent.contains_location(&node.span.end) {
 					if let Some(nearest_expr) = self.nearest_expr {
 						// If we already have a nearest expression, we want to find the one that is closest to our target location
 						if node.span.start > nearest_expr.span.start {
@@ -1046,7 +1046,7 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 			}
 		}
 
-		if node.span.contains(&self.exact_position.into()) {
+		if node.span.contains_location(&self.exact_position) {
 			self.expression_trail.push(node);
 		}
 
