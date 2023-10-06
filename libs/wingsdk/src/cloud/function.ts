@@ -144,7 +144,7 @@ export abstract class Function extends Resource implements IInflightHost {
  */
 export interface IFunctionClient {
   /**
-   * Invoke the function asynchronously with a given payload.
+   * Invokes the function synchronously with a payload and waits for the result.
    * @inflight
    */
   invoke(payload: string): Promise<string>;
