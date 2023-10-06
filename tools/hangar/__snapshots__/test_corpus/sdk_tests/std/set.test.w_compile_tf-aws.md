@@ -33,8 +33,8 @@ module.exports = function({  }) {
       const copyAcronyms = new Set(acronyms);
       {((cond) => {if (!cond) throw new Error("assertion failed: copyAcronyms == {{\"SEL\" => \"Serial Experiments Lain\", \"NGE\" => \"Neon Genesis Evangelion\"}}")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(copyAcronyms,new Set([({"SEL": "Serial Experiments Lain","NGE": "Neon Genesis Evangelion"})]))))};
       (await acronyms.add(({"DomeKano": "Domestic na Kanojo"})));
-      const copyCopyAcronyms = (await new Set(copyAcronyms).add(({"DomeKano": "Domestic na Kanojo"})));
-      {((cond) => {if (!cond) throw new Error("assertion failed: acronyms == copyCopyAcronyms")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(acronyms,copyCopyAcronyms)))};
+      const copyAcronymsNew = new Set(new Set(acronyms));
+      {((cond) => {if (!cond) throw new Error("assertion failed: copyAcronymsNew == acronyms")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(copyAcronymsNew,acronyms)))};
     }
   }
   return $Closure10;
@@ -621,8 +621,8 @@ class $Root extends $stdlib.std.Resource {
     const copyAcronyms = new Set(acronyms);
     {((cond) => {if (!cond) throw new Error("assertion failed: copyAcronyms == {{\"SEL\" => \"Serial Experiments Lain\", \"NGE\" => \"Neon Genesis Evangelion\"}}")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(copyAcronyms,new Set([({"SEL": "Serial Experiments Lain","NGE": "Neon Genesis Evangelion"})]))))};
     (acronyms.add(({"DomeKano": "Domestic na Kanojo"})));
-    const copyCopyAcronyms = (new Set(copyAcronyms).add(({"DomeKano": "Domestic na Kanojo"})));
-    {((cond) => {if (!cond) throw new Error("assertion failed: acronyms == copyCopyAcronyms")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(acronyms,copyCopyAcronyms)))};
+    const copyAcronymsNew = new Set(new Set(acronyms));
+    {((cond) => {if (!cond) throw new Error("assertion failed: copyAcronymsNew == acronyms")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(copyAcronymsNew,acronyms)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:copy()",new $Closure10(this,"$Closure10"));
   }
 }

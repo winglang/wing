@@ -774,9 +774,9 @@ error: Unknown parser error
 
 
 error: Unknown parser error
-   --> ../../../examples/tests/invalid/container_types.test.w:35:24
+   --> ../../../examples/tests/invalid/container_types.test.w:37:24
    |
-35 | let ss1: MutSet<str> = Set{\\"c\\"};
+37 | let ss1: MutSet<str> = Set{\\"c\\"};
    |                        ^^^ Unknown parser error
 
 
@@ -900,30 +900,30 @@ error: Expected type to be \\"MutMap<num>\\", but got \\"Map<num>\\" instead
 
 
 error: Unknown symbol \\"copyMut\\"
-   --> ../../../examples/tests/invalid/container_types.test.w:32:15
+   --> ../../../examples/tests/invalid/container_types.test.w:33:15
    |
-32 | let mm3 = mm2.copyMut();
+33 | let mm3 = mm2.copyMut();
    |               ^^^^^^^ Unknown symbol \\"copyMut\\"
 
 
 error: Expected type to be \\"MutSet<str>\\", but got \\"Set<str>\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:35:27
+   --> ../../../examples/tests/invalid/container_types.test.w:37:27
    |
-35 | let ss1: MutSet<str> = Set{\\"c\\"};
+37 | let ss1: MutSet<str> = Set{\\"c\\"};
    |                           ^^^^^ Expected type to be \\"MutSet<str>\\", but got \\"Set<str>\\" instead
 
 
 error: Expected type to be \\"num\\", but got \\"bool\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:36:37
+   --> ../../../examples/tests/invalid/container_types.test.w:39:37
    |
-36 | let ss2: MutSet<num> = MutSet<num> {true};
+39 | let ss2: MutSet<num> = MutSet<num> {true};
    |                                     ^^^^ Expected type to be \\"num\\", but got \\"bool\\" instead
 
 
 error: Unknown symbol \\"copyMut\\"
-   --> ../../../examples/tests/invalid/container_types.test.w:38:15
+   --> ../../../examples/tests/invalid/container_types.test.w:42:15
    |
-38 | let ss4 = ss3.copyMut();
+42 | let ss4 = ss3.copyMut();
    |               ^^^^^^^ Unknown symbol \\"copyMut\\"
 
 
@@ -1245,79 +1245,79 @@ error: Expected type to be \\"Map<str>\\", but got \\"MutMap<str>\\" instead
 
 
 error: Expected type to be \\"bool\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/immutable_container_types.test.w:7:29
+  --> ../../../examples/tests/invalid/immutable_container_types.test.w:8:29
   |
-7 | let m3 = Map<bool> { \\"a\\" => \\"A\\" };
+8 | let m3 = Map<bool> { \\"a\\" => \\"A\\" };
   |                             ^^^ Expected type to be \\"bool\\", but got \\"str\\" instead
 
 
 error: Unknown symbol \\"set\\"
-  --> ../../../examples/tests/invalid/immutable_container_types.test.w:9:4
-  |
-9 | m4.set(\\"2\\", 3);
-  |    ^^^ Unknown symbol \\"set\\"
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:11:4
+   |
+11 | m4.set(\\"2\\", 3);
+   |    ^^^ Unknown symbol \\"set\\"
 
 
 error: Unknown symbol \\"copy\\"
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:10:13
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:13:13
    |
-10 | let m5 = m4.copy();
+13 | let m5 = m4.copy();
    |             ^^^^ Unknown symbol \\"copy\\"
 
 
 error: Unknown symbol \\"delete\\"
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:11:4
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:15:4
    |
-11 | m4.delete(\\"1\\");
+15 | m4.delete(\\"1\\");
    |    ^^^^^^ Unknown symbol \\"delete\\"
 
 
 error: Unknown symbol \\"clear\\"
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:12:4
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:17:4
    |
-12 | m4.clear();
+17 | m4.clear();
    |    ^^^^^ Unknown symbol \\"clear\\"
 
 
 error: Expected type to be \\"Set<Array<num>>\\", but got \\"MutSet<Array<num>>\\" instead
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:15:27
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:21:27
    |
-15 | let s1: Set<Array<num>> = MutSet<Array<num>> {[1]};
+21 | let s1: Set<Array<num>> = MutSet<Array<num>> {[1]};
    |                           ^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"Set<Array<num>>\\", but got \\"MutSet<Array<num>>\\" instead
 
 
 error: Unknown symbol \\"delete\\"
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:17:4
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:24:4
    |
-17 | s2.delete(\\"a\\");
+24 | s2.delete(\\"a\\");
    |    ^^^^^^ Unknown symbol \\"delete\\"
 
 
 error: Unknown symbol \\"add\\"
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:18:4
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:26:4
    |
-18 | s2.add(\\"d\\");
+26 | s2.add(\\"d\\");
    |    ^^^ Unknown symbol \\"add\\"
 
 
 error: Unknown symbol \\"copy\\"
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:19:13
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:28:13
    |
-19 | let s3 = s2.copy();
+28 | let s3 = s2.copy();
    |             ^^^^ Unknown symbol \\"copy\\"
 
 
 error: Unknown symbol \\"clear\\"
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:20:4
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:30:4
    |
-20 | s2.clear();
+30 | s2.clear();
    |    ^^^^^ Unknown symbol \\"clear\\"
 
 
 error: Expected type to be \\"Set<bool>\\", but got \\"Set<Array<num>>\\" instead
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:21:21
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:32:21
    |
-21 | let s4: Set<bool> = {[3]};
+32 | let s4: Set<bool> = {[3]};
    |                     ^^^^^ Expected type to be \\"Set<bool>\\", but got \\"Set<Array<num>>\\" instead
 
 
