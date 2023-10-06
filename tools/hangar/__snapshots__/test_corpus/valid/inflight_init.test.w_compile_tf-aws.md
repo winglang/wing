@@ -10,7 +10,7 @@ module.exports = function({ $Foo }) {
       return $obj;
     }
     async handle() {
-      const f = (await (async () => {const o = new $Foo(); if ('$inflight_init' in o) { await o.$inflight_init(5); } return o; })());
+      const f = (await (async () => {const o = new $Foo(); await o.$inflight_init?.(5); return o; })());
       {((cond) => {if (!cond) throw new Error("assertion failed: f.field1 == 6 && f.field2 == 5")})(((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f.field1,6)) && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f.field2,5))))};
     }
   }
@@ -29,7 +29,7 @@ module.exports = function({ $FooChild }) {
       return $obj;
     }
     async handle() {
-      const f = (await (async () => {const o = new $FooChild(); if ('$inflight_init' in o) { await o.$inflight_init(); } return o; })());
+      const f = (await (async () => {const o = new $FooChild(); await o.$inflight_init?.(); return o; })());
       {((cond) => {if (!cond) throw new Error("assertion failed: f.field1 == 6 && f.field2 == 5 && f.field3 == 4")})((((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f.field1,6)) && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f.field2,5))) && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f.field3,4))))};
     }
   }
@@ -59,7 +59,7 @@ module.exports = function({  }) {
           this.field = (await this.leet());
         }
       }
-      const f = (await (async () => {const o = new FooChild(); if ('$inflight_init' in o) { await o.$inflight_init(); } return o; })());
+      const f = (await (async () => {const o = new FooChild(); await o.$inflight_init?.(); return o; })());
       {((cond) => {if (!cond) throw new Error("assertion failed: f.field == 1337")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f.field,1337)))};
     }
   }

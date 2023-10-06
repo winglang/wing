@@ -19,7 +19,7 @@ module.exports = function({  }) {
           return ((await y.at(0)) + 10);
         }
       }
-      {((cond) => {if (!cond) throw new Error("assertion failed: new Inner().dang() == 11")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await (await (async () => {const o = new Inner(); if ('$inflight_init' in o) { await o.$inflight_init(); } return o; })()).dang()),11)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: new Inner().dang() == 11")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await (await (async () => {const o = new Inner(); await o.$inflight_init?.(); return o; })()).dang()),11)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: y.at(1) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await y.at(1)),2)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: i == 11")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(i,11)))};
     }

@@ -18,7 +18,7 @@ module.exports = function({  }) {
           return "Static inflight method";
         }
       }
-      const inflightClass = (await (async () => {const o = new InflightClass(); if ('$inflight_init' in o) { await o.$inflight_init(); } return o; })());
+      const inflightClass = (await (async () => {const o = new InflightClass(); await o.$inflight_init?.(); return o; })());
       {((cond) => {if (!cond) throw new Error("assertion failed: inflightClass.inflightMethod() == \"Inflight method\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await inflightClass.inflightMethod()),"Inflight method")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: InflightClass.staticInflightMethod() == \"Static inflight method\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await InflightClass.staticInflightMethod()),"Static inflight method")))};
     }
