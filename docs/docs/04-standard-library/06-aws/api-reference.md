@@ -11,6 +11,106 @@ sidebar_position: 100
 
 # API Reference <a name="API Reference" id="api-reference"></a>
 
+## Resources <a name="Resources" id="Resources"></a>
+
+### Domain <a name="Domain" id="@winglang/sdk.aws.Domain"></a>
+
+AWS implementation of `cloud.Domain`.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.Domain.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.Domain(props: DomainProps);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.Domain.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.DomainProps">DomainProps</a></code> | *No description.* |
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.aws.Domain.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.DomainProps">DomainProps</a>
+
+---
+
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.Domain.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.aws.Domain.property.domainName">domainName</a></code> | <code>str</code> | The domain name. |
+| <code><a href="#@winglang/sdk.aws.Domain.property.acmCertificateArn">acmCertificateArn</a></code> | <code>str</code> | The AWS Certificate Manager (ACM) certificate arn value. |
+| <code><a href="#@winglang/sdk.aws.Domain.property.hostedZoneId">hostedZoneId</a></code> | <code>str</code> | The hosted zone id value. |
+| <code><a href="#@winglang/sdk.aws.Domain.property.iamCertificate">iamCertificate</a></code> | <code>str</code> | The IAM certificate identifier value. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.aws.Domain.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `domainName`<sup>Required</sup> <a name="domainName" id="@winglang/sdk.aws.Domain.property.domainName"></a>
+
+```wing
+domainName: str;
+```
+
+- *Type:* str
+
+The domain name.
+
+---
+
+##### `acmCertificateArn`<sup>Optional</sup> <a name="acmCertificateArn" id="@winglang/sdk.aws.Domain.property.acmCertificateArn"></a>
+
+```wing
+acmCertificateArn: str;
+```
+
+- *Type:* str
+
+The AWS Certificate Manager (ACM) certificate arn value.
+
+---
+
+##### `hostedZoneId`<sup>Optional</sup> <a name="hostedZoneId" id="@winglang/sdk.aws.Domain.property.hostedZoneId"></a>
+
+```wing
+hostedZoneId: str;
+```
+
+- *Type:* str
+
+The hosted zone id value.
+
+---
+
+##### `iamCertificate`<sup>Optional</sup> <a name="iamCertificate" id="@winglang/sdk.aws.Domain.property.iamCertificate"></a>
+
+```wing
+iamCertificate: str;
+```
+
+- *Type:* str
+
+The IAM certificate identifier value.
+
+---
+
 
 ## Classes <a name="Classes" id="Classes"></a>
 
@@ -61,6 +161,59 @@ The inflight host.
 
 
 ## Structs <a name="Structs" id="Structs"></a>
+
+### AwsWebsiteProps <a name="AwsWebsiteProps" id="@winglang/sdk.aws.AwsWebsiteProps"></a>
+
+Options for AWS `Website`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.aws.AwsWebsiteProps.Initializer"></a>
+
+```wing
+bring aws;
+
+let AwsWebsiteProps = aws.AwsWebsiteProps{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.AwsWebsiteProps.property.path">path</a></code> | <code>str</code> | Local path to the website's static files, relative to the Wing source file or absolute. |
+| <code><a href="#@winglang/sdk.aws.AwsWebsiteProps.property.domain">domain</a></code> | <code><a href="#@winglang/sdk.aws.Domain">Domain</a></code> | The website's custom domain object. |
+
+---
+
+##### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.aws.AwsWebsiteProps.property.path"></a>
+
+```wing
+path: str;
+```
+
+- *Type:* str
+
+Local path to the website's static files, relative to the Wing source file or absolute.
+
+---
+
+*Example*
+
+```wing
+"./dist"
+```
+
+
+##### `domain`<sup>Optional</sup> <a name="domain" id="@winglang/sdk.aws.AwsWebsiteProps.property.domain"></a>
+
+```wing
+domain: Domain;
+```
+
+- *Type:* <a href="#@winglang/sdk.aws.Domain">Domain</a>
+- *Default:* undefined
+
+The website's custom domain object.
+
+---
 
 ### PolicyStatement <a name="PolicyStatement" id="@winglang/sdk.aws.PolicyStatement"></a>
 
