@@ -103,8 +103,14 @@ export async function load(options: WingCompilerLoadOptions) {
       .map((value) => value.trim());
 
     for (const drive of drives) {
-      // drive will be something like "C:"
-      preopens[`${drive}/`] = `${drive}\\`;
+      try {
+        let actualPath = `${drive}\\`;
+        await fs.promises.access(actualPath, fs.constants.R_OK | fs.constants.F_OK);
+        // drive will be something like "C:"
+        preopens[`${drive}/`] = actualPath;
+      } catch {
+        // can't access the drive, don't bother preopening it
+      }
     }
   } else {
     // mapping the root is not sufficient on linux/mac
