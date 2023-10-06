@@ -1,23 +1,36 @@
 ---
 title: "#1333 Cloud Stream Spec"
-description: RFC - Cloud.Stream
+description: RFC - Cloud.Stream for Streaming Data Services
 ---
 
 # #1333 - Cloud Stream Spec
 
-- **Author(s):**: @{5herlocked}
+- **Author(s):**: @5herlocked
 - **Submission Date**: {2023-09-29}
 - **Stage**: {Design}
 - **Stage Date**: {2023-09-29}
 
 > One sentence which is a brief description of the feature from a user perspective.
 
+Implementing design and library spec supporting and integrating real-time streaming services.
+
 <!--
     This RFCs have 3 sections: Requirements -> Design -> Implementation. We intentionally start with *Design* since it
     is a great way to introduice the feature to readers.
 -->
 
+## Background
+
+Telemetry and Observability build the backbone of modern application systems and an integral part of such iterative feedback systems is the availability of streaming data. This is implemented across varied cloud providers, specifically services like: AWS Kinesis Data Streams, Google Cloud Pub/Sub, Azure Event Hubs.
+
 ## Design
+
+Typically, a user of a "traditional" language would simply use an endpoint exposed by the ingest service and "write" to it.
+
+Within wing, for the "cloud native" developer, these endpoints and the nuances exposed by them should be abstracted by wing, so write to a streaming system is just like writing to any persistent storage. While still indicating that they're writing to a service capable of massive throughput.
+
+
+
 
 <!--
     This section works backwards from an the end user. It is written as one or more "artifacts from the future" such as the getting started documentation (readme), user interface wireframes (or link to them), press release, changelog entry, etc.
@@ -102,3 +115,9 @@ description: RFC - Cloud.Stream
 ## Appendix
 
 > Feel free to add any number of appendices as you see fit. Appendices are expected to allow readers to dive deeper to certain sections if they like. For example, you can include an appendix which describes the detailed design of an algorithm and reference it from the FAQ.
+
+Real-time streaming services are often a combination of services that cover (AWS):
+* Ingest - Kinesis Data Streams, Pub/Sub, Event Hubs
+* Analysis - Kinesis Data Analytics, BigQuery, Stream Analytics
+* Delivery - Kinesis Firehose, Cloud Storage, Functions 
+* Storage - Data Lakes/Lake Formation/S3, Cloud Storage, Blob Storage
