@@ -127,7 +127,7 @@ new cloud.Function(handler: IFunctionHandler, props?: FunctionProps);
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IFunctionClient.invoke">invoke</a></code> | Invokes the function synchronously with a payload and waits for the result. |
+| <code><a href="#@winglang/sdk.cloud.IFunctionClient.invoke">invoke</a></code> | Invokes the function with a payload and waits for the result. |
 
 ---
 
@@ -157,7 +157,7 @@ Add an environment variable to the function.
 inflight invoke(payload: str): str
 ```
 
-Invokes the function synchronously with a payload and waits for the result.
+Invokes the function with a payload and waits for the result.
 
 ###### `payload`<sup>Required</sup> <a name="payload" id="@winglang/sdk.cloud.IFunctionClient.invoke.parameter.payload"></a>
 
