@@ -14,7 +14,7 @@ use crate::ast::{
 	Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
-use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan};
+use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan, ERR_EXPECTED_SEMICOLON};
 use crate::file_graph::FileGraph;
 use crate::files::Files;
 use crate::type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
@@ -2162,7 +2162,7 @@ impl<'s> Parser<'s> {
 			if node.kind() == "AUTOMATIC_SEMICOLON" {
 				let target_node = Self::last_non_extra(node);
 				let diag = Diagnostic {
-					message: "Expected ';'".to_string(),
+					message: ERR_EXPECTED_SEMICOLON.to_string(),
 					span: Some(self.node_span(&target_node)),
 					annotations: vec![],
 				};

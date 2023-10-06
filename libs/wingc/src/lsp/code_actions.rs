@@ -4,7 +4,7 @@ use lsp_types::{
 };
 use std::collections::HashMap;
 
-use crate::diagnostic::get_diagnostics;
+use crate::diagnostic::{get_diagnostics, ERR_EXPECTED_SEMICOLON};
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 
 #[no_mangle]
@@ -129,7 +129,7 @@ pub fn on_code_action(params: CodeActionParams) -> Vec<CodeActionOrCommand> {
 
 fn get_fix_for_diagnostic(file: Url, diagnostic: Diagnostic) -> Option<CodeActionOrCommand> {
 	match diagnostic.message.as_str() {
-		"Expected ';'" => {
+		ERR_EXPECTED_SEMICOLON => {
 			let mut change_hashmap = HashMap::new();
 			change_hashmap.insert(
 				file,
@@ -176,35 +176,34 @@ mod tests {
 				let text_document_position = load_file_with_contents($code);
 				let $name = on_code_action(CodeActionParams {
 					text_document: text_document_position.text_document.clone(),
-          range: Default::default(),
+					range: Default::default(),
 					context: Default::default(),
 					work_done_progress_params: Default::default(),
 					partial_result_params: Default::default(),
 				});
 
-        insta::with_settings!(
-          {
-            prepend_module_to_snapshot => false,
-            omit_expression => true,
-            snapshot_path => "./snapshots/code_actions",
-          }, {
-            insta::assert_yaml_snapshot!($name, {
-              "[].edit.changes" => insta::dynamic_redaction(|value, _path| {
+				insta::with_settings!(
+					{
+						prepend_module_to_snapshot => false,
+						omit_expression => true,
+						snapshot_path => "./snapshots/code_actions",
+					}, {
+						insta::assert_yaml_snapshot!($name, {
+							"[].edit.changes" => insta::dynamic_redaction(|value, _path| {
 								// value is a hashmap with guid filename keys, change the keys to just be incrementing numbers
-                let mut new_map_entries = vec![];
-                if let insta::internals::Content::Map(map) = value {
-                  for (i, (_, value)) in map.iter().enumerate() {
-                    new_map_entries.push((insta::internals::Content::String(format!("file{}", i)), value.clone()));
-                  }
-                }
+								let mut new_map_entries = vec![];
+								if let insta::internals::Content::Map(map) = value {
+									for (i, (_, value)) in map.iter().enumerate() {
+										new_map_entries.push((insta::internals::Content::String(format!("file{}", i)), value.clone()));
+									}
+								}
 
-                insta::internals::Content::Map(new_map_entries)
-            }),
-            });
-          }
-        );
-        $($assertion)*
-
+								insta::internals::Content::Map(new_map_entries)
+							}),
+						});
+					}
+				);
+				$($assertion)*
 			}
 		};
 	}

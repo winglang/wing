@@ -10,6 +10,9 @@ pub type FileId = String;
 type Diagnostics = Vec<Diagnostic>;
 pub type DiagnosticResult<T> = Result<T, ()>;
 
+// error constant
+pub const ERR_EXPECTED_SEMICOLON: &str = "Expected ';'";
+
 /// Line and character location in a UTF8 Wing source file
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Serialize)]
 pub struct WingLocation {
