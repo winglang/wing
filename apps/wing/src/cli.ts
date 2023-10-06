@@ -112,6 +112,11 @@ async function main() {
     }
   }
 
+  function addValue(value: string, previous: string[]) {
+    previous.push(value);
+    return previous;
+  }
+
   program.hook("preAction", updateHook);
 
   program
@@ -141,6 +146,8 @@ async function main() {
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .option("-r, --rootId <rootId>", "App root id")
+    .option("-v, --value <value>", "Platform-specific value in the form KEY=VALUE", addValue, [])
+    .option("--values <file>", "Yaml file with Platform-specific values")
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("compile"));
