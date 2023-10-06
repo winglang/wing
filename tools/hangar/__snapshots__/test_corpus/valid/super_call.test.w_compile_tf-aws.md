@@ -10,7 +10,7 @@ module.exports = function({ $InflightB }) {
       return $obj;
     }
     async handle() {
-      const b = (await (async () => {const o = new $InflightB(); if ('$inflight_init' in o) { await o.$inflight_init(); } return o; })());
+      const b = (await (async () => {const o = new $InflightB(); await o.$inflight_init?.(); return o; })());
       {((cond) => {if (!cond) throw new Error("assertion failed: b.description() == \"InflightB extends InflightA\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await b.description()),"InflightB extends InflightA")))};
     }
   }

@@ -69,7 +69,7 @@ module.exports = function({ $B }) {
       return $obj;
     }
     async handle() {
-      const b = (await (async () => {const o = new $B(); if ('$inflight_init' in o) { await o.$inflight_init("ba"); } return o; })());
+      const b = (await (async () => {const o = new $B(); await o.$inflight_init?.("ba"); return o; })());
       {((cond) => {if (!cond) throw new Error("assertion failed: b.sound == \"ba\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(b.sound,"ba")))};
     }
   }

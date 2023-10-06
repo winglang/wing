@@ -19,7 +19,7 @@ module.exports = function({ $__parent_this_1_b }) {
           this.field = "value";
         }
       }
-      const c = (await (async () => {const o = new InflightClass(); if ('$inflight_init' in o) { await o.$inflight_init(); } return o; })());
+      const c = (await (async () => {const o = new InflightClass(); await o.$inflight_init?.(); return o; })());
       (await c.method());
     }
   }
@@ -62,7 +62,7 @@ module.exports = function({  }) {
           return x;
         }
       }
-      const foo = (await (async () => {const o = new Foo(); if ('$inflight_init' in o) { await o.$inflight_init(); } return o; })());
+      const foo = (await (async () => {const o = new Foo(); await o.$inflight_init?.(); return o; })());
       const y = (await foo.getX());
       {((cond) => {if (!cond) throw new Error("assertion failed: y == 12")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y,12)))};
     }

@@ -15,7 +15,7 @@ module.exports = function({  }) {
           return "c1";
         }
       }
-      const c = (await (async () => {const o = new C(); if ('$inflight_init' in o) { await o.$inflight_init(); } return o; })());
+      const c = (await (async () => {const o = new C(); await o.$inflight_init?.(); return o; })());
       {((cond) => {if (!cond) throw new Error("assertion failed: c.foo() == \"c1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await c.foo()),"c1")))};
     }
   }
@@ -34,7 +34,7 @@ module.exports = function({ $F }) {
       return $obj;
     }
     async handle() {
-      return (await (await (async () => {const o = new $F(); if ('$inflight_init' in o) { await o.$inflight_init(); } return o; })()).foo());
+      return (await (await (async () => {const o = new $F(); await o.$inflight_init?.(); return o; })()).foo());
     }
   }
   return $Closure2;
@@ -53,7 +53,7 @@ module.exports = function({ $B, $a, $d, $fn, $innerD }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: a.goo() == \"a2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $a.goo()),"a2")))};
-      const b = (await (async () => {const o = new $B(); if ('$inflight_init' in o) { await o.$inflight_init(); } return o; })());
+      const b = (await (async () => {const o = new $B(); await o.$inflight_init?.(); return o; })());
       {((cond) => {if (!cond) throw new Error("assertion failed: b.foo() == \"b1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await b.foo()),"b1")))};
       (await $fn());
       {((cond) => {if (!cond) throw new Error("assertion failed: d.callInner() == \"f1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $d.callInner()),"f1")))};
