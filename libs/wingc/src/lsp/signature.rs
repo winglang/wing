@@ -4,7 +4,7 @@ use lsp_types::{
 	SignatureInformation,
 };
 
-use crate::ast::{CalleeKind, Expr, ExprKind, NewExpr, Symbol};
+use crate::ast::{CalleeKind, Expr, ExprKind, New, Symbol};
 use crate::docs::Documented;
 use crate::lsp::sync::PROJECT_DATA;
 use crate::lsp::sync::WING_TYPES;
@@ -49,7 +49,7 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 				&crate::ast::ArgList,
 			) = match &expr.kind {
 				ExprKind::New(new_expr) => {
-					let NewExpr { class, arg_list, .. } = new_expr;
+					let New { class, arg_list, .. } = new_expr;
 
 					let Some(t) = resolve_user_defined_type(class, &types.get_scope_env(&root_scope), 0).ok() else {
 						return None;
