@@ -1,7 +1,4 @@
 //-----------------------------------------------------------------------------
-// TODO: https://github.com/winglang/wing/issues/2785
-
-//-----------------------------------------------------------------------------
 // keys()
 let m = { "hello" => 123, "world" => 99 };
 let mkeys = m.keys();
@@ -15,6 +12,7 @@ let mvalues = m.values();
 assert(mvalues.length == 2);
 assert(mvalues.at(0) == 123);
 assert(mvalues.at(1) == 99);
+
 
 // container types are equal regardless of the mutability if they have the same
 // content but in all scenraios the type is specified for better readability

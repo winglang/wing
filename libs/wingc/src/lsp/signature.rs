@@ -87,10 +87,12 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 				.enumerate()
 				.filter(|(_, arg)| params.text_document_position_params.position <= arg.span.end.into())
 				.count();
-			let named_arg_pos = provided_args
-				.named_args
-				.iter()
-				.find(|arg| arg.1.span.contains(&params.text_document_position_params.position));
+			let named_arg_pos = provided_args.named_args.iter().find(|arg| {
+				arg
+					.1
+					.span
+					.contains_lsp_position(&params.text_document_position_params.position)
+			});
 
 			let param_data = sig
 				.parameters
@@ -209,7 +211,7 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 			return;
 		}
 
-		if node.span.contains(&self.location) {
+		if node.span.contains_lsp_position(&self.location) {
 			match node.kind {
 				ExprKind::Call { .. } | ExprKind::New { .. } => {
 					self.call_expr = Some(node);

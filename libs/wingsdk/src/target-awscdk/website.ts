@@ -51,7 +51,7 @@ export class Website extends cloud.Website {
           originAccessIdentity: cloudFrontOAI,
         }),
       },
-      domainNames: this._domain ? [this._domain] : undefined,
+      domainNames: this._domain ? [this._domain.domainName] : undefined,
       defaultRootObject: INDEX_FILE,
     });
 

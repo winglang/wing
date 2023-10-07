@@ -90,6 +90,7 @@ export async function lsp() {
         signatureHelpProvider: {
           triggerCharacters: ["(", ",", ")"],
         },
+        codeActionProvider: true,
         hoverProvider: true,
         documentSymbolProvider: true,
         definitionProvider: true,
@@ -205,6 +206,9 @@ export async function lsp() {
   });
   connection.onHover(async (params) => {
     return callWing("wingc_on_hover", params);
+  });
+  connection.onCodeAction(async (params) => {
+    return callWing("wingc_on_code_action", params);
   });
 
   connection.listen();
