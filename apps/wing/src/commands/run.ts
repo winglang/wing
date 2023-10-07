@@ -37,8 +37,17 @@ export async function run(entrypoint?: string, options?: RunOptions) {
 
   if (!entrypoint) {
     const wingFiles = await glob("{main,*.main}.w");
-    if (wingFiles.length !== 1) {
-      throw new Error("Please specify which file you want to run");
+    if (wingFiles.length === 0) {
+      throw new Error(
+        "Cannot find entrypoint files (main.w or *.main.w) in the current directory."
+      );
+    }
+    if (wingFiles.length > 1) {
+      throw new Error(
+        `Multiple entrypoints found in the current directory (${wingFiles.join(
+          ", "
+        )}). Please specify which one to use.`
+      );
     }
     entrypoint = wingFiles[0];
   }
