@@ -241,6 +241,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
             size: filestat.size,
             lastModified: Datetime.fromIso(filestat.mtime.toISOString()),
             // fs does not provide a way to get the content-type
+            contentType: "application/octet-stream",
           };
         } catch (e) {
           throw new Error(`Object does not exist (key=${key}).`);

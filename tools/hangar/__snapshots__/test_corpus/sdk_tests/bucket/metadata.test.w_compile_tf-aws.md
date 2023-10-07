@@ -12,7 +12,7 @@ module.exports = function({ $b }) {
     async handle() {
       (await $b.put("test1.txt","Foo"));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.metadata(\"test1.txt\").size == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.metadata("test1.txt")).size,3)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.metadata(\"test1.txt\").contentType == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.metadata("test1.txt")).contentType,undefined)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.metadata(\"test1.txt\").contentType == \"application/octet-stream\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.metadata("test1.txt")).contentType,"application/octet-stream")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: b.metadata(\"test1.txt\").lastModified.year >= 2023")})(((await $b.metadata("test1.txt")).lastModified.year >= 2023))};
       try {
         (await $b.metadata("no-such-file.txt")).lastModified;
