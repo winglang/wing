@@ -3,8 +3,8 @@ use indexmap::IndexMap;
 use crate::{
 	ast::{
 		AccessModifier, ArgList, AssignmentKind, CalleeKind, Class, ClassField, Expr, ExprKind, FunctionBody,
-		FunctionDefinition, FunctionParameter, FunctionSignature, Literal, NewExpr, Phase, Reference, Scope, Stmt,
-		StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		FunctionDefinition, FunctionParameter, FunctionSignature, Literal, New, Phase, Reference, Scope, Stmt, StmtKind,
+		Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	diagnostic::WingSpan,
 	fold::{self, Fold},
@@ -304,7 +304,7 @@ impl Fold for ClosureTransformer {
 				// new <new_class_name>();
 				// ```
 				let new_class_instance = Expr::new(
-					ExprKind::New(NewExpr {
+					ExprKind::New(New {
 						class: class_udt,
 						arg_list: ArgList {
 							named_args: IndexMap::new(),

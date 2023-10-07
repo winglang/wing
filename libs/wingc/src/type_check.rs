@@ -5,8 +5,8 @@ pub mod lifts;
 pub mod symbol_env;
 
 use crate::ast::{
-	self, AccessModifier, AssignmentKind, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition, IfLet,
-	NewExpr, TypeAnnotationKind,
+	self, AccessModifier, AssignmentKind, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition, IfLet, New,
+	TypeAnnotationKind,
 };
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter as AstFunctionParameter,
@@ -81,7 +81,7 @@ pub type TypeRef = UnsafeRef<Type>;
 
 #[derive(Debug)]
 pub enum SymbolKind {
-	Type(TypeRef), // TODO: <- deprecated since we treat types as a VariableInfo of kind VariableKind::Type
+	Type(TypeRef),
 	Variable(VariableInfo),
 	Namespace(NamespaceRef),
 }
@@ -1926,7 +1926,7 @@ impl<'a> TypeChecker<'a> {
 				(vi.type_, phase)
 			}
 			ExprKind::New(new_expr) => {
-				let NewExpr {
+				let New {
 					class,
 					obj_id,
 					arg_list,
@@ -2754,7 +2754,7 @@ impl<'a> TypeChecker<'a> {
 		{
 			self.validate_type_binary_equality(*inner_actual, *inner_expected, span)
 		} else {
-			self.validate_type_in(actual_type, &[expected_type], span)
+			self.validate_type(actual_type, expected_type, span)
 		}
 	}
 
@@ -5207,8 +5207,9 @@ impl<'a> TypeChecker<'a> {
 				let current_class_type = self
 					.resolve_user_defined_type(&current_class, env, self.ctx.current_stmt_idx())
 					.unwrap();
-				private_access = current_class_type.is_same_type_as(&property_defined_in);
-				protected_access = private_access || current_class_type.is_strict_subtype_of(&property_defined_in);
+				private_access = private_access || current_class_type.is_same_type_as(&property_defined_in);
+				protected_access =
+					protected_access || private_access || current_class_type.is_strict_subtype_of(&property_defined_in);
 				if private_access {
 					break;
 				}
