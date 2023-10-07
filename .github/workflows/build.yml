@@ -19,7 +19,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  RUST_VERSION: "1.67.1"
+  RUST_VERSION: "1.73.0"
   NODE_VERSION: "18.16.0"
   PNPM_VERSION: "8.6.3"
   CARGO_TERM_COLOR: always

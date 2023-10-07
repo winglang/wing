@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
+CARGO_WASI_VERSION="0.1.28"
 WASI_VERSION="19"
 WASI_VERSION_FULL="$WASI_VERSION.0"
 WASI_INSTALL_PARENT_DIR="./.cargo"
@@ -16,9 +17,16 @@ else
     exit 1
 fi
 
+# Install / Update cargo-wasi
 if ! command -v cargo-wasi &> /dev/null; then
     echo "Installing cargo-wasi..."
-    cargo install cargo-wasi
+    cargo install cargo-wasi --version $CARGO_WASI_VERSION
+else
+    INSTALLED_CARGO_WASI_VERSION=$(cargo wasi --version | cut -d' ' -f2)
+    if [ "$INSTALLED_CARGO_WASI_VERSION" != "$CARGO_WASI_VERSION" ]; then
+        echo "Setting cargo-wasi version to $CARGO_WASI_VERSION..."
+        cargo install cargo-wasi --force --version $CARGO_WASI_VERSION
+    fi
 fi
 
 if [ ! -d $WASI_INSTALL_DIR ]; then
