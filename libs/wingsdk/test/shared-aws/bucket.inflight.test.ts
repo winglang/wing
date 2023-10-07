@@ -8,6 +8,7 @@ import {
   ListObjectsV2Command,
   PutObjectCommand,
   S3Client,
+  NotFound,
   NoSuchKey,
 } from "@aws-sdk/client-s3";
 import * as s3RequestPresigner from "@aws-sdk/s3-request-presigner/dist-cjs/getSignedUrl";
@@ -648,7 +649,7 @@ test("metadata fail on non-existent object", async () => {
   const KEY = "KEY";
   s3Mock
     .on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
-    .rejects({ name: "NotFound" });
+    .rejects(new NotFound({ message: "NotFound error", $metadata: {} }));
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME);

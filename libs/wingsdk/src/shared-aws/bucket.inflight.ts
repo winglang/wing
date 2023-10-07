@@ -12,6 +12,7 @@ import {
   GetPublicAccessBlockCommandOutput,
   S3Client,
   GetObjectOutput,
+  NotFound,
   NoSuchKey,
   __Client,
 } from "@aws-sdk/client-s3";
@@ -321,8 +322,9 @@ export class BucketClient implements IBucketClient {
         size: resp.ContentLength!,
       };
     } catch (error) {
-      if ((error as Error).name === "NotFound") {
-        return Promise.reject(`Object does not exist (key=${key}).`);
+      // 403 is thrown if s3:ListObject is not granted.
+      if (error instanceof NotFound || (error as Error).name === "403") {
+        throw new Error(`Object does not exist (key=${key}).`);
       }
       throw error;
     }
