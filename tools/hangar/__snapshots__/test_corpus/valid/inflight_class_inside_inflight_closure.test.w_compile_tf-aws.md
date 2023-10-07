@@ -15,11 +15,11 @@ module.exports = function({ $__parent_this_1_b }) {
         async method() {
           {((cond) => {if (!cond) throw new Error("assertion failed: this.field == \"value\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.field,"value")))};
         }
-        constructor() {
+        async $inflight_init() {
           this.field = "value";
         }
       }
-      const c = new InflightClass();
+      const c = (await (async () => {const o = new InflightClass(); await o.$inflight_init?.(); return o; })());
       (await c.method());
     }
   }
@@ -62,7 +62,7 @@ module.exports = function({  }) {
           return x;
         }
       }
-      const foo = new Foo();
+      const foo = (await (async () => {const o = new Foo(); await o.$inflight_init?.(); return o; })());
       const y = (await foo.getX());
       {((cond) => {if (!cond) throw new Error("assertion failed: y == 12")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y,12)))};
     }
