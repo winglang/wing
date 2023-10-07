@@ -49,12 +49,7 @@ impl Ord for Symbol {
 
 impl PartialOrd for Symbol {
 	fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-		let string_ord = self.name.partial_cmp(&other.name);
-		if string_ord == Some(std::cmp::Ordering::Equal) {
-			self.span.partial_cmp(&other.span)
-		} else {
-			string_ord
-		}
+		Some(self.cmp(other))
 	}
 }
 

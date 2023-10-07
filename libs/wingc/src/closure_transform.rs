@@ -370,3 +370,25 @@ impl<'a> Fold for RenameThisTransformer<'a> {
 		}
 	}
 }
+
+pub struct TypeReferenceTransformer<'a> {
+	pub types: &'a mut crate::type_check::Types,
+}
+
+impl<'a> Fold for TypeReferenceTransformer<'a> {
+	fn fold_reference(&mut self, node: Reference) -> Reference {
+		match node {
+			Reference::InstanceMember { ref object, .. } => {
+				if let Some(new_ref) = self.types.type_expressions.remove(&object.id) {
+					Reference::TypeMember {
+						type_name: new_ref.0,
+						property: new_ref.1,
+					}
+				} else {
+					fold::fold_reference(self, node)
+				}
+			}
+			Reference::Identifier(..) | Reference::TypeMember { .. } => fold::fold_reference(self, node),
+		}
+	}
+}

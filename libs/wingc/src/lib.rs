@@ -9,7 +9,7 @@ extern crate lazy_static;
 
 use ast::{Scope, Symbol, UtilityFunctions};
 use camino::{Utf8Path, Utf8PathBuf};
-use closure_transform::ClosureTransformer;
+use closure_transform::{ClosureTransformer, TypeReferenceTransformer};
 use comp_ctx::set_custom_panic_hook;
 use diagnostic::{found_errors, report_diagnostic, Diagnostic};
 use file_graph::FileGraph;
@@ -186,7 +186,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	if results.is_err() {
 		WASM_RETURN_ERROR
 	} else {
-		string_to_combined_ptr("winged it!".to_string())
+		string_to_combined_ptr("".to_string())
 	}
 }
 
@@ -198,7 +198,7 @@ pub fn type_check(
 	jsii_types: &mut TypeSystem,
 	jsii_imports: &mut Vec<JsiiImportSpec>,
 ) {
-	let env = types.add_symbol_env(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0));
+	let mut env = types.add_symbol_env(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0));
 	types.set_scope_env(scope, env);
 
 	// note: Globals are emitted here and wrapped in "{ ... }" blocks. Wrapping makes these emissions, actual
@@ -242,10 +242,9 @@ pub fn type_check(
 		types,
 	);
 
-	let mut scope_env = types.get_scope_env(&scope);
 	let mut tc = TypeChecker::new(types, file_path, file_graph, jsii_types, jsii_imports);
 	tc.add_jsii_module_to_env(
-		&mut scope_env,
+		&mut env,
 		WINGSDK_ASSEMBLY_NAME.to_string(),
 		vec![WINGSDK_STD_MODULE.to_string()],
 		&Symbol::global(WINGSDK_STD_MODULE),
@@ -314,7 +313,7 @@ pub fn compile(
 	// Type check all files in topological order (start with files that don't bring any other
 	// Wing files, then move on to files that depend on those, and repeat)
 	for file in &topo_sorted_files {
-		let mut scope = asts.get_mut(file).expect("matching AST not found");
+		let mut scope = asts.remove(file).expect("matching AST not found");
 		type_check(
 			&mut scope,
 			&mut types,
@@ -324,6 +323,9 @@ pub fn compile(
 			&mut jsii_imports,
 		);
 
+		let mut r = TypeReferenceTransformer { types: &mut types };
+		let scope = r.fold_scope(scope);
+
 		// Validate the type checker didn't miss anything - see `TypeCheckAssert` for details
 		let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
 		tc_assert.check(&scope);
@@ -331,6 +333,8 @@ pub fn compile(
 		// Validate all Json literals to make sure their values are legal
 		let mut json_checker = ValidJsonVisitor::new(&types);
 		json_checker.check(&scope);
+
+		asts.insert(file.clone(), scope);
 	}
 
 	let project_dir = absolute_project_root;
