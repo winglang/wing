@@ -740,38 +740,6 @@ Whether the bucket's objects should be publicly accessible.
 
 ---
 
-### SignedUrlOptions <a name="SignedUrlOptions" id="@winglang/sdk.cloud.SignedUrlOptions"></a>
-
-Interface for signed url options.
-
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.SignedUrlOptions.Initializer"></a>
-
-```wing
-bring cloud;
-
-let SignedUrlOptions = cloud.SignedUrlOptions{ ... };
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.SignedUrlOptions.property.duration">duration</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The duration for the signed url to expire. |
-
----
-
-##### `duration`<sup>Optional</sup> <a name="duration" id="@winglang/sdk.cloud.SignedUrlOptions.property.duration"></a>
-
-```wing
-duration: duration;
-```
-
-- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
-
-The duration for the signed url to expire.
-
----
-
 ### ObjectMetadata <a name="ObjectMetadata" id="@winglang/sdk.cloud.ObjectMetadata"></a>
 
 Metadata of a bucket object.
@@ -827,6 +795,38 @@ contentType: str;
 - *Type:* str
 
 The content type of the object, if it is known.
+
+---
+
+### SignedUrlOptions <a name="SignedUrlOptions" id="@winglang/sdk.cloud.SignedUrlOptions"></a>
+
+Interface for signed url options.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.SignedUrlOptions.Initializer"></a>
+
+```wing
+bring cloud;
+
+let SignedUrlOptions = cloud.SignedUrlOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.SignedUrlOptions.property.duration">duration</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The duration for the signed url to expire. |
+
+---
+
+##### `duration`<sup>Optional</sup> <a name="duration" id="@winglang/sdk.cloud.SignedUrlOptions.property.duration"></a>
+
+```wing
+duration: duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+
+The duration for the signed url to expire.
 
 ---
 
