@@ -69,7 +69,9 @@ test("wing it doesn't run the only entrypoint file ending with .test.w", async (
 
     writeFileSync("foo.test.w", "bring cloud;");
 
-    await expect(run).rejects.toThrow("Please specify which file you want to run");
+    await expect(run).rejects.toThrow(
+      "Cannot find entrypoint files (main.w or *.main.w) in the current directory."
+    );
   } finally {
     process.chdir(prevdir);
   }
@@ -83,7 +85,9 @@ test("wing it throws error for a directory with a non-entrypoint file", async ()
 
     writeFileSync("foo.w", "bring cloud;");
 
-    await expect(run).rejects.toThrow("Please specify which file you want to run");
+    await expect(run).rejects.toThrow(
+      "Cannot find entrypoint files (main.w or *.main.w) in the current directory."
+    );
   } finally {
     process.chdir(prevdir);
   }
@@ -98,7 +102,9 @@ test("wing it throws error for a directory with more than one entrypoint file", 
     writeFileSync("main.w", "bring cloud;");
     writeFileSync("foo.main.w", "bring cloud;");
 
-    await expect(run).rejects.toThrow("Please specify which file you want to run");
+    await expect(run).rejects.toThrow(
+      "Multiple entrypoints found in the current directory (main.w, foo.main.w). Please specify which one to use."
+    );
   } finally {
     process.chdir(prevdir);
   }
