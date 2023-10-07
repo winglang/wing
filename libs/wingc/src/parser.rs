@@ -14,7 +14,7 @@ use crate::ast::{
 	Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
-use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan};
+use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan, ERR_EXPECTED_SEMICOLON};
 use crate::file_graph::FileGraph;
 use crate::files::Files;
 use crate::type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
@@ -203,6 +203,7 @@ pub fn parse_wing_project(
 					formatted_cycle.trim_end()
 				),
 				span: None,
+				annotations: vec![],
 			});
 
 			// return a list of all files just so we can continue type-checking
@@ -275,7 +276,7 @@ fn parse_wing_directory(
 			&& path.file_name() != Some("node_modules")
 			&& path.file_name() != Some(".git")
 			&& path.extension() != Some("tmp"))
-			|| path.extension() == Some("w")
+			|| path.extension() == Some("w") && !is_entrypoint_file(&path)
 		{
 			files_and_dirs.push(path);
 		}
@@ -359,6 +360,7 @@ impl<'s> Parser<'s> {
 		let diag = Diagnostic {
 			message: message.to_string(),
 			span: Some(span),
+			annotations: vec![],
 		};
 		report_diagnostic(diag);
 	}
@@ -367,6 +369,7 @@ impl<'s> Parser<'s> {
 		let diag = Diagnostic {
 			message: message.to_string(),
 			span: Some(self.node_span(node)),
+			annotations: vec![],
 		};
 		report_diagnostic(diag);
 
@@ -788,7 +791,10 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_bring_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
-		let module_name_node = self.get_child_field(&statement_node, "module_name")?;
+		let Some(module_name_node) = statement_node.child_by_field_name("module_name") else {
+			return self.with_error("Expected module specification (see https://www.winglang.io/docs/libraries)", &statement_node.child(statement_node.child_count() - 1).unwrap_or(*statement_node));
+		};
+
 		let module_name = self.node_symbol(&module_name_node)?;
 		let alias = if let Some(identifier) = statement_node.child_by_field_name("alias") {
 			Some(self.check_reserved_symbol(&identifier)?)
@@ -796,7 +802,12 @@ impl<'s> Parser<'s> {
 			None
 		};
 
-		let module_path = Utf8Path::new(&module_name.name[1..module_name.name.len() - 1]);
+		let module_path = if module_name.name.len() > 1 {
+			Utf8Path::new(&module_name.name[1..module_name.name.len() - 1])
+		} else {
+			Utf8Path::new(&module_name.name)
+		};
+
 		if is_absolute_path(&module_path) {
 			return self.with_error(
 				format!("Cannot bring \"{}\" since it is not a relative path", module_path),
@@ -885,10 +896,55 @@ impl<'s> Parser<'s> {
 		}
 
 		if module_name.name.starts_with("\"") && module_name.name.ends_with("\"") {
+			// we need to inspect the npm dependency to figure out if it's a JSII library or a Wing library
+			// first, find where the package.json is located
+			let module_name_parsed = module_name.name[1..module_name.name.len() - 1].to_string();
+			let source_dir = Utf8Path::new(&self.source_name).parent().unwrap();
+			let module_dir = wingii::util::package_json::find_dependency_directory(&module_name_parsed, &source_dir)
+				.ok_or_else(|| {
+					self
+						.with_error::<Node>(
+							format!(
+								"Unable to load {}: Module not found in \"{}\"",
+								module_name, self.source_name
+							),
+							&statement_node,
+						)
+						.err();
+				})?;
+
+			// If the package.json has a `wing` field, then we treat it as a Wing library
+			if is_wing_library(&Utf8Path::new(&module_dir)) {
+				return if let Some(alias) = alias {
+					// make sure the Wing library is also parsed
+					self.referenced_wing_paths.borrow_mut().push(module_dir.clone());
+
+					Ok(StmtKind::Bring {
+						source: BringSource::WingLibrary(
+							Symbol {
+								name: module_name_parsed,
+								span: module_name.span,
+							},
+							module_dir,
+						),
+						identifier: Some(alias),
+					})
+				} else {
+					self.with_error::<StmtKind>(
+						format!(
+							"bring {} must be assigned to an identifier (e.g. bring \"foo\" as foo)",
+							module_name
+						),
+						statement_node,
+					)
+				};
+			}
+
+			// otherwise, we treat it as a JSII library
 			return if let Some(alias) = alias {
 				Ok(StmtKind::Bring {
 					source: BringSource::JsiiModule(Symbol {
-						name: module_name.name[1..module_name.name.len() - 1].to_string(),
+						name: module_name_parsed,
 						span: module_name.span,
 					}),
 					identifier: Some(alias),
@@ -996,6 +1052,7 @@ impl<'s> Parser<'s> {
 							message: "Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668"
 								.to_string(),
 							span: Some(self.node_span(&class_element)),
+							annotations: vec![],
 						});
 					}
 
@@ -2113,8 +2170,9 @@ impl<'s> Parser<'s> {
 			if node.kind() == "AUTOMATIC_SEMICOLON" {
 				let target_node = Self::last_non_extra(node);
 				let diag = Diagnostic {
-					message: "Expected ';'".to_string(),
+					message: ERR_EXPECTED_SEMICOLON.to_string(),
 					span: Some(self.node_span(&target_node)),
+					annotations: vec![],
 				};
 				report_diagnostic(diag);
 			} else if node.kind() == "AUTOMATIC_BLOCK" {
@@ -2135,6 +2193,7 @@ impl<'s> Parser<'s> {
 					let diag = Diagnostic {
 						message: format!("Expected '{}'", node.kind()),
 						span: Some(self.node_span(&target_node)),
+						annotations: vec![],
 					};
 					report_diagnostic(diag);
 				}
@@ -2249,6 +2308,29 @@ impl<'s> Parser<'s> {
 			}),
 			span,
 		)))
+	}
+}
+
+/// Check if the package.json in the given directory has a `wing` field
+fn is_wing_library(module_dir: &Utf8Path) -> bool {
+	let package_json_path = Utf8Path::new(module_dir).join("package.json");
+	if !package_json_path.exists() {
+		return false;
+	}
+
+	let package_json = match fs::read_to_string(package_json_path) {
+		Ok(package_json) => package_json,
+		Err(_) => return false,
+	};
+
+	let package_json: serde_json::Value = match serde_json::from_str(&package_json) {
+		Ok(package_json) => package_json,
+		Err(_) => return false,
+	};
+
+	match package_json.get("wing") {
+		Some(_) => true,
+		None => false,
 	}
 }
 

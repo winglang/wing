@@ -213,3 +213,17 @@ pass | test_bucket.test.w | root/test:put
 ```
 
 We will see that both functions were invoked and that the tests passed.
+
+## Package: `wing pack`
+
+The `wing pack` command can be used to package your project as a Wing library.
+
+Usage:
+
+```sh
+$ wing pack
+```
+
+This will compile your current Wing directory, and bundle it as a tarball that can be published to [GitHub packages](https://github.com/features/packages) or [npm](https://www.npmjs.com/).
+
+See [Libraries](../05-libraries.md) for more details on packaging and consuming Wing libraries.

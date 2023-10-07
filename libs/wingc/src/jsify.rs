@@ -404,6 +404,7 @@ impl<'a> JSifier<'a> {
 					report_diagnostic(Diagnostic {
 						message: "Cannot reference an inflight value from within a preflight expression".to_string(),
 						span: Some(expression.span.clone()),
+						annotations: vec![],
 					});
 
 					return "<ERROR>".to_string();
@@ -771,6 +772,17 @@ impl<'a> JSifier<'a> {
 					identifier.as_ref().expect("bring jsii module requires an alias"),
 					name
 				)),
+				BringSource::WingLibrary(_, module_dir) => {
+					let preflight_file_map = self.preflight_file_map.borrow();
+					let preflight_file_name = preflight_file_map.get(module_dir).unwrap();
+					CodeMaker::one_line(format!(
+						"const {} = require(\"./{}\")({{ {} }});",
+						// checked during type checking
+						identifier.as_ref().expect("bring wing file requires an alias"),
+						preflight_file_name,
+						STDLIB,
+					))
+				}
 				BringSource::WingFile(name) => {
 					let preflight_file_map = self.preflight_file_map.borrow();
 					let preflight_file_name = preflight_file_map.get(Utf8Path::new(&name.name)).unwrap();
@@ -1089,6 +1101,7 @@ impl<'a> JSifier<'a> {
 							report_diagnostic(Diagnostic {
 								message: format!("Failed to resolve extern \"{external_spec}\": {err}"),
 								span: Some(func_def.span.clone()),
+								annotations: vec![],
 							});
 							format!("/* unresolved: \"{external_spec}\" */")
 						}

@@ -9,12 +9,14 @@ import { core } from "..";
 import { CloudfrontDistribution } from "../.gen/providers/aws/cloudfront-distribution";
 import { CloudfrontOriginAccessControl } from "../.gen/providers/aws/cloudfront-origin-access-control";
 import { DataAwsIamPolicyDocument } from "../.gen/providers/aws/data-aws-iam-policy-document";
+import { Route53Record } from "../.gen/providers/aws/route53-record";
 import { S3Bucket } from "../.gen/providers/aws/s3-bucket";
 import { S3BucketPolicy } from "../.gen/providers/aws/s3-bucket-policy";
 import { S3BucketWebsiteConfiguration } from "../.gen/providers/aws/s3-bucket-website-configuration";
 import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
+import * as aws from "../shared-aws";
 
 const INDEX_FILE = "index.html";
 
@@ -27,7 +29,7 @@ export class Website extends cloud.Website {
   public readonly bucket: S3Bucket;
   private readonly _url: string;
 
-  constructor(scope: Construct, id: string, props: cloud.WebsiteProps) {
+  constructor(scope: Construct, id: string, props: aws.AwsWebsiteProps) {
     super(scope, id, props);
 
     this.bucket = createEncryptedBucket(this, false, "WebsiteBucket");
@@ -60,7 +62,7 @@ export class Website extends cloud.Website {
     // create a cloudFront distribution
     const distribution = new CloudfrontDistribution(this, "Distribution", {
       enabled: true,
-      ...(this._domain && { aliases: [this._domain] }),
+      ...(this._domain?.domainName && { aliases: [this._domain.domainName] }),
       origin: [
         {
           domainName: this.bucket.bucketRegionalDomainName,
@@ -90,7 +92,17 @@ export class Website extends cloud.Website {
         },
       },
       priceClass: "PriceClass_100",
-      viewerCertificate: { cloudfrontDefaultCertificate: true },
+      viewerCertificate: {
+        cloudfrontDefaultCertificate: true,
+        ...(props.domain?.acmCertificateArn && {
+          acmCertificateArn: props.domain.acmCertificateArn,
+          sslSupportMethod: "sni-only",
+        }),
+        ...(props.domain?.iamCertificate && {
+          iamCertificate: props.domain.iamCertificate,
+          sslSupportMethod: "sni-only",
+        }),
+      },
     });
 
     // allow cloudfront distribution to read from private s3 bucket
@@ -125,6 +137,19 @@ export class Website extends cloud.Website {
       bucket: this.bucket.id,
       policy: allowDistributionReadOnly.json,
     });
+
+    if (props.domain && props.domain.domainName && props.domain.hostedZoneId) {
+      new Route53Record(this, "Route53Record", {
+        zoneId: props.domain.hostedZoneId,
+        type: "A",
+        name: props.domain.domainName,
+        alias: {
+          name: distribution.domainName,
+          zoneId: distribution.hostedZoneId,
+          evaluateTargetHealth: false,
+        },
+      });
+    }
 
     this._url = `https://${distribution.domainName}`;
   }

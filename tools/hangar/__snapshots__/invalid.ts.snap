@@ -273,7 +273,14 @@ Duration <DURATION>"
 `;
 
 exports[`bring.test.w 1`] = `
-"error: Redundant bring of \\"std\\"
+"error: Expected module specification (see https://www.winglang.io/docs/libraries)
+  --> ../../../examples/tests/invalid/bring.test.w:8:7
+  |
+8 | bring ;
+  |       ^ Expected module specification (see https://www.winglang.io/docs/libraries)
+
+
+error: Redundant bring of \\"std\\"
   --> ../../../examples/tests/invalid/bring.test.w:1:1
   |
 1 | bring std;
@@ -294,6 +301,13 @@ error: \\"fs\\" is not a built-in module
   | ^^^^^^^^^ \\"fs\\" is not a built-in module
 
 
+error: \\"c\\" is not a built-in module
+   --> ../../../examples/tests/invalid/bring.test.w:10:1
+   |
+10 | bring c;
+   | ^^^^^^^^ \\"c\\" is not a built-in module
+
+
  
  
 Tests 1 failed (1)
@@ -309,11 +323,11 @@ exports[`bring_jsii.test.w 1`] = `
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^ bring \\"jsii-code-samples\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
 
 
-error: Cannot find jsii module \\"foobar\\" in source directory: Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid\\"
+error: Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid/bring_jsii.test.w\\"
   --> ../../../examples/tests/invalid/bring_jsii.test.w:4:1
   |
 4 | bring \\"foobar\\" as baz;
-  | ^^^^^^^^^^^^^^^^^^^^^^ Cannot find jsii module \\"foobar\\" in source directory: Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid\\"
+  | ^^^^^^^^^^^^^^^^^^^^^^ Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid/bring_jsii.test.w\\"
 
 
  
@@ -759,6 +773,13 @@ error: Unknown parser error
    |                                               ^^^^ Unknown parser error
 
 
+error: Unknown parser error
+   --> ../../../examples/tests/invalid/container_types.test.w:37:24
+   |
+37 | let ss1: MutSet<str> = Set{\\"c\\"};
+   |                        ^^^ Unknown parser error
+
+
 error: Expected type to be \\"num\\", but got \\"str\\" instead
   --> ../../../examples/tests/invalid/container_types.test.w:2:28
   |
@@ -879,9 +900,30 @@ error: Expected type to be \\"MutMap<num>\\", but got \\"Map<num>\\" instead
 
 
 error: Unknown symbol \\"copyMut\\"
-   --> ../../../examples/tests/invalid/container_types.test.w:32:15
+   --> ../../../examples/tests/invalid/container_types.test.w:33:15
    |
-32 | let mm3 = mm2.copyMut();
+33 | let mm3 = mm2.copyMut();
+   |               ^^^^^^^ Unknown symbol \\"copyMut\\"
+
+
+error: Expected type to be \\"MutSet<str>\\", but got \\"Set<str>\\" instead
+   --> ../../../examples/tests/invalid/container_types.test.w:37:27
+   |
+37 | let ss1: MutSet<str> = Set{\\"c\\"};
+   |                           ^^^^^ Expected type to be \\"MutSet<str>\\", but got \\"Set<str>\\" instead
+
+
+error: Expected type to be \\"num\\", but got \\"bool\\" instead
+   --> ../../../examples/tests/invalid/container_types.test.w:39:37
+   |
+39 | let ss2: MutSet<num> = MutSet<num> {true};
+   |                                     ^^^^ Expected type to be \\"num\\", but got \\"bool\\" instead
+
+
+error: Unknown symbol \\"copyMut\\"
+   --> ../../../examples/tests/invalid/container_types.test.w:42:15
+   |
+42 | let ss4 = ss3.copyMut();
    |               ^^^^^^^ Unknown symbol \\"copyMut\\"
 
 
@@ -1203,38 +1245,80 @@ error: Expected type to be \\"Map<str>\\", but got \\"MutMap<str>\\" instead
 
 
 error: Expected type to be \\"bool\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/immutable_container_types.test.w:7:29
+  --> ../../../examples/tests/invalid/immutable_container_types.test.w:8:29
   |
-7 | let m3 = Map<bool> { \\"a\\" => \\"A\\" };
+8 | let m3 = Map<bool> { \\"a\\" => \\"A\\" };
   |                             ^^^ Expected type to be \\"bool\\", but got \\"str\\" instead
 
 
 error: Unknown symbol \\"set\\"
-  --> ../../../examples/tests/invalid/immutable_container_types.test.w:9:4
-  |
-9 | m4.set(\\"2\\", 3);
-  |    ^^^ Unknown symbol \\"set\\"
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:11:4
+   |
+11 | m4.set(\\"2\\", 3);
+   |    ^^^ Unknown symbol \\"set\\"
 
 
 error: Unknown symbol \\"copy\\"
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:10:13
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:13:13
    |
-10 | let m5 = m4.copy();
+13 | let m5 = m4.copy();
    |             ^^^^ Unknown symbol \\"copy\\"
 
 
 error: Unknown symbol \\"delete\\"
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:11:4
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:15:4
    |
-11 | m4.delete(\\"1\\");
+15 | m4.delete(\\"1\\");
    |    ^^^^^^ Unknown symbol \\"delete\\"
 
 
 error: Unknown symbol \\"clear\\"
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:12:4
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:17:4
    |
-12 | m4.clear();
+17 | m4.clear();
    |    ^^^^^ Unknown symbol \\"clear\\"
+
+
+error: Expected type to be \\"Set<Array<num>>\\", but got \\"MutSet<Array<num>>\\" instead
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:21:27
+   |
+21 | let s1: Set<Array<num>> = MutSet<Array<num>> {[1]};
+   |                           ^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"Set<Array<num>>\\", but got \\"MutSet<Array<num>>\\" instead
+
+
+error: Unknown symbol \\"delete\\"
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:24:4
+   |
+24 | s2.delete(\\"a\\");
+   |    ^^^^^^ Unknown symbol \\"delete\\"
+
+
+error: Unknown symbol \\"add\\"
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:26:4
+   |
+26 | s2.add(\\"d\\");
+   |    ^^^ Unknown symbol \\"add\\"
+
+
+error: Unknown symbol \\"copy\\"
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:28:13
+   |
+28 | let s3 = s2.copy();
+   |             ^^^^ Unknown symbol \\"copy\\"
+
+
+error: Unknown symbol \\"clear\\"
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:30:4
+   |
+30 | s2.clear();
+   |    ^^^^^ Unknown symbol \\"clear\\"
+
+
+error: Expected type to be \\"Set<bool>\\", but got \\"Set<Array<num>>\\" instead
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:32:21
+   |
+32 | let s4: Set<bool> = {[3]};
+   |                     ^^^^^ Expected type to be \\"Set<bool>\\", but got \\"Set<Array<num>>\\" instead
 
 
  
@@ -1554,6 +1638,9 @@ exports[`inflight_reassign.test.w 1`] = `
 error: Variable is not reassignable
   --> ../../../examples/tests/invalid/inflight_reassign.test.w:8:3
   |
+2 | let ylet = 123;
+  |     ---- defined here (try adding \\"var\\" in front)
+  .
 8 |   ylet = 456;
   |   ^^^^ Variable is not reassignable
 
@@ -1670,6 +1757,8 @@ error: Expected an interface, instead found type \\"ISomeClass\\"
 error: Symbol \\"foo\\" already defined in this scope
    --> ../../../examples/tests/invalid/interface.test.w:23:5
    |
+22 |     foo(): void;
+   |     --- previous definition
 23 |     foo(): void;
    |     ^^^ Symbol \\"foo\\" already defined in this scope
 
@@ -1677,6 +1766,9 @@ error: Symbol \\"foo\\" already defined in this scope
 error: Symbol \\"foo\\" already defined in this scope
    --> ../../../examples/tests/invalid/interface.test.w:25:5
    |
+22 |     foo(): void;
+   |     --- previous definition
+   .
 25 |     foo(): num;
    |     ^^^ Symbol \\"foo\\" already defined in this scope
 
@@ -2154,6 +2246,9 @@ error: Cannot call an optional function
 error: Variable is not reassignable
    --> ../../../examples/tests/invalid/optionals.test.w:53:3
    |
+50 | if let hi = hi {
+   |        -- defined here (try adding \\"var\\" in front)
+   .
 53 |   hi = \\"bye\\";
    |   ^^ Variable is not reassignable
 
@@ -2237,6 +2332,8 @@ exports[`reassign_to_nonreassignable.test.w 1`] = `
 "error: Variable is not reassignable
   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.test.w:3:1
   |
+2 | let x = 5;
+  |     - defined here (try adding \\"var\\" in front)
 3 | x = x + 1;
   | ^ Variable is not reassignable
 
@@ -2244,6 +2341,8 @@ exports[`reassign_to_nonreassignable.test.w 1`] = `
 error: Variable is not reassignable
    --> ../../../examples/tests/invalid/reassign_to_nonreassignable.test.w:42:3
    |
+41 | let f = (arg: num):num => {
+   |          --- defined here (try adding \\"var\\" in front)
 42 |   arg = 0;
    |   ^^^ Variable is not reassignable
 
@@ -2251,6 +2350,9 @@ error: Variable is not reassignable
 error: Variable is not reassignable
    --> ../../../examples/tests/invalid/reassign_to_nonreassignable.test.w:35:5
    |
+16 |   inflight inflightF: num;
+   |            --------- defined here (try adding \\"var\\" in front)
+   .
 35 |     this.inflightF = this.inflightF + 1;
    |     ^^^^^^^^^^^^^^ Variable is not reassignable
 
@@ -2258,6 +2360,9 @@ error: Variable is not reassignable
 error: Variable is not reassignable
    --> ../../../examples/tests/invalid/reassign_to_nonreassignable.test.w:28:5
    |
+14 |   f: num;
+   |   - defined here (try adding \\"var\\" in front)
+   .
 28 |     this.f = this.f + 1;
    |     ^^^^^^ Variable is not reassignable
 
@@ -2265,6 +2370,9 @@ error: Variable is not reassignable
 error: Variable is not reassignable
    --> ../../../examples/tests/invalid/reassign_to_nonreassignable.test.w:30:5
    |
+ 6 |   pub inflight inner: num;
+   |                ----- defined here (try adding \\"var\\" in front)
+   .
 30 |     this.innerR.inner = 2;
    |     ^^^^^^^^^^^^^^^^^ Variable is not reassignable
 
@@ -2992,6 +3100,9 @@ error: Symbol \\"x\\" used before being defined
   |
 5 |   log(\\"\${x}\\");
   |          ^ Symbol \\"x\\" used before being defined
+  .
+8 | let x = \\"hi\\";
+  |     - defined later here
 
 
  
