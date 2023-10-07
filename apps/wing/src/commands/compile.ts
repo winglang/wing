@@ -46,8 +46,17 @@ export interface CompileOptions {
 export async function compile(entrypoint?: string, options?: CompileOptions): Promise<string> {
   if (!entrypoint) {
     const wingFiles = await glob("{main,*.main}.w");
-    if (wingFiles.length !== 1) {
-      throw new Error("Please specify which file you want to compile");
+    if (wingFiles.length === 0) {
+      throw new Error(
+        "Cannot find entrypoint files (main.w or *.main.w) in the current directory."
+      );
+    }
+    if (wingFiles.length > 1) {
+      throw new Error(
+        `Multiple entrypoints found in the current directory (${wingFiles.join(
+          ", "
+        )}). Please specify which one to use.`
+      );
     }
     entrypoint = wingFiles[0];
   }
