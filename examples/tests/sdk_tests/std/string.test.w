@@ -1,28 +1,20 @@
-let assertThrows = (expected: str, block: (): void) => {
-  let var error = false;
-  try {
-    block();
-  } catch actual {
-    assert(actual.contains(expected) == true);
-    error = true;
-  }
-
-  assert(error);
-};
+bring "./../../valid/assertions.w" as assertions;
 
 //-----------------------------------------------------------------------------
 // fromJson (static)
 
-let PARSE_ERROR = "unable to parse string";
+let PARSE_ERROR = "unable to parse string:\n- instance is not of a type(s) string";
 
 assert(str.fromJson(Json "Hello") == "Hello");
-assertThrows(PARSE_ERROR, () => {
+assertions.PreflightAssert.throws(PARSE_ERROR, () => {
   str.fromJson(Json 123); 
 });
 
 test "fromJson" {
   assert(str.fromJson(Json "World") == "World");
-  try { str.fromJson(Json 123); } catch s { assert(s.contains(PARSE_ERROR)); }
+  assertions.Assert.throws(PARSE_ERROR, () => {
+    str.fromJson(Json 123);
+  });
 }
 
 //-----------------------------------------------------------------------------
@@ -46,10 +38,10 @@ assert("boom".at(2) == "o");
 assert("boom".at(-4) == "b");
 assert("boom".at(-1) == "m");
 // Should throw an exception
-assertThrows(INDEX_OUT_OF_BOUNDS_ERROR, () => {
+assertions.PreflightAssert.throws(INDEX_OUT_OF_BOUNDS_ERROR, () => {
   "boom".at(4);
 });
-assertThrows(INDEX_OUT_OF_BOUNDS_ERROR, () => {
+assertions.PreflightAssert.throws(INDEX_OUT_OF_BOUNDS_ERROR, () => {
   "boom".at(-5);
 });
 
@@ -59,8 +51,13 @@ test "at()" {
   assert("boom".at(-4) == "b");
   assert("boom".at(-1) == "m");
   // Should throw an exception
-  try { "boom".at(4); } catch s { assert(s == INDEX_OUT_OF_BOUNDS_ERROR ); } // <-- Passes if no exception is thrown, see issue #3341
-  try { "boom".at(-5); } catch s { assert(s == INDEX_OUT_OF_BOUNDS_ERROR ); }
+  assertions.Assert.throws(INDEX_OUT_OF_BOUNDS_ERROR, () => {
+    // Passes if no exception is thrown, see issue #3341
+    "boom".at(4);
+  });
+  assertions.Assert.throws(INDEX_OUT_OF_BOUNDS_ERROR, () => {
+    "boom".at(-5);
+  });
 }
 
 //-----------------------------------------------------------------------------

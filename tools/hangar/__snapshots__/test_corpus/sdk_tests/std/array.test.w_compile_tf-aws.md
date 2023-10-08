@@ -1,6 +1,6 @@
 # [array.test.w](../../../../../../examples/tests/sdk_tests/std/array.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
+## inflight.$Closure1-2.js
 ```js
 module.exports = function({  }) {
   class $Closure1 {
@@ -19,7 +19,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure10-1.js
+## inflight.$Closure10-2.js
 ```js
 module.exports = function({  }) {
   class $Closure10 {
@@ -41,7 +41,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure11-1.js
+## inflight.$Closure11-2.js
 ```js
 module.exports = function({  }) {
   class $Closure11 {
@@ -63,7 +63,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure12-1.js
+## inflight.$Closure12-2.js
 ```js
 module.exports = function({  }) {
   class $Closure12 {
@@ -84,7 +84,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure13-1.js
+## inflight.$Closure13-2.js
 ```js
 module.exports = function({  }) {
   class $Closure13 {
@@ -105,7 +105,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure14-1.js
+## inflight.$Closure14-2.js
 ```js
 module.exports = function({  }) {
   class $Closure14 {
@@ -126,9 +126,9 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure15-1.js
+## inflight.$Closure15-2.js
 ```js
-module.exports = function({  }) {
+module.exports = function({ $asserions_Assert }) {
   class $Closure15 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -136,29 +136,16 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      const assertThrows = async (expected, block) => {
-        let error = false;
-        try {
-          (await block());
-        }
-        catch ($error_actual) {
-          const actual = $error_actual.message;
-          {((cond) => {if (!cond) throw new Error("assertion failed: actual == expected")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(actual,expected)))};
-          error = true;
-        }
-        {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
-      }
-      ;
       const INDEX_OUT_OF_BOUNDS_ERROR = "Index out of bounds";
       const mutArr = [1, 3, 5, 7, 9];
       {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.at(0) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await mutArr.at(0)),1)))};
       ((obj, args) => { if (args[0] < 0 || args[0] >= mutArr.length) throw new Error("Index out of bounds"); obj[args[0]] = args[1]; })(mutArr, [0,2]);
       {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.at(0) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await mutArr.at(0)),2)))};
-      (await assertThrows(INDEX_OUT_OF_BOUNDS_ERROR,async () => {
+      (await $asserions_Assert.throws(INDEX_OUT_OF_BOUNDS_ERROR,async () => {
         ((obj, args) => { if (args[0] < 0 || args[0] >= mutArr.length) throw new Error("Index out of bounds"); obj[args[0]] = args[1]; })(mutArr, [(-1),1]);
       }
       ));
-      (await assertThrows(INDEX_OUT_OF_BOUNDS_ERROR,async () => {
+      (await $asserions_Assert.throws(INDEX_OUT_OF_BOUNDS_ERROR,async () => {
         ((obj, args) => { if (args[0] < 0 || args[0] >= mutArr.length) throw new Error("Index out of bounds"); obj[args[0]] = args[1]; })(mutArr, [5,11]);
       }
       ));
@@ -169,9 +156,9 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure16-1.js
+## inflight.$Closure16-2.js
 ```js
-module.exports = function({  }) {
+module.exports = function({ $asserions_Assert }) {
   class $Closure16 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -179,31 +166,18 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      const assertThrows = async (expected, block) => {
-        let error = false;
-        try {
-          (await block());
-        }
-        catch ($error_actual) {
-          const actual = $error_actual.message;
-          {((cond) => {if (!cond) throw new Error("assertion failed: actual == expected")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(actual,expected)))};
-          error = true;
-        }
-        {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
-      }
-      ;
       const INDEX_OUT_OF_BOUNDS_ERROR = "Index out of bounds";
       const mutArr = [5, 10, 20];
       ((obj, args) => { if (args[0] < 0 || args[0] > mutArr.length) throw new Error("Index out of bounds"); obj.splice(args[0], 0, args[1]); })(mutArr, [2,15]);
       {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.length == 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mutArr.length,4)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.at(2) == 15")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await mutArr.at(2)),15)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.at(3) == 20")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await mutArr.at(3)),20)))};
-      (await assertThrows(INDEX_OUT_OF_BOUNDS_ERROR,async () => {
+      (await $asserions_Assert.throws(INDEX_OUT_OF_BOUNDS_ERROR,async () => {
         ((obj, args) => { if (args[0] < 0 || args[0] > mutArr.length) throw new Error("Index out of bounds"); obj.splice(args[0], 0, args[1]); })(mutArr, [(-3),15]);
       }
       ));
       {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.length == 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mutArr.length,4)))};
-      (await assertThrows(INDEX_OUT_OF_BOUNDS_ERROR,async () => {
+      (await $asserions_Assert.throws(INDEX_OUT_OF_BOUNDS_ERROR,async () => {
         ((obj, args) => { if (args[0] < 0 || args[0] > mutArr.length) throw new Error("Index out of bounds"); obj.splice(args[0], 0, args[1]); })(mutArr, [7,15]);
       }
       ));
@@ -218,7 +192,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure17-1.js
+## inflight.$Closure17-2.js
 ```js
 module.exports = function({  }) {
   class $Closure17 {
@@ -243,7 +217,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure2-1.js
+## inflight.$Closure2-2.js
 ```js
 module.exports = function({  }) {
   class $Closure2 {
@@ -262,7 +236,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure3-1.js
+## inflight.$Closure3-2.js
 ```js
 module.exports = function({  }) {
   class $Closure3 {
@@ -289,9 +263,9 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure4-1.js
+## inflight.$Closure4-2.js
 ```js
-module.exports = function({  }) {
+module.exports = function({ $asserions_Assert }) {
   class $Closure4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -299,30 +273,17 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      const assertThrows = async (expected, block) => {
-        let error = false;
-        try {
-          (await block());
-        }
-        catch ($error_actual) {
-          const actual = $error_actual.message;
-          {((cond) => {if (!cond) throw new Error("assertion failed: actual == expected")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(actual,expected)))};
-          error = true;
-        }
-        {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
-      }
-      ;
       const INDEX_OUT_OF_BOUNDS_ERROR = "Index out of bounds";
       const mutArr = ["hello", "world"];
       const item = ((obj, args) => { if (args[0] < 0 || args[0] >= mutArr.length) throw new Error("Index out of bounds"); return obj.splice(args[0], 1)[0]; })(mutArr, [0]);
       {((cond) => {if (!cond) throw new Error("assertion failed: item == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(item,"hello")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mutArr.length,1)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.at(0) == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await mutArr.at(0)),"world")))};
-      (await assertThrows(INDEX_OUT_OF_BOUNDS_ERROR,async () => {
+      (await $asserions_Assert.throws(INDEX_OUT_OF_BOUNDS_ERROR,async () => {
         ((obj, args) => { if (args[0] < 0 || args[0] >= mutArr.length) throw new Error("Index out of bounds"); return obj.splice(args[0], 1)[0]; })(mutArr, [(-3)]);
       }
       ));
-      (await assertThrows(INDEX_OUT_OF_BOUNDS_ERROR,async () => {
+      (await $asserions_Assert.throws(INDEX_OUT_OF_BOUNDS_ERROR,async () => {
         ((obj, args) => { if (args[0] < 0 || args[0] >= mutArr.length) throw new Error("Index out of bounds"); return obj.splice(args[0], 1)[0]; })(mutArr, [3]);
       }
       ));
@@ -333,7 +294,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure5-1.js
+## inflight.$Closure5-2.js
 ```js
 module.exports = function({  }) {
   class $Closure5 {
@@ -356,7 +317,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure6-1.js
+## inflight.$Closure6-2.js
 ```js
 module.exports = function({  }) {
   class $Closure6 {
@@ -381,7 +342,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure7-1.js
+## inflight.$Closure7-2.js
 ```js
 module.exports = function({  }) {
   class $Closure7 {
@@ -404,7 +365,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure8-1.js
+## inflight.$Closure8-2.js
 ```js
 module.exports = function({  }) {
   class $Closure8 {
@@ -424,7 +385,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure9-1.js
+## inflight.$Closure9-2.js
 ```js
 module.exports = function({  }) {
   class $Closure9 {
@@ -440,6 +401,73 @@ module.exports = function({  }) {
     }
   }
   return $Closure9;
+}
+
+```
+
+## inflight.Assert-1.js
+```js
+module.exports = function({  }) {
+  class Assert {
+    static async throws(expected, block) {
+      let actual = "";
+      try {
+        (await block());
+      }
+      catch ($error_e) {
+        const e = $error_e.message;
+        actual = e;
+      }
+      if ((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(actual,""))) {
+        throw new Error("expected error, but none thrown.");
+      }
+      if ((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(actual,expected))) {
+        throw new Error(String.raw({ raw: ["expected error message: \"", "\" got: \"", "\""] }, expected, actual));
+      }
+    }
+    static async equalStr(a, b) {
+      try {
+        {((cond) => {if (!cond) throw new Error("assertion failed: a == b")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(a,b)))};
+      }
+      catch ($error_e) {
+        const e = $error_e.message;
+        throw new Error(String.raw({ raw: ["expected: ", " got: ", ""] }, b, a));
+      }
+    }
+    static async isNil(a) {
+      try {
+        {((cond) => {if (!cond) throw new Error("assertion failed: a == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(a,undefined)))};
+      }
+      catch ($error_e) {
+        const e = $error_e.message;
+        {console.log(e)};
+        throw new Error(String.raw({ raw: ["expected '", "' to be nil"] }, a));
+      }
+    }
+    static async equalNum(a, b) {
+      try {
+        {((cond) => {if (!cond) throw new Error("assertion failed: a == b")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(a,b)))};
+      }
+      catch ($error_e) {
+        const e = $error_e.message;
+        {console.log(e)};
+        throw new Error(String.raw({ raw: ["expected: ", " got: ", ""] }, b, a));
+      }
+    }
+  }
+  return Assert;
+}
+
+```
+
+## inflight.PreflightAssert-1.js
+```js
+module.exports = function({  }) {
+  class PreflightAssert {
+    constructor({  }) {
+    }
+  }
+  return PreflightAssert;
 }
 
 ```
@@ -510,6 +538,81 @@ module.exports = function({  }) {
 }
 ```
 
+## preflight.assertions-1.js
+```js
+module.exports = function({ $stdlib }) {
+  const std = $stdlib.std;
+  class Assert extends $stdlib.std.Resource {
+    constructor(scope, id, ) {
+      super(scope, id);
+    }
+    static _toInflightType(context) {
+      return `
+        require("./inflight.Assert-1.js")({
+        })
+      `;
+    }
+    _toInflight() {
+      return `
+        (await (async () => {
+          const AssertClient = ${Assert._toInflightType(this)};
+          const client = new AssertClient({
+          });
+          if (client.$inflight_init) { await client.$inflight_init(); }
+          return client;
+        })())
+      `;
+    }
+    _getInflightOps() {
+      return ["throws", "equalStr", "isNil", "equalNum", "$inflight_init"];
+    }
+  }
+  class PreflightAssert extends $stdlib.std.Resource {
+    constructor(scope, id, ) {
+      super(scope, id);
+    }
+    static throws(expected, block) {
+      let actual = "";
+      try {
+        (block());
+      }
+      catch ($error_e) {
+        const e = $error_e.message;
+        actual = e;
+      }
+      if ((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(actual,""))) {
+        throw new Error("expected error, but none thrown.");
+      }
+      if ((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(actual,expected))) {
+        throw new Error(String.raw({ raw: ["expected error message: \"", "\" got: \"", "\""] }, expected, actual));
+      }
+    }
+    static _toInflightType(context) {
+      return `
+        require("./inflight.PreflightAssert-1.js")({
+        })
+      `;
+    }
+    _toInflight() {
+      return `
+        (await (async () => {
+          const PreflightAssertClient = ${PreflightAssert._toInflightType(this)};
+          const client = new PreflightAssertClient({
+          });
+          if (client.$inflight_init) { await client.$inflight_init(); }
+          return client;
+        })())
+      `;
+    }
+    _getInflightOps() {
+      return ["$inflight_init"];
+    }
+  }
+  return { Assert, PreflightAssert };
+};
+
+```
+
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
@@ -518,6 +621,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
+const asserions = require("./preflight.assertions-1.js")({ $stdlib });
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -528,7 +632,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-2.js")({
           })
         `;
       }
@@ -554,7 +658,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure2-1.js")({
+          require("./inflight.$Closure2-2.js")({
           })
         `;
       }
@@ -580,7 +684,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure3-1.js")({
+          require("./inflight.$Closure3-2.js")({
           })
         `;
       }
@@ -606,7 +710,8 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure4-1.js")({
+          require("./inflight.$Closure4-2.js")({
+            $asserions_Assert: ${context._lift($stdlib.core.toLiftableModuleType(asserions.Assert, "", "Assert"))},
           })
         `;
       }
@@ -632,7 +737,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure5-1.js")({
+          require("./inflight.$Closure5-2.js")({
           })
         `;
       }
@@ -658,7 +763,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure6-1.js")({
+          require("./inflight.$Closure6-2.js")({
           })
         `;
       }
@@ -684,7 +789,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure7-1.js")({
+          require("./inflight.$Closure7-2.js")({
           })
         `;
       }
@@ -710,7 +815,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure8-1.js")({
+          require("./inflight.$Closure8-2.js")({
           })
         `;
       }
@@ -736,7 +841,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure9-1.js")({
+          require("./inflight.$Closure9-2.js")({
           })
         `;
       }
@@ -762,7 +867,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure10-1.js")({
+          require("./inflight.$Closure10-2.js")({
           })
         `;
       }
@@ -788,7 +893,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure11-1.js")({
+          require("./inflight.$Closure11-2.js")({
           })
         `;
       }
@@ -814,7 +919,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure12-1.js")({
+          require("./inflight.$Closure12-2.js")({
           })
         `;
       }
@@ -840,7 +945,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure13-1.js")({
+          require("./inflight.$Closure13-2.js")({
           })
         `;
       }
@@ -866,7 +971,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure14-1.js")({
+          require("./inflight.$Closure14-2.js")({
           })
         `;
       }
@@ -892,7 +997,8 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure15-1.js")({
+          require("./inflight.$Closure15-2.js")({
+            $asserions_Assert: ${context._lift($stdlib.core.toLiftableModuleType(asserions.Assert, "", "Assert"))},
           })
         `;
       }
@@ -918,7 +1024,8 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure16-1.js")({
+          require("./inflight.$Closure16-2.js")({
+            $asserions_Assert: ${context._lift($stdlib.core.toLiftableModuleType(asserions.Assert, "", "Assert"))},
           })
         `;
       }
@@ -944,7 +1051,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure17-1.js")({
+          require("./inflight.$Closure17-2.js")({
           })
         `;
       }

@@ -1,4 +1,5 @@
 bring cloud;
+bring "./assertions.w" as assertions;
 
 let api = new cloud.Api();
 
@@ -12,13 +13,9 @@ let handler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
 
 let testInvalidPath = (path:str) => {
   let var error = "";
-  let expected = "Invalid path ${path}. Url parts can only contain alpha-numeric chars, \"-\", \"_\" and \".\". Params can only contain alpha-numeric chars and \"_\".";
-  try {
+  assertions.PreflightAssert.throws("Invalid path ${path}. Url parts can only contain alpha-numeric chars, \"-\", \"_\" and \".\". Params can only contain alpha-numeric chars and \"_\".", () => {
     api.get(path, handler);
-  } catch e {
-    error = e;
-  }
-  assert(error == expected);
+  });
 };
 
 let testValidPath = (path:str) => {

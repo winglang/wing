@@ -1,17 +1,7 @@
 bring http;
+bring "./../../valid/assertions.w" as assertions;
 
 test "parseUrl()" {
-    let assertThrows = (expected: str, block: (): void) => {
-        let var error = false;
-        try {
-            block();
-        } catch actual {
-            assert(actual == expected);
-            error = true;
-        }
-        assert(error);
-    };
-
     let INVALID_URL_STRING = "hello world";
     let INVALID_URL_ERROR = "Invalid URL: ${INVALID_URL_STRING}";
     let URL_STRING = "http://username:password@www.example.com:3000/pathname?search=test#hash";
@@ -33,23 +23,12 @@ test "parseUrl()" {
     let parsedUrlStruct = http.parseUrl(URL_STRING);
     assert(urlStruct == parsedUrlStruct);
 
-    assertThrows(INVALID_URL_ERROR, () => {
+    assertions.Assert.throws(INVALID_URL_ERROR, () => {
         let invalidUrlStruct = http.parseUrl(INVALID_URL_STRING);
     });
 }
 
 test "formatUrl()" {
-    let assertThrows = (expected: str, block: (): void) => {
-        let var error = false;
-        try {
-            block();
-        } catch actual {
-            assert(actual == expected);
-            error = true;
-        }
-        assert(error);
-    };
-
     let UNABLE_TO_FORMAT_URL_STRUCT_ERROR = "Unable to format URL Struct: Invalid URL";
     let urlStruct = http.parseUrl("https://a:b@測試.com/path?query=1#fragment");
 
@@ -80,7 +59,7 @@ test "formatUrl()" {
         password: urlStruct.password,
     };
 
-    assertThrows(UNABLE_TO_FORMAT_URL_STRUCT_ERROR, () => {
+    assertions.Assert.throws(UNABLE_TO_FORMAT_URL_STRUCT_ERROR, () => {
         http.formatUrl(invalidUrlStruct);
     });
 }

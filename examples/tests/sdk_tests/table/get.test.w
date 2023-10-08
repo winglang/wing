@@ -1,5 +1,6 @@
 bring cloud;
 bring ex;
+bring "./../../valid/assertions.w" as assertions;
 
 let table = new ex.Table( 
     name: "users",
@@ -15,20 +16,9 @@ test "get" {
   let NON_EXISTENT_KEY = "bar";
   let ROW_DOES_NOT_EXIST_ERROR = "Row does not exist (key=${NON_EXISTENT_KEY})";
 
-  let assertThrows = (expected: str, block: (): void) => {
-    let var error = false;
-    try {
-      block();
-    } catch actual {
-      assert(actual == expected);
-      error = true;
-    }
-    assert(error);
-  };
-
   table.insert(VALID_KEY, Json { gender: COLUMN_VALUE });
   assert(table.get(VALID_KEY).get(COLUMN_NAME) == COLUMN_VALUE);
-  assertThrows(ROW_DOES_NOT_EXIST_ERROR, () => {
+  assertions.Assert.throws(ROW_DOES_NOT_EXIST_ERROR, () => {
     table.get(NON_EXISTENT_KEY);
   });
 

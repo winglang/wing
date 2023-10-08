@@ -2,6 +2,7 @@
 // TODO: https://github.com/winglang/wing/issues/2785
 //-----------------------------------------------------------------------------
 bring cloud;
+bring "./../../valid/assertions.w" as assertions;
 
 test "has()" {
   let obj = Json { key1: 1, key2: 2};
@@ -11,17 +12,6 @@ test "has()" {
 }
 
 test "get()" {
-  let assertThrows = (expected: str, block: (): void) => {
-    let var error = false;
-    try {
-      block();
-    } catch actual {
-      assert(actual == expected);
-      error = true;
-    }
-    assert(error);
-  };
-
   let JSON_PROPERTY_DOES_NOT_EXIST_ERROR = "Json property \"c\" does not exist";
   let obj = Json { a: 1, b: 2 };
   let mutObj = MutJson { a: 1, b: 2 };
@@ -29,26 +19,15 @@ test "get()" {
   assert(obj.get("b") == 2);
   assert(mutObj.get("b") == 2);
 
-  assertThrows(JSON_PROPERTY_DOES_NOT_EXIST_ERROR, () => {
+  assertions.Assert.throws(JSON_PROPERTY_DOES_NOT_EXIST_ERROR, () => {
     obj.get("c");
   });
-  assertThrows(JSON_PROPERTY_DOES_NOT_EXIST_ERROR, () => {
+  assertions.Assert.throws(JSON_PROPERTY_DOES_NOT_EXIST_ERROR, () => {
     mutObj.get("c");
   });
 }
 
 test "getAt()" {
-  let assertThrows = (expected: str, block: (): void) => {
-    let var error = false;
-    try {
-      block();
-    } catch actual {
-      assert(actual == expected);
-      error = true;
-    }
-    assert(error);
-  };
-
   let INDEX_OUT_OF_BOUNDS_ERROR = "Index out of bounds";
   let jsonArray = Json ["foo", "bar", "baz"];
   let mutJsonArray = MutJson [1, 2, 3];
@@ -56,7 +35,7 @@ test "getAt()" {
   assert(jsonArray.getAt(2) == "baz");
   assert(mutJsonArray.getAt(2) == 3);
 
-  assertThrows(INDEX_OUT_OF_BOUNDS_ERROR, () => {
+  assertions.Assert.throws(INDEX_OUT_OF_BOUNDS_ERROR, () => {
     jsonArray.getAt(3);
     mutJsonArray.getAt(3);
   });

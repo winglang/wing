@@ -1,8 +1,8 @@
 # [bool.test.w](../../../../../../examples/tests/sdk_tests/std/bool.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
+## inflight.$Closure1-2.js
 ```js
-module.exports = function({ $PARSE_ERROR, $std_Boolean, $std_Json }) {
+module.exports = function({ $PARSE_ERROR, $assertions_Assert, $std_Boolean, $std_Json }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -14,16 +14,80 @@ module.exports = function({ $PARSE_ERROR, $std_Boolean, $std_Json }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: t == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(t,true)))};
       const f = (await $std_Boolean.fromJson((JSON.parse("false"))));
       {((cond) => {if (!cond) throw new Error("assertion failed: f == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f,false)))};
-      try {
+      (await $assertions_Assert.throws($PARSE_ERROR,async () => {
         (await $std_Boolean.fromJson(123));
       }
-      catch ($error_s) {
-        const s = $error_s.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: s.contains(PARSE_ERROR)")})(s.includes($PARSE_ERROR))};
-      }
+      ));
     }
   }
   return $Closure1;
+}
+
+```
+
+## inflight.Assert-1.js
+```js
+module.exports = function({  }) {
+  class Assert {
+    static async throws(expected, block) {
+      let actual = "";
+      try {
+        (await block());
+      }
+      catch ($error_e) {
+        const e = $error_e.message;
+        actual = e;
+      }
+      if ((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(actual,""))) {
+        throw new Error("expected error, but none thrown.");
+      }
+      if ((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(actual,expected))) {
+        throw new Error(String.raw({ raw: ["expected error message: \"", "\" got: \"", "\""] }, expected, actual));
+      }
+    }
+    static async equalStr(a, b) {
+      try {
+        {((cond) => {if (!cond) throw new Error("assertion failed: a == b")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(a,b)))};
+      }
+      catch ($error_e) {
+        const e = $error_e.message;
+        throw new Error(String.raw({ raw: ["expected: ", " got: ", ""] }, b, a));
+      }
+    }
+    static async isNil(a) {
+      try {
+        {((cond) => {if (!cond) throw new Error("assertion failed: a == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(a,undefined)))};
+      }
+      catch ($error_e) {
+        const e = $error_e.message;
+        {console.log(e)};
+        throw new Error(String.raw({ raw: ["expected '", "' to be nil"] }, a));
+      }
+    }
+    static async equalNum(a, b) {
+      try {
+        {((cond) => {if (!cond) throw new Error("assertion failed: a == b")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(a,b)))};
+      }
+      catch ($error_e) {
+        const e = $error_e.message;
+        {console.log(e)};
+        throw new Error(String.raw({ raw: ["expected: ", " got: ", ""] }, b, a));
+      }
+    }
+  }
+  return Assert;
+}
+
+```
+
+## inflight.PreflightAssert-1.js
+```js
+module.exports = function({  }) {
+  class PreflightAssert {
+    constructor({  }) {
+    }
+  }
+  return PreflightAssert;
 }
 
 ```
@@ -60,6 +124,81 @@ module.exports = function({ $PARSE_ERROR, $std_Boolean, $std_Json }) {
 }
 ```
 
+## preflight.assertions-1.js
+```js
+module.exports = function({ $stdlib }) {
+  const std = $stdlib.std;
+  class Assert extends $stdlib.std.Resource {
+    constructor(scope, id, ) {
+      super(scope, id);
+    }
+    static _toInflightType(context) {
+      return `
+        require("./inflight.Assert-1.js")({
+        })
+      `;
+    }
+    _toInflight() {
+      return `
+        (await (async () => {
+          const AssertClient = ${Assert._toInflightType(this)};
+          const client = new AssertClient({
+          });
+          if (client.$inflight_init) { await client.$inflight_init(); }
+          return client;
+        })())
+      `;
+    }
+    _getInflightOps() {
+      return ["throws", "equalStr", "isNil", "equalNum", "$inflight_init"];
+    }
+  }
+  class PreflightAssert extends $stdlib.std.Resource {
+    constructor(scope, id, ) {
+      super(scope, id);
+    }
+    static throws(expected, block) {
+      let actual = "";
+      try {
+        (block());
+      }
+      catch ($error_e) {
+        const e = $error_e.message;
+        actual = e;
+      }
+      if ((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(actual,""))) {
+        throw new Error("expected error, but none thrown.");
+      }
+      if ((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(actual,expected))) {
+        throw new Error(String.raw({ raw: ["expected error message: \"", "\" got: \"", "\""] }, expected, actual));
+      }
+    }
+    static _toInflightType(context) {
+      return `
+        require("./inflight.PreflightAssert-1.js")({
+        })
+      `;
+    }
+    _toInflight() {
+      return `
+        (await (async () => {
+          const PreflightAssertClient = ${PreflightAssert._toInflightType(this)};
+          const client = new PreflightAssertClient({
+          });
+          if (client.$inflight_init) { await client.$inflight_init(); }
+          return client;
+        })())
+      `;
+    }
+    _getInflightOps() {
+      return ["$inflight_init"];
+    }
+  }
+  return { Assert, PreflightAssert };
+};
+
+```
+
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
@@ -67,6 +206,7 @@ const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const assertions = require("./preflight.assertions-1.js")({ $stdlib });
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -77,8 +217,9 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-2.js")({
             $PARSE_ERROR: ${context._lift(PARSE_ERROR)},
+            $assertions_Assert: ${context._lift($stdlib.core.toLiftableModuleType(assertions.Assert, "", "Assert"))},
             $std_Boolean: ${context._lift($stdlib.core.toLiftableModuleType(std.Boolean, "@winglang/sdk/std", "Boolean"))},
             $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
           })
@@ -105,22 +246,10 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const assertThrows = ((expected, block) => {
-      let error = false;
-      try {
-        (block());
-      }
-      catch ($error_actual) {
-        const actual = $error_actual.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: actual.contains(expected)")})(actual.includes(expected))};
-        error = true;
-      }
-      {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
-    });
-    const PARSE_ERROR = "unable to parse bool";
+    const PARSE_ERROR = "unable to parse bool:\n- instance is not of a type(s) boolean";
     const t = (std.Boolean.fromJson((JSON.parse("true"))));
     {((cond) => {if (!cond) throw new Error("assertion failed: t == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(t,true)))};
-    (assertThrows(PARSE_ERROR,(() => {
+    (assertions.PreflightAssert.throws(PARSE_ERROR,(() => {
       (std.Boolean.fromJson(123));
     })));
     const f = (std.Boolean.fromJson((JSON.parse("false"))));

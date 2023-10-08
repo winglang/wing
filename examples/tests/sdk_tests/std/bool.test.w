@@ -1,16 +1,6 @@
-let assertThrows = (expected: str, block: (): void) => {
-  let var error = false;
-  try {
-    block();
-  } catch actual {
-    assert(actual.contains(expected));
-    error = true;
-  }
+bring "./../../valid/assertions.w" as assertions;
 
-  assert(error);
-};
-
-let PARSE_ERROR = "unable to parse bool";
+let PARSE_ERROR = "unable to parse bool:\n- instance is not of a type(s) boolean";
 
 //-----------------------------------------------------------------------------
 // fromJson
@@ -18,7 +8,7 @@ let PARSE_ERROR = "unable to parse bool";
 let t = bool.fromJson(Json.parse("true"));
 assert(t == true);
 
-assertThrows(PARSE_ERROR, () => {
+assertions.PreflightAssert.throws(PARSE_ERROR, () => {
   bool.fromJson(Json 123); 
 });
 
@@ -32,5 +22,7 @@ test "fromJson()" {
   let f = bool.fromJson(Json.parse("false"));
   assert(f == false);
 
-  try { bool.fromJson(Json 123); } catch s { assert(s.contains(PARSE_ERROR)); }
+  assertions.Assert.throws(PARSE_ERROR, () => {
+    bool.fromJson(Json 123);
+  });
 }

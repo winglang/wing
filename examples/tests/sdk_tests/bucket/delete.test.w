@@ -1,20 +1,10 @@
 bring cloud;
+bring "./../../valid/assertions.w" as assertions;
 
 let b = new cloud.Bucket();
 b.addObject("file2.txt", "Bar");
 
 test "delete" {
-  let assertThrows = (expected: str, block: (): void) => {
-    let var error = false;
-    try {
-      block();
-    } catch actual {
-      assert(actual == expected);
-      error = true;
-    }
-    assert(error);
-  };
-
   let OBJECT_DOES_NOT_EXIST_ERROR = "Object does not exist (key=file1.json).";
   let jsonObj1 = Json { key1: "value1" };
 
@@ -26,7 +16,7 @@ test "delete" {
 
   b.delete("file1.json", mustExist: true);
 
-  assertThrows(OBJECT_DOES_NOT_EXIST_ERROR, () => {
+  assertions.Assert.throws(OBJECT_DOES_NOT_EXIST_ERROR, () => {
     b.delete("file1.json", mustExist: true);
   });
   assert(b.exists("file2.txt"));

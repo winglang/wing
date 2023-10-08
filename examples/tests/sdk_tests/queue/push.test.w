@@ -1,5 +1,6 @@
 bring cloud;
 bring util;
+bring "./../../valid/assertions.w" as assertions;
 
 let q = new cloud.Queue();
 
@@ -13,19 +14,13 @@ new std.Test(inflight () => {
     }
   };
 
-  try {
+  assertions.Assert.throws("Empty messages are not allowed", () => {
     q.push("");
-    assert(false);
-  } catch e {
-    assert(e == "Empty messages are not allowed");
-  }
+  });
 
-  try {
+  assertions.Assert.throws("Empty messages are not allowed", () => {
     q.push("Foo", "");
-    assert(false);
-  } catch e {
-    assert(e == "Empty messages are not allowed");
-  }
+  });
 
   q.push("Foo");
   

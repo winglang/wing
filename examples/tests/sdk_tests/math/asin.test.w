@@ -1,34 +1,28 @@
 bring math;
-try {
+bring "./../../valid/assertions.w" as assertions;
+
+assertions.PreflightAssert.throws("Input value must be between -1 and 1, inclusive.", () => {
   log("${math.asin(-2)}");
-} catch e {
-  assert(e == "Input value must be between -1 and 1, inclusive.");
-}
+});
 assert(math.asin(-1) == -1.5707963267948966);
 assert(math.asin(-0) == -0);
 assert(math.asin(0) == 0);
 assert(math.asin(0.5) == 0.5235987755982989);
 assert(math.asin(1) == 1.5707963267948966);
-try {
+assertions.PreflightAssert.throws("Input value must be between -1 and 1, inclusive.", () => {
   log("${math.asin(2)}");
-} catch e {
-  assert(e == "Input value must be between -1 and 1, inclusive.");
-}
+});
 
 test "inflight arc sine" {
-  try {
+  assertions.Assert.throws("Input value must be between -1 and 1, inclusive.", () => {
     log("${math.asin(-2)}");
-  } catch e {
-    assert(e == "Input value must be between -1 and 1, inclusive.");
-  }
+  });
   assert(math.asin(-1) == -1.5707963267948966);
   assert(math.asin(-0) == -0);
   assert(math.asin(0) == 0);
   assert(math.asin(0.5) == 0.5235987755982989);
   assert(math.asin(1) == 1.5707963267948966);
-  try {
+  assertions.Assert.throws("Input value must be between -1 and 1, inclusive.", () => {
     log("${math.asin(2)}");
-  } catch e {
-    assert(e == "Input value must be between -1 and 1, inclusive.");
-  }
+  });
 }
