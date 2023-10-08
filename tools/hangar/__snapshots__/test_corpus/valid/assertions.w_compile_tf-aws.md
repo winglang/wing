@@ -41,6 +41,7 @@ module.exports = function({  }) {
 
 ## preflight.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   class Assert extends $stdlib.std.Resource {

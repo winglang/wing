@@ -142,6 +142,8 @@ impl<'a> JSifier<'a> {
 		let is_entrypoint = is_entrypoint_file(source_path);
 		let is_directory = source_path.is_dir();
 
+		output.line("\"use strict\";");
+
 		if is_entrypoint {
 			output.line(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
 			output.line(format!(
