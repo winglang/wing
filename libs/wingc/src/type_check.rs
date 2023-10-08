@@ -1313,7 +1313,9 @@ pub struct Types {
 	json_literal_casts: IndexMap<ExprId, TypeRef>,
 	/// Lookup table from a Scope's `id` to its symbol environment
 	scope_envs: Vec<Option<SymbolEnvRef>>,
-	pub type_expressions: IndexMap<ExprId, Reference>,
+	/// Expressions used in references that actually refer to a type.
+	/// Key is the ExprId of the object of a InstanceMember, and the value is a TypeMember representing the whole reference.
+	type_expressions: IndexMap<ExprId, Reference>,
 }
 
 impl Types {
