@@ -9,7 +9,7 @@ extern crate lazy_static;
 
 use ast::{Scope, Symbol, UtilityFunctions};
 use camino::{Utf8Path, Utf8PathBuf};
-use closure_transform::{ClosureTransformer, TypeReferenceTransformer};
+use closure_transform::ClosureTransformer;
 use comp_ctx::set_custom_panic_hook;
 use diagnostic::{found_errors, report_diagnostic, Diagnostic};
 use file_graph::FileGraph;
@@ -23,6 +23,7 @@ use parser::parse_wing_project;
 use struct_schema::StructSchemaVisitor;
 use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::{StatementIdx, SymbolEnvKind};
+use type_check::type_reference_transform::TypeReferenceTransformer;
 use type_check::{FunctionSignature, SymbolKind, Type};
 use type_check_assert::TypeCheckAssert;
 use valid_json_visitor::ValidJsonVisitor;
@@ -323,8 +324,9 @@ pub fn compile(
 			&mut jsii_imports,
 		);
 
-		let mut r = TypeReferenceTransformer { types: &mut types };
-		let scope = r.fold_scope(scope);
+		// Make sure all type reference are no longer considered references
+		let mut tr_transformer = TypeReferenceTransformer { types: &mut types };
+		let scope = tr_transformer.fold_scope(scope);
 
 		// Validate the type checker didn't miss anything - see `TypeCheckAssert` for details
 		let mut tc_assert = TypeCheckAssert::new(&types, found_errors());

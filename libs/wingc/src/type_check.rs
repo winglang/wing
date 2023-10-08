@@ -3,6 +3,7 @@ mod inference_visitor;
 pub(crate) mod jsii_importer;
 pub mod lifts;
 pub mod symbol_env;
+pub(crate) mod type_reference_transform;
 
 use crate::ast::{
 	self, AccessModifier, AssignmentKind, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition, IfLet, New,

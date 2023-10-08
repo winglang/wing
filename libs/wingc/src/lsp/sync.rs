@@ -7,7 +7,7 @@ use std::cell::RefCell;
 use std::path::{Path, PathBuf};
 use tree_sitter::Tree;
 
-use crate::closure_transform::{ClosureTransformer, TypeReferenceTransformer};
+use crate::closure_transform::ClosureTransformer;
 use crate::diagnostic::{found_errors, reset_diagnostics};
 use crate::file_graph::FileGraph;
 use crate::files::Files;
@@ -17,6 +17,7 @@ use crate::lifting::LiftVisitor;
 use crate::parser::{normalize_path, parse_wing_project};
 use crate::type_check;
 use crate::type_check::jsii_importer::JsiiImportSpec;
+use crate::type_check::type_reference_transform::TypeReferenceTransformer;
 use crate::type_check_assert::TypeCheckAssert;
 use crate::valid_json_visitor::ValidJsonVisitor;
 use crate::visit::Visit;
@@ -177,8 +178,9 @@ fn partial_compile(
 			&mut jsii_imports,
 		);
 
-		let mut r = TypeReferenceTransformer { types: &mut types };
-		let scope = r.fold_scope(scope);
+		// Make sure all type reference are no longer considered references
+		let mut tr_transformer = TypeReferenceTransformer { types: &mut types };
+		let scope = tr_transformer.fold_scope(scope);
 
 		// Validate the type checker didn't miss anything - see `TypeCheckAssert` for details
 		let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
