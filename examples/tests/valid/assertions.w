@@ -4,6 +4,21 @@
 // - website_with_api.test.w
 
 inflight class Assert {
+  pub static throws(expected: str, block: (): void): void {
+    let var actual = "";
+    try {
+      block();
+    } catch e {
+      actual = e;
+    }
+    if (actual == "") {
+      throw("expected error, but none thrown.");
+    }
+    if (actual != expected) {
+      throw("expected error message: \"${expected}\" got: \"${actual}\"");
+    }
+  }
+
   pub static equalStr(a: str, b: str): bool {
     try {
       assert(a == b);
@@ -27,6 +42,23 @@ inflight class Assert {
     } catch e {
       log(e);
       throw("expected: ${b} got: ${a}");
+    }
+  }
+}
+
+class PreflightAssert {
+  pub static throws(expected: str, block: (): void): void {
+    let var actual = "";
+    try {
+      block();
+    } catch e {
+      actual = e;
+    }
+    if (actual == "") {
+      throw("expected error, but none thrown.");
+    }
+    if (actual != expected) {
+      throw("expected error message: \"${expected}\" got: \"${actual}\"");
     }
   }
 }
