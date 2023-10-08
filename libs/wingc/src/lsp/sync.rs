@@ -7,7 +7,7 @@ use std::cell::RefCell;
 use std::path::{Path, PathBuf};
 use tree_sitter::Tree;
 
-use crate::closure_transform::ClosureTransformer;
+use crate::closure_transform::{ClosureTransformer, TypeReferenceTransformer};
 use crate::diagnostic::{found_errors, reset_diagnostics};
 use crate::file_graph::FileGraph;
 use crate::files::Files;
@@ -167,7 +167,7 @@ fn partial_compile(
 	// Type check all files in topological order (start with files that don't require any other
 	// Wing files, then move on to files that depend on those, etc.)
 	for file in &topo_sorted_files {
-		let mut scope = project_data.asts.get_mut(file).expect("matching AST not found");
+		let mut scope = project_data.asts.remove(file).expect("matching AST not found");
 		type_check(
 			&mut scope,
 			&mut types,
@@ -177,6 +177,9 @@ fn partial_compile(
 			&mut jsii_imports,
 		);
 
+		let mut r = TypeReferenceTransformer { types: &mut types };
+		let scope = r.fold_scope(scope);
+
 		// Validate the type checker didn't miss anything - see `TypeCheckAssert` for details
 		let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
 		tc_assert.check(&scope);
@@ -184,6 +187,8 @@ fn partial_compile(
 		// Validate all Json literals to make sure their values are legal
 		let mut json_checker = ValidJsonVisitor::new(&types);
 		json_checker.check(&scope);
+
+		project_data.asts.insert(file.clone(), scope);
 	}
 
 	// -- LIFTING PHASE --

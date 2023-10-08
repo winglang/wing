@@ -4933,19 +4933,7 @@ impl<'a> TypeChecker<'a> {
 						type_name: user_type_annotation.clone(),
 						property: property.clone(),
 					};
-					// Replace the reference with the new one, this is unsafe because `reference` isn't mutable and theoretically someone may
-					// hold another reference to it. But our AST doesn't hold up/cross references so this is safe as long as we return right.
-					// let const_ptr = reference as *const Reference;
-					// let mut_ptr = const_ptr as *mut Reference;
-					// unsafe {
-					// 	// We don't use the return value but need to call replace so it'll drop the old value
-					// 	_ = std::mem::replace(&mut *mut_ptr, new_ref);
-					// }
 
-					let r = self
-						.resolve_user_defined_type(&user_type_annotation, env, self.ctx.current_stmt_idx())
-						.unwrap();
-					self.types.assign_type_to_expr(&object, r, env.phase);
 					self
 						.types
 						.type_expressions
