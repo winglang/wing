@@ -1936,7 +1936,6 @@ impl<'a> TypeChecker<'a> {
 					obj_scope,
 				} = new_expr;
 				// Type check everything
-				// TODO
 				let class_type = self
 					.resolve_user_defined_type(class, env, self.ctx.current_stmt_idx())
 					.unwrap_or_else(|e| self.type_error(e));
@@ -3025,7 +3024,7 @@ impl<'a> TypeChecker<'a> {
 
 	fn type_check_scope(&mut self, scope: &Scope) {
 		assert!(self.inner_scopes.is_empty());
-		let mut env = &mut *self.types.get_scope_env(scope);
+		let mut env = self.types.get_scope_env(scope);
 
 		for statement in scope.statements.iter() {
 			self.type_check_statement(statement, &mut env);
@@ -3923,23 +3922,19 @@ impl<'a> TypeChecker<'a> {
 		// TODO: we need to verify that if this variable is defined in a parent environment (i.e.
 		// being captured) it cannot be reassigned: https://github.com/winglang/wing/issues/3069
 
-		let original_span = variable.span();
 		let (var, var_phase) = self.resolve_reference(&variable, env);
 
 		if !var.type_.is_unresolved() && !var.reassignable {
 			report_diagnostic(Diagnostic {
 				message: "Variable is not reassignable".to_string(),
-				span: Some(original_span),
+				span: Some(variable.span()),
 				annotations: vec![DiagnosticAnnotation {
 					message: "defined here (try adding \"var\" in front)".to_string(),
 					span: var.name.span(),
 				}],
 			});
 		} else if var_phase == Phase::Preflight && env.phase == Phase::Inflight {
-			self.spanned_error(
-				&original_span,
-				"Variable cannot be reassigned from inflight".to_string(),
-			);
+			self.spanned_error(variable, "Variable cannot be reassigned from inflight".to_string());
 		}
 
 		if matches!(kind, AssignmentKind::AssignIncr | AssignmentKind::AssignDecr) {
@@ -4937,6 +4932,7 @@ impl<'a> TypeChecker<'a> {
 						property: property.clone(),
 					};
 
+					// Store this reference for later when we can modify the final AST and replace the original reference with the new one
 					self.types.type_expressions.insert(object.id, new_ref.clone());
 
 					return self.resolve_reference(&new_ref, env);
@@ -5748,12 +5744,9 @@ mod tests {
 
 	#[test]
 	fn function_subtyping_incompatible_return_type() {
-		let void_t = Type::Void;
-		let void = UnsafeRef::<Type>(&void_t);
-		let num_t = Type::Number;
-		let num = UnsafeRef::<Type>(&num_t);
-		let string_t = Type::String;
-		let string = UnsafeRef::<Type>(&string_t);
+		let void = UnsafeRef::<Type>(&Type::Void as *const Type);
+		let num = UnsafeRef::<Type>(&Type::Number as *const Type);
+		let string = UnsafeRef::<Type>(&Type::String as *const Type);
 
 		let returns_num = make_function(vec![], num, Phase::Inflight);
 		let returns_str = make_function(vec![], string, Phase::Inflight);
@@ -5770,12 +5763,10 @@ mod tests {
 
 	#[test]
 	fn function_subtyping_parameter_contravariance() {
-		let void_t = Type::Void;
-		let void = UnsafeRef::<Type>(&void_t);
-		let string_t = Type::String;
-		let string = UnsafeRef::<Type>(&string_t);
-		let opt_string_t = Type::Optional(string);
-		let opt_string = UnsafeRef::<Type>(&opt_string_t);
+		let void = UnsafeRef::<Type>(&Type::Void);
+		let string = UnsafeRef::<Type>(&Type::String);
+		let opt_string_type = Type::Optional(string);
+		let opt_string = UnsafeRef::<Type>(&opt_string_type);
 		let str_fn = make_function(
 			vec![FunctionParameter {
 				typeref: string,
