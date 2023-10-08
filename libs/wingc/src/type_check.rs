@@ -1294,7 +1294,7 @@ pub struct Types {
 	/// If it's a file, we save its symbol environment, and if it's a directory, we save a namespace that points to
 	/// all of the symbol environments of the files (or subdirectories) in that directory
 	source_file_envs: IndexMap<Utf8PathBuf, SymbolEnvOrNamespace>,
-	pub libraries: Box<SymbolEnv>,
+	pub libraries: SymbolEnv,
 	numeric_idx: usize,
 	string_idx: usize,
 	bool_idx: usize,
@@ -1340,7 +1340,7 @@ impl Types {
 		types.push(Box::new(Type::Unresolved));
 		let err_idx = types.len() - 1;
 
-		let libraries = Box::new(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0));
+		let libraries = SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0);
 
 		Self {
 			types,
