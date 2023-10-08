@@ -93,6 +93,7 @@ impl<'a> HoverVisitor<'a> {
 				| Type::Number
 				| Type::String
 				| Type::Duration
+				| Type::Datetime
 				| Type::Boolean => {
 					if let Some((std_type, ..)) = self.types.get_std_class(&obj_type.to_string()) {
 						if let Some(c) = std_type.as_type() {

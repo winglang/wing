@@ -757,6 +757,7 @@ fn get_completions_from_type(
 		Type::Number
 		| Type::String
 		| Type::Duration
+		| Type::Datetime
 		| Type::Boolean
 		| Type::Json(_)
 		| Type::MutJson
@@ -893,6 +894,7 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 				| Type::Number
 				| Type::String
 				| Type::Duration
+				| Type::Datetime
 				| Type::Boolean
 				| Type::Void
 				| Type::Json(_)

@@ -207,6 +207,7 @@ pub enum Type {
 	Number,
 	String,
 	Duration,
+	Datetime,
 	Boolean,
 	Void,
 	/// Immutable Json literals may store extra information about their known data
@@ -852,6 +853,7 @@ impl Display for Type {
 			Type::Number => write!(f, "num"),
 			Type::String => write!(f, "str"),
 			Type::Duration => write!(f, "duration"),
+			Type::Datetime => write!(f, "datetime"),
 			Type::Boolean => write!(f, "bool"),
 			Type::Void => write!(f, "void"),
 			Type::Json(_) => write!(f, "Json"),
@@ -1124,6 +1126,7 @@ impl TypeRef {
 			Type::Number => true,
 			Type::String => true,
 			Type::Duration => true,
+			Type::Datetime => true,
 			Type::Boolean => true,
 			Type::Json(_) => true,
 			Type::Nil => true,
@@ -1298,6 +1301,7 @@ pub struct Types {
 	string_idx: usize,
 	bool_idx: usize,
 	duration_idx: usize,
+	datetime_idx: usize,
 	anything_idx: usize,
 	void_idx: usize,
 	json_idx: usize,
@@ -1325,6 +1329,8 @@ impl Types {
 		let bool_idx = types.len() - 1;
 		types.push(Box::new(Type::Duration));
 		let duration_idx = types.len() - 1;
+		types.push(Box::new(Type::Datetime));
+		let datetime_idx = types.len() - 1;
 		types.push(Box::new(Type::Anything));
 		let anything_idx = types.len() - 1;
 		types.push(Box::new(Type::Void));
@@ -1350,6 +1356,7 @@ impl Types {
 			string_idx,
 			bool_idx,
 			duration_idx,
+			datetime_idx,
 			anything_idx,
 			void_idx,
 			json_idx,
@@ -1381,6 +1388,10 @@ impl Types {
 
 	pub fn duration(&self) -> TypeRef {
 		self.get_typeref(self.duration_idx)
+	}
+
+	pub fn datetime(&self) -> TypeRef {
+		self.get_typeref(self.datetime_idx)
 	}
 
 	pub fn anything(&self) -> TypeRef {
