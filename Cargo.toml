@@ -4,7 +4,7 @@ members = [
   "libs/wingc",
   "libs/wingii",
 ]
-resolver = "1"
+resolver = "2"
 
 # For use with `cargo flamegraph --profile flamegraph`
 [profile.flamegraph]
