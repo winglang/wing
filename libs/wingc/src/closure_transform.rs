@@ -376,14 +376,18 @@ pub struct TypeReferenceTransformer<'a> {
 }
 
 impl<'a> Fold for TypeReferenceTransformer<'a> {
+	fn fold_scope(&mut self, node: Scope) -> Scope {
+		if self.types.type_expressions.is_empty() {
+			return node;
+		} else {
+			fold::fold_scope(self, node)
+		}
+	}
 	fn fold_reference(&mut self, node: Reference) -> Reference {
 		match node {
 			Reference::InstanceMember { ref object, .. } => {
 				if let Some(new_ref) = self.types.type_expressions.remove(&object.id) {
-					Reference::TypeMember {
-						type_name: new_ref.0,
-						property: new_ref.1,
-					}
+					new_ref
 				} else {
 					fold::fold_reference(self, node)
 				}

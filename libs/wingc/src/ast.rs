@@ -755,6 +755,19 @@ pub enum Reference {
 	},
 }
 
+impl Clone for Reference {
+	fn clone(&self) -> Reference {
+		match self {
+			Reference::Identifier(i) => Reference::Identifier(i.clone()),
+			Reference::InstanceMember { .. } => panic!("Unable to clone reference to instance member"),
+			Reference::TypeMember { type_name, property } => Reference::TypeMember {
+				type_name: type_name.clone(),
+				property: property.clone(),
+			},
+		}
+	}
+}
+
 impl Spanned for Reference {
 	fn span(&self) -> WingSpan {
 		match self {

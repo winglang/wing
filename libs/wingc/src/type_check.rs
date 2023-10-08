@@ -1312,7 +1312,7 @@ pub struct Types {
 	json_literal_casts: IndexMap<ExprId, TypeRef>,
 	/// Lookup table from a Scope's `id` to its symbol environment
 	scope_envs: Vec<Option<SymbolEnvRef>>,
-	pub type_expressions: IndexMap<ExprId, (UserDefinedType, Symbol)>,
+	pub type_expressions: IndexMap<ExprId, Reference>,
 }
 
 impl Types {
@@ -4934,10 +4934,7 @@ impl<'a> TypeChecker<'a> {
 						property: property.clone(),
 					};
 
-					self
-						.types
-						.type_expressions
-						.insert(object.id, (user_type_annotation.clone(), property.clone()));
+					self.types.type_expressions.insert(object.id, new_ref.clone());
 
 					return self.resolve_reference(&new_ref, env);
 				}
