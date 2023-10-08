@@ -1,3 +1,4 @@
+mod code_actions;
 mod completions;
 mod document_symbols;
 mod goto_definition;
