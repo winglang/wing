@@ -114,68 +114,53 @@ error: Cannot override private method \\"private_method\\" of \\"Foo\\"
     |       ^^^^^^^^^^^^^^ Cannot override private method \\"private_method\\" of \\"Foo\\"
 
 
-<<<<<<< HEAD
 error: Cannot access private member \\"private_field\\" of \\"Bar\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:52:14
+   --> ../../../examples/tests/invalid/access_modifiers.test.w:61:14
    |
-52 |     log(this.private_field);
+61 |     log(this.private_field);
    |              ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Bar\\"
 
 
 error: Cannot access private member \\"private_method\\" of \\"Bar\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:57:10
+   --> ../../../examples/tests/invalid/access_modifiers.test.w:66:10
    |
-57 |     this.private_method();
+66 |     this.private_method();
    |          ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Bar\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:65:9
+   --> ../../../examples/tests/invalid/access_modifiers.test.w:74:9
    |
-65 |     Foo.private_static_method();
+74 |     Foo.private_static_method();
    |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_field\\" of \\"Baz\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:75:14
+   --> ../../../examples/tests/invalid/access_modifiers.test.w:84:14
    |
-75 |     log(this.private_field);
+84 |     log(this.private_field);
    |              ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Baz\\"
 
 
 error: Cannot access private member \\"private_method\\" of \\"Baz\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:80:10
+   --> ../../../examples/tests/invalid/access_modifiers.test.w:89:10
    |
-80 |     this.private_method();
+89 |     this.private_method();
    |          ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Baz\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:88:9
+   --> ../../../examples/tests/invalid/access_modifiers.test.w:97:9
    |
-88 |     Foo.private_static_method();
+97 |     Foo.private_static_method();
    |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Bar\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:93:9
-   |
-93 |     Bar.private_static_method();
-   |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Bar\\"
-=======
-error: Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:137:9
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:102:9
     |
-137 |     Foo.protected_static_method();
-    |         ^^^^^^^^^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
-
-
-error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:139:9
-    |
-139 |     Foo.private_static_method();
-    |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
->>>>>>> 31c8698f56f4479e5199c2de76097ac40f04fd6c
+102 |     Bar.private_static_method();
+    |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Bar\\"
 
 
 error: Cannot access protected member \\"protected_field\\" of \\"Foo\\"
@@ -206,68 +191,18 @@ error: Cannot access private member \\"private_method\\" of \\"Foo\\"
     |         ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Foo\\"
 
 
-<<<<<<< HEAD
 error: Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:128:9
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:137:9
     |
-128 |     Foo.protected_static_method();
+137 |     Foo.protected_static_method();
     |         ^^^^^^^^^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:130:9
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:139:9
     |
-130 |     Foo.private_static_method();
+139 |     Foo.private_static_method();
     |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-=======
-error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:97:9
-   |
-97 |     Foo.private_static_method();
-   |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-
-
-error: Cannot access private member \\"private_static_method\\" of \\"Bar\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:102:9
-    |
-102 |     Bar.private_static_method();
-    |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Bar\\"
-
-
-error: Cannot access private member \\"private_field\\" of \\"Baz\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:84:14
-   |
-84 |     log(this.private_field);
-   |              ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Baz\\"
-
-
-error: Cannot access private member \\"private_method\\" of \\"Baz\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:89:10
-   |
-89 |     this.private_method();
-   |          ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Baz\\"
-
-
-error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:74:9
-   |
-74 |     Foo.private_static_method();
-   |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-
-
-error: Cannot access private member \\"private_field\\" of \\"Bar\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:61:14
-   |
-61 |     log(this.private_field);
-   |              ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Bar\\"
-
-
-error: Cannot access private member \\"private_method\\" of \\"Bar\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:66:10
-   |
-66 |     this.private_method();
-   |          ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Bar\\"
->>>>>>> 31c8698f56f4479e5199c2de76097ac40f04fd6c
 
 
  
@@ -1554,16 +1489,16 @@ error: Expected type to be \\"str\\", but got \\"num\\" instead
 
 
 error: Property not found
-    --> ../../../examples/tests/invalid/inference.test.w:108:14
+    --> ../../../examples/tests/invalid/inference.test.w:109:14
     |
-108 |   return arg.get(\\"a\\");
+109 |   return arg.get(\\"a\\");
     |              ^^^ Property not found
 
 
 error: Unable to infer type
-    --> ../../../examples/tests/invalid/inference.test.w:106:19
+    --> ../../../examples/tests/invalid/inference.test.w:107:19
     |
-106 | let unknownArg = (arg) => {
+107 | let unknownArg = (arg) => {
     |                   ^^^ Unable to infer type
 
 

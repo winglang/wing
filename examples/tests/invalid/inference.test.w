@@ -103,12 +103,12 @@ if true {
 //             ^^^^^^^^^^^^^^^ Expected str, got num
 }
 
+// See https://github.com/winglang/wing/issues/4464 for details
 let unknownArg = (arg) => {
 //                ^^^ Unable to infer type
   return arg.get("a");
 //           ^^^ Property not found
 };
-
 if true {
   unknownArg({ a: true });
 }
