@@ -218,7 +218,7 @@ project.addFields({
   preview: true,
   private: true,
   displayName: "Wing",
-  icon: "resources/winglang-symbol-dark.png",
+  icon: "resources/winglang-symbol-dark.svg",
   engines: {
     vscode: `^${VSCODE_BASE_VERSION}`,
   },
