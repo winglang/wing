@@ -2514,7 +2514,7 @@ impl<'a> TypeChecker<'a> {
 				self.validate_structural_type(&arg_list_types.named_args, &last_arg_type, call_span);
 			} else {
 				self.spanned_error(call_span, "No named arguments expected");
-			};
+			}
 		}
 
 		// Check if there is a variadic parameter, get its index
