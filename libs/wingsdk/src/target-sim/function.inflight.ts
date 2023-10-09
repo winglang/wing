@@ -59,4 +59,30 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
       },
     });
   }
+
+  public async invokeAsync(payload: string): Promise<void> {
+    void this.context.withTrace({
+      message: `InvokeAsync (payload=${JSON.stringify(payload)}).`,
+      activity: async () => {
+        const sb = new Sandbox(this.filename, {
+          context: { $simulator: this.context },
+          env: this.env,
+          timeout: this.timeout,
+          log: (_level, message) => {
+            this.context.addTrace({
+              data: { message },
+              type: TraceType.LOG,
+              sourcePath: this.context.resourcePath,
+              sourceType: FUNCTION_TYPE,
+              timestamp: new Date().toISOString(),
+            });
+          },
+        });
+
+        setImmediate(async () => {
+          await sb.call("handler", JSON.stringify(payload));
+        });
+      },
+    });
+  }
 }
