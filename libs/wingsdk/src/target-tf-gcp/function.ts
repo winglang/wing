@@ -14,17 +14,13 @@ import {
   ResourceNames,
 } from "../shared/resource-names";
 import { IInflightHost } from "../std";
+import { StorageBucketPermissions } from "../target-tf-gcp/bucket";
 
 const FUNCTION_NAME_OPTS: NameOptions = {
   maxLen: 32,
   disallowedRegex: /[^a-z0-9]+/g,
   case: CaseConventions.LOWERCASE,
 };
-
-enum StorageBucketPermissions {
-  READ = "roles/storage.objectViewer",
-  READWRITE = "roles/storage.objectAdmin",
-}
 
 /**
  * GCP implementation of `cloud.Function`.
@@ -127,19 +123,19 @@ export class Function extends cloud.Function {
       return;
     }
 
-    // as gcp bucket has unique name, we can use bucket name in map as unique id along with permission
+    // as every gcp bucket has unique name, we can use bucket name in map as unique key along with permission type
     if (permission === StorageBucketPermissions.READ) {
       let newReadPermission = new StorageBucketIamMember(
         this,
         "BucketPermissionToRead",
         {
           bucket: bucket.bucket.name,
-          role: "roles/storage.objectViewer",
+          role: permission,
           member: `projectViewer:${app.projectId}`,
         }
       );
       this.bucketPermission.set(
-        `${bucket.bucket.name}-${StorageBucketPermissions.READ}`,
+        `${bucket.bucket.name}-${permission}`,
         newReadPermission
       );
     } else if (permission === StorageBucketPermissions.READWRITE) {
@@ -148,13 +144,17 @@ export class Function extends cloud.Function {
         "BucketPermissionToWrite",
         {
           bucket: bucket.bucket.name,
-          role: "roles/storage.objectAdmin",
+          role: permission,
           member: `projectEditor:${app.projectId}`,
         }
       );
       this.bucketPermission.set(
-        `${bucket.bucket.name}-${StorageBucketPermissions.READWRITE}`,
+        `${bucket.bucket.name}-${permission}`,
         newReadWritePermission
+      );
+    } else {
+      throw new Error(
+        "Any other permission type apart from READ and READWRITE is not supported yet"
       );
     }
   }

@@ -33,9 +33,9 @@ const BUCKET_NAME_OPTS: NameOptions = {
   includeHash: false,
 };
 
-enum StorageBucketPermissions {
+export enum StorageBucketPermissions {
   READ = "roles/storage.objectViewer",
-  READWRITE = "roles/storage.objectAdmin",
+  READWRITE = "roles/storage.objectUser",
 }
 
 /**
@@ -73,7 +73,7 @@ export class Bucket extends cloud.Bucket {
       // https://cloud.google.com/storage/docs/access-control/making-data-public#terraform
       new StorageBucketIamMember(this, "PublicAccessIamMember", {
         bucket: this.bucket.name,
-        role: "roles/storage.objectViewer",
+        role: StorageBucketPermissions.READ,
         member: "allUsers",
       });
     }
