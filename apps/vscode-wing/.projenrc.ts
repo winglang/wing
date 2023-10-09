@@ -100,8 +100,8 @@ const contributes: VSCodeExtensionContributions = {
       extensions: [".w", ".wsim"],
       configuration: "./language-configuration.json",
       icon: {
-        light: "resources/icon-light.png",
-        dark: "resources/icon-dark.png",
+        light: "resources/winglang-symbol-light.svg",
+        dark: "resources/winglang-symbol-dark.svg",
       },
     },
   ],
@@ -126,16 +126,16 @@ const contributes: VSCodeExtensionContributions = {
       command: "wing.openConsole",
       title: "Open in Wing Console",
       icon: {
-        light: "resources/icon-light.png",
-        dark: "resources/icon-dark.png",
+        light: "resources/winglang-symbol-light.svg",
+        dark: "resources/winglang-symbol-dark.svg",
       },
     },
     {
       command: "wing.openFile",
       title: "Open source file",
       icon: {
-        light: "resources/icon-light.png",
-        dark: "resources/icon-dark.png",
+        light: "resources/winglang-symbol-light.svg",
+        dark: "resources/winglang-symbol-dark.svg",
       },
     },
     {
@@ -218,7 +218,7 @@ project.addFields({
   preview: true,
   private: true,
   displayName: "Wing",
-  icon: "resources/logo.png",
+  icon: "resources/winglang-symbol-dark.png",
   engines: {
     vscode: `^${VSCODE_BASE_VERSION}`,
   },
