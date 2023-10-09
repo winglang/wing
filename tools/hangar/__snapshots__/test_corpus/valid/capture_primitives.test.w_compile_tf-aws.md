@@ -170,6 +170,7 @@ module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_second
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
