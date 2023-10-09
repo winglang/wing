@@ -100,8 +100,8 @@ const contributes: VSCodeExtensionContributions = {
       extensions: [".w", ".wsim"],
       configuration: "./language-configuration.json",
       icon: {
-        light: "resources/winglang-symbol-light.svg",
-        dark: "resources/winglang-symbol-dark.svg",
+        light: "resources/winglang-symbol-dark.svg",
+        dark: "resources/winglang-symbol-light.svg",
       },
     },
   ],
