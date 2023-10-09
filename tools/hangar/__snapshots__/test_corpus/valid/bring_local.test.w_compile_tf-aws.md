@@ -267,6 +267,7 @@ module.exports = function({  }) {
 
 ## preflight.empty-1.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   return {  };
@@ -276,6 +277,7 @@ module.exports = function({ $stdlib }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -390,6 +392,7 @@ new $App({ outdir: $outdir, name: "bring_local.test", rootConstruct: $Root, plug
 
 ## preflight.store-2.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   const file3 = require("./preflight.empty-1.js")({ $stdlib });
@@ -506,6 +509,7 @@ module.exports = function({ $stdlib }) {
 
 ## preflight.subfile-3.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   const math = $stdlib.math;

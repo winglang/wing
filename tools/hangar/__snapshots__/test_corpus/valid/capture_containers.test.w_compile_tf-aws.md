@@ -60,6 +60,7 @@ module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_a
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";

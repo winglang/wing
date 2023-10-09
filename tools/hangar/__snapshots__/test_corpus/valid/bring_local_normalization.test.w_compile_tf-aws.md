@@ -70,6 +70,7 @@ module.exports = function({  }) {
 
 ## preflight.bar-1.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   class Bar extends $stdlib.std.Resource {
@@ -107,6 +108,7 @@ module.exports = function({ $stdlib }) {
 
 ## preflight.baz-2.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   class Baz extends $stdlib.std.Resource {
@@ -144,6 +146,7 @@ module.exports = function({ $stdlib }) {
 
 ## preflight.foo-3.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   const bar = require("./preflight.bar-1.js")({ $stdlib });
@@ -189,6 +192,7 @@ module.exports = function({ $stdlib }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";

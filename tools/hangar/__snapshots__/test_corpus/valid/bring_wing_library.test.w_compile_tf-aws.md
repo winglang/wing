@@ -100,6 +100,7 @@ module.exports = function({  }) {
 
 ## preflight.enums-1.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   const FavoriteNumbers =
@@ -116,6 +117,7 @@ module.exports = function({ $stdlib }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -171,6 +173,7 @@ new $App({ outdir: $outdir, name: "bring_wing_library.test", rootConstruct: $Roo
 
 ## preflight.store-3.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   const cloud = $stdlib.cloud;
@@ -223,6 +226,7 @@ module.exports = function({ $stdlib }) {
 
 ## preflight.subdir-4.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   return {
@@ -234,6 +238,7 @@ module.exports = function({ $stdlib }) {
 
 ## preflight.util-2.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   class Util extends $stdlib.std.Resource {
@@ -268,6 +273,7 @@ module.exports = function({ $stdlib }) {
 
 ## preflight.wingfixture-5.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   return {

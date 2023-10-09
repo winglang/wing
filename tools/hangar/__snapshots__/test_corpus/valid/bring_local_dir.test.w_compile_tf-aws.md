@@ -70,6 +70,7 @@ module.exports = function({  }) {
 
 ## preflight.file1-3.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   const blah = require("./preflight.inner-2.js")({ $stdlib });
@@ -111,6 +112,7 @@ module.exports = function({ $stdlib }) {
 
 ## preflight.file2-4.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   class Bar extends $stdlib.std.Resource {
@@ -148,6 +150,7 @@ module.exports = function({ $stdlib }) {
 
 ## preflight.inner-2.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   return {
@@ -159,6 +162,7 @@ module.exports = function({ $stdlib }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -187,6 +191,7 @@ new $App({ outdir: $outdir, name: "bring_local_dir.test", rootConstruct: $Root, 
 
 ## preflight.subdir2-5.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   return {
@@ -200,6 +205,7 @@ module.exports = function({ $stdlib }) {
 
 ## preflight.widget-1.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   class Widget extends $stdlib.std.Resource {

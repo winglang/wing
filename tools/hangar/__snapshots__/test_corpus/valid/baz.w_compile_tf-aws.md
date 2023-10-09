@@ -14,6 +14,7 @@ module.exports = function({  }) {
 
 ## preflight.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   class Baz extends $stdlib.std.Resource {
