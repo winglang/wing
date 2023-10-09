@@ -3526,7 +3526,7 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn type_check_class(&mut self, env: &mut SymbolEnv, stmt: &Stmt, ast_class: &AstClass) {
-		self.ctx.push_class(UserDefinedType::for_class(ast_class), &env.phase);
+		self.ctx.push_class(ast_class);
 
 		// preflight classes cannot be declared inside an inflight scope
 		// (the other way is okay)
