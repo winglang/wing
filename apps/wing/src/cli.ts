@@ -1,10 +1,9 @@
+import { Command, Option } from "commander";
 import { satisfies } from "compare-versions";
 
-import { Command, Option } from "commander";
-
 import { collectCommandAnalytics } from "./analytics/collect";
-import { exportAnalytics } from "./analytics/export";
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
+import { exportAnalytics } from "./analytics/export";
 import { currentPackage } from "./util";
 
 export const PACKAGE_VERSION = currentPackage.version;
@@ -113,6 +112,11 @@ async function main() {
     }
   }
 
+  function addValue(value: string, previous: string[]) {
+    previous.push(value);
+    return previous;
+  }
+
   program.hook("preAction", updateHook);
 
   program
@@ -142,6 +146,8 @@ async function main() {
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .option("-r, --rootId <rootId>", "App root id")
+    .option("-v, --value <value>", "Platform-specific value in the form KEY=VALUE", addValue, [])
+    .option("--values <file>", "Yaml file with Platform-specific values")
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("compile"));
@@ -163,6 +169,13 @@ async function main() {
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("test"));
+
+  program
+    .command("pack")
+    .description("Package the current directory into an npm library (gzipped tarball).")
+    .addOption(new Option("-o --out-file <filename>", "Output filename"))
+    .hook("preAction", collectAnalyticsHook)
+    .action(runSubCommand("pack"));
 
   program
     .command("docs")

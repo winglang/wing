@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 use crate::{
-	ast::{ExprId, FunctionSignature, Phase, Symbol, UserDefinedType},
+	ast::{Class, ExprId, FunctionSignature, Phase, Symbol, UserDefinedType},
 	type_check::symbol_env::SymbolEnvRef,
 };
 
@@ -79,9 +79,9 @@ impl VisitContext {
 
 	// --
 
-	pub fn push_class(&mut self, class: UserDefinedType, phase: &Phase) {
-		self.class.push(class);
-		self.push_phase(*phase);
+	pub fn push_class(&mut self, class: &Class) {
+		self.class.push(UserDefinedType::for_class(class));
+		self.push_phase(class.phase);
 	}
 
 	pub fn pop_class(&mut self) {

@@ -84,7 +84,14 @@ export class DynamodbTable extends ex.DynamodbTable {
         resources: [this.table.arn],
       });
     }
+    if (ops.includes(ex.DynamodbTableInflightMethods.TRANSACT_GET_ITEMS)) {
+      host.addPolicyStatements({
+        actions: ["dynamodb:GetItem"],
+        resources: [this.table.arn],
+      });
+    }
     if (ops.includes(ex.DynamodbTableInflightMethods.TRANSACT_WRITE_ITEMS)) {
+      // TODO: Merge into a single policy statement.
       host.addPolicyStatements({
         actions: ["dynamodb:PutItem"],
         resources: [this.table.arn],
@@ -95,6 +102,22 @@ export class DynamodbTable extends ex.DynamodbTable {
       });
       host.addPolicyStatements({
         actions: ["dynamodb:DeleteItem"],
+        resources: [this.table.arn],
+      });
+      host.addPolicyStatements({
+        actions: ["dynamodb:ConditionCheckItem"],
+        resources: [this.table.arn],
+      });
+    }
+    if (ops.includes(ex.DynamodbTableInflightMethods.BATCH_GET_ITEM)) {
+      host.addPolicyStatements({
+        actions: ["dynamodb:BatchGetItem"],
+        resources: [this.table.arn],
+      });
+    }
+    if (ops.includes(ex.DynamodbTableInflightMethods.BATCH_WRITE_ITEM)) {
+      host.addPolicyStatements({
+        actions: ["dynamodb:BatchWriteItem"],
         resources: [this.table.arn],
       });
     }

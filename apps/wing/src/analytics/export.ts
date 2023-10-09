@@ -1,4 +1,4 @@
-import { spawn } from 'child_process';
+import { spawn } from "child_process";
 
 export async function exportAnalytics(filePath: Promise<string | undefined>) {
   const awaitedFilePath = await filePath;
@@ -6,15 +6,19 @@ export async function exportAnalytics(filePath: Promise<string | undefined>) {
   if (!awaitedFilePath || process.env.WING_DISABLE_ANALYTICS) {
     return;
   }
-  
-  const child = spawn(process.execPath, [require.resolve('./scripts/detached-export'), awaitedFilePath], {
-    detached: true,
-    stdio: 'ignore',
-    windowsHide: true,
-    env: {
-      ...process.env,
+
+  const child = spawn(
+    process.execPath,
+    [require.resolve("./scripts/detached-export"), awaitedFilePath],
+    {
+      detached: true,
+      stdio: "ignore",
+      windowsHide: true,
+      env: {
+        ...process.env,
+      },
     }
-  });
+  );
 
   child.unref();
 }

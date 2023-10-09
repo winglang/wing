@@ -27,7 +27,7 @@ module.exports = function({ $Base }) {
     async handle() {
       class Derived extends $Base {
       }
-      new Derived();
+      (await (async () => {const o = new Derived(); await o.$inflight_init?.(); return o; })());
     }
   }
   return $Closure1;

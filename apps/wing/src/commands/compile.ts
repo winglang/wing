@@ -1,10 +1,10 @@
 import { promises as fsPromise } from "fs";
 import { relative } from "path";
 
-import chalk from "chalk";
-import debug from "debug";
-import { CHARS_ASCII, emitDiagnostic, File, Label } from "codespan-wasm";
 import * as wingCompiler from "@winglang/compiler";
+import chalk from "chalk";
+import { CHARS_ASCII, emitDiagnostic, File, Label } from "codespan-wasm";
+import debug from "debug";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)
@@ -17,9 +17,33 @@ const log = debug("wing:compile");
  * This is passed from Commander to the `compile` function.
  */
 export interface CompileOptions {
+  /**
+   * Target platform
+   */
   readonly target: wingCompiler.Target;
+  /**
+   * List of compiler plugins
+   */
   readonly plugins?: string[];
+  /**
+   * App root id
+   *
+   * @default "Default"
+   */
   readonly rootId?: string;
+  /**
+   * String with platform-specific values separated by commas
+   */
+  readonly value?: string;
+  /**
+   * Path to the YAML file with specific platform values
+   *
+   * example of the file's content:
+   * root/Default/Domain:
+   *   hostedZoneId: Z0111111111111111111F
+   *   acmCertificateArn: arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+   */
+  readonly values?: string;
   /**
    * Whether to run the compiler in `wing test` mode. This may create multiple
    * copies of the application resources in order to run tests in parallel.
@@ -50,11 +74,11 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   } catch (error) {
     if (error instanceof wingCompiler.CompileError) {
       // This is a bug in the user's code. Print the compiler diagnostics.
-      const errors = error.diagnostics;
+      const diagnostics = error.diagnostics;
       const result = [];
 
-      for (const error of errors) {
-        const { message, span } = error;
+      for (const diagnostic of diagnostics) {
+        const { message, span, annotations } = diagnostic;
         let files: File[] = [];
         let labels: Label[] = [];
 
@@ -71,6 +95,28 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
             rangeEnd: end,
             message,
             style: "primary",
+          });
+        }
+
+        for (const annotation of annotations) {
+          const source = await fsPromise.readFile(annotation.span.file_id, "utf8");
+          const start = byteOffsetFromLineAndColumn(
+            source,
+            annotation.span.start.line,
+            annotation.span.start.col
+          );
+          const end = byteOffsetFromLineAndColumn(
+            source,
+            annotation.span.end.line,
+            annotation.span.end.col
+          );
+          files.push({ name: annotation.span.file_id, source });
+          labels.push({
+            fileId: annotation.span.file_id,
+            rangeStart: start,
+            rangeEnd: end,
+            message: annotation.message,
+            style: "secondary",
           });
         }
 
