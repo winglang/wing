@@ -153,7 +153,7 @@ export interface IFunctionClient {
   invoke(payload: string): Promise<string>;
 
   /**
-   * Kicks off the execution of the function with a payload and returns immediately while the function is running. 
+   * Kicks off the execution of the function with a payload and returns immediately while the function is running.
    * @inflight
    */
   invokeAsync(payload: string): Promise<void>;

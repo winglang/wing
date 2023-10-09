@@ -341,7 +341,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IFunctionClient\n```\n---\nInflight interface for `Function`.\n### Methods\n- `invoke` — Invokes the function with a payload and waits for the result."
+    value: "```wing\ninterface IFunctionClient\n```\n---\nInflight interface for `Function`.\n### Methods\n- `invoke` — Invokes the function with a payload and waits for the result.\n- `invokeAsync` — Kicks off the execution of the function with a payload and returns immediately while the function is running."
   sortText: ii|IFunctionClient
 - label: IFunctionHandler
   kind: 8

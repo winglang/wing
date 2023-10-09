@@ -128,6 +128,7 @@ new cloud.Function(handler: IFunctionHandler, props?: FunctionProps);
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.IFunctionClient.invoke">invoke</a></code> | Invokes the function with a payload and waits for the result. |
+| <code><a href="#@winglang/sdk.cloud.IFunctionClient.invokeAsync">invokeAsync</a></code> | Kicks off the execution of the function with a payload and returns immediately while the function is running. |
 
 ---
 
@@ -160,6 +161,20 @@ inflight invoke(payload: str): str
 Invokes the function with a payload and waits for the result.
 
 ###### `payload`<sup>Required</sup> <a name="payload" id="@winglang/sdk.cloud.IFunctionClient.invoke.parameter.payload"></a>
+
+- *Type:* str
+
+---
+
+##### `invokeAsync` <a name="invokeAsync" id="@winglang/sdk.cloud.IFunctionClient.invokeAsync"></a>
+
+```wing
+inflight invokeAsync(payload: str): void
+```
+
+Kicks off the execution of the function with a payload and returns immediately while the function is running.
+
+###### `payload`<sup>Required</sup> <a name="payload" id="@winglang/sdk.cloud.IFunctionClient.invokeAsync.parameter.payload"></a>
 
 - *Type:* str
 
