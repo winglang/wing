@@ -2505,13 +2505,14 @@ impl<'a> TypeChecker<'a> {
 		arg_list_types: ArgListTypes,
 	) -> Option<TypeRef> {
 		// Verify named args
-		let last_arg = func_sig.parameters.last();
-		let is_last_arg_struct = last_arg.is_some() && last_arg.unwrap().typeref.maybe_unwrap_option().is_struct();
+		let last_param = func_sig.parameters.last();
+		let is_last_param_struct = last_param.is_some() && last_param.unwrap().typeref.maybe_unwrap_option().is_struct();
+		let is_last_param_not_optional_struct = last_param.is_some() && last_param.unwrap().typeref.is_struct();
 
 		if !arg_list.named_args.is_empty() {
-			if is_last_arg_struct {
-				let last_arg_type = last_arg.unwrap().typeref.maybe_unwrap_option();
-				self.validate_structural_type(&arg_list_types.named_args, &last_arg_type, call_span);
+			if is_last_param_struct {
+				let last_param_type = last_param.unwrap().typeref.maybe_unwrap_option();
+				self.validate_structural_type(&arg_list_types.named_args, &last_param_type, call_span);
 			} else {
 				self.spanned_error(call_span, "No named arguments expected");
 			}
@@ -2523,11 +2524,17 @@ impl<'a> TypeChecker<'a> {
 			arg_list.pos_args.len(),
 			variadic_index.unwrap_or(arg_list.pos_args.len()),
 		);
+		let non_variadic_args_len = pos_args_len
+			+ if is_last_param_struct && !arg_list.named_args.is_empty() {
+				1
+			} else {
+				0
+			};
 
 		// Verify arity
-		let min_pos_args = func_sig.min_parameters();
-		let max_pos_args = func_sig.parameters.len() - if variadic_index.is_some() { 1 } else { 0 };
-		let named_args_text = if is_last_arg_struct {
+		let min_args = func_sig.min_parameters() + if is_last_param_not_optional_struct { 1 } else { 0 };
+		let max_args = func_sig.parameters.len() - if variadic_index.is_some() { 1 } else { 0 };
+		let named_args_text = if is_last_param_struct {
 			"or named arguments for the last parameter "
 		} else {
 			""
@@ -2538,22 +2545,22 @@ impl<'a> TypeChecker<'a> {
 			""
 		};
 
-		if pos_args_len < min_pos_args || pos_args_len > max_pos_args {
-			let err_text = if min_pos_args == max_pos_args {
+		// Check arity
+		if non_variadic_args_len < min_args || pos_args_len > max_args {
+			let err_text = if min_args == max_args {
 				format!(
 					"Expected {} positional argument(s) {}{}but got {}",
-					min_pos_args, named_args_text, variadic_args_text, pos_args_len
+					min_args, named_args_text, variadic_args_text, pos_args_len
 				)
 			} else {
 				format!(
 					"Expected between {} and {} positional arguments {}{}but got {}",
-					min_pos_args, max_pos_args, named_args_text, variadic_args_text, pos_args_len
+					min_args, max_args, named_args_text, variadic_args_text, pos_args_len
 				)
 			};
-			self.spanned_error(call_span, err_text);
-		}
 
-		if pos_args_len == max_pos_args && is_last_arg_struct && !arg_list.named_args.is_empty() {
+			self.spanned_error(call_span, err_text);
+		} else if is_last_param_struct && non_variadic_args_len > max_args {
 			self.spanned_error(
 				call_span,
 				"Expected either a positional argument or named arguments for the last parameter, but got both",

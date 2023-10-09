@@ -425,11 +425,11 @@ Duration <DURATION>"
 `;
 
 exports[`bring_non_std_construct.test.w 1`] = `
-"error: Expected between 1 and 2 positional arguments or named arguments for the last parameter but got 0
+"error: Expected 2 positional argument(s) or named arguments for the last parameter but got 0
   --> ../../../examples/tests/invalid/bring_non_std_construct.test.w:8:1
   |
 8 | new cdktf.S3Backend();
-  | ^^^^^^^^^^^^^^^^^^^^^ Expected between 1 and 2 positional arguments or named arguments for the last parameter but got 0
+  | ^^^^^^^^^^^^^^^^^^^^^ Expected 2 positional argument(s) or named arguments for the last parameter but got 0
 
 
 error: Cannot set id of non-standard preflight class \\"S3Backend\\" using \`as\`
@@ -1115,56 +1115,118 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`function_call_arity.test.w 1`] = `
+"error: Unexpected 'identifier'
+   --> ../../../examples/tests/invalid/function_call_arity.test.w:31:62
+   |
+31 | invalidCombinationFunc2(1, 2, prefix: \\"debug\\", priority: 0, \\"hello\\", \\"world\\");
+   |                                                              ^^^^^ Unexpected 'identifier'
+
+
+error: Unexpected 'identifier'
+   --> ../../../examples/tests/invalid/function_call_arity.test.w:31:71
+   |
+31 | invalidCombinationFunc2(1, 2, prefix: \\"debug\\", priority: 0, \\"hello\\", \\"world\\");
+   |                                                                       ^^^^^ Unexpected 'identifier'
+
+
+error: Expected 2 positional argument(s) but got 0
+  --> ../../../examples/tests/invalid/function_call_arity.test.w:2:1
+  |
+2 | func(); // Expected {} positional arguments but got {}
+  | ^^^^^^ Expected 2 positional argument(s) but got 0
+
+
+error: Expected between 2 and 3 positional arguments but got 1
+  --> ../../../examples/tests/invalid/function_call_arity.test.w:5:1
+  |
+5 | optionalParamsFunc(1); // Expected between {} and {} positional arguments but got {}
+  | ^^^^^^^^^^^^^^^^^^^^^ Expected between 2 and 3 positional arguments but got 1
+
+
+error: Expected 2 positional argument(s) + variadic args but got 0
+  --> ../../../examples/tests/invalid/function_call_arity.test.w:8:1
+  |
+8 | variadicFunc(); // Expected {} positional arguments + variadic args but got {}
+  | ^^^^^^^^^^^^^^ Expected 2 positional argument(s) + variadic args but got 0
+
+
+error: Expected between 2 and 3 positional arguments + variadic args but got 1
+   --> ../../../examples/tests/invalid/function_call_arity.test.w:12:1
+   |
+12 | variadicOptionalParamsFunc(2); // Expected between {} and {} positional arguments + variadic args but got {}
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected between 2 and 3 positional arguments + variadic args but got 1
+
+
+error: Expected 3 positional argument(s) or named arguments for the last parameter but got 0
+   --> ../../../examples/tests/invalid/function_call_arity.test.w:20:1
+   |
+20 | namedFunc(); // Expected {} positional arguments or named arguments for the last parameter but got {}
+   | ^^^^^^^^^^^ Expected 3 positional argument(s) or named arguments for the last parameter but got 0
+
+
+error: Expected between 3 and 4 positional arguments or named arguments for the last parameter but got 1
+   --> ../../../examples/tests/invalid/function_call_arity.test.w:23:1
+   |
+23 | namedOptionalParamsFunc(3); // Expected between {} and {} positional arguments or named arguments for the last parameter but got {}
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected between 3 and 4 positional arguments or named arguments for the last parameter but got 1
+
+
+error: Variadic parameters must always be the last parameter in a function.
+   --> ../../../examples/tests/invalid/function_call_arity.test.w:27:51
+   |
+27 | let invalidCombinationFunc = (n: num, b: bool, ...variadic: Array<str>, opts: Options) => {};
+   |                                                   ^^^^^^^^ Variadic parameters must always be the last parameter in a function.
+
+
+error: No named arguments expected
+   --> ../../../examples/tests/invalid/function_call_arity.test.w:31:1
+   |
+31 | invalidCombinationFunc2(1, 2, prefix: \\"debug\\", priority: 0, \\"hello\\", \\"world\\");
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ No named arguments expected
+
+
+error: Expected type to be \\"bool\\", but got \\"num\\" instead
+   --> ../../../examples/tests/invalid/function_call_arity.test.w:31:28
+   |
+31 | invalidCombinationFunc2(1, 2, prefix: \\"debug\\", priority: 0, \\"hello\\", \\"world\\");
+   |                            ^ Expected type to be \\"bool\\", but got \\"num\\" instead
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`function_call_variadic.test.w 1`] = `
 "error: Expected type to be \\"str\\", but got \\"num\\" instead
-  --> ../../../examples/tests/invalid/function_call_variadic.test.w:5:6
+  --> ../../../examples/tests/invalid/function_call_variadic.test.w:3:6
   |
-5 | func(1, 2, 3); // should fail for obvious reasons
+3 | func(1, 2, 3); // should fail due to wrong type for variadic
   |      ^ Expected type to be \\"str\\", but got \\"num\\" instead
 
 
 error: Expected type to be \\"str\\", but got \\"num\\" instead
-  --> ../../../examples/tests/invalid/function_call_variadic.test.w:5:9
+  --> ../../../examples/tests/invalid/function_call_variadic.test.w:3:9
   |
-5 | func(1, 2, 3); // should fail for obvious reasons
+3 | func(1, 2, 3); // should fail due to wrong type for variadic
   |         ^ Expected type to be \\"str\\", but got \\"num\\" instead
 
 
 error: Expected type to be \\"str\\", but got \\"num\\" instead
-  --> ../../../examples/tests/invalid/function_call_variadic.test.w:5:12
+  --> ../../../examples/tests/invalid/function_call_variadic.test.w:3:12
   |
-5 | func(1, 2, 3); // should fail for obvious reasons
+3 | func(1, 2, 3); // should fail due to wrong type for variadic
   |            ^ Expected type to be \\"str\\", but got \\"num\\" instead
 
 
- 
- 
-Tests 1 failed (1)
-Test Files 1 failed (1)
-Duration <DURATION>"
-`;
-
-exports[`function_call_variadic_array.test.w 1`] = `
-"error: Expected type to be \\"str\\", but got \\"Array<str>\\" instead
-  --> ../../../examples/tests/invalid/function_call_variadic_array.test.w:5:6
+error: Expected type to be \\"str\\", but got \\"Array<str>\\" instead
+  --> ../../../examples/tests/invalid/function_call_variadic.test.w:4:6
   |
-5 | func([\\"a\\", \\"b\\", \\"c\\"]); // should fail and inform that the parameter is variadic
+4 | func([\\"a\\", \\"b\\", \\"c\\"]); // should fail as the parameter is variadic
   |      ^^^^^^^^^^^^^^^ Expected type to be \\"str\\", but got \\"Array<str>\\" instead
-
-
- 
- 
-Tests 1 failed (1)
-Test Files 1 failed (1)
-Duration <DURATION>"
-`;
-
-exports[`function_call_variadic_min_arity.test.w 1`] = `
-"error: Expected 2 positional argument(s) + variadic args but got 0
-  --> ../../../examples/tests/invalid/function_call_variadic_min_arity.test.w:5:1
-  |
-5 | func(); // variadic signatures should still require min positional arity
-  | ^^^^^^ Expected 2 positional argument(s) + variadic args but got 0
 
 
  
