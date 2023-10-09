@@ -41,7 +41,7 @@ use wingii::fqn::FQN;
 use wingii::type_system::TypeSystem;
 
 use self::class_fields_init::VisitClassInit;
-use self::inference_visitor::InferenceVisitor;
+use self::inference_visitor::{InferenceCounterVisitor, InferenceVisitor};
 use self::jsii_importer::JsiiImportSpec;
 use self::lifts::Lifts;
 use self::symbol_env::{LookupResult, LookupResultMut, SymbolEnvIter, SymbolEnvRef};
@@ -1696,13 +1696,8 @@ impl<'a> TypeChecker<'a> {
 	/// Recursively check if a type is or contains a type inference.
 	///
 	/// Returns true if any inferences were found.
-	fn check_for_inferences(&mut self, node: &TypeRef, span: &WingSpan) -> bool {
-		let mut visitor = InferenceVisitor {
-			types: self.types,
-			found_inference: false,
-			expected_type: None,
-			span,
-		};
+	fn check_for_inferences(&self, node: &TypeRef) -> bool {
+		let mut visitor = InferenceCounterVisitor::default();
 
 		visitor.visit_typeref(node);
 
@@ -3030,9 +3025,7 @@ impl<'a> TypeChecker<'a> {
 			self.type_check_statement(statement, &mut env);
 		}
 
-		// reverse list to type check later scopes first
-		// Why? To improve the inference algorithm. Earlier inner_scopes for closures may need to infer types from later inner_scopes
-		let inner_scopes = self.inner_scopes.drain(..).rev().collect::<Vec<_>>();
+		let inner_scopes = self.inner_scopes.drain(..).collect::<Vec<_>>();
 		for (inner_scope, ctx) in inner_scopes {
 			let scope = unsafe { &*inner_scope };
 			self.ctx = ctx;
@@ -3058,7 +3051,7 @@ impl<'a> TypeChecker<'a> {
 
 				// If we found a variable with an inferred type, this is an error because it means we failed to infer its type
 				// Ignores any transient (no file_id) variables e.g. `this`. Those failed inferences are cascading errors and not useful to the user
-				if self.check_for_inferences(&var_info.type_, &var_info.name.span) && !var_info.name.span.file_id.is_empty() {
+				if !var_info.name.span.file_id.is_empty() && self.check_for_inferences(&var_info.type_) {
 					self.spanned_error(&var_info.name, "Unable to infer type".to_string());
 				}
 			}
