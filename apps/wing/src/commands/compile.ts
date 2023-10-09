@@ -5,7 +5,6 @@ import * as wingCompiler from "@winglang/compiler";
 import chalk from "chalk";
 import { CHARS_ASCII, emitDiagnostic, File, Label } from "codespan-wasm";
 import debug from "debug";
-import { glob } from "glob";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)
@@ -18,23 +17,43 @@ const log = debug("wing:compile");
  * This is passed from Commander to the `compile` function.
  */
 export interface CompileOptions {
-  readonly rootId?: string;
+  /**
+   * Target platform
+   */
+  readonly target: wingCompiler.Target;
+  /**
+   * List of compiler plugins
+   */
   readonly plugins?: string[];
   /**
-   * The target to compile to
-   * @default wingCompiler.Target.SIM
+   * App root id
+   *
+   * @default "Default"
    */
-  readonly target?: wingCompiler.Target;
+  readonly rootId?: string;
   /**
-   * The location to save the compilation output
-   * @default "./target"
+   * String with platform-specific values separated by commas
    */
-  readonly targetDir?: string;
+  readonly value?: string;
+  /**
+   * Path to the YAML file with specific platform values
+   *
+   * example of the file's content:
+   * root/Default/Domain:
+   *   hostedZoneId: Z0111111111111111111F
+   *   acmCertificateArn: arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+   */
+  readonly values?: string;
   /**
    * Whether to run the compiler in `wing test` mode. This may create multiple
    * copies of the application resources in order to run tests in parallel.
    */
   readonly testing?: boolean;
+  /**
+   * The location to save the compilation output
+   * @default "./target"
+   */
+  readonly targetDir?: string;
 }
 
 /**
@@ -43,22 +62,14 @@ export interface CompileOptions {
  * @param options Compile options.
  * @returns the output directory
  */
-export async function compile(entrypoint?: string, options?: CompileOptions): Promise<string> {
-  if (!entrypoint) {
-    const wingFiles = await glob("{main,*.main}.w");
-    if (wingFiles.length !== 1) {
-      throw new Error("Please specify which file you want to compile");
-    }
-    entrypoint = wingFiles[0];
-  }
-
+export async function compile(entrypoint: string, options: CompileOptions): Promise<string> {
   const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
   try {
     return await wingCompiler.compile(entrypoint, {
       ...options,
       log,
       color: coloring,
-      target: options?.target || wingCompiler.Target.SIM,
+      targetDir: options.targetDir,
     });
   } catch (error) {
     if (error instanceof wingCompiler.CompileError) {
@@ -67,7 +78,7 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
       const result = [];
 
       for (const diagnostic of diagnostics) {
-        const { message, span } = diagnostic;
+        const { message, span, annotations } = diagnostic;
         let files: File[] = [];
         let labels: Label[] = [];
 
@@ -84,6 +95,28 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
             rangeEnd: end,
             message,
             style: "primary",
+          });
+        }
+
+        for (const annotation of annotations) {
+          const source = await fsPromise.readFile(annotation.span.file_id, "utf8");
+          const start = byteOffsetFromLineAndColumn(
+            source,
+            annotation.span.start.line,
+            annotation.span.start.col
+          );
+          const end = byteOffsetFromLineAndColumn(
+            source,
+            annotation.span.end.line,
+            annotation.span.end.col
+          );
+          files.push({ name: annotation.span.file_id, source });
+          labels.push({
+            fileId: annotation.span.file_id,
+            rangeStart: start,
+            rangeEnd: end,
+            message: annotation.message,
+            style: "secondary",
           });
         }
 

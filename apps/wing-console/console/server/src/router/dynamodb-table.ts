@@ -43,7 +43,8 @@ export const createDynamodbTableRouter = () => {
         const client = simulator.getResource(
           input.resourcePath,
         ) as IDynamodbTableClient;
-        return await client.getItem(input.key as any);
+        const { item } = await client.getItem(input.key as any);
+        return item;
       }),
     "dynamodb-table.insert": createProcedure
       .input(
@@ -58,7 +59,7 @@ export const createDynamodbTableRouter = () => {
           input.resourcePath,
         ) as IDynamodbTableClient;
 
-        await client.putItem(input.data as Json);
+        await client.putItem({ item: input.data as Json });
       }),
     "dynamodb-table.delete": createProcedure
       .input(
@@ -82,7 +83,7 @@ export const createDynamodbTableRouter = () => {
             ? { [schema.props.rangeKey]: input.data[schema.props.rangeKey] }
             : {}),
         };
-        return await client.deleteItem(itemKey as Json);
+        return await client.deleteItem({ key: itemKey as Json });
       }),
   });
 };

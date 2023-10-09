@@ -25,19 +25,21 @@ clonedSet.add(4);
 
 let api = new cloud.Api();
 let func = inflight (request) => {
-  return cloud.ApiResponse {
+  return {
     body: request.body,
     status: 200,
   };
 };
+api.get("/hello/world", func);
 
+let argReturn = (n: num) => { return n; };
+let implicitReturn = () => { return 1; };
 if true {
-  api.get("/hello/world", func);
+  let a = argReturn(1);
+  let b = implicitReturn();
 }
 
-let returnsString = () => {
-  return "hi";
-};
+let returnsString = () => { return "hi"; };
 let shouldBeString = returnsString();
 
 let stringArray = [shouldBeString];

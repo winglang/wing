@@ -135,7 +135,7 @@ fn partial_compile(
 	// Reset diagnostics before new compilation (`partial_compile` can be called multiple times)
 	reset_diagnostics();
 
-	let source_path = Utf8Path::from_path(source_path).expect("invalid unicide path");
+	let source_path = Utf8Path::from_path(source_path).expect("invalid unicode path");
 	let source_path = normalize_path(source_path, None);
 
 	let topo_sorted_files = parse_wing_project(
@@ -244,7 +244,7 @@ pub mod test_utils {
 	///
 	pub fn load_file_with_contents(content: &str) -> TextDocumentPositionParams {
 		let temp_dir = tempfile::tempdir().expect("Failed to create temporary directory");
-		let filename = format!("{}.w", Uuid::new_v4());
+		let filename = format!("{}.main.w", Uuid::new_v4());
 		let file_path = temp_dir.path().join(&filename);
 		fs::write(&file_path, content).expect("Failed to write to temporary file");
 		let file_uri_string = format!("file:///{}", file_path.to_str().unwrap());

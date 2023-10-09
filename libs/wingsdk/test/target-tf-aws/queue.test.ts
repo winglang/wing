@@ -14,7 +14,7 @@ import {
 
 test("default queue behavior", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   Queue._newQueue(app, "Queue");
   const output = app.synth();
 
@@ -26,7 +26,7 @@ test("default queue behavior", () => {
 
 test("queue with custom timeout", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   Queue._newQueue(app, "Queue", {
     timeout: std.Duration.fromSeconds(30),
   });
@@ -40,7 +40,7 @@ test("queue with custom timeout", () => {
 
 test("queue with custom retention", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   Queue._newQueue(app, "Queue", {
     retentionPeriod: std.Duration.fromMinutes(30),
   });
@@ -54,7 +54,7 @@ test("queue with custom retention", () => {
 
 test("queue with a consumer function", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const queue = Queue._newQueue(app, "Queue", {
     timeout: std.Duration.fromSeconds(30),
   });
@@ -89,7 +89,7 @@ async handle(event) {
 
 test("queue name valid", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const queue = Queue._newQueue(app, "The-Incredible_Queue-01");
   const output = app.synth();
 
@@ -105,7 +105,7 @@ test("queue name valid", () => {
 
 test("replace invalid character from queue name", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const queue = Queue._newQueue(app, "The*Incredible$Queue");
   const output = app.synth();
 

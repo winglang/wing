@@ -10,7 +10,7 @@ module.exports = function({ $Foo }) {
       return $obj;
     }
     async handle() {
-      return ({"foo": new $Foo()});
+      return ({"foo": (await (async () => {const o = new $Foo(); await o.$inflight_init?.(); return o; })())});
     }
   }
   return $Closure1;
