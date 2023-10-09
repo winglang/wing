@@ -2790,11 +2790,11 @@ Duration <DURATION>"
 `;
 
 exports[`structs.test.w 1`] = `
-"error: Struct \\"C\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != str)
+"error: Struct \\"C\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != num)
    --> ../../../examples/tests/invalid/structs.test.w:11:8
    |
 11 | struct C extends B {
-   |        ^ Struct \\"C\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != str)
+   |        ^ Struct \\"C\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != num)
 
 
 error: \\"x\\" is not initialized
@@ -2825,11 +2825,11 @@ error: Unknown symbol \\"badField\\"
    |       ^^^^^^^^ Unknown symbol \\"badField\\"
 
 
-error: Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != num)
+error: Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != str)
    --> ../../../examples/tests/invalid/structs.test.w:44:8
    |
 44 | struct Showtime extends Razzle, Dazzle {}
-   |        ^^^^^^^^ Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != num)
+   |        ^^^^^^^^ Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != str)
 
 
 error: Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.
