@@ -231,4 +231,11 @@ pub trait VisitorWithContext {
 		self.ctx().pop_function_definition();
 		res
 	}
+
+	fn with_class<T>(&mut self, class: &Class, f: impl FnOnce(&mut Self) -> T) -> T {
+		self.ctx().push_class(class);
+		let res = f(self);
+		self.ctx().pop_class();
+		res
+	}
 }

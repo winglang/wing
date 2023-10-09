@@ -4223,11 +4223,19 @@ impl<'a> TypeChecker<'a> {
 			return;
 		};
 
+		// If the parent class is phase independent than its init name is just "init" regadless of
+		// whether we're inflight or not.
+		let parent_init_name = if parent_class.as_class().unwrap().phase == Phase::Independent {
+			CLASS_INIT_NAME
+		} else {
+			init_name
+		};
+
 		let parent_initializer = parent_class
 			.as_class()
 			.unwrap()
 			.methods(false)
-			.filter(|(name, _type)| name == init_name)
+			.filter(|(name, _type)| name == parent_init_name)
 			.collect_vec()[0]
 			.1;
 
@@ -5293,7 +5301,8 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		if let Some(parent_class) = parent_type.as_class() {
-			if parent_class.phase == phase {
+			// Parent class must be either the same phase as the child or, if the child is an inflight class, the parent can be an independent class
+			if parent_class.phase == phase || phase == Phase::Inflight && parent_class.phase == Phase::Independent {
 				(Some(parent_type), Some(parent_class.env.get_ref()))
 			} else {
 				self.spanned_error(
