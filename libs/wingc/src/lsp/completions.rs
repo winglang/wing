@@ -739,7 +739,7 @@ fn get_completions_from_type(
 	match type_ {
 		Type::Class(c) => get_completions_from_class(c, current_phase, is_instance),
 		Type::Interface(i) => get_completions_from_class(i, current_phase, is_instance),
-		Type::Struct(s) => get_completions_from_class(s, current_phase, is_instance),
+		Type::Struct(s) if is_instance => get_completions_from_class(s, current_phase, is_instance),
 		Type::Enum(enum_) => {
 			let variants = &enum_.values;
 			variants
@@ -766,9 +766,14 @@ fn get_completions_from_type(
 		| Type::Map(_)
 		| Type::MutMap(_)
 		| Type::Set(_)
-		| Type::MutSet(_) => {
+		| Type::MutSet(_)
+		| Type::Struct(_) => {
 			let type_name = type_.to_string();
 			let mut type_name = type_name.as_str();
+
+			if matches!(type_, Type::Struct(_)) {
+				type_name = "Struct";
+			}
 
 			// Certain primitive type names differ from how they actually appear in the std namespace
 			// These are unique when used as a type definition, rather than as a type reference when calling a static method
@@ -1636,5 +1641,16 @@ let x = // hi
             //^
 "#,
 		assert!(comment.is_empty())
+	);
+
+	test_completion_list!(
+		struct_static,
+		r#"
+struct S {}
+
+S.
+//^
+"#,
+		assert!(!struct_static.is_empty())
 	);
 }

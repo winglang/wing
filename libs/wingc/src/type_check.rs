@@ -2370,11 +2370,7 @@ impl<'a> TypeChecker<'a> {
 					.expect(&format!("Expected \"{}\" to be a struct type", struct_type));
 
 				// Verify that all expected fields are present and are the right type
-				for (name, kind, _info) in st.env.iter(true) {
-					let field_type = kind
-						.as_variable()
-						.expect("Expected struct field to be a variable in the struct env")
-						.type_;
+				for (name, field_type) in st.fields(true) {
 					match fields.get(name.as_str()) {
 						Some(field_exp) => {
 							let t = field_types.get(name.as_str()).unwrap();
@@ -5346,7 +5342,7 @@ fn add_parent_members_to_struct_env(
 						span: name.span.clone(),
 						message: format!(
 							"Struct \"{}\" extends \"{}\" which introduces a conflicting member \"{}\" ({} != {})",
-							name, parent_type, parent_member_name, member_type, member_type
+							name, parent_type, parent_member_name, member_type, existing_type
 						),
 						annotations: vec![],
 					});
@@ -5626,7 +5622,7 @@ pub fn fully_qualify_std_type(type_: &str) -> String {
 
 	match type_name {
 		"Json" | "MutJson" | "MutArray" | "MutMap" | "MutSet" | "Array" | "Map" | "Set" | "String" | "Duration"
-		| "Boolean" | "Number" => {
+		| "Boolean" | "Number" | "Struct" => {
 			format!("{WINGSDK_STD_MODULE}.{type_name}")
 		}
 		_ => type_name.to_string(),
