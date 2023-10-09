@@ -6,9 +6,6 @@ members = [
 ]
 resolver = "2"
 
-[profile.release]
-lto = true
-
 # For use with `cargo flamegraph --profile flamegraph`
 [profile.flamegraph]
 inherits = "release"
