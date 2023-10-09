@@ -351,13 +351,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			return;
 		}
 
-		let udt = UserDefinedType {
-			root: node.name.clone(),
-			fields: vec![],
-			span: node.name.span.clone(),
-		};
-
-		self.ctx.push_class(udt.clone(), &node.phase);
+		self.ctx.push_class(node);
 
 		self.lifts_stack.push(Lifts::new());
 
@@ -374,7 +368,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 		let lifts = self.lifts_stack.pop().expect("Unable to pop class tokens");
 
 		if let Some(env) = self.ctx.current_env() {
-			if let Some(mut t) = resolve_user_defined_type(&udt, env, 0).ok() {
+			if let Some(mut t) = resolve_user_defined_type(&UserDefinedType::for_class(node), env, 0).ok() {
 				let mut_class = t.as_class_mut().unwrap();
 				mut_class.set_lifts(lifts);
 			}
