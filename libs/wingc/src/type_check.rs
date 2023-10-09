@@ -5,8 +5,8 @@ pub mod lifts;
 pub mod symbol_env;
 
 use crate::ast::{
-	self, AccessModifier, AssignmentKind, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition, IfLet,
-	NewExpr, TypeAnnotationKind,
+	self, AccessModifier, AssignmentKind, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition, IfLet, New,
+	TypeAnnotationKind,
 };
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter as AstFunctionParameter,
@@ -40,7 +40,7 @@ use wingii::fqn::FQN;
 use wingii::type_system::TypeSystem;
 
 use self::class_fields_init::VisitClassInit;
-use self::inference_visitor::InferenceVisitor;
+use self::inference_visitor::{InferenceCounterVisitor, InferenceVisitor};
 use self::jsii_importer::JsiiImportSpec;
 use self::lifts::Lifts;
 use self::symbol_env::{LookupResult, LookupResultMut, SymbolEnvIter, SymbolEnvRef};
@@ -81,7 +81,7 @@ pub type TypeRef = UnsafeRef<Type>;
 
 #[derive(Debug)]
 pub enum SymbolKind {
-	Type(TypeRef), // TODO: <- deprecated since we treat types as a VariableInfo of kind VariableKind::Type
+	Type(TypeRef),
 	Variable(VariableInfo),
 	Namespace(NamespaceRef),
 }
@@ -1691,13 +1691,8 @@ impl<'a> TypeChecker<'a> {
 	/// Recursively check if a type is or contains a type inference.
 	///
 	/// Returns true if any inferences were found.
-	fn check_for_inferences(&mut self, node: &TypeRef, span: &WingSpan) -> bool {
-		let mut visitor = InferenceVisitor {
-			types: self.types,
-			found_inference: false,
-			expected_type: None,
-			span,
-		};
+	fn check_for_inferences(&self, node: &TypeRef) -> bool {
+		let mut visitor = InferenceCounterVisitor::default();
 
 		visitor.visit_typeref(node);
 
@@ -1924,7 +1919,7 @@ impl<'a> TypeChecker<'a> {
 				(vi.type_, phase)
 			}
 			ExprKind::New(new_expr) => {
-				let NewExpr {
+				let New {
 					class,
 					obj_id,
 					arg_list,
@@ -2751,7 +2746,7 @@ impl<'a> TypeChecker<'a> {
 		{
 			self.validate_type_binary_equality(*inner_actual, *inner_expected, span)
 		} else {
-			self.validate_type_in(actual_type, &[expected_type], span)
+			self.validate_type(actual_type, expected_type, span)
 		}
 	}
 
@@ -3024,9 +3019,7 @@ impl<'a> TypeChecker<'a> {
 			self.type_check_statement(statement, &mut env);
 		}
 
-		// reverse list to type check later scopes first
-		// Why? To improve the inference algorithm. Earlier inner_scopes for closures may need to infer types from later inner_scopes
-		let inner_scopes = self.inner_scopes.drain(..).rev().collect::<Vec<_>>();
+		let inner_scopes = self.inner_scopes.drain(..).collect::<Vec<_>>();
 		for (inner_scope, ctx) in inner_scopes {
 			let scope = unsafe { &*inner_scope };
 			self.ctx = ctx;
@@ -3052,7 +3045,7 @@ impl<'a> TypeChecker<'a> {
 
 				// If we found a variable with an inferred type, this is an error because it means we failed to infer its type
 				// Ignores any transient (no file_id) variables e.g. `this`. Those failed inferences are cascading errors and not useful to the user
-				if self.check_for_inferences(&var_info.type_, &var_info.name.span) && !var_info.name.span.file_id.is_empty() {
+				if !var_info.name.span.file_id.is_empty() && self.check_for_inferences(&var_info.type_) {
 					self.spanned_error(&var_info.name, "Unable to infer type".to_string());
 				}
 			}
@@ -5185,8 +5178,9 @@ impl<'a> TypeChecker<'a> {
 				let current_class_type = self
 					.resolve_user_defined_type(&current_class, env, self.ctx.current_stmt_idx())
 					.unwrap();
-				private_access = current_class_type.is_same_type_as(&property_defined_in);
-				protected_access = private_access || current_class_type.is_strict_subtype_of(&property_defined_in);
+				private_access = private_access || current_class_type.is_same_type_as(&property_defined_in);
+				protected_access =
+					protected_access || private_access || current_class_type.is_strict_subtype_of(&property_defined_in);
 				if private_access {
 					break;
 				}

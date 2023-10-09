@@ -24,12 +24,21 @@ class Foo impl SomeInterface {
     this.protected_method();
     this.private_method();
 
+    // Check access from inner class
     class InnerFoo {
       method(f: Foo) {
-        // Check access from inner class
         log(f.protected_field);
         log(f.private_field);
         log(f.public_field);
+
+        // Check access from 2nd level inner class (inner class nesting)
+        class InnerInnerFoo {
+          method(f: Foo) {
+            log(f.protected_field);
+            log(f.private_field);
+            log(f.public_field);
+          }
+        }
       }
     }
   }
