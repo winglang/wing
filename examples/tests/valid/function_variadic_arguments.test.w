@@ -49,7 +49,9 @@ class A {
 }
 
 class B extends A {
-
+  init(msg: str) {
+    this.message = msg;
+  }
 }
 
 let subTypeFunc = (...events: Array<A>) => {
