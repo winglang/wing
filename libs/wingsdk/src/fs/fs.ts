@@ -16,7 +16,7 @@ function localePath(p: string): string {
   }
   let winPath = p.split(path.posix.sep).join(path.win32.sep);
   // If the path starts from the root directory, the first segment represents a specific drive.
-  winPath = winPath.replace(/^\\([A-Za-z])\\/, "$1:\\"); 
+  winPath = winPath.replace(/^\\([A-Za-z])\\/, "$1:\\");
   return winPath;
 }
 
