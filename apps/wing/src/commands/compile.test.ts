@@ -10,10 +10,24 @@ import { generateTmpDir } from "src/util";
 const exampleDir = resolve("../../examples/tests/valid");
 const exampleSmallDir = resolve("../../examples/tests/valid/subdir2");
 const exampleFilePath = join(exampleDir, "captures.test.w");
+const examplefilepath2 = join(exampleDir, "capture_primitives.test.w");
 
 describe(
   "compile command tests",
   () => {
+    test("should be able to compile the SDK capture test to sim", async () => {
+      const outDir = await compile(exampleFilePath, {
+        target: Target.SIM,
+        targetDir: `${await generateTmpDir()}/target`,
+      });
+
+      const stats = await stat(outDir);
+      expect(stats.isDirectory()).toBeTruthy();
+      const files = (await readdir(outDir)).sort();
+      expect(files.length).toBeGreaterThan(0);
+      expect(files).toEqual([".wing", "connections.json", "simulator.json", "tree.json"]);
+    });
+
     test("should be able to compile the SDK capture test to tf-aws", async () => {
       const artifactDir = await compile(exampleFilePath, {
         target: Target.TF_AWS,
@@ -29,17 +43,22 @@ describe(
       expect(files).toContain("connections.json");
     });
 
-    test("should be able to compile the SDK capture test to sim", async () => {
-      const outDir = await compile(exampleFilePath, {
-        target: Target.SIM,
+    test("should be able to compile the SDK capture primitives test to awscdk", async () => {
+      process.env.CDK_STACK_NAME = "compile-test-stack";
+
+      const artifactDir = await compile(examplefilepath2, {
+        target: Target.AWSCDK,
         targetDir: `${await generateTmpDir()}/target`,
       });
 
-      const stats = await stat(outDir);
+      const stats = await stat(artifactDir);
       expect(stats.isDirectory()).toBeTruthy();
-      const files = (await readdir(outDir)).sort();
+      const files = await readdir(artifactDir);
       expect(files.length).toBeGreaterThan(0);
-      expect(files).toEqual([".wing", "connections.json", "simulator.json", "tree.json"]);
+      expect(files).toContain("compile-test-stack.assets.json");
+      expect(files).toContain("compile-test-stack.template.json");
+      expect(files).toContain("tree.json");
+      expect(files).toContain("connections.json");
     });
 
     test("should be able to compile to default target sim", async () => {
