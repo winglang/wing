@@ -457,12 +457,7 @@ mod sanity {
 				fs::remove_dir_all(&out_dir).expect("remove out dir");
 			}
 
-			let result = compile(
-				test_file.canonicalize_utf8().unwrap().parent().unwrap(),
-				&test_file,
-				None,
-				&out_dir,
-			);
+			let result = compile(&test_dir, &test_file, None, &out_dir);
 
 			if result.is_err() {
 				assert!(
