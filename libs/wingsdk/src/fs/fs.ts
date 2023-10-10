@@ -23,6 +23,9 @@ function localePath(p: string): string {
  * @returns The Normalized path.
  */
 function posixPath(p: string): string {
+  if (/^[A-Za-z]:/.test(p)) {
+    p = p.slice(2);
+  }
   return p.split(path.sep).join(path.posix.sep);
 }
 
