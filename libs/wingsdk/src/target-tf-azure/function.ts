@@ -3,6 +3,8 @@ import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Bucket, StorageAccountPermissions } from "./bucket";
+import { core } from "..";
+import { ApplicationInsights } from "../.gen/providers/azurerm/application-insights";
 import { LinuxFunctionApp } from "../.gen/providers/azurerm/linux-function-app";
 import { ResourceGroup } from "../.gen/providers/azurerm/resource-group";
 import { RoleAssignment } from "../.gen/providers/azurerm/role-assignment";
@@ -16,7 +18,7 @@ import {
   NameOptions,
   ResourceNames,
 } from "../shared/resource-names";
-import { Duration, IResource } from "../std";
+import { IInflightHost, IResource } from "../std";
 
 /**
  * Function names are limited to 32 characters.
@@ -49,6 +51,7 @@ export class Function extends cloud.Function {
   private readonly servicePlan: ServicePlan;
   private readonly storageAccount: StorageAccount;
   private readonly resourceGroup: ResourceGroup;
+  private readonly applicationInsights: ApplicationInsights;
   private permissions?: Map<string, Set<ScopedRoleAssignment>>;
 
   constructor(
@@ -63,11 +66,12 @@ export class Function extends cloud.Function {
     this.storageAccount = app.storageAccount;
     this.resourceGroup = app.resourceGroup;
     this.servicePlan = app.servicePlan;
+    this.applicationInsights = app.applicationInsights;
 
     const functionName = ResourceNames.generateName(this, FUNCTION_NAME_OPTS);
     const functionIdentityType = "SystemAssigned";
     const functionRuntime = "node";
-    const functionNodeVersion = "16";
+    const functionNodeVersion = "18"; // support fetch
 
     // Create Bucket to store function code
     const functionCodeBucket = new Bucket(this, "FunctionBucket");
@@ -98,11 +102,11 @@ export class Function extends cloud.Function {
       JSON.stringify({
         bindings: [
           {
-            authLevel: "anonymous", // TODO: this auth level will be changed with https://github.com/winglang/wing/issues/1371
+            authLevel: "anonymous", // TODO: this auth level will be changed with https://github.com/winglang/wing/issues/4497
             type: "httpTrigger",
             direction: "in",
             name: "req",
-            methods: ["get"],
+            methods: ["get", "post"],
           },
           {
             type: "http",
@@ -112,8 +116,8 @@ export class Function extends cloud.Function {
         ],
       })
     );
-
-    const timeout = props.timeout ?? Duration.fromMinutes(1);
+    // TODO: will be uncommented when fixing https://github.com/winglang/wing/issues/4494
+    // const timeout = props.timeout ?? Duration.fromMinutes(1);
 
     // Write host.json file to set function timeout (must be set in root of function app)
     // https://learn.microsoft.com/en-us/azure/azure-functions/functions-host-json
@@ -121,7 +125,10 @@ export class Function extends cloud.Function {
     fs.writeFileSync(
       `${codeDir}/host.json`,
       JSON.stringify({
-        functionTimeout: `${timeout.hours}:${timeout.minutes}:${timeout.seconds}`,
+        version: "2.0",
+        //TODO: need to read the documentation and parse the number in the right way,
+        // while not surpassing the limits, since it will be resulted in a hard to detect error
+        functionTimeout: `00:01:00`,
       })
     );
 
@@ -155,6 +162,9 @@ export class Function extends cloud.Function {
         applicationStack: {
           nodeVersion: functionNodeVersion,
         },
+        applicationInsightsConnectionString:
+          this.applicationInsights.connectionString,
+        applicationInsightsKey: this.applicationInsights.instrumentationKey,
       },
       httpsOnly: true,
       appSettings: Lazy.anyValue({
@@ -187,6 +197,13 @@ export class Function extends cloud.Function {
         );
       }
     }
+  }
+
+  /**
+   * Function name, used for invocation
+   */
+  get name(): string {
+    return this.function.name;
   }
 
   /**
@@ -227,11 +244,35 @@ export class Function extends cloud.Function {
     this.permissions.set(uniqueId, roleDefinitions);
   }
 
+  protected _getCodeLines(handler: cloud.IFunctionHandler): string[] {
+    const inflightClient = handler._toInflight();
+    const lines = new Array<string>();
+
+    lines.push("module.exports = async function(context, req) {");
+    lines.push(
+      `  const body = await (${inflightClient}).handle(context.req.body ?? "");`
+    );
+    lines.push(`  context.res = { body };`);
+    lines.push(`};`);
+
+    return lines;
+  }
+
+  public bind(host: IInflightHost, ops: string[]): void {
+    //TODO: add permissions here when changing auth level: https://github.com/winglang/wing/issues/4497
+    host.addEnvironment(this.envName(), this.function.name);
+
+    super.bind(host, ops);
+  }
+
   /** @internal */
   public _toInflight(): string {
-    // TODO: support inflight https://github.com/winglang/wing/issues/1371
-    throw new Error(
-      "cloud.Function cannot be used as an Inflight resource on Azure yet"
-    );
+    return core.InflightClient.for(__dirname, __filename, "FunctionClient", [
+      `process.env["${this.envName()}"]`,
+    ]);
+  }
+
+  private envName(): string {
+    return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
   }
 }
