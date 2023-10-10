@@ -217,6 +217,12 @@
           "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/counter.md"
         },
         {
+          "exec": "jsii-docgen -o API.md -l wing --submodule cloud/domain"
+        },
+        {
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/domain.md"
+        },
+        {
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/function"
         },
         {

@@ -5,6 +5,7 @@ import * as wingCompiler from "@winglang/compiler";
 import chalk from "chalk";
 import { CHARS_ASCII, emitDiagnostic, File, Label } from "codespan-wasm";
 import debug from "debug";
+import { glob } from "glob";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)
@@ -17,19 +18,44 @@ const log = debug("wing:compile");
  * This is passed from Commander to the `compile` function.
  */
 export interface CompileOptions {
-  readonly target: wingCompiler.Target;
+  /**
+   * Target plaform
+   * @default wingCompiler.Target.SIM
+   */
+  readonly target?: wingCompiler.Target;
+  /**
+   * List of compiler plugins
+   */
   readonly plugins?: string[];
+  /**
+   * App root id
+   *
+   * @default "Default"
+   */
   readonly rootId?: string;
   /**
-   * Whether to run the compiler in `wing test` mode. This may create multiple
-   * copies of the application resources in order to run tests in parallel.
+   * String with platform-specific values separated by commas
    */
-  readonly testing?: boolean;
+  readonly value?: string;
+  /**
+   * Path to the YAML file with specific platform values
+   *
+   * example of the file's content:
+   * root/Default/Domain:
+   *   hostedZoneId: Z0111111111111111111F
+   *   acmCertificateArn: arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+   */
+  readonly values?: string;
   /**
    * The location to save the compilation output
    * @default "./target"
    */
   readonly targetDir?: string;
+  /**
+   * Whether to run the compiler in `wing test` mode. This may create multiple
+   * copies of the application resources in order to run tests in parallel.
+   */
+  readonly testing?: boolean;
 }
 
 /**
@@ -38,14 +64,31 @@ export interface CompileOptions {
  * @param options Compile options.
  * @returns the output directory
  */
-export async function compile(entrypoint: string, options: CompileOptions): Promise<string> {
+export async function compile(entrypoint?: string, options?: CompileOptions): Promise<string> {
+  if (!entrypoint) {
+    const wingFiles = await glob("{main,*.main}.w");
+    if (wingFiles.length === 0) {
+      throw new Error(
+        "Cannot find entrypoint files (main.w or *.main.w) in the current directory."
+      );
+    }
+    if (wingFiles.length > 1) {
+      throw new Error(
+        `Multiple entrypoints found in the current directory (${wingFiles.join(
+          ", "
+        )}). Please specify which one to use.`
+      );
+    }
+    entrypoint = wingFiles[0];
+  }
+
   const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
   try {
     return await wingCompiler.compile(entrypoint, {
       ...options,
       log,
       color: coloring,
-      targetDir: options.targetDir,
+      target: options?.target || wingCompiler.Target.SIM,
     });
   } catch (error) {
     if (error instanceof wingCompiler.CompileError) {

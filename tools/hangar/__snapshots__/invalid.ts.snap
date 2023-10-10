@@ -17,192 +17,192 @@ Duration <DURATION>"
 
 exports[`access_modifiers.test.w 1`] = `
 "error: Method \\"private_method\\" is private in \\"Foo\\" but it's an implementation of \\"SomeInterface\\". Interface members must be public.
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:40:3
+   --> ../../../examples/tests/invalid/access_modifiers.test.w:49:3
    |
-40 |   private_method() {}
+49 |   private_method() {}
    |   ^^^^^^^^^^^^^^ Method \\"private_method\\" is private in \\"Foo\\" but it's an implementation of \\"SomeInterface\\". Interface members must be public.
 
 
 error: Method \\"protected_method\\" is protected in \\"Foo\\" but it's an implementation of \\"SomeInterface\\". Interface members must be public.
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:38:13
+   --> ../../../examples/tests/invalid/access_modifiers.test.w:47:13
    |
-38 |   protected protected_method() {}
+47 |   protected protected_method() {}
    |             ^^^^^^^^^^^^^^^^ Method \\"protected_method\\" is protected in \\"Foo\\" but it's an implementation of \\"SomeInterface\\". Interface members must be public.
 
 
 error: Cannot override private method \\"method\\" of \\"Foo\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:49:3
+   --> ../../../examples/tests/invalid/access_modifiers.test.w:58:3
    |
-49 |   method() {
+58 |   method() {
    |   ^^^^^^ Cannot override private method \\"method\\" of \\"Foo\\"
 
 
 error: Cannot override private method \\"method\\" of \\"Bar\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:72:3
+   --> ../../../examples/tests/invalid/access_modifiers.test.w:81:3
    |
-72 |   method() {
+81 |   method() {
    |   ^^^^^^ Cannot override private method \\"method\\" of \\"Bar\\"
 
 
 error: Cannot access protected member \\"protected_field\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:100:9
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:109:9
     |
-100 | log(foo.protected_field);
+109 | log(foo.protected_field);
     |         ^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_field\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_field\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:102:9
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:111:9
     |
-102 | log(foo.private_field);
+111 | log(foo.private_field);
     |         ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Foo\\"
 
 
 error: Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:106:5
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:115:5
     |
-106 | Foo.protected_static_method();
+115 | Foo.protected_static_method();
     |     ^^^^^^^^^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:108:5
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:117:5
     |
-108 | Foo.private_static_method();
+117 | Foo.private_static_method();
     |     ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
 
 
 error: Cannot override public method \\"public_method\\" of \\"Foo\\" with a private method
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:148:3
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:157:3
     |
-148 |   public_method() {}
+157 |   public_method() {}
     |   ^^^^^^^^^^^^^ Cannot override public method \\"public_method\\" of \\"Foo\\" with a private method
 
 
 error: Cannot override protected method \\"protected_method\\" of \\"Foo\\" with a private method
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:150:3
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:159:3
     |
-150 |   protected_method() {}
+159 |   protected_method() {}
     |   ^^^^^^^^^^^^^^^^ Cannot override protected method \\"protected_method\\" of \\"Foo\\" with a private method
 
 
 error: Cannot override private method \\"private_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:152:3
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:161:3
     |
-152 |   private_method() {}
+161 |   private_method() {}
     |   ^^^^^^^^^^^^^^ Cannot override private method \\"private_method\\" of \\"Foo\\"
 
 
 error: Cannot override public method \\"public_method\\" of \\"Foo\\" with a protected method
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:157:13
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:166:13
     |
-157 |   protected public_method() {}
+166 |   protected public_method() {}
     |             ^^^^^^^^^^^^^ Cannot override public method \\"public_method\\" of \\"Foo\\" with a protected method
 
 
 error: Cannot override private method \\"private_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:160:13
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:169:13
     |
-160 |   protected private_method() {}
+169 |   protected private_method() {}
     |             ^^^^^^^^^^^^^^ Cannot override private method \\"private_method\\" of \\"Foo\\"
 
 
 error: Cannot override private method \\"private_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:167:7
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:176:7
     |
-167 |   pub private_method() {}
+176 |   pub private_method() {}
     |       ^^^^^^^^^^^^^^ Cannot override private method \\"private_method\\" of \\"Foo\\"
 
 
-error: Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:128:9
-    |
-128 |     Foo.protected_static_method();
-    |         ^^^^^^^^^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
-
-
-error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:130:9
-    |
-130 |     Foo.private_static_method();
-    |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-
-
-error: Cannot access protected member \\"protected_field\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:114:13
-    |
-114 |     log(foo.protected_field);
-    |             ^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_field\\" of \\"Foo\\"
-
-
-error: Cannot access private member \\"private_field\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:116:13
-    |
-116 |     log(foo.private_field);
-    |             ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Foo\\"
-
-
-error: Cannot access protected member \\"protected_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:120:9
-    |
-120 |     foo.protected_method();
-    |         ^^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_method\\" of \\"Foo\\"
-
-
-error: Cannot access private member \\"private_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:122:9
-    |
-122 |     foo.private_method();
-    |         ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Foo\\"
-
-
-error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:88:9
-   |
-88 |     Foo.private_static_method();
-   |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-
-
-error: Cannot access private member \\"private_static_method\\" of \\"Bar\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:93:9
-   |
-93 |     Bar.private_static_method();
-   |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Bar\\"
-
-
-error: Cannot access private member \\"private_field\\" of \\"Baz\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:75:14
-   |
-75 |     log(this.private_field);
-   |              ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Baz\\"
-
-
-error: Cannot access private member \\"private_method\\" of \\"Baz\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:80:10
-   |
-80 |     this.private_method();
-   |          ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Baz\\"
-
-
-error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:65:9
-   |
-65 |     Foo.private_static_method();
-   |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-
-
 error: Cannot access private member \\"private_field\\" of \\"Bar\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:52:14
+   --> ../../../examples/tests/invalid/access_modifiers.test.w:61:14
    |
-52 |     log(this.private_field);
+61 |     log(this.private_field);
    |              ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Bar\\"
 
 
 error: Cannot access private member \\"private_method\\" of \\"Bar\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:57:10
+   --> ../../../examples/tests/invalid/access_modifiers.test.w:66:10
    |
-57 |     this.private_method();
+66 |     this.private_method();
    |          ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Bar\\"
+
+
+error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
+   --> ../../../examples/tests/invalid/access_modifiers.test.w:74:9
+   |
+74 |     Foo.private_static_method();
+   |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
+
+
+error: Cannot access private member \\"private_field\\" of \\"Baz\\"
+   --> ../../../examples/tests/invalid/access_modifiers.test.w:84:14
+   |
+84 |     log(this.private_field);
+   |              ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Baz\\"
+
+
+error: Cannot access private member \\"private_method\\" of \\"Baz\\"
+   --> ../../../examples/tests/invalid/access_modifiers.test.w:89:10
+   |
+89 |     this.private_method();
+   |          ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Baz\\"
+
+
+error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
+   --> ../../../examples/tests/invalid/access_modifiers.test.w:97:9
+   |
+97 |     Foo.private_static_method();
+   |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
+
+
+error: Cannot access private member \\"private_static_method\\" of \\"Bar\\"
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:102:9
+    |
+102 |     Bar.private_static_method();
+    |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Bar\\"
+
+
+error: Cannot access protected member \\"protected_field\\" of \\"Foo\\"
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:123:13
+    |
+123 |     log(foo.protected_field);
+    |             ^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_field\\" of \\"Foo\\"
+
+
+error: Cannot access private member \\"private_field\\" of \\"Foo\\"
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:125:13
+    |
+125 |     log(foo.private_field);
+    |             ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Foo\\"
+
+
+error: Cannot access protected member \\"protected_method\\" of \\"Foo\\"
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:129:9
+    |
+129 |     foo.protected_method();
+    |         ^^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_method\\" of \\"Foo\\"
+
+
+error: Cannot access private member \\"private_method\\" of \\"Foo\\"
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:131:9
+    |
+131 |     foo.private_method();
+    |         ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Foo\\"
+
+
+error: Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:137:9
+    |
+137 |     Foo.protected_static_method();
+    |         ^^^^^^^^^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
+
+
+error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:139:9
+    |
+139 |     Foo.private_static_method();
+    |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
 
 
  
@@ -273,7 +273,14 @@ Duration <DURATION>"
 `;
 
 exports[`bring.test.w 1`] = `
-"error: Redundant bring of \\"std\\"
+"error: Expected module specification (see https://www.winglang.io/docs/libraries)
+  --> ../../../examples/tests/invalid/bring.test.w:8:7
+  |
+8 | bring ;
+  |       ^ Expected module specification (see https://www.winglang.io/docs/libraries)
+
+
+error: Redundant bring of \\"std\\"
   --> ../../../examples/tests/invalid/bring.test.w:1:1
   |
 1 | bring std;
@@ -285,6 +292,13 @@ error: \\"cloud\\" is already defined
   |
 4 | bring cloud;
   |       ^^^^^ \\"cloud\\" is already defined
+
+
+error: \\"c\\" is not a built-in module
+   --> ../../../examples/tests/invalid/bring.test.w:10:1
+   |
+10 | bring c;
+   | ^^^^^^^^ \\"c\\" is not a built-in module
 
 
  
@@ -302,11 +316,11 @@ exports[`bring_jsii.test.w 1`] = `
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^ bring \\"jsii-code-samples\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
 
 
-error: Cannot find jsii module \\"foobar\\" in source directory: Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid\\"
+error: Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid/bring_jsii.test.w\\"
   --> ../../../examples/tests/invalid/bring_jsii.test.w:4:1
   |
 4 | bring \\"foobar\\" as baz;
-  | ^^^^^^^^^^^^^^^^^^^^^^ Cannot find jsii module \\"foobar\\" in source directory: Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid\\"
+  | ^^^^^^^^^^^^^^^^^^^^^^ Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid/bring_jsii.test.w\\"
 
 
  
@@ -652,10 +666,31 @@ error: Unknown symbol \\"C11\\"
    |                   ^^^ Unknown symbol \\"C11\\"
 
 
-error: Expected 1 positional argument(s) but got 0
-    --> ../../../examples/tests/invalid/class.test.w:157:5
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/class.test.w:31:14
+   |
+31 |     this.x = \\"Hi\\";
+   |              ^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Variable cannot be reassigned from inflight
+   --> ../../../examples/tests/invalid/class.test.w:61:5
+   |
+61 |     this.y = 1;
+   |     ^^^^^^ Variable cannot be reassigned from inflight
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+    --> ../../../examples/tests/invalid/class.test.w:123:11
     |
-157 |     super();
+123 |     super(someStr);
+    |           ^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Expected 1 positional argument(s) but got 0
+    --> ../../../examples/tests/invalid/class.test.w:132:5
+    |
+132 |     super();
     |     ^^^^^^^^ Expected 1 positional argument(s) but got 0
 
 
@@ -667,31 +702,10 @@ error: Expected 1 arguments but got 2
 
 
 error: Expected 1 positional argument(s) but got 0
-    --> ../../../examples/tests/invalid/class.test.w:132:5
+    --> ../../../examples/tests/invalid/class.test.w:157:5
     |
-132 |     super();
+157 |     super();
     |     ^^^^^^^^ Expected 1 positional argument(s) but got 0
-
-
-error: Expected type to be \\"num\\", but got \\"str\\" instead
-    --> ../../../examples/tests/invalid/class.test.w:123:11
-    |
-123 |     super(someStr);
-    |           ^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
-
-
-error: Variable cannot be reassigned from inflight
-   --> ../../../examples/tests/invalid/class.test.w:61:5
-   |
-61 |     this.y = 1;
-   |     ^^^^^^ Variable cannot be reassigned from inflight
-
-
-error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/class.test.w:31:14
-   |
-31 |     this.x = \\"Hi\\";
-   |              ^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
  
@@ -750,6 +764,13 @@ error: Unknown parser error
    |
 14 | let m2: Map<num> = [\\"a\\" => 1, \\"b\\" => \\"2\\", \\"c\\" => 3];
    |                                               ^^^^ Unknown parser error
+
+
+error: Unknown parser error
+   --> ../../../examples/tests/invalid/container_types.test.w:37:24
+   |
+37 | let ss1: MutSet<str> = Set{\\"c\\"};
+   |                        ^^^ Unknown parser error
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -872,9 +893,30 @@ error: Expected type to be \\"MutMap<num>\\", but got \\"Map<num>\\" instead
 
 
 error: Unknown symbol \\"copyMut\\"
-   --> ../../../examples/tests/invalid/container_types.test.w:32:15
+   --> ../../../examples/tests/invalid/container_types.test.w:33:15
    |
-32 | let mm3 = mm2.copyMut();
+33 | let mm3 = mm2.copyMut();
+   |               ^^^^^^^ Unknown symbol \\"copyMut\\"
+
+
+error: Expected type to be \\"MutSet<str>\\", but got \\"Set<str>\\" instead
+   --> ../../../examples/tests/invalid/container_types.test.w:37:27
+   |
+37 | let ss1: MutSet<str> = Set{\\"c\\"};
+   |                           ^^^^^ Expected type to be \\"MutSet<str>\\", but got \\"Set<str>\\" instead
+
+
+error: Expected type to be \\"num\\", but got \\"bool\\" instead
+   --> ../../../examples/tests/invalid/container_types.test.w:39:37
+   |
+39 | let ss2: MutSet<num> = MutSet<num> {true};
+   |                                     ^^^^ Expected type to be \\"num\\", but got \\"bool\\" instead
+
+
+error: Unknown symbol \\"copyMut\\"
+   --> ../../../examples/tests/invalid/container_types.test.w:42:15
+   |
+42 | let ss4 = ss3.copyMut();
    |               ^^^^^^^ Unknown symbol \\"copyMut\\"
 
 
@@ -1196,38 +1238,80 @@ error: Expected type to be \\"Map<str>\\", but got \\"MutMap<str>\\" instead
 
 
 error: Expected type to be \\"bool\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/immutable_container_types.test.w:7:29
+  --> ../../../examples/tests/invalid/immutable_container_types.test.w:8:29
   |
-7 | let m3 = Map<bool> { \\"a\\" => \\"A\\" };
+8 | let m3 = Map<bool> { \\"a\\" => \\"A\\" };
   |                             ^^^ Expected type to be \\"bool\\", but got \\"str\\" instead
 
 
 error: Unknown symbol \\"set\\"
-  --> ../../../examples/tests/invalid/immutable_container_types.test.w:9:4
-  |
-9 | m4.set(\\"2\\", 3);
-  |    ^^^ Unknown symbol \\"set\\"
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:11:4
+   |
+11 | m4.set(\\"2\\", 3);
+   |    ^^^ Unknown symbol \\"set\\"
 
 
 error: Unknown symbol \\"copy\\"
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:10:13
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:13:13
    |
-10 | let m5 = m4.copy();
+13 | let m5 = m4.copy();
    |             ^^^^ Unknown symbol \\"copy\\"
 
 
 error: Unknown symbol \\"delete\\"
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:11:4
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:15:4
    |
-11 | m4.delete(\\"1\\");
+15 | m4.delete(\\"1\\");
    |    ^^^^^^ Unknown symbol \\"delete\\"
 
 
 error: Unknown symbol \\"clear\\"
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:12:4
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:17:4
    |
-12 | m4.clear();
+17 | m4.clear();
    |    ^^^^^ Unknown symbol \\"clear\\"
+
+
+error: Expected type to be \\"Set<Array<num>>\\", but got \\"MutSet<Array<num>>\\" instead
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:21:27
+   |
+21 | let s1: Set<Array<num>> = MutSet<Array<num>> {[1]};
+   |                           ^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"Set<Array<num>>\\", but got \\"MutSet<Array<num>>\\" instead
+
+
+error: Unknown symbol \\"delete\\"
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:24:4
+   |
+24 | s2.delete(\\"a\\");
+   |    ^^^^^^ Unknown symbol \\"delete\\"
+
+
+error: Unknown symbol \\"add\\"
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:26:4
+   |
+26 | s2.add(\\"d\\");
+   |    ^^^ Unknown symbol \\"add\\"
+
+
+error: Unknown symbol \\"copy\\"
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:28:13
+   |
+28 | let s3 = s2.copy();
+   |             ^^^^ Unknown symbol \\"copy\\"
+
+
+error: Unknown symbol \\"clear\\"
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:30:4
+   |
+30 | s2.clear();
+   |    ^^^^^ Unknown symbol \\"clear\\"
+
+
+error: Expected type to be \\"Set<bool>\\", but got \\"Set<Array<num>>\\" instead
+   --> ../../../examples/tests/invalid/immutable_container_types.test.w:32:21
+   |
+32 | let s4: Set<bool> = {[3]};
+   |                     ^^^^^ Expected type to be \\"Set<bool>\\", but got \\"Set<Array<num>>\\" instead
 
 
  
@@ -1344,22 +1428,18 @@ error: Expected type to be \\"inflight (str): void\\", but got \\"inflight (arg1
    |                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"inflight (str): void\\", but got \\"inflight (arg1: num): unknown\\" instead
 
 
-error: Inferred type Array<str> conflicts with already inferred type Array<num>
-   --> ../../../examples/tests/invalid/inference.test.w:92:33
-   |  
-92 |     let jsonDoubleInference: SS = {
-   | /---------------------------------^
-93 | |     a: a,
-94 | |     b: a,
-95 | |   };
-   | \\\\---^ Inferred type Array<str> conflicts with already inferred type Array<num>
+error: Unable to infer type
+  --> ../../../examples/tests/invalid/inference.test.w:4:29
+  |
+4 | let preflightClosureArgs = (nice) => { return true; };
+  |                             ^^^^ Unable to infer type
 
 
-error: Unexpected return value from void function. Return type annotations are required for methods.
-   --> ../../../examples/tests/invalid/inference.test.w:75:5
+error: Unable to infer type
+   --> ../../../examples/tests/invalid/inference.test.w:25:44
    |
-75 |     return true;
-   |     ^^^^^^^^^^^^ Unexpected return value from void function. Return type annotations are required for methods.
+25 | let stringInterpolationCannotBeInferred = (nice) => {
+   |                                            ^^^^ Unable to infer type
 
 
 error: Property not found
@@ -1376,18 +1456,43 @@ error: Unable to infer type
    |                       ^^^^^^^ Unable to infer type
 
 
-error: Unable to infer type
-   --> ../../../examples/tests/invalid/inference.test.w:25:44
+error: Unexpected return value from void function. Return type annotations are required for methods.
+   --> ../../../examples/tests/invalid/inference.test.w:75:5
    |
-25 | let stringInterpolationCannotBeInferred = (nice) => {
-   |                                            ^^^^ Unable to infer type
+75 |     return true;
+   |     ^^^^^^^^^^^^ Unexpected return value from void function. Return type annotations are required for methods.
+
+
+error: Inferred type Array<str> conflicts with already inferred type Array<num>
+   --> ../../../examples/tests/invalid/inference.test.w:92:33
+   |  
+92 |     let jsonDoubleInference: SS = {
+   | /---------------------------------^
+93 | |     a: a,
+94 | |     b: a,
+95 | |   };
+   | \\\\---^ Inferred type Array<str> conflicts with already inferred type Array<num>
+
+
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+    --> ../../../examples/tests/invalid/inference.test.w:102:16
+    |
+102 |   let x: str = returnsNumber();
+    |                ^^^^^^^^^^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+error: Property not found
+    --> ../../../examples/tests/invalid/inference.test.w:109:14
+    |
+109 |   return arg.get(\\"a\\");
+    |              ^^^ Property not found
 
 
 error: Unable to infer type
-  --> ../../../examples/tests/invalid/inference.test.w:4:29
-  |
-4 | let preflightClosureArgs = (nice) => { return true; };
-  |                             ^^^^ Unable to infer type
+    --> ../../../examples/tests/invalid/inference.test.w:107:19
+    |
+107 | let unknownArg = (arg) => {
+    |                   ^^^ Unable to infer type
 
 
 error: Unable to infer type
@@ -1454,11 +1559,11 @@ exports[`inflight_class_created_in_preflight.test.w 1`] = `
   | ^^^^^^^^^ Cannot create inflight class \\"Foo\\" in preflight phase
 
 
-error: Cannot create preflight class \\"PreflightClass\\" in inflight phase
-   --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.test.w:19:3
-   |
-19 |   new PreflightClass();
-   |   ^^^^^^^^^^^^^^^^^^^^ Cannot create preflight class \\"PreflightClass\\" in inflight phase
+error: Cannot create inflight class \\"Foo\\" in preflight phase
+  --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.test.w:8:5
+  |
+8 |     new Foo();
+  |     ^^^^^^^^^ Cannot create inflight class \\"Foo\\" in preflight phase
 
 
 error: Cannot create inflight class \\"Foo\\" in preflight phase
@@ -1468,11 +1573,11 @@ error: Cannot create inflight class \\"Foo\\" in preflight phase
    |     ^^^^^^^^^ Cannot create inflight class \\"Foo\\" in preflight phase
 
 
-error: Cannot create inflight class \\"Foo\\" in preflight phase
-  --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.test.w:8:5
-  |
-8 |     new Foo();
-  |     ^^^^^^^^^ Cannot create inflight class \\"Foo\\" in preflight phase
+error: Cannot create preflight class \\"PreflightClass\\" in inflight phase
+   --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.test.w:19:3
+   |
+19 |   new PreflightClass();
+   |   ^^^^^^^^^^^^^^^^^^^^ Cannot create preflight class \\"PreflightClass\\" in inflight phase
 
 
 error: Cannot qualify access to a lifted type \\"PreflightClass\\" (see https://github.com/winglang/wing/issues/76 for more details)
@@ -2248,25 +2353,6 @@ exports[`reassign_to_nonreassignable.test.w 1`] = `
 
 
 error: Variable is not reassignable
-   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.test.w:42:3
-   |
-41 | let f = (arg: num):num => {
-   |          --- defined here (try adding \\"var\\" in front)
-42 |   arg = 0;
-   |   ^^^ Variable is not reassignable
-
-
-error: Variable is not reassignable
-   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.test.w:35:5
-   |
-16 |   inflight inflightF: num;
-   |            --------- defined here (try adding \\"var\\" in front)
-   .
-35 |     this.inflightF = this.inflightF + 1;
-   |     ^^^^^^^^^^^^^^ Variable is not reassignable
-
-
-error: Variable is not reassignable
    --> ../../../examples/tests/invalid/reassign_to_nonreassignable.test.w:28:5
    |
 14 |   f: num;
@@ -2284,6 +2370,25 @@ error: Variable is not reassignable
    .
 30 |     this.innerR.inner = 2;
    |     ^^^^^^^^^^^^^^^^^ Variable is not reassignable
+
+
+error: Variable is not reassignable
+   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.test.w:35:5
+   |
+16 |   inflight inflightF: num;
+   |            --------- defined here (try adding \\"var\\" in front)
+   .
+35 |     this.inflightF = this.inflightF + 1;
+   |     ^^^^^^^^^^^^^^ Variable is not reassignable
+
+
+error: Variable is not reassignable
+   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.test.w:42:3
+   |
+41 | let f = (arg: num):num => {
+   |          --- defined here (try adding \\"var\\" in front)
+42 |   arg = 0;
+   |   ^^^ Variable is not reassignable
 
 
  
@@ -2389,11 +2494,11 @@ exports[`return_types.test.w 1`] = `
   |     ^^^^^^^^^ Return statement outside of function cannot return a value
 
 
-error: Unexpected return value from void function. Return type annotations are required for methods.
-   --> ../../../examples/tests/invalid/return_types.test.w:19:5
-   |
-19 |     return 9;
-   |     ^^^^^^^^^ Unexpected return value from void function. Return type annotations are required for methods.
+error: Return statement outside of function cannot return a value
+  --> ../../../examples/tests/invalid/return_types.test.w:4:5
+  |
+4 |     return 9;
+  |     ^^^^^^^^^ Return statement outside of function cannot return a value
 
 
 error: Unexpected return value from void function. Return type annotations are required for methods.
@@ -2410,11 +2515,11 @@ error: Unexpected return value from void function. Return type annotations are r
    |     ^^^^^^^^^ Unexpected return value from void function. Return type annotations are required for methods.
 
 
-error: Return statement outside of function cannot return a value
-  --> ../../../examples/tests/invalid/return_types.test.w:4:5
-  |
-4 |     return 9;
-  |     ^^^^^^^^^ Return statement outside of function cannot return a value
+error: Unexpected return value from void function. Return type annotations are required for methods.
+   --> ../../../examples/tests/invalid/return_types.test.w:19:5
+   |
+19 |     return 9;
+   |     ^^^^^^^^^ Unexpected return value from void function. Return type annotations are required for methods.
 
 
  
@@ -2749,25 +2854,11 @@ error: Cannot override private method \\"m1\\" of \\"BaseClass\\"
    |            ^^ Cannot override private method \\"m1\\" of \\"BaseClass\\"
 
 
-error: \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
-   --> ../../../examples/tests/invalid/super_call.test.w:52:50
-   |
-52 |       return \\"this: \${this.m1()}, super: \${super.m1()}\\";
-   |                                                  ^^ \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
-
-
-error: Cannot call super method inside of a static method
-   --> ../../../examples/tests/invalid/super_call.test.w:26:11
-   |
-26 |     super.method();
-   |           ^^^^^^ Cannot call super method inside of a static method
-
-
-error: super class \\"A\\" does not have a method named \\"child_method\\"
-   --> ../../../examples/tests/invalid/super_call.test.w:20:11
-   |
-20 |     super.child_method();
-   |           ^^^^^^^^^^^^ super class \\"A\\" does not have a method named \\"child_method\\"
+error: Cannot call super method because class A has no parent
+  --> ../../../examples/tests/invalid/super_call.test.w:4:11
+  |
+4 |     super.method();
+  |           ^^^^^^ Cannot call super method because class A has no parent
 
 
 error: Cannot call super method because class InflightA has no parent
@@ -2777,11 +2868,25 @@ error: Cannot call super method because class InflightA has no parent
    |           ^^^^^^ Cannot call super method because class InflightA has no parent
 
 
-error: Cannot call super method because class A has no parent
-  --> ../../../examples/tests/invalid/super_call.test.w:4:11
-  |
-4 |     super.method();
-  |           ^^^^^^ Cannot call super method because class A has no parent
+error: super class \\"A\\" does not have a method named \\"child_method\\"
+   --> ../../../examples/tests/invalid/super_call.test.w:20:11
+   |
+20 |     super.child_method();
+   |           ^^^^^^^^^^^^ super class \\"A\\" does not have a method named \\"child_method\\"
+
+
+error: Cannot call super method inside of a static method
+   --> ../../../examples/tests/invalid/super_call.test.w:26:11
+   |
+26 |     super.method();
+   |           ^^^^^^ Cannot call super method inside of a static method
+
+
+error: \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
+   --> ../../../examples/tests/invalid/super_call.test.w:52:50
+   |
+52 |       return \\"this: \${this.m1()}, super: \${super.m1()}\\";
+   |                                                  ^^ \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
 
 
  

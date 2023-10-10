@@ -124,7 +124,7 @@ module.exports = grammar({
     import_statement: ($) =>
       seq(
         "bring",
-        field("module_name", choice($.identifier, $.string)),
+        optional(field("module_name", choice($.identifier, $.string))),
         optional(seq("as", field("alias", $.identifier))),
         $._semicolon
       ),

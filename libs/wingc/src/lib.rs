@@ -246,7 +246,7 @@ pub fn type_check(
 
 	let mut scope_env = types.get_scope_env(&scope);
 	let mut tc = TypeChecker::new(types, file_path, file_graph, jsii_types, jsii_imports);
-	tc.add_module_to_env(
+	tc.add_jsii_module_to_env(
 		&mut scope_env,
 		WINGSDK_ASSEMBLY_NAME.to_string(),
 		vec![WINGSDK_STD_MODULE.to_string()],

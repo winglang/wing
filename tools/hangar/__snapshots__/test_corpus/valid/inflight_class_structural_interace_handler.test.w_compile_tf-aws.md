@@ -18,9 +18,9 @@ module.exports = function({ $NotGoo }) {
           {console.log("also fine")};
         }
       }
-      const y = new YesGoo();
+      const y = (await (async () => {const o = new YesGoo(); await o.$inflight_init?.(); return o; })());
       {((cond) => {if (!cond) throw new Error("assertion failed: y.handle() == 456")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await y.handle()),456)))};
-      const x = new $NotGoo();
+      const x = (await (async () => {const o = new $NotGoo(); await o.$inflight_init?.(); return o; })());
       {((cond) => {if (!cond) throw new Error("assertion failed: x.handle() == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await x.handle()),123)))};
     }
   }
