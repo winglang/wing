@@ -14,7 +14,10 @@ function localePath(p: string): string {
   if (process.platform !== "win32") {
     return p;
   }
-  return p.split(path.posix.sep).join(path.win32.sep);
+  let winPath = p.split(path.posix.sep).join(path.win32.sep);
+  // If the path starts from the root directory, the first segment represents a specific drive.
+  winPath = winPath.replace(/^\\([A-Za-z])\\/, "$1:\\"); 
+  return winPath;
 }
 
 /**
@@ -23,9 +26,9 @@ function localePath(p: string): string {
  * @returns The Normalized path.
  */
 function posixPath(p: string): string {
-  if (/^[A-Za-z]:/.test(p)) {
-    p = p.slice(2);
-  }
+  // If the path begins with a specific drive, convert the path to a format that starts from the root directory.
+  // And the initial segment specifies the name of the specific drive.
+  p = p.replace(/^([A-Za-z]):/, "\\$1");
   return p.split(path.sep).join(path.posix.sep);
 }
 
