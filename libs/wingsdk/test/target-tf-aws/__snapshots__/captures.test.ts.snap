@@ -36,7 +36,7 @@ function: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/function.inflight\\"
 exports[`function with a function binding 3`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -180,7 +180,7 @@ return class Handler {
 exports[`function with a queue binding 3`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -321,7 +321,7 @@ bucket: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/bucket.inflight\\")).B
 exports[`function with bucket binding > put operation 2`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -397,7 +397,7 @@ exports[`function with bucket binding > put operation 2`] = `
 exports[`two functions reusing the same IFunctionHandler 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },

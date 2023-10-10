@@ -2,6 +2,11 @@
 
 exports[`bucket is public 1`] = `
 {
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+      "value": "[]",
+    },
+  },
   "resource": {
     "azurerm_resource_group": {
       "ResourceGroup": {
@@ -60,6 +65,29 @@ exports[`bucket is public 2`] = `
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
+              },
+              "cloud.TestRunner": {
+                "children": {
+                  "TestFunctionIdentifiers": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.17.0",
+                    },
+                    "id": "TestFunctionIdentifiers",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
               "my_bucket": {
                 "children": {
@@ -121,6 +149,11 @@ exports[`bucket is public 2`] = `
 
 exports[`bucket name valid 1`] = `
 {
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+      "value": "[]",
+    },
+  },
   "resource": {
     "azurerm_resource_group": {
       "ResourceGroup": {
@@ -202,6 +235,29 @@ exports[`bucket name valid 2`] = `
                 "id": "azure",
                 "path": "root/Default/azure",
               },
+              "cloud.TestRunner": {
+                "children": {
+                  "TestFunctionIdentifiers": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.17.0",
+                    },
+                    "id": "TestFunctionIdentifiers",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+              },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
@@ -240,6 +296,11 @@ exports[`bucket name valid 2`] = `
 
 exports[`bucket with two preflight files 1`] = `
 {
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+      "value": "[]",
+    },
+  },
   "resource": {
     "azurerm_resource_group": {
       "ResourceGroup": {
@@ -314,6 +375,29 @@ exports[`bucket with two preflight files 2`] = `
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
+              },
+              "cloud.TestRunner": {
+                "children": {
+                  "TestFunctionIdentifiers": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.17.0",
+                    },
+                    "id": "TestFunctionIdentifiers",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
               "my_bucket": {
                 "children": {
@@ -391,6 +475,11 @@ exports[`bucket with two preflight files 2`] = `
 
 exports[`bucket with two preflight objects 1`] = `
 {
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+      "value": "[]",
+    },
+  },
   "resource": {
     "azurerm_resource_group": {
       "ResourceGroup": {
@@ -465,6 +554,29 @@ exports[`bucket with two preflight objects 2`] = `
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
+              },
+              "cloud.TestRunner": {
+                "children": {
+                  "TestFunctionIdentifiers": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.17.0",
+                    },
+                    "id": "TestFunctionIdentifiers",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
               "my_bucket": {
                 "children": {
@@ -542,6 +654,11 @@ exports[`bucket with two preflight objects 2`] = `
 
 exports[`create a bucket 1`] = `
 {
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+      "value": "[]",
+    },
+  },
   "resource": {
     "azurerm_resource_group": {
       "ResourceGroup": {
@@ -600,6 +717,29 @@ exports[`create a bucket 2`] = `
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
+              },
+              "cloud.TestRunner": {
+                "children": {
+                  "TestFunctionIdentifiers": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.17.0",
+                    },
+                    "id": "TestFunctionIdentifiers",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
               "my_bucket": {
                 "children": {
@@ -661,6 +801,11 @@ exports[`create a bucket 2`] = `
 
 exports[`create multiple buckets 1`] = `
 {
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+      "value": "[]",
+    },
+  },
   "resource": {
     "azurerm_resource_group": {
       "ResourceGroup": {
@@ -724,6 +869,29 @@ exports[`create multiple buckets 2`] = `
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
+              },
+              "cloud.TestRunner": {
+                "children": {
+                  "TestFunctionIdentifiers": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.17.0",
+                    },
+                    "id": "TestFunctionIdentifiers",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
               "my_bucket": {
                 "children": {
