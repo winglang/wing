@@ -310,6 +310,10 @@
       "type": "bundled"
     },
     {
+      "name": "yaml",
+      "type": "bundled"
+    },
+    {
       "name": "constructs",
       "version": "~10.2.69",
       "type": "peer"

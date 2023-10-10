@@ -29,6 +29,7 @@ import {
   API_FQN,
   BUCKET_FQN,
   COUNTER_FQN,
+  DOMAIN_FQN,
   FUNCTION_FQN,
   ON_DEPLOY_FQN,
   QUEUE_FQN,
@@ -40,6 +41,7 @@ import {
 import { AppProps } from "../core";
 import { TABLE_FQN, REDIS_FQN, REACT_APP_FQN, DYNAMODB_TABLE_FQN } from "../ex";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
+import { Domain } from "../shared-aws/domain";
 import { CdktfApp } from "../shared-tf/app";
 import { TEST_RUNNER_FQN } from "../std";
 
@@ -122,8 +124,12 @@ export class App extends CdktfApp {
       case ON_DEPLOY_FQN:
         return new OnDeploy(scope, id, args[0], args[1]);
 
+      case DOMAIN_FQN:
+        return new Domain(scope, id, args[0]);
+
       case REACT_APP_FQN:
         return new ReactApp(scope, id, args[0]);
+
       case DYNAMODB_TABLE_FQN:
         return new DynamodbTable(scope, id, args[0]);
     }

@@ -34,6 +34,17 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: Domain
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Domain\n```\n---\nA cloud Domain."
+  sortText: gg|Domain
+  insertText: Domain($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: Function
   kind: 7
   documentation:
