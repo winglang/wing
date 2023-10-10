@@ -1,6 +1,10 @@
 import { Construct } from "constructs";
 import { App } from "./app";
-import { Function as GCPFunction } from "./function";
+import {
+  ActionTypes,
+  Function as GCPFunction,
+  ResourceTypes,
+} from "./function";
 import { StorageBucket } from "../.gen/providers/google/storage-bucket";
 import { StorageBucketIamMember } from "../.gen/providers/google/storage-bucket-iam-member";
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
@@ -32,11 +36,6 @@ const BUCKET_NAME_OPTS: NameOptions = {
   disallowedRegex: /([^a-z0-9_\-]+)/g,
   includeHash: false,
 };
-
-export enum StorageBucketPermissions {
-  READ = "roles/storage.objectViewer",
-  READWRITE = "roles/storage.objectUser",
-}
 
 /**
  * GCP implementation of `cloud.Bucket`.
@@ -73,7 +72,7 @@ export class Bucket extends cloud.Bucket {
       // https://cloud.google.com/storage/docs/access-control/making-data-public#terraform
       new StorageBucketIamMember(this, "PublicAccessIamMember", {
         bucket: this.bucket.name,
-        role: StorageBucketPermissions.READ,
+        role: ActionTypes.StorageRead,
         member: "allUsers",
       });
     }
@@ -91,21 +90,25 @@ export class Bucket extends cloud.Bucket {
     if (!(host instanceof GCPFunction)) {
       throw new Error("buckets can only be bound by tfgcp.Function for now");
     }
-
     if (
       ops.includes(cloud.BucketInflightMethods.GET) ||
       ops.includes(cloud.BucketInflightMethods.LIST) ||
       ops.includes(cloud.BucketInflightMethods.GET_JSON)
     ) {
-      host.addBucketPermission(this, StorageBucketPermissions.READ);
+      host.addPermission(this, {
+        Action: ActionTypes.StorageRead,
+        Resource: ResourceTypes.BUCKET,
+      });
     } else if (
       ops.includes(cloud.BucketInflightMethods.DELETE) ||
       ops.includes(cloud.BucketInflightMethods.PUT) ||
       ops.includes(cloud.BucketInflightMethods.PUT_JSON)
     ) {
-      host.addBucketPermission(this, StorageBucketPermissions.READWRITE);
+      host.addPermission(this, {
+        Action: ActionTypes.StorageReadWrite,
+        Resource: ResourceTypes.BUCKET,
+      });
     }
-
     super.bind(host, ops);
   }
 
@@ -114,3 +117,29 @@ export class Bucket extends cloud.Bucket {
     throw new Error("Method not implemented.");
   }
 }
+
+export const addBucketPermission = (
+  bucket: Bucket,
+  permission: ActionTypes,
+  projectId: string
+) => {
+  try {
+    if (permission === ActionTypes.StorageRead) {
+      new StorageBucketIamMember(bucket, `RoleAssignment${permission}`, {
+        bucket: bucket.bucket.name,
+        role: permission,
+        member: `projectViewer:${projectId}`,
+      });
+    } else if (permission === ActionTypes.StorageReadWrite) {
+      new StorageBucketIamMember(bucket, `RoleAssignment${permission}`, {
+        bucket: bucket.bucket.name,
+        role: permission,
+        member: `projectEditor:${projectId}`,
+      });
+    } else {
+      throw new Error("Unsupported permission");
+    }
+  } catch (e) {
+    throw new Error(`Failed to add permission to bucket: ${e}`);
+  }
+};

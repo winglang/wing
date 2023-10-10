@@ -2,9 +2,8 @@ import { resolve } from "path";
 import { AssetType, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
-import { Bucket } from "./bucket";
+import { Bucket, addBucketPermission } from "./bucket";
 import { CloudfunctionsFunction } from "../.gen/providers/google/cloudfunctions-function";
-import { StorageBucketIamMember } from "../.gen/providers/google/storage-bucket-iam-member";
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
 import * as cloud from "../cloud";
 import { createBundle } from "../shared/bundling";
@@ -13,14 +12,30 @@ import {
   NameOptions,
   ResourceNames,
 } from "../shared/resource-names";
-import { IInflightHost } from "../std";
-import { StorageBucketPermissions } from "../target-tf-gcp/bucket";
+import { IInflightHost, IResource } from "../std";
 
 const FUNCTION_NAME_OPTS: NameOptions = {
   maxLen: 32,
   disallowedRegex: /[^a-z0-9]+/g,
   case: CaseConventions.LOWERCASE,
 };
+
+export enum ResourceTypes {
+  BUCKET = "Bucket",
+  Function = "Function",
+}
+
+export enum ActionTypes {
+  StorageRead = "roles/storage.objectViewer",
+  StorageReadWrite = "roles/storage.objectUser",
+  FunctionInvoker = "roles/cloudfunctions.invoker",
+  FunctionViewer = "roles/cloudfunctions.viewer",
+}
+
+interface IFunctionPermissions {
+  Action: ActionTypes;
+  Resource: ResourceTypes;
+}
 
 /**
  * GCP implementation of `cloud.Function`.
@@ -30,8 +45,7 @@ const FUNCTION_NAME_OPTS: NameOptions = {
 
 export class Function extends cloud.Function {
   private readonly function: CloudfunctionsFunction;
-  private readonly bucketPermission: Map<string, StorageBucketIamMember> =
-    new Map<string, StorageBucketIamMember>();
+  private permissions?: Map<string, Set<IFunctionPermissions>>;
 
   constructor(
     scope: Construct,
@@ -99,6 +113,25 @@ export class Function extends cloud.Function {
       timeout: props.timeout?.seconds ?? 60,
       environmentVariables: props.env ?? {},
     });
+
+    // apply permissions to bound resources
+    if (this.permissions) {
+      for (const [uniqueId, roleDefinitions] of this.permissions) {
+        const scopedResource = this.node.tryFindChild(uniqueId);
+        if (!scopedResource) {
+          throw new Error(
+            `Could not find scoped resource with uniqueId ${uniqueId}`
+          );
+        }
+        for (const roleDefinition of roleDefinitions) {
+          addBucketPermission(
+            scopedResource as Bucket,
+            roleDefinition.Action as ActionTypes,
+            app.projectId as string
+          );
+        }
+      }
+    }
   }
 
   public get functionName(): string {
@@ -112,51 +145,41 @@ export class Function extends cloud.Function {
     );
   }
 
-  public addBucketPermission(
-    bucket: Bucket,
-    permission: StorageBucketPermissions
+  public addPermission(
+    scopedResource: IResource,
+    permissions: IFunctionPermissions
   ): void {
-    const app = App.of(this) as App;
-
-    // check if the permission is already set
-    if (this.bucketPermission.has(`${bucket.bucket.name}-${permission}`)) {
-      return;
+    if (!this.permissions) {
+      this.permissions = new Map();
     }
-
-    // as every gcp bucket has unique name, we can use bucket name in map as unique key along with permission type
-    if (permission === StorageBucketPermissions.READ) {
-      let newReadPermission = new StorageBucketIamMember(
-        this,
-        "BucketPermissionToRead",
-        {
-          bucket: bucket.bucket.name,
-          role: permission,
-          member: `projectViewer:${app.projectId}`,
-        }
-      );
-      this.bucketPermission.set(
-        `${bucket.bucket.name}-${permission}`,
-        newReadPermission
-      );
-    } else if (permission === StorageBucketPermissions.READWRITE) {
-      let newReadWritePermission = new StorageBucketIamMember(
-        this,
-        "BucketPermissionToWrite",
-        {
-          bucket: bucket.bucket.name,
-          role: permission,
-          member: `projectEditor:${app.projectId}`,
-        }
-      );
-      this.bucketPermission.set(
-        `${bucket.bucket.name}-${permission}`,
-        newReadWritePermission
-      );
-    } else {
-      throw new Error(
-        "Any other permission type apart from READ and READWRITE is not supported yet"
-      );
+    const uniqueId = scopedResource.node.addr.substring(-8);
+    // If the function has already been initialized attach the role assignment directly
+    if (this.function) {
+      if (
+        this.permissions.has(uniqueId) &&
+        this.permissions.get(uniqueId)?.has(permissions)
+      ) {
+        return; // already exists
+      }
+      const app = App.of(this) as App;
+      // TODO: add support for other resource types
+      switch (permissions.Resource) {
+        case ResourceTypes.BUCKET:
+          addBucketPermission(
+            scopedResource as Bucket,
+            permissions.Action as ActionTypes,
+            app.projectId as string
+          );
+          break;
+        case ResourceTypes.Function:
+          throw new Error("Function permissions not implemented yet");
+        default:
+          throw new Error("Unsupported resource type");
+      }
     }
+    const roleDefinitions = this.permissions.get(uniqueId) ?? new Set();
+    roleDefinitions.add(permissions);
+    this.permissions.set(uniqueId, roleDefinitions);
   }
 
   public bind(_host: IInflightHost, _ops: string[]): void {
