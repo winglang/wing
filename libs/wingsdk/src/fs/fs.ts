@@ -88,7 +88,7 @@ export class Util {
    * @returns The resulting path after joining all the paths.
    */
   public static join(...paths: string[]): string {
-    return path.join(...paths);
+    return posixPath(path.join(...paths));
   }
   /**
    * Retrieve the name of the directory from a given file path.
@@ -96,7 +96,7 @@ export class Util {
    * @returns The directory name of the path.
    */
   public static dirname(p: string): string {
-    return path.dirname(p);
+    return posixPath(path.dirname(p));
   }
   /**
    * Retrieve the final segment of a given file path.
@@ -112,7 +112,7 @@ export class Util {
    * @returns The relative path from {from} to {to}.
    */
   public static relative(from: string, to: string): string {
-    return path.relative(from, to);
+    return posixPath(path.relative(from, to));
   }
   /**
    * The right-most parameter is considered {to}. Other parameters are considered an array of {from}.
@@ -128,7 +128,7 @@ export class Util {
    * @returns The resulting path after performing the resolve operation.
    */
   public static resolve(...paths: string[]): string {
-    return path.resolve(...paths);
+    return posixPath(path.resolve(...paths));
   }
   /**
    * Check if the path exists.
