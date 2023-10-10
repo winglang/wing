@@ -94,12 +94,13 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
     if (error instanceof wingCompiler.CompileError) {
       // This is a bug in the user's code. Print the compiler diagnostics.
       const diagnostics = error.diagnostics;
+      const cwd = process.cwd();
       const result = [];
 
       for (const diagnostic of diagnostics) {
         const { message, span, annotations } = diagnostic;
-        let files: File[] = [];
-        let labels: Label[] = [];
+        const files: File[] = [];
+        const labels: Label[] = [];
 
         // file_id might be "" if the span is synthetic (see #2521)
         if (span?.file_id) {
@@ -107,8 +108,7 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
           const source = await fsPromise.readFile(span.file_id, "utf8");
           const start = byteOffsetFromLineAndColumn(source, span.start.line, span.start.col);
           const end = byteOffsetFromLineAndColumn(source, span.end.line, span.end.col);
-          // display the file path relative to the current working directory
-          const filePath = relative(process.cwd(), span.file_id);
+          const filePath = relative(cwd, span.file_id);
           files.push({ name: filePath, source });
           labels.push({
             fileId: filePath,
@@ -131,9 +131,10 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
             annotation.span.end.line,
             annotation.span.end.col
           );
-          files.push({ name: annotation.span.file_id, source });
+          const filePath = relative(cwd, annotation.span.file_id);
+          files.push({ name: filePath, source });
           labels.push({
-            fileId: annotation.span.file_id,
+            fileId: filePath,
             rangeStart: start,
             rangeEnd: end,
             message: annotation.message,
