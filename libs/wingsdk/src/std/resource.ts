@@ -36,7 +36,7 @@ export interface IResource extends IConstruct {
    *
    * @internal
    */
-  _registerBind(host: IInflightHost, ops: string[]): void;
+  _registerOnLift(host: IInflightHost, ops: string[]): void;
 
   /**
    * Return a code snippet that can be used to reference this resource inflight.
@@ -192,12 +192,12 @@ export abstract class Resource extends Construct implements IResource {
 
   /**
    * Register that the resource needs to be bound to the host for the given
-   * operations. This means that the resource's `bind` method will be called
+   * operations. This means that the resource's `onLift` method will be called
    * during pre-synthesis.
    *
    * @internal
    */
-  public _registerBind(_host: IInflightHost, _ops: string[]) {
+  public _registerOnLift(_host: IInflightHost, _ops: string[]) {
     return;
   }
 
@@ -235,7 +235,7 @@ export abstract class Resource extends Construct implements IResource {
         // infinite recursion.
         opsForHost.add(op);
 
-        this._registerBind(host, [op]);
+        this._registerOnLift(host, [op]);
 
         // add connection metadata
         Node.of(this).addConnection({

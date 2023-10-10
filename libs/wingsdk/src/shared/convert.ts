@@ -42,9 +42,9 @@ export function convertBetweenHandlers(
       )} })`;
     }
 
-    public _registerBind(host: IInflightHost, ops: string[]): void {
+    public _registerOnLift(host: IInflightHost, ops: string[]): void {
       NewHandler._registerBindObject(this.handler, host, ["handle"]);
-      super._registerBind(host, ops);
+      super._registerOnLift(host, ops);
     }
   }
 
