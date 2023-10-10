@@ -27,7 +27,7 @@ export interface IResource extends IConstruct {
    * If `ops` contains any operations not supported by the resource, it should throw an
    * error.
    */
-  bind(host: IInflightHost, ops: string[]): void;
+  onLift(host: IInflightHost, ops: string[]): void;
 
   /**
    * Register that the resource needs to be bound to the host for the given
@@ -184,7 +184,7 @@ export abstract class Resource extends Construct implements IResource {
    * you must call `super.bind(host, ops)` to ensure that the resource is
    * actually bound.
    */
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     // Do nothing by default
     host;
     ops;
@@ -260,7 +260,7 @@ export abstract class Resource extends Construct implements IResource {
     // By aggregating the binding operations, we can avoid performing
     // multiple bindings for the same resource-host pairs.
     for (const [host, ops] of this.bindMap.entries()) {
-      this.bind(host, Array.from(ops));
+      this.onLift(host, Array.from(ops));
     }
   }
 
