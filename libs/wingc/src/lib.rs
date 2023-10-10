@@ -241,6 +241,24 @@ pub fn type_check(
 		scope,
 		types,
 	);
+	add_builtin(
+		UtilityFunctions::UnsafeCast.to_string().as_str(),
+		Type::Function(FunctionSignature {
+			this_type: None,
+			parameters: vec![FunctionParameter {
+				name: "value".into(),
+				typeref: types.anything(),
+				docs: Docs::with_summary("The value to cast into a different type"),
+				variadic: false,
+			}],
+			return_type: types.anything(),
+			phase: Phase::Independent,
+			js_override: Some("$args$".to_string()),
+			docs: Docs::with_summary("Casts a value into a different type. This is unsafe and can cause runtime errors"),
+		}),
+		scope,
+		types,
+	);
 
 	let mut scope_env = types.get_scope_env(&scope);
 	let mut tc = TypeChecker::new(types, file_path, file_graph, jsii_types, jsii_imports);
