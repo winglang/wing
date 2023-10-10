@@ -16,60 +16,71 @@ sidebar_position: 1
 
 The `cloud.Service` class represents a cloud service that has a start and optional stop lifecycle.
 
-Services are a common way to define long running code, such as web servers and custom daemons.
+Services are a common way to define long running code, such as microservices.
 
 ## Usage
 
 ### Creating a service
 
+When defining a service, the first argument is an inflight closure that represents
+the service handler. This handler is responsible to perform any initialization
+activity and **return asynchronously** when initialization is complete.
+
 ```js
 bring cloud;
 
-// At minimum a service needs to have an onStart handler.
-let service = new cloud.Service(
-  onStart: inflight() => {
-    log("Service started...");
-  }
-);
+new cloud.Service(inflight () => {
+  // ...
+  // kick off any initialization activities asynchronously
+  // ...
+  log("Service started...");
+});
 ```
 
 ### Disable auto-start
 
-By default the service resource will start automatically, however this can be disabled by
-passing `autoStart: false` to the constructor.
+By default the service resource will start automatically, however this can be disabled by passing
+`autoStart: false` to the constructor.
 
 ```js
 bring cloud;
 
-let service = new cloud.Service(
-  autoStart: false,
-  onStart: inflight() => {
-    log("Service started...");
-  }
-);
+let handler = inflight () => {
+  log("service started...");
+};
+
+let service = new cloud.Service(handler, autoStart: false);
 ```
 
-### Defining service with stop behavior
+### Service cleanup
+
+Optionally, the service handler inflight closure can return another inflight closure which will be
+called when the service is stopped. Using a return closure allows naturally passing context between
+the async calls.
 
 ```js
 bring cloud;
 
-let service = new cloud.Service(
-  onStart: inflight() => {
-    log("Service started...");
-  },
-  onStop: inflight() => {
+new cloud.Service(inflight() => {
+  let server = startHttpServer();
+  log("Service started...");
+  return () => {
     log("Service stopped...");
-  },
-);
+    server.close();
+  };
+});
 ```
 
 ### Stopping and starting a service
 
-The inflight methods `start` and `stop` are used exactly how they sound, to stop and start the service.
-Here is an example of using a service that will track how often it is started and stopped using counters.
-An important aspect to note is that consecutive starts and stops have no affect on a service. For example
-if a `service.start()` is called on a service that is already started, nothing will happen.
+The inflight methods `start()` and `stop()` are used exactly how they sound, to stop and start the
+service. The method `started()` returns a `bool` indicating if the service is currently started.
+
+Here is an example of using a service that will track how often it is started and stopped using
+counters. 
+
+An important aspect to note is that consecutive starts and stops have no affect on a service. For
+example, if a `service.start()` is called on a service that is already started, nothing will happen.
 
 ```js
 bring cloud;
@@ -77,25 +88,26 @@ bring cloud;
 let startCounter = new cloud.Counter() as "start counter";
 let stopCounter = new cloud.Counter() as "stop counter";
 
-let service = new cloud.Service(
-  autoStart: false,
-  onStart: inflight() => {
-    let i = startCounter.inc();
-    log("Service started for the ${i}th time...");
-  },
-  onStop: inflight() => {
+let handler = inflight() => {
+  let i = startCounter.inc();
+  log("Service started for the ${i}th time...");
+  return () => {
     let i = stopCounter.inc();
     log("Service stopped for the ${i}th time...");
-  },
-);
+  };
+};
+
+let service = new cloud.Service(handler, autoStart: false);
 
 // Functions to stop and start the service
 new cloud.Function(inflight() => {
   service.start();
+  assert(service.started());
 }) as "start service";
 
 new cloud.Function(inflight() => {
   service.stop();
+  assert(!service.started());
 }) as "stop service";
 ```
 
@@ -120,6 +132,8 @@ Within the context of the simulator, services are just spawned processes ran wit
 
 ### Service <a name="Service" id="@winglang/sdk.cloud.Service"></a>
 
+- *Implements:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
 A long-running service.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Service.Initializer"></a>
@@ -127,16 +141,23 @@ A long-running service.
 ```wing
 bring cloud;
 
-new cloud.Service(props: ServiceProps);
+new cloud.Service(handler: IServiceHandler, props?: ServiceProps);
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Service.Initializer.parameter.handler">handler</a></code> | <code><a href="#@winglang/sdk.cloud.IServiceHandler">IServiceHandler</a></code> | *No description.* |
 | <code><a href="#@winglang/sdk.cloud.Service.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.ServiceProps">ServiceProps</a></code> | *No description.* |
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Service.Initializer.parameter.props"></a>
+##### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.cloud.Service.Initializer.parameter.handler"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IServiceHandler">IServiceHandler</a>
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Service.Initializer.parameter.props"></a>
 
 - *Type:* <a href="#@winglang/sdk.cloud.ServiceProps">ServiceProps</a>
 
@@ -144,12 +165,39 @@ new cloud.Service(props: ServiceProps);
 
 #### Methods <a name="Methods" id="Methods"></a>
 
+##### Preflight Methods
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Service.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
+
 ##### Inflight Methods
 
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.IServiceClient.start">start</a></code> | Start the service. |
+| <code><a href="#@winglang/sdk.cloud.IServiceClient.started">started</a></code> | Indicates whether the service is started. |
 | <code><a href="#@winglang/sdk.cloud.IServiceClient.stop">stop</a></code> | Stop the service. |
+
+---
+
+##### `addEnvironment` <a name="addEnvironment" id="@winglang/sdk.cloud.Service.addEnvironment"></a>
+
+```wing
+addEnvironment(name: str, value: str): void
+```
+
+Add an environment variable to the function.
+
+###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.cloud.Service.addEnvironment.parameter.name"></a>
+
+- *Type:* str
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.cloud.Service.addEnvironment.parameter.value"></a>
+
+- *Type:* str
 
 ---
 
@@ -160,6 +208,14 @@ inflight start(): void
 ```
 
 Start the service.
+
+##### `started` <a name="started" id="@winglang/sdk.cloud.IServiceClient.started"></a>
+
+```wing
+inflight started(): bool
+```
+
+Indicates whether the service is started.
 
 ##### `stop` <a name="stop" id="@winglang/sdk.cloud.IServiceClient.stop"></a>
 
@@ -175,6 +231,7 @@ Stop the service.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Service.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.cloud.Service.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Returns the set of environment variables for this function. |
 
 ---
 
@@ -187,6 +244,18 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
+
+---
+
+##### `env`<sup>Required</sup> <a name="env" id="@winglang/sdk.cloud.Service.property.env"></a>
+
+```wing
+env: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+
+Returns the set of environment variables for this function.
 
 ---
 
@@ -211,6 +280,7 @@ let ServiceOnStartProps = cloud.ServiceOnStartProps{ ... };
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.ServiceOnStartProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.ServiceOnStartProps.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
 | <code><a href="#@winglang/sdk.cloud.ServiceOnStartProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
 | <code><a href="#@winglang/sdk.cloud.ServiceOnStartProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
 
@@ -226,6 +296,21 @@ env: MutMap<str>;
 - *Default:* No environment variables.
 
 Environment variables to pass to the function.
+
+---
+
+##### `logRetentionDays`<sup>Optional</sup> <a name="logRetentionDays" id="@winglang/sdk.cloud.ServiceOnStartProps.property.logRetentionDays"></a>
+
+```wing
+logRetentionDays: num;
+```
+
+- *Type:* num
+- *Default:* 30
+
+Specifies the number of days that function logs will be kept.
+
+Setting negative value means logs will not expire.
 
 ---
 
@@ -271,21 +356,8 @@ let ServiceProps = cloud.ServiceProps{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ServiceProps.property.onStart">onStart</a></code> | <code><a href="#@winglang/sdk.cloud.IServiceOnEventHandler">IServiceOnEventHandler</a></code> | Handler to run with the service starts. |
 | <code><a href="#@winglang/sdk.cloud.ServiceProps.property.autoStart">autoStart</a></code> | <code>bool</code> | Whether the service should start automatically. |
-| <code><a href="#@winglang/sdk.cloud.ServiceProps.property.onStop">onStop</a></code> | <code><a href="#@winglang/sdk.cloud.IServiceOnEventHandler">IServiceOnEventHandler</a></code> | Handler to run with the service stops. |
-
----
-
-##### `onStart`<sup>Required</sup> <a name="onStart" id="@winglang/sdk.cloud.ServiceProps.property.onStart"></a>
-
-```wing
-onStart: IServiceOnEventHandler;
-```
-
-- *Type:* <a href="#@winglang/sdk.cloud.IServiceOnEventHandler">IServiceOnEventHandler</a>
-
-Handler to run with the service starts.
+| <code><a href="#@winglang/sdk.cloud.ServiceProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
 
 ---
 
@@ -300,66 +372,46 @@ autoStart: bool;
 
 Whether the service should start automatically.
 
+If `false`, the service will need to be started
+manually by calling the inflight `start()` method.
+
 ---
 
-##### `onStop`<sup>Optional</sup> <a name="onStop" id="@winglang/sdk.cloud.ServiceProps.property.onStop"></a>
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.ServiceProps.property.env"></a>
 
 ```wing
-onStop: IServiceOnEventHandler;
+env: MutMap<str>;
 ```
 
-- *Type:* <a href="#@winglang/sdk.cloud.IServiceOnEventHandler">IServiceOnEventHandler</a>
-- *Default:* no special activity at shutdown
+- *Type:* MutMap&lt;str&gt;
+- *Default:* No environment variables.
 
-Handler to run with the service stops.
+Environment variables to pass to the function.
 
 ---
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
-### IServiceOnEventClient <a name="IServiceOnEventClient" id="@winglang/sdk.cloud.IServiceOnEventClient"></a>
-
-- *Implemented By:* <a href="#@winglang/sdk.cloud.IServiceOnEventClient">IServiceOnEventClient</a>
-
-Inflight client for `IServiceOnEventHandler`.
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IServiceOnEventClient.handle">handle</a></code> | Function that will be called for service events. |
-
----
-
-##### `handle` <a name="handle" id="@winglang/sdk.cloud.IServiceOnEventClient.handle"></a>
-
-```wing
-inflight handle(): void
-```
-
-Function that will be called for service events.
-
-
-### IServiceOnEventHandler <a name="IServiceOnEventHandler" id="@winglang/sdk.cloud.IServiceOnEventHandler"></a>
+### IServiceHandler <a name="IServiceHandler" id="@winglang/sdk.cloud.IServiceHandler"></a>
 
 - *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
-- *Implemented By:* <a href="#@winglang/sdk.cloud.IServiceOnEventHandler">IServiceOnEventHandler</a>
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IServiceHandler">IServiceHandler</a>
 
-**Inflight client:** [@winglang/sdk.cloud.IServiceOnEventClient](#@winglang/sdk.cloud.IServiceOnEventClient)
+**Inflight client:** [@winglang/sdk.cloud.IServiceHandlerClient](#@winglang/sdk.cloud.IServiceHandlerClient)
 
-A resource with an inflight "handle" method that can be passed to `ServiceProps.on_start` || `ServiceProps.on_stop`.
+Executed when a `cloud.Service` is started.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IServiceOnEventHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.cloud.IServiceHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.IServiceOnEventHandler.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.IServiceHandler.property.node"></a>
 
 ```wing
 node: Node;
@@ -370,4 +422,104 @@ node: Node;
 The tree node.
 
 ---
+
+### IServiceHandlerClient <a name="IServiceHandlerClient" id="@winglang/sdk.cloud.IServiceHandlerClient"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IServiceHandlerClient">IServiceHandlerClient</a>
+
+Inflight client for `IServiceHandler`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IServiceHandlerClient.handle">handle</a></code> | Handler to run when the service starts. |
+
+---
+
+##### `handle` <a name="handle" id="@winglang/sdk.cloud.IServiceHandlerClient.handle"></a>
+
+```wing
+handle(): IServiceStopHandler
+```
+
+Handler to run when the service starts.
+
+This is where you implement the initialization logic of
+the service, start any activities asychronously.
+
+DO NOT BLOCK! This handler should return as quickly as possible. If you need to run a long
+running process, start it asynchronously.
+
+*Example*
+
+```wing
+bring cloud;
+
+new cloud.Service(inflight () => {
+  log("starting service...");
+  return () => {
+    log("stoping service...");
+  };
+});
+```
+
+
+
+### IServiceStopHandler <a name="IServiceStopHandler" id="@winglang/sdk.cloud.IServiceStopHandler"></a>
+
+- *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IServiceStopHandler">IServiceStopHandler</a>
+
+**Inflight client:** [@winglang/sdk.cloud.IServiceStopHandlerClient](#@winglang/sdk.cloud.IServiceStopHandlerClient)
+
+Executed when a `cloud.Service` is stopped.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IServiceStopHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.IServiceStopHandler.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+### IServiceStopHandlerClient <a name="IServiceStopHandlerClient" id="@winglang/sdk.cloud.IServiceStopHandlerClient"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IServiceStopHandlerClient">IServiceStopHandlerClient</a>
+
+Inflight client for `IServiceStopHandler`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IServiceStopHandlerClient.handle">handle</a></code> | Handler to run when the service stops. |
+
+---
+
+##### `handle` <a name="handle" id="@winglang/sdk.cloud.IServiceStopHandlerClient.handle"></a>
+
+```wing
+inflight handle(): void
+```
+
+Handler to run when the service stops.
+
+This is where you implement the cleanup logic of
+the service, stop any activities asychronously.
+
 

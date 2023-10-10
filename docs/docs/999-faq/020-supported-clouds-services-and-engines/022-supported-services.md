@@ -19,5 +19,5 @@ You can also check out our [roadmap](https://www.winglang.io/contributing/status
 If there are other services you would like to see supported, please let us know through our GitHub or Slack!
 
 ## You can use any Terraform resource
-Beyond the built-in set of resources in the [Wing Cloud Library](../../standard-library/cloud), you can use any Terraform resource by importing a [CDKTF](https://github.com/hashicorp/terraform-cdk) library corresponding to any given Terraform provider.
+Beyond the built-in set of resources in the [Wing Cloud Library](../../category/cloud-library), you can use any Terraform resource by importing a [CDKTF](https://github.com/hashicorp/terraform-cdk) library corresponding to any given Terraform provider.
 

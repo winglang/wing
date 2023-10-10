@@ -17,6 +17,12 @@ exports[`create an OnDeploy 1`] = `
     },
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "my_on_deploy_Function_CloudwatchLogGroup_A6EB6F36": {
+        "name": "/aws/lambda/Function-c88c90bc",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "my_on_deploy_Function_IamRole_76DF13CA": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -51,7 +57,7 @@ exports[`create an OnDeploy 1`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.my_on_deploy_Function_S3Object_69D52AC4.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -93,7 +99,7 @@ exports[`create an OnDeploy 2`] = `
               "Handler": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -124,7 +130,7 @@ exports[`create an OnDeploy 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -145,6 +151,14 @@ exports[`create an OnDeploy 2`] = `
                         },
                         "id": "Asset",
                         "path": "root/Default/my_on_deploy/Function/Asset",
+                      },
+                      "CloudwatchLogGroup": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "CloudwatchLogGroup",
+                        "path": "root/Default/my_on_deploy/Function/CloudwatchLogGroup",
                       },
                       "Default": {
                         "constructInfo": {
@@ -189,7 +203,7 @@ exports[`create an OnDeploy 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.69",
+                      "version": "10.2.70",
                     },
                     "display": {
                       "description": "A cloud function (FaaS)",
@@ -209,7 +223,7 @@ exports[`create an OnDeploy 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "Run code during the app's deployment.",
@@ -221,7 +235,7 @@ exports[`create an OnDeploy 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.69",
+              "version": "10.2.70",
             },
             "id": "Default",
             "path": "root/Default",
@@ -261,7 +275,6 @@ exports[`execute OnDeploy after other resources 1`] = `
       "my_on_deploy_Invocation_1A26E3B9": {
         "depends_on": [
           "aws_s3_bucket.my_bucket",
-          "aws_s3_bucket_server_side_encryption_configuration.my_bucket_Encryption_3B1569A4",
         ],
         "function_name": "\${aws_lambda_function.my_on_deploy_Function_59669FC0.function_name}",
         "input": "{}",
@@ -274,6 +287,12 @@ exports[`execute OnDeploy after other resources 1`] = `
     },
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "my_on_deploy_Function_CloudwatchLogGroup_A6EB6F36": {
+        "name": "/aws/lambda/Function-c88c90bc",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "my_on_deploy_Function_IamRole_76DF13CA": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -308,7 +327,7 @@ exports[`execute OnDeploy after other resources 1`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.my_on_deploy_Function_S3Object_69D52AC4.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -322,18 +341,6 @@ exports[`execute OnDeploy after other resources 1`] = `
       "my_bucket": {
         "bucket_prefix": "my-bucket-c8045fcc-",
         "force_destroy": false,
-      },
-    },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "my_bucket_Encryption_3B1569A4": {
-        "bucket": "\${aws_s3_bucket.my_bucket.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256",
-            },
-          },
-        ],
       },
     },
     "aws_s3_object": {
@@ -366,7 +373,7 @@ exports[`execute OnDeploy after other resources 2`] = `
               "Handler": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -397,7 +404,7 @@ exports[`execute OnDeploy after other resources 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -417,18 +424,10 @@ exports[`execute OnDeploy after other resources 2`] = `
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
                   },
-                  "Encryption": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "Encryption",
-                    "path": "root/Default/my_bucket/Encryption",
-                  },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -448,6 +447,14 @@ exports[`execute OnDeploy after other resources 2`] = `
                         },
                         "id": "Asset",
                         "path": "root/Default/my_on_deploy/Function/Asset",
+                      },
+                      "CloudwatchLogGroup": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "CloudwatchLogGroup",
+                        "path": "root/Default/my_on_deploy/Function/CloudwatchLogGroup",
                       },
                       "Default": {
                         "constructInfo": {
@@ -492,7 +499,7 @@ exports[`execute OnDeploy after other resources 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.69",
+                      "version": "10.2.70",
                     },
                     "display": {
                       "description": "A cloud function (FaaS)",
@@ -512,7 +519,7 @@ exports[`execute OnDeploy after other resources 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "Run code during the app's deployment.",
@@ -524,7 +531,7 @@ exports[`execute OnDeploy after other resources 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.69",
+              "version": "10.2.70",
             },
             "id": "Default",
             "path": "root/Default",
@@ -574,6 +581,12 @@ exports[`execute OnDeploy before other resources 1`] = `
     },
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "my_on_deploy_Function_CloudwatchLogGroup_A6EB6F36": {
+        "name": "/aws/lambda/Function-c88c90bc",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "my_on_deploy_Function_IamRole_76DF13CA": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -608,7 +621,7 @@ exports[`execute OnDeploy before other resources 1`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.my_on_deploy_Function_S3Object_69D52AC4.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -625,21 +638,6 @@ exports[`execute OnDeploy before other resources 1`] = `
           "\${data.aws_lambda_invocation.my_on_deploy_Invocation_1A26E3B9}",
         ],
         "force_destroy": false,
-      },
-    },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "my_bucket_Encryption_3B1569A4": {
-        "bucket": "\${aws_s3_bucket.my_bucket.bucket}",
-        "depends_on": [
-          "\${data.aws_lambda_invocation.my_on_deploy_Invocation_1A26E3B9}",
-        ],
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256",
-            },
-          },
-        ],
       },
     },
     "aws_s3_object": {
@@ -672,7 +670,7 @@ exports[`execute OnDeploy before other resources 2`] = `
               "Handler": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -703,7 +701,7 @@ exports[`execute OnDeploy before other resources 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -723,18 +721,10 @@ exports[`execute OnDeploy before other resources 2`] = `
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
                   },
-                  "Encryption": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "Encryption",
-                    "path": "root/Default/my_bucket/Encryption",
-                  },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -754,6 +744,14 @@ exports[`execute OnDeploy before other resources 2`] = `
                         },
                         "id": "Asset",
                         "path": "root/Default/my_on_deploy/Function/Asset",
+                      },
+                      "CloudwatchLogGroup": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "CloudwatchLogGroup",
+                        "path": "root/Default/my_on_deploy/Function/CloudwatchLogGroup",
                       },
                       "Default": {
                         "constructInfo": {
@@ -798,7 +796,7 @@ exports[`execute OnDeploy before other resources 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.69",
+                      "version": "10.2.70",
                     },
                     "display": {
                       "description": "A cloud function (FaaS)",
@@ -818,7 +816,7 @@ exports[`execute OnDeploy before other resources 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "Run code during the app's deployment.",
@@ -830,7 +828,7 @@ exports[`execute OnDeploy before other resources 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.69",
+              "version": "10.2.70",
             },
             "id": "Default",
             "path": "root/Default",

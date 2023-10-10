@@ -24,7 +24,7 @@ exports[`create an OnDeploy 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "f852bfab94a36947a0c426b4c9aa55f31d1ba844ac1c6c40af84b941fd4ae8bb.zip",
+          "S3Key": "e62535c1e251fa24f7bee044e96b427fb5e8b87bb32c1c6fe04758589f959275.zip",
         },
         "Handler": "__entrypoint__.handler",
         "MemorySize": 128,
@@ -34,7 +34,7 @@ exports[`create an OnDeploy 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs14.x",
+        "Runtime": "nodejs18.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -93,6 +93,84 @@ exports[`create an OnDeploy 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
+      "DependsOn": [
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "1039a174afbf09cd27e3b215f53b9e80b1bd66df24547e5746f0e5bcb9204cf3.zip",
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:PutRetentionPolicy",
+                "logs:DeleteRetentionPolicy",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "Roles": [
+          {
+            "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
     "myondeployFunction47551748": {
       "DependsOn": [
         "myondeployFunctionServiceRole7277F8BB",
@@ -115,17 +193,40 @@ exports[`create an OnDeploy 1`] = `
           ],
         },
         "Runtime": "nodejs18.x",
-        "Timeout": 30,
+        "Timeout": 60,
       },
       "Type": "AWS::Lambda::Function",
     },
-    "myondeployFunctionCurrentVersion6BC23754495ffbfe7093f6d76e062790f78856b0": {
+    "myondeployFunctionCurrentVersion6BC23754a188fe5d8f20d876aab6d4da7e10ca3d": {
       "Properties": {
         "FunctionName": {
           "Ref": "myondeployFunction47551748",
         },
       },
       "Type": "AWS::Lambda::Version",
+    },
+    "myondeployFunctionLogRetention67CB6178": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "myondeployFunction47551748",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
     },
     "myondeployFunctionServiceRole7277F8BB": {
       "Properties": {
@@ -161,15 +262,18 @@ exports[`create an OnDeploy 1`] = `
     "myondeployTrigger63552203": {
       "DeletionPolicy": "Delete",
       "Properties": {
+        "ExecuteOnHandlerChange": true,
         "HandlerArn": {
-          "Ref": "myondeployFunctionCurrentVersion6BC23754495ffbfe7093f6d76e062790f78856b0",
+          "Ref": "myondeployFunctionCurrentVersion6BC23754a188fe5d8f20d876aab6d4da7e10ca3d",
         },
+        "InvocationType": "RequestResponse",
         "ServiceToken": {
           "Fn::GetAtt": [
             "AWSCDKTriggerCustomResourceProviderCustomResourceProviderHandler97BECD91",
             "Arn",
           ],
         },
+        "Timeout": "120000",
       },
       "Type": "Custom::Trigger",
       "UpdateReplacePolicy": "Delete",
@@ -229,7 +333,7 @@ exports[`execute OnDeploy after other resources 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "f852bfab94a36947a0c426b4c9aa55f31d1ba844ac1c6c40af84b941fd4ae8bb.zip",
+          "S3Key": "e62535c1e251fa24f7bee044e96b427fb5e8b87bb32c1c6fe04758589f959275.zip",
         },
         "Handler": "__entrypoint__.handler",
         "MemorySize": 128,
@@ -239,7 +343,7 @@ exports[`execute OnDeploy after other resources 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs14.x",
+        "Runtime": "nodejs18.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -298,6 +402,84 @@ exports[`execute OnDeploy after other resources 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
+      "DependsOn": [
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "1039a174afbf09cd27e3b215f53b9e80b1bd66df24547e5746f0e5bcb9204cf3.zip",
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:PutRetentionPolicy",
+                "logs:DeleteRetentionPolicy",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "Roles": [
+          {
+            "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
     "mybucketD601CBAA": {
       "DeletionPolicy": "Delete",
       "Properties": {
@@ -342,17 +524,40 @@ exports[`execute OnDeploy after other resources 1`] = `
           ],
         },
         "Runtime": "nodejs18.x",
-        "Timeout": 30,
+        "Timeout": 60,
       },
       "Type": "AWS::Lambda::Function",
     },
-    "myondeployFunctionCurrentVersion6BC23754495ffbfe7093f6d76e062790f78856b0": {
+    "myondeployFunctionCurrentVersion6BC23754a188fe5d8f20d876aab6d4da7e10ca3d": {
       "Properties": {
         "FunctionName": {
           "Ref": "myondeployFunction47551748",
         },
       },
       "Type": "AWS::Lambda::Version",
+    },
+    "myondeployFunctionLogRetention67CB6178": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "myondeployFunction47551748",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
     },
     "myondeployFunctionServiceRole7277F8BB": {
       "Properties": {
@@ -391,15 +596,18 @@ exports[`execute OnDeploy after other resources 1`] = `
         "mybucketD601CBAA",
       ],
       "Properties": {
+        "ExecuteOnHandlerChange": true,
         "HandlerArn": {
-          "Ref": "myondeployFunctionCurrentVersion6BC23754495ffbfe7093f6d76e062790f78856b0",
+          "Ref": "myondeployFunctionCurrentVersion6BC23754a188fe5d8f20d876aab6d4da7e10ca3d",
         },
+        "InvocationType": "RequestResponse",
         "ServiceToken": {
           "Fn::GetAtt": [
             "AWSCDKTriggerCustomResourceProviderCustomResourceProviderHandler97BECD91",
             "Arn",
           ],
         },
+        "Timeout": "120000",
       },
       "Type": "Custom::Trigger",
       "UpdateReplacePolicy": "Delete",
@@ -459,7 +667,7 @@ exports[`execute OnDeploy before other resources 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "f852bfab94a36947a0c426b4c9aa55f31d1ba844ac1c6c40af84b941fd4ae8bb.zip",
+          "S3Key": "e62535c1e251fa24f7bee044e96b427fb5e8b87bb32c1c6fe04758589f959275.zip",
         },
         "Handler": "__entrypoint__.handler",
         "MemorySize": 128,
@@ -469,7 +677,7 @@ exports[`execute OnDeploy before other resources 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs14.x",
+        "Runtime": "nodejs18.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -528,6 +736,84 @@ exports[`execute OnDeploy before other resources 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
+      "DependsOn": [
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "1039a174afbf09cd27e3b215f53b9e80b1bd66df24547e5746f0e5bcb9204cf3.zip",
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:PutRetentionPolicy",
+                "logs:DeleteRetentionPolicy",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "Roles": [
+          {
+            "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
     "mybucketD601CBAA": {
       "DeletionPolicy": "Delete",
       "DependsOn": [
@@ -575,17 +861,40 @@ exports[`execute OnDeploy before other resources 1`] = `
           ],
         },
         "Runtime": "nodejs18.x",
-        "Timeout": 30,
+        "Timeout": 60,
       },
       "Type": "AWS::Lambda::Function",
     },
-    "myondeployFunctionCurrentVersion6BC23754495ffbfe7093f6d76e062790f78856b0": {
+    "myondeployFunctionCurrentVersion6BC23754a188fe5d8f20d876aab6d4da7e10ca3d": {
       "Properties": {
         "FunctionName": {
           "Ref": "myondeployFunction47551748",
         },
       },
       "Type": "AWS::Lambda::Version",
+    },
+    "myondeployFunctionLogRetention67CB6178": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "myondeployFunction47551748",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
     },
     "myondeployFunctionServiceRole7277F8BB": {
       "Properties": {
@@ -621,15 +930,18 @@ exports[`execute OnDeploy before other resources 1`] = `
     "myondeployTrigger63552203": {
       "DeletionPolicy": "Delete",
       "Properties": {
+        "ExecuteOnHandlerChange": true,
         "HandlerArn": {
-          "Ref": "myondeployFunctionCurrentVersion6BC23754495ffbfe7093f6d76e062790f78856b0",
+          "Ref": "myondeployFunctionCurrentVersion6BC23754a188fe5d8f20d876aab6d4da7e10ca3d",
         },
+        "InvocationType": "RequestResponse",
         "ServiceToken": {
           "Fn::GetAtt": [
             "AWSCDKTriggerCustomResourceProviderCustomResourceProviderHandler97BECD91",
             "Arn",
           ],
         },
+        "Timeout": "120000",
       },
       "Type": "Custom::Trigger",
       "UpdateReplacePolicy": "Delete",

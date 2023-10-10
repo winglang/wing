@@ -3,7 +3,7 @@ import { IFunctionClient, IOnDeployClient } from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
-} from "../testing/simulator";
+} from "../simulator/simulator";
 
 export class OnDeploy implements IOnDeployClient, ISimulatorResourceInstance {
   private functionHandle: string;

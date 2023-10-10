@@ -16,7 +16,7 @@
     }
   ],
   "dependencies": {
-    "nan": "^2.12.1"
+    "nan": "^2.17.0"
   },
   "scripts": {
     "test": "tree-sitter test",
@@ -33,7 +33,7 @@
     "extends": "../../package.json"
   },
   "devDependencies": {
-    "nodemon": "^2.0.22",
+    "nodemon": "^3.0.1",
     "tree-sitter-cli": "0.20.6"
   }
 }

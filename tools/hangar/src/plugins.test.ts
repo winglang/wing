@@ -10,12 +10,12 @@ import {
 import { Testing } from "cdktf";
 
 describe("Plugin examples", () => {
-  const app = "app.w";
+  const app = "main.w";
   const appFile = path.join(pluginsDir, app);
 
   describe("AWS target plugins", () => {
     const args = ["compile", "--target", "tf-aws"];
-    const targetDir = path.join(pluginsDir, "target", "app.tfaws");
+    const targetDir = path.join(pluginsDir, "target", "main.tfaws");
 
     test("permission-boundary.js", async () => {
       const plugin = path.join(pluginsDir, "permission-boundary.js");

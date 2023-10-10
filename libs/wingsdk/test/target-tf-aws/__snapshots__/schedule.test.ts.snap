@@ -20,6 +20,12 @@ exports[`schedule behavior with cron 1`] = `
         "rule": "\${aws_cloudwatch_event_rule.Schedule_15669BF1.name}",
       },
     },
+    "aws_cloudwatch_log_group": {
+      "Schedule-OnTick-c5395e41_CloudwatchLogGroup_582BD7D1": {
+        "name": "/aws/lambda/Schedule-OnTick-c5395e41-c861b8f8",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "Schedule-OnTick-c5395e41_IamRole_014E0D2D": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -54,7 +60,7 @@ exports[`schedule behavior with cron 1`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Schedule-OnTick-c5395e41_S3Object_70645C21.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -105,7 +111,7 @@ exports[`schedule behavior with cron 2`] = `
               "Handler": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -136,7 +142,7 @@ exports[`schedule behavior with cron 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud schedule to trigger events at regular intervals",
@@ -154,6 +160,14 @@ exports[`schedule behavior with cron 2`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Schedule-OnTick-c5395e41/Asset",
+                  },
+                  "CloudwatchLogGroup": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CloudwatchLogGroup",
+                    "path": "root/Default/Schedule-OnTick-c5395e41/CloudwatchLogGroup",
                   },
                   "Default": {
                     "constructInfo": {
@@ -206,7 +220,7 @@ exports[`schedule behavior with cron 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -218,7 +232,7 @@ exports[`schedule behavior with cron 2`] = `
               "Schedule-OnTickHandler-c5395e41": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "hidden": true,
@@ -247,7 +261,7 @@ exports[`schedule behavior with cron 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -260,7 +274,7 @@ exports[`schedule behavior with cron 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.69",
+              "version": "10.2.70",
             },
             "id": "Default",
             "path": "root/Default",
@@ -313,6 +327,12 @@ exports[`schedule behavior with rate 1`] = `
         "rule": "\${aws_cloudwatch_event_rule.Schedule_15669BF1.name}",
       },
     },
+    "aws_cloudwatch_log_group": {
+      "Schedule-OnTick-c5395e41_CloudwatchLogGroup_582BD7D1": {
+        "name": "/aws/lambda/Schedule-OnTick-c5395e41-c861b8f8",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "Schedule-OnTick-c5395e41_IamRole_014E0D2D": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -347,7 +367,7 @@ exports[`schedule behavior with rate 1`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Schedule-OnTick-c5395e41_S3Object_70645C21.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -398,7 +418,7 @@ exports[`schedule behavior with rate 2`] = `
               "Handler": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -429,7 +449,7 @@ exports[`schedule behavior with rate 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud schedule to trigger events at regular intervals",
@@ -447,6 +467,14 @@ exports[`schedule behavior with rate 2`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Schedule-OnTick-c5395e41/Asset",
+                  },
+                  "CloudwatchLogGroup": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CloudwatchLogGroup",
+                    "path": "root/Default/Schedule-OnTick-c5395e41/CloudwatchLogGroup",
                   },
                   "Default": {
                     "constructInfo": {
@@ -499,7 +527,7 @@ exports[`schedule behavior with rate 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -511,7 +539,7 @@ exports[`schedule behavior with rate 2`] = `
               "Schedule-OnTickHandler-c5395e41": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "hidden": true,
@@ -540,7 +568,7 @@ exports[`schedule behavior with rate 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -553,7 +581,7 @@ exports[`schedule behavior with rate 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.69",
+              "version": "10.2.70",
             },
             "id": "Default",
             "path": "root/Default",
@@ -610,6 +638,16 @@ exports[`schedule with two functions 1`] = `
         "rule": "\${aws_cloudwatch_event_rule.Schedule_15669BF1.name}",
       },
     },
+    "aws_cloudwatch_log_group": {
+      "Schedule-OnTick-0a615500_CloudwatchLogGroup_2E9B471C": {
+        "name": "/aws/lambda/Schedule-OnTick-0a615500-c8fd8480",
+        "retention_in_days": 30,
+      },
+      "Schedule-OnTick-7b33bcba_CloudwatchLogGroup_D13A3FA1": {
+        "name": "/aws/lambda/Schedule-OnTick-7b33bcba-c86000d7",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "Schedule-OnTick-0a615500_IamRole_92CE809F": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -655,7 +693,7 @@ exports[`schedule with two functions 1`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Schedule-OnTick-0a615500_S3Object_587833FB.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -677,7 +715,7 @@ exports[`schedule with two functions 1`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Schedule-OnTick-7b33bcba_S3Object_4D57889B.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -740,7 +778,7 @@ exports[`schedule with two functions 2`] = `
               "Handler1": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -753,7 +791,7 @@ exports[`schedule with two functions 2`] = `
               "Handler2": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "An inflight resource",
@@ -792,7 +830,7 @@ exports[`schedule with two functions 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud schedule to trigger events at regular intervals",
@@ -810,6 +848,14 @@ exports[`schedule with two functions 2`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Schedule-OnTick-0a615500/Asset",
+                  },
+                  "CloudwatchLogGroup": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CloudwatchLogGroup",
+                    "path": "root/Default/Schedule-OnTick-0a615500/CloudwatchLogGroup",
                   },
                   "Default": {
                     "constructInfo": {
@@ -862,7 +908,7 @@ exports[`schedule with two functions 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -880,6 +926,14 @@ exports[`schedule with two functions 2`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Schedule-OnTick-7b33bcba/Asset",
+                  },
+                  "CloudwatchLogGroup": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CloudwatchLogGroup",
+                    "path": "root/Default/Schedule-OnTick-7b33bcba/CloudwatchLogGroup",
                   },
                   "Default": {
                     "constructInfo": {
@@ -932,7 +986,7 @@ exports[`schedule with two functions 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -944,7 +998,7 @@ exports[`schedule with two functions 2`] = `
               "Schedule-OnTickHandler-0a615500": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "hidden": true,
@@ -955,7 +1009,7 @@ exports[`schedule with two functions 2`] = `
               "Schedule-OnTickHandler-7b33bcba": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "hidden": true,
@@ -984,7 +1038,7 @@ exports[`schedule with two functions 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.69",
+                  "version": "10.2.70",
                 },
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
@@ -997,7 +1051,7 @@ exports[`schedule with two functions 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.69",
+              "version": "10.2.70",
             },
             "id": "Default",
             "path": "root/Default",

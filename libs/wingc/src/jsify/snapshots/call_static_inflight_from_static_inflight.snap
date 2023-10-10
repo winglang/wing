@@ -6,7 +6,7 @@ source: libs/wingc/src/jsify/tests.rs
 ```w
 
     class A {
-      static inflight foo() { log("hello"); }
+      pub static inflight foo() { log("hello"); }
     }
 
     inflight class B {

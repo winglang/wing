@@ -1,8 +1,9 @@
-import { readdirSync, existsSync } from "fs";
-import { debug } from "debug";
+import { existsSync } from "fs";
 import { resolve } from "path";
-import open from "open";
 import { createConsoleApp } from "@wingconsole/app";
+import { debug } from "debug";
+import { glob } from "glob";
+import open from "open";
 import { parseNumericString } from "../util";
 
 /**
@@ -35,9 +36,18 @@ export async function run(entrypoint?: string, options?: RunOptions) {
   const openBrowser = options?.open ?? true;
 
   if (!entrypoint) {
-    const wingFiles = readdirSync(".").filter((item) => item.endsWith(".w"));
-    if (wingFiles.length !== 1) {
-      throw new Error("Please specify which file you want to run");
+    const wingFiles = await glob("{main,*.main}.w");
+    if (wingFiles.length === 0) {
+      throw new Error(
+        "Cannot find entrypoint files (main.w or *.main.w) in the current directory."
+      );
+    }
+    if (wingFiles.length > 1) {
+      throw new Error(
+        `Multiple entrypoints found in the current directory (${wingFiles.join(
+          ", "
+        )}). Please specify which one to use.`
+      );
     }
     entrypoint = wingFiles[0];
   }
@@ -49,19 +59,27 @@ export async function run(entrypoint?: string, options?: RunOptions) {
   entrypoint = resolve(entrypoint);
   debug("opening the wing console with:" + entrypoint);
 
-  const { port } = await createConsoleApp({
+  const { port, close } = await createConsoleApp({
     wingfile: entrypoint,
     requestedPort,
     hostUtils: {
-      async openExternal(url) {
+      async openExternal(url: string) {
         await open(url);
       },
     },
-    requireAcceptTerms: true,
+    requireAcceptTerms: !!process.stdin.isTTY,
   });
   const url = `http://localhost:${port}/`;
   if (openBrowser) {
     await open(url);
   }
   console.log(`The Wing Console is running at ${url}`);
+
+  const onExit = async (exitCode: number) => {
+    await close(() => process.exit(exitCode));
+  };
+
+  process.once("exit", async (c) => onExit(c));
+  process.once("SIGTERM", async () => onExit(0));
+  process.once("SIGINT", async () => onExit(0));
 }

@@ -1,7 +1,7 @@
 import { test, expect } from "vitest";
 import { listMessages } from "./util";
 import * as cloud from "../../src/cloud";
-import { Testing } from "../../src/testing";
+import { Testing } from "../../src/simulator";
 import { SimApp } from "../sim-app";
 
 const INFLIGHT_CODE = `async handle() { console.log("super duper success"); }`;

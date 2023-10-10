@@ -46,7 +46,7 @@ export function calculateQueuePermissions(
 
   if (ops.includes(cloud.QueueInflightMethods.POP)) {
     policies.push({
-      actions: ["sqs:ReceiveMessage"],
+      actions: ["sqs:ReceiveMessage", "sqs:DeleteMessage"],
       resources: [arn],
     });
   }
@@ -91,6 +91,7 @@ export function calculateBucketPermissions(
   // contains a check if an object exists/list
   if (
     ops.includes(cloud.BucketInflightMethods.PUBLIC_URL) ||
+    ops.includes(cloud.BucketInflightMethods.SIGNED_URL) ||
     ops.includes(cloud.BucketInflightMethods.LIST) ||
     ops.includes(cloud.BucketInflightMethods.EXISTS) ||
     ops.includes(cloud.BucketInflightMethods.TRY_GET) ||
@@ -120,6 +121,7 @@ export function calculateBucketPermissions(
     ops.includes(cloud.BucketInflightMethods.TRY_GET_JSON) ||
     ops.includes(cloud.BucketInflightMethods.TRY_DELETE) ||
     ops.includes(cloud.BucketInflightMethods.PUBLIC_URL) ||
+    ops.includes(cloud.BucketInflightMethods.SIGNED_URL) ||
     ops.includes(cloud.BucketInflightMethods.EXISTS)
   ) {
     actions.push("s3:GetObject*", "s3:GetBucket*");

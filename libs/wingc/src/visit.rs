@@ -1,8 +1,8 @@
 use crate::{
 	ast::{
 		ArgList, BringSource, CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
-		FunctionSignature, Interface, InterpolatedStringPart, Literal, NewExpr, Reference, Scope, Stmt, StmtKind, Symbol,
-		TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		FunctionSignature, IfLet, Interface, InterpolatedStringPart, Literal, New, Reference, Scope, Stmt, StmtKind,
+		Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -48,7 +48,7 @@ pub trait Visit<'ast> {
 	fn visit_expr(&mut self, node: &'ast Expr) {
 		visit_expr(self, node);
 	}
-	fn visit_new_expr(&mut self, node: &'ast NewExpr) {
+	fn visit_new_expr(&mut self, node: &'ast New) {
 		visit_new_expr(self, node);
 	}
 	fn visit_literal(&mut self, node: &'ast Literal) {
@@ -97,8 +97,10 @@ where
 		StmtKind::Bring { source, identifier } => {
 			match &source {
 				BringSource::BuiltinModule(name) => v.visit_symbol(name),
+				BringSource::WingLibrary(name, _module_dir) => v.visit_symbol(name),
 				BringSource::JsiiModule(name) => v.visit_symbol(name),
 				BringSource::WingFile(name) => v.visit_symbol(name),
+				BringSource::Directory(name) => v.visit_symbol(name),
 			}
 			if let Some(identifier) = identifier {
 				v.visit_symbol(identifier);
@@ -131,14 +133,14 @@ where
 			v.visit_scope(statements);
 		}
 		StmtKind::Break | StmtKind::Continue => {}
-		StmtKind::IfLet {
+		StmtKind::IfLet(IfLet {
 			value,
 			statements,
 			reassignable: _,
 			var_name,
 			elif_statements,
 			else_statements,
-		} => {
+		}) => {
 			v.visit_symbol(var_name);
 			v.visit_expr(value);
 			v.visit_scope(statements);
@@ -170,7 +172,11 @@ where
 		StmtKind::Expression(expr) => {
 			v.visit_expr(&expr);
 		}
-		StmtKind::Assignment { variable, value } => {
+		StmtKind::Assignment {
+			kind: _,
+			variable,
+			value,
+		} => {
 			v.visit_reference(variable);
 			v.visit_expr(value);
 		}
@@ -275,7 +281,7 @@ where
 	}
 }
 
-pub fn visit_new_expr<'ast, V>(v: &mut V, node: &'ast NewExpr)
+pub fn visit_new_expr<'ast, V>(v: &mut V, node: &'ast New)
 where
 	V: Visit<'ast> + ?Sized,
 {

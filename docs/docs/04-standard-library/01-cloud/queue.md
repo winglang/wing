@@ -20,6 +20,7 @@ sidebar_position: 1
 
 The `cloud.Queue` resource represents a data structure for holding a list of messages.
 Queues are typically used to decouple producers of data and the consumers of said data in distributed systems.
+Queues by default are not FIFO (first in, first out) - so the order of messages is not guaranteed.
 
 ## Usage
 
@@ -170,7 +171,7 @@ Purge all of the messages in the queue.
 ##### `push` <a name="push" id="@winglang/sdk.cloud.IQueueClient.push"></a>
 
 ```wing
-inflight push(messages: str): void
+inflight push(...messages: Array<str>): void
 ```
 
 Push one or more messages to the queue.
@@ -180,6 +181,8 @@ Push one or more messages to the queue.
 - *Type:* str
 
 Payload to send to the queue.
+
+Each message must be non-empty.
 
 ---
 
@@ -272,6 +275,7 @@ let QueueSetConsumerProps = cloud.QueueSetConsumerProps{ ... };
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
 | <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
 | <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
 | <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.batchSize">batchSize</a></code> | <code>num</code> | The maximum number of messages to send to subscribers at once. |
@@ -288,6 +292,21 @@ env: MutMap<str>;
 - *Default:* No environment variables.
 
 Environment variables to pass to the function.
+
+---
+
+##### `logRetentionDays`<sup>Optional</sup> <a name="logRetentionDays" id="@winglang/sdk.cloud.QueueSetConsumerProps.property.logRetentionDays"></a>
+
+```wing
+logRetentionDays: num;
+```
+
+- *Type:* num
+- *Default:* 30
+
+Specifies the number of days that function logs will be kept.
+
+Setting negative value means logs will not expire.
 
 ---
 

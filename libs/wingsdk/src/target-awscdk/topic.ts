@@ -75,7 +75,7 @@ export class Topic extends cloud.Topic {
     }
 
     host.addPolicyStatements(
-      calculateTopicPermissions(this.topic.topicArn, ops)
+      ...calculateTopicPermissions(this.topic.topicArn, ops)
     );
 
     host.addEnvironment(this.envName(), this.topic.topicArn);

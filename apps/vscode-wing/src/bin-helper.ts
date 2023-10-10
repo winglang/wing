@@ -1,125 +1,138 @@
-import { exec, execSync } from "child_process";
+import { exec } from "child_process";
+import { realpath } from "fs/promises";
+import { promisify } from "node:util";
+import { basename, join } from "path";
 import { env } from "process";
-import {
-  StatusBarItem,
-  ExtensionContext,
-  ProgressLocation,
-  window,
-  workspace,
-} from "vscode";
+import { StatusBarItem, ProgressLocation, window, workspace } from "vscode";
 import which from "which";
 import { CFG_WING, CFG_WING_BIN } from "./constants";
+import { Loggers } from "./logging";
 
 let STATUS_BAR_ITEM: StatusBarItem;
 
 /**
  * Install wing globally using npm if desired by the user
  *
- * @returns "wing" if wing is successfully installed, "npx" otherwise
+ * @returns true if wing is successfully installed, false otherwise
  */
-async function guidedWingInstallation(version: string) {
+async function guidedWingInstallation() {
   return window.withProgress(
     {
       location: ProgressLocation.Notification,
       cancellable: false,
     },
     async (progress) => {
-      progress.report({ message: `Installing Wing v${version}...` });
-      return new Promise((resolve, reject) => {
-        exec(`npm install -g winglang@${version}`, (error, stdout) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(stdout);
-          }
-        });
-      })
+      progress.report({ message: `Installing Wing...` });
+      return executeCommand("npm install -g winglang@latest")
         .then(() => {
-          void window.showInformationMessage(
-            `Wing v${version} has been installed!`
-          );
-          return "wing";
+          void window.showInformationMessage(`Wing has been installed!`);
+          return true;
         })
         .catch((e) => {
-          void window.showErrorMessage(
-            `Failed to install Wing v${version}: ${e}`
-          );
-          return "npx";
+          void window.showErrorMessage(`Failed to install Wing: ${e}`);
+          return false;
         });
     }
   );
 }
 
-async function updateStatusBar(wingBin: string, args?: string[]) {
-  let clean_args = args ? [...args] : [];
-  clean_args.push("-V");
-
-  // get current wing version
-  const version = await new Promise<string>((resolve, reject) => {
-    exec(`${wingBin} ${clean_args.join(" ")}`, (error, stdout) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(stdout.trim());
-      }
-    });
-  }).catch(() => "unknown");
-
-  if (version === "unknown") {
-    return;
+export async function updateStatusBar(wingBin: string) {
+  let version = "not found";
+  try {
+    version = await executeCommand(`"${wingBin}" -V --no-update-check`);
+  } catch (e) {
+    Loggers.default.appendLine(
+      `Failed to get wing version from ${wingBin}: ${e}`
+    );
   }
 
   // update status bar
-  const status = `Wing v${version}`;
+  const status = `Wing (${version})`;
   if (!STATUS_BAR_ITEM) {
     STATUS_BAR_ITEM = window.createStatusBarItem();
   }
 
   STATUS_BAR_ITEM.text = status;
+  STATUS_BAR_ITEM.tooltip = wingBin;
   STATUS_BAR_ITEM.show();
+
+  return version !== "not found";
 }
 
-/**
- * Get the absolute location of the wing executable
- *
- * @param command The command to search for, defaults to "wing"
- * @returns The absolute path to the wing executable, or null if not found/installed
- */
-function wingBinaryLocation(command?: string) {
-  return which.sync(command ?? "wing", { nothrow: true });
-}
+export async function getWingBin(): Promise<string | null> {
+  let configuredWingBin =
+    env.WING_BIN ??
+    workspace.getConfiguration(CFG_WING).get<string>(CFG_WING_BIN);
 
-export async function getWingBinAndArgs(context: ExtensionContext) {
-  const extVersion = context.extension.packageJSON.version;
-  const configuredWingBin = workspace
-    .getConfiguration(CFG_WING)
-    .get<string>(CFG_WING_BIN, "wing");
-  let wingBin = env.WING_BIN ?? configuredWingBin;
-
-  if (wingBin !== "npx") {
-    const result = wingBinaryLocation(wingBin);
-    if (!result) {
-      const npmInstallOption = `Install globally with npm`;
-      const choice = await window.showWarningMessage(
-        `"${wingBin}" is not in PATH, please choose one of the following options to use the Wing language server`,
-        npmInstallOption
-      );
-
-      if (choice === npmInstallOption) {
-        wingBin = await guidedWingInstallation(extVersion);
-      } else {
-        // User decided to ignore the warning
-        return;
-      }
+  if (configuredWingBin) {
+    configuredWingBin = configuredWingBin.trim();
+    const configuredPath = await resolvePath(configuredWingBin);
+    if (configuredPath) {
+      // this is already a path, so we can just return it
+      return configuredPath;
     }
+  } else {
+    configuredWingBin = "wing";
   }
 
-  const args =
-    wingBin === "npx"
-      ? ["-y", "-q", `winglang@${extVersion}`, "--no-update-check"]
-      : ["--no-update-check"];
+  try {
+    const whichPath = await which(configuredWingBin);
+    Loggers.default.appendLine(
+      `"which ${configuredWingBin}" => "${whichPath}"`
+    );
+    return resolvePath(whichPath);
+  } catch (e) {
+    const choice = await window.showWarningMessage(
+      `Unable to find wing from "${configuredWingBin}" (not in PATH). Install globally with \`npm install -g winglang@latest\`? (${e})`,
+      "Yes!"
+    );
 
-  await updateStatusBar(wingBin, args);
+    if (choice === "Yes!") {
+      if (await guidedWingInstallation()) {
+        return getWingBin();
+      } else {
+        return null;
+      }
+    } else {
+      // User decided to ignore the warning
+      return null;
+    }
+  }
+}
 
-  return [wingBin, ...args];
+export async function resolvePath(p: string) {
+  try {
+    const real = await realpath(p);
+
+    if (basename(real) === "volta-shim") {
+      // Handle volta shims by resolving the true path
+      // https://docs.volta.sh/guide/#how-does-it-work
+      const voltaPath = join(real, "..", "volta");
+      const vResult = await executeCommand(`"${voltaPath}" which wing`).catch(
+        async () => {
+          void window.showWarningMessage(
+            `Failed to resolve volta from shim: ${real}`
+          );
+          return null;
+        }
+      );
+
+      if (!vResult) {
+        return null;
+      } else {
+        return resolvePath(vResult);
+      }
+    }
+
+    return real;
+  } catch (e) {
+    // the path doesn't exist or is invalid
+    return null;
+  }
+}
+
+export async function executeCommand(command: string): Promise<string> {
+  return promisify(exec)(command, {
+    encoding: "utf-8",
+  }).then((out) => out.stdout.trim());
 }

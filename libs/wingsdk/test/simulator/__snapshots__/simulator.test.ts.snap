@@ -1,0 +1,171 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`provides raw tree data 1`] = `
+{
+  "tree": {
+    "children": {
+      "cloud.TestRunner": {
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.2.70",
+        },
+        "display": {
+          "description": "A suite of APIs for running tests and collecting results.",
+          "hidden": true,
+          "title": "TestRunner",
+        },
+        "id": "cloud.TestRunner",
+        "path": "root/cloud.TestRunner",
+      },
+      "test": {
+        "children": {
+          "Handler": {
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.2.70",
+            },
+            "display": {
+              "description": "A cloud function (FaaS)",
+              "title": "Function",
+            },
+            "id": "Handler",
+            "path": "root/test/Handler",
+          },
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.2.70",
+        },
+        "display": {
+          "description": "A cloud unit test.",
+          "title": "Test",
+        },
+        "id": "test",
+        "path": "root/test",
+      },
+      "test.handler": {
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.2.70",
+        },
+        "display": {
+          "description": "An inflight resource",
+          "hidden": true,
+          "title": "Inflight",
+        },
+        "id": "test.handler",
+        "path": "root/test.handler",
+      },
+    },
+    "constructInfo": {
+      "fqn": "constructs.Construct",
+      "version": "10.2.70",
+    },
+    "id": "root",
+    "path": "root",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`run all tests > single test 1`] = `
+[
+  {
+    "error": undefined,
+    "pass": true,
+    "path": "root/test",
+    "traces": [
+      {
+        "data": {
+          "message": "hi",
+        },
+        "sourcePath": "root/test/Handler",
+        "sourceType": "wingsdk.cloud.Function",
+        "timestamp": "<TIMESTAMP>",
+        "type": "log",
+      },
+      {
+        "data": {
+          "message": "Invoke (payload=\\"\\").",
+          "result": undefined,
+          "status": "success",
+        },
+        "sourcePath": "root/test/Handler",
+        "sourceType": "wingsdk.cloud.Function",
+        "timestamp": "<TIMESTAMP>",
+        "type": "resource",
+      },
+    ],
+  },
+]
+`;
+
+exports[`run single test > happy path 1`] = `
+{
+  "error": undefined,
+  "pass": true,
+  "path": "root/test",
+  "traces": [
+    {
+      "data": {
+        "message": "hi",
+      },
+      "sourcePath": "root/test/Handler",
+      "sourceType": "wingsdk.cloud.Function",
+      "timestamp": "<TIMESTAMP>",
+      "type": "log",
+    },
+    {
+      "data": {
+        "message": "Invoke (payload=\\"\\").",
+        "result": undefined,
+        "status": "success",
+      },
+      "sourcePath": "root/test/Handler",
+      "sourceType": "wingsdk.cloud.Function",
+      "timestamp": "<TIMESTAMP>",
+      "type": "resource",
+    },
+  ],
+}
+`;
+
+exports[`run single test > test failure 1`] = `
+{
+  "error": "Error: test failed
+<sanitized>
+<sanitized>
+    at evalmachine.<anonymous>:<sanitized>
+    at Script.runInContext (node:vm:<sanitized>)
+    at Object.runInContext (node:vm:<sanitized>)
+<sanitized>
+    at new Promise (<anonymous>)
+<sanitized>
+<sanitized>
+<sanitized>",
+  "pass": false,
+  "path": "root/test",
+  "traces": [
+    {
+      "data": {
+        "message": "I am about to fail",
+      },
+      "sourcePath": "root/test/Handler",
+      "sourceType": "wingsdk.cloud.Function",
+      "timestamp": "<TIMESTAMP>",
+      "type": "log",
+    },
+    {
+      "data": {
+        "error": [Error: test failed],
+        "message": "Invoke (payload=\\"\\").",
+        "status": "failure",
+      },
+      "sourcePath": "root/test/Handler",
+      "sourceType": "wingsdk.cloud.Function",
+      "timestamp": "<TIMESTAMP>",
+      "type": "resource",
+    },
+  ],
+}
+`;

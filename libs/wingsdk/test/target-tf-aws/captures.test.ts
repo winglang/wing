@@ -1,7 +1,7 @@
 import { test, expect, describe } from "vitest";
 import * as cloud from "../../src/cloud";
+import { Testing } from "../../src/simulator";
 import * as tfaws from "../../src/target-tf-aws";
-import { Testing } from "../../src/testing";
 import { mkdtemp, sanitizeCode, tfResourcesOf, tfSanitize } from "../util";
 
 describe("function with bucket binding", () => {
@@ -30,7 +30,7 @@ describe("function with bucket binding", () => {
 
   test("put operation", () => {
     // GIVEN
-    const app = new tfaws.App({ outdir: mkdtemp() });
+    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     const bucket = cloud.Bucket._newBucket(app, "Bucket");
     const inflight = Testing.makeHandler(
       app,
@@ -50,12 +50,12 @@ describe("function with bucket binding", () => {
     expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
 
     expect(tfResourcesOf(output)).toEqual([
+      "aws_cloudwatch_log_group",
       "aws_iam_role",
       "aws_iam_role_policy",
       "aws_iam_role_policy_attachment",
       "aws_lambda_function",
       "aws_s3_bucket",
-      "aws_s3_bucket_server_side_encryption_configuration",
       "aws_s3_object",
     ]);
     expect(tfSanitize(output)).toMatchSnapshot();
@@ -63,7 +63,7 @@ describe("function with bucket binding", () => {
 
   test("put json operation has correct permissions", () => {
     // GIVEN
-    const app = new tfaws.App({ outdir: mkdtemp() });
+    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     const bucket = cloud.Bucket._newBucket(app, "Bucket");
     const inflight = Testing.makeHandler(
       app,
@@ -86,7 +86,7 @@ describe("function with bucket binding", () => {
 
   test("get json operation has correct permissions", () => {
     // GIVEN
-    const app = new tfaws.App({ outdir: mkdtemp() });
+    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     const bucket = cloud.Bucket._newBucket(app, "Bucket");
     const inflight = Testing.makeHandler(
       app,
@@ -114,7 +114,7 @@ describe("function with bucket binding", () => {
 
 test("function with a function binding", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const inflight1 = Testing.makeHandler(
     app,
     "Handler1",
@@ -143,6 +143,7 @@ test("function with a function binding", () => {
   expect(sanitizeCode(inflight2._toInflight())).toMatchSnapshot();
 
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group",
     "aws_iam_role",
     "aws_iam_role_policy",
     "aws_iam_role_policy_attachment",
@@ -155,7 +156,7 @@ test("function with a function binding", () => {
 
 test("two functions reusing the same IFunctionHandler", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const inflight = Testing.makeHandler(
     app,
     "Handler1",
@@ -169,6 +170,7 @@ test("two functions reusing the same IFunctionHandler", () => {
   const output = app.synth();
 
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group",
     "aws_iam_role",
     "aws_iam_role_policy",
     "aws_iam_role_policy_attachment",
@@ -181,7 +183,7 @@ test("two functions reusing the same IFunctionHandler", () => {
 
 test("function with a queue binding", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const queue = cloud.Queue._newQueue(app, "Queue");
   const pusher = Testing.makeHandler(
     app,
@@ -209,6 +211,7 @@ test("function with a queue binding", () => {
   expect(sanitizeCode(processor._toInflight())).toMatchSnapshot();
 
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group",
     "aws_iam_role",
     "aws_iam_role_policy",
     "aws_iam_role_policy_attachment",

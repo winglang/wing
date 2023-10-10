@@ -62,7 +62,7 @@ fn compile_code(code: &str) -> String {
 	// convert tabs to 2 spaces
 	let code = code.replace("\t", "  ");
 
-	let result = compile(&project_dir, &source_path, code.clone(), &out_dir);
+	let result = compile(project_dir, &source_path, Some(code.clone()), &out_dir);
 
 	let mut snap = vec![];
 

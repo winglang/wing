@@ -1,5 +1,5 @@
+import { BaseResourceSchema } from "../simulator/simulator";
 import { IResource } from "../std";
-import { BaseResourceSchema } from "../testing/simulator";
 
 /**
  * Interfaces shared by all polycon implementations (preflight classes)

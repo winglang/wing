@@ -111,6 +111,7 @@ export const TableInteractionView = ({
 
           <div className="flex items-center gap-2 justify-end">
             <TableInteraction
+              resourceId={resourcePath}
               columns={table.data?.columns || []}
               rows={rows}
               primaryKey={table.data?.primaryKey || ""}

@@ -19,7 +19,7 @@ impl FileGraph {
 	/// For example, if the current graph has file A depending on B, and
 	/// `update_file(pathA, &[pathC])` was called, then this function will remove the edge
 	/// from A to B, and add an edge from A to C.
-	pub fn update_file(&mut self, from_path: &Utf8Path, to_paths: &[Utf8PathBuf]) {
+	pub fn update_file<'a, I: IntoIterator<Item = &'a Utf8PathBuf>>(&mut self, from_path: &Utf8Path, to_paths: I) {
 		let from_node_index = self.get_or_insert_node_index(from_path);
 
 		// remove all current outcoming edges from this node
@@ -42,6 +42,18 @@ impl FileGraph {
 	/// Returns true if the given file is in the graph
 	pub fn contains_file(&mut self, path: &Utf8Path) -> bool {
 		self.path_to_node_index.contains_key(path)
+	}
+
+	/// Returns a list of the direct dependencies of the given file.
+	/// (does not include all transitive dependencies)
+	/// The file path must be relative to the root of the file graph.
+	pub fn dependencies_of(&self, path: &Utf8Path) -> Vec<&Utf8PathBuf> {
+		let node_index = self.path_to_node_index.get(path).expect("path not in graph");
+		self
+			.graph
+			.edges(*node_index)
+			.map(|edge| &self.graph[edge.target()])
+			.collect::<Vec<_>>()
 	}
 
 	/// Returns a list of files in the order they should be compiled
@@ -86,7 +98,7 @@ impl Display for FileGraph {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		for node_index in self.graph.node_indices() {
 			let node = &self.graph[node_index];
-			write!(f, "{{{} -> [", node)?;
+			write!(f, "{{{} -> [ ", node)?;
 			for edge in self.graph.edges(node_index) {
 				let target = &self.graph[edge.target()];
 				write!(f, "{} ", target)?;

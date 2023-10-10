@@ -16,7 +16,7 @@ pub mod fqn;
 pub mod jsii;
 
 pub mod node_resolve;
-mod util;
+pub mod util;
 
 pub type Result<T> = std::result::Result<T, Box<dyn Error>>;
 
@@ -236,7 +236,7 @@ pub mod type_system {
 		pub fn load_dep(&mut self, dep: &str, search_start: &Utf8Path) -> Result<AssemblyName> {
 			let module_dir = package_json::find_dependency_directory(dep, search_start).ok_or(format!(
 				"Unable to load \"{}\": Module not found in \"{}\"",
-				dep, search_start
+				dep, search_start,
 			))?;
 			self.load_module(&module_dir)
 		}

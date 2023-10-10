@@ -1,5 +1,320 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`api configured for cors 1`] = `
+{
+  "openapi": "3.0.3",
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "get",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Headers": {
+                "schema": {
+                  "type": "string",
+                },
+              },
+              "Access-Control-Allow-Methods": {
+                "schema": {
+                  "type": "string",
+                },
+              },
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string",
+                },
+              },
+              "Access-Control-Max-Age": {
+                "schema": {
+                  "type": "string",
+                },
+              },
+            },
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_Api-OnRequest-c5395e41_37F21C2B.arn}/invocations",
+        },
+      },
+    },
+    "/{proxy+}": {
+      "x-amazon-apigateway-any-method": {
+        "produces": [
+          "application/json",
+        ],
+        "responses": {
+          "204": {
+            "description": "204 response",
+            "headers": {
+              "Access-Control-Allow-Headers": {
+                "type": "string",
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string",
+              },
+              "Access-Control-Allow-Origin": {
+                "type": "string",
+              },
+              "Content-Type": {
+                "type": "string",
+              },
+            },
+          },
+          "404": {
+            "description": "404 response",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+              },
+            },
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "passthroughBehavior": "never",
+          "requestTemplates": {
+            "application/json": "
+                #if ($context.httpMethod == \\"OPTIONS\\")
+                    {\\"statusCode\\": 204}
+                #else
+                    {\\"statusCode\\": 404}
+                #end
+              ",
+          },
+          "responses": {
+            "204": {
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Requested-With'",
+                "method.response.header.Access-Control-Allow-Methods": "'GET,POST,PUT,DELETE,HEAD,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{}",
+              },
+              "statusCode": "204",
+            },
+            "404": {
+              "responseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+              },
+              "statusCode": "404",
+            },
+            "default": {
+              "responseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+              },
+              "statusCode": "404",
+            },
+          },
+          "type": "mock",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`api with 'name' & 'age' parameter 1`] = `
+{
+  "openapi": "3.0.3",
+  "paths": {
+    "/{name}/{age}": {
+      "get": {
+        "operationId": "get-{name}/{age}",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string",
+            },
+          },
+          {
+            "in": "path",
+            "name": "age",
+            "required": true,
+            "schema": {
+              "type": "string",
+            },
+          },
+        ],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_Api-OnRequest-c5395e41_37F21C2B.arn}/invocations",
+        },
+      },
+    },
+    "/{proxy+}": {
+      "x-amazon-apigateway-any-method": {
+        "produces": [
+          "application/json",
+        ],
+        "responses": {
+          "404": {
+            "description": "404 response",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+              },
+            },
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "passthroughBehavior": "never",
+          "requestTemplates": {
+            "application/json": "
+                {\\"statusCode\\": 404}
+              ",
+          },
+          "responses": {
+            "404": {
+              "responseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+              },
+              "statusCode": "404",
+            },
+            "default": {
+              "responseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+              },
+              "statusCode": "404",
+            },
+          },
+          "type": "mock",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`api with 'name' parameter 1`] = `
+{
+  "openapi": "3.0.3",
+  "paths": {
+    "/{name}": {
+      "get": {
+        "operationId": "get-{name}",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string",
+            },
+          },
+        ],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_Api-OnRequest-c5395e41_37F21C2B.arn}/invocations",
+        },
+      },
+    },
+    "/{proxy+}": {
+      "x-amazon-apigateway-any-method": {
+        "produces": [
+          "application/json",
+        ],
+        "responses": {
+          "404": {
+            "description": "404 response",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+              },
+            },
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "passthroughBehavior": "never",
+          "requestTemplates": {
+            "application/json": "
+                {\\"statusCode\\": 404}
+              ",
+          },
+          "responses": {
+            "404": {
+              "responseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+              },
+              "statusCode": "404",
+            },
+            "default": {
+              "responseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+              },
+              "statusCode": "404",
+            },
+          },
+          "type": "mock",
+        },
+      },
+    },
+  },
+}
+`;
+
 exports[`api with CONNECT route 1`] = `
 {
   "openapi": "3.0.3",
@@ -30,9 +345,6 @@ exports[`api with CONNECT route 1`] = `
     },
     "/{proxy+}": {
       "x-amazon-apigateway-any-method": {
-        "consumes": [
-          "application/json",
-        ],
         "produces": [
           "application/json",
         ],
@@ -47,16 +359,28 @@ exports[`api with CONNECT route 1`] = `
           },
         },
         "x-amazon-apigateway-integration": {
+          "passthroughBehavior": "never",
           "requestTemplates": {
-            "application/json": "{\\"statusCode\\": 404}",
+            "application/json": "
+                {\\"statusCode\\": 404}
+              ",
           },
           "responses": {
+            "404": {
+              "responseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+              },
+              "statusCode": "404",
+            },
             "default": {
               "responseParameters": {
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode: 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
               },
               "statusCode": "404",
             },
@@ -99,9 +423,6 @@ exports[`api with DELETE route 1`] = `
     },
     "/{proxy+}": {
       "x-amazon-apigateway-any-method": {
-        "consumes": [
-          "application/json",
-        ],
         "produces": [
           "application/json",
         ],
@@ -116,16 +437,28 @@ exports[`api with DELETE route 1`] = `
           },
         },
         "x-amazon-apigateway-integration": {
+          "passthroughBehavior": "never",
           "requestTemplates": {
-            "application/json": "{\\"statusCode\\": 404}",
+            "application/json": "
+                {\\"statusCode\\": 404}
+              ",
           },
           "responses": {
+            "404": {
+              "responseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+              },
+              "statusCode": "404",
+            },
             "default": {
               "responseParameters": {
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode: 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
               },
               "statusCode": "404",
             },
@@ -168,9 +501,6 @@ exports[`api with GET route at root 1`] = `
     },
     "/{proxy+}": {
       "x-amazon-apigateway-any-method": {
-        "consumes": [
-          "application/json",
-        ],
         "produces": [
           "application/json",
         ],
@@ -185,16 +515,28 @@ exports[`api with GET route at root 1`] = `
           },
         },
         "x-amazon-apigateway-integration": {
+          "passthroughBehavior": "never",
           "requestTemplates": {
-            "application/json": "{\\"statusCode\\": 404}",
+            "application/json": "
+                {\\"statusCode\\": 404}
+              ",
           },
           "responses": {
+            "404": {
+              "responseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+              },
+              "statusCode": "404",
+            },
             "default": {
               "responseParameters": {
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode: 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
               },
               "statusCode": "404",
             },
@@ -261,9 +603,6 @@ exports[`api with GET routes with common prefix 1`] = `
     },
     "/{proxy+}": {
       "x-amazon-apigateway-any-method": {
-        "consumes": [
-          "application/json",
-        ],
         "produces": [
           "application/json",
         ],
@@ -278,16 +617,28 @@ exports[`api with GET routes with common prefix 1`] = `
           },
         },
         "x-amazon-apigateway-integration": {
+          "passthroughBehavior": "never",
           "requestTemplates": {
-            "application/json": "{\\"statusCode\\": 404}",
+            "application/json": "
+                {\\"statusCode\\": 404}
+              ",
           },
           "responses": {
+            "404": {
+              "responseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+              },
+              "statusCode": "404",
+            },
             "default": {
               "responseParameters": {
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode: 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
               },
               "statusCode": "404",
             },
@@ -354,9 +705,6 @@ exports[`api with GET routes with different prefix 1`] = `
     },
     "/{proxy+}": {
       "x-amazon-apigateway-any-method": {
-        "consumes": [
-          "application/json",
-        ],
         "produces": [
           "application/json",
         ],
@@ -371,16 +719,28 @@ exports[`api with GET routes with different prefix 1`] = `
           },
         },
         "x-amazon-apigateway-integration": {
+          "passthroughBehavior": "never",
           "requestTemplates": {
-            "application/json": "{\\"statusCode\\": 404}",
+            "application/json": "
+                {\\"statusCode\\": 404}
+              ",
           },
           "responses": {
+            "404": {
+              "responseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+              },
+              "statusCode": "404",
+            },
             "default": {
               "responseParameters": {
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode: 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
               },
               "statusCode": "404",
             },
@@ -423,9 +783,6 @@ exports[`api with HEAD route 1`] = `
     },
     "/{proxy+}": {
       "x-amazon-apigateway-any-method": {
-        "consumes": [
-          "application/json",
-        ],
         "produces": [
           "application/json",
         ],
@@ -440,16 +797,28 @@ exports[`api with HEAD route 1`] = `
           },
         },
         "x-amazon-apigateway-integration": {
+          "passthroughBehavior": "never",
           "requestTemplates": {
-            "application/json": "{\\"statusCode\\": 404}",
+            "application/json": "
+                {\\"statusCode\\": 404}
+              ",
           },
           "responses": {
+            "404": {
+              "responseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+              },
+              "statusCode": "404",
+            },
             "default": {
               "responseParameters": {
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode: 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
               },
               "statusCode": "404",
             },
@@ -492,9 +861,6 @@ exports[`api with OPTIONS route 1`] = `
     },
     "/{proxy+}": {
       "x-amazon-apigateway-any-method": {
-        "consumes": [
-          "application/json",
-        ],
         "produces": [
           "application/json",
         ],
@@ -509,16 +875,28 @@ exports[`api with OPTIONS route 1`] = `
           },
         },
         "x-amazon-apigateway-integration": {
+          "passthroughBehavior": "never",
           "requestTemplates": {
-            "application/json": "{\\"statusCode\\": 404}",
+            "application/json": "
+                {\\"statusCode\\": 404}
+              ",
           },
           "responses": {
+            "404": {
+              "responseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+              },
+              "statusCode": "404",
+            },
             "default": {
               "responseParameters": {
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode: 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
               },
               "statusCode": "404",
             },
@@ -561,9 +939,6 @@ exports[`api with PATCH route 1`] = `
     },
     "/{proxy+}": {
       "x-amazon-apigateway-any-method": {
-        "consumes": [
-          "application/json",
-        ],
         "produces": [
           "application/json",
         ],
@@ -578,16 +953,28 @@ exports[`api with PATCH route 1`] = `
           },
         },
         "x-amazon-apigateway-integration": {
+          "passthroughBehavior": "never",
           "requestTemplates": {
-            "application/json": "{\\"statusCode\\": 404}",
+            "application/json": "
+                {\\"statusCode\\": 404}
+              ",
           },
           "responses": {
+            "404": {
+              "responseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+              },
+              "statusCode": "404",
+            },
             "default": {
               "responseParameters": {
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode: 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
               },
               "statusCode": "404",
             },
@@ -630,9 +1017,6 @@ exports[`api with POST route 1`] = `
     },
     "/{proxy+}": {
       "x-amazon-apigateway-any-method": {
-        "consumes": [
-          "application/json",
-        ],
         "produces": [
           "application/json",
         ],
@@ -647,16 +1031,28 @@ exports[`api with POST route 1`] = `
           },
         },
         "x-amazon-apigateway-integration": {
+          "passthroughBehavior": "never",
           "requestTemplates": {
-            "application/json": "{\\"statusCode\\": 404}",
+            "application/json": "
+                {\\"statusCode\\": 404}
+              ",
           },
           "responses": {
+            "404": {
+              "responseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+              },
+              "statusCode": "404",
+            },
             "default": {
               "responseParameters": {
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode: 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
               },
               "statusCode": "404",
             },
@@ -699,9 +1095,6 @@ exports[`api with PUT route 1`] = `
     },
     "/{proxy+}": {
       "x-amazon-apigateway-any-method": {
-        "consumes": [
-          "application/json",
-        ],
         "produces": [
           "application/json",
         ],
@@ -716,16 +1109,28 @@ exports[`api with PUT route 1`] = `
           },
         },
         "x-amazon-apigateway-integration": {
+          "passthroughBehavior": "never",
           "requestTemplates": {
-            "application/json": "{\\"statusCode\\": 404}",
+            "application/json": "
+                {\\"statusCode\\": 404}
+              ",
           },
           "responses": {
+            "404": {
+              "responseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+              },
+              "statusCode": "404",
+            },
             "default": {
               "responseParameters": {
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode: 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
               },
               "statusCode": "404",
             },
@@ -792,9 +1197,6 @@ exports[`api with multiple GET route and one lambda 1`] = `
     },
     "/{proxy+}": {
       "x-amazon-apigateway-any-method": {
-        "consumes": [
-          "application/json",
-        ],
         "produces": [
           "application/json",
         ],
@@ -809,16 +1211,28 @@ exports[`api with multiple GET route and one lambda 1`] = `
           },
         },
         "x-amazon-apigateway-integration": {
+          "passthroughBehavior": "never",
           "requestTemplates": {
-            "application/json": "{\\"statusCode\\": 404}",
+            "application/json": "
+                {\\"statusCode\\": 404}
+              ",
           },
           "responses": {
+            "404": {
+              "responseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+              },
+              "statusCode": "404",
+            },
             "default": {
               "responseParameters": {
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode: 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
               },
               "statusCode": "404",
             },
@@ -885,9 +1299,6 @@ exports[`api with multiple methods and multiple lambda 1`] = `
     },
     "/{proxy+}": {
       "x-amazon-apigateway-any-method": {
-        "consumes": [
-          "application/json",
-        ],
         "produces": [
           "application/json",
         ],
@@ -902,16 +1313,28 @@ exports[`api with multiple methods and multiple lambda 1`] = `
           },
         },
         "x-amazon-apigateway-integration": {
+          "passthroughBehavior": "never",
           "requestTemplates": {
-            "application/json": "{\\"statusCode\\": 404}",
+            "application/json": "
+                {\\"statusCode\\": 404}
+              ",
           },
           "responses": {
+            "404": {
+              "responseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+              },
+              "statusCode": "404",
+            },
             "default": {
               "responseParameters": {
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode: 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
               },
               "statusCode": "404",
             },
@@ -978,9 +1401,6 @@ exports[`api with multiple methods and one lambda 1`] = `
     },
     "/{proxy+}": {
       "x-amazon-apigateway-any-method": {
-        "consumes": [
-          "application/json",
-        ],
         "produces": [
           "application/json",
         ],
@@ -995,16 +1415,28 @@ exports[`api with multiple methods and one lambda 1`] = `
           },
         },
         "x-amazon-apigateway-integration": {
+          "passthroughBehavior": "never",
           "requestTemplates": {
-            "application/json": "{\\"statusCode\\": 404}",
+            "application/json": "
+                {\\"statusCode\\": 404}
+              ",
           },
           "responses": {
+            "404": {
+              "responseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+              },
+              "statusCode": "404",
+            },
             "default": {
               "responseParameters": {
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode: 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
               },
               "statusCode": "404",
             },
@@ -1069,9 +1501,6 @@ exports[`api with multiple methods on same route 1`] = `
     },
     "/{proxy+}": {
       "x-amazon-apigateway-any-method": {
-        "consumes": [
-          "application/json",
-        ],
         "produces": [
           "application/json",
         ],
@@ -1086,16 +1515,28 @@ exports[`api with multiple methods on same route 1`] = `
           },
         },
         "x-amazon-apigateway-integration": {
+          "passthroughBehavior": "never",
           "requestTemplates": {
-            "application/json": "{\\"statusCode\\": 404}",
+            "application/json": "
+                {\\"statusCode\\": 404}
+              ",
           },
           "responses": {
+            "404": {
+              "responseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+              },
+              "statusCode": "404",
+            },
             "default": {
               "responseParameters": {
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode: 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
               },
               "statusCode": "404",
             },
@@ -1147,9 +1588,6 @@ exports[`api with path parameter 1`] = `
     },
     "/{proxy+}": {
       "x-amazon-apigateway-any-method": {
-        "consumes": [
-          "application/json",
-        ],
         "produces": [
           "application/json",
         ],
@@ -1164,16 +1602,28 @@ exports[`api with path parameter 1`] = `
           },
         },
         "x-amazon-apigateway-integration": {
+          "passthroughBehavior": "never",
           "requestTemplates": {
-            "application/json": "{\\"statusCode\\": 404}",
+            "application/json": "
+                {\\"statusCode\\": 404}
+              ",
           },
           "responses": {
+            "404": {
+              "responseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+              },
+              "statusCode": "404",
+            },
             "default": {
               "responseParameters": {
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode: 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
               },
               "statusCode": "404",
             },

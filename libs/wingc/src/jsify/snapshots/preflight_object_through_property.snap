@@ -8,7 +8,7 @@ source: libs/wingc/src/jsify/tests.rs
     bring cloud;
 
     class MyType {
-      b: cloud.Bucket;
+      pub b: cloud.Bucket;
       init() {
         this.b = new cloud.Bucket();
       }

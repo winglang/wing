@@ -1,13 +1,13 @@
 import { TerraformVariable } from "cdktf";
 import { test, expect } from "vitest";
+import { Testing } from "../../src/simulator";
 import * as tfaws from "../../src/target-tf-aws";
 import { Api } from "../../src/target-tf-aws";
-import { Testing } from "../../src/testing";
 import { mkdtemp, tfSanitize, sanitizeCode } from "../util";
 
 test("captures tokens", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const api = new Api(app, "Api");
   const numVar = new TerraformVariable(app, "Number", {
     type: "Number",

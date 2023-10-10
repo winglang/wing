@@ -6,11 +6,21 @@ keywords: [Wing contributors, contributors, workflows]
 
 This topic includes a description of common development workflows for the Wing project.
 
-## Environment Setup
+## How to prepare for take-off? 🐤
 
 :::info
-You can open up this repo just using the badge below. It is recommended to select a 4-core minimum machine.
+You can open up this repo by clicking the badge below. It is recommended to select a 4-core minimum machine.
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/winglang/wing)
+:::
+
+:::info
+For windows we recommend to set the tools up within WSL as some of the scripts 
+don't support windows and expect unix tooling.
+
+Some Guides:
+- [💡 Setup WSL 2](https://learn.microsoft.com/en-us/windows/wsl/install#install-wsl-command)
+- [💡 Setup build essentials for rust](https://stackoverflow.com/questions/52445961/how-do-i-fix-the-rust-error-linker-cc-not-found-for-debian-on-windows-10)
+- [💡 Enable systemd to install docker without the need of Docker Desktop](https://devblogs.microsoft.com/commandline/systemd-support-is-now-available-in-wsl/#how-can-you-get-systemd-on-your-machine)
 :::
 
 Here is a list of minimal tools you should install to build the Wing repo in your development
@@ -35,6 +45,7 @@ cd wing
 pnpm install
 ```
 
+
 :::note Turbo Commands
 [Turbo] commands in this document are structured as
 
@@ -47,6 +58,7 @@ pnpm turbo <task> --filter=<project> -- <args>
 - `pnpm` can be omitted if [Turbo] is installed globally
 - `--filter=<project>` may be used to filter to a specific project (and it's dependencies)
 - Running `turbo <task>` inside of a project directory will automatically filter to that project
+- We use [Turbo caching](https://turbo.build/repo/docs/core-concepts/caching) to speed up builds. If you want to force a rebuild, use `--force`.
 
 :::
 
@@ -59,7 +71,6 @@ pnpm turbo <task> --filter=<project> -- <args>
 [volta]: https://volta.sh
 [PNPM]: https://pnpm.io
 [Docker]: https://docs.docker.com/get-docker/
-[emscripten]: https://emscripten.org/docs/getting_started/downloads.html
 
 ## Full build
 
@@ -72,6 +83,12 @@ pnpm build
 It will compile, lint, test and package all modules.
 
 ## 🏠 What's the recommended development workflow?
+:::info
+When testing your changes to Wing, locally it may be helpful to be able to easily invoke your local version of the Wing CLI.
+In which case adding a shell alias may be helpful for instance on Linux and Mac you could add: 
+
+`alias mywing=/<PATH_TO_WING_REPO>/apps/wing/bin/wing` to your shell's rc file.
+:::
 
 The `pnpm wing` command can be executed from the root of the repository in order to build and run the
 compiler, SDK (standard library) and the Wing CLI. Turbo is configured to make sure only the changed components are built
@@ -84,11 +101,18 @@ export NODE_OPTIONS=--stack-trace-limit=100
 export RUST_BACKTRACE=full
 ```
 
+Or if you just want to compile your changes and run a local version of the Wing CLI:
+
+```sh
+pnpm compile --filter=winglang
+```
+
+
 Now, you can edit a source file anywhere across the stack and run the compiler with arguments.
 For example:
 
 ```sh
-pnpm wing -- test examples/tests/valid/captures.w
+pnpm wing -- test examples/tests/valid/captures.test.w
 ```
 
 This command runs the full Wing CLI with the given arguments. Turbo will ensure the CLI build is updated.
@@ -119,14 +143,16 @@ If you wish to install it manually, you may do so by running `scripts/setup_wasi
 
 ## 🧪 How do I run tests?
 
-End-to-end tests are hosted under `./tools/hangar`. To get started, first ensure you can [build
+End-to-end tests are hosted under `tools/hangar`. To get started, first ensure you can [build
 wing](#-how-do-i-build-wing).
 
 To run the tests (and update snapshots), run the following command from anywhere in the monorepo:
 
 ```sh
-pnpm turbo test --filter=hangar
+pnpm turbo wing:e2e
 ```
+
+(This is a helpful shortcut for `pnpm turbo test --filter=hangar`)
 
 ### Test Meta-Comments
 
@@ -152,24 +178,12 @@ This is useful if, for example, the test requires docker. In our CI only linux s
 Benchmark files are located in `examples/tests/valid/benchmarks`. To run the benchmarks, run the following command from anywhere in the monorepo:
 
 ```sh
-pnpm turbo bench
+pnpm turbo wing:bench
 ```
 
-Benchmark files should ideally have a meta-comment with the `cases` key. For example:
+(This is a helpful shortcut for `pnpm turbo bench --filter=hangar`)
 
-```ts
-/*\
-cases:
-  - target: sim
-    maxMeanTime: 900
-  - target: tf-aws
-    maxMeanTime: 1000
-\*/
-```
-
-Given each of these cases, the current purpose is to provide a maxMeanTime (milliseconds) per compilation target.
-If the average time for compiling to this target takes longer than the maxMeanTime, the test will fail.
-Note: In CI, tests likely run much slower than on your local machine, so you may need to observe the CI results to determine the correct maxMeanTime.
+In CI, if these benchmarks regress too far from the current `main` branch, the build will fail.
 
 ## How do I work only on the compiler?
 

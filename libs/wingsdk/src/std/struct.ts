@@ -1,6 +1,6 @@
-import { Validator } from "jsonschema";
 import { T1 } from "./generics";
-import { Json } from "./json";
+import { Json, JsonValidationOptions } from "./json";
+import { JsonSchema } from "./json_schema";
 import { InflightClient } from "../core";
 
 /**
@@ -19,17 +19,18 @@ export class Struct {
   /**
    * Converts a Json to a Struct
    *
-   * @macro ($self$.fromJson($args$))
+   * @macro ((json, validateOptions) => ($self$._fromJson(json, validateOptions)))($args$)
    */
-  public static fromJson(json: Json): T1 {
+  public static fromJson(json: Json, options?: JsonValidationOptions): T1 {
     json;
+    options;
     throw new Error("Macro");
   }
 
   /**
    * Converts a Json to a Struct, returning nil if the Json is not valid
    *
-   * @macro (() => { try { return $self$.fromJson($args$); } catch { return undefined; }})();
+   * @macro ((json) => ($self$._tryFromJson(json)))($args$)
    */
   public static tryFromJson(json: Json): T1 | undefined {
     json;
@@ -37,26 +38,20 @@ export class Struct {
   }
 
   /**
-   * Validates a Json object against a schema
-   *
-   * The expected schema format: https://json-schema.org/
-   *
-   * @param obj Json object to validate
-   * @param schema schema to validate against
+   * Retrieve the schema for this struct
+   * @macro ($self$)
+   */
+  public static schema(): JsonSchema {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Create an instance of a StructSchema from a JsonSchema
    *
    * @internal
    */
-  public static _validate(obj: Json, schema: any): Json {
-    const validator = new Validator();
-    const result = validator.validate(obj, schema);
-    if (result.errors.length > 0) {
-      throw new Error(
-        `unable to parse ${schema.id.replace("/", "")}:\n- ${result.errors.join(
-          "\n- "
-        )}`
-      );
-    }
-    return obj;
+  public static _createJsonSchema(schema: Json): JsonSchema {
+    return new JsonSchema(schema);
   }
 
   private constructor() {}

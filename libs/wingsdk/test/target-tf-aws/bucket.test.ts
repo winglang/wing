@@ -1,8 +1,8 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
 import { Bucket } from "../../src/cloud";
+import { Testing } from "../../src/simulator";
 import * as tfaws from "../../src/target-tf-aws";
-import { Testing } from "../../src/testing";
 import {
   mkdtemp,
   tfResourcesOf,
@@ -21,7 +21,6 @@ test("create a bucket", () => {
   // THEN
   expect(tfResourcesOf(output)).toEqual([
     "aws_s3_bucket", // main bucket
-    "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
   ]);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -54,7 +53,6 @@ test("bucket is public", () => {
     "aws_s3_bucket", // main bucket
     "aws_s3_bucket_policy", // resource policy to grant read access to anyone
     "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
-    "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
   ]);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -73,7 +71,6 @@ test("bucket with two preflight objects", () => {
     "aws_s3_bucket", // main bucket
     "aws_s3_bucket_policy", // resource policy to grant read access to anyone
     "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
-    "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
     "aws_s3_object", // file1.txt
   ]);
   expect(tfResourcesOfCount(output, "aws_s3_object")).toEqual(2);
@@ -85,8 +82,8 @@ test("bucket with two preflight files", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
-  bucket.addFile("file1.txt", "../testFiles/test1.txt");
-  bucket.addFile("file2.txt", "../testFiles/test2.txt");
+  bucket.addFile("file1.txt", "../test-files/test1.txt");
+  bucket.addFile("file2.txt", "../test-files/test2.txt");
   const output = app.synth();
 
   // THEN
@@ -94,7 +91,6 @@ test("bucket with two preflight files", () => {
     "aws_s3_bucket", // main bucket
     "aws_s3_bucket_policy", // resource policy to grant read access to anyone
     "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
-    "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
     "aws_s3_object", // file1.txt
   ]);
   expect(tfResourcesOfCount(output, "aws_s3_object")).toEqual(2);
@@ -164,6 +160,7 @@ test("bucket with onCreate method", () => {
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group", // log group for subscriber
     "aws_iam_role",
     "aws_iam_role_policy",
     "aws_iam_role_policy_attachment",
@@ -173,7 +170,6 @@ test("bucket with onCreate method", () => {
     "aws_s3_bucket_notification",
     "aws_s3_bucket_policy", // resource policy to grant read access to anyone
     "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
-    "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
     "aws_s3_object",
     "aws_sns_topic", // topic to subscribe to bucket events
     "aws_sns_topic_policy", //permission of the bucket to publish events
@@ -203,6 +199,7 @@ test("bucket with onDelete method", () => {
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group", // log group for subscriber
     "aws_iam_role",
     "aws_iam_role_policy",
     "aws_iam_role_policy_attachment",
@@ -212,7 +209,6 @@ test("bucket with onDelete method", () => {
     "aws_s3_bucket_notification",
     "aws_s3_bucket_policy", // resource policy to grant read access to anyone
     "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
-    "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
     "aws_s3_object",
     "aws_sns_topic", // topic to subscribe to bucket events
     "aws_sns_topic_policy", //permission of the bucket to publish events
@@ -242,6 +238,7 @@ test("bucket with onUpdate method", () => {
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group", // log group for subscriber
     "aws_iam_role",
     "aws_iam_role_policy",
     "aws_iam_role_policy_attachment",
@@ -251,7 +248,6 @@ test("bucket with onUpdate method", () => {
     "aws_s3_bucket_notification",
     "aws_s3_bucket_policy", // resource policy to grant read access to anyone
     "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
-    "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
     "aws_s3_object",
     "aws_sns_topic", // topic to subscribe to bucket events
     "aws_sns_topic_policy", //permission of the bucket to publish events
@@ -281,6 +277,7 @@ test("bucket with onEvent method", () => {
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group", // log group for subscriber
     "aws_iam_role",
     "aws_iam_role_policy",
     "aws_iam_role_policy_attachment",
@@ -290,7 +287,6 @@ test("bucket with onEvent method", () => {
     "aws_s3_bucket_notification",
     "aws_s3_bucket_policy", // resource policy to grant read access to anyone
     "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
-    "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
     "aws_s3_object",
     "aws_sns_topic", // topic to subscribe to bucket events
     "aws_sns_topic_policy", //permission of the bucket to publish events

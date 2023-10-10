@@ -6,6 +6,7 @@ import {
   TableRow,
   getInputType,
 } from "@wingconsole/design-system";
+import { createPersistentState } from "@wingconsole/use-persistent-state";
 import classNames from "classnames";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -17,6 +18,7 @@ export type Row = {
 };
 
 export interface TableInteractionProps {
+  resourceId: string;
   primaryKey?: string;
   columns?: Column[];
   rows?: Row[];
@@ -29,6 +31,7 @@ export interface TableInteractionProps {
 }
 
 export const TableInteraction = ({
+  resourceId,
   primaryKey = "",
   columns = [],
   rows = [],
@@ -40,8 +43,9 @@ export const TableInteraction = ({
   loading = false,
 }: TableInteractionProps) => {
   const { theme } = useTheme();
+  const { usePersistentState } = createPersistentState(resourceId);
 
-  const [newRow, setNewRow] = useState<Row>({ data: {}, error: "" });
+  const [newRow, setNewRow] = usePersistentState<Row>({ data: {}, error: "" });
   const [internalRows, setInternalRows] = useState<Row[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -51,7 +55,8 @@ export const TableInteraction = ({
       return;
     }
     onAddRow(row);
-  }, [newRow, onAddRow, primaryKey]);
+    setNewRow({ data: {}, error: "" });
+  }, [newRow, onAddRow, primaryKey, setNewRow]);
 
   const updateNewRow = useCallback(
     (key: string, newValue: any) => {
@@ -94,7 +99,6 @@ export const TableInteraction = ({
   );
 
   useEffect(() => {
-    setNewRow({ data: {}, error: "" });
     setInternalRows(rows);
   }, [rows]);
 

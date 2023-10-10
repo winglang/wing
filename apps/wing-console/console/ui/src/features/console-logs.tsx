@@ -9,6 +9,9 @@ import classNames from "classnames";
 import throttle from "lodash.throttle";
 import { Fragment, useEffect, useRef, useState } from "react";
 
+import { OpenFileInEditorButton } from "../shared/use-file-link.js";
+import { createHtmlLink } from "../shared/use-file-link.js";
+
 const dateTimeFormat = new Intl.DateTimeFormat(undefined, {
   hour: "2-digit",
   minute: "2-digit",
@@ -22,21 +25,6 @@ interface LogEntryProps {
   onRowClick?: (log: LogEntry) => void;
   showIcons?: boolean;
 }
-
-export const formatAbsolutePaths = (
-  error: string,
-  className: string,
-  expanded: boolean = false,
-) => {
-  return error
-    .replaceAll(
-      /\B((?:[a-z]:)?[/\\]\S+):(\d+):(\d+)/gi,
-      (match, path, line, column) => {
-        return `<a class="${className}" onclick="event.stopPropagation()" href="vscode://file/${path}:${line}:${column}">${match}</a>`;
-      },
-    )
-    .replaceAll(/(\r\n|\n|\r)/gm, expanded ? "<br />" : "\n");
-};
 
 const LogEntryRow = ({
   log,
@@ -77,7 +65,7 @@ const LogEntryRow = ({
     if (expandableRef.current === null) {
       return;
     }
-    const html = formatAbsolutePaths(
+    const html = createHtmlLink(
       log.message,
       "text-sky-500 underline hover:text-sky-800",
       expanded,
@@ -154,20 +142,22 @@ const LogEntryRow = ({
               />
             </button>
           )}
-          <span
-            className={classNames(
-              log.ctx?.messageType === "info" && theme.text2,
-              log.ctx?.messageType === "title" && theme.text1,
-              log.ctx?.messageType === "success" &&
-                "text-green-700 dark:text-green-500",
-              log.ctx?.messageType === "fail" && "text-red-500",
-              log.ctx?.messageType === "summary" && [
-                "font-medium",
-                theme.text1,
-              ],
-            )}
-            ref={expandableRef}
-          />
+          <OpenFileInEditorButton>
+            <span
+              className={classNames(
+                log.ctx?.messageType === "info" && theme.text2,
+                log.ctx?.messageType === "title" && theme.text1,
+                log.ctx?.messageType === "success" &&
+                  "text-green-700 dark:text-green-500",
+                log.ctx?.messageType === "fail" && "text-red-500",
+                log.ctx?.messageType === "summary" && [
+                  "font-medium",
+                  theme.text1,
+                ],
+              )}
+              ref={expandableRef}
+            />
+          </OpenFileInEditorButton>
         </div>
 
         {onResourceClick && (

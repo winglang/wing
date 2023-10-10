@@ -8,7 +8,7 @@ source: libs/wingc/src/jsify/tests.rs
     bring cloud;
     let b = new cloud.Bucket();
     class A {
-      bucky: cloud.Bucket;
+      pub bucky: cloud.Bucket;
       init() {
         this.bucky = b;
       }

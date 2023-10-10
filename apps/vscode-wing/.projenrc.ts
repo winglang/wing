@@ -60,7 +60,7 @@ const project = new TypeScriptAppProject({
     "@trpc/client",
     "ws",
     "open",
-    "node-fetch@2",
+    "node-fetch@^2.6.7",
     "@types/node",
     "@types/which",
     "@vscode/vsce",
@@ -100,8 +100,8 @@ const contributes: VSCodeExtensionContributions = {
       extensions: [".w", ".wsim"],
       configuration: "./language-configuration.json",
       icon: {
-        light: "resources/icon-light.png",
-        dark: "resources/icon-dark.png",
+        light: "resources/winglang-symbol-dark.svg",
+        dark: "resources/winglang-symbol-light.svg",
       },
     },
   ],
@@ -126,16 +126,16 @@ const contributes: VSCodeExtensionContributions = {
       command: "wing.openConsole",
       title: "Open in Wing Console",
       icon: {
-        light: "resources/icon-light.png",
-        dark: "resources/icon-dark.png",
+        light: "resources/winglang-symbol-light.svg",
+        dark: "resources/winglang-symbol-dark.svg",
       },
     },
     {
       command: "wing.openFile",
       title: "Open source file",
       icon: {
-        light: "resources/icon-light.png",
-        dark: "resources/icon-dark.png",
+        light: "resources/winglang-symbol-light.svg",
+        dark: "resources/winglang-symbol-dark.svg",
       },
     },
     {
@@ -193,9 +193,8 @@ const contributes: VSCodeExtensionContributions = {
       properties: {
         "wing.bin": {
           type: "string",
-          default: "wing",
           description:
-            "Path to the Wing binary. Will be `wing` from PATH by default.\nSet to `npx` to automatically retrieve the version that matches this extension",
+            "Path to the Wing binary. Will be `wing` from PATH by default.",
         },
       },
     },

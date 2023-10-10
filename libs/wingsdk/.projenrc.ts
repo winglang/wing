@@ -1,28 +1,6 @@
 import { readdirSync } from "fs";
 import { JsonFile, cdk, javascript } from "projen";
 
-const UNDOCUMENTED_CLOUD_FILES = ["index", "test-runner"];
-
-const cloudFiles = readdirSync("./src/cloud");
-
-const cloudResources: Set<string> = new Set(
-  cloudFiles.map((filename) => filename.split(".").slice(0, -1).join("."))
-);
-
-UNDOCUMENTED_CLOUD_FILES.forEach((file) => cloudResources.delete(file));
-
-const undocumentedResources = Array.from(cloudResources).filter(
-  (file) => !cloudFiles.includes(`${file}.md`)
-);
-
-if (undocumentedResources.length) {
-  throw new Error(
-    `Detected undocumented resources: ${undocumentedResources.join(
-      ", "
-    )}. Please add the corresponding .md files in ./src/cloud folder.`
-  );
-}
-
 const JSII_DEPS = ["constructs@~10.2.69"];
 const CDKTF_VERSION = "0.17.0";
 
@@ -33,9 +11,10 @@ const CDKTF_PROVIDERS = [
   "google@~>4.63.1",
 ];
 
-const PUBLIC_MODULES = ["std", "http", "util", "aws", "ex"];
+const PUBLIC_MODULES = ["std", "http", "util", "aws", "math", "regex"];
 
 const CLOUD_DOCS_PREFIX = "../../docs/docs/04-standard-library/01-cloud/";
+const EX_DOCS_PREFIX = "../../docs/docs/04-standard-library/02-ex/";
 
 // defines the list of dependencies required for each compilation target that is not built into the
 // compiler (like Terraform targets).
@@ -74,18 +53,19 @@ const project = new cdk.JsiiProject({
     // aws client dependencies
     // (note: these should always be updated together, otherwise they will
     // conflict with each other)
-    "@aws-sdk/client-cloudwatch-logs@3.354.0",
-    "@aws-sdk/client-dynamodb@3.354.0",
-    "@aws-sdk/client-elasticache@3.354.0",
-    "@aws-sdk/util-dynamodb@3.354.0",
-    "@aws-sdk/client-lambda@3.354.0",
-    "@aws-sdk/client-s3@3.354.0",
-    "@aws-sdk/client-secrets-manager@3.354.0",
-    "@aws-sdk/client-sqs@3.354.0",
-    "@aws-sdk/client-sns@3.354.0",
-    "@aws-sdk/types@3.347.0",
+    "@aws-sdk/client-cloudwatch-logs@3.405.0",
+    "@aws-sdk/client-dynamodb@3.405.0",
+    "@aws-sdk/client-elasticache@3.405.0",
+    "@aws-sdk/util-dynamodb@3.405.0",
+    "@aws-sdk/client-lambda@3.405.0",
+    "@aws-sdk/client-s3@3.405.0",
+    "@aws-sdk/client-secrets-manager@3.405.0",
+    "@aws-sdk/client-sqs@3.405.0",
+    "@aws-sdk/client-sns@3.405.0",
+    "@aws-sdk/types@3.398.0",
     "@aws-sdk/util-stream-node@3.350.0",
     "@aws-sdk/util-utf8-node@3.259.0",
+    "@aws-sdk/s3-request-presigner@3.405.0",
     "@types/aws-lambda",
     // the following 2 deps are required by @aws-sdk/util-utf8-node
     "@aws-sdk/util-buffer-from@3.208.0",
@@ -104,6 +84,7 @@ const project = new cdk.JsiiProject({
     // shared client dependencies
     "ioredis",
     "jsonschema",
+    "yaml",
   ],
   devDeps: [
     `@cdktf/provider-aws@^15.0.0`, // only for testing Wing plugins
@@ -276,10 +257,11 @@ docgen.reset();
 
 // copy readme docs
 docgen.exec(`cp -r src/cloud/*.md ${CLOUD_DOCS_PREFIX}`);
+docgen.exec(`cp -r src/ex/*.md ${EX_DOCS_PREFIX}`);
 
 // generate api reference for each submodule
 for (const mod of PUBLIC_MODULES) {
-  const prefix = docsPrefix(PUBLIC_MODULES.indexOf(mod) + 2, mod);
+  const prefix = docsPrefix(PUBLIC_MODULES.indexOf(mod) + 3, mod);
   const docsPath = prefix + "/api-reference.md";
   docgen.exec(`jsii-docgen -o API.md -l wing --submodule ${mod}`);
   docgen.exec(`mkdir -p ${prefix}`);
@@ -287,12 +269,54 @@ for (const mod of PUBLIC_MODULES) {
   docgen.exec(`cat API.md >> ${docsPath}`);
 }
 
-// generate api reference for each cloud/submodule and append it to the doc file
-for (const mod of cloudResources) {
-  const docsPath = `${CLOUD_DOCS_PREFIX}${mod}.md`;
-  docgen.exec(`jsii-docgen -o API.md -l wing --submodule cloud/${mod}`);
-  docgen.exec(`cat API.md >> ${docsPath}`);
+const UNDOCUMENTED_CLOUD_FILES = ["index", "test-runner"];
+const UNDOCUMENTED_EX_FILES = ["index"];
+
+function generateResourceApiDocs(
+  module: string,
+  pathToFolder: string,
+  docsPath: string,
+  excludedFiles: string[] = []
+) {
+  const cloudFiles = readdirSync(pathToFolder);
+
+  const cloudResources: Set<string> = new Set(
+    cloudFiles.map((filename) => filename.split(".")[0])
+  );
+
+  excludedFiles.forEach((file) => cloudResources.delete(file));
+
+  const undocumentedResources = Array.from(cloudResources).filter(
+    (file) => !cloudFiles.includes(`${file}.md`)
+  );
+
+  if (undocumentedResources.length) {
+    throw new Error(
+      `Detected undocumented resources: ${undocumentedResources.join(
+        ", "
+      )}. Please add the corresponding .md files in ${pathToFolder} folder.`
+    );
+  }
+
+  // generate api reference for each cloud/submodule and append it to the doc file
+  for (const mod of cloudResources) {
+    docgen.exec(`jsii-docgen -o API.md -l wing --submodule ${module}/${mod}`);
+    docgen.exec(`cat API.md >> ${docsPath}${mod}.md`);
+  }
 }
+
+generateResourceApiDocs(
+  "cloud",
+  "./src/cloud",
+  CLOUD_DOCS_PREFIX,
+  UNDOCUMENTED_CLOUD_FILES
+);
+generateResourceApiDocs(
+  "ex",
+  "./src/ex",
+  EX_DOCS_PREFIX,
+  UNDOCUMENTED_EX_FILES
+);
 
 docgen.exec("rm API.md");
 
@@ -333,9 +357,9 @@ new JsonFile(project, "cdktf.json", {
     projectId: "93afdbfa-23ed-40cf-9ce4-495b3289c519",
   },
 });
-project.gitignore.addPatterns("src/.gen/providers");
+project.gitignore.addPatterns("src/.gen");
 
-project.preCompileTask.exec("cdktf get");
+project.preCompileTask.exec("cdktf get --force");
 
 project.package.file.addDeletionOverride("pnpm");
 project.tryRemoveFile(".npmrc");

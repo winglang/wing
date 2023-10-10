@@ -33,7 +33,7 @@ These targets contain a combination of provisioning engine and cloud environment
 
 ## Portability
 
-The [Wing Cloud Library](/docs/category/cloud-resources) has several classes representing abstracted cloud resources, whose APIs are not specific to a single cloud provider.
+The [Wing Cloud Library](/docs/category/cloud-library) has several classes representing abstracted cloud resources, whose APIs are not specific to a single cloud provider.
 This allows you to write code that can be deployed to any supported cloud environment or provisioning engine.
 
 Here's an example of a portable code snippet:

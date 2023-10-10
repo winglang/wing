@@ -1,12 +1,15 @@
-import { compile } from "./compile";
-import { readdir, stat, writeFile } from "fs/promises";
-import { describe, test, expect } from "vitest";
+import { writeFileSync } from "fs";
+import { readdir, stat, writeFile, mkdtemp } from "fs/promises";
+import { tmpdir } from "os";
 import { join, resolve } from "path";
 import { Target } from "@winglang/compiler";
+import { describe, test, expect } from "vitest";
+import { compile } from "./compile";
 import { generateTmpDir } from "src/util";
 
 const exampleDir = resolve("../../examples/tests/valid");
-const exampleFilePath = join(exampleDir, "captures.w");
+const exampleSmallDir = resolve("../../examples/tests/valid/subdir2");
+const exampleFilePath = join(exampleDir, "captures.test.w");
 
 describe(
   "compile command tests",
@@ -39,10 +42,61 @@ describe(
       expect(files).toEqual([".wing", "connections.json", "simulator.json", "tree.json"]);
     });
 
+    test("should be able to compile to default target sim", async () => {
+      const outDir = await compile(exampleFilePath, {
+        targetDir: `${await generateTmpDir()}/target`,
+      });
+
+      const stats = await stat(outDir);
+      expect(stats.isDirectory()).toBeTruthy();
+      const files = (await readdir(outDir)).sort();
+      expect(files.length).toBeGreaterThan(0);
+      expect(files).toEqual([".wing", "connections.json", "simulator.json", "tree.json"]);
+    });
+
+    test("should be able to compile the only entrypoint file in current directory", async () => {
+      const outDir = await mkdtemp(join(tmpdir(), "-wing-compile-test"));
+      const prevdir = process.cwd();
+
+      try {
+        process.chdir(outDir);
+        writeFileSync("main.w", "bring cloud;");
+        await compile();
+
+        const stats = await stat(outDir);
+        expect(stats.isDirectory()).toBeTruthy();
+        const files = (await readdir(outDir)).sort();
+        expect(files.length).toBeGreaterThan(0);
+        expect(files).toEqual(["main.w", "target"]);
+      } finally {
+        process.chdir(prevdir);
+      }
+    });
+
     test("should error if a nonexistent file is compiled", async () => {
       return expect(compile("non-existent-file.w", { target: Target.SIM })).rejects.toThrowError(
         /Source file cannot be found/
       );
+    });
+
+    test("should be able to compile a directory", async () => {
+      const artifactDir = await compile(exampleSmallDir, {
+        target: Target.SIM,
+        targetDir: `${await generateTmpDir()}/target`,
+      });
+
+      const stats = await stat(artifactDir);
+      expect(stats.isDirectory()).toBeTruthy();
+    });
+
+    test("should be able to compile a directory to tf-aws", async () => {
+      const artifactDir = await compile(exampleSmallDir, {
+        target: Target.TF_AWS,
+        targetDir: `${await generateTmpDir()}/target`,
+      });
+
+      const stats = await stat(artifactDir);
+      expect(stats.isDirectory()).toBeTruthy();
     });
 
     // https://github.com/winglang/wing/issues/2081
@@ -53,7 +107,7 @@ describe(
         process.chdir(exampleDir);
 
         // because we changed to the example directory, we can just pass the filename
-        const outDir = await compile("extern_implementation.w", {
+        const outDir = await compile("extern_implementation.test.w", {
           target: Target.SIM,
           targetDir: `${await generateTmpDir()}/target`,
         });

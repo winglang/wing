@@ -45,15 +45,35 @@ new cloud.Function(inflight () => {
 
 ### Simulator (`sim`)
 
-The sim implementation of `cloud.Function` uses JavaScript's function
+The sim implementation of `cloud.Function` runs the inflight code as a JavaScript function.
 
 ### AWS (`tf-aws` and `awscdk`)
 
-The AWS implementation of `cloud.Function` uses [Amazon Lambda](https://aws.amazon.com/lambda/).
+The AWS implementation of `cloud.Function` uses [AWS Lambda](https://aws.amazon.com/lambda/).
+
+To add extra IAM permissions to the function, you can use the `aws.Function` class as shown below.
+
+```ts playground
+bring aws;
+bring cloud;
+
+let f = new cloud.Function(inflight () => {
+  log("Hello world!");
+});
+if let lambdaFn = aws.Function.from(f) {
+  lambdaFn.addPolicyStatements(
+    aws.PolicyStatement {
+      actions: ["ses:sendEmail"],
+      effect: aws.Effect.ALLOW,
+      resources: ["*"],
+    },
+  );
+}
+```
 
 ### Azure (`tf-azure`)
 
-The Azure implementation of `cloud.Function` uses [Azure Function](https://azure.microsoft.com/en-us/products/function).
+The Azure implementation of `cloud.Function` uses [Azure Functions](https://azure.microsoft.com/en-us/products/functions).
 
 🚧 `invoke` API is not supported yet (tracking issue: [#1371](https://github.com/winglang/wing/issues/1371))
 
@@ -107,7 +127,7 @@ new cloud.Function(handler: IFunctionHandler, props?: FunctionProps);
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IFunctionClient.invoke">invoke</a></code> | Invoke the function asynchronously with a given payload. |
+| <code><a href="#@winglang/sdk.cloud.IFunctionClient.invoke">invoke</a></code> | Invokes the function with a payload and waits for the result. |
 
 ---
 
@@ -137,7 +157,7 @@ Add an environment variable to the function.
 inflight invoke(payload: str): str
 ```
 
-Invoke the function asynchronously with a given payload.
+Invokes the function with a payload and waits for the result.
 
 ###### `payload`<sup>Required</sup> <a name="payload" id="@winglang/sdk.cloud.IFunctionClient.invoke.parameter.payload"></a>
 
@@ -200,6 +220,7 @@ let FunctionProps = cloud.FunctionProps{ ... };
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.FunctionProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.FunctionProps.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
 | <code><a href="#@winglang/sdk.cloud.FunctionProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
 | <code><a href="#@winglang/sdk.cloud.FunctionProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
 
@@ -215,6 +236,21 @@ env: MutMap<str>;
 - *Default:* No environment variables.
 
 Environment variables to pass to the function.
+
+---
+
+##### `logRetentionDays`<sup>Optional</sup> <a name="logRetentionDays" id="@winglang/sdk.cloud.FunctionProps.property.logRetentionDays"></a>
+
+```wing
+logRetentionDays: num;
+```
+
+- *Type:* num
+- *Default:* 30
+
+Specifies the number of days that function logs will be kept.
+
+Setting negative value means logs will not expire.
 
 ---
 
