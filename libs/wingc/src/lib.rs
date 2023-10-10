@@ -112,7 +112,7 @@ const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";
 const MACRO_REPLACE_ARGS_TEXT: &'static str = "$args_text$";
 
-pub const GLOBAL_SYMBOLS: [&'static str; 3] = [WINGSDK_STD_MODULE, "assert", "log"];
+pub const GLOBAL_SYMBOLS: [&'static str; 4] = [WINGSDK_STD_MODULE, "assert", "log", "unsafeCast"];
 
 pub struct CompilerOutput {}
 
@@ -239,6 +239,24 @@ pub fn type_check(
 				"{((cond) => {if (!cond) throw new Error(\"assertion failed: $args_text$\")})($args$)}".to_string(),
 			),
 			docs: Docs::with_summary("Asserts that a condition is true"),
+		}),
+		scope,
+		types,
+	);
+	add_builtin(
+		UtilityFunctions::UnsafeCast.to_string().as_str(),
+		Type::Function(FunctionSignature {
+			this_type: None,
+			parameters: vec![FunctionParameter {
+				name: "value".into(),
+				typeref: types.anything(),
+				docs: Docs::with_summary("The value to cast into a different type"),
+				variadic: false,
+			}],
+			return_type: types.anything(),
+			phase: Phase::Independent,
+			js_override: Some("$args$".to_string()),
+			docs: Docs::with_summary("Casts a value into a different type. This is unsafe and can cause runtime errors"),
 		}),
 		scope,
 		types,
