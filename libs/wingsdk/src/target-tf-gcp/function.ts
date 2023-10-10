@@ -124,11 +124,19 @@ export class Function extends cloud.Function {
           );
         }
         for (const roleDefinition of roleDefinitions) {
-          addBucketPermission(
-            scopedResource as Bucket,
-            roleDefinition.Action as ActionTypes,
-            app.projectId as string
-          );
+          switch (roleDefinition.Resource) {
+            case ResourceTypes.BUCKET:
+              addBucketPermission(
+                scopedResource as Bucket,
+                roleDefinition.Action as ActionTypes,
+                app.projectId as string
+              );
+              break;
+            case ResourceTypes.Function:
+              throw new Error("Function permissions not implemented yet");
+            default:
+              throw new Error("Unsupported resource type");
+          }
         }
       }
     }
