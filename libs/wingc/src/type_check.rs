@@ -3255,7 +3255,10 @@ impl<'a> TypeChecker<'a> {
 				tc.type_check_try_catch(env, try_statements, catch_block, finally_statements);
 			}
 			StmtKind::CompilerDebugEnv => {
-				println!("[symbol environment at {}]", stmt.span);
+				println!(
+					"[symbol environment at {}]",
+					Utf8Path::new(&stmt.span.file_id).file_name().unwrap(),
+				);
 				println!("{}", env);
 			}
 			StmtKind::SuperConstructor { arg_list } => {
