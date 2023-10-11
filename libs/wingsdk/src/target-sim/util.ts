@@ -3,8 +3,8 @@ import { basename } from "path";
 import { promisify } from "util";
 import { IConstruct } from "constructs";
 import { simulatorHandleToken } from "./tokens";
+import { makeSimulatorClient } from "../simulator/client";
 import { Duration, IInflightHost, Resource } from "../std";
-import { makeSimulatorClient } from "../testing";
 
 /**
  * Check if a file exists for an specific path
