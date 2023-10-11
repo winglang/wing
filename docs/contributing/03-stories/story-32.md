@@ -34,7 +34,9 @@ He begins by creating his platform in a new npm project:
 ```typescript
 // marcus-platform.ts
 import { Construct } from "constructs";
-import { IPlatform, TfAWS } from "wingsdk/platform";
+import { IPlatform } from "@winglang/sdk";
+import * as tfaws from "@winglang/sdk/tf-aws";
+
 
 export class MarcusPlatform extends TfAWS.Platform {
   newInstance(type: string, scope: Construct, id: string, props: any): any {
