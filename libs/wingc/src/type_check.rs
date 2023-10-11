@@ -2142,10 +2142,7 @@ impl<'a> TypeChecker<'a> {
 				if let CalleeKind::Expr(call_expr) = callee {
 					if let ExprKind::Reference(Reference::Identifier(ident)) = &call_expr.kind {
 						if ident.name == "wingc_env" {
-							println!(
-								"[symbol environment at {}]",
-								Utf8Path::new(&exp.span().file_id).file_name().unwrap(),
-							);
+							println!("[symbol environment at {}]", exp.span().file_id);
 							println!("{}", env.to_string());
 						}
 					}
@@ -3261,10 +3258,7 @@ impl<'a> TypeChecker<'a> {
 				tc.type_check_try_catch(env, try_statements, catch_block, finally_statements);
 			}
 			StmtKind::CompilerDebugEnv => {
-				println!(
-					"[symbol environment at {}]",
-					Utf8Path::new(&stmt.span.file_id).file_name().unwrap(),
-				);
+				println!("[symbol environment at {}]", stmt.span);
 				println!("{}", env);
 			}
 			StmtKind::SuperConstructor { arg_list } => {
