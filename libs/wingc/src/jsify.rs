@@ -822,20 +822,12 @@ impl<'a> JSifier<'a> {
 					Phase::Inflight => CodeMaker::one_line(format!("await this.super_{CLASS_INFLIGHT_INIT_NAME}?.({args});")),
 					Phase::Preflight => CodeMaker::one_line(format!("super(scope,id,{args});")),
 					Phase::Independent => {
-						// If we're an inflight class an our parent is phase independent then don't call calll the parent's ctor since we're in an async method
-						// in that case we'll make sure to jsify a seperate ctor for the super call
-						// let current_class_pahse = current_class_type.as_class().expect("a class").phase;
+						// If our parent is phase independent than we don't call its super, instead a call to its supper will be
+						// generated in `jsify_inflight_init` when we generate the inflight init for this class.
+						// Note: this is only true for inflight clases which are the only type of classes that can have a phase independent parent.
+						// when/if this changes we'll need to be move verbose here.
 						CodeMaker::default()
-						// if current_class_pahse != Phase::Inflight {
-						// 	code.line(format!("super({args});"));
-						// }
-						//code
 					}
-					// Phase::Independent => CodeMaker::one_line(format!(
-					// 	// Phase independent's ctor might be called from an inflight init, in which case it's an async method that can't use plain `super`
-					// 	// so we use the following hack to call the parent class's ctor.
-					// 	"{parent_class}.prototype.constructor.call(this,{args});"
-					// )),
 				}
 			}
 			StmtKind::Let {
