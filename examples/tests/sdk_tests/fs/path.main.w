@@ -1,4 +1,5 @@
 bring fs;
+bring regex;
 
 let from = "/a/b/c/d";
 let to = "/a/b/e/f";
@@ -16,7 +17,7 @@ result = fs.basename(from);
 assert(result == "d");
 
 result = fs.resolve(from, to);
-assert(result == "/a/b/e/f");
+assert(regex.match("/a/b/e/f", result));
 
 test "inflight path conversion" {
     let var result = fs.join(from, to);
@@ -32,5 +33,5 @@ test "inflight path conversion" {
     assert(result == "d");
 
     result = fs.resolve(from, to);
-    assert(result == "/a/b/e/f");
+    assert(regex.match("/a/b/e/f", result));
 }

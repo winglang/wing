@@ -4,6 +4,7 @@ import * as path from "path";
 import * as yaml from "js-yaml";
 import { InflightClient } from "../core";
 import { Json } from "../std";
+import { normalPath } from "../shared/misc";
 
 /**
  * Convert the path to Windows format if running on Windows.
@@ -11,25 +12,15 @@ import { Json } from "../std";
  * @returns The Normalized path
  */
 function localePath(p: string): string {
-  if (process.platform !== "win32") {
+  if (process.platform === "win32") {
+    return (
+      p
+        // force windows path separator
+        .replace(/\/+/g, "\\")
+    );
+  } else {
     return p;
   }
-  let winPath = p.split(path.posix.sep).join(path.win32.sep);
-  // If the path starts from the root directory, the first segment represents a specific drive.
-  winPath = winPath.replace(/^\\([A-Za-z])\\/, "$1:\\");
-  return winPath;
-}
-
-/**
- * Convert the path to POSIX format.
- * @param p The path to convert.
- * @returns The Normalized path.
- */
-function posixPath(p: string): string {
-  // If the path begins with a specific drive, convert the path to a format that starts from the root directory.
-  // And the initial segment specifies the name of the specific drive.
-  p = p.replace(/^([A-Za-z]):/, "\\$1");
-  return p.split(path.sep).join(path.posix.sep);
 }
 
 /**
@@ -94,7 +85,7 @@ export class Util {
    * @returns The resulting path after joining all the paths.
    */
   public static join(...paths: string[]): string {
-    return posixPath(path.join(...paths));
+    return normalPath(path.join(...paths));
   }
   /**
    * Retrieve the name of the directory from a given file path.
@@ -102,7 +93,7 @@ export class Util {
    * @returns The directory name of the path.
    */
   public static dirname(p: string): string {
-    return posixPath(path.dirname(p));
+    return normalPath(path.dirname(p));
   }
   /**
    * Retrieve the final segment of a given file path.
@@ -118,7 +109,7 @@ export class Util {
    * @returns The relative path from {from} to {to}.
    */
   public static relative(from: string, to: string): string {
-    return posixPath(path.relative(from, to));
+    return normalPath(path.relative(from, to));
   }
   /**
    * The right-most parameter is considered {to}. Other parameters are considered an array of {from}.
@@ -134,7 +125,7 @@ export class Util {
    * @returns The resulting path after performing the resolve operation.
    */
   public static resolve(...paths: string[]): string {
-    return posixPath(path.resolve(...paths));
+    return normalPath(path.resolve(...paths));
   }
   /**
    * Check if the path exists.
@@ -184,7 +175,7 @@ export class Util {
       prefix = "wingtemp";
     }
     const dirpath = fs.mkdtempSync(path.join(os.tmpdir(), prefix));
-    return posixPath(dirpath);
+    return normalPath(dirpath);
   }
   /**
    * Read the entire contents of a file.

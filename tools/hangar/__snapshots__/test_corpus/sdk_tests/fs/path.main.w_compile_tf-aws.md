@@ -2,7 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
-module.exports = function({ $from, $fs_Util, $to }) {
+module.exports = function({ $from, $fs_Util, $regex_Util, $to }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -19,7 +19,7 @@ module.exports = function({ $from, $fs_Util, $to }) {
       result = (await $fs_Util.basename($from));
       {((cond) => {if (!cond) throw new Error("assertion failed: result == \"d\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(result,"d")))};
       result = (await $fs_Util.resolve($from,$to));
-      {((cond) => {if (!cond) throw new Error("assertion failed: result == \"/a/b/e/f\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(result,"/a/b/e/f")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: regex.match(\"/a/b/e/f\", result)")})((await $regex_Util.match("/a/b/e/f",result)))};
     }
   }
   return $Closure1;
@@ -67,6 +67,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const fs = $stdlib.fs;
+const regex = $stdlib.regex;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -80,6 +81,7 @@ class $Root extends $stdlib.std.Resource {
           require("./inflight.$Closure1-1.js")({
             $from: ${context._lift(from)},
             $fs_Util: ${context._lift($stdlib.core.toLiftableModuleType(fs.Util, "@winglang/sdk/fs", "Util"))},
+            $regex_Util: ${context._lift($stdlib.core.toLiftableModuleType(regex.Util, "@winglang/sdk/regex", "Util"))},
             $to: ${context._lift(to)},
           })
         `;
@@ -117,7 +119,7 @@ class $Root extends $stdlib.std.Resource {
     result = (fs.Util.basename(from));
     {((cond) => {if (!cond) throw new Error("assertion failed: result == \"d\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(result,"d")))};
     result = (fs.Util.resolve(from,to));
-    {((cond) => {if (!cond) throw new Error("assertion failed: result == \"/a/b/e/f\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(result,"/a/b/e/f")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: regex.match(\"/a/b/e/f\", result)")})((regex.Util.match("/a/b/e/f",result)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight path conversion",new $Closure1(this,"$Closure1"));
   }
 }
