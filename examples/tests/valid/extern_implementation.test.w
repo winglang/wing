@@ -6,7 +6,6 @@ class Foo {
   extern "./external_js.js" static inflight getUuid(): str;
   extern "./external_js.js" static inflight getData(): str;
   extern "./external_js.js" pub static inflight print(msg: str);
-  extern "uuid" pub static v4(): str;
 
   pub inflight call() {
     assert(Foo.regexInflight("[a-z]+-\\d+", "abc-123"));
@@ -18,7 +17,6 @@ class Foo {
 }
 
 assert(Foo.getGreeting("Wingding") == "Hello, Wingding!");
-assert(Foo.v4().length == 36);
 
 let f = new Foo();
 

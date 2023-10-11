@@ -6,7 +6,8 @@
       "dependsOn": ["@winglang/wingii#compile", "@winglang/tree-sitter-wing#compile"],
       "outputs": [
         "../../target/wasm32-wasi/release/wingc.wasm",
-        "../../target/wasm32-wasi/release/libwingc.*"
+        "../../target/wasm32-wasi/release/libwingc.*",
+        "wingc.wasm"
       ]
     },
     "test": {

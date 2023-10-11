@@ -3,6 +3,7 @@ mod inference_visitor;
 pub(crate) mod jsii_importer;
 pub mod lifts;
 pub mod symbol_env;
+pub(crate) mod type_reference_transform;
 
 use crate::ast::{
 	self, AccessModifier, AssignmentKind, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition, IfLet, New,
@@ -48,7 +49,7 @@ use self::symbol_env::{LookupResult, LookupResultMut, SymbolEnvIter, SymbolEnvRe
 pub struct UnsafeRef<T>(*const T);
 impl<T> Clone for UnsafeRef<T> {
 	fn clone(&self) -> Self {
-		Self(self.0)
+		*self
 	}
 }
 
@@ -1312,6 +1313,9 @@ pub struct Types {
 	json_literal_casts: IndexMap<ExprId, TypeRef>,
 	/// Lookup table from a Scope's `id` to its symbol environment
 	scope_envs: Vec<Option<SymbolEnvRef>>,
+	/// Expressions used in references that actually refer to a type.
+	/// Key is the ExprId of the object of a InstanceMember, and the value is a TypeMember representing the whole reference.
+	type_expressions: IndexMap<ExprId, Reference>,
 }
 
 impl Types {
@@ -1360,6 +1364,7 @@ impl Types {
 			json_literal_casts: IndexMap::new(),
 			scope_envs: Vec::new(),
 			inferences: Vec::new(),
+			type_expressions: IndexMap::new(),
 		}
 	}
 
@@ -2137,7 +2142,7 @@ impl<'a> TypeChecker<'a> {
 				if let CalleeKind::Expr(call_expr) = callee {
 					if let ExprKind::Reference(Reference::Identifier(ident)) = &call_expr.kind {
 						if ident.name == "wingc_env" {
-							println!("[symbol environment at {}]", exp.span().to_string());
+							println!("[symbol environment at {}]", exp.span().file_id);
 							println!("{}", env.to_string());
 						}
 					}
@@ -3015,6 +3020,7 @@ impl<'a> TypeChecker<'a> {
 	fn type_check_scope(&mut self, scope: &Scope) {
 		assert!(self.inner_scopes.is_empty());
 		let mut env = self.types.get_scope_env(scope);
+
 		for statement in scope.statements.iter() {
 			self.type_check_statement(statement, &mut env);
 		}
@@ -3737,8 +3743,8 @@ impl<'a> TypeChecker<'a> {
 		};
 
 		let cur_func_env = *self.ctx.current_function_env().expect("a function env");
-		let SymbolEnvKind::Function{sig: cur_func_type, ..} = cur_func_env.kind else {
-				panic!("Expected function env");
+		let SymbolEnvKind::Function { sig: cur_func_type, .. } = cur_func_env.kind else {
+			panic!("Expected function env");
 		};
 		let mut function_ret_type = cur_func_type.as_function_sig().expect("a function_type").return_type;
 
@@ -4212,7 +4218,10 @@ impl<'a> TypeChecker<'a> {
 
 		// Verify the class has a parent class
 		let Some(parent_class) = &class_type.as_class().expect("class type to be a class").parent else {
-			self.spanned_error(super_constructor_call, format!("Class \"{class_type}\" does not have a parent class"));
+			self.spanned_error(
+				super_constructor_call,
+				format!("Class \"{class_type}\" does not have a parent class"),
+			);
 			return;
 		};
 
@@ -4603,7 +4612,8 @@ impl<'a> TypeChecker<'a> {
 		// Update the class's env to point to the new env
 		new_type_class.env = new_env;
 
-		let SymbolEnvKind::Type(new_type) = new_type_class.env.kind else { // TODO: Ugly hack to get non mut ref of new_type so we can use it
+		let SymbolEnvKind::Type(new_type) = new_type_class.env.kind else {
+			// TODO: Ugly hack to get non mut ref of new_type so we can use it
 			panic!("Expected class env to be a type");
 		};
 
@@ -4911,18 +4921,14 @@ impl<'a> TypeChecker<'a> {
 					// We can't get here twice, we can safely assume that if we're here the `object` part of the reference doesn't have and evaluated type yet.
 					// Create a type reference out of this nested reference and call ourselves again
 					let new_ref = Reference::TypeMember {
-						type_name: user_type_annotation,
+						type_name: user_type_annotation.clone(),
 						property: property.clone(),
 					};
-					// Replace the reference with the new one, this is unsafe because `reference` isn't mutable and theoretically someone may
-					// hold another reference to it. But our AST doesn't hold up/cross references so this is safe as long as we return right.
-					let const_ptr = reference as *const Reference;
-					let mut_ptr = const_ptr as *mut Reference;
-					unsafe {
-						// We don't use the return value but need to call replace so it'll drop the old value
-						_ = std::mem::replace(&mut *mut_ptr, new_ref);
-					}
-					return self.resolve_reference(reference, env);
+
+					// Store this reference for later when we can modify the final AST and replace the original reference with the new one
+					self.types.type_expressions.insert(object.id, new_ref.clone());
+
+					return self.resolve_reference(&new_ref, env);
 				}
 
 				// Special case: if the object expression is a simple reference to `this` and we're inside the init function then
@@ -5257,7 +5263,7 @@ impl<'a> TypeChecker<'a> {
 		name: &Symbol,
 		env: &mut SymbolEnv,
 	) -> (Option<TypeRef>, Option<SymbolEnvRef>) {
-		let Some(parent) = parent else  {
+		let Some(parent) = parent else {
 			if phase == Phase::Preflight {
 				// if this is a preflight and we don't have a parent, then we implicitly set it to `std.Resource`
 				let t = self.types.resource_base_type();
@@ -5734,6 +5740,7 @@ mod tests {
 		let void = UnsafeRef::<Type>(&Type::Void as *const Type);
 		let num = UnsafeRef::<Type>(&Type::Number as *const Type);
 		let string = UnsafeRef::<Type>(&Type::String as *const Type);
+
 		let returns_num = make_function(vec![], num, Phase::Inflight);
 		let returns_str = make_function(vec![], string, Phase::Inflight);
 		let returns_void = make_function(vec![], void, Phase::Inflight);
@@ -5749,9 +5756,10 @@ mod tests {
 
 	#[test]
 	fn function_subtyping_parameter_contravariance() {
-		let void = UnsafeRef::<Type>(&Type::Void as *const Type);
-		let string = UnsafeRef::<Type>(&Type::String as *const Type);
-		let opt_string = UnsafeRef::<Type>(&Type::Optional(string) as *const Type);
+		let void = UnsafeRef::<Type>(&Type::Void);
+		let string = UnsafeRef::<Type>(&Type::String);
+		let opt_string_type = Type::Optional(string);
+		let opt_string = UnsafeRef::<Type>(&opt_string_type);
 		let str_fn = make_function(
 			vec![FunctionParameter {
 				typeref: string,
