@@ -23,7 +23,7 @@ export interface IPlatform {
 ```
 
 As he understands it, Wing comes with a set of built-in platforms `tf-aws`, `tf-azure`, `tf-gcp`, and `sim`. These platforms define how the resources are translated into
-the underlying infrastructure and inflight clients. He knows his company is an AWS shop and many in the company have extensive experience with `Terraform` so the `tf-aws` platform sounds like a great
+the underlying infrastructure and inflight clients. He knows his company is an AWS shop and many in the company have extensive experience with Terraform so the `tf-aws` platform sounds like a great
 place to start.
 
 He has determined that he can create a new platform lovingly dubbed `MarcusPlatform` which should be able to just extend the `tf-aws` platform and override a few methods to
