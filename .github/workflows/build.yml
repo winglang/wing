@@ -19,7 +19,6 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  RUST_VERSION: "1.73.0"
   NODE_VERSION: "18.16.0"
   PNPM_VERSION: "8.6.3"
   CARGO_TERM_COLOR: always
@@ -58,13 +57,10 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@master
+        uses: moonrepo/setup-rust@v1
         with:
-          toolchain: ${{ env.RUST_VERSION }}
-          targets: |
-            x86_64-unknown-linux-gnu
-            wasm32-wasi
-          components: rustfmt,clippy,rust-std
+          inherit-toolchain: true
+          cache: false
 
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
@@ -120,13 +116,10 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@master
+        uses: moonrepo/setup-rust@v1
         with:
-          toolchain: ${{ env.RUST_VERSION }}
-          targets: |
-            x86_64-unknown-linux-gnu
-            wasm32-wasi
-          components: rustfmt,clippy,rust-std
+          inherit-toolchain: true
+          cache: false
 
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
