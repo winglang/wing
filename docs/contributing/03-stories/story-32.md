@@ -38,7 +38,7 @@ import { IPlatform } from "@winglang/sdk";
 import * as tfaws from "@winglang/sdk/tf-aws";
 
 
-export class MarcusPlatform extends TfAWS.Platform {
+export class MarcusPlatform extends tfaws.Platform {
   newInstance(type: string, scope: Construct, id: string, props: any): any {
     if (type === wingsdk.BUCKET_TYPE) {
       // return custom bucket
