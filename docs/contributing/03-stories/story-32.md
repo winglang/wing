@@ -64,7 +64,7 @@ export class Bucket extends tfaws.Bucket {
 
 As Marcus continues to change the resources to implement his company's standards he recalls that all IAM roles in his company must have a permission boundary set. 
 
-He recalls the `preSynth` method from the `IPlatform` interface which will allow him to traverse the Construct tree before any synthesis occurs. Meaning he can apply the permission boundary to all IAM roles before the code is compiled.
+He recalls the `preSynth` method from the `IPlatform` interface which will allow him to traverse the construct tree before any synthesis occurs. Meaning he can apply the permission boundary to all IAM roles before the code is compiled.
 
 
 He is able to just add the following method to his platform
