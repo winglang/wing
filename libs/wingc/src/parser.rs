@@ -792,7 +792,12 @@ impl<'s> Parser<'s> {
 
 	fn build_bring_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
 		let Some(module_name_node) = statement_node.child_by_field_name("module_name") else {
-			return self.with_error("Expected module specification (see https://www.winglang.io/docs/libraries)", &statement_node.child(statement_node.child_count() - 1).unwrap_or(*statement_node));
+			return self.with_error(
+				"Expected module specification (see https://www.winglang.io/docs/libraries)",
+				&statement_node
+					.child(statement_node.child_count() - 1)
+					.unwrap_or(*statement_node),
+			);
 		};
 
 		let module_name = self.node_symbol(&module_name_node)?;
@@ -1029,7 +1034,9 @@ impl<'s> Parser<'s> {
 						continue;
 					};
 
-					let Ok(func_def) = self.build_function_definition(Some(method_name.clone()), &class_element, phase, is_static) else {
+					let Ok(func_def) =
+						self.build_function_definition(Some(method_name.clone()), &class_element, phase, is_static)
+					else {
 						continue;
 					};
 
@@ -1386,8 +1393,12 @@ impl<'s> Parser<'s> {
 		let signature = self.build_function_signature(func_def_node, phase)?;
 		let statements = if let Some(external) = func_def_node.child_by_field_name("extern_modifier") {
 			let node_text = self.node_text(&external.named_child(0).unwrap());
-			let node_text = &node_text[1..node_text.len() - 1];
-			FunctionBody::External(node_text.to_string())
+			let file_path = Utf8Path::new(&node_text[1..node_text.len() - 1]);
+			let file_path = normalize_path(file_path, Some(&Utf8Path::new(&self.source_name)));
+			if !file_path.exists() {
+				self.add_error(format!("File not found: {}", node_text), &external);
+			}
+			FunctionBody::External(file_path.to_string())
 		} else {
 			FunctionBody::Statements(self.build_scope(&self.get_child_field(func_def_node, "block")?, phase))
 		};

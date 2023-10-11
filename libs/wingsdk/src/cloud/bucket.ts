@@ -5,7 +5,7 @@ import { Topic } from "./topic";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Json, IResource, Node, Resource, Duration } from "../std";
+import { Json, IResource, Node, Resource, Datetime, Duration } from "../std";
 
 /**
  * Global identifier for `Bucket`.
@@ -68,6 +68,7 @@ export abstract class Bucket extends Resource {
       BucketInflightMethods.TRY_GET_JSON,
       BucketInflightMethods.TRY_DELETE,
       BucketInflightMethods.SIGNED_URL,
+      BucketInflightMethods.METADATA,
     ];
   }
 
@@ -363,6 +364,28 @@ export interface IBucketClient {
    * @inflight
    */
   signedUrl(key: string, options?: SignedUrlOptions): Promise<string>;
+
+  /**
+   * Get the metadata of an object in the bucket.
+   * @param key Key of the object.
+   * @Throws if there is no object with the given key.
+   * @inflight
+   */
+  metadata(key: string): Promise<ObjectMetadata>;
+}
+
+/**
+ * Metadata of a bucket object.
+ */
+export interface ObjectMetadata {
+  /** The size of the object in bytes. */
+  readonly size: number;
+
+  /** The time the object was last modified. */
+  readonly lastModified: Datetime;
+
+  /** The content type of the object, if it is known. */
+  readonly contentType?: string;
 }
 
 /**
@@ -467,4 +490,5 @@ export enum BucketInflightMethods {
   TRY_DELETE = "tryDelete",
 
   SIGNED_URL = "signedUrl",
+  METADATA = "metadata",
 }
