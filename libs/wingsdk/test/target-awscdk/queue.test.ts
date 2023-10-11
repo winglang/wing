@@ -1,9 +1,9 @@
 import { Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import { Queue } from "../../src/cloud";
+import { Testing } from "../../src/simulator";
 import * as std from "../../src/std";
 import * as awscdk from "../../src/target-awscdk";
-import { Testing } from "../../src/testing";
 import { mkdtemp, sanitizeCode, awscdkSanitize } from "../util";
 
 const CDK_APP_OPTS = {
@@ -70,9 +70,9 @@ async handle(event) {
 
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::SQS::Queue", 1);
-  template.resourceCountIs("AWS::Lambda::Function", 1);
-  template.resourceCountIs("AWS::IAM::Role", 1);
-  template.resourceCountIs("AWS::IAM::Policy", 1);
+  template.resourceCountIs("AWS::Lambda::Function", 2);
+  template.resourceCountIs("AWS::IAM::Role", 2);
+  template.resourceCountIs("AWS::IAM::Policy", 2);
   template.resourceCountIs("AWS::Lambda::EventSourceMapping", 1);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });

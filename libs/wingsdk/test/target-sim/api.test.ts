@@ -1,8 +1,8 @@
 import { test, expect } from "vitest";
 import { listMessages } from "./util";
 import * as cloud from "../../src/cloud";
+import { Simulator, Testing } from "../../src/simulator";
 import { ApiAttributes } from "../../src/target-sim/schema-resources";
-import { Simulator, Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
 
 // Handler that responds to a request with a fixed string
@@ -158,6 +158,96 @@ test("api with 'name' & 'age' parameter", async () => {
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("api doesn't allow duplicated routes", () => {
+  // GIVEN
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api");
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE_ECHO_BODY);
+  api.get("/hello", inflight);
+
+  // THEN
+  expect(() => api.get("/hello", inflight)).toThrowError(
+    "Endpoint for path '/hello' and method 'GET' already exists"
+  );
+});
+
+test("api allows duplicates routes with different methods", () => {
+  // GIVEN
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api");
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE_ECHO_BODY);
+  api.get("/hello", inflight);
+
+  // WHEN
+  api.post("/hello", inflight);
+
+  // THEN
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("api doesn't allow ambiguous routes", () => {
+  // GIVEN
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api");
+  const path = "/api/hello/{name}";
+  const inflightGet = Testing.makeHandler(
+    app,
+    "Handler",
+    INFLIGHT_CODE_ECHO_BODY
+  );
+  api.get(path, inflightGet);
+
+  // WHEN
+  const ambiguousPath = "/api/{name}/hello";
+
+  // THEN
+  expect(() => api.get(ambiguousPath, inflightGet)).toThrowError(
+    `Endpoint for path '${ambiguousPath}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '${path}'`
+  );
+});
+
+test("api doesn't allow ambiguous routes containing only variables", () => {
+  // GIVEN
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api");
+  const path = "/{age}";
+  const inflightGet = Testing.makeHandler(
+    app,
+    "Handler",
+    INFLIGHT_CODE_ECHO_BODY
+  );
+  api.get(path, inflightGet);
+
+  // WHEN
+  const ambiguousPath = "/{name}";
+
+  // THEN
+  expect(() => api.get(ambiguousPath, inflightGet)).toThrowError(
+    `Endpoint for path '${ambiguousPath}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '${path}'`
+  );
+});
+
+test("api doesn't allow ambiguous routes containing different number of varaibles", () => {
+  // GIVEN
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api");
+  const path = "/{param}/{something}";
+  const inflightGet = Testing.makeHandler(
+    app,
+    "Handler",
+    INFLIGHT_CODE_ECHO_BODY
+  );
+  api.get(path, inflightGet);
+
+  // WHEN
+  const ambiguousPath = "/path/{something}";
+
+  // THEN
+  expect(() => api.get(ambiguousPath, inflightGet)).toThrowError(
+    `Endpoint for path '${ambiguousPath}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '${path}'`
+  );
 });
 
 test("api with multiple GET routes and one lambda", () => {
@@ -686,4 +776,5 @@ test("api with CORS settings responds to OPTIONS request", async () => {
   expect(response.headers.get("access-control-allow-methods")).toEqual(
     "GET,POST,PUT,DELETE,HEAD,OPTIONS"
   );
+  expect(response.headers.get("access-control-max-age")).toEqual("300");
 });

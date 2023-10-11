@@ -17,11 +17,11 @@ import {
   parseHttpMethod,
   sanitizeParamLikeObject,
 } from "../cloud";
-import { TraceType } from "../std";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
-} from "../testing/simulator";
+} from "../simulator/simulator";
+import { TraceType } from "../std";
 
 const LOCALHOST_ADDRESS = "127.0.0.1";
 

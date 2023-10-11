@@ -107,7 +107,7 @@ export const DefaultLayout = ({
 
   const { loading: deferredLoading, setLoading: setDeferredLoading } =
     useLoading({
-      delay: 500,
+      delay: 800,
       duration: 100,
     });
   useEffect(() => {
@@ -250,7 +250,7 @@ export const DefaultLayout = ({
         />
       )}
 
-      <div className={classNames(USE_EXTERNAL_THEME_COLOR, "fixed inset-0")}>
+      <div className="fixed inset-0">
         <div className={classNames("w-full h-full", theme.bg1)} />
       </div>
 
@@ -279,6 +279,10 @@ export const DefaultLayout = ({
 
           {renderApp && (
             <>
+              {loading && (
+                <div data-testid="loading-overlay" className="fixed inset-0" />
+              )}
+
               <div className="flex-1 flex relative gap-0.5">
                 <div
                   className={classNames(
@@ -287,7 +291,6 @@ export const DefaultLayout = ({
                     deferredLoading && "opacity-100 z-50",
                     !deferredLoading && "opacity-100 -z-10",
                   )}
-                  data-testid="loading-overlay"
                 >
                   <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                     <SpinnerLoader data-testid="main-view-loader" />

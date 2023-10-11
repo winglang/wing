@@ -6,8 +6,8 @@ import {
   FunctionHandle,
   PublisherHandle,
 } from "./schema-resources";
-import { ISimulatorContext } from "../testing";
-import { ISimulatorResourceInstance } from "../testing/simulator";
+import { ISimulatorContext } from "../simulator";
+import { ISimulatorResourceInstance } from "../simulator/simulator";
 
 export class EventMapping implements ISimulatorResourceInstance {
   private readonly publisher: PublisherHandle;

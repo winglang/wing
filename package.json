@@ -3,7 +3,8 @@
   "private": true,
   "devDependencies": {
     "bump-pack": "workspace:^",
-    "turbo": "^1.10.13"
+    "generate-workspace": "workspace:^",
+    "turbo": "^1.10.14"
   },
   "scripts": {
     "build": "turbo compile post-compile lint eslint test package",
@@ -14,7 +15,7 @@
     "test:ci": "turbo default --color --concurrency 1 && turbo compile post-compile lint eslint test test:playwright --color --filter=!hangar",
     "docs": "./scripts/docsite.sh",
     "install": "bash scripts/setup_wasi.sh",
-    "postinstall": "link-bundles",
+    "postinstall": "link-bundles && generate-workspace",
     "wing": "turbo compile --filter=winglang --output-logs=errors-only && ./apps/wing/bin/wing"
   },
   "volta": {

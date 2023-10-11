@@ -13,7 +13,7 @@ npm install @winglang/compiler
 ```ts
 import { compile, Target } from "@winglang/compiler";
 
-const outputDir = await compile("index.w", {
+const outputDir = await compile("main.w", {
   target: Target.SIM,
 });
 ```

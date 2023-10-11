@@ -8,7 +8,7 @@ import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
-import { IInflightHost, Node } from "../std";
+import { Duration, IInflightHost, Node } from "../std";
 
 /**
  * Queue names are limited to 80 characters.
@@ -57,7 +57,12 @@ export class Queue extends cloud.Queue {
       this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-SetConsumer-${hash}`,
       functionHandler,
-      props
+      {
+        ...props,
+        timeout: Duration.fromSeconds(
+          this.queue.visibilityTimeoutSeconds ?? 30
+        ),
+      }
     );
 
     // TODO: remove this constraint by adding generic permission APIs to cloud.Function
@@ -65,18 +70,16 @@ export class Queue extends cloud.Queue {
       throw new Error("Queue only supports creating tfaws.Function right now");
     }
 
-    fn.addPolicyStatements([
-      {
-        actions: [
-          "sqs:ReceiveMessage",
-          "sqs:ChangeMessageVisibility",
-          "sqs:GetQueueUrl",
-          "sqs:DeleteMessage",
-          "sqs:GetQueueAttributes",
-        ],
-        resources: [this.queue.arn],
-      },
-    ]);
+    fn.addPolicyStatements({
+      actions: [
+        "sqs:ReceiveMessage",
+        "sqs:ChangeMessageVisibility",
+        "sqs:GetQueueUrl",
+        "sqs:DeleteMessage",
+        "sqs:GetQueueAttributes",
+      ],
+      resources: [this.queue.arn],
+    });
 
     new LambdaEventSourceMapping(this, "EventSourceMapping", {
       functionName: fn._functionName,
@@ -100,7 +103,7 @@ export class Queue extends cloud.Queue {
 
     const env = this.envName();
 
-    host.addPolicyStatements(calculateQueuePermissions(this.queue.arn, ops));
+    host.addPolicyStatements(...calculateQueuePermissions(this.queue.arn, ops));
 
     // The queue url needs to be passed through an environment variable since
     // it may not be resolved until deployment time.

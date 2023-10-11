@@ -14,9 +14,10 @@ use crate::files::Files;
 use crate::fold::Fold;
 use crate::jsify::JSifier;
 use crate::lifting::LiftVisitor;
-use crate::parser::parse_wing_project;
+use crate::parser::{normalize_path, parse_wing_project};
 use crate::type_check;
 use crate::type_check::jsii_importer::JsiiImportSpec;
+use crate::type_check::type_reference_transform::TypeReferenceTransformer;
 use crate::type_check_assert::TypeCheckAssert;
 use crate::valid_json_visitor::ValidJsonVisitor;
 use crate::visit::Visit;
@@ -135,11 +136,12 @@ fn partial_compile(
 	// Reset diagnostics before new compilation (`partial_compile` can be called multiple times)
 	reset_diagnostics();
 
-	let source_path = Utf8Path::from_path(source_path).expect("invalid unicide path");
+	let source_path = Utf8Path::from_path(source_path).expect("invalid unicode path");
+	let source_path = normalize_path(source_path, None);
 
 	let topo_sorted_files = parse_wing_project(
 		&source_path,
-		source_text,
+		Some(source_text),
 		&mut project_data.files,
 		&mut project_data.file_graph,
 		&mut project_data.trees,
@@ -166,8 +168,19 @@ fn partial_compile(
 	// Type check all files in topological order (start with files that don't require any other
 	// Wing files, then move on to files that depend on those, etc.)
 	for file in &topo_sorted_files {
-		let mut scope = project_data.asts.get_mut(file).expect("matching AST not found");
-		type_check(&mut scope, &mut types, &file, jsii_types, &mut jsii_imports);
+		let mut scope = project_data.asts.remove(file).expect("matching AST not found");
+		type_check(
+			&mut scope,
+			&mut types,
+			&file,
+			&project_data.file_graph,
+			jsii_types,
+			&mut jsii_imports,
+		);
+
+		// Make sure all type reference are no longer considered references
+		let mut tr_transformer = TypeReferenceTransformer { types: &mut types };
+		let scope = tr_transformer.fold_scope(scope);
 
 		// Validate the type checker didn't miss anything - see `TypeCheckAssert` for details
 		let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
@@ -176,6 +189,8 @@ fn partial_compile(
 		// Validate all Json literals to make sure their values are legal
 		let mut json_checker = ValidJsonVisitor::new(&types);
 		json_checker.check(&scope);
+
+		project_data.asts.insert(file.clone(), scope);
 	}
 
 	// -- LIFTING PHASE --
@@ -183,7 +198,13 @@ fn partial_compile(
 	// source_file will never be "" because it is the path to the file being compiled and lsp does not allow empty paths
 	let project_dir = source_path.parent().expect("Empty filename");
 
-	let jsifier = JSifier::new(&mut types, &project_data.files, &source_path, &project_dir);
+	let jsifier = JSifier::new(
+		&mut types,
+		&project_data.files,
+		&project_data.file_graph,
+		&source_path,
+		&project_dir,
+	);
 	for file in &topo_sorted_files {
 		let mut lift = LiftVisitor::new(&jsifier);
 		let scope = project_data.asts.remove(file).expect("matching AST not found");
@@ -230,7 +251,7 @@ pub mod test_utils {
 	///
 	pub fn load_file_with_contents(content: &str) -> TextDocumentPositionParams {
 		let temp_dir = tempfile::tempdir().expect("Failed to create temporary directory");
-		let filename = format!("{}.w", Uuid::new_v4());
+		let filename = format!("{}.main.w", Uuid::new_v4());
 		let file_path = temp_dir.path().join(&filename);
 		fs::write(&file_path, content).expect("Failed to write to temporary file");
 		let file_uri_string = format!("file:///{}", file_path.to_str().unwrap());

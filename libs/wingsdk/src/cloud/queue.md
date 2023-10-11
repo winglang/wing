@@ -20,6 +20,7 @@ sidebar_position: 1
 
 The `cloud.Queue` resource represents a data structure for holding a list of messages.
 Queues are typically used to decouple producers of data and the consumers of said data in distributed systems.
+Queues by default are not FIFO (first in, first out) - so the order of messages is not guaranteed.
 
 ## Usage
 

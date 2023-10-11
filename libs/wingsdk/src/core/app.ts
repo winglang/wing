@@ -1,5 +1,6 @@
 import { Construct } from "constructs";
 import { Tokens } from "./tokens";
+import { SDK_PACKAGE_NAME } from "../constants";
 import { IResource } from "../std/resource";
 import { TestRunner } from "../std/test-runner";
 
@@ -134,6 +135,10 @@ export abstract class App extends Construct {
 
   constructor(scope: Construct, id: string, props: AppProps) {
     super(scope, id);
+    if (!props.entrypointDir) {
+      throw new Error("Missing environment variable: WING_SOURCE_DIR");
+    }
+
     this.entrypointDir = props.entrypointDir;
   }
 
@@ -189,9 +194,10 @@ export abstract class App extends Construct {
   ): any {
     // delegate to "tryNew" first, which will allow derived classes to inject
     const instance = this.tryNew(fqn, scope, id, ...args);
+    const typeName = fqn.replace(`${SDK_PACKAGE_NAME}.`, "");
     if (!instance) {
       throw new Error(
-        `Unable to create an instance of abstract type \"${fqn}\" for this target`
+        `Resource "${fqn}" is not yet implemented for "${this._target}" target. Please refer to the roadmap https://github.com/orgs/winglang/projects/3/views/1?filterQuery=${typeName}`
       );
     }
 

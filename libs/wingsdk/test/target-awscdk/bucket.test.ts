@@ -1,8 +1,8 @@
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import { Bucket } from "../../src/cloud";
+import { Testing } from "../../src/simulator";
 import * as awscdk from "../../src/target-awscdk";
-import { Testing } from "../../src/testing";
 import { mkdtemp, awscdkSanitize } from "../util";
 
 const CDK_APP_OPTS = {
@@ -62,8 +62,8 @@ test("bucket with two preflight files", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
-  bucket.addFile("file1.txt", "../testFiles/test1.txt");
-  bucket.addFile("file2.txt", "../testFiles/test2.txt");
+  bucket.addFile("file1.txt", "../test-files/test1.txt");
+  bucket.addFile("file2.txt", "../test-files/test2.txt");
   const output = app.synth();
 
   // THEN

@@ -62,15 +62,15 @@ fn compile_code(code: &str) -> String {
 	// convert tabs to 2 spaces
 	let code = code.replace("\t", "  ");
 
-	let result = compile(source_path, code.clone(), Some(outdir_path), Some(outdir_path));
+	let result = compile(source_path, Some(code.clone()), outdir_path, outdir_path);
 
 	let mut snap = vec![];
 
 	match result {
 		Ok(_) => {
 			let Ok(files) = read_dir(outdir.path()) else {
-        panic!("failed to read dir");
-      };
+				panic!("failed to read dir");
+			};
 
 			snap.push("## Code".to_string());
 			snap.push("".into());

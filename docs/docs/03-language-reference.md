@@ -313,7 +313,14 @@ For each `fromJson()`, there is a `tryFromJson()` method which returns an option
 indicates if parsing was successful or not:
 ```js
 let s = str.tryFromJson(myJson) ?? "invalid string";
-``````
+```
+
+Use `unsafe: true` to disable this check at your own risk:
+```js
+let trustMe = 123;
+let x = num.fromJson(trustMe, unsafe: true);
+assert(x == 123);
+```
 
 ##### 1.1.4.6 Mutability
 
@@ -386,6 +393,13 @@ Contact.fromJson(p);
 // RUNTIME ERROR: unable to parse Contact:
 // - field "last" is required and missing
 // - field "phone" is expected to be a string, got number.
+```
+
+Same as with primitives, it is possible to opt-out of validation using `unsafe: true`:
+```js
+let p = Json { first: "Wing", phone: 1234 };
+let x = Contact.fromJson(p, unsafe: true);
+assert(x.last.len > 0); // RUNTIME ERROR
 ```
 
 ##### 1.1.4.8 Serialization
@@ -524,10 +538,11 @@ log("UTC: ${t1.utc.toIso())}");            // output: 2023-02-09T06:21:03.000Z
 
 ### 1.2 Utility Functions
 
-| Name     | Extra information                                     |
-| -------- | ----------------------------------------------------- |
-| `log`    | logs str                                              |
-| `assert` | checks a condition and _throws_ if evaluated to false |
+| Name         | Extra information                                     |
+| ------------ | ----------------------------------------------------- |
+| `log`        | logs str                                              |
+| `assert`     | checks a condition and _throws_ if evaluated to false |
+| `unsafeCast` | cast a value into a different type                    |
 
 > ```TS
 > log("Hello ${name}");
@@ -654,7 +669,73 @@ Static class fields are not supported yet, see https://github.com/winglang/wing/
 
 ---
 
-### 1.5 Reassignability
+### 1.5 Access Modifiers (member visibility)
+
+Class members, by default, can only be accessed from within the implementation code of the same class (private).
+Inner classes or closures can access private members of their containing class.
+```TS
+class Foo {
+  private_field: num; // This is private by default
+  
+  init() {this.private_field = 1;}
+  
+  method() {
+    log(this.private_field); // We can access `private_field` since we're in Foo
+    
+    class InnerFoo {
+      method(f: Foo) {
+        log(f.private_field); // We can access `private_field` since we're in Foo
+      }
+    }
+  }
+}
+```
+Accessing class members of a super class can be done by adding the the `protected` access modifier.
+```TS
+class Foo {
+  protected protected_method() {}; // This is a `protected` method
+}
+
+class Bar extends Foo {
+  method() {
+    this.protected_method(); // We can access `protected_method` from a subclass
+  }
+}
+```
+The `pub` access modifier makes the class member accessible from anywhere. 
+Interface members are always public. 
+Implementing interface members in a class requires explicitly flagging them as `pub`.
+```TS
+interface FooInterface {
+  interface_method(): void; // Interface definitions are always implicitly `pub`
+}
+
+class Foo impl FooInterface {
+  pub public_method() {} // This can be accessed from outside of the class implemenetation
+  pub interface_method() {} // This must be explicitly defined as `pub` since it's an interface implementation
+}
+let f = new Foo();
+f.public_method(); // We can call this method from outside the class - it's public
+```
+
+Access modifier rules apply for both fields and methods of a class.
+Struct fields are always public and do not have access modifiers.
+
+#### 1.5.1 Method overriding and access modifiers
+Private methods cannot be overriden. 
+Overriding a method of a parent class requires the parent class's method to be either `pub` or `protected`.
+The overriding method can have either the same access modifier as the original method or a more permissive one.
+You cannot "decrease" the access level down the inheritence hierarchy, only "increase" it. 
+In practice this means:
+* `protected` methods can be overidden by either a `protected` or a `pub` method.
+* `pub` methods can be overriden by a `pub` method.
+
+Note that method overriding only applies to instance methods. `static` methods are not treated as part of the inheritence hierarcy.
+
+[`▲ top`][top]
+
+---
+### 1.6 Reassignability
 
 Re-assignment to variables that are defined with `let` is not allowed in Wing.
 
@@ -700,7 +781,7 @@ let f = (arg1: num, var arg2: num) => {
 
 ---
 
-### 1.6 Optionality
+### 1.7 Optionality
 
 Nullity is a primary source of bugs in software. Being able to guarantee that a value will never be
 null makes it easier to write safe code without constantly having to take nullity into account.
@@ -723,9 +804,9 @@ Here's a quick summary of how optionality works in Wing:
 * The keyword `nil` can be used in assignment scenarios to indicate that an optional doesn't have a
   value. It cannot be used to test if an optional has a value or not.
 
-#### 1.6.1 Declaration
+#### 1.7.1 Declaration
 
-##### 1.6.1.1 Struct fields
+##### 1.7.1.1 Struct fields
 
 One of the more common use cases for optionals is to use them in struct declarations.
 
@@ -746,7 +827,7 @@ assert(david.address? == false);
 assert(jonathan.address? == true);
 ```
 
-##### 1.6.1.2 Variables
+##### 1.7.1.2 Variables
 
 Use `T?` to indicate that a variable is optional. To initialize it without a value use `= nil`.
 
@@ -764,7 +845,7 @@ x = nil;
 assert(x? == false);
 ```
 
-##### 1.6.1.3 Class fields
+##### 1.7.1.3 Class fields
 
 Similarly to struct fields, fields of classes can be also defined as optional using `T?`:
 
@@ -784,7 +865,7 @@ class Foo {
 }
 ```
 
-##### 1.6.1.4 Function arguments
+##### 1.7.1.4 Function arguments
 
 In the following example, the argument `by` is optional, so it is possible to call `increment()`
 without supplying a value for `by`:
@@ -826,7 +907,7 @@ f(myRequired: "hello");
 f(myOptional: 12, myRequired: "dang");
 ```
 
-##### 1.6.1.5 Function return types
+##### 1.7.1.5 Function return types
 
 If a function returns an optional type, use the `return nil;` statement to indicate that the value
 is not defined.
@@ -852,7 +933,7 @@ if let name = tryParseName("Neo Matrix") {
 }
 ```
 
-#### 1.6.2 Testing using `x?`
+#### 1.7.2 Testing using `x?`
 
 To test if an optional has a value or not, you can either use `x == nil` or `x != nil` or the
 special syntax `x?`.
@@ -883,7 +964,7 @@ if myPerson.address == nil {
 }
 ```
 
-#### 1.6.3 Unwrapping using `if let`
+#### 1.7.3 Unwrapping using `if let`
 
 The `if let` statement (or `if let var` for a reassignable variable) can be used to test if an 
 optional is defined and *unwrap* it into a non-optional variable defined inside the block:
@@ -899,7 +980,7 @@ if let address = myPerson.address {
 > multiple conditions, or unwrapping multiple optionals. This is something we might consider in the
 > future.
 
-#### 1.6.4 Unwrapping or default value using `??`
+#### 1.7.4 Unwrapping or default value using `??`
 
 The `??` operator can be used to unwrap or provide a default value. This returns a value of `T` that
 can safely be used.
@@ -908,7 +989,7 @@ can safely be used.
 let address: str = myPerson.address ?? "Planet Earth";
 ```
 
-#### 1.6.5 Optional chaining using `?.`
+#### 1.7.5 Optional chaining using `?.`
 
 The `?.` syntax can be used for optional chaining. Optional chaining returns a value of type `T?`
 which must be unwrapped in order to be used.
@@ -925,7 +1006,7 @@ if let ip = ipAddress {
 
 ---
 
-#### 1.6.6 Roadmap
+#### 1.7.6 Roadmap
 
 The following features are not yet implemented, but we are planning to add them in the future:
 
@@ -944,7 +1025,7 @@ The following features are not yet implemented, but we are planning to add them 
 * Support `??` for different types if they have a common ancestor (and also think of interfaces).
   See https://github.com/winglang/wing/issues/2103 to track.
 
-### 1.7 Type Inference
+### 1.8 Type Inference
 
 Type can optionally be put between name and the equal sign, using a colon.  
 Partial type inference is allowed while using the `?` keyword immediately after
@@ -972,7 +1053,7 @@ Type annotations are required for method arguments and their return value but op
 
 ---
 
-### 1.8 Error Handling
+### 1.9 Error Handling
 
 Exceptions and `try/catch/finally` are the error mechanism. Mechanics directly
 translate to JavaScript. You can create a new exception with a `throw` call.
@@ -997,7 +1078,7 @@ In the presence of `catch` the variable holding the exception (`e` in the exampl
 
 ---
 
-### 1.9 Recommended Formatting
+### 1.10 Recommended Formatting
 
 Wing recommends the following formatting and naming conventions:
 
@@ -1013,7 +1094,7 @@ Wing recommends the following formatting and naming conventions:
 
 ---
 
-### 1.10 Memory Management
+### 1.11 Memory Management
 
 There is no implicit memory de-allocation function, dynamic memory is managed by
 Wing and is garbage collected (relying on JSII target GC for the meantime).
@@ -1022,36 +1103,28 @@ Wing and is garbage collected (relying on JSII target GC for the meantime).
 
 ---
 
-### 1.11 Execution Model
+### 1.12 Execution Model
 
 Execution model currently is delegated to the JSII target. This means if you are
 targeting JSII with Node, Wing will use the event based loop that Node offers.
 
 In Wing, writing and executing at root block scope level is forbidden except for
-the entrypoint of the program. Root block scope is considered special and
-compiler generates special instructions to properly assign all preflight classes to
-their respective scopes recursively down the constructs tree based on entry.
+in entrypoint files (designated by `main.w`, `*.main.w` or `*.test.w`).
+Root block scope is considered special and compiler generates special instructions
+to properly assign all preflight classes to their respective scopes recursively
+down the constructs tree based on entry.
 
-Entrypoint is always a Wing source with an extension of `.w`. Within this entry
-point, a root preflight class is made available for all subsequent preflight classes that are
-initialized and instantiated. Type of the root class is determined by the
-target being used by the compiler. The root class might be of type `App` in
-AWS CDK or `TerraformApp` in case of CDK for Terraform target.
-
-> Following "shimming" is only done for the entrypoint file and nowhere else.
-> Type of the "shim" changes from `cdk.Stack` to `TerraformStack` for cdk-tf.
-
-> ```TS
-> // Wing Entrypoint Code:
-> let a = MyResource();
-> let b = MyResource() be "my-resource";
-> ```
+Within the entrypoint file, a root preflight class is made available for all
+subsequent preflight classes that are initialized and instantiated. The type of
+the root class is determined by the target being used by the compiler. The root
+class might be of type `aws-cdk-lib.App` in AWS CDK or `cdktf.TerraformApp` in
+case of CDK for Terraform target.
 
 [`▲ top`][top]
 
 ---
 
-### 1.12 Asynchronous Model
+### 1.13 Asynchronous Model
 
 Wing builds upon the asynchronous model of JavaScript currently and expands upon
 it with new keywords and concepts. The `async` keyword of JavaScript is replaced
@@ -1064,17 +1137,17 @@ Main concepts to understand:
 
 Contrary to JavaScript, any call to an async function is implicitly awaited in Wing.
 
-#### 1.12.1 Roadmap
+#### 1.13.1 Roadmap
 
 The following features are not yet implemented, but we are planning to add them in the future:
 
 * `await`/`defer` statements - see https://github.com/winglang/wing/issues/116 to track.
 * Promise function type - see https://github.com/winglang/wing/issues/1004 to track.
 
-### 1.13 Roadmap
+### 1.14 Roadmap
 
-Access modifiers (`private`/`public`/`internal`/`protected`) are not yet implemented.
-See https://github.com/winglang/wing/issues/108 to track.
+* Module type visibility (exports/`pub` types) is not implemented yet - see https://github.com/winglang/wing/issues/130 to track.
+* `internal` access modifier is not yet implemented - see https://github.com/winglang/wing/issues/4156 to track.
 
 ## 2. Statements
 
@@ -1318,7 +1391,7 @@ class Bar {
     this.z = new Foo();
     this.log(); // OK to call here
   }
-  public log() {
+  pub log() {
     log("${this.y}");
   }
 }
@@ -1339,7 +1412,7 @@ their "strict" mode.
 class Foo {
   x: num;
   init() { this.x = 0; }
-  public method() { }
+  pub method() { }
 }
 class Boo extends Foo {
   init() {
@@ -1357,7 +1430,7 @@ Classes can implement interfaces iff the interfaces do not contain `inflight`.
 class Foo {
   x: num;
   init() { this.x = 0; }
-  public method() { }
+  pub method() { }
 }
 class Boo extends Foo {
   init() { super(); this.x = 10; }
@@ -1380,7 +1453,6 @@ In methods if return type is missing, `: void` is assumed.
 The following features are not yet implemented, but we are planning to add them in the future:
 
 * Overloading class methods (including `init`) - see https://github.com/winglang/wing/issues/3123 to track.
-* Overriding class methods - see https://github.com/winglang/wing/issues/1124 to track.
 * Using the `final` keyword to stop the inheritance chain - see https://github.com/winglang/wing/issues/460 to track. 
 
 [`▲ top`][top]
@@ -1713,6 +1785,29 @@ bring util; // from util bring * as util;
 bring cloud; // from cloud bring * as cloud;
 bring "cdktf" as cdktf; // from "cdktf" bring * as cdktf;
 ```
+
+To import an individual Wing file as a module, you can specify its path relative
+to the current file:
+
+```TS
+bring "./my-module.w" as myModule;
+```
+
+It's also possible to import a directory as a module. The module will contain all
+public types defined in the directory's files. If the directory has subdirectories,
+they will be available under the corresponding names.
+
+```TS
+bring "./my-module" as myModule;
+
+// from ./my-module/submodule/my-class.w
+new myModule.submodule.MyClass();
+```
+
+The following features are not yet implemented, but we are planning to add them in the future:
+
+* Specify types as public using `pub` - see https://github.com/winglang/wing/issues/4294 to track.
+* Specify types as public within the current project or library, and private outside, using `internal` - see https://github.com/winglang/wing/issues/4156 to track.
 
 [`▲ top`][top]
 

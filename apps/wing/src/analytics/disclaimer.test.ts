@@ -1,15 +1,19 @@
-import {test, expect, describe, beforeEach, afterEach, vi} from "vitest";
-import { AnalyticsStorage } from "./storage";
-import path from "path";
-import * as os from "os";
-import { WING_DISCLAIMER, WING_DISCLAIMER_VERSION, optionallyDisplayDisclaimer, shouldDisplayDisclaimer } from "./disclaimer";
 import { existsSync, unlinkSync } from "fs";
-
+import * as os from "os";
+import path from "path";
+import { test, expect, describe, beforeEach, afterEach, vi } from "vitest";
+import {
+  WING_DISCLAIMER,
+  WING_DISCLAIMER_VERSION,
+  optionallyDisplayDisclaimer,
+  shouldDisplayDisclaimer,
+} from "./disclaimer";
+import { AnalyticsStorage } from "./storage";
 
 describe("disclaimer", () => {
   const originalTTY = process.stdin.isTTY;
   const nonExistentFile = path.join(os.tmpdir(), "_)(*noWayThis_file_exists%$#@.json");
-  
+
   beforeEach(() => {
     if (existsSync(nonExistentFile)) {
       unlinkSync(nonExistentFile);
@@ -32,47 +36,49 @@ describe("disclaimer", () => {
 
     test("appears on first run", () => {
       // GIVEN
-      const storage = new AnalyticsStorage({configFile: nonExistentFile});
-  
+      const storage = new AnalyticsStorage({ configFile: nonExistentFile });
+
       // WHEN
       optionallyDisplayDisclaimer(storage);
-  
+
       // THEN
-      expect(console.log).toHaveBeenCalledWith(expect.stringContaining(WING_DISCLAIMER.split("\n")[0]));
+      expect(console.log).toHaveBeenCalledWith(
+        expect.stringContaining(WING_DISCLAIMER.split("\n")[0])
+      );
     });
-  
+
     test("alters config value for displayed", () => {
       // GIVEN
-      const storage = new AnalyticsStorage({configFile: nonExistentFile});
-      storage.saveConfig({anonymousId: "fake-id", disclaimerDisplayed: false});
-  
+      const storage = new AnalyticsStorage({ configFile: nonExistentFile });
+      storage.saveConfig({ anonymousId: "fake-id", disclaimerDisplayed: false });
+
       // WHEN
       optionallyDisplayDisclaimer(storage);
-  
+
       // THEN
       expect(storage.loadConfig().disclaimerDisplayed).toBe(true);
     });
-  
+
     test("alters displayed version", () => {
-      // GIVEN 
-      const storage = new AnalyticsStorage({configFile: nonExistentFile});
-      storage.saveConfig({anonymousId: "fake-id", disclaimerDisplayed: false});
-  
-      // WHEN 
+      // GIVEN
+      const storage = new AnalyticsStorage({ configFile: nonExistentFile });
+      storage.saveConfig({ anonymousId: "fake-id", disclaimerDisplayed: false });
+
+      // WHEN
       optionallyDisplayDisclaimer(storage);
-  
+
       // THEN
       expect(storage.loadConfig().disclaimerVersion).toBe(WING_DISCLAIMER_VERSION);
-    })
-  
+    });
+
     test("does not appear on second run", () => {
       // GIVEN
-      const storage = new AnalyticsStorage({configFile: nonExistentFile});
-  
+      const storage = new AnalyticsStorage({ configFile: nonExistentFile });
+
       // WHEN
       optionallyDisplayDisclaimer(storage);
       optionallyDisplayDisclaimer(storage);
-  
+
       // THEN
       expect(console.log).toHaveBeenCalledTimes(1);
     });
@@ -81,37 +87,42 @@ describe("disclaimer", () => {
       test("returns true if config is empty", () => {
         expect(shouldDisplayDisclaimer({} as any)).toBe(true);
       });
-  
+
       test("returns true if version is not set", () => {
-        expect(shouldDisplayDisclaimer({
-          anonymousId: "fake-id",
-          disclaimerDisplayed: true
-        })).toBe(true);
+        expect(
+          shouldDisplayDisclaimer({
+            anonymousId: "fake-id",
+            disclaimerDisplayed: true,
+          })
+        ).toBe(true);
       });
-  
+
       test("returns true if version is not current", () => {
-        expect(shouldDisplayDisclaimer({
-          anonymousId: "fake-id",
-          disclaimerDisplayed: true,
-          disclaimerVersion: "-100.0.0"
-        })).toBe(true);
+        expect(
+          shouldDisplayDisclaimer({
+            anonymousId: "fake-id",
+            disclaimerDisplayed: true,
+            disclaimerVersion: "-100.0.0",
+          })
+        ).toBe(true);
       });
-  
+
       test("return false if displayed version is current", () => {
-        expect(shouldDisplayDisclaimer({
-          anonymousId: "fake-id",
-          disclaimerDisplayed: true,
-          disclaimerVersion: WING_DISCLAIMER_VERSION
-        })).toBe(false);
-      })
+        expect(
+          shouldDisplayDisclaimer({
+            anonymousId: "fake-id",
+            disclaimerDisplayed: true,
+            disclaimerVersion: WING_DISCLAIMER_VERSION,
+          })
+        ).toBe(false);
+      });
     });
-  })
+  });
 
   describe("behavior when not in TTY", () => {
-    
     beforeEach(() => {
       process.stdin.isTTY = false;
-    })
+    });
 
     afterEach(() => {
       process.stdin.isTTY = originalTTY;
@@ -119,8 +130,8 @@ describe("disclaimer", () => {
 
     test("does not alter config value for displayed", () => {
       // GIVEN
-      const storage = new AnalyticsStorage({configFile: nonExistentFile});
-      storage.saveConfig({anonymousId: "fake-id", disclaimerDisplayed: false});
+      const storage = new AnalyticsStorage({ configFile: nonExistentFile });
+      storage.saveConfig({ anonymousId: "fake-id", disclaimerDisplayed: false });
 
       // WHEN
       optionallyDisplayDisclaimer(storage);
@@ -130,7 +141,7 @@ describe("disclaimer", () => {
     });
 
     test("returns false if no matter the config", () => {
-      expect(shouldDisplayDisclaimer({} as any )).toBe(false);
+      expect(shouldDisplayDisclaimer({} as any)).toBe(false);
     });
   });
-})
+});

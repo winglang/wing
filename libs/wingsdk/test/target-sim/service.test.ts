@@ -1,34 +1,21 @@
+import { Construct } from "constructs";
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
+import { Testing } from "../../src/simulator";
+import { Resource } from "../../src/std";
 import { SERVICE_TYPE } from "../../src/target-sim/schema-resources";
-import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
 
-const INFLIGHT_ON_START = `
-async handle(message) {
-  console.log("Service Started");
-}`;
-
-const INFLIGHT_ON_START_WITH_LOOP = `
-async handle(message) {
-  console.log("Service Started");
-  while (true) {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-  }
-}`;
-
-const INFLIGHT_ON_STOP = `
-async handle(message) {
-  console.log("Service Stopped");
-}`;
+const HANDLER_WITH_START_AND_STOP = `
+  console.log("start!");
+  return () => console.log("stop!");
+`;
 
 test("create a service with on start method", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "OnStartHandler", INFLIGHT_ON_START);
-  cloud.Service._newService(app, "my_service", {
-    onStart: handler,
-  });
+  const handler = new ServiceHandler(app, "Handler", `console.log("hi");`);
+  cloud.Service._newService(app, "my_service", handler);
 
   // WHEN
   const s = await app.startSimulator();
@@ -40,7 +27,8 @@ test("create a service with on start method", async () => {
     },
     path: "root/my_service",
     props: {
-      onStartHandler: expect.any(String),
+      sourceCodeFile: expect.any(String),
+      environmentVariables: {},
       autoStart: true,
     },
     type: "wingsdk.cloud.Service",
@@ -50,46 +38,14 @@ test("create a service with on start method", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
-test(
-  "on start method does not block other resources from deploying",
-  async () => {
-    // GIVEN
-    const app = new SimApp();
-    const handler = Testing.makeHandler(
-      app,
-      "OnStartHandler",
-      INFLIGHT_ON_START_WITH_LOOP
-    );
-    cloud.Service._newService(app, "my_service", {
-      onStart: handler,
-    });
-
-    // WHEN
-    const s = await app.startSimulator();
-
-    // THEN
-    await s.stop();
-  },
-  { timeout: 10000 }
-);
-
 test("create a service with a on stop method", async () => {
   // Given
   const app = new SimApp();
-  const onStartHandler = Testing.makeHandler(
+  cloud.Service._newService(
     app,
-    "OnStartHandler",
-    INFLIGHT_ON_START
+    "my_service",
+    new ServiceHandler(app, "Handler", HANDLER_WITH_START_AND_STOP)
   );
-  const onStopHandler = Testing.makeHandler(
-    app,
-    "OnStopHandler",
-    INFLIGHT_ON_STOP
-  );
-  cloud.Service._newService(app, "my_service", {
-    onStart: onStartHandler,
-    onStop: onStopHandler,
-  });
 
   // WHEN
   const s = await app.startSimulator();
@@ -102,8 +58,8 @@ test("create a service with a on stop method", async () => {
     },
     path: "root/my_service",
     props: {
-      onStartHandler: expect.any(String),
-      onStopHandler: expect.any(String),
+      sourceCodeFile: expect.any(String),
+      environmentVariables: {},
       autoStart: true,
     },
     type: "wingsdk.cloud.Service",
@@ -115,9 +71,9 @@ test("create a service with a on stop method", async () => {
       .filter((v) => v.sourceType == SERVICE_TYPE)
       .map((trace) => trace.data.message)
   ).toEqual([
-    "Starting service (onStartHandler=sim-1).",
+    "start!",
     "wingsdk.cloud.Service created.",
-    "Stopping service (onStopHandler=sim-2).",
+    "stop!",
     "wingsdk.cloud.Service deleted.",
   ]);
 });
@@ -125,15 +81,12 @@ test("create a service with a on stop method", async () => {
 test("create a service without autostart", async () => {
   // Given
   const app = new SimApp();
-  const onStartHandler = Testing.makeHandler(
+  cloud.Service._newService(
     app,
-    "OnStartHandler",
-    INFLIGHT_ON_START
+    "my_service",
+    new ServiceHandler(app, "Handler", `console.log("hi");`),
+    { autoStart: false }
   );
-  cloud.Service._newService(app, "my_service", {
-    onStart: onStartHandler,
-    autoStart: false,
-  });
 
   // WHEN
   const s = await app.startSimulator();
@@ -146,7 +99,8 @@ test("create a service without autostart", async () => {
     },
     path: "root/my_service",
     props: {
-      onStartHandler: expect.any(String),
+      sourceCodeFile: expect.any(String),
+      environmentVariables: {},
       autoStart: false,
     },
     type: "wingsdk.cloud.Service",
@@ -166,22 +120,15 @@ test("create a service without autostart", async () => {
 test("start and stop service", async () => {
   // Given
   const app = new SimApp();
-  const onStartHandler = Testing.makeHandler(
-    app,
-    "OnStartHandler",
-    INFLIGHT_ON_START
-  );
-  const onStopHandler = Testing.makeHandler(
-    app,
-    "OnStopHandler",
-    INFLIGHT_ON_STOP
-  );
 
-  cloud.Service._newService(app, "my_service", {
-    onStart: onStartHandler,
-    onStop: onStopHandler,
-    autoStart: false,
-  });
+  cloud.Service._newService(
+    app,
+    "my_service",
+    new ServiceHandler(app, "Handler", HANDLER_WITH_START_AND_STOP),
+    {
+      autoStart: false,
+    }
+  );
   const s = await app.startSimulator();
   const service = s.getResource("/my_service") as cloud.IServiceClient;
 
@@ -199,32 +146,24 @@ test("start and stop service", async () => {
       .map((trace) => trace.data.message)
   ).toEqual([
     "wingsdk.cloud.Service created.",
-    "Starting service (onStartHandler=sim-1).",
-    "Stopping service (onStopHandler=sim-2).",
-    "Starting service (onStartHandler=sim-1).",
-    "Stopping service (onStopHandler=sim-2).",
+    "start!",
+    "stop!",
+    "start!",
+    "stop!",
   ]);
 });
 
 test("consecutive start and stop service", async () => {
   // GIVEN
   const app = new SimApp();
-  const onStartHandler = Testing.makeHandler(
+  cloud.Service._newService(
     app,
-    "OnStartHandler",
-    INFLIGHT_ON_START
+    "my_service",
+    new ServiceHandler(app, "Handler", HANDLER_WITH_START_AND_STOP),
+    {
+      autoStart: false,
+    }
   );
-  const onStopHandler = Testing.makeHandler(
-    app,
-    "OnStopHandler",
-    INFLIGHT_ON_STOP
-  );
-
-  cloud.Service._newService(app, "my_service", {
-    onStart: onStartHandler,
-    onStop: onStopHandler,
-    autoStart: false,
-  });
   const s = await app.startSimulator();
   const service = s.getResource("/my_service") as cloud.IServiceClient;
 
@@ -242,9 +181,21 @@ test("consecutive start and stop service", async () => {
       .listTraces()
       .filter((v) => v.sourceType == SERVICE_TYPE)
       .map((trace) => trace.data.message)
-  ).toEqual([
-    "wingsdk.cloud.Service created.",
-    "Starting service (onStartHandler=sim-1).",
-    "Stopping service (onStopHandler=sim-2).",
-  ]);
+  ).toEqual(["wingsdk.cloud.Service created.", "start!", "stop!"]);
 });
+
+class ServiceHandler extends Resource implements cloud.IServiceHandler {
+  constructor(scope: Construct, id: string, private readonly code: string) {
+    super(scope, id);
+  }
+  public _getInflightOps(): string[] {
+    throw new Error("Method not implemented.");
+  }
+  public _toInflight(): string {
+    return `{
+      handle: async () => {
+        ${this.code}
+      }
+    }`;
+  }
+}

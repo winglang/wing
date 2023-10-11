@@ -1,5 +1,10 @@
+// used by:
+// - api_cors_custom.test.w
+// - api_cors_default.test.w
+// - website_with_api.test.w
+
 inflight class Assert {
-  static equalStr(a: str, b: str): bool {
+  pub static equalStr(a: str, b: str): bool {
     try {
       assert(a == b);
     } catch e {
@@ -7,7 +12,7 @@ inflight class Assert {
     }
   }
 
-  static isNil(a: str?): bool {
+  pub static isNil(a: str?): bool {
     try {
       assert(a == nil);
     } catch e {
@@ -16,7 +21,7 @@ inflight class Assert {
     }
   }
 
-  static equalNum(a: num, b: num): bool{
+  pub static equalNum(a: num, b: num): bool{
     try {
       assert(a == b);
     } catch e {

@@ -5,7 +5,7 @@ import { Topic } from "./topic";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Json, IResource, Node, Resource } from "../std";
+import { Json, IResource, Node, Resource, Duration } from "../std";
 
 /**
  * Global identifier for `Bucket`.
@@ -67,6 +67,7 @@ export abstract class Bucket extends Resource {
       BucketInflightMethods.TRY_GET,
       BucketInflightMethods.TRY_GET_JSON,
       BucketInflightMethods.TRY_DELETE,
+      BucketInflightMethods.SIGNED_URL,
     ];
   }
 
@@ -92,15 +93,11 @@ export abstract class Bucket extends Resource {
     encoding: BufferEncoding = "utf-8"
   ): void {
     const app = App.of(this);
-    if (isAbsolute(path)) {
-      path = path;
-    } else {
-      if (!app.entrypointDir) {
-        throw new Error("Missing environment variable: WING_SOURCE_DIR");
-      }
-      path = resolve(app.entrypointDir, path);
-    }
-    const data = fs.readFileSync(path, { encoding: encoding });
+
+    const data = fs.readFileSync(
+      isAbsolute(path) ? path : resolve(app.entrypointDir, path),
+      { encoding: encoding }
+    );
 
     this.addObject(key, data);
   }
@@ -244,6 +241,17 @@ export abstract class Bucket extends Resource {
   }
 }
 
+/**
+ * Interface for signed url options
+ */
+export interface SignedUrlOptions {
+  /**
+   * The duration for the signed url to expire
+   */
+
+  readonly duration?: Duration;
+}
+
 /** Interface for delete method inside `Bucket` */
 export interface BucketDeleteOptions {
   /**
@@ -345,6 +353,16 @@ export interface IBucketClient {
    * @inflight
    */
   publicUrl(key: string): Promise<string>;
+
+  /**
+   * Returns a signed url to the given file.
+   * @Throws if object does not exist.
+   * @param key The key to access the cloud object
+   * @param options The signedUrlOptions where you can provide the configurations of the signed url
+   * @returns A string representing the signed url of the object which can be used to download in any downstream system
+   * @inflight
+   */
+  signedUrl(key: string, options?: SignedUrlOptions): Promise<string>;
 }
 
 /**
@@ -447,4 +465,6 @@ export enum BucketInflightMethods {
   TRY_GET_JSON = "tryGetJson",
   /** `Bucket.tryDelete` */
   TRY_DELETE = "tryDelete",
+
+  SIGNED_URL = "signedUrl",
 }

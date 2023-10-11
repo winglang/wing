@@ -2,6 +2,7 @@ import { resolve } from "path";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
+import { CloudwatchLogGroup } from "../.gen/providers/aws/cloudwatch-log-group";
 import { IamRole } from "../.gen/providers/aws/iam-role";
 import { IamRolePolicy } from "../.gen/providers/aws/iam-role-policy";
 import { IamRolePolicyAttachment } from "../.gen/providers/aws/iam-role-policy-attachment";
@@ -182,6 +183,15 @@ export class Function extends cloud.Function implements IAwsFunction {
       );
     }
 
+    if (!props.logRetentionDays || props.logRetentionDays >= 0) {
+      new CloudwatchLogGroup(this, "CloudwatchLogGroup", {
+        name: `/aws/lambda/${name}`,
+        retentionInDays: props.logRetentionDays ?? 30,
+      });
+    } else {
+      // Negative value means Infinite retention
+    }
+
     // Create Lambda function
     this.function = new LambdaFunction(this, "Default", {
       functionName: name,
@@ -206,7 +216,7 @@ export class Function extends cloud.Function implements IAwsFunction {
       },
       timeout: props.timeout
         ? props.timeout.seconds
-        : Duration.fromMinutes(0.5).seconds,
+        : Duration.fromMinutes(1).seconds,
       memorySize: props.memory ? props.memory : undefined,
       architectures: ["arm64"],
     });
@@ -229,12 +239,10 @@ export class Function extends cloud.Function implements IAwsFunction {
     }
 
     if (ops.includes(cloud.FunctionInflightMethods.INVOKE)) {
-      host.addPolicyStatements([
-        {
-          actions: ["lambda:InvokeFunction"],
-          resources: [`${this.function.arn}`],
-        },
-      ]);
+      host.addPolicyStatements({
+        actions: ["lambda:InvokeFunction"],
+        resources: [`${this.function.arn}`],
+      });
     }
 
     // The function name needs to be passed through an environment variable since
@@ -269,7 +277,7 @@ export class Function extends cloud.Function implements IAwsFunction {
   /**
    * Add a policy statement to the Lambda role.
    */
-  public addPolicyStatements(statements: PolicyStatement[]) {
+  public addPolicyStatements(...statements: PolicyStatement[]) {
     // we do lazy initialization here because addPolicyStatements() might be called through the
     // constructor chain of the Function base class which means that our constructor might not have
     // been called yet... yes, ugly.

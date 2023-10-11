@@ -6,7 +6,7 @@ source: libs/wingc/src/jsify/tests.rs
 ```w
 
     class Base {
-      inflight f: str;
+      protected inflight f: str;
       inflight init() {
         this.f = "hello";
       }

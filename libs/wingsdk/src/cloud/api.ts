@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { IResource, Node, Resource } from "../std";
+import { IResource, Node, Resource, Duration } from "../std";
 
 /**
  * Global identifier for `Api`.
@@ -46,6 +46,12 @@ export interface ApiCorsOptions {
    * @default - false
    */
   readonly allowCredentials?: boolean;
+
+  /**
+   * How long the browser should cache preflight request results.
+   * @default - 300 seconds
+   */
+  readonly maxAge?: Duration;
 }
 
 /**
@@ -93,7 +99,7 @@ export type OpenApiSpec = any;
 
 /**
  * The OpenAPI spec extension for a route.
- * see https://spec.openapis.org/oas/v3.0.3
+ * @see https://spec.openapis.org/oas/v3.0.3
  * */
 export type OpenApiSpecExtension = any;
 
@@ -108,20 +114,20 @@ export type OpenApiCorsHeaders = Record<string, { schema: { type: string } }>;
 type CorsDefaultResponseHeaders = {
   /**
    * Specifies the origin that is allowed to access the resource.
-   * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
    */
   "Access-Control-Allow-Origin": string;
 
   /**
    * Lists the headers that the client can access.
-   * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Expose-Headers
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Expose-Headers
    */
   "Access-Control-Expose-Headers": string;
 
   /**
    * Indicates whether the response to the request can
    * be exposed when the credentials flag is true.
-   * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
    */
   "Access-Control-Allow-Credentials": string;
 };
@@ -132,21 +138,27 @@ type CorsDefaultResponseHeaders = {
 type CorsOptionsResponseHeaders = {
   /**
    * Specifies the origin that is allowed to access the resource.
-   * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
    */
   "Access-Control-Allow-Origin": string;
 
   /**
    * Specifies the headers that are allowed in a request.
-   * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers
    */
   "Access-Control-Allow-Headers": string;
 
   /**
    * Specifies the methods that are allowed in a request.
-   * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Methods
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Methods
    */
   "Access-Control-Allow-Methods": string;
+
+  /**
+   * Indicates how long the results of a preflight request can be cached.
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age
+   */
+  "Access-Control-Max-Age": string;
 };
 
 /**
@@ -198,6 +210,7 @@ export abstract class Api extends Resource {
     allowHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
     exposeHeaders: [],
     allowCredentials: false,
+    maxAge: Duration.fromMinutes(5),
   };
 
   /**
@@ -324,12 +337,12 @@ export abstract class Api extends Resource {
    */
   protected _validatePath(path: string) {
     if (
-      !/^(\/[a-zA-Z0-9_\-]+(\/\{[a-zA-Z0-9_\-]+\}|\/[a-zA-Z0-9_\-]+)*(?:\?[^#]*)?)?$|^(\/\{[a-zA-Z0-9_\-]+\})*\/?$/g.test(
+      !/^(\/[a-zA-Z0-9_\-\.]+(\/\{[a-zA-Z0-9_\-]+\}|\/[a-zA-Z0-9_\-\.]+)*(?:\?[^#]*)?)?$|^(\/\{[a-zA-Z0-9_\-]+\})*\/?$/g.test(
         path
       )
     ) {
       throw new Error(
-        `Invalid path ${path}. Url cannot contain ":", params contains only alpha-numeric chars or "_".`
+        `Invalid path ${path}. Url parts can only contain alpha-numeric chars, "-", "_" and ".". Params can only contain alpha-numeric chars and "_".`
       );
     }
   }
@@ -348,6 +361,57 @@ export abstract class Api extends Resource {
   }
 
   /**
+   * Checks if two given paths are ambiguous.
+   * @param pathA
+   * @param pathB
+   * @returns A boolean value indicating if provided paths are ambiguous.
+   * @internal
+   */
+  protected _arePathsAmbiguous(pathA: string, pathB: string): boolean {
+    const partsA = pathA.split("/");
+    const partsB = pathB.split("/");
+
+    if (partsA.length !== partsB.length) {
+      return false;
+    }
+
+    for (let i = 0; i < partsA.length; i++) {
+      const partA = partsA[i];
+      const partB = partsB[i];
+
+      if (
+        partA !== partB &&
+        !partA.match(/^{.+?}$/) &&
+        !partB.match(/^{.+?}$/)
+      ) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  /**
+   * Checks if provided path and method are ambigous with paths and methods already defined in the api spec.
+   * @param path Path to be checked
+   * @param method HTTP method
+   * @returns A boolean value indicating if provided path and method are ambiguous.
+   * @internal
+   */
+  protected _findAmbiguousPath(
+    path: string,
+    method: string
+  ): string | undefined {
+    const existingPaths = Object.keys(this.apiSpec.paths);
+
+    return existingPaths.find(
+      (existingPath) =>
+        !!this.apiSpec.paths[existingPath][method.toLowerCase()] &&
+        this._arePathsAmbiguous(existingPath, path)
+    );
+  }
+
+  /**
    * Generates the OpenAPI schema for CORS headers based on the provided CORS options.
    * @param corsOptions The CORS options to generate the schema from.
    * @returns An object representing the OpenAPI schema for CORS headers.
@@ -363,6 +427,7 @@ export abstract class Api extends Resource {
       corsHeaders["Access-Control-Allow-Origin"] = corsHeaderSchema;
       corsHeaders["Access-Control-Allow-Methods"] = corsHeaderSchema;
       corsHeaders["Access-Control-Allow-Headers"] = corsHeaderSchema;
+      corsHeaders["Access-Control-Max-Age"] = corsHeaderSchema;
     }
     return corsHeaders;
   }
@@ -386,6 +451,7 @@ export abstract class Api extends Resource {
       allowMethods = [],
       exposeHeaders = [],
       allowCredentials = false,
+      maxAge = Duration.fromMinutes(5),
     } = corsOptions;
 
     const defaultHeaders: CorsDefaultResponseHeaders = {
@@ -398,6 +464,7 @@ export abstract class Api extends Resource {
       "Access-Control-Allow-Origin": allowOrigin.join(",") || "",
       "Access-Control-Allow-Headers": allowHeaders.join(",") || "",
       "Access-Control-Allow-Methods": allowMethods.join(",") || "",
+      "Access-Control-Max-Age": maxAge.seconds.toString(),
     };
 
     return {
@@ -423,6 +490,12 @@ export abstract class Api extends Resource {
     if (this.apiSpec.paths[path]?.[method.toLowerCase()]) {
       throw new Error(
         `Endpoint for path '${path}' and method '${method}' already exists`
+      );
+    }
+    const ambiguousPath = this._findAmbiguousPath(path, method);
+    if (!!ambiguousPath) {
+      throw new Error(
+        `Endpoint for path '${path}' and method '${method}' is ambiguous - it conflicts with existing endpoint for path '${ambiguousPath}'`
       );
     }
     const operationId = `${method.toLowerCase()}${

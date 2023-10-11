@@ -1,8 +1,8 @@
 import { existsSync, readdirSync } from "fs";
 import { test, expect } from "vitest";
 import { Function } from "../../src/cloud";
+import { Testing } from "../../src/simulator";
 import * as tfaws from "../../src/target-tf-aws";
-import { Testing } from "../../src/testing";
 import { mkdtemp } from "../util";
 
 test("artifacts are located in app root level outdir", () => {

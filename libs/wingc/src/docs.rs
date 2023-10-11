@@ -262,7 +262,9 @@ fn render_struct(s: &Struct) -> String {
 	}
 
 	for field in s.env.iter(true) {
-		let Some(variable) = field.1.as_variable() else { continue };
+		let Some(variable) = field.1.as_variable() else {
+			continue;
+		};
 		let optional = if variable.type_.is_option() { "?" } else { "" };
 		markdown.line(&format!(
 			"- `{}{optional}` — {}\n",

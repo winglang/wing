@@ -2,7 +2,6 @@ import { access, constants } from "fs";
 import { basename } from "path";
 import { promisify } from "util";
 import { IConstruct } from "constructs";
-import { Function } from "./function";
 import { simulatorHandleToken } from "./tokens";
 import { Duration, IInflightHost, Resource } from "../std";
 import { makeSimulatorClient } from "../testing";
@@ -36,12 +35,6 @@ export function bindSimulatorResource(
   host: IInflightHost
 ) {
   const type = basename(filename).split(".")[0];
-  if (!(host instanceof Function)) {
-    throw new Error(
-      `Resources of ${type} can only be bound by a sim.Function for now`
-    );
-  }
-
   const env = makeEnvVarName(type, resource);
   const handle = simulatorHandleToken(resource);
   host.addEnvironment(env, handle);
