@@ -820,7 +820,7 @@ impl<'a> JSifier<'a> {
 					Phase::Inflight => CodeMaker::one_line(format!("await this.super_{CLASS_INFLIGHT_INIT_NAME}?.({args});")),
 					Phase::Preflight => CodeMaker::one_line(format!("super(scope,id,{args});")),
 					Phase::Independent => {
-						// If our parent is phase independent than we don't call its super, instead a call to its supper will be
+						// If our parent is phase independent then we don't call its super, instead a call to its supper will be
 						// generated in `jsify_inflight_init` when we generate the inflight init for this class.
 						// Note: this is only true for inflight clases which are the only type of classes that can have a phase independent parent.
 						// when/if this changes we'll need to be move verbose here.
