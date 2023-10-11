@@ -33,8 +33,10 @@ module.exports = function({  }) {
   class Base {
     constructor({  }) {
     }
-    async $inflight_init() {
-      this.f = "hello";
+    constructor(){
+      this.$inflight_init = async () => {
+        this.f = "hello";
+      }
     }
   }
   return Base;
@@ -53,8 +55,10 @@ module.exports = function({ $Base }) {
       this.f;
       this.g;
     }
-    async $inflight_init() {
-      this.g = "world";
+    constructor(){
+      this.$inflight_init = async () => {
+        this.g = "world";
+      }
     }
   }
   return Derived;

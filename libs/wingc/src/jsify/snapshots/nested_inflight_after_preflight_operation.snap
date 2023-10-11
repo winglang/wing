@@ -46,8 +46,10 @@ module.exports = function({  }) {
   class YourType {
     constructor({  }) {
     }
-    async $inflight_init() {
-      this.b = "hello";
+    constructor(){
+      this.$inflight_init = async () => {
+        this.b = "hello";
+      }
     }
   }
   return YourType;
