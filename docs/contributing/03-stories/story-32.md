@@ -42,7 +42,7 @@ export class MarcusPlatform extends TfAWS.Platform {
   newInstance(type: string, scope: Construct, id: string, props: any): any {
     if (type === wingsdk.BUCKET_TYPE) {
       // return custom bucket
-      return new Bucket(scope, id, props);
+      return new MarcusBucket(scope, id, props);
     }
 
     return super.newInstance(type, scope, id, props);
