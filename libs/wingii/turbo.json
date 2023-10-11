@@ -3,6 +3,7 @@
   "extends": ["//"],
   "pipeline": {
     "compile": {
+      "dependsOn": ["@winglang/tree-sitter-wing#compile"],
       "outputs": ["../../target/wasm32-wasi/release/libwingii.*"]
     }
   }

@@ -23,6 +23,7 @@ use parser::parse_wing_project;
 use struct_schema::StructSchemaVisitor;
 use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::{StatementIdx, SymbolEnvKind};
+use type_check::type_reference_transform::TypeReferenceTransformer;
 use type_check::{FunctionSignature, SymbolKind, Type};
 use type_check_assert::TypeCheckAssert;
 use valid_json_visitor::ValidJsonVisitor;
@@ -189,7 +190,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	if results.is_err() {
 		WASM_RETURN_ERROR
 	} else {
-		string_to_combined_ptr("winged it!".to_string())
+		string_to_combined_ptr("".to_string())
 	}
 }
 
@@ -201,7 +202,7 @@ pub fn type_check(
 	jsii_types: &mut TypeSystem,
 	jsii_imports: &mut Vec<JsiiImportSpec>,
 ) {
-	let env = types.add_symbol_env(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0));
+	let mut env = types.add_symbol_env(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0));
 	types.set_scope_env(scope, env);
 
 	// note: Globals are emitted here and wrapped in "{ ... }" blocks. Wrapping makes these emissions, actual
@@ -263,10 +264,9 @@ pub fn type_check(
 		types,
 	);
 
-	let mut scope_env = types.get_scope_env(&scope);
 	let mut tc = TypeChecker::new(types, file_path, file_graph, jsii_types, jsii_imports);
 	tc.add_jsii_module_to_env(
-		&mut scope_env,
+		&mut env,
 		WINGSDK_ASSEMBLY_NAME.to_string(),
 		vec![WINGSDK_STD_MODULE.to_string()],
 		&Symbol::global(WINGSDK_STD_MODULE),
@@ -335,7 +335,7 @@ pub fn compile(
 	// Type check all files in topological order (start with files that don't bring any other
 	// Wing files, then move on to files that depend on those, and repeat)
 	for file in &topo_sorted_files {
-		let mut scope = asts.get_mut(file).expect("matching AST not found");
+		let mut scope = asts.remove(file).expect("matching AST not found");
 		type_check(
 			&mut scope,
 			&mut types,
@@ -345,6 +345,10 @@ pub fn compile(
 			&mut jsii_imports,
 		);
 
+		// Make sure all type reference are no longer considered references
+		let mut tr_transformer = TypeReferenceTransformer { types: &mut types };
+		let scope = tr_transformer.fold_scope(scope);
+
 		// Validate the type checker didn't miss anything - see `TypeCheckAssert` for details
 		let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
 		tc_assert.check(&scope);
@@ -352,6 +356,8 @@ pub fn compile(
 		// Validate all Json literals to make sure their values are legal
 		let mut json_checker = ValidJsonVisitor::new(&types);
 		json_checker.check(&scope);
+
+		asts.insert(file.clone(), scope);
 	}
 
 	// Verify that the project dir is absolute

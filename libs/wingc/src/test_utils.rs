@@ -68,7 +68,7 @@ fn compile_code(code: &str) -> String {
 
 	match result {
 		Ok(_) => {
-			let Ok(files) = read_dir(&out_dir) else {
+			let Ok(files) = read_dir(outdir.path()) else {
 				panic!("failed to read dir");
 			};
 

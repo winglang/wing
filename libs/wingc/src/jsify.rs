@@ -572,7 +572,7 @@ impl<'a> JSifier<'a> {
 						};
 						let patterns = &[MACRO_REPLACE_SELF, MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT];
 						let replace_with = &[self_string, args_string, args_text_string];
-						let ac = AhoCorasick::new(patterns);
+						let ac = AhoCorasick::new(patterns).expect("Failed to create macro pattern");
 						return ac.replace_all(js_override, replace_with);
 					}
 				}
