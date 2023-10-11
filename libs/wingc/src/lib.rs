@@ -171,8 +171,11 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 		return WASM_RETURN_ERROR;
 	}
 	let source_path = Utf8Path::new(split[0]);
-	let output_dir = split.get(1).map(|s| Utf8Path::new(s)).unwrap();
-	let absolute_project_dir = split.get(2).map(|s| Utf8Path::new(s)).unwrap();
+	let output_dir = split.get(1).map(|s| Utf8Path::new(s)).expect("output dir not provided");
+	let project_dir = split
+		.get(2)
+		.map(|s| Utf8Path::new(s))
+		.expect("project dir not provided");
 
 	if !source_path.exists() {
 		report_diagnostic(Diagnostic {
@@ -183,7 +186,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 		return WASM_RETURN_ERROR;
 	}
 
-	let results = compile(source_path, None, output_dir, absolute_project_dir);
+	let results = compile(project_dir, source_path, None, output_dir);
 	if results.is_err() {
 		WASM_RETURN_ERROR
 	} else {
@@ -287,10 +290,10 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 }
 
 pub fn compile(
+	project_dir: &Utf8Path,
 	source_path: &Utf8Path,
 	source_text: Option<String>,
 	out_dir: &Utf8Path,
-	absolute_project_root: &Utf8Path,
 ) -> Result<CompilerOutput, ()> {
 	let source_path = normalize_path(source_path, None);
 
@@ -357,8 +360,6 @@ pub fn compile(
 		asts.insert(file.clone(), scope);
 	}
 
-	let project_dir = absolute_project_root;
-
 	// Verify that the project dir is absolute
 	if !is_absolute_path(&project_dir) {
 		report_diagnostic(Diagnostic {
@@ -369,7 +370,7 @@ pub fn compile(
 		return Err(());
 	}
 
-	let mut jsifier = JSifier::new(&mut types, &files, &file_graph, &source_path, &project_dir);
+	let mut jsifier = JSifier::new(&mut types, &files, &file_graph, &source_path);
 
 	// -- LIFTING PHASE --
 
@@ -435,39 +436,34 @@ pub fn is_absolute_path(path: &Utf8Path) -> bool {
 
 #[cfg(test)]
 mod sanity {
-	use camino::Utf8PathBuf;
+	use camino::{Utf8Path, Utf8PathBuf};
 
 	use crate::{compile, diagnostic::assert_no_panics};
-	use std::{fs, path::Path};
+	use std::fs;
 
 	fn get_wing_files<P>(dir: P) -> impl Iterator<Item = Utf8PathBuf>
 	where
-		P: AsRef<Path>,
+		P: AsRef<Utf8Path>,
 	{
-		fs::read_dir(dir)
+		fs::read_dir(dir.as_ref())
 			.unwrap()
 			.map(|entry| Utf8PathBuf::from_path_buf(entry.unwrap().path()).expect("invalid unicode path"))
 			.filter(|path| path.is_file() && path.extension().map(|ext| ext == "w").unwrap_or(false))
 	}
 
 	fn compile_test(test_dir: &str, expect_failure: bool) {
-		for test_file in get_wing_files(test_dir) {
+		let test_dir = Utf8Path::new(test_dir).canonicalize_utf8().unwrap();
+		for test_file in get_wing_files(&test_dir) {
 			println!("\n=== {} ===\n", test_file);
 
-			let mut out_dir = test_file.parent().unwrap().to_path_buf();
-			out_dir.push(format!("target/wingc/{}.out", test_file.file_name().unwrap()));
+			let out_dir = test_dir.join(format!("target/wingc/{}.out", test_file.file_name().unwrap()));
 
 			// reset out_dir
 			if out_dir.exists() {
 				fs::remove_dir_all(&out_dir).expect("remove out dir");
 			}
 
-			let result = compile(
-				&test_file,
-				None,
-				&out_dir,
-				test_file.canonicalize_utf8().unwrap().parent().unwrap(),
-			);
+			let result = compile(&test_dir, &test_file, None, &out_dir);
 
 			if result.is_err() {
 				assert!(

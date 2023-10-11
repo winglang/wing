@@ -99,9 +99,9 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   const { log } = options;
   // create a unique temporary directory for the compilation
   const targetdir = options.targetDir ?? join(dirname(entrypoint), "target");
-  const wingFile = entrypoint;
+  const wingFile = resolve(entrypoint);
   log?.("wing file: %s", wingFile);
-  const wingDir = dirname(wingFile);
+  const wingDir = resolve(dirname(wingFile));
   log?.("wing dir: %s", wingDir);
   const testing = options.testing ?? false;
   log?.("testing: %s", testing);
@@ -122,12 +122,12 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
 
   const tempProcess: { env: Record<string, string | undefined> } = { env: { ...process.env } };
 
-  tempProcess.env["WING_SOURCE_DIR"] = resolve(wingDir);
+  tempProcess.env["WING_SOURCE_DIR"] = wingDir;
   if (options.rootId) {
     tempProcess.env["WING_ROOT_ID"] = options.rootId;
   }
   // from wingDir, find the nearest node_modules directory
-  let wingNodeModules = resolve(wingDir, "node_modules");
+  let wingNodeModules = join(wingDir, "node_modules");
   while (!existsSync(wingNodeModules)) {
     wingNodeModules = dirname(dirname(wingNodeModules));
 
@@ -175,7 +175,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     errors.push(JSON.parse(data_str));
   }
 
-  const arg = `${normalPath(wingFile)};${normalPath(workDir)};${normalPath(resolve(wingDir))}`;
+  const arg = `${normalPath(wingFile)};${normalPath(workDir)};${normalPath(wingDir)}`;
   log?.(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
   let compileSuccess: boolean;
   try {
@@ -227,7 +227,7 @@ async function runPreflightCodeInVm(
   tempProcess: { env: Record<string, string | undefined> },
   log?: (...args: any[]) => void
 ): Promise<void> {
-  const artifactPath = resolve(workDir, WINGC_PREFLIGHT);
+  const artifactPath = join(workDir, WINGC_PREFLIGHT);
   log?.("reading artifact from %s", artifactPath);
   const artifact = await fs.readFile(artifactPath, "utf-8");
   log?.("artifact: %s", artifact);

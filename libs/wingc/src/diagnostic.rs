@@ -1,3 +1,4 @@
+use camino::Utf8Path;
 use colored::Colorize;
 use std::{cell::RefCell, fmt::Display};
 use tree_sitter::Point;
@@ -205,9 +206,15 @@ impl WingSpan {
 	}
 }
 
-impl std::fmt::Display for WingSpan {
+impl Display for WingSpan {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		write!(f, "{}:{}:{}", self.file_id, self.start.line + 1, self.start.col + 1)
+		write!(
+			f,
+			"{}:{}:{}",
+			Utf8Path::new(&self.file_id).file_name().expect("invalid file id"),
+			self.start.line + 1,
+			self.start.col + 1
+		)
 	}
 }
 

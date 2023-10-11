@@ -15,7 +15,7 @@ use crate::{
 		StmtKind, Symbol, UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
-	dbg_panic, debug,
+	dbg_panic,
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
 	file_graph::FileGraph,
 	files::Files,
@@ -71,8 +71,6 @@ pub struct JSifier<'a> {
 	preflight_file_map: RefCell<IndexMap<Utf8PathBuf, String>>,
 	source_files: &'a Files,
 	source_file_graph: &'a FileGraph,
-	/// Root of the project, used for resolving extern modules
-	absolute_project_root: &'a Utf8Path,
 	/// The path that compilation started at (file or directory)
 	compilation_init_path: &'a Utf8Path,
 }
@@ -91,7 +89,6 @@ impl<'a> JSifier<'a> {
 		source_files: &'a Files,
 		source_file_graph: &'a FileGraph,
 		compilation_init_path: &'a Utf8Path,
-		absolute_project_root: &'a Utf8Path,
 	) -> Self {
 		let output_files = Files::default();
 		Self {
@@ -99,7 +96,6 @@ impl<'a> JSifier<'a> {
 			source_files,
 			source_file_graph,
 			compilation_init_path,
-			absolute_project_root,
 			referenced_struct_schemas: RefCell::new(BTreeMap::new()),
 			inflight_file_counter: RefCell::new(0),
 			inflight_file_map: RefCell::new(IndexMap::new()),
@@ -1083,26 +1079,8 @@ impl<'a> JSifier<'a> {
 				code.add_code(self.jsify_scope_body(scope, ctx));
 				code
 			}
-			FunctionBody::External(external_spec) => {
-				debug!(
-					"Resolving extern \"{}\" from \"{}\"",
-					external_spec, self.absolute_project_root
-				);
-				let resolved_path =
-					match wingii::node_resolve::resolve_from(&external_spec, Utf8Path::new(&self.absolute_project_root)) {
-						Ok(resolved_path) => resolved_path.to_string().replace("\\", "/"),
-						Err(err) => {
-							report_diagnostic(Diagnostic {
-								message: format!("Failed to resolve extern \"{external_spec}\": {err}"),
-								span: Some(func_def.span.clone()),
-								annotations: vec![],
-							});
-							format!("/* unresolved: \"{external_spec}\" */")
-						}
-					};
-				CodeMaker::one_line(format!(
-					"return (require(\"{resolved_path}\")[\"{name}\"])({parameters})"
-				))
+			FunctionBody::External(file_path) => {
+				CodeMaker::one_line(format!("return (require(\"{file_path}\")[\"{name}\"])({parameters})"))
 			}
 		};
 		let mut prefix = vec![];

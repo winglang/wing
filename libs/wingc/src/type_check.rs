@@ -2142,7 +2142,7 @@ impl<'a> TypeChecker<'a> {
 				if let CalleeKind::Expr(call_expr) = callee {
 					if let ExprKind::Reference(Reference::Identifier(ident)) = &call_expr.kind {
 						if ident.name == "wingc_env" {
-							println!("[symbol environment at {}]", exp.span().to_string());
+							println!("[symbol environment at {}]", exp.span().file_id);
 							println!("{}", env.to_string());
 						}
 					}

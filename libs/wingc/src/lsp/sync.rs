@@ -195,16 +195,7 @@ fn partial_compile(
 
 	// -- LIFTING PHASE --
 
-	// source_file will never be "" because it is the path to the file being compiled and lsp does not allow empty paths
-	let project_dir = source_path.parent().expect("Empty filename");
-
-	let jsifier = JSifier::new(
-		&mut types,
-		&project_data.files,
-		&project_data.file_graph,
-		&source_path,
-		&project_dir,
-	);
+	let jsifier = JSifier::new(&mut types, &project_data.files, &project_data.file_graph, &source_path);
 	for file in &topo_sorted_files {
 		let mut lift = LiftVisitor::new(&jsifier);
 		let scope = project_data.asts.remove(file).expect("matching AST not found");
