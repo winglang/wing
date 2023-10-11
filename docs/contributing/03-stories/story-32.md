@@ -1,6 +1,6 @@
 # User Story 31 - Wing Platforms
 
-Marcus works on a Platform Engineering for a large company that has multiple internal teams all building applications that get deployed into the cloud. 
+Marcus is an engineer in the Platform Engineering Team for a large company that has multiple internal teams all building applications that get deployed into the cloud. 
 
 Recently, his company decided to start investigating adopting Winglang as the main language for their internal teams. However, his company's Cloud Center of Excellence (CCoE) 
 has a few concerns about adopting Winglang. Primarily, they are concerned about how they will still be able to enforce company best practices and standards across all the teams,
