@@ -213,10 +213,15 @@ export class BucketClient implements IBucketClient {
    */
   public async signedUrl(
     key: string,
-    _options?: SignedUrlOptions
+    options?: SignedUrlOptions
   ): Promise<string> {
     try {
-      throw new Error("Not implemented");
+      const expiryTimeInSeconds: number = options?.duration?.seconds || 86400;
+      const [url] = await this.bucket.file(key).getSignedUrl({
+        action: "read",
+        expires: Date.now() + expiryTimeInSeconds * 1000,
+      });
+      return url;
     } catch (error) {
       throw new Error(`Failed to get signed URL. (key=${key})`);
     }

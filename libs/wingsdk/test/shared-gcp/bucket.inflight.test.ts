@@ -1,6 +1,7 @@
 import { MockStorage } from "mock-gcs";
 import { vi, test, beforeEach, expect } from "vitest";
 import { BucketClient } from "../../src/shared-gcp/bucket.inflight";
+import { Duration } from "../../src/std";
 
 vi.mock("@google-cloud/storage", () => ({
   Storage: MockStorage,
@@ -287,4 +288,33 @@ test("tryDelete a non-existent object from the bucket", async () => {
   const res = await client.tryDelete(NON_EXISTENT_KEY);
 
   expect(res).toBe(false);
+});
+
+test("Given a bucket, when giving one of its keys, we should get its signed url", async () => {
+  const BUCKET_NAME = "test-bucket";
+  const KEY = "test-file-1";
+  const VALUE = "test-content-1";
+
+  const storage = new MockStorage();
+  await storage.bucket(BUCKET_NAME).put(KEY, VALUE);
+
+  const client = new BucketClient(BUCKET_NAME, false, storage as any);
+  const res = await client.signedUrl(KEY, {
+    duration: Duration.fromSeconds(86400),
+  });
+  expect(res).toBe(
+    `https://storage.googleapis.com/${BUCKET_NAME}/${KEY}?X-Goog-Algorithm=MOCKED`
+  );
+});
+
+test("Given a bucket when reaching to a non existent key, signed url it should throw an error", async () => {
+  const BUCKET_NAME = "test-bucket";
+  const NON_EXISTENT_KEY = "NON_EXISTENT_KEY";
+
+  const storage = new MockStorage();
+
+  const client = new BucketClient(BUCKET_NAME, false, storage as any);
+  await expect(() => client.signedUrl(NON_EXISTENT_KEY)).rejects.toThrowError(
+    `Failed to get signed URL. (key=${NON_EXISTENT_KEY})`
+  );
 });
