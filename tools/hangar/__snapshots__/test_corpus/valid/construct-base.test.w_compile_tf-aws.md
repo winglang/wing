@@ -2,6 +2,7 @@
 
 ## inflight.WingResource-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class WingResource {
     constructor({  }) {

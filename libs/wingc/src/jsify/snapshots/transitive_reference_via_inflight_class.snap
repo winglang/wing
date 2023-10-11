@@ -25,6 +25,7 @@ source: libs/wingc/src/jsify/tests.rs
 ## inflight.$Closure1-1.js
 
 ```js
+"use strict";
 module.exports = function({ $MyInflightClass }) {
   class $Closure1 {
     constructor({  }) {
@@ -44,6 +45,7 @@ module.exports = function({ $MyInflightClass }) {
 ## inflight.MyInflightClass-1.js
 
 ```js
+"use strict";
 module.exports = function({ $b }) {
   class MyInflightClass {
     async putInBucket() {

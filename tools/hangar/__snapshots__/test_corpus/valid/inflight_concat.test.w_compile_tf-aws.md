@@ -2,6 +2,7 @@
 
 ## inflight.R-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class R {
     constructor({ $_this_s1_concat___world___ }) {

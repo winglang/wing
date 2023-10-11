@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-2.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -20,6 +21,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure2-2.js
 ```js
+"use strict";
 module.exports = function({ $apiDefaultCors_url, $http_Util, $t_Assert }) {
   class $Closure2 {
     constructor({  }) {
@@ -45,6 +47,7 @@ module.exports = function({ $apiDefaultCors_url, $http_Util, $t_Assert }) {
 
 ## inflight.$Closure3-2.js
 ```js
+"use strict";
 module.exports = function({ $apiDefaultCors_url, $http_HttpMethod, $http_Util, $t_Assert }) {
   class $Closure3 {
     constructor({  }) {
@@ -70,6 +73,7 @@ module.exports = function({ $apiDefaultCors_url, $http_HttpMethod, $http_Util, $
 
 ## inflight.Assert-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Assert {
     static async equalStr(a, b) {

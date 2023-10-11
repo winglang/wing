@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $x }) {
   class $Closure1 {
     constructor({  }) {
@@ -20,6 +21,7 @@ module.exports = function({ $x }) {
 
 ## inflight.A-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class A {
     constructor({  }) {
@@ -38,6 +40,7 @@ module.exports = function({  }) {
 
 ## inflight.Dog-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Dog {
     constructor({  }) {
@@ -53,6 +56,7 @@ module.exports = function({  }) {
 
 ## inflight.Terrier-1.js
 ```js
+"use strict";
 module.exports = function({ $Dog }) {
   class Terrier extends $Dog {
     constructor({  }) {
@@ -69,6 +73,7 @@ module.exports = function({ $Dog }) {
 
 ## inflight.r-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class r {
     constructor({  }) {

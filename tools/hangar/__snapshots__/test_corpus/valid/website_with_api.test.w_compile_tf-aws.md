@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-2.js
 ```js
+"use strict";
 module.exports = function({ $std_Json, $usersTable }) {
   class $Closure1 {
     constructor({  }) {
@@ -20,6 +21,7 @@ module.exports = function({ $std_Json, $usersTable }) {
 
 ## inflight.$Closure2-2.js
 ```js
+"use strict";
 module.exports = function({ $std_Json, $usersTable }) {
   class $Closure2 {
     constructor({  }) {
@@ -43,6 +45,7 @@ module.exports = function({ $std_Json, $usersTable }) {
 
 ## inflight.$Closure3-2.js
 ```js
+"use strict";
 module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert }) {
   class $Closure3 {
     constructor({  }) {
@@ -68,6 +71,7 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert })
 
 ## inflight.$Closure4-2.js
 ```js
+"use strict";
 module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert }) {
   class $Closure4 {
     constructor({  }) {
@@ -90,6 +94,7 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert })
 
 ## inflight.Assert-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Assert {
     static async equalStr(a, b) {

@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $NotGoo }) {
   class $Closure1 {
     constructor({  }) {
@@ -31,6 +32,7 @@ module.exports = function({ $NotGoo }) {
 
 ## inflight.NotGoo-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class NotGoo {
     async handle() {

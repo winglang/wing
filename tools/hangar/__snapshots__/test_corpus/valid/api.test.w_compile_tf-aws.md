@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $counter, $std_Json }) {
   class $Closure1 {
     constructor({  }) {
@@ -23,6 +24,7 @@ module.exports = function({ $counter, $std_Json }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $api_url }) {
   class $Closure2 {
     constructor({  }) {
@@ -42,6 +44,7 @@ module.exports = function({ $api_url }) {
 
 ## inflight.$Closure3-1.js
 ```js
+"use strict";
 module.exports = function({ $__parent_this_3_api_url }) {
   class $Closure3 {
     constructor({  }) {
@@ -61,6 +64,7 @@ module.exports = function({ $__parent_this_3_api_url }) {
 
 ## inflight.A-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class A {
     constructor({  }) {

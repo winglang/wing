@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $PARSE_ERROR, $std_Boolean, $std_Json }) {
   class $Closure1 {
     constructor({  }) {

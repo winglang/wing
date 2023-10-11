@@ -1357,6 +1357,7 @@ impl<'a> JSifier<'a> {
 			Default::default()
 		};
 
+		code.line("\"use strict\";");
 		code.open(format!("module.exports = function({{ {inputs} }}) {{"));
 		code.add_code(inflight_class_code);
 		code.line(format!("return {name};"));

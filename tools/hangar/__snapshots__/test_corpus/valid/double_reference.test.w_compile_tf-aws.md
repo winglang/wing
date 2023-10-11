@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $bar, $bar_foo, $initCount }) {
   class $Closure1 {
     constructor({  }) {
@@ -22,6 +23,7 @@ module.exports = function({ $bar, $bar_foo, $initCount }) {
 
 ## inflight.Bar-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Bar {
     constructor({ $this_foo }) {
@@ -38,6 +40,7 @@ module.exports = function({  }) {
 
 ## inflight.Foo-1.js
 ```js
+"use strict";
 module.exports = function({ $initCount }) {
   class Foo {
     constructor({  }) {

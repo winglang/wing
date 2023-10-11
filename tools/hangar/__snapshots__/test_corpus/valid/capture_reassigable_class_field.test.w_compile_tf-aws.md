@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -19,6 +20,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $counter }) {
   class $Closure2 {
     constructor({  }) {
@@ -37,6 +39,7 @@ module.exports = function({ $counter }) {
 
 ## inflight.$Closure3-1.js
 ```js
+"use strict";
 module.exports = function({ $counter, $kv, $util_Util }) {
   class $Closure3 {
     constructor({  }) {
@@ -67,6 +70,7 @@ module.exports = function({ $counter, $kv, $util_Util }) {
 
 ## inflight.KeyValueStore-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class KeyValueStore {
     constructor({ $this_bucket, $this_onUpdateCallback }) {

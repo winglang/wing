@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $globalBucket }) {
   class $Closure1 {
     constructor({  }) {
@@ -20,6 +21,7 @@ module.exports = function({ $globalBucket }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $storeInBucket }) {
   class $Closure2 {
     constructor({  }) {
@@ -38,6 +40,7 @@ module.exports = function({ $storeInBucket }) {
 
 ## inflight.$Closure3-1.js
 ```js
+"use strict";
 module.exports = function({ $func1, $globalBucket }) {
   class $Closure3 {
     constructor({  }) {
@@ -57,6 +60,7 @@ module.exports = function({ $func1, $globalBucket }) {
 
 ## inflight.$Closure4-1.js
 ```js
+"use strict";
 module.exports = function({ $globalBucket }) {
   class $Closure4 {
     constructor({  }) {
@@ -76,6 +80,7 @@ module.exports = function({ $globalBucket }) {
 
 ## inflight.$Closure5-1.js
 ```js
+"use strict";
 module.exports = function({ $x }) {
   class $Closure5 {
     constructor({  }) {
@@ -95,6 +100,7 @@ module.exports = function({ $x }) {
 
 ## inflight.MyResource-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class MyResource {
     constructor({ $this_closure }) {

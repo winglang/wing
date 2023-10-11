@@ -2,6 +2,7 @@
 
 ## inflight.C-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class C {
     async method() {

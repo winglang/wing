@@ -29,6 +29,7 @@ source: libs/wingc/src/jsify/tests.rs
 ## inflight.Base-1.js
 
 ```js
+"use strict";
 module.exports = function({  }) {
   class Base {
     constructor({  }) {
@@ -41,6 +42,7 @@ module.exports = function({  }) {
 ## inflight.Derived-1.js
 
 ```js
+"use strict";
 module.exports = function({ $Base }) {
   class Derived extends $Base {
     constructor({  }) {

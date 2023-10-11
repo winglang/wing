@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $table }) {
   class $Closure1 {
     constructor({  }) {

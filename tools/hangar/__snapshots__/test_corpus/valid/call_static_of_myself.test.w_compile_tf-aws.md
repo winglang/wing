@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $Bar, $Foo, $foo }) {
   class $Closure1 {
     constructor({  }) {
@@ -30,6 +31,7 @@ module.exports = function({ $Bar, $Foo, $foo }) {
 
 ## inflight.Bar-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Bar {
     static async bar() {
@@ -46,6 +48,7 @@ module.exports = function({  }) {
 
 ## inflight.Foo-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Foo {
     constructor({  }) {

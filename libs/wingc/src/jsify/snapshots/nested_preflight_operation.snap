@@ -30,6 +30,7 @@ source: libs/wingc/src/jsify/tests.rs
 ## inflight.$Closure1-1.js
 
 ```js
+"use strict";
 module.exports = function({ $t_y_b }) {
   class $Closure1 {
     constructor({  }) {
@@ -48,6 +49,7 @@ module.exports = function({ $t_y_b }) {
 ## inflight.MyType-1.js
 
 ```js
+"use strict";
 module.exports = function({  }) {
   class MyType {
     constructor({  }) {
@@ -60,6 +62,7 @@ module.exports = function({  }) {
 ## inflight.YourType-1.js
 
 ```js
+"use strict";
 module.exports = function({  }) {
   class YourType {
     constructor({  }) {

@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $std_Duration }) {
   class $Closure1 {
     constructor({  }) {

@@ -2,6 +2,7 @@
 
 ## inflight.Bar-3.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Bar {
     constructor({  }) {
@@ -14,6 +15,7 @@ module.exports = function({  }) {
 
 ## inflight.Foo-2.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Foo {
     constructor({  }) {
@@ -26,6 +28,7 @@ module.exports = function({  }) {
 
 ## inflight.Widget-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Widget {
     constructor({  }) {

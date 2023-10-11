@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $even_arr, $math_Util, $odd_arr }) {
   class $Closure1 {
     constructor({  }) {
@@ -21,6 +22,7 @@ module.exports = function({ $even_arr, $math_Util, $odd_arr }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $_bimodal_at_0__, $_bimodal_at_1__, $_multimodal_at_0__, $_multimodal_at_1__, $_multimodal_at_2__, $math_Util, $modal_arr }) {
   class $Closure2 {
     constructor({  }) {
@@ -44,6 +46,7 @@ module.exports = function({ $_bimodal_at_0__, $_bimodal_at_1__, $_multimodal_at_
 
 ## inflight.$Closure3-1.js
 ```js
+"use strict";
 module.exports = function({ $math_Util, $mean_arr }) {
   class $Closure3 {
     constructor({  }) {

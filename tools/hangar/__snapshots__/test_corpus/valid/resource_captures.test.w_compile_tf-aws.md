@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $r }) {
   class $Closure1 {
     constructor({  }) {
@@ -30,6 +31,7 @@ module.exports = function({ $r }) {
 
 ## inflight.Another-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Another {
     constructor({  }) {
@@ -48,6 +50,7 @@ module.exports = function({  }) {
 
 ## inflight.First-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class First {
     constructor({  }) {
@@ -60,6 +63,7 @@ module.exports = function({  }) {
 
 ## inflight.MyResource-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class MyResource {
     constructor({ $___this_setOfStr_has__s3____, $_this_arrayOfStr_at_0__, $_this_arrayOfStr_at_1__, $_this_mapOfNum___k1__, $_this_mapOfNum___k2__, $_this_myOptStr_______, $_this_setOfStr_has__s1___, $_this_setOfStr_has__s2___, $this_another, $this_another_first_myResource, $this_another_myField, $this_arrayOfStr_length, $this_extBucket, $this_extNum, $this_myBool, $this_myNum, $this_myQueue, $this_myResource, $this_myStr }) {

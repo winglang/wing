@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $Object_keys_m__length, $aCloned_length, $a_length, $s_size }) {
   class $Closure1 {
     constructor({  }) {
@@ -23,6 +24,7 @@ module.exports = function({ $Object_keys_m__length, $aCloned_length, $a_length, 
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $handler }) {
   class $Closure2 {
     constructor({  }) {

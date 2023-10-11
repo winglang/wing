@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $Foo, $myConst }) {
   class $Closure1 {
     constructor({  }) {
@@ -21,6 +22,7 @@ module.exports = function({ $Foo, $myConst }) {
 
 ## inflight.Foo-1.js
 ```js
+"use strict";
 module.exports = function({ $myConst }) {
   class Foo {
     async getValue() {

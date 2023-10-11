@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $JSHelperInflight, $util_Util }) {
   class $Closure1 {
     constructor({  }) {
@@ -21,6 +22,7 @@ module.exports = function({ $JSHelperInflight, $util_Util }) {
 
 ## inflight.JSHelper-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class JSHelper {
     constructor({  }) {
@@ -33,6 +35,7 @@ module.exports = function({  }) {
 
 ## inflight.JSHelperInflight-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class JSHelperInflight {
     constructor({  }) {

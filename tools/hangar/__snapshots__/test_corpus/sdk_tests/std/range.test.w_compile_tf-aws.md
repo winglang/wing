@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $std_Range }) {
   class $Closure1 {
     constructor({  }) {
@@ -20,6 +21,7 @@ module.exports = function({ $std_Range }) {
 
 ## inflight.$Closure10-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure10 {
     constructor({  }) {
@@ -42,6 +44,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $std_Range }) {
   class $Closure2 {
     constructor({  }) {
@@ -60,6 +63,7 @@ module.exports = function({ $std_Range }) {
 
 ## inflight.$Closure3-1.js
 ```js
+"use strict";
 module.exports = function({ $std_Range }) {
   class $Closure3 {
     constructor({  }) {
@@ -78,6 +82,7 @@ module.exports = function({ $std_Range }) {
 
 ## inflight.$Closure4-1.js
 ```js
+"use strict";
 module.exports = function({ $std_Range }) {
   class $Closure4 {
     constructor({  }) {
@@ -96,6 +101,7 @@ module.exports = function({ $std_Range }) {
 
 ## inflight.$Closure5-1.js
 ```js
+"use strict";
 module.exports = function({ $std_Range }) {
   class $Closure5 {
     constructor({  }) {
@@ -114,6 +120,7 @@ module.exports = function({ $std_Range }) {
 
 ## inflight.$Closure6-1.js
 ```js
+"use strict";
 module.exports = function({ $std_Range }) {
   class $Closure6 {
     constructor({  }) {
@@ -132,6 +139,7 @@ module.exports = function({ $std_Range }) {
 
 ## inflight.$Closure7-1.js
 ```js
+"use strict";
 module.exports = function({ $std_Range }) {
   class $Closure7 {
     constructor({  }) {
@@ -150,6 +158,7 @@ module.exports = function({ $std_Range }) {
 
 ## inflight.$Closure8-1.js
 ```js
+"use strict";
 module.exports = function({ $std_Range }) {
   class $Closure8 {
     constructor({  }) {
@@ -168,6 +177,7 @@ module.exports = function({ $std_Range }) {
 
 ## inflight.$Closure9-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure9 {
     constructor({  }) {

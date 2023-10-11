@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $cloud_HttpMethod, $path }) {
   class $Closure1 {
     constructor({  }) {
@@ -23,6 +24,7 @@ module.exports = function({ $cloud_HttpMethod, $path }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $cloud_HttpMethod, $path }) {
   class $Closure2 {
     constructor({  }) {
@@ -44,6 +46,7 @@ module.exports = function({ $cloud_HttpMethod, $path }) {
 
 ## inflight.$Closure3-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure3 {
     constructor({  }) {
@@ -62,6 +65,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure4-1.js
 ```js
+"use strict";
 module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
   class $Closure4 {
     constructor({  }) {

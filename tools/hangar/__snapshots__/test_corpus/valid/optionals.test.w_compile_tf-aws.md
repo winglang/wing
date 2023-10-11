@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutOptions_b_____null_, $payloadWithBucket_c }) {
   class $Closure1 {
     constructor({  }) {
@@ -23,6 +24,7 @@ module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutO
 
 ## inflight.Node-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Node {
     constructor({  }) {
@@ -35,6 +37,7 @@ module.exports = function({  }) {
 
 ## inflight.Sub-1.js
 ```js
+"use strict";
 module.exports = function({ $Super }) {
   class Sub extends $Super {
     constructor({  }) {
@@ -48,6 +51,7 @@ module.exports = function({ $Super }) {
 
 ## inflight.Sub1-1.js
 ```js
+"use strict";
 module.exports = function({ $Super }) {
   class Sub1 extends $Super {
     constructor({  }) {
@@ -61,6 +65,7 @@ module.exports = function({ $Super }) {
 
 ## inflight.Super-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Super {
     constructor({  }) {

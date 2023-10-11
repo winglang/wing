@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $bucket, $res, $res_foo }) {
   class $Closure1 {
     constructor({  }) {
@@ -25,6 +26,7 @@ module.exports = function({ $bucket, $res, $res_foo }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $__parent_this_2_b }) {
   class $Closure2 {
     constructor({  }) {
@@ -43,6 +45,7 @@ module.exports = function({ $__parent_this_2_b }) {
 
 ## inflight.$Closure3-1.js
 ```js
+"use strict";
 module.exports = function({ $__parent_this_3_b }) {
   class $Closure3 {
     constructor({  }) {
@@ -61,6 +64,7 @@ module.exports = function({ $__parent_this_3_b }) {
 
 ## inflight.$Closure4-1.js
 ```js
+"use strict";
 module.exports = function({ $__parent_this_4_q }) {
   class $Closure4 {
     constructor({  }) {
@@ -79,6 +83,7 @@ module.exports = function({ $__parent_this_4_q }) {
 
 ## inflight.$Closure5-1.js
 ```js
+"use strict";
 module.exports = function({ $bigOlPublisher }) {
   class $Closure5 {
     constructor({  }) {
@@ -98,6 +103,7 @@ module.exports = function({ $bigOlPublisher }) {
 
 ## inflight.Bar-1.js
 ```js
+"use strict";
 module.exports = function({ $Foo, $MyEnum }) {
   class Bar {
     constructor({ $this_b, $this_e, $this_foo }) {
@@ -129,6 +135,7 @@ module.exports = function({ $Foo, $MyEnum }) {
 
 ## inflight.BigPublisher-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class BigPublisher {
     constructor({ $this_b, $this_b2, $this_q, $this_t }) {
@@ -153,6 +160,7 @@ module.exports = function({  }) {
 
 ## inflight.Dummy-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Dummy {
     constructor({  }) {
@@ -165,6 +173,7 @@ module.exports = function({  }) {
 
 ## inflight.Foo-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Foo {
     constructor({ $this_c }) {
@@ -192,6 +201,7 @@ module.exports = function({  }) {
 
 ## inflight.ScopeAndIdTestClass-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class ScopeAndIdTestClass {
     constructor({  }) {

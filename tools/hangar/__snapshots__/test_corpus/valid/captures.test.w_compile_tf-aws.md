@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $bucket1, $bucket2, $bucket3 }) {
   class $Closure1 {
     constructor({  }) {
@@ -34,6 +35,7 @@ module.exports = function({ $bucket1, $bucket2, $bucket3 }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $headers }) {
   class $Closure2 {
     constructor({  }) {

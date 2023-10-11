@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_seconds, $myNum, $mySecondBool, $myStr }) {
   class $Closure1 {
     constructor({  }) {

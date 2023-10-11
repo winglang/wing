@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $MyService, $__parent_this_1_b, $__parent_this_1_body }) {
   class $Closure1 {
     constructor({  }) {
@@ -29,6 +30,7 @@ module.exports = function({ $MyService, $__parent_this_1_b, $__parent_this_1_bod
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $foo, $http_Util }) {
   class $Closure2 {
     constructor({  }) {
@@ -49,6 +51,7 @@ module.exports = function({ $foo, $http_Util }) {
 
 ## inflight.$Closure3-1.js
 ```js
+"use strict";
 module.exports = function({ $foo, $foo_s, $http_Util }) {
   class $Closure3 {
     constructor({  }) {
@@ -77,6 +80,7 @@ module.exports = function({ $foo, $foo_s, $http_Util }) {
 
 ## inflight.MyService-1.js
 ```js
+"use strict";
 module.exports = function({ $std_Number }) {
   class MyService {
     constructor({ $this_b }) {

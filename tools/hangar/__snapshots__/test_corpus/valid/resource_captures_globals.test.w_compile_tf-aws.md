@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $res }) {
   class $Closure1 {
     constructor({  }) {
@@ -20,6 +21,7 @@ module.exports = function({ $res }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $Another }) {
   class $Closure2 {
     constructor({  }) {
@@ -38,6 +40,7 @@ module.exports = function({ $Another }) {
 
 ## inflight.Another-1.js
 ```js
+"use strict";
 module.exports = function({ $globalCounter }) {
   class Another {
     constructor({  }) {
@@ -60,6 +63,7 @@ module.exports = function({ $globalCounter }) {
 
 ## inflight.First-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class First {
     constructor({  }) {
@@ -72,6 +76,7 @@ module.exports = function({  }) {
 
 ## inflight.MyResource-1.js
 ```js
+"use strict";
 module.exports = function({ $Another, $_globalArrayOfStr_at_0__, $_globalMapOfNum___a__, $_globalSetOfStr_has__a___, $globalAnother, $globalAnother_first_myResource, $globalAnother_myField, $globalBool, $globalBucket, $globalNum, $globalStr }) {
   class MyResource {
     constructor({ $this_localTopic }) {
@@ -99,6 +104,7 @@ module.exports = function({ $Another, $_globalArrayOfStr_at_0__, $_globalMapOfNu
 
 ## inflight.R-1.js
 ```js
+"use strict";
 module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
   class R {
     constructor({  }) {

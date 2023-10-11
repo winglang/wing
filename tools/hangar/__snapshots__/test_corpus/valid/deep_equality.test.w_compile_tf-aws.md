@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $numA, $numB, $strA, $strB }) {
   class $Closure1 {
     constructor({  }) {
@@ -23,6 +24,7 @@ module.exports = function({ $numA, $numB, $strA, $strB }) {
 
 ## inflight.$Closure10-1.js
 ```js
+"use strict";
 module.exports = function({ $arrayA, $arrayB, $arrayC }) {
   class $Closure10 {
     constructor({  }) {
@@ -42,6 +44,7 @@ module.exports = function({ $arrayA, $arrayB, $arrayC }) {
 
 ## inflight.$Closure11-1.js
 ```js
+"use strict";
 module.exports = function({ $cat1, $cat2 }) {
   class $Closure11 {
     constructor({  }) {
@@ -61,6 +64,7 @@ module.exports = function({ $cat1, $cat2 }) {
 
 ## inflight.$Closure12-1.js
 ```js
+"use strict";
 module.exports = function({ $cat1, $cat2, $cat3 }) {
   class $Closure12 {
     constructor({  }) {
@@ -80,6 +84,7 @@ module.exports = function({ $cat1, $cat2, $cat3 }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $numA, $numC, $strA, $strC }) {
   class $Closure2 {
     constructor({  }) {
@@ -99,6 +104,7 @@ module.exports = function({ $numA, $numC, $strA, $strC }) {
 
 ## inflight.$Closure3-1.js
 ```js
+"use strict";
 module.exports = function({ $jsonA, $jsonB }) {
   class $Closure3 {
     constructor({  }) {
@@ -118,6 +124,7 @@ module.exports = function({ $jsonA, $jsonB }) {
 
 ## inflight.$Closure4-1.js
 ```js
+"use strict";
 module.exports = function({ $jsonA, $jsonB, $jsonC }) {
   class $Closure4 {
     constructor({  }) {
@@ -137,6 +144,7 @@ module.exports = function({ $jsonA, $jsonB, $jsonC }) {
 
 ## inflight.$Closure5-1.js
 ```js
+"use strict";
 module.exports = function({ $setA, $setB }) {
   class $Closure5 {
     constructor({  }) {
@@ -156,6 +164,7 @@ module.exports = function({ $setA, $setB }) {
 
 ## inflight.$Closure6-1.js
 ```js
+"use strict";
 module.exports = function({ $setA, $setB, $setC }) {
   class $Closure6 {
     constructor({  }) {
@@ -175,6 +184,7 @@ module.exports = function({ $setA, $setB, $setC }) {
 
 ## inflight.$Closure7-1.js
 ```js
+"use strict";
 module.exports = function({ $mapA, $mapB }) {
   class $Closure7 {
     constructor({  }) {
@@ -194,6 +204,7 @@ module.exports = function({ $mapA, $mapB }) {
 
 ## inflight.$Closure8-1.js
 ```js
+"use strict";
 module.exports = function({ $mapA, $mapB, $mapC }) {
   class $Closure8 {
     constructor({  }) {
@@ -213,6 +224,7 @@ module.exports = function({ $mapA, $mapB, $mapC }) {
 
 ## inflight.$Closure9-1.js
 ```js
+"use strict";
 module.exports = function({ $arrayA, $arrayB }) {
   class $Closure9 {
     constructor({  }) {

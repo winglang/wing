@@ -2,6 +2,7 @@
 
 ## inflight.CdkDockerImageFunction-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class CdkDockerImageFunction {
     constructor({  }) {

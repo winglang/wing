@@ -18,6 +18,7 @@ source: libs/wingc/src/jsify/tests.rs
 ## inflight.$Closure1-1.js
 
 ```js
+"use strict";
 module.exports = function({ $_y_at_0__, $x_length }) {
   class $Closure1 {
     constructor({  }) {

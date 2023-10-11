@@ -18,6 +18,7 @@ source: libs/wingc/src/jsify/tests.rs
 ## inflight.MyType-1.js
 
 ```js
+"use strict";
 module.exports = function({ $s }) {
   class MyType {
     constructor({  }) {

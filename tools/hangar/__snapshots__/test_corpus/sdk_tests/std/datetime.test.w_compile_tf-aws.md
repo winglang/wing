@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $_d4_toUtc____hours, $d4_hours, $d4_timezone, $math_Util, $std_Datetime, $std_Duration, $util_Util }) {
   class $Closure1 {
     constructor({  }) {

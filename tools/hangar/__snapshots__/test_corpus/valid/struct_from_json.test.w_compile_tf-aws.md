@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-2.js
 ```js
+"use strict";
 module.exports = function({ $cloud_BucketProps, $j }) {
   class $Closure1 {
     constructor({  }) {
@@ -21,6 +22,7 @@ module.exports = function({ $cloud_BucketProps, $j }) {
 
 ## inflight.$Closure2-2.js
 ```js
+"use strict";
 module.exports = function({ $Student }) {
   class $Closure2 {
     constructor({  }) {
@@ -60,6 +62,7 @@ module.exports = function({ $Student }) {
 
 ## inflight.$Closure3-2.js
 ```js
+"use strict";
 module.exports = function({ $Student, $jStudent1 }) {
   class $Closure3 {
     constructor({  }) {
@@ -85,6 +88,7 @@ module.exports = function({ $Student, $jStudent1 }) {
 
 ## inflight.$Closure4-2.js
 ```js
+"use strict";
 module.exports = function({ $MyStruct, $_schema_asStr___, $expectedSchema, $jMyStruct, $std_Json }) {
   class $Closure4 {
     constructor({  }) {
@@ -105,6 +109,7 @@ module.exports = function({ $MyStruct, $_schema_asStr___, $expectedSchema, $jMyS
 
 ## inflight.$Closure5-2.js
 ```js
+"use strict";
 module.exports = function({ $Student, $std_Boolean, $std_Number, $std_String }) {
   class $Closure5 {
     constructor({  }) {
@@ -126,6 +131,7 @@ module.exports = function({ $Student, $std_Boolean, $std_Number, $std_String }) 
 
 ## inflight.UsesStructInImportedFile-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class UsesStructInImportedFile {
     constructor({  }) {
