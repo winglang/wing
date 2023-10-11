@@ -313,12 +313,17 @@ pub struct Stmt {
 pub enum UtilityFunctions {
 	Log,
 	Assert,
+	UnsafeCast,
 }
 
 impl UtilityFunctions {
 	/// Returns all utility functions.
 	pub fn all() -> Vec<UtilityFunctions> {
-		vec![UtilityFunctions::Log, UtilityFunctions::Assert]
+		vec![
+			UtilityFunctions::Log,
+			UtilityFunctions::Assert,
+			UtilityFunctions::UnsafeCast,
+		]
 	}
 }
 
@@ -327,6 +332,7 @@ impl Display for UtilityFunctions {
 		match self {
 			UtilityFunctions::Log => write!(f, "log"),
 			UtilityFunctions::Assert => write!(f, "assert"),
+			UtilityFunctions::UnsafeCast => write!(f, "unsafeCast"),
 		}
 	}
 }
