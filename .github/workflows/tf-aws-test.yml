@@ -67,6 +67,7 @@ jobs:
       max-parallel: 10
       matrix: ${{ fromJson(needs.setup.outputs.tests) }}
     name: ${{ matrix.test.name }}
+    if: ${{ matrix.test.directory != 'std'}}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -141,7 +142,7 @@ jobs:
             then 
               wing test -t tf-aws ${{ matrix.test.directory }}/*.w
             else
-            ./localwing/node_modules/.bin/wing test -t tf-aws ${{ matrix.test.directory }}/*.w
+            ./localwing/node_modules/.bin/wing test -t sim ${{ matrix.test.directory }}/*.w
             fi
 
       - name: Output Terraform log

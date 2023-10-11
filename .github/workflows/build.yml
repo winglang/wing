@@ -12,6 +12,7 @@ on:
     branches:
       - main
       - dev
+      - tsuf/skip-std-tests
   workflow_dispatch: {}
 
 concurrency:
@@ -316,7 +317,7 @@ jobs:
         with:
           message: |
             Console preview environment is available at https://${{env.APP_NAME}}.fly.dev :rocket:
-            
+
             ###### Last Updated (UTC) ${{steps.deploy-fly.outputs.deploytime }}
           comment_tag: Console preview environment
           GITHUB_TOKEN: ${{secrets.PROJEN_GITHUB_TOKEN}}
