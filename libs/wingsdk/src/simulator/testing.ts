@@ -71,7 +71,7 @@ ${Object.entries(clients)
 
       public _registerOnLift(host: IInflightHost, ops: string[]): void {
         for (const v of Object.values(bindings)) {
-          Handler._registerBindObject(v.obj, host, v.ops);
+          Handler._registerOnLiftObject(v.obj, host, v.ops);
         }
         super._registerOnLift(host, ops);
       }

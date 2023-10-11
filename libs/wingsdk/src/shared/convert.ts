@@ -43,7 +43,7 @@ export function convertBetweenHandlers(
     }
 
     public _registerOnLift(host: IInflightHost, ops: string[]): void {
-      NewHandler._registerBindObject(this.handler, host, ["handle"]);
+      NewHandler._registerOnLiftObject(this.handler, host, ["handle"]);
       super._registerOnLift(host, ops);
     }
   }

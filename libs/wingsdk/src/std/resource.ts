@@ -80,7 +80,7 @@ export abstract class Resource extends Construct implements IResource {
    *
    * @internal
    */
-  public static _registerTypeBind(host: IInflightHost, ops: string[]): void {
+  public static _registerTypeOnLift(host: IInflightHost, ops: string[]): void {
     // Do nothing by default
     host;
     ops;
@@ -100,7 +100,7 @@ export abstract class Resource extends Construct implements IResource {
    *
    * @internal
    */
-  protected static _registerBindObject(
+  protected static _registerOnLiftObject(
     obj: any,
     host: IInflightHost,
     ops: string[] = []
@@ -119,7 +119,7 @@ export abstract class Resource extends Construct implements IResource {
 
       case "object":
         if (Array.isArray(obj)) {
-          obj.forEach((item) => this._registerBindObject(item, host));
+          obj.forEach((item) => this._registerOnLiftObject(item, host));
           return;
         }
 
@@ -129,13 +129,13 @@ export abstract class Resource extends Construct implements IResource {
 
         if (obj instanceof Set) {
           return Array.from(obj).forEach((item) =>
-            this._registerBindObject(item, host)
+            this._registerOnLiftObject(item, host)
           );
         }
 
         if (obj instanceof Map) {
           Array.from(obj.values()).forEach((item) =>
-            this._registerBindObject(item, host)
+            this._registerOnLiftObject(item, host)
           );
           return;
         }
@@ -144,14 +144,14 @@ export abstract class Resource extends Construct implements IResource {
         if (isResource(obj)) {
           // Explicitly register the resource's `$inflight_init` op, which is a special op that can be used to makes sure
           // the host can instantiate a client for this resource.
-          obj._addBind(host, [...ops, "$inflight_init"]);
+          obj._addOnLift(host, [...ops, "$inflight_init"]);
           return;
         }
 
         // structs are just plain objects
         if (obj.constructor.name === "Object") {
           Object.values(obj).forEach((item) =>
-            this._registerBindObject(item, host, ops)
+            this._registerOnLiftObject(item, host, ops)
           );
           return;
         }
@@ -160,7 +160,7 @@ export abstract class Resource extends Construct implements IResource {
       case "function":
         // If the object is actually a resource type, call the type's _registerTypeBind static method
         if (isResourceType(obj)) {
-          obj._registerTypeBind(host, ops);
+          obj._registerTypeOnLift(host, ops);
           return;
         }
         break;
@@ -207,7 +207,7 @@ export abstract class Resource extends Construct implements IResource {
    * @param ops The operations that may access this resource
    * @returns `true` if a new bind was added or `false` if there was already a bind
    */
-  private _addBind(host: IInflightHost, ops: string[]) {
+  private _addOnLift(host: IInflightHost, ops: string[]) {
     log(
       `Registering a binding for a resource (${this.node.path}) to a host (${
         host.node.path
