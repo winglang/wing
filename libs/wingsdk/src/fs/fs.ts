@@ -3,8 +3,8 @@ import * as os from "os";
 import * as path from "path";
 import * as yaml from "js-yaml";
 import { InflightClient } from "../core";
-import { Json } from "../std";
 import { normalPath } from "../shared/misc";
+import { Json } from "../std";
 
 /**
  * Convert the path to Windows format if running on Windows.
