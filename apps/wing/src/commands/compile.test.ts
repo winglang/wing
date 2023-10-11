@@ -10,7 +10,7 @@ import { generateTmpDir } from "src/util";
 const exampleDir = resolve("../../examples/tests/valid");
 const exampleSmallDir = resolve("../../examples/tests/valid/subdir2");
 const exampleFilePath = join(exampleDir, "captures.test.w");
-const examplefilepath2 = join(exampleDir, "capture_primitives.test.w");
+const exampleFilePath2 = join(exampleDir, "capture_primitives.test.w");
 
 describe(
   "compile command tests",
