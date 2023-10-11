@@ -13275,7 +13275,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20231011
+      typescript: 5.3.0-dev.20231006
     dev: true
 
   /dset@3.1.2:
@@ -22712,8 +22712,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20231011:
-    resolution: {integrity: sha512-qpyUI7J37X3Xj7/bPWSNPUvmJ8yDGVnkQ8665xD4+LVWKUX7vwO7n2E1CUuQzeQIF4y369iPaz1d396rTW5LfA==}
+  /typescript@5.3.0-dev.20231006:
+    resolution: {integrity: sha512-jD5wAzdZhl5Emk89dTMb7EqlUmO+n+U/uldQsSMxYh1HQG9J5Ti63B6em7Ob7DgoT7pvbqFUBn3X7UxaBba1Tg==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
