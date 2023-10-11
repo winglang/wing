@@ -17,7 +17,7 @@
     "url": "git+https://github.com/winglang/wing.git"
   },
   "scripts": {
-    "compile:copy-wingc-wasm": "cp ../../target/wasm32-wasi/release/wingc.wasm . && mkdir -p ../../dist && cp wingc.wasm ../../dist/wingc.wasm",
+    "compile:copy-wingc-wasm": "cp ../wingc/wingc.wasm . && mkdir -p ../../dist && cp wingc.wasm ../../dist/wingc.wasm",
     "compile": "tsup-node",
     "watch": "tsup-node --watch",
     "test": "vitest run --passWithNoTests",
