@@ -121,7 +121,7 @@ const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
-const fixture = require("./preflight.wingfixture-6.js")({ $stdlib });
+const fixture = require("./preflight.wingfixture-5.js")({ $stdlib });
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -232,16 +232,6 @@ module.exports = function({ $stdlib }) {
 
 ```
 
-## preflight.target-5.js
-```js
-module.exports = function({ $stdlib }) {
-  const std = $stdlib.std;
-  return {
-  };
-};
-
-```
-
 ## preflight.util-2.js
 ```js
 module.exports = function({ $stdlib }) {
@@ -276,12 +266,11 @@ module.exports = function({ $stdlib }) {
 
 ```
 
-## preflight.wingfixture-6.js
+## preflight.wingfixture-5.js
 ```js
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   return {
-    target: require("./preflight.target-5.js")({ $stdlib }),
     subdir: require("./preflight.subdir-4.js")({ $stdlib }),
     ...require("./preflight.store-3.js")({ $stdlib }),
     ...require("./preflight.enums-1.js")({ $stdlib }),
