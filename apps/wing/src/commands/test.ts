@@ -8,7 +8,7 @@ import chalk from "chalk";
 import debug from "debug";
 import { nanoid } from "nanoid";
 import { compile, CompileOptions } from "./compile";
-import { generateTmpDir, withSpinner } from "../util";
+import { withSpinner } from "../util";
 
 const log = debug("wing:test");
 
@@ -138,9 +138,6 @@ async function testOne(entrypoint: string, options: TestOptions) {
         ...options,
         rootId: options.rootId ?? `Test.${nanoid(10)}`,
         testing: true,
-        // since the test cleans up after each run, it's essential to create a temporary output directory-
-        // at least one that is different then the usual compilation output dir,  otherwise we might end up cleaning up the user's actual resources.
-        ...(options.target !== Target.SIM && { targetDir: `${await generateTmpDir()}/target` }),
       })
   );
 

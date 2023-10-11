@@ -105,7 +105,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   log?.("testing: %s", testing);
   const tmpSynthDir = resolveSynthDir(targetdir, wingFile, options.target, testing, true);
   log?.("temp synth dir: %s", tmpSynthDir);
-  const synthDir = resolveSynthDir(targetdir, wingFile, options.target, testing);
+  const synthDir = testing && options.target !== Target.SIM ? tmpSynthDir : resolveSynthDir(targetdir, wingFile, options.target, testing);
   log?.("synth dir: %s", synthDir);
   const workDir = resolve(tmpSynthDir, ".wing");
   log?.("work dir: %s", workDir);
@@ -190,18 +190,20 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     await runPreflightCodeInVm(workDir, wingDir, tempProcess, log);
   }
 
-  if (os.platform() === "win32") {
-    // Windows doesn't really support fully atomic moves.
-    // So we just copy the directory instead.
-    // Also only using sync methods to avoid possible async fs issues.
-    await fs.rm(synthDir, { recursive: true, force: true });
-    await fs.mkdir(synthDir, { recursive: true });
-    await copyDir(tmpSynthDir, synthDir);
-    await fs.rm(tmpSynthDir, { recursive: true, force: true });
-  } else {
-    // Move the temporary directory to the final target location in an atomic operation
-    await copyDir(tmpSynthDir, synthDir);
-    await fs.rm(tmpSynthDir, { recursive: true, force: true });
+  if (tmpSynthDir !== synthDir) {
+    if (os.platform() === "win32") {
+      // Windows doesn't really support fully atomic moves.
+      // So we just copy the directory instead.
+      // Also only using sync methods to avoid possible async fs issues.
+      await fs.rm(synthDir, { recursive: true, force: true });
+      await fs.mkdir(synthDir, { recursive: true });
+      await copyDir(tmpSynthDir, synthDir);
+      await fs.rm(tmpSynthDir, { recursive: true, force: true });
+    } else {
+      // Move the temporary directory to the final target location in an atomic operation
+      await copyDir(tmpSynthDir, synthDir);
+      await fs.rm(tmpSynthDir, { recursive: true, force: true });
+    }
   }
 
   return synthDir;
