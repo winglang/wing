@@ -81,12 +81,10 @@ impl VisitContext {
 
 	pub fn push_class(&mut self, class: &Class) {
 		self.class.push(UserDefinedType::for_class(class));
-		self.push_phase(class.phase);
 	}
 
 	pub fn pop_class(&mut self) {
 		self.class.pop();
-		self.pop_phase();
 	}
 
 	pub fn current_class(&self) -> Option<&UserDefinedType> {

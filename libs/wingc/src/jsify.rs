@@ -1210,7 +1210,6 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_class(&self, env: &SymbolEnv, class: &AstClass, ctx: &mut JSifyContext) -> CodeMaker {
-		let class_definition_phase = ctx.visit_ctx.current_phase();
 		ctx.with_class(class, |ctx| {
 			// lookup the class type
 			let class_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
@@ -1234,7 +1233,7 @@ impl<'a> JSifier<'a> {
 
 			// if this is inflight/independent, class, just emit the inflight class code inline and move on
 			// with your life.
-			if class_definition_phase != Phase::Preflight {
+			if ctx.visit_ctx.current_phase() != Phase::Preflight {
 				return inflight_class_code;
 			}
 
