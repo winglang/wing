@@ -41,7 +41,7 @@ export interface IResource extends IConstruct {
   /**
    * Return a code snippet that can be used to reference this resource inflight.
    *
-   * Note this code snippet may by async code, so it's unsafe to run it in a
+   * Note this code snippet may be async code, so it's unsafe to run it in a
    * constructor or other sync context.
    *
    * @internal
@@ -158,7 +158,7 @@ export abstract class Resource extends Construct implements IResource {
         break;
 
       case "function":
-        // If the object is actually a resource type, call the type's _registerTypeBind static method
+        // If the object is actually a resource type, call the type's _registerTypeOnLift() static method
         if (isResourceType(obj)) {
           obj._registerTypeOnLift(host, ops);
           return;
