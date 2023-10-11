@@ -54,7 +54,6 @@ mod docs;
 mod file_graph;
 mod files;
 pub mod fold;
-pub mod inflight_init_transform;
 pub mod jsify;
 pub mod json_schema_generator;
 mod lifting;

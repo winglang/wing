@@ -117,7 +117,6 @@ impl<'a> LiftVisitor<'a> {
 			&mut JSifyContext {
 				lifts: None,
 				visit_ctx: &mut self.ctx,
-				current_class_parent: None,
 			},
 		);
 		self.ctx.pop_phase();
@@ -130,7 +129,6 @@ impl<'a> LiftVisitor<'a> {
 			&mut JSifyContext {
 				lifts: None,
 				visit_ctx: &mut self.ctx,
-				current_class_parent: None,
 			},
 		);
 

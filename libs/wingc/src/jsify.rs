@@ -50,7 +50,6 @@ const JS_CONSTRUCTOR: &str = "constructor";
 pub struct JSifyContext<'a> {
 	pub lifts: Option<&'a Lifts>,
 	pub visit_ctx: &'a mut VisitContext,
-	pub current_class_parent: Option<UserDefinedType>, // TODO: stack!
 }
 
 pub struct JSifier<'a> {
@@ -121,7 +120,6 @@ impl<'a> JSifier<'a> {
 		let mut jsify_context = JSifyContext {
 			visit_ctx: &mut visit_ctx,
 			lifts: None,
-			current_class_parent: None,
 		};
 		jsify_context.visit_ctx.push_env(self.types.get_scope_env(&scope));
 		for statement in scope.statements.iter().sorted_by(|a, b| match (&a.kind, &b.kind) {
@@ -1195,7 +1193,6 @@ impl<'a> JSifier<'a> {
 			let ctx = &mut JSifyContext {
 				lifts,
 				visit_ctx: &mut ctx.visit_ctx,
-				current_class_parent: class.parent.clone(),
 			};
 
 			// emit the inflight side of the class into a separate file
@@ -1396,21 +1393,7 @@ impl<'a> JSifier<'a> {
 		// emit the $inflight_init function (if it has a body).
 		if let FunctionBody::Statements(s) = &class.inflight_initializer.body {
 			if !s.statements.is_empty() {
-				//class_code.line(self.jsify_function(Some(class), &class.inflight_initializer, &mut ctx));
 				class_code.line(self.jsify_inflight_init(&class.inflight_initializer, &mut ctx));
-
-				// If our parent is phase independent, we also need to emit a regular ctor so we can call the parent's `super()`
-				// if let Some(parent) = &class.parent {
-				// 	let parent_type = resolve_user_defined_type(
-				// 		parent,
-				// 		ctx.visit_ctx.current_env().expect("an env"),
-				// 		ctx.visit_ctx.current_stmt_idx(),
-				// 	)
-				// 	.expect("resolved type");
-				// 	if parent_type.as_class().unwrap().phase == Phase::Independent {
-				// 		class_code.line(self.jsify_function(Some(class), &class.initializer, &mut ctx));
-				// 	}
-				// }
 			}
 		}
 
