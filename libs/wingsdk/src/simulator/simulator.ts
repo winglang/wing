@@ -3,7 +3,11 @@ import { Server } from "http";
 import { AddressInfo } from "net";
 import { join } from "path";
 import express from "express";
-import { makeSimulatorClient } from "./client";
+import {
+  deserializeValue,
+  makeSimulatorClient,
+  serializeValue,
+} from "./client";
 import { Tree } from "./tree";
 import { SDK_VERSION } from "../constants";
 import { ConstructTree, TREE_FILE_PATH } from "../core";
@@ -255,19 +259,20 @@ export class Simulator {
 
     app.post("/v1/call", async (req, res, next) => {
       try {
-        let request: SimulatorServerRequest = req.body;
-        // assumption: Wing APIs don't distinguish between null and undefined, so we can swap them
-        request = JSON.parse(JSON.stringify(request), (_key, value) => {
-          return value === null ? undefined : value;
-        });
+        let request: SimulatorServerRequest = deserializeValue(
+          JSON.stringify(req.body)
+        );
 
         const { handle, method, args } = request;
         const resource = this._handles.find(handle);
 
         try {
           const result = await (resource as any)[method](...args);
-          // assumption: Wing APIs are only returning JSON-serializable values
-          res.status(200).json({ result } as SimulatorServerResponse);
+          res
+            .status(200)
+            .json(
+              JSON.parse(serializeValue({ result })) as SimulatorServerResponse
+            );
         } catch (err) {
           if (err instanceof Error) {
             res.status(500).json({
