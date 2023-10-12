@@ -47,14 +47,20 @@ use self::lifts::Lifts;
 use self::symbol_env::{LookupResult, LookupResultMut, SymbolEnvIter, SymbolEnvRef};
 
 pub struct UnsafeRef<T>(*const T);
+
+impl<T> Copy for UnsafeRef<T> {}
+
+impl<'a, T> From<&'a T> for UnsafeRef<T> {
+	fn from(t: &'a T) -> Self {
+		UnsafeRef(t)
+	}
+}
+
 impl<T> Clone for UnsafeRef<T> {
 	fn clone(&self) -> Self {
 		*self
 	}
 }
-
-impl<T> Copy for UnsafeRef<T> {}
-
 impl<T> std::ops::Deref for UnsafeRef<T> {
 	type Target = T;
 	fn deref(&self) -> &Self::Target {
@@ -197,6 +203,13 @@ impl SymbolKind {
 	pub fn as_type(&self) -> Option<TypeRef> {
 		match &self {
 			SymbolKind::Type(t) => Some(*t),
+			_ => None,
+		}
+	}
+
+	pub fn as_type_ref(&self) -> Option<&TypeRef> {
+		match &self {
+			SymbolKind::Type(t) => Some(t),
 			_ => None,
 		}
 	}
@@ -1570,9 +1583,16 @@ impl Types {
 
 	/// Obtain the type of a given expression id. Will panic if the expression has not been type checked yet.
 	pub fn get_expr_id_type(&self, expr_id: ExprId) -> TypeRef {
+		*self.get_expr_id_type_ref(expr_id)
+	}
+
+	/// Obtain the type of a given expression id. Will panic if the expression has not been type checked yet.
+	pub fn get_expr_id_type_ref(&self, expr_id: ExprId) -> &TypeRef {
 		self
-			.try_get_expr_type(expr_id)
-			.expect("All expressions should have a type")
+			.type_for_expr
+			.get(expr_id)
+			.and_then(|t| t.as_ref().map(|t| &t.type_))
+			.unwrap()
 	}
 
 	/// Sets the type environment for a given scope. Usually should be called soon
@@ -5487,6 +5507,14 @@ pub fn resolve_user_defined_type(
 	env: &SymbolEnv,
 	statement_idx: usize,
 ) -> Result<TypeRef, TypeError> {
+	resolve_user_defined_type_ref(user_defined_type, env, statement_idx).map(|t| *t)
+}
+
+pub fn resolve_user_defined_type_ref<'a>(
+	user_defined_type: &'a UserDefinedType,
+	env: &'a SymbolEnv,
+	statement_idx: usize,
+) -> Result<&'a TypeRef, TypeError> {
 	// Resolve all types down the fields list and return the last one (which is likely to be a real type and not a namespace)
 	let mut nested_name = vec![&user_defined_type.root];
 	nested_name.extend(user_defined_type.fields.iter().collect_vec());
@@ -5495,7 +5523,7 @@ pub fn resolve_user_defined_type(
 
 	if let LookupResult::Found(symb_kind, _) = lookup_result {
 		if let SymbolKind::Type(t) = symb_kind {
-			Ok(*t)
+			Ok(t)
 		} else {
 			let symb = nested_name.last().unwrap();
 			Err(TypeError {
