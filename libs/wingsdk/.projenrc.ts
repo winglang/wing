@@ -366,6 +366,8 @@ project.preCompileTask.exec("cdktf get --force");
 
 project.package.addPackageResolutions("mime@^1.4.0");
 
+project.package.file.addDeletionOverride("pnpm");
+
 project.tryRemoveFile(".npmrc");
 
 project.packageTask.reset("bump-pack -b");
