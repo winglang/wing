@@ -65,11 +65,11 @@ impl VisitContext {
 
 	// --
 
-	fn push_expr(&mut self, expr: ExprId) {
+	pub fn push_expr(&mut self, expr: ExprId) {
 		self.expression.push(expr);
 	}
 
-	fn pop_expr(&mut self) {
+	pub fn pop_expr(&mut self) {
 		self.expression.pop();
 	}
 

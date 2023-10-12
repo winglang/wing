@@ -70,27 +70,38 @@ test "size()" {
 
 let greeting = { "hello" => "there!" };
 assert(greeting.get("hello") == "there!");
+try {
+  greeting.get("bye");
+} catch err {
+  assert(err.contains("does not contain key: \"bye\""));
+}
 
-let general: str? = greeting.get("grievous");
+
+let general: str? = greeting.tryGet("grievous");
 assert(general == nil);
 
 let mutGreeting = MutMap<str>{ "general" => "kenobi" };
 assert(mutGreeting.get("general") == "kenobi");
 
-let Viceroy: str? = mutGreeting.get("gunray");
+let Viceroy: str? = mutGreeting.tryGet("gunray");
 assert(Viceroy == nil);
 
 test "get()" {
     let greeting = { "hello" => "there!" };
     assert(greeting.get("hello") == "there!");
+    try {
+      greeting.get("bye");
+    } catch err {
+      assert(err.contains("does not contain key: \"bye\""));
+    }
 
-    let general: str? = greeting.get("grievous");
+    let general: str? = greeting.tryGet("grievous");
     assert(general == nil);
 
     let mutGreeting = MutMap<str>{ "general" => "kenobi" };
     assert(mutGreeting.get("general") == "kenobi");
 
-    let Viceroy: str? = mutGreeting.get("gunray");
+    let Viceroy: str? = mutGreeting.tryGet("gunray");
     assert(Viceroy == nil);
 }
 
@@ -254,3 +265,10 @@ test "delete()" {
     sithTriumvirate.delete("sion");
     assert(sithTriumvirate == MutMap<str> { "traya" => "lord of betrayal" });
 }
+
+
+// testing optionals
+let mapOfOptionalString = MutMap<str?>{ };
+mapOfOptionalString.set("a", nil);
+let b = mapOfOptionalString.get("a");
+assert(b == nil);

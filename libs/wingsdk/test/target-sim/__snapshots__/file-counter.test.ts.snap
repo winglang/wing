@@ -2,7 +2,8 @@
 
 exports[`can create sequential files in a bucket 1`] = `
 {
-  ".wing/queue-setconsumer-401ee792_c8c63697.js": "exports.handler = async function(event) {
+  ".wing/queue-setconsumer-401ee792_c8c63697.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {

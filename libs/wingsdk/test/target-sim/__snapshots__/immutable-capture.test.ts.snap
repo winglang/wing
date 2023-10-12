@@ -2,7 +2,8 @@
 
 exports[`array 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
+  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -105,7 +106,8 @@ my_capture: [\\"hello\\",\\"dude\\"]
 
 exports[`array of buckets 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
+  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -291,7 +293,8 @@ my_buckets: [(function() {
 
 exports[`array of durations 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
+  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -394,7 +397,8 @@ my_array: [{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.1666666666666666
 
 exports[`array of maps 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
+  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -496,7 +500,8 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
 
 exports[`boolean 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
+  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -597,7 +602,8 @@ my_capture: false
 
 exports[`duration 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
+  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -700,7 +706,8 @@ my_capture: {\\"seconds\\": 7200,\\"minutes\\": 120,\\"hours\\": 2,}
 
 exports[`map 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
+  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -805,7 +812,8 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
 
 exports[`map of arrays 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
+  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -912,7 +920,8 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
 
 exports[`map of arrays of durations 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
+  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1016,7 +1025,8 @@ my_map: new Map([[\\"foo\\",[{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 
 
 exports[`map of buckets 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
+  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1199,7 +1209,8 @@ my_map: new Map([[\\"foo\\",(function() {
 
 exports[`number 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
+  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1300,7 +1311,8 @@ my_capture: 123
 
 exports[`set 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
+  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1404,7 +1416,8 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
 
 exports[`set of durations 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
+  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1507,7 +1520,8 @@ my_set: new Set([{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.1666666666
 
 exports[`string 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
+  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1609,7 +1623,8 @@ my_capture: \\"bam bam bam\\"
 
 exports[`struct 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
+  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1713,7 +1728,8 @@ my_capture: {\\"hello\\": \\"dude\\",\\"world\\": \\"cup\\",\\"foo\\": \\"bar\\"
 
 exports[`struct of maps 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
+  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1817,7 +1833,8 @@ my_struct: {\\"foo\\": new Map([[\\"foo\\",1],[\\"bar\\",2]]),\\"bar\\": new Map
 
 exports[`struct with resources 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
+  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {

@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $__parent_this_1_b }) {
   class $Closure1 {
     constructor({  }) {
@@ -20,6 +21,7 @@ module.exports = function({ $__parent_this_1_b }) {
 
 ## inflight.Store-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Store {
     constructor({ $this_b }) {
@@ -36,6 +38,7 @@ module.exports = function({  }) {
 
 ## inflight.Util-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Util {
     constructor({  }) {
@@ -48,6 +51,7 @@ module.exports = function({  }) {
 
 ## preflight.empty-1.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   return {  };
@@ -57,6 +61,7 @@ module.exports = function({ $stdlib }) {
 
 ## preflight.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   const file3 = require("./preflight.empty-1.js")({ $stdlib });

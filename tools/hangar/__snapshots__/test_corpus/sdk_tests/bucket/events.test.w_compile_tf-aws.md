@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $idsCounter, $table }) {
   class $Closure1 {
     constructor({  }) {
@@ -20,6 +21,7 @@ module.exports = function({ $idsCounter, $table }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $Source, $logHistory }) {
   class $Closure2 {
     constructor({  }) {
@@ -38,6 +40,7 @@ module.exports = function({ $Source, $logHistory }) {
 
 ## inflight.$Closure3-1.js
 ```js
+"use strict";
 module.exports = function({ $Source, $logHistory }) {
   class $Closure3 {
     constructor({  }) {
@@ -56,6 +59,7 @@ module.exports = function({ $Source, $logHistory }) {
 
 ## inflight.$Closure4-1.js
 ```js
+"use strict";
 module.exports = function({ $Source, $logHistory }) {
   class $Closure4 {
     constructor({  }) {
@@ -74,6 +78,7 @@ module.exports = function({ $Source, $logHistory }) {
 
 ## inflight.$Closure5-1.js
 ```js
+"use strict";
 module.exports = function({ $Source, $logHistory }) {
   class $Closure5 {
     constructor({  }) {
@@ -92,6 +97,7 @@ module.exports = function({ $Source, $logHistory }) {
 
 ## inflight.$Closure6-1.js
 ```js
+"use strict";
 module.exports = function({ $std_Duration, $util_Util }) {
   class $Closure6 {
     constructor({  }) {
@@ -118,6 +124,7 @@ module.exports = function({ $std_Duration, $util_Util }) {
 
 ## inflight.$Closure7-1.js
 ```js
+"use strict";
 module.exports = function({ $table }) {
   class $Closure7 {
     constructor({  }) {
@@ -145,6 +152,7 @@ module.exports = function({ $table }) {
 
 ## inflight.$Closure8-1.js
 ```js
+"use strict";
 module.exports = function({ $Source, $b, $checkHitCount, $util_Util, $wait }) {
   class $Closure8 {
     constructor({  }) {
@@ -1022,6 +1030,7 @@ module.exports = function({ $Source, $b, $checkHitCount, $util_Util, $wait }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
