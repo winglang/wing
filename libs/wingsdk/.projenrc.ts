@@ -85,7 +85,6 @@ const project = new cdk.JsiiProject({
     "ioredis",
     "jsonschema",
     // fs module dependency
-    "js-yaml@^4.1.0",
     "yaml",
   ],
   devDeps: [

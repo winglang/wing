@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
-import * as yaml from "js-yaml";
+import * as yaml from "yaml";
 import { InflightClient } from "../core";
 import { normalPath } from "../shared/misc";
 import { Json } from "../std";
@@ -213,7 +213,7 @@ export class Util {
    */
   public static readYaml(filepath: string): Json[] {
     const text = Util.readFile(filepath);
-    const yamlObjs = yaml.loadAll(text);
+    const yamlObjs = yaml.parseAllDocuments(text);
     return yamlObjs.map((o: any) => JSON.parse(JSON.stringify(o)) as Json);
   }
   /**
@@ -251,7 +251,7 @@ export class Util {
    * @param objs The YANL objects to be dumped.
    */
   public static writeYaml(filepath: string, ...objs: Json[]): void {
-    const contents = objs.map((o) => yaml.dump(o, { noRefs: true }));
+    const contents = objs.map((o) => yaml.stringify(o, { aliasDuplicateObjects: false }));
     fs.writeFileSync(filepath, contents.join("---\n"));
   }
   /**

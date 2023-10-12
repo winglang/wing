@@ -284,11 +284,6 @@
       "type": "bundled"
     },
     {
-      "name": "js-yaml",
-      "version": "^4.1.0",
-      "type": "bundled"
-    },
-    {
       "name": "jsonschema",
       "type": "bundled"
     },
