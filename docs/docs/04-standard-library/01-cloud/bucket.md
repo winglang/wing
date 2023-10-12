@@ -435,7 +435,7 @@ Returns a url to the given file.
 ##### `put` <a name="put" id="@winglang/sdk.cloud.IBucketClient.put"></a>
 
 ```wing
-inflight put(key: str, body: str): void
+inflight put(key: str, body: str, options?: BucketPutProps): void
 ```
 
 Put an object in the bucket.
@@ -453,6 +453,14 @@ Key of the object.
 - *Type:* str
 
 Content of the object we want to store into the bucket.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.IBucketClient.put.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.BucketPutProps">BucketPutProps</a>
+
+Additional options.
 
 ---
 
@@ -737,6 +745,40 @@ public: bool;
 - *Default:* false
 
 Whether the bucket's objects should be publicly accessible.
+
+---
+
+### BucketPutProps <a name="BucketPutProps" id="@winglang/sdk.cloud.BucketPutProps"></a>
+
+Options for `Bucket.put`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketPutProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let BucketPutProps = cloud.BucketPutProps{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.BucketPutProps.property.contentType">contentType</a></code> | <code>str</code> | The HTTP Content-Type of the object. |
+
+---
+
+##### `contentType`<sup>Required</sup> <a name="contentType" id="@winglang/sdk.cloud.BucketPutProps.property.contentType"></a>
+
+```wing
+contentType: str;
+```
+
+- *Type:* str
+
+The HTTP Content-Type of the object.
+
+> [https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type)
 
 ---
 

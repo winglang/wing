@@ -94,10 +94,10 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: put
   kind: 2
-  detail: "inflight (key: str, body: str): void"
+  detail: "inflight (key: str, body: str, options: BucketPutProps?): void"
   documentation:
     kind: markdown
-    value: "```wing\ninflight put: inflight (key: str, body: str): void\n```\n---\nPut an object in the bucket."
+    value: "```wing\ninflight put: inflight (key: str, body: str, options: BucketPutProps?): void\n```\n---\nPut an object in the bucket."
   sortText: ff|put
   insertText: put($0)
   insertTextFormat: 2

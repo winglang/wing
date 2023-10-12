@@ -193,6 +193,12 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstruct BucketProps\n```\n---\nOptions for `Bucket`.\n### Fields\n- `public?` — Whether the bucket's objects should be publicly accessible."
   sortText: hh|BucketProps
+- label: BucketPutProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct BucketPutProps\n```\n---\nOptions for `Bucket.put`.\n### Fields\n- `contentType` — The HTTP Content-Type of the object."
+  sortText: hh|BucketPutProps
 - label: CounterProps
   kind: 22
   documentation:
