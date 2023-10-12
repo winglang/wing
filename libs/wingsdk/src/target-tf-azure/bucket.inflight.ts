@@ -9,6 +9,7 @@ import {
   IBucketClient,
   SignedUrlOptions,
   ObjectMetadata,
+  BucketPutProps,
 } from "../cloud";
 import { Json } from "../std";
 
@@ -57,10 +58,18 @@ export class BucketClient implements IBucketClient {
    * @param key Key of the object
    * @param body string contents of the object
    */
-  public async put(key: string, body: string): Promise<void> {
-    await this.containerClient
-      .getBlockBlobClient(key)
-      .upload(body, body.length);
+  public async put(
+    key: string,
+    body: string,
+    props?: BucketPutProps
+  ): Promise<void> {
+    const blobClient = this.containerClient.getBlockBlobClient(key);
+    const options = {
+      blobHTTPHeaders: {
+        blobContentType: props?.contentType,
+      },
+    };
+    await blobClient.upload(body, body.length, options);
   }
 
   /**
@@ -70,7 +79,9 @@ export class BucketClient implements IBucketClient {
    * @param body Json object
    */
   public async putJson(key: string, body: Json): Promise<void> {
-    await this.put(key, JSON.stringify(body, null, 2));
+    await this.put(key, JSON.stringify(body, null, 2), {
+      contentType: "application/json",
+    });
   }
 
   /**

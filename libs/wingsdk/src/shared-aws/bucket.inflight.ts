@@ -22,6 +22,7 @@ import {
   IBucketClient,
   SignedUrlOptions,
   ObjectMetadata,
+  BucketPutProps,
 } from "../cloud";
 import { Datetime, Json } from "../std";
 
@@ -59,11 +60,16 @@ export class BucketClient implements IBucketClient {
    * @param key Key of the object
    * @param body string contents of the object
    */
-  public async put(key: string, body: string): Promise<void> {
+  public async put(
+    key: string,
+    body: string,
+    props?: BucketPutProps
+  ): Promise<void> {
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
       Key: key,
       Body: body,
+      ContentType: props?.contentType,
     });
     await this.s3Client.send(command);
   }
@@ -75,7 +81,9 @@ export class BucketClient implements IBucketClient {
    * @param body Json object
    */
   public async putJson(key: string, body: Json): Promise<void> {
-    await this.put(key, JSON.stringify(body, null, 2));
+    await this.put(key, JSON.stringify(body, null, 2), {
+      contentType: "application/json",
+    });
   }
 
   /**

@@ -24,6 +24,17 @@ export interface BucketProps {
 }
 
 /**
+ * Options for `Bucket.put`.
+ */
+export interface BucketPutProps {
+  /**
+   * The HTTP Content-Type of the object.
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type
+   */
+  readonly contentType: string;
+}
+
+/**
  * A cloud object store.
  *
  * @inflight `@winglang/sdk.cloud.IBucketClient`
@@ -278,9 +289,10 @@ export interface IBucketClient {
    * Put an object in the bucket.
    * @param key Key of the object.
    * @param body Content of the object we want to store into the bucket.
+   * @param options Additional options
    * @inflight
    */
-  put(key: string, body: string): Promise<void>;
+  put(key: string, body: string, options?: BucketPutProps): void;
 
   /**
    * Put a Json object in the bucket.
