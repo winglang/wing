@@ -132,10 +132,11 @@ export class Util {
    * @returns The contents of the directory if the path exists, `undefined` otherwise.
    */
   public static tryReaddir(dirpath: string): Array<string> | undefined {
-    if (!Util.exists(dirpath)) {
+    try {
+      return Util.readdir(dirpath);
+    } catch {
       return undefined;
     }
-    return Util.readdir(dirpath);
   }
   /**
    * Create a directory.
@@ -169,7 +170,8 @@ export class Util {
     return buf.toString();
   }
   /**
-   * Read the entire contents if the file exists, `undefined` otherwise.
+   * If the file exists and can be read successfully, read the entire contents;
+   * otherwise, return `undefined`.
    * @param filepath The path of the file to be read.
    * @param options The `encoding` can be set to specify the character encoding, or the `flag` can be set to specify the attributes.
    * @returns The contents of the `filepath`, `undefined` otherwise.
@@ -178,10 +180,11 @@ export class Util {
     filepath: string,
     options?: ReadFileOptions
   ): string | undefined {
-    if (!Util.exists(filepath)) {
-      return;
+    try {
+      return Util.readFile(filepath, options);
+    } catch {
+      return undefined;
     }
-    return Util.readFile(filepath, options);
   }
   /**
    * Read the contents of the file and convert it to JSON.
@@ -194,16 +197,18 @@ export class Util {
     return JSON.parse(text) as Json;
   }
   /**
-   * Get the content of the file and convert it to JSON if the path exists, `undefined` otherwise.
+   * Retrieve the contents of the file and convert it to JSON
+   * if the file exists and can be parsed successfully, otherwise, return `undefined`.
    * @param filepath The file path of the JSON file.
    * @returns The JSON object contained in the file, `undefined` otherwise.
    * @throws Will throw if the content is not in valid JSON format.
    */
   public static tryReadJson(filepath: string): Json | undefined {
-    if (!Util.exists(filepath)) {
+    try {
+      return Util.readJson(filepath);
+    } catch {
       return undefined;
     }
-    return Util.readJson(filepath);
   }
   /**
    * Convert all YAML objects from a single file into JSON objects.
@@ -217,16 +222,18 @@ export class Util {
     return yamlObjs.map((o: any) => JSON.parse(JSON.stringify(o)) as Json);
   }
   /**
-   * Convert all YAML objects from a single file into JSON objects if the path exists, `undefined` otherwise.
+   * Convert all YAML objects from a single file into JSON objects
+   * if the file exists and can be parsed successfully, `undefined` otherwise.
    * @param filepath The file path of the YAML file.
    * @returns The JSON objects converted from YAML objects in the file, `undefined` otherwise.
    * @throws Will throw if the content is not in valid YAML format.
    */
   public static tryReadYaml(filepath: string): Json[] | undefined {
-    if (!Util.exists(filepath)) {
+    try {
+      return Util.readYaml(filepath);
+    } catch {
       return undefined;
     }
-    return Util.readYaml(filepath);
   }
   /**
    * Writes data to a file, replacing the file if it already exists.
