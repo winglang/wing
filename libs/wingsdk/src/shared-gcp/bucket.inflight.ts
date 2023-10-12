@@ -1,5 +1,10 @@
 import { Storage, Bucket } from "@google-cloud/storage";
-import { BucketDeleteOptions, IBucketClient, SignedUrlOptions } from "../cloud";
+import {
+  BucketDeleteOptions,
+  IBucketClient,
+  ObjectMetadata,
+  SignedUrlOptions,
+} from "../cloud";
 import { Json } from "../std";
 
 export class BucketClient implements IBucketClient {
@@ -18,6 +23,10 @@ export class BucketClient implements IBucketClient {
     this.bucketName = bucketName;
     this.storage = storage ? storage : new Storage({ projectId: projectId });
     this.bucket = this.storage.bucket(this.bucketName);
+  }
+
+  public async metadata(_key: string): Promise<ObjectMetadata> {
+    throw new Error("Method not implemented.");
   }
 
   /**
