@@ -98,9 +98,9 @@ export class Map {
 
   /**
    * Returns a specified element from the map, or nil if the key can't be found
-   * 
+   *
    * @macro ($self$)[$args$]
-   * 
+   *
    * @param key The key of the element to return.
    * @returns the specified element from the map, or nil if the key can't be found
    */
@@ -239,9 +239,9 @@ export class MutMap {
 
   /**
    * Returns a specified element from the map, or nil if the key can't be found
-   * 
+   *
    * @macro ($self$)[$args$]
-   * 
+   *
    * @param key The key of the element to return.
    * @returns the specified element from the map, or nil if the key can't be found
    */

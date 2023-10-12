@@ -16,7 +16,7 @@ source: libs/wingc/src/jsify/tests.rs
 ## inflight.$Closure1-1.js
 
 ```js
-module.exports = function({ $_s___hello___length }) {
+module.exports = function({ $__map__key_______if____key_in_map_____throw_new_Error__no_value_found_for_key______key___________return_map_key______s___hello___length }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -24,7 +24,7 @@ module.exports = function({ $_s___hello___length }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: s.get(\"hello\").length == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($_s___hello___length,3)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: s.get(\"hello\").length == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($__map__key_______if____key_in_map_____throw_new_Error__no_value_found_for_key______key___________return_map_key______s___hello___length,3)))};
     }
   }
   return $Closure1;
@@ -50,7 +50,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $_s___hello___length: ${context._lift((s)["hello"].length)},
+            $__map__key_______if____key_in_map_____throw_new_Error__no_value_found_for_key______key___________return_map_key______s___hello___length: ${context._lift(((map, key) => { if (!(key in map)) { throw new Error("no value found for key '" + key + "'"); } return map[key]; })(s, "hello").length)},
           })
         `;
       }
@@ -70,7 +70,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject((s)["hello"].length, host, []);
+          $Closure1._registerBindObject(((map, key) => { if (!(key in map)) { throw new Error("no value found for key '" + key + "'"); } return map[key]; })(s, "hello").length, host, []);
         }
         super._registerBind(host, ops);
       }

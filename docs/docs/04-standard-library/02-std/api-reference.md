@@ -1089,12 +1089,12 @@ Immutable Map.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.std.Map.copyMut">copyMut</a></code> | Create a mutable shallow copy of this map. |
-| <code><a href="#@winglang/sdk.std.Map.get">get</a></code> | Returns a specified element from the map. Throws if the map has no element for that key. |
+| <code><a href="#@winglang/sdk.std.Map.get">get</a></code> | Returns a specified element from the map. |
 | <code><a href="#@winglang/sdk.std.Map.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
 | <code><a href="#@winglang/sdk.std.Map.keys">keys</a></code> | Returns the keys of this map. |
 | <code><a href="#@winglang/sdk.std.Map.size">size</a></code> | Returns the number of elements in the map. |
+| <code><a href="#@winglang/sdk.std.Map.tryGet">tryGet</a></code> | Returns a specified element from the map, or nil if the key can't be found. |
 | <code><a href="#@winglang/sdk.std.Map.values">values</a></code> | Returns the values of this map. |
-| <code><a href="#@winglang/sdk.std.Map.tryGet">tryGet</a></code> | Returns a specified element from the map, or nil if the map has no element for that key. |
 
 ---
 
@@ -1112,7 +1112,7 @@ Create a mutable shallow copy of this map.
 get(key: str): <T>
 ```
 
-Returns a specified element from the map, or throw if the element is not found.
+Returns a specified element from the map.
 
 If the value that is associated to the provided key is an object, then you will get a reference
 to that object and any change made to that object will effectively modify it inside the map.
@@ -1159,6 +1159,22 @@ Returns the number of elements in the map.
 
 TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
 
+##### `tryGet` <a name="tryGet" id="@winglang/sdk.std.Map.tryGet"></a>
+
+```wing
+tryGet(key: str): <T>
+```
+
+Returns a specified element from the map, or nil if the key can't be found.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Map.tryGet.parameter.key"></a>
+
+- *Type:* str
+
+The key of the element to return.
+
+---
+
 ##### `values` <a name="values" id="@winglang/sdk.std.Map.values"></a>
 
 ```wing
@@ -1167,16 +1183,8 @@ values(): Array
 
 Returns the values of this map.
 
-##### `tryGet` <a name="tryGet" id="@winglang/sdk.std.Map.tryGet"></a>
 
-```wing
-tryGet(key: str): <T?>
-```
 
-Returns a specified element from the map, or nil if the element was not found.
-
-If the value that is associated to the provided key is an object, then you will get a reference
-to that object and any change made to that object will effectively modify it inside the map.
 
 ### MutArray <a name="MutArray" id="@winglang/sdk.std.MutArray"></a>
 
@@ -1633,6 +1641,7 @@ Mutable Map.
 | <code><a href="#@winglang/sdk.std.MutMap.keys">keys</a></code> | Returns the keys of this map. |
 | <code><a href="#@winglang/sdk.std.MutMap.set">set</a></code> | Adds or updates an entry in a Map object with a specified key and a value. |
 | <code><a href="#@winglang/sdk.std.MutMap.size">size</a></code> | Returns the number of elements in the map. |
+| <code><a href="#@winglang/sdk.std.MutMap.tryGet">tryGet</a></code> | Returns a specified element from the map, or nil if the key can't be found. |
 | <code><a href="#@winglang/sdk.std.MutMap.values">values</a></code> | Returns the values of this map. |
 
 ---
@@ -1747,6 +1756,22 @@ size(): num
 Returns the number of elements in the map.
 
 TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
+
+##### `tryGet` <a name="tryGet" id="@winglang/sdk.std.MutMap.tryGet"></a>
+
+```wing
+tryGet(key: str): <T>
+```
+
+Returns a specified element from the map, or nil if the key can't be found.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutMap.tryGet.parameter.key"></a>
+
+- *Type:* str
+
+The key of the element to return.
+
+---
 
 ##### `values` <a name="values" id="@winglang/sdk.std.MutMap.values"></a>
 
