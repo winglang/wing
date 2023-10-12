@@ -251,7 +251,9 @@ export class Util {
    * @param objs The YANL objects to be dumped.
    */
   public static writeYaml(filepath: string, ...objs: Json[]): void {
-    const contents = objs.map((o) => yaml.stringify(o, { aliasDuplicateObjects: false }));
+    const contents = objs.map((o) =>
+      yaml.stringify(o, { aliasDuplicateObjects: false })
+    );
     fs.writeFileSync(filepath, contents.join("---\n"));
   }
   /**
