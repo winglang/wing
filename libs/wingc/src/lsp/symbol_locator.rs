@@ -410,6 +410,14 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 
 		self.visit_symbol(&node.name);
 
+		for implement in &node.implements {
+			self.visit_user_defined_type(implement);
+		}
+
+		if let Some(parent) = &node.parent {
+			self.visit_user_defined_type(parent);
+		}
+
 		self.visit_function_definition(&node.initializer);
 		self.visit_function_definition(&node.inflight_initializer);
 
