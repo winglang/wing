@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $http_Util, $w1_url, $w2_url }) {
   class $Closure1 {
     constructor({  }) {
@@ -391,6 +392,7 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";

@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_at_0____, $__obj__args_______if__obj_args______undefined__throw_new_Error__Json_property____args___does_not_exist____return_obj_args_____j___b__, $__world__in__myMap__, $_arr_at_0__, $_arr_at_1__, $_mySet_has__my___, $arr_length, $mySet_size }) {
   class $Closure1 {
     constructor({  }) {
@@ -60,6 +61,7 @@ module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_a
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";

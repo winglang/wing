@@ -2,6 +2,7 @@
 
 ## inflight.Animal-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Animal {
     constructor({  }) {
@@ -14,6 +15,7 @@ module.exports = function({  }) {
 
 ## inflight.Cat-1.js
 ```js
+"use strict";
 module.exports = function({ $Animal }) {
   class Cat extends $Animal {
     constructor({  }) {
@@ -27,6 +29,7 @@ module.exports = function({ $Animal }) {
 
 ## inflight.Dog-1.js
 ```js
+"use strict";
 module.exports = function({ $Animal }) {
   class Dog extends $Animal {
     constructor({  }) {
@@ -72,6 +75,7 @@ module.exports = function({ $Animal }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";

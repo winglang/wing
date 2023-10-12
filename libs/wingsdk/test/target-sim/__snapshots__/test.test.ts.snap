@@ -2,7 +2,8 @@
 
 exports[`create a test 1`] = `
 {
-  ".wing/handler_c818e9be.js": "exports.handler = async function(event) {
+  ".wing/handler_c818e9be.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {

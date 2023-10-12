@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $__parent_this_1_b }) {
   class $Closure1 {
     constructor({  }) {
@@ -20,6 +21,7 @@ module.exports = function({ $__parent_this_1_b }) {
 
 ## inflight.$Closure1-3.js
 ```js
+"use strict";
 module.exports = function({ $store }) {
   class $Closure1 {
     constructor({  }) {
@@ -38,6 +40,7 @@ module.exports = function({ $store }) {
 
 ## inflight.Q-2.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Q {
     constructor({  }) {
@@ -53,6 +56,7 @@ module.exports = function({  }) {
 
 ## inflight.Store-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Store {
     constructor({ $this_b }) {
@@ -69,6 +73,7 @@ module.exports = function({  }) {
 
 ## inflight.Triangle-3.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Triangle {
     constructor({  }) {
@@ -81,6 +86,7 @@ module.exports = function({  }) {
 
 ## inflight.Util-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Util {
     constructor({  }) {
@@ -93,6 +99,7 @@ module.exports = function({  }) {
 
 ## inflight.Util-3.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Util {
     constructor({  }) {
@@ -267,6 +274,7 @@ module.exports = function({  }) {
 
 ## preflight.empty-1.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   return {  };
@@ -276,6 +284,7 @@ module.exports = function({ $stdlib }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -390,6 +399,7 @@ new $App({ outdir: $outdir, name: "bring_local.test", rootConstruct: $Root, plug
 
 ## preflight.store-2.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   const file3 = require("./preflight.empty-1.js")({ $stdlib });
@@ -506,6 +516,7 @@ module.exports = function({ $stdlib }) {
 
 ## preflight.subfile-3.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   const math = $stdlib.math;

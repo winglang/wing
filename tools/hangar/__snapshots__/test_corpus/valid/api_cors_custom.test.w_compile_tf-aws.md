@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-2.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -20,6 +21,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure2-2.js
 ```js
+"use strict";
 module.exports = function({ $api_url, $http_Util, $t_Assert }) {
   class $Closure2 {
     constructor({  }) {
@@ -45,6 +47,7 @@ module.exports = function({ $api_url, $http_Util, $t_Assert }) {
 
 ## inflight.$Closure3-2.js
 ```js
+"use strict";
 module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert }) {
   class $Closure3 {
     constructor({  }) {
@@ -70,6 +73,7 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert })
 
 ## inflight.$Closure4-2.js
 ```js
+"use strict";
 module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert }) {
   class $Closure4 {
     constructor({  }) {
@@ -93,6 +97,7 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert })
 
 ## inflight.Assert-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Assert {
     static async equalStr(a, b) {
@@ -337,6 +342,7 @@ module.exports = function({  }) {
 
 ## preflight.assertions-1.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   class Assert extends $stdlib.std.Resource {
@@ -371,6 +377,7 @@ module.exports = function({ $stdlib }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
