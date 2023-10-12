@@ -310,11 +310,11 @@ function isIResourceType(t: any): t is new (...args: any[]) => IResource {
   return (
     t instanceof Function &&
     "prototype" in t &&
-    typeof t.prototype.bind === "function" &&
-    typeof t.prototype._registerBind === "function"
+    typeof t.prototype.onLift === "function" &&
+    typeof t.prototype._registerOnLift === "function"
   );
 }
 
 function isResourceType(t: any): t is typeof Resource {
-  return typeof t._registerTypeBind === "function" && isIResourceType(t);
+  return typeof t._registerTypeOnLift === "function" && isIResourceType(t);
 }
