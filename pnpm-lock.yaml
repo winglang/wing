@@ -303,6 +303,9 @@ importers:
       debug:
         specifier: ^4.3.4
         version: 4.3.4
+      glob:
+        specifier: ^10.3.10
+        version: 10.3.10
       minimatch:
         specifier: ^9.0.3
         version: 9.0.3
@@ -4305,7 +4308,7 @@ packages:
       '@cdktf/provider-generator': 0.17.0
       camelcase: 6.3.0
       deep-equal: 2.2.2
-      glob: 10.3.4
+      glob: 10.3.10
       graphology: 0.25.4(graphology-types@0.24.7)
       graphology-types: 0.24.7
       jsii-rosetta: 5.0.11
@@ -5815,7 +5818,7 @@ packages:
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
       '@npmcli/name-from-folder': 2.0.0
-      glob: 10.3.4
+      glob: 10.3.10
       minimatch: 9.0.3
       read-package-json-fast: 3.0.2
     dev: false
@@ -5847,7 +5850,7 @@ packages:
     engines: {node: ^16.14.0 || >=18.0.0}
     dependencies:
       '@npmcli/git': 5.0.3
-      glob: 10.3.4
+      glob: 10.3.10
       hosted-git-info: 7.0.1
       json-parse-even-better-errors: 3.0.0
       normalize-package-data: 6.0.0
@@ -8605,7 +8608,7 @@ packages:
       find-cache-dir: 3.3.2
       find-up: 5.0.0
       fs-extra: 11.1.1
-      glob: 10.3.4
+      glob: 10.3.10
       handlebars: 4.7.8
       lazy-universal-dotenv: 4.0.0
       node-fetch: 2.7.0
@@ -11722,7 +11725,7 @@ packages:
     dependencies:
       '@npmcli/fs': 3.1.0
       fs-minipass: 3.0.3
-      glob: 10.3.4
+      glob: 10.3.10
       lru-cache: 7.18.3
       minipass: 7.0.3
       minipass-collect: 1.0.2
@@ -11739,7 +11742,7 @@ packages:
     dependencies:
       '@npmcli/fs': 3.1.0
       fs-minipass: 3.0.3
-      glob: 10.3.4
+      glob: 10.3.10
       lru-cache: 10.0.1
       minipass: 7.0.3
       minipass-collect: 1.0.2
@@ -13272,7 +13275,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20231005
+      typescript: 5.3.0-dev.20231006
     dev: true
 
   /dset@3.1.2:
@@ -15116,13 +15119,13 @@ packages:
     resolution: {integrity: sha512-lkX1HJXwyMcprw/5YUZc2s7DrpAiHB21/V+E1rHUrVNokkvB6bqMzT0VfV6/86ZNabt1k14YOIaT7nDvOX3Iiw==}
     dev: true
 
-  /glob@10.3.4:
-    resolution: {integrity: sha512-6LFElP3A+i/Q8XQKEvZjkEWEOTgAIALR9AO2rwT8bgPhDd1anmqDJDZ6lLddI4ehxxxR1S5RIqKe1uapMQfYaQ==}
+  /glob@10.3.10:
+    resolution: {integrity: sha512-fa46+tv1Ak0UPK1TOy/pZrIybNNt4HCv7SDzwyfiOZkvZLEbjsZkJBPtDHVshZjbecAoAGSC20MjLDG/qr679g==}
     engines: {node: '>=16 || 14 >=14.17'}
     hasBin: true
     dependencies:
       foreground-child: 3.1.1
-      jackspeak: 2.3.1
+      jackspeak: 2.3.6
       minimatch: 9.0.3
       minipass: 7.0.3
       path-scurry: 1.10.1
@@ -15512,6 +15515,7 @@ packages:
   /iconv-lite@0.6.3:
     resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
     engines: {node: '>=0.10.0'}
+    requiresBuild: true
     dependencies:
       safer-buffer: 2.1.2
 
@@ -16194,8 +16198,8 @@ packages:
       reflect.getprototypeof: 1.0.4
     dev: false
 
-  /jackspeak@2.3.1:
-    resolution: {integrity: sha512-4iSY3Bh1Htv+kLhiiZunUhQ+OYXIn0ze3ulq8JeWrFKmhPAJSySV2+kdtRh2pGcCeF0s6oR8Oc+pYZynJj4t8A==}
+  /jackspeak@2.3.6:
+    resolution: {integrity: sha512-N3yCS/NegsOBokc8GAdM8UcmfsKiSS8cipheD/nivzr700H+nsMOxJjQnvwOcRYVuFkdH0wGUvW2WbXGmrZGbQ==}
     engines: {node: '>=14'}
     dependencies:
       '@isaacs/cliui': 8.0.2
@@ -20483,7 +20487,7 @@ packages:
     resolution: {integrity: sha512-AEtWXYfopBj2z5N5PbkAOeNHRPUg5q+Nen7QLxV8M2zJq1ym6/lCz3fYNTCXe19puu2d06jfHhrP7v/S2PtMMw==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
-      glob: 10.3.4
+      glob: 10.3.10
       json-parse-even-better-errors: 3.0.0
       normalize-package-data: 5.0.0
       npm-normalize-package-bin: 3.0.1
@@ -20493,7 +20497,7 @@ packages:
     resolution: {integrity: sha512-uL4Z10OKV4p6vbdvIXB+OzhInYtIozl/VxUBPgNkBuUi2DeRonnuspmaVAMcrkmfjKGNmRndyQAbE7/AmzGwFg==}
     engines: {node: ^16.14.0 || >=18.0.0}
     dependencies:
-      glob: 10.3.4
+      glob: 10.3.10
       json-parse-even-better-errors: 3.0.0
       normalize-package-data: 6.0.0
       npm-normalize-package-bin: 3.0.1
@@ -20917,7 +20921,7 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
     dependencies:
-      glob: 10.3.4
+      glob: 10.3.10
     dev: true
 
   /rollup@3.28.1:
@@ -21018,6 +21022,7 @@ packages:
 
   /safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
+    requiresBuild: true
 
   /sax@1.2.4:
     resolution: {integrity: sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==}
@@ -22707,8 +22712,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20231005:
-    resolution: {integrity: sha512-Twm3wBauTO94CSWbjXFMpsHsbaOUVssreq6pUo4wr8YsaIp0jim8EeCa9LfawFetQ+P4PODMmiM+uBhhWRVX0Q==}
+  /typescript@5.3.0-dev.20231006:
+    resolution: {integrity: sha512-jD5wAzdZhl5Emk89dTMb7EqlUmO+n+U/uldQsSMxYh1HQG9J5Ti63B6em7Ob7DgoT7pvbqFUBn3X7UxaBba1Tg==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

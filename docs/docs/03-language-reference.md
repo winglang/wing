@@ -538,10 +538,11 @@ log("UTC: ${t1.utc.toIso())}");            // output: 2023-02-09T06:21:03.000Z
 
 ### 1.2 Utility Functions
 
-| Name     | Extra information                                     |
-| -------- | ----------------------------------------------------- |
-| `log`    | logs str                                              |
-| `assert` | checks a condition and _throws_ if evaluated to false |
+| Name         | Extra information                                     |
+| ------------ | ----------------------------------------------------- |
+| `log`        | logs str                                              |
+| `assert`     | checks a condition and _throws_ if evaluated to false |
+| `unsafeCast` | cast a value into a different type                    |
 
 > ```TS
 > log("Hello ${name}");
@@ -1839,7 +1840,7 @@ let bucket = new awscdk.aws_s3.Bucket(
 
 ## 5.2 JavaScript
 
-The `extern "<commonjs module path or name>"` modifier can be used on method declarations in classes to indicate that a method is backed by an implementation imported from a JavaScript module. The module can either be a relative path or a name and will be loaded via [require()](https://nodejs.org/api/modules.html#requireid).
+The `extern "<commonjs module path>"` modifier can be used on method declarations in classes to indicate that a method is backed by an implementation imported from a JavaScript module. The module must be a relative path and will be loaded via [require()](https://nodejs.org/api/modules.html#requireid).
 
 In the following example, the static inflight method `makeId` is implemented
 in `helper.js`:
@@ -1859,9 +1860,6 @@ class TaskList {
 
   // Load js helper file
   extern "./helpers.js" static inflight makeId(): str;
-
-  // Alternatively, you can use a module name
-  extern "uuid" static inflight v4(): str;
 } 
 
 // helpers.js

@@ -819,7 +819,7 @@ fn get_completions_from_namespace(
 		.iter()
 		.flat_map(|env| env.symbol_map.iter())
 		.flat_map(|(name, symbol)| format_symbol_kind_as_completion(name, &symbol.2))
-		.chain(util_completions.into_iter())
+		.chain(util_completions)
 		.collect()
 }
 

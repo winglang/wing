@@ -217,6 +217,12 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstruct GetSecretValueOptions\n```\n---\nOptions when getting a secret value.\n### Fields\n- `cache?` — Whether to cache the value."
   sortText: hh|GetSecretValueOptions
+- label: ObjectMetadata
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct ObjectMetadata\n```\n---\nMetadata of a bucket object.\n### Fields\n- `contentType?` — The content type of the object, if it is known.\n- `lastModified` — The time the object was last modified.\n- `size` — The size of the object in bytes."
+  sortText: hh|ObjectMetadata
 - label: OnDeployProps
   kind: 22
   documentation:
@@ -317,7 +323,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IBucketClient\n```\n---\nInflight interface for `Bucket`.\n### Methods\n- `delete` — Delete an existing object using a key from the bucket.\n- `exists` — Check if an object exists in the bucket.\n- `get` — Retrieve an object from the bucket.\n- `getJson` — Retrieve a Json object from the bucket.\n- `list` — Retrieve existing objects keys from the bucket.\n- `publicUrl` — Returns a url to the given file.\n- `put` — Put an object in the bucket.\n- `putJson` — Put a Json object in the bucket.\n- `signedUrl` — Returns a signed url to the given file.\n- `tryDelete` — Delete an object from the bucket if it exists.\n- `tryGet` — Get an object from the bucket if it exists.\n- `tryGetJson` — Gets an object from the bucket if it exists, parsing it as Json."
+    value: "```wing\ninterface IBucketClient\n```\n---\nInflight interface for `Bucket`.\n### Methods\n- `delete` — Delete an existing object using a key from the bucket.\n- `exists` — Check if an object exists in the bucket.\n- `get` — Retrieve an object from the bucket.\n- `getJson` — Retrieve a Json object from the bucket.\n- `list` — Retrieve existing objects keys from the bucket.\n- `metadata` — Get the metadata of an object in the bucket.\n- `publicUrl` — Returns a url to the given file.\n- `put` — Put an object in the bucket.\n- `putJson` — Put a Json object in the bucket.\n- `signedUrl` — Returns a signed url to the given file.\n- `tryDelete` — Delete an object from the bucket if it exists.\n- `tryGet` — Get an object from the bucket if it exists.\n- `tryGetJson` — Gets an object from the bucket if it exists, parsing it as Json."
   sortText: ii|IBucketClient
 - label: IBucketEventHandler
   kind: 8
