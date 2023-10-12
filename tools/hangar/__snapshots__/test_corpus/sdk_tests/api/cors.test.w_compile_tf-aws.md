@@ -32,7 +32,7 @@ module.exports = function({ $api_url, $http_Util }) {
     async handle() {
       const url = ($api_url + "/path");
       const response = (await $http_Util.get(url));
-      {((cond) => {if (!cond) throw new Error("assertion failed: response.headers.get(\"access-control-allow-origin\") == \"*\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, key) => { if (obj[key] === undefined) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(response.headers, "access-control-allow-origin"),"*")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: response.headers.get(\"access-control-allow-origin\") == \"*\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(response.headers, "access-control-allow-origin"),"*")))};
     }
   }
   return $Closure2;
