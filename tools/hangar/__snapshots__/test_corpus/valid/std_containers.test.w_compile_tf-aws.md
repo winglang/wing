@@ -197,10 +197,10 @@ class $Root extends $stdlib.std.Resource {
     const mutMap = {...(sMap)};
     ((obj, args) => { obj[args[0]] = args[1]; })(mutMap, ["five",5]);
     const immutMap = ({...(mutMap)});
-    {((cond) => {if (!cond) throw new Error("assertion failed: sMap.get(\"one\") == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((sMap)["one"],1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: sMap.get(\"one\") == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(sMap, "one"),1)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: sMap.size() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(sMap).length,2)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: immutMap.size() == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(immutMap).length,3)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: nestedMap.get(\"a\").get(\"b\").get(\"c\") == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((nestedMap)["a"])["b"], "c"),"hello")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: nestedMap.get(\"a\").get(\"b\").get(\"c\") == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(nestedMap, "a"), "b"), "c"),"hello")))};
     const heterogeneousArray = [new Cat(this,"C1"), new Dog(this,"D1")];
     const heterogeneousDoubleArray = [[new Cat(this,"C2")], [new Cat(this,"C3"), new Dog(this,"D2")], [new Animal(this,"A1")]];
     const heterogeneousSet = new Set([new Cat(this,"C4"), new Dog(this,"D3")]);

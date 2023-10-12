@@ -11,7 +11,7 @@ module.exports = function({ $std_Json }) {
       return $obj;
     }
     async handle(req) {
-      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"user": (req.vars)["name"]})]),"headers": ({"content-type": "application/json"}),"status": 200});
+      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"user": ((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(req.vars, "name")})]),"headers": ({"content-type": "application/json"}),"status": 200});
     }
   }
   return $Closure1;
@@ -30,7 +30,7 @@ module.exports = function({ $std_Json }) {
       return $obj;
     }
     async handle(req) {
-      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"user": (req.vars)["name"],"age": (req.vars)["age"]})]),"headers": ({"content-type": "application/json"}),"status": 200});
+      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"user": ((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(req.vars, "name"),"age": ((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(req.vars, "age")})]),"headers": ({"content-type": "application/json"}),"status": 200});
     }
   }
   return $Closure2;

@@ -33,8 +33,8 @@ test "GET /users has cors headers" {
   t.Assert.equalStr(headers.get("access-control-expose-headers"), "Content-Type");
 
   // OPTIONS cors headers are not set
-  t.Assert.isNil(headers.get("access-control-allow-headers"));
-  t.Assert.isNil(headers.get("access-control-allow-methods"));
+  t.Assert.isNil(headers.tryGet("access-control-allow-headers"));
+  t.Assert.isNil(headers.tryGet("access-control-allow-methods"));
 }
 
 test "OPTIONS /users has cors headers" {
@@ -52,8 +52,8 @@ test "OPTIONS /users has cors headers" {
   t.Assert.equalStr(headers.get("access-control-allow-origin"), "winglang.io");
 
   // Other cors headers are not set
-  t.Assert.isNil(headers.get("access-control-expose-headers"));
-  t.Assert.isNil(headers.get("access-control-allow-credentials"));
+  t.Assert.isNil(headers.tryGet("access-control-expose-headers"));
+  t.Assert.isNil(headers.tryGet("access-control-allow-credentials"));
 }
 
 test "OPTIONS /users responds with proper headers for requested" {
