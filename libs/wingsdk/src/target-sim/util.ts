@@ -1,5 +1,5 @@
 import { access, constants } from "fs";
-import { basename, join } from "path";
+import { basename } from "path";
 import { promisify } from "util";
 import { IConstruct } from "constructs";
 import { simulatorHandleToken } from "./tokens";
@@ -45,7 +45,6 @@ export function makeSimulatorJsClient(filename: string, resource: Resource) {
   const env = makeEnvVarName(type, resource);
 
   // return an object where calling any method will make a request to the simulator server
-  const clientPath = join(__dirname, "..", "simulator", "client.js");
   return `(function() {
   const handle = process.env.${env};
   if (!handle) {
@@ -56,7 +55,7 @@ export function makeSimulatorJsClient(filename: string, resource: Resource) {
     throw new Error("Missing environment variable: WING_SIMULATOR_URL");
   }
 
-  return require("${clientPath}").makeSimulatorClient(simulatorUrl, handle);
+  return require("@winglang/sdk").simulator.makeSimulatorClient(simulatorUrl, handle);
 })()`;
 }
 

@@ -28,7 +28,7 @@ counter: (function() {
     throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
   }
 
-  return require(\\"[REDACTED]/wingsdk/src/simulator/client.js\\").makeSimulatorClient(simulatorUrl, handle);
+  return require(\\"@winglang/sdk\\").simulator.makeSimulatorClient(simulatorUrl, handle);
 })(),
 bucket: (function() {
   const handle = process.env.BUCKET_HANDLE_5f2a41c8;
@@ -40,7 +40,7 @@ bucket: (function() {
     throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
   }
 
-  return require(\\"[REDACTED]/wingsdk/src/simulator/client.js\\").makeSimulatorClient(simulatorUrl, handle);
+  return require(\\"@winglang/sdk\\").simulator.makeSimulatorClient(simulatorUrl, handle);
 })()
 }), args: {} })).handle(event);
 };",
