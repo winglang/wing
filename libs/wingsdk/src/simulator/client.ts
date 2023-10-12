@@ -32,7 +32,6 @@ export function deserializeValue(input: string): any {
       return undefined;
     }
     if (value.$kind === "datetime") {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
       return Datetime.fromComponents({
         day: value.day,
         hour: value.hour,
