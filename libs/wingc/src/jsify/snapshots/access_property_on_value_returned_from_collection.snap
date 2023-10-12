@@ -17,7 +17,7 @@ source: libs/wingc/src/jsify/tests.rs
 
 ```js
 "use strict";
-module.exports = function({ $_s___hello___length }) {
+module.exports = function({ $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______s___hello___length }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);

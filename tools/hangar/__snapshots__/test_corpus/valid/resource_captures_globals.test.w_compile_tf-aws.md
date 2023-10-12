@@ -77,7 +77,7 @@ module.exports = function({  }) {
 ## inflight.MyResource-1.js
 ```js
 "use strict";
-module.exports = function({ $Another, $_globalArrayOfStr_at_0__, $_globalMapOfNum___a__, $_globalSetOfStr_has__a___, $globalAnother, $globalAnother_first_myResource, $globalAnother_myField, $globalBool, $globalBucket, $globalNum, $globalStr }) {
+module.exports = function({ $Another, $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______globalMapOfNum___a__, $_globalArrayOfStr_at_0__, $_globalSetOfStr_has__a___, $globalAnother, $globalAnother_first_myResource, $globalAnother_myField, $globalBool, $globalBucket, $globalNum, $globalStr }) {
   class MyResource {
     constructor({ $this_localTopic }) {
       this.$this_localTopic = $this_localTopic;
