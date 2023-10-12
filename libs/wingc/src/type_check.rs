@@ -5334,21 +5334,23 @@ fn add_parent_members_to_struct_env(
 		};
 		// Add each member of current parent to the struct's environment (if it wasn't already added by a previous parent)
 		for (parent_member_name, parent_member, _) in parent_struct.env.iter(true) {
-			let member_type = parent_member
+			let parent_member_var = parent_member
 				.as_variable()
-				.expect("Expected struct member to be a variable")
-				.type_;
+				.expect("Expected struct member to be a variable");
+			let parent_member_type = parent_member_var.type_;
+
 			if let Some(existing_type) = struct_env.lookup(&parent_member_name.as_str().into(), None) {
-				let existing_type = existing_type
+				let existing_var = existing_type
 					.as_variable()
-					.expect("Expected struct member to be a variable")
-					.type_;
-				if !existing_type.is_same_type_as(&member_type) {
+					.expect("Expected struct member to be a variable");
+				let existing_type = existing_var.type_;
+
+				if !existing_type.is_same_type_as(&parent_member_type) {
 					return Err(TypeError {
-						span: name.span.clone(),
+						span: existing_var.name.span.clone(),
 						message: format!(
 							"Struct \"{}\" extends \"{}\" which introduces a conflicting member \"{}\" ({} != {})",
-							name, parent_type, parent_member_name, member_type, existing_type
+							name, parent_type, parent_member_name, parent_member_type, existing_type
 						),
 						annotations: vec![],
 					});
@@ -5356,13 +5358,13 @@ fn add_parent_members_to_struct_env(
 			} else {
 				let sym = Symbol {
 					name: parent_member_name,
-					span: name.span.clone(),
+					span: parent_member_var.name.span.clone(),
 				};
 				struct_env.define(
 					&sym,
 					SymbolKind::make_member_variable(
 						sym.clone(),
-						member_type,
+						parent_member_type,
 						false,
 						false,
 						struct_env.phase,
