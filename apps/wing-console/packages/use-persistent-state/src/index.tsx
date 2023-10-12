@@ -68,7 +68,7 @@ export const createPersistentState = (stateId: string) => {
           storedData[index] = valueRef.current;
           currentState.set(stateId, storedData);
         };
-      }, []);
+      }, [state]);
 
       return [value, setValue];
     },
