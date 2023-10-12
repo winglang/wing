@@ -1,30 +1,32 @@
 bring fs;
 
-let filename = "hello.txt";
+let filepath = "/tmp/hello-preflight.txt";
 let data = "Hello, Wing!";
 
-fs.writeFile(filename, data);
-assert(fs.exists(filename) == true);
+fs.writeFile(filepath, data);
+assert(fs.exists(filepath) == true);
 
-let content = fs.readFile(filename);
+let content = fs.readFile(filepath);
 assert(content == data);
 
-fs.remove(filename);
-assert(fs.exists(filename) == false);
+fs.remove(filepath);
+assert(fs.exists(filepath) == false);
 
-let nilContent = fs.tryReadFile(filename);
+let nilContent = fs.tryReadFile(filepath);
 assert(nilContent == nil);
 
 test "inflight file basic operations" {
-    fs.writeFile(filename, data);
-    assert(fs.exists(filename) == true);
+    let filepath = "/tmp/hello-inflight.txt";
 
-    let content = fs.readFile(filename);
+    fs.writeFile(filepath, data);
+    assert(fs.exists(filepath) == true);
+
+    let content = fs.readFile(filepath);
     assert(content == data);
 
-    fs.remove(filename);
-    assert(fs.exists(filename) == false);
+    fs.remove(filepath);
+    assert(fs.exists(filepath) == false);
 
-    let nilContent = fs.tryReadFile(filename);
+    let nilContent = fs.tryReadFile(filepath);
     assert(nilContent == nil);
 }

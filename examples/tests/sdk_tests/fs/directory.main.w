@@ -1,45 +1,47 @@
 bring fs;
 bring regex;
 
-let dirname = "wingdir";
+let dirpath = "/tmp/wingdir-preflight";
 let filename = "temp.txt";
 
-fs.mkdir(dirname);
-assert(fs.exists(dirname) == true);
+fs.mkdir(dirpath);
+assert(fs.exists(dirpath) == true);
 
 try {
-    fs.mkdir(dirname);
+    fs.mkdir(dirpath);
 } catch e {
     assert(regex.match("^EEXIST: file already exists", e) == true);
 }
 
-fs.writeFile(fs.join(dirname, filename), "");
-let files = fs.readdir(dirname);
+fs.writeFile(fs.join(dirpath, filename), "");
+let files = fs.readdir(dirpath);
 assert(files.length == 1);
 
-fs.remove(dirname, { recursive: true });
-assert(fs.exists(dirname) == false);
+fs.remove(dirpath, { recursive: true });
+assert(fs.exists(dirpath) == false);
 
-let nilFiles = fs.tryReaddir(dirname);
+let nilFiles = fs.tryReaddir(dirpath);
 assert(nilFiles == nil);
 
 test "inflight create normal directory" {
-    fs.mkdir(dirname);
-    assert(fs.exists(dirname) == true);
+    let dirpath = "/tmp/wingdir-inflight";
+
+    fs.mkdir(dirpath);
+    assert(fs.exists(dirpath) == true);
 
     try {
-        fs.mkdir(dirname);
+        fs.mkdir(dirpath);
     } catch e {
         assert(regex.match("^EEXIST: file already exists", e) == true);
     }
     
-    fs.writeFile(fs.join(dirname, filename), "");
-    let files = fs.readdir(dirname);
+    fs.writeFile(fs.join(dirpath, filename), "");
+    let files = fs.readdir(dirpath);
     assert(files.length == 1);
 
-    fs.remove(dirname, { recursive: true });
-    assert(fs.exists(dirname) == false);
+    fs.remove(dirpath, { recursive: true });
+    assert(fs.exists(dirpath) == false);
 
-    let nilFiles = fs.tryReaddir(dirname);
+    let nilFiles = fs.tryReaddir(dirpath);
     assert(nilFiles == nil);
 }

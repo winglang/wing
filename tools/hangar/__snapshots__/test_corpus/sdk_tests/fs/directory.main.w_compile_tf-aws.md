@@ -2,7 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
-module.exports = function({ $dirname, $filename, $fs_Util, $regex_Util }) {
+module.exports = function({ $filename, $fs_Util, $regex_Util }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -10,21 +10,22 @@ module.exports = function({ $dirname, $filename, $fs_Util, $regex_Util }) {
       return $obj;
     }
     async handle() {
-      (await $fs_Util.mkdir($dirname));
-      {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(dirname) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists($dirname)),true)))};
+      const dirpath = "/tmp/wingdir-inflight";
+      (await $fs_Util.mkdir(dirpath));
+      {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(dirpath) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists(dirpath)),true)))};
       try {
-        (await $fs_Util.mkdir($dirname));
+        (await $fs_Util.mkdir(dirpath));
       }
       catch ($error_e) {
         const e = $error_e.message;
         {((cond) => {if (!cond) throw new Error("assertion failed: regex.match(\"^EEXIST: file already exists\", e) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $regex_Util.match("^EEXIST: file already exists",e)),true)))};
       }
-      (await $fs_Util.writeFile((await $fs_Util.join($dirname,$filename)),""));
-      const files = (await $fs_Util.readdir($dirname));
+      (await $fs_Util.writeFile((await $fs_Util.join(dirpath,$filename)),""));
+      const files = (await $fs_Util.readdir(dirpath));
       {((cond) => {if (!cond) throw new Error("assertion failed: files.length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(files.length,1)))};
-      (await $fs_Util.remove($dirname,({"recursive": true})));
-      {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(dirname) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists($dirname)),false)))};
-      const nilFiles = (await $fs_Util.tryReaddir($dirname));
+      (await $fs_Util.remove(dirpath,({"recursive": true})));
+      {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(dirpath) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists(dirpath)),false)))};
+      const nilFiles = (await $fs_Util.tryReaddir(dirpath));
       {((cond) => {if (!cond) throw new Error("assertion failed: nilFiles == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(nilFiles,undefined)))};
     }
   }
@@ -85,7 +86,6 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $dirname: ${context._lift(dirname)},
             $filename: ${context._lift(filename)},
             $fs_Util: ${context._lift($stdlib.core.toLiftableModuleType(fs.Util, "@winglang/sdk/fs", "Util"))},
             $regex_Util: ${context._lift($stdlib.core.toLiftableModuleType(regex.Util, "@winglang/sdk/regex", "Util"))},
@@ -108,29 +108,28 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(dirname, host, []);
           $Closure1._registerBindObject(filename, host, []);
         }
         super._registerBind(host, ops);
       }
     }
-    const dirname = "wingdir";
+    const dirpath = "/tmp/wingdir-preflight";
     const filename = "temp.txt";
-    (fs.Util.mkdir(dirname));
-    {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(dirname) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.exists(dirname)),true)))};
+    (fs.Util.mkdir(dirpath));
+    {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(dirpath) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.exists(dirpath)),true)))};
     try {
-      (fs.Util.mkdir(dirname));
+      (fs.Util.mkdir(dirpath));
     }
     catch ($error_e) {
       const e = $error_e.message;
       {((cond) => {if (!cond) throw new Error("assertion failed: regex.match(\"^EEXIST: file already exists\", e) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((regex.Util.match("^EEXIST: file already exists",e)),true)))};
     }
-    (fs.Util.writeFile((fs.Util.join(dirname,filename)),""));
-    const files = (fs.Util.readdir(dirname));
+    (fs.Util.writeFile((fs.Util.join(dirpath,filename)),""));
+    const files = (fs.Util.readdir(dirpath));
     {((cond) => {if (!cond) throw new Error("assertion failed: files.length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(files.length,1)))};
-    (fs.Util.remove(dirname,({"recursive": true})));
-    {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(dirname) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.exists(dirname)),false)))};
-    const nilFiles = (fs.Util.tryReaddir(dirname));
+    (fs.Util.remove(dirpath,({"recursive": true})));
+    {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(dirpath) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.exists(dirpath)),false)))};
+    const nilFiles = (fs.Util.tryReaddir(dirpath));
     {((cond) => {if (!cond) throw new Error("assertion failed: nilFiles == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(nilFiles,undefined)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight create normal directory",new $Closure1(this,"$Closure1"));
   }

@@ -2,7 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
-module.exports = function({ $data, $filename, $fs_Util, $regex_Util, $std_Json }) {
+module.exports = function({ $data, $fs_Util, $regex_Util, $std_Json }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -10,21 +10,22 @@ module.exports = function({ $data, $filename, $fs_Util, $regex_Util, $std_Json }
       return $obj;
     }
     async handle() {
+      const filepath = "/tmp/test-inflight.json";
       try {
-        (await $fs_Util.writeFile($filename,"invalid content"));
-        (await $fs_Util.readJson($filename));
+        (await $fs_Util.writeFile(filepath,"invalid content"));
+        (await $fs_Util.readJson(filepath));
       }
       catch ($error_e) {
         const e = $error_e.message;
         {((cond) => {if (!cond) throw new Error("assertion failed: regex.match(\"^Unexpected token\", e) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $regex_Util.match("^Unexpected token",e)),true)))};
       }
-      (await $fs_Util.writeJson($filename,$data));
-      {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(filename) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists($filename)),true)))};
-      const obj = (await $fs_Util.readJson($filename));
+      (await $fs_Util.writeJson(filepath,$data));
+      {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(filepath) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists(filepath)),true)))};
+      const obj = (await $fs_Util.readJson(filepath));
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(obj) == Json.stringify(data)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([obj]),((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$data]))))};
-      (await $fs_Util.remove($filename));
-      {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(filename) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists($filename)),false)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fs.tryReadJson(filename) == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.tryReadJson($filename)),undefined)))};
+      (await $fs_Util.remove(filepath));
+      {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(filepath) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists(filepath)),false)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fs.tryReadJson(filepath) == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.tryReadJson(filepath)),undefined)))};
     }
   }
   return $Closure1;
@@ -85,7 +86,6 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("./inflight.$Closure1-1.js")({
             $data: ${context._lift(data)},
-            $filename: ${context._lift(filename)},
             $fs_Util: ${context._lift($stdlib.core.toLiftableModuleType(fs.Util, "@winglang/sdk/fs", "Util"))},
             $regex_Util: ${context._lift($stdlib.core.toLiftableModuleType(regex.Util, "@winglang/sdk/regex", "Util"))},
             $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
@@ -109,28 +109,27 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(data, host, []);
-          $Closure1._registerBindObject(filename, host, []);
         }
         super._registerBind(host, ops);
       }
     }
-    const filename = "test-json.json";
+    const filepath = "/tmp/test-preflight.json";
     const data = ({"foo": "bar","arr": [1, 2, 3, "test", ({"foo": "bar"})]});
     try {
-      (fs.Util.writeFile(filename,"invalid content"));
-      (fs.Util.readJson(filename));
+      (fs.Util.writeFile(filepath,"invalid content"));
+      (fs.Util.readJson(filepath));
     }
     catch ($error_e) {
       const e = $error_e.message;
       {((cond) => {if (!cond) throw new Error("assertion failed: regex.match(\"^Unexpected token\", e) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((regex.Util.match("^Unexpected token",e)),true)))};
     }
-    (fs.Util.writeJson(filename,data));
-    {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(filename) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.exists(filename)),true)))};
-    const obj = (fs.Util.readJson(filename));
+    (fs.Util.writeJson(filepath,data));
+    {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(filepath) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.exists(filepath)),true)))};
+    const obj = (fs.Util.readJson(filepath));
     {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(obj) == Json.stringify(data)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([obj]),((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([data]))))};
-    (fs.Util.remove(filename));
-    {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(filename) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.exists(filename)),false)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: fs.tryReadJson(filename) == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.tryReadJson(filename)),undefined)))};
+    (fs.Util.remove(filepath));
+    {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(filepath) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.exists(filepath)),false)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: fs.tryReadJson(filepath) == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.tryReadJson(filepath)),undefined)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight json operations",new $Closure1(this,"$Closure1"));
   }
 }

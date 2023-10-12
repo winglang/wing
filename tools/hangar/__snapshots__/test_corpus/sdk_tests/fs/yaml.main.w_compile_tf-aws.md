@@ -2,7 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
-module.exports = function({ $data, $filename, $fs_Util, $std_Json }) {
+module.exports = function({ $data, $fs_Util, $std_Json }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -10,14 +10,15 @@ module.exports = function({ $data, $filename, $fs_Util, $std_Json }) {
       return $obj;
     }
     async handle() {
-      (await $fs_Util.writeYaml($filename,$data,$data));
-      {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(filename) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists($filename)),true)))};
-      const objs = (await $fs_Util.readYaml($filename));
+      const filepath = "/tmp/test-inflight.yaml";
+      (await $fs_Util.writeYaml(filepath,$data,$data));
+      {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(filepath) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists(filepath)),true)))};
+      const objs = (await $fs_Util.readYaml(filepath));
       {((cond) => {if (!cond) throw new Error("assertion failed: objs.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(objs.length,2)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(objs.at(0)) == Json.stringify(data)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([(await objs.at(0))]),((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$data]))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(objs.at(1)) == Json.stringify(data)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([(await objs.at(1))]),((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$data]))))};
-      (await $fs_Util.remove($filename));
-      {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(filename) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists($filename)),false)))};
+      (await $fs_Util.remove(filepath));
+      {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(filepath) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists(filepath)),false)))};
     }
   }
   return $Closure1;
@@ -78,7 +79,6 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("./inflight.$Closure1-1.js")({
             $data: ${context._lift(data)},
-            $filename: ${context._lift(filename)},
             $fs_Util: ${context._lift($stdlib.core.toLiftableModuleType(fs.Util, "@winglang/sdk/fs", "Util"))},
             $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
           })
@@ -101,29 +101,28 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(data, host, []);
-          $Closure1._registerBindObject(filename, host, []);
         }
         super._registerBind(host, ops);
       }
     }
-    const filename = "test-yaml.yaml";
+    const filepath = "/tmp/test-preflight.yaml";
     const data = ({"foo": "bar","arr": [1, 2, 3, "test", ({"foo": "bar"})]});
     try {
-      (fs.Util.writeFile(filename,"invalid: {{ content }}, invalid"));
-      (fs.Util.readYaml(filename));
+      (fs.Util.writeFile(filepath,"invalid: {{ content }}, invalid"));
+      (fs.Util.readYaml(filepath));
     }
     catch ($error_e) {
       const e = $error_e.message;
       {((cond) => {if (!cond) throw new Error("assertion failed: regex.match(\"^bad indentation\", e) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((regex.Util.match("^bad indentation",e)),true)))};
     }
-    (fs.Util.writeYaml(filename,data,data));
-    {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(filename) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.exists(filename)),true)))};
-    const objs = (fs.Util.readYaml(filename));
+    (fs.Util.writeYaml(filepath,data,data));
+    {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(filepath) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.exists(filepath)),true)))};
+    const objs = (fs.Util.readYaml(filepath));
     {((cond) => {if (!cond) throw new Error("assertion failed: objs.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(objs.length,2)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(objs.at(0)) == Json.stringify(data)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([(objs.at(0))]),((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([data]))))};
     {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(objs.at(1)) == Json.stringify(data)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([(objs.at(1))]),((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([data]))))};
-    (fs.Util.remove(filename));
-    {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(filename) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.exists(filename)),false)))};
+    (fs.Util.remove(filepath));
+    {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(filepath) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.exists(filepath)),false)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight yaml operations",new $Closure1(this,"$Closure1"));
   }
 }
