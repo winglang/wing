@@ -7,23 +7,6 @@ import { normalPath } from "../shared/misc";
 import { Json } from "../std";
 
 /**
- * Convert the path to Windows format if running on Windows.
- * @param p The path to convert.
- * @returns The Normalized path
- */
-function localePath(p: string): string {
-  if (process.platform === "win32") {
-    return (
-      p
-        // force windows path separator
-        .replace(/\/+/g, "\\")
-    );
-  } else {
-    return p;
-  }
-}
-
-/**
  * Custom settings for reading file
  */
 export interface ReadFileOptions {
@@ -133,8 +116,7 @@ export class Util {
    * @returns `true` if the path exists, `false` otherwise.
    */
   public static exists(p: string): boolean {
-    const normPath = localePath(p);
-    return fs.existsSync(normPath);
+    return fs.existsSync(p);
   }
   /**
    * Read the contents of the directory.
@@ -142,8 +124,7 @@ export class Util {
    * @returns The contents of the directory.
    */
   public static readdir(dirpath: string): Array<string> {
-    const normPath = localePath(dirpath);
-    return fs.readdirSync(normPath);
+    return fs.readdirSync(dirpath);
   }
   /**
    * If the path exists, read the contents of the directory; otherwise, return `undefined`.
@@ -161,8 +142,7 @@ export class Util {
    * @param dirpath The path to the directory you want to create.
    */
   public static mkdir(dirpath: string, opts?: MkdirOptions): void {
-    const normPath = localePath(dirpath);
-    fs.mkdirSync(normPath, opts);
+    fs.mkdirSync(dirpath, opts);
   }
   /**
    * Create a temporary directory.
@@ -185,8 +165,7 @@ export class Util {
    * @returns The contents of the `filepath`.
    */
   public static readFile(filepath: string, options?: ReadFileOptions): string {
-    const normPath = localePath(filepath);
-    const buf = fs.readFileSync(normPath, options);
+    const buf = fs.readFileSync(filepath, options);
     return buf.toString();
   }
   /**
@@ -255,8 +234,7 @@ export class Util {
    * @param data The data to write.
    */
   public static writeFile(filepath: string, data: string): void {
-    const normPath = localePath(filepath);
-    fs.writeFileSync(normPath, data);
+    fs.writeFileSync(filepath, data);
   }
   /**
    * Writes JSON to a file, replacing the file if it already exists.
@@ -281,8 +259,7 @@ export class Util {
    * @param p The path to the file or directory you want to remove.
    */
   public static remove(p: string, opts?: RemoveOptions): void {
-    const normPath = localePath(p);
-    fs.rmSync(normPath, opts);
+    fs.rmSync(p, opts);
   }
   /**
    * @internal
