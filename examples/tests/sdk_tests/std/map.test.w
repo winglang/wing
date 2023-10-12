@@ -71,26 +71,26 @@ test "size()" {
 let greeting = { "hello" => "there!" };
 assert(greeting.get("hello") == "there!");
 
-let general: str? = greeting.get("grievous");
+let general: str? = greeting.tryGet("grievous");
 assert(general == nil);
 
 let mutGreeting = MutMap<str>{ "general" => "kenobi" };
 assert(mutGreeting.get("general") == "kenobi");
 
-let Viceroy: str? = mutGreeting.get("gunray");
+let Viceroy: str? = mutGreeting.tryGet("gunray");
 assert(Viceroy == nil);
 
 test "get()" {
     let greeting = { "hello" => "there!" };
     assert(greeting.get("hello") == "there!");
 
-    let general: str? = greeting.get("grievous");
+    let general: str? = greeting.tryGet("grievous");
     assert(general == nil);
 
     let mutGreeting = MutMap<str>{ "general" => "kenobi" };
     assert(mutGreeting.get("general") == "kenobi");
 
-    let Viceroy: str? = mutGreeting.get("gunray");
+    let Viceroy: str? = mutGreeting.tryGet("gunray");
     assert(Viceroy == nil);
 }
 

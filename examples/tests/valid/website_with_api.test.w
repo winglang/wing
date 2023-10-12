@@ -65,13 +65,13 @@ test "GET /users" {
 
 let headers = response.headers;
   t.Assert.equalNum(response.status, 200);
-
   t.Assert.equalStr(headers.get("access-control-allow-origin"), "*");
+  
   t.Assert.equalStr(headers.get("access-control-expose-headers"), "Content-Type");
   t.Assert.equalStr(headers.get("access-control-allow-credentials"), "false");
 
-  t.Assert.isNil(headers.get("access-control-allow-headers"));
-  t.Assert.isNil(headers.get("access-control-allow-methods"));
+  t.Assert.isNil(headers.tryGet("access-control-allow-headers"));
+  t.Assert.isNil(headers.tryGet("access-control-allow-methods"));
 }
 
 test "OPTIONS /users" {

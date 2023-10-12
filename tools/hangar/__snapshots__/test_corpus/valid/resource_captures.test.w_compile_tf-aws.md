@@ -66,12 +66,12 @@ module.exports = function({  }) {
 "use strict";
 module.exports = function({  }) {
   class MyResource {
-    constructor({ $___this_setOfStr_has__s3____, $_this_arrayOfStr_at_0__, $_this_arrayOfStr_at_1__, $_this_mapOfNum___k1__, $_this_mapOfNum___k2__, $_this_myOptStr_______, $_this_setOfStr_has__s1___, $_this_setOfStr_has__s2___, $this_another, $this_another_first_myResource, $this_another_myField, $this_arrayOfStr_length, $this_extBucket, $this_extNum, $this_myBool, $this_myNum, $this_myQueue, $this_myResource, $this_myStr }) {
+    constructor({ $___this_setOfStr_has__s3____, $__obj__key_______if__obj_key______undefined__throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__, $__obj__key_______if__obj_key______undefined__throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__, $_this_arrayOfStr_at_0__, $_this_arrayOfStr_at_1__, $_this_myOptStr_______, $_this_setOfStr_has__s1___, $_this_setOfStr_has__s2___, $this_another, $this_another_first_myResource, $this_another_myField, $this_arrayOfStr_length, $this_extBucket, $this_extNum, $this_myBool, $this_myNum, $this_myQueue, $this_myResource, $this_myStr }) {
       this.$___this_setOfStr_has__s3____ = $___this_setOfStr_has__s3____;
+      this.$__obj__key_______if__obj_key______undefined__throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__ = $__obj__key_______if__obj_key______undefined__throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__;
+      this.$__obj__key_______if__obj_key______undefined__throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__ = $__obj__key_______if__obj_key______undefined__throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__;
       this.$_this_arrayOfStr_at_0__ = $_this_arrayOfStr_at_0__;
       this.$_this_arrayOfStr_at_1__ = $_this_arrayOfStr_at_1__;
-      this.$_this_mapOfNum___k1__ = $_this_mapOfNum___k1__;
-      this.$_this_mapOfNum___k2__ = $_this_mapOfNum___k2__;
       this.$_this_myOptStr_______ = $_this_myOptStr_______;
       this.$_this_setOfStr_has__s1___ = $_this_setOfStr_has__s1___;
       this.$_this_setOfStr_has__s2___ = $_this_setOfStr_has__s2___;
@@ -96,8 +96,8 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: this.arrayOfStr.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.$this_arrayOfStr_length,2)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: this.arrayOfStr.at(0) == \"s1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.$_this_arrayOfStr_at_0__,"s1")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: this.arrayOfStr.at(1) == \"s2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.$_this_arrayOfStr_at_1__,"s2")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: this.mapOfNum.get(\"k1\") == 11")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.$_this_mapOfNum___k1__,11)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: this.mapOfNum.get(\"k2\") == 22")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.$_this_mapOfNum___k2__,22)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.mapOfNum.get(\"k1\") == 11")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.$__obj__key_______if__obj_key______undefined__throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__,11)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.mapOfNum.get(\"k2\") == 22")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.$__obj__key_______if__obj_key______undefined__throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__,22)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: this.setOfStr.has(\"s1\")")})(this.$_this_setOfStr_has__s1___)};
       {((cond) => {if (!cond) throw new Error("assertion failed: this.setOfStr.has(\"s2\")")})(this.$_this_setOfStr_has__s2___)};
       {((cond) => {if (!cond) throw new Error("assertion failed: !this.setOfStr.has(\"s3\")")})(this.$___this_setOfStr_has__s3____)};
@@ -340,10 +340,10 @@ class $Root extends $stdlib.std.Resource {
             const MyResourceClient = ${MyResource._toInflightType(this)};
             const client = new MyResourceClient({
               $___this_setOfStr_has__s3____: ${this._lift((!(this.setOfStr.has("s3"))))},
+              $__obj__key_______if__obj_key______undefined__throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__: ${this._lift(((obj, key) => { if (obj[key] === undefined) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k1"))},
+              $__obj__key_______if__obj_key______undefined__throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__: ${this._lift(((obj, key) => { if (obj[key] === undefined) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k2"))},
               $_this_arrayOfStr_at_0__: ${this._lift((this.arrayOfStr.at(0)))},
               $_this_arrayOfStr_at_1__: ${this._lift((this.arrayOfStr.at(1)))},
-              $_this_mapOfNum___k1__: ${this._lift((this.mapOfNum)["k1"])},
-              $_this_mapOfNum___k2__: ${this._lift((this.mapOfNum)["k2"])},
               $_this_myOptStr_______: ${this._lift((this.myOptStr ?? ""))},
               $_this_setOfStr_has__s1___: ${this._lift((this.setOfStr.has("s1")))},
               $_this_setOfStr_has__s2___: ${this._lift((this.setOfStr.has("s2")))},
@@ -370,10 +370,10 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           MyResource._registerBindObject((!(this.setOfStr.has("s3"))), host, []);
+          MyResource._registerBindObject(((obj, key) => { if (obj[key] === undefined) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k1"), host, []);
+          MyResource._registerBindObject(((obj, key) => { if (obj[key] === undefined) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k2"), host, []);
           MyResource._registerBindObject((this.arrayOfStr.at(0)), host, []);
           MyResource._registerBindObject((this.arrayOfStr.at(1)), host, []);
-          MyResource._registerBindObject((this.mapOfNum)["k1"], host, []);
-          MyResource._registerBindObject((this.mapOfNum)["k2"], host, []);
           MyResource._registerBindObject((this.myOptStr ?? ""), host, []);
           MyResource._registerBindObject((this.setOfStr.has("s1")), host, []);
           MyResource._registerBindObject((this.setOfStr.has("s2")), host, []);
@@ -391,10 +391,10 @@ class $Root extends $stdlib.std.Resource {
         }
         if (ops.includes("testCaptureCollectionsOfData")) {
           MyResource._registerBindObject((!(this.setOfStr.has("s3"))), host, []);
+          MyResource._registerBindObject(((obj, key) => { if (obj[key] === undefined) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k1"), host, []);
+          MyResource._registerBindObject(((obj, key) => { if (obj[key] === undefined) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k2"), host, []);
           MyResource._registerBindObject((this.arrayOfStr.at(0)), host, []);
           MyResource._registerBindObject((this.arrayOfStr.at(1)), host, []);
-          MyResource._registerBindObject((this.mapOfNum)["k1"], host, []);
-          MyResource._registerBindObject((this.mapOfNum)["k2"], host, []);
           MyResource._registerBindObject((this.setOfStr.has("s1")), host, []);
           MyResource._registerBindObject((this.setOfStr.has("s2")), host, []);
           MyResource._registerBindObject(this.arrayOfStr.length, host, []);

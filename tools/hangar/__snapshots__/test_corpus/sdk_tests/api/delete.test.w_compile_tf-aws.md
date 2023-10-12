@@ -12,10 +12,10 @@ module.exports = function({ $cloud_HttpMethod }) {
     }
     async handle(req) {
       {((cond) => {if (!cond) throw new Error("assertion failed: req.method == cloud.HttpMethod.DELETE")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.method,$cloud_HttpMethod.DELETE)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.query?.get(\"all\") == \"true\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((req.query)["all"],"true")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.query?.get(\"page\") == \"6\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((req.query)["page"],"6")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.query?.get(\"all\") == \"true\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, key) => { if (obj[key] === undefined) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(req.query, "all"),"true")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.query?.get(\"page\") == \"6\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, key) => { if (obj[key] === undefined) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(req.query, "page"),"6")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.path == \"/path\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.path,"/path")))};
-      return ({"status": 200,"body": (req.query)["page"]});
+      return ({"status": 200,"body": ((obj, key) => { if (obj[key] === undefined) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(req.query, "page")});
     }
   }
   return $Closure1;
