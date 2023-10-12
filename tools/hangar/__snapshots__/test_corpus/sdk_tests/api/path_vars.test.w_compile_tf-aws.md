@@ -10,7 +10,7 @@ module.exports = function({ $std_Json }) {
       return $obj;
     }
     async handle(req) {
-      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"user": (req.vars)["name"]})]),"headers": ({"content-type": "application/json"}),"status": 200});
+      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"user": ((map, key) => { if (!(key in map)) { throw new Error("no value found for key '" + key + "'"); } return map[key]; })(req.vars, "name")})]),"headers": ({"content-type": "application/json"}),"status": 200});
     }
   }
   return $Closure1;
@@ -28,7 +28,7 @@ module.exports = function({ $std_Json }) {
       return $obj;
     }
     async handle(req) {
-      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"user": (req.vars)["name"],"age": (req.vars)["age"]})]),"headers": ({"content-type": "application/json"}),"status": 200});
+      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"user": ((map, key) => { if (!(key in map)) { throw new Error("no value found for key '" + key + "'"); } return map[key]; })(req.vars, "name"),"age": ((map, key) => { if (!(key in map)) { throw new Error("no value found for key '" + key + "'"); } return map[key]; })(req.vars, "age")})]),"headers": ({"content-type": "application/json"}),"status": 200});
     }
   }
   return $Closure2;
