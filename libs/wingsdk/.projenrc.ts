@@ -103,7 +103,6 @@ const project = new cdk.JsiiProject({
     "vitest",
     "@types/uuid",
     "@vitest/coverage-v8",
-    "@types/js-yaml@^4.0.6",
     "nanoid", // for ESM import test in target-sim/function.test.ts
     ...JSII_DEPS,
   ],

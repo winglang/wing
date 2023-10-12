@@ -1254,9 +1254,6 @@ importers:
       '@types/fs-extra':
         specifier: ^11.0.1
         version: 11.0.1
-      '@types/js-yaml':
-        specifier: ^4.0.6
-        version: 4.0.6
       '@types/mime-types':
         specifier: ^2.1.1
         version: 2.1.1
@@ -9495,10 +9492,6 @@ packages:
     dependencies:
       expect: 29.6.4
       pretty-format: 29.6.3
-    dev: true
-
-  /@types/js-yaml@4.0.6:
-    resolution: {integrity: sha512-ACTuifTSIIbyksx2HTon3aFtCKWcID7/h3XEmRpDYdMCXxPbl+m9GteOJeaAkiAta/NJaSFuA7ahZ0NkwajDSw==}
     dev: true
 
   /@types/json-schema@7.0.12:
