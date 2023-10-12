@@ -1,4 +1,7 @@
-import { SimulatorServerRequest, SimulatorServerResponse } from "./simulator";
+import type {
+  SimulatorServerRequest,
+  SimulatorServerResponse,
+} from "./simulator";
 
 export function makeSimulatorClient(url: string, handle: string) {
   return new Proxy(
