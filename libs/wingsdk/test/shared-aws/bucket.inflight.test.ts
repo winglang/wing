@@ -8,6 +8,7 @@ import {
   ListObjectsV2Command,
   PutObjectCommand,
   S3Client,
+  NotFound,
   NoSuchKey,
 } from "@aws-sdk/client-s3";
 import * as s3RequestPresigner from "@aws-sdk/s3-request-presigner/dist-cjs/getSignedUrl";
@@ -16,6 +17,7 @@ import { sdkStreamMixin } from "@aws-sdk/util-stream-node";
 import { mockClient } from "aws-sdk-client-mock";
 import { test, expect, beforeEach, vi, Mock } from "vitest";
 import { BucketClient } from "../../src/shared-aws/bucket.inflight";
+import { Datetime } from "../../src/std";
 
 const s3Mock = mockClient(S3Client);
 
@@ -589,4 +591,71 @@ test("Given a bucket, when giving one of its keys, we should get its signed url"
   // THEN
   expect(signedUrlFn).toBeCalledTimes(1);
   expect(signedUrl).toBe(VALUE);
+});
+
+test("get metadata of an object", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  s3Mock.on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({
+    AcceptRanges: "bytes",
+    ContentLength: 3191,
+    ContentType: "image/jpeg",
+    ETag: "6805f2cfc46c0f04559748bb039d69ae",
+    LastModified: new Date("Thu, 15 Dec 2016 01:19:41 GMT"),
+    Metadata: {},
+    VersionId: "null",
+  });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const response = await client.metadata(KEY);
+
+  // THEN
+  expect(response).toEqual({
+    size: 3191,
+    lastModified: Datetime.fromIso("2016-12-15T01:19:41Z"),
+    contentType: "image/jpeg",
+  });
+});
+
+test("metadata may not contains content-type if it is unknown", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  s3Mock.on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({
+    AcceptRanges: "bytes",
+    ContentLength: 1234,
+    ETag: "6805f2cfc46c0f04559748bb039d69ae",
+    LastModified: new Date("Thu, 15 Dec 2016 01:19:41 GMT"),
+    Metadata: {},
+    VersionId: "null",
+  });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const response = await client.metadata(KEY);
+
+  // THEN
+  expect(response).toEqual({
+    size: 1234,
+    lastModified: Datetime.fromIso("2016-12-15T01:19:41Z"),
+  });
+});
+
+test("metadata fail on non-existent object", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  s3Mock
+    .on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .rejects(new NotFound({ message: "NotFound error", $metadata: {} }));
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+
+  // THEN
+  await expect(() => client.metadata(KEY)).rejects.toThrowError(
+    "Object does not exist (key=KEY)."
+  );
 });

@@ -22,14 +22,14 @@ export const useApi = ({
     //   return;
     // }
     onFetchDataUpdate(fetch.data);
-  }, [fetch.data]);
+  }, [fetch.data, onFetchDataUpdate]);
 
   useEffect(() => {
     if (!schema.data) {
       return;
     }
     onSchemaDataUpdate(schema.data);
-  }, [schema.data]);
+  }, [onSchemaDataUpdate, schema.data]);
 
   const callFetch = async ({
     url,

@@ -2142,7 +2142,7 @@ impl<'a> TypeChecker<'a> {
 				if let CalleeKind::Expr(call_expr) = callee {
 					if let ExprKind::Reference(Reference::Identifier(ident)) = &call_expr.kind {
 						if ident.name == "wingc_env" {
-							println!("[symbol environment at {}]", exp.span().to_string());
+							println!("[symbol environment at {}]", exp.span().file_id);
 							println!("{}", env.to_string());
 						}
 					}
@@ -2375,11 +2375,7 @@ impl<'a> TypeChecker<'a> {
 					.expect(&format!("Expected \"{}\" to be a struct type", struct_type));
 
 				// Verify that all expected fields are present and are the right type
-				for (name, kind, _info) in st.env.iter(true) {
-					let field_type = kind
-						.as_variable()
-						.expect("Expected struct field to be a variable in the struct env")
-						.type_;
+				for (name, field_type) in st.fields(true) {
 					match fields.get(name.as_str()) {
 						Some(field_exp) => {
 							let t = field_types.get(name.as_str()).unwrap();
@@ -5338,21 +5334,23 @@ fn add_parent_members_to_struct_env(
 		};
 		// Add each member of current parent to the struct's environment (if it wasn't already added by a previous parent)
 		for (parent_member_name, parent_member, _) in parent_struct.env.iter(true) {
-			let member_type = parent_member
+			let parent_member_var = parent_member
 				.as_variable()
-				.expect("Expected struct member to be a variable")
-				.type_;
+				.expect("Expected struct member to be a variable");
+			let parent_member_type = parent_member_var.type_;
+
 			if let Some(existing_type) = struct_env.lookup(&parent_member_name.as_str().into(), None) {
-				let existing_type = existing_type
+				let existing_var = existing_type
 					.as_variable()
-					.expect("Expected struct member to be a variable")
-					.type_;
-				if !existing_type.is_same_type_as(&member_type) {
+					.expect("Expected struct member to be a variable");
+				let existing_type = existing_var.type_;
+
+				if !existing_type.is_same_type_as(&parent_member_type) {
 					return Err(TypeError {
-						span: name.span.clone(),
+						span: existing_var.name.span.clone(),
 						message: format!(
 							"Struct \"{}\" extends \"{}\" which introduces a conflicting member \"{}\" ({} != {})",
-							name, parent_type, parent_member_name, member_type, member_type
+							name, parent_type, parent_member_name, parent_member_type, existing_type
 						),
 						annotations: vec![],
 					});
@@ -5360,13 +5358,13 @@ fn add_parent_members_to_struct_env(
 			} else {
 				let sym = Symbol {
 					name: parent_member_name,
-					span: name.span.clone(),
+					span: parent_member_var.name.span.clone(),
 				};
 				struct_env.define(
 					&sym,
 					SymbolKind::make_member_variable(
 						sym.clone(),
-						member_type,
+						parent_member_type,
 						false,
 						false,
 						struct_env.phase,
@@ -5632,7 +5630,7 @@ pub fn fully_qualify_std_type(type_: &str) -> String {
 
 	match type_name {
 		"Json" | "MutJson" | "MutArray" | "MutMap" | "MutSet" | "Array" | "Map" | "Set" | "String" | "Duration"
-		| "Boolean" | "Number" => {
+		| "Boolean" | "Number" | "Struct" => {
 			format!("{WINGSDK_STD_MODULE}.{type_name}")
 		}
 		_ => type_name.to_string(),
