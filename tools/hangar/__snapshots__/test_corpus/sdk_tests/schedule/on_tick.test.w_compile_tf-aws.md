@@ -508,7 +508,7 @@ class $Root extends $stdlib.std.Resource {
     const c2 = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"c2");
     (from_cron.onTick(new $Closure1(this,"$Closure1")));
     (from_rate.onTick(new $Closure2(this,"$Closure2")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"on tick is called both for rate and cron schedules",new $Closure3(this,"$Closure3"),({"timeout": (std.Duration.fromSeconds(120))}));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"on tick is called both for rate and cron schedules",new $Closure3(this,"$Closure3"),{ timeout: (std.Duration.fromSeconds(120)) });
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
