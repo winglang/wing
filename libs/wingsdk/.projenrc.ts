@@ -76,7 +76,7 @@ const project = new cdk.JsiiProject({
     "@azure/identity@3.1.3",
     "@azure/core-paging",
     // gcp client dependencies
-    "@google-cloud/storage@6.12.0",
+    "@google-cloud/storage@7.2.0",
     // simulator dependencies
     "express",
     "uuid",
@@ -363,8 +363,6 @@ new JsonFile(project, "cdktf.json", {
 project.gitignore.addPatterns("src/.gen");
 
 project.preCompileTask.exec("cdktf get --force");
-
-project.package.addPackageResolutions("mime@^1.4.0");
 
 project.package.file.addDeletionOverride("pnpm");
 

@@ -255,7 +255,7 @@
     },
     {
       "name": "@google-cloud/storage",
-      "version": "6.12.0",
+      "version": "7.2.0",
       "type": "bundled"
     },
     {
@@ -312,11 +312,6 @@
     {
       "name": "yaml",
       "type": "bundled"
-    },
-    {
-      "name": "mime",
-      "version": "^1.4.0",
-      "type": "override"
     },
     {
       "name": "constructs",
