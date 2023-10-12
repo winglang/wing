@@ -2,7 +2,6 @@ import { existsSync } from "fs";
 import { Server } from "http";
 import { AddressInfo } from "net";
 import { join } from "path";
-import type express from "express";
 import {
   deserializeValue,
   makeSimulatorClient,
@@ -255,10 +254,9 @@ export class Simulator {
    */
   public async startServer(): Promise<void> {
     // import lazily to reduce SDK import time (20ms or so)
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const express_: typeof express = require("express");
-    const app = express_();
-    app.use(express_.json());
+    const express = await import("express").then((m) => m.default);
+    const app = express();
+    app.use(express.json());
 
     app.post("/v1/call", async (req, res, next) => {
       try {
