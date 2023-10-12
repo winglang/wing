@@ -148,6 +148,11 @@
     "uuid",
     "yaml"
   ],
+  "pnpm": {
+    "overrides": {
+      "mime": "^1.4.0"
+    }
+  },
   "engines": {
     "node": ">= 18.13.0"
   },

@@ -314,6 +314,11 @@
       "type": "bundled"
     },
     {
+      "name": "mime",
+      "version": "^1.4.0",
+      "type": "override"
+    },
+    {
       "name": "constructs",
       "version": "~10.2.69",
       "type": "peer"
