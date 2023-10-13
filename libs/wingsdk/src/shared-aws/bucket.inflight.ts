@@ -17,6 +17,7 @@ import {
   __Client,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import mime from "mime-types";
 import {
   BucketDeleteOptions,
   IBucketClient,
@@ -69,7 +70,8 @@ export class BucketClient implements IBucketClient {
       Bucket: this.bucketName,
       Key: key,
       Body: body,
-      ContentType: props?.contentType,
+      ContentType:
+        props?.contentType || mime.lookup(key) || "application/octet-stream",
     });
     await this.s3Client.send(command);
   }
