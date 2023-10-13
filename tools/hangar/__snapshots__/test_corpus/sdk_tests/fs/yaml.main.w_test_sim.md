@@ -2,7 +2,7 @@
 
 ## stderr.log
 ```log
-(node:92057) Warning: Keys with collection values will be stringified due to JS Object restrictions: "{ content }". Set mapAsMap: true to use object keys.
+(node:9947) Warning: Keys with collection values will be stringified due to JS Object restrictions: "{ content }". Set mapAsMap: true to use object keys.
 (Use `node --trace-warnings ...` to show where the warning was created)
 ```
 
