@@ -98,7 +98,7 @@
     "@azure/core-paging": "^1.5.0",
     "@azure/identity": "3.1.3",
     "@azure/storage-blob": "12.14.0",
-    "@google-cloud/storage": "7.2.0",
+    "@google-cloud/storage": "6.9.5",
     "@types/aws-lambda": "^8.10.119",
     "aws-cdk-lib": "^2.64.0",
     "cdktf": "0.17.0",
