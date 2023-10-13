@@ -23,9 +23,22 @@ describe("getPlatformSpecificValues", () => {
   test("get single value form command", () => {
     // GIVEN
     const app = new MyApp();
-    const resource = new MyResource(app, "my-resource");
-    process.env.WING_VALUES = "root/my-resource.number=123";
+    const defaultResource = new MyResource(app, "Default");
+    const resource = new MyResource(defaultResource, "my-resource");
+    process.env.WING_VALUES = "root/Default/my-resource.number=123";
     const result = getPlatformSpecificValues(resource, "number");
+    // THEN
+    expect(result).toStrictEqual({ number: "123" });
+  });
+
+  test("get single value form command when running tests", () => {
+    // GIVEN
+    const app = new MyApp();
+    const resourceTest = new MyResource(app, "Test.X67tGM87zf");
+    const resourceEnv = new MyResource(resourceTest, "env0");
+    const myResource = new MyResource(resourceEnv, "my-resource");
+    process.env.WING_VALUES = "root/Default/my-resource.number=123";
+    const result = getPlatformSpecificValues(myResource, "number");
     // THEN
     expect(result).toStrictEqual({ number: "123" });
   });
@@ -33,9 +46,22 @@ describe("getPlatformSpecificValues", () => {
   test("get single value from yaml file", () => {
     // GIVEN
     const app = new MyApp();
-    const resource = new MyResource(app, "my-resource");
+    const firstResource = new MyResource(app, "Default");
+    const myResource = new MyResource(firstResource, "my-resource");
     process.env.WING_VALUES_FILE = __dirname + "/single-number-value.yaml";
-    const result = getPlatformSpecificValues(resource, "number");
+    const result = getPlatformSpecificValues(myResource, "number");
+    // THEN
+    expect(result).toStrictEqual({ number: "123" });
+  });
+
+  test("get single value from yaml file when running tests", () => {
+    // GIVEN
+    const app = new MyApp();
+    const resourceTest = new MyResource(app, "Test.X67tGM87zf");
+    const resourceEnv = new MyResource(resourceTest, "env0");
+    const myResource = new MyResource(resourceEnv, "my-resource");
+    process.env.WING_VALUES_FILE = __dirname + "/single-number-value.yaml";
+    const result = getPlatformSpecificValues(myResource, "number");
     // THEN
     expect(result).toStrictEqual({ number: "123" });
   });
@@ -43,11 +69,39 @@ describe("getPlatformSpecificValues", () => {
   test("get single optional value from command", () => {
     // GIVEN
     const app = new MyApp();
-    const resource = new MyResource(app, "my-resource");
-    process.env.WING_VALUES = "root/my-resource.number=123";
-    const numberResult = getPlatformSpecificValues(resource, "string||number");
-    process.env.WING_VALUES = "root/my-resource.string=abc";
-    const stringResult = getPlatformSpecificValues(resource, "string||number");
+    const firstResource = new MyResource(app, "Default");
+    const myResource = new MyResource(firstResource, "my-resource");
+    process.env.WING_VALUES = "root/Default/my-resource.number=123";
+    const numberResult = getPlatformSpecificValues(
+      myResource,
+      "string||number"
+    );
+    process.env.WING_VALUES = "root/Default/my-resource.string=abc";
+    const stringResult = getPlatformSpecificValues(
+      myResource,
+      "string||number"
+    );
+    // THEN
+    expect(numberResult).toStrictEqual({ string: undefined, number: "123" });
+    expect(stringResult).toStrictEqual({ string: "abc", number: undefined });
+  });
+
+  test("get single optional value from command when running tests", () => {
+    // GIVEN
+    const app = new MyApp();
+    const resourceTest = new MyResource(app, "Test.X67tGM87zf");
+    const resourceEnv = new MyResource(resourceTest, "env0");
+    const myResource = new MyResource(resourceEnv, "my-resource");
+    process.env.WING_VALUES = "root/Default/my-resource.number=123";
+    const numberResult = getPlatformSpecificValues(
+      myResource,
+      "string||number"
+    );
+    process.env.WING_VALUES = "root/Default/my-resource.string=abc";
+    const stringResult = getPlatformSpecificValues(
+      myResource,
+      "string||number"
+    );
     // THEN
     expect(numberResult).toStrictEqual({ string: undefined, number: "123" });
     expect(stringResult).toStrictEqual({ string: "abc", number: undefined });
@@ -56,11 +110,39 @@ describe("getPlatformSpecificValues", () => {
   test("get single optional value from yaml file", () => {
     // GIVEN
     const app = new MyApp();
-    const resource = new MyResource(app, "my-resource");
+    const firstResource = new MyResource(app, "Default");
+    const myResource = new MyResource(firstResource, "my-resource");
     process.env.WING_VALUES_FILE = __dirname + "/single-number-value.yaml";
-    const numberResult = getPlatformSpecificValues(resource, "string||number");
+    const numberResult = getPlatformSpecificValues(
+      myResource,
+      "string||number"
+    );
     process.env.WING_VALUES_FILE = __dirname + "/single-string-value.yaml";
-    const stringResult = getPlatformSpecificValues(resource, "string||number");
+    const stringResult = getPlatformSpecificValues(
+      myResource,
+      "string||number"
+    );
+    // THEN
+    expect(numberResult).toStrictEqual({ number: "123" });
+    expect(stringResult).toStrictEqual({ string: "abc" });
+  });
+
+  test("get single optional value from yaml file when running tests", () => {
+    // GIVEN
+    const app = new MyApp();
+    const resourceTest = new MyResource(app, "Test.X67tGM87zf");
+    const resourceEnv = new MyResource(resourceTest, "env0");
+    const myResource = new MyResource(resourceEnv, "my-resource");
+    process.env.WING_VALUES_FILE = __dirname + "/single-number-value.yaml";
+    const numberResult = getPlatformSpecificValues(
+      myResource,
+      "string||number"
+    );
+    process.env.WING_VALUES_FILE = __dirname + "/single-string-value.yaml";
+    const stringResult = getPlatformSpecificValues(
+      myResource,
+      "string||number"
+    );
     // THEN
     expect(numberResult).toStrictEqual({ number: "123" });
     expect(stringResult).toStrictEqual({ string: "abc" });
@@ -68,11 +150,25 @@ describe("getPlatformSpecificValues", () => {
 
   test("get multiple values from command", () => {
     // GIVEN
-    process.env.WING_VALUES =
-      "root/my-resource.number=123,root/my-resource.string=abc";
     const app = new MyApp();
-    const resource = new MyResource(app, "my-resource");
-    const result = getPlatformSpecificValues(resource, "number", "string");
+    const firstResource = new MyResource(app, "Default");
+    const myResource = new MyResource(firstResource, "my-resource");
+    process.env.WING_VALUES =
+      "root/Default/my-resource.number=123,root/Default/my-resource.string=abc";
+    const result = getPlatformSpecificValues(myResource, "number", "string");
+    // THEN
+    expect(result).toStrictEqual({ number: "123", string: "abc" });
+  });
+
+  test("get multiple values from command when running tests", () => {
+    // GIVEN
+    const app = new MyApp();
+    const resourceTest = new MyResource(app, "Test.X67tGM87zf");
+    const resourceEnv = new MyResource(resourceTest, "env0");
+    const myResource = new MyResource(resourceEnv, "my-resource");
+    process.env.WING_VALUES =
+      "root/Default/my-resource.number=123,root/Default/my-resource.string=abc";
+    const result = getPlatformSpecificValues(myResource, "number", "string");
     // THEN
     expect(result).toStrictEqual({ number: "123", string: "abc" });
   });
@@ -81,8 +177,21 @@ describe("getPlatformSpecificValues", () => {
     // GIVEN
     process.env.WING_VALUES_FILE = __dirname + "/multiple-values.yaml";
     const app = new MyApp();
-    const resource = new MyResource(app, "my-resource");
-    const result = getPlatformSpecificValues(resource, "number", "string");
+    const firstResource = new MyResource(app, "Default");
+    const myResource = new MyResource(firstResource, "my-resource");
+    const result = getPlatformSpecificValues(myResource, "number", "string");
+    // THEN
+    expect(result).toStrictEqual({ number: "123", string: "abc" });
+  });
+
+  test("get multiple values from file when running tests", () => {
+    // GIVEN
+    const app = new MyApp();
+    const resourceTest = new MyResource(app, "Test.X67tGM87zf");
+    const resourceEnv = new MyResource(resourceTest, "env0");
+    const myResource = new MyResource(resourceEnv, "my-resource");
+    process.env.WING_VALUES_FILE = __dirname + "/multiple-values.yaml";
+    const result = getPlatformSpecificValues(myResource, "number", "string");
     // THEN
     expect(result).toStrictEqual({ number: "123", string: "abc" });
   });
@@ -91,11 +200,28 @@ describe("getPlatformSpecificValues", () => {
     expect(() => {
       // GIVEN
       const app = new MyApp();
-      const resource = new MyResource(app, "my-resource");
-      getPlatformSpecificValues(resource, "number", "string||bool");
+      const firstResource = new MyResource(app, "Default");
+      const myResource = new MyResource(firstResource, "my-resource");
+      getPlatformSpecificValues(myResource, "number", "string||bool");
     }).toThrowError(`
-  - 'number' is missing from root/my-resource
-  - 'string' or 'bool' is missing from root/my-resource
+  - 'number' is missing from root/Default/my-resource
+  - 'string' or 'bool' is missing from root/Default/my-resource
+
+These are required properties of platform-specific types. You can set these values
+either through '-v | --value' switches or '--values' file.`);
+  });
+
+  test("throw exception if no value is provided when running tests", () => {
+    expect(() => {
+      // GIVEN
+      const app = new MyApp();
+      const resourceTest = new MyResource(app, "Test.X67tGM87zf");
+      const resourceEnv = new MyResource(resourceTest, "env0");
+      const myResource = new MyResource(resourceEnv, "my-resource");
+      getPlatformSpecificValues(myResource, "number", "string||bool");
+    }).toThrowError(`
+  - 'number' is missing from root/Test.X67tGM87zf/env0/my-resource
+  - 'string' or 'bool' is missing from root/Test.X67tGM87zf/env0/my-resource
 
 These are required properties of platform-specific types. You can set these values
 either through '-v | --value' switches or '--values' file.`);

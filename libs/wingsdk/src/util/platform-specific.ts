@@ -25,7 +25,7 @@ export const getPlatformSpecificValues = (
   }
 
   let result: { [key: string]: string | undefined } = {};
-  if (wingValues) {
+  if (wingValues && wingValues.length !== 0) {
     for (const argument of argLst) {
       result[`${argument}`] = getPlatformSpecificValue(
         scope.node.path,
@@ -33,7 +33,7 @@ export const getPlatformSpecificValues = (
         wingValues
       );
     }
-  } else if (wingValuesFile) {
+  } else if (wingValuesFile && wingValuesFile.length !== 0) {
     result = getPlatformSpecificValuesFromFile(scope.node.path, wingValuesFile);
   }
 
@@ -62,18 +62,17 @@ const getPlatformSpecificValue = (
   argument: string,
   wingValues: string
 ): string | undefined => {
-  if (wingValues) {
-    const valuesList = wingValues.split(",");
-    for (const v of valuesList) {
-      const x = v.split("=");
+  const valuesList = wingValues.split(",");
 
-      const lastDotIndex = x[0].lastIndexOf(".");
-      const pathPart = x[0].substring(0, lastDotIndex);
-      const argumentPart = x[0].substring(lastDotIndex + 1);
+  for (const v of valuesList) {
+    const x = v.split("=");
 
-      if (pathPart === path && argumentPart === argument) {
-        return x[1];
-      }
+    const lastDotIndex = x[0].lastIndexOf(".");
+    const pathPart = x[0].substring(0, lastDotIndex);
+    const argumentPart = x[0].substring(lastDotIndex + 1);
+
+    if (checkPathFromCommandLine(path, pathPart) && argumentPart === argument) {
+      return x[1];
     }
   }
 
@@ -83,7 +82,44 @@ const getPlatformSpecificValue = (
 const getPlatformSpecificValuesFromFile = (path: string, file: string) => {
   const data = readFileSync(file);
   const yamlObj = parse(data.toString());
-  return yamlObj[`${path}`];
+  const index = getPathFromFile(path, yamlObj);
+  return yamlObj[`${index}`];
+};
+
+const checkPathFromCommandLine = (
+  objPath: string,
+  cmdPath: string
+): boolean => {
+  if (objPath === cmdPath) {
+    return true;
+  }
+  // check if it's a test
+  const testIndex = objPath.indexOf("Test.");
+  const endIndex = objPath.lastIndexOf("/");
+  if (testIndex > -1) {
+    const prefix = objPath.substring(0, testIndex);
+    const suffix = objPath.substring(endIndex, objPath.length);
+    return cmdPath.startsWith(prefix) && cmdPath.endsWith(suffix);
+  }
+
+  return false;
+};
+
+const getPathFromFile = (path: string, data: any): string => {
+  const testIndex = path.indexOf("Test.");
+  // If it's a test, ignore everything between 'root' and the resource's logical ID
+  if (testIndex > -1) {
+    const endIndex = path.lastIndexOf("/");
+    const prefix = path.substring(0, testIndex);
+    const suffix = path.substring(endIndex, path.length);
+    const keys = Object.keys(data).filter(
+      (key) => key.startsWith(prefix) && key.endsWith(suffix)
+    );
+    if (keys.length > 0) {
+      return keys[0];
+    }
+  }
+  return path;
 };
 
 const checkMissingValues = (

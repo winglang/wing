@@ -164,6 +164,8 @@ async function main() {
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .option("-r, --rootId <rootId>", "App root id")
+    .option("-v, --value <value>", "Platform-specific value in the form KEY=VALUE", addValue, [])
+    .option("--values <file>", "Yaml file with Platform-specific values")
     .option("--no-clean", "Keep build output")
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)

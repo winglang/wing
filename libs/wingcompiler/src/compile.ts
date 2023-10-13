@@ -115,7 +115,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   // TODO: couldn't be moved to the context's since used in utils.env(...)
   // in the future we may look for a unified approach
   process.env["WING_TARGET"] = options.target;
-  process.env["WING_VALUES"] = options.value?.length == 0 ? undefined : options.value;
+  process.env["WING_VALUES"] = options.value;
   process.env["WING_VALUES_FILE"] = options.values;
   process.env["WING_IS_TEST"] = testing.toString();
   process.env["WING_PLUGIN_PATHS"] = resolvePluginPaths(options.plugins ?? []);
