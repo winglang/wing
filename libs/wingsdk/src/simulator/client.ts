@@ -58,11 +58,17 @@ export function makeSimulatorClient(url: string, handle: string) {
             method: method as string,
             args,
           };
-          const resp = await fetch(url + "/v1/call", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body),
-          });
+          let resp;
+          try {
+            resp = await fetch(url + "/v1/call", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(body),
+            });
+          } catch (e) {
+            console.error(e);
+            throw e;
+          }
 
           let parsed: SimulatorServerResponse = deserializeValue(
             await resp.text()
