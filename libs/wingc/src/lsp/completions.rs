@@ -694,7 +694,11 @@ fn completion_sort_text(completion_item: &CompletionItem) -> String {
 	} else {
 		"z"
 	};
-	format!("{}|{}", letter, completion_item.label)
+	format!(
+		"{}|{}",
+		letter,
+		completion_item.sort_text.as_ref().unwrap_or(&completion_item.label)
+	)
 }
 
 /// Create completion for fields within a struct.
@@ -706,13 +710,15 @@ fn get_inner_struct_completions(struct_: &Struct, existing_fields: &Vec<String>)
 		if !existing_fields.contains(&field_data.0) {
 			if let Some(mut base_completion) = format_symbol_kind_as_completion(&field_data.0, &field_data.1) {
 				let v = field_data.1.as_variable().unwrap();
+				let is_optional = v.type_.is_option();
+
 				if v.type_.maybe_unwrap_option().is_struct() {
 					base_completion.insert_text = Some(format!("{}: {{\n$1\n}}", field_data.0));
 				} else {
 					base_completion.insert_text = Some(format!("{}: $1", field_data.0));
 				}
 
-				base_completion.label = format!("{}:", base_completion.label);
+				base_completion.label = format!("{}{}:", base_completion.label, if is_optional { "?" } else { "" });
 				base_completion.kind = Some(CompletionItemKind::FIELD);
 				base_completion.insert_text_format = Some(InsertTextFormat::SNIPPET);
 				base_completion.command = Some(Command {
@@ -720,6 +726,11 @@ fn get_inner_struct_completions(struct_: &Struct, existing_fields: &Vec<String>)
 					command: "editor.action.triggerSuggest".to_string(),
 					arguments: None,
 				});
+				base_completion.sort_text = if is_optional {
+					Some(format!("b|{}", base_completion.label))
+				} else {
+					Some(format!("a|{}", base_completion.label))
+				};
 				completions.push(base_completion);
 			}
 		}
