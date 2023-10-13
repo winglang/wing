@@ -1,3 +1,4 @@
+import { fetch, Agent } from "undici";
 import type {
   SimulatorServerRequest,
   SimulatorServerResponse,
@@ -64,6 +65,12 @@ export function makeSimulatorClient(url: string, handle: string) {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(body),
+              dispatcher: new Agent({
+                keepAliveTimeout: 15 * 60 * 1000,
+                keepAliveMaxTimeout: 15 * 60 * 1000,
+                headersTimeout: 15 * 60 * 1000,
+                bodyTimeout: 15 * 60 * 1000,
+              }),
             });
           } catch (e) {
             console.error(e);
