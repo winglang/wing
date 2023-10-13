@@ -18,6 +18,8 @@ const skip = [
   "std.CONNECTIONS_FILE_PATH",
   "std.SDK_SOURCE_MODULE",
   "std.Node",
+  "std.DisplayMetaLink",
+  "std.DisplayMetaComponent",
   "util.RequestCache", // an enum
   "util.RequestRedirect", // an enum
   "util.HttpMethod", // an enum

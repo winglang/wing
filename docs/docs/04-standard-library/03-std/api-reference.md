@@ -452,6 +452,135 @@ Returns the year of the local machine time or in utc.
 ---
 
 
+### DisplayMetaComponent <a name="DisplayMetaComponent" id="@winglang/sdk.std.DisplayMetaComponent"></a>
+
+Display meta component.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.DisplayMetaComponent.Initializer"></a>
+
+```wing
+new DisplayMetaComponent(type: str, props: MutMap<any>);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.DisplayMetaComponent.Initializer.parameter.type">type</a></code> | <code>str</code> | The component type. |
+| <code><a href="#@winglang/sdk.std.DisplayMetaComponent.Initializer.parameter.props">props</a></code> | <code>MutMap&lt;any&gt;</code> | The component props. |
+
+---
+
+##### `type`<sup>Required</sup> <a name="type" id="@winglang/sdk.std.DisplayMetaComponent.Initializer.parameter.type"></a>
+
+- *Type:* str
+
+The component type.
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.std.DisplayMetaComponent.Initializer.parameter.props"></a>
+
+- *Type:* MutMap&lt;any&gt;
+
+The component props.
+
+---
+
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.DisplayMetaComponent.property.props">props</a></code> | <code>MutMap&lt;any&gt;</code> | The component props. |
+| <code><a href="#@winglang/sdk.std.DisplayMetaComponent.property.type">type</a></code> | <code>str</code> | The component type. |
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.std.DisplayMetaComponent.property.props"></a>
+
+```wing
+props: MutMap<any>;
+```
+
+- *Type:* MutMap&lt;any&gt;
+
+The component props.
+
+---
+
+##### `type`<sup>Required</sup> <a name="type" id="@winglang/sdk.std.DisplayMetaComponent.property.type"></a>
+
+```wing
+type: str;
+```
+
+- *Type:* str
+
+The component type.
+
+---
+
+
+### DisplayMetaLink <a name="DisplayMetaLink" id="@winglang/sdk.std.DisplayMetaLink"></a>
+
+Display meta link component.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.DisplayMetaLink.Initializer"></a>
+
+```wing
+new DisplayMetaLink(props: LinkProps);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.DisplayMetaLink.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.std.LinkProps">LinkProps</a></code> | The component props. |
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.std.DisplayMetaLink.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.LinkProps">LinkProps</a>
+
+The component props.
+
+---
+
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.DisplayMetaLink.property.props">props</a></code> | <code>MutMap&lt;any&gt;</code> | The component props. |
+| <code><a href="#@winglang/sdk.std.DisplayMetaLink.property.type">type</a></code> | <code>str</code> | The component type. |
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.std.DisplayMetaLink.property.props"></a>
+
+```wing
+props: MutMap<any>;
+```
+
+- *Type:* MutMap&lt;any&gt;
+
+The component props.
+
+---
+
+##### `type`<sup>Required</sup> <a name="type" id="@winglang/sdk.std.DisplayMetaLink.property.type"></a>
+
+```wing
+type: str;
+```
+
+- *Type:* str
+
+The component type.
+
+---
+
+
 ### Duration <a name="Duration" id="@winglang/sdk.std.Duration"></a>
 
 Represents a length of time.
@@ -1871,6 +2000,8 @@ The internal node of a construct.
 | --- | --- |
 | <code><a href="#@winglang/sdk.std.Node.addConnection">addConnection</a></code> | Adds a connection between two constructs. |
 | <code><a href="#@winglang/sdk.std.Node.addDependency">addDependency</a></code> | Add an ordering dependency on another construct. |
+| <code><a href="#@winglang/sdk.std.Node.addLink">addLink</a></code> | Add a link to the array of meta components. |
+| <code><a href="#@winglang/sdk.std.Node.addMeta">addMeta</a></code> | Add a meta component to the array of meta components. |
 | <code><a href="#@winglang/sdk.std.Node.addMetadata">addMetadata</a></code> | Adds a metadata entry to this construct. |
 | <code><a href="#@winglang/sdk.std.Node.addValidation">addValidation</a></code> | Adds a validation to this construct. |
 | <code><a href="#@winglang/sdk.std.Node.findAll">findAll</a></code> | Return this construct and all of its children in the given order. |
@@ -1915,6 +2046,40 @@ An `IDependable`
 ###### `deps`<sup>Required</sup> <a name="deps" id="@winglang/sdk.std.Node.addDependency.parameter.deps"></a>
 
 - *Type:* constructs.IDependable
+
+---
+
+##### `addLink` <a name="addLink" id="@winglang/sdk.std.Node.addLink"></a>
+
+```wing
+addLink(href: str, text: str): void
+```
+
+Add a link to the array of meta components.
+
+###### `href`<sup>Required</sup> <a name="href" id="@winglang/sdk.std.Node.addLink.parameter.href"></a>
+
+- *Type:* str
+
+---
+
+###### `text`<sup>Required</sup> <a name="text" id="@winglang/sdk.std.Node.addLink.parameter.text"></a>
+
+- *Type:* str
+
+---
+
+##### `addMeta` <a name="addMeta" id="@winglang/sdk.std.Node.addMeta"></a>
+
+```wing
+addMeta(component: DisplayMetaComponent): void
+```
+
+Add a meta component to the array of meta components.
+
+###### `component`<sup>Required</sup> <a name="component" id="@winglang/sdk.std.Node.addMeta.parameter.component"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.DisplayMetaComponent">DisplayMetaComponent</a>
 
 ---
 
@@ -2120,6 +2285,7 @@ Invokes the `validate()` method on all validations added through
 | <code><a href="#@winglang/sdk.std.Node.property.path">path</a></code> | <code>str</code> | The full, absolute path of this construct in the tree. |
 | <code><a href="#@winglang/sdk.std.Node.property.root">root</a></code> | <code>constructs.IConstruct</code> | Returns the root of the construct tree. |
 | <code><a href="#@winglang/sdk.std.Node.property.scopes">scopes</a></code> | <code>MutArray&lt;constructs.IConstruct&gt;</code> | All parent scopes of this construct. |
+| <code><a href="#@winglang/sdk.std.Node.property.meta">meta</a></code> | <code>MutArray&lt;<a href="#@winglang/sdk.std.DisplayMetaComponent">DisplayMetaComponent</a>&gt;</code> | Returns the display meta of the construct node. |
 | <code><a href="#@winglang/sdk.std.Node.property.scope">scope</a></code> | <code>constructs.IConstruct</code> | Returns the scope in which this construct is defined. |
 | <code><a href="#@winglang/sdk.std.Node.property.defaultChild">defaultChild</a></code> | <code>constructs.IConstruct</code> | Returns the child construct that has the id `Default` or `Resource"`. |
 | <code><a href="#@winglang/sdk.std.Node.property.description">description</a></code> | <code>str</code> | Description of the construct for display purposes. |
@@ -2192,7 +2358,7 @@ id: str;
 
 The id of this construct within the current scope.
 
-This is a a scope-unique id. To obtain an app-unique id for this construct, use `addr`.
+This is a scope-unique id. To obtain an app-unique id for this construct, use `addr`.
 
 ---
 
@@ -2257,6 +2423,18 @@ scopes: MutArray<IConstruct>;
 - *Type:* MutArray&lt;constructs.IConstruct&gt;
 
 All parent scopes of this construct.
+
+---
+
+##### `meta`<sup>Optional</sup> <a name="meta" id="@winglang/sdk.std.Node.property.meta"></a>
+
+```wing
+meta: MutArray<DisplayMetaComponent>;
+```
+
+- *Type:* MutArray&lt;<a href="#@winglang/sdk.std.DisplayMetaComponent">DisplayMetaComponent</a>&gt;
+
+Returns the display meta of the construct node.
 
 ---
 
@@ -3072,6 +3250,49 @@ unsafe: bool;
 - *Type:* bool
 
 Unsafe mode to skip validation (may lead to runtime errors).
+
+---
+
+### LinkProps <a name="LinkProps" id="@winglang/sdk.std.LinkProps"></a>
+
+Display meta link props.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.std.LinkProps.Initializer"></a>
+
+```wing
+let LinkProps = LinkProps{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.LinkProps.property.href">href</a></code> | <code>str</code> | The link href. |
+| <code><a href="#@winglang/sdk.std.LinkProps.property.text">text</a></code> | <code>str</code> | The link text. |
+
+---
+
+##### `href`<sup>Required</sup> <a name="href" id="@winglang/sdk.std.LinkProps.property.href"></a>
+
+```wing
+href: str;
+```
+
+- *Type:* str
+
+The link href.
+
+---
+
+##### `text`<sup>Required</sup> <a name="text" id="@winglang/sdk.std.LinkProps.property.text"></a>
+
+```wing
+text: str;
+```
+
+- *Type:* str
+
+The link text.
 
 ---
 

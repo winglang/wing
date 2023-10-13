@@ -14,6 +14,45 @@ export const CONNECTIONS_FILE_PATH = "connections.json";
 export const SDK_SOURCE_MODULE = "@winglang/sdk";
 
 /**
+ * Display meta component.
+ */
+export class DisplayMetaComponent {
+  constructor(
+    /**
+     * The component type.
+     */
+    public readonly type: string,
+    /**
+     * The component props.
+     */
+    public readonly props: { [key: string]: any }
+  ) {}
+}
+
+/**
+ * Display meta link props
+ */
+export interface LinkProps {
+  /**
+   * The link href.
+   */
+  readonly href: string;
+  /**
+   * The link text.
+   */
+  readonly text: string;
+}
+
+/**
+ * Display meta link component.
+ */
+export class DisplayMetaLink extends DisplayMetaComponent {
+  constructor(props: LinkProps) {
+    super("link", props);
+  }
+}
+
+/**
  * The internal node of a construct.
  */
 export class Node {
@@ -51,12 +90,48 @@ export class Node {
    */
   public hidden?: boolean;
 
+  /**
+   * The display meta of the construct node. Describe how the construct should be displayed.
+   * @private
+   */
+  private _meta?: DisplayMetaComponent[];
+
   private readonly _constructsNode: ConstructsNode;
   private readonly _connections: Connections;
 
   private constructor(construct: IConstruct) {
     this._constructsNode = construct.node;
     this._connections = Connections.of(construct); // tree-unique instance
+  }
+
+  /**
+   * Returns the display meta of the construct node.
+   */
+  public get meta(): DisplayMetaComponent[] | undefined {
+    if (!this._meta) {
+      return undefined;
+    }
+    return [...this._meta];
+  }
+
+  /**
+   * Add a meta component to the array of meta components.
+   * @param component
+   */
+  public addMeta(component: DisplayMetaComponent) {
+    if (!this._meta) {
+      this._meta = [];
+    }
+    this._meta.push(component);
+  }
+
+  /**
+   * Add a link to the array of meta components.
+   * @param href
+   * @param text
+   */
+  public addLink(href: string, text: string) {
+    this.addMeta(new DisplayMetaLink({ href, text }));
   }
 
   /**
@@ -82,7 +157,7 @@ export class Node {
   /**
    * The id of this construct within the current scope.
    *
-   * This is a a scope-unique id. To obtain an app-unique id for this construct, use `addr`.
+   * This is a scope-unique id. To obtain an app-unique id for this construct, use `addr`.
    */
   public get id(): string {
     return this._constructsNode.id;
