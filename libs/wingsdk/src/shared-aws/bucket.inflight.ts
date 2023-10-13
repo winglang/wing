@@ -71,7 +71,7 @@ export class BucketClient implements IBucketClient {
       Key: key,
       Body: body,
       ContentType:
-        props?.contentType || mime.lookup(key) || "application/octet-stream",
+        (props?.contentType ?? mime.lookup(key)) || "application/octet-stream",
     });
     await this.s3Client.send(command);
   }
