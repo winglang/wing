@@ -57,7 +57,7 @@ jobs:
         with:
           mode: recreate
           message: |
-            ### ❌ Unstable Self-Mutation ❌
+            ### :x: Unstable Self-Mutation :x:
             Self-mutation has run twice in a row. There may be a something non-deterministic in the build or test process.
             Check the last mutation commit (${{ github.event.workflow_run.head_sha }}) for suspicious changes.
             This is typically caused by:
