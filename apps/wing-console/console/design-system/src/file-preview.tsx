@@ -18,7 +18,7 @@ export type PreviewType =
 
 export const getPreviewType = (
   filename: string,
-  content: string,
+  content?: string,
 ): PreviewType => {
   switch (getFileType(filename)) {
     case "png":
@@ -41,6 +41,9 @@ export const getPreviewType = (
       return "pdf";
     }
     default: {
+      if (!content) {
+        return "unknown";
+      }
       try {
         atob(content);
         return "unknown";
