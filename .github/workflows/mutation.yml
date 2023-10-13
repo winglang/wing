@@ -76,7 +76,7 @@ jobs:
         if: steps.download-artifacts.outputs.found_artifact == 'true'
         run: |
           git config --global core.hooksPath /dev/null
-      
+
       - name: Update PR Branch
         uses: actions/github-script@v6
         if: steps.download-artifacts.outputs.found_artifact == 'true'
@@ -132,7 +132,6 @@ jobs:
           ref: ${{ github.event.workflow_run.head_branch }}
           repository: ${{ github.event.workflow_run.head_repository.full_name }}
           path: repo
-          fetch-depth: 0
 
       - id: self_mutation
         if: steps.download-artifacts.outputs.found_artifact == 'true'
