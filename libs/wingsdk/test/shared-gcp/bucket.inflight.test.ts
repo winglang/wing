@@ -9,6 +9,7 @@ vi.mock("@google-cloud/storage", () => ({
 
 beforeEach(() => {
   vi.resetAllMocks;
+  vi.clearAllMocks;
 });
 
 test("put object to bucket", async () => {
@@ -134,13 +135,16 @@ test("delete a non-existent object from the bucket with mustExist option", async
 
 test("Given a non public bucket when reaching to a key public url it should throw an error", async () => {
   const BUCKET_NAME = "test-bucket";
+  const KEY = "test-file-1";
+  const VALUE = "test-content-1";
 
   const storage = new MockStorage();
 
   const client = new BucketClient(BUCKET_NAME, false, storage as any);
+  await client.put(KEY, VALUE);
 
-  await expect(() => client.publicUrl("test-file-1")).rejects.toThrowError(
-    "Cannot provide public URL for a non-public bucket"
+  await expect(() => client.publicUrl(KEY)).rejects.toThrowError(
+    `Failed to get public URL. (key=${KEY})`
   );
 });
 

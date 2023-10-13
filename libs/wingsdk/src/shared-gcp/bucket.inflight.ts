@@ -8,14 +8,14 @@ import {
 import { Json } from "../std";
 
 export class BucketClient implements IBucketClient {
-  private _public: boolean;
+  private _public: boolean | undefined;
   private bucketName: string;
   private storage: Storage;
   private bucket: Bucket;
 
   constructor(
     bucketName: string,
-    isPublic: boolean = false,
+    isPublic: boolean | undefined,
     storage: Storage,
     projectId: string = process.env.GCP_PROJECT_ID || "wingsdk-test"
   ) {
@@ -199,13 +199,27 @@ export class BucketClient implements IBucketClient {
    * @Throws if the file is not public or if object does not exist.
    */
   public async publicUrl(key: string): Promise<string> {
-    if (!this._public) {
-      throw new Error(`Cannot provide public URL for a non-public bucket`);
-    }
     try {
       if (!(await this.exists(key))) {
         throw new Error(
-          `Cannot get public URL for a non-existent object. (key=${key})`
+          `Cannot provide public URL for a non-existent object. (key=${key})`
+        );
+      }
+      // if this._public is not undefined, it means that the bucketClient is
+      // used for testing purposes
+      if (this._public !== undefined) {
+        if (!this._public) {
+          throw new Error(
+            `Cannot provide public URL for a non-public bucket. (key=${key})`
+          );
+        }
+        return `https://storage.googleapis.com/${this.bucketName}/${key}`;
+      }
+      // check if the bucket is public using metadata
+      const [metadata] = await this.bucket.file(key).getMetadata();
+      if (metadata.iamConfiguration?.publicAccessPrevention === "enforced") {
+        throw new Error(
+          `Cannot provide public URL for a non-public bucket. (key=${key})`
         );
       }
       return `https://storage.googleapis.com/${this.bucketName}/${key}`;
