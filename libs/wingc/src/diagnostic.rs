@@ -191,15 +191,13 @@ impl WingSpan {
 	}
 
 	pub fn merge(&self, other: &Self) -> Self {
-		let merged_file_id = if self.file_id == other.file_id {
-			&self.file_id
-		} else if self.file_id.is_empty() {
-			&other.file_id
-		} else if other.file_id.is_empty() {
-			&self.file_id
-		} else {
-			panic!("Cannot merge spans from different files")
-		};
+		if self.is_default() {
+			return other.clone();
+		} else if other.is_default() {
+			return self.clone();
+		}
+
+		assert!(self.file_id == other.file_id);
 
 		let start = if self.start < other.start {
 			self.start
@@ -210,8 +208,13 @@ impl WingSpan {
 		Self {
 			start,
 			end,
-			file_id: merged_file_id.clone(),
+			file_id: self.file_id.clone(),
 		}
+	}
+
+	/// Checks if this span is the default span. This means the span is covers nothing by ending at (0,0).
+	pub fn is_default(&self) -> bool {
+		self.end == WingLocation::default()
 	}
 }
 
