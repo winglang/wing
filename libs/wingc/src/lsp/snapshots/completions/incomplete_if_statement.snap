@@ -81,6 +81,18 @@ source: libs/wingc/src/lsp/completions.rs
     value: "```wing\nsize: (): num\n```\n---\nReturns the number of elements in the map.\n\n\n### Returns\nThe number of elements in map\n\n### Remarks\nTODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658"
   sortText: ff|size
   insertText: size()
+- label: tryGet
+  kind: 2
+  detail: "(key: str): T1?"
+  documentation:
+    kind: markdown
+    value: "```wing\ntryGet: (key: str): T1?\n```\n---\nOptionally returns a specified element from the map.\n\n\n### Returns\nThe element associated with the specified key, or undefined if the key can't be found"
+  sortText: ff|tryGet
+  insertText: tryGet($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: values
   kind: 2
   detail: "(): Array"

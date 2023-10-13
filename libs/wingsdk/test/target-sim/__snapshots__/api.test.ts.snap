@@ -2,7 +2,8 @@
 
 exports[`api allows duplicates routes with different methods 1`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -210,7 +211,8 @@ exports[`api handler can read the request params 1`] = `
 
 exports[`api handler can read the request params 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -399,7 +401,8 @@ exports[`api handler can read the request path 1`] = `
 
 exports[`api handler can read the request path 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -588,7 +591,8 @@ exports[`api handler can set response headers 1`] = `
 
 exports[`api handler can set response headers 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -777,7 +781,8 @@ exports[`api response returns Content-Type header from inflight 1`] = `
 
 exports[`api response returns Content-Type header from inflight 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -966,7 +971,8 @@ exports[`api response returns default Content-Type header 1`] = `
 
 exports[`api response returns default Content-Type header 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1173,7 +1179,8 @@ exports[`api supports every method type 1`] = `
 
 exports[`api supports every method type 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1476,7 +1483,8 @@ exports[`api with 'name' & 'age' parameter 1`] = `
 
 exports[`api with 'name' & 'age' parameter 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1682,7 +1690,8 @@ exports[`api with 'name' parameter 1`] = `
 
 exports[`api with 'name' parameter 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1862,7 +1871,8 @@ return class Handler {
 
 exports[`api with multiple GET routes and one lambda 1`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -2074,7 +2084,8 @@ exports[`api with multiple methods on same route 1`] = `
 
 exports[`api with multiple methods on same route 2`] = `
 {
-  ".wing/onrequesthandler-7c48a9f0_c8912b27.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-7c48a9f0_c8912b27.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -2088,7 +2099,8 @@ return class Handler {
 
 })).handle(event);
 };",
-  ".wing/onrequesthandler-f6d90a7f_c869cdc5.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-f6d90a7f_c869cdc5.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -2364,7 +2376,8 @@ exports[`api with multiple routes 1`] = `
 
 exports[`api with multiple routes 2`] = `
 {
-  ".wing/onrequesthandler-7c48a9f0_c8912b27.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-7c48a9f0_c8912b27.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -2378,7 +2391,8 @@ return class Handler {
 
 })).handle(event);
 };",
-  ".wing/onrequesthandler-f6d90a7f_c869cdc5.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-f6d90a7f_c869cdc5.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -2649,7 +2663,8 @@ exports[`api with one GET route 1`] = `
 
 exports[`api with one GET route 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -2838,7 +2853,8 @@ exports[`api with one GET route with request params 1`] = `
 
 exports[`api with one GET route with request params 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -3036,7 +3052,8 @@ exports[`api with one POST route, with body 1`] = `
 
 exports[`api with one POST route, with body 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {

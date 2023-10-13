@@ -285,4 +285,31 @@ pub mod test_utils {
 			position: cursor_position,
 		};
 	}
+
+	/// Finds all ranges in the document starting with `//-`
+	pub fn get_ranges(content: &str) -> Vec<Range> {
+		let lines = content.lines();
+
+		let mut ranges = vec![];
+		for line in lines.enumerate() {
+			if line.1.contains("//-") {
+				let start_col = line.1.match_indices("//-").next().unwrap().0 + 2;
+				let end_col = line.1.len();
+				let line_num = line.0 - 1;
+
+				ranges.push(Range {
+					start: Position {
+						line: line_num as u32,
+						character: start_col as u32,
+					},
+					end: Position {
+						line: line_num as u32,
+						character: end_col as u32,
+					},
+				});
+			}
+		}
+
+		ranges
+	}
 }

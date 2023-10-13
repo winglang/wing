@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $c1 }) {
   class $Closure1 {
     constructor({  }) {
@@ -20,6 +21,7 @@ module.exports = function({ $c1 }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $c2 }) {
   class $Closure2 {
     constructor({  }) {
@@ -38,6 +40,7 @@ module.exports = function({ $c2 }) {
 
 ## inflight.$Closure3-1.js
 ```js
+"use strict";
 module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
   class $Closure3 {
     constructor({  }) {
@@ -385,6 +388,7 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
