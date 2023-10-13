@@ -1,7 +1,8 @@
 bring fs;
 bring regex;
 
-let dirpath = "/tmp/wingdir-preflight";
+let tmpdir = fs.mkdtemp();
+let dirpath = "${tmpdir}/wingdir-preflight";
 let filename = "temp.txt";
 
 fs.mkdir(dirpath);
@@ -24,7 +25,8 @@ let nilFiles = fs.tryReaddir(dirpath);
 assert(nilFiles == nil);
 
 test "inflight create normal directory" {
-    let dirpath = "/tmp/wingdir-inflight";
+    let tmpdir = fs.mkdtemp();
+    let dirpath = "${tmpdir}/wingdir-inflight";
 
     fs.mkdir(dirpath);
     assert(fs.exists(dirpath) == true);

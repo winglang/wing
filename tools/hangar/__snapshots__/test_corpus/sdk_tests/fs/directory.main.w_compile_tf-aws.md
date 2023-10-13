@@ -10,7 +10,8 @@ module.exports = function({ $filename, $fs_Util, $regex_Util }) {
       return $obj;
     }
     async handle() {
-      const dirpath = "/tmp/wingdir-inflight";
+      const tmpdir = (await $fs_Util.mkdtemp());
+      const dirpath = String.raw({ raw: ["", "/wingdir-inflight"] }, tmpdir);
       (await $fs_Util.mkdir(dirpath));
       {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(dirpath) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists(dirpath)),true)))};
       try {
@@ -113,7 +114,8 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const dirpath = "/tmp/wingdir-preflight";
+    const tmpdir = (fs.Util.mkdtemp());
+    const dirpath = String.raw({ raw: ["", "/wingdir-preflight"] }, tmpdir);
     const filename = "temp.txt";
     (fs.Util.mkdir(dirpath));
     {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(dirpath) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.exists(dirpath)),true)))};

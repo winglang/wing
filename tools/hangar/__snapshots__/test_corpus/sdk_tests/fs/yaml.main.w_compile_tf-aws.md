@@ -10,7 +10,8 @@ module.exports = function({ $data, $fs_Util, $std_Json }) {
       return $obj;
     }
     async handle() {
-      const filepath = "/tmp/test-inflight.yaml";
+      const tmpdir = (await $fs_Util.mkdtemp());
+      const filepath = String.raw({ raw: ["", "/test-inflight.yaml"] }, tmpdir);
       (await $fs_Util.writeYaml(filepath,$data,$data));
       {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(filepath) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists(filepath)),true)))};
       const objs = (await $fs_Util.readYaml(filepath));
@@ -19,6 +20,8 @@ module.exports = function({ $data, $fs_Util, $std_Json }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(objs.at(1)) == Json.stringify(data)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([(await objs.at(1))]),((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$data]))))};
       (await $fs_Util.remove(filepath));
       {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(filepath) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists(filepath)),false)))};
+      (await $fs_Util.remove(tmpdir,({"recursive": true})));
+      {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(tmpdir) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists(tmpdir)),false)))};
     }
   }
   return $Closure1;
@@ -105,7 +108,8 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const filepath = "/tmp/test-preflight.yaml";
+    const tmpdir = (fs.Util.mkdtemp());
+    const filepath = String.raw({ raw: ["", "/test-preflight.yaml"] }, tmpdir);
     const data = ({"foo": "bar","arr": [1, 2, 3, "test", ({"foo": "bar"})]});
     try {
       (fs.Util.writeFile(filepath,"invalid: {{ content }}, invalid"));
@@ -123,6 +127,8 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(objs.at(1)) == Json.stringify(data)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([(objs.at(1))]),((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([data]))))};
     (fs.Util.remove(filepath));
     {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(filepath) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.exists(filepath)),false)))};
+    (fs.Util.remove(tmpdir,({"recursive": true})));
+    {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(tmpdir) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.exists(tmpdir)),false)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight yaml operations",new $Closure1(this,"$Closure1"));
   }
 }

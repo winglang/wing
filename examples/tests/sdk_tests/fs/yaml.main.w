@@ -1,7 +1,8 @@
 bring fs;
 bring regex;
 
-let filepath = "/tmp/test-preflight.yaml";
+let tmpdir = fs.mkdtemp();
+let filepath = "${tmpdir}/test-preflight.yaml";
 let data = Json {
     "foo": "bar", 
     "arr": [1, 2, 3, "test", { "foo": "bar" }]
@@ -25,8 +26,12 @@ assert(Json.stringify(objs.at(1)) == Json.stringify(data));
 fs.remove(filepath);
 assert(fs.exists(filepath) == false);
 
+fs.remove(tmpdir, { recursive: true });
+assert(fs.exists(tmpdir) == false);
+
 test "inflight yaml operations" {
-    let filepath = "/tmp/test-inflight.yaml";
+    let tmpdir = fs.mkdtemp();
+    let filepath = "${tmpdir}/test-inflight.yaml";
 
     fs.writeYaml(filepath, data, data);
     assert(fs.exists(filepath) == true);
@@ -38,4 +43,7 @@ test "inflight yaml operations" {
 
     fs.remove(filepath);
     assert(fs.exists(filepath) == false);
+
+    fs.remove(tmpdir, { recursive: true });
+    assert(fs.exists(tmpdir) == false);
 }
