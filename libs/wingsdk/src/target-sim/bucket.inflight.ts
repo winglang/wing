@@ -3,6 +3,7 @@ import * as fs from "fs";
 import * as os from "os";
 import { dirname, join } from "path";
 import * as url from "url";
+import mime from "mime-types";
 import { BucketAttributes, BucketSchema } from "./schema-resources";
 import {
   BucketDeleteOptions,
@@ -11,6 +12,7 @@ import {
   ITopicClient,
   SignedUrlOptions,
   ObjectMetadata,
+  BucketPutProps,
 } from "../cloud";
 import {
   ISimulatorContext,
@@ -76,11 +78,15 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     });
   }
 
-  public async put(key: string, value: string): Promise<void> {
+  public async put(
+    key: string,
+    value: string,
+    props?: BucketPutProps
+  ): Promise<void> {
     return this.context.withTrace({
       message: `Put (key=${key}).`,
       activity: async () => {
-        return this.addFile(key, value);
+        return this.addFile(key, value, props?.contentType);
       },
     });
   }
@@ -250,15 +256,37 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     });
   }
 
-  private async addFile(key: string, value: string): Promise<void> {
+  private async storeMetadata(
+    filePath: string,
+    contentType: string
+  ): Promise<void> {
+    const metadataPath = filePath + ".meta";
+    const metadata = {
+      contentType: contentType,
+    };
+    fs.writeFileSync(metadataPath, JSON.stringify(metadata));
+  }
+
+  private async addFile(
+    key: string,
+    value: string,
+    contentType?: string
+  ): Promise<void> {
     const actionType: BucketEventType = this.objectKeys.has(key)
       ? BucketEventType.UPDATE
       : BucketEventType.CREATE;
+
     const hash = this.hashKey(key);
     const filename = join(this._fileDir, hash);
     const dirName = dirname(filename);
+
     await fs.promises.mkdir(dirName, { recursive: true });
     await fs.promises.writeFile(filename, value);
+
+    const determinedContentType =
+      (contentType ?? mime.lookup(key)) || "application/octet-stream";
+    await this.storeMetadata(filename, determinedContentType);
+
     this.objectKeys.add(key);
     await this.notifyListeners(actionType, key);
   }
