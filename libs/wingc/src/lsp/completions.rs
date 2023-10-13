@@ -7,7 +7,8 @@ use std::cmp::max;
 use tree_sitter::{Node, Point};
 
 use crate::ast::{
-	CalleeKind, Expr, ExprKind, Phase, Scope, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+	AccessModifier, CalleeKind, Expr, ExprKind, Phase, Reference, Scope, Symbol, TypeAnnotation, TypeAnnotationKind,
+	UserDefinedType,
 };
 use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};
 use crate::diagnostic::{WingLocation, WingSpan};
@@ -224,7 +225,18 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 							return vec![];
 						}
 
-						let mut completions = get_completions_from_type(&nearest_expr_type, &types, Some(found_env.phase), true);
+						let access_context = if let ExprKind::Reference(Reference::Identifier(ident)) = &nearest_expr.kind {
+							match ident.name.as_str() {
+								"this" => ObjectAccessContext::This,
+								"super" => ObjectAccessContext::Super,
+								_ => ObjectAccessContext::Outside,
+							}
+						} else {
+							ObjectAccessContext::Outside
+						};
+
+						let mut completions =
+							get_completions_from_type(&nearest_expr_type, &types, Some(found_env.phase), &access_context);
 						if nearest_expr_type.is_option() {
 							// check to see if we need to add a ? to the completion
 							let replace_node = if node_to_complete_kind == "." {
@@ -290,7 +302,12 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 						let type_lookup = resolve_user_defined_type(udt, &found_env, scope_visitor.found_stmt_index.unwrap_or(0));
 
 						let completions = if let Ok(type_lookup) = type_lookup {
-							get_completions_from_type(&type_lookup, &types, Some(found_env.phase), false)
+							get_completions_from_type(
+								&type_lookup,
+								&types,
+								Some(found_env.phase),
+								&ObjectAccessContext::Static,
+							)
 						} else {
 							// this is probably a namespace, let's look it up
 							if let Some(namespace) = root_env
@@ -319,8 +336,12 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 					.ok()
 				{
 					let completions = match lookup_thing {
-						SymbolKind::Type(t) => get_completions_from_type(&t, &types, Some(found_env.phase), false),
-						SymbolKind::Variable(v) => get_completions_from_type(&v.type_, &types, Some(found_env.phase), false),
+						SymbolKind::Type(t) => {
+							get_completions_from_type(&t, &types, Some(found_env.phase), &ObjectAccessContext::Static)
+						}
+						SymbolKind::Variable(v) => {
+							get_completions_from_type(&v.type_, &types, Some(found_env.phase), &ObjectAccessContext::Static)
+						}
 						SymbolKind::Namespace(n) => {
 							// If the types in this namespace aren't loaded yet, load them now to get completions
 							if !n.loaded {
@@ -738,19 +759,29 @@ fn get_inner_struct_completions(struct_: &Struct, existing_fields: &Vec<String>)
 	return completions;
 }
 
+#[derive(Debug)]
+enum ObjectAccessContext {
+	Outside,
+	This,
+	Super,
+	Static,
+}
+
 /// Gets accessible properties on a type as a list of CompletionItems
 fn get_completions_from_type(
 	type_: &TypeRef,
 	types: &Types,
 	current_phase: Option<Phase>,
-	is_instance: bool,
+	access_context: &ObjectAccessContext,
 ) -> Vec<CompletionItem> {
 	let type_ = *type_.maybe_unwrap_option();
 	let type_ = &*types.maybe_unwrap_inference(type_);
 	match type_ {
-		Type::Class(c) => get_completions_from_class(c, current_phase, is_instance),
-		Type::Interface(i) => get_completions_from_class(i, current_phase, is_instance),
-		Type::Struct(s) if is_instance => get_completions_from_class(s, current_phase, is_instance),
+		Type::Class(c) => get_completions_from_class(c, current_phase, access_context),
+		Type::Interface(i) => get_completions_from_class(i, current_phase, access_context),
+		Type::Struct(s) if !matches!(access_context, ObjectAccessContext::Static) => {
+			get_completions_from_class(s, current_phase, access_context)
+		}
 		Type::Enum(enum_) => {
 			let variants = &enum_.values;
 			variants
@@ -763,7 +794,7 @@ fn get_completions_from_type(
 				})
 				.collect()
 		}
-		Type::Optional(t) => get_completions_from_type(t, types, current_phase, is_instance),
+		Type::Optional(t) => get_completions_from_type(t, types, current_phase, access_context),
 		Type::Void | Type::Function(_) | Type::Anything | Type::Unresolved | Type::Inferred(_) => vec![],
 		Type::Number
 		| Type::String
@@ -800,7 +831,12 @@ fn get_completions_from_type(
 
 			let fqn = format!("{WINGSDK_ASSEMBLY_NAME}.{final_type_name}");
 			if let LookupResult::Found(std_type, _) = types.libraries.lookup_nested_str(fqn.as_str(), None) {
-				return get_completions_from_type(&std_type.as_type().expect("is type"), types, current_phase, is_instance);
+				return get_completions_from_type(
+					&std_type.as_type().expect("is type"),
+					types,
+					current_phase,
+					access_context,
+				);
 			} else {
 				vec![]
 			}
@@ -820,7 +856,11 @@ fn get_completions_from_namespace(
 			if let SymbolKind::Type(typeref) = kind {
 				let util_class = typeref.as_class();
 				if let Some(util_class) = util_class {
-					util_completions.extend(get_completions_from_class(util_class, current_phase, false));
+					util_completions.extend(get_completions_from_class(
+						util_class,
+						current_phase,
+						&ObjectAccessContext::Static,
+					));
 				}
 			}
 		}
@@ -838,7 +878,7 @@ fn get_completions_from_namespace(
 fn get_completions_from_class(
 	class: &impl ClassLike,
 	current_phase: Option<Phase>,
-	is_instance: bool,
+	access_context: &ObjectAccessContext,
 ) -> Vec<CompletionItem> {
 	class
 		.get_env()
@@ -853,8 +893,28 @@ fn get_completions_from_class(
 				.as_variable()
 				.expect("Symbols in classes are always variables");
 
+			match access_context {
+				// hide private and protected members when accessing from outside the class
+				ObjectAccessContext::Outside => {
+					if matches!(
+						variable.access_modifier,
+						AccessModifier::Private | AccessModifier::Protected
+					) {
+						return None;
+					}
+				}
+				// hide private members when accessing from inside the class with "super"
+				ObjectAccessContext::Super => {
+					if matches!(variable.access_modifier, AccessModifier::Private) {
+						return None;
+					}
+				}
+				// Don't hide anything when accessing from inside the class with "this"
+				ObjectAccessContext::This | ObjectAccessContext::Static => {}
+			}
+
 			// don't show static members if we're looking for instance members, and vice versa
-			if matches!(variable.kind, VariableKind::StaticMember) == is_instance {
+			if matches!(variable.kind, VariableKind::StaticMember) != matches!(access_context, ObjectAccessContext::Static) {
 				return None;
 			}
 
@@ -1663,5 +1723,33 @@ S.
 //^
 "#,
 		assert!(!struct_static.is_empty())
+	);
+
+	test_completion_list!(
+		hide_private,
+		r#"
+class S {
+  a: num;
+  init() { this.a = 2; }
+}
+let x = new S();
+x.
+//^
+"#,
+		assert!(!hide_private.iter().any(|c| c.label == "a"))
+	);
+
+	test_completion_list!(
+		show_private,
+		r#"
+class S {
+  a: num;
+  init() { 
+    this.
+       //^
+  }
+}
+"#,
+		assert!(show_private.iter().any(|c| c.label == "a"))
 	);
 }
