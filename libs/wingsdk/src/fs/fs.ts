@@ -29,12 +29,12 @@ export interface MkdirOptions {
   /**
    * Indicates whether parent folders should be created.
    * If a folder was created, the path to the first created folder will be returned.
-   * @default false
+   * @default true
    */
   readonly recursive?: boolean;
   /**
    * A file mode. The string will be parsed as an octal integer.
-   * @default "0o777"
+   * @default "0777"
    */
   readonly mode?: string;
 }
@@ -143,7 +143,10 @@ export class Util {
    * @param dirpath The path to the directory you want to create.
    */
   public static mkdir(dirpath: string, opts?: MkdirOptions): void {
-    fs.mkdirSync(dirpath, opts);
+    fs.mkdirSync(dirpath, {
+      recursive: opts?.recursive ?? true,
+      mode: opts?.mode ?? "0777",
+    });
   }
   /**
    * Create a temporary directory.
