@@ -30,6 +30,7 @@ export interface BucketPutProps {
   /**
    * The HTTP Content-Type of the object.
    * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type
+   * @default - Determined by file extension or fallback to "application/octet-stream"
    */
   readonly contentType: string;
 }
