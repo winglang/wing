@@ -133,7 +133,7 @@ test("put multiple json objects and list all from bucket", async () => {
   expect(listMessages(s)).toMatchSnapshot();
 });
 
-test("put and get objects from bucket", async () => {
+test("put and get object from bucket", async () => {
   // GIVEN
   const app = new SimApp();
   cloud.Bucket._newBucket(app, "my_bucket");
@@ -146,6 +146,29 @@ test("put and get objects from bucket", async () => {
 
   // WHEN
   await client.put(KEY, VALUE);
+  const response = await client.get("greeting.txt");
+
+  // THEN
+  await s.stop();
+
+  expect(response).toEqual(VALUE);
+  expect(listMessages(s)).toMatchSnapshot();
+});
+
+test("put and get object from bucket specifying content-type", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Bucket._newBucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  const KEY = "greeting.txt";
+  const VALUE = JSON.stringify({ msg: "Hello world!" });
+  const CONTENT_TYPE = "application/json";
+
+  // WHEN
+  await client.put(KEY, VALUE, { contentType: CONTENT_TYPE });
   const response = await client.get("greeting.txt");
 
   // THEN
