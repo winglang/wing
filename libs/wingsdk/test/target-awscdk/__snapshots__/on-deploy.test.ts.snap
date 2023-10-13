@@ -184,7 +184,7 @@ exports[`create an OnDeploy 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "34031e10a718327bb9ec731d7b54025eebeef68c03bb4f5a3d8e6ad5262a0517.zip",
+          "S3Key": "f80d449080b3bc6bdcb8d4d5c26fea4558a000376aa660842ca899dbe3179556.zip",
         },
         "Handler": "index.handler",
         "Role": {
@@ -198,7 +198,7 @@ exports[`create an OnDeploy 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "myondeployFunctionCurrentVersion6BC23754a188fe5d8f20d876aab6d4da7e10ca3d": {
+    "myondeployFunctionCurrentVersion6BC23754b7391f94763bd1da32cd4e09377d41e4": {
       "Properties": {
         "FunctionName": {
           "Ref": "myondeployFunction47551748",
@@ -265,7 +265,7 @@ exports[`create an OnDeploy 1`] = `
       "Properties": {
         "ExecuteOnHandlerChange": true,
         "HandlerArn": {
-          "Ref": "myondeployFunctionCurrentVersion6BC23754a188fe5d8f20d876aab6d4da7e10ca3d",
+          "Ref": "myondeployFunctionCurrentVersion6BC23754b7391f94763bd1da32cd4e09377d41e4",
         },
         "InvocationType": "RequestResponse",
         "ServiceToken": {
@@ -516,7 +516,7 @@ exports[`execute OnDeploy after other resources 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "34031e10a718327bb9ec731d7b54025eebeef68c03bb4f5a3d8e6ad5262a0517.zip",
+          "S3Key": "f80d449080b3bc6bdcb8d4d5c26fea4558a000376aa660842ca899dbe3179556.zip",
         },
         "Handler": "index.handler",
         "Role": {
@@ -530,7 +530,7 @@ exports[`execute OnDeploy after other resources 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "myondeployFunctionCurrentVersion6BC23754a188fe5d8f20d876aab6d4da7e10ca3d": {
+    "myondeployFunctionCurrentVersion6BC23754b7391f94763bd1da32cd4e09377d41e4": {
       "Properties": {
         "FunctionName": {
           "Ref": "myondeployFunction47551748",
@@ -600,7 +600,7 @@ exports[`execute OnDeploy after other resources 1`] = `
       "Properties": {
         "ExecuteOnHandlerChange": true,
         "HandlerArn": {
-          "Ref": "myondeployFunctionCurrentVersion6BC23754a188fe5d8f20d876aab6d4da7e10ca3d",
+          "Ref": "myondeployFunctionCurrentVersion6BC23754b7391f94763bd1da32cd4e09377d41e4",
         },
         "InvocationType": "RequestResponse",
         "ServiceToken": {
@@ -854,7 +854,7 @@ exports[`execute OnDeploy before other resources 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "34031e10a718327bb9ec731d7b54025eebeef68c03bb4f5a3d8e6ad5262a0517.zip",
+          "S3Key": "f80d449080b3bc6bdcb8d4d5c26fea4558a000376aa660842ca899dbe3179556.zip",
         },
         "Handler": "index.handler",
         "Role": {
@@ -868,7 +868,7 @@ exports[`execute OnDeploy before other resources 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "myondeployFunctionCurrentVersion6BC23754a188fe5d8f20d876aab6d4da7e10ca3d": {
+    "myondeployFunctionCurrentVersion6BC23754b7391f94763bd1da32cd4e09377d41e4": {
       "Properties": {
         "FunctionName": {
           "Ref": "myondeployFunction47551748",
@@ -935,7 +935,7 @@ exports[`execute OnDeploy before other resources 1`] = `
       "Properties": {
         "ExecuteOnHandlerChange": true,
         "HandlerArn": {
-          "Ref": "myondeployFunctionCurrentVersion6BC23754a188fe5d8f20d876aab6d4da7e10ca3d",
+          "Ref": "myondeployFunctionCurrentVersion6BC23754b7391f94763bd1da32cd4e09377d41e4",
         },
         "InvocationType": "RequestResponse",
         "ServiceToken": {

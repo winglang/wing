@@ -47,14 +47,20 @@ use self::lifts::Lifts;
 use self::symbol_env::{LookupResult, LookupResultMut, SymbolEnvIter, SymbolEnvRef};
 
 pub struct UnsafeRef<T>(*const T);
+
+impl<T> Copy for UnsafeRef<T> {}
+
+impl<'a, T> From<&'a T> for UnsafeRef<T> {
+	fn from(t: &'a T) -> Self {
+		UnsafeRef(t)
+	}
+}
+
 impl<T> Clone for UnsafeRef<T> {
 	fn clone(&self) -> Self {
 		*self
 	}
 }
-
-impl<T> Copy for UnsafeRef<T> {}
-
 impl<T> std::ops::Deref for UnsafeRef<T> {
 	type Target = T;
 	fn deref(&self) -> &Self::Target {
@@ -197,6 +203,13 @@ impl SymbolKind {
 	pub fn as_type(&self) -> Option<TypeRef> {
 		match &self {
 			SymbolKind::Type(t) => Some(*t),
+			_ => None,
+		}
+	}
+
+	pub fn as_type_ref(&self) -> Option<&TypeRef> {
+		match &self {
+			SymbolKind::Type(t) => Some(t),
 			_ => None,
 		}
 	}
@@ -1570,9 +1583,16 @@ impl Types {
 
 	/// Obtain the type of a given expression id. Will panic if the expression has not been type checked yet.
 	pub fn get_expr_id_type(&self, expr_id: ExprId) -> TypeRef {
+		*self.get_expr_id_type_ref(expr_id)
+	}
+
+	/// Obtain the type of a given expression id. Will panic if the expression has not been type checked yet.
+	pub fn get_expr_id_type_ref(&self, expr_id: ExprId) -> &TypeRef {
 		self
-			.try_get_expr_type(expr_id)
-			.expect("All expressions should have a type")
+			.type_for_expr
+			.get(expr_id)
+			.and_then(|t| t.as_ref().map(|t| &t.type_))
+			.unwrap()
 	}
 
 	/// Sets the type environment for a given scope. Usually should be called soon
@@ -2375,11 +2395,7 @@ impl<'a> TypeChecker<'a> {
 					.expect(&format!("Expected \"{}\" to be a struct type", struct_type));
 
 				// Verify that all expected fields are present and are the right type
-				for (name, kind, _info) in st.env.iter(true) {
-					let field_type = kind
-						.as_variable()
-						.expect("Expected struct field to be a variable in the struct env")
-						.type_;
+				for (name, field_type) in st.fields(true) {
 					match fields.get(name.as_str()) {
 						Some(field_exp) => {
 							let t = field_types.get(name.as_str()).unwrap();
@@ -5338,21 +5354,23 @@ fn add_parent_members_to_struct_env(
 		};
 		// Add each member of current parent to the struct's environment (if it wasn't already added by a previous parent)
 		for (parent_member_name, parent_member, _) in parent_struct.env.iter(true) {
-			let member_type = parent_member
+			let parent_member_var = parent_member
 				.as_variable()
-				.expect("Expected struct member to be a variable")
-				.type_;
+				.expect("Expected struct member to be a variable");
+			let parent_member_type = parent_member_var.type_;
+
 			if let Some(existing_type) = struct_env.lookup(&parent_member_name.as_str().into(), None) {
-				let existing_type = existing_type
+				let existing_var = existing_type
 					.as_variable()
-					.expect("Expected struct member to be a variable")
-					.type_;
-				if !existing_type.is_same_type_as(&member_type) {
+					.expect("Expected struct member to be a variable");
+				let existing_type = existing_var.type_;
+
+				if !existing_type.is_same_type_as(&parent_member_type) {
 					return Err(TypeError {
-						span: name.span.clone(),
+						span: existing_var.name.span.clone(),
 						message: format!(
 							"Struct \"{}\" extends \"{}\" which introduces a conflicting member \"{}\" ({} != {})",
-							name, parent_type, parent_member_name, member_type, member_type
+							name, parent_type, parent_member_name, parent_member_type, existing_type
 						),
 						annotations: vec![],
 					});
@@ -5360,13 +5378,13 @@ fn add_parent_members_to_struct_env(
 			} else {
 				let sym = Symbol {
 					name: parent_member_name,
-					span: name.span.clone(),
+					span: parent_member_var.name.span.clone(),
 				};
 				struct_env.define(
 					&sym,
 					SymbolKind::make_member_variable(
 						sym.clone(),
-						member_type,
+						parent_member_type,
 						false,
 						false,
 						struct_env.phase,
@@ -5489,6 +5507,14 @@ pub fn resolve_user_defined_type(
 	env: &SymbolEnv,
 	statement_idx: usize,
 ) -> Result<TypeRef, TypeError> {
+	resolve_user_defined_type_ref(user_defined_type, env, statement_idx).map(|t| *t)
+}
+
+pub fn resolve_user_defined_type_ref<'a>(
+	user_defined_type: &'a UserDefinedType,
+	env: &'a SymbolEnv,
+	statement_idx: usize,
+) -> Result<&'a TypeRef, TypeError> {
 	// Resolve all types down the fields list and return the last one (which is likely to be a real type and not a namespace)
 	let mut nested_name = vec![&user_defined_type.root];
 	nested_name.extend(user_defined_type.fields.iter().collect_vec());
@@ -5497,7 +5523,7 @@ pub fn resolve_user_defined_type(
 
 	if let LookupResult::Found(symb_kind, _) = lookup_result {
 		if let SymbolKind::Type(t) = symb_kind {
-			Ok(*t)
+			Ok(t)
 		} else {
 			let symb = nested_name.last().unwrap();
 			Err(TypeError {
@@ -5632,7 +5658,7 @@ pub fn fully_qualify_std_type(type_: &str) -> String {
 
 	match type_name {
 		"Json" | "MutJson" | "MutArray" | "MutMap" | "MutSet" | "Array" | "Map" | "Set" | "String" | "Duration"
-		| "Boolean" | "Number" => {
+		| "Boolean" | "Number" | "Struct" => {
 			format!("{WINGSDK_STD_MODULE}.{type_name}")
 		}
 		_ => type_name.to_string(),
