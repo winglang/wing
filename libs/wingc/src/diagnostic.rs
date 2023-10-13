@@ -191,7 +191,16 @@ impl WingSpan {
 	}
 
 	pub fn merge(&self, other: &Self) -> Self {
-		assert!(self.file_id == other.file_id);
+		let merged_file_id = if self.file_id == other.file_id {
+			&self.file_id
+		} else if self.file_id.is_empty() {
+			&other.file_id
+		} else if other.file_id.is_empty() {
+			&self.file_id
+		} else {
+			panic!("Cannot merge spans from different files")
+		};
+
 		let start = if self.start < other.start {
 			self.start
 		} else {
@@ -201,7 +210,7 @@ impl WingSpan {
 		Self {
 			start,
 			end,
-			file_id: self.file_id.clone(),
+			file_id: merged_file_id.clone(),
 		}
 	}
 }
