@@ -84,6 +84,7 @@ const project = new cdk.JsiiProject({
     // shared client dependencies
     "ioredis",
     "jsonschema",
+    // fs module dependency
     "yaml",
     // mime dependencies
     "mime@^3.0.0",
