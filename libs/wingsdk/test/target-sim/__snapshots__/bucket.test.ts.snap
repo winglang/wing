@@ -483,7 +483,18 @@ exports[`put and get Json object from bucket 2`] = `
 }
 `;
 
-exports[`put and get objects from bucket 1`] = `
+exports[`put and get object from bucket 1`] = `
+[
+  "wingsdk.cloud.TestRunner created.",
+  "wingsdk.cloud.Bucket created.",
+  "Put (key=greeting.txt).",
+  "Get (key=greeting.txt).",
+  "wingsdk.cloud.Bucket deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
+]
+`;
+
+exports[`put and get object from bucket specifying content-type 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Bucket created.",
