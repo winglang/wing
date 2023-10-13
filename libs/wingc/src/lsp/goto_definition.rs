@@ -295,4 +295,24 @@ class T {
 }
 "#
 	);
+
+	test_goto_definition!(
+		class_impl,
+		r#"
+interface IInterface {}
+        //----------
+class C impl IInterface {}
+               //^
+"#
+	);
+
+	test_goto_definition!(
+		class_extends,
+		r#"
+class Parent {}
+    //------
+class Child extends Parent {}
+                   //^
+"#
+	);
 }

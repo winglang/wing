@@ -9,15 +9,6 @@ use crate::{
 	visit_context::*,
 };
 
-macro_rules! unwrap_return {
-	($e:expr) => {
-		match $e {
-			Some(v) => v,
-			None => return,
-		}
-	};
-}
-
 #[derive(Debug)]
 /// Result of using the [SymbolLocato]
 pub enum SymbolLocatorResult {
@@ -90,6 +81,17 @@ impl<'a> SymbolLocator<'a> {
 
 	fn is_found(&self) -> bool {
 		!matches!(self.result, SymbolLocatorResult::NotFound)
+	}
+
+	fn get_env_from_classlike_symbol(&'a self, sym: &'a Symbol) -> Option<SymbolEnvRef> {
+		let struct_type = self.ctx.current_env()?.lookup(sym, None)?;
+		let struct_type = struct_type.as_type()?;
+		match &*struct_type {
+			Type::Class(c) => Some(c.get_env().into()),
+			Type::Interface(c) => Some(c.get_env().into()),
+			Type::Struct(c) => Some(c.get_env().into()),
+			_ => None,
+		}
 	}
 
 	fn lookup_property_on_udt(
@@ -219,64 +221,69 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 
 		// Handle situations where symbols are actually defined in inner scopes
 		match &node.kind {
+			StmtKind::Struct { name, fields, .. } => {
+				let Some(struct_env) = self.get_env_from_classlike_symbol(name) else {
+					return;
+				};
+
+				self.ctx.push_env(struct_env);
+
+				for field in fields {
+					self.visit_symbol(&field.name);
+				}
+
+				self.ctx.pop_env();
+			}
+			StmtKind::Interface(interface) => {
+				let Some(interface_env) = self.get_env_from_classlike_symbol(&interface.name) else {
+					return;
+				};
+
+				self.ctx.push_env(interface_env);
+
+				for method in &interface.methods {
+					self.visit_symbol(&method.0);
+				}
+
+				self.ctx.pop_env();
+			}
 			StmtKind::ForLoop {
-				iterator,
-				iterable,
-				statements,
+				iterator, statements, ..
 			} => {
 				self.push_scope_env(&statements);
 				self.visit_symbol(iterator);
 				self.ctx.pop_env();
-
-				self.visit_expr(iterable);
-				self.visit_scope(statements);
 			}
-			StmtKind::TryCatch {
-				try_statements,
-				catch_block,
-				finally_statements,
-			} => {
-				self.visit_scope(try_statements);
+			StmtKind::TryCatch { catch_block, .. } => {
 				if let Some(catch_block) = catch_block {
 					if let Some(exception_var) = &catch_block.exception_var {
 						self.push_scope_env(&catch_block.statements);
 						self.visit_symbol(exception_var);
 						self.ctx.pop_env();
 					}
-					self.visit_scope(&catch_block.statements);
-				}
-				if let Some(finally_statements) = finally_statements {
-					self.visit_scope(finally_statements);
 				}
 			}
 			StmtKind::IfLet(IfLet {
 				var_name,
-				value,
 				statements,
-				reassignable: _,
 				elif_statements,
-				else_statements,
+				..
 			}) => {
 				self.push_scope_env(&statements);
 				self.visit_symbol(var_name);
 				self.ctx.pop_env();
 
-				self.visit_expr(value);
-				self.visit_scope(statements);
 				for elif in elif_statements {
 					self.push_scope_env(&elif.statements);
 					self.visit_symbol(&elif.var_name);
 					self.ctx.pop_env();
-
-					self.visit_expr(&elif.value);
-					self.visit_scope(&elif.statements);
-				}
-				if let Some(else_statements) = else_statements {
-					self.visit_scope(else_statements);
 				}
 			}
-			_ => crate::visit::visit_stmt(self, node),
+			_ => {}
 		}
+
+		visit_stmt(self, node);
+
 		self.ctx.pop_stmt();
 	}
 
@@ -298,8 +305,12 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 				if let Some((arg_name, ..)) = found_named_arg {
 					// we need to get the struct type from the class constructor
 					let class_type = self.types.get_expr_type(node);
-					let class_phase = unwrap_return!(self.types.get_expr_phase(node));
-					let class_type = unwrap_return!(class_type.as_class());
+					let Some(class_phase) = self.types.get_expr_phase(node) else {
+						return;
+					};
+					let Some(class_type) = class_type.as_class() else {
+						return;
+					};
 					let init_info = match class_phase {
 						Phase::Inflight => class_type.get_method(&Symbol::global(CLASS_INFLIGHT_INIT_NAME)),
 						Phase::Preflight => class_type.get_method(&Symbol::global(CLASS_INIT_NAME)),
@@ -324,7 +335,9 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 					.iter()
 					.find(|a| a.0.span.contains_location(&self.location));
 				if let Some((arg_name, ..)) = x {
-					let env = unwrap_return!(self.ctx.current_env());
+					let Some(env) = self.ctx.current_env() else {
+						return;
+					};
 					// we need to get the struct type from the callee
 					let callee_type = match callee {
 						CalleeKind::Expr(expr) => self.types.get_expr_type(expr),
@@ -396,11 +409,7 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 			self.ctx.pop_env();
 		}
 
-		self.visit_type_annotation(&node.signature.return_type);
-
-		if let FunctionBody::Statements(scope) = &node.body {
-			self.visit_scope(scope);
-		}
+		visit_function_definition(self, node);
 	}
 
 	fn visit_class(&mut self, node: &'a Class) {
@@ -408,22 +417,11 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 			return;
 		}
 
-		self.visit_symbol(&node.name);
+		let Some(class_env) = self.get_env_from_classlike_symbol(&node.name) else {
+			return;
+		};
 
-		self.visit_function_definition(&node.initializer);
-		self.visit_function_definition(&node.inflight_initializer);
-
-		for field in &node.fields {
-			self.visit_type_annotation(&field.member_type);
-		}
-		for method in &node.methods {
-			self.visit_function_definition(&method.1);
-		}
-
-		let class_type = unwrap_return!(unwrap_return!(self.ctx.current_env()).lookup(&node.name, None));
-		let class_type = unwrap_return!(class_type.as_type());
-		let class_type = unwrap_return!(class_type.as_class());
-		self.ctx.push_env(class_type.get_env().into());
+		self.ctx.push_env(class_env);
 
 		for field in &node.fields {
 			self.visit_symbol(&field.name);
@@ -433,6 +431,8 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 		}
 
 		self.ctx.pop_env();
+
+		visit_class(self, node);
 	}
 
 	fn visit_reference(&mut self, node: &'a Reference) {
