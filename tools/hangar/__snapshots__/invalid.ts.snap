@@ -258,7 +258,7 @@ Duration <DURATION>"
 exports[`ambiguous_api_paths.test.w 1`] = `
 "ERROR: Endpoint for path '/test/{variable}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '/test/path'
 
-../../../examples/tests/invalid/target/test/ambiguous_api_paths.test.wsim.[REDACTED].tmp/.wing/preflight.js:38
+../../../examples/tests/invalid/target/test/ambiguous_api_paths.test.wsim.[REDACTED].tmp/.wing/preflight.js:39
        const handler = new $Closure1(this,\\"$Closure1\\");
        (api.get(\\"<ABSOLUTE_PATH>/path\\",handler));
 >>     (api.get(\\"<ABSOLUTE_PATH>/{variable}\\",handler));
@@ -2776,11 +2776,11 @@ Duration <DURATION>"
 `;
 
 exports[`structs.test.w 1`] = `
-"error: Struct \\"C\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != str)
-   --> ../../../examples/tests/invalid/structs.test.w:11:8
+"error: Struct \\"C\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != num)
+   --> ../../../examples/tests/invalid/structs.test.w:13:3
    |
-11 | struct C extends B {
-   |        ^ Struct \\"C\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != str)
+13 |   x: num;
+   |   ^ Struct \\"C\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != num)
 
 
 error: \\"x\\" is not initialized
@@ -2811,11 +2811,11 @@ error: Unknown symbol \\"badField\\"
    |       ^^^^^^^^ Unknown symbol \\"badField\\"
 
 
-error: Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != num)
-   --> ../../../examples/tests/invalid/structs.test.w:44:8
+error: Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != str)
+   --> ../../../examples/tests/invalid/structs.test.w:37:3
    |
-44 | struct Showtime extends Razzle, Dazzle {}
-   |        ^^^^^^^^ Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != num)
+37 |   a: str;
+   |   ^ Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != str)
 
 
 error: Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.

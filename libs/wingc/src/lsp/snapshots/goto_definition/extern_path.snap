@@ -1,0 +1,26 @@
+---
+source: libs/wingc/src/lsp/goto_definition.rs
+---
+- originSelectionRange:
+    start:
+      line: 2
+      character: 9
+    end:
+      line: 2
+      character: 20
+  targetUri: "file:///util.js"
+  targetRange:
+    start:
+      line: 0
+      character: 0
+    end:
+      line: 0
+      character: 0
+  targetSelectionRange:
+    start:
+      line: 0
+      character: 0
+    end:
+      line: 0
+      character: 0
+
