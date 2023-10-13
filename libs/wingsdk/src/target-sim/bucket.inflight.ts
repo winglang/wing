@@ -3,7 +3,7 @@ import * as fs from "fs";
 import * as os from "os";
 import { dirname, join } from "path";
 import * as url from "url";
-import mime from "mime-types";
+import * as mime from "mime";
 import { BucketAttributes, BucketSchema } from "./schema-resources";
 import {
   BucketDeleteOptions,
@@ -284,7 +284,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     await fs.promises.writeFile(filename, value);
 
     const determinedContentType =
-      (contentType ?? mime.lookup(key)) || "application/octet-stream";
+      contentType ?? mime.getType(key) ?? "application/octet-stream";
     await this.storeMetadata(filename, determinedContentType);
 
     this.objectKeys.add(key);
