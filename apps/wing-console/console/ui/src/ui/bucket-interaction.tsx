@@ -51,8 +51,8 @@ export const BucketInteraction = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const previewType = useMemo(() => {
-    return getPreviewType(selectedFile ?? "");
-  }, [selectedFile]);
+    return getPreviewType(selectedFile ?? "", selectedFileData);
+  }, [selectedFile, selectedFileData]);
 
   const validPreviewTypes = new Set(["image", "video", "pdf", "text"]);
   const [showPreview, setShowPreview] = useState(false);

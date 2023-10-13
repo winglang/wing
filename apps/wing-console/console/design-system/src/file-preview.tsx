@@ -8,14 +8,24 @@ const getFileType = (fileName: string) => {
   return fileName.split(".").pop();
 };
 
-export type PreviewType = "image" | "pdf" | "text" | "video" | "audio";
+export type PreviewType =
+  | "image"
+  | "pdf"
+  | "text"
+  | "video"
+  | "audio"
+  | "unknown";
 
-export const getPreviewType = (filename: string): PreviewType => {
+export const getPreviewType = (
+  filename: string,
+  content: string,
+): PreviewType => {
   switch (getFileType(filename)) {
     case "png":
     case "jpg":
     case "jpeg":
     case "gif":
+    case "ico":
     case "svg": {
       return "image";
     }
@@ -31,7 +41,12 @@ export const getPreviewType = (filename: string): PreviewType => {
       return "pdf";
     }
     default: {
-      return "text";
+      try {
+        atob(content);
+        return "unknown";
+      } catch {
+        return "text";
+      }
     }
   }
 };
@@ -53,10 +68,10 @@ export const FilePreview = ({
 
   const type: PreviewType = useMemo(() => {
     if (!filename) {
-      return "text";
+      return "unknown";
     }
-    return getPreviewType(filename);
-  }, [filename]);
+    return getPreviewType(filename, content);
+  }, [filename, content]);
 
   return (
     <>
@@ -132,6 +147,20 @@ export const FilePreview = ({
           json
           dataTestid={dataTestid}
         />
+      )}
+      {type === "unknown" && (
+        <div
+          className={classNames(
+            theme.bgInput,
+            theme.text2,
+            theme.borderInput,
+            "px-2.5 py-1.5",
+            "outline-none rounded text-center inline-block w-full text-xs",
+          )}
+          data-testid={dataTestid}
+        >
+          No preview available
+        </div>
       )}
     </>
   );

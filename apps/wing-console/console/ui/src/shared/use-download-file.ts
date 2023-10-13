@@ -14,6 +14,10 @@ export const getFileEncoding = (file: string): "base64" | "utf8" => {
     case "js":
     case "html":
     case "css":
+    case "ts":
+    case "tsx":
+    case "yaml":
+    case "w":
     case "md": {
       return "utf8";
     }
