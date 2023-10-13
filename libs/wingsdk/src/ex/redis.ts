@@ -32,7 +32,6 @@ export abstract class Redis extends Resource {
   /** @internal */
   public _getInflightOps(): string[] {
     return [
-      RedisInflightMethods.RAW_CLIENT,
       RedisInflightMethods.URL,
       RedisInflightMethods.SET,
       RedisInflightMethods.GET,
@@ -49,12 +48,6 @@ export abstract class Redis extends Resource {
  * Inflight interface for `Redis`.
  */
 export interface IRedisClient {
-  /**
-   * Get raw redis client (currently IoRedis).
-   * @inflight
-   */
-  rawClient(): Promise<any>;
-
   /**
    * Get url of redis server.
    * @inflight
@@ -126,8 +119,6 @@ export interface IRedisClient {
  * @internal
  */
 export enum RedisInflightMethods {
-  /** `Redis.rawClient` */
-  RAW_CLIENT = "rawClient",
   /** `Redis.url` */
   URL = "url",
   /** `Redis.set` */
@@ -150,7 +141,10 @@ export enum RedisInflightMethods {
  * Base class for `Redis` Client.
  */
 export abstract class RedisClientBase implements IRedisClient {
-  public abstract rawClient(): Promise<any>;
+  /**
+   * Get raw redis client (currently IoRedis).
+   */
+  protected abstract rawClient(): Promise<any>;
   public abstract url(): Promise<string>;
 
   public async set(key: string, value: string): Promise<void> {

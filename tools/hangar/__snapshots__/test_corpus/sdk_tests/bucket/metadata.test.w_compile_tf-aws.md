@@ -12,15 +12,16 @@ module.exports = function({ $b }) {
     }
     async handle() {
       (await $b.put("test1.txt","Foo"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.metadata(\"test1.txt\").size == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.metadata("test1.txt")).size,3)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.metadata(\"test1.txt\").contentType == \"application/octet-stream\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.metadata("test1.txt")).contentType,"application/octet-stream")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.metadata(\"test1.txt\").lastModified.year >= 2023")})(((await $b.metadata("test1.txt")).lastModified.year >= 2023))};
+      const metadata = (await $b.metadata("test1.txt"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: metadata.size == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(metadata.size,3)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: metadata.contentType == \"application/octet-stream\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(metadata.contentType,"application/octet-stream")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: metadata.lastModified.year >= 2023")})((metadata.lastModified.year >= 2023))};
       try {
         (await $b.metadata("no-such-file.txt")).lastModified;
       }
       catch ($error_e) {
         const e = $error_e.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Object does not exist (key=no-such-file.txt).\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"Object does not exist (key=no-such-file.txt).")))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: e.contains(\"Object does not exist (key=no-such-file.txt).\")")})(e.includes("Object does not exist (key=no-such-file.txt)."))};
       }
     }
   }

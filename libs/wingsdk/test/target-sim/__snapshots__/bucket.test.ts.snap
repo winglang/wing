@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`bucket on event creates 3 topics, and sends the right event and key in the event handlers  1`] = `
+exports[`bucket on event creates 3 topics, and sends the right event and key in the event handlers 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Topic created.",
@@ -574,7 +574,6 @@ exports[`update an object in bucket 1`] = `
   "Sending message (message=greeting.txt, subscriber=sim-3).",
   "Invoke (payload=\\"greeting.txt\\").",
   "Subscriber error: TypeError: this.handler.handle is not a function",
-  "Put (key=greeting.txt).",
   "Put (key=greeting.txt).",
   "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Function deleted.",
