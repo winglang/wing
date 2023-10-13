@@ -775,6 +775,7 @@ contentType: str;
 ```
 
 - *Type:* str
+- *Default:* Determined by file extension or fallback to "application/octet-stream"
 
 The HTTP Content-Type of the object.
 
