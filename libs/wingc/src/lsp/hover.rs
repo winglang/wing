@@ -406,4 +406,14 @@ class T {
 }
 "#
 	);
+
+	test_hover_list!(
+		struct_decl_field,
+		r#"
+struct S {
+  field: str;
+  //^
+}
+"#
+	);
 }
