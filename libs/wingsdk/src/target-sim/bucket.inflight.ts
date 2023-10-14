@@ -12,7 +12,7 @@ import {
   ITopicClient,
   SignedUrlOptions,
   ObjectMetadata,
-  BucketPutProps,
+  BucketPutOptions,
 } from "../cloud";
 import {
   ISimulatorContext,
@@ -82,7 +82,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   public async put(
     key: string,
     value: string,
-    props?: BucketPutProps
+    props?: BucketPutOptions
   ): Promise<void> {
     return this.context.withTrace({
       message: `Put (key=${key}).`,

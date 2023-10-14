@@ -24,18 +24,6 @@ export interface BucketProps {
 }
 
 /**
- * Options for `Bucket.put`.
- */
-export interface BucketPutProps {
-  /**
-   * The HTTP Content-Type of the object.
-   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type
-   * @default - Determined by file extension or fallback to "application/octet-stream"
-   */
-  readonly contentType: string;
-}
-
-/**
  * A cloud object store.
  *
  * @inflight `@winglang/sdk.cloud.IBucketClient`
@@ -255,6 +243,30 @@ export abstract class Bucket extends Resource {
 }
 
 /**
+ * Options for `Bucket.put()`.
+ */
+export interface BucketPutOptions {
+  /**
+   * The HTTP Content-Type of the object.
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type
+   * @default - Determined by file extension or fallback to "application/octet-stream"
+   */
+  readonly contentType: string;
+}
+
+/**
+ * Options for `Bucket.delete()`.
+ */
+export interface BucketDeleteOptions {
+  /**
+   * Check failures on the method and retrieve errors if any
+   * @Throws if this is `true`, an error is thrown if the file is not found (or any error case).
+   * @default false
+   */
+  readonly mustExist?: boolean;
+}
+
+/**
  * Interface for signed url options
  */
 export interface SignedUrlOptions {
@@ -263,16 +275,6 @@ export interface SignedUrlOptions {
    */
 
   readonly duration?: Duration;
-}
-
-/** Interface for delete method inside `Bucket` */
-export interface BucketDeleteOptions {
-  /**
-   * Check failures on the method and retrieve errors if any
-   * @Throws if this is `true`, an error is thrown if the file is not found (or any error case).
-   * @default false
-   */
-  readonly mustExist?: boolean;
 }
 
 /**
@@ -293,7 +295,7 @@ export interface IBucketClient {
    * @param options Additional options
    * @inflight
    */
-  put(key: string, body: string, options?: BucketPutProps): void;
+  put(key: string, body: string, options?: BucketPutOptions): void;
 
   /**
    * Put a Json object in the bucket.

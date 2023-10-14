@@ -10,7 +10,7 @@ import {
   IBucketClient,
   SignedUrlOptions,
   ObjectMetadata,
-  BucketPutProps,
+  BucketPutOptions,
 } from "../cloud";
 import { Json } from "../std";
 
@@ -62,7 +62,7 @@ export class BucketClient implements IBucketClient {
   public async put(
     key: string,
     body: string,
-    props?: BucketPutProps
+    props?: BucketPutOptions
   ): Promise<void> {
     const blobClient = this.containerClient.getBlockBlobClient(key);
     const options = {

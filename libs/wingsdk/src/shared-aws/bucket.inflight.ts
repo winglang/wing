@@ -23,7 +23,7 @@ import {
   IBucketClient,
   SignedUrlOptions,
   ObjectMetadata,
-  BucketPutProps,
+  BucketPutOptions,
 } from "../cloud";
 import { Datetime, Json } from "../std";
 
@@ -64,7 +64,7 @@ export class BucketClient implements IBucketClient {
   public async put(
     key: string,
     body: string,
-    props?: BucketPutProps
+    props?: BucketPutOptions
   ): Promise<void> {
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
