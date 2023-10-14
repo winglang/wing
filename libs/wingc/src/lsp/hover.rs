@@ -40,7 +40,7 @@ pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
 			if let Some(lookup) = symbol_finder.lookup_located_symbol() {
 				if let LookupResult::Found(symbol_info, ..) = &lookup {
 					let docs = symbol_info.render_docs();
-					let span = symbol_finder.located_span().unwrap();
+					let span = symbol_finder.located_span()?;
 					return Some(Hover {
 						contents: HoverContents::Markup(MarkupContent {
 							kind: MarkupKind::Markdown,
@@ -414,6 +414,14 @@ struct S {
   field: str;
   //^
 }
+"#
+	);
+
+	test_hover_list!(
+		static_method_root,
+		r#"
+Json.stringify({});
+//^
 "#
 	);
 }
