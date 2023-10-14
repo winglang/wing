@@ -22,14 +22,14 @@ const FUNCTION_NAME_OPTS: NameOptions = {
 
 export enum ResourceTypes {
   BUCKET = "Bucket",
-  Function = "Function",
+  FUNCTION = "Function",
 }
 
 export enum ActionTypes {
-  StorageRead = "roles/storage.objectViewer",
-  StorageReadWrite = "roles/storage.objectUser",
-  FunctionInvoker = "roles/cloudfunctions.invoker",
-  FunctionViewer = "roles/cloudfunctions.viewer",
+  STORAGE_READ = "roles/storage.objectViewer",
+  STORAGE_READ_WRITE = "roles/storage.objectUser",
+  FUNCTION_INVOKER = "roles/cloudfunctions.invoker",
+  FUNCTION_VIEWER = "roles/cloudfunctions.viewer",
 }
 
 interface IFunctionPermissions {
@@ -132,7 +132,7 @@ export class Function extends cloud.Function {
                 app.projectId as string
               );
               break;
-            case ResourceTypes.Function:
+            case ResourceTypes.FUNCTION:
               throw new Error("Function permissions not implemented yet");
             default:
               throw new Error("Unsupported resource type");
@@ -179,7 +179,7 @@ export class Function extends cloud.Function {
             app.projectId as string
           );
           break;
-        case ResourceTypes.Function:
+        case ResourceTypes.FUNCTION:
           throw new Error("Function permissions not implemented yet");
         default:
           throw new Error("Unsupported resource type");

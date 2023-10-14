@@ -72,7 +72,7 @@ export class Bucket extends cloud.Bucket {
       // https://cloud.google.com/storage/docs/access-control/making-data-public#terraform
       new StorageBucketIamMember(this, "PublicAccessIamMember", {
         bucket: this.bucket.name,
-        role: ActionTypes.StorageRead,
+        role: ActionTypes.STORAGE_READ,
         member: "allUsers",
       });
     }
@@ -92,22 +92,31 @@ export class Bucket extends cloud.Bucket {
     }
     if (
       ops.includes(cloud.BucketInflightMethods.GET) ||
+      ops.includes(cloud.BucketInflightMethods.GET_JSON) ||
       ops.includes(cloud.BucketInflightMethods.LIST) ||
-      ops.includes(cloud.BucketInflightMethods.GET_JSON)
+      ops.includes(cloud.BucketInflightMethods.EXISTS) ||
+      ops.includes(cloud.BucketInflightMethods.PUBLIC_URL) ||
+      ops.includes(cloud.BucketInflightMethods.SIGNED_URL) ||
+      ops.includes(cloud.BucketInflightMethods.TRY_GET) ||
+      ops.includes(cloud.BucketInflightMethods.TRY_GET_JSON)
     ) {
       host.addPermission(this, {
-        Action: ActionTypes.StorageRead,
+        Action: ActionTypes.STORAGE_READ,
         Resource: ResourceTypes.BUCKET,
       });
     } else if (
       ops.includes(cloud.BucketInflightMethods.DELETE) ||
       ops.includes(cloud.BucketInflightMethods.PUT) ||
-      ops.includes(cloud.BucketInflightMethods.PUT_JSON)
+      ops.includes(cloud.BucketInflightMethods.PUT_JSON) ||
+      ops.includes(cloud.BucketInflightMethods.TRY_DELETE)
     ) {
       host.addPermission(this, {
-        Action: ActionTypes.StorageReadWrite,
+        Action: ActionTypes.STORAGE_READ_WRITE,
         Resource: ResourceTypes.BUCKET,
       });
+    }
+    else {
+      throw new Error("Method not implemented.");
     }
     super.bind(host, ops);
   }
@@ -124,13 +133,13 @@ export const addBucketPermission = (
   projectId: string
 ) => {
   try {
-    if (permission === ActionTypes.StorageRead) {
+    if (permission === ActionTypes.STORAGE_READ) {
       new StorageBucketIamMember(bucket, `RoleAssignment${permission}`, {
         bucket: bucket.bucket.name,
         role: permission,
         member: `projectViewer:${projectId}`,
       });
-    } else if (permission === ActionTypes.StorageReadWrite) {
+    } else if (permission === ActionTypes.STORAGE_READ_WRITE) {
       new StorageBucketIamMember(bucket, `RoleAssignment${permission}`, {
         bucket: bucket.bucket.name,
         role: permission,
