@@ -27,6 +27,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   private readonly initialObjects: Record<string, string>;
   private readonly _public: boolean;
   private readonly topicHandlers: Partial<Record<BucketEventType, string>>;
+  private readonly metadata: Record<string, ObjectMetadata> = {};
 
   public constructor(props: BucketSchema["props"], context: ISimulatorContext) {
     this.objectKeys = new Set();
@@ -109,7 +110,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Get (key=${key}).`,
       activity: async () => {
-        const hash = this.hashKey(key);
+        const hash = this.getHashKey(key);
         const filename = join(this._fileDir, hash);
         try {
           return await fs.promises.readFile(filename, "utf8");
@@ -134,7 +135,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Get Json (key=${key}).`,
       activity: async () => {
-        const hash = this.hashKey(key);
+        const hash = this.getHashKey(key);
         const filename = join(this._fileDir, hash);
         return JSON.parse(await fs.promises.readFile(filename, "utf8"));
       },
@@ -163,7 +164,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
           return;
         }
 
-        const hash = this.hashKey(key);
+        const hash = this.getHashKey(key);
         const filename = join(this._fileDir, hash);
         await fs.promises.unlink(filename);
         this.objectKeys.delete(key);
@@ -233,38 +234,19 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
    * @param key Key of the object.
    * @throws if the object does not exist.
    */
-  public async metadata(key: string): Promise<ObjectMetadata> {
+  public async getMetadata(key: string): Promise<ObjectMetadata> {
     return this.context.withTrace({
       message: `Metadata (key=${key}).`,
       activity: async () => {
-        const hash = this.hashKey(key);
-        const filename = join(this._fileDir, hash);
-        try {
-          const filestat = await fs.promises.stat(filename, {
-            bigint: false,
-          });
-          return {
-            size: filestat.size,
-            lastModified: Datetime.fromIso(filestat.mtime.toISOString()),
-            // fs does not provide a way to get the content-type
-            contentType: "application/octet-stream",
-          };
-        } catch (e) {
+        if (!this.objectKeys.has(key)) {
           throw new Error(`Object does not exist (key=${key}).`);
         }
+        if (!this.metadata[key]) {
+          throw new Error(`Metadata does not exist for object (key=${key}).`);
+        }
+        return this.metadata[key];
       },
     });
-  }
-
-  private async storeMetadata(
-    filePath: string,
-    contentType: string
-  ): Promise<void> {
-    const metadataPath = filePath + ".meta";
-    const metadata = {
-      contentType: contentType,
-    };
-    fs.writeFileSync(metadataPath, JSON.stringify(metadata));
   }
 
   private async addFile(
@@ -276,22 +258,28 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       ? BucketEventType.UPDATE
       : BucketEventType.CREATE;
 
-    const hash = this.hashKey(key);
+    const hash = this.getHashKey(key);
     const filename = join(this._fileDir, hash);
     const dirName = dirname(filename);
 
     await fs.promises.mkdir(dirName, { recursive: true });
     await fs.promises.writeFile(filename, value);
 
+    const filestat = await fs.promises.stat(filename);
     const determinedContentType =
       contentType ?? mime.getType(key) ?? "application/octet-stream";
-    await this.storeMetadata(filename, determinedContentType);
+
+    this.metadata[key] = {
+      size: filestat.size,
+      lastModified: Datetime.fromIso(filestat.mtime.toISOString()),
+      contentType: determinedContentType,
+    };
 
     this.objectKeys.add(key);
     await this.notifyListeners(actionType, key);
   }
 
-  private hashKey(key: string): string {
+  private getHashKey(key: string): string {
     return crypto.createHash("sha512").update(key).digest("hex");
   }
 }

@@ -116,7 +116,7 @@ export function calculateBucketPermissions(
   if (
     ops.includes(cloud.BucketInflightMethods.GET) ||
     ops.includes(cloud.BucketInflightMethods.GET_JSON) ||
-    ops.includes(cloud.BucketInflightMethods.METADATA) ||
+    ops.includes(cloud.BucketInflightMethods.GET_METADATA) ||
     ops.includes(cloud.BucketInflightMethods.LIST) ||
     ops.includes(cloud.BucketInflightMethods.TRY_GET) ||
     ops.includes(cloud.BucketInflightMethods.TRY_GET_JSON) ||
