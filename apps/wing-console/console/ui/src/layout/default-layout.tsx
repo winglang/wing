@@ -19,7 +19,7 @@ import { TestsTreeView } from "../features/tests-tree-view.js";
 import { BlueScreenOfDeath } from "../ui/blue-screen-of-death.js";
 import { EdgeMetadata } from "../ui/edge-metadata.js";
 import { Explorer } from "../ui/explorer.js";
-import { ResourceMetadata } from "../ui/resource-metadata.js";
+import { ResourceMetadataPanel } from "../ui/resource-metadata-panel.js";
 
 import { StatusBar } from "./status-bar.js";
 import { TermsAndConditionsModal } from "./terms-and-conditions-modal.js";
@@ -384,7 +384,7 @@ export const DefaultLayout = ({
                         )}
                       >
                         {metadata.data && (
-                          <ResourceMetadata
+                          <ResourceMetadataPanel
                             node={metadata.data?.node}
                             inbound={metadata.data?.inbound}
                             outbound={metadata.data?.outbound}

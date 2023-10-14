@@ -1,10 +1,16 @@
 import { ConstructInfo, ConstructTreeNode } from "./construct-tree.js";
 
+export interface DisplayMetaComponent {
+  type: string;
+  props: Record<string, any>;
+}
+
 export interface NodeDisplay {
   title?: string;
   description?: string;
   sourceModule?: string;
   hidden?: boolean;
+  meta?: DisplayMetaComponent[];
 }
 
 export interface NodeConnection {

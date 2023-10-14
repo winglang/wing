@@ -39,6 +39,7 @@ export type { MapNode, MapEdge } from "./router/app.js";
 export type { InternalTestResult } from "./router/test.js";
 export type { Column } from "./router/table.js";
 export type { NodeDisplay } from "./utils/constructTreeNodeMap.js";
+export type { DisplayMetaComponent } from "./utils/constructTreeNodeMap.js";
 export type {
   LayoutConfig,
   LayoutComponent,

@@ -3,7 +3,7 @@ import { useCallback } from "react";
 
 import { useQueue } from "../services/use-queue.js";
 import { QueueMetadata } from "../ui/queue-metadata.js";
-import { MetadataNode } from "../ui/resource-metadata.js";
+import { MetadataNode } from "../ui/resource-metadata-panel.js";
 
 export interface QueueMetadataProps {
   node: MetadataNode;

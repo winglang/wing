@@ -5,6 +5,7 @@ import { createAppRouter } from "./app.js";
 import { createBucketRouter } from "./bucket.js";
 import { createConfigRouter } from "./config.js";
 import { createCounterRouter } from "./counter.js";
+import { createCustomResourceRouter } from "./custom-resource.js";
 import { createDynamodbTableRouter } from "./dynamodb-table.js";
 import { createFunctionRouter } from "./function.js";
 import { createQueueRouter } from "./queue.js";
@@ -33,6 +34,7 @@ export const mergeAllRouters = () => {
     createWebsiteRouter(),
     createConfigRouter(),
     createDynamodbTableRouter(),
+    createCustomResourceRouter(),
   );
 
   return { router };
