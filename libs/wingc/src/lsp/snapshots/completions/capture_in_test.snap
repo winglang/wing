@@ -61,7 +61,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "inflight (key: str): ObjectMetadata"
   documentation:
     kind: markdown
-    value: "```wing\ninflight getMetadata: inflight (key: str): ObjectMetadata\n```\n---\nGet the metadata of an object in the bucket.\n\n\n*@Throws* *if there is no object with the given key.*"
+    value: "```wing\ninflight getMetadata: inflight (key: str): ObjectMetadata\n```\n---\nGet the metadata of an object in the bucket.\n### Parameters\n- `key` — `str` — Key of the object.\n\n*@Throws* *if there is no object with the given key.*"
   sortText: ff|getMetadata
   insertText: getMetadata($0)
   insertTextFormat: 2
@@ -73,7 +73,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "inflight (prefix: str?): Array<str>"
   documentation:
     kind: markdown
-    value: "```wing\ninflight list: inflight (prefix: str?): Array<str>\n```\n---\nRetrieve existing objects keys from the bucket.\n\n\n### Returns\na list of keys or an empty array if the bucket is empty."
+    value: "```wing\ninflight list: inflight (prefix: str?): Array<str>\n```\n---\nRetrieve existing objects keys from the bucket.\n### Parameters\n- `prefix` — `str?` — Limits the response to keys that begin with the specified prefix.\n\n### Returns\na list of keys or an empty array if the bucket is empty."
   sortText: ff|list
   insertText: list($0)
   insertTextFormat: 2
@@ -97,7 +97,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "inflight (key: str, body: str, options: BucketPutProps?): void"
   documentation:
     kind: markdown
-    value: "```wing\ninflight put: inflight (key: str, body: str, options: BucketPutProps?): void\n```\n---\nPut an object in the bucket."
+    value: "```wing\ninflight put: inflight (key: str, body: str, options: BucketPutProps?): void\n```\n---\nPut an object in the bucket.\n### Parameters\n- `key` — `str` — Key of the object.\n- `body` — `str` — Content of the object we want to store into the bucket.\n- `...options` — `BucketPutProps?` — Additional options.\n  \n  - `contentType` — `str` — The HTTP Content-Type of the object."
   sortText: ff|put
   insertText: put($0)
   insertTextFormat: 2
