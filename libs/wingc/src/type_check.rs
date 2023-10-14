@@ -1096,6 +1096,10 @@ impl TypeRef {
 		}
 	}
 
+	pub fn is_function_sig(&self) -> bool {
+		matches!(**self, Type::Function(_))
+	}
+
 	/// If this is a function and its last argument is a struct, return that struct.
 	pub fn get_function_struct_arg(&self) -> Option<&Struct> {
 		if let Some(func) = self.maybe_unwrap_option().as_function_sig() {
@@ -3274,8 +3278,8 @@ impl<'a> TypeChecker<'a> {
 				tc.type_check_try_catch(env, try_statements, catch_block, finally_statements);
 			}
 			StmtKind::CompilerDebugEnv => {
-				println!("[symbol environment at {}]", stmt.span);
-				println!("{}", env);
+				eprintln!("[symbol environment at {}]", stmt.span);
+				eprintln!("{}", env);
 			}
 			StmtKind::SuperConstructor { arg_list } => {
 				tc.type_check_super_constructor_against_parent_initializer(stmt, arg_list, env);

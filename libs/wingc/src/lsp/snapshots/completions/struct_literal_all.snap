@@ -7,7 +7,7 @@ source: libs/wingc/src/lsp/completions.rs
   documentation:
     kind: markdown
     value: "```wing\nx: str\n```"
-  sortText: "ab|x:"
+  sortText: "ab|a|x:"
   insertText: "x: $1"
   insertTextFormat: 2
   command:
@@ -19,7 +19,7 @@ source: libs/wingc/src/lsp/completions.rs
   documentation:
     kind: markdown
     value: "```wing\ny: num\n```"
-  sortText: "ab|y:"
+  sortText: "ab|a|y:"
   insertText: "y: $1"
   insertTextFormat: 2
   command:
