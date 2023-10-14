@@ -165,8 +165,8 @@ new cloud.Bucket(props?: BucketProps);
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.exists">exists</a></code> | Check if an object exists in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.get">get</a></code> | Retrieve an object from the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.getJson">getJson</a></code> | Retrieve a Json object from the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.getMetadata">getMetadata</a></code> | Get the metadata of an object in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.list">list</a></code> | Retrieve existing objects keys from the bucket. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.metadata">metadata</a></code> | Get the metadata of an object in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.publicUrl">publicUrl</a></code> | Returns a url to the given file. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.putJson">putJson</a></code> | Put a Json object in the bucket. |
@@ -386,6 +386,22 @@ Key of the object.
 
 ---
 
+##### `getMetadata` <a name="getMetadata" id="@winglang/sdk.cloud.IBucketClient.getMetadata"></a>
+
+```wing
+inflight getMetadata(key: str): ObjectMetadata
+```
+
+Get the metadata of an object in the bucket.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.getMetadata.parameter.key"></a>
+
+- *Type:* str
+
+Key of the object.
+
+---
+
 ##### `list` <a name="list" id="@winglang/sdk.cloud.IBucketClient.list"></a>
 
 ```wing
@@ -399,22 +415,6 @@ Retrieve existing objects keys from the bucket.
 - *Type:* str
 
 Limits the response to keys that begin with the specified prefix.
-
----
-
-##### `metadata` <a name="metadata" id="@winglang/sdk.cloud.IBucketClient.metadata"></a>
-
-```wing
-inflight metadata(key: str): ObjectMetadata
-```
-
-Get the metadata of an object in the bucket.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.metadata.parameter.key"></a>
-
-- *Type:* str
-
-Key of the object.
 
 ---
 
