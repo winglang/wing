@@ -114,8 +114,7 @@ export class Bucket extends cloud.Bucket {
         Action: ActionTypes.STORAGE_READ_WRITE,
         Resource: ResourceTypes.BUCKET,
       });
-    }
-    else {
+    } else {
       throw new Error("Method not implemented.");
     }
     super.bind(host, ops);
