@@ -1068,53 +1068,69 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_inflight_init(&self, func_def: &FunctionDefinition, ctx: &mut JSifyContext) -> String {
+	fn jsify_inflight_init(&self, func_def: &FunctionDefinition, class_phase: Phase, ctx: &mut JSifyContext) -> String {
 		assert!(ctx.visit_ctx.current_phase() == Phase::Inflight);
-
-		let mut parameter_list = vec![];
-
-		for p in &func_def.signature.parameters {
-			if p.variadic {
-				parameter_list.push("...".to_string() + &p.name.to_string());
-			} else {
-				parameter_list.push(p.name.to_string());
-			}
-		}
-
-		let parameters = parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", ");
 
 		let FunctionBody::Statements(body_scope) = &func_def.body else {
 			panic!("inflight init must have a scope body")
 		};
 
-		let mut code = CodeMaker::default();
-		code.open(format!("constructor({parameters}){{"));
-
-		// Issue a call to the parent class's regular ctor
-		if let Some(Stmt {
-			kind: StmtKind::SuperConstructor { arg_list },
-			..
-		}) = body_scope.statements.iter().next()
-		{
-			let args = self.jsify_arg_list(&arg_list, None, None, ctx);
-			code.line(format!("super({args});"));
-
-			// If our parent's phase in inflight then backup a reference to the paren't inflight init to be used in the super ctor call
-			if parent_class_phase(ctx) == Phase::Inflight {
-				code.line(format!(
-					"this.super_{CLASS_INFLIGHT_INIT_NAME} = this.{CLASS_INFLIGHT_INIT_NAME};"
-				));
-			}
-		}
-
 		// Create the async init function that'll capture the ctor's args
-		code.open(format!("this.{CLASS_INFLIGHT_INIT_NAME} = async () => {{"));
 		let mut async_init_body_code = CodeMaker::default();
+		// Define this as a closure if we're inside a regulat ctor (inflight class)
+		async_init_body_code.open(if class_phase == Phase::Inflight {
+			// A closure that'll capture the ctor args
+			format!("this.{CLASS_INFLIGHT_INIT_NAME} = async () => {{")
+		} else {
+			// Preflight class's inflight inits have no args
+			format!("async {CLASS_INFLIGHT_INIT_NAME}() {{")
+		});
 		async_init_body_code.add_code(self.jsify_scope_body(body_scope, ctx));
-		code.add_code(async_init_body_code);
-		code.close("}");
+		async_init_body_code.close("}");
 
-		code.close("}");
+		// If this is an inflight init of an inflight class then we also need to generate a normat ctor, if it's a preflight class
+		// then we generate a binding ctor seperately see `jsify_inflight_binding_constructor`
+		let code = if class_phase == Phase::Inflight {
+			let mut code = CodeMaker::default();
+			let mut parameter_list = vec![];
+
+			for p in &func_def.signature.parameters {
+				if p.variadic {
+					parameter_list.push("...".to_string() + &p.name.to_string());
+				} else {
+					parameter_list.push(p.name.to_string());
+				}
+			}
+
+			let parameters = parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", ");
+
+			code.open(format!("constructor({parameters}){{"));
+
+			// Issue a call to the parent class's regular ctor
+			if let Some(Stmt {
+				kind: StmtKind::SuperConstructor { arg_list },
+				..
+			}) = body_scope.statements.iter().next()
+			{
+				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
+				code.line(format!("super({args});"));
+
+				// If our parent's phase in inflight then backup a reference to the paren't inflight init to be used in the super ctor call
+				if parent_class_phase(ctx) == Phase::Inflight {
+					code.line(format!(
+						"this.super_{CLASS_INFLIGHT_INIT_NAME} = this.{CLASS_INFLIGHT_INIT_NAME};"
+					));
+				}
+			}
+
+			code.add_code(async_init_body_code);
+
+			code.close("}");
+			code
+		} else {
+			assert!(func_def.signature.parameters.is_empty());
+			async_init_body_code
+		};
 
 		code.to_string()
 	}
@@ -1393,7 +1409,7 @@ impl<'a> JSifier<'a> {
 		// emit the $inflight_init function (if it has a body).
 		if let FunctionBody::Statements(s) = &class.inflight_initializer.body {
 			if !s.statements.is_empty() {
-				class_code.line(self.jsify_inflight_init(&class.inflight_initializer, &mut ctx));
+				class_code.line(self.jsify_inflight_init(&class.inflight_initializer, class.phase, &mut ctx));
 			}
 		}
 
