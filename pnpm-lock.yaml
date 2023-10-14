@@ -1,12 +1,6 @@
 lockfileVersion: '6.0'
 
-settings:!/API.md
-/coverage/
-src/**/*.js
-src/**/*.d.ts
-!/cdktf.json
-src/.gen
-
+settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
@@ -14007,7 +14001,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20231013
+      typescript: 5.3.0-dev.20231014
     dev: true
 
   /dset@3.1.2:
@@ -23497,8 +23491,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20231013:
-    resolution: {integrity: sha512-ZhuwwWpJ9Hec2JJaS0yOJOjkLDu6lm/PXjniirFFcFBArD5HA3K8P31XxPmwonBhk7oznUbhdIDu8LEYha9Kxw==}
+  /typescript@5.3.0-dev.20231014:
+    resolution: {integrity: sha512-GdNly6XgR/4j8jLzjrs4OWRLomjRlBo/0oWtG1WA25VVHKWO6cd0CbfLNuII7LATW/KEvMBJg2sgpZosKejr9g==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
