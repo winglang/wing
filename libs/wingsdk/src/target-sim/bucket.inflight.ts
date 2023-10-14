@@ -3,7 +3,7 @@ import * as fs from "fs";
 import * as os from "os";
 import { dirname, join } from "path";
 import * as url from "url";
-import * as mime from "mime";
+import mime from "mime-types";
 import { BucketAttributes, BucketSchema } from "./schema-resources";
 import {
   BucketDeleteOptions,
@@ -267,7 +267,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
 
     const filestat = await fs.promises.stat(filename);
     const determinedContentType =
-      contentType ?? mime.getType(key) ?? "application/octet-stream";
+      (contentType ?? mime.lookup(key)) || "application/octet-stream";
 
     this.metadata[key] = {
       size: filestat.size,

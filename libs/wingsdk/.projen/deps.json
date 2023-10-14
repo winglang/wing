@@ -253,11 +253,6 @@
       "type": "bundled"
     },
     {
-      "name": "@types/mime",
-      "version": "^3.0.2",
-      "type": "bundled"
-    },
-    {
       "name": "aws-cdk-lib",
       "version": "^2.64.0",
       "type": "bundled"
@@ -289,11 +284,6 @@
     },
     {
       "name": "mime-types",
-      "type": "bundled"
-    },
-    {
-      "name": "mime",
-      "version": "^3.0.0",
       "type": "bundled"
     },
     {

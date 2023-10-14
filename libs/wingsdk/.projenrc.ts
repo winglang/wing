@@ -87,9 +87,6 @@ const project = new cdk.JsiiProject({
     "jsonschema",
     // fs module dependency
     "yaml",
-    // mime dependencies
-    "mime@^3.0.0",
-    "@types/mime@^3.0.2",
   ],
   devDeps: [
     `@cdktf/provider-aws@^15.0.0`, // only for testing Wing plugins
