@@ -45,10 +45,8 @@ module.exports = function({  }) {
     async dontTouchCounter() {
       {console.log("hello")};
     }
-    constructor(){
-      this.$inflight_init = async () => {
-        this.myField2 = "hello";
-      }
+    async $inflight_init() {
+      this.myField2 = "hello";
     }
   }
   return Foo;

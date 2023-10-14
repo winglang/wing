@@ -30,10 +30,8 @@ module.exports = function({  }) {
       {console.log(this.s)};
       this.s = "hello!";
     }
-    constructor(){
-      this.$inflight_init = async () => {
-        this.s = "hey there!";
-      }
+    async $inflight_init() {
+      this.s = "hey there!";
     }
   }
   return MyType;

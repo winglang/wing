@@ -59,10 +59,8 @@ module.exports = function({  }) {
     async foo() {
       return ((await this.bar()) / 2);
     }
-    constructor(){
-      this.$inflight_init = async () => {
-        this.x = 42;
-      }
+    async $inflight_init() {
+      this.x = 42;
     }
   }
   return Foo;
