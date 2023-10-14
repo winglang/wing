@@ -20,9 +20,11 @@ test("put object to bucket", async () => {
   const storage = new MockStorage();
 
   const client = new BucketClient(BUCKET_NAME, false, storage as any);
-  const res = await client.put(KEY, VALUE);
+  await client.put(KEY, VALUE);
 
-  expect(res).toBe(undefined);
+  // check that the object was put by ensuring it exists
+  const res = await client.exists(KEY);
+  expect(res).toBe(true);
 });
 
 test("putJson an object into the bucket", async () => {
@@ -33,9 +35,11 @@ test("putJson an object into the bucket", async () => {
   const storage = new MockStorage();
 
   const client = new BucketClient(BUCKET_NAME, false, storage as any);
-  const res = await client.putJson(KEY, VALUE as any);
+  await client.putJson(KEY, VALUE as any);
 
-  expect(res).toBe(undefined);
+  // check that the object was put by ensuring it exists
+  const res = await client.exists(KEY);
+  expect(res).toBe(true);
 });
 
 test("get an object from bucket", async () => {
@@ -102,9 +106,11 @@ test("delete object from bucket", async () => {
   await storage.bucket(BUCKET_NAME).put(KEY, VALUE);
 
   const client = new BucketClient(BUCKET_NAME, false, storage as any);
-  const res = await client.delete(KEY);
+  await client.delete(KEY);
 
-  expect(res).toBe(undefined);
+  // check that the object was deleted by ensuring it doesn't exist
+  const res = await client.exists(KEY);
+  expect(res).toBe(false);
 });
 
 test("delete object from the bucket with mustExist option", async () => {
