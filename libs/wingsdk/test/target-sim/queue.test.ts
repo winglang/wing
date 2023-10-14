@@ -111,7 +111,7 @@ test("queue batch size of 2, purge the queue", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
-test("queue with one subscriber, batch size of 5", async () => {
+test("queue with one subscriber, batch size of 5, should get processed in two batches", async () => {
   // GIVEN
   const app = new SimApp();
 
@@ -125,12 +125,7 @@ test("queue with one subscriber, batch size of 5", async () => {
     "OnDeployHandler",
     `\
 async handle() {
-  await this.queue.push("A");
-  await this.queue.push("B");
-  await this.queue.push("C");
-  await this.queue.push("D");
-  await this.queue.push("E");
-  await this.queue.push("F");
+  await this.queue.push("A", "B", "C", "D", "E", "F");
 }`,
     {
       queue: {
