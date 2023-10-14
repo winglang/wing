@@ -18,7 +18,7 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
         }
         catch ($error_actual) {
           const actual = $error_actual.message;
-          {((cond) => {if (!cond) throw new Error("assertion failed: actual == expected")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(actual,expected)))};
+          {((cond) => {if (!cond) throw new Error("assertion failed: actual.contains(expected)")})(actual.includes(expected))};
           error = true;
         }
         {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
