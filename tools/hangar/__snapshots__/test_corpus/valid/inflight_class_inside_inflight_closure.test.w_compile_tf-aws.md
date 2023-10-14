@@ -16,8 +16,10 @@ module.exports = function({ $__parent_this_1_b }) {
         async method() {
           {((cond) => {if (!cond) throw new Error("assertion failed: this.field == \"value\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.field,"value")))};
         }
-        async $inflight_init() {
-          this.field = "value";
+        constructor(){
+          this.$inflight_init = async () => {
+            this.field = "value";
+          }
         }
       }
       const c = (await (async () => {const o = new InflightClass(); await o.$inflight_init?.(); return o; })());

@@ -7,8 +7,10 @@ module.exports = function({  }) {
   class C {
     async method() {
     }
-    async $inflight_init() {
-      this.field = 12;
+    constructor(){
+      this.$inflight_init = async () => {
+        this.field = 12;
+      }
     }
   }
   return C;
