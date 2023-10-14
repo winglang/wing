@@ -78,7 +78,7 @@ export const DynamodbTableInteraction = ({
     }
 
     return result;
-  }, [rows]);
+  }, [hashKey, rangeKey, rows]);
 
   const addRow = useCallback(async () => {
     onAddRow(newRow);
@@ -103,6 +103,7 @@ export const DynamodbTableInteraction = ({
         error,
       });
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [newRow, hashKey, rangeKey],
   );
 

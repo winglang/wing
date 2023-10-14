@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $_id, $body, $cloud_HttpMethod, $std_Json }) {
   class $Closure1 {
     constructor({  }) {
@@ -11,11 +12,11 @@ module.exports = function({ $_id, $body, $cloud_HttpMethod, $std_Json }) {
     }
     async handle(req) {
       {((cond) => {if (!cond) throw new Error("assertion failed: req.method == cloud.HttpMethod.PATCH")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.method,$cloud_HttpMethod.PATCH)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.vars?.get(\"id\") == _id")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((req.vars)["id"],$_id)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.vars?.get(\"id\") == _id")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(req.vars, "id"),$_id)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.path == \"/path/\"+ _id")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.path,("/path/" + $_id))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.body == Json.stringify(body)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.body,((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$body]))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.headers?.get(\"content-type\") == \"application/json\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((req.headers)["content-type"],"application/json")))};
-      return ({"status": 200,"body": (req.vars)["id"]});
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.headers?.get(\"content-type\") == \"application/json\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(req.headers, "content-type"),"application/json")))};
+      return ({"status": 200,"body": ((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(req.vars, "id")});
     }
   }
   return $Closure1;
@@ -25,6 +26,7 @@ module.exports = function({ $_id, $body, $cloud_HttpMethod, $std_Json }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $_id, $api_url, $body, $http_HttpMethod, $http_Util, $std_Json }) {
   class $Closure2 {
     constructor({  }) {
@@ -256,6 +258,7 @@ module.exports = function({ $_id, $api_url, $body, $http_HttpMethod, $http_Util,
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";

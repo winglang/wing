@@ -148,6 +148,8 @@ impl<'a> JSifier<'a> {
 		let is_entrypoint = is_entrypoint_file(source_path);
 		let is_directory = source_path.is_dir();
 
+		output.line("\"use strict\";");
+
 		if is_entrypoint {
 			output.line(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
 			output.line(format!(
@@ -1437,6 +1439,7 @@ impl<'a> JSifier<'a> {
 			Default::default()
 		};
 
+		code.line("\"use strict\";");
 		code.open(format!("module.exports = function({{ {inputs} }}) {{"));
 		code.add_code(inflight_class_code);
 		code.line(format!("return {name};"));

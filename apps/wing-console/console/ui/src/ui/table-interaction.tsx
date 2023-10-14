@@ -60,16 +60,15 @@ export const TableInteraction = ({
 
   const updateNewRow = useCallback(
     (key: string, newValue: any) => {
-      const row = {
-        ...newRow.data,
-        [key]: newValue,
-      };
-      setNewRow({
-        data: row,
+      setNewRow((newRow) => ({
+        data: {
+          ...newRow.data,
+          [key]: newValue,
+        },
         error: "",
-      });
+      }));
     },
-    [newRow],
+    [setNewRow],
   );
 
   const editRow = useCallback(
