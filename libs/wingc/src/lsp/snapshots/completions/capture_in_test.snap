@@ -94,10 +94,10 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: put
   kind: 2
-  detail: "inflight (key: str, body: str, options: BucketPutProps?): void"
+  detail: "inflight (key: str, body: str, options: BucketPutOptions?): void"
   documentation:
     kind: markdown
-    value: "```wing\ninflight put: inflight (key: str, body: str, options: BucketPutProps?): void\n```\n---\nPut an object in the bucket.\n### Parameters\n- `key` — `str` — Key of the object.\n- `body` — `str` — Content of the object we want to store into the bucket.\n- `...options` — `BucketPutProps?` — Additional options.\n  \n  - `contentType` — `str` — The HTTP Content-Type of the object."
+    value: "```wing\ninflight put: inflight (key: str, body: str, options: BucketPutOptions?): void\n```\n---\nPut an object in the bucket.\n### Parameters\n- `key` — `str` — Key of the object.\n- `body` — `str` — Content of the object we want to store into the bucket.\n- `...options` — `BucketPutOptions?` — Additional options.\n  \n  - `contentType` — `str` — The HTTP Content-Type of the object."
   sortText: ff|put
   insertText: put($0)
   insertTextFormat: 2
@@ -118,10 +118,10 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: signedUrl
   kind: 2
-  detail: "inflight (key: str, options: SignedUrlOptions?): str"
+  detail: "inflight (key: str, options: BucketSignedUrlOptions?): str"
   documentation:
     kind: markdown
-    value: "```wing\ninflight signedUrl: inflight (key: str, options: SignedUrlOptions?): str\n```\n---\nReturns a signed url to the given file.\n### Parameters\n- `key` — `str` — The key to access the cloud object.\n- `...options` — `SignedUrlOptions?` — The signedUrlOptions where you can provide the configurations of the signed url.\n  \n  - `duration?` — `duration?` — The duration for the signed url to expire.\n\n### Returns\nA string representing the signed url of the object which can be used to download in any downstream system\n\n*@Throws* *if object does not exist.*"
+    value: "```wing\ninflight signedUrl: inflight (key: str, options: BucketSignedUrlOptions?): str\n```\n---\nReturns a signed url to the given file.\n### Parameters\n- `key` — `str` — The key to access the cloud object.\n- `...options` — `BucketSignedUrlOptions?` — The signedUrlOptions where you can provide the configurations of the signed url.\n  \n  - `duration?` — `duration?` — The duration for the signed url to expire.\n\n### Returns\nA string representing the signed url of the object which can be used to download in any downstream system\n\n*@Throws* *if object does not exist.*"
   sortText: ff|signedUrl
   insertText: signedUrl($0)
   insertTextFormat: 2
