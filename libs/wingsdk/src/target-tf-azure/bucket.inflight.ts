@@ -62,14 +62,13 @@ export class BucketClient implements IBucketClient {
   public async put(
     key: string,
     body: string,
-    props?: BucketPutOptions
+    opts?: BucketPutOptions
   ): Promise<void> {
     const blobClient = this.containerClient.getBlockBlobClient(key);
     const options = {
       blobHTTPHeaders: {
         blobContentType:
-          (props?.contentType ?? mime.lookup(key)) ||
-          "application/octet-stream",
+          (opts?.contentType ?? mime.lookup(key)) || "application/octet-stream",
       },
     };
     await blobClient.upload(body, body.length, options);

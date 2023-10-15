@@ -82,12 +82,12 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   public async put(
     key: string,
     value: string,
-    props?: BucketPutOptions
+    opts?: BucketPutOptions
   ): Promise<void> {
     return this.context.withTrace({
       message: `Put (key=${key}).`,
       activity: async () => {
-        return this.addFile(key, value, props?.contentType);
+        return this.addFile(key, value, opts?.contentType);
       },
     });
   }

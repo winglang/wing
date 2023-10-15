@@ -64,14 +64,14 @@ export class BucketClient implements IBucketClient {
   public async put(
     key: string,
     body: string,
-    props?: BucketPutOptions
+    opts?: BucketPutOptions
   ): Promise<void> {
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
       Key: key,
       Body: body,
       ContentType:
-        (props?.contentType ?? mime.lookup(key)) || "application/octet-stream",
+        (opts?.contentType ?? mime.lookup(key)) || "application/octet-stream",
     });
     await this.s3Client.send(command);
   }
