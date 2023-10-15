@@ -6,9 +6,11 @@ export interface UseCustomResourceProps {
   resourcePath: string;
 }
 export const useCustomResource = ({ resourcePath }: UseCustomResourceProps) => {
-  const displayMeta = trpc["custom-resource.getDisplayMeta"].useQuery({
-    resourcePath,
-  });
+  const displayMeta = trpc["custom-resource.getDisplayMetaComponents"].useQuery(
+    {
+      resourcePath,
+    },
+  );
 
   const [displayComponents, setDisplayComponents] = useState<
     DisplayMetaComponent[]

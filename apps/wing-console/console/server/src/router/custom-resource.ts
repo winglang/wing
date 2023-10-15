@@ -6,7 +6,7 @@ import { createProcedure, createRouter } from "../utils/createRouter.js";
 
 export const createCustomResourceRouter = () => {
   return createRouter({
-    "custom-resource.getDisplayMeta": createProcedure
+    "custom-resource.getDisplayMetaComponents": createProcedure
       .input(
         z.object({
           resourcePath: z.string().optional(),
@@ -23,7 +23,7 @@ export const createCustomResourceRouter = () => {
             message: "Node was not found.",
           });
         }
-        return node.display?.meta;
+        return node.display?.displayMetaComponents;
       }),
   });
 };

@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { IConstruct } from "constructs";
 import { App } from "./app";
-import { DisplayMetaComponent, IResource, Node, Resource } from "../std";
+import { IResource, Node, Resource, DisplayMetaComponent } from "../std";
 
 export const TREE_FILE_PATH = "tree.json";
 
@@ -70,9 +70,9 @@ export interface DisplayInfo {
   readonly sourceModule?: string;
 
   /**
-   * The display meta of the construct node. Describe how the construct should be displayed.
+   * The display meta components of the construct node.
    */
-  readonly meta?: DisplayMetaComponent[];
+  readonly displayMetaComponents?: DisplayMetaComponent[];
 }
 
 /**
@@ -165,13 +165,18 @@ function synthDisplay(construct: IConstruct): DisplayInfo | undefined {
     return;
   }
   const display = Node.of(construct);
-  if (display.description || display.title || display.hidden || display.meta) {
+  if (
+    display.description ||
+    display.title ||
+    display.hidden ||
+    display.displayMeta
+  ) {
     return {
       title: display.title,
       description: display.description,
       hidden: display.hidden,
       sourceModule: display.sourceModule,
-      meta: display.meta,
+      displayMetaComponents: display.displayMeta.components,
     };
   }
   return;

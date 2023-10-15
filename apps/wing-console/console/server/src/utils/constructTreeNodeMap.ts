@@ -10,7 +10,7 @@ export interface NodeDisplay {
   description?: string;
   sourceModule?: string;
   hidden?: boolean;
-  meta?: DisplayMetaComponent[];
+  displayMetaComponents?: DisplayMetaComponent[];
 }
 
 export interface NodeConnection {

@@ -6,51 +6,13 @@ import {
   MetadataOptions,
   IValidation,
 } from "constructs";
+import { DisplayMeta } from "./display-meta";
 import { Connections } from "../core";
 
 const NODE_SYMBOL = Symbol.for("@winglang/sdk.std.Node");
 
 export const CONNECTIONS_FILE_PATH = "connections.json";
 export const SDK_SOURCE_MODULE = "@winglang/sdk";
-
-/**
- * Display meta component.
- */
-export class DisplayMetaComponent {
-  constructor(
-    /**
-     * The component type.
-     */
-    public readonly type: string,
-    /**
-     * The component props.
-     */
-    public readonly props: { [key: string]: any }
-  ) {}
-}
-
-/**
- * Display meta link props
- */
-export interface LinkProps {
-  /**
-   * The link href.
-   */
-  readonly href: string;
-  /**
-   * The link text.
-   */
-  readonly text: string;
-}
-
-/**
- * Display meta link component.
- */
-export class DisplayMetaLink extends DisplayMetaComponent {
-  constructor(props: LinkProps) {
-    super("link", props);
-  }
-}
 
 /**
  * The internal node of a construct.
@@ -90,11 +52,7 @@ export class Node {
    */
   public hidden?: boolean;
 
-  /**
-   * The display meta of the construct node. Describe how the construct should be displayed.
-   * @private
-   */
-  private _meta?: DisplayMetaComponent[];
+  private _displayMeta?: DisplayMeta;
 
   private readonly _constructsNode: ConstructsNode;
   private readonly _connections: Connections;
@@ -105,33 +63,13 @@ export class Node {
   }
 
   /**
-   * Returns the display meta of the construct node.
+   * Returns the display meta of this construct node.
    */
-  public get meta(): DisplayMetaComponent[] | undefined {
-    if (!this._meta) {
-      return undefined;
+  public get displayMeta(): DisplayMeta {
+    if (!this._displayMeta) {
+      this._displayMeta = new DisplayMeta();
     }
-    return [...this._meta];
-  }
-
-  /**
-   * Add a meta component to the array of meta components.
-   * @param component
-   */
-  public addMeta(component: DisplayMetaComponent) {
-    if (!this._meta) {
-      this._meta = [];
-    }
-    this._meta.push(component);
-  }
-
-  /**
-   * Add a link to the array of meta components.
-   * @param href
-   * @param text
-   */
-  public addLink(href: string, text: string) {
-    this.addMeta(new DisplayMetaLink({ href, text }));
+    return this._displayMeta;
   }
 
   /**

@@ -452,6 +452,71 @@ Returns the year of the local machine time or in utc.
 ---
 
 
+### DisplayMeta <a name="DisplayMeta" id="@winglang/sdk.std.DisplayMeta"></a>
+
+Display meta.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.DisplayMeta.Initializer"></a>
+
+```wing
+new DisplayMeta();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.DisplayMeta.addLink">addLink</a></code> | Add a link to the array of meta components. |
+
+---
+
+##### `addLink` <a name="addLink" id="@winglang/sdk.std.DisplayMeta.addLink"></a>
+
+```wing
+addLink(href: str, text: str): void
+```
+
+Add a link to the array of meta components.
+
+###### `href`<sup>Required</sup> <a name="href" id="@winglang/sdk.std.DisplayMeta.addLink.parameter.href"></a>
+
+- *Type:* str
+
+---
+
+###### `text`<sup>Required</sup> <a name="text" id="@winglang/sdk.std.DisplayMeta.addLink.parameter.text"></a>
+
+- *Type:* str
+
+---
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.DisplayMeta.property.components">components</a></code> | <code>MutArray&lt;<a href="#@winglang/sdk.std.DisplayMetaComponent">DisplayMetaComponent</a>&gt;</code> | Returns the meta components. |
+
+---
+
+##### `components`<sup>Optional</sup> <a name="components" id="@winglang/sdk.std.DisplayMeta.property.components"></a>
+
+```wing
+components: MutArray<DisplayMetaComponent>;
+```
+
+- *Type:* MutArray&lt;<a href="#@winglang/sdk.std.DisplayMetaComponent">DisplayMetaComponent</a>&gt;
+
+Returns the meta components.
+
+---
+
+
 ### DisplayMetaComponent <a name="DisplayMetaComponent" id="@winglang/sdk.std.DisplayMetaComponent"></a>
 
 Display meta component.
@@ -2000,8 +2065,6 @@ The internal node of a construct.
 | --- | --- |
 | <code><a href="#@winglang/sdk.std.Node.addConnection">addConnection</a></code> | Adds a connection between two constructs. |
 | <code><a href="#@winglang/sdk.std.Node.addDependency">addDependency</a></code> | Add an ordering dependency on another construct. |
-| <code><a href="#@winglang/sdk.std.Node.addLink">addLink</a></code> | Add a link to the array of meta components. |
-| <code><a href="#@winglang/sdk.std.Node.addMeta">addMeta</a></code> | Add a meta component to the array of meta components. |
 | <code><a href="#@winglang/sdk.std.Node.addMetadata">addMetadata</a></code> | Adds a metadata entry to this construct. |
 | <code><a href="#@winglang/sdk.std.Node.addValidation">addValidation</a></code> | Adds a validation to this construct. |
 | <code><a href="#@winglang/sdk.std.Node.findAll">findAll</a></code> | Return this construct and all of its children in the given order. |
@@ -2046,40 +2109,6 @@ An `IDependable`
 ###### `deps`<sup>Required</sup> <a name="deps" id="@winglang/sdk.std.Node.addDependency.parameter.deps"></a>
 
 - *Type:* constructs.IDependable
-
----
-
-##### `addLink` <a name="addLink" id="@winglang/sdk.std.Node.addLink"></a>
-
-```wing
-addLink(href: str, text: str): void
-```
-
-Add a link to the array of meta components.
-
-###### `href`<sup>Required</sup> <a name="href" id="@winglang/sdk.std.Node.addLink.parameter.href"></a>
-
-- *Type:* str
-
----
-
-###### `text`<sup>Required</sup> <a name="text" id="@winglang/sdk.std.Node.addLink.parameter.text"></a>
-
-- *Type:* str
-
----
-
-##### `addMeta` <a name="addMeta" id="@winglang/sdk.std.Node.addMeta"></a>
-
-```wing
-addMeta(component: DisplayMetaComponent): void
-```
-
-Add a meta component to the array of meta components.
-
-###### `component`<sup>Required</sup> <a name="component" id="@winglang/sdk.std.Node.addMeta.parameter.component"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.DisplayMetaComponent">DisplayMetaComponent</a>
 
 ---
 
@@ -2281,11 +2310,11 @@ Invokes the `validate()` method on all validations added through
 | <code><a href="#@winglang/sdk.std.Node.property.dependencies">dependencies</a></code> | <code>MutArray&lt;constructs.IConstruct&gt;</code> | Return all dependencies registered on this node (non-recursive). |
 | <code><a href="#@winglang/sdk.std.Node.property.id">id</a></code> | <code>str</code> | The id of this construct within the current scope. |
 | <code><a href="#@winglang/sdk.std.Node.property.locked">locked</a></code> | <code>bool</code> | Returns true if this construct or the scopes in which it is defined are locked. |
+| <code><a href="#@winglang/sdk.std.Node.property.meta">meta</a></code> | <code><a href="#@winglang/sdk.std.DisplayMeta">DisplayMeta</a></code> | Returns the display meta of this construct node. |
 | <code><a href="#@winglang/sdk.std.Node.property.metadata">metadata</a></code> | <code>MutArray&lt;constructs.MetadataEntry&gt;</code> | An immutable array of metadata objects associated with this construct. |
 | <code><a href="#@winglang/sdk.std.Node.property.path">path</a></code> | <code>str</code> | The full, absolute path of this construct in the tree. |
 | <code><a href="#@winglang/sdk.std.Node.property.root">root</a></code> | <code>constructs.IConstruct</code> | Returns the root of the construct tree. |
 | <code><a href="#@winglang/sdk.std.Node.property.scopes">scopes</a></code> | <code>MutArray&lt;constructs.IConstruct&gt;</code> | All parent scopes of this construct. |
-| <code><a href="#@winglang/sdk.std.Node.property.meta">meta</a></code> | <code>MutArray&lt;<a href="#@winglang/sdk.std.DisplayMetaComponent">DisplayMetaComponent</a>&gt;</code> | Returns the display meta of the construct node. |
 | <code><a href="#@winglang/sdk.std.Node.property.scope">scope</a></code> | <code>constructs.IConstruct</code> | Returns the scope in which this construct is defined. |
 | <code><a href="#@winglang/sdk.std.Node.property.defaultChild">defaultChild</a></code> | <code>constructs.IConstruct</code> | Returns the child construct that has the id `Default` or `Resource"`. |
 | <code><a href="#@winglang/sdk.std.Node.property.description">description</a></code> | <code>str</code> | Description of the construct for display purposes. |
@@ -2374,6 +2403,18 @@ Returns true if this construct or the scopes in which it is defined are locked.
 
 ---
 
+##### `meta`<sup>Required</sup> <a name="meta" id="@winglang/sdk.std.Node.property.meta"></a>
+
+```wing
+meta: DisplayMeta;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.DisplayMeta">DisplayMeta</a>
+
+Returns the display meta of this construct node.
+
+---
+
 ##### `metadata`<sup>Required</sup> <a name="metadata" id="@winglang/sdk.std.Node.property.metadata"></a>
 
 ```wing
@@ -2423,18 +2464,6 @@ scopes: MutArray<IConstruct>;
 - *Type:* MutArray&lt;constructs.IConstruct&gt;
 
 All parent scopes of this construct.
-
----
-
-##### `meta`<sup>Optional</sup> <a name="meta" id="@winglang/sdk.std.Node.property.meta"></a>
-
-```wing
-meta: MutArray<DisplayMetaComponent>;
-```
-
-- *Type:* MutArray&lt;<a href="#@winglang/sdk.std.DisplayMetaComponent">DisplayMetaComponent</a>&gt;
-
-Returns the display meta of the construct node.
 
 ---
 
