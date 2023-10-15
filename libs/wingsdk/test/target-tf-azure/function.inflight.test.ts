@@ -1,6 +1,6 @@
 import { test, expect, vi, afterEach } from "vitest";
 import { Util as http } from "../../src/http";
-import { FunctionClient } from "../../src/target-tf-azure/function.inflight";
+import { FunctionClient } from "../../src/shared-azure/function.inflight";
 
 afterEach(() => {
   vi.clearAllMocks();
