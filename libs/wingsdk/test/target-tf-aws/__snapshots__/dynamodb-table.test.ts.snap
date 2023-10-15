@@ -3,7 +3,7 @@
 exports[`default dynamodb table behavior 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]",
     },
   },
@@ -46,7 +46,7 @@ my_table: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/dynamodb-table.infli
 exports[`function with a table binding 2`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]",
     },
   },

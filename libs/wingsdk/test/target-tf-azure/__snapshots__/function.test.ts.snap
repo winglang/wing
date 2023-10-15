@@ -3,7 +3,7 @@
 exports[`basic function 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]",
     },
   },
@@ -283,7 +283,7 @@ exports[`basic function 2`] = `
 exports[`basic function with environment variables 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]",
     },
   },
@@ -565,7 +565,7 @@ exports[`basic function with environment variables 2`] = `
 exports[`replace invalid character from function name 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]",
     },
   },

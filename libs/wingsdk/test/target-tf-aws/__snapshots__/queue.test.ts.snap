@@ -3,7 +3,7 @@
 exports[`default queue behavior 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]",
     },
   },
@@ -117,7 +117,7 @@ exports[`default queue behavior 2`] = `
 exports[`queue name valid 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]",
     },
   },
@@ -233,7 +233,7 @@ exports[`queue with a consumer function 1`] = `"new (require(\\"[REDACTED]/wings
 exports[`queue with a consumer function 2`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]",
     },
   },
@@ -524,7 +524,7 @@ exports[`queue with a consumer function 3`] = `
 exports[`queue with custom retention 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]",
     },
   },
@@ -639,7 +639,7 @@ exports[`queue with custom retention 2`] = `
 exports[`queue with custom timeout 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]",
     },
   },
@@ -754,7 +754,7 @@ exports[`queue with custom timeout 2`] = `
 exports[`replace invalid character from queue name 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]",
     },
   },

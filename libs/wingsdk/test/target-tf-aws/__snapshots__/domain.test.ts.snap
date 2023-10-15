@@ -36,7 +36,7 @@ exports[`cloud.Domain for tf-aws > default domain behavior when passing values f
     },
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]",
     },
   },
@@ -384,7 +384,7 @@ exports[`cloud.Domain for tf-aws > default domain behavior when passing values o
     },
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]",
     },
   },

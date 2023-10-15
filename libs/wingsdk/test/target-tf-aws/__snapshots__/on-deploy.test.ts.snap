@@ -12,7 +12,7 @@ exports[`create an OnDeploy 1`] = `
     },
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]",
     },
   },
@@ -282,7 +282,7 @@ exports[`execute OnDeploy after other resources 1`] = `
     },
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]",
     },
   },
@@ -576,7 +576,7 @@ exports[`execute OnDeploy before other resources 1`] = `
     },
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]",
     },
   },

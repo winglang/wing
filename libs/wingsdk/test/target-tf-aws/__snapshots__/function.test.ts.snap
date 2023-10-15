@@ -3,7 +3,7 @@
 exports[`basic function 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]",
     },
   },
@@ -240,7 +240,7 @@ exports[`basic function 2`] = `
 exports[`basic function with custom log retention 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]",
     },
   },
@@ -477,7 +477,7 @@ exports[`basic function with custom log retention 2`] = `
 exports[`basic function with environment variables 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]",
     },
   },
@@ -716,7 +716,7 @@ exports[`basic function with environment variables 2`] = `
 exports[`basic function with infinite log retention 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]",
     },
   },
@@ -939,7 +939,7 @@ exports[`basic function with infinite log retention 2`] = `
 exports[`basic function with memory size specified 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]",
     },
   },
@@ -1177,7 +1177,7 @@ exports[`basic function with memory size specified 2`] = `
 exports[`basic function with timeout explicitly set 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]",
     },
   },
@@ -1414,7 +1414,7 @@ exports[`basic function with timeout explicitly set 2`] = `
 exports[`function name valid 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]",
     },
   },
@@ -1651,7 +1651,7 @@ exports[`function name valid 2`] = `
 exports[`replace invalid character from function name 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]",
     },
   },
