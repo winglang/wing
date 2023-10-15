@@ -381,7 +381,7 @@ async function awsCdkOutput(synthDir: string, name: string, stackName: string) {
 
 const targetFolder: Record<string, string> = {
   [Target.TF_AWS]: "shared-aws",
-  [Target.TF_AZURE]: "target-tf-azure",
+  [Target.TF_AZURE]: "shared-azure",
 };
 
 async function testTf(synthDir: string, options: TestOptions): Promise<std.TestResult[] | void> {

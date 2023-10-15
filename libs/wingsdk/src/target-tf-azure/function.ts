@@ -267,9 +267,12 @@ export class Function extends cloud.Function {
 
   /** @internal */
   public _toInflight(): string {
-    return core.InflightClient.for(__dirname, __filename, "FunctionClient", [
-      `process.env["${this.envName()}"]`,
-    ]);
+    return core.InflightClient.for(
+      __dirname.replace("target-tf-azure", "shared-azure"),
+      __filename,
+      "FunctionClient",
+      [`process.env["${this.envName()}"]`]
+    );
   }
 
   private envName(): string {
