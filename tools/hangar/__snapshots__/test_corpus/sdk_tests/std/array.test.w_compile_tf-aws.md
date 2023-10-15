@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -21,6 +22,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure10-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure10 {
     constructor({  }) {
@@ -43,6 +45,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure11-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure11 {
     constructor({  }) {
@@ -65,6 +68,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure12-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure12 {
     constructor({  }) {
@@ -86,6 +90,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure13-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure13 {
     constructor({  }) {
@@ -107,6 +112,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure14-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure14 {
     constructor({  }) {
@@ -128,6 +134,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure15-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure15 {
     constructor({  }) {
@@ -171,6 +178,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure16-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure16 {
     constructor({  }) {
@@ -220,6 +228,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure17-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure17 {
     constructor({  }) {
@@ -245,6 +254,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure2 {
     constructor({  }) {
@@ -264,6 +274,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure3-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure3 {
     constructor({  }) {
@@ -291,6 +302,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure4-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure4 {
     constructor({  }) {
@@ -335,6 +347,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure5-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure5 {
     constructor({  }) {
@@ -358,6 +371,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure6-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure6 {
     constructor({  }) {
@@ -383,6 +397,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure7-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure7 {
     constructor({  }) {
@@ -406,6 +421,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure8-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure8 {
     constructor({  }) {
@@ -426,6 +442,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure9-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure9 {
     constructor({  }) {
@@ -512,6 +529,7 @@ module.exports = function({  }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";

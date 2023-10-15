@@ -23,28 +23,37 @@ export interface TabsProps {
 }
 
 export const Tabs = (props: TabsProps) => {
+  const {
+    onTabChange,
+    transparent,
+    small,
+    currentTabId: propsCurrentTabId,
+    tabs,
+    tabsWithNotifications,
+    renderActiveTabPanelOnly,
+  } = props;
   const { theme } = useTheme();
-  const [currentTabId, setCurrentTabId] = useState(props.currentTabId);
+  const [currentTabId, setCurrentTabId] = useState(propsCurrentTabId);
 
   useEffect(() => {
-    if (props.currentTabId) {
-      setCurrentTabId(props.currentTabId);
+    if (propsCurrentTabId) {
+      setCurrentTabId(propsCurrentTabId);
     }
-  }, [props]);
+  }, [propsCurrentTabId]);
 
   useEffect(() => {
-    if (props.onTabChange && currentTabId) {
-      props.onTabChange(currentTabId);
+    if (onTabChange && currentTabId) {
+      onTabChange(currentTabId);
     }
-  }, [currentTabId]);
+  }, [currentTabId, onTabChange]);
 
   return (
     <div className="h-full flex flex-col">
       <div
         className={classNames(
           "relative w-full text-sm select-none",
-          !props.transparent && [theme.bg3, theme.text2],
-          props.small ? "h-6" : "h-8",
+          !transparent && [theme.bg3, theme.text2],
+          small ? "h-6" : "h-8",
         )}
       >
         <ScrollableArea
@@ -53,11 +62,11 @@ export const Tabs = (props: TabsProps) => {
           scrollbarSize="xs"
           className={classNames(
             "flex gap-px",
-            !props.transparent && [theme.bg1, theme.text2],
-            props.transparent && "gap-x-3",
+            !transparent && [theme.bg1, theme.text2],
+            transparent && "gap-x-3",
           )}
         >
-          {props.tabs.map((tab) => {
+          {tabs.map((tab) => {
             const isCurrent = tab.id === currentTabId;
             return (
               // TODO: Fix a11y
@@ -66,19 +75,18 @@ export const Tabs = (props: TabsProps) => {
                 key={tab.id}
                 className={classNames(
                   "relative flex items-center cursor-pointer group",
-                  props.transparent &&
+                  transparent &&
                     isCurrent && [theme.text2, "border-b-2", theme.border3],
-                  props.transparent &&
+                  transparent &&
                     !isCurrent && [
                       theme.text2,
                       theme.text3Hover,
                       "border-b-2 border-transparent",
                     ],
 
-                  !props.transparent && "px-4",
-                  !props.transparent && isCurrent && theme.bg3,
-                  !props.transparent &&
-                    !isCurrent && [theme.bg2, theme.bg2Hover],
+                  !transparent && "px-4",
+                  !transparent && isCurrent && theme.bg3,
+                  !transparent && !isCurrent && [theme.bg2, theme.bg2Hover],
                 )}
                 onClick={() => setCurrentTabId(tab.id)}
               >
@@ -90,7 +98,7 @@ export const Tabs = (props: TabsProps) => {
                   )}
                 </div>
 
-                {props.tabsWithNotifications?.includes(tab.id) && (
+                {tabsWithNotifications?.includes(tab.id) && (
                   <div className="ml-2">
                     <span className="relative flex h-2 w-2">
                       <span
@@ -114,9 +122,9 @@ export const Tabs = (props: TabsProps) => {
         </ScrollableArea>
       </div>
 
-      {props.tabs.map((tab) => {
+      {tabs.map((tab) => {
         const isCurrent = tab.id === currentTabId;
-        if (props.renderActiveTabPanelOnly && !isCurrent) {
+        if (renderActiveTabPanelOnly && !isCurrent) {
           return;
         }
 

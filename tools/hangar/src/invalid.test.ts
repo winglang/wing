@@ -8,10 +8,8 @@ invalidWingFiles.forEach((wingFile) => {
   test(wingFile, async ({ expect }) => {
     const args = ["test", "-t", "sim"];
 
-    const relativeWingFile = path.relative(
-      tmpDir,
-      path.join(invalidTestDir, wingFile)
-    );
+    const absoluteWingFile = path.join(invalidTestDir, wingFile);
+    const relativeWingFile = path.relative(tmpDir, absoluteWingFile);
 
     const metaComment = parseMetaCommentFromPath(
       path.join(invalidTestDir, wingFile)
@@ -28,7 +26,8 @@ invalidWingFiles.forEach((wingFile) => {
     const sanitize = (output: string) =>
       output
         // Remove absolute paths to wing files
-        .replaceAll(relativeWingFile, relativeWingFile.replaceAll("\\", "/"))
+        // .replaceAll(absoluteWingFile, "<")
+        .replaceAll(/(?<=[\s"])(\/|\w:)\S+\/(.+)/g, "<ABSOLUTE_PATH>/$2")
         // Remove absolute paths to source code
         .replaceAll(/(src\/.+\.rs):\d+:\d+/g, "$1:LINE:COL")
         // Normalize line endings

@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $r }) {
   class $Closure1 {
     constructor({  }) {
@@ -20,6 +21,7 @@ module.exports = function({ $r }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $queue, $r, $r2, $util_Util }) {
   class $Closure2 {
     constructor({  }) {
@@ -28,10 +30,6 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
       return $obj;
     }
     async handle() {
-      const connection = (await $r.rawClient());
-      (await connection.set("wing","does redis"));
-      const value = (await connection.get("wing"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: value == \"does redis\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(value,"does redis")))};
       (await $r2.set("wing","does redis again"));
       const value2 = (await $r2.get("wing"));
       {((cond) => {if (!cond) throw new Error("assertion failed: value2 == \"does redis again\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(value2,"does redis again")))};
@@ -544,6 +542,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -620,7 +619,7 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(queue, host, ["push"]);
-          $Closure2._registerBindObject(r, host, ["get", "rawClient"]);
+          $Closure2._registerBindObject(r, host, ["get"]);
           $Closure2._registerBindObject(r2, host, ["get", "set"]);
         }
         super._registerBind(host, ops);

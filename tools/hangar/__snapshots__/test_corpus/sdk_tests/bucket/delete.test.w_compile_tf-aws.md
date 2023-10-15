@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $b }) {
   class $Closure1 {
     constructor({  }) {
@@ -17,7 +18,7 @@ module.exports = function({ $b }) {
         }
         catch ($error_actual) {
           const actual = $error_actual.message;
-          {((cond) => {if (!cond) throw new Error("assertion failed: actual == expected")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(actual,expected)))};
+          {((cond) => {if (!cond) throw new Error("assertion failed: actual.contains(expected)")})(actual.includes(expected))};
           error = true;
         }
         {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
@@ -105,6 +106,7 @@ module.exports = function({ $b }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";

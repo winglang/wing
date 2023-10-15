@@ -43,8 +43,9 @@ export const formatWingError = async (error: unknown) => {
 
       for (const error of errors) {
         const { message, span, annotations } = error;
-        let files: File[] = [];
-        let labels: Label[] = [];
+        const files: File[] = [];
+        const labels: Label[] = [];
+        const cwd = process.cwd();
 
         // file_id might be "" if the span is synthetic (see #2521)
         if (span !== null && span !== undefined && span.file_id) {
@@ -60,9 +61,10 @@ export const formatWingError = async (error: unknown) => {
             span.end.line,
             span.end.col,
           );
-          files.push({ name: span.file_id, source });
+          const filePath = relative(cwd, span.file_id);
+          files.push({ name: filePath, source });
           labels.push({
-            fileId: span.file_id,
+            fileId: filePath,
             rangeStart: start,
             rangeEnd: end,
             message,
@@ -82,9 +84,10 @@ export const formatWingError = async (error: unknown) => {
             annotation.span.end.line,
             annotation.span.end.col,
           );
-          files.push({ name: annotation.span.file_id, source });
+          const filePath = relative(cwd, annotation.span.file_id);
+          files.push({ name: filePath, source });
           labels.push({
-            fileId: annotation.span.file_id,
+            fileId: filePath,
             rangeStart: start,
             rangeEnd: end,
             message: annotation.message,

@@ -593,7 +593,7 @@ impl<'a> JsiiImporter<'a> {
 					line: (jsii_source_location.line - 1.0) as u32,
 					col: 0,
 				},
-				file_id: (&jsii_source_location.filename).into(),
+				file_id: jsii_source_location.filename.clone(),
 			}
 		} else {
 			Default::default()
@@ -1069,9 +1069,7 @@ pub fn is_construct_base(fqn: &str) -> bool {
 
 impl From<&Option<jsii::Docs>> for Docs {
 	fn from(value: &Option<jsii::Docs>) -> Self {
-		let Some(docs) = value else {
-			return Docs::default()
-		};
+		let Some(docs) = value else { return Docs::default() };
 
 		Docs {
 			custom: docs.custom.as_ref().unwrap_or(&BTreeMap::default()).clone(),

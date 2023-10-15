@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $Preflight }) {
   class $Closure1 {
     constructor({  }) {
@@ -20,6 +21,7 @@ module.exports = function({ $Preflight }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $OuterInflight }) {
   class $Closure2 {
     constructor({  }) {
@@ -38,6 +40,7 @@ module.exports = function({ $OuterInflight }) {
 
 ## inflight.$Closure3-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure3 {
     constructor({  }) {
@@ -61,6 +64,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure4-1.js
 ```js
+"use strict";
 module.exports = function({ $util_Util }) {
   class $Closure4 {
     constructor({  }) {
@@ -88,6 +92,7 @@ module.exports = function({ $util_Util }) {
 
 ## inflight.OuterInflight-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class OuterInflight {
     static async staticMethod(b) {
@@ -101,6 +106,7 @@ module.exports = function({  }) {
 
 ## inflight.Preflight-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Preflight {
     constructor({  }) {
@@ -148,6 +154,7 @@ module.exports = function({  }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";

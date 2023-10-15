@@ -39,12 +39,25 @@ export class Map {
    * If the value that is associated to the provided key is an object, then you will get a reference
    * to that object and any change made to that object will effectively modify it inside the map.
    *
-   * @macro ($self$)[$args$]
+   * @macro ((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })($self$, $args$)
    *
    * @param key The key of the element to return.
    * @returns The element associated with the specified key, or undefined if the key can't be found
    */
   public get(key: string): T1 {
+    key;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Optionally returns a specified element from the map.
+   *
+   * @macro ($self$)[$args$]
+   *
+   * @param key The key of the element to return.
+   * @returns The element associated with the specified key, or undefined if the key can't be found
+   */
+  public tryGet(key: string): T1 | undefined {
     key;
     throw new Error("Macro");
   }
@@ -162,12 +175,25 @@ export class MutMap {
    * If the value that is associated to the provided key is an object, then you will get a reference
    * to that object and any change made to that object will effectively modify it inside the map.
    *
-   * @macro ($self$)[$args$]
+   * @macro ((obj, key) => { if (!(key in obj)) throw new Error(`MutMap does not contain key: "${key}"`); return obj[key]; })($self$, $args$)
    *
    * @param key The key of the element to return.
    * @returns The element associated with the specified key, or undefined if the key can't be found
    */
   public get(key: string): T1 {
+    key;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Optionally returns a specified element from the map.
+   *
+   * @macro ($self$)[$args$]
+   *
+   * @param key The key of the element to return.
+   * @returns The element associated with the specified key, or undefined if the key can't be found
+   */
+  public tryGet(key: string): T1 | undefined {
     key;
     throw new Error("Macro");
   }
