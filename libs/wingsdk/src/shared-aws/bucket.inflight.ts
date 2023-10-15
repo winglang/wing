@@ -19,11 +19,11 @@ import {
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import mime from "mime-types";
 import {
-  BucketDeleteOptions,
   IBucketClient,
-  SignedUrlOptions,
   ObjectMetadata,
   BucketPutOptions,
+  BucketDeleteOptions,
+  BucketSignedUrlOptions,
 } from "../cloud";
 import { Datetime, Json } from "../std";
 
@@ -291,7 +291,7 @@ export class BucketClient implements IBucketClient {
 
   public async signedUrl(
     key: string,
-    options?: SignedUrlOptions
+    options?: BucketSignedUrlOptions
   ): Promise<string> {
     if (!(await this.exists(key))) {
       throw new Error(

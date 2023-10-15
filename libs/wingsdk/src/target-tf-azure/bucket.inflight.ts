@@ -6,11 +6,11 @@ import {
 } from "@azure/storage-blob";
 import mime from "mime-types";
 import {
-  BucketDeleteOptions,
   IBucketClient,
-  SignedUrlOptions,
   ObjectMetadata,
   BucketPutOptions,
+  BucketDeleteOptions,
+  BucketSignedUrlOptions,
 } from "../cloud";
 import { Json } from "../std";
 
@@ -217,7 +217,7 @@ export class BucketClient implements IBucketClient {
 
   public async signedUrl(
     key: string,
-    options?: SignedUrlOptions
+    options?: BucketSignedUrlOptions
   ): Promise<string> {
     options;
     throw new Error(

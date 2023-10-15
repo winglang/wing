@@ -267,13 +267,12 @@ export interface BucketDeleteOptions {
 }
 
 /**
- * Interface for signed url options
+ * Options for `Bucket.signedUrl()`.
  */
-export interface SignedUrlOptions {
+export interface BucketSignedUrlOptions {
   /**
    * The duration for the signed url to expire
    */
-
   readonly duration?: Duration;
 }
 
@@ -378,7 +377,7 @@ export interface IBucketClient {
    * @returns A string representing the signed url of the object which can be used to download in any downstream system
    * @inflight
    */
-  signedUrl(key: string, options?: SignedUrlOptions): Promise<string>;
+  signedUrl(key: string, options?: BucketSignedUrlOptions): Promise<string>;
 
   /**
    * Get the metadata of an object in the bucket.

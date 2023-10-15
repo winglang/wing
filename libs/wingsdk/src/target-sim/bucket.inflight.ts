@@ -6,13 +6,13 @@ import * as url from "url";
 import mime from "mime-types";
 import { BucketAttributes, BucketSchema } from "./schema-resources";
 import {
-  BucketDeleteOptions,
+  ITopicClient,
+  BucketSignedUrlOptions,
   BucketEventType,
   IBucketClient,
-  ITopicClient,
-  SignedUrlOptions,
   ObjectMetadata,
   BucketPutOptions,
+  BucketDeleteOptions,
 } from "../cloud";
 import {
   ISimulatorContext,
@@ -217,7 +217,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     });
   }
 
-  public async signedUrl(key: string, options?: SignedUrlOptions) {
+  public async signedUrl(key: string, options?: BucketSignedUrlOptions) {
     options;
     return this.context.withTrace({
       message: `Signed URL (key=${key})`,
