@@ -113,33 +113,6 @@ export class Function extends cloud.Function {
       timeout: props.timeout?.seconds ?? 60,
       environmentVariables: props.env ?? {},
     });
-
-    // apply permissions to bound resources
-    if (this.permissions) {
-      for (const [uniqueId, roleDefinitions] of this.permissions) {
-        const scopedResource = this.node.tryFindChild(uniqueId);
-        if (!scopedResource) {
-          throw new Error(
-            `Could not find scoped resource with uniqueId ${uniqueId}`
-          );
-        }
-        for (const roleDefinition of roleDefinitions) {
-          switch (roleDefinition.Resource) {
-            case ResourceTypes.BUCKET:
-              addBucketPermission(
-                scopedResource as Bucket,
-                roleDefinition.Action as ActionTypes,
-                app.projectId as string
-              );
-              break;
-            case ResourceTypes.FUNCTION:
-              throw new Error("Function permissions not implemented yet");
-            default:
-              throw new Error("Unsupported resource type");
-          }
-        }
-      }
-    }
   }
 
   public get functionName(): string {
@@ -161,29 +134,27 @@ export class Function extends cloud.Function {
       this.permissions = new Map();
     }
     const uniqueId = scopedResource.node.addr.substring(-8);
-    // If the function has already been initialized attach the role assignment directly
-    if (this.function) {
-      if (
-        this.permissions.has(uniqueId) &&
-        this.permissions.get(uniqueId)?.has(permissions)
-      ) {
-        return; // already exists
-      }
-      const app = App.of(this) as App;
-      // TODO: add support for other resource types
-      switch (permissions.Resource) {
-        case ResourceTypes.BUCKET:
-          addBucketPermission(
-            scopedResource as Bucket,
-            permissions.Action as ActionTypes,
-            app.projectId as string
-          );
-          break;
-        case ResourceTypes.FUNCTION:
-          throw new Error("Function permissions not implemented yet");
-        default:
-          throw new Error("Unsupported resource type");
-      }
+
+    if (
+      this.permissions.has(uniqueId) &&
+      this.permissions.get(uniqueId)?.has(permissions)
+    ) {
+      return; // already exists
+    }
+    const app = App.of(this) as App;
+    // TODO: add support for other resource types
+    switch (permissions.Resource) {
+      case ResourceTypes.BUCKET:
+        addBucketPermission(
+          scopedResource as Bucket,
+          permissions.Action as ActionTypes,
+          app.projectId as string
+        );
+        break;
+      case ResourceTypes.FUNCTION:
+        throw new Error("Function permissions not implemented yet");
+      default:
+        throw new Error("Unsupported resource type");
     }
     const roleDefinitions = this.permissions.get(uniqueId) ?? new Set();
     roleDefinitions.add(permissions);
