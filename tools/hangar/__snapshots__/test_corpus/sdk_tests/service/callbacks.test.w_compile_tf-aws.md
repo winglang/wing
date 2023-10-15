@@ -107,14 +107,14 @@ module.exports = function({ $b, $s, $startCounter, $status, $stopped }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]"
     }
   },

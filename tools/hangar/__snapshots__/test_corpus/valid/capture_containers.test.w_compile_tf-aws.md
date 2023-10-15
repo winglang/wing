@@ -40,14 +40,14 @@ module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_a
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]"
     }
   },

@@ -64,7 +64,7 @@ module.exports = function({ $_id, $api_url, $body, $http_HttpMethod, $http_Util,
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
         }
       }
@@ -83,7 +83,7 @@ module.exports = function({ $_id, $api_url, $body, $http_HttpMethod, $http_Util,
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[]"
     }
   },
