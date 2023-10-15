@@ -3,4 +3,4 @@ lib/**
 .jsii
 .turbo
 tsconfig.json
-tsconfig.buildinfo
+tsconfig.tsbuildinfo
