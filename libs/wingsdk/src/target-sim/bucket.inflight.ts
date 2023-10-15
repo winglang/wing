@@ -55,7 +55,10 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     await fs.promises.rm(this._fileDir, { recursive: true, force: true });
   }
 
-  private async notifyListeners(actionType: BucketEventType, key: string) {
+  private async notifyListeners(
+    actionType: BucketEventType,
+    key: string
+  ): Promise<void> {
     if (!this.topicHandlers[actionType]) {
       return;
     }
@@ -80,7 +83,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Put (key=${key}).`,
       activity: async () => {
-        return this.addFile(key, value);
+        await this.addFile(key, value);
       },
     });
   }
@@ -89,12 +92,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Put Json (key=${key}).`,
       activity: async () => {
-        const actionType: BucketEventType = this.objectKeys.has(key)
-          ? BucketEventType.UPDATE
-          : BucketEventType.CREATE;
-
         await this.addFile(key, JSON.stringify(body, null, 2));
-        await this.notifyListeners(actionType, key);
       },
     });
   }
