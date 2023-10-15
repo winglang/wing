@@ -157,6 +157,9 @@ pub struct SymbolLookupInfo {
 	/// Whether the symbol was defined in an `init`'s environment
 	pub init: bool,
 
+	/// The original span of the symbol when first defined
+	pub span: WingSpan,
+
 	/// The environment in which this symbol is defined.
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnvRef,
@@ -283,6 +286,7 @@ impl SymbolEnv {
 					phase: self.phase,
 					init: matches!(self.kind, SymbolEnvKind::Function { is_init: true, .. }),
 					env: get_ref,
+					span: span.clone(),
 				},
 			);
 		}
@@ -405,7 +409,7 @@ impl<'a> Iterator for SymbolEnvIter<'a> {
 	type Item = (String, &'a SymbolKind, SymbolLookupInfo);
 
 	fn next(&mut self) -> Option<Self::Item> {
-		if let Some((name, (_, _, kind))) = self.curr_pos.next() {
+		if let Some((name, (_, span, kind))) = self.curr_pos.next() {
 			if self.seen_keys.contains(name) {
 				self.next()
 			} else {
@@ -417,6 +421,7 @@ impl<'a> Iterator for SymbolEnvIter<'a> {
 						phase: self.curr_env.phase,
 						init: matches!(self.curr_env.kind, SymbolEnvKind::Function { is_init: true, .. }),
 						env: self.curr_env.get_ref(),
+						span: span.clone(),
 					},
 				))
 			}

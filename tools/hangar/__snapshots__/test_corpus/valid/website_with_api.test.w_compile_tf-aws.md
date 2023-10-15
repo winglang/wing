@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-2.js
 ```js
+"use strict";
 module.exports = function({ $std_Json, $usersTable }) {
   class $Closure1 {
     constructor({  }) {
@@ -20,6 +21,7 @@ module.exports = function({ $std_Json, $usersTable }) {
 
 ## inflight.$Closure2-2.js
 ```js
+"use strict";
 module.exports = function({ $std_Json, $usersTable }) {
   class $Closure2 {
     constructor({  }) {
@@ -43,6 +45,7 @@ module.exports = function({ $std_Json, $usersTable }) {
 
 ## inflight.$Closure3-2.js
 ```js
+"use strict";
 module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert }) {
   class $Closure3 {
     constructor({  }) {
@@ -54,9 +57,9 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert })
       const response = (await $http_Util.fetch(($api_url + "/users"),({"method": $http_HttpMethod.GET,"headers": ({"Content-Type": "text/json"})})));
       const headers = response.headers;
       (await $t_Assert.equalNum(response.status,200));
-      (await $t_Assert.equalStr((headers)["access-control-allow-origin"],"*"));
-      (await $t_Assert.equalStr((headers)["access-control-expose-headers"],"Content-Type"));
-      (await $t_Assert.equalStr((headers)["access-control-allow-credentials"],"false"));
+      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-allow-origin"),"*"));
+      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-expose-headers"),"Content-Type"));
+      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-allow-credentials"),"false"));
       (await $t_Assert.isNil((headers)["access-control-allow-headers"]));
       (await $t_Assert.isNil((headers)["access-control-allow-methods"]));
     }
@@ -68,6 +71,7 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert })
 
 ## inflight.$Closure4-2.js
 ```js
+"use strict";
 module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert }) {
   class $Closure4 {
     constructor({  }) {
@@ -79,8 +83,8 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert })
       const response = (await $http_Util.fetch(($api_url + "/users"),({"method": $http_HttpMethod.OPTIONS,"headers": ({"Content-Type": "text/json"})})));
       const headers = response.headers;
       (await $t_Assert.equalNum(response.status,204));
-      (await $t_Assert.equalStr((headers)["access-control-allow-methods"],"GET,POST,OPTIONS"));
-      (await $t_Assert.equalStr((headers)["access-control-allow-headers"],"Content-Type"));
+      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-allow-methods"),"GET,POST,OPTIONS"));
+      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-allow-headers"),"Content-Type"));
     }
   }
   return $Closure4;
@@ -90,6 +94,7 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert })
 
 ## inflight.Assert-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Assert {
     static async equalStr(a, b) {
@@ -620,6 +625,7 @@ module.exports = function({  }) {
 
 ## preflight.assertions-1.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   class Assert extends $stdlib.std.Resource {
@@ -654,6 +660,7 @@ module.exports = function({ $stdlib }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";

@@ -7,6 +7,9 @@ class Store {
     this.data = new cloud.Bucket();
   }
 
+  extern "./util.js" pub static makeKey(name: str): str;
+  extern "./util.js" pub static inflight makeKeyInflight(name: str): str;
+
   inflight set(message: str) {
     this.data.put("data.txt", myutil.double(message));
   }

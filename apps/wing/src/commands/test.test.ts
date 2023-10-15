@@ -1,7 +1,12 @@
+import { writeFileSync } from "fs";
+import { mkdtemp } from "fs/promises";
+import { tmpdir } from "os";
+import { join } from "path";
+import { Target } from "@winglang/compiler";
 import { TestResult, TraceType } from "@winglang/sdk/lib/std";
 import chalk from "chalk";
-import { describe, test, expect, beforeEach, afterEach } from "vitest";
-import { renderTestReport, filterTests, pickOneTestPerEnvironment } from "./test";
+import { describe, test, expect, beforeEach, afterEach, vi } from "vitest";
+import { renderTestReport, test as wingTest, filterTests, pickOneTestPerEnvironment } from "./test";
 
 const defaultChalkLevel = chalk.level;
 
@@ -35,6 +40,36 @@ describe("printing test reports", () => {
 });
 
 describe("test options", () => {
+  beforeEach(() => {
+    chalk.level = 0;
+  });
+
+  afterEach(() => {
+    chalk.level = defaultChalkLevel;
+  });
+
+  test("wing test (default entrypoint)", async () => {
+    const outDir = await mkdtemp(join(tmpdir(), "-wing-compile-test"));
+    const prevdir = process.cwd();
+    const logSpy = vi.spyOn(console, "log");
+
+    try {
+      process.chdir(outDir);
+      writeFileSync("foo.test.w", "bring cloud;");
+      writeFileSync("bar.test.w", "bring cloud;");
+      writeFileSync("baz.test.w", "bring cloud;");
+
+      await wingTest([], { clean: true, target: Target.SIM });
+
+      expect(logSpy).toHaveBeenCalledWith("pass ─ foo.test.wsim (no tests)");
+      expect(logSpy).toHaveBeenCalledWith("pass ─ bar.test.wsim (no tests)");
+      expect(logSpy).toHaveBeenCalledWith("pass ─ baz.test.wsim (no tests)");
+    } finally {
+      process.chdir(prevdir);
+      logSpy.mockRestore();
+    }
+  });
+
   test("wing test (no filter)", () => {
     const filteredTests = pickOneTestPerEnvironment(filterTests(EXAMPLE_UNFILTERED_TESTS));
 
