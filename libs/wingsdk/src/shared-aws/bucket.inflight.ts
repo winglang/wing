@@ -17,11 +17,13 @@ import {
   __Client,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import mime from "mime-types";
 import {
-  BucketDeleteOptions,
   IBucketClient,
-  SignedUrlOptions,
   ObjectMetadata,
+  BucketPutOptions,
+  BucketDeleteOptions,
+  BucketSignedUrlOptions,
 } from "../cloud";
 import { Datetime, Json } from "../std";
 
@@ -59,11 +61,17 @@ export class BucketClient implements IBucketClient {
    * @param key Key of the object
    * @param body string contents of the object
    */
-  public async put(key: string, body: string): Promise<void> {
+  public async put(
+    key: string,
+    body: string,
+    opts?: BucketPutOptions
+  ): Promise<void> {
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
       Key: key,
       Body: body,
+      ContentType:
+        (opts?.contentType ?? mime.lookup(key)) || "application/octet-stream",
     });
     await this.s3Client.send(command);
   }
@@ -75,7 +83,9 @@ export class BucketClient implements IBucketClient {
    * @param body Json object
    */
   public async putJson(key: string, body: Json): Promise<void> {
-    await this.put(key, JSON.stringify(body, null, 2));
+    await this.put(key, JSON.stringify(body, null, 2), {
+      contentType: "application/json",
+    });
   }
 
   /**
@@ -281,7 +291,7 @@ export class BucketClient implements IBucketClient {
 
   public async signedUrl(
     key: string,
-    options?: SignedUrlOptions
+    options?: BucketSignedUrlOptions
   ): Promise<string> {
     if (!(await this.exists(key))) {
       throw new Error(

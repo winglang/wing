@@ -52,6 +52,29 @@ test("put an object into the bucket", async () => {
   expect(response).toEqual(undefined);
 });
 
+test("put an object into the bucket specifying the content-type", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const VALUE = "VALUE";
+  const CONTENT_TYPE = "image/png";
+  s3Mock
+    .on(PutObjectCommand, {
+      Bucket: BUCKET_NAME,
+      Key: KEY,
+      Body: VALUE,
+      ContentType: CONTENT_TYPE,
+    })
+    .resolves({});
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const response = await client.put(KEY, VALUE, { contentType: CONTENT_TYPE });
+
+  // THEN
+  expect(response).toEqual(undefined);
+});
+
 test("putJson an object into the bucket", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
