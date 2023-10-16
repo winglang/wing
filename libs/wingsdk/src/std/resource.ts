@@ -22,7 +22,7 @@ export interface IInflightHost extends IResource {
  */
 export interface IResource extends IConstruct {
   /**
-   * Binds the resource to the host so that it can be used by inflight code.
+   * Lifts the resource to the host so that it can be used by inflight code.
    *
    * If `ops` contains any operations not supported by the resource, it should throw an
    * error.
@@ -30,8 +30,8 @@ export interface IResource extends IConstruct {
   onLift(host: IInflightHost, ops: string[]): void;
 
   /**
-   * Register that the resource needs to be bound to the host for the given
-   * operations. This means that the resource's `bind` method will be called
+   * Register that the resource needs to be lifted to the host for the given
+   * operations. This means that the resource's `onLift` method will be called
    * during pre-synthesis.
    *
    * @internal
@@ -74,9 +74,9 @@ export interface IResource extends IConstruct {
  */
 export abstract class Resource extends Construct implements IResource {
   /**
-   * Register that the resource type needs to be bound to the host for the given
-   * operations. A type being bound to a host means that that type's static members
-   * will be bound to the host.
+   * Register that the resource type needs to be lifted to the host for the given
+   * operations. A type being lifted to a host means that that type's static members
+   * will be lifted to the host.
    *
    * @internal
    */
@@ -87,14 +87,14 @@ export abstract class Resource extends Construct implements IResource {
   }
 
   /**
-   * Register a binding between an object (either data or resource) and a host.
+   * Register a lifting between an object (either data or resource) and a host.
    *
    * - Primitives and Duration objects are ignored.
    * - Arrays, sets and maps and structs (Objects) are recursively bound.
-   * - Resources are bound to the host by calling their bind() method.
+   * - Resources are bound to the host by calling their lift() method.
    *
-   * @param obj The object to bind.
-   * @param host The host to bind to
+   * @param obj The object to lift.
+   * @param host The host to lift to
    * @param ops The set of operations that may access the object (use "?" to indicate that we don't
    * know the operation)
    *
@@ -107,7 +107,7 @@ export abstract class Resource extends Construct implements IResource {
   ): void {
     const tokens = App.of(host)._tokens;
     if (tokens.isToken(obj)) {
-      return tokens.bindValue(host, obj);
+      return tokens.liftValue(host, obj);
     }
 
     switch (typeof obj) {
@@ -140,7 +140,7 @@ export abstract class Resource extends Construct implements IResource {
           return;
         }
 
-        // if the object is a resource (i.e. has a "bind" method"), register a binding between it and the host.
+        // if the object is a resource (i.e. has a "lift" method"), register a lifting between it and the host.
         if (isResource(obj)) {
           // Explicitly register the resource's `$inflight_init` op, which is a special op that can be used to makes sure
           // the host can instantiate a client for this resource.
@@ -177,7 +177,7 @@ export abstract class Resource extends Construct implements IResource {
   public abstract _getInflightOps(): string[];
 
   /**
-   * Binds the resource to the host so that it can be used by inflight code.
+   * Lifts the resource to the host so that it can be used by inflight code.
    *
    * You can override this method to perform additional logic like granting
    * IAM permissions to the host based on what methods are being called. But
