@@ -1191,7 +1191,7 @@ impl<'a> JSifier<'a> {
 		code.add_code(self.jsify_to_inflight_method(&class.name, ctx));
 		code.add_code(self.jsify_get_inflight_ops_method(&class));
 
-		// emit `_registerBindObject` to register bindings (for type & instance binds)
+		// emit `_registerOnLiftObject` to register bindings (for type & instance binds)
 		code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Instance, ctx));
 		code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Type, ctx));
 
@@ -1497,7 +1497,7 @@ impl<'a> JSifier<'a> {
 				let ops_strings = method_lift_qual.ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
 
 				bind_method.line(format!(
-					"{class_name}._registerBindObject({code}, host, [{ops_strings}]);",
+					"{class_name}._registerOnLiftObject({code}, host, [{ops_strings}]);",
 				));
 			}
 			bind_method.close("}");
