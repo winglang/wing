@@ -319,7 +319,7 @@ export class BucketClient implements IBucketClient {
    * Get the metadata of an object in the bucket.
    * @param key Key of the object.
    */
-  public async getMetadata(key: string): Promise<ObjectMetadata> {
+  public async metadata(key: string): Promise<ObjectMetadata> {
     const command = new HeadObjectCommand({
       Bucket: this.bucketName,
       Key: key,

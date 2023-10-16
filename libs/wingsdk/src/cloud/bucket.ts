@@ -68,7 +68,7 @@ export abstract class Bucket extends Resource {
       BucketInflightMethods.TRY_GET_JSON,
       BucketInflightMethods.TRY_DELETE,
       BucketInflightMethods.SIGNED_URL,
-      BucketInflightMethods.GET_METADATA,
+      BucketInflightMethods.METADATA,
     ];
   }
 
@@ -385,7 +385,7 @@ export interface IBucketClient {
    * @Throws if there is no object with the given key.
    * @inflight
    */
-  getMetadata(key: string): Promise<ObjectMetadata>;
+  metadata(key: string): Promise<ObjectMetadata>;
 }
 
 /**
@@ -502,7 +502,8 @@ export enum BucketInflightMethods {
   TRY_GET_JSON = "tryGetJson",
   /** `Bucket.tryDelete` */
   TRY_DELETE = "tryDelete",
-
+  /** `Bucket.signedUrl` */
   SIGNED_URL = "signedUrl",
-  GET_METADATA = "getMetadata",
+  /** `Bucket.metadata` */
+  METADATA = "metadata",
 }

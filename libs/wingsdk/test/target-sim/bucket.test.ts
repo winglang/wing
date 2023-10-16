@@ -158,9 +158,9 @@ test("put and getMetadata of objects from bucket", async () => {
   await client.put(KEY1, VALUE1);
   await client.put(KEY2, VALUE2);
   await client.put(KEY3, VALUE3, { contentType: CONTENT_TYPE3 });
-  const response1 = await client.getMetadata("file1.main.w");
-  const response2 = await client.getMetadata("file2.txt");
-  const response3 = await client.getMetadata("file3.txt");
+  const response1 = await client.metadata("file1.main.w");
+  const response2 = await client.metadata("file2.txt");
+  const response3 = await client.metadata("file3.txt");
 
   // THEN
   await s.stop();

@@ -27,7 +27,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   private readonly initialObjects: Record<string, string>;
   private readonly _public: boolean;
   private readonly topicHandlers: Partial<Record<BucketEventType, string>>;
-  private readonly metadata: Record<string, ObjectMetadata> = {};
+  private readonly _metadata: Record<string, ObjectMetadata> = {};
 
   public constructor(props: BucketSchema["props"], context: ISimulatorContext) {
     this.objectKeys = new Set();
@@ -234,17 +234,17 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
    * @param key Key of the object.
    * @throws if the object does not exist.
    */
-  public async getMetadata(key: string): Promise<ObjectMetadata> {
+  public async metadata(key: string): Promise<ObjectMetadata> {
     return this.context.withTrace({
       message: `Metadata (key=${key}).`,
       activity: async () => {
         if (!this.objectKeys.has(key)) {
           throw new Error(`Object does not exist (key=${key}).`);
         }
-        if (!this.metadata[key]) {
+        if (!this._metadata[key]) {
           throw new Error(`Metadata does not exist for object (key=${key}).`);
         }
-        return this.metadata[key];
+        return this._metadata[key];
       },
     });
   }
@@ -269,7 +269,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     const determinedContentType =
       (contentType ?? mime.lookup(key)) || "application/octet-stream";
 
-    this.metadata[key] = {
+    this._metadata[key] = {
       size: filestat.size,
       lastModified: Datetime.fromIso(filestat.mtime.toISOString()),
       contentType: determinedContentType,

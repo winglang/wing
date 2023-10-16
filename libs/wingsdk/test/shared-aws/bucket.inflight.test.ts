@@ -632,7 +632,7 @@ test("get metadata of an object", async () => {
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
-  const response = await client.getMetadata(KEY);
+  const response = await client.metadata(KEY);
 
   // THEN
   expect(response).toEqual({
@@ -657,7 +657,7 @@ test("metadata may not contains content-type if it is unknown", async () => {
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
-  const response = await client.getMetadata(KEY);
+  const response = await client.metadata(KEY);
 
   // THEN
   expect(response).toEqual({
@@ -678,7 +678,7 @@ test("metadata fail on non-existent object", async () => {
   const client = new BucketClient(BUCKET_NAME);
 
   // THEN
-  await expect(() => client.getMetadata(KEY)).rejects.toThrowError(
+  await expect(() => client.metadata(KEY)).rejects.toThrowError(
     "Object does not exist (key=KEY)."
   );
 });

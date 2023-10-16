@@ -248,7 +248,7 @@ export class BucketClient implements IBucketClient {
    * @throws if the object does not exist.
    * @param key Key of the object.
    */
-  public async getMetadata(key: string): Promise<ObjectMetadata> {
+  public async metadata(key: string): Promise<ObjectMetadata> {
     return Promise.reject(`metadata is not implemented: (key=${key})`);
   }
 
