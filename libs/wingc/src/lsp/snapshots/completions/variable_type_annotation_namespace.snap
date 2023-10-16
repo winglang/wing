@@ -11,7 +11,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Bucket\n```\n---\nA cloud object store.\n\n### Initializer\n- `...props` — `BucketProps?`\n  \n  - `public?` — `bool?` — Whether the bucket's objects should be publicly accessible.\n### Fields\n- `node` — `Node` — The tree node.\n### Methods\n- `addFile` — `preflight (key: str, path: str, encoding: str?): void` — Add a file to the bucket from system folder.\n- `addObject` — `preflight (key: str, body: str): void` — Add a file to the bucket that is uploaded when the app is deployed.\n- `bind` — `preflight (host: IInflightHost, ops: Array<str>): void` — Binds the resource to the host so that it can be used by inflight code.\n- `delete` — `inflight (key: str, opts: BucketDeleteOptions?): void` — Delete an existing object using a key from the bucket.\n- `exists` — `inflight (key: str): bool` — Check if an object exists in the bucket.\n- `get` — `inflight (key: str): str` — Retrieve an object from the bucket.\n- `getJson` — `inflight (key: str): Json` — Retrieve a Json object from the bucket.\n- `isConstruct` — `preflight (x: any): bool` — Checks if `x` is a construct.\n- `list` — `inflight (prefix: str?): Array<str>` — Retrieve existing objects keys from the bucket.\n- `metadata` — `inflight (key: str): ObjectMetadata` — Get the metadata of an object in the bucket.\n- `onCreate` — `preflight (fn: inflight (key: str, type: BucketEventType): void, opts: BucketOnCreateProps?): void` — Run an inflight whenever a file is uploaded to the bucket.\n- `onDelete` — `preflight (fn: inflight (key: str, type: BucketEventType): void, opts: BucketOnDeleteProps?): void` — Run an inflight whenever a file is deleted from the bucket.\n- `onEvent` — `preflight (fn: inflight (key: str, type: BucketEventType): void, opts: BucketOnEventProps?): void` — Run an inflight whenever a file is uploaded, modified, or deleted from the bucket.\n- `onUpdate` — `preflight (fn: inflight (key: str, type: BucketEventType): void, opts: BucketOnUpdateProps?): void` — Run an inflight whenever a file is updated in the bucket.\n- `publicUrl` — `inflight (key: str): str` — Returns a url to the given file.\n- `put` — `inflight (key: str, body: str): void` — Put an object in the bucket.\n- `putJson` — `inflight (key: str, body: Json): void` — Put a Json object in the bucket.\n- `signedUrl` — `inflight (key: str, options: SignedUrlOptions?): str` — Returns a signed url to the given file.\n- `toString` — `preflight (): str` — Returns a string representation of this construct.\n- `tryDelete` — `inflight (key: str): bool` — Delete an object from the bucket if it exists.\n- `tryGet` — `inflight (key: str): str?` — Get an object from the bucket if it exists.\n- `tryGetJson` — `inflight (key: str): Json?` — Gets an object from the bucket if it exists, parsing it as Json."
+    value: "```wing\nclass Bucket\n```\n---\nA cloud object store.\n\n### Initializer\n- `...props` — `BucketProps?`\n  \n  - `public?` — `bool?` — Whether the bucket's objects should be publicly accessible.\n### Fields\n- `node` — `Node` — The tree node.\n### Methods\n- `addFile` — `preflight (key: str, path: str, encoding: str?): void` — Add a file to the bucket from system folder.\n- `addObject` — `preflight (key: str, body: str): void` — Add a file to the bucket that is uploaded when the app is deployed.\n- `bind` — `preflight (host: IInflightHost, ops: Array<str>): void` — Binds the resource to the host so that it can be used by inflight code.\n- `delete` — `inflight (key: str, opts: BucketDeleteOptions?): void` — Delete an existing object using a key from the bucket.\n- `exists` — `inflight (key: str): bool` — Check if an object exists in the bucket.\n- `get` — `inflight (key: str): str` — Retrieve an object from the bucket.\n- `getJson` — `inflight (key: str): Json` — Retrieve a Json object from the bucket.\n- `isConstruct` — `preflight (x: any): bool` — Checks if `x` is a construct.\n- `list` — `inflight (prefix: str?): Array<str>` — Retrieve existing objects keys from the bucket.\n- `metadata` — `inflight (key: str): ObjectMetadata` — Get the metadata of an object in the bucket.\n- `onCreate` — `preflight (fn: inflight (key: str, type: BucketEventType): void, opts: BucketOnCreateProps?): void` — Run an inflight whenever a file is uploaded to the bucket.\n- `onDelete` — `preflight (fn: inflight (key: str, type: BucketEventType): void, opts: BucketOnDeleteProps?): void` — Run an inflight whenever a file is deleted from the bucket.\n- `onEvent` — `preflight (fn: inflight (key: str, type: BucketEventType): void, opts: BucketOnEventProps?): void` — Run an inflight whenever a file is uploaded, modified, or deleted from the bucket.\n- `onUpdate` — `preflight (fn: inflight (key: str, type: BucketEventType): void, opts: BucketOnUpdateProps?): void` — Run an inflight whenever a file is updated in the bucket.\n- `publicUrl` — `inflight (key: str): str` — Returns a url to the given file.\n- `put` — `inflight (key: str, body: str, options: BucketPutOptions?): void` — Put an object in the bucket.\n- `putJson` — `inflight (key: str, body: Json): void` — Put a Json object in the bucket.\n- `signedUrl` — `inflight (key: str, options: BucketSignedUrlOptions?): str` — Returns a signed url to the given file.\n- `toString` — `preflight (): str` — Returns a string representation of this construct.\n- `tryDelete` — `inflight (key: str): bool` — Delete an object from the bucket if it exists.\n- `tryGet` — `inflight (key: str): str?` — Get an object from the bucket if it exists.\n- `tryGetJson` — `inflight (key: str): Json?` — Gets an object from the bucket if it exists, parsing it as Json."
   sortText: gg|Bucket
 - label: Counter
   kind: 7
@@ -155,7 +155,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct BucketDeleteOptions\n```\n---\nInterface for delete method inside `Bucket`.\n### Fields\n- `mustExist?` — `bool?` — Check failures on the method and retrieve errors if any."
+    value: "```wing\nstruct BucketDeleteOptions\n```\n---\nOptions for `Bucket.delete()`.\n### Fields\n- `mustExist?` — `bool?` — Check failures on the method and retrieve errors if any."
   sortText: hh|BucketDeleteOptions
 - label: BucketEvent
   kind: 22
@@ -193,6 +193,18 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstruct BucketProps\n```\n---\nOptions for `Bucket`.\n### Fields\n- `public?` — `bool?` — Whether the bucket's objects should be publicly accessible."
   sortText: hh|BucketProps
+- label: BucketPutOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct BucketPutOptions\n```\n---\nOptions for `Bucket.put()`.\n### Fields\n- `contentType` — `str` — The HTTP Content-Type of the object."
+  sortText: hh|BucketPutOptions
+- label: BucketSignedUrlOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct BucketSignedUrlOptions\n```\n---\nOptions for `Bucket.signedUrl()`.\n### Fields\n- `duration?` — `duration?` — The duration for the signed url to expire."
+  sortText: hh|BucketSignedUrlOptions
 - label: CounterProps
   kind: 22
   documentation:
@@ -271,12 +283,6 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstruct ServiceProps\n```\n---\nOptions for `Service`.\n### Fields\n- `autoStart?` — `bool?` — Whether the service should start automatically.\n- `env?` — `Map<str>?` — Environment variables to pass to the function."
   sortText: hh|ServiceProps
-- label: SignedUrlOptions
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nstruct SignedUrlOptions\n```\n---\nInterface for signed url options.\n### Fields\n- `duration?` — `duration?` — The duration for the signed url to expire."
-  sortText: hh|SignedUrlOptions
 - label: TopicOnMessageProps
   kind: 22
   documentation:
@@ -323,7 +329,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IBucketClient\n```\n---\nInflight interface for `Bucket`.\n### Methods\n- `delete` — `inflight (key: str, opts: BucketDeleteOptions?): void` — Delete an existing object using a key from the bucket.\n- `exists` — `inflight (key: str): bool` — Check if an object exists in the bucket.\n- `get` — `inflight (key: str): str` — Retrieve an object from the bucket.\n- `getJson` — `inflight (key: str): Json` — Retrieve a Json object from the bucket.\n- `list` — `inflight (prefix: str?): Array<str>` — Retrieve existing objects keys from the bucket.\n- `metadata` — `inflight (key: str): ObjectMetadata` — Get the metadata of an object in the bucket.\n- `publicUrl` — `inflight (key: str): str` — Returns a url to the given file.\n- `put` — `inflight (key: str, body: str): void` — Put an object in the bucket.\n- `putJson` — `inflight (key: str, body: Json): void` — Put a Json object in the bucket.\n- `signedUrl` — `inflight (key: str, options: SignedUrlOptions?): str` — Returns a signed url to the given file.\n- `tryDelete` — `inflight (key: str): bool` — Delete an object from the bucket if it exists.\n- `tryGet` — `inflight (key: str): str?` — Get an object from the bucket if it exists.\n- `tryGetJson` — `inflight (key: str): Json?` — Gets an object from the bucket if it exists, parsing it as Json."
+    value: "```wing\ninterface IBucketClient\n```\n---\nInflight interface for `Bucket`.\n### Methods\n- `delete` — `inflight (key: str, opts: BucketDeleteOptions?): void` — Delete an existing object using a key from the bucket.\n- `exists` — `inflight (key: str): bool` — Check if an object exists in the bucket.\n- `get` — `inflight (key: str): str` — Retrieve an object from the bucket.\n- `getJson` — `inflight (key: str): Json` — Retrieve a Json object from the bucket.\n- `list` — `inflight (prefix: str?): Array<str>` — Retrieve existing objects keys from the bucket.\n- `metadata` — `inflight (key: str): ObjectMetadata` — Get the metadata of an object in the bucket.\n- `publicUrl` — `inflight (key: str): str` — Returns a url to the given file.\n- `put` — `inflight (key: str, body: str, options: BucketPutOptions?): void` — Put an object in the bucket.\n- `putJson` — `inflight (key: str, body: Json): void` — Put a Json object in the bucket.\n- `signedUrl` — `inflight (key: str, options: BucketSignedUrlOptions?): str` — Returns a signed url to the given file.\n- `tryDelete` — `inflight (key: str): bool` — Delete an object from the bucket if it exists.\n- `tryGet` — `inflight (key: str): str?` — Get an object from the bucket if it exists.\n- `tryGetJson` — `inflight (key: str): Json?` — Gets an object from the bucket if it exists, parsing it as Json."
   sortText: ii|IBucketClient
 - label: IBucketEventHandler
   kind: 8

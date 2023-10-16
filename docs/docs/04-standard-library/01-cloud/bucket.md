@@ -435,7 +435,7 @@ Returns a url to the given file.
 ##### `put` <a name="put" id="@winglang/sdk.cloud.IBucketClient.put"></a>
 
 ```wing
-inflight put(key: str, body: str): void
+inflight put(key: str, body: str, options?: BucketPutOptions): void
 ```
 
 Put an object in the bucket.
@@ -453,6 +453,14 @@ Key of the object.
 - *Type:* str
 
 Content of the object we want to store into the bucket.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.IBucketClient.put.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.BucketPutOptions">BucketPutOptions</a>
+
+Additional options.
 
 ---
 
@@ -483,7 +491,7 @@ Json object that we want to store into the bucket.
 ##### `signedUrl` <a name="signedUrl" id="@winglang/sdk.cloud.IBucketClient.signedUrl"></a>
 
 ```wing
-inflight signedUrl(key: str, options?: SignedUrlOptions): str
+inflight signedUrl(key: str, options?: BucketSignedUrlOptions): str
 ```
 
 Returns a signed url to the given file.
@@ -498,7 +506,7 @@ The key to access the cloud object.
 
 ###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.IBucketClient.signedUrl.parameter.options"></a>
 
-- *Type:* <a href="#@winglang/sdk.cloud.SignedUrlOptions">SignedUrlOptions</a>
+- *Type:* <a href="#@winglang/sdk.cloud.BucketSignedUrlOptions">BucketSignedUrlOptions</a>
 
 The signedUrlOptions where you can provide the configurations of the signed url.
 
@@ -579,7 +587,7 @@ The tree node.
 
 ### BucketDeleteOptions <a name="BucketDeleteOptions" id="@winglang/sdk.cloud.BucketDeleteOptions"></a>
 
-Interface for delete method inside `Bucket`.
+Options for `Bucket.delete()`.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketDeleteOptions.Initializer"></a>
 
@@ -740,6 +748,73 @@ Whether the bucket's objects should be publicly accessible.
 
 ---
 
+### BucketPutOptions <a name="BucketPutOptions" id="@winglang/sdk.cloud.BucketPutOptions"></a>
+
+Options for `Bucket.put()`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketPutOptions.Initializer"></a>
+
+```wing
+bring cloud;
+
+let BucketPutOptions = cloud.BucketPutOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.BucketPutOptions.property.contentType">contentType</a></code> | <code>str</code> | The HTTP Content-Type of the object. |
+
+---
+
+##### `contentType`<sup>Required</sup> <a name="contentType" id="@winglang/sdk.cloud.BucketPutOptions.property.contentType"></a>
+
+```wing
+contentType: str;
+```
+
+- *Type:* str
+- *Default:* Determined by file extension or fallback to "application/octet-stream"
+
+The HTTP Content-Type of the object.
+
+> [https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type)
+
+---
+
+### BucketSignedUrlOptions <a name="BucketSignedUrlOptions" id="@winglang/sdk.cloud.BucketSignedUrlOptions"></a>
+
+Options for `Bucket.signedUrl()`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketSignedUrlOptions.Initializer"></a>
+
+```wing
+bring cloud;
+
+let BucketSignedUrlOptions = cloud.BucketSignedUrlOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.BucketSignedUrlOptions.property.duration">duration</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The duration for the signed url to expire. |
+
+---
+
+##### `duration`<sup>Optional</sup> <a name="duration" id="@winglang/sdk.cloud.BucketSignedUrlOptions.property.duration"></a>
+
+```wing
+duration: duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+
+The duration for the signed url to expire.
+
+---
+
 ### ObjectMetadata <a name="ObjectMetadata" id="@winglang/sdk.cloud.ObjectMetadata"></a>
 
 Metadata of a bucket object.
@@ -795,38 +870,6 @@ contentType: str;
 - *Type:* str
 
 The content type of the object, if it is known.
-
----
-
-### SignedUrlOptions <a name="SignedUrlOptions" id="@winglang/sdk.cloud.SignedUrlOptions"></a>
-
-Interface for signed url options.
-
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.SignedUrlOptions.Initializer"></a>
-
-```wing
-bring cloud;
-
-let SignedUrlOptions = cloud.SignedUrlOptions{ ... };
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.SignedUrlOptions.property.duration">duration</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The duration for the signed url to expire. |
-
----
-
-##### `duration`<sup>Optional</sup> <a name="duration" id="@winglang/sdk.cloud.SignedUrlOptions.property.duration"></a>
-
-```wing
-duration: duration;
-```
-
-- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
-
-The duration for the signed url to expire.
 
 ---
 
