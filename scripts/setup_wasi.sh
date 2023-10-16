@@ -28,22 +28,7 @@ fi
 
 # Download binaryen tools
 BINARYEN_INSTALL_DIR="$TOOL_INSTALL_DIR/binaryen-$BINARYEN_VERSION"
-BINARIES=(
-    "binaryen-unittests"
-    "wasm-as"
-    "wasm-ctor-eval"
-    "wasm-dis"
-    "wasm-emscripten-finalize"
-    "wasm-fuzz-lattices"
-    "wasm-fuzz-types"
-    "wasm-merge"
-    "wasm-metadce"
-    "wasm-opt"
-    "wasm-reduce"
-    "wasm-shell"
-    "wasm-split"
-    "wasm2js"
-)
+BINARYEN_BINARIES=("wasm-opt")
 all_binaries_present() {
     for binary in "${BINARIES[@]}"; do
         if [ ! -f "$BINARYEN_INSTALL_DIR/bin/$binary" ]; then
