@@ -623,7 +623,7 @@ class $Root extends $stdlib.std.Resource {
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
           $Closure2._registerOnLiftObject(queue, host, ["push"]);
-          $Closure2._registerOnLiftObject(r, host, ["get"]);
+          $Closure2._registerOnLiftObject(r, host, ["get", "rawClient"]);
           $Closure2._registerOnLiftObject(r2, host, ["get", "set"]);
         }
         super._registerOnLift(host, ops);
