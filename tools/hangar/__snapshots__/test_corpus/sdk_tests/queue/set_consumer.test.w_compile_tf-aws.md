@@ -285,14 +285,14 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["test", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Predicate._registerBindObject(this.c, host, []);
+          Predicate._registerOnLiftObject(this.c, host, []);
         }
         if (ops.includes("test")) {
-          Predicate._registerBindObject(this.c, host, ["peek"]);
+          Predicate._registerOnLiftObject(this.c, host, ["peek"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -321,11 +321,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(c, host, ["inc"]);
+          $Closure1._registerOnLiftObject(c, host, ["inc"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -357,12 +357,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(predicate, host, ["test"]);
-          $Closure2._registerBindObject(q, host, ["push"]);
+          $Closure2._registerOnLiftObject(predicate, host, ["test"]);
+          $Closure2._registerOnLiftObject(q, host, ["push"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
