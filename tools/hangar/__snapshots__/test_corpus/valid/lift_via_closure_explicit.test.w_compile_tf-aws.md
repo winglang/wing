@@ -122,14 +122,14 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          MyClosure._registerBindObject(this.q, host, []);
+          MyClosure._registerOnLiftObject(this.q, host, []);
         }
         if (ops.includes("handle")) {
-          MyClosure._registerBindObject(this.q, host, ["push"]);
+          MyClosure._registerOnLiftObject(this.q, host, ["push"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -158,11 +158,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(fn, host, ["handle"]);
+          $Closure1._registerOnLiftObject(fn, host, ["handle"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const fn = new MyClosure(this,"MyClosure");

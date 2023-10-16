@@ -119,13 +119,13 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(data.size, host, []);
-          $Closure1._registerBindObject(queue, host, ["push"]);
-          $Closure1._registerBindObject(res, host, ["get", "put"]);
+          $Closure1._registerOnLiftObject(data.size, host, []);
+          $Closure1._registerOnLiftObject(queue, host, ["push"]);
+          $Closure1._registerOnLiftObject(res, host, ["get", "put"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const data = new Set([1, 2, 3]);
