@@ -112,7 +112,7 @@ export abstract class Website extends Resource implements IWebsite {
   public abstract addFile(
     path: string,
     data: string,
-    options: AddFileOptions
+    options?: AddFileOptions
   ): string;
 }
 

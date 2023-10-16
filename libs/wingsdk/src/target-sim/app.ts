@@ -15,6 +15,7 @@ import { isSimulatorResource } from "./resource";
 import { Schedule } from "./schedule";
 import { Secret } from "./secret";
 import { Service } from "./service";
+import { STATE_FQN, State } from "./state";
 import { Table } from "./table";
 import { TestRunner } from "./test-runner";
 import { SimTokens } from "./tokens";
@@ -133,6 +134,9 @@ export class App extends core.App {
 
       case DYNAMODB_TABLE_FQN:
         return new DynamodbTable(scope, id, args[0]);
+
+      case STATE_FQN:
+        return new State(scope, id);
     }
 
     return undefined;

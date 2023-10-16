@@ -24,6 +24,7 @@ export const SECRET_TYPE = "wingsdk.cloud.Secret";
 export const SERVICE_TYPE = "wingsdk.cloud.Service";
 export const ON_DEPLOY_TYPE = "wingsdk.cloud.OnDeploy";
 export const DYNAMODB_TABLE_TYPE = "wingsdk.ex.DynamodbTable";
+export const SIMULATOR_STATE_TYPE = "wingsdk.sim.State";
 
 export type FunctionHandle = string;
 export type PublisherHandle = string;
@@ -310,3 +311,12 @@ export interface DynamodbTableSchema extends BaseResourceSchema {
     readonly rangeKey?: string;
   };
 }
+
+/** Schema for simulator.State */
+export interface StateSchema extends BaseResourceSchema {
+  readonly type: typeof SIMULATOR_STATE_TYPE;
+  readonly props: {};
+}
+
+/** Runtime attributes for cloud.Bucket */
+export interface BucketAttributes {}
