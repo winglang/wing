@@ -31,7 +31,7 @@ module.exports = function({ $b }) {
       }
       catch ($error_e) {
         const e = $error_e.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: e.contains(\"Object does not exist (key=no-such-file.txt).\")")})(e.includes("Object does not exist (key=no-such-file.txt)."))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Object does not exist (key=no-such-file.txt).\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"Object does not exist (key=no-such-file.txt).")))};
       }
     }
   }
