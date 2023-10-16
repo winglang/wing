@@ -110,7 +110,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Get (key=${key}).`,
       activity: async () => {
-        const hash = this.getHashKey(key);
+        const hash = this.hashKey(key);
         const filename = join(this._fileDir, hash);
         try {
           return await fs.promises.readFile(filename, "utf8");
@@ -135,7 +135,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Get Json (key=${key}).`,
       activity: async () => {
-        const hash = this.getHashKey(key);
+        const hash = this.hashKey(key);
         const filename = join(this._fileDir, hash);
         return JSON.parse(await fs.promises.readFile(filename, "utf8"));
       },
@@ -164,7 +164,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
           return;
         }
 
-        const hash = this.getHashKey(key);
+        const hash = this.hashKey(key);
         const filename = join(this._fileDir, hash);
         await fs.promises.unlink(filename);
         this.objectKeys.delete(key);
@@ -258,7 +258,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       ? BucketEventType.UPDATE
       : BucketEventType.CREATE;
 
-    const hash = this.getHashKey(key);
+    const hash = this.hashKey(key);
     const filename = join(this._fileDir, hash);
     const dirName = dirname(filename);
 
@@ -279,7 +279,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     await this.notifyListeners(actionType, key);
   }
 
-  private getHashKey(key: string): string {
+  private hashKey(key: string): string {
     return crypto.createHash("sha512").update(key).digest("hex");
   }
 }
