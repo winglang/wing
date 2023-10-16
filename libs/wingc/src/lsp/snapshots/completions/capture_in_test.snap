@@ -56,18 +56,6 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
-- label: getMetadata
-  kind: 2
-  detail: "inflight (key: str): ObjectMetadata"
-  documentation:
-    kind: markdown
-    value: "```wing\ninflight getMetadata: inflight (key: str): ObjectMetadata\n```\n---\nGet the metadata of an object in the bucket.\n### Parameters\n- `key` — `str` — Key of the object.\n\n*@Throws* *if there is no object with the given key.*"
-  sortText: ff|getMetadata
-  insertText: getMetadata($0)
-  insertTextFormat: 2
-  command:
-    title: triggerParameterHints
-    command: editor.action.triggerParameterHints
 - label: list
   kind: 2
   detail: "inflight (prefix: str?): Array<str>"
@@ -76,6 +64,18 @@ source: libs/wingc/src/lsp/completions.rs
     value: "```wing\ninflight list: inflight (prefix: str?): Array<str>\n```\n---\nRetrieve existing objects keys from the bucket.\n### Parameters\n- `prefix` — `str?` — Limits the response to keys that begin with the specified prefix.\n\n### Returns\na list of keys or an empty array if the bucket is empty."
   sortText: ff|list
   insertText: list($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: metadata
+  kind: 2
+  detail: "inflight (key: str): ObjectMetadata"
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight metadata: inflight (key: str): ObjectMetadata\n```\n---\nGet the metadata of an object in the bucket.\n### Parameters\n- `key` — `str` — Key of the object.\n\n*@Throws* *if there is no object with the given key.*"
+  sortText: ff|metadata
+  insertText: metadata($0)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
