@@ -51,6 +51,27 @@ jobs:
             exit 1
           fi
 
+      - name: Unstable mutation comment
+        if: steps.download-artifacts.outputs.found_artifact == 'true' && startsWith(github.event.workflow_run.head_commit.message, format('chore{0} self mutation', ':'))
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          mode: recreate
+          message: |
+            ### :x: Unstable Self-Mutation :x:
+            Self-mutation has run twice in a row. There may be a something non-deterministic in the build or test process.
+            Check the last mutation commit (${{ github.event.workflow_run.head_sha }}) for suspicious changes.
+            This is typically caused by:
+            - Absolute paths
+            - Timestamps
+            - Random values
+            - Flakey tests (relying on one of the above)
+          comment_tag: UnstableMutation
+          GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+      
+      - name: Unstable mutation fail
+        if: steps.download-artifacts.outputs.found_artifact == 'true' && startsWith(github.event.workflow_run.head_commit.message, format('chore{0} self mutation', ':'))
+        run: exit 1
+
       - name: Disable Git Hooks
         if: steps.download-artifacts.outputs.found_artifact == 'true'
         run: |
@@ -58,7 +79,7 @@ jobs:
 
       - name: Update PR Branch
         uses: actions/github-script@v6
-        if: github.event.workflow_run.event == 'pull_request' && steps.download-artifacts.outputs.found_artifact == 'true'
+        if: steps.download-artifacts.outputs.found_artifact == 'true'
         with:
           github-token: ${{ secrets.MUTATION_TOKEN }}
           script: |
@@ -141,7 +162,7 @@ jobs:
 
       - name: Add label to block auto merge
         uses: actions/github-script@v6
-        if: github.event.workflow_run.event == 'pull_request' && steps.download-artifacts.outputs.found_artifact == 'true'
+        if: steps.download-artifacts.outputs.found_artifact == 'true'
         with:
           github-token: ${{ secrets.MUTATION_TOKEN }}
           script: |

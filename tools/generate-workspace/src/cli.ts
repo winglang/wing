@@ -17,6 +17,8 @@ const ignoreList = [
   "@wingconsole/tsconfig",
   "hangar",
   "@wingconsole/design-system",
+  "@wingconsole/use-persistent-state",
+  "wing-fixture",
 ];
 
 const nameMapping: Record<string, string> = {

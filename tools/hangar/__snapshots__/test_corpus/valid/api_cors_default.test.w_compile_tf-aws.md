@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-2.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -20,6 +21,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure2-2.js
 ```js
+"use strict";
 module.exports = function({ $apiDefaultCors_url, $http_Util, $t_Assert }) {
   class $Closure2 {
     constructor({  }) {
@@ -31,9 +33,9 @@ module.exports = function({ $apiDefaultCors_url, $http_Util, $t_Assert }) {
       const response = (await $http_Util.get(($apiDefaultCors_url + "/users")));
       const headers = response.headers;
       (await $t_Assert.equalNum(response.status,200));
-      (await $t_Assert.equalStr((headers)["access-control-allow-origin"],"*"));
-      (await $t_Assert.equalStr((headers)["access-control-allow-credentials"],"false"));
-      (await $t_Assert.equalStr((headers)["access-control-expose-headers"],""));
+      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-allow-origin"),"*"));
+      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-allow-credentials"),"false"));
+      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-expose-headers"),""));
       (await $t_Assert.isNil((headers)["access-control-allow-headers"]));
       (await $t_Assert.isNil((headers)["access-control-allow-methods"]));
     }
@@ -45,6 +47,7 @@ module.exports = function({ $apiDefaultCors_url, $http_Util, $t_Assert }) {
 
 ## inflight.$Closure3-2.js
 ```js
+"use strict";
 module.exports = function({ $apiDefaultCors_url, $http_HttpMethod, $http_Util, $t_Assert }) {
   class $Closure3 {
     constructor({  }) {
@@ -56,9 +59,9 @@ module.exports = function({ $apiDefaultCors_url, $http_HttpMethod, $http_Util, $
       const response = (await $http_Util.fetch(($apiDefaultCors_url + "/users"),({"method": $http_HttpMethod.OPTIONS})));
       const headers = response.headers;
       (await $t_Assert.equalNum(response.status,204));
-      (await $t_Assert.equalStr((headers)["access-control-allow-headers"],"Content-Type,Authorization,X-Requested-With"));
-      (await $t_Assert.equalStr((headers)["access-control-allow-methods"],"GET,POST,PUT,DELETE,HEAD,OPTIONS"));
-      (await $t_Assert.equalStr((headers)["access-control-allow-origin"],"*"));
+      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-allow-headers"),"Content-Type,Authorization,X-Requested-With"));
+      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-allow-methods"),"GET,POST,PUT,DELETE,HEAD,OPTIONS"));
+      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-allow-origin"),"*"));
       (await $t_Assert.isNil((headers)["access-control-allow-credentials"]));
       (await $t_Assert.isNil((headers)["access-control-expose-headers"]));
     }
@@ -70,6 +73,7 @@ module.exports = function({ $apiDefaultCors_url, $http_HttpMethod, $http_Util, $
 
 ## inflight.Assert-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Assert {
     static async equalStr(a, b) {
@@ -314,6 +318,7 @@ module.exports = function({  }) {
 
 ## preflight.assertions-1.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   class Assert extends $stdlib.std.Resource {
@@ -348,6 +353,7 @@ module.exports = function({ $stdlib }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";

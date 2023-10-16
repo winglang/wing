@@ -6,7 +6,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(condition: bool): void"
   documentation:
     kind: markdown
-    value: "```wing\nassert: (condition: bool): void\n```\n---\nAsserts that a condition is true\n\n### Parameters\n- `condition` — The condition to assert"
+    value: "```wing\nassert: (condition: bool): void\n```\n---\nAsserts that a condition is true\n### Parameters\n- `condition` — `bool` — The condition to assert"
   sortText: cc|assert
   insertText: assert($0)
   insertTextFormat: 2
@@ -18,9 +18,21 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(message: str): void"
   documentation:
     kind: markdown
-    value: "```wing\nlog: (message: str): void\n```\n---\nLogs a message\n\n### Parameters\n- `message` — The message to log"
+    value: "```wing\nlog: (message: str): void\n```\n---\nLogs a message\n### Parameters\n- `message` — `str` — The message to log"
   sortText: cc|log
   insertText: log($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: unsafeCast
+  kind: 3
+  detail: "(value: any): any"
+  documentation:
+    kind: markdown
+    value: "```wing\nunsafeCast: (value: any): any\n```\n---\nCasts a value into a different type. This is unsafe and can cause runtime errors\n### Parameters\n- `value` — `any` — The value to cast into a different type"
+  sortText: cc|unsafeCast
+  insertText: unsafeCast($0)
   insertTextFormat: 2
   command:
     title: triggerParameterHints

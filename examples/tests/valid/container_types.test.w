@@ -90,10 +90,30 @@ assert(m9.values().at(0) == "a1");
 assert(m9.values().at(1) == "b1");
 assert(m9.values().at(2) == "c1");
 for val in m9.keys() {
+
   assert(!val.endsWith("1"));
 }
 for val in m9.values() {
   assert(val.endsWith("1"));
+}
+
+// try get something exists
+if let k = m9.tryGet("a") {
+  assert(k == "a1");
+} else {
+  assert(false); // should never happen
+}
+
+// try get something doesnt exist
+if let k = m9.tryGet("def-fake") {
+  assert(false); // should never happen
+}
+
+// get something that doesnt exist
+try {
+  m9.get("def-fake");
+} catch err {
+  assert(err.contains("does not contain key: \"def-fake\""));
 }
 
 //Set tests

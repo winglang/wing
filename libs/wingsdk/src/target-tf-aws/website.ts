@@ -1,5 +1,5 @@
 import { readdirSync } from "fs";
-import { extname, join, posix, resolve, sep } from "path";
+import { extname, join, resolve } from "path";
 
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -15,6 +15,7 @@ import { S3BucketPolicy } from "../.gen/providers/aws/s3-bucket-policy";
 import { S3BucketWebsiteConfiguration } from "../.gen/providers/aws/s3-bucket-website-configuration";
 import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
+import { normalPath } from "../shared/misc";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import * as aws from "../shared-aws";
 
@@ -168,21 +169,22 @@ export class Website extends cloud.Website {
       content: data,
       bucket: this.bucket.bucket,
       contentType: options?.contentType ?? "text/plain",
-      key: this.formatPath(path),
+      key: normalPath(path),
     });
 
     return `${this.url}/${path}`;
   }
 
   private uploadFile(filePath: string) {
-    const fileKey = filePath.replace(this.path, "");
+    const fileKey = normalPath(filePath.replace(this.path, ""));
+    const normalizedFullPath = normalPath(resolve(filePath));
 
-    new S3Object(this, `File${fileKey.replace(/[\/\\]/g, "--")}`, {
+    new S3Object(this, `File${fileKey.replace(/\//g, "--")}`, {
       dependsOn: [this.bucket],
-      key: this.formatPath(filePath.replace(this.path, "")),
+      key: fileKey,
       bucket: this.bucket.bucket,
-      source: resolve(filePath),
-      sourceHash: Fn.filemd5(resolve(filePath)),
+      source: normalizedFullPath,
+      sourceHash: Fn.filemd5(normalizedFullPath),
       contentType: mime.contentType(extname(filePath)) || undefined,
     });
   }
@@ -197,10 +199,6 @@ export class Website extends cloud.Website {
         this.uploadFile(filename);
       }
     }
-  }
-
-  private formatPath(path: string): string {
-    return path.split(sep).join(posix.sep);
   }
 
   /** @internal */

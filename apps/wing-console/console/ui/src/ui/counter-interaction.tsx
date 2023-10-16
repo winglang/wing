@@ -41,7 +41,7 @@ export const CounterInteraction = ({
           <input
             id={actualValueElementId}
             className={classNames(
-              "w-full border opacity-70 ease-in-out items-center px-2 select-text text-sm transition truncate rounded",
+              "w-full border opacity-70 ease-in-out items-center px-2 py-0 select-text text-sm transition truncate rounded",
               theme.bgInput,
               theme.borderInput,
               theme.textInput,

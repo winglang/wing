@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $c5 }) {
   class $Closure1 {
     constructor({  }) {
@@ -23,6 +24,7 @@ module.exports = function({ $c5 }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $student_hrlyWage, $student_major, $student_name }) {
   class $Closure2 {
     constructor({  }) {
@@ -43,6 +45,7 @@ module.exports = function({ $student_hrlyWage, $student_major, $student_name }) 
 
 ## inflight.$Closure3-1.js
 ```js
+"use strict";
 module.exports = function({ $ta_hrlyWage }) {
   class $Closure3 {
     constructor({  }) {
@@ -61,6 +64,7 @@ module.exports = function({ $ta_hrlyWage }) {
 
 ## inflight.$Closure4-1.js
 ```js
+"use strict";
 module.exports = function({ $B }) {
   class $Closure4 {
     constructor({  }) {
@@ -80,6 +84,7 @@ module.exports = function({ $B }) {
 
 ## inflight.A-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class A {
     async $inflight_init(sound) {
@@ -93,6 +98,7 @@ module.exports = function({  }) {
 
 ## inflight.B-1.js
 ```js
+"use strict";
 module.exports = function({ $A }) {
   class B extends $A {
     async $inflight_init(sound) {
@@ -106,6 +112,7 @@ module.exports = function({ $A }) {
 
 ## inflight.Bam-1.js
 ```js
+"use strict";
 module.exports = function({ $Boom }) {
   class Bam extends $Boom {
     constructor({  }) {
@@ -119,6 +126,7 @@ module.exports = function({ $Boom }) {
 
 ## inflight.Bar-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Bar {
     constructor({  }) {
@@ -131,6 +139,7 @@ module.exports = function({  }) {
 
 ## inflight.Baz-1.js
 ```js
+"use strict";
 module.exports = function({ $Bar }) {
   class Baz extends $Bar {
     constructor({  }) {
@@ -144,6 +153,7 @@ module.exports = function({ $Bar }) {
 
 ## inflight.Boom-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Boom {
     constructor({  }) {
@@ -156,6 +166,7 @@ module.exports = function({  }) {
 
 ## inflight.C1-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class C1 {
     constructor({  }) {
@@ -168,6 +179,7 @@ module.exports = function({  }) {
 
 ## inflight.C2-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class C2 {
     constructor({  }) {
@@ -180,6 +192,7 @@ module.exports = function({  }) {
 
 ## inflight.C3-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class C3 {
     constructor({  }) {
@@ -192,6 +205,7 @@ module.exports = function({  }) {
 
 ## inflight.C4-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class C4 {
     constructor({  }) {
@@ -204,6 +218,7 @@ module.exports = function({  }) {
 
 ## inflight.C5-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class C5 {
     constructor({  }) {
@@ -223,6 +238,7 @@ module.exports = function({  }) {
 
 ## inflight.Foo-1.js
 ```js
+"use strict";
 module.exports = function({ $Bar }) {
   class Foo extends $Bar {
     constructor({  }) {
@@ -238,6 +254,7 @@ module.exports = function({ $Bar }) {
 
 ## inflight.PaidStudent-1.js
 ```js
+"use strict";
 module.exports = function({ $Student }) {
   class PaidStudent extends $Student {
     constructor({  }) {
@@ -251,6 +268,7 @@ module.exports = function({ $Student }) {
 
 ## inflight.Person-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Person {
     constructor({  }) {
@@ -263,6 +281,7 @@ module.exports = function({  }) {
 
 ## inflight.Student-1.js
 ```js
+"use strict";
 module.exports = function({ $Person }) {
   class Student extends $Person {
     constructor({  }) {
@@ -276,6 +295,7 @@ module.exports = function({ $Person }) {
 
 ## inflight.TeacherAid-1.js
 ```js
+"use strict";
 module.exports = function({ $PaidStudent }) {
   class TeacherAid extends $PaidStudent {
     constructor({  }) {
@@ -321,6 +341,7 @@ module.exports = function({ $PaidStudent }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";

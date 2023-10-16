@@ -71,7 +71,8 @@ exports[`create a queue 2`] = `
 
 exports[`messages are not requeued if the function fails after retention timeout 1`] = `
 {
-  ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "exports.handler = async function(event) {
+  ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
@@ -265,7 +266,8 @@ exports[`messages are not requeued if the function fails before timeout 1`] = `
 
 exports[`messages are not requeued if the function fails before timeout 2`] = `
 {
-  ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "exports.handler = async function(event) {
+  ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
@@ -460,7 +462,8 @@ exports[`messages are requeued if the function fails after timeout 1`] = `
 
 exports[`messages are requeued if the function fails after timeout 2`] = `
 {
-  ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "exports.handler = async function(event) {
+  ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
@@ -797,9 +800,10 @@ exports[`queue batch size of 2, purge the queue 2`] = `
 }
 `;
 
-exports[`queue with one subscriber, batch size of 5 1`] = `
+exports[`queue with one subscriber, batch size of 5, should get processed in two batches 1`] = `
 {
-  ".wing/function_c8ab799f.js": "exports.handler = async function(event) {
+  ".wing/function_c8ab799f.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -808,25 +812,26 @@ return class Handler {
     }
   }
   async handle() {
-  await this.queue.push(\\"A\\");
-  await this.queue.push(\\"B\\");
-  await this.queue.push(\\"C\\");
-  await this.queue.push(\\"D\\");
-  await this.queue.push(\\"E\\");
-  await this.queue.push(\\"F\\");
+  await this.queue.push(\\"A\\", \\"B\\", \\"C\\", \\"D\\", \\"E\\", \\"F\\");
 }
 };
 })())({
-queue: (function(env) {
-  let handle = process.env[env];
+queue: (function() {
+  const handle = process.env.QUEUE_HANDLE_54fcf4cd;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: QUEUE_HANDLE_54fcf4cd\\");
   }
-  return $simulator.findInstance(handle);
-})(\\"QUEUE_HANDLE_54fcf4cd\\")
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+  }
+
+  return require(\\"@winglang/sdk\\").simulator.makeSimulatorClient(simulatorUrl, handle);
+})()
 })).handle(event);
 };",
-  ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "exports.handler = async function(event) {
+  ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1074,7 +1079,8 @@ async handle(message) {
 
 exports[`queue with one subscriber, default batch size of 1 1`] = `
 {
-  ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "exports.handler = async function(event) {
+  ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {

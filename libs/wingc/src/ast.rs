@@ -49,12 +49,7 @@ impl Ord for Symbol {
 
 impl PartialOrd for Symbol {
 	fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-		let string_ord = self.name.partial_cmp(&other.name);
-		if string_ord == Some(std::cmp::Ordering::Equal) {
-			self.span.partial_cmp(&other.span)
-		} else {
-			string_ord
-		}
+		Some(self.cmp(other))
 	}
 }
 
@@ -318,12 +313,17 @@ pub struct Stmt {
 pub enum UtilityFunctions {
 	Log,
 	Assert,
+	UnsafeCast,
 }
 
 impl UtilityFunctions {
 	/// Returns all utility functions.
 	pub fn all() -> Vec<UtilityFunctions> {
-		vec![UtilityFunctions::Log, UtilityFunctions::Assert]
+		vec![
+			UtilityFunctions::Log,
+			UtilityFunctions::Assert,
+			UtilityFunctions::UnsafeCast,
+		]
 	}
 }
 
@@ -332,6 +332,7 @@ impl Display for UtilityFunctions {
 		match self {
 			UtilityFunctions::Log => write!(f, "log"),
 			UtilityFunctions::Assert => write!(f, "assert"),
+			UtilityFunctions::UnsafeCast => write!(f, "unsafeCast"),
 		}
 	}
 }
@@ -758,6 +759,19 @@ pub enum Reference {
 		type_name: UserDefinedType,
 		property: Symbol,
 	},
+}
+
+impl Clone for Reference {
+	fn clone(&self) -> Reference {
+		match self {
+			Reference::Identifier(i) => Reference::Identifier(i.clone()),
+			Reference::InstanceMember { .. } => panic!("Unable to clone reference to instance member"),
+			Reference::TypeMember { type_name, property } => Reference::TypeMember {
+				type_name: type_name.clone(),
+				property: property.clone(),
+			},
+		}
+	}
 }
 
 impl Spanned for Reference {
