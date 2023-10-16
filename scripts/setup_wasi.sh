@@ -28,16 +28,8 @@ fi
 
 # Download binaryen tools
 BINARYEN_INSTALL_DIR="$TOOL_INSTALL_DIR/binaryen-$BINARYEN_VERSION"
-BINARYEN_BINARIES=("wasm-opt")
-all_binaries_present() {
-    for binary in "${BINARIES[@]}"; do
-        if [ ! -f "$BINARYEN_INSTALL_DIR/bin/$binary" ]; then
-            return 1
-        fi
-    done
-    return 0
-}
-if ! all_binaries_present; then
+BINARYEN_BINARIES="$BINARYEN_INSTALL_DIR/bin/wasm-opt"
+if [ ! -f $BINARYEN_BINARIES ]; then
     TARBALL="binaryen-$BINARYEN_VERSION-$SYS_ARCH-$SYS_OS.tar.gz"
     INSTALL_URL="https://github.com/WebAssembly/binaryen/releases/download/$BINARYEN_VERSION/$TARBALL"
     OUTFILE="/tmp/$TARBALL"
