@@ -30,6 +30,10 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
       return $obj;
     }
     async handle() {
+      const connection = (await $r.rawClient());
+      (await connection.set("wing","does redis"));
+      const value = (await connection.get("wing"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: value == \"does redis\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(value,"does redis")))};
       (await $r2.set("wing","does redis again"));
       const value2 = (await $r2.get("wing"));
       {((cond) => {if (!cond) throw new Error("assertion failed: value2 == \"does redis again\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(value2,"does redis again")))};

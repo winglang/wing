@@ -42,10 +42,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
       activity: async () => {
         const sb = new Sandbox(this.filename, {
           context: { $simulator: this.context },
-          env: {
-            ...this.env,
-            WING_SIMULATOR_URL: this.context.serverUrl,
-          },
+          env: this.env,
           timeout: this.timeout,
           log: (_level, message) => {
             this.context.addTrace({

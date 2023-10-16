@@ -25,6 +25,6 @@ test "metadata()" {
   try {
     b.metadata("no-such-file.txt");
   } catch e {
-    assert(e.contains("Object does not exist (key=no-such-file.txt)."));
+    assert(e == "Object does not exist (key=no-such-file.txt).");
   }
 }
