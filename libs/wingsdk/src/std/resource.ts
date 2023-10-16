@@ -22,10 +22,12 @@ export interface IInflightHost extends IResource {
  */
 export interface IResource extends IConstruct {
   /**
-   * Lifts the resource to the host so that it can be used by inflight code.
+   * A hook called by the Wing compiler once for each inflight host that needs to
+   * use this resource inflight. The list of requested inflight methods
+   * needed by the inflight host are given by `ops`.
    *
-   * If `ops` contains any operations not supported by the resource, it should throw an
-   * error.
+   * This method is commonly used for adding permissions, environment variables, or
+   * other capabilities to the inflight host.
    */
   onLift(host: IInflightHost, ops: string[]): void;
 
@@ -171,13 +173,14 @@ export abstract class Resource extends Construct implements IResource {
     );
   }
 
-  private readonly bindMap: Map<IInflightHost, Set<string>> = new Map();
+  private readonly onLiftMap: Map<IInflightHost, Set<string>> = new Map();
 
   /** @internal */
   public abstract _getInflightOps(): string[];
 
   /**
-   * Lifts the resource to the host so that it can be used by inflight code.
+   * A hook called by the Wing compiler once for each inflight host that needs to
+   * use this resource inflight.
    *
    * You can override this method to perform additional logic like granting
    * IAM permissions to the host based on what methods are being called. But
@@ -215,11 +218,11 @@ export abstract class Resource extends Construct implements IResource {
     );
 
     // Register the binding between this resource and the host
-    if (!this.bindMap.has(host)) {
-      this.bindMap.set(host, new Set());
+    if (!this.onLiftMap.has(host)) {
+      this.onLiftMap.set(host, new Set());
     }
 
-    const opsForHost = this.bindMap.get(host)!;
+    const opsForHost = this.onLiftMap.get(host)!;
 
     // For each operation, check if the host supports it. If it does, register the binding.
     const supportedOps = [...(this._getInflightOps() ?? []), "$inflight_init"];
@@ -259,7 +262,7 @@ export abstract class Resource extends Construct implements IResource {
     // Perform the live bindings betweeen resources and hosts
     // By aggregating the binding operations, we can avoid performing
     // multiple bindings for the same resource-host pairs.
-    for (const [host, ops] of this.bindMap.entries()) {
+    for (const [host, ops] of this.onLiftMap.entries()) {
       this.onLift(host, Array.from(ops));
     }
   }
