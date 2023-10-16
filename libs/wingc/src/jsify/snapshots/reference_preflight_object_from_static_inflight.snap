@@ -71,11 +71,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["addToQueue", "$inflight_init"];
       }
-      static _registerTypeBind(host, ops) {
+      static _registerTypeOnLift(host, ops) {
         if (ops.includes("addToQueue")) {
-          MyType._registerBindObject(q, host, ["push"]);
+          MyType._registerOnLiftObject(q, host, ["push"]);
         }
-        super._registerTypeBind(host, ops);
+        super._registerTypeOnLift(host, ops);
       }
     }
     const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
