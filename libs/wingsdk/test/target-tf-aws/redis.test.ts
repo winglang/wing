@@ -64,7 +64,7 @@ describe("When creating a Redis resource", () => {
       const redisCluster = ex.Redis._newRedis(app, "Redis") as ex.Redis;
       const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
       const func = Function._newFunction(app, "Function", inflight);
-      redisCluster.bind(func, ["set", "get"]);
+      redisCluster.onLift(func, ["set", "get"]);
 
       // WHEN
       const output = app.synth();
@@ -111,8 +111,8 @@ describe("When creating multiple Redis resources", () => {
       const otherCluster = ex.Redis._newRedis(app, "OtherRedis") as ex.Redis;
       const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
       const func = Function._newFunction(app, "Function", inflight);
-      redisCluster.bind(func, ["set", "get"]);
-      otherCluster.bind(func, ["set", "get"]);
+      redisCluster.onLift(func, ["set", "get"]);
+      otherCluster.onLift(func, ["set", "get"]);
 
       // WHEN
       const output = app.synth();
