@@ -226,8 +226,7 @@ export class Util {
       if (doc.contents && doc.contents.toJSON) {
         return doc.contents.toJSON();
       } else {
-        console.warn("Unexpected document structure:", doc);
-        return {};
+        throw new Error(`Unexpected document structure: ${doc}`);
       }
     });
   }
