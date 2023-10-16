@@ -3,7 +3,7 @@ use derivative::Derivative;
 use duplicate::duplicate_item;
 
 use crate::{
-	ast::{Phase, Symbol},
+	ast::{AccessModifier, Phase, Symbol},
 	diagnostic::{DiagnosticAnnotation, TypeError, WingSpan},
 	type_check::{SymbolKind, Type, TypeRef},
 };
@@ -25,7 +25,7 @@ impl Debug for SymbolEnvRef {
 
 pub struct SymbolEnv {
 	// We use a BTreeMaps here so that we can iterate over the symbols in a deterministic order (snapshot tests)
-	pub(crate) symbol_map: BTreeMap<String, (StatementIdx, WingSpan, SymbolKind)>,
+	pub(crate) symbol_map: BTreeMap<String, (StatementIdx, WingSpan, AccessModifier, SymbolKind)>,
 	pub(crate) parent: Option<SymbolEnvRef>,
 
 	pub kind: SymbolEnvKind,
@@ -47,7 +47,7 @@ impl Display for SymbolEnv {
 		loop {
 			write!(f, "level {}: {{ ", level.to_string().bold())?;
 			let mut items = vec![];
-			for (name, (_, _, kind)) in &env.symbol_map {
+			for (name, (_, _, _, kind)) in &env.symbol_map {
 				let repr = match kind {
 					SymbolKind::Type(t) => format!("{} [type]", t).red(),
 					SymbolKind::Variable(v) => format!("{}", v.type_).blue(),
@@ -72,8 +72,12 @@ impl Display for SymbolEnv {
 
 impl Debug for SymbolEnv {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut symbols_with_access_modifiers: Vec<(String, AccessModifier)> = vec![];
+		for (name, (_, _, access, _)) in &self.symbol_map {
+			symbols_with_access_modifiers.push((name.clone(), *access));
+		}
 		f.debug_struct("SymbolEnv")
-			.field("symbols", &self.symbol_map.keys())
+			.field("symbols", &symbols_with_access_modifiers)
 			.field("phase", &self.phase)
 			.finish()
 	}
@@ -160,6 +164,8 @@ pub struct SymbolLookupInfo {
 	/// The original span of the symbol when first defined
 	pub span: WingSpan,
 
+	pub access: AccessModifier,
+
 	/// The environment in which this symbol is defined.
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnvRef,
@@ -218,7 +224,13 @@ impl SymbolEnv {
 		std::ptr::eq(other, self)
 	}
 
-	pub fn define(&mut self, symbol: &Symbol, kind: SymbolKind, pos: StatementIdx) -> Result<(), TypeError> {
+	pub fn define(
+		&mut self,
+		symbol: &Symbol,
+		kind: SymbolKind,
+		access: AccessModifier,
+		pos: StatementIdx,
+	) -> Result<(), TypeError> {
 		if self.symbol_map.contains_key(&symbol.name) {
 			return Err(TypeError {
 				span: symbol.span.clone(),
@@ -232,7 +244,7 @@ impl SymbolEnv {
 
 		self
 			.symbol_map
-			.insert(symbol.name.clone(), (pos, symbol.span.clone(), kind));
+			.insert(symbol.name.clone(), (pos, symbol.span.clone(), access, kind));
 
 		Ok(())
 	}
@@ -267,7 +279,7 @@ impl SymbolEnv {
 	/// cannot be a nested symbol (e.g. `foo.bar`), use `lookup_nested` for that.
 	/// TODO: perhaps make this private and switch to the nested version in all external calls
 	pub fn lookup_ext(self: reference([Self]), symbol: &Symbol, not_after_stmt_idx: Option<usize>) -> LookupResult {
-		if let Some((definition_idx, span, kind)) = self.symbol_map.map_get(&symbol.name) {
+		if let Some((definition_idx, span, access, kind)) = self.symbol_map.map_get(&symbol.name) {
 			// if found the symbol and it is defined before the statement index (or statement index is
 			// unspecified, which is likely not something we want to support), we found it
 			let lookup_index = not_after_stmt_idx.unwrap_or(usize::MAX);
@@ -285,6 +297,7 @@ impl SymbolEnv {
 				SymbolLookupInfo {
 					phase: self.phase,
 					init: matches!(self.kind, SymbolEnvKind::Function { is_init: true, .. }),
+					access: *access,
 					env: get_ref,
 					span: span.clone(),
 				},
@@ -342,11 +355,13 @@ impl SymbolEnv {
 			let mut lookup_result: Option<LookupResult> = None;
 			for env in ns.envs.vec_iter() {
 				let partial_result = env.lookup_ext(next_symb, statement_idx);
-				if matches!(partial_result, LookupResult::Found(_, _)) {
-					if lookup_result.is_none() {
-						lookup_result = Some(partial_result);
-					} else {
-						return LookupResult::MultipleFound;
+				if let LookupResult::Found(_, ref lookup_info) = partial_result {
+					if lookup_info.access == AccessModifier::Public {
+						if lookup_result.is_none() {
+							lookup_result = Some(partial_result);
+						} else {
+							return LookupResult::MultipleFound;
+						}
 					}
 				}
 			}
@@ -390,7 +405,7 @@ impl SymbolEnv {
 pub struct SymbolEnvIter<'a> {
 	seen_keys: HashSet<String>,
 	curr_env: &'a SymbolEnv,
-	curr_pos: btree_map::Iter<'a, String, (StatementIdx, WingSpan, SymbolKind)>,
+	curr_pos: btree_map::Iter<'a, String, (StatementIdx, WingSpan, AccessModifier, SymbolKind)>,
 	with_ancestry: bool,
 }
 
@@ -409,7 +424,7 @@ impl<'a> Iterator for SymbolEnvIter<'a> {
 	type Item = (String, &'a SymbolKind, SymbolLookupInfo);
 
 	fn next(&mut self) -> Option<Self::Item> {
-		if let Some((name, (_, span, kind))) = self.curr_pos.next() {
+		if let Some((name, (_, span, access, kind))) = self.curr_pos.next() {
 			if self.seen_keys.contains(name) {
 				self.next()
 			} else {
@@ -420,6 +435,7 @@ impl<'a> Iterator for SymbolEnvIter<'a> {
 					SymbolLookupInfo {
 						phase: self.curr_env.phase,
 						init: matches!(self.curr_env.kind, SymbolEnvKind::Function { is_init: true, .. }),
+						access: *access,
 						env: self.curr_env.get_ref(),
 						span: span.clone(),
 					},
@@ -442,7 +458,7 @@ impl<'a> Iterator for SymbolEnvIter<'a> {
 #[cfg(test)]
 mod tests {
 	use crate::{
-		ast::{Phase, Symbol},
+		ast::{AccessModifier, Phase, Symbol},
 		type_check::{
 			symbol_env::{LookupResult, SymbolEnvKind},
 			Namespace, ResolveSource, SymbolKind, Types,
@@ -473,6 +489,7 @@ mod tests {
 			parent_env.define(
 				&sym,
 				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
+				AccessModifier::Private,
 				StatementIdx::Top,
 			),
 			Ok(())
@@ -484,6 +501,7 @@ mod tests {
 			parent_env.define(
 				&sym,
 				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
+				AccessModifier::Private,
 				StatementIdx::Index(child_scope_idx - 1),
 			),
 			Ok(())
@@ -496,6 +514,7 @@ mod tests {
 			parent_env.define(
 				&sym,
 				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
+				AccessModifier::Private,
 				StatementIdx::Index(parent_high_pos_var_idx),
 			),
 			Ok(())
@@ -507,6 +526,7 @@ mod tests {
 			child_env.define(
 				&sym,
 				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
+				AccessModifier::Private,
 				StatementIdx::Top,
 			),
 			Ok(())
@@ -607,7 +627,12 @@ mod tests {
 
 		// Define ns2 in n1's env
 		assert!(matches!(
-			ns1_env.define(&Symbol::global("ns2"), SymbolKind::Namespace(ns2), StatementIdx::Top),
+			ns1_env.define(
+				&Symbol::global("ns2"),
+				SymbolKind::Namespace(ns2),
+				AccessModifier::Public,
+				StatementIdx::Top
+			),
 			Ok(())
 		));
 
@@ -617,6 +642,7 @@ mod tests {
 			ns2_env.define(
 				&sym,
 				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
+				AccessModifier::Public,
 				StatementIdx::Top,
 			),
 			Ok(())
@@ -628,6 +654,7 @@ mod tests {
 			ns1_env.define(
 				&sym,
 				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
+				AccessModifier::Public,
 				StatementIdx::Top,
 			),
 			Ok(())
@@ -635,7 +662,12 @@ mod tests {
 
 		// Define the namesapces in the parent env
 		assert!(matches!(
-			parent_env.define(&Symbol::global("ns1"), SymbolKind::Namespace(ns1), StatementIdx::Top),
+			parent_env.define(
+				&Symbol::global("ns1"),
+				SymbolKind::Namespace(ns1),
+				AccessModifier::Public,
+				StatementIdx::Top
+			),
 			Ok(())
 		));
 

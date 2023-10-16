@@ -22,9 +22,9 @@ use crate::type_check::symbol_env::SymbolEnvKind;
 use crate::visit_context::{VisitContext, VisitorWithContext};
 use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
-	dbg_panic, debug, GLOBAL_SYMBOLS, UTIL_CLASS_NAME, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES,
-	WINGSDK_DURATION, WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET,
-	WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
+	dbg_panic, debug, UTIL_CLASS_NAME, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION,
+	WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_RESOURCE,
+	WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
@@ -2970,6 +2970,7 @@ impl<'a> TypeChecker<'a> {
 						.define(
 							&Symbol::global(child_path.file_stem().unwrap().to_string()),
 							SymbolKind::Namespace(*ns),
+							AccessModifier::Public,
 							StatementIdx::Top,
 						)
 						.unwrap();
@@ -2997,16 +2998,15 @@ impl<'a> TypeChecker<'a> {
 			};
 		}
 
-		// Check that there aren't multiply-defined symbols in the directory
-		let mut seen_symbols = HashSet::new();
+		// Check that there aren't multiply-defined public symbols in the directory
+		let mut seen_public_symbols = HashSet::new();
 		for child_env in &child_envs {
 			for key in child_env.symbol_map.keys() {
-				// ignore globals
-				if GLOBAL_SYMBOLS.contains(&key.as_str()) {
+				if child_env.symbol_map[key].2 != AccessModifier::Public {
 					continue;
 				}
 
-				if seen_symbols.contains(key) {
+				if seen_public_symbols.contains(key) {
 					self.types.source_file_envs.insert(
 						source_path.to_owned(),
 						SymbolEnvOrNamespace::Error(Diagnostic {
@@ -3017,7 +3017,7 @@ impl<'a> TypeChecker<'a> {
 					);
 					return;
 				}
-				seen_symbols.insert(key.clone());
+				seen_public_symbols.insert(key.clone());
 			}
 		}
 
@@ -3049,7 +3049,7 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		if let SymbolEnvKind::Function { sig, .. } = env.kind {
-			let mut return_type = sig.as_function_sig().expect("a fucntion type").return_type;
+			let mut return_type = sig.as_function_sig().expect("a function type").return_type;
 			if let Type::Inferred(n) = &*return_type {
 				if self.types.get_inference_by_id(*n).is_none() {
 					// If function types don't return anything then we should set the return type to void
@@ -3060,7 +3060,7 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		for symbol_data in env.symbol_map.values_mut() {
-			if let SymbolKind::Variable(ref mut var_info) = symbol_data.2 {
+			if let SymbolKind::Variable(ref mut var_info) = symbol_data.3 {
 				// Update any possible inferred types in this variable.
 				// This must be called before checking for un-inferred types because some variable were not used in this scope so they did not get a chance to get updated.
 				self.update_known_inferences(&mut var_info.type_, &var_info.name.span);
@@ -3314,6 +3314,7 @@ impl<'a> TypeChecker<'a> {
 				match catch_env.define(
 					exception_var,
 					SymbolKind::make_free_variable(exception_var.clone(), self.types.string(), false, env.phase),
+					AccessModifier::Private,
 					StatementIdx::Top,
 				) {
 					Err(type_error) => {
@@ -3346,7 +3347,12 @@ impl<'a> TypeChecker<'a> {
 			docs: Default::default(),
 		}));
 
-		match env.define(name, SymbolKind::Type(enum_type_ref), StatementIdx::Top) {
+		match env.define(
+			name,
+			SymbolKind::Type(enum_type_ref),
+			AccessModifier::Public,
+			StatementIdx::Top,
+		) {
 			Err(type_error) => {
 				self.type_error(type_error);
 			}
@@ -3422,6 +3428,7 @@ impl<'a> TypeChecker<'a> {
 					AccessModifier::Public,
 					None,
 				),
+				AccessModifier::Public,
 				StatementIdx::Top,
 			) {
 				Err(type_error) => {
@@ -3434,7 +3441,12 @@ impl<'a> TypeChecker<'a> {
 		if let Err(e) = add_parent_members_to_struct_env(&extends_types, name, &mut struct_env) {
 			self.type_error(e);
 		}
-		match env.define(name, SymbolKind::Type(struct_type), StatementIdx::Top) {
+		match env.define(
+			name,
+			SymbolKind::Type(struct_type),
+			AccessModifier::Public,
+			StatementIdx::Top,
+		) {
 			Err(type_error) => {
 				self.type_error(type_error);
 			}
@@ -3486,7 +3498,12 @@ impl<'a> TypeChecker<'a> {
 			extends: extend_interfaces.clone(),
 		};
 		let mut interface_type = self.types.add_type(Type::Interface(interface_spec));
-		match env.define(name, SymbolKind::Type(interface_type), StatementIdx::Top) {
+		match env.define(
+			name,
+			SymbolKind::Type(interface_type),
+			AccessModifier::Public,
+			StatementIdx::Top,
+		) {
 			Err(type_error) => {
 				self.type_error(type_error);
 			}
@@ -3522,6 +3539,7 @@ impl<'a> TypeChecker<'a> {
 					AccessModifier::Public,
 					None,
 				),
+				AccessModifier::Public,
 				StatementIdx::Top,
 			) {
 				Err(type_error) => {
@@ -3589,7 +3607,12 @@ impl<'a> TypeChecker<'a> {
 			lifts: None,
 		};
 		let mut class_type = self.types.add_type(Type::Class(class_spec));
-		match env.define(&ast_class.name, SymbolKind::Type(class_type), StatementIdx::Top) {
+		match env.define(
+			&ast_class.name,
+			SymbolKind::Type(class_type),
+			AccessModifier::Public,
+			StatementIdx::Top,
+		) {
 			Err(type_error) => {
 				self.type_error(type_error);
 			}
@@ -3613,6 +3636,7 @@ impl<'a> TypeChecker<'a> {
 					field.access_modifier,
 					None,
 				),
+				field.access_modifier,
 				StatementIdx::Top,
 			) {
 				Err(type_error) => {
@@ -3850,6 +3874,7 @@ impl<'a> TypeChecker<'a> {
 				if let Err(e) = env.define(
 					identifier.as_ref().unwrap(),
 					SymbolKind::Namespace(ns),
+					AccessModifier::Private,
 					StatementIdx::Top,
 				) {
 					self.type_error(e);
@@ -3880,6 +3905,7 @@ impl<'a> TypeChecker<'a> {
 				if let Err(e) = env.define(
 					identifier.as_ref().unwrap(),
 					SymbolKind::Namespace(*brought_ns),
+					AccessModifier::Private,
 					StatementIdx::Top,
 				) {
 					self.type_error(e);
@@ -3910,6 +3936,7 @@ impl<'a> TypeChecker<'a> {
 				if let Err(e) = env.define(
 					identifier.as_ref().unwrap(),
 					SymbolKind::Namespace(*brought_ns),
+					AccessModifier::Private,
 					StatementIdx::Top,
 				) {
 					self.type_error(e);
@@ -4053,6 +4080,7 @@ impl<'a> TypeChecker<'a> {
 		match scope_env.define(
 			&iterator,
 			SymbolKind::make_free_variable(iterator.clone(), iterator_type, false, env.phase),
+			AccessModifier::Private,
 			StatementIdx::Top,
 		) {
 			Err(type_error) => {
@@ -4098,6 +4126,7 @@ impl<'a> TypeChecker<'a> {
 			match env.define(
 				var_name,
 				SymbolKind::make_free_variable(var_name.clone(), final_type, *reassignable, env.phase),
+				AccessModifier::Private,
 				StatementIdx::Index(self.ctx.current_stmt_idx()),
 			) {
 				Err(type_error) => {
@@ -4115,6 +4144,7 @@ impl<'a> TypeChecker<'a> {
 			match env.define(
 				var_name,
 				SymbolKind::make_free_variable(var_name.clone(), inferred_type, *reassignable, env.phase),
+				AccessModifier::Private,
 				StatementIdx::Index(self.ctx.current_stmt_idx()),
 			) {
 				Err(type_error) => {
@@ -4169,6 +4199,7 @@ impl<'a> TypeChecker<'a> {
 		match stmt_env.define(
 			var_name,
 			SymbolKind::make_free_variable(var_name.clone(), var_type, *reassignable, env.phase),
+			AccessModifier::Private,
 			StatementIdx::Top,
 		) {
 			Err(type_error) => {
@@ -4347,6 +4378,7 @@ impl<'a> TypeChecker<'a> {
 						span: method_name.span.clone(),
 					},
 					SymbolKind::make_free_variable("this".into(), class_type, false, class_env.phase),
+					AccessModifier::Private,
 					StatementIdx::Top,
 				)
 				.expect("Expected `this` to be added to constructor env");
@@ -4431,6 +4463,7 @@ impl<'a> TypeChecker<'a> {
 				access_modifier,
 				None,
 			),
+			access_modifier,
 			StatementIdx::Top,
 		) {
 			Err(type_error) => {
@@ -4550,6 +4583,7 @@ impl<'a> TypeChecker<'a> {
 			match env.define(
 				&arg.name,
 				SymbolKind::make_free_variable(arg.name.clone(), param.typeref, arg.reassignable, env.phase),
+				AccessModifier::Public,
 				StatementIdx::Top,
 			) {
 				Err(type_error) => {
@@ -4688,6 +4722,7 @@ impl<'a> TypeChecker<'a> {
 								*access_modifier,
 								None,
 							),
+							*access_modifier,
 							StatementIdx::Top,
 						) {
 							Err(type_error) => {
@@ -4710,6 +4745,7 @@ impl<'a> TypeChecker<'a> {
 								*access_modifier,
 								None,
 							),
+							*access_modifier,
 							StatementIdx::Top,
 						) {
 							Err(type_error) => {
@@ -5391,6 +5427,7 @@ fn add_parent_members_to_struct_env(
 						AccessModifier::Public,
 						None,
 					),
+					AccessModifier::Public,
 					StatementIdx::Top,
 				)?;
 			}
@@ -5456,6 +5493,7 @@ fn add_parent_members_to_iface_env(
 						AccessModifier::Public,
 						None,
 					),
+					AccessModifier::Public,
 					StatementIdx::Top,
 				)?;
 			}
