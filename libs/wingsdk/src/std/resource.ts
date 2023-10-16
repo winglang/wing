@@ -91,7 +91,7 @@ export abstract class Resource extends Construct implements IResource {
    *
    * - Primitives and Duration objects are ignored.
    * - Arrays, sets and maps and structs (Objects) are recursively bound.
-   * - Resources are bound to the host by calling their lift() method.
+   * - Resources are bound to the host by calling their onLift() method.
    *
    * @param obj The object to lift.
    * @param host The host to lift to
