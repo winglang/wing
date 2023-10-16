@@ -1238,9 +1238,6 @@ importers:
       safe-stable-stringify:
         specifier: ^2.4.3
         version: 2.4.3
-      undici:
-        specifier: ^5.26.3
-        version: 5.26.3
       uuid:
         specifier: ^8.3.2
         version: 8.3.2
@@ -4889,11 +4886,6 @@ packages:
   /@fal-works/esbuild-plugin-global-externals@2.1.2:
     resolution: {integrity: sha512-cEee/Z+I12mZcFJshKcCqC8tuX5hG3s+d+9nZ3LabqKF1vKdF41B92pJVCBggjAGORAeOzyyDDKrZwIkLffeOQ==}
     dev: true
-
-  /@fastify/busboy@2.0.0:
-    resolution: {integrity: sha512-JUFJad5lv7jxj926GPgymrWQxxjPYuJNiNjNMzqT+HiuP6Vl3dk5xzG+8sTX96np0ZAluvaMzPsjhHZ5rNuNQQ==}
-    engines: {node: '>=14'}
-    dev: false
 
   /@floating-ui/core@1.4.1:
     resolution: {integrity: sha512-jk3WqquEJRlcyu7997NtR5PibI+y5bi+LS3hPmguVClypenMsCY3CBa3LAQnozRCtCrYWSEtAdiskpamuJRFOQ==}
@@ -13283,7 +13275,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20231013
+      typescript: 5.3.0-dev.20231012
     dev: true
 
   /dset@3.1.2:
@@ -22720,8 +22712,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20231013:
-    resolution: {integrity: sha512-ZhuwwWpJ9Hec2JJaS0yOJOjkLDu6lm/PXjniirFFcFBArD5HA3K8P31XxPmwonBhk7oznUbhdIDu8LEYha9Kxw==}
+  /typescript@5.3.0-dev.20231012:
+    resolution: {integrity: sha512-k/m+QK/2eVsPMAao4I28Cv2Y9WzUKFVhRqvFGZ3CIXc0lrMkw/1pSA+8tp7IMw1ecxoa1myFql1tmCUrMKCbzA==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
@@ -22756,13 +22748,6 @@ packages:
   /underscore@1.13.6:
     resolution: {integrity: sha512-+A5Sja4HP1M08MaXya7p5LvjuM7K6q/2EaC0+iovj/wOcMsTzMvDFbasi/oSapiwOlt252IqsKqPjCl7huKS0A==}
     dev: true
-
-  /undici@5.26.3:
-    resolution: {integrity: sha512-H7n2zmKEWgOllKkIUkLvFmsJQj062lSm3uA4EYApG8gLuiOM0/go9bIoC3HVaSnfg4xunowDE2i9p8drkXuvDw==}
-    engines: {node: '>=14.0'}
-    dependencies:
-      '@fastify/busboy': 2.0.0
-    dev: false
 
   /unicode-canonical-property-names-ecmascript@2.0.0:
     resolution: {integrity: sha512-yY5PpDlfVIU5+y/BSCxAJRBIS1Zc2dDG3Ujq+sR0U+JjUevW2JhocOF+soROYDSaAezOzOKuyyixhD6mBknSmQ==}

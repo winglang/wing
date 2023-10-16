@@ -47,14 +47,25 @@ test("update an object in bucket", async () => {
   const VALUE = JSON.stringify({ msg: "Hello world!" });
 
   // WHEN
+  // @ts-expect-error - private method
+  const notifyListeners = vi.spyOn(client, "notifyListeners");
+
   await client.put(KEY, VALUE);
+  expect(notifyListeners).toBeCalledWith(cloud.BucketEventType.CREATE, KEY);
+
+  await client.put(KEY, JSON.stringify({ msg: "another msg" }));
+  expect(notifyListeners).toBeCalledWith(cloud.BucketEventType.UPDATE, KEY);
+  expect(Object.keys((client as any).topicHandlers)).toMatchObject([
+    BucketEventType.CREATE,
+  ]);
 
   // THEN
   await s.stop();
+  expect(notifyListeners).toBeCalledTimes(2);
   expect(listMessages(s)).toMatchSnapshot();
 });
 
-test("bucket on event creates 3 topics, and sends the right event and key in the event handlers", async () => {
+test("bucket on event creates 3 topics, and sends the right event and key in the event handlers ", async () => {
   // GIVEN
   const app = new SimApp();
   const bucket = cloud.Bucket._newBucket(app, "my_bucket");
@@ -62,9 +73,9 @@ test("bucket on event creates 3 topics, and sends the right event and key in the
   const testInflight = Testing.makeHandler(
     app,
     "inflight_test",
-    `async handle(key, event) { await this.logBucket.put(key, event); }`,
+    `async handle(key, event) { await this.bucket.put(key, event); }`,
     {
-      logBucket: {
+      bucket: {
         obj: logBucket,
         ops: [cloud.BucketInflightMethods.PUT],
       },
@@ -76,6 +87,12 @@ test("bucket on event creates 3 topics, and sends the right event and key in the
   const s = await app.startSimulator();
   const client = s.getResource("/my_bucket") as cloud.IBucketClient;
   const logClient = s.getResource("/log_bucket") as cloud.IBucketClient;
+
+  expect(Object.keys((client as any).topicHandlers)).toMatchObject([
+    BucketEventType.CREATE,
+    BucketEventType.UPDATE,
+    BucketEventType.DELETE,
+  ]);
 
   // THEN
   await client.put("a", "1");
@@ -150,6 +167,8 @@ test("put and get Json object from bucket", async () => {
   const VALUE = { msg: "Hello world!" };
 
   // WHEN
+
+  const notifyListeners = vi.spyOn(client as any, "notifyListeners");
   await client.putJson(KEY, VALUE as any);
   const response = await client.getJson("greeting.json");
 
@@ -159,6 +178,7 @@ test("put and get Json object from bucket", async () => {
   expect(response).toEqual(VALUE);
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
+  expect(notifyListeners).toBeCalledWith(cloud.BucketEventType.CREATE, KEY);
 });
 
 test("put multiple objects and list all from bucket", async () => {
@@ -331,9 +351,20 @@ test("removing a key will call onDelete method", async () => {
   await client.put(fileName, JSON.stringify({ msg: "Hello world!" }));
 
   // delete file
+  //@ts-expect-error
+  const notifyListeners = vi.spyOn(client, "notifyListeners");
   const response = await client.delete(fileName);
+
+  expect(Object.keys((client as any).topicHandlers)).toMatchObject([
+    BucketEventType.DELETE,
+  ]);
+
   await s.stop();
 
+  expect(notifyListeners).toBeCalledWith(
+    cloud.BucketEventType.DELETE,
+    fileName
+  );
   expect(response).toEqual(undefined);
   expect(listMessages(s)).toMatchSnapshot();
 });
@@ -498,7 +529,8 @@ test("can add file in preflight", async () => {
 });
 
 test("Given a non public bucket when reaching to a key public url it should throw an error", async () => {
-  // GIVEN
+  //GIVEN
+  let error;
   const app = new SimApp();
   cloud.Bucket._newBucket(app, "my_bucket");
 
@@ -507,15 +539,23 @@ test("Given a non public bucket when reaching to a key public url it should thro
 
   const KEY = "KEY";
 
+  // WHEN
+  try {
+    await client.publicUrl(KEY);
+  } catch (err) {
+    error = err;
+  }
+
   // THEN
-  await expect(() => client.publicUrl(KEY)).rejects.toThrowError(
-    /Cannot provide public url for a non-public bucket/
+  expect(error?.message).toBe(
+    "Cannot provide public url for a non-public bucket"
   );
   await s.stop();
 });
 
 test("Given a public bucket when reaching to a non existent key, public url it should throw an error", async () => {
-  // GIVEN
+  //GIVEN
+  let error;
   const app = new SimApp();
   cloud.Bucket._newBucket(app, "my_bucket", { public: true });
 
@@ -524,14 +564,21 @@ test("Given a public bucket when reaching to a non existent key, public url it s
 
   const KEY = "KEY";
 
-  // THEN
-  await expect(() => client.publicUrl(KEY)).rejects.toThrowError(
-    /Cannot provide public url for an non-existent key/
+  // WHEN
+  try {
+    await client.publicUrl(KEY);
+  } catch (err) {
+    error = err;
+  }
+
+  expect(error?.message).toBe(
+    "Cannot provide public url for an non-existent key (key=KEY)"
   );
+  // THEN
   await s.stop();
 });
 
-test("Given a public bucket, when giving one of its keys, we should get its public url", async () => {
+test("Given a public bucket, when giving one of its keys, we should get it's public url", async () => {
   // GIVEN
   const app = new SimApp();
   cloud.Bucket._newBucket(app, "my_bucket", { public: true });
@@ -548,8 +595,8 @@ test("Given a public bucket, when giving one of its keys, we should get its publ
 
   // THEN
   await s.stop();
-  // file paths are different on windows and linux
-  expect(response.endsWith("KEY")).toBe(true);
+  const filePath = `${client.fileDir}/${KEY}`;
+  expect(response).toEqual(url.pathToFileURL(filePath).href);
 });
 
 test("check if an object exists in the bucket", async () => {
