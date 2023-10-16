@@ -20,7 +20,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "preflight (host: IInflightHost, ops: Array<str>): void"
   documentation:
     kind: markdown
-    value: "```wing\npreflight onLift: preflight (host: IInflightHost, ops: Array<str>): void\n```\n---\nLifts the resource to the host so that it can be used by inflight code.\n### Parameters\n- `host` — `IInflightHost`\n- `ops` — `Array<str>`\n\n### Remarks\nYou can override this method to perform additional logic like granting\nIAM permissions to the host based on what methods are being called. But\nyou must call `super.bind(host, ops)` to ensure that the resource is\nactually bound."
+    value: "```wing\npreflight onLift: preflight (host: IInflightHost, ops: Array<str>): void\n```\n---\nA hook called by the Wing compiler once for each inflight host that needs to use this resource inflight.\n### Parameters\n- `host` — `IInflightHost`\n- `ops` — `Array<str>`\n\n### Remarks\nYou can override this method to perform additional logic like granting\nIAM permissions to the host based on what methods are being called. But\nyou must call `super.bind(host, ops)` to ensure that the resource is\nactually bound."
   sortText: ff|onLift
   insertText: onLift($0)
   insertTextFormat: 2
