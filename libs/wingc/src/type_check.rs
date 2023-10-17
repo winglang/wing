@@ -3002,7 +3002,7 @@ impl<'a> TypeChecker<'a> {
 		let mut seen_public_symbols = HashSet::new();
 		for child_env in &child_envs {
 			for key in child_env.symbol_map.keys() {
-				if child_env.symbol_map[key].2 != AccessModifier::Public {
+				if child_env.symbol_map[key].access != AccessModifier::Public {
 					continue;
 				}
 
@@ -3060,7 +3060,7 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		for symbol_data in env.symbol_map.values_mut() {
-			if let SymbolKind::Variable(ref mut var_info) = symbol_data.3 {
+			if let SymbolKind::Variable(ref mut var_info) = symbol_data.kind {
 				// Update any possible inferred types in this variable.
 				// This must be called before checking for un-inferred types because some variable were not used in this scope so they did not get a chance to get updated.
 				self.update_known_inferences(&mut var_info.type_, &var_info.name.span);

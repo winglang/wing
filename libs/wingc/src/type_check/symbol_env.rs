@@ -25,13 +25,20 @@ impl Debug for SymbolEnvRef {
 
 pub struct SymbolEnv {
 	// We use a BTreeMaps here so that we can iterate over the symbols in a deterministic order (snapshot tests)
-	pub(crate) symbol_map: BTreeMap<String, (StatementIdx, WingSpan, AccessModifier, SymbolKind)>,
+	pub(crate) symbol_map: BTreeMap<String, SymbolEnvEntry>,
 	pub(crate) parent: Option<SymbolEnvRef>,
 
 	pub kind: SymbolEnvKind,
 
 	pub phase: Phase,
 	statement_idx: usize,
+}
+
+pub struct SymbolEnvEntry {
+	pub statement_idx: StatementIdx,
+	pub span: WingSpan,
+	pub access: AccessModifier,
+	pub kind: SymbolKind,
 }
 
 pub enum SymbolEnvKind {
@@ -47,8 +54,8 @@ impl Display for SymbolEnv {
 		loop {
 			write!(f, "level {}: {{ ", level.to_string().bold())?;
 			let mut items = vec![];
-			for (name, (_, _, _, kind)) in &env.symbol_map {
-				let repr = match kind {
+			for (name, entry) in &env.symbol_map {
+				let repr = match &entry.kind {
 					SymbolKind::Type(t) => format!("{} [type]", t).red(),
 					SymbolKind::Variable(v) => format!("{}", v.type_).blue(),
 					SymbolKind::Namespace(ns) => format!("{} [namespace]", ns.name).green(),
@@ -73,8 +80,8 @@ impl Display for SymbolEnv {
 impl Debug for SymbolEnv {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let mut symbols_with_access_modifiers: Vec<(String, AccessModifier)> = vec![];
-		for (name, (_, _, access, _)) in &self.symbol_map {
-			symbols_with_access_modifiers.push((name.clone(), *access));
+		for (name, entry) in &self.symbol_map {
+			symbols_with_access_modifiers.push((name.clone(), entry.access));
 		}
 		f.debug_struct("SymbolEnv")
 			.field("symbols", &symbols_with_access_modifiers)
@@ -237,14 +244,20 @@ impl SymbolEnv {
 				message: format!("Symbol \"{}\" already defined in this scope", symbol.name),
 				annotations: vec![DiagnosticAnnotation {
 					message: "previous definition".to_string(),
-					span: self.symbol_map[&symbol.name].1.clone(),
+					span: self.symbol_map[&symbol.name].span.clone(),
 				}],
 			});
 		}
 
-		self
-			.symbol_map
-			.insert(symbol.name.clone(), (pos, symbol.span.clone(), access, kind));
+		self.symbol_map.insert(
+			symbol.name.clone(),
+			SymbolEnvEntry {
+				statement_idx: pos,
+				span: symbol.span.clone(),
+				access,
+				kind,
+			},
+		);
 
 		Ok(())
 	}
@@ -279,27 +292,27 @@ impl SymbolEnv {
 	/// cannot be a nested symbol (e.g. `foo.bar`), use `lookup_nested` for that.
 	/// TODO: perhaps make this private and switch to the nested version in all external calls
 	pub fn lookup_ext(self: reference([Self]), symbol: &Symbol, not_after_stmt_idx: Option<usize>) -> LookupResult {
-		if let Some((definition_idx, span, access, kind)) = self.symbol_map.map_get(&symbol.name) {
+		if let Some(entry) = self.symbol_map.map_get(&symbol.name) {
 			// if found the symbol and it is defined before the statement index (or statement index is
 			// unspecified, which is likely not something we want to support), we found it
 			let lookup_index = not_after_stmt_idx.unwrap_or(usize::MAX);
-			let definition_idx = match definition_idx {
+			let definition_idx = match entry.statement_idx {
 				StatementIdx::Top => 0,
-				StatementIdx::Index(idx) => *idx,
+				StatementIdx::Index(idx) => idx,
 			};
 
 			if lookup_index < definition_idx {
-				return LookupResult::DefinedLater(span.clone());
+				return LookupResult::DefinedLater(entry.span.clone());
 			}
 
 			return LookupResult::Found(
-				kind,
+				reference([entry.kind]),
 				SymbolLookupInfo {
 					phase: self.phase,
 					init: matches!(self.kind, SymbolEnvKind::Function { is_init: true, .. }),
-					access: *access,
+					access: entry.access,
 					env: get_ref,
-					span: span.clone(),
+					span: entry.span.clone(),
 				},
 			);
 		}
@@ -405,7 +418,7 @@ impl SymbolEnv {
 pub struct SymbolEnvIter<'a> {
 	seen_keys: HashSet<String>,
 	curr_env: &'a SymbolEnv,
-	curr_pos: btree_map::Iter<'a, String, (StatementIdx, WingSpan, AccessModifier, SymbolKind)>,
+	curr_pos: btree_map::Iter<'a, String, SymbolEnvEntry>,
 	with_ancestry: bool,
 }
 
@@ -424,20 +437,20 @@ impl<'a> Iterator for SymbolEnvIter<'a> {
 	type Item = (String, &'a SymbolKind, SymbolLookupInfo);
 
 	fn next(&mut self) -> Option<Self::Item> {
-		if let Some((name, (_, span, access, kind))) = self.curr_pos.next() {
+		if let Some((name, entry)) = self.curr_pos.next() {
 			if self.seen_keys.contains(name) {
 				self.next()
 			} else {
 				self.seen_keys.insert(name.clone());
 				Some((
 					name.clone(),
-					kind,
+					&entry.kind,
 					SymbolLookupInfo {
 						phase: self.curr_env.phase,
 						init: matches!(self.curr_env.kind, SymbolEnvKind::Function { is_init: true, .. }),
-						access: *access,
+						access: entry.access,
 						env: self.curr_env.get_ref(),
-						span: span.clone(),
+						span: entry.span.clone(),
 					},
 				))
 			}

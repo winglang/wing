@@ -585,14 +585,14 @@ fn get_current_scope_completions(
 	let found_env = types.get_scope_env(&scope_visitor.found_scope);
 
 	for symbol_data in found_env.symbol_map.iter().filter(|s| {
-		if let StatementIdx::Index(i) = s.1 .0 {
+		if let StatementIdx::Index(i) = s.1.statement_idx {
 			// within the found scope, we only want to show symbols that were defined before the current position
 			i < found_stmt_index
 		} else {
 			true
 		}
 	}) {
-		let symbol_kind = &symbol_data.1 .3;
+		let symbol_kind = &symbol_data.1.kind;
 
 		if let Some(completion) = format_symbol_kind_as_completion(symbol_data.0, symbol_kind) {
 			completions.push(completion);
@@ -818,7 +818,7 @@ fn get_completions_from_namespace(
 		.envs
 		.iter()
 		.flat_map(|env| env.symbol_map.iter())
-		.flat_map(|(name, symbol)| format_symbol_kind_as_completion(name, &symbol.3))
+		.flat_map(|(name, symbol)| format_symbol_kind_as_completion(name, &symbol.kind))
 		.chain(util_completions)
 		.collect()
 }
