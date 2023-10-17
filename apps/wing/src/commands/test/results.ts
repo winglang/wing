@@ -1,5 +1,5 @@
 import { writeFile } from "fs";
-import { resolve } from "path";
+import { parse, resolve } from "path";
 import { std } from "@winglang/sdk";
 import chalk from "chalk";
 
@@ -91,9 +91,10 @@ export function writeResultsToFile(
       {}
     );
   }
+  const { dir, name: fileName } = parse(filePath);
 
   writeFile(
-    resolve(`${filePath}.json`),
+    resolve(dir, `${fileName}.json`),
     JSON.stringify(output, null, 2),
     { encoding: "utf-8" },
     (error) => {

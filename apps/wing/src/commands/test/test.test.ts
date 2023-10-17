@@ -82,7 +82,7 @@ describe("test options", () => {
       process.chdir(outDir);
       fs.writeFileSync("test.test.w", EXAMPLE_TEST);
 
-      const outputFile = "out";
+      const outputFile = "out.json";
 
       await wingTest(["test.test.w"], {
         clean: true,
