@@ -1,20 +1,21 @@
 import { Readable } from "stream";
 import * as consumers from "stream/consumers";
 import {
-  HeadObjectCommand,
+  __Client,
+  CopyObjectCommand,
   DeleteObjectCommand,
-  GetObjectCommand,
-  ListObjectsV2Command,
-  ListObjectsV2CommandOutput,
-  PutObjectCommand,
   GetBucketLocationCommand,
+  GetObjectCommand,
+  GetObjectOutput,
   GetPublicAccessBlockCommand,
   GetPublicAccessBlockCommandOutput,
-  S3Client,
-  GetObjectOutput,
+  HeadObjectCommand,
+  ListObjectsV2Command,
+  ListObjectsV2CommandOutput,
   NotFound,
   NoSuchKey,
-  __Client,
+  PutObjectCommand,
+  S3Client,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import mime from "mime-types";
@@ -240,6 +241,32 @@ export class BucketClient implements IBucketClient {
     }
     return list;
   }
+
+  /**
+   * Copy an object to a new location in the bucket. If the destination object
+   * already exists, it will be overwritten.
+   *
+   * @param srcKey The key of the source object you wish to copy.
+   * @param dstKey The key of the destination object after copying.
+   */
+  public async copy(srcKey: string, dstKey: string): Promise<void> {
+    const command = new CopyObjectCommand({
+      Bucket: this.bucketName,
+      CopySource: `${this.bucketName}/${srcKey}`,
+      Key: dstKey,
+    });
+
+    try {
+      await this.s3Client.send(command);
+    } catch (error) {
+      throw new Error(
+        `Unable to copy object from "${srcKey}" to "${dstKey}": ${
+          (error as Error).message
+        }`
+      );
+    }
+  }
+
   /**
    * Checks if the bucket is public
    * @returns true if the bucket is public and false otherwise
