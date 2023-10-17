@@ -165,6 +165,10 @@ async function main() {
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .option("-r, --rootId <rootId>", "App root id")
     .option("--no-clean", "Keep build output")
+    .option(
+      "-o, --output-file <outputFile>",
+      "File name to write test results to (no file extension in needed)"
+    )
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("test"));

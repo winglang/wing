@@ -21,8 +21,8 @@
     "emitDecoratorMetadata": true,
     "declaration": true,
     "baseUrl": ".",
-    "esModuleInterop": true,
+    "esModuleInterop": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/test/*"],
   "exclude": ["node_modules"]
 }
