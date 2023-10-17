@@ -14,6 +14,7 @@ export type {
   ITopicClient,
   IApiClient,
   OpenApiSpec,
+  IWebsiteClient,
 } from "@winglang/sdk/lib/cloud/index.js";
 
 export type { ITestRunnerClient } from "@winglang/sdk/lib/std/index.js";
