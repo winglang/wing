@@ -3222,6 +3222,15 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`unresolved_state.test.w 1`] = `
+"Could not start resource root/env0/cloud.Function after 10 attempts. This could be due to a dependency cycle or an invalid attribute reference.
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`use_before_defined.test.w 1`] = `
 "error: Unknown symbol \\"y\\"
   --> ../../../examples/tests/invalid/use_before_defined.test.w:1:8
