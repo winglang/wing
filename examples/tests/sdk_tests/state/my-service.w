@@ -24,6 +24,6 @@ class MyService {
   }
 
   pub inflight getStartTime(): str {
-    return this.state.get(this.startTimeKey);
+    return this.state.get(this.startTimeKey).asStr();
   }
 }
