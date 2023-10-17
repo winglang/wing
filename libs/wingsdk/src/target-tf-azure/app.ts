@@ -2,6 +2,8 @@ import { Construct } from "constructs";
 import { Bucket } from "./bucket";
 import { Function } from "./function";
 import { APP_AZURE_TF_SYMBOL } from "./internal";
+import { TestRunner } from "./test-runner";
+import { ApplicationInsights } from "../.gen/providers/azurerm/application-insights";
 import { AzurermProvider } from "../.gen/providers/azurerm/provider";
 import { ResourceGroup } from "../.gen/providers/azurerm/resource-group";
 import { ServicePlan } from "../.gen/providers/azurerm/service-plan";
@@ -14,6 +16,7 @@ import {
   ResourceNames,
 } from "../shared/resource-names";
 import { CdktfApp } from "../shared-tf/app";
+import { TEST_RUNNER_FQN } from "../std";
 
 /**
  * Azure app props
@@ -63,11 +66,14 @@ export class App extends CdktfApp {
   private _resourceGroup?: ResourceGroup;
   private _storageAccount?: StorageAccount;
   private _servicePlan?: ServicePlan;
+  private _applicationInsights?: ApplicationInsights;
+  protected readonly testRunner: TestRunner;
 
   constructor(props: AzureAppProps) {
     super(props);
-
     this.location = props.location ?? process.env.AZURE_LOCATION;
+    this.testRunner = new TestRunner(this, "cloud.TestRunner");
+    this.synthRoots(props, this.testRunner);
     // Using env variable for location is work around until we are
     // able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
     if (this.location === undefined) {
@@ -76,22 +82,49 @@ export class App extends CdktfApp {
       );
     }
 
-    new AzurermProvider(this, "azure", { features: {} });
+    new AzurermProvider(this, "azure", {
+      features: {
+        // To be able to run terraform destroy during tests, and in a reasonable time
+        resourceGroup: { preventDeletionIfContainsResources: false },
+      },
+    });
 
     Object.defineProperty(this, APP_AZURE_TF_SYMBOL, {
       value: this,
       enumerable: false,
       writable: false,
     });
+  }
 
+  protected synthRoots(props: AppProps, testRunner: TestRunner): void {
     if (props.rootConstruct) {
       const Root = props.rootConstruct;
       if (this.isTestEnvironment) {
-        throw new Error("wing test not supported for tf-azure target yet");
+        new Root(this, "env0");
+        const tests = testRunner.findTests();
+        for (let i = 1; i < tests.length; i++) {
+          new Root(this, "env" + i);
+        }
       } else {
         new Root(this, "Default");
       }
     }
+  }
+
+  public get applicationInsights() {
+    if (!this._applicationInsights) {
+      this._applicationInsights = new ApplicationInsights(
+        this,
+        `ApplicationInsights`,
+        {
+          name: `application-insights`,
+          resourceGroupName: this.resourceGroup.name,
+          location: this.resourceGroup.location,
+          applicationType: "web",
+        }
+      );
+    }
+    return this._applicationInsights;
   }
 
   /**
@@ -148,6 +181,9 @@ export class App extends CdktfApp {
     ...args: any[]
   ): any {
     switch (fqn) {
+      case TEST_RUNNER_FQN:
+        return new TestRunner(scope, id, args[0]);
+
       case FUNCTION_FQN:
         return new Function(scope, id, args[0], args[1]);
 
