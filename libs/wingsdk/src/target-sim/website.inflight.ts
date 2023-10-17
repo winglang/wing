@@ -3,16 +3,16 @@ import { AddressInfo } from "net";
 import express from "express";
 import {
   ApiAttributes,
-  WebsiteSchema,
-  WEBSITE_TYPE,
   FileRoutes,
+  WEBSITE_TYPE,
+  WebsiteSchema,
 } from "./schema-resources";
 import { IWebsiteClient } from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
 } from "../simulator/simulator";
-import { TraceType } from "../std";
+import { ComponentType, VisualModel, TraceType, LinkComponent } from "../std";
 
 const LOCALHOST_ADDRESS = "127.0.0.1";
 
@@ -81,5 +81,19 @@ export class Website implements IWebsiteClient, ISimulatorResourceInstance {
       sourceType: WEBSITE_TYPE,
       timestamp: new Date().toISOString(),
     });
+  }
+
+  public async visualModel(): Promise<VisualModel | undefined> {
+    return {
+      components: [
+        {
+          type: ComponentType.LINK,
+          props: {
+            href: this.url ?? "http://boom",
+            text: "Website",
+          } as LinkComponent,
+        },
+      ],
+    };
   }
 }
