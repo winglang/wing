@@ -105,7 +105,6 @@ module.exports = grammar({
         $.variable_assignment_statement,
         $.return_statement,
         $.class_definition,
-        $.resource_definition,
         $.interface_definition,
         $.for_in_loop,
         $.while_statement,
@@ -185,7 +184,7 @@ module.exports = grammar({
     // Classes
     class_definition: ($) =>
       seq(
-        $.inflight_specifier,
+        optional(field("phase_modifier", $.inflight_specifier)),
         "class",
         field("name", $.identifier),
         optional(seq("extends", field("parent", $.custom_type))),
@@ -215,26 +214,6 @@ module.exports = grammar({
         $._type_annotation,
         optional(seq("=", field("initializer", $.expression))),
         $._semicolon
-      ),
-
-    resource_definition: ($) =>
-      seq(
-        "class",
-        field("name", $.identifier),
-        optional(seq("extends", field("parent", $.custom_type))),
-        optional(seq("impl", field("implements", commaSep1($.custom_type)))),
-        field("implementation", $.resource_implementation)
-      ),
-    resource_implementation: ($) =>
-      braced(
-        repeat(
-          choice(
-            $.initializer,
-            $.method_definition,
-            $.inflight_method_definition,
-            $.class_field
-          )
-        )
       ),
 
     interface_definition: ($) =>

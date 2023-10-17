@@ -536,8 +536,7 @@ impl<'s> Parser<'s> {
 			"continue_statement" => self.build_continue_statement(statement_node)?,
 			"return_statement" => self.build_return_statement(statement_node, phase)?,
 			"throw_statement" => self.build_throw_statement(statement_node, phase)?,
-			"class_definition" => self.build_class_statement(statement_node, Phase::Inflight)?, // `inflight class` is always "inflight"
-			"resource_definition" => self.build_class_statement(statement_node, phase)?, // `class` without a modifier inherits from scope
+			"class_definition" => self.build_class_statement(statement_node, phase)?,
 			"interface_definition" => self.build_interface_statement(statement_node, phase)?,
 			"enum_definition" => self.build_enum_statement(statement_node)?,
 			"try_catch_statement" => self.build_try_catch_statement(statement_node, phase)?,
@@ -1008,6 +1007,11 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_class_statement(&self, statement_node: &Node, class_phase: Phase) -> DiagnosticResult<StmtKind> {
+		let class_phase = if statement_node.child_by_field_name("phase_modifier").is_some() {
+			Phase::Inflight
+		} else {
+			class_phase
+		};
 		let mut cursor = statement_node.walk();
 		let mut fields = vec![];
 		let mut methods = vec![];
