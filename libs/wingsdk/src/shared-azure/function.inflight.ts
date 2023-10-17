@@ -32,6 +32,7 @@ export class FunctionClient implements IFunctionClient {
    */
   public async invokeWithLogs(payload: string): Promise<[string, Trace[]]> {
     console.error("invokeWithLogs is not implemented yet on tf-azure");
+    //TODO: add traces to tf-azure tests- https://github.com/winglang/wing/issues/4574
     return [await this.invoke(payload), []];
   }
 }
