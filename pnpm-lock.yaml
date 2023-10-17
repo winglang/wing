@@ -9803,9 +9803,9 @@ packages:
   /@types/serve-static@1.15.3:
     resolution: {integrity: sha512-yVRvFsEMrv7s0lGhzrggJjNOSmZCdgCjw9xWrPr/kNNLp6FaDfMC1KaYl3TSJ0c58bECwNBMoQrZJ8hA8E1eFg==}
     dependencies:
-      '@types/http-errors': 2.0.2
+      '@types/http-errors': 2.0.1
       '@types/mime': 3.0.2
-      '@types/node': 18.18.4
+      '@types/node': 18.17.13
     dev: true
 
   /@types/sinon@10.0.19:
@@ -13414,7 +13414,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20231012
+      typescript: 5.3.0-dev.20231016
     dev: true
 
   /dset@3.1.2:
@@ -22869,8 +22869,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20231012:
-    resolution: {integrity: sha512-k/m+QK/2eVsPMAao4I28Cv2Y9WzUKFVhRqvFGZ3CIXc0lrMkw/1pSA+8tp7IMw1ecxoa1myFql1tmCUrMKCbzA==}
+  /typescript@5.3.0-dev.20231016:
+    resolution: {integrity: sha512-1NaopFFSKTDFUHEkuN7xJfPMwXZFd1g+wKuMu2eh3rDHN7lhQMGDU08D2CnlLYK2xfNjgeb5qAWXQAdMbRLn3A==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

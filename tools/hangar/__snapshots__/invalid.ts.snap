@@ -274,9 +274,9 @@ Duration <DURATION>"
 
 exports[`bring.test.w 1`] = `
 "error: Expected module specification (see https://www.winglang.io/docs/libraries)
-  --> ../../../examples/tests/invalid/bring.test.w:8:7
+  --> ../../../examples/tests/invalid/bring.test.w:6:7
   |
-8 | bring ;
+6 | bring ;
   |       ^ Expected module specification (see https://www.winglang.io/docs/libraries)
 
 
@@ -294,18 +294,11 @@ error: \\"cloud\\" is already defined
   |       ^^^^^ \\"cloud\\" is already defined
 
 
-error: \\"fs\\" is not a built-in module
-  --> ../../../examples/tests/invalid/bring.test.w:6:1
-  |
-6 | bring fs;
-  | ^^^^^^^^^ \\"fs\\" is not a built-in module
-
-
 error: \\"c\\" is not a built-in module
-   --> ../../../examples/tests/invalid/bring.test.w:10:1
-   |
-10 | bring c;
-   | ^^^^^^^^ \\"c\\" is not a built-in module
+  --> ../../../examples/tests/invalid/bring.test.w:8:1
+  |
+8 | bring c;
+  | ^^^^^^^^ \\"c\\" is not a built-in module
 
 
  
