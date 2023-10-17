@@ -15,3 +15,4 @@ export * from "./string";
 export * from "./struct";
 export * from "./test";
 export * from "./test-runner";
+export * from "./visual-model";

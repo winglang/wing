@@ -3,8 +3,7 @@ import { Duration } from "./duration";
 import { App } from "../core";
 import { liftObject } from "../core/internal";
 import { log } from "../shared/log";
-import { Node } from "../std";
-
+import { Node, VisualModel } from "../std";
 /**
  * A resource that can run inflight code.
  * @skipDocs
@@ -14,6 +13,19 @@ export interface IInflightHost extends IResource {
    * Adds an environment variable to the host.
    */
   addEnvironment(name: string, value: string): void;
+}
+
+/**
+ * Abstract interface for `IResourceDisplay`.
+ * @inflight `@winglang/sdk.std.IDisplayableResource`
+ */
+export interface IDisplayableResource {
+  /**
+   * Returns a visual model for this resource.
+   * @returns a visual model for this resource.
+   * @inflight
+   */
+  visualModel(): Promise<VisualModel | undefined>;
 }
 
 /**
@@ -71,6 +83,7 @@ export interface IResource extends IConstruct {
 /**
  * Shared behavior between all Wing SDK resources.
  * @skipDocs
+ * @inflight `@winglang/sdk.std.IResourceClient`
  */
 export abstract class Resource extends Construct implements IResource {
   /**

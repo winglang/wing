@@ -3,7 +3,7 @@ import { Construct } from "constructs";
 import { cloud } from "..";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Json, Node, Resource } from "../std";
+import { IDisplayableResource, Json, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Website`.
@@ -119,7 +119,7 @@ export abstract class Website extends Resource implements IWebsite {
 /**
  * Inflight methods and members of `cloud.Website`.
  */
-export interface IWebsiteClient {}
+export interface IWebsiteClient extends IDisplayableResource {}
 
 /**
  * Options for adding a file with custom value during the website's deployment.
