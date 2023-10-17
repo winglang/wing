@@ -26,10 +26,10 @@ export class Queue extends cloud.Queue {
     this.queue = new SQSQueue(this, "Default", {
       visibilityTimeout: props.timeout
         ? Duration.seconds(props.timeout?.seconds)
-        : undefined,
+        : Duration.seconds(30),
       retentionPeriod: props.retentionPeriod
         ? Duration.seconds(props.retentionPeriod?.seconds)
-        : undefined,
+        : Duration.hours(1),
     });
   }
 

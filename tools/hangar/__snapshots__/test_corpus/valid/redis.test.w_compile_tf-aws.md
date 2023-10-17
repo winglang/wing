@@ -491,7 +491,9 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
             "uniqueId": "cloudQueue"
           }
         },
-        "name": "cloud-Queue-c86e03d8"
+        "message_retention_seconds": 3600,
+        "name": "cloud-Queue-c86e03d8",
+        "visibility_timeout_seconds": 30
       }
     },
     "aws_subnet": {
