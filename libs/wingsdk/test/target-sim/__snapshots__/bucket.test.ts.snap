@@ -402,93 +402,27 @@ exports[`objects can have keys that look like directories 1`] = `
 ]
 `;
 
-exports[`put and get Json object from bucket 1`] = `
-[
-  "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Bucket created.",
-  "Put Json (key=greeting.json).",
-  "Get Json (key=greeting.json).",
-  "wingsdk.cloud.Bucket deleted.",
-  "wingsdk.cloud.TestRunner deleted.",
-]
-`;
-
-exports[`put and get Json object from bucket 2`] = `
-{
-  "connections.json": {
-    "connections": [],
-    "version": "connections-0.1",
-  },
-  "simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "wingsdk.cloud.TestRunner",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_bucket",
-        "props": {
-          "initialObjects": {},
-          "public": false,
-          "topics": {},
-        },
-        "type": "wingsdk.cloud.Bucket",
-      },
-    ],
-    "sdkVersion": "0.0.0",
-  },
-  "tree.json": {
-    "tree": {
-      "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
-        "my_bucket": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A cloud object store",
-            "title": "Bucket",
-          },
-          "id": "my_bucket",
-          "path": "root/my_bucket",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.2.70",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
-}
-`;
-
-exports[`put and get objects from bucket 1`] = `
+exports[`put and get object from bucket 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Bucket created.",
   "Put (key=greeting.txt).",
   "Get (key=greeting.txt).",
+  "wingsdk.cloud.Bucket deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
+]
+`;
+
+exports[`put and getMetadata of objects from bucket 1`] = `
+[
+  "wingsdk.cloud.TestRunner created.",
+  "wingsdk.cloud.Bucket created.",
+  "Put (key=file1.main.w).",
+  "Put (key=file2.txt).",
+  "Put (key=file3.txt).",
+  "Metadata (key=file1.main.w).",
+  "Metadata (key=file2.txt).",
+  "Metadata (key=file3.txt).",
   "wingsdk.cloud.Bucket deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]

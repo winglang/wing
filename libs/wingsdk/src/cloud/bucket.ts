@@ -243,17 +243,20 @@ export abstract class Bucket extends Resource {
 }
 
 /**
- * Interface for signed url options
+ * Options for `Bucket.put()`.
  */
-export interface SignedUrlOptions {
+export interface BucketPutOptions {
   /**
-   * The duration for the signed url to expire
+   * The HTTP Content-Type of the object.
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type
+   * @default - Determined by file extension or fallback to "application/octet-stream"
    */
-
-  readonly duration?: Duration;
+  readonly contentType: string;
 }
 
-/** Interface for delete method inside `Bucket` */
+/**
+ * Options for `Bucket.delete()`.
+ */
 export interface BucketDeleteOptions {
   /**
    * Check failures on the method and retrieve errors if any
@@ -261,6 +264,16 @@ export interface BucketDeleteOptions {
    * @default false
    */
   readonly mustExist?: boolean;
+}
+
+/**
+ * Options for `Bucket.signedUrl()`.
+ */
+export interface BucketSignedUrlOptions {
+  /**
+   * The duration for the signed url to expire
+   */
+  readonly duration?: Duration;
 }
 
 /**
@@ -278,9 +291,10 @@ export interface IBucketClient {
    * Put an object in the bucket.
    * @param key Key of the object.
    * @param body Content of the object we want to store into the bucket.
+   * @param options Additional options
    * @inflight
    */
-  put(key: string, body: string): Promise<void>;
+  put(key: string, body: string, options?: BucketPutOptions): void;
 
   /**
    * Put a Json object in the bucket.
@@ -363,7 +377,7 @@ export interface IBucketClient {
    * @returns A string representing the signed url of the object which can be used to download in any downstream system
    * @inflight
    */
-  signedUrl(key: string, options?: SignedUrlOptions): Promise<string>;
+  signedUrl(key: string, options?: BucketSignedUrlOptions): Promise<string>;
 
   /**
    * Get the metadata of an object in the bucket.
@@ -488,7 +502,8 @@ export enum BucketInflightMethods {
   TRY_GET_JSON = "tryGetJson",
   /** `Bucket.tryDelete` */
   TRY_DELETE = "tryDelete",
-
+  /** `Bucket.signedUrl` */
   SIGNED_URL = "signedUrl",
+  /** `Bucket.metadata` */
   METADATA = "metadata",
 }
