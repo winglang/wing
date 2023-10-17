@@ -16,8 +16,7 @@ export interface IInflightHost extends IResource {
 }
 
 /**
- * Abstract interface for `IResourceDisplay`.
- * @inflight `@winglang/sdk.std.IDisplayableResource`
+ * Abstract interface for `IDisplayableResource`.
  */
 export interface IDisplayableResource {
   /**
