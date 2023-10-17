@@ -3,7 +3,7 @@ bring cloud;
 bring util;
 
 class MyService {
-  state: sim.State;
+  pub state: sim.State;
   startTimeKey: str;
   pub startTime: str;
   
