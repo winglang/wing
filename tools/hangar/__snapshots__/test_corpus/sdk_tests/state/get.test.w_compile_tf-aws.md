@@ -39,6 +39,26 @@ module.exports = function({ $svc, $svc_startTime }) {
 
 ```
 
+## inflight.$Closure2-2.js
+```js
+"use strict";
+module.exports = function({ $svc_state }) {
+  class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      const v = (await $svc_state.tryGet("foo_bar"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: !v?")})((!((v) != null)))};
+    }
+  }
+  return $Closure2;
+}
+
+```
+
 ## inflight.MyService-1.js
 ```js
 "use strict";
@@ -140,6 +160,40 @@ class $Root extends $stdlib.std.Resource {
         }
       }
       this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:state.get() returns the runtime value",new $Closure1(this,"$Closure1"));
+      class $Closure2 extends $stdlib.std.Resource {
+        constructor(scope, id, ) {
+          super(scope, id);
+          (std.Node.of(this)).hidden = true;
+        }
+        static _toInflightType(context) {
+          return `
+            require("./inflight.$Closure2-2.js")({
+              $svc_state: ${context._lift(svc.state)},
+            })
+          `;
+        }
+        _toInflight() {
+          return `
+            (await (async () => {
+              const $Closure2Client = ${$Closure2._toInflightType(this)};
+              const client = new $Closure2Client({
+              });
+              if (client.$inflight_init) { await client.$inflight_init(); }
+              return client;
+            })())
+          `;
+        }
+        _getInflightOps() {
+          return ["handle", "$inflight_init"];
+        }
+        _registerBind(host, ops) {
+          if (ops.includes("handle")) {
+            $Closure2._registerBindObject(svc.state, host, ["tryGet"]);
+          }
+          super._registerBind(host, ops);
+        }
+      }
+      this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:state.tryGet() return nil if there is no value",new $Closure2(this,"$Closure2"));
     }
   }
 }
