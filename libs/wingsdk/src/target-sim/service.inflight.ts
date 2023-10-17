@@ -22,10 +22,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     this.entrypoint = resolve(context.simdir, props.sourceCodeFile);
     this.autoStart = props.autoStart;
     this.sandbox = new Sandbox(this.entrypoint, {
-      env: {
-        ...props.environmentVariables,
-        WING_SIMULATOR_URL: context.serverUrl,
-      },
+      env: props.environmentVariables,
       context: { $simulator: this.context },
       log: (_level, message) => {
         this.context.addTrace({

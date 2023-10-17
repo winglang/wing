@@ -49,11 +49,11 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
       return $obj;
     }
     async handle() {
-      const c1val = (await $c1.peek());
-      const c2val = (await $c2.peek());
+      {((cond) => {if (!cond) throw new Error("assertion failed: c1.peek() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $c1.peek()),0)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c2.peek() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $c2.peek()),0)))};
       (await $util_Util.sleep((await $std_Duration.fromSeconds(66))));
-      {((cond) => {if (!cond) throw new Error("assertion failed: c1.peek() >= c1val + 1")})(((await $c1.peek()) >= (c1val + 1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: c2.peek() >= c2val + 1")})(((await $c2.peek()) >= (c2val + 1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c1.peek() >= 1")})(((await $c1.peek()) >= 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c2.peek() >= 1")})(((await $c2.peek()) >= 1))};
     }
   }
   return $Closure3;
@@ -508,7 +508,7 @@ class $Root extends $stdlib.std.Resource {
     const c2 = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"c2");
     (from_cron.onTick(new $Closure1(this,"$Closure1")));
     (from_rate.onTick(new $Closure2(this,"$Closure2")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"on tick is called both for rate and cron schedules",new $Closure3(this,"$Closure3"),{ timeout: (std.Duration.fromSeconds(120)) });
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"on tick is called both for rate and cron schedules",new $Closure3(this,"$Closure3"),({"timeout": (std.Duration.fromSeconds(120))}));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

@@ -1021,6 +1021,9 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
       }
+      static getInstance(scope) {
+        return new Dummy(scope,"StaticDummy");
+      }
       static _toInflightType(context) {
         return `
           require("./inflight.Dummy-1.js")({
@@ -1049,6 +1052,8 @@ class $Root extends $stdlib.std.Resource {
         {((cond) => {if (!cond) throw new Error("assertion failed: d1.node.path.endsWith(\"/ScopeAndIdTestClass/Dummy\")")})(d1.node.path.endsWith("/ScopeAndIdTestClass/Dummy"))};
         const d2 = new Dummy(d1,"Dummy");
         {((cond) => {if (!cond) throw new Error("assertion failed: d2.node.path.endsWith(\"/ScopeAndIdTestClass/Dummy/Dummy\")")})(d2.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy"))};
+        const d3 = new Dummy((Dummy.getInstance(d2)),"Dummy");
+        {((cond) => {if (!cond) throw new Error("assertion failed: d3.node.path.endsWith(\"/ScopeAndIdTestClass/Dummy/Dummy/StaticDummy/Dummy\")")})(d3.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy/StaticDummy/Dummy"))};
         for (const i of $stdlib.std.Range.of(0, 3, false)) {
           const x = new Dummy(this,String.raw({ raw: ["tc", ""] }, i));
           const expected_path = String.raw({ raw: ["/ScopeAndIdTestClass/tc", ""] }, i);

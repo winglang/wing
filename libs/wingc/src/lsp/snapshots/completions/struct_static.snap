@@ -6,7 +6,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(json: Json, options: JsonValidationOptions?): T1"
   documentation:
     kind: markdown
-    value: "```wing\nstatic fromJson: (json: Json, options: JsonValidationOptions?): T1\n```\n---\nConverts a Json to a Struct."
+    value: "```wing\nstatic fromJson: (json: Json, options: JsonValidationOptions?): T1\n```\n---\nConverts a Json to a Struct.\n### Parameters\n- `json` — `Json`\n- `...options` — `JsonValidationOptions?`\n  \n  - `unsafe?` — `bool?` — Unsafe mode to skip validation (may lead to runtime errors)."
   sortText: ff|fromJson
   insertText: fromJson($0)
   insertTextFormat: 2
@@ -26,7 +26,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(json: Json): T1?"
   documentation:
     kind: markdown
-    value: "```wing\nstatic tryFromJson: (json: Json): T1?\n```\n---\nConverts a Json to a Struct, returning nil if the Json is not valid."
+    value: "```wing\nstatic tryFromJson: (json: Json): T1?\n```\n---\nConverts a Json to a Struct, returning nil if the Json is not valid.\n### Parameters\n- `json` — `Json`"
   sortText: ff|tryFromJson
   insertText: tryFromJson($0)
   insertTextFormat: 2

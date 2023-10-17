@@ -136,12 +136,12 @@ jobs:
             if  ${{ env.MANUAL == 'true' }}
             then
               pnpm install
-              pnpm wing test -t tf-aws ${{ matrix.test.directory }}/*.w
+              pnpm wing test -t tf-aws ${{ matrix.test.directory }}/*.test.w
             elif ${{ env.LOCAL_BUILD == 'false'}}
             then 
-              wing test -t tf-aws ${{ matrix.test.directory }}/*.w
+              wing test -t tf-aws ${{ matrix.test.directory }}/*.test.w
             else
-            ./localwing/node_modules/.bin/wing test -t tf-aws ${{ matrix.test.directory }}/*.w
+            ./localwing/node_modules/.bin/wing test -t tf-aws ${{ matrix.test.directory }}/*.test.w
             fi
 
       - name: Output Terraform log

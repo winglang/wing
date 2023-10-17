@@ -18,7 +18,7 @@ module.exports = function({ $q, $std_Duration, $util_Util }) {
       }
       catch ($error_e) {
         const e = $error_e.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: e.contains(\"Empty messages are not allowed\")")})(e.includes("Empty messages are not allowed"))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Empty messages are not allowed\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"Empty messages are not allowed")))};
       }
       try {
         (await $q.push("Foo",""));
@@ -26,7 +26,7 @@ module.exports = function({ $q, $std_Duration, $util_Util }) {
       }
       catch ($error_e) {
         const e = $error_e.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: e.contains(\"Empty messages are not allowed\")")})(e.includes("Empty messages are not allowed"))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Empty messages are not allowed\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"Empty messages are not allowed")))};
       }
       (await $q.push("Foo"));
       {((cond) => {if (!cond) throw new Error("assertion failed: util.waitUntil((): bool => {\n    return q.approxSize() == 1;\n  })")})((await $util_Util.waitUntil(async () => {

@@ -7,7 +7,7 @@ source: libs/wingc/src/lsp/completions.rs
   documentation:
     kind: markdown
     value: "```wing\ndurationThing: duration\n```"
-  sortText: "ab|durationThing:"
+  sortText: "ab|a|durationThing:"
   insertText: "durationThing: $1"
   insertTextFormat: 2
   command:
