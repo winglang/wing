@@ -29,6 +29,16 @@ export class BucketClient implements IBucketClient {
     throw new Error("Method not implemented.");
   }
 
+  // check if bucket is public or not from bucket metadata and set it to _public
+  public async isPublic(): Promise<boolean> {
+    try {
+      const [metadata] = await this.bucket.getMetadata();
+      return metadata.iamConfiguration?.publicAccessPrevention === "inherited";
+    } catch (error) {
+      throw new Error(`Failed to check if bucket is public. (bucket=${this.bucketName})`);
+    }
+  }
+
   /**
    * Check if an object exists in the bucket
    *

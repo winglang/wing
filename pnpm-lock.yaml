@@ -9803,9 +9803,9 @@ packages:
   /@types/serve-static@1.15.3:
     resolution: {integrity: sha512-yVRvFsEMrv7s0lGhzrggJjNOSmZCdgCjw9xWrPr/kNNLp6FaDfMC1KaYl3TSJ0c58bECwNBMoQrZJ8hA8E1eFg==}
     dependencies:
-      '@types/http-errors': 2.0.1
+      '@types/http-errors': 2.0.2
       '@types/mime': 3.0.2
-      '@types/node': 18.17.13
+      '@types/node': 18.18.4
     dev: true
 
   /@types/sinon@10.0.19:
