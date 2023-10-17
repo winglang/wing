@@ -2,6 +2,7 @@
 
 ## inflight.A-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class A {
     constructor({  }) {
@@ -14,6 +15,7 @@ module.exports = function({  }) {
 
 ## inflight.B-1.js
 ```js
+"use strict";
 module.exports = function({ $A }) {
   class B extends $A {
     constructor({  }) {

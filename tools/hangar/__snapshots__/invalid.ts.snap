@@ -2860,11 +2860,11 @@ error: \\"notAField\\" is not a field of \\"ApiResponse\\"
    | \\\\-^ \\"notAField\\" is not a field of \\"ApiResponse\\"
 
 
-error: Expected 2 positional argument(s) but got 1
+error: Expected between 2 and 3 positional arguments or named arguments for the last parameter but got 1
    --> ../../../examples/tests/invalid/struct_expansion.test.w:11:3
    |
 11 |   bucket1.put(file: \\"file.txt\\", \\"data\\");
-   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected 2 positional argument(s) but got 1
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected between 2 and 3 positional arguments or named arguments for the last parameter but got 1
 
 
  
