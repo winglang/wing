@@ -29,7 +29,9 @@ export const createWebsiteRouter = () => {
       )
       .query(async ({ input, ctx }) => {
         const simulator = await ctx.simulator();
-        const client = simulator.getResource(input.resourcePath); //as IWebsiteClient;
+        const client = simulator.getResource(
+          input.resourcePath,
+        ) as IWebsiteClient;
         if (!client) {
           return;
         }
