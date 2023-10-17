@@ -1,6 +1,7 @@
 import { StateSchema } from "./schema-resources";
 import { IStateClient } from "./state";
 import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
+import { Json } from "../std";
 
 export class State implements IStateClient, ISimulatorResourceInstance {
   constructor(
@@ -15,17 +16,20 @@ export class State implements IStateClient, ISimulatorResourceInstance {
   public async cleanup(): Promise<void> {}
 
   public async set(key: string, value: any): Promise<void> {
-    // once the property is set on the object, the token will be resolved.
-    Object.defineProperty(this, key, { value });
     this.context.setResourceAttributes(this.path, { [key]: value });
   }
 
   public async get(key: string): Promise<any> {
-    const value = this.context.resourceAttributes(this.path)[key];
+    const value = await this.tryGet(key);
     if (value === undefined) {
-      throw new Error(`Key ${key} not found`);
+      throw new Error(`Key "${key}" not found`);
     }
 
     return value;
+  }
+
+  public async tryGet(key: string): Promise<Json | undefined> {
+    return this.context.resourceAttributes(this.path)[key];
+    
   }
 }

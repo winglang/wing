@@ -317,6 +317,3 @@ export interface StateSchema extends BaseResourceSchema {
   readonly type: typeof SIMULATOR_STATE_TYPE;
   readonly props: {};
 }
-
-/** Runtime attributes for cloud.Bucket */
-export interface BucketAttributes {}
