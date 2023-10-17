@@ -35,7 +35,9 @@ export class BucketClient implements IBucketClient {
       const [metadata] = await this.bucket.getMetadata();
       return metadata.iamConfiguration?.publicAccessPrevention === "inherited";
     } catch (error) {
-      throw new Error(`Failed to check if bucket is public. (bucket=${this.bucketName})`);
+      throw new Error(
+        `Failed to check if bucket is public. (bucket=${this.bucketName})`
+      );
     }
   }
 
