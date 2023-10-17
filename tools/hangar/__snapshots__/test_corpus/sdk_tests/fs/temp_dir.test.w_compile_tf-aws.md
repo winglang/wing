@@ -1,4 +1,4 @@
-# [temp_dir.main.w](../../../../../../examples/tests/sdk_tests/fs/temp_dir.main.w) | compile | tf-aws
+# [temp_dir.test.w](../../../../../../examples/tests/sdk_tests/fs/temp_dir.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.js
 ```js
@@ -101,7 +101,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "temp_dir.main", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+new $App({ outdir: $outdir, name: "temp_dir.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 
