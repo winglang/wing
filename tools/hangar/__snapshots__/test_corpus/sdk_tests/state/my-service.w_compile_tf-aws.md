@@ -78,12 +78,12 @@ module.exports = function({ $stdlib }) {
         _getInflightOps() {
           return ["handle", "$inflight_init"];
         }
-        _registerBind(host, ops) {
+        _registerOnLift(host, ops) {
           if (ops.includes("handle")) {
-            $Closure1._registerBindObject(__parent_this_1.startTimeKey, host, []);
-            $Closure1._registerBindObject(__parent_this_1.state, host, ["set"]);
+            $Closure1._registerOnLiftObject(__parent_this_1.startTimeKey, host, []);
+            $Closure1._registerOnLiftObject(__parent_this_1.state, host, ["set"]);
           }
-          super._registerBind(host, ops);
+          super._registerOnLift(host, ops);
         }
       }
       this.node.root.newAbstract("@winglang/sdk.cloud.Service",this,"cloud.Service",new $Closure1(this,"$Closure1"));
@@ -111,16 +111,16 @@ module.exports = function({ $stdlib }) {
     _getInflightOps() {
       return ["getStartTime", "$inflight_init"];
     }
-    _registerBind(host, ops) {
+    _registerOnLift(host, ops) {
       if (ops.includes("$inflight_init")) {
-        MyService._registerBindObject(this.startTimeKey, host, []);
-        MyService._registerBindObject(this.state, host, []);
+        MyService._registerOnLiftObject(this.startTimeKey, host, []);
+        MyService._registerOnLiftObject(this.state, host, []);
       }
       if (ops.includes("getStartTime")) {
-        MyService._registerBindObject(this.startTimeKey, host, ["asStr"]);
-        MyService._registerBindObject(this.state, host, ["get"]);
+        MyService._registerOnLiftObject(this.startTimeKey, host, ["asStr"]);
+        MyService._registerOnLiftObject(this.state, host, ["get"]);
       }
-      super._registerBind(host, ops);
+      super._registerOnLift(host, ops);
     }
   }
   return { MyService };
