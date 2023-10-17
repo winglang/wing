@@ -20,7 +20,7 @@ export const STATE_FQN = fqnForType("sim.State");
  * During deployment (i.e. `cloud.OnDeploy` or `cloud.Service` startup), you must call the inflight
  * method `set(key, value)` to set the runtime value. The value will be available at runtime through
  * the inflight method `get(key)` (or resolved as a token).
- * 
+ *
  * See tests for examples.
  *
  * @inflight `@winglang/sdk.sim.IStateClient`
@@ -80,7 +80,7 @@ export interface IStateClient {
   /**
    * Checks if runtime state exists for this object and returns it's value. If no value exists,
    * returns `nil`.
-   * 
+   *
    * @param key The object's key
    */
   tryGet(key: string): Promise<Json | undefined>;
