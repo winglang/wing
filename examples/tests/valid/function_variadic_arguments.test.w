@@ -33,3 +33,39 @@ let addNums = (...nums: MutArray<num>):num => {
 };
 assert(addNums(1, 2, 3) == 6);
 assert(addNums() == 0);
+
+let arityFunc = (n: num, b: bool, ...events: Array<Json>) => {
+  assert(events.at(-1) == "d");
+};
+
+arityFunc(1, true, "a", "b", "c", "d"); // variadic args should be considered correctly in the arity check
+
+class A {
+  pub message: str;
+
+  init(msg: str) {
+    this.message = msg;
+  }
+}
+
+class B extends A {
+  init(msg: str) {
+    this.message = msg;
+  }
+}
+
+let subTypeFunc = (...events: Array<A>) => {
+  assert(events.at(0).message == "this is A");
+  assert(events.at(1).message == "this is B");
+};
+
+subTypeFunc(new A("this is A"), new B("this is B")); // variadic args should allow sub types
+
+let jsonCastingFunc = (...events: Array<Json>) => {
+  assert(events.at(0) == "str");
+  assert(events.at(1) == "json str");
+};
+
+let jsonStr = Json "json str";
+
+jsonCastingFunc("str", jsonStr); // variadic args should consider implicit json casting

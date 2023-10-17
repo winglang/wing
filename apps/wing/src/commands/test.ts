@@ -14,8 +14,8 @@ import { generateTmpDir, withSpinner } from "../util";
 
 const log = debug("wing:test");
 
-const ENV_WING_TEST_RUNNER_FUNCTION_ARNS = "WING_TEST_RUNNER_FUNCTION_ARNS";
-const ENV_WING_TEST_RUNNER_FUNCTION_ARNS_AWSCDK = "WingTestRunnerFunctionArns";
+const ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS = "WING_TEST_RUNNER_FUNCTION_ARNS"; //TODO: [tsuf] rename arns to identifiers
+const ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS_AWSCDK = "WingTestRunnerFunctionArns";
 
 /**
  * @param path path to the test/s file
@@ -165,8 +165,9 @@ async function testOne(entrypoint: string, options: TestOptions) {
   switch (options.target) {
     case Target.SIM:
       return testSimulator(synthDir, options);
+    case Target.TF_AZURE:
     case Target.TF_AWS:
-      return testTfAws(synthDir, options);
+      return testTf(synthDir, options);
     case Target.AWSCDK:
       return testAwsCdk(synthDir, options);
     default:
@@ -303,7 +304,7 @@ async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.T
     const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
       const testArns = await awsCdkOutput(
         synthDir,
-        ENV_WING_TEST_RUNNER_FUNCTION_ARNS_AWSCDK,
+        ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS_AWSCDK,
         process.env.CDK_STACK_NAME!
       );
 
@@ -378,8 +379,14 @@ async function awsCdkOutput(synthDir: string, name: string, stackName: string) {
   return parsed[stackName][name];
 }
 
-async function testTfAws(synthDir: string, options: TestOptions): Promise<std.TestResult[] | void> {
-  const { clean } = options;
+const targetFolder: Record<string, string> = {
+  [Target.TF_AWS]: "shared-aws",
+  [Target.TF_AZURE]: "shared-azure",
+};
+
+async function testTf(synthDir: string, options: TestOptions): Promise<std.TestResult[] | void> {
+  const { clean, target = Target.SIM } = options;
+
   try {
     if (!isTerraformInstalled(synthDir)) {
       throw new Error(
@@ -392,9 +399,9 @@ async function testTfAws(synthDir: string, options: TestOptions): Promise<std.Te
     await withSpinner("terraform apply", () => terraformApply(synthDir));
 
     const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
-      const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_ARNS);
+      const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS);
       const { TestRunnerClient } = await import(
-        "@winglang/sdk/lib/shared-aws/test-runner.inflight"
+        `@winglang/sdk/lib/${targetFolder[target]}/test-runner.inflight`
       );
       const runner = new TestRunnerClient(testArns);
 

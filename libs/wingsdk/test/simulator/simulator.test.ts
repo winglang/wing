@@ -1,9 +1,9 @@
 import { Construct } from "constructs";
 import { test, expect, describe } from "vitest";
-import { Bucket } from "../../src/cloud";
+import { Bucket, ITestRunnerClient, TestResult } from "../../src/cloud";
 import { InflightBindings } from "../../src/core";
 import { Testing } from "../../src/simulator";
-import { ITestRunnerClient, Test, TestResult } from "../../src/std";
+import { Test } from "../../src/std";
 import { SimApp } from "../sim-app";
 
 describe("run single test", () => {

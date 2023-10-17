@@ -170,7 +170,7 @@ export type CorsHeaders = {
 };
 /**
  * Functionality shared between all `Api` implementations.
- * @inflight  `@winglang/sdk.cloud.IApiClient`
+ * @inflight `@winglang/sdk.cloud.IApiClient`
  */
 
 export abstract class Api extends Resource {
