@@ -3,7 +3,7 @@ import {
   BucketDeleteOptions,
   IBucketClient,
   ObjectMetadata,
-  SignedUrlOptions,
+  BucketSignedUrlOptions,
 } from "../cloud";
 import { Json } from "../std";
 
@@ -224,7 +224,7 @@ export class BucketClient implements IBucketClient {
    */
   public async signedUrl(
     key: string,
-    options?: SignedUrlOptions
+    options?: BucketSignedUrlOptions
   ): Promise<string> {
     try {
       const expiryTimeInSeconds: number = options?.duration?.seconds || 86400;
