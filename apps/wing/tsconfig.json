@@ -23,6 +23,6 @@
     "baseUrl": ".",
     "esModuleInterop": true
   },
-  "include": ["src/**/*", "src/test/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules"]
 }
