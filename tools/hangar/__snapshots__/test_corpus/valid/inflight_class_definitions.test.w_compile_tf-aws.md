@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -15,7 +16,7 @@ module.exports = function({  }) {
           return "c1";
         }
       }
-      const c = new C();
+      const c = (await (async () => {const o = new C(); await o.$inflight_init?.(); return o; })());
       {((cond) => {if (!cond) throw new Error("assertion failed: c.foo() == \"c1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await c.foo()),"c1")))};
     }
   }
@@ -26,6 +27,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $F }) {
   class $Closure2 {
     constructor({  }) {
@@ -34,7 +36,7 @@ module.exports = function({ $F }) {
       return $obj;
     }
     async handle() {
-      return (await new $F().foo());
+      return (await (await (async () => {const o = new $F(); await o.$inflight_init?.(); return o; })()).foo());
     }
   }
   return $Closure2;
@@ -44,6 +46,7 @@ module.exports = function({ $F }) {
 
 ## inflight.$Closure3-1.js
 ```js
+"use strict";
 module.exports = function({ $B, $a, $d, $fn, $innerD }) {
   class $Closure3 {
     constructor({  }) {
@@ -53,7 +56,7 @@ module.exports = function({ $B, $a, $d, $fn, $innerD }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: a.goo() == \"a2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $a.goo()),"a2")))};
-      const b = new $B();
+      const b = (await (async () => {const o = new $B(); await o.$inflight_init?.(); return o; })());
       {((cond) => {if (!cond) throw new Error("assertion failed: b.foo() == \"b1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await b.foo()),"b1")))};
       (await $fn());
       {((cond) => {if (!cond) throw new Error("assertion failed: d.callInner() == \"f1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $d.callInner()),"f1")))};
@@ -67,6 +70,7 @@ module.exports = function({ $B, $a, $d, $fn, $innerD }) {
 
 ## inflight.A-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class A {
     constructor({  }) {
@@ -82,6 +86,7 @@ module.exports = function({  }) {
 
 ## inflight.B-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class B {
     async foo() {
@@ -95,6 +100,7 @@ module.exports = function({  }) {
 
 ## inflight.D-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class D {
     constructor({ $this_inner }) {
@@ -111,6 +117,7 @@ module.exports = function({  }) {
 
 ## inflight.E-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class E {
     constructor({  }) {
@@ -123,6 +130,7 @@ module.exports = function({  }) {
 
 ## inflight.F-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class F {
     async foo() {
@@ -168,6 +176,7 @@ module.exports = function({  }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";

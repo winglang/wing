@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $Foo }) {
   class $Closure1 {
     constructor({  }) {
@@ -10,7 +11,7 @@ module.exports = function({ $Foo }) {
       return $obj;
     }
     async handle() {
-      new $Foo();
+      (await (async () => {const o = new $Foo(); await o.$inflight_init?.(); return o; })());
     }
   }
   return $Closure1;
@@ -20,6 +21,7 @@ module.exports = function({ $Foo }) {
 
 ## inflight.Foo-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Foo {
   }
@@ -62,6 +64,7 @@ module.exports = function({  }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";

@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $t1 }) {
   class $Closure1 {
     constructor({  }) {
@@ -10,8 +11,8 @@ module.exports = function({ $t1 }) {
       return $obj;
     }
     async handle() {
-      (await $t1.putItem(({"k1": "key1","k2": "value1","k3": "other-value1"})));
-      (await $t1.putItem(({"k1": "key1","k2": "value2","k3": "other-value2"})));
+      (await $t1.putItem(({"item": ({"k1": "key1","k2": "value1","k3": "other-value1"})})));
+      (await $t1.putItem(({"item": ({"k1": "key1","k2": "value2","k3": "other-value2"})})));
       const result = (await $t1.query({ keyConditionExpression: "k1 = :k1", expressionAttributeValues: ({":k1": "key1"}) }));
       {((cond) => {if (!cond) throw new Error("assertion failed: result.count == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(result.count,2)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: result.items.at(0).get(\"k1\") == \"key1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })((await result.items.at(0)), "k1"),"key1")))};
@@ -87,6 +88,7 @@ module.exports = function({ $t1 }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";

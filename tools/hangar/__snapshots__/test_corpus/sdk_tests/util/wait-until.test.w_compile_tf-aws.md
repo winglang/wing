@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $JSHelper, $util_Util }) {
   class $Closure1 {
     constructor({  }) {
@@ -29,6 +30,7 @@ module.exports = function({ $JSHelper, $util_Util }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $JSHelper, $oneSecond, $util_Util }) {
   class $Closure2 {
     constructor({  }) {
@@ -56,6 +58,7 @@ module.exports = function({ $JSHelper, $oneSecond, $util_Util }) {
 
 ## inflight.$Closure3-1.js
 ```js
+"use strict";
 module.exports = function({ $JSHelper, $invokeCounter, $oneSecond, $util_Util }) {
   class $Closure3 {
     constructor({  }) {
@@ -86,6 +89,7 @@ module.exports = function({ $JSHelper, $invokeCounter, $oneSecond, $util_Util })
 
 ## inflight.$Closure4-1.js
 ```js
+"use strict";
 module.exports = function({ $JSHelper, $fiveSeconds, $invokeCounter, $oneSecond, $util_Util }) {
   class $Closure4 {
     constructor({  }) {
@@ -116,6 +120,7 @@ module.exports = function({ $JSHelper, $fiveSeconds, $invokeCounter, $oneSecond,
 
 ## inflight.$Closure5-1.js
 ```js
+"use strict";
 module.exports = function({ $invokeCounter, $util_Util }) {
   class $Closure5 {
     constructor({  }) {
@@ -144,6 +149,7 @@ module.exports = function({ $invokeCounter, $util_Util }) {
 
 ## inflight.JSHelper-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class JSHelper {
     constructor({  }) {
@@ -212,6 +218,7 @@ module.exports = function({  }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";

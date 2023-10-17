@@ -4,7 +4,14 @@ import {
   BlobServiceClient,
   ContainerClient,
 } from "@azure/storage-blob";
-import { BucketDeleteOptions, IBucketClient, SignedUrlOptions } from "../cloud";
+import mime from "mime-types";
+import {
+  IBucketClient,
+  ObjectMetadata,
+  BucketPutOptions,
+  BucketDeleteOptions,
+  BucketSignedUrlOptions,
+} from "../cloud";
 import { Json } from "../std";
 
 export class BucketClient implements IBucketClient {
@@ -52,10 +59,19 @@ export class BucketClient implements IBucketClient {
    * @param key Key of the object
    * @param body string contents of the object
    */
-  public async put(key: string, body: string): Promise<void> {
-    await this.containerClient
-      .getBlockBlobClient(key)
-      .upload(body, body.length);
+  public async put(
+    key: string,
+    body: string,
+    opts?: BucketPutOptions
+  ): Promise<void> {
+    const blobClient = this.containerClient.getBlockBlobClient(key);
+    const options = {
+      blobHTTPHeaders: {
+        blobContentType:
+          (opts?.contentType ?? mime.lookup(key)) || "application/octet-stream",
+      },
+    };
+    await blobClient.upload(body, body.length, options);
   }
 
   /**
@@ -65,7 +81,9 @@ export class BucketClient implements IBucketClient {
    * @param body Json object
    */
   public async putJson(key: string, body: Json): Promise<void> {
-    await this.put(key, JSON.stringify(body, null, 2));
+    await this.put(key, JSON.stringify(body, null, 2), {
+      contentType: "application/json",
+    });
   }
 
   /**
@@ -198,7 +216,7 @@ export class BucketClient implements IBucketClient {
 
   public async signedUrl(
     key: string,
-    options?: SignedUrlOptions
+    options?: BucketSignedUrlOptions
   ): Promise<string> {
     options;
     throw new Error(
@@ -223,6 +241,15 @@ export class BucketClient implements IBucketClient {
     return encodeURI(
       `https://${this.storageAccount}.blob.core.windows.net/${this.bucketName}/${key}`
     );
+  }
+
+  /**
+   * Get the metadata of an object in the bucket.
+   * @throws if the object does not exist.
+   * @param key Key of the object.
+   */
+  public async metadata(key: string): Promise<ObjectMetadata> {
+    return Promise.reject(`metadata is not implemented: (key=${key})`);
   }
 
   /**

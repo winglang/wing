@@ -4,6 +4,15 @@ import { LogLevel } from "@wingconsole/server";
 import debounce from "lodash.debounce";
 import { useCallback, useEffect, useState } from "react";
 
+const logLevels = ["verbose", "info", "warn", "error"] as const;
+
+const logLevelNames = {
+  verbose: "Verbose",
+  info: "Info",
+  warn: "Warnings",
+  error: "Errors",
+} as const;
+
 export interface ConsoleLogsFiltersProps {
   selectedLogTypeFilters: LogLevel[];
   setSelectedLogTypeFilters: (types: LogLevel[]) => void;
@@ -11,6 +20,7 @@ export interface ConsoleLogsFiltersProps {
   isLoading: boolean;
   onSearch: (search: string) => void;
 }
+
 export const ConsoleLogsFilters = ({
   selectedLogTypeFilters,
   setSelectedLogTypeFilters,
@@ -28,14 +38,6 @@ export const ConsoleLogsFilters = ({
 
   const [defaultSelection, setDefaultSelection] = useState<string[]>();
   const [combinationName, setCombinationName] = useState<string>();
-
-  const logLevels = ["verbose", "info", "warn", "error"] as const;
-  const logLevelNames: Record<(typeof logLevels)[number], string> = {
-    verbose: "Verbose",
-    info: "Info",
-    warn: "Warnings",
-    error: "Errors",
-  };
 
   useEffect(() => {
     if (selectedLogTypeFilters.length === 4) {
@@ -59,7 +61,7 @@ export const ConsoleLogsFilters = ({
 
   useEffect(() => {
     setDefaultSelection(selectedLogTypeFilters);
-  }, []);
+  }, [selectedLogTypeFilters]);
 
   return (
     <div className="flex px-2 space-x-2 pt-1">

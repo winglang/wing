@@ -2,8 +2,56 @@
 
 ## inflight.$Closure1-1.js
 ```js
-module.exports = function({  }) {
+"use strict";
+module.exports = function({ $std_Json }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      const obj = ({"key1": 1,"key2": 2});
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.has(obj, \"key1\") == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return args[0].hasOwnProperty(args[1]); })([obj,"key1"]),true)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.has(obj, \"key3\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return args[0].hasOwnProperty(args[1]); })([obj,"key3"]),false)))};
+    }
+  }
+  return $Closure1;
+}
+
+```
+
+## inflight.$Closure10-1.js
+```js
+"use strict";
+module.exports = function({ $std_Json }) {
+  class $Closure10 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      const original = ({"string": "wing","number": 123,"array": [1, 2, 3],"true": true,"false": false,"object": ({"key1": "value1","key2": 2,"key3": false,"key5": [3, 2, 1]})});
+      const mutation = ({"key1": 1,"key2": 2});
+      const copy = JSON.parse(JSON.stringify(original));
+      const copyMut = (JSON.parse(JSON.stringify(original)));
+      {((cond) => {if (!cond) throw new Error("assertion failed: copy == copyMut")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(copy,copyMut)))};
+      ((obj, args) => { obj[args[0]] = args[1]; })(copyMut, ["object",mutation]);
+      {((cond) => {if (!cond) throw new Error("assertion failed: copy != copyMut")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(copy,copyMut)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: copyMut.get(\"object\") == mutation")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(copyMut, "object"),mutation)))};
+    }
+  }
+  return $Closure10;
+}
+
+```
+
+## inflight.$Closure2-1.js
+```js
+"use strict";
+module.exports = function({  }) {
+  class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -38,15 +86,16 @@ module.exports = function({  }) {
       ));
     }
   }
-  return $Closure1;
+  return $Closure2;
 }
 
 ```
 
-## inflight.$Closure2-1.js
+## inflight.$Closure3-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
-  class $Closure2 {
+  class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -78,15 +127,16 @@ module.exports = function({  }) {
       ));
     }
   }
-  return $Closure2;
+  return $Closure3;
 }
 
 ```
 
-## inflight.$Closure3-1.js
+## inflight.$Closure4-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
-  class $Closure3 {
+  class $Closure4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -100,15 +150,16 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: mutObj.get(\"z\") == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(mutObj, "z"),3)))};
     }
   }
-  return $Closure3;
+  return $Closure4;
 }
 
 ```
 
-## inflight.$Closure4-1.js
+## inflight.$Closure5-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
-  class $Closure4 {
+  class $Closure5 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -122,15 +173,16 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: mutJsonArray.getAt(3) == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(mutJsonArray, 3),3)))};
     }
   }
-  return $Closure4;
+  return $Closure5;
 }
 
 ```
 
-## inflight.$Closure5-1.js
+## inflight.$Closure6-1.js
 ```js
+"use strict";
 module.exports = function({ $std_Json }) {
-  class $Closure5 {
+  class $Closure6 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -144,15 +196,16 @@ module.exports = function({ $std_Json }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: stringifiedIndent == \"{\\n  \\\"a\\\": 1,\\n  \\\"b\\\": 2\\n}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(stringifiedIndent,"{\n  \"a\": 1,\n  \"b\": 2\n}")))};
     }
   }
-  return $Closure5;
+  return $Closure6;
 }
 
 ```
 
-## inflight.$Closure6-1.js
+## inflight.$Closure7-1.js
 ```js
+"use strict";
 module.exports = function({ $std_Json }) {
-  class $Closure6 {
+  class $Closure7 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -171,7 +224,56 @@ module.exports = function({ $std_Json }) {
       }
     }
   }
-  return $Closure6;
+  return $Closure7;
+}
+
+```
+
+## inflight.$Closure8-1.js
+```js
+"use strict";
+module.exports = function({ $std_Json }) {
+  class $Closure8 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      const obj = ({"key1": 1,"key2": 2});
+      const String = "{\"key\":1,\"key2\":2}";
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.parse(\"123\") == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((JSON.parse("123")),123)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.parse(\"true\") == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((JSON.parse("true")),true)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.parse(\"\\\"foo\\\"\") == \"foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((JSON.parse("\"foo\"")),"foo")))};
+    }
+  }
+  return $Closure8;
+}
+
+```
+
+## inflight.$Closure9-1.js
+```js
+"use strict";
+module.exports = function({ $std_Json }) {
+  class $Closure9 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      const obj = ({"key1": 1,"key2": 2});
+      const String = "{\"key\":1,\"key2\":2}";
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(\"123\") == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })("123"),123)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(\"true\") == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })("true"),true)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(\"\\\"foo\\\"\") == \"foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })("\"foo\""),"foo")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(\"foo\") == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })("foo"),undefined)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(\"\") == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })(""),undefined)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(nil) == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })(undefined),undefined)))};
+    }
+  }
+  return $Closure9;
 }
 
 ```
@@ -210,6 +312,7 @@ module.exports = function({ $std_Json }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -227,6 +330,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
+            $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
           })
         `;
       }
@@ -331,7 +435,6 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure5-1.js")({
-            $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
           })
         `;
       }
@@ -377,15 +480,124 @@ class $Root extends $stdlib.std.Resource {
         return ["handle", "$inflight_init"];
       }
     }
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:get()",new $Closure1(this,"$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:getAt()",new $Closure2(this,"$Closure2"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:set()",new $Closure3(this,"$Closure3"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:setAt()",new $Closure4(this,"$Closure4"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:stringify()",new $Closure5(this,"$Closure5"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:keys(), values(), entries()",new $Closure6(this,"$Closure6"));
-    {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(nil) == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })(undefined),undefined)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(\"boom\") == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })("boom"),undefined)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(\"\") == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })(""),undefined)))};
+    class $Closure7 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        (std.Node.of(this)).hidden = true;
+      }
+      static _toInflightType(context) {
+        return `
+          require("./inflight.$Closure7-1.js")({
+            $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure7Client = ${$Closure7._toInflightType(this)};
+            const client = new $Closure7Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
+      }
+    }
+    class $Closure8 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        (std.Node.of(this)).hidden = true;
+      }
+      static _toInflightType(context) {
+        return `
+          require("./inflight.$Closure8-1.js")({
+            $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure8Client = ${$Closure8._toInflightType(this)};
+            const client = new $Closure8Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
+      }
+    }
+    class $Closure9 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        (std.Node.of(this)).hidden = true;
+      }
+      static _toInflightType(context) {
+        return `
+          require("./inflight.$Closure9-1.js")({
+            $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure9Client = ${$Closure9._toInflightType(this)};
+            const client = new $Closure9Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
+      }
+    }
+    class $Closure10 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        (std.Node.of(this)).hidden = true;
+      }
+      static _toInflightType(context) {
+        return `
+          require("./inflight.$Closure10-1.js")({
+            $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure10Client = ${$Closure10._toInflightType(this)};
+            const client = new $Closure10Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"];
+      }
+    }
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:has()",new $Closure1(this,"$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:get()",new $Closure2(this,"$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:getAt()",new $Closure3(this,"$Closure3"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:set()",new $Closure4(this,"$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:setAt()",new $Closure5(this,"$Closure5"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:stringify()",new $Closure6(this,"$Closure6"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:keys(), values(), entries()",new $Closure7(this,"$Closure7"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:parse()",new $Closure8(this,"$Closure8"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:tryParse()",new $Closure9(this,"$Closure9"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:deepCopy(), deepCopyMut()",new $Closure10(this,"$Closure10"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

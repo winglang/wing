@@ -89,6 +89,7 @@ export abstract class Function extends Resource implements IInflightHost {
     const inflightClient = handler._toInflight();
     const lines = new Array<string>();
 
+    lines.push('"use strict";');
     lines.push("exports.handler = async function(event) {");
     lines.push(`  return await (${inflightClient}).handle(event);`);
     lines.push("};");
@@ -144,7 +145,7 @@ export abstract class Function extends Resource implements IInflightHost {
  */
 export interface IFunctionClient {
   /**
-   * Invoke the function asynchronously with a given payload.
+   * Invokes the function with a payload and waits for the result.
    * @inflight
    */
   invoke(payload: string): Promise<string>;

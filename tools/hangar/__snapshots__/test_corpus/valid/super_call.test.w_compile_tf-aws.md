@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $InflightB }) {
   class $Closure1 {
     constructor({  }) {
@@ -10,7 +11,7 @@ module.exports = function({ $InflightB }) {
       return $obj;
     }
     async handle() {
-      const b = new $InflightB();
+      const b = (await (async () => {const o = new $InflightB(); await o.$inflight_init?.(); return o; })());
       {((cond) => {if (!cond) throw new Error("assertion failed: b.description() == \"InflightB extends InflightA\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await b.description()),"InflightB extends InflightA")))};
     }
   }
@@ -21,6 +22,7 @@ module.exports = function({ $InflightB }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $extended }) {
   class $Closure2 {
     constructor({  }) {
@@ -39,6 +41,7 @@ module.exports = function({ $extended }) {
 
 ## inflight.A-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class A {
     constructor({  }) {
@@ -51,6 +54,7 @@ module.exports = function({  }) {
 
 ## inflight.B-1.js
 ```js
+"use strict";
 module.exports = function({ $A }) {
   class B extends $A {
     constructor({  }) {
@@ -64,6 +68,7 @@ module.exports = function({ $A }) {
 
 ## inflight.BaseClass-1.js
 ```js
+"use strict";
 module.exports = function({ $b }) {
   class BaseClass {
     constructor({  }) {
@@ -79,6 +84,7 @@ module.exports = function({ $b }) {
 
 ## inflight.C-1.js
 ```js
+"use strict";
 module.exports = function({ $B }) {
   class C extends $B {
     constructor({  }) {
@@ -92,6 +98,7 @@ module.exports = function({ $B }) {
 
 ## inflight.D-1.js
 ```js
+"use strict";
 module.exports = function({ $C }) {
   class D extends $C {
     constructor({  }) {
@@ -105,6 +112,7 @@ module.exports = function({ $C }) {
 
 ## inflight.E-1.js
 ```js
+"use strict";
 module.exports = function({ $D }) {
   class E extends $D {
     constructor({  }) {
@@ -118,6 +126,7 @@ module.exports = function({ $D }) {
 
 ## inflight.ExtendedClass-1.js
 ```js
+"use strict";
 module.exports = function({ $BaseClass, $b }) {
   class ExtendedClass extends $BaseClass {
     constructor({  }) {
@@ -135,6 +144,7 @@ module.exports = function({ $BaseClass, $b }) {
 
 ## inflight.InflightA-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class InflightA {
     async description() {
@@ -148,6 +158,7 @@ module.exports = function({  }) {
 
 ## inflight.InflightB-1.js
 ```js
+"use strict";
 module.exports = function({ $InflightA }) {
   class InflightB extends $InflightA {
     async description() {
@@ -207,6 +218,7 @@ module.exports = function({ $InflightA }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";

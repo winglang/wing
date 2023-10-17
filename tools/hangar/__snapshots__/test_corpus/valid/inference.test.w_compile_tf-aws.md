@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -225,6 +226,7 @@ module.exports = function({  }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -283,8 +285,16 @@ class $Root extends $stdlib.std.Resource {
     (clonedSet.add(4));
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
     const func = new $Closure1(this,"$Closure1");
+    (api.get("/hello/world",func));
+    const argReturn = ((n) => {
+      return n;
+    });
+    const implicitReturn = (() => {
+      return 1;
+    });
     if (true) {
-      (api.get("/hello/world",func));
+      const a = (argReturn(1));
+      const b = (implicitReturn());
     }
     const returnsString = (() => {
       return "hi";

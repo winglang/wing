@@ -11,7 +11,7 @@ function annotatePreflightError(error: Error): Error {
       error.message,
       "hint: Every preflight object needs a unique identifier within its scope. You can assign one as shown:",
       '> new cloud.Bucket() as "MyBucket";',
-      "For more information, see https://www.winglang.io/docs/concepts/resources",
+      "For more information, see https://www.winglang.io/docs/concepts/application-tree",
     );
 
     // eslint-disable-next-line unicorn/error-message
@@ -42,12 +42,13 @@ export const formatWingError = async (error: unknown) => {
       const result = [];
 
       for (const error of errors) {
-        const { message, span } = error;
-        let files: File[] = [];
-        let labels: Label[] = [];
+        const { message, span, annotations } = error;
+        const files: File[] = [];
+        const labels: Label[] = [];
+        const cwd = process.cwd();
 
         // file_id might be "" if the span is synthetic (see #2521)
-        if (span !== null && span.file_id) {
+        if (span !== null && span !== undefined && span.file_id) {
           // `span` should only be null if source file couldn't be read etc.
           const source = await readFile(span.file_id, "utf8");
           const start = offsetFromLineAndColumn(
@@ -60,13 +61,37 @@ export const formatWingError = async (error: unknown) => {
             span.end.line,
             span.end.col,
           );
-          files.push({ name: span.file_id, source });
+          const filePath = relative(cwd, span.file_id);
+          files.push({ name: filePath, source });
           labels.push({
-            fileId: span.file_id,
+            fileId: filePath,
             rangeStart: start,
             rangeEnd: end,
             message,
             style: "primary",
+          });
+        }
+
+        for (const annotation of annotations) {
+          const source = await readFile(annotation.span.file_id, "utf8");
+          const start = offsetFromLineAndColumn(
+            source,
+            annotation.span.start.line,
+            annotation.span.start.col,
+          );
+          const end = offsetFromLineAndColumn(
+            source,
+            annotation.span.end.line,
+            annotation.span.end.col,
+          );
+          const filePath = relative(cwd, annotation.span.file_id);
+          files.push({ name: filePath, source });
+          labels.push({
+            fileId: filePath,
+            rangeStart: start,
+            rangeEnd: end,
+            message: annotation.message,
+            style: "secondary",
           });
         }
 

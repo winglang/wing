@@ -1,11 +1,11 @@
 [package]
 name = "tree-sitter-wing"
 description = "winglang grammar for the tree-sitter parsing library"
-version = "0.0.1"
+version = "0.0.0"
 keywords = ["incremental", "parsing", "wing"]
 categories = ["parsing", "text-editors"]
 repository = "https://github.com/winglang/wing/tree/main/libs/tree-sitter-wing"
-edition = "2018"
+edition = "2021"
 license = "MIT"
 
 build = "bindings/rust/build.rs"
@@ -20,12 +20,12 @@ include = [
 path = "bindings/rust/lib.rs"
 
 [dependencies]
-tree-sitter = "0.20.7"
+tree-sitter = "0.20.10"
 
 [dev-dependencies]
-tree-sitter-cli = "0.20.7"
+tree-sitter-cli = "0.20.8"
 
 [build-dependencies]
-cc = "1.0.79"
-tree-sitter-cli = "0.20.7"
-tree-sitter = "0.20.7"
+cc = "1.0"
+tree-sitter-cli = "0.20.8"
+tree-sitter = "0.20.10"

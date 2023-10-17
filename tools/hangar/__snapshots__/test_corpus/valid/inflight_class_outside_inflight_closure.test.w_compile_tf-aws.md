@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $BinaryOperation }) {
   class $Closure1 {
     constructor({  }) {
@@ -10,7 +11,7 @@ module.exports = function({ $BinaryOperation }) {
       return $obj;
     }
     async handle() {
-      const op = new $BinaryOperation(10,20);
+      const op = (await (async () => {const o = new $BinaryOperation(); await o.$inflight_init?.(10,20); return o; })());
       {((cond) => {if (!cond) throw new Error("assertion failed: op.add() == 30")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await op.add()),30)))};
     }
   }
@@ -21,12 +22,13 @@ module.exports = function({ $BinaryOperation }) {
 
 ## inflight.BinaryOperation-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class BinaryOperation {
     async add() {
       return (this.lhs + this.rhs);
     }
-    constructor(lhs, rhs) {
+    async $inflight_init(lhs, rhs) {
       this.lhs = lhs;
       this.rhs = rhs;
     }
@@ -70,6 +72,7 @@ module.exports = function({  }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";

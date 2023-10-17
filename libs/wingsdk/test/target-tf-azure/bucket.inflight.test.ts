@@ -53,6 +53,27 @@ test("put an object into the bucket", async () => {
   expect(response).toEqual(undefined);
 });
 
+test("put an object into the bucket specifying the content-type", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const STORAGE_NAME = "STORAGE_NAME";
+  const KEY = "KEY";
+  const VALUE = "VALUE";
+  const CONTENT_TYPE = "image/png";
+
+  // WHEN
+  const client = new BucketClient(
+    BUCKET_NAME,
+    STORAGE_NAME,
+    false,
+    mockBlobServiceClient
+  );
+  const response = await client.put(KEY, VALUE, { contentType: CONTENT_TYPE });
+
+  // THEN
+  expect(response).toEqual(undefined);
+});
+
 test("putJson an object into the bucket", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";

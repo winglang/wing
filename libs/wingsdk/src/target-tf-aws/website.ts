@@ -1,5 +1,5 @@
 import { readdirSync } from "fs";
-import { extname, join, posix, resolve, sep } from "path";
+import { extname, join, resolve } from "path";
 
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -9,12 +9,15 @@ import { core } from "..";
 import { CloudfrontDistribution } from "../.gen/providers/aws/cloudfront-distribution";
 import { CloudfrontOriginAccessControl } from "../.gen/providers/aws/cloudfront-origin-access-control";
 import { DataAwsIamPolicyDocument } from "../.gen/providers/aws/data-aws-iam-policy-document";
+import { Route53Record } from "../.gen/providers/aws/route53-record";
 import { S3Bucket } from "../.gen/providers/aws/s3-bucket";
 import { S3BucketPolicy } from "../.gen/providers/aws/s3-bucket-policy";
 import { S3BucketWebsiteConfiguration } from "../.gen/providers/aws/s3-bucket-website-configuration";
 import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
+import { normalPath } from "../shared/misc";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
+import * as aws from "../shared-aws";
 
 const INDEX_FILE = "index.html";
 
@@ -27,7 +30,7 @@ export class Website extends cloud.Website {
   public readonly bucket: S3Bucket;
   private readonly _url: string;
 
-  constructor(scope: Construct, id: string, props: cloud.WebsiteProps) {
+  constructor(scope: Construct, id: string, props: aws.AwsWebsiteProps) {
     super(scope, id, props);
 
     this.bucket = createEncryptedBucket(this, false, "WebsiteBucket");
@@ -60,7 +63,7 @@ export class Website extends cloud.Website {
     // create a cloudFront distribution
     const distribution = new CloudfrontDistribution(this, "Distribution", {
       enabled: true,
-      ...(this._domain && { aliases: [this._domain] }),
+      ...(this._domain?.domainName && { aliases: [this._domain.domainName] }),
       origin: [
         {
           domainName: this.bucket.bucketRegionalDomainName,
@@ -90,7 +93,17 @@ export class Website extends cloud.Website {
         },
       },
       priceClass: "PriceClass_100",
-      viewerCertificate: { cloudfrontDefaultCertificate: true },
+      viewerCertificate: {
+        cloudfrontDefaultCertificate: true,
+        ...(props.domain?.acmCertificateArn && {
+          acmCertificateArn: props.domain.acmCertificateArn,
+          sslSupportMethod: "sni-only",
+        }),
+        ...(props.domain?.iamCertificate && {
+          iamCertificate: props.domain.iamCertificate,
+          sslSupportMethod: "sni-only",
+        }),
+      },
     });
 
     // allow cloudfront distribution to read from private s3 bucket
@@ -126,6 +139,19 @@ export class Website extends cloud.Website {
       policy: allowDistributionReadOnly.json,
     });
 
+    if (props.domain && props.domain.domainName && props.domain.hostedZoneId) {
+      new Route53Record(this, "Route53Record", {
+        zoneId: props.domain.hostedZoneId,
+        type: "A",
+        name: props.domain.domainName,
+        alias: {
+          name: distribution.domainName,
+          zoneId: distribution.hostedZoneId,
+          evaluateTargetHealth: false,
+        },
+      });
+    }
+
     this._url = `https://${distribution.domainName}`;
   }
 
@@ -143,21 +169,22 @@ export class Website extends cloud.Website {
       content: data,
       bucket: this.bucket.bucket,
       contentType: options?.contentType ?? "text/plain",
-      key: this.formatPath(path),
+      key: normalPath(path),
     });
 
     return `${this.url}/${path}`;
   }
 
   private uploadFile(filePath: string) {
-    const fileKey = filePath.replace(this.path, "");
+    const fileKey = normalPath(filePath.replace(this.path, ""));
+    const normalizedFullPath = normalPath(resolve(filePath));
 
-    new S3Object(this, `File${fileKey.replace(/[\/\\]/g, "--")}`, {
+    new S3Object(this, `File${fileKey.replace(/\//g, "--")}`, {
       dependsOn: [this.bucket],
-      key: this.formatPath(filePath.replace(this.path, "")),
+      key: fileKey,
       bucket: this.bucket.bucket,
-      source: resolve(filePath),
-      sourceHash: Fn.filemd5(resolve(filePath)),
+      source: normalizedFullPath,
+      sourceHash: Fn.filemd5(normalizedFullPath),
       contentType: mime.contentType(extname(filePath)) || undefined,
     });
   }
@@ -172,10 +199,6 @@ export class Website extends cloud.Website {
         this.uploadFile(filename);
       }
     }
-  }
-
-  private formatPath(path: string): string {
-    return path.split(sep).join(posix.sep);
   }
 
   /** @internal */
