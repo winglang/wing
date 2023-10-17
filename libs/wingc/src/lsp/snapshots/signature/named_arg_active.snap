@@ -11,6 +11,6 @@ signatures:
       - label: "...opts"
         documentation:
           kind: markdown
-          value: "```wing\nstruct BucketDeleteOptions\n```\n---\nInterface for delete method inside `Bucket`.\n### Fields\n- `mustExist?` — `bool?` — Check failures on the method and retrieve errors if any."
+          value: "```wing\nstruct BucketDeleteOptions\n```\n---\nOptions for `Bucket.delete()`.\n### Fields\n- `mustExist?` — `bool?` — Check failures on the method and retrieve errors if any."
     activeParameter: 1
 

@@ -144,7 +144,11 @@ test "dependency cycles" {
 }
 
 // Scope and ID tests
-class Dummy {}
+class Dummy {
+  pub static getInstance(scope: Dummy): Dummy {
+    return new Dummy() as "StaticDummy" in scope;
+  }
+}
 class ScopeAndIdTestClass {
   init() {
     // Create a Dummy in my scope
@@ -153,6 +157,9 @@ class ScopeAndIdTestClass {
     // Create a Dummy in someone else's scope
     let d2 = new Dummy() in d1;
     assert(d2.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy"));
+    // Create a Dummy in someone else's scope (reference)
+    let d3 = new Dummy() in Dummy.getInstance(d2);
+    assert(d3.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy/StaticDummy/Dummy"));
     // Generate multiple Dummys with different id's
     for i in 0..3 {
       let x = new Dummy() as "tc${i}";
