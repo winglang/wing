@@ -18,6 +18,7 @@ import {
 } from "./utils/createRouter.js";
 import type { LogInterface } from "./utils/LogInterface.js";
 import { createSimulator } from "./utils/simulator.js";
+export type { VisualModel } from "@winglang/sdk/lib/std/visual-model.js";
 
 export type {
   TestsStateManager,
