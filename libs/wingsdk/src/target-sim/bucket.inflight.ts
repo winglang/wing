@@ -257,8 +257,12 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
           throw new Error(`Object does not exist (srcKey=${srcKey}).`);
         }
 
-        const content = await this.get(srcKey);
-        await this.put(dstKey, content);
+        const dstValue = await this.get(srcKey);
+        const dstMetadata = await this.metadata(srcKey);
+
+        await this.put(dstKey, dstValue, {
+          contentType: dstMetadata.contentType ?? "application/octet-stream",
+        });
       },
     });
   }
