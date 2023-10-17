@@ -30,6 +30,5 @@ export class State implements IStateClient, ISimulatorResourceInstance {
 
   public async tryGet(key: string): Promise<Json | undefined> {
     return this.context.resourceAttributes(this.path)[key];
-    
   }
 }
