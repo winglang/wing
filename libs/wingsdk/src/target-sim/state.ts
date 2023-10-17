@@ -37,7 +37,7 @@ export class State extends Resource implements ISimulatorResource {
 
   /** @internal */
   public _getInflightOps(): string[] {
-    return [StateInflightMethods.GET, StateInflightMethods.SET];
+    return [StateInflightMethods.GET, StateInflightMethods.SET, StateInflightMethods.TRY_GET];
   }
 
   /** @internal */
