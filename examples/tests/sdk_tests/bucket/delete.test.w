@@ -9,7 +9,7 @@ test "delete" {
     try {
       block();
     } catch actual {
-      assert(actual.contains(expected));
+      assert(actual == expected);
       error = true;
     }
     assert(error);

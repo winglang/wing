@@ -28,7 +28,8 @@ fi
 
 # Download binaryen tools
 BINARYEN_INSTALL_DIR="$TOOL_INSTALL_DIR/binaryen-$BINARYEN_VERSION"
-if [ ! -d $BINARYEN_INSTALL_DIR ]; then
+BINARYEN_BINARIES="$BINARYEN_INSTALL_DIR/bin/wasm-opt"
+if [ ! -f $BINARYEN_BINARIES ]; then
     TARBALL="binaryen-$BINARYEN_VERSION-$SYS_ARCH-$SYS_OS.tar.gz"
     INSTALL_URL="https://github.com/WebAssembly/binaryen/releases/download/$BINARYEN_VERSION/$TARBALL"
     OUTFILE="/tmp/$TARBALL"
@@ -37,11 +38,19 @@ if [ ! -d $BINARYEN_INSTALL_DIR ]; then
 
     if [ ! -f $OUTFILE ]; then
         echo "Downloading Binaryen $BINARYEN_VERSION to $OUTFILE..."
-        curl --retry 2 -L $INSTALL_URL -o $OUTFILE
+        if ! curl --retry 2 -L $INSTALL_URL -o $OUTFILE; then
+            echo "Error downloading Binaryen. Exiting."
+            exit 1
+        fi
     fi
 
     echo "Extracting to $BINARYEN_INSTALL_DIR..."
-    tar zxf $OUTFILE -C $TOOL_INSTALL_DIR
+    if ! tar zxf $OUTFILE -C $TOOL_INSTALL_DIR; then
+        echo "Error extracting Binaryen. Exiting."
+        exit 1
+    fi
+else
+    echo "Binaryen $BINARYEN_VERSION already installed."
 fi
 
 # Download wasi-sdk

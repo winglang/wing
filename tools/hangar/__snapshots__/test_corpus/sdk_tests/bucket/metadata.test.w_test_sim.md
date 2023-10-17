@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ metadata.test.wsim » root/env0/test:metadata
+pass ─ metadata.test.wsim » root/env0/test:metadata()
  
  
 Tests 1 passed (1)
