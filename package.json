@@ -23,6 +23,9 @@
     "pnpm": "8.6.5"
   },
   "pnpm": {
+    "overrides": {
+      "mime": "^3.0.0"
+    },
     "patchedDependencies": {
       "wasi-js@1.7.3": "patches/wasi-js@1.7.3.patch",
       "@aws-sdk/is-array-buffer@3.201.0": "patches/@aws-sdk__is-array-buffer@3.201.0.patch",
@@ -30,7 +33,8 @@
       "jsii@5.0.11": "patches/jsii@5.0.11.patch",
       "@aws-sdk/util-utf8-node@3.259.0": "patches/@aws-sdk__util-utf8-node@3.259.0.patch",
       "@aws-sdk/util-utf8-browser@3.259.0": "patches/@aws-sdk__util-utf8-browser@3.259.0.patch",
-      "esbuild-wasm@0.18.20": "patches/esbuild-wasm@0.18.20.patch"
+      "esbuild-wasm@0.18.20": "patches/esbuild-wasm@0.18.20.patch",
+      "send@0.18.0": "patches/send@0.18.0.patch"
     }
   }
 }
