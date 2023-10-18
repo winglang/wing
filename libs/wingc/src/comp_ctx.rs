@@ -12,20 +12,15 @@ use crate::diagnostic::{report_diagnostic, Diagnostic, WingSpan};
 /// Try to make these end with 'ing' (building, parsing, etc.) so they'll fit in
 /// in the context of a diagnostic message.
 /// See `CompilationContext::set` for more information.
-#[derive(EnumString, Display, PartialEq, Clone, Copy)]
+#[derive(EnumString, Display, PartialEq, Clone, Copy, Debug, Default)]
 #[strum(serialize_all = "kebab-case")]
 pub enum CompilationPhase {
+	#[default]
 	Compiling,
 	Parsing,
 	TypeChecking,
 	Lifting,
 	Jsifying,
-}
-
-impl Default for CompilationPhase {
-	fn default() -> Self {
-		CompilationPhase::Compiling
-	}
 }
 
 pub struct CompilationContext {
@@ -78,7 +73,9 @@ macro_rules! dbg_panic {
 	() => {{
 		|| -> () {
 			// Get environment variable to see if we should panic or not
-			let Ok(dbg_panic) = std::env::var("WINGC_DEBUG_PANIC") else { return; };
+			let Ok(dbg_panic) = std::env::var("WINGC_DEBUG_PANIC") else {
+				return;
+			};
 
 			if dbg_panic == "1"
 				|| dbg_panic == "true"
@@ -105,11 +102,12 @@ pub fn set_custom_panic_hook() {
 
 		report_diagnostic(Diagnostic {
 			message: format!(
-				"Compiler bug ({}) during {}, please report at https://www.winglang.io/contributing/start-here/bugs",
+				"Compiler bug during {} ('{}'), please report at https://www.winglang.io/contributing/start-here/bugs",
+				CompilationContext::get_phase(),
 				pi,
-				CompilationContext::get_phase()
 			),
 			span: Some(CompilationContext::get_span()),
+			annotations: vec![],
 		})
 	}));
 }

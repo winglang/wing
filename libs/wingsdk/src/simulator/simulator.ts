@@ -99,6 +99,19 @@ export interface ISimulatorContext {
    * Get a list of all traces until this point.
    */
   listTraces(): Trace[];
+
+  /**
+   * Sets the runtime attributes of a resource.
+   * @param path The resource path
+   * @param attrs Attributes to set (will be merged with existing attributes)
+   */
+  setResourceAttributes(path: string, attrs: Record<string, any>): void;
+
+  /**
+   * Returns the runtime attributes of a resource.
+   * @param path The resource path
+   */
+  resourceAttributes(path: string): Record<string, any>;
 }
 
 /**
@@ -375,10 +388,7 @@ export class Simulator {
   ): Promise<boolean> {
     const context = this.createContext(resourceConfig);
 
-    const resolvedProps = this.tryResolveTokens(
-      resourceConfig.props,
-      resourceConfig.path
-    );
+    const resolvedProps = this.tryResolveTokens(resourceConfig.props);
     if (resolvedProps === undefined) {
       this._addTrace({
         type: TraceType.RESOURCE,
@@ -395,6 +405,7 @@ export class Simulator {
 
     // create the resource based on its type
     const resourceObject = this._factory.resolve(
+      resourceConfig.path,
       resourceConfig.type,
       resolvedProps,
       context
@@ -407,7 +418,7 @@ export class Simulator {
     const handle = this._handles.allocate(resourceObject);
 
     // update the resource configuration with new attrs returned after initialization
-    (resourceConfig as any).attrs = { ...attrs, handle };
+    context.setResourceAttributes(resourceConfig.path, { ...attrs, handle });
 
     // trace the resource creation
     this._addTrace({
@@ -461,6 +472,14 @@ export class Simulator {
       listTraces: () => {
         return [...this._traces];
       },
+      setResourceAttributes: (path: string, attrs: Record<string, any>) => {
+        const config = this.getResourceConfig(path);
+        const prev = config.attrs;
+        (config as any).attrs = { ...prev, ...attrs };
+      },
+      resourceAttributes: (path: string) => {
+        return this.getResourceConfig(path).attrs;
+      },
     };
   }
 
@@ -483,11 +502,10 @@ export class Simulator {
    * Tokens can also be nested, like "${app/my_bucket#attrs.handle}/foo/bar".
    *
    * @param obj The object to resolve tokens in.
-   * @param source The path of the resource that requested the token to be resolved.
    * @returns `undefined` if the token could not be resolved (e.g. needs a dependency), otherwise
    * the resolved value.
    */
-  private tryResolveTokens(obj: any, source: string): any {
+  private tryResolveTokens(obj: any): any {
     if (typeof obj === "string") {
       if (isToken(obj)) {
         const ref = obj.slice(2, -1);
@@ -522,7 +540,7 @@ export class Simulator {
     if (Array.isArray(obj)) {
       const result = [];
       for (const x of obj) {
-        const value = this.tryResolveTokens(x, source);
+        const value = this.tryResolveTokens(x);
         if (value === undefined) {
           return undefined;
         }
@@ -535,7 +553,7 @@ export class Simulator {
     if (typeof obj === "object") {
       const ret: any = {};
       for (const [key, value] of Object.entries(obj)) {
-        const resolved = this.tryResolveTokens(value, source);
+        const resolved = this.tryResolveTokens(value);
         if (resolved === undefined) {
           return undefined;
         }
@@ -556,6 +574,7 @@ export interface ISimulatorFactory {
    * Resolve the parameters needed for creating a specific resource simulation.
    */
   resolve(
+    path: string,
     type: string,
     props: any,
     context: ISimulatorContext

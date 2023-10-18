@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $Foo, $myConst }) {
   class $Closure1 {
     constructor({  }) {
@@ -10,7 +11,7 @@ module.exports = function({ $Foo, $myConst }) {
       return $obj;
     }
     async handle() {
-      const x = new $Foo();
+      const x = (await (async () => {const o = new $Foo(); await o.$inflight_init?.(); return o; })());
       {((cond) => {if (!cond) throw new Error("assertion failed: x.getValue() == myConst")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await x.getValue()),$myConst)))};
     }
   }
@@ -21,6 +22,7 @@ module.exports = function({ $Foo, $myConst }) {
 
 ## inflight.Foo-1.js
 ```js
+"use strict";
 module.exports = function({ $myConst }) {
   class Foo {
     async getValue() {
@@ -66,6 +68,7 @@ module.exports = function({ $myConst }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";

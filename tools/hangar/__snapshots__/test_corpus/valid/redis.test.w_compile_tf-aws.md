@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $r }) {
   class $Closure1 {
     constructor({  }) {
@@ -20,6 +21,7 @@ module.exports = function({ $r }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $queue, $r, $r2, $util_Util }) {
   class $Closure2 {
     constructor({  }) {
@@ -489,7 +491,9 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
             "uniqueId": "cloudQueue"
           }
         },
-        "name": "cloud-Queue-c86e03d8"
+        "message_retention_seconds": 3600,
+        "name": "cloud-Queue-c86e03d8",
+        "visibility_timeout_seconds": 30
       }
     },
     "aws_subnet": {
@@ -544,6 +548,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";

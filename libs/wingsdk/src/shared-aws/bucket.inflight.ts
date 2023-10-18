@@ -12,12 +12,21 @@ import {
   GetPublicAccessBlockCommandOutput,
   S3Client,
   GetObjectOutput,
+  NotFound,
   NoSuchKey,
   __Client,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { BucketDeleteOptions, IBucketClient, SignedUrlOptions } from "../cloud";
-import { Json } from "../std";
+import mime from "mime-types";
+import {
+  IBucketClient,
+  ObjectMetadata,
+  BucketPutOptions,
+  BucketDeleteOptions,
+  BucketSignedUrlOptions,
+} from "../cloud";
+import { Datetime, Json } from "../std";
+
 export class BucketClient implements IBucketClient {
   constructor(
     private readonly bucketName: string,
@@ -52,11 +61,17 @@ export class BucketClient implements IBucketClient {
    * @param key Key of the object
    * @param body string contents of the object
    */
-  public async put(key: string, body: string): Promise<void> {
+  public async put(
+    key: string,
+    body: string,
+    opts?: BucketPutOptions
+  ): Promise<void> {
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
       Key: key,
       Body: body,
+      ContentType:
+        (opts?.contentType ?? mime.lookup(key)) || "application/octet-stream",
     });
     await this.s3Client.send(command);
   }
@@ -68,7 +83,9 @@ export class BucketClient implements IBucketClient {
    * @param body Json object
    */
   public async putJson(key: string, body: Json): Promise<void> {
-    await this.put(key, JSON.stringify(body, null, 2));
+    await this.put(key, JSON.stringify(body, null, 2), {
+      contentType: "application/json",
+    });
   }
 
   /**
@@ -274,7 +291,7 @@ export class BucketClient implements IBucketClient {
 
   public async signedUrl(
     key: string,
-    options?: SignedUrlOptions
+    options?: BucketSignedUrlOptions
   ): Promise<string> {
     if (!(await this.exists(key))) {
       throw new Error(
@@ -295,6 +312,31 @@ export class BucketClient implements IBucketClient {
       throw new Error(
         `Unable to generate signed url for key ${key} : ${error as Error}`
       );
+    }
+  }
+
+  /**
+   * Get the metadata of an object in the bucket.
+   * @param key Key of the object.
+   */
+  public async metadata(key: string): Promise<ObjectMetadata> {
+    const command = new HeadObjectCommand({
+      Bucket: this.bucketName,
+      Key: key,
+    });
+    try {
+      const resp = await this.s3Client.send(command);
+      return {
+        contentType: resp.ContentType,
+        lastModified: Datetime.fromIso(resp.LastModified!.toISOString()),
+        size: resp.ContentLength!,
+      };
+    } catch (error) {
+      // 403 is thrown if s3:ListObject is not granted.
+      if (error instanceof NotFound || (error as Error).name === "403") {
+        throw new Error(`Object does not exist (key=${key}).`);
+      }
+      throw error;
     }
   }
 

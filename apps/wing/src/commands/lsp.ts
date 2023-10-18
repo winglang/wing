@@ -8,6 +8,7 @@ import {
   Diagnostic,
   Range,
   DocumentUri,
+  Location,
 } from "vscode-languageserver/node";
 
 export async function lsp() {
@@ -89,6 +90,7 @@ export async function lsp() {
         signatureHelpProvider: {
           triggerCharacters: ["(", ",", ")"],
         },
+        codeActionProvider: true,
         hoverProvider: true,
         documentSymbolProvider: true,
         definitionProvider: true,
@@ -130,14 +132,41 @@ export async function lsp() {
         const diagnosticUri = "file://" + rd.span.file_id;
         const diag = Diagnostic.create(
           Range.create(rd.span.start.line, rd.span.start.col, rd.span.end.line, rd.span.end.col),
-          rd.message
+          rd.message,
+          undefined,
+          undefined,
+          undefined,
+          rd.annotations.map((a) => ({
+            location: Location.create(
+              "file://" + a.span.file_id,
+              Range.create(a.span.start.line, a.span.start.col, a.span.end.line, a.span.end.col)
+            ),
+            message: a.message,
+          }))
+        );
+
+        // Add annotations as notes hinting back to the original diagnostic
+        const extraNotes = rd.annotations.map((a) =>
+          Diagnostic.create(
+            Range.create(a.span.start.line, a.span.start.col, a.span.end.line, a.span.end.col),
+            a.message,
+            DiagnosticSeverity.Hint,
+            undefined,
+            undefined,
+            [
+              {
+                location: Location.create(diagnosticUri, diag.range),
+                message: `(source) ${diag.message}`,
+              },
+            ]
+          )
         );
 
         if (!allDiagnostics.has(diagnosticUri)) {
           allDiagnostics.set(diagnosticUri, []);
           seenFiles.add(diagnosticUri);
         }
-        allDiagnostics.get(diagnosticUri)!.push(diag);
+        allDiagnostics.get(diagnosticUri)!.push(diag, ...extraNotes);
       } else {
         // skip if diagnostic is not associated with any file
       }
@@ -177,6 +206,9 @@ export async function lsp() {
   });
   connection.onHover(async (params) => {
     return callWing("wingc_on_hover", params);
+  });
+  connection.onCodeAction(async (params) => {
+    return callWing("wingc_on_code_action", params);
   });
 
   connection.listen();

@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $NotGoo }) {
   class $Closure1 {
     constructor({  }) {
@@ -18,9 +19,9 @@ module.exports = function({ $NotGoo }) {
           {console.log("also fine")};
         }
       }
-      const y = new YesGoo();
+      const y = (await (async () => {const o = new YesGoo(); await o.$inflight_init?.(); return o; })());
       {((cond) => {if (!cond) throw new Error("assertion failed: y.handle() == 456")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await y.handle()),456)))};
-      const x = new $NotGoo();
+      const x = (await (async () => {const o = new $NotGoo(); await o.$inflight_init?.(); return o; })());
       {((cond) => {if (!cond) throw new Error("assertion failed: x.handle() == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await x.handle()),123)))};
     }
   }
@@ -31,6 +32,7 @@ module.exports = function({ $NotGoo }) {
 
 ## inflight.NotGoo-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class NotGoo {
     async handle() {
@@ -76,6 +78,7 @@ module.exports = function({  }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";

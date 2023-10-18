@@ -2,7 +2,8 @@
 
 ## inflight.$Closure1-1.js
 ```js
-module.exports = function({ $config, $http_Util, $indexFile, $otherFile, $std_Json, $w_url }) {
+"use strict";
+module.exports = function({ $config, $htmlContent, $http_Util, $indexFile, $otherFile, $std_Json, $w_url }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -13,21 +14,10 @@ module.exports = function({ $config, $http_Util, $indexFile, $otherFile, $std_Js
       {((cond) => {if (!cond) throw new Error("assertion failed: http.get(w.url).body == indexFile")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get($w_url)).body,$indexFile)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: http.get(w.url + \"/inner-folder/other.html\").body == otherFile")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get(($w_url + "/inner-folder/other.html"))).body,$otherFile)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: http.get(w.url + \"/config.json\").body == Json.stringify(config)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get(($w_url + "/config.json"))).body,((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$config]))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(w.url + \"/another-file.html\").body == htmlContent")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get(($w_url + "/another-file.html"))).body,$htmlContent)))};
     }
   }
   return $Closure1;
-}
-
-```
-
-## inflight.Util-1.js
-```js
-module.exports = function({  }) {
-  class Util {
-    constructor({  }) {
-    }
-  }
-  return Util;
 }
 
 ```
@@ -237,6 +227,21 @@ module.exports = function({  }) {
         "source": "<SOURCE>",
         "source_hash": "${filemd5(<SOURCE>)}"
       },
+      "cloudWebsite_File-another-filehtml_C41CE440": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Website/File-another-file.html",
+            "uniqueId": "cloudWebsite_File-another-filehtml_C41CE440"
+          }
+        },
+        "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
+        "content": "<html>Hello World!</html>",
+        "content_type": "text/html",
+        "depends_on": [
+          "aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355"
+        ],
+        "key": "another-file.html"
+      },
       "cloudWebsite_File-configjson_591A81BA": {
         "//": {
           "metadata": {
@@ -259,6 +264,7 @@ module.exports = function({  }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -266,37 +272,10 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 const http = $stdlib.http;
+const fs = $stdlib.fs;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class Util extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-      }
-      static readFile(path) {
-        return (require("<ABSOLUTE_PATH>/fs.js")["readFile"])(path)
-      }
-      static _toInflightType(context) {
-        return `
-          require("./inflight.Util-1.js")({
-          })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const UtilClient = ${Util._toInflightType(this)};
-            const client = new UtilClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
-      }
-      _getInflightOps() {
-        return ["$inflight_init"];
-      }
-    }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
@@ -306,6 +285,7 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("./inflight.$Closure1-1.js")({
             $config: ${context._lift(config)},
+            $htmlContent: ${context._lift(htmlContent)},
             $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
             $indexFile: ${context._lift(indexFile)},
             $otherFile: ${context._lift(otherFile)},
@@ -331,6 +311,7 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(config, host, []);
+          $Closure1._registerBindObject(htmlContent, host, []);
           $Closure1._registerBindObject(indexFile, host, []);
           $Closure1._registerBindObject(otherFile, host, []);
           $Closure1._registerBindObject(w.url, host, ["body"]);
@@ -340,9 +321,11 @@ class $Root extends $stdlib.std.Resource {
     }
     const w = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this,"cloud.Website",{ path: "./website" });
     const config = ({"json": 1});
-    const indexFile = (Util.readFile("./website/website/index.html"));
-    const otherFile = (Util.readFile("./website/website/inner-folder/other.html"));
+    const htmlContent = "<html>Hello World!</html>";
+    const indexFile = (fs.Util.readFile(String.raw({ raw: ["", "/index.html"] }, w.path)));
+    const otherFile = (fs.Util.readFile(String.raw({ raw: ["", "/inner-folder/other.html"] }, w.path)));
     (w.addJson("config.json",config));
+    (w.addFile("another-file.html",htmlContent,{ contentType: "text/html" }));
     {((cond) => {if (!cond) throw new Error("assertion failed: w.path.endsWith(\"sdk_tests/website/website\") || w.path.endsWith(\"sdk_tests\\\\website\\\\website\")")})((w.path.endsWith("sdk_tests/website/website") || w.path.endsWith("sdk_tests\\website\\website")))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:access files on the website",new $Closure1(this,"$Closure1"));
   }

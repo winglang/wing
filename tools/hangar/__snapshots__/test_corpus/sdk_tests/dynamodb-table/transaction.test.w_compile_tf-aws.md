@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $t1 }) {
   class $Closure1 {
     constructor({  }) {
@@ -10,19 +11,19 @@ module.exports = function({ $t1 }) {
       return $obj;
     }
     async handle() {
-      (await $t1.putItem(({"k1": "key1","k2": "value1","k3": "other-value1"})));
-      (await $t1.putItem(({"k1": "key2","k2": "value2","k3": "other-value2"})));
+      (await $t1.putItem(({"item": ({"k1": "key1","k2": "value1","k3": "other-value1"})})));
+      (await $t1.putItem(({"item": ({"k1": "key2","k2": "value2","k3": "other-value2"})})));
       (await $t1.transactWriteItems({ transactItems: [({"put": ({"item": ({"k1": "key3","k2": "value3","k3": "other-value3"})})}), ({"delete": ({"key": ({"k1": "key2","k2": "value2"})})}), ({"update": ({"key": ({"k1": "key1","k2": "value1"}),"updateExpression": "set k3 = :k3","expressionAttributeValues": ({":k3": "not-other-value1"})})})] }));
-      let r = (await $t1.getItem(({"k1": "key1","k2": "value1"})));
-      {((cond) => {if (!cond) throw new Error("assertion failed: r.get(\"k1\").asStr() == \"key1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(r, "k1")),"key1")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: r.get(\"k2\").asStr() == \"value1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(r, "k2")),"value1")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: r.get(\"k3\").asStr() == \"not-other-value1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(r, "k3")),"not-other-value1")))};
-      r = (await $t1.getItem(({"k1": "key2","k2": "value2"})));
-      {((cond) => {if (!cond) throw new Error("assertion failed: r.tryGet(\"k1\") == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((r)?.["k1"],undefined)))};
-      r = (await $t1.getItem(({"k1": "key3","k2": "value3"})));
-      {((cond) => {if (!cond) throw new Error("assertion failed: r.get(\"k1\").asStr() == \"key3\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(r, "k1")),"key3")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: r.get(\"k2\").asStr() == \"value3\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(r, "k2")),"value3")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: r.get(\"k3\").asStr() == \"other-value3\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(r, "k3")),"other-value3")))};
+      let r = (await $t1.getItem(({"key": ({"k1": "key1","k2": "value1"})})));
+      {((cond) => {if (!cond) throw new Error("assertion failed: r.item?.get(\"k1\")?.asStr() == \"key1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(r.item, "k1")),"key1")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: r.item?.get(\"k2\")?.asStr() == \"value1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(r.item, "k2")),"value1")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: r.item?.get(\"k3\")?.asStr() == \"not-other-value1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(r.item, "k3")),"not-other-value1")))};
+      r = (await $t1.getItem(({"key": ({"k1": "key2","k2": "value2"})})));
+      {((cond) => {if (!cond) throw new Error("assertion failed: r.item?.tryGet(\"k1\") == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((r.item)?.["k1"],undefined)))};
+      r = (await $t1.getItem(({"key": ({"k1": "key3","k2": "value3"})})));
+      {((cond) => {if (!cond) throw new Error("assertion failed: r.item?.get(\"k1\")?.asStr() == \"key3\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(r.item, "k1")),"key3")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: r.item?.get(\"k2\")?.asStr() == \"value3\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(r.item, "k2")),"value3")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: r.item?.get(\"k3\")?.asStr() == \"other-value3\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(r.item, "k3")),"other-value3")))};
     }
   }
   return $Closure1;
@@ -90,6 +91,7 @@ module.exports = function({ $t1 }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";

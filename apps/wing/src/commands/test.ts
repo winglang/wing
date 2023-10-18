@@ -1,19 +1,21 @@
 import * as cp from "child_process";
 import { readFile, rm, rmSync } from "fs";
+import * as os from "os";
 import { basename, resolve, sep } from "path";
 import { promisify } from "util";
 import { Target } from "@winglang/compiler";
 import { std, simulator } from "@winglang/sdk";
 import chalk from "chalk";
 import debug from "debug";
+import { glob } from "glob";
 import { nanoid } from "nanoid";
 import { compile, CompileOptions } from "./compile";
 import { withSpinner } from "../util";
 
 const log = debug("wing:test");
 
-const ENV_WING_TEST_RUNNER_FUNCTION_ARNS = "WING_TEST_RUNNER_FUNCTION_ARNS";
-const ENV_WING_TEST_RUNNER_FUNCTION_ARNS_AWSCDK = "WingTestRunnerFunctionArns";
+const ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS = "WING_TEST_RUNNER_FUNCTION_ARNS"; //TODO: [tsuf] rename arns to identifiers
+const ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS_AWSCDK = "WingTestRunnerFunctionArns";
 
 /**
  * @param path path to the test/s file
@@ -29,6 +31,22 @@ export interface TestOptions extends CompileOptions {
 }
 
 export async function test(entrypoints: string[], options: TestOptions): Promise<number> {
+  let patterns;
+
+  if (entrypoints.length === 0) {
+    patterns = ["*.test.w"];
+  } else {
+    patterns =
+      os.platform() === "win32"
+        ? entrypoints.map((entrypoint) => entrypoint.replace(/\\/g, "/"))
+        : entrypoints;
+  }
+
+  const expandedEntrypoints = await glob(patterns);
+  if (expandedEntrypoints.length === 0) {
+    throw new Error(`No matching files found for patterns: [${patterns.join(", ")}]`);
+  }
+
   const startTime = Date.now();
   const results: { testName: string; results: std.TestResult[] }[] = [];
   const testFile = async (entrypoint: string) => {
@@ -44,7 +62,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
       });
     }
   };
-  await Promise.all(entrypoints.map(testFile));
+  await Promise.all(expandedEntrypoints.map(testFile));
   printResults(results, Date.now() - startTime);
 
   // if we have any failures, exit with 1
@@ -144,8 +162,9 @@ async function testOne(entrypoint: string, options: TestOptions) {
   switch (options.target) {
     case Target.SIM:
       return testSimulator(synthDir, options);
+    case Target.TF_AZURE:
     case Target.TF_AWS:
-      return testTfAws(synthDir, options);
+      return testTf(synthDir, options);
     case Target.AWSCDK:
       return testAwsCdk(synthDir, options);
     default:
@@ -282,7 +301,7 @@ async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.T
     const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
       const testArns = await awsCdkOutput(
         synthDir,
-        ENV_WING_TEST_RUNNER_FUNCTION_ARNS_AWSCDK,
+        ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS_AWSCDK,
         process.env.CDK_STACK_NAME!
       );
 
@@ -357,8 +376,14 @@ async function awsCdkOutput(synthDir: string, name: string, stackName: string) {
   return parsed[stackName][name];
 }
 
-async function testTfAws(synthDir: string, options: TestOptions): Promise<std.TestResult[] | void> {
-  const { clean } = options;
+const targetFolder: Record<string, string> = {
+  [Target.TF_AWS]: "shared-aws",
+  [Target.TF_AZURE]: "shared-azure",
+};
+
+async function testTf(synthDir: string, options: TestOptions): Promise<std.TestResult[] | void> {
+  const { clean, target = Target.SIM } = options;
+
   try {
     if (!isTerraformInstalled(synthDir)) {
       throw new Error(
@@ -371,9 +396,9 @@ async function testTfAws(synthDir: string, options: TestOptions): Promise<std.Te
     await withSpinner("terraform apply", () => terraformApply(synthDir));
 
     const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
-      const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_ARNS);
+      const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS);
       const { TestRunnerClient } = await import(
-        "@winglang/sdk/lib/shared-aws/test-runner.inflight"
+        `@winglang/sdk/lib/${targetFolder[target]}/test-runner.inflight`
       );
       const runner = new TestRunnerClient(testArns);
 

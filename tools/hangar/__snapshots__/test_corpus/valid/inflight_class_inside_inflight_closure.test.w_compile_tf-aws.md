@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $__parent_this_1_b }) {
   class $Closure1 {
     constructor({  }) {
@@ -15,11 +16,11 @@ module.exports = function({ $__parent_this_1_b }) {
         async method() {
           {((cond) => {if (!cond) throw new Error("assertion failed: this.field == \"value\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.field,"value")))};
         }
-        constructor() {
+        async $inflight_init() {
           this.field = "value";
         }
       }
-      const c = new InflightClass();
+      const c = (await (async () => {const o = new InflightClass(); await o.$inflight_init?.(); return o; })());
       (await c.method());
     }
   }
@@ -30,6 +31,7 @@ module.exports = function({ $__parent_this_1_b }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $f }) {
   class $Closure2 {
     constructor({  }) {
@@ -48,6 +50,7 @@ module.exports = function({ $f }) {
 
 ## inflight.$Closure3-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure3 {
     constructor({  }) {
@@ -62,7 +65,7 @@ module.exports = function({  }) {
           return x;
         }
       }
-      const foo = new Foo();
+      const foo = (await (async () => {const o = new Foo(); await o.$inflight_init?.(); return o; })());
       const y = (await foo.getX());
       {((cond) => {if (!cond) throw new Error("assertion failed: y == 12")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y,12)))};
     }
@@ -74,6 +77,7 @@ module.exports = function({  }) {
 
 ## inflight.PreflightClass-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class PreflightClass {
     constructor({  }) {
@@ -233,6 +237,7 @@ module.exports = function({  }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";

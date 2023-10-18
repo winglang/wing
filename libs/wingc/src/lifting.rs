@@ -56,11 +56,12 @@ impl<'a> LiftVisitor<'a> {
 		if let Some(env) = self.ctx.current_env() {
 			if matches!(
 				env.lookup_ext(symbol, Some(self.ctx.current_stmt_idx())),
-				LookupResult::DefinedLater
+				LookupResult::DefinedLater(_)
 			) {
 				report_diagnostic(Diagnostic {
 					span: Some(symbol.span.clone()),
 					message: format!("Cannot access \"{symbol}\" because it is shadowed by another symbol with the same name"),
+					annotations: vec![],
 				});
 			}
 		}
@@ -215,6 +216,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 							expr_type.to_string()
 						),
 						span: Some(node.span.clone()),
+						annotations: vec![],
 					});
 
 					return;
@@ -279,6 +281,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 					message: format!(
 						"Cannot qualify access to a lifted type \"{udt_type}\" (see https://github.com/winglang/wing/issues/76 for more details)"),
 					span: Some(node.span.clone()),
+					annotations: vec![],
 				});
 
 				return;
@@ -348,13 +351,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			return;
 		}
 
-		let udt = UserDefinedType {
-			root: node.name.clone(),
-			fields: vec![],
-			span: node.name.span.clone(),
-		};
-
-		self.ctx.push_class(udt.clone(), &node.phase);
+		self.ctx.push_class(node);
 
 		self.lifts_stack.push(Lifts::new());
 
@@ -371,7 +368,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 		let lifts = self.lifts_stack.pop().expect("Unable to pop class tokens");
 
 		if let Some(env) = self.ctx.current_env() {
-			if let Some(mut t) = resolve_user_defined_type(&udt, env, 0).ok() {
+			if let Some(mut t) = resolve_user_defined_type(&UserDefinedType::for_class(node), env, 0).ok() {
 				let mut_class = t.as_class_mut().unwrap();
 				mut_class.set_lifts(lifts);
 			}

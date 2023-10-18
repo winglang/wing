@@ -21,7 +21,7 @@
   },
   "scripts": {
     "build": "tsc && pnpm copy-root-readme",
-    "eslint": "eslint --ext .ts src",
+    "eslint": "eslint --fix --ext .ts src",
     "compile": "tsc",
     "copy-root-readme": "cp ../../README.md ./README.md && pnpm copy-root-assets",
     "copy-root-assets": "cp ../../logo/demo.gif ./logo/demo.gif",
@@ -31,6 +31,7 @@
     "package": "bump-pack -b"
   },
   "dependencies": {
+    "@npmcli/arborist": "^7.2.0",
     "@segment/analytics-node": "^1.1.0",
     "@wingconsole/app": "workspace:^",
     "@wingconsole/server": "workspace:^",
@@ -41,9 +42,13 @@
     "commander": "^10.0.1",
     "compare-versions": "^5.0.3",
     "debug": "^4.3.4",
+    "glob": "^10.3.10",
+    "minimatch": "^9.0.3",
     "nanoid": "^3.3.6",
+    "npm-packlist": "^8.0.0",
     "open": "^8.4.2",
     "ora": "^5.4.1",
+    "tar": "^6.2.0",
     "tiny-updater": "^3.5.1",
     "uuid": "^8.3.2",
     "vscode-languageserver": "^8.1.0"
@@ -52,7 +57,10 @@
     "@types/debug": "^4.1.8",
     "@types/node": "^18.17.13",
     "@types/node-persist": "^3.1.4",
+    "@types/npm-packlist": "^7.0.1",
+    "@types/npmcli__arborist": "^5.6.2",
     "@types/semver-utils": "^1.1.1",
+    "@types/tar": "^6.1.6",
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
     "@typescript-eslint/parser": "^6.7.4",

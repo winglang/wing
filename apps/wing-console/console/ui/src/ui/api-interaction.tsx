@@ -118,15 +118,29 @@ export const ApiInteraction = ({
       headers,
       body,
     });
-  }, [url, currentRoute, pathVariables, currentMethod, headers, body]);
+  }, [
+    url,
+    currentMethod,
+    currentRoute,
+    callFetch,
+    pathVariables,
+    headers,
+    body,
+  ]);
 
   // TODO revisit
-  const openResponseTab = useCallback((tabId: string) => {
-    setCurrentResponseTab(tabId);
-  }, []);
-  const openOptionTab = useCallback((tabId: string) => {
-    setCurrentOptionsTab(tabId);
-  }, []);
+  const openResponseTab = useCallback(
+    (tabId: string) => {
+      setCurrentResponseTab(tabId);
+    },
+    [setCurrentResponseTab],
+  );
+  const openOptionTab = useCallback(
+    (tabId: string) => {
+      setCurrentOptionsTab(tabId);
+    },
+    [setCurrentOptionsTab],
+  );
 
   useEffect(() => {
     if (!currentHeaderKey) {
@@ -189,7 +203,7 @@ export const ApiInteraction = ({
       newRoute = `${newRoute}?${urlParameters.toString()}`;
     }
     setCurrentRoute(newRoute);
-  }, [currentRoute, queryParameters]);
+  }, [currentRoute, queryParameters, setCurrentRoute]);
 
   useEffect(() => {
     if (!schemaData) {
@@ -207,7 +221,7 @@ export const ApiInteraction = ({
     if (methods.length > 0 && methods[0]) {
       setCurrentMethod(methods[0]);
     }
-  }, [schemaData]);
+  }, [currentRoute, schemaData, setCurrentMethod]);
 
   return (
     <div className="h-full flex-1 flex flex-col text-sm space-y-1">

@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $b }) {
   class $Closure1 {
     constructor({  }) {
@@ -92,6 +93,7 @@ module.exports = function({ $b }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -135,8 +137,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    (b.addFile("file1.txt","testFiles/test1.txt"));
-    (b.addFile("file2.txt","testFiles/test2.txt"));
+    (b.addFile("file1.txt","test-files/test1.txt"));
+    (b.addFile("file2.txt","test-files/test2.txt"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:addObject",new $Closure1(this,"$Closure1"));
   }
 }

@@ -4,15 +4,18 @@ import { Construct } from "constructs";
 import { Api } from "./api";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
+import { Domain } from "./domain";
 import { DynamodbTable } from "./dynamodb-table";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
+import { ReactApp } from "./react-app";
 import { Redis } from "./redis";
 import { isSimulatorResource } from "./resource";
 import { Schedule } from "./schedule";
 import { Secret } from "./secret";
 import { Service } from "./service";
+import { STATE_FQN, State } from "./state";
 import { Table } from "./table";
 import { TestRunner } from "./test-runner";
 import { SimTokens } from "./tokens";
@@ -22,6 +25,7 @@ import {
   API_FQN,
   BUCKET_FQN,
   COUNTER_FQN,
+  DOMAIN_FQN,
   FUNCTION_FQN,
   ON_DEPLOY_FQN,
   QUEUE_FQN,
@@ -34,7 +38,7 @@ import {
 import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
-import { TABLE_FQN, REDIS_FQN, DYNAMODB_TABLE_FQN } from "../ex";
+import { TABLE_FQN, REDIS_FQN, DYNAMODB_TABLE_FQN, REACT_APP_FQN } from "../ex";
 import { WingSimulatorSchema } from "../simulator/simulator";
 import { TEST_RUNNER_FQN } from "../std";
 
@@ -110,6 +114,9 @@ export class App extends core.App {
       case WEBSITE_FQN:
         return new Website(scope, id, args[0]);
 
+      case REACT_APP_FQN:
+        return new ReactApp(scope, id, args[0]);
+
       case SECRET_FQN:
         return new Secret(scope, id, args[0]);
 
@@ -122,8 +129,14 @@ export class App extends core.App {
       case ON_DEPLOY_FQN:
         return new OnDeploy(scope, id, args[0], args[1]);
 
+      case DOMAIN_FQN:
+        return new Domain(scope, id, args[0]);
+
       case DYNAMODB_TABLE_FQN:
         return new DynamodbTable(scope, id, args[0]);
+
+      case STATE_FQN:
+        return new State(scope, id);
     }
 
     return undefined;

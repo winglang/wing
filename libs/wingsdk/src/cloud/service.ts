@@ -79,6 +79,7 @@ export abstract class Service extends Resource implements IInflightHost {
     const inflightClient = handler._toInflight();
     const lines = new Array<string>();
 
+    lines.push('"use strict";');
     lines.push("let $obj;");
 
     lines.push("async function $initOnce() {");

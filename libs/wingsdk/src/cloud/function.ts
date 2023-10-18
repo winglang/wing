@@ -86,13 +86,7 @@ export abstract class Function extends Resource implements IInflightHost {
     // inflight "handle" method on the handler resource.
     handler._registerBind(this, ["handle", "$inflight_init"]);
 
-    const inflightClient = handler._toInflight();
-    const lines = new Array<string>();
-
-    lines.push("exports.handler = async function(event) {");
-    lines.push(`  return await (${inflightClient}).handle(event);`);
-    lines.push("};");
-
+    const lines = this._getCodeLines(handler);
     const assetName = ResourceNames.generateName(this, {
       // Avoid characters that may cause path issues
       disallowedRegex: /[><:"/\\|?*\s]/g,
@@ -120,6 +114,23 @@ export abstract class Function extends Resource implements IInflightHost {
   }
 
   /**
+   * @internal
+   * @param handler IFunctionHandler
+   * @returns the function code lines as strings
+   */
+  protected _getCodeLines(handler: IFunctionHandler): string[] {
+    const inflightClient = handler._toInflight();
+    const lines = new Array<string>();
+
+    lines.push('"use strict";');
+    lines.push("exports.handler = async function(event) {");
+    lines.push(`  return await (${inflightClient}).handle(event);`);
+    lines.push("};");
+
+    return lines;
+  }
+
+  /**
    * Add an environment variable to the function.
    */
   public addEnvironment(name: string, value: string) {
@@ -144,7 +155,7 @@ export abstract class Function extends Resource implements IInflightHost {
  */
 export interface IFunctionClient {
   /**
-   * Invoke the function asynchronously with a given payload.
+   * Invokes the function with a payload and waits for the result.
    * @inflight
    */
   invoke(payload: string): Promise<string>;

@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -18,7 +19,7 @@ module.exports = function({  }) {
           return "Static inflight method";
         }
       }
-      const inflightClass = new InflightClass();
+      const inflightClass = (await (async () => {const o = new InflightClass(); await o.$inflight_init?.(); return o; })());
       {((cond) => {if (!cond) throw new Error("assertion failed: inflightClass.inflightMethod() == \"Inflight method\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await inflightClass.inflightMethod()),"Inflight method")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: InflightClass.staticInflightMethod() == \"Static inflight method\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await InflightClass.staticInflightMethod()),"Static inflight method")))};
     }
@@ -30,6 +31,7 @@ module.exports = function({  }) {
 
 ## inflight.Foo-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Foo {
     constructor({  }) {
@@ -77,6 +79,7 @@ module.exports = function({  }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
