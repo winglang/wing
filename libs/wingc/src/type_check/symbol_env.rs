@@ -101,17 +101,17 @@ pub enum StatementIdx {
 }
 
 /// Possible results for a symbol lookup in the environment
-#[derive(Debug)]
 #[duplicate_item(
 	LookupResult reference(lifetime, type) SymbolLookupInfo;
 	[LookupResult] [& 'lifetime type] [SymbolLookupInfo];
 	[LookupResultMut] [& 'lifetime mut type] [SymbolLookupInfoMut];
 )]
+#[derive(Debug)]
 pub enum LookupResult<'a> {
 	/// The kind of symbol and useful metadata associated with its lookup
 	Found(reference([a], [SymbolKind]), SymbolLookupInfo),
 	/// A matching symbol was found but it's not public
-	NotPublic(Symbol),
+	NotPublic(reference([a], [SymbolKind]), SymbolLookupInfo),
 	/// The symbol was not found in the environment, contains the name of the symbol or part of it that was not found
 	NotFound(Symbol),
 	/// A symbol with a matching name was found in multiple environments.
@@ -132,7 +132,7 @@ impl<'a> LookupResult<'a> {
 	pub fn unwrap(self) -> (reference([a], [SymbolKind]), SymbolLookupInfo) {
 		match self {
 			LookupResult::Found(kind, info) => (kind, info),
-			LookupResult::NotPublic(x) => panic!("LookupResult::unwrap({x}) called on LookupResult::NotPublic"),
+			LookupResult::NotPublic(x, _) => panic!("LookupResult::unwrap({x}) called on LookupResult::NotPublic"),
 			LookupResult::NotFound(x) => panic!("LookupResult::unwrap({x}) called on LookupResult::NotFound"),
 			LookupResult::MultipleFound => panic!("LookupResult::unwrap() called on LookupResult::MultipleFound"),
 			LookupResult::DefinedLater(_) => panic!("LookupResult::unwrap() called on LookupResult::DefinedLater"),
@@ -158,13 +158,13 @@ impl<'a> LookupResult<'a> {
 	}
 }
 
-#[derive(Derivative)]
-#[derivative(Debug)]
 #[duplicate_item(
 	SymbolLookupInfo SymbolEnvRef;
 	[SymbolLookupInfo] [SymbolEnvRef];
 	[SymbolLookupInfoMut] [()];
 )]
+#[derive(Derivative)]
+#[derivative(Debug)]
 pub struct SymbolLookupInfo {
 	/// The phase the symbol was defined in
 	pub phase: Phase,
@@ -371,16 +371,22 @@ impl SymbolEnv {
 			let mut lookup_result: Option<LookupResult> = None;
 			for env in ns.envs.vec_iter() {
 				let partial_result = env.lookup_ext(next_symb, statement_idx);
-				if let LookupResult::Found(_, ref lookup_info) = partial_result {
-					if lookup_info.access == AccessModifier::Public {
-						if lookup_result.is_none() {
-							lookup_result = Some(partial_result);
-						} else {
-							return LookupResult::MultipleFound;
-						}
-					} else {
-						return LookupResult::NotPublic((*next_symb).clone());
+				if matches!(partial_result, LookupResult::Found(_, _)) {
+					if lookup_result.is_some() {
+						return LookupResult::MultipleFound;
 					}
+
+					let lookup_info_access = match &partial_result {
+						LookupResult::Found(_, lookup_info) => lookup_info.access,
+						_ => unreachable!(), // checked by the "matches!" case above
+					};
+					if lookup_info_access != AccessModifier::Public {
+						if let LookupResult::Found(kind, lookup_info) = partial_result {
+							return LookupResult::NotPublic(kind, lookup_info);
+						}
+					}
+
+					lookup_result = Some(partial_result);
 				}
 			}
 			if let Some(LookupResult::Found(k, i)) = lookup_result {

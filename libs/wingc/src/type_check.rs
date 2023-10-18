@@ -5533,10 +5533,32 @@ where
 			span: s.span(),
 			annotations: vec![],
 		},
-		LookupResult::NotPublic(s) => TypeError {
-			message: format!("Symbol \"{s}\" is not public"),
-			span: s.span(),
-			annotations: vec![],
+		LookupResult::NotPublic(kind, lookup_info) => TypeError {
+			message: {
+				let access_modifier = lookup_info.access.to_string();
+				match kind {
+					SymbolKind::Type(type_) => {
+						if matches!(**type_, Type::Class(_)) {
+							format!("Class \"{looked_up_object}\" is {access_modifier}")
+						} else if matches!(**type_, Type::Interface(_)) {
+							format!("Interface \"{looked_up_object}\" is {access_modifier}")
+						} else if matches!(**type_, Type::Struct(_)) {
+							format!("Struct \"{looked_up_object}\" is {access_modifier}")
+						} else if matches!(**type_, Type::Enum(_)) {
+							format!("Enum \"{looked_up_object}\" is {access_modifier}")
+						} else {
+							format!("Symbol \"{looked_up_object}\" is {access_modifier}")
+						}
+					}
+					SymbolKind::Variable(_) => format!("Symbol \"{looked_up_object}\" is {access_modifier}"),
+					SymbolKind::Namespace(_) => format!("namespace \"{looked_up_object}\" is {access_modifier}"),
+				}
+			},
+			span: looked_up_object.span(),
+			annotations: vec![DiagnosticAnnotation {
+				message: "defined here".to_string(),
+				span: lookup_info.span,
+			}],
 		},
 		LookupResult::MultipleFound => TypeError {
 			message: format!("Ambiguous symbol \"{looked_up_object}\""),
