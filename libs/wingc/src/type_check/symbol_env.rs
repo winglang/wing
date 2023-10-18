@@ -110,6 +110,8 @@ pub enum StatementIdx {
 pub enum LookupResult<'a> {
 	/// The kind of symbol and useful metadata associated with its lookup
 	Found(reference([a], [SymbolKind]), SymbolLookupInfo),
+	/// A matching symbol was found but it's not public
+	NotPublic(Symbol),
 	/// The symbol was not found in the environment, contains the name of the symbol or part of it that was not found
 	NotFound(Symbol),
 	/// A symbol with a matching name was found in multiple environments.
@@ -130,6 +132,7 @@ impl<'a> LookupResult<'a> {
 	pub fn unwrap(self) -> (reference([a], [SymbolKind]), SymbolLookupInfo) {
 		match self {
 			LookupResult::Found(kind, info) => (kind, info),
+			LookupResult::NotPublic(x) => panic!("LookupResult::unwrap({x}) called on LookupResult::NotPublic"),
 			LookupResult::NotFound(x) => panic!("LookupResult::unwrap({x}) called on LookupResult::NotFound"),
 			LookupResult::MultipleFound => panic!("LookupResult::unwrap() called on LookupResult::MultipleFound"),
 			LookupResult::DefinedLater(_) => panic!("LookupResult::unwrap() called on LookupResult::DefinedLater"),
@@ -375,6 +378,8 @@ impl SymbolEnv {
 						} else {
 							return LookupResult::MultipleFound;
 						}
+					} else {
+						return LookupResult::NotPublic((*next_symb).clone());
 					}
 				}
 			}

@@ -168,14 +168,25 @@ where
 		StmtKind::Scope(scope) => StmtKind::Scope(f.fold_scope(scope)),
 		StmtKind::Class(class) => StmtKind::Class(f.fold_class(class)),
 		StmtKind::Interface(interface) => StmtKind::Interface(f.fold_interface(interface)),
-		StmtKind::Struct { name, extends, fields } => StmtKind::Struct {
+		StmtKind::Struct {
+			name,
+			extends,
+			fields,
+			access_modifier,
+		} => StmtKind::Struct {
 			name: f.fold_symbol(name),
 			extends: extends.into_iter().map(|e| f.fold_user_defined_type(e)).collect(),
 			fields: fields.into_iter().map(|field| f.fold_struct_field(field)).collect(),
+			access_modifier,
 		},
-		StmtKind::Enum { name, values } => StmtKind::Enum {
+		StmtKind::Enum {
+			name,
+			values,
+			access_modifier,
+		} => StmtKind::Enum {
 			name: f.fold_symbol(name),
 			values: values.into_iter().map(|value| f.fold_symbol(value)).collect(),
+			access_modifier,
 		},
 		StmtKind::TryCatch {
 			try_statements,
@@ -222,6 +233,7 @@ where
 			.collect(),
 		phase: node.phase,
 		inflight_initializer: f.fold_function_definition(node.inflight_initializer),
+		access_modifier: node.access_modifier,
 	}
 }
 
@@ -265,6 +277,7 @@ where
 			.into_iter()
 			.map(|interface| f.fold_user_defined_type(interface))
 			.collect(),
+		access_modifier: node.access_modifier,
 	}
 }
 

@@ -990,7 +990,7 @@ impl<'a> JSifier<'a> {
 				// Struct schemas are emitted before jsification phase
 				CodeMaker::default()
 			}
-			StmtKind::Enum { name, values } => {
+			StmtKind::Enum { name, values, .. } => {
 				let mut code = CodeMaker::default();
 				code.open(format!("const {name} ="));
 				code.add_code(self.jsify_enum(values));

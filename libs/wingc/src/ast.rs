@@ -361,6 +361,7 @@ pub struct Class {
 	pub parent: Option<UserDefinedType>, // base class (the expression is a reference to a user defined type)
 	pub implements: Vec<UserDefinedType>,
 	pub phase: Phase,
+	pub access_modifier: AccessModifier,
 }
 
 impl Class {
@@ -422,6 +423,7 @@ pub struct Interface {
 	pub name: Symbol,
 	pub methods: Vec<(Symbol, FunctionSignature)>,
 	pub extends: Vec<UserDefinedType>,
+	pub access_modifier: AccessModifier,
 }
 
 #[derive(Debug)]
@@ -501,10 +503,12 @@ pub enum StmtKind {
 		name: Symbol,
 		extends: Vec<UserDefinedType>,
 		fields: Vec<StructField>,
+		access_modifier: AccessModifier,
 	},
 	Enum {
 		name: Symbol,
 		values: IndexSet<Symbol>,
+		access_modifier: AccessModifier,
 	},
 	TryCatch {
 		try_statements: Scope,

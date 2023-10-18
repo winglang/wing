@@ -768,10 +768,13 @@ impl<'s> Parser<'s> {
 			}
 		}
 
+		let access_modifier = self.build_access_modifier(statement_node.child_by_field_name("access_modifier"))?;
+
 		Ok(StmtKind::Struct {
 			name,
 			extends,
 			fields: members,
+			access_modifier,
 		})
 	}
 
@@ -1000,9 +1003,12 @@ impl<'s> Parser<'s> {
 			}
 		}
 
+		let access_modifier = self.build_access_modifier(statement_node.child_by_field_name("access_modifier"))?;
+
 		Ok(StmtKind::Enum {
 			name: name.unwrap(),
 			values,
+			access_modifier,
 		})
 	}
 
@@ -1264,6 +1270,8 @@ impl<'s> Parser<'s> {
 			}
 		}
 
+		let access_modifier = self.build_access_modifier(statement_node.child_by_field_name("access_modifier"))?;
+
 		Ok(StmtKind::Class(Class {
 			name,
 			fields,
@@ -1273,6 +1281,7 @@ impl<'s> Parser<'s> {
 			initializer,
 			phase: class_phase,
 			inflight_initializer,
+			access_modifier,
 		}))
 	}
 
@@ -1343,7 +1352,14 @@ impl<'s> Parser<'s> {
 			}
 		}
 
-		Ok(StmtKind::Interface(Interface { name, methods, extends }))
+		let access_modifier = self.build_access_modifier(statement_node.child_by_field_name("access_modifier"))?;
+
+		Ok(StmtKind::Interface(Interface {
+			name,
+			methods,
+			extends,
+			access_modifier,
+		}))
 	}
 
 	fn build_interface_method(

@@ -130,6 +130,7 @@ module.exports = grammar({
 
     struct_definition: ($) =>
       seq(
+        optional(field("access_modifier", $.access_modifier)),
         "struct",
         field("name", $.identifier),
         optional(seq("extends", commaSep(field("extends", $.custom_type)))),
@@ -140,6 +141,7 @@ module.exports = grammar({
 
     enum_definition: ($) =>
       seq(
+        optional(field("access_modifier", $.access_modifier)),
         "enum",
         field("enum_name", $.identifier),
         braced(commaSep(alias($.identifier, $.enum_field)))
@@ -184,6 +186,7 @@ module.exports = grammar({
     // Classes
     class_definition: ($) =>
       seq(
+        optional(field("access_modifier", $.access_modifier)),
         optional(field("phase_modifier", $.inflight_specifier)),
         "class",
         field("name", $.identifier),
@@ -218,6 +221,7 @@ module.exports = grammar({
 
     interface_definition: ($) =>
       seq(
+        optional(field("access_modifier", $.access_modifier)),
         "interface",
         field("name", $.identifier),
         optional(seq("extends", field("extends", commaSep1($.custom_type)))),
