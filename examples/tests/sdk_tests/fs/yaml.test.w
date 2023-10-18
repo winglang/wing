@@ -8,11 +8,11 @@ let data = Json {
     "arr": [1, 2, 3, "test", { "foo": "bar" }]
 };
 
+fs.writeFile(filepath, "invalid: {{ content }}, invalid");
 try {
-    fs.writeFile(filepath, "invalid: {{ content }}, invalid");
     fs.readYaml(filepath);
 } catch e {
-    assert(regex.match("^bad indentation", e) == true);
+    assert(regex.match("^bad indentation", e));
 }
 
 fs.writeYaml(filepath, data, data);
