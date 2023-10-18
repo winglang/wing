@@ -13,7 +13,6 @@ export const getPlatformSpecificValues = (
   ...args: string[]
 ): { [key: string]: string | undefined } => {
   const wingValues = process.env.WING_VALUES;
-  const wingValuesFile = process.env.WING_VALUES_FILE;
 
   let argLst: string[] = [];
   for (const x of args) {
@@ -25,7 +24,7 @@ export const getPlatformSpecificValues = (
   }
 
   let result: { [key: string]: string | undefined } = {};
-  if (wingValues && wingValues.length !== 0) {
+  if (wingValues && wingValues.length !== 0 && wingValues.indexOf(".yaml") === -1 && wingValues.indexOf(".yml") === -1) {
     for (const argument of argLst) {
       result[`${argument}`] = getPlatformSpecificValue(
         scope.node.path,
@@ -33,8 +32,8 @@ export const getPlatformSpecificValues = (
         wingValues
       );
     }
-  } else if (wingValuesFile && wingValuesFile.length !== 0) {
-    result = getPlatformSpecificValuesFromFile(scope.node.path, wingValuesFile);
+  } else if (wingValues && wingValues.length !== 0 && (wingValues.indexOf(".yaml") > -1 || wingValues.indexOf(".yml") > -1)) {
+    result = getPlatformSpecificValuesFromFile(scope.node.path, wingValues);
   }
 
   let errors: Array<String> = new Array<String>();
