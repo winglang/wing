@@ -1232,9 +1232,9 @@ importers:
       jsonschema:
         specifier: ^1.4.1
         version: 1.4.1
-      mime-types:
-        specifier: ^2.1.35
-        version: 2.1.35
+      mime:
+        specifier: ^3.0.0
+        version: 3.0.0
       nanoid:
         specifier: ^3.3.6
         version: 3.3.6
@@ -1257,9 +1257,9 @@ importers:
       '@types/fs-extra':
         specifier: ^11.0.1
         version: 11.0.2
-      '@types/mime-types':
-        specifier: ^2.1.1
-        version: 2.1.2
+      '@types/mime':
+        specifier: ^3.0.2
+        version: 3.0.2
       '@types/node':
         specifier: ^18
         version: 18.18.4
@@ -13414,7 +13414,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20231016
+      typescript: 5.3.0-dev.20231018
     dev: true
 
   /dset@3.1.2:
@@ -22869,8 +22869,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20231016:
-    resolution: {integrity: sha512-1NaopFFSKTDFUHEkuN7xJfPMwXZFd1g+wKuMu2eh3rDHN7lhQMGDU08D2CnlLYK2xfNjgeb5qAWXQAdMbRLn3A==}
+  /typescript@5.3.0-dev.20231018:
+    resolution: {integrity: sha512-qBPaVi+ntB9Ys4T3uP1ZYCtxFWIV/1ieooBDhFEd8nw4IqAoB/Us7XobF3xb756bnX8cS/zIt9fgukde4MG4bA==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

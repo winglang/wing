@@ -18,7 +18,7 @@
       "type": "build"
     },
     {
-      "name": "@types/mime-types",
+      "name": "@types/mime",
       "type": "build"
     },
     {
@@ -293,7 +293,7 @@
       "type": "bundled"
     },
     {
-      "name": "mime-types",
+      "name": "mime",
       "type": "bundled"
     },
     {
@@ -312,11 +312,6 @@
     {
       "name": "yaml",
       "type": "bundled"
-    },
-    {
-      "name": "mime",
-      "version": "^1.4.0",
-      "type": "override"
     },
     {
       "name": "constructs",

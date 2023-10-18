@@ -203,7 +203,7 @@ module.exports = function({ $config, $htmlContent, $http_Util, $indexFile, $othe
           }
         },
         "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
-        "content_type": "text/html; charset=utf-8",
+        "content_type": "text/html",
         "depends_on": [
           "aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355"
         ],
@@ -219,7 +219,7 @@ module.exports = function({ $config, $htmlContent, $http_Util, $indexFile, $othe
           }
         },
         "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
-        "content_type": "text/html; charset=utf-8",
+        "content_type": "text/html",
         "depends_on": [
           "aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355"
         ],

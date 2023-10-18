@@ -3,7 +3,7 @@ import { extname, join, resolve } from "path";
 
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
-import mime from "mime-types";
+import mime from "mime";
 import { createEncryptedBucket } from "./bucket";
 import { core } from "..";
 import { CloudfrontDistribution } from "../.gen/providers/aws/cloudfront-distribution";
@@ -185,7 +185,7 @@ export class Website extends cloud.Website {
       bucket: this.bucket.bucket,
       source: normalizedFullPath,
       sourceHash: Fn.filemd5(normalizedFullPath),
-      contentType: mime.contentType(extname(filePath)) || undefined,
+      contentType: mime.getType(extname(filePath)) || undefined,
     });
   }
 

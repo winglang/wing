@@ -70,7 +70,7 @@ const project = new cdk.JsiiProject({
     // the following 2 deps are required by @aws-sdk/util-utf8-node
     "@aws-sdk/util-buffer-from@3.208.0",
     "@aws-sdk/is-array-buffer@3.201.0",
-    "mime-types",
+    "mime",
     // azure client dependencies
     "@azure/storage-blob@12.14.0",
     "@azure/identity@3.1.3",
@@ -95,7 +95,7 @@ const project = new cdk.JsiiProject({
     "bump-pack",
     "@types/aws-lambda",
     "@types/fs-extra",
-    "@types/mime-types",
+    "@types/mime",
     "mock-gcs@^1.0.0",
     "@types/express",
     "aws-sdk-client-mock",
@@ -364,8 +364,6 @@ new JsonFile(project, "cdktf.json", {
 project.gitignore.addPatterns("src/.gen");
 
 project.preCompileTask.exec("cdktf get --force");
-
-project.package.addPackageResolutions("mime@^1.4.0");
 
 project.tryRemoveFile(".npmrc");
 

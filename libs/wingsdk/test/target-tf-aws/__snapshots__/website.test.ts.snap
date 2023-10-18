@@ -117,7 +117,7 @@ exports[`default website behavior 1`] = `
     "aws_s3_object": {
       "Website_File--bhtml_6ACC0793": {
         "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
-        "content_type": "text/html; charset=utf-8",
+        "content_type": "text/html",
         "depends_on": [
           "aws_s3_bucket.Website_WebsiteBucket_3C0321F0",
         ],
@@ -127,7 +127,7 @@ exports[`default website behavior 1`] = `
       },
       "Website_File--indexhtml_864F8C36": {
         "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
-        "content_type": "text/html; charset=utf-8",
+        "content_type": "text/html",
         "depends_on": [
           "aws_s3_bucket.Website_WebsiteBucket_3C0321F0",
         ],
@@ -137,7 +137,7 @@ exports[`default website behavior 1`] = `
       },
       "Website_File--inner-folder--ahtml_7D20A7EF": {
         "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
-        "content_type": "text/html; charset=utf-8",
+        "content_type": "text/html",
         "depends_on": [
           "aws_s3_bucket.Website_WebsiteBucket_3C0321F0",
         ],
@@ -428,7 +428,7 @@ exports[`website with addFile 1`] = `
     "aws_s3_object": {
       "Website_File--bhtml_6ACC0793": {
         "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
-        "content_type": "text/html; charset=utf-8",
+        "content_type": "text/html",
         "depends_on": [
           "aws_s3_bucket.Website_WebsiteBucket_3C0321F0",
         ],
@@ -438,7 +438,7 @@ exports[`website with addFile 1`] = `
       },
       "Website_File--indexhtml_864F8C36": {
         "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
-        "content_type": "text/html; charset=utf-8",
+        "content_type": "text/html",
         "depends_on": [
           "aws_s3_bucket.Website_WebsiteBucket_3C0321F0",
         ],
@@ -448,7 +448,7 @@ exports[`website with addFile 1`] = `
       },
       "Website_File--inner-folder--ahtml_7D20A7EF": {
         "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
-        "content_type": "text/html; charset=utf-8",
+        "content_type": "text/html",
         "depends_on": [
           "aws_s3_bucket.Website_WebsiteBucket_3C0321F0",
         ],
@@ -756,7 +756,7 @@ exports[`website with addJson 1`] = `
     "aws_s3_object": {
       "Website_File--bhtml_6ACC0793": {
         "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
-        "content_type": "text/html; charset=utf-8",
+        "content_type": "text/html",
         "depends_on": [
           "aws_s3_bucket.Website_WebsiteBucket_3C0321F0",
         ],
@@ -766,7 +766,7 @@ exports[`website with addJson 1`] = `
       },
       "Website_File--indexhtml_864F8C36": {
         "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
-        "content_type": "text/html; charset=utf-8",
+        "content_type": "text/html",
         "depends_on": [
           "aws_s3_bucket.Website_WebsiteBucket_3C0321F0",
         ],
@@ -776,7 +776,7 @@ exports[`website with addJson 1`] = `
       },
       "Website_File--inner-folder--ahtml_7D20A7EF": {
         "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
-        "content_type": "text/html; charset=utf-8",
+        "content_type": "text/html",
         "depends_on": [
           "aws_s3_bucket.Website_WebsiteBucket_3C0321F0",
         ],

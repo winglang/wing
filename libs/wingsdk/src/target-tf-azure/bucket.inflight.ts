@@ -4,7 +4,7 @@ import {
   BlobServiceClient,
   ContainerClient,
 } from "@azure/storage-blob";
-import mime from "mime-types";
+import mime from "mime";
 import {
   IBucketClient,
   ObjectMetadata,
@@ -68,7 +68,8 @@ export class BucketClient implements IBucketClient {
     const options = {
       blobHTTPHeaders: {
         blobContentType:
-          (opts?.contentType ?? mime.lookup(key)) || "application/octet-stream",
+          (opts?.contentType ?? mime.getType(key)) ||
+          "application/octet-stream",
       },
     };
     await blobClient.upload(body, body.length, options);
