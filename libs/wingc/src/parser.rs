@@ -768,7 +768,18 @@ impl<'s> Parser<'s> {
 			}
 		}
 
-		let access_modifier = self.build_access_modifier(statement_node.child_by_field_name("access_modifier"))?;
+		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
+		let access_modifier = self.build_access_modifier(access_modifier_node)?;
+		match access_modifier {
+			AccessModifier::Private => {} // OK
+			AccessModifier::Public => {}  // OK
+			AccessModifier::Protected => {
+				self.with_error::<Node>(
+					"Structs must be public (\"pub\") or private",
+					&access_modifier_node.expect("access modifier node"),
+				)?;
+			}
+		};
 
 		Ok(StmtKind::Struct {
 			name,
@@ -1003,7 +1014,18 @@ impl<'s> Parser<'s> {
 			}
 		}
 
-		let access_modifier = self.build_access_modifier(statement_node.child_by_field_name("access_modifier"))?;
+		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
+		let access_modifier = self.build_access_modifier(access_modifier_node)?;
+		match access_modifier {
+			AccessModifier::Private => {} // OK
+			AccessModifier::Public => {}  // OK
+			AccessModifier::Protected => {
+				self.with_error::<Node>(
+					"Enums must be public (\"pub\") or private",
+					&access_modifier_node.expect("access modifier node"),
+				)?;
+			}
+		};
 
 		Ok(StmtKind::Enum {
 			name: name.unwrap(),
@@ -1270,7 +1292,18 @@ impl<'s> Parser<'s> {
 			}
 		}
 
-		let access_modifier = self.build_access_modifier(statement_node.child_by_field_name("access_modifier"))?;
+		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
+		let access_modifier = self.build_access_modifier(access_modifier_node)?;
+		match access_modifier {
+			AccessModifier::Private => {} // OK
+			AccessModifier::Public => {}  // OK
+			AccessModifier::Protected => {
+				self.with_error::<Node>(
+					"Classes must be public (\"pub\") or private",
+					&access_modifier_node.expect("access modifier node"),
+				)?;
+			}
+		};
 
 		Ok(StmtKind::Class(Class {
 			name,
@@ -1352,7 +1385,18 @@ impl<'s> Parser<'s> {
 			}
 		}
 
-		let access_modifier = self.build_access_modifier(statement_node.child_by_field_name("access_modifier"))?;
+		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
+		let access_modifier = self.build_access_modifier(access_modifier_node)?;
+		match access_modifier {
+			AccessModifier::Private => {} // OK
+			AccessModifier::Public => {}  // OK
+			AccessModifier::Protected => {
+				self.with_error::<Node>(
+					"Interfaces must be public (\"pub\") or private",
+					&access_modifier_node.expect("access modifier node"),
+				)?;
+			}
+		};
 
 		Ok(StmtKind::Interface(Interface {
 			name,
