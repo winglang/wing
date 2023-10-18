@@ -46,3 +46,35 @@ export interface VisualModel {
    */
   readonly components: VisualModelComponent[];
 }
+
+/**
+ * Visual Model Builder. Used to build a visual model.
+ */
+export class VisualModelBuilder {
+  private readonly components: VisualModelComponent[] = [];
+
+  /**
+   * Adds a link component to the visual model.
+   * @param href
+   * @param text
+   */
+  public addLink(href: string, text: string): void {
+    this.components.push({
+      type: ComponentType.LINK,
+      props: {
+        href,
+        text,
+      },
+    });
+  }
+
+  /**
+   * Builds the visual model.
+   * @returns the visual model.
+   */
+  public buildVisualModel(): VisualModel {
+    return {
+      components: this.components,
+    };
+  }
+}

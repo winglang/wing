@@ -12,7 +12,7 @@ import {
   ISimulatorContext,
   ISimulatorResourceInstance,
 } from "../simulator/simulator";
-import { ComponentType, VisualModel, TraceType, LinkComponent } from "../std";
+import { VisualModel, TraceType, VisualModelBuilder } from "../std";
 
 const LOCALHOST_ADDRESS = "127.0.0.1";
 
@@ -83,17 +83,10 @@ export class Website implements IWebsiteClient, ISimulatorResourceInstance {
     });
   }
 
+  // todo [sa] remove - just for testing
   public async visualModel(): Promise<VisualModel | undefined> {
-    return {
-      components: [
-        {
-          type: ComponentType.LINK,
-          props: {
-            href: this.url ?? "http://boom",
-            text: "Website",
-          } as LinkComponent,
-        },
-      ],
-    };
+    const builder = new VisualModelBuilder();
+    builder.addLink(this.url ?? "http://boom", "Website");
+    return builder.buildVisualModel();
   }
 }
