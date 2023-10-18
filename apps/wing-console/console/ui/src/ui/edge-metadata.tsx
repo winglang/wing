@@ -14,7 +14,7 @@ import {
 import classNames from "classnames";
 import { useMemo, useState } from "react";
 
-import { MetadataNode } from "./resource-metadata.js";
+import { MetadataNode } from "./resource-metadata-panel.js";
 
 export interface EdgeMetadataProps {
   source: MetadataNode;

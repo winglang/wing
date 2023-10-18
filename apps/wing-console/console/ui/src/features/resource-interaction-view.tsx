@@ -1,6 +1,7 @@
 import { ApiInteractionView } from "./api-interaction-view.js";
 import { BucketInteractionView } from "./bucket-interaction-view.js";
 import { CounterInteractionView } from "./counter-interaction-view.js";
+import { CustomResourceInteractionView } from "./custom-resource-interaction-view.js";
 import { DynamodbTableInteractionView } from "./dynamodb-table-interaction-view.js";
 import { FunctionInteractionView } from "./function-interaction-view.js";
 import { QueueInteractionView } from "./queue-interaction-view.js";
@@ -55,7 +56,12 @@ export const ResourceInteractionView = ({
         return <DynamodbTableInteractionView resourcePath={resourcePath} />;
       }
       default: {
-        return <UnsupportedInteractionView resourceType={resourceType} />;
+        return (
+          <CustomResourceInteractionView
+            resourceType={resourceType}
+            resourcePath={resourcePath}
+          />
+        );
       }
     }
   };

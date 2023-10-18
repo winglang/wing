@@ -9,6 +9,7 @@ import { createDynamodbTableRouter } from "./dynamodb-table.js";
 import { createFunctionRouter } from "./function.js";
 import { createQueueRouter } from "./queue.js";
 import { createRedisRouter } from "./redis.js";
+import { createResourceRouter } from "./resource.js";
 import { createTableRouter } from "./table.js";
 import { createTestRouter } from "./test.js";
 import { createTopicRouter } from "./topic.js";
@@ -33,6 +34,7 @@ export const mergeAllRouters = () => {
     createWebsiteRouter(),
     createConfigRouter(),
     createDynamodbTableRouter(),
+    createResourceRouter(),
   );
 
   return { router };

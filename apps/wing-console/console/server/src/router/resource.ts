@@ -1,11 +1,11 @@
+import { IWebsiteClient } from "@winglang/sdk/lib/cloud";
 import { z } from "zod";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import { WebsiteSchema, IWebsiteClient } from "../wingsdk.js";
 
-export const createWebsiteRouter = () => {
+export const createResourceRouter = () => {
   return createRouter({
-    "website.url": createProcedure
+    "resource.visualModel": createProcedure
       .input(
         z.object({
           resourcePath: z.string(),
@@ -13,13 +13,13 @@ export const createWebsiteRouter = () => {
       )
       .query(async ({ input, ctx }) => {
         const simulator = await ctx.simulator();
-        const config = simulator.getResourceConfig(
+        const client = simulator.getResource(
           input.resourcePath,
-        ) as WebsiteSchema;
-        if (!config || !config.attrs?.url) {
-          return "";
+        ) as IWebsiteClient;
+        if (!client) {
+          return;
         }
-        return config.attrs.url;
+        return await client.visualModel();
       }),
   });
 };
