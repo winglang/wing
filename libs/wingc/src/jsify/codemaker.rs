@@ -70,6 +70,11 @@ impl CodeMaker {
 		code.line(s);
 		code
 	}
+
+	/// Checks if there are no lines of code
+	pub fn is_empty(&self) -> bool {
+		self.lines.is_empty()
+	}
 }
 
 impl ToString for CodeMaker {

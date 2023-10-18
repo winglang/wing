@@ -628,7 +628,7 @@ return class Handler {
   }
   async handle() {
           
-    return typeof fetch;
+    return fetch;
   
         }
 };
@@ -648,7 +648,7 @@ return class Handler {
   async handle() {
           
     const c = require(\\"crypto\\");
-    return typeof c.createHash;
+    return c.createHash;
   
         }
 };

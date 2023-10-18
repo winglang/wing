@@ -126,16 +126,16 @@ const contributes: VSCodeExtensionContributions = {
       command: "wing.openConsole",
       title: "Open in Wing Console",
       icon: {
-        light: "resources/winglang-symbol-light.svg",
-        dark: "resources/winglang-symbol-dark.svg",
+        light: "resources/icon-light.svg",
+        dark: "resources/icon-dark.svg",
       },
     },
     {
       command: "wing.openFile",
       title: "Open source file",
       icon: {
-        light: "resources/winglang-symbol-light.svg",
-        dark: "resources/winglang-symbol-dark.svg",
+        light: "resources/icon-light.svg",
+        dark: "resources/icon-dark.svg",
       },
     },
     {

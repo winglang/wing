@@ -3,7 +3,7 @@ import { join } from "path";
 import { directorySnapshot, mkdtemp } from "./util";
 import { Function, IFunctionClient } from "../src/cloud";
 import { Simulator, Testing } from "../src/simulator";
-import * as sim from "../src/target-sim";
+import { App } from "../src/target-sim/app";
 
 /**
  * A simulated app.
@@ -12,7 +12,7 @@ import * as sim from "../src/target-sim";
  * and then call `app.startSimulator()` to start an instance of this app inside
  * a cloud simulator.
  */
-export class SimApp extends sim.App {
+export class SimApp extends App {
   private _synthesized: boolean = false;
   private functionIndex: number = 0;
 

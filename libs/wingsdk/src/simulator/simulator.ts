@@ -1,12 +1,5 @@
 import { existsSync } from "fs";
-import { Server } from "http";
-import { AddressInfo } from "net";
 import { join } from "path";
-import {
-  deserializeValue,
-  makeSimulatorClient,
-  serializeValue,
-} from "./client";
 import { Tree } from "./tree";
 import { SDK_VERSION } from "../constants";
 import { ConstructTree, TREE_FILE_PATH } from "../core";
@@ -17,8 +10,6 @@ import { DefaultSimulatorFactory } from "../target-sim/factory.inflight";
 import { isToken } from "../target-sim/tokens";
 
 const START_ATTEMPT_COUNT = 10;
-
-const LOCALHOST_ADDRESS = "127.0.0.1";
 
 /**
  * Props for `Simulator`.
@@ -87,11 +78,6 @@ export interface ISimulatorContext {
   readonly resourcePath: string;
 
   /**
-   * The url that the simulator server is listening on.
-   */
-  readonly serverUrl: string;
-
-  /**
    * Find a resource simulation by its handle. Throws if the handle isn't valid.
    */
   findInstance(handle: string): ISimulatorResourceInstance;
@@ -113,6 +99,19 @@ export interface ISimulatorContext {
    * Get a list of all traces until this point.
    */
   listTraces(): Trace[];
+
+  /**
+   * Sets the runtime attributes of a resource.
+   * @param path The resource path
+   * @param attrs Attributes to set (will be merged with existing attributes)
+   */
+  setResourceAttributes(path: string, attrs: Record<string, any>): void;
+
+  /**
+   * Returns the runtime attributes of a resource.
+   * @param path The resource path
+   */
+  resourceAttributes(path: string): Record<string, any>;
 }
 
 /**
@@ -141,8 +140,6 @@ export class Simulator {
   private readonly _traceSubscribers: Array<ITraceSubscriber>;
   private _tree: Tree;
   private _connections: ConnectionData[];
-  private _serverUrl: string | undefined;
-  private _server: Server | undefined;
 
   constructor(props: SimulatorProps) {
     this.simdir = props.simfile;
@@ -219,8 +216,6 @@ export class Simulator {
       ...this._config.resources,
     ];
 
-    await this.startServer();
-
     while (true) {
       const next = initQueue.shift();
       if (!next) {
@@ -247,69 +242,6 @@ export class Simulator {
     }
 
     this._running = true;
-  }
-
-  /**
-   * Start a server that allows any resource to be accessed via HTTP.
-   */
-  public async startServer(): Promise<void> {
-    // import lazily to reduce SDK import time (20ms or so)
-    const express = await import("express").then((m) => m.default);
-    const app = express();
-    app.use(express.json());
-
-    app.post("/v1/call", async (req, res, next) => {
-      try {
-        let request: SimulatorServerRequest = deserializeValue(
-          JSON.stringify(req.body)
-        );
-
-        const { handle, method, args } = request;
-        const resource = this._handles.find(handle);
-
-        try {
-          const result = await (resource as any)[method](...args);
-          res
-            .status(200)
-            .json(
-              JSON.parse(serializeValue({ result })) as SimulatorServerResponse
-            );
-        } catch (err) {
-          if (err instanceof Error) {
-            res.status(500).json({
-              error: err.stack ?? err.message,
-            } as SimulatorServerResponse);
-          } else {
-            res.status(500).json({ error: err } as SimulatorServerResponse);
-          }
-        }
-      } catch (err) {
-        return next(err);
-      }
-    });
-
-    const addrInfo: AddressInfo = await new Promise((resolve, reject) => {
-      this._server = app.listen(0, LOCALHOST_ADDRESS, () => {
-        const addr = this._server?.address();
-        if (addr && typeof addr === "object" && (addr as any).port) {
-          resolve(addr);
-        } else {
-          reject(new Error("No address found"));
-        }
-      });
-    });
-
-    this._serverUrl = `http://${addrInfo.address}:${addrInfo.port}`;
-  }
-
-  /**
-   * The URL that the simulator server is listening on.
-   */
-  public get url(): string {
-    if (!this._serverUrl) {
-      throw new Error("Simulator server is not running.");
-    }
-    return this._serverUrl;
   }
 
   /**
@@ -346,9 +278,6 @@ export class Simulator {
       this._addTrace(event);
     }
 
-    this._server!.close();
-    this._server!.closeAllConnections();
-
     this._handles.reset();
     this._running = false;
   }
@@ -383,28 +312,28 @@ export class Simulator {
   }
 
   /**
-   * Get a resource client.
+   * Get a simulated resource instance.
    * @returns the resource
    */
   public getResource(path: string): any {
-    const client = this.tryGetResource(path);
-    if (!client) {
+    const handle = this.tryGetResource(path);
+    if (!handle) {
       throw new Error(`Resource "${path}" not found.`);
     }
-    return client;
+    return handle;
   }
 
   /**
-   * Get a resource client.
+   * Get a simulated resource instance.
    * @returns The resource of undefined if not found
    */
   public tryGetResource(path: string): any | undefined {
-    const handle: string = this.tryGetResourceConfig(path)?.attrs.handle;
+    const handle = this.tryGetResourceConfig(path)?.attrs.handle;
     if (!handle) {
       return undefined;
     }
 
-    return makeSimulatorClient(this.url, handle);
+    return this._handles.find(handle);
   }
 
   /**
@@ -459,10 +388,7 @@ export class Simulator {
   ): Promise<boolean> {
     const context = this.createContext(resourceConfig);
 
-    const resolvedProps = this.tryResolveTokens(
-      resourceConfig.props,
-      resourceConfig.path
-    );
+    const resolvedProps = this.tryResolveTokens(resourceConfig.props);
     if (resolvedProps === undefined) {
       this._addTrace({
         type: TraceType.RESOURCE,
@@ -479,6 +405,7 @@ export class Simulator {
 
     // create the resource based on its type
     const resourceObject = this._factory.resolve(
+      resourceConfig.path,
       resourceConfig.type,
       resolvedProps,
       context
@@ -491,7 +418,7 @@ export class Simulator {
     const handle = this._handles.allocate(resourceObject);
 
     // update the resource configuration with new attrs returned after initialization
-    (resourceConfig as any).attrs = { ...attrs, handle };
+    context.setResourceAttributes(resourceConfig.path, { ...attrs, handle });
 
     // trace the resource creation
     this._addTrace({
@@ -506,14 +433,9 @@ export class Simulator {
   }
 
   private createContext(resourceConfig: BaseResourceSchema): ISimulatorContext {
-    const serverUrl = this._serverUrl;
-    if (!serverUrl) {
-      throw new Error("Simulator server is not running.");
-    }
     return {
       simdir: this.simdir,
       resourcePath: resourceConfig.path,
-      serverUrl,
       findInstance: (handle: string) => {
         return this._handles.find(handle);
       },
@@ -550,6 +472,14 @@ export class Simulator {
       listTraces: () => {
         return [...this._traces];
       },
+      setResourceAttributes: (path: string, attrs: Record<string, any>) => {
+        const config = this.getResourceConfig(path);
+        const prev = config.attrs;
+        (config as any).attrs = { ...prev, ...attrs };
+      },
+      resourceAttributes: (path: string) => {
+        return this.getResourceConfig(path).attrs;
+      },
     };
   }
 
@@ -572,11 +502,10 @@ export class Simulator {
    * Tokens can also be nested, like "${app/my_bucket#attrs.handle}/foo/bar".
    *
    * @param obj The object to resolve tokens in.
-   * @param source The path of the resource that requested the token to be resolved.
    * @returns `undefined` if the token could not be resolved (e.g. needs a dependency), otherwise
    * the resolved value.
    */
-  private tryResolveTokens(obj: any, source: string): any {
+  private tryResolveTokens(obj: any): any {
     if (typeof obj === "string") {
       if (isToken(obj)) {
         const ref = obj.slice(2, -1);
@@ -611,7 +540,7 @@ export class Simulator {
     if (Array.isArray(obj)) {
       const result = [];
       for (const x of obj) {
-        const value = this.tryResolveTokens(x, source);
+        const value = this.tryResolveTokens(x);
         if (value === undefined) {
           return undefined;
         }
@@ -624,7 +553,7 @@ export class Simulator {
     if (typeof obj === "object") {
       const ret: any = {};
       for (const [key, value] of Object.entries(obj)) {
-        const resolved = this.tryResolveTokens(value, source);
+        const resolved = this.tryResolveTokens(value);
         if (resolved === undefined) {
           return undefined;
         }
@@ -645,6 +574,7 @@ export interface ISimulatorFactory {
    * Resolve the parameters needed for creating a specific resource simulation.
    */
   resolve(
+    path: string,
     type: string,
     props: any,
     context: ISimulatorContext
@@ -741,28 +671,4 @@ export interface ConnectionData {
   readonly target: string;
   /** A name for the connection. */
   readonly name: string;
-}
-
-/**
- * Internal schema for requests to the simulator server's /call endpoint.
- * Subject to breaking changes.
- */
-export interface SimulatorServerRequest {
-  /** The resource handle (an ID unique among resources in the simulation). */
-  readonly handle: string;
-  /** The method to call on the resource. */
-  readonly method: string;
-  /** The arguments to the method. */
-  readonly args: any[];
-}
-
-/**
- * Internal schema for responses from the simulator server's /call endpoint.
- * Subject to breaking changes.
- */
-export interface SimulatorServerResponse {
-  /** The result of the method call. */
-  readonly result?: any;
-  /** The error that occurred during the method call. */
-  readonly error?: any;
 }

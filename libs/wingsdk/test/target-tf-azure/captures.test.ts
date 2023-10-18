@@ -41,6 +41,7 @@ test("function with a bucket binding requiring read_write", () => {
   ).toEqual(true);
   expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
   expect(tfResourcesOf(output)).toEqual([
+    "azurerm_application_insights",
     "azurerm_linux_function_app",
     "azurerm_resource_group",
     "azurerm_role_assignment",
@@ -99,6 +100,7 @@ test("function with a bucket binding requiring only read", () => {
 
   expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
   expect(tfResourcesOf(output)).toEqual([
+    "azurerm_application_insights",
     "azurerm_linux_function_app",
     "azurerm_resource_group",
     "azurerm_role_assignment",
