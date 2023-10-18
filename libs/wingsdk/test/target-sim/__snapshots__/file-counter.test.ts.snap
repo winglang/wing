@@ -121,7 +121,7 @@ bucket: (function(env) {
         "path": "root/HelloWorld/Queue",
         "props": {
           "retentionPeriod": 3600,
-          "timeout": 10,
+          "timeout": 30,
         },
         "type": "wingsdk.cloud.Queue",
       },

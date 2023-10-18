@@ -21,7 +21,7 @@ exports[`create a queue 2`] = `
         "path": "root/my_queue",
         "props": {
           "retentionPeriod": 3600,
-          "timeout": 10,
+          "timeout": 30,
         },
         "type": "wingsdk.cloud.Queue",
       },
@@ -669,7 +669,7 @@ exports[`push rejects empty message 2`] = `
         "path": "root/my_queue",
         "props": {
           "retentionPeriod": 3600,
-          "timeout": 10,
+          "timeout": 30,
         },
         "type": "wingsdk.cloud.Queue",
       },
@@ -752,7 +752,7 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "path": "root/my_queue",
         "props": {
           "retentionPeriod": 3600,
-          "timeout": 10,
+          "timeout": 30,
         },
         "type": "wingsdk.cloud.Queue",
       },
@@ -906,7 +906,7 @@ async handle(message) {
         "path": "root/my_queue",
         "props": {
           "retentionPeriod": 3600,
-          "timeout": 10,
+          "timeout": 30,
         },
         "type": "wingsdk.cloud.Queue",
       },
@@ -1145,7 +1145,7 @@ async handle(message) {
         "path": "root/my_queue",
         "props": {
           "retentionPeriod": 3600,
-          "timeout": 10,
+          "timeout": 30,
         },
         "type": "wingsdk.cloud.Queue",
       },

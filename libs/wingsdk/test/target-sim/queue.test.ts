@@ -49,7 +49,7 @@ test("create a queue", async () => {
       "path": "root/my_queue",
       "props": {
         "retentionPeriod": 3600,
-        "timeout": 10,
+        "timeout": 30,
       },
       "type": "wingsdk.cloud.Queue",
     }
