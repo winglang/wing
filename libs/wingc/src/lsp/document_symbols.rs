@@ -2,7 +2,7 @@ use crate::ast::*;
 use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};
 use crate::lsp::sync::PROJECT_DATA;
 use crate::visit::Visit;
-use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
+use crate::wasm_util::extern_json_fn;
 use lsp_types::{DocumentSymbol, SymbolKind};
 
 use super::sync::check_utf8;
@@ -82,15 +82,7 @@ impl Visit<'_> for DocumentSymbolVisitor {
 
 #[no_mangle]
 pub unsafe extern "C" fn wingc_on_document_symbol(ptr: u32, len: u32) -> u64 {
-	let parse_string = ptr_to_string(ptr, len);
-	if let Ok(parsed) = serde_json::from_str(&parse_string) {
-		let doc_symbols = on_document_symbols(parsed);
-		let result = serde_json::to_string(&doc_symbols).expect("Failed to serialize DocumentSymbol response");
-
-		string_to_combined_ptr(result)
-	} else {
-		WASM_RETURN_ERROR
-	}
+	extern_json_fn(ptr, len, on_document_symbols)
 }
 
 pub fn on_document_symbols(params: lsp_types::DocumentSymbolParams) -> Vec<DocumentSymbol> {
