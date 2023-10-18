@@ -15,13 +15,13 @@ export const QUEUE_FQN = fqnForType("cloud.Queue");
 export interface QueueProps {
   /**
    * How long a queue's consumers have to process a message.
-   * @default undefined
+   * @default 30s
    */
   readonly timeout?: Duration;
 
   /**
    * How long a queue retains a message.
-   * @default undefined
+   * @default 1h
    */
   readonly retentionPeriod?: Duration;
 }

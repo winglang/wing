@@ -9558,8 +9558,8 @@ packages:
     resolution: {integrity: sha512-YATxVxgRqNH6nHEIsvg6k2Boc1JHI9ZbH5iWFFv/MTkchz3b1ieGDa5T0a9RznNdI0KhVbdbWSN+KWWrQZRxTw==}
     dev: true
 
-  /@types/mime@3.0.1:
-    resolution: {integrity: sha512-Y4XFY5VJAuw0FgAqPNd6NNoV44jbq9Bz2L7Rh/J6jLTiHBSBJa9fxqQIvkIld4GsoDOcCbvzOUAbLPsSKKg+uA==}
+  /@types/mime@3.0.2:
+    resolution: {integrity: sha512-Wj+fqpTLtTbG7c0tH47dkahefpLKEbB+xAZuLq7b4/IDHPl/n6VoXcyUQ2bypFlbSwvCr0y+bD4euTTqTJsPxQ==}
     dev: true
 
   /@types/minimatch@5.1.2:
@@ -9724,7 +9724,7 @@ packages:
     resolution: {integrity: sha512-J2LqtvFYCzaj8pVYKw8klQXrLLk7TBZmQ4ShlcdkELFKGwGMfevMLneMMRkMgZxotOD9wg497LpC7O8PcvAmfw==}
     dependencies:
       '@types/http-errors': 2.0.1
-      '@types/mime': 3.0.1
+      '@types/mime': 3.0.2
       '@types/node': 18.17.13
     dev: true
 
@@ -13275,7 +13275,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20231012
+      typescript: 5.3.0-dev.20231016
     dev: true
 
   /dset@3.1.2:
@@ -22712,8 +22712,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20231012:
-    resolution: {integrity: sha512-k/m+QK/2eVsPMAao4I28Cv2Y9WzUKFVhRqvFGZ3CIXc0lrMkw/1pSA+8tp7IMw1ecxoa1myFql1tmCUrMKCbzA==}
+  /typescript@5.3.0-dev.20231016:
+    resolution: {integrity: sha512-1NaopFFSKTDFUHEkuN7xJfPMwXZFd1g+wKuMu2eh3rDHN7lhQMGDU08D2CnlLYK2xfNjgeb5qAWXQAdMbRLn3A==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

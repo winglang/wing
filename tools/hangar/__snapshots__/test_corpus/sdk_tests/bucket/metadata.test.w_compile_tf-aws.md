@@ -11,12 +11,28 @@ module.exports = function({ $b }) {
       return $obj;
     }
     async handle() {
-      (await $b.put("test1.txt","Foo"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.metadata(\"test1.txt\").size == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.metadata("test1.txt")).size,3)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.metadata(\"test1.txt\").contentType == \"application/octet-stream\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.metadata("test1.txt")).contentType,"application/octet-stream")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.metadata(\"test1.txt\").lastModified.year >= 2023")})(((await $b.metadata("test1.txt")).lastModified.year >= 2023))};
+      (await $b.put("file1.main.w","Foo"));
+      (await $b.put("file2.txt","Bar"));
+      (await $b.put("file3.txt","Baz",({"contentType": "application/json"})));
+      (await $b.putJson("file4.txt","Qux"));
+      const file1Metadata = (await $b.metadata("file1.main.w"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: file1Metadata.size == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(file1Metadata.size,3)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: file1Metadata.contentType == \"application/octet-stream\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(file1Metadata.contentType,"application/octet-stream")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: file1Metadata.lastModified.year >= 2023")})((file1Metadata.lastModified.year >= 2023))};
+      const file2Metadata = (await $b.metadata("file2.txt"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: file2Metadata.size == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(file2Metadata.size,3)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: file2Metadata.contentType == \"text/plain\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(file2Metadata.contentType,"text/plain")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: file2Metadata.lastModified.year >= 2023")})((file2Metadata.lastModified.year >= 2023))};
+      const file3Metadata = (await $b.metadata("file3.txt"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: file3Metadata.size == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(file3Metadata.size,3)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: file3Metadata.contentType == \"application/json\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(file3Metadata.contentType,"application/json")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: file3Metadata.lastModified.year >= 2023")})((file3Metadata.lastModified.year >= 2023))};
+      const file4Metadata = (await $b.metadata("file4.txt"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: file4Metadata.size == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(file4Metadata.size,5)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: file4Metadata.contentType == \"application/json\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(file4Metadata.contentType,"application/json")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: file4Metadata.lastModified.year >= 2023")})((file4Metadata.lastModified.year >= 2023))};
       try {
-        (await $b.metadata("no-such-file.txt")).lastModified;
+        (await $b.metadata("no-such-file.txt"));
       }
       catch ($error_e) {
         const e = $error_e.message;
@@ -115,13 +131,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(b, host, ["metadata", "put"]);
+          $Closure1._registerBindObject(b, host, ["metadata", "put", "putJson"]);
         }
         super._registerBind(host, ops);
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:metadata",new $Closure1(this,"$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:metadata()",new $Closure1(this,"$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

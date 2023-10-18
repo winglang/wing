@@ -357,9 +357,17 @@ where
 {
 	New {
 		class: f.fold_user_defined_type(node.class),
-		obj_id: node.obj_id,
+		obj_id: if let Some(obj_id) = node.obj_id {
+			Some(Box::new(f.fold_expr(*obj_id)))
+		} else {
+			None
+		},
 		arg_list: f.fold_args(node.arg_list),
-		obj_scope: node.obj_scope,
+		obj_scope: if let Some(obj_scope) = node.obj_scope {
+			Some(Box::new(f.fold_expr(*obj_scope)))
+		} else {
+			None
+		},
 	}
 }
 

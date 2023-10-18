@@ -102,10 +102,9 @@ pub fn set_custom_panic_hook() {
 
 		report_diagnostic(Diagnostic {
 			message: format!(
-				"Compiler bug ('{}' at {}) during {}, please report at https://www.winglang.io/contributing/start-here/bugs",
-				pi.payload().downcast_ref::<&str>().unwrap_or(&""),
-				pi.location().unwrap_or(&std::panic::Location::caller()),
-				CompilationContext::get_phase()
+				"Compiler bug during {} ('{}'), please report at https://www.winglang.io/contributing/start-here/bugs",
+				CompilationContext::get_phase(),
+				pi,
 			),
 			span: Some(CompilationContext::get_span()),
 			annotations: vec![],
