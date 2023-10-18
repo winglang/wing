@@ -1,4 +1,4 @@
-import { ComponentType, VisualModelComponent } from "@wingconsole/server";
+import { VisualModelComponent } from "@wingconsole/server";
 
 import { useOpenExternal } from "../services/use-open-external.js";
 import { useVisualModel } from "../services/use-visual-model.js";
@@ -20,7 +20,7 @@ export const CustomResourceInteractionView = ({
 
   const onComponentActionClick = (component: VisualModelComponent) => {
     switch (component.type) {
-      case ComponentType.LINK: {
+      case "link": {
         open(component.props.href);
       }
     }

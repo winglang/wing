@@ -1,10 +1,6 @@
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
 import { Attribute, useTheme } from "@wingconsole/design-system";
-import {
-  ComponentType,
-  VisualModel,
-  VisualModelComponent,
-} from "@wingconsole/server";
+import { VisualModel, VisualModelComponent } from "@wingconsole/server";
 import classNames from "classnames";
 
 export interface CustomResourceInteractionProps {
@@ -22,7 +18,7 @@ export const CustomResourceInteraction = ({
   //todo [sa] move to our design system and create some sort of Components factory
   const getUIComponent = (component: VisualModelComponent) => {
     switch (component.type) {
-      case ComponentType.LINK: {
+      case "link": {
         return (
           <div className="h-full flex-1 flex flex-col text-sm space-y-1">
             <div className="relative grow flex-row flex items-center">

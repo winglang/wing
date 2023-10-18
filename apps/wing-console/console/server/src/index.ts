@@ -21,8 +21,8 @@ import { createSimulator } from "./utils/simulator.js";
 export type {
   VisualModel,
   VisualModelComponent,
+  ComponentType,
 } from "@winglang/sdk/lib/std/visual-model.js";
-export { ComponentType } from "@winglang/sdk/lib/std/visual-model.js";
 
 export type {
   TestsStateManager,

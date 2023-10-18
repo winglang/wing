@@ -1,12 +1,7 @@
 /**
  * Visual Model Component Type.
  */
-export enum ComponentType {
-  /**
-   * Link Component type.
-   */
-  LINK = "LINK",
-}
+export type ComponentType = "link";
 
 /**
  * Visual Model Component.
@@ -60,7 +55,7 @@ export class VisualModelBuilder {
    */
   public addLink(href: string, text: string): void {
     this.components.push({
-      type: ComponentType.LINK,
+      type: "link",
       props: {
         href,
         text,

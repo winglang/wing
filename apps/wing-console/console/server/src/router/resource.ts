@@ -1,4 +1,4 @@
-import { IWebsiteClient } from "@winglang/sdk/lib/cloud";
+import { IDisplayableResource } from "@winglang/sdk/lib/std";
 import { z } from "zod";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";
@@ -15,7 +15,7 @@ export const createResourceRouter = () => {
         const simulator = await ctx.simulator();
         const client = simulator.getResource(
           input.resourcePath,
-        ) as IWebsiteClient;
+        ) as IDisplayableResource;
         if (!client) {
           return;
         }
