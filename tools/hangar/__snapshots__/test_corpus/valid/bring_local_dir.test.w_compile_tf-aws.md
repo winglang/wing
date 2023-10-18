@@ -77,6 +77,7 @@ module.exports = function({  }) {
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   const blah = require("./preflight.inner-2.js")({ $stdlib });
+  const util = $stdlib.util;
   class Foo extends $stdlib.std.Resource {
     constructor(scope, id, ) {
       super(scope, id);
@@ -118,6 +119,7 @@ module.exports = function({ $stdlib }) {
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
+  const util = $stdlib.util;
   class Bar extends $stdlib.std.Resource {
     constructor(scope, id, ) {
       super(scope, id);

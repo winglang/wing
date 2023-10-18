@@ -3444,7 +3444,7 @@ impl<'a> TypeChecker<'a> {
 					AccessModifier::Public,
 					None,
 				),
-				*access_modifier,
+				AccessModifier::Public,
 				StatementIdx::Top,
 			) {
 				Err(type_error) => {
@@ -3457,12 +3457,7 @@ impl<'a> TypeChecker<'a> {
 		if let Err(e) = add_parent_members_to_struct_env(&extends_types, name, &mut struct_env) {
 			self.type_error(e);
 		}
-		match env.define(
-			name,
-			SymbolKind::Type(struct_type),
-			AccessModifier::Public,
-			StatementIdx::Top,
-		) {
+		match env.define(name, SymbolKind::Type(struct_type), *access_modifier, StatementIdx::Top) {
 			Err(type_error) => {
 				self.type_error(type_error);
 			}
@@ -3517,7 +3512,7 @@ impl<'a> TypeChecker<'a> {
 		match env.define(
 			name,
 			SymbolKind::Type(interface_type),
-			AccessModifier::Public,
+			*access_modifier,
 			StatementIdx::Top,
 		) {
 			Err(type_error) => {
@@ -3555,7 +3550,7 @@ impl<'a> TypeChecker<'a> {
 					AccessModifier::Public,
 					None,
 				),
-				*access_modifier,
+				AccessModifier::Public,
 				StatementIdx::Top,
 			) {
 				Err(type_error) => {

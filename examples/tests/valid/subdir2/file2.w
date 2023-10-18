@@ -1,6 +1,6 @@
 bring util;
 
-class Bar {
+pub class Bar {
   pub bar(): str {
     return "bar";
   }

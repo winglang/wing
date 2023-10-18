@@ -1,1 +1,1 @@
-class Foo {}
+pub class Foo {}
