@@ -222,13 +222,9 @@ export const createConsoleManager = (
         light: Uri.joinPath(
           context.extensionUri,
           "resources",
-          "winglang-symbol-light.svg"
+          "icon-light.svg"
         ),
-        dark: Uri.joinPath(
-          context.extensionUri,
-          "resources",
-          "winglang-symbol-dark.svg"
-        ),
+        dark: Uri.joinPath(context.extensionUri, "resources", "icon-dark.svg"),
       };
 
       webviewPanel.onDidDispose(async () => {

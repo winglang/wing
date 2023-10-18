@@ -17,6 +17,7 @@ import {
   ON_DEPLOY_TYPE,
   REACT_APP_TYPE,
   DYNAMODB_TABLE_TYPE,
+  SIMULATOR_STATE_TYPE,
 } from "./schema-resources";
 import type {
   ISimulatorFactory,
@@ -27,12 +28,14 @@ import type {
 export class DefaultSimulatorFactory implements ISimulatorFactory {
   /**
    * Creates a new simulator runtime resource
+   * @param path resource path
    * @param type type id
    * @param props resource properties
    * @param context simulator context
    * @returns a new instance
    */
   public resolve(
+    path: string,
     type: string,
     props: any,
     context: ISimulatorContext
@@ -91,6 +94,9 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
         const DynamodbTable =
           require("./dynamodb-table.inflight").DynamodbTable;
         return new DynamodbTable(props, context);
+      case SIMULATOR_STATE_TYPE:
+        const StateClient = require("./state.inflight").State;
+        return new StateClient(path, props, context);
       default:
         throw new Error(`Type ${type} not implemented by the simulator.`);
     }
