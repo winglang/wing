@@ -122,7 +122,7 @@ pub struct VariableInfo {
 	/// The kind of variable
 	pub kind: VariableKind,
 	/// Access rules for this variable (only applies to methods and fields)
-	pub access_modifier: AccessModifier,
+	pub access: AccessModifier,
 
 	pub docs: Option<Docs>,
 }
@@ -135,7 +135,7 @@ impl SymbolKind {
 		reassignable: bool,
 		is_static: bool,
 		phase: Phase,
-		access_modifier: AccessModifier,
+		access: AccessModifier,
 		docs: Option<Docs>,
 	) -> Self {
 		SymbolKind::Variable(VariableInfo {
@@ -148,7 +148,7 @@ impl SymbolKind {
 			} else {
 				VariableKind::InstanceMember
 			},
-			access_modifier,
+			access,
 			docs,
 		})
 	}
@@ -160,7 +160,7 @@ impl SymbolKind {
 			reassignable,
 			phase,
 			kind: VariableKind::Free,
-			access_modifier: AccessModifier::Public,
+			access: AccessModifier::Public,
 			docs: None,
 		})
 	}
@@ -1805,7 +1805,7 @@ impl<'a> TypeChecker<'a> {
 			reassignable: false,
 			phase: Phase::Independent,
 			kind: VariableKind::Error,
-			access_modifier: AccessModifier::Public,
+			access: AccessModifier::Public,
 			docs: None,
 		}
 	}
@@ -3264,16 +3264,12 @@ impl<'a> TypeChecker<'a> {
 				name,
 				extends,
 				fields,
-				access_modifier,
+				access,
 			} => {
-				tc.type_check_struct(fields, extends, name, access_modifier, env);
+				tc.type_check_struct(fields, extends, name, access, env);
 			}
-			StmtKind::Enum {
-				name,
-				values,
-				access_modifier,
-			} => {
-				tc.type_check_enum(name, values, access_modifier, env);
+			StmtKind::Enum { name, values, access } => {
+				tc.type_check_enum(name, values, access, env);
 			}
 			StmtKind::TryCatch {
 				try_statements,
@@ -3353,7 +3349,7 @@ impl<'a> TypeChecker<'a> {
 		&mut self,
 		name: &Symbol,
 		values: &IndexSet<Symbol>,
-		access_modifier: &AccessModifier,
+		access: &AccessModifier,
 		env: &mut SymbolEnv,
 	) {
 		let enum_type_ref = self.types.add_type(Type::Enum(Enum {
@@ -3362,12 +3358,7 @@ impl<'a> TypeChecker<'a> {
 			docs: Default::default(),
 		}));
 
-		match env.define(
-			name,
-			SymbolKind::Type(enum_type_ref),
-			*access_modifier,
-			StatementIdx::Top,
-		) {
+		match env.define(name, SymbolKind::Type(enum_type_ref), *access, StatementIdx::Top) {
 			Err(type_error) => {
 				self.type_error(type_error);
 			}
@@ -3380,7 +3371,7 @@ impl<'a> TypeChecker<'a> {
 		fields: &Vec<ast::StructField>,
 		extends: &Vec<UserDefinedType>,
 		name: &Symbol,
-		access_modifier: &AccessModifier,
+		access: &AccessModifier,
 		env: &mut SymbolEnv,
 	) {
 		// Note: structs don't have a parent environment, instead they flatten their parent's members into the struct's env.
@@ -3457,7 +3448,7 @@ impl<'a> TypeChecker<'a> {
 		if let Err(e) = add_parent_members_to_struct_env(&extends_types, name, &mut struct_env) {
 			self.type_error(e);
 		}
-		match env.define(name, SymbolKind::Type(struct_type), *access_modifier, StatementIdx::Top) {
+		match env.define(name, SymbolKind::Type(struct_type), *access, StatementIdx::Top) {
 			Err(type_error) => {
 				self.type_error(type_error);
 			}
@@ -3473,7 +3464,7 @@ impl<'a> TypeChecker<'a> {
 			name,
 			extends,
 			methods,
-			access_modifier,
+			access,
 		} = ast_iface;
 		// Create environment representing this interface, for now it'll be empty just so we can support referencing ourselves from the interface definition.
 		let dummy_env = SymbolEnv::new(
@@ -3509,12 +3500,7 @@ impl<'a> TypeChecker<'a> {
 			extends: extend_interfaces.clone(),
 		};
 		let mut interface_type = self.types.add_type(Type::Interface(interface_spec));
-		match env.define(
-			name,
-			SymbolKind::Type(interface_type),
-			*access_modifier,
-			StatementIdx::Top,
-		) {
+		match env.define(name, SymbolKind::Type(interface_type), *access, StatementIdx::Top) {
 			Err(type_error) => {
 				self.type_error(type_error);
 			}
@@ -3621,7 +3607,7 @@ impl<'a> TypeChecker<'a> {
 		match env.define(
 			&ast_class.name,
 			SymbolKind::Type(class_type),
-			ast_class.access_modifier,
+			ast_class.access,
 			StatementIdx::Top,
 		) {
 			Err(type_error) => {
@@ -3644,10 +3630,10 @@ impl<'a> TypeChecker<'a> {
 					field.reassignable,
 					field.is_static,
 					field.phase,
-					field.access_modifier,
+					field.access,
 					None,
 				),
-				field.access_modifier,
+				field.access,
 				StatementIdx::Top,
 			) {
 				Err(type_error) => {
@@ -3663,7 +3649,7 @@ impl<'a> TypeChecker<'a> {
 				&method_def.signature,
 				env,
 				if method_def.is_static { None } else { Some(class_type) },
-				method_def.access_modifier,
+				method_def.access,
 				&mut class_env,
 				method_name,
 			);
@@ -3679,7 +3665,7 @@ impl<'a> TypeChecker<'a> {
 			&ast_class.initializer.signature,
 			env,
 			None,
-			ast_class.initializer.access_modifier,
+			ast_class.initializer.access,
 			&mut class_env,
 			&init_symb,
 		);
@@ -3694,7 +3680,7 @@ impl<'a> TypeChecker<'a> {
 			&ast_class.inflight_initializer.signature,
 			env,
 			Some(class_type),
-			ast_class.inflight_initializer.access_modifier,
+			ast_class.inflight_initializer.access,
 			&mut class_env,
 			&inflight_init_symb,
 		);
@@ -3760,12 +3746,12 @@ impl<'a> TypeChecker<'a> {
 					let class_method_type = class_method_var.type_;
 					self.validate_type(class_method_type, method_type, &ast_class.name);
 					// Make sure the method is public (interface methods must be public)
-					if class_method_var.access_modifier != AccessModifier::Public {
+					if class_method_var.access != AccessModifier::Public {
 						self.spanned_error(
 							&class_method_var.name,
 							format!(
 								"Method \"{method_name}\" is {} in \"{}\" but it's an implementation of \"{interface_type}\". Interface members must be public.",
-								class_method_var.access_modifier, ast_class.name,
+								class_method_var.access, ast_class.name,
 							),
 						);
 					}
@@ -4418,7 +4404,7 @@ impl<'a> TypeChecker<'a> {
 		method_sig: &ast::FunctionSignature,
 		env: &mut SymbolEnv,
 		instance_type: Option<TypeRef>,
-		access_modifier: AccessModifier,
+		access: AccessModifier,
 		class_env: &mut SymbolEnv,
 		method_name: &Symbol,
 	) {
@@ -4437,7 +4423,7 @@ impl<'a> TypeChecker<'a> {
 						panic!("Expected env to be a type env");
 					};
 					// If parent method is private we don't allow overriding
-					if var.access_modifier == AccessModifier::Private {
+					if var.access == AccessModifier::Private {
 						self.spanned_error(
 							method_name,
 							format!("Cannot override private method \"{method_name}\" of \"{method_defined_in}\""),
@@ -4446,15 +4432,15 @@ impl<'a> TypeChecker<'a> {
 						// For non private methods, we only allow overriding if the access modifier is the same or more permissive:
 						// - public can override public or protected
 						// - protected can only override protected
-						if !(access_modifier == AccessModifier::Public
-							&& matches!(var.access_modifier, AccessModifier::Public | AccessModifier::Protected)
-							|| access_modifier == AccessModifier::Protected && var.access_modifier == AccessModifier::Protected)
+						if !(access == AccessModifier::Public
+							&& matches!(var.access, AccessModifier::Public | AccessModifier::Protected)
+							|| access == AccessModifier::Protected && var.access == AccessModifier::Protected)
 						{
 							self.spanned_error(
 								method_name,
 								format!(
-									"Cannot override {} method \"{method_name}\" of \"{method_defined_in}\" with a {access_modifier} method",
-									var.access_modifier
+									"Cannot override {} method \"{method_name}\" of \"{method_defined_in}\" with a {access} method",
+									var.access
 								),
 							);
 						}
@@ -4471,10 +4457,10 @@ impl<'a> TypeChecker<'a> {
 				false,
 				instance_type.is_none(),
 				method_sig.phase,
-				access_modifier,
+				access,
 				None,
 			),
-			access_modifier,
+			access,
 			StatementIdx::Top,
 		) {
 			Err(type_error) => {
@@ -4688,7 +4674,7 @@ impl<'a> TypeChecker<'a> {
 					reassignable,
 					phase: flight,
 					kind,
-					access_modifier,
+					access,
 					docs: _,
 				}) => {
 					// Replace type params in function signatures
@@ -4730,10 +4716,10 @@ impl<'a> TypeChecker<'a> {
 								*reassignable,
 								matches!(kind, VariableKind::StaticMember),
 								*flight,
-								*access_modifier,
+								*access,
 								None,
 							),
-							*access_modifier,
+							*access,
 							StatementIdx::Top,
 						) {
 							Err(type_error) => {
@@ -4753,10 +4739,10 @@ impl<'a> TypeChecker<'a> {
 								*reassignable,
 								matches!(kind, VariableKind::StaticMember),
 								*flight,
-								*access_modifier,
+								*access,
 								None,
 							),
-							*access_modifier,
+							*access,
 							StatementIdx::Top,
 						) {
 							Err(type_error) => {
@@ -5061,7 +5047,7 @@ impl<'a> TypeChecker<'a> {
 									type_,
 									reassignable: false,
 									phase: Phase::Independent,
-									access_modifier: AccessModifier::Public,
+									access: AccessModifier::Public,
 									docs: None,
 								},
 								Phase::Independent,
@@ -5133,7 +5119,7 @@ impl<'a> TypeChecker<'a> {
 				reassignable: false,
 				phase: env.phase,
 				kind: VariableKind::InstanceMember,
-				access_modifier: AccessModifier::Public,
+				access: AccessModifier::Public,
 				docs: None,
 			},
 
@@ -5256,7 +5242,7 @@ impl<'a> TypeChecker<'a> {
 			}
 
 			// Compare the access type with what's allowed
-			match var.access_modifier {
+			match var.access {
 				AccessModifier::Private => {
 					if !private_access {
 						self.spanned_error(
@@ -5530,23 +5516,23 @@ where
 		},
 		LookupResult::NotPublic(kind, lookup_info) => TypeError {
 			message: {
-				let access_modifier = lookup_info.access.to_string();
+				let access = lookup_info.access.to_string();
 				match kind {
 					SymbolKind::Type(type_) => {
 						if matches!(**type_, Type::Class(_)) {
-							format!("Class \"{looked_up_object}\" is {access_modifier}")
+							format!("Class \"{looked_up_object}\" is {access}")
 						} else if matches!(**type_, Type::Interface(_)) {
-							format!("Interface \"{looked_up_object}\" is {access_modifier}")
+							format!("Interface \"{looked_up_object}\" is {access}")
 						} else if matches!(**type_, Type::Struct(_)) {
-							format!("Struct \"{looked_up_object}\" is {access_modifier}")
+							format!("Struct \"{looked_up_object}\" is {access}")
 						} else if matches!(**type_, Type::Enum(_)) {
-							format!("Enum \"{looked_up_object}\" is {access_modifier}")
+							format!("Enum \"{looked_up_object}\" is {access}")
 						} else {
-							format!("Symbol \"{looked_up_object}\" is {access_modifier}")
+							format!("Symbol \"{looked_up_object}\" is {access}")
 						}
 					}
-					SymbolKind::Variable(_) => format!("Symbol \"{looked_up_object}\" is {access_modifier}"),
-					SymbolKind::Namespace(_) => format!("namespace \"{looked_up_object}\" is {access_modifier}"),
+					SymbolKind::Variable(_) => format!("Symbol \"{looked_up_object}\" is {access}"),
+					SymbolKind::Namespace(_) => format!("namespace \"{looked_up_object}\" is {access}"),
 				}
 			},
 			span: looked_up_object.span(),

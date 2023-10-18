@@ -201,7 +201,7 @@ where
 			name,
 			extends,
 			fields,
-			access_modifier: _,
+			access: _,
 		} => {
 			v.visit_symbol(name);
 			for extend in extends {
@@ -215,7 +215,7 @@ where
 		StmtKind::Enum {
 			name,
 			values,
-			access_modifier: _,
+			access: _,
 		} => {
 			v.visit_symbol(name);
 			for value in values {

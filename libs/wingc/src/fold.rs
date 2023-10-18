@@ -172,21 +172,17 @@ where
 			name,
 			extends,
 			fields,
-			access_modifier,
+			access,
 		} => StmtKind::Struct {
 			name: f.fold_symbol(name),
 			extends: extends.into_iter().map(|e| f.fold_user_defined_type(e)).collect(),
 			fields: fields.into_iter().map(|field| f.fold_struct_field(field)).collect(),
-			access_modifier,
+			access,
 		},
-		StmtKind::Enum {
-			name,
-			values,
-			access_modifier,
-		} => StmtKind::Enum {
+		StmtKind::Enum { name, values, access } => StmtKind::Enum {
 			name: f.fold_symbol(name),
 			values: values.into_iter().map(|value| f.fold_symbol(value)).collect(),
-			access_modifier,
+			access,
 		},
 		StmtKind::TryCatch {
 			try_statements,
@@ -233,7 +229,7 @@ where
 			.collect(),
 		phase: node.phase,
 		inflight_initializer: f.fold_function_definition(node.inflight_initializer),
-		access_modifier: node.access_modifier,
+		access: node.access,
 	}
 }
 
@@ -247,7 +243,7 @@ where
 		reassignable: node.reassignable,
 		phase: node.phase,
 		is_static: node.is_static,
-		access_modifier: node.access_modifier,
+		access: node.access,
 	}
 }
 
@@ -277,7 +273,7 @@ where
 			.into_iter()
 			.map(|interface| f.fold_user_defined_type(interface))
 			.collect(),
-		access_modifier: node.access_modifier,
+		access: node.access,
 	}
 }
 
@@ -424,7 +420,7 @@ where
 		signature: f.fold_function_signature(node.signature),
 		is_static: node.is_static,
 		span: node.span,
-		access_modifier: node.access_modifier,
+		access: node.access,
 	}
 }
 
