@@ -12,7 +12,7 @@ import {
   ISimulatorContext,
   ISimulatorResourceInstance,
 } from "../simulator/simulator";
-import { VisualModel, TraceType, VisualModelBuilder } from "../std";
+import { TraceType } from "../std";
 
 const LOCALHOST_ADDRESS = "127.0.0.1";
 
@@ -81,12 +81,5 @@ export class Website implements IWebsiteClient, ISimulatorResourceInstance {
       sourceType: WEBSITE_TYPE,
       timestamp: new Date().toISOString(),
     });
-  }
-
-  // todo [sa] remove - just for testing
-  public async visualModel(): Promise<VisualModel | undefined> {
-    const builder = new VisualModelBuilder();
-    builder.addLink(this.url ?? "http://boom", "Website");
-    return builder.buildVisualModel();
   }
 }
