@@ -8,18 +8,15 @@ import {
 import { Json } from "../std";
 
 export class BucketClient implements IBucketClient {
-  private _public: boolean;
   private bucketName: string;
   private storage: Storage;
   private bucket: Bucket;
 
   constructor(
     bucketName: string,
-    isPublic: boolean = false,
     storage: Storage,
     projectId: string = process.env.GCP_PROJECT_ID || "wingsdk-test"
   ) {
-    this._public = isPublic;
     this.bucketName = bucketName;
     this.storage = storage ? storage : new Storage({ projectId: projectId });
     this.bucket = this.storage.bucket(this.bucketName);
@@ -217,9 +214,9 @@ export class BucketClient implements IBucketClient {
           `Cannot provide public URL for a non-existent object. (key=${key})`
         );
       }
-      if (!this._public) {
+      if ((await this.isPublic()) === false) {
         throw new Error(
-          `Cannot provide public URL for a non-public bucket. (key=${key})`
+          `Cannot provide public URL for a non-public bucket. (bucket=${this.bucketName})`
         );
       }
       return `https://storage.googleapis.com/${this.bucketName}/${key}`;
