@@ -1,5 +1,5 @@
 import { resolve } from "path";
-import { AssetType, TerraformAsset } from "cdktf";
+import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Bucket, addBucketPermission } from "./bucket";
@@ -45,7 +45,7 @@ interface IFunctionPermissions {
 
 export class Function extends cloud.Function {
   private readonly function: CloudfunctionsFunction;
-  private permissions?: Map<string, Set<IFunctionPermissions>>;
+  private permissions: Map<string, Set<IFunctionPermissions>> = new Map();
 
   constructor(
     scope: Construct,
@@ -111,7 +111,9 @@ export class Function extends cloud.Function {
       entryPoint: "handler",
       triggerHttp: true,
       timeout: props.timeout?.seconds ?? 60,
-      environmentVariables: props.env ?? {},
+      environmentVariables: Lazy.anyValue({
+        produce: () => this.env ?? {},
+      }) as any,
     });
   }
 
@@ -130,9 +132,6 @@ export class Function extends cloud.Function {
     scopedResource: IResource,
     permissions: IFunctionPermissions
   ): void {
-    if (!this.permissions) {
-      this.permissions = new Map();
-    }
     const uniqueId = scopedResource.node.addr.substring(-8);
 
     if (
@@ -146,9 +145,10 @@ export class Function extends cloud.Function {
     switch (permissions.Resource) {
       case ResourceTypes.BUCKET:
         addBucketPermission(
+          this,
           scopedResource as Bucket,
-          permissions.Action as ActionTypes,
-          app.projectId as string
+          permissions.Action,
+          app.projectId
         );
         break;
       case ResourceTypes.FUNCTION:

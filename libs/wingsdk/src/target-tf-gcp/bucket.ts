@@ -10,6 +10,7 @@ import { StorageBucketIamMember } from "../.gen/providers/google/storage-bucket-
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
 import { Id } from "../.gen/providers/random/id";
 import * as cloud from "../cloud";
+import { InflightClient } from "../core";
 import {
   CaseConventions,
   NameOptions,
@@ -117,29 +118,46 @@ export class Bucket extends cloud.Bucket {
     } else {
       throw new Error("Method not implemented.");
     }
+    host.addEnvironment(this.envName(), this.bucket.name);
+
     super.bind(host, ops);
   }
 
   /** @internal */
   public _toInflight(): string {
-    throw new Error("Method not implemented.");
+    return InflightClient.for(
+      __dirname.replace("target-tf-gcp", "shared-gcp"),
+      __filename,
+      "BucketClient",
+      [`process.env["${this.envName()}"]`]
+    );
+  }
+
+  private envName(): string {
+    return `BUCKET_NAME_${this.node.addr.slice(-8)}`;
   }
 }
 
 export const addBucketPermission = (
+  scopedConstruct: Construct,
   bucket: Bucket,
   permission: ActionTypes,
   projectId: string
 ) => {
   try {
+    const permissionId = `RoleAssignment-${permission.replace(
+      /[.\\\/]/g,
+      "-"
+    )}-${bucket.node.addr.slice(-8)}-${scopedConstruct.node.addr.slice(-8)}`;
+
     if (permission === ActionTypes.STORAGE_READ) {
-      new StorageBucketIamMember(bucket, `RoleAssignment${permission}`, {
+      new StorageBucketIamMember(bucket, permissionId, {
         bucket: bucket.bucket.name,
         role: permission,
         member: `projectViewer:${projectId}`,
       });
     } else if (permission === ActionTypes.STORAGE_READ_WRITE) {
-      new StorageBucketIamMember(bucket, `RoleAssignment${permission}`, {
+      new StorageBucketIamMember(bucket, permissionId, {
         bucket: bucket.bucket.name,
         role: permission,
         member: `projectEditor:${projectId}`,
