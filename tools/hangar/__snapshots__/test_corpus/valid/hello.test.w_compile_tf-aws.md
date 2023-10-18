@@ -183,7 +183,9 @@ module.exports = function({ $bucket }) {
             "uniqueId": "cloudQueue"
           }
         },
-        "name": "cloud-Queue-c86e03d8"
+        "message_retention_seconds": 3600,
+        "name": "cloud-Queue-c86e03d8",
+        "visibility_timeout_seconds": 30
       }
     }
   }
