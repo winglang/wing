@@ -34,7 +34,7 @@
       "@aws-sdk/util-utf8-node@3.259.0": "patches/@aws-sdk__util-utf8-node@3.259.0.patch",
       "@aws-sdk/util-utf8-browser@3.259.0": "patches/@aws-sdk__util-utf8-browser@3.259.0.patch",
       "esbuild-wasm@0.18.20": "patches/esbuild-wasm@0.18.20.patch",
-      "send@0.18.0": "patches/send@0.18.0.patch"
+      "mime@3.0.0": "patches/mime@3.0.0.patch"
     }
   }
 }

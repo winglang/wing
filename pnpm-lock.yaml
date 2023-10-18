@@ -26,9 +26,9 @@ patchedDependencies:
   jsii@5.0.11:
     hash: zhi5puwzi5jiulxnmqgkd4wl2a
     path: patches/jsii@5.0.11.patch
-  send@0.18.0:
-    hash: oxikm3gvffrrl6wjeh5fvqboje
-    path: patches/send@0.18.0.patch
+  mime@3.0.0:
+    hash: 2he2uszztbibyal6zfzmv2a2oa
+    path: patches/mime@3.0.0.patch
   wasi-js@1.7.3:
     hash: rmwvp46j2ligfusbdx5dzh4a3q
     path: patches/wasi-js@1.7.3.patch
@@ -1237,7 +1237,7 @@ importers:
         version: 1.4.1
       mime:
         specifier: ^3.0.0
-        version: 3.0.0
+        version: 3.0.0(patch_hash=2he2uszztbibyal6zfzmv2a2oa)
       mime-types:
         specifier: ^2.1.35
         version: 2.1.35
@@ -10457,7 +10457,7 @@ packages:
       jsonc-parser: 3.2.0
       leven: 3.1.0
       markdown-it: 12.3.2
-      mime: 3.0.0
+      mime: 3.0.0(patch_hash=2he2uszztbibyal6zfzmv2a2oa)
       minimatch: 3.1.2
       parse-semver: 1.1.1
       read: 1.0.7
@@ -14480,7 +14480,7 @@ packages:
       qs: 6.11.0
       range-parser: 1.2.1
       safe-buffer: 5.2.1
-      send: 0.18.0(patch_hash=oxikm3gvffrrl6wjeh5fvqboje)
+      send: 0.18.0
       serve-static: 1.15.0
       setprototypeof: 1.2.0
       statuses: 2.0.1
@@ -18455,10 +18455,11 @@ packages:
     dependencies:
       mime-db: 1.52.0
 
-  /mime@3.0.0:
+  /mime@3.0.0(patch_hash=2he2uszztbibyal6zfzmv2a2oa):
     resolution: {integrity: sha512-jSCU7/VB1loIWBZe14aEYHU/+1UMEHoaO7qxCOVJOw9GgH72VAWppxNcjU+x9a2k3GSIBXNKxXQFqRvvZ7vr3A==}
     engines: {node: '>=10.0.0'}
     hasBin: true
+    patched: true
 
   /mimic-fn@2.1.0:
     resolution: {integrity: sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==}
@@ -20133,7 +20134,7 @@ packages:
       debug: 4.3.4
       extract-zip: 1.7.0
       https-proxy-agent: 4.0.0
-      mime: 3.0.0
+      mime: 3.0.0(patch_hash=2he2uszztbibyal6zfzmv2a2oa)
       mime-types: 2.1.35
       progress: 2.0.3
       proxy-from-env: 1.1.0
@@ -21093,7 +21094,7 @@ packages:
     dependencies:
       lru-cache: 6.0.0
 
-  /send@0.18.0(patch_hash=oxikm3gvffrrl6wjeh5fvqboje):
+  /send@0.18.0:
     resolution: {integrity: sha512-qqWzuOjSFOuqPjFe4NOsMLafToQQwBSOEpS+FwEt3A2V3vKubTquT3vmLTQpFgMXp8AlFWFuP1qKaJZOtPpVXg==}
     engines: {node: '>= 0.8.0'}
     dependencies:
@@ -21105,14 +21106,13 @@ packages:
       etag: 1.8.1
       fresh: 0.5.2
       http-errors: 2.0.0
-      mime: 3.0.0
+      mime: 3.0.0(patch_hash=2he2uszztbibyal6zfzmv2a2oa)
       ms: 2.1.3
       on-finished: 2.4.1
       range-parser: 1.2.1
       statuses: 2.0.1
     transitivePeerDependencies:
       - supports-color
-    patched: true
 
   /serialize-javascript@6.0.1:
     resolution: {integrity: sha512-owoXEFjWRllis8/M1Q+Cw5k8ZH40e3zhp/ovX+Xr/vi1qj6QesbyXXViFbpNvWvPNAD62SutwEXavefrLJWj7w==}
@@ -21138,7 +21138,7 @@ packages:
       encodeurl: 1.0.2
       escape-html: 1.0.3
       parseurl: 1.3.3
-      send: 0.18.0(patch_hash=oxikm3gvffrrl6wjeh5fvqboje)
+      send: 0.18.0
     transitivePeerDependencies:
       - supports-color
 
