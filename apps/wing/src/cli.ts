@@ -145,7 +145,12 @@ async function main() {
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .option("-r, --rootId <rootId>", "App root id")
-    .option("-o, --option <value>", "Platform-specific values in the form KEY=VALUE or yaml file", addValue, [])
+    .option(
+      "-o, --option <value>",
+      "Platform-specific values in the form KEY=VALUE or yaml file",
+      addValue,
+      []
+    )
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("compile"));
@@ -163,7 +168,12 @@ async function main() {
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .option("-r, --rootId <rootId>", "App root id")
-    .option("-o, --option <value>", "Platform-specific values in the form KEY=VALUE or yaml file", addValue, [])
+    .option(
+      "-o, --option <value>",
+      "Platform-specific values in the form KEY=VALUE or yaml file",
+      addValue,
+      []
+    )
     .option("--no-clean", "Keep build output")
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)

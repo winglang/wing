@@ -24,7 +24,12 @@ export const getPlatformSpecificValues = (
   }
 
   let result: { [key: string]: string | undefined } = {};
-  if (wingValues && wingValues.length !== 0 && wingValues.indexOf(".yaml") === -1 && wingValues.indexOf(".yml") === -1) {
+  if (
+    wingValues &&
+    wingValues.length !== 0 &&
+    wingValues.indexOf(".yaml") === -1 &&
+    wingValues.indexOf(".yml") === -1
+  ) {
     for (const argument of argLst) {
       result[`${argument}`] = getPlatformSpecificValue(
         scope.node.path,
@@ -32,7 +37,11 @@ export const getPlatformSpecificValues = (
         wingValues
       );
     }
-  } else if (wingValues && wingValues.length !== 0 && (wingValues.indexOf(".yaml") > -1 || wingValues.indexOf(".yml") > -1)) {
+  } else if (
+    wingValues &&
+    wingValues.length !== 0 &&
+    (wingValues.indexOf(".yaml") > -1 || wingValues.indexOf(".yml") > -1)
+  ) {
     result = getPlatformSpecificValuesFromFile(scope.node.path, wingValues);
   }
 
