@@ -896,16 +896,13 @@ fn get_completions_from_class(
 			match access_context {
 				// hide private and protected members when accessing from outside the class
 				ObjectAccessContext::Outside => {
-					if matches!(
-						variable.access_modifier,
-						AccessModifier::Private | AccessModifier::Protected
-					) {
+					if matches!(variable.access, AccessModifier::Private | AccessModifier::Protected) {
 						return None;
 					}
 				}
 				// hide private members when accessing from inside the class with "super"
 				ObjectAccessContext::Super => {
-					if matches!(variable.access_modifier, AccessModifier::Private) {
+					if matches!(variable.access, AccessModifier::Private) {
 						return None;
 					}
 				}
