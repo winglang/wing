@@ -240,10 +240,10 @@ export class BucketClient implements IBucketClient {
 
       // as BucketSignedUrlOptions don't have a action field, we are using the read action as default
       const [url] = await this.bucket.file(key).getSignedUrl({
-        version: 'v4',
-        action: 'read',
+        version: "v4",
+        action: "read",
         expires: Date.now() + expiryTimeInSeconds * 1000,
-      })
+      });
 
       return url;
     } catch (error) {
