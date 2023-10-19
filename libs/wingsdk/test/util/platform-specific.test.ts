@@ -17,7 +17,6 @@ class MyResource extends Construct {
 describe("getPlatformSpecificValues", () => {
   beforeEach(() => {
     delete process.env.WING_VALUES;
-    delete process.env.WING_VALUES_FILE;
   });
 
   test("get single value form command", () => {
@@ -48,7 +47,7 @@ describe("getPlatformSpecificValues", () => {
     const app = new MyApp();
     const firstResource = new MyResource(app, "Default");
     const myResource = new MyResource(firstResource, "my-resource");
-    process.env.WING_VALUES_FILE = __dirname + "/single-number-value.yaml";
+    process.env.WING_VALUES = __dirname + "/single-number-value.yaml";
     const result = getPlatformSpecificValues(myResource, "number");
     // THEN
     expect(result).toStrictEqual({ number: "123" });
@@ -60,7 +59,7 @@ describe("getPlatformSpecificValues", () => {
     const resourceTest = new MyResource(app, "Test.X67tGM87zf");
     const resourceEnv = new MyResource(resourceTest, "env0");
     const myResource = new MyResource(resourceEnv, "my-resource");
-    process.env.WING_VALUES_FILE = __dirname + "/single-number-value.yaml";
+    process.env.WING_VALUES = __dirname + "/single-number-value.yaml";
     const result = getPlatformSpecificValues(myResource, "number");
     // THEN
     expect(result).toStrictEqual({ number: "123" });
@@ -112,12 +111,12 @@ describe("getPlatformSpecificValues", () => {
     const app = new MyApp();
     const firstResource = new MyResource(app, "Default");
     const myResource = new MyResource(firstResource, "my-resource");
-    process.env.WING_VALUES_FILE = __dirname + "/single-number-value.yaml";
+    process.env.WING_VALUES = __dirname + "/single-number-value.yaml";
     const numberResult = getPlatformSpecificValues(
       myResource,
       "string||number"
     );
-    process.env.WING_VALUES_FILE = __dirname + "/single-string-value.yaml";
+    process.env.WING_VALUES = __dirname + "/single-string-value.yaml";
     const stringResult = getPlatformSpecificValues(
       myResource,
       "string||number"
@@ -133,12 +132,12 @@ describe("getPlatformSpecificValues", () => {
     const resourceTest = new MyResource(app, "Test.X67tGM87zf");
     const resourceEnv = new MyResource(resourceTest, "env0");
     const myResource = new MyResource(resourceEnv, "my-resource");
-    process.env.WING_VALUES_FILE = __dirname + "/single-number-value.yaml";
+    process.env.WING_VALUES = __dirname + "/single-number-value.yaml";
     const numberResult = getPlatformSpecificValues(
       myResource,
       "string||number"
     );
-    process.env.WING_VALUES_FILE = __dirname + "/single-string-value.yaml";
+    process.env.WING_VALUES = __dirname + "/single-string-value.yaml";
     const stringResult = getPlatformSpecificValues(
       myResource,
       "string||number"
@@ -175,7 +174,7 @@ describe("getPlatformSpecificValues", () => {
 
   test("get multiple values from file", () => {
     // GIVEN
-    process.env.WING_VALUES_FILE = __dirname + "/multiple-values.yaml";
+    process.env.WING_VALUES = __dirname + "/multiple-values.yaml";
     const app = new MyApp();
     const firstResource = new MyResource(app, "Default");
     const myResource = new MyResource(firstResource, "my-resource");
@@ -190,7 +189,7 @@ describe("getPlatformSpecificValues", () => {
     const resourceTest = new MyResource(app, "Test.X67tGM87zf");
     const resourceEnv = new MyResource(resourceTest, "env0");
     const myResource = new MyResource(resourceEnv, "my-resource");
-    process.env.WING_VALUES_FILE = __dirname + "/multiple-values.yaml";
+    process.env.WING_VALUES = __dirname + "/multiple-values.yaml";
     const result = getPlatformSpecificValues(myResource, "number", "string");
     // THEN
     expect(result).toStrictEqual({ number: "123", string: "abc" });
@@ -207,8 +206,8 @@ describe("getPlatformSpecificValues", () => {
   - 'number' is missing from root/Default/my-resource
   - 'string' or 'bool' is missing from root/Default/my-resource
 
-These are required properties of platform-specific types. You can set these values
-either through '-v | --value' switches or '--values' file.`);
+These are required properties of platform-specific types.
+You can set these values through '-o | --option' command.`);
   });
 
   test("throw exception if no value is provided when running tests", () => {
@@ -223,7 +222,7 @@ either through '-v | --value' switches or '--values' file.`);
   - 'number' is missing from root/Test.X67tGM87zf/env0/my-resource
   - 'string' or 'bool' is missing from root/Test.X67tGM87zf/env0/my-resource
 
-These are required properties of platform-specific types. You can set these values
-either through '-v | --value' switches or '--values' file.`);
+These are required properties of platform-specific types.
+You can set these values through '-o | --option' command.`);
   });
 });

@@ -30,7 +30,6 @@ const containCertificate = (config: any, certificate: string): boolean => {
 describe("cloud.Domain for tf-aws", () => {
   beforeEach(() => {
     delete process.env.WING_VALUES;
-    delete process.env.WING_VALUES_FILE;
   });
 
   test("default domain behavior when passing values on the command line", () => {
@@ -73,7 +72,7 @@ describe("cloud.Domain for tf-aws", () => {
 
   test("default domain behavior when passing values from file", () => {
     // GIVEN
-    process.env.WING_VALUES_FILE = __dirname + "/domain.values.yaml";
+    process.env.WING_VALUES = __dirname + "/domain.values.yaml";
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     const domain = cloud.Domain._newDomain(app, "Domain", {
       domainName: "www.example.com",
@@ -122,7 +121,7 @@ describe("cloud.Domain for tf-aws", () => {
   - 'iamCertificate' or 'acmCertificateArn' is missing from root/Default/Domain
   - 'hostedZoneId' is missing from root/Default/Domain
 
-These are required properties of platform-specific types. You can set these values
-either through '-v | --value' switches or '--values' file.`);
+These are required properties of platform-specific types.
+You can set these values through '-o | --option' command.`);
   });
 });

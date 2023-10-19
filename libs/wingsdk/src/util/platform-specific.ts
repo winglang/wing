@@ -55,10 +55,8 @@ export const getPlatformSpecificValues = (
 
   if (errors.length > 0) {
     errors[0] = "\n" + errors[0];
-    errors.push(
-      "\nThese are required properties of platform-specific types. You can set these values"
-    );
-    errors.push(`either through '-v | --value' switches or '--values' file.`);
+    errors.push("\nThese are required properties of platform-specific types.");
+    errors.push(`You can set these values through '-o | --option' command.`);
     throw new Error(errors.join("\n"));
   }
 
