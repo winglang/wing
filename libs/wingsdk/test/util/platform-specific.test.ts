@@ -207,7 +207,7 @@ describe("getPlatformSpecificValues", () => {
   - 'string' or 'bool' is missing from root/Default/my-resource
 
 These are required properties of platform-specific types.
-You can set these values through '-o | --option' command.`);
+You can set these values through '--value' command.`);
   });
 
   test("throw exception if no value is provided when running tests", () => {
@@ -223,6 +223,6 @@ You can set these values through '-o | --option' command.`);
   - 'string' or 'bool' is missing from root/Test.X67tGM87zf/env0/my-resource
 
 These are required properties of platform-specific types.
-You can set these values through '-o | --option' command.`);
+You can set these values through '--value' command.`);
   });
 });

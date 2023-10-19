@@ -122,6 +122,6 @@ describe("cloud.Domain for tf-aws", () => {
   - 'hostedZoneId' is missing from root/Default/Domain
 
 These are required properties of platform-specific types.
-You can set these values through '-o | --option' command.`);
+You can set these values through '--value' command.`);
   });
 });
