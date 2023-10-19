@@ -520,6 +520,6 @@ inflight handle(): void
 Handler to run when the service stops.
 
 This is where you implement the cleanup logic of
-the service, stop any activities asynchronously.
+the service, stop any activities asychronously.
 
 

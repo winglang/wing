@@ -2181,7 +2181,7 @@ path.
 
 To enable refactorings of construct trees, constructs with the ID `Default`
 will be excluded from the calculation. In those cases constructs in the
-same tree may have the same address.
+same tree may have the same addreess.
 
 ---
 
