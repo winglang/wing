@@ -28,7 +28,7 @@ use type_check::{FunctionSignature, SymbolKind, Type};
 use type_check_assert::TypeCheckAssert;
 use valid_json_visitor::ValidJsonVisitor;
 use visit::Visit;
-use wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
+use wasm_util::{ptr_to_str, string_to_combined_ptr, WASM_RETURN_ERROR};
 use wingii::type_system::TypeSystem;
 
 use crate::docs::Docs;
@@ -163,7 +163,7 @@ pub unsafe extern "C" fn wingc_init() {
 
 #[no_mangle]
 pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
-	let args = ptr_to_string(ptr, len);
+	let args = ptr_to_str(ptr, len);
 
 	let split = args.split(";").collect::<Vec<&str>>();
 	if split.len() != 3 {

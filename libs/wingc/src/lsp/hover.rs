@@ -2,8 +2,7 @@ use crate::docs::Documented;
 use crate::lsp::sync::PROJECT_DATA;
 use crate::type_check::symbol_env::LookupResult;
 use crate::visit::Visit;
-use crate::wasm_util::WASM_RETURN_ERROR;
-use crate::wasm_util::{ptr_to_string, string_to_combined_ptr};
+use crate::wasm_util::extern_json_fn;
 use lsp_types::{Hover, HoverContents, MarkupContent, MarkupKind};
 
 use super::symbol_locator::{SymbolLocator, SymbolLocatorResult};
@@ -11,19 +10,7 @@ use super::sync::{check_utf8, WING_TYPES};
 
 #[no_mangle]
 pub unsafe extern "C" fn wingc_on_hover(ptr: u32, len: u32) -> u64 {
-	let parse_string = ptr_to_string(ptr, len);
-	if let Ok(parsed) = serde_json::from_str(&parse_string) {
-		if let Some(token_result) = on_hover(parsed) {
-			let result = serde_json::to_string(&token_result).expect("Failed to serialize Hover response");
-
-			string_to_combined_ptr(result)
-		} else {
-			WASM_RETURN_ERROR
-		}
-	} else {
-		eprintln!("Failed to parse 'onHover' text document: {}", parse_string);
-		WASM_RETURN_ERROR
-	}
+	extern_json_fn(ptr, len, on_hover)
 }
 pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
 	WING_TYPES.with(|types| {
