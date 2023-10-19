@@ -225,7 +225,6 @@ export class BucketClient implements IBucketClient {
     }
   }
 
-
   // TODO: implement
   // https://github.com/winglang/wing/issues/4599
   /**
