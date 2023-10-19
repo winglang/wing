@@ -26,6 +26,19 @@ module.exports = function({  }) {
 
 ```
 
+## inflight.Foo-3.js
+```js
+"use strict";
+module.exports = function({  }) {
+  class Foo {
+    constructor({  }) {
+    }
+  }
+  return Foo;
+}
+
+```
+
 ## inflight.Widget-1.js
 ```js
 "use strict";
@@ -138,6 +151,31 @@ module.exports = function({ $stdlib }) {
         (await (async () => {
           const BarClient = ${Bar._toInflightType(this)};
           const client = new BarClient({
+          });
+          if (client.$inflight_init) { await client.$inflight_init(); }
+          return client;
+        })())
+      `;
+    }
+    _getInflightOps() {
+      return ["$inflight_init"];
+    }
+  }
+  class Foo extends $stdlib.std.Resource {
+    constructor(scope, id, ) {
+      super(scope, id);
+    }
+    static _toInflightType(context) {
+      return `
+        require("./inflight.Foo-3.js")({
+        })
+      `;
+    }
+    _toInflight() {
+      return `
+        (await (async () => {
+          const FooClient = ${Foo._toInflightType(this)};
+          const client = new FooClient({
           });
           if (client.$inflight_init) { await client.$inflight_init(); }
           return client;

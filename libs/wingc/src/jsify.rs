@@ -1528,11 +1528,9 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 			}
 			// interfaces are bringable, but there's nothing to emit
 			StmtKind::Interface(_) => {}
-			StmtKind::Struct { name, access, .. } => {
-				if *access == AccessModifier::Public {
-					symbols.push(name.clone());
-				}
-			}
+			// structs are bringable, but we don't emit anything for them
+			// unless a static method is called on them
+			StmtKind::Struct { .. } => {}
 			StmtKind::Enum { name, access, .. } => {
 				if *access == AccessModifier::Public {
 					symbols.push(name.clone());

@@ -413,7 +413,7 @@ impl SymbolEnv {
 				}
 			}
 			match lookup_result {
-				LookupResult::Found(k, i) | LookupResult::NotPublic(k, i) => {
+				LookupResult::Found(k, i) => {
 					res = (k, i);
 				}
 				r => return r,
