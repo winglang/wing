@@ -179,13 +179,13 @@ class $Root extends $stdlib.std.Resource {
             _getInflightOps() {
               return ["handle", "$inflight_init"];
             }
-            _registerBind(host, ops) {
+            _registerOnLift(host, ops) {
               if (ops.includes("handle")) {
-                $Closure1._registerBindObject(MyService, host, ["createServer"]);
-                $Closure1._registerBindObject(__parent_this_1.b, host, ["put"]);
-                $Closure1._registerBindObject(__parent_this_1.body, host, []);
+                $Closure1._registerOnLiftObject(MyService, host, ["createServer"]);
+                $Closure1._registerOnLiftObject(__parent_this_1.b, host, ["put"]);
+                $Closure1._registerOnLiftObject(__parent_this_1.body, host, []);
               }
-              super._registerBind(host, ops);
+              super._registerOnLift(host, ops);
             }
           }
           this.s = this.node.root.newAbstract("@winglang/sdk.cloud.Service",this,"cloud.Service",new $Closure1(this,"$Closure1"));
@@ -212,14 +212,14 @@ class $Root extends $stdlib.std.Resource {
         _getInflightOps() {
           return ["port", "createServer", "$inflight_init"];
         }
-        _registerBind(host, ops) {
+        _registerOnLift(host, ops) {
           if (ops.includes("$inflight_init")) {
-            MyService._registerBindObject(this.b, host, []);
+            MyService._registerOnLiftObject(this.b, host, []);
           }
           if (ops.includes("port")) {
-            MyService._registerBindObject(this.b, host, ["get"]);
+            MyService._registerOnLiftObject(this.b, host, ["get"]);
           }
-          super._registerBind(host, ops);
+          super._registerOnLift(host, ops);
         }
       }
       const foo = new MyService(this,"MyService","bang bang!");
@@ -250,11 +250,11 @@ class $Root extends $stdlib.std.Resource {
         _getInflightOps() {
           return ["handle", "$inflight_init"];
         }
-        _registerBind(host, ops) {
+        _registerOnLift(host, ops) {
           if (ops.includes("handle")) {
-            $Closure2._registerBindObject(foo, host, ["port"]);
+            $Closure2._registerOnLiftObject(foo, host, ["port"]);
           }
-          super._registerBind(host, ops);
+          super._registerOnLift(host, ops);
         }
       }
       this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:http server is started with the service",new $Closure2(this,"$Closure2"));
@@ -286,12 +286,12 @@ class $Root extends $stdlib.std.Resource {
         _getInflightOps() {
           return ["handle", "$inflight_init"];
         }
-        _registerBind(host, ops) {
+        _registerOnLift(host, ops) {
           if (ops.includes("handle")) {
-            $Closure3._registerBindObject(foo, host, ["port"]);
-            $Closure3._registerBindObject(foo.s, host, ["stop"]);
+            $Closure3._registerOnLiftObject(foo, host, ["port"]);
+            $Closure3._registerOnLiftObject(foo.s, host, ["stop"]);
           }
-          super._registerBind(host, ops);
+          super._registerOnLift(host, ops);
         }
       }
       this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:service.stop() closes the http server",new $Closure3(this,"$Closure3"));

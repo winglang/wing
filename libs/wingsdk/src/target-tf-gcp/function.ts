@@ -161,7 +161,7 @@ export class Function extends cloud.Function {
     this.permissions.set(uniqueId, roleDefinitions);
   }
 
-  public bind(_host: IInflightHost, _ops: string[]): void {
+  public onLift(_host: IInflightHost, _ops: string[]): void {
     throw new Error("Method not implemented.");
   }
 }

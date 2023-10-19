@@ -131,12 +131,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(b, host, ["get", "getJson", "list"]);
-          $Closure1._registerBindObject(jsonObj1, host, []);
+          $Closure1._registerOnLiftObject(b, host, ["get", "getJson", "list"]);
+          $Closure1._registerOnLiftObject(jsonObj1, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");

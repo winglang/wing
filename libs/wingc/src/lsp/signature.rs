@@ -12,22 +12,13 @@ use crate::lsp::sync::WING_TYPES;
 use crate::type_check::symbol_env::SymbolEnvRef;
 use crate::type_check::{resolve_super_method, resolve_user_defined_type, Types, CLASS_INIT_NAME};
 use crate::visit::{visit_expr, visit_scope, Visit};
-use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
+use crate::wasm_util::extern_json_fn;
 
 use super::sync::check_utf8;
 
 #[no_mangle]
 pub unsafe extern "C" fn wingc_on_signature_help(ptr: u32, len: u32) -> u64 {
-	let parse_string = ptr_to_string(ptr, len);
-	if let Ok(parsed) = serde_json::from_str(&parse_string) {
-		let result = on_signature_help(parsed);
-		let result = serde_json::to_string(&result).unwrap();
-
-		// return result as u64 with ptr and len
-		string_to_combined_ptr(result)
-	} else {
-		WASM_RETURN_ERROR
-	}
+	extern_json_fn(ptr, len, on_signature_help)
 }
 
 pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<SignatureHelp> {

@@ -31,7 +31,7 @@ export class TestRunner extends std.TestRunner {
     output.overrideLogicalId(OUTPUT_TEST_RUNNER_FUNCTION_IDENTIFIERS);
   }
 
-  public bind(host: std.IInflightHost, ops: string[]): void {
+  public onLift(host: std.IInflightHost, ops: string[]): void {
     if (!(host instanceof AzureFunction)) {
       throw new Error(
         "TestRunner can only be bound by tfazure.Function for now"
@@ -44,7 +44,7 @@ export class TestRunner extends std.TestRunner {
       JSON.stringify([...testFunctions.entries()])
     );
 
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

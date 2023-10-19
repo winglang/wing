@@ -87,7 +87,7 @@ export class Bucket extends cloud.Bucket {
     });
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof GCPFunction)) {
       throw new Error("buckets can only be bound by tfgcp.Function for now");
     }
@@ -120,7 +120,7 @@ export class Bucket extends cloud.Bucket {
     }
     host.addEnvironment(this.envName(), this.bucket.name);
 
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

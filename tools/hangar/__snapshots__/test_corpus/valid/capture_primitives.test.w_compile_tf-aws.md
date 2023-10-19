@@ -213,17 +213,17 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(myBool, host, []);
-          $Closure1._registerBindObject(myDur.hours, host, []);
-          $Closure1._registerBindObject(myDur.minutes, host, []);
-          $Closure1._registerBindObject(myDur.seconds, host, []);
-          $Closure1._registerBindObject(myNum, host, []);
-          $Closure1._registerBindObject(mySecondBool, host, []);
-          $Closure1._registerBindObject(myStr, host, []);
+          $Closure1._registerOnLiftObject(myBool, host, []);
+          $Closure1._registerOnLiftObject(myDur.hours, host, []);
+          $Closure1._registerOnLiftObject(myDur.minutes, host, []);
+          $Closure1._registerOnLiftObject(myDur.seconds, host, []);
+          $Closure1._registerOnLiftObject(myNum, host, []);
+          $Closure1._registerOnLiftObject(mySecondBool, host, []);
+          $Closure1._registerOnLiftObject(myStr, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const myStr = "hello, string";

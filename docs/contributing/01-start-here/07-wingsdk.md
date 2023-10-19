@@ -199,14 +199,14 @@ Under the hood, two main functions are performed by the SDK with this informatio
 
 #### 1. Resource binding
 
-First, each referenced resource is "bound" to the inflight host through a `_bind` method that is defined on all resources.
+First, each referenced resource is "bound" to the inflight host through an `onLift` method that is defined on all resources.
 In the example above, `cloud.Function` is the host, and `cloud.Queue` is a referenced resource.
-The function would call `queue._bind(this, ["push"])` to bind the queue to the function host, providing information about the methods it expects to use on the queue.
+The function would call `queue.onLift(this, ["push"])` to bind the queue to the function host, providing information about the methods it expects to use on the queue.
 
 The referenced resource can then perform any necessary setup to allow the host to referenced it during runtime, such as setting up least privilege permissions.
 For example, when compiling to AWS, the queue can create an IAM role that allows the function to execute `sqs:SendMessage` API calls on the queue.
 
-In more complex resources, the `_bind` method will automatically call `_bind` on any sub-resources based on the operations that the host expects to use.
+In more complex resources, the `onLift` method will automatically call `onLift` on any sub-resources based on the operations that the host expects to use.
 For example, suppose the user defines a `TaskList` resource with a method named `addTask`, and `addTask` calls `put` on a `cloud.Bucket` (a child resource).
 Then whenever `TaskList` is bound to a host and `addTask` is one of the operations the inflight code expects to call, then the `cloud.Bucket` will automatically be bound to the host as well.
 

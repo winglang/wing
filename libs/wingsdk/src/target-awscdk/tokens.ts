@@ -40,7 +40,7 @@ export class CdkTokens extends Tokens {
   /**
    * Binds the given token to the host.
    */
-  public bindValue(host: IInflightHost, value: any) {
+  public onLiftValue(host: IInflightHost, value: any) {
     if (!(host instanceof Function)) {
       throw new Error(`Tokens can only be bound by a Function for now`);
     }

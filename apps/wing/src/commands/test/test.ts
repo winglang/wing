@@ -9,8 +9,9 @@ import chalk from "chalk";
 import debug from "debug";
 import { glob } from "glob";
 import { nanoid } from "nanoid";
-import { compile, CompileOptions } from "./compile";
-import { generateTmpDir, withSpinner } from "../util";
+import { printResults, validateOutputFilePath, writeResultsToFile } from "./results";
+import { generateTmpDir, withSpinner } from "../../util";
+import { compile, CompileOptions } from "../compile";
 
 const log = debug("wing:test");
 
@@ -27,11 +28,19 @@ const generateTestName = (path: string) => path.split(sep).slice(-2).join("/");
  * Options for the `test` command.
  */
 export interface TestOptions extends CompileOptions {
+  /** Whether to keep the build output. */
   clean: boolean;
+  outputFile?: string;
+  /** String representing a RegEx used for test filtering. */
+  testFilter?: string;
 }
 
 export async function test(entrypoints: string[], options: TestOptions): Promise<number> {
   let patterns;
+
+  if (options.outputFile) {
+    validateOutputFilePath(options.outputFile);
+  }
 
   if (entrypoints.length === 0) {
     patterns = ["*.test.w"];
@@ -63,7 +72,11 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
     }
   };
   await Promise.all(expandedEntrypoints.map(testFile));
-  printResults(results, Date.now() - startTime);
+  const testDuration = Date.now() - startTime;
+  printResults(results, testDuration);
+  if (options.outputFile) {
+    writeResultsToFile(results, testDuration, options.outputFile);
+  }
 
   // if we have any failures, exit with 1
   for (const testSuite of results) {
@@ -75,77 +88,6 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
   }
 
   return 0;
-}
-
-function printResults(
-  testResults: { testName: string; results: std.TestResult[] }[],
-  duration: number
-) {
-  const durationInSeconds = duration / 1000;
-  const totalSum = testResults.length;
-  const failing = testResults.filter(({ results }) => results.some(({ pass }) => !pass));
-  const passing = testResults.filter(({ results }) => results.every(({ pass }) => !!pass));
-  const failingTestsNumber = failing.reduce(
-    (acc, { results }) => acc + results.filter(({ pass }) => !pass).length,
-    0
-  );
-  const passingTestsNumber = testResults.reduce(
-    (acc, { results }) => acc + results.filter(({ pass }) => !!pass).length,
-    0
-  );
-  console.log(" "); // for getting a new line- \n does't seem to work :(
-  const areErrors = failing.length > 0 && totalSum > 1;
-  const showTitle = totalSum > 1;
-
-  const res = [];
-
-  if (showTitle) {
-    // prints a list of the tests names with an icon
-    res.push(`Results:`);
-    res.push(...passing.map(({ testName }) => `    ${chalk.green("✓")} ${testName}`));
-    res.push(...failing.map(({ testName }) => `    ${chalk.red("×")} ${testName}`));
-  }
-
-  if (areErrors) {
-    // prints error messages form failed tests
-    res.push(" ");
-    res.push("Errors:");
-    res.push(
-      ...failing.map(({ testName, results }) =>
-        [
-          `At ${testName}`,
-          results.filter(({ pass }) => !pass).map(({ error }) => chalk.red(error)),
-        ].join("\n")
-      )
-    );
-  }
-
-  // prints a summary of how many tests passed and failed
-  res.push(" ");
-  res.push(
-    `${chalk.dim("Tests")}${failingTestsNumber ? chalk.red(` ${failingTestsNumber} failed`) : ""}${
-      failingTestsNumber && passingTestsNumber ? chalk.dim(" |") : ""
-    }${passingTestsNumber ? chalk.green(` ${passingTestsNumber} passed`) : ""} ${chalk.dim(
-      `(${failingTestsNumber + passingTestsNumber})`
-    )}`
-  );
-  // prints a summary of how many tests files passed and failed
-  res.push(
-    `${chalk.dim("Test Files")}${failing.length ? chalk.red(` ${failing.length} failed`) : ""}${
-      failing.length && passing.length ? chalk.dim(" |") : ""
-    }${passing.length ? chalk.green(` ${passing.length} passed`) : ""} ${chalk.dim(
-      `(${totalSum})`
-    )}`
-  );
-
-  // prints the test duration
-  res.push(
-    `${chalk.dim("Duration")} ${Math.floor(durationInSeconds / 60)}m${(
-      durationInSeconds % 60
-    ).toFixed(2)}s`
-  );
-
-  console.log(res.filter((value) => !!value).join("\n"));
 }
 
 async function testOne(entrypoint: string, options: TestOptions) {
@@ -265,16 +207,30 @@ function noCleanUp(synthDir: string) {
   );
 }
 
+export function filterTests(tests: Array<string>, regexString?: string): Array<string> {
+  if (regexString) {
+    const regex = new RegExp(regexString);
+    return tests.filter((t) => {
+      // Extract test name from the string
+      // root/env0/test:<testName>
+      const firstColonIndex = t.indexOf(":");
+      const testName = t.substring(firstColonIndex + 1);
+      return testName ? regex.test(testName) : false;
+    });
+  } else {
+    return tests;
+  }
+}
+
 async function testSimulator(synthDir: string, options: TestOptions) {
   const s = new simulator.Simulator({ simfile: synthDir });
-  const { clean } = options;
+  const { clean, testFilter } = options;
   await s.start();
 
   const testRunner = s.getResource("root/cloud.TestRunner") as std.ITestRunnerClient;
   const tests = await testRunner.listTests();
-  const filteredTests = pickOneTestPerEnvironment(tests);
+  const filteredTests = pickOneTestPerEnvironment(filterTests(tests, testFilter));
   const results = new Array<std.TestResult>();
-
   // TODO: run these tests in parallel
   for (const path of filteredTests) {
     results.push(await testRunner.runTest(path));
@@ -295,7 +251,7 @@ async function testSimulator(synthDir: string, options: TestOptions) {
 }
 
 async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.TestResult[]> {
-  const { clean } = options;
+  const { clean, testFilter } = options;
   try {
     await isAwsCdkInstalled(synthDir);
 
@@ -314,7 +270,8 @@ async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.T
       const runner = new TestRunnerClient(testArns);
 
       const allTests = await runner.listTests();
-      return [runner, pickOneTestPerEnvironment(allTests)];
+      const filteredTests = pickOneTestPerEnvironment(filterTests(allTests, testFilter));
+      return [runner, filteredTests];
     });
 
     const results = await withSpinner("Running tests...", async () => {
@@ -385,7 +342,7 @@ const targetFolder: Record<string, string> = {
 };
 
 async function testTf(synthDir: string, options: TestOptions): Promise<std.TestResult[] | void> {
-  const { clean, target = Target.SIM } = options;
+  const { clean, testFilter, target = Target.SIM } = options;
 
   try {
     if (!isTerraformInstalled(synthDir)) {
@@ -406,7 +363,8 @@ async function testTf(synthDir: string, options: TestOptions): Promise<std.TestR
       const runner = new TestRunnerClient(testArns);
 
       const allTests = await runner.listTests();
-      return [runner, pickOneTestPerEnvironment(allTests)];
+      const filteredTests = pickOneTestPerEnvironment(filterTests(allTests, testFilter));
+      return [runner, filteredTests];
     });
 
     const results = await withSpinner("Running tests...", async () => {
@@ -468,7 +426,7 @@ async function terraformOutput(synthDir: string, name: string) {
   return parsed[name].value;
 }
 
-function pickOneTestPerEnvironment(testPaths: string[]) {
+export function pickOneTestPerEnvironment(testPaths: string[]) {
   // Given a list of test paths like so:
   //
   // root/Default/env0/a/b/test:test1
