@@ -329,7 +329,7 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
           }
         },
         "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
-        "content_type": "text/html",
+        "content_type": "text/html; charset=utf-8",
         "depends_on": [
           "aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355"
         ],
@@ -345,7 +345,7 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
           }
         },
         "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
-        "content_type": "text/html",
+        "content_type": "text/html; charset=utf-8",
         "depends_on": [
           "aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355"
         ],
@@ -361,7 +361,7 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
           }
         },
         "bucket": "${aws_s3_bucket.website-2_WebsiteBucket_59576A0C.bucket}",
-        "content_type": "text/html",
+        "content_type": "text/html; charset=utf-8",
         "depends_on": [
           "aws_s3_bucket.website-2_WebsiteBucket_59576A0C"
         ],
@@ -377,7 +377,7 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
           }
         },
         "bucket": "${aws_s3_bucket.website-2_WebsiteBucket_59576A0C.bucket}",
-        "content_type": "text/html",
+        "content_type": "text/html; charset=utf-8",
         "depends_on": [
           "aws_s3_bucket.website-2_WebsiteBucket_59576A0C"
         ],
