@@ -40,7 +40,7 @@ import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
 import { TABLE_FQN, REDIS_FQN, DYNAMODB_TABLE_FQN, REACT_APP_FQN } from "../ex";
 import { WingSimulatorSchema } from "../simulator/simulator";
-import { TEST_RUNNER_FQN } from "../std";
+import { Node, TEST_RUNNER_FQN } from "../std";
 
 /**
  * Path of the simulator configuration file in every .wsim tarball.
@@ -153,6 +153,9 @@ export class App extends core.App {
 
     fs.mkdirSync(this.outdir, { recursive: true });
 
+    // TODO... there's probably a better way to do this
+    this.synthAllDisplayFunctions();
+
     // call preSynthesize() on every construct in the tree
     preSynthesizeAllConstructs(this);
 
@@ -170,11 +173,34 @@ export class App extends core.App {
     return this.outdir;
   }
 
+  private synthAllDisplayFunctions() {
+    for (const c of this.node.findAll()) {
+      const node = Node.of(c);
+      for (const [label, inflight] of Object.entries(node.displayFields)) {
+        const fn = new Function(c, `DisplayField-${label}`, inflight, {});
+        fn.node.addDependency(c);
+        node.displayFieldFns[label] = fn;
+      }
+    }
+  }
+
   private synthSimulatorFile(outdir: string) {
-    const resources = new core.DependencyGraph(this.node)
-      .topology()
-      .filter(isSimulatorResource)
-      .map((res) => res.toSimulator());
+    const resourceList = new core.DependencyGraph(this.node).topology();
+    const resources = [];
+    for (const res of resourceList) {
+      let json: any = {};
+      if (isSimulatorResource(res)) {
+        json = res.toSimulator();
+      }
+      json.path = res.node.path;
+      const node = Node.of(res);
+      json.display = {};
+      json.display.labels = {};
+      for (const [label, fn] of Object.entries(node.displayFieldFns)) {
+        json.display.labels[label] = fn.node.path;
+      }
+      resources.push(json);
+    }
 
     const contents: WingSimulatorSchema = {
       resources,
