@@ -71,6 +71,7 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/util-buffer-from@3.208.0",
     "@aws-sdk/is-array-buffer@3.201.0",
     "mime-types",
+    "mime@^3.0.0",
     // azure client dependencies
     "@azure/storage-blob@12.14.0",
     "@azure/identity@3.1.3",

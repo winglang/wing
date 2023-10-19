@@ -239,7 +239,7 @@ retentionPeriod: duration;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
-- *Default:* undefined
+- *Default:* 1h
 
 How long a queue retains a message.
 
@@ -252,7 +252,7 @@ timeout: duration;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
-- *Default:* undefined
+- *Default:* 30s
 
 How long a queue's consumers have to process a message.
 

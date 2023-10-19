@@ -2608,13 +2608,13 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		// Verify variadic args
-		if variadic_index.is_some() {
-			let variadic_args_param = func_sig.parameters.get(variadic_index.unwrap()).unwrap();
+		if let Some(variadic_index) = variadic_index {
+			let variadic_args_param = func_sig.parameters.get(variadic_index).unwrap();
 			let variadic_args_inner_type = variadic_args_param.typeref.collection_item_type().unwrap();
 
 			for (arg_expr, arg_type) in izip!(
-				arg_list.pos_args.iter().skip(variadic_index.unwrap()),
-				arg_list_types.pos_args.iter().skip(variadic_index.unwrap()),
+				arg_list.pos_args.iter().skip(variadic_index),
+				arg_list_types.pos_args.iter().skip(variadic_index),
 			) {
 				self.validate_type(*arg_type, variadic_args_inner_type, arg_expr);
 			}

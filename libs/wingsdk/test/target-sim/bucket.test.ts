@@ -155,7 +155,7 @@ test("put and get object from bucket", async () => {
   expect(listMessages(s)).toMatchSnapshot();
 });
 
-test("put and getMetadata of objects from bucket", async () => {
+test("put and get metadata of objects from bucket", async () => {
   // GIVEN
   const app = new SimApp();
   cloud.Bucket._newBucket(app, "my_bucket");
@@ -193,6 +193,30 @@ test("put and getMetadata of objects from bucket", async () => {
   expect(response3.contentType).toEqual("application/json");
   expect(response3.lastModified.year).toEqual(currentYear);
   expect(listMessages(s)).toMatchSnapshot();
+});
+
+test("putJson and get metadata of object from bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Bucket._newBucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+  const KEY = "json-file.txt";
+  const VALUE = "bring cloud;";
+
+  // WHEN
+  await client.putJson(KEY, VALUE as any);
+  const response = await client.metadata("json-file.txt");
+
+  // THEN
+  await s.stop();
+  const currentYear = new Date().getFullYear();
+
+  expect(response.size).toEqual(14);
+  expect(response.contentType).toEqual("application/json");
+  expect(response.lastModified.year).toEqual(currentYear);
 });
 
 test("put multiple objects and list all from bucket", async () => {

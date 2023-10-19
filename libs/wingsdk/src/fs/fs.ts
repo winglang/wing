@@ -221,8 +221,14 @@ export class Util {
    */
   public static readYaml(filepath: string): Json[] {
     const text = Util.readFile(filepath);
-    const yamlObjs = yaml.parseAllDocuments(text);
-    return yamlObjs.map((o: any) => JSON.parse(JSON.stringify(o)) as Json);
+    const yamlDocs = yaml.parseAllDocuments(text);
+    return yamlDocs.map((doc) => {
+      if (doc.contents && doc.contents.toJSON) {
+        return doc.contents.toJSON();
+      } else {
+        throw new Error(`Unexpected document structure: ${doc}`);
+      }
+    });
   }
   /**
    * Convert all YAML objects from a single file into JSON objects
