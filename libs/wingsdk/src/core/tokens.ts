@@ -18,7 +18,7 @@ export abstract class Tokens {
   /**
    * Lifts the given token to the host.
    */
-  public abstract liftValue(host: IInflightHost, value: any): void;
+  public abstract onLiftValue(host: IInflightHost, value: any): void;
 
   /**
    * Creates a valid environment variable name from the given token.

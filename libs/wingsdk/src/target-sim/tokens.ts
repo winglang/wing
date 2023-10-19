@@ -59,7 +59,7 @@ export class SimTokens extends Tokens {
   /**
    * Lifts the given token to the host.
    */
-  public liftValue(host: IInflightHost, value: any) {
+  public onLiftValue(host: IInflightHost, value: any) {
     switch (typeof value) {
       case "string":
         const envName = this.envName(value);

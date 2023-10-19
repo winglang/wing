@@ -109,7 +109,7 @@ export abstract class Resource extends Construct implements IResource {
   ): void {
     const tokens = App.of(host)._tokens;
     if (tokens.isToken(obj)) {
-      return tokens.liftValue(host, obj);
+      return tokens.onLiftValue(host, obj);
     }
 
     switch (typeof obj) {
