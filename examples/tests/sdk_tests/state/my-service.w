@@ -2,7 +2,7 @@ bring sim;
 bring cloud;
 bring util;
 
-class MyService {
+pub class MyService {
   pub state: sim.State;
   startTimeKey: str;
   pub startTime: str;
