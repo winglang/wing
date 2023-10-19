@@ -287,16 +287,17 @@
       "type": "bundled"
     },
     {
+      "name": "mime",
+      "version": "^3.0.0",
+      "type": "bundled"
+    },
+    {
       "name": "nanoid",
       "version": "^3.3.6",
       "type": "bundled"
     },
     {
       "name": "safe-stable-stringify",
-      "type": "bundled"
-    },
-    {
-      "name": "undici",
       "type": "bundled"
     },
     {

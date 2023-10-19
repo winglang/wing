@@ -117,11 +117,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["putInBucket", "$inflight_init"];
       }
-      static _registerTypeBind(host, ops) {
+      static _registerTypeOnLift(host, ops) {
         if (ops.includes("putInBucket")) {
-          MyType._registerBindObject(b, host, ["put"]);
+          MyType._registerOnLiftObject(b, host, ["put"]);
         }
-        super._registerTypeBind(host, ops);
+        super._registerTypeOnLift(host, ops);
       }
     }
     class YourType extends $stdlib.std.Resource {
@@ -149,11 +149,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["putIndirect", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("putIndirect")) {
-          YourType._registerBindObject(MyType, host, ["putInBucket"]);
+          YourType._registerOnLiftObject(MyType, host, ["putInBucket"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -182,11 +182,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(t, host, ["putIndirect"]);
+          $Closure1._registerOnLiftObject(t, host, ["putIndirect"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");

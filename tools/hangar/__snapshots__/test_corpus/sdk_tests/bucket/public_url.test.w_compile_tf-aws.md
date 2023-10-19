@@ -18,7 +18,7 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
         }
         catch ($error_actual) {
           const actual = $error_actual.message;
-          {((cond) => {if (!cond) throw new Error("assertion failed: actual.contains(expected)")})(actual.includes(expected))};
+          {((cond) => {if (!cond) throw new Error("assertion failed: actual == expected")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(actual,expected)))};
           error = true;
         }
         {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
@@ -172,12 +172,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(privateBucket, host, ["publicUrl", "put"]);
-          $Closure1._registerBindObject(publicBucket, host, ["publicUrl", "put"]);
+          $Closure1._registerOnLiftObject(privateBucket, host, ["publicUrl", "put"]);
+          $Closure1._registerOnLiftObject(publicBucket, host, ["publicUrl", "put"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const publicBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"publicBucket",{ public: true });

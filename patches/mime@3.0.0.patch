@@ -1,0 +1,32 @@
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+deleted file mode 100644
+index cdf9be581e413715fefc1d72d146e35b98cd10ef..0000000000000000000000000000000000000000
+diff --git a/Mime.js b/Mime.js
+index 969a66e41fbb6d7265562a657cb24b4e761969ee..63a8891041f07745af0f74d64941c3225f12951b 100644
+--- a/Mime.js
++++ b/Mime.js
+@@ -15,6 +15,8 @@ function Mime() {
+   this.define = this.define.bind(this);
+   this.getType = this.getType.bind(this);
+   this.getExtension = this.getExtension.bind(this);
++  this.lookup = this.lookup.bind(this);
++  this.charsets.lookup = this.charsets.lookup.bind(this);
+ }
+ 
+ /**
+@@ -86,6 +88,15 @@ Mime.prototype.getType = function(path) {
+   return (hasDot || !hasPath) && this._types[ext] || null;
+ };
+ 
++
++Mime.prototype.lookup = Mime.prototype.getType;
++Mime.prototype.charsets = {
++  lookup: function(mimeType, fallback) {
++    // Assume text types are utf8
++    return (/^text\/|^application\/(javascript|json)/).test(mimeType) ? 'UTF-8' : fallback;
++  }
++};
++
+ /**
+  * Return file extension associated with a mime type
+  */

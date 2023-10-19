@@ -10,8 +10,6 @@ export interface Bundle {
   hash: string;
 }
 
-const SDK_PATH = normalPath(join(__dirname, "..", ".."));
-
 /**
  * Bundles a javascript entrypoint into a single file.
  * @param entrypoint The javascript entrypoint
@@ -31,9 +29,6 @@ export function createBundle(entrypoint: string, outputDir?: string): Bundle {
     nodePaths: process.env.WING_NODE_MODULES
       ? [normalPath(process.env.WING_NODE_MODULES as string)]
       : undefined,
-    alias: {
-      "@winglang/sdk": SDK_PATH,
-    },
     minify: false,
     platform: "node",
     target: "node18",

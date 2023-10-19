@@ -94,34 +94,6 @@ const response = await fn.invoke("hello!");
 console.log(response);
 ```
 
-### Interacting with the simulation across processes
-
-The simulator also exposes an HTTP server that can be used to interact with the
-simulated application from other processes. To get the URL of the simulator's
-HTTP server, access `sim.url` after the simulator has started.
-
-```typescript
-declare const sim: testing.Simulator;
-
-// ...after the simulator has started
-
-const url = sim.url;
-console.log(url);
-
-const handleId = sim.getResourceConfig("root/Default/cloud.Bucket").attrs.handle;
-console.log(handleId);
-```
-
-In another process, a client can be generated to interact with the simulator. Internally it will behave the same as the resource client, but it will use HTTP requests to communicate with the simulator.
-
-```typescript
-import { cloud, testing } from '@winglang/sdk';
-
-const bucket = testing.makeSimulatorClient("WING_SIMULATOR_URL", "HANDLE_ID") as cloud.IBucketClient;
-const response = await bucket.get("my-key");
-console.log(response);
-```
-
 ### Debugging
 
 Finally, when you want to understand how Wing resources are working, you may

@@ -550,6 +550,26 @@ exports[`tree.json for an app with many resources 1`] = `
                       "Dummy": {
                         "children": {
                           "Dummy": {
+                            "children": {
+                              "StaticDummy": {
+                                "children": {
+                                  "Dummy": {
+                                    "constructInfo": {
+                                      "fqn": "@winglang/sdk.std.Resource",
+                                      "version": "0.0.0",
+                                    },
+                                    "id": "Dummy",
+                                    "path": "root/Default/Default/ScopeAndIdTestClass/Dummy/Dummy/StaticDummy/Dummy",
+                                  },
+                                },
+                                "constructInfo": {
+                                  "fqn": "@winglang/sdk.std.Resource",
+                                  "version": "0.0.0",
+                                },
+                                "id": "StaticDummy",
+                                "path": "root/Default/Default/ScopeAndIdTestClass/Dummy/Dummy/StaticDummy",
+                              },
+                            },
                             "constructInfo": {
                               "fqn": "@winglang/sdk.std.Resource",
                               "version": "0.0.0",

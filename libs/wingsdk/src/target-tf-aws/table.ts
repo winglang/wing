@@ -51,7 +51,7 @@ export class Table extends ex.Table {
     });
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("tables can only be bound by tfaws.Function for now");
     }
@@ -97,7 +97,7 @@ export class Table extends ex.Table {
     host.addEnvironment(this.primaryKeyEnvName(), this.primaryKey);
     host.addEnvironment(this.columnsEnvName(), JSON.stringify(this.columns));
 
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

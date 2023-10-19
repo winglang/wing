@@ -7,6 +7,9 @@ import * as cloud from "../cloud";
 import { BaseResourceSchema } from "../simulator/simulator";
 import { IInflightHost } from "../std";
 
+/**
+ * A static website.
+ */
 export class Website extends cloud.Website implements ISimulatorResource {
   private fileRoutes: FileRoutes = {};
 
@@ -14,10 +17,12 @@ export class Website extends cloud.Website implements ISimulatorResource {
     super(scope, id, props);
   }
 
+  /** The url of the website */
   public get url(): string {
     return simulatorAttrToken(this, "url");
   }
 
+  /** Adds a file to the website during deployment */
   public addFile(
     path: string,
     data: string,
@@ -31,6 +36,7 @@ export class Website extends cloud.Website implements ISimulatorResource {
     return `${this.url}/${path}`;
   }
 
+  /** Returns sim schema */
   public toSimulator(): BaseResourceSchema {
     const schema: WebsiteSchema = {
       type: WEBSITE_TYPE,
@@ -41,9 +47,9 @@ export class Website extends cloud.Website implements ISimulatorResource {
     return schema;
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

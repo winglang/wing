@@ -5,20 +5,11 @@ use lsp_types::{
 use std::collections::HashMap;
 
 use crate::diagnostic::{get_diagnostics, ERR_EXPECTED_SEMICOLON};
-use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
+use crate::wasm_util::extern_json_fn;
 
 #[no_mangle]
 pub unsafe extern "C" fn wingc_on_code_action(ptr: u32, len: u32) -> u64 {
-	let parse_string = ptr_to_string(ptr, len);
-	if let Ok(parsed) = serde_json::from_str(&parse_string) {
-		let result = on_code_action(parsed);
-		let result = serde_json::to_string(&result).unwrap();
-
-		// return result as u64 with ptr and len
-		string_to_combined_ptr(result)
-	} else {
-		WASM_RETURN_ERROR
-	}
+	extern_json_fn(ptr, len, on_code_action)
 }
 
 pub fn on_code_action(params: CodeActionParams) -> Vec<CodeActionOrCommand> {

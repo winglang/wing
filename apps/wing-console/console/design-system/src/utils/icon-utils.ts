@@ -10,7 +10,7 @@ import {
   MegaphoneIcon,
   QueueListIcon,
   TableCellsIcon,
-  LockClosedIcon,
+  KeyIcon,
 } from "@heroicons/react/24/outline";
 import {
   ArchiveBoxIcon as SolidArchiveBoxIcon,
@@ -23,7 +23,7 @@ import {
   MegaphoneIcon as SolidMegaphoneIcon,
   QueueListIcon as SolidQueueListIcon,
   TableCellsIcon as SolidTableCellsIcon,
-  LockClosedIcon as SolidLockClosedIcon,
+  KeyIcon as SolidKeyIcon,
 } from "@heroicons/react/24/solid";
 
 import { DynamoDBIcon } from "../icons/dynamodb-icon.js";
@@ -79,7 +79,7 @@ export const getResourceIconComponent = (
       return solid ? SolidBeakerIcon : BeakerIcon;
     }
     case "wingsdk.cloud.Secret": {
-      return solid ? SolidLockClosedIcon : LockClosedIcon;
+      return solid ? SolidKeyIcon : KeyIcon;
     }
     case "wingsdk.ex.DynamodbTable": {
       return DynamoDBIcon;

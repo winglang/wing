@@ -173,11 +173,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(JSHelperInflight, host, ["validateUUIDv4"]);
+          $Closure1._registerOnLiftObject(JSHelperInflight, host, ["validateUUIDv4"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const data = (util.Util.uuidv4());

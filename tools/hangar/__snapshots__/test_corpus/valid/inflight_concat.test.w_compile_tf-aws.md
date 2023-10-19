@@ -87,14 +87,14 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["foo", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          R._registerBindObject((this.s1.concat(" world")), host, []);
+          R._registerOnLiftObject((this.s1.concat(" world")), host, []);
         }
         if (ops.includes("foo")) {
-          R._registerBindObject((this.s1.concat(" world")), host, []);
+          R._registerOnLiftObject((this.s1.concat(" world")), host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const r = new R(this,"R");
