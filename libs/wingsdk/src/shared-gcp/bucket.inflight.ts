@@ -225,6 +225,9 @@ export class BucketClient implements IBucketClient {
     }
   }
 
+
+  // TODO: implement
+  // https://github.com/winglang/wing/issues/4599
   /**
    * Returns a signed url to the given file. This URL can be used by anyone to
    * access the file until the link expires (defaults to 24 hours).
@@ -232,22 +235,23 @@ export class BucketClient implements IBucketClient {
    * @param duration Time until expires
    */
   public async signedUrl(
-    key: string,
-    options?: BucketSignedUrlOptions
+    _key: string,
+    _options?: BucketSignedUrlOptions
   ): Promise<string> {
-    try {
-      const expiryTimeInSeconds: number = options?.duration?.seconds || 86400;
+    // try {
+    //   const expiryTimeInSeconds: number = options?.duration?.seconds || 86400;
 
-      // as BucketSignedUrlOptions don't have a action field, we are using the read action as default
-      const [url] = await this.bucket.file(key).getSignedUrl({
-        version: "v4",
-        action: "read",
-        expires: Date.now() + expiryTimeInSeconds * 1000,
-      });
+    //   // as BucketSignedUrlOptions don't have a action field, we are using the read action as default
+    //   const [url] = await this.bucket.file(key).getSignedUrl({
+    //     version: "v4",
+    //     action: "read",
+    //     expires: Date.now() + expiryTimeInSeconds * 1000,
+    //   });
 
-      return url;
-    } catch (error) {
-      throw new Error(`Failed to get signed URL. (key=${key})`);
-    }
+    //   return url;
+    // } catch (error) {
+    //   throw new Error(`Failed to get signed URL. (key=${key})`);
+    // }
+    throw new Error("Method not implemented.");
   }
 }

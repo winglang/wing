@@ -97,7 +97,7 @@ export class Bucket extends cloud.Bucket {
       ops.includes(cloud.BucketInflightMethods.LIST) ||
       ops.includes(cloud.BucketInflightMethods.EXISTS) ||
       ops.includes(cloud.BucketInflightMethods.PUBLIC_URL) ||
-      ops.includes(cloud.BucketInflightMethods.SIGNED_URL) ||
+      // ops.includes(cloud.BucketInflightMethods.SIGNED_URL) ||
       ops.includes(cloud.BucketInflightMethods.TRY_GET) ||
       ops.includes(cloud.BucketInflightMethods.TRY_GET_JSON)
     ) {
