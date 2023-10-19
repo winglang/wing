@@ -7,6 +7,7 @@ import {
   GetPublicAccessBlockCommand,
   ListObjectsV2Command,
   PutObjectCommand,
+  CopyObjectCommand,
   S3Client,
   NotFound,
   NoSuchKey,
@@ -681,4 +682,28 @@ test("metadata fail on non-existent object", async () => {
   await expect(() => client.metadata(KEY)).rejects.toThrowError(
     "Object does not exist (key=KEY)."
   );
+});
+
+test("copy objects within the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const SRC_KEY = "SRC/KEY";
+  const DST_KEY = "DST/KEY";
+
+  s3Mock
+    .on(CopyObjectCommand, {
+      Bucket: BUCKET_NAME,
+      CopySource: `${BUCKET_NAME}/${SRC_KEY}`,
+      Key: DST_KEY,
+    })
+    .resolves({});
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const response1 = await client.copy(SRC_KEY, SRC_KEY);
+  const response2 = await client.copy(SRC_KEY, DST_KEY);
+
+  // THEN
+  expect(response1).toEqual(undefined);
+  expect(response2).toEqual(undefined);
 });
