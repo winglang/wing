@@ -368,31 +368,55 @@ impl SymbolEnv {
 
 			// Look up the result in each env. If there are multiple results, throw a special error
 			// otherwise proceed normally
-			let mut lookup_result: Option<LookupResult> = None;
+			let mut lookup_result = LookupResult::NotFound((*next_symb).clone());
 			for env in ns.envs.vec_iter() {
-				let partial_result = env.lookup_ext(next_symb, statement_idx);
-				if matches!(partial_result, LookupResult::Found(_, _)) {
-					if lookup_result.is_some() {
-						return LookupResult::MultipleFound;
-					}
+				// invariant: lookup_result is never "ExpectedNamespace" or "MultipleFound"
 
-					let lookup_info_access = match &partial_result {
-						LookupResult::Found(_, lookup_info) => lookup_info.access,
-						_ => unreachable!(), // checked by the "matches!" case above
-					};
-					if lookup_info_access != AccessModifier::Public {
-						if let LookupResult::Found(kind, lookup_info) = partial_result {
-							return LookupResult::NotPublic(kind, lookup_info);
-						}
-					}
+				// We're looking up a symbol in a namespace other than our own, so we need to
+				// check if the symbol is public or not. If it's not, replace a "Found" result
+				// with a "NotPublic" result.
+				let partial_result = match env.lookup_ext(next_symb, statement_idx) {
+					LookupResult::Found(kind, info) => match info.access {
+						AccessModifier::Public => LookupResult::Found(kind, info),
+						_ => LookupResult::NotPublic(kind, info),
+					},
+					result => result,
+				};
 
-					lookup_result = Some(partial_result);
+				// if the current result was "Found" or "DefinedLater", and the partial result
+				// was "Found" or "DefinedLater", then we have multiple valid results
+				if (matches!(partial_result, LookupResult::Found(_, _))
+					|| matches!(partial_result, LookupResult::DefinedLater(_)))
+					&& (matches!(lookup_result, LookupResult::Found(_, _))
+						|| matches!(lookup_result, LookupResult::DefinedLater(_)))
+				{
+					return LookupResult::MultipleFound;
+				}
+
+				// if the current result was "NotPublic" or "NotFound" but we got a
+				// "Found" or "DefinedLater" partial result, then report that instead
+				#[allow(clippy::if_same_then_else)]
+				if (matches!(partial_result, LookupResult::Found(_, _))
+					|| matches!(partial_result, LookupResult::DefinedLater(_)))
+					&& (matches!(lookup_result, LookupResult::NotPublic(_, _))
+						|| matches!(lookup_result, LookupResult::NotFound(_)))
+				{
+					lookup_result = partial_result;
+				}
+				// if we found a symbol but it wasn't public, we can update our
+				// result if we're currently "NotFound". "Found", "DefinedLater", and any
+				// existing "NotPublic" results take precedence.
+				else if (matches!(partial_result, LookupResult::NotPublic(_, _)))
+					&& (matches!(lookup_result, LookupResult::NotFound(_)))
+				{
+					lookup_result = partial_result;
 				}
 			}
-			if let Some(LookupResult::Found(k, i)) = lookup_result {
-				res = (k, i);
-			} else {
-				return LookupResult::NotFound((*next_symb).clone());
+			match lookup_result {
+				LookupResult::Found(k, i) | LookupResult::NotPublic(k, i) => {
+					res = (k, i);
+				}
+				r => return r,
 			}
 
 			prev_symb = *next_symb;
