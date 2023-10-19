@@ -94,7 +94,7 @@ export class Function extends cloud.Function {
 
     // As per documentation "a function must have exactly one trigger" so for now
     // by default a function will support http get requests
-    // when we bind other resources like queues or topics this function.json will need to
+    // when we lift other resources like queues or topics this function.json will need to
     // be overwritten with the correct trigger
     // https://learn.microsoft.com/en-us/azure/azure-functions/functions-triggers-bindings?tabs=csharp
     fs.writeFileSync(
@@ -258,11 +258,11 @@ export class Function extends cloud.Function {
     return lines;
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     //TODO: add permissions here when changing auth level: https://github.com/winglang/wing/issues/4497
     host.addEnvironment(this.envName(), this.function.name);
 
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

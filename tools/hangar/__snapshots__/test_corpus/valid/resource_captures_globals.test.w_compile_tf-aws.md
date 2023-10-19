@@ -419,20 +419,20 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["myMethod", "myStaticMethod", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Another._registerBindObject(globalCounter, host, ["peek"]);
+          Another._registerOnLiftObject(globalCounter, host, ["peek"]);
         }
         if (ops.includes("myMethod")) {
-          Another._registerBindObject(globalCounter, host, ["inc", "peek"]);
+          Another._registerOnLiftObject(globalCounter, host, ["inc", "peek"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
-      static _registerTypeBind(host, ops) {
+      static _registerTypeOnLift(host, ops) {
         if (ops.includes("myStaticMethod")) {
-          Another._registerBindObject(globalCounter, host, ["peek"]);
+          Another._registerOnLiftObject(globalCounter, host, ["peek"]);
         }
-        super._registerTypeBind(host, ops);
+        super._registerTypeOnLift(host, ops);
       }
     }
     class MyResource extends $stdlib.std.Resource {
@@ -467,12 +467,12 @@ class $Root extends $stdlib.std.Resource {
           _getInflightOps() {
             return ["handle", "$inflight_init"];
           }
-          _registerBind(host, ops) {
+          _registerOnLift(host, ops) {
             if (ops.includes("handle")) {
-              R._registerBindObject($parentThis.localCounter, host, ["inc"]);
-              R._registerBindObject(globalCounter, host, ["inc"]);
+              R._registerOnLiftObject($parentThis.localCounter, host, ["inc"]);
+              R._registerOnLiftObject(globalCounter, host, ["inc"]);
             }
-            super._registerBind(host, ops);
+            super._registerOnLift(host, ops);
           }
         }
         (this.localTopic.onMessage(new R(this,"R")));
@@ -509,25 +509,25 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["myPut", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          MyResource._registerBindObject(this.localTopic, host, []);
+          MyResource._registerOnLiftObject(this.localTopic, host, []);
         }
         if (ops.includes("myPut")) {
-          MyResource._registerBindObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(globalMapOfNum, "a"), host, []);
-          MyResource._registerBindObject((globalArrayOfStr.at(0)), host, []);
-          MyResource._registerBindObject((globalSetOfStr.has("a")), host, []);
-          MyResource._registerBindObject(Another, host, ["myStaticMethod"]);
-          MyResource._registerBindObject(globalAnother, host, ["myMethod"]);
-          MyResource._registerBindObject(globalAnother.first.myResource, host, ["put"]);
-          MyResource._registerBindObject(globalAnother.myField, host, []);
-          MyResource._registerBindObject(globalBool, host, []);
-          MyResource._registerBindObject(globalBucket, host, ["put"]);
-          MyResource._registerBindObject(globalNum, host, []);
-          MyResource._registerBindObject(globalStr, host, []);
-          MyResource._registerBindObject(this.localTopic, host, ["publish"]);
+          MyResource._registerOnLiftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(globalMapOfNum, "a"), host, []);
+          MyResource._registerOnLiftObject((globalArrayOfStr.at(0)), host, []);
+          MyResource._registerOnLiftObject((globalSetOfStr.has("a")), host, []);
+          MyResource._registerOnLiftObject(Another, host, ["myStaticMethod"]);
+          MyResource._registerOnLiftObject(globalAnother, host, ["myMethod"]);
+          MyResource._registerOnLiftObject(globalAnother.first.myResource, host, ["put"]);
+          MyResource._registerOnLiftObject(globalAnother.myField, host, []);
+          MyResource._registerOnLiftObject(globalBool, host, []);
+          MyResource._registerOnLiftObject(globalBucket, host, ["put"]);
+          MyResource._registerOnLiftObject(globalNum, host, []);
+          MyResource._registerOnLiftObject(globalStr, host, []);
+          MyResource._registerOnLiftObject(this.localTopic, host, ["publish"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -556,11 +556,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(res, host, ["myPut"]);
+          $Closure1._registerOnLiftObject(res, host, ["myPut"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -589,11 +589,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(Another, host, ["myStaticMethod"]);
+          $Closure2._registerOnLiftObject(Another, host, ["myStaticMethod"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const globalBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");

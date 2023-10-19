@@ -105,19 +105,19 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(("bang" in ((arrOfMap.at(0)))), host, []);
-          $Closure1._registerBindObject(("world" in (myMap)), host, []);
-          $Closure1._registerBindObject(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(j, "b"), host, []);
-          $Closure1._registerBindObject((arr.at(0)), host, []);
-          $Closure1._registerBindObject((arr.at(1)), host, []);
-          $Closure1._registerBindObject((mySet.has("my")), host, []);
-          $Closure1._registerBindObject(Object.keys(myMap).length, host, []);
-          $Closure1._registerBindObject(arr.length, host, []);
-          $Closure1._registerBindObject(mySet.size, host, []);
+          $Closure1._registerOnLiftObject(("bang" in ((arrOfMap.at(0)))), host, []);
+          $Closure1._registerOnLiftObject(("world" in (myMap)), host, []);
+          $Closure1._registerOnLiftObject(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(j, "b"), host, []);
+          $Closure1._registerOnLiftObject((arr.at(0)), host, []);
+          $Closure1._registerOnLiftObject((arr.at(1)), host, []);
+          $Closure1._registerOnLiftObject((mySet.has("my")), host, []);
+          $Closure1._registerOnLiftObject(Object.keys(myMap).length, host, []);
+          $Closure1._registerOnLiftObject(arr.length, host, []);
+          $Closure1._registerOnLiftObject(mySet.size, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const arr = ["hello", "world"];

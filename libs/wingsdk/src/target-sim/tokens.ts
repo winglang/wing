@@ -45,7 +45,7 @@ export class SimTokens extends Tokens {
   }
 
   /**
-   * "Lifts" a value into an inflight context.
+   * Lifts a value into an inflight context.
    */
   public lift(value: any): string {
     switch (typeof value) {
@@ -57,16 +57,16 @@ export class SimTokens extends Tokens {
   }
 
   /**
-   * Binds the given token to the host.
+   * Lifts the given token to the host.
    */
-  public bindValue(host: IInflightHost, value: any) {
+  public onLiftValue(host: IInflightHost, value: any) {
     switch (typeof value) {
       case "string":
         const envName = this.envName(value);
         host.addEnvironment(envName, value);
         break;
       default:
-        throw new Error(`Unable to bind token ${value}`);
+        throw new Error(`Unable to lift token ${value}`);
     }
   }
 }

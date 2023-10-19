@@ -112,12 +112,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(q, host, ["approxSize", "push"]);
-          $Closure1._registerBindObject(retentionPeriod, host, []);
+          $Closure1._registerOnLiftObject(q, host, ["approxSize", "push"]);
+          $Closure1._registerOnLiftObject(retentionPeriod, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     let timeout = (std.Duration.fromSeconds(30));

@@ -226,12 +226,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(b, host, ["getJson"]);
-          $Closure1._registerBindObject(fileName, host, []);
+          $Closure1._registerOnLiftObject(b, host, ["getJson"]);
+          $Closure1._registerOnLiftObject(fileName, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -263,14 +263,14 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(b, host, ["putJson"]);
-          $Closure2._registerBindObject(fileName, host, []);
-          $Closure2._registerBindObject(getJson, host, ["invoke"]);
-          $Closure2._registerBindObject(j, host, []);
+          $Closure2._registerOnLiftObject(b, host, ["putJson"]);
+          $Closure2._registerOnLiftObject(fileName, host, []);
+          $Closure2._registerOnLiftObject(getJson, host, ["invoke"]);
+          $Closure2._registerOnLiftObject(j, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");

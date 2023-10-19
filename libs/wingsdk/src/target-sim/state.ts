@@ -49,9 +49,9 @@ export class State extends Resource implements ISimulatorResource {
     return makeSimulatorJsClient(__filename, this);
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   public toSimulator(): BaseResourceSchema {
