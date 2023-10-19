@@ -720,6 +720,47 @@ test("tryDelete objects from bucket", async () => {
   expect(nonExistentObjectTryDelete).toEqual(false);
 });
 
+test("copy objects within the bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Bucket._newBucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  const KEY1 = "file1.main.w";
+  const VALUE1 = "bring cloud;";
+  const KEY2 = "file2.txt";
+  const VALUE2 = { msg: "Hello world!" };
+
+  // WHEN
+  await client.put(KEY1, VALUE1);
+  await client.putJson(KEY2, VALUE2 as any);
+  const file1SrcMetadata = await client.metadata("file1.main.w");
+  const file2SrcMetadata = await client.metadata("file2.txt");
+
+  // Sleep 100ms to ensure 'metadata.lastModified' changes upon copy.
+  await new Promise((r) => setTimeout(r, 100));
+
+  await client.copy("file1.main.w", "file1.main.w");
+  await client.copy("file2.txt", "dir/file2.txt");
+  const file1DstMetadata = await client.metadata("file1.main.w");
+  const file2DstMetadata = await client.metadata("dir/file2.txt");
+
+  // THEN
+  await s.stop();
+  expect(file1SrcMetadata.contentType).toEqual(file1DstMetadata.contentType);
+  expect(file1SrcMetadata.size).toEqual(file1DstMetadata.size);
+  expect(file1SrcMetadata.lastModified).not.toEqual(
+    file1DstMetadata.lastModified
+  );
+  expect(file2SrcMetadata.contentType).toEqual(file2DstMetadata.contentType);
+  expect(file2SrcMetadata.size).toEqual(file2DstMetadata.size);
+  expect(file2SrcMetadata.lastModified).not.toEqual(
+    file2DstMetadata.lastModified
+  );
+});
+
 // Deceided to seperate this feature in a different release,(see https://github.com/winglang/wing/issues/4143)
 
 // test("Given a bucket when reaching to a non existent key, signed url it should throw an error", async () => {
