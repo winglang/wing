@@ -9,7 +9,7 @@ import chalk from "chalk";
 import debug from "debug";
 import { glob } from "glob";
 import { nanoid } from "nanoid";
-import { compile, CompileOptions } from "./compile";
+import { compile, CompileOptions, NotImplementedError } from "./compile";
 import { generateTmpDir, withSpinner } from "../util";
 
 const log = debug("wing:test");
@@ -62,7 +62,15 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
       console.log((error as Error).message);
       results.push({
         testName: generateTestName(entrypoint),
-        results: [{ pass: false, path: "", error: (error as Error).message, traces: [] }],
+        results: [
+          {
+            pass: false,
+            unsupported: error instanceof NotImplementedError,
+            path: "",
+            error: (error as Error).message,
+            traces: [],
+          },
+        ],
       });
     }
   };
@@ -72,7 +80,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
   // if we have any failures, exit with 1
   for (const testSuite of results) {
     for (const r of testSuite.results) {
-      if (r.error) {
+      if (!r.pass && !r.unsupported) {
         return 1;
       }
     }
@@ -87,10 +95,20 @@ function printResults(
 ) {
   const durationInSeconds = duration / 1000;
   const totalSum = testResults.length;
-  const failing = testResults.filter(({ results }) => results.some(({ pass }) => !pass));
+  const unsupportedFiles = testResults.filter(({ results }) =>
+    results.some(({ unsupported }) => unsupported)
+  );
+  const failing = testResults.filter(({ results }) =>
+    results.some(({ pass, unsupported }) => !pass && !unsupported)
+  );
   const passing = testResults.filter(({ results }) => results.every(({ pass }) => !!pass));
   const failingTestsNumber = failing.reduce(
-    (acc, { results }) => acc + results.filter(({ pass }) => !pass).length,
+    (acc, { results }) =>
+      acc + results.filter(({ pass, unsupported }) => !pass && !unsupported).length,
+    0
+  );
+  const unsupportedTestsNumber = unsupportedFiles.reduce(
+    (acc, { results }) => acc + results.filter(({ unsupported }) => !!unsupported).length,
     0
   );
   const passingTestsNumber = testResults.reduce(
@@ -98,7 +116,7 @@ function printResults(
     0
   );
   console.log(" "); // for getting a new line- \n does't seem to work :(
-  const areErrors = failing.length > 0 && totalSum > 1;
+  const areErrors = failing.length + unsupportedFiles.length > 0 && totalSum > 1;
   const showTitle = totalSum > 1;
 
   const res = [];
@@ -108,6 +126,7 @@ function printResults(
     res.push(`Results:`);
     res.push(...passing.map(({ testName }) => `    ${chalk.green("✓")} ${testName}`));
     res.push(...failing.map(({ testName }) => `    ${chalk.red("×")} ${testName}`));
+    res.push(...unsupportedFiles.map(({ testName }) => `    ${chalk.yellow("?")} ${testName}`));
   }
 
   if (areErrors) {
@@ -115,7 +134,7 @@ function printResults(
     res.push(" ");
     res.push("Errors:");
     res.push(
-      ...failing.map(({ testName, results }) =>
+      ...[...failing, ...unsupportedFiles].map(({ testName, results }) =>
         [
           `At ${testName}`,
           results.filter(({ pass }) => !pass).map(({ error }) => chalk.red(error)),
@@ -126,21 +145,29 @@ function printResults(
 
   // prints a summary of how many tests passed and failed
   res.push(" ");
+  const testCount = [
+    failingTestsNumber && chalk.red(` ${failingTestsNumber} failed`),
+    passingTestsNumber && chalk.green(` ${passingTestsNumber} passed`),
+    unsupportedTestsNumber && chalk.yellow(` ${unsupportedTestsNumber} unsupported`),
+  ]
+    .filter((item) => !!item)
+    .join(chalk.dim(" |"));
+
+  const fileCount = [
+    failing.length && chalk.red(` ${failing.length} failed`),
+    passing.length && chalk.green(` ${passing.length} passed`),
+    unsupportedFiles.length && chalk.yellow(` ${unsupportedFiles.length} unsupported`),
+  ]
+    .filter((item) => !!item)
+    .join(chalk.dim(" |"));
+
   res.push(
-    `${chalk.dim("Tests")}${failingTestsNumber ? chalk.red(` ${failingTestsNumber} failed`) : ""}${
-      failingTestsNumber && passingTestsNumber ? chalk.dim(" |") : ""
-    }${passingTestsNumber ? chalk.green(` ${passingTestsNumber} passed`) : ""} ${chalk.dim(
-      `(${failingTestsNumber + passingTestsNumber})`
+    `${chalk.dim("Tests")}${testCount} ${chalk.dim(
+      `(${failingTestsNumber + passingTestsNumber + unsupportedTestsNumber})`
     )}`
   );
   // prints a summary of how many tests files passed and failed
-  res.push(
-    `${chalk.dim("Test Files")}${failing.length ? chalk.red(` ${failing.length} failed`) : ""}${
-      failing.length && passing.length ? chalk.dim(" |") : ""
-    }${passing.length ? chalk.green(` ${passing.length} passed`) : ""} ${chalk.dim(
-      `(${totalSum})`
-    )}`
-  );
+  res.push(`${chalk.dim("Test Files")}${fileCount} ${chalk.dim(`(${totalSum})`)}`);
 
   // prints the test duration
   res.push(
@@ -175,7 +202,7 @@ async function testOne(entrypoint: string, options: TestOptions) {
     case Target.AWSCDK:
       return testAwsCdk(synthDir, options);
     default:
-      throw new Error(`unsupported target ${options.target}`);
+      throw new NotImplementedError(`unsupported target ${options.target}`);
   }
 }
 

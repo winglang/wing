@@ -13,6 +13,8 @@ Error.stackTraceLimit = 50;
 
 const log = debug("wing:compile");
 
+export class NotImplementedError extends Error {}
+
 /**
  * Compile options for the `compile` command.
  * This is passed from Commander to the `compile` function.
@@ -196,7 +198,13 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
         output.push(causedBy.stack ?? "");
       }
 
-      throw new Error(output.join("\n"));
+      if (
+        (error as wingCompiler.PreflightError).causedBy.constructor.name === "NotImplementedError"
+      ) {
+        throw new NotImplementedError(output.join("\n"));
+      } else {
+        throw new Error(output.join("\n"));
+      }
     } else {
       throw error;
     }
