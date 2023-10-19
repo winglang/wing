@@ -113,6 +113,14 @@ class $Root extends $stdlib.std.Resource {
     const tmpdir = (fs.Util.mkdtemp());
     const filepath = String.raw({ raw: ["", "/test-preflight.yaml"] }, tmpdir);
     const data = ({"foo": "bar","arr": [1, 2, 3, "test", ({"foo": "bar"})]});
+    (fs.Util.writeFile(filepath,"invalid: {{ content }}, invalid"));
+    try {
+      (fs.Util.readYaml(filepath));
+    }
+    catch ($error_e) {
+      const e = $error_e.message;
+      {((cond) => {if (!cond) throw new Error("assertion failed: regex.match(\"^bad indentation\", e)")})((regex.Util.match("^bad indentation",e)))};
+    }
     (fs.Util.writeYaml(filepath,data,data));
     {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(filepath) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.exists(filepath)),true)))};
     const objs = (fs.Util.readYaml(filepath));

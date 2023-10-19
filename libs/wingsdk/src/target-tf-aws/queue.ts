@@ -31,8 +31,12 @@ export class Queue extends cloud.Queue {
     super(scope, id, props);
 
     this.queue = new SqsQueue(this, "Default", {
-      visibilityTimeoutSeconds: props.timeout?.seconds,
-      messageRetentionSeconds: props.retentionPeriod?.seconds,
+      visibilityTimeoutSeconds: props.timeout
+        ? props.timeout.seconds
+        : Duration.fromSeconds(30).seconds,
+      messageRetentionSeconds: props.retentionPeriod
+        ? props.retentionPeriod.seconds
+        : Duration.fromHours(1).seconds,
       name: ResourceNames.generateName(this, NAME_OPTS),
     });
   }

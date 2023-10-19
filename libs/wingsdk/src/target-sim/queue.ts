@@ -21,7 +21,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
-    this.timeout = props.timeout ?? Duration.fromSeconds(10);
+    this.timeout = props.timeout ?? Duration.fromSeconds(30);
     this.retentionPeriod = props.retentionPeriod ?? Duration.fromHours(1);
 
     if (this.retentionPeriod.seconds < this.timeout.seconds) {

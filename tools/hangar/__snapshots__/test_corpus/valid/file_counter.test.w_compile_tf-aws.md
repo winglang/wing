@@ -205,6 +205,7 @@ module.exports = function({ $bucket, $counter }) {
             "uniqueId": "cloudQueue"
           }
         },
+        "message_retention_seconds": 3600,
         "name": "cloud-Queue-c86e03d8",
         "visibility_timeout_seconds": 10
       }

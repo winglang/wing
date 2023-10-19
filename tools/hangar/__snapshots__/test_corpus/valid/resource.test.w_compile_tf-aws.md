@@ -680,7 +680,9 @@ module.exports = function({  }) {
             "uniqueId": "BigPublisher_cloudQueue_2EE8871A"
           }
         },
-        "name": "cloud-Queue-c890dd9f"
+        "message_retention_seconds": 3600,
+        "name": "cloud-Queue-c890dd9f",
+        "visibility_timeout_seconds": 30
       }
     }
   }

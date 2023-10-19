@@ -77,7 +77,9 @@ module.exports = function({  }) {
             "uniqueId": "MyClosure_cloudQueue_465FD228"
           }
         },
-        "name": "cloud-Queue-c8cccb9b"
+        "message_retention_seconds": 3600,
+        "name": "cloud-Queue-c8cccb9b",
+        "visibility_timeout_seconds": 30
       }
     }
   }

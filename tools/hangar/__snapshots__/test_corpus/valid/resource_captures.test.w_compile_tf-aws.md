@@ -236,7 +236,9 @@ module.exports = function({  }) {
             "uniqueId": "MyResource_cloudQueue_E7A2C0F4"
           }
         },
-        "name": "cloud-Queue-c8185458"
+        "message_retention_seconds": 3600,
+        "name": "cloud-Queue-c8185458",
+        "visibility_timeout_seconds": 30
       }
     }
   }
