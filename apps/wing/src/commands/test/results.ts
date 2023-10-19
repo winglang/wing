@@ -91,16 +91,18 @@ export function writeResultsToFile(
       {}
     );
   }
-  const { dir, name: fileName } = parse(filePath);
 
-  writeFile(
-    resolve(dir, `${fileName}.json`),
-    JSON.stringify(output, null, 2),
-    { encoding: "utf-8" },
-    (error) => {
-      if (error) {
-        console.error(`error while writing test output file: ${error}`);
-      }
+  writeFile(resolve(filePath), JSON.stringify(output, null, 2), { encoding: "utf-8" }, (error) => {
+    if (error) {
+      console.error(`error while writing test output file: ${error}`);
     }
-  );
+  });
+}
+
+export function validateOutputFilePath(filePath: string) {
+  const { ext } = parse(filePath);
+
+  if (ext !== ".json") {
+    throw new Error(`only .json output files are supported. (found "${ext}")`);
+  }
 }

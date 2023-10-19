@@ -167,8 +167,8 @@ Refer to the TESTS section in the image below. You have the option to run all te
 
 ### Saving test output to a json file
 
-In order to save a test output to a json file, add the relative path to the file (without `.json` extension) to the `-o` or `--output-file` option.
+In order to save a test output to a json file, add the relative path to the file (`.json` extension is required) to the `-o` or `--output-file` option.
 
 For example:
-`wing test -t sim -o out /test/file.test.w`
-`wing test -t sim --output-file out /test/file.test.w`
+`wing test -t sim -o out.json /test/file.test.w`
+`wing test -t sim --output-file path/to/out.json /test/file.test.w`

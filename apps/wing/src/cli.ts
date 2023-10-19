@@ -167,7 +167,7 @@ async function main() {
     .option("--no-clean", "Keep build output")
     .option(
       "-o, --output-file <outputFile>",
-      "File name to write test results to (file extension optional)"
+      "File name to write test results to (file extension is required, supports only json at the moment)"
     )
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)

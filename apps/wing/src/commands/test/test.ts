@@ -9,7 +9,7 @@ import chalk from "chalk";
 import debug from "debug";
 import { glob } from "glob";
 import { nanoid } from "nanoid";
-import { printResults, writeResultsToFile } from "./results";
+import { printResults, validateOutputFilePath, writeResultsToFile } from "./results";
 import { generateTmpDir, withSpinner } from "../../util";
 import { compile, CompileOptions } from "../compile";
 
@@ -34,6 +34,10 @@ export interface TestOptions extends CompileOptions {
 
 export async function test(entrypoints: string[], options: TestOptions): Promise<number> {
   let patterns;
+
+  if (options.outputFile) {
+    validateOutputFilePath(options.outputFile);
+  }
 
   if (entrypoints.length === 0) {
     patterns = ["*.test.w"];

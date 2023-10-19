@@ -125,6 +125,19 @@ describe("test options", () => {
       process.chdir(prevdir);
     }
   });
+
+  test("validate output file", () => {
+    expect(resultsFn.validateOutputFilePath("/path/out.json")).toBeUndefined();
+    expect(resultsFn.validateOutputFilePath("out.json")).toBeUndefined();
+
+    expect(() => resultsFn.validateOutputFilePath("/path/out.csv")).toThrow(
+      'only .json output files are supported. (found ".csv")'
+    );
+
+    expect(() => resultsFn.validateOutputFilePath("/path/json")).toThrow(
+      'only .json output files are supported. (found "")'
+    );
+  });
 });
 
 const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
