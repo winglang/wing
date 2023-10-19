@@ -70,7 +70,8 @@ const project = new cdk.JsiiProject({
     // the following 2 deps are required by @aws-sdk/util-utf8-node
     "@aws-sdk/util-buffer-from@3.208.0",
     "@aws-sdk/is-array-buffer@3.201.0",
-    "mime",
+    "mime-types",
+    "mime@^3.0.0",
     // azure client dependencies
     "@azure/storage-blob@12.14.0",
     "@azure/identity@3.1.3",

@@ -99,7 +99,11 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Put Json (key=${key}).`,
       activity: async () => {
-        await this.addFile(key, JSON.stringify(body, null, 2));
+        await this.addFile(
+          key,
+          JSON.stringify(body, null, 2),
+          "application/json"
+        );
       },
     });
   }
