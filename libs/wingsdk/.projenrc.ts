@@ -366,6 +366,8 @@ project.gitignore.addPatterns("src/.gen");
 
 project.preCompileTask.exec("cdktf get --force");
 
+project.package.file.addDeletionOverride("pnpm")
+
 project.tryRemoveFile(".npmrc");
 
 project.packageTask.reset("bump-pack -b");
