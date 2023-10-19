@@ -69,14 +69,14 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["field", "getField", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          MyType._registerBindObject(this, host, ["field"]);
+          MyType._registerOnLiftObject(this, host, ["field"]);
         }
         if (ops.includes("getField")) {
-          MyType._registerBindObject(this, host, ["field"]);
+          MyType._registerOnLiftObject(this, host, ["field"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
   }

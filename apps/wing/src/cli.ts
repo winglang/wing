@@ -174,6 +174,10 @@ async function main() {
       addValue,
       []
     )
+    .option(
+      "-f, --test-filter <regex>",
+      "Run tests that match the provided regex pattern within the selected entrypoint files"
+    )
     .option("--no-clean", "Keep build output")
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)

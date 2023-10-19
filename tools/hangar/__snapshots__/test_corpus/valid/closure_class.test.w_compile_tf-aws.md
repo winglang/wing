@@ -136,11 +136,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(fn, host, ["another", "handle"]);
+          $Closure1._registerOnLiftObject(fn, host, ["another", "handle"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const fn = new MyClosure(this,"MyClosure");

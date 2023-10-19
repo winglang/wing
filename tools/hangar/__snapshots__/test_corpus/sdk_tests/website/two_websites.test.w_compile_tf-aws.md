@@ -431,12 +431,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(w1.url, host, ["ok"]);
-          $Closure1._registerBindObject(w2.url, host, ["ok"]);
+          $Closure1._registerOnLiftObject(w1.url, host, ["ok"]);
+          $Closure1._registerOnLiftObject(w2.url, host, ["ok"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const w1 = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this,"cloud.Website",{ path: "./website" });

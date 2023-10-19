@@ -41,7 +41,7 @@ export class DynamodbTable extends ex.DynamodbTable {
     });
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error(
         "Dynamodb tables can only be bound by tfaws.Function for now"
@@ -124,7 +124,7 @@ export class DynamodbTable extends ex.DynamodbTable {
 
     host.addEnvironment(this.envName(), this.table.name);
 
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */
