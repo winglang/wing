@@ -281,11 +281,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(JSHelper, host, ["getTime"]);
+          $Closure1._registerOnLiftObject(JSHelper, host, ["getTime"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -316,12 +316,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(JSHelper, host, ["getTime"]);
-          $Closure2._registerBindObject(oneSecond, host, []);
+          $Closure2._registerOnLiftObject(JSHelper, host, ["getTime"]);
+          $Closure2._registerOnLiftObject(oneSecond, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
@@ -353,13 +353,13 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure3._registerBindObject(JSHelper, host, ["getTime"]);
-          $Closure3._registerBindObject(invokeCounter, host, ["inc", "peek"]);
-          $Closure3._registerBindObject(oneSecond, host, []);
+          $Closure3._registerOnLiftObject(JSHelper, host, ["getTime"]);
+          $Closure3._registerOnLiftObject(invokeCounter, host, ["inc", "peek"]);
+          $Closure3._registerOnLiftObject(oneSecond, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
@@ -392,14 +392,14 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure4._registerBindObject(JSHelper, host, ["getTime"]);
-          $Closure4._registerBindObject(fiveSeconds, host, []);
-          $Closure4._registerBindObject(invokeCounter, host, ["inc", "peek"]);
-          $Closure4._registerBindObject(oneSecond, host, []);
+          $Closure4._registerOnLiftObject(JSHelper, host, ["getTime"]);
+          $Closure4._registerOnLiftObject(fiveSeconds, host, []);
+          $Closure4._registerOnLiftObject(invokeCounter, host, ["inc", "peek"]);
+          $Closure4._registerOnLiftObject(oneSecond, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure5 extends $stdlib.std.Resource {
@@ -429,11 +429,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure5._registerBindObject(invokeCounter, host, ["inc", "peek"]);
+          $Closure5._registerOnLiftObject(invokeCounter, host, ["inc", "peek"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const invokeCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");

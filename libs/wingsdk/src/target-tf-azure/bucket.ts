@@ -97,7 +97,7 @@ export class Bucket extends cloud.Bucket {
     });
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("buckets can only be bound by tfazure.Function for now");
     }
@@ -126,7 +126,7 @@ export class Bucket extends cloud.Bucket {
     host.addEnvironment(this.envName(), this.storageContainer.name);
     host.addEnvironment(this.envStorageAccountName(), this.storageAccount.name);
     host.addEnvironment(this.isPublicEnvName(), `${this.public}`);
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /**

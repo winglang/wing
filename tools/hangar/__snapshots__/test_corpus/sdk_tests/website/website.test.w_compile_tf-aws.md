@@ -308,15 +308,15 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(config, host, []);
-          $Closure1._registerBindObject(htmlContent, host, []);
-          $Closure1._registerBindObject(indexFile, host, []);
-          $Closure1._registerBindObject(otherFile, host, []);
-          $Closure1._registerBindObject(w.url, host, ["body"]);
+          $Closure1._registerOnLiftObject(config, host, []);
+          $Closure1._registerOnLiftObject(htmlContent, host, []);
+          $Closure1._registerOnLiftObject(indexFile, host, []);
+          $Closure1._registerOnLiftObject(otherFile, host, []);
+          $Closure1._registerOnLiftObject(w.url, host, ["body"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const w = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this,"cloud.Website",{ path: "./website" });

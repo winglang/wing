@@ -491,7 +491,9 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
             "uniqueId": "cloudQueue"
           }
         },
-        "name": "cloud-Queue-c86e03d8"
+        "message_retention_seconds": 3600,
+        "name": "cloud-Queue-c86e03d8",
+        "visibility_timeout_seconds": 30
       }
     },
     "aws_subnet": {
@@ -584,11 +586,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(r, host, ["set"]);
+          $Closure1._registerOnLiftObject(r, host, ["set"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -620,13 +622,13 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(queue, host, ["push"]);
-          $Closure2._registerBindObject(r, host, ["get", "rawClient"]);
-          $Closure2._registerBindObject(r2, host, ["get", "set"]);
+          $Closure2._registerOnLiftObject(queue, host, ["push"]);
+          $Closure2._registerOnLiftObject(r, host, ["get", "rawClient"]);
+          $Closure2._registerOnLiftObject(r2, host, ["get", "set"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const r = this.node.root.newAbstract("@winglang/sdk.ex.Redis",this,"ex.Redis");

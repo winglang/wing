@@ -156,11 +156,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject($stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"), host, ["makeKeyInflight"]);
+          $Closure1._registerOnLiftObject($stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"), host, ["makeKeyInflight"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     new fixture.Store(this,"fixture.Store");
@@ -211,15 +211,15 @@ module.exports = function({ $stdlib }) {
     _getInflightOps() {
       return ["makeKeyInflight", "set", "$inflight_init"];
     }
-    _registerBind(host, ops) {
+    _registerOnLift(host, ops) {
       if (ops.includes("$inflight_init")) {
-        Store._registerBindObject(this.data, host, []);
+        Store._registerOnLiftObject(this.data, host, []);
       }
       if (ops.includes("set")) {
-        Store._registerBindObject($stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"), host, ["double"]);
-        Store._registerBindObject(this.data, host, ["put"]);
+        Store._registerOnLiftObject($stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"), host, ["double"]);
+        Store._registerOnLiftObject(this.data, host, ["put"]);
       }
-      super._registerBind(host, ops);
+      super._registerOnLift(host, ops);
     }
   }
   return { Store };

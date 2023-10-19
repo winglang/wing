@@ -28,7 +28,7 @@ use type_check::{FunctionSignature, SymbolKind, Type};
 use type_check_assert::TypeCheckAssert;
 use valid_json_visitor::ValidJsonVisitor;
 use visit::Visit;
-use wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
+use wasm_util::{ptr_to_str, string_to_combined_ptr, WASM_RETURN_ERROR};
 use wingii::type_system::TypeSystem;
 
 use crate::docs::Docs;
@@ -79,10 +79,11 @@ const WINGSDK_AWS_MODULE: &'static str = "aws";
 const WINGSDK_EX_MODULE: &'static str = "ex";
 const WINGSDK_REGEX_MODULE: &'static str = "regex";
 const WINGSDK_FS_MODULE: &'static str = "fs";
+const WINGSDK_SIM_MODULE: &'static str = "sim";
 
 pub const UTIL_CLASS_NAME: &'static str = "Util";
 
-const WINGSDK_BRINGABLE_MODULES: [&'static str; 8] = [
+const WINGSDK_BRINGABLE_MODULES: [&'static str; 9] = [
 	WINGSDK_CLOUD_MODULE,
 	WINGSDK_UTIL_MODULE,
 	WINGSDK_HTTP_MODULE,
@@ -91,6 +92,7 @@ const WINGSDK_BRINGABLE_MODULES: [&'static str; 8] = [
 	WINGSDK_EX_MODULE,
 	WINGSDK_REGEX_MODULE,
 	WINGSDK_FS_MODULE,
+	WINGSDK_SIM_MODULE,
 ];
 
 const WINGSDK_DURATION: &'static str = "std.Duration";
@@ -161,7 +163,7 @@ pub unsafe extern "C" fn wingc_init() {
 
 #[no_mangle]
 pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
-	let args = ptr_to_string(ptr, len);
+	let args = ptr_to_str(ptr, len);
 
 	let split = args.split(";").collect::<Vec<&str>>();
 	if split.len() != 3 {

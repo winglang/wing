@@ -10,6 +10,9 @@ export class Domain extends cloud.Domain {
     super(scope, id, props);
   }
 
+  /**
+   * @internal
+   */
   public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
   }

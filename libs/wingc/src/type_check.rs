@@ -33,6 +33,7 @@ use indexmap::{IndexMap, IndexSet};
 use itertools::{izip, Itertools};
 use jsii_importer::JsiiImporter;
 
+use std::cmp;
 use std::collections::{HashMap, HashSet};
 use std::fmt::{Debug, Display};
 use std::iter::FilterMap;
@@ -1120,6 +1121,7 @@ impl TypeRef {
 			Type::MutMap(t) => Some(t),
 			Type::Set(t) => Some(t),
 			Type::MutSet(t) => Some(t),
+			Type::Optional(t) => t.collection_item_type(),
 			_ => None,
 		}
 	}
@@ -2533,115 +2535,91 @@ impl<'a> TypeChecker<'a> {
 		call_span: &impl Spanned,
 		arg_list_types: ArgListTypes,
 	) -> Option<TypeRef> {
-		// Verify arity
-		let pos_args_count = arg_list.pos_args.len();
-		let min_args = func_sig.min_parameters();
-		if pos_args_count < min_args {
-			let err_text = format!(
-				"Expected {} positional argument(s) but got {}",
-				min_args, pos_args_count
-			);
-			self.spanned_error(call_span, err_text);
-			return Some(self.types.error());
-		}
+		// Verify named args
+		let last_param = func_sig.parameters.last();
+		let is_last_param_struct = last_param.is_some() && last_param.unwrap().typeref.maybe_unwrap_option().is_struct();
+		let is_last_param_not_optional_struct = last_param.is_some() && last_param.unwrap().typeref.is_struct();
 
 		if !arg_list.named_args.is_empty() {
-			let last_arg = match func_sig.parameters.last() {
-				Some(arg) => arg.typeref.maybe_unwrap_option(),
-				None => {
-					self.spanned_error(
-						call_span,
-						format!(
-							"Expected 0 named arguments for func at {}",
-							call_span.span().to_string()
-						),
-					);
-					return Some(self.types.error());
-				}
-			};
-
-			if !last_arg.is_struct() {
+			if is_last_param_struct {
+				let last_param_type = last_param.unwrap().typeref.maybe_unwrap_option();
+				self.validate_structural_type(&arg_list_types.named_args, &last_param_type, call_span);
+			} else {
 				self.spanned_error(call_span, "No named arguments expected");
-				return Some(self.types.error());
 			}
-
-			self.validate_structural_type(&arg_list_types.named_args, &last_arg, call_span);
 		}
 
-		// Count number of optional parameters from the end of the function's params
-		// Allow arg_list to be missing up to that number of nil values to try and make the number of arguments match
-		let num_optionals = func_sig
-			.parameters
-			.iter()
-			.rev()
-			.take_while(|arg| arg.typeref.is_option())
-			.count();
+		// Check if there is a variadic parameter, get its index
+		let variadic_index = func_sig.parameters.iter().position(|o| o.variadic);
+		let pos_args_len = cmp::min(
+			arg_list.pos_args.len(),
+			variadic_index.unwrap_or(arg_list.pos_args.len()),
+		);
+		let non_variadic_args_len = pos_args_len
+			+ if is_last_param_struct && !arg_list.named_args.is_empty() {
+				1
+			} else {
+				0
+			};
 
 		// Verify arity
-
-		// check if there is a variadic parameter, get its index
-		let variadic_index = func_sig.parameters.iter().position(|o| o.variadic);
-		let (index_last_item, arg_count) = if let Some(variadic_index) = variadic_index {
-			(
-				variadic_index,
-				(variadic_index + 1) + (if arg_list.named_args.is_empty() { 0 } else { 1 }),
-			)
+		let min_args = func_sig.min_parameters() + if is_last_param_not_optional_struct { 1 } else { 0 };
+		let max_args = func_sig.parameters.len() - if variadic_index.is_some() { 1 } else { 0 };
+		let named_args_text = if is_last_param_struct {
+			"or named arguments for the last parameter "
 		} else {
-			(
-				arg_list_types.pos_args.len(),
-				(arg_list_types.pos_args.len()) + (if arg_list.named_args.is_empty() { 0 } else { 1 }),
-			)
+			""
 		};
-		let min_args = func_sig.parameters.len() - num_optionals;
-		let max_args = func_sig.parameters.len();
-		if arg_count < min_args || arg_count > max_args {
+		let variadic_args_text = if variadic_index.is_some() {
+			"+ variadic args "
+		} else {
+			""
+		};
+
+		// Check arity
+		if non_variadic_args_len < min_args || pos_args_len > max_args {
 			let err_text = if min_args == max_args {
-				format!("Expected {} arguments but got {}", min_args, arg_count)
+				format!(
+					"Expected {} positional argument(s) {}{}but got {}",
+					min_args, named_args_text, variadic_args_text, pos_args_len
+				)
 			} else {
 				format!(
-					"Expected between {} and {} arguments but got {}",
-					min_args, max_args, arg_count
+					"Expected between {} and {} positional arguments {}{}but got {}",
+					min_args, max_args, named_args_text, variadic_args_text, pos_args_len
 				)
 			};
+
 			self.spanned_error(call_span, err_text);
+		} else if is_last_param_struct && non_variadic_args_len > max_args {
+			self.spanned_error(
+				call_span,
+				"Expected either a positional argument or named arguments for the last parameter, but got both",
+			);
 		}
-		let params = func_sig.parameters.iter();
 
-		if index_last_item == arg_list_types.pos_args.len() {
-			for (arg_expr, arg_type, param) in izip!(arg_list.pos_args.iter(), arg_list_types.pos_args.iter(), params) {
-				self.validate_type(*arg_type, param.typeref, arg_expr);
-			}
-		} else {
-			let mut new_arg_list: Vec<&Expr> = Vec::new();
-			let mut new_arg_list_types: Vec<TypeRef> = Vec::new();
-			for i in 0..index_last_item {
-				new_arg_list.push(arg_list.pos_args.get(i).unwrap());
-				new_arg_list_types.push(*arg_list_types.pos_args.get(i).unwrap());
-			}
+		// Verify positioned args
+		for (arg_expr, arg_type, param) in izip!(
+			arg_list.pos_args.iter().take(pos_args_len),
+			arg_list_types.pos_args.iter().take(pos_args_len),
+			func_sig.parameters.iter().take(pos_args_len)
+		) {
+			self.validate_type(*arg_type, param.typeref, arg_expr);
+		}
 
-			let mut variadic_arg_list: Vec<&Expr> = Vec::new();
-			let variadic_arg_types = *arg_list_types.pos_args.get(index_last_item).unwrap();
-			for i in index_last_item..arg_list.pos_args.len() {
-				let variadic_arg = arg_list.pos_args.get(i).unwrap();
-				if !variadic_arg_types.is_same_type_as(arg_list_types.pos_args.get(i).unwrap()) {
-					let error = format!(
-						"Expected type to be {}, but got {} instead.",
-						variadic_arg_types,
-						arg_list_types.pos_args.get(i).unwrap()
-					);
-					self.spanned_error(&variadic_arg.span, error);
-				}
-				variadic_arg_list.push(variadic_arg);
+		// Verify variadic args
+		if let Some(variadic_index) = variadic_index {
+			let variadic_args_param = func_sig.parameters.get(variadic_index).unwrap();
+			let variadic_args_inner_type = variadic_args_param.typeref.collection_item_type().unwrap();
+
+			for (arg_expr, arg_type) in izip!(
+				arg_list.pos_args.iter().skip(variadic_index),
+				arg_list_types.pos_args.iter().skip(variadic_index),
+			) {
+				self.validate_type(*arg_type, variadic_args_inner_type, arg_expr);
 			}
-			let variadic_array_inner_type = *arg_list_types.pos_args.get(index_last_item).unwrap();
-			for (arg_expr, arg_type, param) in izip!(new_arg_list.iter(), new_arg_list_types.iter(), params) {
-				self.validate_type(*arg_type, param.typeref, *arg_expr);
-			}
-			// assert that each the extra args are of the same type as the variadic array type
-			for arg_expr in variadic_arg_list.iter() {
-				self.validate_type(variadic_array_inner_type, variadic_array_inner_type, *arg_expr);
-			}
-		};
+		}
+
 		None
 	}
 

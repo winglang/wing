@@ -84,16 +84,9 @@ export abstract class Function extends Resource implements IInflightHost {
 
     // indicates that we are calling the inflight constructor and the
     // inflight "handle" method on the handler resource.
-    handler._registerBind(this, ["handle", "$inflight_init"]);
+    handler._registerOnLift(this, ["handle", "$inflight_init"]);
 
-    const inflightClient = handler._toInflight();
-    const lines = new Array<string>();
-
-    lines.push('"use strict";');
-    lines.push("exports.handler = async function(event) {");
-    lines.push(`  return await (${inflightClient}).handle(event);`);
-    lines.push("};");
-
+    const lines = this._getCodeLines(handler);
     const assetName = ResourceNames.generateName(this, {
       // Avoid characters that may cause path issues
       disallowedRegex: /[><:"/\\|?*\s]/g,
@@ -118,6 +111,23 @@ export abstract class Function extends Resource implements IInflightHost {
   /** @internal */
   public _getInflightOps(): string[] {
     return [FunctionInflightMethods.INVOKE];
+  }
+
+  /**
+   * @internal
+   * @param handler IFunctionHandler
+   * @returns the function code lines as strings
+   */
+  protected _getCodeLines(handler: IFunctionHandler): string[] {
+    const inflightClient = handler._toInflight();
+    const lines = new Array<string>();
+
+    lines.push('"use strict";');
+    lines.push("exports.handler = async function(event) {");
+    lines.push(`  return await (${inflightClient}).handle(event);`);
+    lines.push("};");
+
+    return lines;
   }
 
   /**

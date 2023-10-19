@@ -680,7 +680,9 @@ module.exports = function({  }) {
             "uniqueId": "BigPublisher_cloudQueue_2EE8871A"
           }
         },
-        "name": "cloud-Queue-c890dd9f"
+        "message_retention_seconds": 3600,
+        "name": "cloud-Queue-c890dd9f",
+        "visibility_timeout_seconds": 30
       }
     }
   }
@@ -725,17 +727,17 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["inflightField", "fooInc", "fooGet", "fooStatic", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject(this.c, host, ["dec", "inc"]);
+          Foo._registerOnLiftObject(this.c, host, ["dec", "inc"]);
         }
         if (ops.includes("fooGet")) {
-          Foo._registerBindObject(this.c, host, ["peek"]);
+          Foo._registerOnLiftObject(this.c, host, ["peek"]);
         }
         if (ops.includes("fooInc")) {
-          Foo._registerBindObject(this.c, host, ["inc"]);
+          Foo._registerOnLiftObject(this.c, host, ["inc"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class Bar extends $stdlib.std.Resource {
@@ -771,23 +773,23 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["barStatic", "myMethod", "testTypeAccess", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Bar._registerBindObject(this.b, host, []);
-          Bar._registerBindObject(this.e, host, []);
-          Bar._registerBindObject(this.foo, host, []);
+          Bar._registerOnLiftObject(this.b, host, []);
+          Bar._registerOnLiftObject(this.e, host, []);
+          Bar._registerOnLiftObject(this.foo, host, []);
         }
         if (ops.includes("myMethod")) {
-          Bar._registerBindObject(Foo, host, ["fooStatic"]);
-          Bar._registerBindObject(this.b, host, ["get", "put"]);
-          Bar._registerBindObject(this.foo, host, ["fooGet", "fooInc"]);
+          Bar._registerOnLiftObject(Foo, host, ["fooStatic"]);
+          Bar._registerOnLiftObject(this.b, host, ["get", "put"]);
+          Bar._registerOnLiftObject(this.foo, host, ["fooGet", "fooInc"]);
         }
         if (ops.includes("testTypeAccess")) {
-          Bar._registerBindObject(Bar, host, ["barStatic"]);
-          Bar._registerBindObject(Foo, host, ["fooStatic"]);
-          Bar._registerBindObject(this.e, host, []);
+          Bar._registerOnLiftObject(Bar, host, ["barStatic"]);
+          Bar._registerOnLiftObject(Foo, host, ["fooStatic"]);
+          Bar._registerOnLiftObject(this.e, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -818,13 +820,13 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(bucket, host, ["list"]);
-          $Closure1._registerBindObject(res, host, ["myMethod", "testTypeAccess"]);
-          $Closure1._registerBindObject(res.foo, host, ["inflightField"]);
+          $Closure1._registerOnLiftObject(bucket, host, ["list"]);
+          $Closure1._registerOnLiftObject(res, host, ["myMethod", "testTypeAccess"]);
+          $Closure1._registerOnLiftObject(res.foo, host, ["inflightField"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class BigPublisher extends $stdlib.std.Resource {
@@ -861,11 +863,11 @@ class $Root extends $stdlib.std.Resource {
           _getInflightOps() {
             return ["handle", "$inflight_init"];
           }
-          _registerBind(host, ops) {
+          _registerOnLift(host, ops) {
             if (ops.includes("handle")) {
-              $Closure2._registerBindObject(__parent_this_2.b, host, ["put"]);
+              $Closure2._registerOnLiftObject(__parent_this_2.b, host, ["put"]);
             }
-            super._registerBind(host, ops);
+            super._registerOnLift(host, ops);
           }
         }
         (this.t.onMessage(new $Closure2(this,"$Closure2")));
@@ -896,11 +898,11 @@ class $Root extends $stdlib.std.Resource {
           _getInflightOps() {
             return ["handle", "$inflight_init"];
           }
-          _registerBind(host, ops) {
+          _registerOnLift(host, ops) {
             if (ops.includes("handle")) {
-              $Closure3._registerBindObject(__parent_this_3.b, host, ["put"]);
+              $Closure3._registerOnLiftObject(__parent_this_3.b, host, ["put"]);
             }
-            super._registerBind(host, ops);
+            super._registerOnLift(host, ops);
           }
         }
         (this.q.setConsumer(new $Closure3(this,"$Closure3")));
@@ -931,11 +933,11 @@ class $Root extends $stdlib.std.Resource {
           _getInflightOps() {
             return ["handle", "$inflight_init"];
           }
-          _registerBind(host, ops) {
+          _registerOnLift(host, ops) {
             if (ops.includes("handle")) {
-              $Closure4._registerBindObject(__parent_this_4.q, host, ["push"]);
+              $Closure4._registerOnLiftObject(__parent_this_4.q, host, ["push"]);
             }
-            super._registerBind(host, ops);
+            super._registerOnLift(host, ops);
           }
         }
         (this.b2.onCreate(new $Closure4(this,"$Closure4")));
@@ -964,22 +966,22 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["publish", "getObjectCount", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          BigPublisher._registerBindObject(this.b, host, []);
-          BigPublisher._registerBindObject(this.b2, host, []);
-          BigPublisher._registerBindObject(this.q, host, []);
-          BigPublisher._registerBindObject(this.t, host, []);
+          BigPublisher._registerOnLiftObject(this.b, host, []);
+          BigPublisher._registerOnLiftObject(this.b2, host, []);
+          BigPublisher._registerOnLiftObject(this.q, host, []);
+          BigPublisher._registerOnLiftObject(this.t, host, []);
         }
         if (ops.includes("getObjectCount")) {
-          BigPublisher._registerBindObject(this.b, host, ["list"]);
+          BigPublisher._registerOnLiftObject(this.b, host, ["list"]);
         }
         if (ops.includes("publish")) {
-          BigPublisher._registerBindObject(this.b2, host, ["put"]);
-          BigPublisher._registerBindObject(this.q, host, ["push"]);
-          BigPublisher._registerBindObject(this.t, host, ["publish"]);
+          BigPublisher._registerOnLiftObject(this.b2, host, ["put"]);
+          BigPublisher._registerOnLiftObject(this.q, host, ["push"]);
+          BigPublisher._registerOnLiftObject(this.t, host, ["publish"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure5 extends $stdlib.std.Resource {
@@ -1008,11 +1010,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure5._registerBindObject(bigOlPublisher, host, ["getObjectCount", "publish"]);
+          $Closure5._registerOnLiftObject(bigOlPublisher, host, ["getObjectCount", "publish"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class Dummy extends $stdlib.std.Resource {

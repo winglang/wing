@@ -17,6 +17,10 @@ exports[`default queue behavior 1`] = `
   "Resources": {
     "Queue4A7E3555": {
       "DeletionPolicy": "Delete",
+      "Properties": {
+        "MessageRetentionPeriod": 3600,
+        "VisibilityTimeout": 30,
+      },
       "Type": "AWS::SQS::Queue",
       "UpdateReplacePolicy": "Delete",
     },
@@ -149,6 +153,7 @@ exports[`queue with a consumer function 2`] = `
     "Queue4A7E3555": {
       "DeletionPolicy": "Delete",
       "Properties": {
+        "MessageRetentionPeriod": 3600,
         "VisibilityTimeout": 30,
       },
       "Type": "AWS::SQS::Queue",
@@ -332,6 +337,7 @@ exports[`queue with custom retention 1`] = `
       "DeletionPolicy": "Delete",
       "Properties": {
         "MessageRetentionPeriod": 1800,
+        "VisibilityTimeout": 30,
       },
       "Type": "AWS::SQS::Queue",
       "UpdateReplacePolicy": "Delete",
@@ -385,6 +391,7 @@ exports[`queue with custom timeout 1`] = `
     "Queue4A7E3555": {
       "DeletionPolicy": "Delete",
       "Properties": {
+        "MessageRetentionPeriod": 3600,
         "VisibilityTimeout": 30,
       },
       "Type": "AWS::SQS::Queue",
