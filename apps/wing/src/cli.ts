@@ -164,6 +164,10 @@ async function main() {
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .option("-r, --rootId <rootId>", "App root id")
+    .option(
+      "-f, --test-filter <regex>",
+      "Run tests that match the provided regex pattern within the selected entrypoint files"
+    )
     .option("--no-clean", "Keep build output")
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
