@@ -17,10 +17,11 @@ if (!SUPPORTED_NODE_VERSION) {
   throw new Error("couldn't parse engines.node version from package.json");
 }
 
-function runSubCommand(subCommand: string) {
+function runSubCommand(subCommand: string, path: string = subCommand) {
   return async (...args: any[]) => {
     try {
-      const exitCode = await import(`./commands/${subCommand}`).then((m) => m[subCommand](...args));
+      // paths other than the root path aren't working unless specified in the path arg
+      const exitCode = await import(`./commands/${path}`).then((m) => m[subCommand](...args));
       if (exitCode === 1) {
         await exportAnalyticsHook();
         process.exit(1);
@@ -171,7 +172,7 @@ async function main() {
     )
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
-    .action(runSubCommand("test"));
+    .action(runSubCommand("test", "test/test"));
 
   program
     .command("pack")
