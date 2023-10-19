@@ -93,7 +93,7 @@ export class Table extends ex.Table {
     );
   }
 
-  public bind(_host: IInflightHost, _ops: string[]): void {
+  public onLift(_host: IInflightHost, _ops: string[]): void {
     throw new Error("Method not implemented.");
   }
 

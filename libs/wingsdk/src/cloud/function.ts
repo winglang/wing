@@ -84,7 +84,7 @@ export abstract class Function extends Resource implements IInflightHost {
 
     // indicates that we are calling the inflight constructor and the
     // inflight "handle" method on the handler resource.
-    handler._registerBind(this, ["handle", "$inflight_init"]);
+    handler._registerOnLift(this, ["handle", "$inflight_init"]);
 
     const lines = this._getCodeLines(handler);
     const assetName = ResourceNames.generateName(this, {

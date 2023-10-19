@@ -123,11 +123,11 @@ module.exports = function({ $stdlib }) {
         _getInflightOps() {
           return ["handle", "$inflight_init"];
         }
-        _registerBind(host, ops) {
+        _registerOnLift(host, ops) {
           if (ops.includes("handle")) {
-            $Closure1._registerBindObject(__parent_this_1.b, host, ["put"]);
+            $Closure1._registerOnLiftObject(__parent_this_1.b, host, ["put"]);
           }
-          super._registerBind(host, ops);
+          super._registerOnLift(host, ops);
         }
       }
       const prefill = this.node.root.newAbstract("@winglang/sdk.cloud.OnDeploy",this,"cloud.OnDeploy",new $Closure1(this,"$Closure1"));
@@ -153,14 +153,14 @@ module.exports = function({ $stdlib }) {
     _getInflightOps() {
       return ["store", "$inflight_init"];
     }
-    _registerBind(host, ops) {
+    _registerOnLift(host, ops) {
       if (ops.includes("$inflight_init")) {
-        Store._registerBindObject(this.b, host, []);
+        Store._registerOnLiftObject(this.b, host, []);
       }
       if (ops.includes("store")) {
-        Store._registerBindObject(this.b, host, ["put"]);
+        Store._registerOnLiftObject(this.b, host, ["put"]);
       }
-      super._registerBind(host, ops);
+      super._registerOnLift(host, ops);
     }
   }
   const Color =

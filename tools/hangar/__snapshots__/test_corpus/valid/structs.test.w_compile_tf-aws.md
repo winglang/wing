@@ -106,14 +106,14 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["getStuff", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject(this.data.field0, host, []);
+          Foo._registerOnLiftObject(this.data.field0, host, []);
         }
         if (ops.includes("getStuff")) {
-          Foo._registerBindObject(this.data.field0, host, []);
+          Foo._registerOnLiftObject(this.data.field0, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
