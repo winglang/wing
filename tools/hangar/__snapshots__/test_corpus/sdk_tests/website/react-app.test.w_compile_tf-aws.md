@@ -387,7 +387,7 @@ module.exports = function({ $api_url, $http_Util, $preflightVariable, $website_u
           }
         },
         "bucket": "${aws_s3_bucket.exReactApp_exReactApp-host_WebsiteBucket_FE5E163A.bucket}",
-        "content_type": "text/html",
+        "content_type": "text/html; charset=utf-8",
         "depends_on": [
           "aws_s3_bucket.exReactApp_exReactApp-host_WebsiteBucket_FE5E163A"
         ],
@@ -403,7 +403,7 @@ module.exports = function({ $api_url, $http_Util, $preflightVariable, $website_u
           }
         },
         "bucket": "${aws_s3_bucket.exReactApp_exReactApp-host_WebsiteBucket_FE5E163A.bucket}",
-        "content_type": "application/javascript",
+        "content_type": "application/javascript; charset=utf-8",
         "depends_on": [
           "aws_s3_bucket.exReactApp_exReactApp-host_WebsiteBucket_FE5E163A"
         ],

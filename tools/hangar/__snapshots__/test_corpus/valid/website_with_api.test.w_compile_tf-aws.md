@@ -595,7 +595,7 @@ module.exports = function({  }) {
           }
         },
         "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
-        "content_type": "text/html",
+        "content_type": "text/html; charset=utf-8",
         "depends_on": [
           "aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355"
         ],
