@@ -18,7 +18,7 @@
       "type": "build"
     },
     {
-      "name": "@types/mime",
+      "name": "@types/mime-types",
       "type": "build"
     },
     {
@@ -293,7 +293,7 @@
       "type": "bundled"
     },
     {
-      "name": "mime",
+      "name": "mime-types",
       "type": "bundled"
     },
     {

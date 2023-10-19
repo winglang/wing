@@ -96,7 +96,7 @@ const project = new cdk.JsiiProject({
     "bump-pack",
     "@types/aws-lambda",
     "@types/fs-extra",
-    "@types/mime",
+    "@types/mime-types",
     "mock-gcs@^1.0.0",
     "@types/express",
     "aws-sdk-client-mock",

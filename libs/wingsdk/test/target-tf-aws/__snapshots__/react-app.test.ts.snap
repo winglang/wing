@@ -117,7 +117,7 @@ exports[`Testing ReactApp > default React App behavior 1`] = `
     "aws_s3_object": {
       "Website_Website-host_File--indexhtml_7EB8DC7E": {
         "bucket": "\${aws_s3_bucket.Website_Website-host_WebsiteBucket_0ECE7584.bucket}",
-        "content_type": "text/html",
+        "content_type": "text/html; charset=utf-8",
         "depends_on": [
           "aws_s3_bucket.Website_Website-host_WebsiteBucket_0ECE7584",
         ],
@@ -424,7 +424,7 @@ exports[`Testing ReactApp > website with addEnvironment 1`] = `
     "aws_s3_object": {
       "Website_Website-host_File--indexhtml_7EB8DC7E": {
         "bucket": "\${aws_s3_bucket.Website_Website-host_WebsiteBucket_0ECE7584.bucket}",
-        "content_type": "text/html",
+        "content_type": "text/html; charset=utf-8",
         "depends_on": [
           "aws_s3_bucket.Website_Website-host_WebsiteBucket_0ECE7584",
         ],
