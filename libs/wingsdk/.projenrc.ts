@@ -366,7 +366,7 @@ project.gitignore.addPatterns("src/.gen");
 
 project.preCompileTask.exec("cdktf get --force");
 
-project.package.file.addDeletionOverride("pnpm")
+project.package.file.addDeletionOverride("pnpm");
 
 project.tryRemoveFile(".npmrc");
 
