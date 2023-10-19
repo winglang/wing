@@ -20,23 +20,14 @@ use crate::type_check::{
 	Struct, SymbolKind, Type, TypeRef, Types, UnsafeRef, VariableKind, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
 };
 use crate::visit::{visit_expr, visit_type_annotation, Visit};
-use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
+use crate::wasm_util::extern_json_fn;
 use crate::{UTIL_CLASS_NAME, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_STD_MODULE};
 
 use super::sync::check_utf8;
 
 #[no_mangle]
 pub unsafe extern "C" fn wingc_on_completion(ptr: u32, len: u32) -> u64 {
-	let parse_string = ptr_to_string(ptr, len);
-	if let Ok(parsed) = serde_json::from_str(&parse_string) {
-		let result = on_completion(parsed);
-		let result = serde_json::to_string(&result).unwrap();
-
-		// return result as u64 with ptr and len
-		string_to_combined_ptr(result)
-	} else {
-		WASM_RETURN_ERROR
-	}
+	extern_json_fn(ptr, len, on_completion)
 }
 
 /// Using tree-sitter data only, check if there should be no valid completions at this position.
@@ -115,6 +106,19 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			let root_ts_node = project_data.trees.get(&file).expect("tree not found").root_node();
 			let root_scope = project_data.asts.get(&file).expect("ast not found");
 			let root_env = types.get_scope_env(root_scope);
+
+			let true_point = Point::new(
+				params.text_document_position.position.line as usize,
+				params.text_document_position.position.character as usize,
+			);
+			let true_node = root_ts_node
+				.named_descendant_for_point_range(true_point, true_point)
+				.unwrap();
+			if true_node.is_extra() && !true_node.is_error() {
+				// this is a comment, so don't show anything
+				return vec![];
+			}
+
 			let contents = project_data.files.get_file(&file).expect("file not found");
 
 			// get all character from file_data.contents up to the current position
@@ -131,18 +135,6 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 				})
 				.join("\n");
 			let last_char_is_colon = preceding_text.ends_with(':');
-
-			let true_point = Point::new(
-				params.text_document_position.position.line as usize,
-				params.text_document_position.position.character as usize,
-			);
-			let true_node = root_ts_node
-				.named_descendant_for_point_range(true_point, true_point)
-				.unwrap();
-			if true_node.is_extra() && !true_node.is_error() {
-				// this is a comment, so don't show anything
-				return vec![];
-			}
 
 			let node_to_complete = nearest_interesting_node(
 				Point::new(
