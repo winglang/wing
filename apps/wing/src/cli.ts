@@ -146,7 +146,7 @@ async function main() {
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .option("-r, --rootId <rootId>", "App root id")
     .option(
-      "-o, --option <value>",
+      "--value <value>",
       "Platform-specific values in the form KEY=VALUE or yaml file",
       addValue,
       []
