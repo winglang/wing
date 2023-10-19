@@ -165,7 +165,7 @@ test "this test should fail" {
 Refer to the TESTS section in the image below. You have the option to run all tests or a single test.
 ![image](https://github.com/winglang/wing/assets/1727147/7d5ebc00-9316-41d1-9a3c-0e28e195d077)
 
-### Saving test output to a json file
+### Saving test output to a file
 
 In order to save a test output to a json file, add the relative path to the file (`.json` extension is required) to the `-o` or `--output-file` option.
 
