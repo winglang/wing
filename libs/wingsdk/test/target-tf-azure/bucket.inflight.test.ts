@@ -465,6 +465,29 @@ test("Given a public bucket, when giving one of its keys, we should get its publ
   expect(response).toEqual(expectedUrl);
 });
 
+test("copy objects within the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const STORAGE_NAME = "STORAGE_NAME";
+  const SRC_KEY = "SRC/KEY";
+  const DST_KEY = "DST/KEY";
+
+  // WHEN
+  const client = new BucketClient(
+    BUCKET_NAME,
+    STORAGE_NAME,
+    false,
+    mockBlobServiceClient
+  );
+
+  const response1 = await client.copy(SRC_KEY, SRC_KEY);
+  const response2 = await client.copy(SRC_KEY, DST_KEY);
+
+  // THEN
+  expect(response1).toEqual(undefined);
+  expect(response2).toEqual(undefined);
+});
+
 // Mock Clients
 class MockBlobClient extends BlobClient {
   public download(): Promise<BlobDownloadResponseParsed> {
