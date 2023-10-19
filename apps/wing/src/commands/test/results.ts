@@ -94,7 +94,7 @@ export function writeResultsToFile(
 
   const { dir } = parse(filePath);
   try {
-    if (!existsSync(dir)) {
+    if (!!dir && !existsSync(dir)) {
       mkdirSync(dir, { recursive: true });
     }
 

@@ -7,7 +7,7 @@ import { Target } from "@winglang/compiler";
 import { TestResult, TraceType } from "@winglang/sdk/lib/std";
 import chalk from "chalk";
 import { describe, test, expect, beforeEach, afterEach, vi } from "vitest";
-import { renderTestReport, test as wingTest } from ".";
+import { filterTests, pickOneTestPerEnvironment, renderTestReport, test as wingTest } from ".";
 import * as resultsFn from "./results";
 
 const defaultChalkLevel = chalk.level;
@@ -137,6 +137,23 @@ describe("test options", () => {
     expect(() => resultsFn.validateOutputFilePath("/path/json")).toThrow(
       'only .json output files are supported. (found "")'
     );
+  });
+
+  test("wing test (no filter)", () => {
+    const filteredTests = pickOneTestPerEnvironment(filterTests(EXAMPLE_UNFILTERED_TESTS));
+
+    expect(filteredTests.length).toBe(3);
+    expect(filteredTests[0]).toBe("root/env0/test:get()");
+    expect(filteredTests[1]).toBe("root/env1/test:get:At()");
+    expect(filteredTests[2]).toBe("root/env2/test:stringify()");
+  });
+
+  test("wing test --test-filter <regex>", () => {
+    const filteredTests = pickOneTestPerEnvironment(filterTests(EXAMPLE_UNFILTERED_TESTS, "get"));
+
+    expect(filteredTests.length).toBe(2);
+    expect(filteredTests[0]).toBe("root/env0/test:get()");
+    expect(filteredTests[1]).toBe("root/env1/test:get:At()");
   });
 });
 
@@ -283,3 +300,15 @@ const OUTPUT_FILE = {
     },
   },
 };
+
+const EXAMPLE_UNFILTERED_TESTS: string[] = [
+  "root/env0/test:get()",
+  "root/env0/test:get:At()",
+  "root/env0/test:stringify()",
+  "root/env1/test:get()",
+  "root/env1/test:get:At()",
+  "root/env1/test:stringify()",
+  "root/env2/test:get()",
+  "root/env2/test:get:At()",
+  "root/env2/test:stringify()",
+];
