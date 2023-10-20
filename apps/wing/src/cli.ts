@@ -1,5 +1,6 @@
 import { Command, Option } from "commander";
 import { satisfies } from "compare-versions";
+import * as dotenv from "dotenv";
 
 import { collectCommandAnalytics } from "./analytics/collect";
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
@@ -15,6 +16,23 @@ if (PACKAGE_VERSION == "0.0.0" && !process.env.DEBUG) {
 const SUPPORTED_NODE_VERSION = currentPackage.engines.node;
 if (!SUPPORTED_NODE_VERSION) {
   throw new Error("couldn't parse engines.node version from package.json");
+}
+
+function loadEnvVariables(mode?: string) {
+  dotenv.config();
+  dotenv.config({ path: ".env.local" });
+  if (mode) {
+    dotenv.config({ path: `.env.${mode}` });
+    dotenv.config({ path: `.env.${mode}.local` });
+  }
+}
+
+function getModeFromArgs(args: string[]): string | undefined {
+  if (args.includes("run") || args.includes("it")) return "run";
+  if (args.includes("compile")) return "compile";
+  if (args.includes("test")) return "test";
+  if (args.includes("lsp")) return "lsp";
+  return undefined;
 }
 
 function runSubCommand(subCommand: string, path: string = subCommand) {
@@ -67,8 +85,10 @@ async function exportAnalyticsHook() {
 async function main() {
   checkNodeVersion();
 
-  const program = new Command();
+  const mode = getModeFromArgs(process.argv);
+  loadEnvVariables(mode);
 
+  const program = new Command();
   program.configureHelp({
     sortOptions: true,
     showGlobalOptions: true,

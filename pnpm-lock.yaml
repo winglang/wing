@@ -309,6 +309,9 @@ importers:
       debug:
         specifier: ^4.3.4
         version: 4.3.4
+      dotenv:
+        specifier: ^16.3.1
+        version: 16.3.1
       glob:
         specifier: ^10.3.10
         version: 10.3.10
@@ -13284,7 +13287,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20231018
+      typescript: 5.3.0-dev.20231019
     dev: true
 
   /dset@3.1.2:
@@ -22716,8 +22719,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20231018:
-    resolution: {integrity: sha512-qBPaVi+ntB9Ys4T3uP1ZYCtxFWIV/1ieooBDhFEd8nw4IqAoB/Us7XobF3xb756bnX8cS/zIt9fgukde4MG4bA==}
+  /typescript@5.3.0-dev.20231019:
+    resolution: {integrity: sha512-fdexB8vj46ZSMsAg6g5aSNjThPegwT73WYwNM1DLmEnt0+fKPmmyft3LzfUR1CMHtcQNic5hl+0FeNTv7l232Q==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
