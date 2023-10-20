@@ -103,7 +103,7 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 			} else {
 				provided_args.pos_args.len() - positional_arg_pos
 			}
-			.min(param_data.len() - 1)
+			.min(if param_data.is_empty() { 0 } else { param_data.len() - 1 })
 			.max(0);
 
 			let param_text = param_data.join(", ");
@@ -198,6 +198,8 @@ impl<'a> ScopeVisitor<'a> {
 
 impl<'a> Visit<'a> for ScopeVisitor<'a> {
 	fn visit_expr(&mut self, node: &'a Expr) {
+		visit_expr(self, node);
+
 		if self.call_expr.is_some() {
 			return;
 		}
@@ -211,8 +213,6 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 				_ => {}
 			}
 		}
-
-		visit_expr(self, node);
 	}
 
 	fn visit_scope(&mut self, node: &'a crate::ast::Scope) {
@@ -279,7 +279,7 @@ bring cloud;
 let bucket = new cloud.Bucket();
 bucket.addObject("key", )
                      //^
-		"#,
+"#,
 	);
 
 	test_signature!(
@@ -288,9 +288,10 @@ bucket.addObject("key", )
 bring cloud;
 let bucket = new cloud.Bucket();
 bucket.onEvent(inflight () => {
-	bucket.delete("", );
+  bucket.delete("", );
                  //^
-});"#,
+});
+"#,
 	);
 
 	test_signature!(
@@ -298,6 +299,28 @@ bucket.onEvent(inflight () => {
 		r#"
 bring cloud;
 let bucket = new cloud.Bucket( );
-                            //^"#,
+                            //^
+"#,
+	);
+
+	test_signature!(
+		nested_class_calls,
+		r#"
+bring http;
+
+class T {
+  inflight do() {
+    this.handle(inflight (context: str): str => {
+      http.get( )
+             //^
+      return "321";
+    });
+  }
+
+  inflight handle(handler:  (str): str) {
+    handler("123");
+  }
+}
+"#,
 	);
 }

@@ -149,9 +149,25 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 				return vec![];
 			}
 
-			if matches!(node_to_complete.parent(), Some(p) if p.kind() == "import_statement")
-				&& matches!(node_to_complete_kind, "identifier" | "bring")
-			{
+			// references have a complicated hierarchy, so it's useful to know the nearest non-reference parent
+			let mut nearest_non_reference = node_to_complete;
+			while nearest_non_reference.is_error()
+				|| nearest_non_reference.is_extra()
+				|| !nearest_non_reference.is_named()
+				|| matches!(
+					nearest_non_reference.kind(),
+					"identifier" | "reference" | "reference_identifier"
+				) {
+				let parent = nearest_non_reference.parent();
+				if let Some(parent) = parent {
+					nearest_non_reference = parent;
+				} else {
+					nearest_non_reference = root_ts_node;
+					break;
+				}
+			}
+
+			if nearest_non_reference.kind() == "import_statement" {
 				let mut modules = WINGSDK_BRINGABLE_MODULES
 					.map(|module| CompletionItem {
 						label: module.to_string(),
@@ -186,18 +202,6 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			scope_visitor.visit();
 
 			let found_env = types.get_scope_env(&scope_visitor.found_scope);
-
-			// references have a complicated hierarchy, so it's useful to know the nearest non-reference parent
-			let mut nearest_non_reference_parent = node_to_complete.parent();
-			while let Some(parent) = nearest_non_reference_parent {
-				let parent_kind = parent.kind();
-				if parent.is_error() || matches!(parent_kind, "identifier" | "reference" | "reference_identifier") {
-					nearest_non_reference_parent = parent.parent();
-				} else {
-					break;
-				}
-			}
-			let nearest_non_reference_parent = nearest_non_reference_parent.unwrap_or(root_ts_node);
 
 			if node_to_complete_kind == "." || node_to_complete_kind == "?." || node_to_complete_kind == "member_identifier" {
 				let parent = node_to_complete.parent().expect("A dot must have a parent");
@@ -358,11 +362,10 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 				}
 
 				return vec![];
-			} else if matches!(node_to_complete_kind, "struct_literal" | "json_map_literal")
-				|| matches!(
-					nearest_non_reference_parent.kind(),
-					"struct_literal" | "struct_literal_member" | "json_map_literal" | "set_literal"
-				) {
+			} else if matches!(
+				nearest_non_reference.kind(),
+				"struct_literal" | "json_map_literal" | "set_literal" | "struct_literal_member"
+			) {
 				// check to see if ":" is the last character of the same line up to the cursor
 				// if it is, we want an expression instead of struct completions
 				if !last_char_is_colon {
@@ -380,12 +383,15 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 						let (fields, structy) = if let ExprKind::StructLiteral { fields, .. } = &expr.kind {
 							(fields, types.get_expr_type(expr))
-						} else if let ExprKind::JsonMapLiteral { fields, .. } = &expr.kind {
-							if let Some(structy) = types.get_type_from_json_cast(expr.id) {
-								(fields, *structy)
-							} else {
+						} else if let ExprKind::JsonLiteral { is_mut: false, element } = &expr.kind {
+							let ExprKind::JsonMapLiteral { fields } = &element.kind else {
 								return vec![];
-							}
+							};
+							let Some(structy) = types.get_type_from_json_cast(element.id) else {
+								return vec![];
+							};
+
+							(fields, *structy)
 						} else {
 							return vec![];
 						};
@@ -397,12 +403,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 						};
 					}
 				}
-			} else if !last_char_is_colon
-				&& (node_to_complete_kind == "argument_list"
-					|| matches!(
-						nearest_non_reference_parent.kind(),
-						"argument_list" | "positional_argument"
-					)) {
+			} else if !last_char_is_colon && (nearest_non_reference.kind() == "argument_list") {
 				if let Some(callish_expr) = scope_visitor.expression_trail.iter().rev().find_map(|e| match &e.kind {
 					ExprKind::Call { arg_list, callee } => Some((
 						match callee {
@@ -469,7 +470,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			}
 
 			// fallback: no special completions, just get stuff from the current scope
-			get_current_scope_completions(&types, &scope_visitor, &node_to_complete, &preceding_text)
+			get_current_scope_completions(&types, &scope_visitor, &nearest_non_reference, &preceding_text)
 		});
 
 		final_completions = final_completions
@@ -496,14 +497,23 @@ fn get_current_scope_completions(
 
 	// by default assume being after a colon means we're looking for a type, but this is not always true
 	let mut in_type = preceding_text.ends_with(':');
+	let expecting_statement = matches!(node_to_complete.kind(), "source" | "block" | "expression_statement");
 
 	match node_to_complete.kind() {
-		"set_literal" | "struct_literal" => {
+		"variable_definition_statement" => {
+			if preceding_text.ends_with("let") || preceding_text.ends_with("var") {
+				return vec![];
+			}
+		}
+
+		// { a: } or { a: 1, b: }
+		//     ^               ^
+		"set_literal" | "struct_literal" | "json_map_literal" | "json_literal_member" => {
 			in_type = false;
 		}
 
 		"struct_definition" | "interface_implementation" => {
-			if preceding_text.ends_with("extends") {
+			if preceding_text.ends_with(" extends") {
 				// TODO Should only show namespaces and matching types
 				in_type = true;
 			} else if !in_type {
@@ -585,10 +595,6 @@ fn get_current_scope_completions(
 				return vec![];
 			}
 
-			"json_map_literal" => {
-				return vec![];
-			}
-
 			"custom_type" => in_type = true,
 			_ => {}
 		}
@@ -596,11 +602,12 @@ fn get_current_scope_completions(
 
 	let found_stmt_index = scope_visitor.found_stmt_index.unwrap_or_default();
 	let found_env = types.get_scope_env(&scope_visitor.found_scope);
+	let error_buffer = if node_to_complete.has_error() { 1 } else { 0 };
 
 	for symbol_data in found_env.symbol_map.iter().filter(|s| {
 		if let StatementIdx::Index(i) = s.1 .0 {
 			// within the found scope, we only want to show symbols that were defined before the current position
-			i < found_stmt_index
+			i + error_buffer < found_stmt_index
 		} else {
 			true
 		}
@@ -614,6 +621,15 @@ fn get_current_scope_completions(
 
 	if let Some(parent) = found_env.parent {
 		for data in parent.iter(true) {
+			if let SymbolKind::Variable(var) = data.1 {
+				if matches!(var.kind, VariableKind::Free) {
+					// check if this defined after the current scope we're in
+					if var.name.span.start > scope_visitor.found_scope.span.end {
+						continue;
+					}
+				}
+			}
+
 			if let Some(completion) = format_symbol_kind_as_completion(&data.0, &data.1) {
 				if completions.iter().all(|c| c.label != completion.label) {
 					completions.push(completion);
@@ -622,7 +638,7 @@ fn get_current_scope_completions(
 		}
 	}
 
-	if !in_type {
+	if !in_type && !expecting_statement {
 		completions.push(CompletionItem {
 			label: "inflight () => {}".to_string(),
 			filter_text: Some("inflight".to_string()),
@@ -652,7 +668,16 @@ fn get_current_scope_completions(
 		// we're not looking for a type, so hide things that can only result in types
 		completions
 			.into_iter()
-			.filter(|c| !matches!(c.kind, Some(CompletionItemKind::INTERFACE)))
+			.filter(|c| {
+				let not_type = !matches!(c.kind, Some(CompletionItemKind::INTERFACE));
+
+				if !expecting_statement && matches!(c.kind, Some(CompletionItemKind::FUNCTION)) {
+					// filter out functions that return void
+					return not_type && matches!(c.detail.as_ref(), Some(s) if !s.ends_with("): void"));
+				} else {
+					not_type
+				}
+			})
 			.collect()
 	}
 }
@@ -1114,7 +1139,7 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 			}
 		}
 
-		if node.span.contains_location(&self.exact_position) {
+		if self.nearest_expr.is_none() && node.span.contains_location(&self.exact_position) {
 			self.expression_trail.push(node);
 		}
 
@@ -1247,6 +1272,7 @@ let c = 3;
 "#,
 		assert!(!only_show_symbols_in_scope.is_empty())
 
+		assert!(only_show_symbols_in_scope.iter().all(|c| c.label != "b"))
 		assert!(only_show_symbols_in_scope.iter().all(|c| c.label != "c"))
 	);
 
@@ -1743,5 +1769,55 @@ class S {
 }
 "#,
 		assert!(show_private.iter().any(|c| c.label == "a"))
+	);
+
+	test_completion_list!(
+		struct_completion_in_test,
+		r#"
+struct S { ab: num; }
+
+test "" {
+  let x = S {
+    
+  //^
+  };
+}
+"#,
+		assert!(struct_completion_in_test.iter().any(|c| c.label == "ab:"))
+	);
+
+	test_completion_list!(
+		no_completions_after_let,
+		r#"
+let 
+  //^
+let y = 3;
+"#,
+		assert!(no_completions_after_let.is_empty())
+	);
+
+	test_completion_list!(
+		hide_parent_symbols_defined_later,
+		r#"
+let x = 2;
+test "" {
+  
+//^
+}
+let y = 3;
+"#,
+		assert!(hide_parent_symbols_defined_later.iter().any(|c| c.label == "x"))
+		assert!(hide_parent_symbols_defined_later.iter().all(|c| c.label != "y"))
+	);
+
+	test_completion_list!(
+		struct_show_values,
+		r#"
+struct S { a: num; b: num; }
+let x = 1;
+let s: S = { a: 1, b:  };
+                   //^
+"#,
+		assert!(struct_show_values.iter().any(|c| c.label == "x"))
 	);
 }

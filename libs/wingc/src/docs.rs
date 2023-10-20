@@ -217,7 +217,11 @@ fn render_signature_help(f: &FunctionSignature) -> String {
 		let param_type_unwrapped = param.typeref.maybe_unwrap_option();
 		let is_last = param_idx == f.parameters.len() - 1;
 
-		let param_name: &String = &param.name;
+		let param_name = if param.name.is_empty() {
+			param_idx.to_string()
+		} else {
+			param.name.clone()
+		};
 		let detail_text = if let Some(summary) = &param.docs.summary {
 			format!("— `{param_type}` — {summary}")
 		} else {

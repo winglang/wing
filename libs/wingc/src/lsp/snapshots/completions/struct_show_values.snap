@@ -1,18 +1,13 @@
 ---
 source: libs/wingc/src/lsp/completions.rs
 ---
-- label: "a:"
-  kind: 5
-  detail: str
+- label: x
+  kind: 6
+  detail: num
   documentation:
     kind: markdown
-    value: "```wing\na: str\n```"
-  sortText: "ab|a|a:"
-  insertText: "a: $1"
-  insertTextFormat: 2
-  command:
-    title: triggerCompletion
-    command: editor.action.triggerSuggest
+    value: "```wing\npreflight x: num\n```"
+  sortText: bb|x
 - label: unsafeCast
   kind: 3
   detail: "(value: any): any"
@@ -25,12 +20,12 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
-- label: A
+- label: S
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct A\n```\n---\n### Fields\n- `a` — `str`"
-  sortText: hh|A
+    value: "```wing\nstruct S\n```\n---\n### Fields\n- `a` — `num`\n- `b` — `num`"
+  sortText: hh|S
 - label: "inflight () => {}"
   kind: 15
   sortText: "ll|inflight () => {}"
