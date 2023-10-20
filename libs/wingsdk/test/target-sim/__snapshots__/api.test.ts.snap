@@ -1,5 +1,196 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`api allows duplicates routes with different methods 1`] = `
+{
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle(req) { return { status: 200, body: req.body, headers: req.headers }; }
+};
+})())({
+
+})).handle(event);
+};",
+  "connections.json": {
+    "connections": [
+      {
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+      {
+        "name": "post()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler-e645076f",
+        "props": {
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler-e645076f_c887c38c.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "wingsdk.cloud.Function",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api",
+        "props": {
+          "openApiSpec": {
+            "openapi": "3.0.3",
+            "paths": {
+              "/hello": {
+                "get": {
+                  "operationId": "get-hello",
+                  "parameters": [],
+                  "responses": {
+                    "200": {
+                      "content": {},
+                      "description": "200 response",
+                    },
+                  },
+                },
+                "post": {
+                  "operationId": "post-hello",
+                  "parameters": [],
+                  "responses": {
+                    "200": {
+                      "content": {},
+                      "description": "200 response",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        "type": "wingsdk.cloud.Api",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/ApiEventMapping-e645076f",
+        "props": {
+          "publisher": "\${root/my_api#attrs.handle}",
+          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "subscriptionProps": {
+            "routes": [
+              {
+                "method": "GET",
+                "path": "/hello",
+              },
+              {
+                "method": "POST",
+                "path": "/hello",
+              },
+            ],
+          },
+        },
+        "type": "wingsdk.sim.EventMapping",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "Handler": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.2.70",
+          },
+          "display": {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
+          "id": "Handler",
+          "path": "root/Handler",
+        },
+        "cloud.TestRunner": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.2.70",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
+        "my_api": {
+          "children": {
+            "ApiEventMapping-e645076f": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.2.70",
+              },
+              "display": {
+                "hidden": true,
+              },
+              "id": "ApiEventMapping-e645076f",
+              "path": "root/my_api/ApiEventMapping-e645076f",
+            },
+            "OnRequestHandler-e645076f": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.2.70",
+              },
+              "display": {
+                "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
+                "title": "get()",
+              },
+              "id": "OnRequestHandler-e645076f",
+              "path": "root/my_api/OnRequestHandler-e645076f",
+            },
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.2.70",
+          },
+          "display": {
+            "description": "A REST API endpoint",
+            "title": "Api",
+          },
+          "id": "my_api",
+          "path": "root/my_api",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.2.70",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
 exports[`api handler can read the request params 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
@@ -20,7 +211,8 @@ exports[`api handler can read the request params 1`] = `
 
 exports[`api handler can read the request params 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -209,7 +401,8 @@ exports[`api handler can read the request path 1`] = `
 
 exports[`api handler can read the request path 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -398,7 +591,8 @@ exports[`api handler can set response headers 1`] = `
 
 exports[`api handler can set response headers 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -587,7 +781,8 @@ exports[`api response returns Content-Type header from inflight 1`] = `
 
 exports[`api response returns Content-Type header from inflight 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -776,7 +971,8 @@ exports[`api response returns default Content-Type header 1`] = `
 
 exports[`api response returns default Content-Type header 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -983,7 +1179,8 @@ exports[`api supports every method type 1`] = `
 
 exports[`api supports every method type 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1286,7 +1483,8 @@ exports[`api with 'name' & 'age' parameter 1`] = `
 
 exports[`api with 'name' & 'age' parameter 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1492,7 +1690,8 @@ exports[`api with 'name' parameter 1`] = `
 
 exports[`api with 'name' parameter 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1672,7 +1871,8 @@ return class Handler {
 
 exports[`api with multiple GET routes and one lambda 1`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1884,7 +2084,8 @@ exports[`api with multiple methods on same route 1`] = `
 
 exports[`api with multiple methods on same route 2`] = `
 {
-  ".wing/onrequesthandler-7c48a9f0_c8912b27.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-7c48a9f0_c8912b27.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1898,7 +2099,8 @@ return class Handler {
 
 })).handle(event);
 };",
-  ".wing/onrequesthandler-f6d90a7f_c869cdc5.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-f6d90a7f_c869cdc5.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -2174,7 +2376,8 @@ exports[`api with multiple routes 1`] = `
 
 exports[`api with multiple routes 2`] = `
 {
-  ".wing/onrequesthandler-7c48a9f0_c8912b27.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-7c48a9f0_c8912b27.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -2188,7 +2391,8 @@ return class Handler {
 
 })).handle(event);
 };",
-  ".wing/onrequesthandler-f6d90a7f_c869cdc5.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-f6d90a7f_c869cdc5.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -2459,7 +2663,8 @@ exports[`api with one GET route 1`] = `
 
 exports[`api with one GET route 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -2648,7 +2853,8 @@ exports[`api with one GET route with request params 1`] = `
 
 exports[`api with one GET route with request params 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -2846,7 +3052,8 @@ exports[`api with one POST route, with body 1`] = `
 
 exports[`api with one POST route, with body 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {

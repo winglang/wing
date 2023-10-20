@@ -3,8 +3,8 @@ use indexmap::IndexMap;
 use crate::{
 	ast::{
 		AccessModifier, ArgList, AssignmentKind, CalleeKind, Class, ClassField, Expr, ExprKind, FunctionBody,
-		FunctionDefinition, FunctionParameter, FunctionSignature, Literal, NewExpr, Phase, Reference, Scope, Stmt,
-		StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		FunctionDefinition, FunctionParameter, FunctionSignature, Literal, New, Phase, Reference, Scope, Stmt, StmtKind,
+		Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	diagnostic::WingSpan,
 	fold::{self, Fold},
@@ -180,7 +180,7 @@ impl Fold for ClosureTransformer {
 					// Anonymous functions are always static -- since the function code is now an instance method on a class,
 					// we need to set this to false.
 					is_static: false,
-					access_modifier: AccessModifier::Public,
+					access: AccessModifier::Public,
 				};
 
 				// class_init_body :=
@@ -273,7 +273,7 @@ impl Fold for ClosureTransformer {
 							is_static: true,
 							body: FunctionBody::Statements(Scope::new(class_init_body, WingSpan::for_file(file_id))),
 							span: WingSpan::for_file(file_id),
-							access_modifier: AccessModifier::Public,
+							access: AccessModifier::Public,
 						},
 						fields: class_fields,
 						implements: vec![],
@@ -292,8 +292,9 @@ impl Fold for ClosureTransformer {
 							is_static: false,
 							body: FunctionBody::Statements(Scope::new(vec![], WingSpan::for_file(file_id))),
 							span: WingSpan::for_file(file_id),
-							access_modifier: AccessModifier::Public,
+							access: AccessModifier::Public,
 						},
+						access: AccessModifier::Private,
 					}),
 					idx: self.nearest_stmt_idx,
 					span: WingSpan::for_file(file_id),
@@ -304,7 +305,7 @@ impl Fold for ClosureTransformer {
 				// new <new_class_name>();
 				// ```
 				let new_class_instance = Expr::new(
-					ExprKind::New(NewExpr {
+					ExprKind::New(New {
 						class: class_udt,
 						arg_list: ArgList {
 							named_args: IndexMap::new(),

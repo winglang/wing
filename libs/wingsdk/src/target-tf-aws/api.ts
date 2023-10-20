@@ -340,14 +340,14 @@ export class Api extends cloud.Api {
   }
 
   /** @internal */
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("topics can only be bound by tfaws.Function for now");
     }
 
     host.addEnvironment(this.urlEnvName(), this.url);
 
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

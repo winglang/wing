@@ -19,12 +19,13 @@ source: libs/wingc/src/jsify/tests.rs
 ## inflight.MyType-1.js
 
 ```js
+"use strict";
 module.exports = function({  }) {
   class MyType {
     async getField() {
       return this.field;
     }
-    constructor() {
+    async $inflight_init() {
       this.field = "hi";
     }
   }
@@ -35,6 +36,7 @@ module.exports = function({  }) {
 ## preflight.js
 
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -67,14 +69,14 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["field", "getField", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          MyType._registerBindObject(this, host, ["field"]);
+          MyType._registerOnLiftObject(this, host, ["field"]);
         }
         if (ops.includes("getField")) {
-          MyType._registerBindObject(this, host, ["field"]);
+          MyType._registerOnLiftObject(this, host, ["field"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
   }

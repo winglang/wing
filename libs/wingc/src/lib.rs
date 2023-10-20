@@ -7,7 +7,7 @@
 #[macro_use]
 extern crate lazy_static;
 
-use ast::{Scope, Symbol, UtilityFunctions};
+use ast::{AccessModifier, Scope, Symbol, UtilityFunctions};
 use camino::{Utf8Path, Utf8PathBuf};
 use closure_transform::ClosureTransformer;
 use comp_ctx::set_custom_panic_hook;
@@ -17,22 +17,25 @@ use files::Files;
 use fold::Fold;
 use indexmap::IndexMap;
 use jsify::JSifier;
+
 use lifting::LiftVisitor;
 use parser::parse_wing_project;
 use struct_schema::StructSchemaVisitor;
 use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::{StatementIdx, SymbolEnvKind};
+use type_check::type_reference_transform::TypeReferenceTransformer;
 use type_check::{FunctionSignature, SymbolKind, Type};
 use type_check_assert::TypeCheckAssert;
 use valid_json_visitor::ValidJsonVisitor;
 use visit::Visit;
-use wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
+use wasm_util::{ptr_to_str, string_to_combined_ptr, WASM_RETURN_ERROR};
 use wingii::type_system::TypeSystem;
 
 use crate::docs::Docs;
+use crate::parser::normalize_path;
 use std::alloc::{alloc, dealloc, Layout};
 
-use std::{fs, mem};
+use std::mem;
 
 use crate::ast::Phase;
 use crate::type_check::symbol_env::SymbolEnv;
@@ -52,6 +55,7 @@ mod file_graph;
 mod files;
 pub mod fold;
 pub mod jsify;
+pub mod json_schema_generator;
 mod lifting;
 pub mod lsp;
 pub mod parser;
@@ -75,8 +79,12 @@ const WINGSDK_AWS_MODULE: &'static str = "aws";
 const WINGSDK_EX_MODULE: &'static str = "ex";
 const WINGSDK_TESTING_MODULE: &'static str = "testing";
 const WINGSDK_REGEX_MODULE: &'static str = "regex";
+const WINGSDK_FS_MODULE: &'static str = "fs";
+const WINGSDK_SIM_MODULE: &'static str = "sim";
 
-const WINGSDK_BRINGABLE_MODULES: [&'static str; 8] = [
+pub const UTIL_CLASS_NAME: &'static str = "Util";
+
+const WINGSDK_BRINGABLE_MODULES: [&'static str; 10] = [
 	WINGSDK_CLOUD_MODULE,
 	WINGSDK_UTIL_MODULE,
 	WINGSDK_HTTP_MODULE,
@@ -85,6 +93,8 @@ const WINGSDK_BRINGABLE_MODULES: [&'static str; 8] = [
 	WINGSDK_EX_MODULE,
 	WINGSDK_TESTING_MODULE,
 	WINGSDK_REGEX_MODULE,
+	WINGSDK_FS_MODULE,
+	WINGSDK_SIM_MODULE,
 ];
 
 const WINGSDK_DURATION: &'static str = "std.Duration";
@@ -153,45 +163,38 @@ pub unsafe extern "C" fn wingc_init() {
 
 #[no_mangle]
 pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
-	let args = ptr_to_string(ptr, len);
+	let args = ptr_to_str(ptr, len);
 
 	let split = args.split(";").collect::<Vec<&str>>();
-	let source_file = Utf8Path::new(split[0]);
-	let output_dir = split.get(1).map(|s| Utf8Path::new(s));
-	let absolute_project_dir = split.get(2).map(|s| Utf8Path::new(s));
-
-	if !source_file.exists() {
+	if split.len() != 3 {
 		report_diagnostic(Diagnostic {
-			message: format!("Source file cannot be found: {}", source_file),
+			message: format!("Expected 3 arguments to wingc_compile, got {}", split.len()),
 			span: None,
+			annotations: vec![],
+		});
+		return WASM_RETURN_ERROR;
+	}
+	let source_path = Utf8Path::new(split[0]);
+	let output_dir = split.get(1).map(|s| Utf8Path::new(s)).expect("output dir not provided");
+	let project_dir = split
+		.get(2)
+		.map(|s| Utf8Path::new(s))
+		.expect("project dir not provided");
+
+	if !source_path.exists() {
+		report_diagnostic(Diagnostic {
+			message: format!("Source path cannot be found: {}", source_path),
+			span: None,
+			annotations: vec![],
 		});
 		return WASM_RETURN_ERROR;
 	}
 
-	if source_file.is_dir() {
-		report_diagnostic(Diagnostic {
-			message: format!("Source path must be a file (not a directory): {}", source_file),
-			span: None,
-		});
-		return WASM_RETURN_ERROR;
-	}
-
-	let source_text = match fs::read_to_string(&source_file) {
-		Ok(text) => text,
-		Err(e) => {
-			report_diagnostic(Diagnostic {
-				message: format!("Could not read file \"{}\": {}", source_file, e),
-				span: None,
-			});
-			return WASM_RETURN_ERROR;
-		}
-	};
-
-	let results = compile(source_file, source_text, output_dir, absolute_project_dir);
+	let results = compile(project_dir, source_path, None, output_dir);
 	if results.is_err() {
 		WASM_RETURN_ERROR
 	} else {
-		string_to_combined_ptr("winged it!".to_string())
+		string_to_combined_ptr("".to_string())
 	}
 }
 
@@ -199,10 +202,11 @@ pub fn type_check(
 	scope: &mut Scope,
 	types: &mut Types,
 	file_path: &Utf8Path,
+	file_graph: &FileGraph,
 	jsii_types: &mut TypeSystem,
 	jsii_imports: &mut Vec<JsiiImportSpec>,
 ) {
-	let env = types.add_symbol_env(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0));
+	let mut env = types.add_symbol_env(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0));
 	types.set_scope_env(scope, env);
 
 	// note: Globals are emitted here and wrapped in "{ ... }" blocks. Wrapping makes these emissions, actual
@@ -245,18 +249,35 @@ pub fn type_check(
 		scope,
 		types,
 	);
+	add_builtin(
+		UtilityFunctions::UnsafeCast.to_string().as_str(),
+		Type::Function(FunctionSignature {
+			this_type: None,
+			parameters: vec![FunctionParameter {
+				name: "value".into(),
+				typeref: types.anything(),
+				docs: Docs::with_summary("The value to cast into a different type"),
+				variadic: false,
+			}],
+			return_type: types.anything(),
+			phase: Phase::Independent,
+			js_override: Some("$args$".to_string()),
+			docs: Docs::with_summary("Casts a value into a different type. This is unsafe and can cause runtime errors"),
+		}),
+		scope,
+		types,
+	);
 
-	let mut scope_env = types.get_scope_env(&scope);
-	let mut tc = TypeChecker::new(types, file_path, jsii_types, jsii_imports);
-	tc.add_module_to_env(
-		&mut scope_env,
+	let mut tc = TypeChecker::new(types, file_path, file_graph, jsii_types, jsii_imports);
+	tc.add_jsii_module_to_env(
+		&mut env,
 		WINGSDK_ASSEMBLY_NAME.to_string(),
 		vec![WINGSDK_STD_MODULE.to_string()],
 		&Symbol::global(WINGSDK_STD_MODULE),
 		None,
 	);
 
-	tc.type_check_file(file_path, scope);
+	tc.type_check_file_or_dir(file_path, scope);
 }
 
 // TODO: refactor this (why is scope needed?) (move to separate module?)
@@ -267,20 +288,19 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 		.define(
 			&sym,
 			SymbolKind::make_free_variable(sym.clone(), types.add_type(typ), false, Phase::Independent),
+			AccessModifier::Private,
 			StatementIdx::Top,
 		)
 		.expect("Failed to add builtin");
 }
 
 pub fn compile(
+	project_dir: &Utf8Path,
 	source_path: &Utf8Path,
-	source_text: String,
-	out_dir: Option<&Utf8Path>,
-	absolute_project_root: Option<&Utf8Path>,
+	source_text: Option<String>,
+	out_dir: &Utf8Path,
 ) -> Result<CompilerOutput, ()> {
-	let file_name = source_path.file_name().unwrap();
-	let default_out_dir = Utf8PathBuf::from(format!("{}.out", file_name));
-	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
+	let source_path = normalize_path(source_path, None);
 
 	// -- PARSING PHASE --
 	let mut files = Files::new();
@@ -317,11 +337,22 @@ pub fn compile(
 	// Create a universal JSII import spec (need to keep this alive during entire compilation)
 	let mut jsii_imports = vec![];
 
-	// Type check all files in topological order (start with files that don't require any other
-	// Wing files, then move on to files that depend on those, etc.)
+	// Type check all files in topological order (start with files that don't bring any other
+	// Wing files, then move on to files that depend on those, and repeat)
 	for file in &topo_sorted_files {
-		let mut scope = asts.get_mut(file).expect("matching AST not found");
-		type_check(&mut scope, &mut types, &file, &mut jsii_types, &mut jsii_imports);
+		let mut scope = asts.remove(file).expect("matching AST not found");
+		type_check(
+			&mut scope,
+			&mut types,
+			&file,
+			&file_graph,
+			&mut jsii_types,
+			&mut jsii_imports,
+		);
+
+		// Make sure all type reference are no longer considered references
+		let mut tr_transformer = TypeReferenceTransformer { types: &mut types };
+		let scope = tr_transformer.fold_scope(scope);
 
 		// Validate the type checker didn't miss anything - see `TypeCheckAssert` for details
 		let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
@@ -330,22 +361,21 @@ pub fn compile(
 		// Validate all Json literals to make sure their values are legal
 		let mut json_checker = ValidJsonVisitor::new(&types);
 		json_checker.check(&scope);
+
+		asts.insert(file.clone(), scope);
 	}
 
-	let project_dir = absolute_project_root
-		.unwrap_or(source_path.parent().unwrap())
-		.to_path_buf();
-
 	// Verify that the project dir is absolute
-	if !is_project_dir_absolute(&project_dir) {
+	if !is_absolute_path(&project_dir) {
 		report_diagnostic(Diagnostic {
 			message: format!("Project directory must be absolute: {}", project_dir),
 			span: None,
+			annotations: vec![],
 		});
 		return Err(());
 	}
 
-	let mut jsifier = JSifier::new(&mut types, &files, &source_path, &project_dir);
+	let mut jsifier = JSifier::new(&mut types, &files, &file_graph, &source_path);
 
 	// -- LIFTING PHASE --
 
@@ -394,15 +424,15 @@ pub fn compile(
 	return Ok(CompilerOutput {});
 }
 
-fn is_project_dir_absolute(project_dir: &Utf8PathBuf) -> bool {
-	if project_dir.starts_with("/") {
+pub fn is_absolute_path(path: &Utf8Path) -> bool {
+	if path.starts_with("/") {
 		return true;
 	}
 
-	let project_dir = project_dir.as_str();
 	// Check if this is a Windows path instead by checking if the second char is a colon
 	// Note: Cannot use Utf8Path::is_absolute() because it doesn't work with Windows paths on WASI
-	if project_dir.len() < 2 || project_dir.chars().nth(1).expect("Project dir has second character") != ':' {
+	let chars = path.as_str().chars().collect::<Vec<char>>();
+	if chars.len() < 2 || chars[1] != ':' {
 		return false;
 	}
 
@@ -411,41 +441,34 @@ fn is_project_dir_absolute(project_dir: &Utf8PathBuf) -> bool {
 
 #[cfg(test)]
 mod sanity {
-	use camino::Utf8PathBuf;
+	use camino::{Utf8Path, Utf8PathBuf};
 
 	use crate::{compile, diagnostic::assert_no_panics};
-	use std::{fs, path::Path};
+	use std::fs;
 
 	fn get_wing_files<P>(dir: P) -> impl Iterator<Item = Utf8PathBuf>
 	where
-		P: AsRef<Path>,
+		P: AsRef<Utf8Path>,
 	{
-		fs::read_dir(dir)
+		fs::read_dir(dir.as_ref())
 			.unwrap()
 			.map(|entry| Utf8PathBuf::from_path_buf(entry.unwrap().path()).expect("invalid unicode path"))
 			.filter(|path| path.is_file() && path.extension().map(|ext| ext == "w").unwrap_or(false))
 	}
 
 	fn compile_test(test_dir: &str, expect_failure: bool) {
-		for test_file in get_wing_files(test_dir) {
+		let test_dir = Utf8Path::new(test_dir).canonicalize_utf8().unwrap();
+		for test_file in get_wing_files(&test_dir) {
 			println!("\n=== {} ===\n", test_file);
 
-			let mut out_dir = test_file.parent().unwrap().to_path_buf();
-			out_dir.push(format!("target/wingc/{}.out", test_file.file_name().unwrap()));
+			let out_dir = test_dir.join(format!("target/wingc/{}.out", test_file.file_name().unwrap()));
 
 			// reset out_dir
 			if out_dir.exists() {
 				fs::remove_dir_all(&out_dir).expect("remove out dir");
 			}
 
-			let test_text = fs::read_to_string(&test_file).expect("read test file");
-
-			let result = compile(
-				&test_file,
-				test_text,
-				Some(&out_dir),
-				Some(test_file.canonicalize_utf8().unwrap().parent().unwrap()),
-			);
+			let result = compile(&test_dir, &test_file, None, &out_dir);
 
 			if result.is_err() {
 				assert!(

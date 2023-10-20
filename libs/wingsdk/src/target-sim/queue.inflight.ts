@@ -55,6 +55,9 @@ export class Queue
     return this.context.withTrace({
       message: `Push (messages=${messages}).`,
       activity: async () => {
+        if (messages.includes("")) {
+          throw new Error("Empty messages are not allowed");
+        }
         for (const message of messages) {
           this.messages.push(new QueueMessage(this.retentionPeriod, message));
         }
@@ -98,6 +101,16 @@ export class Queue
     let processedMessages = false;
     do {
       processedMessages = false;
+      // Remove messages that have expired
+      const currentTime = new Date();
+      this.messages.forEach(async (message, index) => {
+        if (message.retentionTimeout < currentTime) {
+          await this.context.withTrace({
+            activity: async () => this.messages.splice(index, 1),
+            message: `Removing expired message (message=${message.payload}).`,
+          });
+        }
+      });
       // Randomize the order of subscribers to avoid user code making
       // assumptions on the order that subscribers process messages.
       for (const subscriber of new RandomArrayIterator(this.subscribers)) {

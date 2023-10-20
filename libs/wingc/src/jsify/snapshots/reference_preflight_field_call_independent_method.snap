@@ -22,6 +22,7 @@ source: libs/wingc/src/jsify/tests.rs
 ## inflight.Foo-1.js
 
 ```js
+"use strict";
 module.exports = function({  }) {
   class Foo {
     constructor({ $_this_arr_at_1__ }) {
@@ -38,6 +39,7 @@ module.exports = function({  }) {
 ## preflight.js
 
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -72,14 +74,14 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["method", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject((this.arr.at(1)), host, []);
+          Foo._registerOnLiftObject((this.arr.at(1)), host, []);
         }
         if (ops.includes("method")) {
-          Foo._registerBindObject((this.arr.at(1)), host, []);
+          Foo._registerOnLiftObject((this.arr.at(1)), host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
   }

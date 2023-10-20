@@ -5,7 +5,7 @@ import { Topic } from "./topic";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Json, IResource, Node, Resource } from "../std";
+import { Json, IResource, Node, Resource, Datetime, Duration } from "../std";
 
 /**
  * Global identifier for `Bucket`.
@@ -67,6 +67,8 @@ export abstract class Bucket extends Resource {
       BucketInflightMethods.TRY_GET,
       BucketInflightMethods.TRY_GET_JSON,
       BucketInflightMethods.TRY_DELETE,
+      BucketInflightMethods.SIGNED_URL,
+      BucketInflightMethods.METADATA,
     ];
   }
 
@@ -92,15 +94,11 @@ export abstract class Bucket extends Resource {
     encoding: BufferEncoding = "utf-8"
   ): void {
     const app = App.of(this);
-    if (isAbsolute(path)) {
-      path = path;
-    } else {
-      if (!app.entrypointDir) {
-        throw new Error("Missing environment variable: WING_SOURCE_DIR");
-      }
-      path = resolve(app.entrypointDir, path);
-    }
-    const data = fs.readFileSync(path, { encoding: encoding });
+
+    const data = fs.readFileSync(
+      isAbsolute(path) ? path : resolve(app.entrypointDir, path),
+      { encoding: encoding }
+    );
 
     this.addObject(key, data);
   }
@@ -244,7 +242,21 @@ export abstract class Bucket extends Resource {
   }
 }
 
-/** Interface for delete method inside `Bucket` */
+/**
+ * Options for `Bucket.put()`.
+ */
+export interface BucketPutOptions {
+  /**
+   * The HTTP Content-Type of the object.
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type
+   * @default - Determined by file extension or fallback to "application/octet-stream"
+   */
+  readonly contentType: string;
+}
+
+/**
+ * Options for `Bucket.delete()`.
+ */
 export interface BucketDeleteOptions {
   /**
    * Check failures on the method and retrieve errors if any
@@ -252,6 +264,16 @@ export interface BucketDeleteOptions {
    * @default false
    */
   readonly mustExist?: boolean;
+}
+
+/**
+ * Options for `Bucket.signedUrl()`.
+ */
+export interface BucketSignedUrlOptions {
+  /**
+   * The duration for the signed url to expire
+   */
+  readonly duration?: Duration;
 }
 
 /**
@@ -269,9 +291,10 @@ export interface IBucketClient {
    * Put an object in the bucket.
    * @param key Key of the object.
    * @param body Content of the object we want to store into the bucket.
+   * @param options Additional options
    * @inflight
    */
-  put(key: string, body: string): Promise<void>;
+  put(key: string, body: string, options?: BucketPutOptions): void;
 
   /**
    * Put a Json object in the bucket.
@@ -345,6 +368,38 @@ export interface IBucketClient {
    * @inflight
    */
   publicUrl(key: string): Promise<string>;
+
+  /**
+   * Returns a signed url to the given file.
+   * @Throws if object does not exist.
+   * @param key The key to access the cloud object
+   * @param options The signedUrlOptions where you can provide the configurations of the signed url
+   * @returns A string representing the signed url of the object which can be used to download in any downstream system
+   * @inflight
+   */
+  signedUrl(key: string, options?: BucketSignedUrlOptions): Promise<string>;
+
+  /**
+   * Get the metadata of an object in the bucket.
+   * @param key Key of the object.
+   * @Throws if there is no object with the given key.
+   * @inflight
+   */
+  metadata(key: string): Promise<ObjectMetadata>;
+}
+
+/**
+ * Metadata of a bucket object.
+ */
+export interface ObjectMetadata {
+  /** The size of the object in bytes. */
+  readonly size: number;
+
+  /** The time the object was last modified. */
+  readonly lastModified: Datetime;
+
+  /** The content type of the object, if it is known. */
+  readonly contentType?: string;
 }
 
 /**
@@ -447,4 +502,8 @@ export enum BucketInflightMethods {
   TRY_GET_JSON = "tryGetJson",
   /** `Bucket.tryDelete` */
   TRY_DELETE = "tryDelete",
+  /** `Bucket.signedUrl` */
+  SIGNED_URL = "signedUrl",
+  /** `Bucket.metadata` */
+  METADATA = "metadata",
 }

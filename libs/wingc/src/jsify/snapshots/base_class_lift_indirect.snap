@@ -30,6 +30,7 @@ source: libs/wingc/src/jsify/tests.rs
 ## inflight.Base-1.js
 
 ```js
+"use strict";
 module.exports = function({  }) {
   class Base {
     constructor({ $this_b }) {
@@ -47,6 +48,7 @@ module.exports = function({  }) {
 ## inflight.Derived-1.js
 
 ```js
+"use strict";
 module.exports = function({ $Base }) {
   class Derived extends $Base {
     constructor({ $this_b }) {
@@ -63,6 +65,7 @@ module.exports = function({ $Base }) {
 ## preflight.js
 
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -98,14 +101,14 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["put", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Base._registerBindObject(this.b, host, []);
+          Base._registerOnLiftObject(this.b, host, []);
         }
         if (ops.includes("put")) {
-          Base._registerBindObject(this.b, host, ["list", "put"]);
+          Base._registerOnLiftObject(this.b, host, ["list", "put"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class Derived extends Base {
@@ -133,11 +136,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["foo", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("foo")) {
-          Derived._registerBindObject(this, host, ["put"]);
+          Derived._registerOnLiftObject(this, host, ["put"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
   }

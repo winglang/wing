@@ -4,7 +4,7 @@ use lsp_types::{
 	SignatureInformation,
 };
 
-use crate::ast::{CalleeKind, Expr, ExprKind, NewExpr, Symbol};
+use crate::ast::{CalleeKind, Expr, ExprKind, New, Symbol};
 use crate::docs::Documented;
 use crate::lsp::sync::PROJECT_DATA;
 use crate::lsp::sync::WING_TYPES;
@@ -12,22 +12,13 @@ use crate::lsp::sync::WING_TYPES;
 use crate::type_check::symbol_env::SymbolEnvRef;
 use crate::type_check::{resolve_super_method, resolve_user_defined_type, Types, CLASS_INIT_NAME};
 use crate::visit::{visit_expr, visit_scope, Visit};
-use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
+use crate::wasm_util::extern_json_fn;
 
 use super::sync::check_utf8;
 
 #[no_mangle]
 pub unsafe extern "C" fn wingc_on_signature_help(ptr: u32, len: u32) -> u64 {
-	let parse_string = ptr_to_string(ptr, len);
-	if let Ok(parsed) = serde_json::from_str(&parse_string) {
-		let result = on_signature_help(parsed);
-		let result = serde_json::to_string(&result).unwrap();
-
-		// return result as u64 with ptr and len
-		string_to_combined_ptr(result)
-	} else {
-		WASM_RETURN_ERROR
-	}
+	extern_json_fn(ptr, len, on_signature_help)
 }
 
 pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<SignatureHelp> {
@@ -49,7 +40,7 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 				&crate::ast::ArgList,
 			) = match &expr.kind {
 				ExprKind::New(new_expr) => {
-					let NewExpr { class, arg_list, .. } = new_expr;
+					let New { class, arg_list, .. } = new_expr;
 
 					let Some(t) = resolve_user_defined_type(class, &types.get_scope_env(&root_scope), 0).ok() else {
 						return None;
@@ -87,10 +78,12 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 				.enumerate()
 				.filter(|(_, arg)| params.text_document_position_params.position <= arg.span.end.into())
 				.count();
-			let named_arg_pos = provided_args
-				.named_args
-				.iter()
-				.find(|arg| arg.1.span.contains(&params.text_document_position_params.position));
+			let named_arg_pos = provided_args.named_args.iter().find(|arg| {
+				arg
+					.1
+					.span
+					.contains_lsp_position(&params.text_document_position_params.position)
+			});
 
 			let param_data = sig
 				.parameters
@@ -209,7 +202,7 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 			return;
 		}
 
-		if node.span.contains(&self.location) {
+		if node.span.contains_lsp_position(&self.location) {
 			match node.kind {
 				ExprKind::Call { .. } | ExprKind::New { .. } => {
 					self.call_expr = Some(node);

@@ -51,10 +51,10 @@ pub fn compile_fail(code: &str) -> String {
 
 /// Compiles `code` and returns the capture scanner results as a string that can be snapshotted
 fn compile_code(code: &str) -> String {
-	let outdir = tempfile::tempdir().unwrap();
-	let outdir_path = Utf8Path::from_path(outdir.path()).unwrap();
-
-	let source_path = Utf8Path::new("main.w");
+	let project_dir = tempfile::tempdir().unwrap();
+	let project_dir = Utf8Path::from_path(project_dir.path()).unwrap();
+	let source_path = project_dir.join("main.w");
+	let out_dir = project_dir.join("target/main.out/.wing");
 
 	// NOTE: this is needed for debugging to work regardless of where you run the test
 	env::set_current_dir(env!("CARGO_MANIFEST_DIR")).unwrap();
@@ -62,15 +62,15 @@ fn compile_code(code: &str) -> String {
 	// convert tabs to 2 spaces
 	let code = code.replace("\t", "  ");
 
-	let result = compile(source_path, code.clone(), Some(outdir_path), Some(outdir_path));
+	let result = compile(project_dir, &source_path, Some(code.clone()), &out_dir);
 
 	let mut snap = vec![];
 
 	match result {
 		Ok(_) => {
-			let Ok(files) = read_dir(outdir.path()) else {
-        panic!("failed to read dir");
-      };
+			let Ok(files) = read_dir(out_dir) else {
+				panic!("failed to read dir");
+			};
 
 			snap.push("## Code".to_string());
 			snap.push("".into());

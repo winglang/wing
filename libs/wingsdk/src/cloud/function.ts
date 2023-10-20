@@ -32,6 +32,13 @@ export interface FunctionProps {
    * @default 128
    */
   readonly memory?: number;
+
+  /**
+   * Specifies the number of days that function logs will be kept.
+   * Setting negative value means logs will not expire.
+   * @default 30
+   */
+  readonly logRetentionDays?: number;
 }
 
 /**
@@ -77,15 +84,9 @@ export abstract class Function extends Resource implements IInflightHost {
 
     // indicates that we are calling the inflight constructor and the
     // inflight "handle" method on the handler resource.
-    handler._registerBind(this, ["handle", "$inflight_init"]);
+    handler._registerOnLift(this, ["handle", "$inflight_init"]);
 
-    const inflightClient = handler._toInflight();
-    const lines = new Array<string>();
-
-    lines.push("exports.handler = async function(event) {");
-    lines.push(`  return await (${inflightClient}).handle(event);`);
-    lines.push("};");
-
+    const lines = this._getCodeLines(handler);
     const assetName = ResourceNames.generateName(this, {
       // Avoid characters that may cause path issues
       disallowedRegex: /[><:"/\\|?*\s]/g,
@@ -113,11 +114,30 @@ export abstract class Function extends Resource implements IInflightHost {
   }
 
   /**
+   * @internal
+   * @param handler IFunctionHandler
+   * @returns the function code lines as strings
+   */
+  protected _getCodeLines(handler: IFunctionHandler): string[] {
+    const inflightClient = handler._toInflight();
+    const lines = new Array<string>();
+
+    lines.push('"use strict";');
+    lines.push("exports.handler = async function(event) {");
+    lines.push(`  return await (${inflightClient}).handle(event);`);
+    lines.push("};");
+
+    return lines;
+  }
+
+  /**
    * Add an environment variable to the function.
    */
   public addEnvironment(name: string, value: string) {
-    if (this._env[name] !== undefined) {
-      throw new Error(`Environment variable "${name}" already set.`);
+    if (this._env[name] !== undefined && this._env[name] !== value) {
+      throw new Error(
+        `Environment variable "${name}" already set with a different value.`
+      );
     }
     this._env[name] = value;
   }
@@ -135,7 +155,7 @@ export abstract class Function extends Resource implements IInflightHost {
  */
 export interface IFunctionClient {
   /**
-   * Invoke the function asynchronously with a given payload.
+   * Invokes the function with a payload and waits for the result.
    * @inflight
    */
   invoke(payload: string): Promise<string>;

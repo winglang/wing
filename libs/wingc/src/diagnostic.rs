@@ -1,3 +1,4 @@
+use camino::Utf8Path;
 use colored::Colorize;
 use std::{cell::RefCell, fmt::Display};
 use tree_sitter::Point;
@@ -9,6 +10,9 @@ use serde::Serialize;
 pub type FileId = String;
 type Diagnostics = Vec<Diagnostic>;
 pub type DiagnosticResult<T> = Result<T, ()>;
+
+// error constant
+pub const ERR_EXPECTED_SEMICOLON: &str = "Expected ';'";
 
 /// Line and character location in a UTF8 Wing source file
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Serialize)]
@@ -116,7 +120,56 @@ impl Into<Range> for &WingSpan {
 }
 
 impl WingSpan {
-	pub fn contains(&self, position: &Position) -> bool {
+	/// Checks if the given span is contained within this span
+	pub fn contains_span(&self, position: &Self) -> bool {
+		let start = self.start;
+		let end = self.end;
+		let other_start = position.start;
+		let other_end = position.end;
+
+		if start.line == end.line && other_start.line == other_end.line {
+			other_start.col >= start.col && other_end.col <= end.col
+		} else if start.line == end.line {
+			other_start.col >= start.col
+				&& other_start.line == start.line
+				&& other_end.line == end.line
+				&& other_end.col <= end.col
+		} else if other_start.line == other_end.line {
+			other_start.line >= start.line
+				&& other_start.col >= start.col
+				&& other_end.line == end.line
+				&& other_end.col <= end.col
+		} else {
+			other_start.line >= start.line
+				&& other_start.col >= start.col
+				&& other_end.line <= end.line
+				&& other_end.col <= end.col
+		}
+	}
+
+	/// Checks if the given location is contained within this span
+	pub fn contains_location(&self, position: &WingLocation) -> bool {
+		let pos_line = position.line;
+		let pos_char = position.col;
+		let start = self.start;
+		let end = self.end;
+
+		if pos_line >= start.line && pos_line <= end.line {
+			if start.line == end.line && pos_line == start.line {
+				pos_char >= start.col && pos_char <= end.col
+			} else if pos_line == start.line {
+				pos_char >= start.col
+			} else if pos_line == end.line {
+				pos_char <= end.col
+			} else {
+				true
+			}
+		} else {
+			false
+		}
+	}
+
+	pub fn contains_lsp_position(&self, position: &Position) -> bool {
 		let pos_line = position.line;
 		let pos_char = position.character;
 		let start = self.start;
@@ -138,7 +191,14 @@ impl WingSpan {
 	}
 
 	pub fn merge(&self, other: &Self) -> Self {
+		if self.is_default() {
+			return other.clone();
+		} else if other.is_default() {
+			return self.clone();
+		}
+
 		assert!(self.file_id == other.file_id);
+
 		let start = if self.start < other.start {
 			self.start
 		} else {
@@ -151,11 +211,22 @@ impl WingSpan {
 			file_id: self.file_id.clone(),
 		}
 	}
+
+	/// Checks if this span is the default span. This means the span is covers nothing by ending at (0,0).
+	pub fn is_default(&self) -> bool {
+		self.end == WingLocation::default()
+	}
 }
 
-impl std::fmt::Display for WingSpan {
+impl Display for WingSpan {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		write!(f, "{}:{}:{}", self.file_id, self.start.line + 1, self.start.col + 1)
+		write!(
+			f,
+			"{}:{}:{}",
+			Utf8Path::new(&self.file_id).file_name().expect("invalid file id"),
+			self.start.line + 1,
+			self.start.col + 1
+		)
 	}
 }
 
@@ -171,23 +242,21 @@ impl Ord for WingSpan {
 
 impl PartialOrd for WingSpan {
 	fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-		if self.file_id == other.file_id {
-			let start_ord = self.start.partial_cmp(&other.start);
-			if start_ord == Some(std::cmp::Ordering::Equal) {
-				self.end.partial_cmp(&other.end)
-			} else {
-				start_ord
-			}
-		} else {
-			self.file_id.partial_cmp(&other.file_id)
-		}
+		Some(self.cmp(other))
 	}
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize)]
 pub struct Diagnostic {
 	pub message: String,
+	pub annotations: Vec<DiagnosticAnnotation>,
 	pub span: Option<WingSpan>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize)]
+pub struct DiagnosticAnnotation {
+	pub message: String,
+	pub span: WingSpan,
 }
 
 impl std::fmt::Display for Diagnostic {
@@ -208,7 +277,7 @@ impl Ord for Diagnostic {
 
 impl PartialOrd for Diagnostic {
 	fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-		self.span.partial_cmp(&other.span)
+		Some(self.cmp(other))
 	}
 }
 
@@ -226,10 +295,17 @@ pub fn report_diagnostic(diagnostic: Diagnostic) {
 	// If we're running in wasm32 then send the diagnostic to the client
 	#[cfg(target_arch = "wasm32")]
 	{
-		let json = serde_json::to_string(&diagnostic).unwrap();
-		let bytes = json.as_bytes();
-		unsafe {
-			send_diagnostic(bytes.as_ptr(), bytes.len() as u32);
+		match serde_json::to_string(&diagnostic) {
+			Ok(json) => {
+				let bytes = json.as_bytes();
+				unsafe {
+					send_diagnostic(bytes.as_ptr(), bytes.len() as u32);
+				}
+			}
+			Err(err) => {
+				eprintln!("Error serializing diagnostic: {}", err);
+				// avoiding a panic here because we don't want to crash the panic handler
+			}
 		}
 	}
 }
@@ -283,6 +359,7 @@ pub fn reset_diagnostics() {
 pub struct TypeError {
 	pub message: String,
 	pub span: WingSpan,
+	pub annotations: Vec<DiagnosticAnnotation>,
 }
 
 impl std::fmt::Display for TypeError {
@@ -296,7 +373,7 @@ mod tests {
 	use super::*;
 
 	#[test]
-	fn wingspan_contains() {
+	fn wingspan_contains_lsp_position() {
 		let span = WingSpan {
 			start: WingLocation { line: 0, col: 0 },
 			end: WingLocation { line: 1, col: 10 },
@@ -306,8 +383,48 @@ mod tests {
 		let in_position = Position { line: 0, character: 5 };
 		let out_position = Position { line: 2, character: 5 };
 
-		assert!(span.contains(&in_position));
-		assert!(!span.contains(&out_position));
+		assert!(span.contains_lsp_position(&in_position));
+		assert!(!span.contains_lsp_position(&out_position));
+	}
+
+	#[test]
+	fn wingspan_contains_span() {
+		let file_id = "test";
+
+		let span = WingSpan {
+			start: WingLocation { line: 0, col: 0 },
+			end: WingLocation { line: 1, col: 10 },
+			file_id: file_id.to_string(),
+		};
+
+		let in_span = WingSpan {
+			start: WingLocation { line: 0, col: 5 },
+			end: WingLocation { line: 1, col: 5 },
+			file_id: file_id.to_string(),
+		};
+		let out_span = WingSpan {
+			start: WingLocation { line: 2, col: 0 },
+			end: WingLocation { line: 2, col: 5 },
+			file_id: file_id.to_string(),
+		};
+
+		assert!(span.contains_span(&in_span));
+		assert!(!span.contains_span(&out_span));
+	}
+
+	#[test]
+	fn wingspan_contains_location() {
+		let span = WingSpan {
+			start: WingLocation { line: 0, col: 0 },
+			end: WingLocation { line: 1, col: 10 },
+			file_id: "test".to_string(),
+		};
+
+		let in_location = WingLocation { line: 0, col: 5 };
+		let out_location = WingLocation { line: 2, col: 5 };
+
+		assert!(span.contains_location(&in_location));
+		assert!(!span.contains_location(&out_location));
 	}
 
 	#[test]

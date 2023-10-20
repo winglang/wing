@@ -1,12 +1,11 @@
-import open from "open";
-import { createConsoleApp } from "@wingconsole/app";
-import { run } from "./run";
-import { mkdtemp } from "fs/promises";
-import { join } from "path";
-import { tmpdir } from "os";
 import { mkdirSync, writeFileSync } from "fs";
-import { resolve } from "path";
+import { mkdtemp } from "fs/promises";
+import { tmpdir } from "os";
+import { join, resolve } from "path";
+import { createConsoleApp } from "@wingconsole/app";
+import open from "open";
 import { vi, test, expect } from "vitest";
+import { run } from "./run";
 
 vi.mock("open");
 
@@ -20,17 +19,17 @@ vi.mock("@wingconsole/app", () => {
   };
 });
 
-test("wing it runs the only .w file", async () => {
+test("wing it runs the only entrypoint file named main.w", async () => {
   const workdir = await mkdtemp(join(tmpdir(), "-wing-it-test"));
   const prevdir = process.cwd();
   try {
     process.chdir(workdir);
 
-    writeFileSync("foo.w", "bring cloud;");
+    writeFileSync("main.w", "bring cloud;");
 
     await run();
     expect(createConsoleApp).toBeCalledWith({
-      wingfile: resolve("foo.w"),
+      wingfile: resolve("main.w"),
       requestedPort: 3000,
       hostUtils: expect.anything(),
       requireAcceptTerms: false,
@@ -41,37 +40,71 @@ test("wing it runs the only .w file", async () => {
   }
 });
 
-test("wing it with no file throws error for a directory with more than 1 .w file", async () => {
+test("wing it runs the only entrypoint file ending with .main.w", async () => {
   const workdir = await mkdtemp(join(tmpdir(), "-wing-it-test"));
   const prevdir = process.cwd();
   try {
     process.chdir(workdir);
 
-    writeFileSync("foo.w", "bring cloud;");
-    writeFileSync("bar.w", "bring cloud;");
+    writeFileSync("foo.main.w", "bring cloud;");
 
-    await expect(run).rejects.toThrow("Please specify which file you want to run");
-  } finally {
-    process.chdir(prevdir);
-  }
-});
-
-test("wing it with a file runs", async () => {
-  const workdir = await mkdtemp(join(tmpdir(), "-wing-it-test"));
-  const prevdir = process.cwd();
-  try {
-    process.chdir(workdir);
-
-    writeFileSync("foo.w", "bring cloud;");
-
-    await run("foo.w");
+    await run();
     expect(createConsoleApp).toBeCalledWith({
-      wingfile: resolve("foo.w"),
+      wingfile: resolve("foo.main.w"),
       requestedPort: 3000,
       hostUtils: expect.anything(),
       requireAcceptTerms: false,
     });
     expect(open).toBeCalledWith("http://localhost:3000/");
+  } finally {
+    process.chdir(prevdir);
+  }
+});
+
+test("wing it doesn't run the only entrypoint file ending with .test.w", async () => {
+  const workdir = await mkdtemp(join(tmpdir(), "-wing-it-test"));
+  const prevdir = process.cwd();
+  try {
+    process.chdir(workdir);
+
+    writeFileSync("foo.test.w", "bring cloud;");
+
+    await expect(run).rejects.toThrow(
+      "Cannot find entrypoint files (main.w or *.main.w) in the current directory."
+    );
+  } finally {
+    process.chdir(prevdir);
+  }
+});
+
+test("wing it throws error for a directory with a non-entrypoint file", async () => {
+  const workdir = await mkdtemp(join(tmpdir(), "-wing-it-test"));
+  const prevdir = process.cwd();
+  try {
+    process.chdir(workdir);
+
+    writeFileSync("foo.w", "bring cloud;");
+
+    await expect(run).rejects.toThrow(
+      "Cannot find entrypoint files (main.w or *.main.w) in the current directory."
+    );
+  } finally {
+    process.chdir(prevdir);
+  }
+});
+
+test("wing it throws error for a directory with more than one entrypoint file", async () => {
+  const workdir = await mkdtemp(join(tmpdir(), "-wing-it-test"));
+  const prevdir = process.cwd();
+  try {
+    process.chdir(workdir);
+
+    writeFileSync("main.w", "bring cloud;");
+    writeFileSync("foo.main.w", "bring cloud;");
+
+    await expect(run).rejects.toThrow(
+      "Multiple entrypoints found in the current directory (main.w, foo.main.w). Please specify which one to use."
+    );
   } finally {
     process.chdir(prevdir);
   }
@@ -80,7 +113,7 @@ test("wing it with a file runs", async () => {
 test("wing it with a nested file runs", async () => {
   const workdir = await mkdtemp(join(tmpdir(), "-wing-it-test"));
   const subdir = join(workdir, "subdir");
-  const filePath = join(subdir, "foo.w");
+  const filePath = join(subdir, "foo.main.w");
   const prevdir = process.cwd();
   try {
     process.chdir(workdir);
@@ -107,9 +140,9 @@ test("wing it with an invalid file throws exception", async () => {
   try {
     process.chdir(workdir);
 
-    writeFileSync("foo.w", "bring cloud;");
+    writeFileSync("foo.main.w", "bring cloud;");
 
-    await expect(run("bar.w")).rejects.toThrow("bar.w doesn't exist");
+    await expect(run("bar.main.w")).rejects.toThrow("bar.main.w doesn't exist");
   } finally {
     process.chdir(prevdir);
   }
@@ -121,11 +154,11 @@ test("wing it with a custom port runs", async () => {
   try {
     process.chdir(workdir);
 
-    writeFileSync("foo.w", "bring cloud;");
+    writeFileSync("foo.main.w", "bring cloud;");
 
-    await run("foo.w", { port: "5000" });
+    await run("foo.main.w", { port: "5000" });
     expect(createConsoleApp).toBeCalledWith({
-      wingfile: resolve("foo.w"),
+      wingfile: resolve("foo.main.w"),
       requestedPort: 5000,
       hostUtils: expect.anything(),
       requireAcceptTerms: false,
@@ -142,10 +175,10 @@ test("wing it throws when invalid port number is used", async () => {
   try {
     process.chdir(workdir);
 
-    writeFileSync("foo.w", "bring cloud;");
+    writeFileSync("foo.main.w", "bring cloud;");
 
     await expect(async () => {
-      await run("foo.w", { port: "not a number" });
+      await run("foo.main.w", { port: "not a number" });
     }).rejects.toThrowError('"not a number" is not a number');
   } finally {
     process.chdir(prevdir);

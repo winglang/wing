@@ -1,7 +1,7 @@
-struct MyStruct {
+pub struct MyStruct {
   val: num;
 }
 
-struct MyOtherStruct {
+pub struct MyOtherStruct {
   data: MyStruct;
 }

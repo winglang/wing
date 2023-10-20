@@ -28,7 +28,7 @@ export const AutoUpdater = () => {
     if (enabled?.data?.enabled) {
       checkForUpdates.mutate();
     }
-  }, [enabled?.data?.enabled]);
+  }, [checkForUpdates, enabled?.data?.enabled]);
 
   useEffect(() => {
     if (currentStatus?.status?.version) {

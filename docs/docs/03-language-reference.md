@@ -313,7 +313,14 @@ For each `fromJson()`, there is a `tryFromJson()` method which returns an option
 indicates if parsing was successful or not:
 ```js
 let s = str.tryFromJson(myJson) ?? "invalid string";
-``````
+```
+
+Use `unsafe: true` to disable this check at your own risk:
+```js
+let trustMe = 123;
+let x = num.fromJson(trustMe, unsafe: true);
+assert(x == 123);
+```
 
 ##### 1.1.4.6 Mutability
 
@@ -386,6 +393,13 @@ Contact.fromJson(p);
 // RUNTIME ERROR: unable to parse Contact:
 // - field "last" is required and missing
 // - field "phone" is expected to be a string, got number.
+```
+
+Same as with primitives, it is possible to opt-out of validation using `unsafe: true`:
+```js
+let p = Json { first: "Wing", phone: 1234 };
+let x = Contact.fromJson(p, unsafe: true);
+assert(x.last.len > 0); // RUNTIME ERROR
 ```
 
 ##### 1.1.4.8 Serialization
@@ -524,10 +538,11 @@ log("UTC: ${t1.utc.toIso())}");            // output: 2023-02-09T06:21:03.000Z
 
 ### 1.2 Utility Functions
 
-| Name     | Extra information                                     |
-| -------- | ----------------------------------------------------- |
-| `log`    | logs str                                              |
-| `assert` | checks a condition and _throws_ if evaluated to false |
+| Name         | Extra information                                     |
+| ------------ | ----------------------------------------------------- |
+| `log`        | logs str                                              |
+| `assert`     | checks a condition and _throws_ if evaluated to false |
+| `unsafeCast` | cast a value into a different type                    |
 
 > ```TS
 > log("Hello ${name}");
@@ -1094,10 +1109,10 @@ Execution model currently is delegated to the JSII target. This means if you are
 targeting JSII with Node, Wing will use the event based loop that Node offers.
 
 In Wing, writing and executing at root block scope level is forbidden except for
-in entrypoint files (designated by `main.w` or `*.main.w`). Root block scope is
-considered special and compiler generates special instructions to properly
-assign all preflight classes to their respective scopes recursively down the
-constructs tree based on entry.
+in entrypoint files (designated by `main.w`, `*.main.w` or `*.test.w`).
+Root block scope is considered special and compiler generates special instructions
+to properly assign all preflight classes to their respective scopes recursively
+down the constructs tree based on entry.
 
 Within the entrypoint file, a root preflight class is made available for all
 subsequent preflight classes that are initialized and instantiated. The type of
@@ -1131,7 +1146,6 @@ The following features are not yet implemented, but we are planning to add them 
 
 ### 1.14 Roadmap
 
-* Module type visibility (exports/`pub` types) is not implemented yet - see https://github.com/winglang/wing/issues/130 to track.
 * `internal` access modifier is not yet implemented - see https://github.com/winglang/wing/issues/4156 to track.
 
 ## 2. Statements
@@ -1771,6 +1785,29 @@ bring cloud; // from cloud bring * as cloud;
 bring "cdktf" as cdktf; // from "cdktf" bring * as cdktf;
 ```
 
+To import an individual Wing file as a module, you can specify its path relative
+to the current file:
+
+```TS
+bring "./my-module.w" as myModule;
+```
+
+It's also possible to import a directory as a module. The module will contain all
+public types defined in the directory's files. If the directory has subdirectories,
+they will be available under the corresponding names.
+
+```TS
+bring "./my-module" as myModule;
+
+// from ./my-module/submodule/my-class.w
+new myModule.submodule.MyClass();
+```
+
+The following features are not yet implemented, but we are planning to add them in the future:
+
+* Specify types as public using `pub` - see https://github.com/winglang/wing/issues/4294 to track.
+* Specify types as public within the current project or library, and private outside, using `internal` - see https://github.com/winglang/wing/issues/4156 to track.
+
 [`▲ top`][top]
 
 ---
@@ -1802,7 +1839,7 @@ let bucket = new awscdk.aws_s3.Bucket(
 
 ## 5.2 JavaScript
 
-The `extern "<commonjs module path or name>"` modifier can be used on method declarations in classes to indicate that a method is backed by an implementation imported from a JavaScript module. The module can either be a relative path or a name and will be loaded via [require()](https://nodejs.org/api/modules.html#requireid).
+The `extern "<commonjs module path>"` modifier can be used on method declarations in classes to indicate that a method is backed by an implementation imported from a JavaScript module. The module must be a relative path and will be loaded via [require()](https://nodejs.org/api/modules.html#requireid).
 
 In the following example, the static inflight method `makeId` is implemented
 in `helper.js`:
@@ -1822,9 +1859,6 @@ class TaskList {
 
   // Load js helper file
   extern "./helpers.js" static inflight makeId(): str;
-
-  // Alternatively, you can use a module name
-  extern "uuid" static inflight v4(): str;
 } 
 
 // helpers.js

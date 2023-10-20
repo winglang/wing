@@ -187,3 +187,32 @@ impl<'a> crate::visit_types::VisitType<'_> for InferenceVisitor<'a> {
 		}
 	}
 }
+
+#[derive(Default)]
+/// Deeply visits a type and finds any inferences.
+pub struct InferenceCounterVisitor {
+	/// Whether or not we found an inference during the entire visit
+	pub found_inference: bool,
+
+	/// Whether or not we found an inference during the entire visit
+	pub found_inferences: Vec<InferenceId>,
+}
+
+impl crate::visit_types::VisitType<'_> for InferenceCounterVisitor {
+	// structs and interfaces cannot have inferences
+	fn visit_interface(&mut self, _node: &'_ Interface) {}
+	fn visit_struct(&mut self, _node: &'_ Struct) {}
+
+	fn visit_class(&mut self, node: &'_ Class) {
+		// We only care about visiting a class if it represent an inflight closure, where inference is possible.
+		// In which case, we need to visit the function signature of the handle method
+		if let Some(method) = node.get_closure_method() {
+			self.visit_typeref(&method);
+		}
+	}
+
+	fn visit_inference(&mut self, node: &'_ InferenceId) {
+		self.found_inference = true;
+		self.found_inferences.push(*node);
+	}
+}

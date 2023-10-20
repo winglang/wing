@@ -1,8 +1,9 @@
-import { readdirSync, existsSync } from "fs";
-import { debug } from "debug";
+import { existsSync } from "fs";
 import { resolve } from "path";
-import open from "open";
 import { createConsoleApp } from "@wingconsole/app";
+import { debug } from "debug";
+import { glob } from "glob";
+import open from "open";
 import { parseNumericString } from "../util";
 
 /**
@@ -35,9 +36,18 @@ export async function run(entrypoint?: string, options?: RunOptions) {
   const openBrowser = options?.open ?? true;
 
   if (!entrypoint) {
-    const wingFiles = readdirSync(".").filter((item) => item.endsWith(".w"));
-    if (wingFiles.length !== 1) {
-      throw new Error("Please specify which file you want to run");
+    const wingFiles = await glob("{main,*.main}.w");
+    if (wingFiles.length === 0) {
+      throw new Error(
+        "Cannot find entrypoint files (main.w or *.main.w) in the current directory."
+      );
+    }
+    if (wingFiles.length > 1) {
+      throw new Error(
+        `Multiple entrypoints found in the current directory (${wingFiles.join(
+          ", "
+        )}). Please specify which one to use.`
+      );
     }
     entrypoint = wingFiles[0];
   }
@@ -69,7 +79,7 @@ export async function run(entrypoint?: string, options?: RunOptions) {
     await close(() => process.exit(exitCode));
   };
 
-  process.once("exit", async (c) => await onExit(c));
-  process.once("SIGTERM", async () => await onExit(0));
-  process.once("SIGINT", async () => await onExit(0));
+  process.once("exit", async (c) => onExit(c));
+  process.once("SIGTERM", async () => onExit(0));
+  process.once("SIGINT", async () => onExit(0));
 }

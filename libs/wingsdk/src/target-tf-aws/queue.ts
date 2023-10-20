@@ -8,7 +8,7 @@ import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
-import { IInflightHost, Node } from "../std";
+import { Duration, IInflightHost, Node } from "../std";
 
 /**
  * Queue names are limited to 80 characters.
@@ -31,8 +31,12 @@ export class Queue extends cloud.Queue {
     super(scope, id, props);
 
     this.queue = new SqsQueue(this, "Default", {
-      visibilityTimeoutSeconds: props.timeout?.seconds,
-      messageRetentionSeconds: props.retentionPeriod?.seconds,
+      visibilityTimeoutSeconds: props.timeout
+        ? props.timeout.seconds
+        : Duration.fromSeconds(30).seconds,
+      messageRetentionSeconds: props.retentionPeriod
+        ? props.retentionPeriod.seconds
+        : Duration.fromHours(1).seconds,
       name: ResourceNames.generateName(this, NAME_OPTS),
     });
   }
@@ -57,7 +61,12 @@ export class Queue extends cloud.Queue {
       this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-SetConsumer-${hash}`,
       functionHandler,
-      props
+      {
+        ...props,
+        timeout: Duration.fromSeconds(
+          this.queue.visibilityTimeoutSeconds ?? 30
+        ),
+      }
     );
 
     // TODO: remove this constraint by adding generic permission APIs to cloud.Function
@@ -91,7 +100,7 @@ export class Queue extends cloud.Queue {
     return fn;
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("queues can only be bound by tfaws.Function for now");
     }
@@ -104,7 +113,7 @@ export class Queue extends cloud.Queue {
     // it may not be resolved until deployment time.
     host.addEnvironment(env, this.queue.url);
 
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

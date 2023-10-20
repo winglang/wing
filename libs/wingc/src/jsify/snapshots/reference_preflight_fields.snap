@@ -32,6 +32,7 @@ source: libs/wingc/src/jsify/tests.rs
 ## inflight.MyType-1.js
 
 ```js
+"use strict";
 module.exports = function({  }) {
   class MyType {
     constructor({ $this_b, $this_s_length }) {
@@ -54,6 +55,7 @@ module.exports = function({  }) {
 ## preflight.js
 
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -91,19 +93,19 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["boom", "bam", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          MyType._registerBindObject(this.b, host, []);
-          MyType._registerBindObject(this.s.length, host, []);
+          MyType._registerOnLiftObject(this.b, host, []);
+          MyType._registerOnLiftObject(this.s.length, host, []);
         }
         if (ops.includes("bam")) {
-          MyType._registerBindObject(this.b, host, ["get", "put"]);
+          MyType._registerOnLiftObject(this.b, host, ["get", "put"]);
         }
         if (ops.includes("boom")) {
-          MyType._registerBindObject(this.b, host, ["list"]);
-          MyType._registerBindObject(this.s.length, host, []);
+          MyType._registerOnLiftObject(this.b, host, ["list"]);
+          MyType._registerOnLiftObject(this.s.length, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
   }

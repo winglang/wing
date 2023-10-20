@@ -3,10 +3,11 @@ mod inference_visitor;
 pub(crate) mod jsii_importer;
 pub mod lifts;
 pub mod symbol_env;
+pub(crate) mod type_reference_transform;
 
 use crate::ast::{
-	self, AccessModifier, AssignmentKind, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition, IfLet,
-	NewExpr, TypeAnnotationKind,
+	self, AccessModifier, AssignmentKind, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition, IfLet, New,
+	TypeAnnotationKind,
 };
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter as AstFunctionParameter,
@@ -14,15 +15,16 @@ use crate::ast::{
 	TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
-use crate::diagnostic::{report_diagnostic, Diagnostic, TypeError, WingSpan};
+use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticAnnotation, TypeError, WingSpan};
 use crate::docs::Docs;
+use crate::file_graph::FileGraph;
 use crate::type_check::symbol_env::SymbolEnvKind;
 use crate::visit_context::{VisitContext, VisitorWithContext};
 use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
-	dbg_panic, debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_JSON,
-	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_RESOURCE, WINGSDK_SET,
-	WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
+	dbg_panic, debug, UTIL_CLASS_NAME, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION,
+	WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_RESOURCE,
+	WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
@@ -31,7 +33,8 @@ use indexmap::{IndexMap, IndexSet};
 use itertools::{izip, Itertools};
 use jsii_importer::JsiiImporter;
 
-use std::collections::HashMap;
+use std::cmp;
+use std::collections::{HashMap, HashSet};
 use std::fmt::{Debug, Display};
 use std::iter::FilterMap;
 use symbol_env::{StatementIdx, SymbolEnv};
@@ -39,20 +42,26 @@ use wingii::fqn::FQN;
 use wingii::type_system::TypeSystem;
 
 use self::class_fields_init::VisitClassInit;
-use self::inference_visitor::InferenceVisitor;
+use self::inference_visitor::{InferenceCounterVisitor, InferenceVisitor};
 use self::jsii_importer::JsiiImportSpec;
 use self::lifts::Lifts;
 use self::symbol_env::{LookupResult, LookupResultMut, SymbolEnvIter, SymbolEnvRef};
 
 pub struct UnsafeRef<T>(*const T);
-impl<T> Clone for UnsafeRef<T> {
-	fn clone(&self) -> Self {
-		Self(self.0)
-	}
-}
 
 impl<T> Copy for UnsafeRef<T> {}
 
+impl<'a, T> From<&'a T> for UnsafeRef<T> {
+	fn from(t: &'a T) -> Self {
+		UnsafeRef(t)
+	}
+}
+
+impl<T> Clone for UnsafeRef<T> {
+	fn clone(&self) -> Self {
+		*self
+	}
+}
 impl<T> std::ops::Deref for UnsafeRef<T> {
 	type Target = T;
 	fn deref(&self) -> &Self::Target {
@@ -80,7 +89,7 @@ pub type TypeRef = UnsafeRef<Type>;
 
 #[derive(Debug)]
 pub enum SymbolKind {
-	Type(TypeRef), // TODO: <- deprecated since we treat types as a VeriableInfo of kind VariableKind::Type
+	Type(TypeRef),
 	Variable(VariableInfo),
 	Namespace(NamespaceRef),
 }
@@ -114,7 +123,7 @@ pub struct VariableInfo {
 	/// The kind of variable
 	pub kind: VariableKind,
 	/// Access rules for this variable (only applies to methods and fields)
-	pub access_modifier: AccessModifier,
+	pub access: AccessModifier,
 
 	pub docs: Option<Docs>,
 }
@@ -127,7 +136,7 @@ impl SymbolKind {
 		reassignable: bool,
 		is_static: bool,
 		phase: Phase,
-		access_modifier: AccessModifier,
+		access: AccessModifier,
 		docs: Option<Docs>,
 	) -> Self {
 		SymbolKind::Variable(VariableInfo {
@@ -140,7 +149,7 @@ impl SymbolKind {
 			} else {
 				VariableKind::InstanceMember
 			},
-			access_modifier,
+			access,
 			docs,
 		})
 	}
@@ -152,7 +161,7 @@ impl SymbolKind {
 			reassignable,
 			phase,
 			kind: VariableKind::Free,
-			access_modifier: AccessModifier::Public,
+			access: AccessModifier::Public,
 			docs: None,
 		})
 	}
@@ -195,6 +204,13 @@ impl SymbolKind {
 	pub fn as_type(&self) -> Option<TypeRef> {
 		match &self {
 			SymbolKind::Type(t) => Some(*t),
+			_ => None,
+		}
+	}
+
+	pub fn as_type_ref(&self) -> Option<&TypeRef> {
+		match &self {
+			SymbolKind::Type(t) => Some(t),
 			_ => None,
 		}
 	}
@@ -266,13 +282,24 @@ pub struct Namespace {
 	pub name: String,
 
 	#[derivative(Debug = "ignore")]
-	pub env: SymbolEnv,
+	pub envs: Vec<SymbolEnvRef>,
 
 	// Indicate whether all the types in this namespace have been loaded, this is part of our
 	// lazy loading mechanism and is used by the lsp's autocomplete in case we need to load
 	// the types after initial compilation.
 	#[derivative(Debug = "ignore")]
 	pub loaded: bool,
+
+	/// Where we can resolve this namespace from
+	pub module_path: ResolveSource,
+}
+
+#[derive(Debug)]
+pub enum ResolveSource {
+	/// A wing file within the source tree for this compilation.
+	WingFile,
+	/// External JSII module. This string will be the spec of the module, either a path or a npm package name.
+	ExternalModule(String),
 }
 
 pub type NamespaceRef = UnsafeRef<Namespace>;
@@ -1070,6 +1097,10 @@ impl TypeRef {
 		}
 	}
 
+	pub fn is_function_sig(&self) -> bool {
+		matches!(**self, Type::Function(_))
+	}
+
 	/// If this is a function and its last argument is a struct, return that struct.
 	pub fn get_function_struct_arg(&self) -> Option<&Struct> {
 		if let Some(func) = self.maybe_unwrap_option().as_function_sig() {
@@ -1090,6 +1121,7 @@ impl TypeRef {
 			Type::MutMap(t) => Some(t),
 			Type::Set(t) => Some(t),
 			Type::MutSet(t) => Some(t),
+			Type::Optional(t) => t.collection_item_type(),
 			_ => None,
 		}
 	}
@@ -1249,6 +1281,24 @@ struct ResolvedExpression {
 	phase: Phase,
 }
 
+/// In Wing projects that have both files and directories, type information is stored like so:
+///
+/// "src/subdir/inner/widget.w" -> SymbolEnv { "Widget": TypeRef } = SE1
+/// "src/subdir/inner/" -> Namespace { envs: [SE1] } = NS1
+/// "src/subdir/foo.w" -> SymbolEnv { "Foo": TypeRef } = SE2
+/// "src/subdir/bar.w" -> SymbolEnv { "Bar": TypeRef } = SE3
+/// "src/subdir/" -> Namespace { envs: [SE2, SE3, SymbolEnv { "inner": NS1 }] } = NS2
+///
+/// Then when a file at "src/main.w" has a statement `bring "./subdir" as subdir;`,
+/// it retrieves NS2 from the types.source_file_envs map and adds it to the main file's symbol environment
+/// under the symbol "subdir".
+#[derive(Debug)]
+pub enum SymbolEnvOrNamespace {
+	SymbolEnv(SymbolEnvRef),
+	Namespace(NamespaceRef),
+	Error(Diagnostic),
+}
+
 /// File-unique identifier for each necessary inference while type checking. This is an index of the Types.inferences vec.
 /// There will always be an entry for each InferenceId.
 pub type InferenceId = usize;
@@ -1259,8 +1309,10 @@ pub struct Types {
 	types: Vec<Box<Type>>,
 	namespaces: Vec<Box<Namespace>>,
 	symbol_envs: Vec<Box<SymbolEnv>>,
-	/// A map from source file name to the symbol environment for that file (and whether that file is safe to bring)
-	source_file_envs: IndexMap<Utf8PathBuf, SymbolEnvRef>,
+	/// A map from source paths to type information about that path
+	/// If it's a file, we save its symbol environment, and if it's a directory, we save a namespace that points to
+	/// all of the symbol environments of the files (or subdirectories) in that directory
+	source_file_envs: IndexMap<Utf8PathBuf, SymbolEnvOrNamespace>,
 	pub libraries: SymbolEnv,
 	numeric_idx: usize,
 	string_idx: usize,
@@ -1280,6 +1332,9 @@ pub struct Types {
 	json_literal_casts: IndexMap<ExprId, TypeRef>,
 	/// Lookup table from a Scope's `id` to its symbol environment
 	scope_envs: Vec<Option<SymbolEnvRef>>,
+	/// Expressions used in references that actually refer to a type.
+	/// Key is the ExprId of the object of a InstanceMember, and the value is a TypeMember representing the whole reference.
+	type_expressions: IndexMap<ExprId, Reference>,
 }
 
 impl Types {
@@ -1328,6 +1383,7 @@ impl Types {
 			json_literal_casts: IndexMap::new(),
 			scope_envs: Vec::new(),
 			inferences: Vec::new(),
+			type_expressions: IndexMap::new(),
 		}
 	}
 
@@ -1427,6 +1483,7 @@ impl Types {
 				report_diagnostic(Diagnostic {
 					message: format!("Inferred type {new_type} conflicts with already inferred type {existing_type}"),
 					span: Some(span.clone()),
+					annotations: vec![],
 				});
 				existing_type_option.replace(error);
 				return;
@@ -1532,9 +1589,16 @@ impl Types {
 
 	/// Obtain the type of a given expression id. Will panic if the expression has not been type checked yet.
 	pub fn get_expr_id_type(&self, expr_id: ExprId) -> TypeRef {
+		*self.get_expr_id_type_ref(expr_id)
+	}
+
+	/// Obtain the type of a given expression id. Will panic if the expression has not been type checked yet.
+	pub fn get_expr_id_type_ref(&self, expr_id: ExprId) -> &TypeRef {
 		self
-			.try_get_expr_type(expr_id)
-			.expect("All expressions should have a type")
+			.type_for_expr
+			.get(expr_id)
+			.and_then(|t| t.as_ref().map(|t| &t.type_))
+			.unwrap()
 	}
 
 	/// Sets the type environment for a given scope. Usually should be called soon
@@ -1620,6 +1684,9 @@ pub struct TypeChecker<'a> {
 	/// The path to the source file being type checked.
 	source_path: &'a Utf8Path,
 
+	/// The file graph of the compilation.
+	file_graph: &'a FileGraph,
+
 	/// JSII Manifest descriptions to be imported.
 	/// May be reused between compilations
 	jsii_imports: &'a mut Vec<JsiiImportSpec>,
@@ -1636,6 +1703,7 @@ impl<'a> TypeChecker<'a> {
 	pub fn new(
 		types: &'a mut Types,
 		source_path: &'a Utf8Path,
+		file_graph: &'a FileGraph,
 		jsii_types: &'a mut TypeSystem,
 		jsii_imports: &'a mut Vec<JsiiImportSpec>,
 	) -> Self {
@@ -1644,6 +1712,7 @@ impl<'a> TypeChecker<'a> {
 			inner_scopes: vec![],
 			jsii_types,
 			source_path,
+			file_graph,
 			jsii_imports,
 			is_in_mut_json: false,
 			ctx: VisitContext::new(),
@@ -1653,13 +1722,8 @@ impl<'a> TypeChecker<'a> {
 	/// Recursively check if a type is or contains a type inference.
 	///
 	/// Returns true if any inferences were found.
-	fn check_for_inferences(&mut self, node: &TypeRef, span: &WingSpan) -> bool {
-		let mut visitor = InferenceVisitor {
-			types: self.types,
-			found_inference: false,
-			expected_type: None,
-			span,
-		};
+	fn check_for_inferences(&self, node: &TypeRef) -> bool {
+		let mut visitor = InferenceCounterVisitor::default();
 
 		visitor.visit_typeref(node);
 
@@ -1703,6 +1767,7 @@ impl<'a> TypeChecker<'a> {
 		report_diagnostic(Diagnostic {
 			message: message.into(),
 			span: Some(spanned.span()),
+			annotations: vec![],
 		});
 
 		(self.make_error_variable_info(), Phase::Independent)
@@ -1712,6 +1777,7 @@ impl<'a> TypeChecker<'a> {
 		report_diagnostic(Diagnostic {
 			message: message.into(),
 			span: Some(spanned.span()),
+			annotations: vec![],
 		});
 	}
 
@@ -1719,14 +1785,20 @@ impl<'a> TypeChecker<'a> {
 		report_diagnostic(Diagnostic {
 			message: message.into(),
 			span: None,
+			annotations: vec![],
 		});
 	}
 
 	fn type_error(&self, type_error: TypeError) -> TypeRef {
-		let TypeError { message, span } = type_error;
+		let TypeError {
+			message,
+			span,
+			annotations,
+		} = type_error;
 		report_diagnostic(Diagnostic {
 			message,
 			span: Some(span),
+			annotations,
 		});
 
 		self.types.error()
@@ -1739,7 +1811,7 @@ impl<'a> TypeChecker<'a> {
 			reassignable: false,
 			phase: Phase::Independent,
 			kind: VariableKind::Error,
-			access_modifier: AccessModifier::Public,
+			access: AccessModifier::Public,
 			docs: None,
 		}
 	}
@@ -1878,7 +1950,7 @@ impl<'a> TypeChecker<'a> {
 				(vi.type_, phase)
 			}
 			ExprKind::New(new_expr) => {
-				let NewExpr {
+				let New {
 					class,
 					obj_id,
 					arg_list,
@@ -1932,7 +2004,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Type check args against constructor
-				let init_method_name = if env.phase == Phase::Preflight {
+				let init_method_name = if env.phase == Phase::Preflight || class_env.phase == Phase::Independent {
 					CLASS_INIT_NAME
 				} else {
 					CLASS_INFLIGHT_INIT_NAME
@@ -2096,7 +2168,7 @@ impl<'a> TypeChecker<'a> {
 				if let CalleeKind::Expr(call_expr) = callee {
 					if let ExprKind::Reference(Reference::Identifier(ident)) = &call_expr.kind {
 						if ident.name == "wingc_env" {
-							println!("[symbol environment at {}]", exp.span().to_string());
+							println!("[symbol environment at {}]", exp.span().file_id);
 							println!("{}", env.to_string());
 						}
 					}
@@ -2130,7 +2202,7 @@ impl<'a> TypeChecker<'a> {
 			}
 			ExprKind::ArrayLiteral { type_, items } => {
 				// Infer type based on either the explicit type or the value in one of the items
-				let (container_type, mut element_type) = if let Some(type_) = type_ {
+				let (mut container_type, mut element_type) = if let Some(type_) = type_ {
 					let container_type = self.resolve_type_annotation(type_, env);
 					let element_type = match *container_type {
 						Type::Array(t) | Type::MutArray(t) => t,
@@ -2159,6 +2231,15 @@ impl<'a> TypeChecker<'a> {
 				for item in items {
 					let (t, _) = self.type_check_exp(item, env);
 
+					if t.is_json() && !matches!(*element_type, Type::Json(Some(..))) {
+						// This is an array of JSON, change the element type to reflect that
+						let json_data = JsonData {
+							expression_id: exp.id,
+							kind: JsonDataKind::List(vec![]),
+						};
+						element_type = self.types.add_type(Type::Json(Some(json_data)));
+					}
+
 					// Augment the json list data with the new element type
 					if let Type::Json(Some(JsonData { ref mut kind, .. })) = &mut *element_type {
 						if let JsonDataKind::List(ref mut json_list) = kind {
@@ -2182,11 +2263,15 @@ impl<'a> TypeChecker<'a> {
 					}
 				}
 
+				if let Type::Array(ref mut inner) | Type::MutArray(ref mut inner) = &mut *container_type {
+					*inner = element_type;
+				}
+
 				(container_type, env.phase)
 			}
 			ExprKind::MapLiteral { fields, type_ } => {
 				// Infer type based on either the explicit type or the value in one of the fields
-				let (container_type, mut element_type) = if let Some(type_) = type_ {
+				let (mut container_type, mut element_type) = if let Some(type_) = type_ {
 					let container_type = self.resolve_type_annotation(type_, env);
 					let element_type = match *container_type {
 						Type::Map(t) | Type::MutMap(t) => t,
@@ -2205,17 +2290,43 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Verify all types are the same as the inferred type
-				for field in fields.values() {
+				for (sym, field) in fields {
 					let (t, _) = self.type_check_exp(field, env);
+					if t.is_json() && !matches!(*element_type, Type::Json(Some(..))) {
+						// This is an field of JSON, change the element type to reflect that
+						let json_data = JsonData {
+							expression_id: exp.id,
+							kind: JsonDataKind::Fields(IndexMap::new()),
+						};
+						element_type = self.types.add_type(Type::Json(Some(json_data)));
+					}
+
+					// Augment the json list data with the new element type
+					if let Type::Json(Some(JsonData { ref mut kind, .. })) = &mut *element_type {
+						if let JsonDataKind::Fields(ref mut fields) = kind {
+							fields.insert(
+								sym.clone(),
+								SpannedTypeInfo {
+									type_: t,
+									span: field.span(),
+								},
+							);
+						}
+					}
+
 					self.validate_type(t, element_type, field);
 					element_type = self.types.maybe_unwrap_inference(element_type);
+				}
+
+				if let Type::Map(ref mut inner) | Type::MutMap(ref mut inner) = &mut *container_type {
+					*inner = element_type;
 				}
 
 				(container_type, env.phase)
 			}
 			ExprKind::SetLiteral { type_, items } => {
 				// Infer type based on either the explicit type or the value in one of the items
-				let (container_type, mut element_type) = if let Some(type_) = type_ {
+				let (mut container_type, mut element_type) = if let Some(type_) = type_ {
 					let container_type = self.resolve_type_annotation(type_, env);
 					let element_type = match *container_type {
 						Type::Set(t) | Type::MutSet(t) => t,
@@ -2236,8 +2347,32 @@ impl<'a> TypeChecker<'a> {
 				// Verify all types are the same as the inferred type
 				for item in items {
 					let (t, _) = self.type_check_exp(item, env);
+
+					if t.is_json() && !matches!(*element_type, Type::Json(Some(..))) {
+						// this is an set of JSON, change the element type to reflect that
+						let json_data = JsonData {
+							expression_id: exp.id,
+							kind: JsonDataKind::List(vec![]),
+						};
+						element_type = self.types.add_type(Type::Json(Some(json_data)));
+					}
+
+					// Augment the json list data with the new element type
+					if let Type::Json(Some(JsonData { ref mut kind, .. })) = &mut *element_type {
+						if let JsonDataKind::List(ref mut json_list) = kind {
+							json_list.push(SpannedTypeInfo {
+								type_: t,
+								span: item.span(),
+							});
+						}
+					}
+
 					self.validate_type(t, element_type, item);
 					element_type = self.types.maybe_unwrap_inference(element_type);
+				}
+
+				if let Type::Set(ref mut inner) | Type::MutSet(ref mut inner) = &mut *container_type {
+					*inner = element_type;
 				}
 
 				(container_type, env.phase)
@@ -2266,11 +2401,7 @@ impl<'a> TypeChecker<'a> {
 					.expect(&format!("Expected \"{}\" to be a struct type", struct_type));
 
 				// Verify that all expected fields are present and are the right type
-				for (name, kind, _info) in st.env.iter(true) {
-					let field_type = kind
-						.as_variable()
-						.expect("Expected struct field to be a variable in the struct env")
-						.type_;
+				for (name, field_type) in st.fields(true) {
 					match fields.get(name.as_str()) {
 						Some(field_exp) => {
 							let t = field_types.get(name.as_str()).unwrap();
@@ -2385,6 +2516,7 @@ impl<'a> TypeChecker<'a> {
 					self.type_error(TypeError {
 						message: "Panic expression".to_string(),
 						span: exp.span.clone(),
+						annotations: vec![],
 					}),
 					env.phase,
 				)
@@ -2403,115 +2535,91 @@ impl<'a> TypeChecker<'a> {
 		call_span: &impl Spanned,
 		arg_list_types: ArgListTypes,
 	) -> Option<TypeRef> {
-		// Verify arity
-		let pos_args_count = arg_list.pos_args.len();
-		let min_args = func_sig.min_parameters();
-		if pos_args_count < min_args {
-			let err_text = format!(
-				"Expected {} positional argument(s) but got {}",
-				min_args, pos_args_count
-			);
-			self.spanned_error(call_span, err_text);
-			return Some(self.types.error());
-		}
+		// Verify named args
+		let last_param = func_sig.parameters.last();
+		let is_last_param_struct = last_param.is_some() && last_param.unwrap().typeref.maybe_unwrap_option().is_struct();
+		let is_last_param_not_optional_struct = last_param.is_some() && last_param.unwrap().typeref.is_struct();
 
 		if !arg_list.named_args.is_empty() {
-			let last_arg = match func_sig.parameters.last() {
-				Some(arg) => arg.typeref.maybe_unwrap_option(),
-				None => {
-					self.spanned_error(
-						call_span,
-						format!(
-							"Expected 0 named arguments for func at {}",
-							call_span.span().to_string()
-						),
-					);
-					return Some(self.types.error());
-				}
-			};
-
-			if !last_arg.is_struct() {
+			if is_last_param_struct {
+				let last_param_type = last_param.unwrap().typeref.maybe_unwrap_option();
+				self.validate_structural_type(&arg_list_types.named_args, &last_param_type, call_span);
+			} else {
 				self.spanned_error(call_span, "No named arguments expected");
-				return Some(self.types.error());
 			}
-
-			self.validate_structural_type(&arg_list_types.named_args, &last_arg, call_span);
 		}
 
-		// Count number of optional parameters from the end of the function's params
-		// Allow arg_list to be missing up to that number of nil values to try and make the number of arguments match
-		let num_optionals = func_sig
-			.parameters
-			.iter()
-			.rev()
-			.take_while(|arg| arg.typeref.is_option())
-			.count();
+		// Check if there is a variadic parameter, get its index
+		let variadic_index = func_sig.parameters.iter().position(|o| o.variadic);
+		let pos_args_len = cmp::min(
+			arg_list.pos_args.len(),
+			variadic_index.unwrap_or(arg_list.pos_args.len()),
+		);
+		let non_variadic_args_len = pos_args_len
+			+ if is_last_param_struct && !arg_list.named_args.is_empty() {
+				1
+			} else {
+				0
+			};
 
 		// Verify arity
-
-		// check if there is a variadic parameter, get its index
-		let variadic_index = func_sig.parameters.iter().position(|o| o.variadic);
-		let (index_last_item, arg_count) = if let Some(variadic_index) = variadic_index {
-			(
-				variadic_index,
-				(variadic_index + 1) + (if arg_list.named_args.is_empty() { 0 } else { 1 }),
-			)
+		let min_args = func_sig.min_parameters() + if is_last_param_not_optional_struct { 1 } else { 0 };
+		let max_args = func_sig.parameters.len() - if variadic_index.is_some() { 1 } else { 0 };
+		let named_args_text = if is_last_param_struct {
+			"or named arguments for the last parameter "
 		} else {
-			(
-				arg_list_types.pos_args.len(),
-				(arg_list_types.pos_args.len()) + (if arg_list.named_args.is_empty() { 0 } else { 1 }),
-			)
+			""
 		};
-		let min_args = func_sig.parameters.len() - num_optionals;
-		let max_args = func_sig.parameters.len();
-		if arg_count < min_args || arg_count > max_args {
+		let variadic_args_text = if variadic_index.is_some() {
+			"+ variadic args "
+		} else {
+			""
+		};
+
+		// Check arity
+		if non_variadic_args_len < min_args || pos_args_len > max_args {
 			let err_text = if min_args == max_args {
-				format!("Expected {} arguments but got {}", min_args, arg_count)
+				format!(
+					"Expected {} positional argument(s) {}{}but got {}",
+					min_args, named_args_text, variadic_args_text, pos_args_len
+				)
 			} else {
 				format!(
-					"Expected between {} and {} arguments but got {}",
-					min_args, max_args, arg_count
+					"Expected between {} and {} positional arguments {}{}but got {}",
+					min_args, max_args, named_args_text, variadic_args_text, pos_args_len
 				)
 			};
+
 			self.spanned_error(call_span, err_text);
+		} else if is_last_param_struct && non_variadic_args_len > max_args {
+			self.spanned_error(
+				call_span,
+				"Expected either a positional argument or named arguments for the last parameter, but got both",
+			);
 		}
-		let params = func_sig.parameters.iter();
 
-		if index_last_item == arg_list_types.pos_args.len() {
-			for (arg_expr, arg_type, param) in izip!(arg_list.pos_args.iter(), arg_list_types.pos_args.iter(), params) {
-				self.validate_type(*arg_type, param.typeref, arg_expr);
-			}
-		} else {
-			let mut new_arg_list: Vec<&Expr> = Vec::new();
-			let mut new_arg_list_types: Vec<TypeRef> = Vec::new();
-			for i in 0..index_last_item {
-				new_arg_list.push(arg_list.pos_args.get(i).unwrap());
-				new_arg_list_types.push(*arg_list_types.pos_args.get(i).unwrap());
-			}
+		// Verify positioned args
+		for (arg_expr, arg_type, param) in izip!(
+			arg_list.pos_args.iter().take(pos_args_len),
+			arg_list_types.pos_args.iter().take(pos_args_len),
+			func_sig.parameters.iter().take(pos_args_len)
+		) {
+			self.validate_type(*arg_type, param.typeref, arg_expr);
+		}
 
-			let mut variadic_arg_list: Vec<&Expr> = Vec::new();
-			let variadic_arg_types = *arg_list_types.pos_args.get(index_last_item).unwrap();
-			for i in index_last_item..arg_list.pos_args.len() {
-				let variadic_arg = arg_list.pos_args.get(i).unwrap();
-				if !variadic_arg_types.is_same_type_as(arg_list_types.pos_args.get(i).unwrap()) {
-					let error = format!(
-						"Expected type to be {}, but got {} instead.",
-						variadic_arg_types,
-						arg_list_types.pos_args.get(i).unwrap()
-					);
-					self.spanned_error(&variadic_arg.span, error);
-				}
-				variadic_arg_list.push(variadic_arg);
+		// Verify variadic args
+		if let Some(variadic_index) = variadic_index {
+			let variadic_args_param = func_sig.parameters.get(variadic_index).unwrap();
+			let variadic_args_inner_type = variadic_args_param.typeref.collection_item_type().unwrap();
+
+			for (arg_expr, arg_type) in izip!(
+				arg_list.pos_args.iter().skip(variadic_index),
+				arg_list_types.pos_args.iter().skip(variadic_index),
+			) {
+				self.validate_type(*arg_type, variadic_args_inner_type, arg_expr);
 			}
-			let variadic_array_inner_type = *arg_list_types.pos_args.get(index_last_item).unwrap();
-			for (arg_expr, arg_type, param) in izip!(new_arg_list.iter(), new_arg_list_types.iter(), params) {
-				self.validate_type(*arg_type, param.typeref, *arg_expr);
-			}
-			// assert that each the extra args are of the same type as the variadic array type
-			for arg_expr in variadic_arg_list.iter() {
-				self.validate_type(variadic_array_inner_type, variadic_array_inner_type, *arg_expr);
-			}
-		};
+		}
+
 		None
 	}
 
@@ -2641,7 +2749,85 @@ impl<'a> TypeChecker<'a> {
 		{
 			self.validate_type_binary_equality(*inner_actual, *inner_expected, span)
 		} else {
-			self.validate_type_in(actual_type, &[expected_type], span)
+			self.validate_type(actual_type, expected_type, span)
+		}
+	}
+
+	/// If possible, structurally check the given type as a Json against the expected type.
+	///
+	/// returns true if validation occurred, false otherwise
+	pub fn validate_type_json(&mut self, actual_type: TypeRef, expected_type: TypeRef, span: &impl Spanned) -> bool {
+		let mut json_type = actual_type;
+		let expected_type = self.types.maybe_unwrap_inference(expected_type);
+		let expected_type_unwrapped = expected_type.maybe_unwrap_option();
+
+		if expected_type_unwrapped.is_json() {
+			// No need for fancy type checking against Json
+			return false;
+		}
+
+		let inner_expected = expected_type_unwrapped.collection_item_type();
+		if let Some(inner_expected) = inner_expected {
+			if let Some(inner_actual) = actual_type.collection_item_type() {
+				if matches!(*inner_actual, Type::Json(Some(_))) {
+					// If the outer collection type doesn't match then don't bother
+					// We can just check the collection enum variant to make sure they match exactly (subtyping isn't relevant here)
+					if std::mem::discriminant(&**expected_type_unwrapped) != std::mem::discriminant(&*actual_type) {
+						return false;
+					}
+					json_type = inner_actual;
+				} else {
+					// The expected type is a collection and the actual type is a collection of non-json
+					// In case the actual type is a nested collection, we must recurse here
+					return self.validate_type_json(inner_actual, inner_expected, span);
+				}
+			}
+		}
+
+		let Type::Json(Some(data)) = &*json_type else {
+			// We don't have any json data to validate
+			return false;
+		};
+
+		if expected_type_unwrapped.is_struct()
+			|| expected_type_unwrapped.is_immutable_collection()
+			|| expected_type_unwrapped.is_json_legal_value()
+		{
+			// We don't need to check the json-legality of this expr later because we know it's either legal or it's being used as a struct/map
+			self.types.json_literal_casts.insert(data.expression_id, expected_type);
+		}
+
+		match &data.kind {
+			JsonDataKind::Type(t) => {
+				// The expected type is some sort of primitive
+				self.validate_type(t.type_, expected_type, span);
+				true
+			}
+			JsonDataKind::Fields(fields) => {
+				if expected_type_unwrapped.is_struct() {
+					self.validate_structural_type(fields, expected_type_unwrapped, span);
+					true
+				} else if let Some(inner_expected) = inner_expected {
+					// The expected type is a Map
+					for field_info in fields.values() {
+						self.validate_type(field_info.type_, inner_expected, &field_info.span);
+					}
+					true
+				} else {
+					false
+				}
+			}
+			JsonDataKind::List(list) => {
+				if let Some(inner_expected) = inner_expected {
+					// The expected type is an Array or Set
+					for t in list {
+						self.validate_type(t.type_, inner_expected, &t.span);
+					}
+					true
+				} else {
+					false
+				}
+			}
 		}
 	}
 
@@ -2660,10 +2846,10 @@ impl<'a> TypeChecker<'a> {
 		assert!(expected_types.len() > 0);
 		let first_expected_type = expected_types[0];
 		let mut return_type = actual_type;
-		let span = span.span();
 
 		// To avoid ambiguity, only do inference if there is one expected type
 		if expected_types.len() == 1 {
+			let span = span.span();
 			// First check if the actual type is an inference that can be replaced with the expected type
 			if self.add_new_inference(&actual_type, &first_expected_type, &span) {
 				// Update the type we validate and return
@@ -2692,79 +2878,16 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		// If the expected type is Json and the actual type is a Json legal value then we're good
-		if expected_types.iter().any(|t| t.is_json()) {
+		if expected_types.iter().any(|t| t.maybe_unwrap_option().is_json()) {
 			if return_type.is_json_legal_value() {
 				return return_type;
 			}
-		}
-
-		// if the actual type is an empty array of json, it can be assigned to any array
-		let mut json_type = return_type;
-		if let Type::Array(inner) = **return_type.maybe_unwrap_option() {
-			if let Type::Json(Some(JsonData {
-				kind: JsonDataKind::List(list),
-				..
-			})) = &*inner
+		} else {
+			if expected_types
+				.iter()
+				.any(|t| self.validate_type_json(actual_type, *t, span))
 			{
-				if list.is_empty() && expected_types.iter().all(|t| matches!(**t, Type::Array(_))) {
-					return return_type;
-				}
-				json_type = inner;
-			}
-		}
-		if let Type::Map(inner) = **return_type.maybe_unwrap_option() {
-			if let Type::Json(Some(JsonData {
-				kind: JsonDataKind::Fields(field),
-				..
-			})) = &*inner
-			{
-				if field.is_empty() && expected_types.iter().all(|t| matches!(**t, Type::Map(_))) {
-					return return_type;
-				}
-				json_type = inner;
-			}
-		}
-
-		// if the actual type is a Json with known data, we can attempt to structurally type check
-		if expected_types.len() == 1 && json_type.is_json() {
-			let expected_type = self.types.maybe_unwrap_inference(first_expected_type);
-			let expected_type_unwrapped = expected_type.maybe_unwrap_option();
-			if expected_type_unwrapped.is_json() {
-				return actual_type;
-			}
-			if let Type::Json(Some(data)) = &**json_type.maybe_unwrap_option() {
-				if expected_type_unwrapped.is_json_legal_value()
-					|| expected_type_unwrapped.is_struct()
-					|| expected_type_unwrapped.is_immutable_collection()
-				{
-					// we don't need to check the json-ability of this expr later because we know it's legal or it's being used as a struct/map
-					self.types.json_literal_casts.insert(data.expression_id, expected_type);
-				}
-				match &data.kind {
-					JsonDataKind::Type(t) => {
-						self.validate_type(t.type_, expected_type, &span);
-						return return_type;
-					}
-					JsonDataKind::Fields(fields) => {
-						if expected_type_unwrapped.is_struct() {
-							self.validate_structural_type(fields, expected_type_unwrapped, &span);
-							return return_type;
-						} else if let Type::Map(expected_map) = &**expected_type_unwrapped {
-							for field_info in fields.values() {
-								self.validate_type(field_info.type_, *expected_map, &field_info.span);
-							}
-							return return_type;
-						}
-					}
-					JsonDataKind::List(list) => {
-						if let Type::Array(expected_inner) = **expected_type_unwrapped {
-							for t in list {
-								self.validate_type(t.type_, expected_inner, &t.span);
-							}
-							return return_type;
-						}
-					}
-				};
+				return return_type;
 			}
 		}
 
@@ -2783,39 +2906,124 @@ impl<'a> TypeChecker<'a> {
 		if return_type.is_nil() && expected_types.len() == 1 {
 			message = format!("{message} (hint: to allow \"nil\" assignment use optional type: \"{first_expected_type}?\")");
 		}
-		if json_type.maybe_unwrap_option().is_json() {
+		if return_type.maybe_unwrap_option().is_json() {
 			// known json data is statically known
 			message = format!("{message} (hint: use {first_expected_type}.fromJson() to convert dynamic Json)");
 		}
-		report_diagnostic(Diagnostic {
-			message,
-			span: Some(span.span()),
-		});
+		self.spanned_error(span, message);
 
 		// Evaluate to one of the expected types
 		first_expected_type
 	}
 
-	pub fn type_check_file(&mut self, source_path: &Utf8Path, scope: &Scope) {
+	pub fn type_check_file_or_dir(&mut self, source_path: &Utf8Path, scope: &Scope) {
 		CompilationContext::set(CompilationPhase::TypeChecking, &scope.span);
 		self.type_check_scope(scope);
 
-		// Save the module's symbol environment to `self.types.source_file_envs`
+		if source_path.is_dir() {
+			self.type_check_dir(source_path);
+			return;
+		}
+
+		// Save the file's symbol environment to `self.types.source_file_envs`
 		// (replacing any existing ones if there was already a SymbolEnv from a previous compilation)
 		let scope_env = self.types.get_scope_env(scope);
-		self.types.source_file_envs.insert(source_path.to_owned(), scope_env);
+		self
+			.types
+			.source_file_envs
+			.insert(source_path.to_owned(), SymbolEnvOrNamespace::SymbolEnv(scope_env));
+	}
+
+	pub fn type_check_dir(&mut self, source_path: &Utf8Path) {
+		// Get a list of all children paths (files or directories) through the file graph
+		let children = self.file_graph.dependencies_of(source_path);
+
+		// Obtain each child's symbol environment or namespace
+		// If it's a namespace (i.e. it's a directory), wrap it in a symbol env
+		let mut child_envs = vec![];
+		for child_path in children.iter() {
+			match self.types.source_file_envs.get(*child_path) {
+				Some(SymbolEnvOrNamespace::SymbolEnv(env)) => {
+					child_envs.push(*env);
+				}
+				Some(SymbolEnvOrNamespace::Namespace(ns)) => {
+					let mut new_env = SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Independent, 0);
+					new_env
+						.define(
+							&Symbol::global(child_path.file_stem().unwrap().to_string()),
+							SymbolKind::Namespace(*ns),
+							AccessModifier::Public,
+							StatementIdx::Top,
+						)
+						.unwrap();
+					let wrapper_env = self.types.add_symbol_env(new_env);
+					child_envs.push(wrapper_env);
+				}
+				Some(SymbolEnvOrNamespace::Error(diagnostic)) => {
+					self
+						.types
+						.source_file_envs
+						.insert(source_path.to_owned(), SymbolEnvOrNamespace::Error(diagnostic.clone()));
+					return;
+				}
+				None => {
+					self.types.source_file_envs.insert(
+						source_path.to_owned(),
+						SymbolEnvOrNamespace::Error(Diagnostic {
+							message: format!("Could not bring \"{}\" due to cyclic bring statements", source_path,),
+							span: None,
+							annotations: vec![],
+						}),
+					);
+					return;
+				}
+			};
+		}
+
+		// Check that there aren't multiply-defined public symbols in the directory
+		let mut seen_public_symbols = HashSet::new();
+		for child_env in &child_envs {
+			for key in child_env.symbol_map.keys() {
+				if child_env.symbol_map[key].access != AccessModifier::Public {
+					continue;
+				}
+
+				if seen_public_symbols.contains(key) {
+					self.types.source_file_envs.insert(
+						source_path.to_owned(),
+						SymbolEnvOrNamespace::Error(Diagnostic {
+							message: format!("Symbol \"{}\" has multiple definitions in \"{}\"", key, source_path),
+							span: None,
+							annotations: vec![],
+						}),
+					);
+					return;
+				}
+				seen_public_symbols.insert(key.clone());
+			}
+		}
+
+		let ns = self.types.add_namespace(Namespace {
+			name: source_path.file_stem().unwrap().to_string(),
+			envs: child_envs,
+			loaded: true,
+			module_path: ResolveSource::WingFile,
+		});
+		self
+			.types
+			.source_file_envs
+			.insert(source_path.to_owned(), SymbolEnvOrNamespace::Namespace(ns));
 	}
 
 	fn type_check_scope(&mut self, scope: &Scope) {
 		assert!(self.inner_scopes.is_empty());
 		let mut env = self.types.get_scope_env(scope);
+
 		for statement in scope.statements.iter() {
 			self.type_check_statement(statement, &mut env);
 		}
 
-		// reverse list to type check later scopes first
-		// Why? To improve the inference algorithm. Earlier inner_scopes for closures may need to infer types from later inner_scopes
-		let inner_scopes = self.inner_scopes.drain(..).rev().collect::<Vec<_>>();
+		let inner_scopes = self.inner_scopes.drain(..).collect::<Vec<_>>();
 		for (inner_scope, ctx) in inner_scopes {
 			let scope = unsafe { &*inner_scope };
 			self.ctx = ctx;
@@ -2823,7 +3031,7 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		if let SymbolEnvKind::Function { sig, .. } = env.kind {
-			let mut return_type = sig.as_function_sig().expect("a fucntion type").return_type;
+			let mut return_type = sig.as_function_sig().expect("a function type").return_type;
 			if let Type::Inferred(n) = &*return_type {
 				if self.types.get_inference_by_id(*n).is_none() {
 					// If function types don't return anything then we should set the return type to void
@@ -2834,14 +3042,14 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		for symbol_data in env.symbol_map.values_mut() {
-			if let SymbolKind::Variable(ref mut var_info) = symbol_data.1 {
+			if let SymbolKind::Variable(ref mut var_info) = symbol_data.kind {
 				// Update any possible inferred types in this variable.
 				// This must be called before checking for un-inferred types because some variable were not used in this scope so they did not get a chance to get updated.
 				self.update_known_inferences(&mut var_info.type_, &var_info.name.span);
 
 				// If we found a variable with an inferred type, this is an error because it means we failed to infer its type
 				// Ignores any transient (no file_id) variables e.g. `this`. Those failed inferences are cascading errors and not useful to the user
-				if self.check_for_inferences(&var_info.type_, &var_info.name.span) && !var_info.name.span.file_id.is_empty() {
+				if !var_info.name.span.file_id.is_empty() && self.check_for_inferences(&var_info.type_) {
 					self.spanned_error(&var_info.name, "Unable to infer type".to_string());
 				}
 			}
@@ -2979,21 +3187,21 @@ impl<'a> TypeChecker<'a> {
 				initial_value,
 				type_,
 			} => {
-				tc.type_check_let(type_, env, initial_value, var_name, reassignable);
+				tc.type_check_let(type_, initial_value, var_name, reassignable, env);
 			}
 			StmtKind::ForLoop {
 				iterator,
 				iterable,
 				statements,
 			} => {
-				tc.type_check_for_loop(iterable, env, iterator, statements);
+				tc.type_check_for_loop(iterable, iterator, statements, env);
 			}
 			StmtKind::While { condition, statements } => {
-				tc.type_check_while(condition, env, statements);
+				tc.type_check_while(condition, statements, env);
 			}
 			StmtKind::Break | StmtKind::Continue => {}
 			StmtKind::IfLet(iflet) => {
-				tc.type_check_iflet(env, iflet);
+				tc.type_check_iflet(iflet, env);
 			}
 			StmtKind::If {
 				condition,
@@ -3001,13 +3209,13 @@ impl<'a> TypeChecker<'a> {
 				elif_statements,
 				else_statements,
 			} => {
-				tc.type_check_if(condition, statements, env, elif_statements, else_statements);
+				tc.type_check_if(condition, statements, elif_statements, else_statements, env);
 			}
 			StmtKind::Expression(e) => {
 				tc.type_check_exp(e, env);
 			}
 			StmtKind::Assignment { kind, variable, value } => {
-				tc.type_check_assignment(kind, value, env, variable);
+				tc.type_check_assignment(kind, value, variable, env);
 			}
 			StmtKind::Bring { source, identifier } => {
 				tc.type_check_bring(source, identifier, stmt, env);
@@ -3026,30 +3234,35 @@ impl<'a> TypeChecker<'a> {
 				tc.type_check_throw(exp, env);
 			}
 			StmtKind::Return(exp) => {
-				tc.type_check_return(env, stmt, exp);
+				tc.type_check_return(stmt, exp, env);
 			}
 			StmtKind::Class(ast_class) => {
-				tc.type_check_class(env, stmt, ast_class);
+				tc.type_check_class(stmt, ast_class, env);
 			}
-			StmtKind::Interface(AstInterface { name, methods, extends }) => {
-				tc.type_check_interface(env, extends, name, methods);
+			StmtKind::Interface(ast_iface) => {
+				tc.type_check_interface(ast_iface, env);
 			}
-			StmtKind::Struct { name, extends, fields } => {
-				tc.type_check_struct(fields, env, extends, name);
+			StmtKind::Struct {
+				name,
+				extends,
+				fields,
+				access,
+			} => {
+				tc.type_check_struct(fields, extends, name, access, env);
 			}
-			StmtKind::Enum { name, values } => {
-				tc.type_check_enum(name, values, env);
+			StmtKind::Enum { name, values, access } => {
+				tc.type_check_enum(name, values, access, env);
 			}
 			StmtKind::TryCatch {
 				try_statements,
 				catch_block,
 				finally_statements,
 			} => {
-				tc.type_check_try_catch(env, try_statements, catch_block, finally_statements);
+				tc.type_check_try_catch(try_statements, catch_block, finally_statements, env);
 			}
 			StmtKind::CompilerDebugEnv => {
-				println!("[symbol environment at {}]", stmt.span);
-				println!("{}", env);
+				eprintln!("[symbol environment at {}]", stmt.span);
+				eprintln!("{}", env);
 			}
 			StmtKind::SuperConstructor { arg_list } => {
 				tc.type_check_super_constructor_against_parent_initializer(stmt, arg_list, env);
@@ -3059,10 +3272,10 @@ impl<'a> TypeChecker<'a> {
 
 	fn type_check_try_catch(
 		&mut self,
-		env: &mut SymbolEnv,
 		try_statements: &Scope,
 		catch_block: &Option<ast::CatchBlock>,
 		finally_statements: &Option<Scope>,
+		env: &mut SymbolEnv,
 	) {
 		// Create a new environment for the try block
 		let try_env = self.types.add_symbol_env(SymbolEnv::new(
@@ -3088,6 +3301,7 @@ impl<'a> TypeChecker<'a> {
 				match catch_env.define(
 					exception_var,
 					SymbolKind::make_free_variable(exception_var.clone(), self.types.string(), false, env.phase),
+					AccessModifier::Private,
 					StatementIdx::Top,
 				) {
 					Err(type_error) => {
@@ -3113,14 +3327,20 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn type_check_enum(&mut self, name: &Symbol, values: &IndexSet<Symbol>, env: &mut SymbolEnv) {
+	fn type_check_enum(
+		&mut self,
+		name: &Symbol,
+		values: &IndexSet<Symbol>,
+		access: &AccessModifier,
+		env: &mut SymbolEnv,
+	) {
 		let enum_type_ref = self.types.add_type(Type::Enum(Enum {
 			name: name.clone(),
 			values: values.clone(),
 			docs: Default::default(),
 		}));
 
-		match env.define(name, SymbolKind::Type(enum_type_ref), StatementIdx::Top) {
+		match env.define(name, SymbolKind::Type(enum_type_ref), *access, StatementIdx::Top) {
 			Err(type_error) => {
 				self.type_error(type_error);
 			}
@@ -3131,9 +3351,10 @@ impl<'a> TypeChecker<'a> {
 	fn type_check_struct(
 		&mut self,
 		fields: &Vec<ast::StructField>,
-		env: &mut SymbolEnv,
 		extends: &Vec<UserDefinedType>,
 		name: &Symbol,
+		access: &AccessModifier,
+		env: &mut SymbolEnv,
 	) {
 		// Note: structs don't have a parent environment, instead they flatten their parent's members into the struct's env.
 		//   If we encounter an existing member with the same name and type we skip it, if the types are different we
@@ -3196,6 +3417,7 @@ impl<'a> TypeChecker<'a> {
 					AccessModifier::Public,
 					None,
 				),
+				AccessModifier::Public,
 				StatementIdx::Top,
 			) {
 				Err(type_error) => {
@@ -3208,7 +3430,7 @@ impl<'a> TypeChecker<'a> {
 		if let Err(e) = add_parent_members_to_struct_env(&extends_types, name, &mut struct_env) {
 			self.type_error(e);
 		}
-		match env.define(name, SymbolKind::Type(struct_type), StatementIdx::Top) {
+		match env.define(name, SymbolKind::Type(struct_type), *access, StatementIdx::Top) {
 			Err(type_error) => {
 				self.type_error(type_error);
 			}
@@ -3219,13 +3441,13 @@ impl<'a> TypeChecker<'a> {
 		struct_type.as_mut_struct().unwrap().env = struct_env;
 	}
 
-	fn type_check_interface(
-		&mut self,
-		env: &mut SymbolEnv,
-		extends: &Vec<UserDefinedType>,
-		name: &Symbol,
-		methods: &Vec<(Symbol, ast::FunctionSignature)>,
-	) {
+	fn type_check_interface(&mut self, ast_iface: &AstInterface, env: &mut SymbolEnv) {
+		let AstInterface {
+			name,
+			extends,
+			methods,
+			access,
+		} = ast_iface;
 		// Create environment representing this interface, for now it'll be empty just so we can support referencing ourselves from the interface definition.
 		let dummy_env = SymbolEnv::new(
 			None,
@@ -3260,7 +3482,7 @@ impl<'a> TypeChecker<'a> {
 			extends: extend_interfaces.clone(),
 		};
 		let mut interface_type = self.types.add_type(Type::Interface(interface_spec));
-		match env.define(name, SymbolKind::Type(interface_type), StatementIdx::Top) {
+		match env.define(name, SymbolKind::Type(interface_type), *access, StatementIdx::Top) {
 			Err(type_error) => {
 				self.type_error(type_error);
 			}
@@ -3296,6 +3518,7 @@ impl<'a> TypeChecker<'a> {
 					AccessModifier::Public,
 					None,
 				),
+				AccessModifier::Public,
 				StatementIdx::Top,
 			) {
 				Err(type_error) => {
@@ -3314,8 +3537,8 @@ impl<'a> TypeChecker<'a> {
 		interface_type.as_mut_interface().unwrap().env = interface_env;
 	}
 
-	fn type_check_class(&mut self, env: &mut SymbolEnv, stmt: &Stmt, ast_class: &AstClass) {
-		self.ctx.push_class(UserDefinedType::for_class(ast_class), &env.phase);
+	fn type_check_class(&mut self, stmt: &Stmt, ast_class: &AstClass, env: &mut SymbolEnv) {
+		self.ctx.push_class(ast_class);
 
 		// preflight classes cannot be declared inside an inflight scope
 		// (the other way is okay)
@@ -3363,7 +3586,12 @@ impl<'a> TypeChecker<'a> {
 			lifts: None,
 		};
 		let mut class_type = self.types.add_type(Type::Class(class_spec));
-		match env.define(&ast_class.name, SymbolKind::Type(class_type), StatementIdx::Top) {
+		match env.define(
+			&ast_class.name,
+			SymbolKind::Type(class_type),
+			ast_class.access,
+			StatementIdx::Top,
+		) {
 			Err(type_error) => {
 				self.type_error(type_error);
 			}
@@ -3384,9 +3612,10 @@ impl<'a> TypeChecker<'a> {
 					field.reassignable,
 					field.is_static,
 					field.phase,
-					field.access_modifier,
+					field.access,
 					None,
 				),
+				field.access,
 				StatementIdx::Top,
 			) {
 				Err(type_error) => {
@@ -3402,7 +3631,7 @@ impl<'a> TypeChecker<'a> {
 				&method_def.signature,
 				env,
 				if method_def.is_static { None } else { Some(class_type) },
-				method_def.access_modifier,
+				method_def.access,
 				&mut class_env,
 				method_name,
 			);
@@ -3418,7 +3647,7 @@ impl<'a> TypeChecker<'a> {
 			&ast_class.initializer.signature,
 			env,
 			None,
-			ast_class.initializer.access_modifier,
+			ast_class.initializer.access,
 			&mut class_env,
 			&init_symb,
 		);
@@ -3433,7 +3662,7 @@ impl<'a> TypeChecker<'a> {
 			&ast_class.inflight_initializer.signature,
 			env,
 			Some(class_type),
-			ast_class.inflight_initializer.access_modifier,
+			ast_class.inflight_initializer.access,
 			&mut class_env,
 			&inflight_init_symb,
 		);
@@ -3499,12 +3728,12 @@ impl<'a> TypeChecker<'a> {
 					let class_method_type = class_method_var.type_;
 					self.validate_type(class_method_type, method_type, &ast_class.name);
 					// Make sure the method is public (interface methods must be public)
-					if class_method_var.access_modifier != AccessModifier::Public {
+					if class_method_var.access != AccessModifier::Public {
 						self.spanned_error(
 							&class_method_var.name,
 							format!(
 								"Method \"{method_name}\" is {} in \"{}\" but it's an implementation of \"{interface_type}\". Interface members must be public.",
-								class_method_var.access_modifier, ast_class.name,
+								class_method_var.access, ast_class.name,
 							),
 						);
 					}
@@ -3522,7 +3751,7 @@ impl<'a> TypeChecker<'a> {
 		self.ctx.pop_class();
 	}
 
-	fn type_check_return(&mut self, env: &mut SymbolEnv, stmt: &Stmt, exp: &Option<Expr>) {
+	fn type_check_return(&mut self, stmt: &Stmt, exp: &Option<Expr>, env: &mut SymbolEnv) {
 		// Type check the return expression
 		let return_type = exp.as_ref().map(|exp| (self.type_check_exp(exp, env).0, exp));
 
@@ -3533,8 +3762,8 @@ impl<'a> TypeChecker<'a> {
 		};
 
 		let cur_func_env = *self.ctx.current_function_env().expect("a function env");
-		let SymbolEnvKind::Function{sig: cur_func_type, ..} = cur_func_env.kind else {
-				panic!("Expected function env");
+		let SymbolEnvKind::Function { sig: cur_func_type, .. } = cur_func_env.kind else {
+			panic!("Expected function env");
 		};
 		let mut function_ret_type = cur_func_type.as_function_sig().expect("a function_type").return_type;
 
@@ -3596,7 +3825,17 @@ impl<'a> TypeChecker<'a> {
 			}
 			BringSource::WingFile(name) => {
 				let brought_env = match self.types.source_file_envs.get(Utf8Path::new(&name.name)) {
-					Some(env) => *env,
+					Some(SymbolEnvOrNamespace::SymbolEnv(env)) => *env,
+					Some(SymbolEnvOrNamespace::Namespace(_)) => {
+						panic!("Expected a symbol environment to be associated with the file")
+					}
+					Some(SymbolEnvOrNamespace::Error(diagnostic)) => {
+						report_diagnostic(Diagnostic {
+							span: Some(stmt.span()),
+							..diagnostic.clone()
+						});
+						return;
+					}
 					None => {
 						self.spanned_error(
 							stmt,
@@ -3607,12 +3846,76 @@ impl<'a> TypeChecker<'a> {
 				};
 				let ns = self.types.add_namespace(Namespace {
 					name: name.name.to_string(),
-					env: SymbolEnv::new(Some(brought_env.get_ref()), SymbolEnvKind::Scope, brought_env.phase, 0),
+					envs: vec![brought_env],
 					loaded: true,
+					module_path: ResolveSource::WingFile,
 				});
 				if let Err(e) = env.define(
 					identifier.as_ref().unwrap(),
 					SymbolKind::Namespace(ns),
+					AccessModifier::Private,
+					StatementIdx::Top,
+				) {
+					self.type_error(e);
+				}
+				return;
+			}
+			BringSource::WingLibrary(name, module_dir) => {
+				let brought_ns = match self.types.source_file_envs.get(module_dir) {
+					Some(SymbolEnvOrNamespace::SymbolEnv(_)) => {
+						panic!("Expected a namespace to be associated with the library")
+					}
+					Some(SymbolEnvOrNamespace::Namespace(ns)) => ns,
+					Some(SymbolEnvOrNamespace::Error(diagnostic)) => {
+						report_diagnostic(Diagnostic {
+							span: Some(stmt.span()),
+							..diagnostic.clone()
+						});
+						return;
+					}
+					None => {
+						self.spanned_error(
+							stmt,
+							format!("Could not type check \"{}\" due to cyclic bring statements", name),
+						);
+						return;
+					}
+				};
+				if let Err(e) = env.define(
+					identifier.as_ref().unwrap(),
+					SymbolKind::Namespace(*brought_ns),
+					AccessModifier::Private,
+					StatementIdx::Top,
+				) {
+					self.type_error(e);
+				}
+				return;
+			}
+			BringSource::Directory(name) => {
+				let brought_ns = match self.types.source_file_envs.get(Utf8Path::new(&name.name)) {
+					Some(SymbolEnvOrNamespace::SymbolEnv(_)) => {
+						panic!("Expected a namespace to be associated with the directory")
+					}
+					Some(SymbolEnvOrNamespace::Namespace(ns)) => ns,
+					Some(SymbolEnvOrNamespace::Error(diagnostic)) => {
+						report_diagnostic(Diagnostic {
+							span: Some(stmt.span()),
+							..diagnostic.clone()
+						});
+						return;
+					}
+					None => {
+						self.spanned_error(
+							stmt,
+							format!("Could not type check \"{}\" due to cyclic bring statements", name),
+						);
+						return;
+					}
+				};
+				if let Err(e) = env.define(
+					identifier.as_ref().unwrap(),
+					SymbolKind::Namespace(*brought_ns),
+					AccessModifier::Private,
 					StatementIdx::Top,
 				) {
 					self.type_error(e);
@@ -3620,7 +3923,7 @@ impl<'a> TypeChecker<'a> {
 				return;
 			}
 		}
-		self.add_module_to_env(env, library_name, namespace_filter, alias, Some(&stmt));
+		self.add_jsii_module_to_env(env, library_name, namespace_filter, alias, Some(&stmt));
 		// library_name is the name of the library we are importing from the JSII world
 		// namespace_filter describes what types we are importing from the library
 		// e.g. [] means we are importing everything from `mylib`
@@ -3628,7 +3931,7 @@ impl<'a> TypeChecker<'a> {
 		// alias is the symbol we are giving to the imported library or namespace
 	}
 
-	fn type_check_assignment(&mut self, kind: &AssignmentKind, value: &Expr, env: &mut SymbolEnv, variable: &Reference) {
+	fn type_check_assignment(&mut self, kind: &AssignmentKind, value: &Expr, variable: &Reference, env: &mut SymbolEnv) {
 		let (exp_type, _) = self.type_check_exp(value, env);
 
 		// TODO: we need to verify that if this variable is defined in a parent environment (i.e.
@@ -3637,7 +3940,14 @@ impl<'a> TypeChecker<'a> {
 		let (var, var_phase) = self.resolve_reference(&variable, env);
 
 		if !var.type_.is_unresolved() && !var.reassignable {
-			self.spanned_error(variable, "Variable is not reassignable".to_string());
+			report_diagnostic(Diagnostic {
+				message: "Variable is not reassignable".to_string(),
+				span: Some(variable.span()),
+				annotations: vec![DiagnosticAnnotation {
+					message: "defined here (try adding \"var\" in front)".to_string(),
+					span: var.name.span(),
+				}],
+			});
 		} else if var_phase == Phase::Preflight && env.phase == Phase::Inflight {
 			self.spanned_error(variable, "Variable cannot be reassigned from inflight".to_string());
 		}
@@ -3654,9 +3964,9 @@ impl<'a> TypeChecker<'a> {
 		&mut self,
 		condition: &Expr,
 		statements: &Scope,
-		env: &mut SymbolEnv,
 		elif_statements: &Vec<ast::ElifBlock>,
 		else_statements: &Option<Scope>,
+		env: &mut SymbolEnv,
 	) {
 		self.type_check_if_statement(condition, statements, env);
 
@@ -3676,7 +3986,7 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn type_check_iflet(&mut self, env: &mut SymbolEnv, iflet: &IfLet) {
+	fn type_check_iflet(&mut self, iflet: &IfLet, env: &mut SymbolEnv) {
 		self.type_check_if_let_statement(
 			&iflet.value,
 			&iflet.statements,
@@ -3707,7 +4017,7 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn type_check_while(&mut self, condition: &Expr, env: &mut SymbolEnv, statements: &Scope) {
+	fn type_check_while(&mut self, condition: &Expr, statements: &Scope, env: &mut SymbolEnv) {
 		let (cond_type, _) = self.type_check_exp(condition, env);
 		self.validate_type(cond_type, self.types.bool(), condition);
 
@@ -3722,7 +4032,7 @@ impl<'a> TypeChecker<'a> {
 		self.inner_scopes.push((statements, self.ctx.clone()));
 	}
 
-	fn type_check_for_loop(&mut self, iterable: &Expr, env: &mut SymbolEnv, iterator: &Symbol, statements: &Scope) {
+	fn type_check_for_loop(&mut self, iterable: &Expr, iterator: &Symbol, statements: &Scope, env: &mut SymbolEnv) {
 		// TODO: Expression must be iterable
 		let (exp_type, _) = self.type_check_exp(iterable, env);
 
@@ -3749,6 +4059,7 @@ impl<'a> TypeChecker<'a> {
 		match scope_env.define(
 			&iterator,
 			SymbolKind::make_free_variable(iterator.clone(), iterator_type, false, env.phase),
+			AccessModifier::Private,
 			StatementIdx::Top,
 		) {
 			Err(type_error) => {
@@ -3764,10 +4075,10 @@ impl<'a> TypeChecker<'a> {
 	fn type_check_let(
 		&mut self,
 		type_: &Option<TypeAnnotation>,
-		env: &mut SymbolEnv,
 		initial_value: &Expr,
 		var_name: &Symbol,
 		reassignable: &bool,
+		env: &mut SymbolEnv,
 	) {
 		let explicit_type = type_.as_ref().map(|t| self.resolve_type_annotation(t, env));
 		let (mut inferred_type, _) = self.type_check_exp(initial_value, env);
@@ -3794,6 +4105,7 @@ impl<'a> TypeChecker<'a> {
 			match env.define(
 				var_name,
 				SymbolKind::make_free_variable(var_name.clone(), final_type, *reassignable, env.phase),
+				AccessModifier::Private,
 				StatementIdx::Index(self.ctx.current_stmt_idx()),
 			) {
 				Err(type_error) => {
@@ -3811,6 +4123,7 @@ impl<'a> TypeChecker<'a> {
 			match env.define(
 				var_name,
 				SymbolKind::make_free_variable(var_name.clone(), inferred_type, *reassignable, env.phase),
+				AccessModifier::Private,
 				StatementIdx::Index(self.ctx.current_stmt_idx()),
 			) {
 				Err(type_error) => {
@@ -3842,10 +4155,10 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		if !cond_type.is_option() {
-			report_diagnostic(Diagnostic {
-				message: format!("Expected type to be optional, but got \"{}\" instead", cond_type),
-				span: Some(value.span()),
-			});
+			self.spanned_error(
+				value,
+				format!("Expected type to be optional, but got \"{}\" instead", cond_type),
+			)
 		}
 
 		// Technically we only allow if let statements to be used with optionals
@@ -3865,6 +4178,7 @@ impl<'a> TypeChecker<'a> {
 		match stmt_env.define(
 			var_name,
 			SymbolKind::make_free_variable(var_name.clone(), var_type, *reassignable, env.phase),
+			AccessModifier::Private,
 			StatementIdx::Top,
 		) {
 			Err(type_error) => {
@@ -3930,7 +4244,10 @@ impl<'a> TypeChecker<'a> {
 
 		// Verify the class has a parent class
 		let Some(parent_class) = &class_type.as_class().expect("class type to be a class").parent else {
-			self.spanned_error(super_constructor_call, format!("Class \"{class_type}\" does not have a parent class"));
+			self.spanned_error(
+				super_constructor_call,
+				format!("Class \"{class_type}\" does not have a parent class"),
+			);
 			return;
 		};
 
@@ -4040,6 +4357,7 @@ impl<'a> TypeChecker<'a> {
 						span: method_name.span.clone(),
 					},
 					SymbolKind::make_free_variable("this".into(), class_type, false, class_env.phase),
+					AccessModifier::Private,
 					StatementIdx::Top,
 				)
 				.expect("Expected `this` to be added to constructor env");
@@ -4068,7 +4386,7 @@ impl<'a> TypeChecker<'a> {
 		method_sig: &ast::FunctionSignature,
 		env: &mut SymbolEnv,
 		instance_type: Option<TypeRef>,
-		access_modifier: AccessModifier,
+		access: AccessModifier,
 		class_env: &mut SymbolEnv,
 		method_name: &Symbol,
 	) {
@@ -4087,7 +4405,7 @@ impl<'a> TypeChecker<'a> {
 						panic!("Expected env to be a type env");
 					};
 					// If parent method is private we don't allow overriding
-					if var.access_modifier == AccessModifier::Private {
+					if var.access == AccessModifier::Private {
 						self.spanned_error(
 							method_name,
 							format!("Cannot override private method \"{method_name}\" of \"{method_defined_in}\""),
@@ -4096,15 +4414,15 @@ impl<'a> TypeChecker<'a> {
 						// For non private methods, we only allow overriding if the access modifier is the same or more permissive:
 						// - public can override public or protected
 						// - protected can only override protected
-						if !(access_modifier == AccessModifier::Public
-							&& matches!(var.access_modifier, AccessModifier::Public | AccessModifier::Protected)
-							|| access_modifier == AccessModifier::Protected && var.access_modifier == AccessModifier::Protected)
+						if !(access == AccessModifier::Public
+							&& matches!(var.access, AccessModifier::Public | AccessModifier::Protected)
+							|| access == AccessModifier::Protected && var.access == AccessModifier::Protected)
 						{
 							self.spanned_error(
 								method_name,
 								format!(
-									"Cannot override {} method \"{method_name}\" of \"{method_defined_in}\" with a {access_modifier} method",
-									var.access_modifier
+									"Cannot override {} method \"{method_name}\" of \"{method_defined_in}\" with a {access} method",
+									var.access
 								),
 							);
 						}
@@ -4121,9 +4439,10 @@ impl<'a> TypeChecker<'a> {
 				false,
 				instance_type.is_none(),
 				method_sig.phase,
-				access_modifier,
+				access,
 				None,
 			),
+			access,
 			StatementIdx::Top,
 		) {
 			Err(type_error) => {
@@ -4133,7 +4452,7 @@ impl<'a> TypeChecker<'a> {
 		};
 	}
 
-	pub fn add_module_to_env(
+	pub fn add_jsii_module_to_env(
 		&mut self,
 		env: &mut SymbolEnv,
 		library_name: String,
@@ -4178,7 +4497,7 @@ impl<'a> TypeChecker<'a> {
 						self.spanned_error(
 							&stmt.map(|s| s.span.clone()).unwrap_or_default(),
 							format!(
-								"Cannot find module \"{}\" in source directory: {}",
+								"Cannot find jsii module \"{}\" in source directory: {}",
 								library_name, type_error
 							),
 						);
@@ -4243,6 +4562,7 @@ impl<'a> TypeChecker<'a> {
 			match env.define(
 				&arg.name,
 				SymbolKind::make_free_variable(arg.name.clone(), param.typeref, arg.reassignable, env.phase),
+				AccessModifier::Public,
 				StatementIdx::Top,
 			) {
 				Err(type_error) => {
@@ -4321,7 +4641,8 @@ impl<'a> TypeChecker<'a> {
 		// Update the class's env to point to the new env
 		new_type_class.env = new_env;
 
-		let SymbolEnvKind::Type(new_type) = new_type_class.env.kind else { // TODO: Ugly hack to get non mut ref of new_type so we can use it
+		let SymbolEnvKind::Type(new_type) = new_type_class.env.kind else {
+			// TODO: Ugly hack to get non mut ref of new_type so we can use it
 			panic!("Expected class env to be a type");
 		};
 
@@ -4335,7 +4656,7 @@ impl<'a> TypeChecker<'a> {
 					reassignable,
 					phase: flight,
 					kind,
-					access_modifier,
+					access,
 					docs: _,
 				}) => {
 					// Replace type params in function signatures
@@ -4377,9 +4698,10 @@ impl<'a> TypeChecker<'a> {
 								*reassignable,
 								matches!(kind, VariableKind::StaticMember),
 								*flight,
-								*access_modifier,
+								*access,
 								None,
 							),
+							*access,
 							StatementIdx::Top,
 						) {
 							Err(type_error) => {
@@ -4399,9 +4721,10 @@ impl<'a> TypeChecker<'a> {
 								*reassignable,
 								matches!(kind, VariableKind::StaticMember),
 								*flight,
-								*access_modifier,
+								*access,
 								None,
 							),
+							*access,
 							StatementIdx::Top,
 						) {
 							Err(type_error) => {
@@ -4574,7 +4897,7 @@ impl<'a> TypeChecker<'a> {
 				if let SymbolKind::Namespace(_) = symbol_kind {
 					let mut new_udt = base_udt.clone();
 					new_udt.fields.push(Symbol {
-						name: "Util".to_string(),
+						name: UTIL_CLASS_NAME.to_string(),
 						span: base_udt.span.clone(),
 					});
 
@@ -4629,18 +4952,14 @@ impl<'a> TypeChecker<'a> {
 					// We can't get here twice, we can safely assume that if we're here the `object` part of the reference doesn't have and evaluated type yet.
 					// Create a type reference out of this nested reference and call ourselves again
 					let new_ref = Reference::TypeMember {
-						type_name: user_type_annotation,
+						type_name: user_type_annotation.clone(),
 						property: property.clone(),
 					};
-					// Replace the reference with the new one, this is unsafe because `reference` isn't mutable and theoretically someone may
-					// hold another reference to it. But our AST doesn't hold up/cross references so this is safe as long as we return right.
-					let const_ptr = reference as *const Reference;
-					let mut_ptr = const_ptr as *mut Reference;
-					unsafe {
-						// We don't use the return value but need to call replace so it'll drop the old value
-						_ = std::mem::replace(&mut *mut_ptr, new_ref);
-					}
-					return self.resolve_reference(reference, env);
+
+					// Store this reference for later when we can modify the final AST and replace the original reference with the new one
+					self.types.type_expressions.insert(object.id, new_ref.clone());
+
+					return self.resolve_reference(&new_ref, env);
 				}
 
 				// Special case: if the object expression is a simple reference to `this` and we're inside the init function then
@@ -4710,7 +5029,7 @@ impl<'a> TypeChecker<'a> {
 									type_,
 									reassignable: false,
 									phase: Phase::Independent,
-									access_modifier: AccessModifier::Public,
+									access: AccessModifier::Public,
 									docs: None,
 								},
 								Phase::Independent,
@@ -4782,7 +5101,7 @@ impl<'a> TypeChecker<'a> {
 				reassignable: false,
 				phase: env.phase,
 				kind: VariableKind::InstanceMember,
-				access_modifier: AccessModifier::Public,
+				access: AccessModifier::Public,
 				docs: None,
 			},
 
@@ -4896,15 +5215,16 @@ impl<'a> TypeChecker<'a> {
 				let current_class_type = self
 					.resolve_user_defined_type(&current_class, env, self.ctx.current_stmt_idx())
 					.unwrap();
-				private_access = current_class_type.is_same_type_as(&property_defined_in);
-				protected_access = private_access || current_class_type.is_strict_subtype_of(&property_defined_in);
+				private_access = private_access || current_class_type.is_same_type_as(&property_defined_in);
+				protected_access =
+					protected_access || private_access || current_class_type.is_strict_subtype_of(&property_defined_in);
 				if private_access {
 					break;
 				}
 			}
 
 			// Compare the access type with what's allowed
-			match var.access_modifier {
+			match var.access {
 				AccessModifier::Private => {
 					if !private_access {
 						self.spanned_error(
@@ -4974,7 +5294,7 @@ impl<'a> TypeChecker<'a> {
 		name: &Symbol,
 		env: &mut SymbolEnv,
 	) -> (Option<TypeRef>, Option<SymbolEnvRef>) {
-		let Some(parent) = parent else  {
+		let Some(parent) = parent else {
 			if phase == Phase::Preflight {
 				// if this is a preflight and we don't have a parent, then we implicitly set it to `std.Resource`
 				let t = self.types.resource_base_type();
@@ -5006,20 +5326,17 @@ impl<'a> TypeChecker<'a> {
 			if parent_class.phase == phase {
 				(Some(parent_type), Some(parent_class.env.get_ref()))
 			} else {
-				report_diagnostic(Diagnostic {
-					message: format!(
+				self.spanned_error(
+					parent,
+					format!(
 						"Class \"{}\" is an {} class and cannot extend {} class \"{}\"",
 						name, phase, parent_class.phase, parent_class.name
 					),
-					span: Some(parent.span.clone()),
-				});
+				);
 				(None, None)
 			}
 		} else {
-			report_diagnostic(Diagnostic {
-				message: format!("Expected \"{}\" to be a class", parent),
-				span: Some(parent.span.clone()),
-			});
+			self.spanned_error(parent, format!("Expected \"{}\" to be a class", parent));
 			(None, None)
 		}
 	}
@@ -5047,44 +5364,49 @@ fn add_parent_members_to_struct_env(
 					name.name, parent_type
 				),
 				span: name.span.clone(),
+				annotations: vec![],
 			});
 		};
 		// Add each member of current parent to the struct's environment (if it wasn't already added by a previous parent)
 		for (parent_member_name, parent_member, _) in parent_struct.env.iter(true) {
-			let member_type = parent_member
+			let parent_member_var = parent_member
 				.as_variable()
-				.expect("Expected struct member to be a variable")
-				.type_;
+				.expect("Expected struct member to be a variable");
+			let parent_member_type = parent_member_var.type_;
+
 			if let Some(existing_type) = struct_env.lookup(&parent_member_name.as_str().into(), None) {
-				let existing_type = existing_type
+				let existing_var = existing_type
 					.as_variable()
-					.expect("Expected struct member to be a variable")
-					.type_;
-				if !existing_type.is_same_type_as(&member_type) {
+					.expect("Expected struct member to be a variable");
+				let existing_type = existing_var.type_;
+
+				if !existing_type.is_same_type_as(&parent_member_type) {
 					return Err(TypeError {
-						span: name.span.clone(),
+						span: existing_var.name.span.clone(),
 						message: format!(
 							"Struct \"{}\" extends \"{}\" which introduces a conflicting member \"{}\" ({} != {})",
-							name, parent_type, parent_member_name, member_type, member_type
+							name, parent_type, parent_member_name, parent_member_type, existing_type
 						),
+						annotations: vec![],
 					});
 				}
 			} else {
 				let sym = Symbol {
 					name: parent_member_name,
-					span: name.span.clone(),
+					span: parent_member_var.name.span.clone(),
 				};
 				struct_env.define(
 					&sym,
 					SymbolKind::make_member_variable(
 						sym.clone(),
-						member_type,
+						parent_member_type,
 						false,
 						false,
 						struct_env.phase,
 						AccessModifier::Public,
 						None,
 					),
+					AccessModifier::Public,
 					StatementIdx::Top,
 				)?;
 			}
@@ -5110,6 +5432,7 @@ fn add_parent_members_to_iface_env(
 					name.name, parent_type
 				),
 				span: name.span.clone(),
+				annotations: vec![],
 			});
 		};
 		// Add each member of current parent to the interface's environment (if it wasn't already added by a previous parent)
@@ -5125,11 +5448,12 @@ fn add_parent_members_to_iface_env(
 					.type_;
 				if !existing_type.is_same_type_as(&member_type) {
 					return Err(TypeError {
-						span: name.span.clone(),
 						message: format!(
 							"Interface \"{}\" extends \"{}\" but has a conflicting member \"{}\" ({} != {})",
 							name, parent_type, parent_member_name, member_type, member_type
 						),
+						span: name.span.clone(),
+						annotations: vec![],
 					});
 				}
 			} else {
@@ -5148,6 +5472,7 @@ fn add_parent_members_to_iface_env(
 						AccessModifier::Public,
 						None,
 					),
+					AccessModifier::Public,
 					StatementIdx::Top,
 				)?;
 			}
@@ -5165,19 +5490,59 @@ fn lookup_result_to_type_error<T>(lookup_result: LookupResult, looked_up_object:
 where
 	T: Spanned + Display,
 {
-	let (message, span) = match lookup_result {
-		LookupResult::NotFound(s) => (format!("Unknown symbol \"{s}\""), s.span()),
-		LookupResult::DefinedLater => (
-			format!("Symbol \"{looked_up_object}\" used before being defined"),
-			looked_up_object.span(),
-		),
-		LookupResult::ExpectedNamespace(ns_name) => (
-			format!("Expected \"{ns_name}\" in \"{looked_up_object}\" to be a namespace"),
-			ns_name.span(),
-		),
+	match lookup_result {
+		LookupResult::NotFound(s) => TypeError {
+			message: format!("Unknown symbol \"{s}\""),
+			span: s.span(),
+			annotations: vec![],
+		},
+		LookupResult::NotPublic(kind, lookup_info) => TypeError {
+			message: {
+				let access = lookup_info.access.to_string();
+				match kind {
+					SymbolKind::Type(type_) => {
+						if matches!(**type_, Type::Class(_)) {
+							format!("Class \"{looked_up_object}\" is {access}")
+						} else if matches!(**type_, Type::Interface(_)) {
+							format!("Interface \"{looked_up_object}\" is {access}")
+						} else if matches!(**type_, Type::Struct(_)) {
+							format!("Struct \"{looked_up_object}\" is {access}")
+						} else if matches!(**type_, Type::Enum(_)) {
+							format!("Enum \"{looked_up_object}\" is {access}")
+						} else {
+							format!("Symbol \"{looked_up_object}\" is {access}")
+						}
+					}
+					SymbolKind::Variable(_) => format!("Symbol \"{looked_up_object}\" is {access}"),
+					SymbolKind::Namespace(_) => format!("namespace \"{looked_up_object}\" is {access}"),
+				}
+			},
+			span: looked_up_object.span(),
+			annotations: vec![DiagnosticAnnotation {
+				message: "defined here".to_string(),
+				span: lookup_info.span,
+			}],
+		},
+		LookupResult::MultipleFound => TypeError {
+			message: format!("Ambiguous symbol \"{looked_up_object}\""),
+			span: looked_up_object.span(),
+			annotations: vec![],
+		},
+		LookupResult::DefinedLater(span) => TypeError {
+			message: format!("Symbol \"{looked_up_object}\" used before being defined"),
+			span: looked_up_object.span(),
+			annotations: vec![DiagnosticAnnotation {
+				message: "defined later here".to_string(),
+				span,
+			}],
+		},
+		LookupResult::ExpectedNamespace(ns_name) => TypeError {
+			message: format!("Expected \"{ns_name}\" in \"{looked_up_object}\" to be a namespace"),
+			span: ns_name.span(),
+			annotations: vec![],
+		},
 		LookupResult::Found(..) => panic!("Expected a lookup error, but found a successful lookup"),
-	};
-	TypeError { message, span }
+	}
 }
 
 /// Resolves a user defined type (e.g. `Foo.Bar.Baz`) to a type reference
@@ -5186,6 +5551,14 @@ pub fn resolve_user_defined_type(
 	env: &SymbolEnv,
 	statement_idx: usize,
 ) -> Result<TypeRef, TypeError> {
+	resolve_user_defined_type_ref(user_defined_type, env, statement_idx).map(|t| *t)
+}
+
+pub fn resolve_user_defined_type_ref<'a>(
+	user_defined_type: &'a UserDefinedType,
+	env: &'a SymbolEnv,
+	statement_idx: usize,
+) -> Result<&'a TypeRef, TypeError> {
 	// Resolve all types down the fields list and return the last one (which is likely to be a real type and not a namespace)
 	let mut nested_name = vec![&user_defined_type.root];
 	nested_name.extend(user_defined_type.fields.iter().collect_vec());
@@ -5194,12 +5567,13 @@ pub fn resolve_user_defined_type(
 
 	if let LookupResult::Found(symb_kind, _) = lookup_result {
 		if let SymbolKind::Type(t) = symb_kind {
-			Ok(*t)
+			Ok(t)
 		} else {
 			let symb = nested_name.last().unwrap();
 			Err(TypeError {
 				message: format!("Expected \"{}\" to be a type but it's a {symb_kind}", symb.name),
 				span: symb.span.clone(),
+				annotations: vec![],
 			})
 		}
 	} else {
@@ -5229,6 +5603,7 @@ pub fn resolve_super_method(method: &Symbol, env: &SymbolEnv, types: &Types) -> 
 					"`super` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474"
 						.to_string(),
 				span: method.span.clone(),
+				annotations: vec![],
 			});
 		}
 		// Get the parent type of "this" (if it's a preflight class that's directly derived from `std.Resource` it's an implicit derive so we'll treat it as if there's no parent)
@@ -5247,12 +5622,14 @@ pub fn resolve_super_method(method: &Symbol, env: &SymbolEnv, types: &Types) -> 
 						parent_type, method
 					),
 					span: method.span.clone(),
+					annotations: vec![],
 				})
 			}
 		} else {
 			Err(TypeError {
 				message: format!("Cannot call super method because class {} has no parent", type_),
 				span: method.span.clone(),
+				annotations: vec![],
 			})
 		}
 	} else {
@@ -5264,6 +5641,7 @@ pub fn resolve_super_method(method: &Symbol, env: &SymbolEnv, types: &Types) -> 
 			})
 			.to_string(),
 			span: method.span.clone(),
+			annotations: vec![],
 		})
 	}
 }
@@ -5324,7 +5702,7 @@ pub fn fully_qualify_std_type(type_: &str) -> String {
 
 	match type_name {
 		"Json" | "MutJson" | "MutArray" | "MutMap" | "MutSet" | "Array" | "Map" | "Set" | "String" | "Duration"
-		| "Boolean" | "Number" => {
+		| "Boolean" | "Number" | "Struct" => {
 			format!("{WINGSDK_STD_MODULE}.{type_name}")
 		}
 		_ => type_name.to_string(),
@@ -5432,6 +5810,7 @@ mod tests {
 		let void = UnsafeRef::<Type>(&Type::Void as *const Type);
 		let num = UnsafeRef::<Type>(&Type::Number as *const Type);
 		let string = UnsafeRef::<Type>(&Type::String as *const Type);
+
 		let returns_num = make_function(vec![], num, Phase::Inflight);
 		let returns_str = make_function(vec![], string, Phase::Inflight);
 		let returns_void = make_function(vec![], void, Phase::Inflight);
@@ -5447,9 +5826,10 @@ mod tests {
 
 	#[test]
 	fn function_subtyping_parameter_contravariance() {
-		let void = UnsafeRef::<Type>(&Type::Void as *const Type);
-		let string = UnsafeRef::<Type>(&Type::String as *const Type);
-		let opt_string = UnsafeRef::<Type>(&Type::Optional(string) as *const Type);
+		let void = UnsafeRef::<Type>(&Type::Void);
+		let string = UnsafeRef::<Type>(&Type::String);
+		let opt_string_type = Type::Optional(string);
+		let opt_string = UnsafeRef::<Type>(&opt_string_type);
 		let str_fn = make_function(
 			vec![FunctionParameter {
 				typeref: string,

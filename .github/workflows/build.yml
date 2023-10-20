@@ -19,12 +19,12 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  RUST_VERSION: "1.67.1"
   NODE_VERSION: "18.16.0"
   PNPM_VERSION: "8.6.3"
   CARGO_TERM_COLOR: always
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+  IS_SAME_REPO_PR: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository }}
 
 jobs:
   build:
@@ -57,13 +57,10 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@master
+        uses: moonrepo/setup-rust@v1
         with:
-          toolchain: ${{ env.RUST_VERSION }}
-          targets: |
-            x86_64-unknown-linux-gnu
-            wasm32-wasi
-          components: rustfmt,clippy,rust-std
+          inherit-toolchain: true
+          cache: false
 
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
@@ -119,13 +116,10 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@master
+        uses: moonrepo/setup-rust@v1
         with:
-          toolchain: ${{ env.RUST_VERSION }}
-          targets: |
-            x86_64-unknown-linux-gnu
-            wasm32-wasi
-          components: rustfmt,clippy,rust-std
+          inherit-toolchain: true
+          cache: false
 
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
@@ -181,18 +175,26 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --ignore-scripts --frozen-lockfile --filter hangar --filter examples-valid --filter examples-invalid
 
-      - name: Run E2E Benchmarks
-        run: pnpm bench
+      - name: Run Baseline Benchmarks
         working-directory: tools/hangar
+        if: github.event_name == 'pull_request'
+        env:
+          HANGAR_WINGLANG_PACKAGE: "winglang@latest"
+        run: pnpm bench
+
+      - name: Run Benchmarks
+        env:
+          BENCH_FAIL_THRESHOLD_PERCENT: "25"
+          GITHUB_TOKEN: ${{ env.IS_SAME_REPO_PR == 'true' && secrets.PROJEN_GITHUB_TOKEN || secrets.GITHUB_TOKEN  }}
+          BENCH_PR: "${{ env.IS_SAME_REPO_PR == 'true' && github.event.pull_request.number || '' }}"
+        working-directory: tools/hangar
+        run: pnpm bench
 
       - name: Upload Report JSON
         uses: actions/upload-artifact@v3
         with:
           name: benchmarks
           path: tools/hangar/results/report.json
-
-      - name: Create Markdown report
-        run: scripts/benchmark_json_to_table.mjs
 
   e2e-test:
     name: "E2E / ${{ matrix.runner }} + Node${{ matrix.node }} [${{ matrix.shard }}]"
@@ -265,6 +267,13 @@ jobs:
           name: ${{ steps.diff.outputs.diff_name }}
           path: ${{ steps.diff.outputs.diff_name }}
 
+  aws-sdk-spec-test:
+    needs:
+      - build
+    if: github.event_name == 'push' && needs.build.outputs.e2e-changed == 'true'
+    uses: ./.github/workflows/tf-aws-test.yml
+    secrets: inherit
+
   console-preview:
     name: "Console Preview"
     runs-on: ubuntu-latest
@@ -308,7 +317,7 @@ jobs:
           message: |
             Console preview environment is available at https://${{env.APP_NAME}}.fly.dev :rocket:
 
-            *Updated (UTC): ${{steps.deploy-fly.outputs.deploytime }}*
+            ###### Last Updated (UTC) ${{steps.deploy-fly.outputs.deploytime }}
           comment_tag: Console preview environment
           GITHUB_TOKEN: ${{secrets.PROJEN_GITHUB_TOKEN}}
 
@@ -321,9 +330,10 @@ jobs:
       - e2e-test
       - benchmark
       - test
+      - aws-sdk-spec-test
     steps:
       - name: Check failure
-        if: needs.build.result == 'failure' || needs.e2e-test.result == 'failure' || needs.benchmark.result == 'failure' || needs.test.result == 'failure'
+        if: needs.build.result == 'failure' || needs.e2e-test.result == 'failure' || needs.benchmark.result == 'failure' || needs.test.result == 'failure' || needs.aws-sdk-spec-test.result == 'failure'
         run: exit 1
       - name: Download patches
         uses: actions/download-artifact@v3
@@ -362,25 +372,36 @@ jobs:
       - name: Login to NPM registry
         run: npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
 
-      - name: Publish npm packages
-        working-directory: dist
+      - name: Publish NPM packages
+        uses: nick-fields/retry@v2
         env:
           PACKAGE_VERSION: ${{ needs.build.outputs.version }}
-        run: |
-          PACKAGES=("@winglang/sdk" "@winglang/compiler" "@wingconsole/design-system" "@wingconsole/ui" "@wingconsole/server" "@wingconsole/app" "winglang")
-          for PACKAGE in "${PACKAGES[@]}"; do
-            # Check if already published
-            VERSION_FOUND=$(npm view "$PACKAGE@$PACKAGE_VERSION" version || true)
-            if [ "$VERSION_FOUND" = "$PACKAGE_VERSION" ]; then
-              echo "$PACKAGE@$PACKAGE_VERSION already published, skipping"
-              continue
-            fi
+        with:
+          max_attempts: 7
+          timeout_minutes: 5
+          command: |
+            set -o pipefail
 
-            # remove "@" and replace "/" with "-"
-            TARBALL=$(echo "$PACKAGE-$PACKAGE_VERSION.tgz" | sed 's/@//g' | sed 's/\//-/g')
+            cd dist
+            PACKAGES=("@winglang/sdk" "@winglang/compiler" "@wingconsole/design-system" "@wingconsole/ui" "@wingconsole/server" "@wingconsole/app" "winglang")
+            for PACKAGE in "${PACKAGES[@]}"; do
+              # Check if already published
+              VERSION_FOUND=$(npm view "$PACKAGE@$PACKAGE_VERSION" version --verbose || true)
+              if [ "$VERSION_FOUND" = "$PACKAGE_VERSION" ]; then
+                echo "$PACKAGE@$PACKAGE_VERSION already published, skipping"
+                continue
+              fi
 
-            npm publish "$TARBALL" --access public
-          done
+              # remove "@" and replace "/" with "-"
+              TARBALL=$(echo "$PACKAGE-$PACKAGE_VERSION.tgz" | sed 's/@//g' | sed 's/\//-/g')
+
+              npm publish "$TARBALL" --access public --verbose
+
+              if [ $? -ne 0 ]; then
+                echo "Publishing $PACKAGE failed, exiting"
+                exit 1
+              fi
+            done
 
       - name: Publish Extension to Visual Studio Marketplace
         if: needs.build.outputs.vscode-wing-changed == 'true'

@@ -1,12 +1,10 @@
+import { Command, Option } from "commander";
 import { satisfies } from "compare-versions";
 
-import { Command, Option } from "commander";
-
 import { collectCommandAnalytics } from "./analytics/collect";
-import { exportAnalytics } from "./analytics/export";
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
+import { exportAnalytics } from "./analytics/export";
 import { currentPackage } from "./util";
-
 export const PACKAGE_VERSION = currentPackage.version;
 let analyticsExportFile: Promise<string | undefined>;
 
@@ -19,10 +17,11 @@ if (!SUPPORTED_NODE_VERSION) {
   throw new Error("couldn't parse engines.node version from package.json");
 }
 
-function runSubCommand(subCommand: string) {
+function runSubCommand(subCommand: string, path: string = subCommand) {
   return async (...args: any[]) => {
     try {
-      const exitCode = await import(`./commands/${subCommand}`).then((m) => m[subCommand](...args));
+      // paths other than the root path aren't working unless specified in the path arg
+      const exitCode = await import(`./commands/${path}`).then((m) => m[subCommand](...args));
       if (exitCode === 1) {
         await exportAnalyticsHook();
         process.exit(1);
@@ -113,6 +112,11 @@ async function main() {
     }
   }
 
+  function addValue(value: string, previous: string[]) {
+    previous.push(value);
+    return previous;
+  }
+
   program.hook("preAction", updateHook);
 
   program
@@ -134,7 +138,7 @@ async function main() {
   program
     .command("compile")
     .description("Compiles a Wing program")
-    .argument("<entrypoint>", "program .w entrypoint")
+    .argument("[entrypoint]", "program .w entrypoint")
     .addOption(
       new Option("-t, --target <target>", "Target platform")
         .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])
@@ -142,6 +146,8 @@ async function main() {
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .option("-r, --rootId <rootId>", "App root id")
+    .option("-v, --value <value>", "Platform-specific value in the form KEY=VALUE", addValue, [])
+    .option("--values <file>", "Yaml file with Platform-specific values")
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("compile"));
@@ -151,7 +157,7 @@ async function main() {
     .description(
       "Compiles a Wing program and runs all functions with the word 'test' or start with 'test:' in their resource identifiers"
     )
-    .argument("<entrypoint...>", "all entrypoints to test")
+    .argument("[entrypoint...]", "all files to test (globs are supported)")
     .addOption(
       new Option("-t, --target <target>", "Target platform")
         .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])
@@ -159,10 +165,25 @@ async function main() {
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .option("-r, --rootId <rootId>", "App root id")
+    .option(
+      "-f, --test-filter <regex>",
+      "Run tests that match the provided regex pattern within the selected entrypoint files"
+    )
     .option("--no-clean", "Keep build output")
+    .option(
+      "-o, --output-file <outputFile>",
+      "File name to write test results to (file extension is required, supports only .json at the moment)"
+    )
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
-    .action(runSubCommand("test"));
+    .action(runSubCommand("test", "test/test"));
+
+  program
+    .command("pack")
+    .description("Package the current directory into an npm library (gzipped tarball).")
+    .addOption(new Option("-o --out-file <filename>", "Output filename"))
+    .hook("preAction", collectAnalyticsHook)
+    .action(runSubCommand("pack"));
 
   program
     .command("docs")

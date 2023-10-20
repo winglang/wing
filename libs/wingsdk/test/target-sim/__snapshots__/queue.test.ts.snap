@@ -21,7 +21,7 @@ exports[`create a queue 2`] = `
         "path": "root/my_queue",
         "props": {
           "retentionPeriod": 3600,
-          "timeout": 10,
+          "timeout": 30,
         },
         "type": "wingsdk.cloud.Queue",
       },
@@ -70,25 +70,9 @@ exports[`create a queue 2`] = `
 `;
 
 exports[`messages are not requeued if the function fails after retention timeout 1`] = `
-[
-  "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Function created.",
-  "wingsdk.cloud.Queue created.",
-  "wingsdk.sim.EventMapping created.",
-  "Push (messages=BAD MESSAGE).",
-  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
-  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
-  "Subscriber error - returning 1 messages to queue: ERROR",
-  "wingsdk.sim.EventMapping deleted.",
-  "wingsdk.cloud.Queue deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.TestRunner deleted.",
-]
-`;
-
-exports[`messages are not requeued if the function fails after retention timeout 2`] = `
 {
-  ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "exports.handler = async function(event) {
+  ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
@@ -153,7 +137,7 @@ async handle(message) {
         "path": "root/my_queue",
         "props": {
           "retentionPeriod": 1,
-          "timeout": 10,
+          "timeout": 0.1,
         },
         "type": "wingsdk.cloud.Queue",
       },
@@ -282,7 +266,8 @@ exports[`messages are not requeued if the function fails before timeout 1`] = `
 
 exports[`messages are not requeued if the function fails before timeout 2`] = `
 {
-  ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "exports.handler = async function(event) {
+  ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
@@ -477,7 +462,8 @@ exports[`messages are requeued if the function fails after timeout 1`] = `
 
 exports[`messages are requeued if the function fails after timeout 2`] = `
 {
-  ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "exports.handler = async function(event) {
+  ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
@@ -652,6 +638,85 @@ async handle(message) {
 }
 `;
 
+exports[`push rejects empty message 1`] = `
+[
+  "wingsdk.cloud.TestRunner created.",
+  "wingsdk.cloud.Queue created.",
+  "Push (messages=).",
+  "wingsdk.cloud.Queue deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
+]
+`;
+
+exports[`push rejects empty message 2`] = `
+{
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_queue",
+        "props": {
+          "retentionPeriod": 3600,
+          "timeout": 30,
+        },
+        "type": "wingsdk.cloud.Queue",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "cloud.TestRunner": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.2.70",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
+        "my_queue": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.2.70",
+          },
+          "display": {
+            "description": "A distributed message queue",
+            "title": "Queue",
+          },
+          "id": "my_queue",
+          "path": "root/my_queue",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.2.70",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
 exports[`queue batch size of 2, purge the queue 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
@@ -687,7 +752,7 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "path": "root/my_queue",
         "props": {
           "retentionPeriod": 3600,
-          "timeout": 10,
+          "timeout": 30,
         },
         "type": "wingsdk.cloud.Queue",
       },
@@ -737,7 +802,8 @@ exports[`queue batch size of 2, purge the queue 2`] = `
 
 exports[`queue with one subscriber, batch size of 5 1`] = `
 {
-  ".wing/function_c8ab799f.js": "exports.handler = async function(event) {
+  ".wing/function_c8ab799f.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -764,7 +830,8 @@ queue: (function(env) {
 })(\\"QUEUE_HANDLE_54fcf4cd\\")
 })).handle(event);
 };",
-  ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "exports.handler = async function(event) {
+  ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
@@ -839,7 +906,7 @@ async handle(message) {
         "path": "root/my_queue",
         "props": {
           "retentionPeriod": 3600,
-          "timeout": 10,
+          "timeout": 30,
         },
         "type": "wingsdk.cloud.Queue",
       },
@@ -1012,7 +1079,8 @@ async handle(message) {
 
 exports[`queue with one subscriber, default batch size of 1 1`] = `
 {
-  ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "exports.handler = async function(event) {
+  ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1077,7 +1145,7 @@ async handle(message) {
         "path": "root/my_queue",
         "props": {
           "retentionPeriod": 3600,
-          "timeout": 10,
+          "timeout": 30,
         },
         "type": "wingsdk.cloud.Queue",
       },

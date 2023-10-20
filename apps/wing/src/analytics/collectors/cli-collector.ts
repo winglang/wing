@@ -25,12 +25,13 @@ export class CLICollector extends Collector {
       options: `${JSON.stringify(this.cmd.opts())}`,
       version: PACKAGE_VERSION,
       wing_sdk_version: this.tryGetModuleVersion("@winglang/sdk/package.json"),
-      wing_console_version: this.tryGetModuleVersion(`@wingconsole/app/package.json`)
-    }
+      wing_console_version: this.tryGetModuleVersion(`@wingconsole/app/package.json`),
+    };
   }
 
   private tryGetModuleVersion(module: string): string | undefined {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       return require(module).version as string;
     } catch (error) {
       return undefined;

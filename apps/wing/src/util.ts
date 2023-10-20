@@ -1,6 +1,8 @@
+import * as cp from "child_process";
 import { copyFileSync, promises as fsPromise } from "fs";
 import { tmpdir } from "os";
 import { join } from "path";
+import { promisify } from "util";
 
 /**
  * Normalize windows paths to be posix-like.
@@ -52,6 +54,14 @@ export async function copyDir(src: string, dest: string) {
 }
 
 /**
+ * Execute a command and return its stdout.
+ */
+export async function exec(command: string): Promise<string> {
+  const output = await promisify(cp.exec)(command);
+  return output.stdout.trim();
+}
+
+/**
  * Creates a clean environment for each test by copying the example file to a temporary directory.
  */
 export async function generateTmpDir() {
@@ -82,4 +92,5 @@ export const currentPackage: {
   name: string;
   version: string;
   engines: { node: string };
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
 } = require("../package.json");

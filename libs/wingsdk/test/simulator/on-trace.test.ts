@@ -1,12 +1,12 @@
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import * as testing from "../../src/simulator";
-import * as sim from "../../src/target-sim";
+import { App } from "../../src/target-sim/app";
 import { mkdtemp } from "../util";
 
 test("onTrace", async () => {
   // GIVEN
-  const app = new sim.App({ outdir: mkdtemp() });
+  const app = new App({ outdir: mkdtemp(), entrypointDir: __dirname });
   cloud.Bucket._newBucket(app, "my_bucket", { public: false });
   const simfile = app.synth();
 

@@ -8,7 +8,8 @@ use crate::{
 	type_check::{
 		self,
 		symbol_env::{StatementIdx, SymbolEnvKind},
-		Class, FunctionParameter, FunctionSignature, Interface, Struct, SymbolKind, Type, TypeRef, Types, CLASS_INIT_NAME,
+		Class, FunctionParameter, FunctionSignature, Interface, ResolveSource, Struct, SymbolKind, Type, TypeRef, Types,
+		CLASS_INIT_NAME,
 	},
 	CONSTRUCT_BASE_CLASS, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_JSON, WINGSDK_MUT_JSON, WINGSDK_RESOURCE,
 };
@@ -187,31 +188,35 @@ impl<'a> JsiiImporter<'a> {
 		// First, create a namespace in the Wing type system (if there isn't one already) corresponding to the JSII assembly
 		// the type belongs to.
 		debug!("Setting up namespaces for {}", type_name);
+		let assembly = type_name.assembly();
 
-		if let Some(symb) = self.wing_types.libraries.lookup_mut(&type_name.assembly().into(), None) {
+		if let Some(symb) = self.wing_types.libraries.lookup_mut(&assembly.into(), None) {
 			if let SymbolKind::Namespace(_) = symb {
 				// do nothing
 			} else {
 				// TODO: make this a proper error
 				panic!(
 					"Tried importing {} but {} already defined as a {}",
-					type_name,
-					type_name.assembly(),
-					symb
+					type_name, assembly, symb
 				)
 			}
 		} else {
+			let ns_env = self
+				.wing_types
+				.add_symbol_env(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0));
 			let ns = self.wing_types.add_namespace(Namespace {
-				name: type_name.assembly().to_string(),
-				env: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0),
+				name: assembly.to_string(),
+				envs: vec![ns_env],
 				loaded: false,
+				module_path: ResolveSource::ExternalModule(assembly.to_string()),
 			});
 			self
 				.wing_types
 				.libraries
 				.define(
-					&Symbol::global(type_name.assembly()),
+					&Symbol::global(assembly),
 					SymbolKind::Namespace(ns),
+					AccessModifier::Public,
 					StatementIdx::Top,
 				)
 				.unwrap();
@@ -219,9 +224,9 @@ impl<'a> JsiiImporter<'a> {
 
 		// Next, ensure there is a namespace for each of the namespaces in the type name
 		for (ns_idx, namespace_name) in type_name.namespaces().enumerate() {
-			let mut lookup_str = vec![type_name.assembly()];
-			lookup_str.extend(type_name.namespaces().take(ns_idx));
-			let lookup_str = lookup_str.join(".");
+			let mut lookup_vec = vec![assembly];
+			lookup_vec.extend(type_name.namespaces().take(ns_idx));
+			let lookup_str = lookup_vec.join(".");
 
 			let mut parent_ns = self
 				.wing_types
@@ -232,7 +237,12 @@ impl<'a> JsiiImporter<'a> {
 				.as_namespace_ref()
 				.unwrap();
 
-			if let Some(symb) = parent_ns.env.lookup_mut(&namespace_name.into(), None) {
+			if let Some(symb) = parent_ns
+				.envs
+				.get_mut(0)
+				.unwrap()
+				.lookup_mut(&namespace_name.into(), None)
+			{
 				if let SymbolKind::Namespace(_) = symb {
 					// do nothing
 				} else {
@@ -243,16 +253,30 @@ impl<'a> JsiiImporter<'a> {
 					)
 				}
 			} else {
+				let ns_env = self
+					.wing_types
+					.add_symbol_env(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0));
+				// Special case for the SDK, we are able to alias the namespace
+				let module_path = if assembly == WINGSDK_ASSEMBLY_NAME {
+					format!("{}/{}", lookup_vec.join("/"), namespace_name)
+				} else {
+					lookup_vec.join("/")
+				};
+
 				let ns = self.wing_types.add_namespace(Namespace {
 					name: namespace_name.to_string(),
-					env: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0),
+					envs: vec![ns_env],
 					loaded: false,
+					module_path: ResolveSource::ExternalModule(module_path),
 				});
 				parent_ns
-					.env
+					.envs
+					.get_mut(0)
+					.unwrap()
 					.define(
 						&Symbol::global(namespace_name),
 						SymbolKind::Namespace(ns),
+						AccessModifier::Public,
 						StatementIdx::Top,
 					)
 					.unwrap();
@@ -510,6 +534,7 @@ impl<'a> JsiiImporter<'a> {
 							access_modifier,
 							Some(Docs::from(&m.docs)),
 						),
+						access_modifier,
 						StatementIdx::Top,
 					)
 					.expect(&format!(
@@ -554,6 +579,7 @@ impl<'a> JsiiImporter<'a> {
 							access_modifier,
 							Some(Docs::from(&p.docs)),
 						),
+						access_modifier,
 						StatementIdx::Top,
 					)
 					.expect(&format!(
@@ -575,7 +601,7 @@ impl<'a> JsiiImporter<'a> {
 					line: (jsii_source_location.line - 1.0) as u32,
 					col: 0,
 				},
-				file_id: (&jsii_source_location.filename).into(),
+				file_id: jsii_source_location.filename.clone(),
 			}
 		} else {
 			Default::default()
@@ -777,6 +803,7 @@ impl<'a> JsiiImporter<'a> {
 					access_modifier,
 					Some(Docs::from(&initializer.docs)),
 				),
+				access_modifier,
 				StatementIdx::Top,
 			) {
 				panic!("Invalid JSII library, failed to define {}'s init: {}", type_name, e)
@@ -948,10 +975,14 @@ impl<'a> JsiiImporter<'a> {
 				.lookup(&assembly.name.as_str().into(), None)
 				.is_none()
 			{
+				let ns_env = self
+					.wing_types
+					.add_symbol_env(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0));
 				let ns = self.wing_types.add_namespace(Namespace {
 					name: assembly.name.clone(),
-					env: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0),
+					envs: vec![ns_env],
 					loaded: false,
+					module_path: ResolveSource::ExternalModule(assembly.name.clone()),
 				});
 				self
 					.wing_types
@@ -959,6 +990,7 @@ impl<'a> JsiiImporter<'a> {
 					.define(
 						&Symbol::global(assembly.name.clone()),
 						SymbolKind::Namespace(ns),
+						AccessModifier::Public,
 						StatementIdx::Top,
 					)
 					.expect("Failed to define jsii root namespace");
@@ -991,6 +1023,7 @@ impl<'a> JsiiImporter<'a> {
 			.define(
 				&self.jsii_spec.alias,
 				SymbolKind::Namespace(ns),
+				AccessModifier::Private,
 				StatementIdx::Index(self.jsii_spec.import_statement_idx),
 			)
 			.unwrap();
@@ -1016,8 +1049,15 @@ impl<'a> JsiiImporter<'a> {
 			.0
 			.as_namespace_ref()
 			.unwrap();
-		ns.env
-			.define(&symbol, SymbolKind::Type(type_ref), StatementIdx::Top)
+		ns.envs
+			.get_mut(0)
+			.unwrap()
+			.define(
+				&symbol,
+				SymbolKind::Type(type_ref),
+				AccessModifier::Public,
+				StatementIdx::Top,
+			)
 			.expect(&format!("Invalid JSII library: failed to define type {}", fqn));
 	}
 }
@@ -1045,9 +1085,7 @@ pub fn is_construct_base(fqn: &str) -> bool {
 
 impl From<&Option<jsii::Docs>> for Docs {
 	fn from(value: &Option<jsii::Docs>) -> Self {
-		let Some(docs) = value else {
-			return Docs::default()
-		};
+		let Some(docs) = value else { return Docs::default() };
 
 		Docs {
 			custom: docs.custom.as_ref().unwrap_or(&BTreeMap::default()).clone(),

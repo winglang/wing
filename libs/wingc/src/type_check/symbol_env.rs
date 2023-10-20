@@ -3,8 +3,8 @@ use derivative::Derivative;
 use duplicate::duplicate_item;
 
 use crate::{
-	ast::{Phase, Symbol},
-	diagnostic::TypeError,
+	ast::{AccessModifier, Phase, Symbol},
+	diagnostic::{DiagnosticAnnotation, TypeError, WingSpan},
 	type_check::{SymbolKind, Type, TypeRef},
 };
 use std::fmt::Debug;
@@ -17,15 +17,28 @@ use super::{UnsafeRef, VariableInfo};
 
 pub type SymbolEnvRef = UnsafeRef<SymbolEnv>;
 
+impl Debug for SymbolEnvRef {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		write!(f, "{:?}", &**self)
+	}
+}
+
 pub struct SymbolEnv {
 	// We use a BTreeMaps here so that we can iterate over the symbols in a deterministic order (snapshot tests)
-	pub(crate) symbol_map: BTreeMap<String, (StatementIdx, SymbolKind)>,
+	pub(crate) symbol_map: BTreeMap<String, SymbolEnvEntry>,
 	pub(crate) parent: Option<SymbolEnvRef>,
 
 	pub kind: SymbolEnvKind,
 
 	pub phase: Phase,
 	statement_idx: usize,
+}
+
+pub struct SymbolEnvEntry {
+	pub statement_idx: StatementIdx,
+	pub span: WingSpan,
+	pub access: AccessModifier,
+	pub kind: SymbolKind,
 }
 
 pub enum SymbolEnvKind {
@@ -41,8 +54,8 @@ impl Display for SymbolEnv {
 		loop {
 			write!(f, "level {}: {{ ", level.to_string().bold())?;
 			let mut items = vec![];
-			for (name, (_, kind)) in &env.symbol_map {
-				let repr = match kind {
+			for (name, entry) in &env.symbol_map {
+				let repr = match &entry.kind {
 					SymbolKind::Type(t) => format!("{} [type]", t).red(),
 					SymbolKind::Variable(v) => format!("{}", v.type_).blue(),
 					SymbolKind::Namespace(ns) => format!("{} [namespace]", ns.name).green(),
@@ -66,8 +79,12 @@ impl Display for SymbolEnv {
 
 impl Debug for SymbolEnv {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut symbols_with_access_modifiers: Vec<(String, AccessModifier)> = vec![];
+		for (name, entry) in &self.symbol_map {
+			symbols_with_access_modifiers.push((name.clone(), entry.access));
+		}
 		f.debug_struct("SymbolEnv")
-			.field("symbols", &self.symbol_map.keys())
+			.field("symbols", &symbols_with_access_modifiers)
 			.field("phase", &self.phase)
 			.finish()
 	}
@@ -84,20 +101,24 @@ pub enum StatementIdx {
 }
 
 /// Possible results for a symbol lookup in the environment
-#[derive(Debug)]
 #[duplicate_item(
 	LookupResult reference(lifetime, type) SymbolLookupInfo;
 	[LookupResult] [& 'lifetime type] [SymbolLookupInfo];
 	[LookupResultMut] [& 'lifetime mut type] [SymbolLookupInfoMut];
 )]
+#[derive(Debug)]
 pub enum LookupResult<'a> {
 	/// The kind of symbol and useful metadata associated with its lookup
 	Found(reference([a], [SymbolKind]), SymbolLookupInfo),
+	/// A matching symbol was found but it's not public
+	NotPublic(reference([a], [SymbolKind]), SymbolLookupInfo),
 	/// The symbol was not found in the environment, contains the name of the symbol or part of it that was not found
 	NotFound(Symbol),
+	/// A symbol with a matching name was found in multiple environments.
+	MultipleFound,
 	/// The symbol exists in the environment but it's not defined yet (based on the statement
 	/// index passed to the lookup)
-	DefinedLater,
+	DefinedLater(WingSpan),
 	/// Expected a namespace in a nested lookup but found a different kind of symbol
 	ExpectedNamespace(Symbol),
 }
@@ -111,8 +132,10 @@ impl<'a> LookupResult<'a> {
 	pub fn unwrap(self) -> (reference([a], [SymbolKind]), SymbolLookupInfo) {
 		match self {
 			LookupResult::Found(kind, info) => (kind, info),
+			LookupResult::NotPublic(x, _) => panic!("LookupResult::unwrap({x}) called on LookupResult::NotPublic"),
 			LookupResult::NotFound(x) => panic!("LookupResult::unwrap({x}) called on LookupResult::NotFound"),
-			LookupResult::DefinedLater => panic!("LookupResult::unwrap() called on LookupResult::DefinedLater"),
+			LookupResult::MultipleFound => panic!("LookupResult::unwrap() called on LookupResult::MultipleFound"),
+			LookupResult::DefinedLater(_) => panic!("LookupResult::unwrap() called on LookupResult::DefinedLater"),
 			LookupResult::ExpectedNamespace(symbol) => panic!(
 				"LookupResult::unwrap() called on LookupResult::ExpectedNamespace({:?})",
 				symbol
@@ -135,18 +158,23 @@ impl<'a> LookupResult<'a> {
 	}
 }
 
-#[derive(Derivative)]
-#[derivative(Debug)]
 #[duplicate_item(
 	SymbolLookupInfo SymbolEnvRef;
 	[SymbolLookupInfo] [SymbolEnvRef];
 	[SymbolLookupInfoMut] [()];
 )]
+#[derive(Derivative)]
+#[derivative(Debug)]
 pub struct SymbolLookupInfo {
 	/// The phase the symbol was defined in
 	pub phase: Phase,
 	/// Whether the symbol was defined in an `init`'s environment
 	pub init: bool,
+
+	/// The original span of the symbol when first defined
+	pub span: WingSpan,
+
+	pub access: AccessModifier,
 
 	/// The environment in which this symbol is defined.
 	#[derivative(Debug = "ignore")]
@@ -206,15 +234,33 @@ impl SymbolEnv {
 		std::ptr::eq(other, self)
 	}
 
-	pub fn define(&mut self, symbol: &Symbol, kind: SymbolKind, pos: StatementIdx) -> Result<(), TypeError> {
+	pub fn define(
+		&mut self,
+		symbol: &Symbol,
+		kind: SymbolKind,
+		access: AccessModifier,
+		pos: StatementIdx,
+	) -> Result<(), TypeError> {
 		if self.symbol_map.contains_key(&symbol.name) {
 			return Err(TypeError {
 				span: symbol.span.clone(),
 				message: format!("Symbol \"{}\" already defined in this scope", symbol.name),
+				annotations: vec![DiagnosticAnnotation {
+					message: "previous definition".to_string(),
+					span: self.symbol_map[&symbol.name].span.clone(),
+				}],
 			});
 		}
 
-		self.symbol_map.insert(symbol.name.clone(), (pos, kind));
+		self.symbol_map.insert(
+			symbol.name.clone(),
+			SymbolEnvEntry {
+				statement_idx: pos,
+				span: symbol.span.clone(),
+				access,
+				kind,
+			},
+		);
 
 		Ok(())
 	}
@@ -249,25 +295,27 @@ impl SymbolEnv {
 	/// cannot be a nested symbol (e.g. `foo.bar`), use `lookup_nested` for that.
 	/// TODO: perhaps make this private and switch to the nested version in all external calls
 	pub fn lookup_ext(self: reference([Self]), symbol: &Symbol, not_after_stmt_idx: Option<usize>) -> LookupResult {
-		if let Some((definition_idx, kind)) = self.symbol_map.map_get(&symbol.name) {
+		if let Some(entry) = self.symbol_map.map_get(&symbol.name) {
 			// if found the symbol and it is defined before the statement index (or statement index is
 			// unspecified, which is likely not something we want to support), we found it
 			let lookup_index = not_after_stmt_idx.unwrap_or(usize::MAX);
-			let definition_idx = match definition_idx {
+			let definition_idx = match entry.statement_idx {
 				StatementIdx::Top => 0,
-				StatementIdx::Index(idx) => *idx,
+				StatementIdx::Index(idx) => idx,
 			};
 
 			if lookup_index < definition_idx {
-				return LookupResult::DefinedLater;
+				return LookupResult::DefinedLater(entry.span.clone());
 			}
 
 			return LookupResult::Found(
-				kind,
+				reference([entry.kind]),
 				SymbolLookupInfo {
 					phase: self.phase,
 					init: matches!(self.kind, SymbolEnvKind::Function { is_init: true, .. }),
+					access: entry.access,
 					env: get_ref,
+					span: entry.span.clone(),
 				},
 			);
 		}
@@ -283,9 +331,9 @@ impl SymbolEnv {
 
 	#[allow(clippy::needless_arbitrary_self_type)]
 	#[duplicate_item(
-		lookup_nested LookupResult lookup_ext as_namespace reference(type) SymbolLookupInfo;
-		[lookup_nested] [LookupResult] [lookup_ext] [as_namespace] [& type] [SymbolLookupInfo];
-		[lookup_nested_mut] [LookupResultMut] [lookup_ext_mut] [as_namespace_mut] [&mut type] [SymbolLookupInfoMut];
+		lookup_nested LookupResult lookup_ext as_namespace reference(type) SymbolLookupInfo vec_iter;
+		[lookup_nested] [LookupResult] [lookup_ext] [as_namespace] [& type] [SymbolLookupInfo] [iter];
+		[lookup_nested_mut] [LookupResultMut] [lookup_ext_mut] [as_namespace_mut] [&mut type] [SymbolLookupInfoMut] [iter_mut];
 	)]
 	/// Lookup a symbol in the environment, returning a `LookupResult`. The symbol name may be a
 	/// nested symbol (e.g. `foo.bar`) if `nested_vec` is larger than 1.
@@ -318,14 +366,60 @@ impl SymbolEnv {
 				return LookupResult::ExpectedNamespace(prev_symb.clone());
 			};
 
-			let lookup_result = ns.env.lookup_ext(next_symb, statement_idx);
-			prev_symb = *next_symb;
+			// Look up the result in each env. If there are multiple results, throw a special error
+			// otherwise proceed normally
+			let mut lookup_result = LookupResult::NotFound((*next_symb).clone());
+			for env in ns.envs.vec_iter() {
+				// invariant: lookup_result is never "ExpectedNamespace" or "MultipleFound"
 
-			if let LookupResult::Found(k, i) = lookup_result {
-				res = (k, i);
-			} else {
-				return lookup_result;
+				// We're looking up a symbol in a namespace other than our own, so we need to
+				// check if the symbol is public or not. If it's not, replace a "Found" result
+				// with a "NotPublic" result.
+				let partial_result = match env.lookup_ext(next_symb, statement_idx) {
+					LookupResult::Found(kind, info) => match info.access {
+						AccessModifier::Public => LookupResult::Found(kind, info),
+						_ => LookupResult::NotPublic(kind, info),
+					},
+					result => result,
+				};
+
+				// if the current result was "Found" or "DefinedLater", and the partial result
+				// was "Found" or "DefinedLater", then we have multiple valid results
+				if (matches!(partial_result, LookupResult::Found(_, _))
+					|| matches!(partial_result, LookupResult::DefinedLater(_)))
+					&& (matches!(lookup_result, LookupResult::Found(_, _))
+						|| matches!(lookup_result, LookupResult::DefinedLater(_)))
+				{
+					return LookupResult::MultipleFound;
+				}
+
+				// if the current result was "NotPublic" or "NotFound" but we got a
+				// "Found" or "DefinedLater" partial result, then report that instead
+				#[allow(clippy::if_same_then_else)]
+				if (matches!(partial_result, LookupResult::Found(_, _))
+					|| matches!(partial_result, LookupResult::DefinedLater(_)))
+					&& (matches!(lookup_result, LookupResult::NotPublic(_, _))
+						|| matches!(lookup_result, LookupResult::NotFound(_)))
+				{
+					lookup_result = partial_result;
+				}
+				// if we found a symbol but it wasn't public, we can update our
+				// result if we're currently "NotFound". "Found", "DefinedLater", and any
+				// existing "NotPublic" results take precedence.
+				else if (matches!(partial_result, LookupResult::NotPublic(_, _)))
+					&& (matches!(lookup_result, LookupResult::NotFound(_)))
+				{
+					lookup_result = partial_result;
+				}
 			}
+			match lookup_result {
+				LookupResult::Found(k, i) => {
+					res = (k, i);
+				}
+				r => return r,
+			}
+
+			prev_symb = *next_symb;
 		}
 		let (kind, lookup_info) = res;
 		LookupResult::Found(kind, lookup_info)
@@ -359,7 +453,7 @@ impl SymbolEnv {
 pub struct SymbolEnvIter<'a> {
 	seen_keys: HashSet<String>,
 	curr_env: &'a SymbolEnv,
-	curr_pos: btree_map::Iter<'a, String, (StatementIdx, SymbolKind)>,
+	curr_pos: btree_map::Iter<'a, String, SymbolEnvEntry>,
 	with_ancestry: bool,
 }
 
@@ -378,18 +472,20 @@ impl<'a> Iterator for SymbolEnvIter<'a> {
 	type Item = (String, &'a SymbolKind, SymbolLookupInfo);
 
 	fn next(&mut self) -> Option<Self::Item> {
-		if let Some((name, (_, kind))) = self.curr_pos.next() {
+		if let Some((name, entry)) = self.curr_pos.next() {
 			if self.seen_keys.contains(name) {
 				self.next()
 			} else {
 				self.seen_keys.insert(name.clone());
 				Some((
 					name.clone(),
-					kind,
+					&entry.kind,
 					SymbolLookupInfo {
 						phase: self.curr_env.phase,
 						init: matches!(self.curr_env.kind, SymbolEnvKind::Function { is_init: true, .. }),
+						access: entry.access,
 						env: self.curr_env.get_ref(),
+						span: entry.span.clone(),
 					},
 				))
 			}
@@ -410,10 +506,10 @@ impl<'a> Iterator for SymbolEnvIter<'a> {
 #[cfg(test)]
 mod tests {
 	use crate::{
-		ast::{Phase, Symbol},
+		ast::{AccessModifier, Phase, Symbol},
 		type_check::{
 			symbol_env::{LookupResult, SymbolEnvKind},
-			Namespace, SymbolKind, Types,
+			Namespace, ResolveSource, SymbolKind, Types,
 		},
 	};
 
@@ -441,6 +537,7 @@ mod tests {
 			parent_env.define(
 				&sym,
 				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
+				AccessModifier::Private,
 				StatementIdx::Top,
 			),
 			Ok(())
@@ -452,6 +549,7 @@ mod tests {
 			parent_env.define(
 				&sym,
 				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
+				AccessModifier::Private,
 				StatementIdx::Index(child_scope_idx - 1),
 			),
 			Ok(())
@@ -464,6 +562,7 @@ mod tests {
 			parent_env.define(
 				&sym,
 				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
+				AccessModifier::Private,
 				StatementIdx::Index(parent_high_pos_var_idx),
 			),
 			Ok(())
@@ -475,6 +574,7 @@ mod tests {
 			child_env.define(
 				&sym,
 				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
+				AccessModifier::Private,
 				StatementIdx::Top,
 			),
 			Ok(())
@@ -507,7 +607,7 @@ mod tests {
 		// Lookup positionally visible variable using an index before it's defined
 		assert!(matches!(
 			parent_env.lookup_nested_str("parent_high_pos_var", Some(parent_high_pos_var_idx - 1)),
-			LookupResult::DefinedLater
+			LookupResult::DefinedLater(_)
 		));
 
 		// Lookup a globally visible parent var in the child env with a low statement index
@@ -525,7 +625,7 @@ mod tests {
 		// Lookup a positionally visible parent var defined after the child scope in the child env using a low statement index
 		assert!(matches!(
 			child_env.lookup_nested_str("parent_high_pos_var", Some(0)),
-			LookupResult::DefinedLater
+			LookupResult::DefinedLater(_)
 		));
 
 		// Lookup for a child var in the parent env
@@ -553,32 +653,44 @@ mod tests {
 		);
 
 		// Create namespaces
+		let mut ns1_env = types.add_symbol_env(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Independent, 0));
+		let mut ns2_env = types.add_symbol_env(SymbolEnv::new(
+			Some(ns1_env),
+			SymbolEnvKind::Scope,
+			Phase::Independent,
+			0,
+		));
 		let ns1 = types.add_namespace(Namespace {
 			name: "ns1".to_string(),
-			env: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Independent, 0),
+			envs: vec![ns1_env],
 			loaded: false,
+			module_path: ResolveSource::WingFile,
 		});
 		let ns2 = types.add_namespace(Namespace {
 			name: "ns2".to_string(),
-			env: SymbolEnv::new(Some(ns1.env.get_ref()), SymbolEnvKind::Scope, Phase::Independent, 0),
+			envs: vec![ns2_env],
 			loaded: false,
+			module_path: ResolveSource::WingFile,
 		});
 
 		// Define ns2 in n1's env
 		assert!(matches!(
-			ns1
-				.env
-				.get_ref()
-				.define(&Symbol::global("ns2"), SymbolKind::Namespace(ns2), StatementIdx::Top),
+			ns1_env.define(
+				&Symbol::global("ns2"),
+				SymbolKind::Namespace(ns2),
+				AccessModifier::Public,
+				StatementIdx::Top
+			),
 			Ok(())
 		));
 
 		// Define a variable in n2's env
 		let sym = Symbol::global("ns2_var");
 		assert!(matches!(
-			ns2.env.get_ref().define(
+			ns2_env.define(
 				&sym,
 				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
+				AccessModifier::Public,
 				StatementIdx::Top,
 			),
 			Ok(())
@@ -587,9 +699,10 @@ mod tests {
 		// Define a variable in n1's env
 		let sym = Symbol::global("ns1_var");
 		assert!(matches!(
-			ns1.env.get_ref().define(
+			ns1_env.define(
 				&sym,
 				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
+				AccessModifier::Public,
 				StatementIdx::Top,
 			),
 			Ok(())
@@ -597,7 +710,12 @@ mod tests {
 
 		// Define the namesapces in the parent env
 		assert!(matches!(
-			parent_env.define(&Symbol::global("ns1"), SymbolKind::Namespace(ns1), StatementIdx::Top),
+			parent_env.define(
+				&Symbol::global("ns1"),
+				SymbolKind::Namespace(ns1),
+				AccessModifier::Public,
+				StatementIdx::Top
+			),
 			Ok(())
 		));
 

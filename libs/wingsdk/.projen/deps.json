@@ -205,6 +205,11 @@
       "type": "bundled"
     },
     {
+      "name": "@aws-sdk/s3-request-presigner",
+      "version": "3.405.0",
+      "type": "bundled"
+    },
+    {
       "name": "@aws-sdk/types",
       "version": "3.398.0",
       "type": "bundled"
@@ -282,6 +287,11 @@
       "type": "bundled"
     },
     {
+      "name": "mime",
+      "version": "^3.0.0",
+      "type": "bundled"
+    },
+    {
       "name": "nanoid",
       "version": "^3.3.6",
       "type": "bundled"
@@ -292,6 +302,10 @@
     },
     {
       "name": "uuid",
+      "type": "bundled"
+    },
+    {
+      "name": "yaml",
       "type": "bundled"
     },
     {

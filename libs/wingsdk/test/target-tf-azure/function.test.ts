@@ -9,7 +9,11 @@ const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
 
 test("basic function", () => {
   // GIVEN
-  const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
+  const app = new tfazure.App({
+    outdir: mkdtemp(),
+    location: "East US",
+    entrypointDir: __dirname,
+  });
   const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
 
   // WHEN
@@ -18,6 +22,7 @@ test("basic function", () => {
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
+    "azurerm_application_insights",
     "azurerm_linux_function_app", // function app
     "azurerm_resource_group", // resource group
     "azurerm_role_assignment", // role assignment for function app
@@ -32,7 +37,11 @@ test("basic function", () => {
 
 test("basic function with environment variables", () => {
   // GIVEN
-  const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
+  const app = new tfazure.App({
+    outdir: mkdtemp(),
+    location: "East US",
+    entrypointDir: __dirname,
+  });
   const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
 
   // WHEN
@@ -63,7 +72,11 @@ test("basic function with environment variables", () => {
 
 test("permissions resources are added to function after constructor has been initialized", () => {
   // GIVEN
-  const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
+  const app = new tfazure.App({
+    outdir: mkdtemp(),
+    location: "East US",
+    entrypointDir: __dirname,
+  });
   const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   const func = new tfazure.Function(app, "Function", inflight, {});
 
@@ -88,7 +101,11 @@ test("permissions resources are added to function after constructor has been ini
 
 test("replace invalid character from function name", () => {
   // GIVEN
-  const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
+  const app = new tfazure.App({
+    outdir: mkdtemp(),
+    location: "East US",
+    entrypointDir: __dirname,
+  });
   const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
 
   // WHEN

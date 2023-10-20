@@ -10,14 +10,16 @@ use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, collections::BTreeMap, v
 
 use crate::{
 	ast::{
-		ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, ElifLetBlock, Expr, ExprKind,
-		FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt,
-		StmtKind, Symbol, UnaryOperator, UserDefinedType,
+		AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, ElifLetBlock,
+		Expr, ExprKind, FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, Literal, New, Phase, Reference,
+		Scope, Stmt, StmtKind, Symbol, UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
-	dbg_panic, debug,
+	dbg_panic,
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
+	file_graph::FileGraph,
 	files::Files,
+	parser::is_entrypoint_file,
 	type_check::{
 		is_udt_struct_type,
 		lifts::{Liftable, Lifts},
@@ -68,10 +70,9 @@ pub struct JSifier<'a> {
 	/// e.g. "bucket.w" -> "preflight.bucket-1.js"
 	preflight_file_map: RefCell<IndexMap<Utf8PathBuf, String>>,
 	source_files: &'a Files,
-	/// Root of the project, used for resolving extern modules
-	absolute_project_root: &'a Utf8Path,
-	/// The entrypoint file of the Wing application.
-	entrypoint_file_path: &'a Utf8Path,
+	source_file_graph: &'a FileGraph,
+	/// The path that compilation started at (file or directory)
+	compilation_init_path: &'a Utf8Path,
 }
 
 /// Preflight classes have two types of host binding methods:
@@ -86,15 +87,15 @@ impl<'a> JSifier<'a> {
 	pub fn new(
 		types: &'a mut Types,
 		source_files: &'a Files,
-		entrypoint_file_path: &'a Utf8Path,
-		absolute_project_root: &'a Utf8Path,
+		source_file_graph: &'a FileGraph,
+		compilation_init_path: &'a Utf8Path,
 	) -> Self {
 		let output_files = Files::default();
 		Self {
 			types,
 			source_files,
-			entrypoint_file_path,
-			absolute_project_root,
+			source_file_graph,
+			compilation_init_path,
 			referenced_struct_schemas: RefCell::new(BTreeMap::new()),
 			inflight_file_counter: RefCell::new(0),
 			inflight_file_map: RefCell::new(IndexMap::new()),
@@ -137,9 +138,13 @@ impl<'a> JSifier<'a> {
 
 		let mut output = CodeMaker::default();
 
-		let is_entrypoint_file = source_path == self.entrypoint_file_path;
+		let is_compilation_init = source_path == self.compilation_init_path;
+		let is_entrypoint = is_entrypoint_file(source_path);
+		let is_directory = source_path.is_dir();
 
-		if is_entrypoint_file {
+		output.line("\"use strict\";");
+
+		if is_entrypoint {
 			output.line(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
 			output.line(format!(
 				"const {} = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);",
@@ -158,7 +163,7 @@ impl<'a> JSifier<'a> {
 		output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
 		output.add_code(imports);
 
-		if is_entrypoint_file {
+		if is_entrypoint {
 			let mut root_class = CodeMaker::default();
 			root_class.open(format!("class {} extends {} {{", ROOT_CLASS, STDLIB_CORE_RESOURCE));
 			root_class.open(format!("{JS_CONSTRUCTOR}(scope, id) {{"));
@@ -170,12 +175,42 @@ impl<'a> JSifier<'a> {
 
 			output.add_code(root_class);
 			output.line("const $App = $stdlib.core.App.for(process.env.WING_TARGET);".to_string());
-			let app_name = self.entrypoint_file_path.file_stem().unwrap();
+			let app_name = source_path.file_stem().unwrap();
 			output.line(format!(
 				"new $App({{ outdir: {}, name: \"{}\", rootConstruct: {}, plugins: {}, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }}).synth();",
 				OUTDIR_VAR, app_name, ROOT_CLASS, PLUGINS_VAR, ENV_WING_IS_TEST
 			));
+		} else if is_directory {
+			let directory_children = self.source_file_graph.dependencies_of(source_path);
+			let preflight_file_map = self.preflight_file_map.borrow();
+
+			// supposing a directory has two files and two subdirectories in it,
+			// we generate code like this:
+			// ```
+			// return {
+			//   inner_directory1: require("./preflight.inner-directory1.js")({ $stdlib }),
+			//   inner_directory2: require("./preflight.inner-directory2.js")({ $stdlib }),
+			//   ...require("./preflight.inner-file1.js")({ $stdlib }),
+			//   ...require("./preflight.inner-file2.js")({ $stdlib }),
+			// };
+			// ```
+			output.open("return {");
+			for file in directory_children {
+				let preflight_file_name = preflight_file_map.get(file).expect("no emitted JS file found");
+				if file.is_dir() {
+					let directory_name = file.file_stem().unwrap();
+					output.line(format!(
+						"{}: require(\"./{}\")({{ {} }}),",
+						directory_name, preflight_file_name, STDLIB
+					));
+				} else {
+					output.line(format!("...require(\"./{}\")({{ {} }}),", preflight_file_name, STDLIB));
+				}
+			}
+			output.close("};");
+			output.close("};");
 		} else {
+			output.add_code(self.jsify_struct_schemas());
 			output.add_code(js);
 			let exports = get_public_symbols(&scope);
 			output.line(format!(
@@ -186,7 +221,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		// Generate a name for the JS file this preflight code will be written to
-		let preflight_file_name = if is_entrypoint_file {
+		let preflight_file_name = if is_compilation_init {
 			PREFLIGHT_FILE_NAME.to_string()
 		} else {
 			// remove all non-alphanumeric characters
@@ -367,6 +402,7 @@ impl<'a> JSifier<'a> {
 					report_diagnostic(Diagnostic {
 						message: "Cannot reference an inflight value from within a preflight expression".to_string(),
 						span: Some(expression.span.clone()),
+						annotations: vec![],
 					});
 
 					return "<ERROR>".to_string();
@@ -379,8 +415,8 @@ impl<'a> JSifier<'a> {
 			_ => "",
 		};
 		match &expression.kind {
-			ExprKind::New(new_expr) => {
-				let NewExpr { class, obj_id, arg_list, obj_scope } = new_expr;
+			ExprKind::New(new) => {
+				let New { class, obj_id, arg_list, obj_scope } = new;
 
 				let expression_type = self.types.get_expr_type(&expression);
 				let is_preflight_class = expression_type.is_preflight_class();
@@ -427,7 +463,13 @@ impl<'a> JSifier<'a> {
 						format!("this.node.root.new(\"{}\",{},{})", fqn, ctor, args)
 					}
 				} else {
-					format!("new {}({})", ctor, args)
+					// If we're inflight and this new expression evaluates to a type with an inflight init (that's not empty)
+					// make sure it's called before we return the object.
+					if ctx.visit_ctx.current_phase() == Phase::Inflight && expression_type.as_class().expect("a class").get_method(&Symbol::global(CLASS_INFLIGHT_INIT_NAME)).is_some() {
+						format!("(await (async () => {{const o = new {ctor}(); await o.{CLASS_INFLIGHT_INIT_NAME}?.({args}); return o; }})())")
+					} else {
+						format!("new {}({})", ctor, args)
+					}
 				}
 			}
 			ExprKind::Literal(lit) => match lit {
@@ -532,7 +574,7 @@ impl<'a> JSifier<'a> {
 						};
 						let patterns = &[MACRO_REPLACE_SELF, MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT];
 						let replace_with = &[self_string, args_string, args_text_string];
-						let ac = AhoCorasick::new(patterns);
+						let ac = AhoCorasick::new(patterns).expect("Failed to create macro pattern");
 						return ac.replace_all(js_override, replace_with);
 					}
 				}
@@ -734,7 +776,29 @@ impl<'a> JSifier<'a> {
 					identifier.as_ref().expect("bring jsii module requires an alias"),
 					name
 				)),
+				BringSource::WingLibrary(_, module_dir) => {
+					let preflight_file_map = self.preflight_file_map.borrow();
+					let preflight_file_name = preflight_file_map.get(module_dir).unwrap();
+					CodeMaker::one_line(format!(
+						"const {} = require(\"./{}\")({{ {} }});",
+						// checked during type checking
+						identifier.as_ref().expect("bring wing file requires an alias"),
+						preflight_file_name,
+						STDLIB,
+					))
+				}
 				BringSource::WingFile(name) => {
+					let preflight_file_map = self.preflight_file_map.borrow();
+					let preflight_file_name = preflight_file_map.get(Utf8Path::new(&name.name)).unwrap();
+					CodeMaker::one_line(format!(
+						"const {} = require(\"./{}\")({{ {} }});",
+						// checked during type checking
+						identifier.as_ref().expect("bring wing file requires an alias"),
+						preflight_file_name,
+						STDLIB,
+					))
+				}
+				BringSource::Directory(name) => {
 					let preflight_file_map = self.preflight_file_map.borrow();
 					let preflight_file_name = preflight_file_map.get(Utf8Path::new(&name.name)).unwrap();
 					CodeMaker::one_line(format!(
@@ -750,7 +814,7 @@ impl<'a> JSifier<'a> {
 				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
 				match ctx.visit_ctx.current_phase() {
 					Phase::Preflight => CodeMaker::one_line(format!("super(scope,id,{});", args)),
-					_ => CodeMaker::one_line(format!("super({});", args)),
+					_ => CodeMaker::one_line(format!("await super.{CLASS_INFLIGHT_INIT_NAME}?.({});", args)),
 				}
 			}
 			StmtKind::Let {
@@ -926,7 +990,7 @@ impl<'a> JSifier<'a> {
 				// Struct schemas are emitted before jsification phase
 				CodeMaker::default()
 			}
-			StmtKind::Enum { name, values } => {
+			StmtKind::Enum { name, values, .. } => {
 				let mut code = CodeMaker::default();
 				code.open(format!("const {name} ="));
 				code.add_code(self.jsify_enum(values));
@@ -1005,19 +1069,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		let (name, arrow) = match &func_def.name {
-			Some(name) => {
-				let mut result = name.name.clone();
-
-				// if this is an inflight class, we need to rename the constructor to "constructor" because
-				// it's "just a class" basically.
-				if let Some(class) = class {
-					if result == CLASS_INFLIGHT_INIT_NAME && class.phase == Phase::Inflight {
-						result = JS_CONSTRUCTOR.to_string();
-					}
-				}
-
-				(result, " ".to_string())
-			}
+			Some(name) => (name.name.clone(), " ".to_string()),
 			None => ("".to_string(), " => ".to_string()),
 		};
 
@@ -1029,25 +1081,8 @@ impl<'a> JSifier<'a> {
 				code.add_code(self.jsify_scope_body(scope, ctx));
 				code
 			}
-			FunctionBody::External(external_spec) => {
-				debug!(
-					"Resolving extern \"{}\" from \"{}\"",
-					external_spec, self.absolute_project_root
-				);
-				let resolved_path =
-					match wingii::node_resolve::resolve_from(&external_spec, Utf8Path::new(&self.absolute_project_root)) {
-						Ok(resolved_path) => resolved_path.to_string().replace("\\", "/"),
-						Err(err) => {
-							report_diagnostic(Diagnostic {
-								message: format!("Failed to resolve extern \"{external_spec}\": {err}"),
-								span: Some(func_def.span.clone()),
-							});
-							format!("/* unresolved: \"{external_spec}\" */")
-						}
-					};
-				CodeMaker::one_line(format!(
-					"return (require(\"{resolved_path}\")[\"{name}\"])({parameters})"
-				))
+			FunctionBody::External(file_path) => {
+				CodeMaker::one_line(format!("return (require(\"{file_path}\")[\"{name}\"])({parameters})"))
 			}
 		};
 		let mut prefix = vec![];
@@ -1136,7 +1171,7 @@ impl<'a> JSifier<'a> {
 		code.add_code(self.jsify_to_inflight_method(&class.name, ctx));
 		code.add_code(self.jsify_get_inflight_ops_method(&class));
 
-		// emit `_registerBindObject` to register bindings (for type & instance binds)
+		// emit `_registerOnLiftObject` to register bindings (for type & instance binds)
 		code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Instance, ctx));
 		code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Type, ctx));
 
@@ -1322,6 +1357,7 @@ impl<'a> JSifier<'a> {
 			Default::default()
 		};
 
+		code.line("\"use strict\";");
 		code.open(format!("module.exports = function({{ {inputs} }}) {{"));
 		code.add_code(inflight_class_code);
 		code.line(format!("return {name};"));
@@ -1404,8 +1440,8 @@ impl<'a> JSifier<'a> {
 	) -> CodeMaker {
 		let mut bind_method = CodeMaker::default();
 		let (modifier, bind_method_name) = match bind_method_kind {
-			BindMethod::Type => ("static ", "_registerTypeBind"),
-			BindMethod::Instance => ("", "_registerBind"),
+			BindMethod::Type => ("static ", "_registerTypeOnLift"),
+			BindMethod::Instance => ("", "_registerOnLift"),
 		};
 
 		let class_name = class.name.to_string();
@@ -1442,7 +1478,7 @@ impl<'a> JSifier<'a> {
 				let ops_strings = method_lift_qual.ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
 
 				bind_method.line(format!(
-					"{class_name}._registerBindObject({code}, host, [{ops_strings}]);",
+					"{class_name}._registerOnLiftObject({code}, host, [{ops_strings}]);",
 				));
 			}
 			bind_method.close("}");
@@ -1486,13 +1522,19 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 			StmtKind::Assignment { .. } => {}
 			StmtKind::Scope(_) => {}
 			StmtKind::Class(class) => {
-				symbols.push(class.name.clone());
+				if class.access == AccessModifier::Public {
+					symbols.push(class.name.clone());
+				}
 			}
 			// interfaces are bringable, but there's nothing to emit
 			StmtKind::Interface(_) => {}
+			// structs are bringable, but we don't emit anything for them
+			// unless a static method is called on them
 			StmtKind::Struct { .. } => {}
-			StmtKind::Enum { name, .. } => {
-				symbols.push(name.clone());
+			StmtKind::Enum { name, access, .. } => {
+				if *access == AccessModifier::Public {
+					symbols.push(name.clone());
+				}
 			}
 			StmtKind::TryCatch { .. } => {}
 			StmtKind::CompilerDebugEnv => {}

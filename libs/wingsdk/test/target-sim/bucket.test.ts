@@ -133,7 +133,7 @@ test("put multiple json objects and list all from bucket", async () => {
   expect(listMessages(s)).toMatchSnapshot();
 });
 
-test("put and get objects from bucket", async () => {
+test("put and get object from bucket", async () => {
   // GIVEN
   const app = new SimApp();
   cloud.Bucket._newBucket(app, "my_bucket");
@@ -155,30 +155,68 @@ test("put and get objects from bucket", async () => {
   expect(listMessages(s)).toMatchSnapshot();
 });
 
-test("put and get Json object from bucket", async () => {
+test("put and get metadata of objects from bucket", async () => {
   // GIVEN
   const app = new SimApp();
   cloud.Bucket._newBucket(app, "my_bucket");
 
   const s = await app.startSimulator();
-  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
 
-  const KEY = "greeting.json";
-  const VALUE = { msg: "Hello world!" };
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+  const KEY1 = "file1.main.w";
+  const KEY2 = "file2.txt";
+  const KEY3 = "file3.txt";
+  const VALUE1 = "bring cloud;";
+  const VALUE2 = "hello world";
+  const VALUE3 = JSON.stringify({ msg: "hello world" });
+  const CONTENT_TYPE3 = "application/json";
 
   // WHEN
-
-  const notifyListeners = vi.spyOn(client as any, "notifyListeners");
-  await client.putJson(KEY, VALUE as any);
-  const response = await client.getJson("greeting.json");
+  await client.put(KEY1, VALUE1);
+  await client.put(KEY2, VALUE2);
+  await client.put(KEY3, VALUE3, { contentType: CONTENT_TYPE3 });
+  const response1 = await client.metadata("file1.main.w");
+  const response2 = await client.metadata("file2.txt");
+  const response3 = await client.metadata("file3.txt");
 
   // THEN
   await s.stop();
+  const currentYear = new Date().getFullYear();
 
-  expect(response).toEqual(VALUE);
+  expect(response1.size).toEqual(12);
+  expect(response1.contentType).toEqual("application/octet-stream");
+  expect(response1.lastModified.year).toEqual(currentYear);
+  expect(response2.size).toEqual(11);
+  expect(response2.contentType).toEqual("text/plain");
+  expect(response2.lastModified.year).toEqual(currentYear);
+  expect(response3.size).toEqual(21);
+  expect(response3.contentType).toEqual("application/json");
+  expect(response3.lastModified.year).toEqual(currentYear);
   expect(listMessages(s)).toMatchSnapshot();
-  expect(app.snapshot()).toMatchSnapshot();
-  expect(notifyListeners).toBeCalledWith(cloud.BucketEventType.CREATE, KEY);
+});
+
+test("putJson and get metadata of object from bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Bucket._newBucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+  const KEY = "json-file.txt";
+  const VALUE = "bring cloud;";
+
+  // WHEN
+  await client.putJson(KEY, VALUE as any);
+  const response = await client.metadata("json-file.txt");
+
+  // THEN
+  await s.stop();
+  const currentYear = new Date().getFullYear();
+
+  expect(response.size).toEqual(14);
+  expect(response.contentType).toEqual("application/json");
+  expect(response.lastModified.year).toEqual(currentYear);
 });
 
 test("put multiple objects and list all from bucket", async () => {
@@ -505,7 +543,7 @@ test("can add object in preflight", async () => {
 test("can add file in preflight", async () => {
   // GIVEN
   const FILENAME = "test.txt";
-  const PATH = resolve(__dirname, "../testFiles/test1.txt");
+  const PATH = resolve(__dirname, "../test-files/test1.txt");
 
   const app = new SimApp();
   const bucket = cloud.Bucket._newBucket(app, "my_bucket");
@@ -705,3 +743,51 @@ test("tryDelete objects from bucket", async () => {
   expect(existingObject2TryDelete).toEqual(true);
   expect(nonExistentObjectTryDelete).toEqual(false);
 });
+
+// Deceided to seperate this feature in a different release,(see https://github.com/winglang/wing/issues/4143)
+
+// test("Given a bucket when reaching to a non existent key, signed url it should throw an error", async () => {
+//   //GIVEN
+//   let error;
+//   const app = new SimApp();
+//   cloud.Bucket._newBucket(app, "my_bucket", { public: true });
+
+//   const s = await app.startSimulator();
+//   const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+//   const KEY = "KEY";
+
+//   // WHEN
+//   try {
+//     await client.signedUrl(KEY);
+//   } catch (err) {
+//     error = err;
+//   }
+
+//   expect(error?.message).toBe(
+//     "Cannot provide signed url for an non-existent key (key=${KEY})"
+//   );
+//   // THEN
+//   await s.stop();
+// });
+
+// test("Given a bucket, when giving one of its keys, we should get it's signed url", async () => {
+//   // GIVEN
+//   const app = new SimApp();
+//   cloud.Bucket._newBucket(app, "my_bucket", { public: true });
+
+//   const s = await app.startSimulator();
+//   const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+//   const KEY = "KEY";
+//   const VALUE = "VALUE";
+
+//   // WHEN
+//   await client.put(KEY, VALUE);
+//   const response = await client.signedUrl(KEY);
+
+//   // THEN
+//   await s.stop();
+//   const filePath = `${client.fileDir}/${KEY}`;
+//   expect(response).toEqual(url.pathToFileURL(filePath).searchParams.append("Expires","86400"));
+// });

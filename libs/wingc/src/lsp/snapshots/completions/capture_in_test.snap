@@ -6,14 +6,14 @@ source: libs/wingc/src/lsp/completions.rs
   detail: Node
   documentation:
     kind: markdown
-    value: "```wing\npreflight node: Node\n```\n---\nThe tree node."
+    value: "```wing\npreflight node: Node\nclass Node\n```\n---\nRepresents the construct node in the scope tree.\n\n### Initializer\n- `host` — `Construct`\n- `scope` — `IConstruct`\n- `id` — `str`\n### Fields\n- `PATH_SEP` — `str` — Separator used to delimit construct path components.\n- `addr` — `str` — Returns an opaque tree-unique address for this construct.\n- `children` — `Array<IConstruct>` — All direct children of this construct.\n- `dependencies` — `Array<IConstruct>` — Return all dependencies registered on this node (non-recursive).\n- `id` — `str` — The id of this construct within the current scope.\n- `locked` — `bool` — Returns true if this construct or the scopes in which it is defined are locked.\n- `metadata` — `Array<MetadataEntry>` — An immutable array of metadata objects associated with this construct.\n- `path` — `str` — The full, absolute path of this construct in the tree.\n- `root` — `IConstruct` — Returns the root of the construct tree.\n- `scopes` — `Array<IConstruct>` — All parent scopes of this construct.\n- `defaultChild?` — `IConstruct?` — Returns the child construct that has the id `Default` or `Resource\"`.\n- `scope?` — `IConstruct?` — Returns the scope in which this construct is defined.\n### Methods\n- `addDependency` — `(deps: Array<IDependable>?): void` — Add an ordering dependency on another construct.\n- `addMetadata` — `(type: str, data: any, options: MetadataOptions?): void` — Adds a metadata entry to this construct.\n- `addValidation` — `(validation: IValidation): void` — Adds a validation to this construct.\n- `findAll` — `(order: ConstructOrder?): Array<IConstruct>` — Return this construct and all of its children in the given order.\n- `findChild` — `(id: str): IConstruct` — Return a direct child by id.\n- `getContext` — `(key: str): any` — Retrieves a value from tree context if present. Otherwise, would throw an error.\n- `lock` — `(): void` — Locks this construct from allowing more children to be added.\n- `of` — `(construct: IConstruct): Node` — Returns the node associated with a construct.\n- `setContext` — `(key: str, value: any): void` — This can be used to set contextual values.\n- `tryFindChild` — `(id: str): IConstruct?` — Return a direct child by id, or undefined.\n- `tryGetContext` — `(key: str): any` — Retrieves a value from tree context.\n- `tryRemoveChild` — `(childName: str): bool` — Remove the child with the given name, if present.\n- `validate` — `(): Array<str>` — Validates this construct."
   sortText: ab|node
 - label: delete
   kind: 2
   detail: "inflight (key: str, opts: BucketDeleteOptions?): void"
   documentation:
     kind: markdown
-    value: "```wing\ninflight delete: inflight (key: str, opts: BucketDeleteOptions?): void\n```\n---\nDelete an existing object using a key from the bucket."
+    value: "```wing\ninflight delete: inflight (key: str, opts: BucketDeleteOptions?): void\n```\n---\nDelete an existing object using a key from the bucket.\n### Parameters\n- `key` — `str` — Key of the object.\n- `...opts` — `BucketDeleteOptions?` — Options available for delete an item from a bucket.\n  \n  - `mustExist?` — `bool?` — Check failures on the method and retrieve errors if any."
   sortText: ff|delete
   insertText: delete($0)
   insertTextFormat: 2
@@ -25,7 +25,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "inflight (key: str): bool"
   documentation:
     kind: markdown
-    value: "```wing\ninflight exists: inflight (key: str): bool\n```\n---\nCheck if an object exists in the bucket."
+    value: "```wing\ninflight exists: inflight (key: str): bool\n```\n---\nCheck if an object exists in the bucket.\n### Parameters\n- `key` — `str` — Key of the object."
   sortText: ff|exists
   insertText: exists($0)
   insertTextFormat: 2
@@ -37,7 +37,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "inflight (key: str): str"
   documentation:
     kind: markdown
-    value: "```wing\ninflight get: inflight (key: str): str\n```\n---\nRetrieve an object from the bucket.\n\n\n*@Returns* *the object's body.*\n*@Throws* *if no object with the given key exists.*"
+    value: "```wing\ninflight get: inflight (key: str): str\n```\n---\nRetrieve an object from the bucket.\n### Parameters\n- `key` — `str` — Key of the object.\n\n*@Returns* *the object's body.*\n*@Throws* *if no object with the given key exists.*"
   sortText: ff|get
   insertText: get($0)
   insertTextFormat: 2
@@ -49,7 +49,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "inflight (key: str): Json"
   documentation:
     kind: markdown
-    value: "```wing\ninflight getJson: inflight (key: str): Json\n```\n---\nRetrieve a Json object from the bucket.\n\n\n*@Returns* *the object's parsed Json.*\n*@Throws* *if no object with the given key exists.*"
+    value: "```wing\ninflight getJson: inflight (key: str): Json\n```\n---\nRetrieve a Json object from the bucket.\n### Parameters\n- `key` — `str` — Key of the object.\n\n*@Returns* *the object's parsed Json.*\n*@Throws* *if no object with the given key exists.*"
   sortText: ff|getJson
   insertText: getJson($0)
   insertTextFormat: 2
@@ -61,9 +61,21 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "inflight (prefix: str?): Array<str>"
   documentation:
     kind: markdown
-    value: "```wing\ninflight list: inflight (prefix: str?): Array<str>\n```\n---\nRetrieve existing objects keys from the bucket.\n\n\n### Returns\na list of keys or an empty array if the bucket is empty."
+    value: "```wing\ninflight list: inflight (prefix: str?): Array<str>\n```\n---\nRetrieve existing objects keys from the bucket.\n### Parameters\n- `prefix` — `str?` — Limits the response to keys that begin with the specified prefix.\n\n### Returns\na list of keys or an empty array if the bucket is empty."
   sortText: ff|list
   insertText: list($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: metadata
+  kind: 2
+  detail: "inflight (key: str): ObjectMetadata"
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight metadata: inflight (key: str): ObjectMetadata\n```\n---\nGet the metadata of an object in the bucket.\n### Parameters\n- `key` — `str` — Key of the object.\n\n*@Throws* *if there is no object with the given key.*"
+  sortText: ff|metadata
+  insertText: metadata($0)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -73,7 +85,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "inflight (key: str): str"
   documentation:
     kind: markdown
-    value: "```wing\ninflight publicUrl: inflight (key: str): str\n```\n---\nReturns a url to the given file.\n\n\n*@Throws* *if the file is not public or if object does not exist.*"
+    value: "```wing\ninflight publicUrl: inflight (key: str): str\n```\n---\nReturns a url to the given file.\n### Parameters\n- `key` — `str`\n\n*@Throws* *if the file is not public or if object does not exist.*"
   sortText: ff|publicUrl
   insertText: publicUrl($0)
   insertTextFormat: 2
@@ -82,10 +94,10 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: put
   kind: 2
-  detail: "inflight (key: str, body: str): void"
+  detail: "inflight (key: str, body: str, options: BucketPutOptions?): void"
   documentation:
     kind: markdown
-    value: "```wing\ninflight put: inflight (key: str, body: str): void\n```\n---\nPut an object in the bucket."
+    value: "```wing\ninflight put: inflight (key: str, body: str, options: BucketPutOptions?): void\n```\n---\nPut an object in the bucket.\n### Parameters\n- `key` — `str` — Key of the object.\n- `body` — `str` — Content of the object we want to store into the bucket.\n- `...options` — `BucketPutOptions?` — Additional options.\n  \n  - `contentType` — `str` — The HTTP Content-Type of the object."
   sortText: ff|put
   insertText: put($0)
   insertTextFormat: 2
@@ -97,9 +109,21 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "inflight (key: str, body: Json): void"
   documentation:
     kind: markdown
-    value: "```wing\ninflight putJson: inflight (key: str, body: Json): void\n```\n---\nPut a Json object in the bucket."
+    value: "```wing\ninflight putJson: inflight (key: str, body: Json): void\n```\n---\nPut a Json object in the bucket.\n### Parameters\n- `key` — `str` — Key of the object.\n- `body` — `Json` — Json object that we want to store into the bucket."
   sortText: ff|putJson
   insertText: putJson($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: signedUrl
+  kind: 2
+  detail: "inflight (key: str, options: BucketSignedUrlOptions?): str"
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight signedUrl: inflight (key: str, options: BucketSignedUrlOptions?): str\n```\n---\nReturns a signed url to the given file.\n### Parameters\n- `key` — `str` — The key to access the cloud object.\n- `...options` — `BucketSignedUrlOptions?` — The signedUrlOptions where you can provide the configurations of the signed url.\n  \n  - `duration?` — `duration?` — The duration for the signed url to expire.\n\n### Returns\nA string representing the signed url of the object which can be used to download in any downstream system\n\n*@Throws* *if object does not exist.*"
+  sortText: ff|signedUrl
+  insertText: signedUrl($0)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -109,7 +133,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "inflight (key: str): bool"
   documentation:
     kind: markdown
-    value: "```wing\ninflight tryDelete: inflight (key: str): bool\n```\n---\nDelete an object from the bucket if it exists.\n\n\n### Returns\nthe result of the delete operation"
+    value: "```wing\ninflight tryDelete: inflight (key: str): bool\n```\n---\nDelete an object from the bucket if it exists.\n### Parameters\n- `key` — `str` — Key of the object.\n\n### Returns\nthe result of the delete operation"
   sortText: ff|tryDelete
   insertText: tryDelete($0)
   insertTextFormat: 2
@@ -121,7 +145,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "inflight (key: str): str?"
   documentation:
     kind: markdown
-    value: "```wing\ninflight tryGet: inflight (key: str): str?\n```\n---\nGet an object from the bucket if it exists.\n\n\n### Returns\nthe contents of the object as a string if it exists, nil otherwise"
+    value: "```wing\ninflight tryGet: inflight (key: str): str?\n```\n---\nGet an object from the bucket if it exists.\n### Parameters\n- `key` — `str` — Key of the object.\n\n### Returns\nthe contents of the object as a string if it exists, nil otherwise"
   sortText: ff|tryGet
   insertText: tryGet($0)
   insertTextFormat: 2
@@ -133,7 +157,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "inflight (key: str): Json?"
   documentation:
     kind: markdown
-    value: "```wing\ninflight tryGetJson: inflight (key: str): Json?\n```\n---\nGets an object from the bucket if it exists, parsing it as Json.\n\n\n### Returns\nthe contents of the object as Json if it exists, nil otherwise"
+    value: "```wing\ninflight tryGetJson: inflight (key: str): Json?\n```\n---\nGets an object from the bucket if it exists, parsing it as Json.\n### Parameters\n- `key` — `str` — Key of the object.\n\n### Returns\nthe contents of the object as Json if it exists, nil otherwise"
   sortText: ff|tryGetJson
   insertText: tryGetJson($0)
   insertTextFormat: 2

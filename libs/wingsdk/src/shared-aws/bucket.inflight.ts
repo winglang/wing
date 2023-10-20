@@ -12,15 +12,25 @@ import {
   GetPublicAccessBlockCommandOutput,
   S3Client,
   GetObjectOutput,
+  NotFound,
   NoSuchKey,
+  __Client,
 } from "@aws-sdk/client-s3";
-import { BucketDeleteOptions, IBucketClient } from "../cloud";
-import { Duration, Json } from "../std";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import mime from "mime-types";
+import {
+  IBucketClient,
+  ObjectMetadata,
+  BucketPutOptions,
+  BucketDeleteOptions,
+  BucketSignedUrlOptions,
+} from "../cloud";
+import { Datetime, Json } from "../std";
 
 export class BucketClient implements IBucketClient {
   constructor(
     private readonly bucketName: string,
-    private readonly s3Client = new S3Client({})
+    private readonly s3Client: S3Client = new S3Client({})
   ) {}
 
   /**
@@ -51,11 +61,17 @@ export class BucketClient implements IBucketClient {
    * @param key Key of the object
    * @param body string contents of the object
    */
-  public async put(key: string, body: string): Promise<void> {
+  public async put(
+    key: string,
+    body: string,
+    opts?: BucketPutOptions
+  ): Promise<void> {
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
       Key: key,
       Body: body,
+      ContentType:
+        (opts?.contentType ?? mime.lookup(key)) || "application/octet-stream",
     });
     await this.s3Client.send(command);
   }
@@ -67,7 +83,9 @@ export class BucketClient implements IBucketClient {
    * @param body Json object
    */
   public async putJson(key: string, body: Json): Promise<void> {
-    await this.put(key, JSON.stringify(body, null, 2));
+    await this.put(key, JSON.stringify(body, null, 2), {
+      contentType: "application/json",
+    });
   }
 
   /**
@@ -264,16 +282,62 @@ export class BucketClient implements IBucketClient {
   }
 
   /**
-   * Returns a signed url to the given file. This URL can be used by anyone to
-   * access the file until the link expires (defaults to 24 hours).
+   * Returns a signed url to the given file.
+   * @Throws if object does not exist.
+   * @inflight
    * @param key The key to reach
-   * @param duration Time until expires
+   *    @param duration Time until expires
    */
-  public async signed_url(key: string, duration?: Duration): Promise<string> {
-    // for signed_url take a look here: https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/s3-example-creating-buckets.html#s3-create-presigendurl-get
-    throw new Error(
-      `signed_url is not implemented yet (key=${key}, duration=${duration})`
-    );
+
+  public async signedUrl(
+    key: string,
+    options?: BucketSignedUrlOptions
+  ): Promise<string> {
+    if (!(await this.exists(key))) {
+      throw new Error(
+        `Cannot provide signed url for a non-existent key (key=${key})`
+      );
+    }
+    const expiryTimeInSeconds: number = options?.duration?.seconds || 86400;
+    const command: GetObjectCommand = new GetObjectCommand({
+      Bucket: this.bucketName,
+      Key: key,
+    });
+    try {
+      const signedUrl: string = await getSignedUrl(this.s3Client, command, {
+        expiresIn: expiryTimeInSeconds,
+      });
+      return signedUrl;
+    } catch (error) {
+      throw new Error(
+        `Unable to generate signed url for key ${key} : ${error as Error}`
+      );
+    }
+  }
+
+  /**
+   * Get the metadata of an object in the bucket.
+   * @param key Key of the object.
+   */
+  public async metadata(key: string): Promise<ObjectMetadata> {
+    const command = new HeadObjectCommand({
+      Bucket: this.bucketName,
+      Key: key,
+    });
+    try {
+      const resp = await this.s3Client.send(command);
+      return {
+        contentType: resp.ContentType,
+        lastModified: Datetime.fromIso(resp.LastModified!.toISOString()),
+        size: resp.ContentLength!,
+      };
+    } catch (error) {
+      // 403 is thrown if s3:ListObject is not granted.
+      if (error instanceof NotFound || (error as Error).name === "403") {
+        throw new Error(`Object does not exist (key=${key}).`);
+      }
+      throw error;
+    }
   }
 
   private async getLocation(): Promise<string> {

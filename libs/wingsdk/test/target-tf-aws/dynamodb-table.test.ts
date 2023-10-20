@@ -12,7 +12,7 @@ import {
 } from "../util";
 
 test("default dynamodb table behavior", () => {
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   ex.DynamodbTable._newDynamodbTable(app, "Table", {
     attributeDefinitions: { id: "S" } as any,
     hashKey: "id",
@@ -25,7 +25,7 @@ test("default dynamodb table behavior", () => {
 });
 
 test("function with a table binding", () => {
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const table = ex.DynamodbTable._newDynamodbTable(app, "Table", {
     attributeDefinitions: { id: "S" } as any,
     hashKey: "id",
@@ -35,7 +35,7 @@ test("function with a table binding", () => {
     app,
     "Handler",
     `async handle(event) {
-  await this.my_table.putItem({ id: "test" });
+  await this.my_table.putItem({ item: { id: "test" } });
   await this.my_table.scan();
 }`,
     {
@@ -53,6 +53,7 @@ test("function with a table binding", () => {
 
   expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group", // log group for Lambda
     "aws_dynamodb_table", // main table
     "aws_iam_role", // role for function
     "aws_iam_role_policy", // policy for role

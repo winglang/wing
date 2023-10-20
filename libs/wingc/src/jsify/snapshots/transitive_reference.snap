@@ -35,6 +35,7 @@ source: libs/wingc/src/jsify/tests.rs
 ## inflight.$Closure1-1.js
 
 ```js
+"use strict";
 module.exports = function({ $t }) {
   class $Closure1 {
     constructor({  }) {
@@ -53,6 +54,7 @@ module.exports = function({ $t }) {
 ## inflight.MyType-1.js
 
 ```js
+"use strict";
 module.exports = function({  }) {
   class MyType {
     constructor({ $this_b }) {
@@ -74,6 +76,7 @@ module.exports = function({  }) {
 ## preflight.js
 
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -109,17 +112,17 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["isEmpty", "checkIfEmpty", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          MyType._registerBindObject(this.b, host, []);
+          MyType._registerOnLiftObject(this.b, host, []);
         }
         if (ops.includes("checkIfEmpty")) {
-          MyType._registerBindObject(this, host, ["isEmpty"]);
+          MyType._registerOnLiftObject(this, host, ["isEmpty"]);
         }
         if (ops.includes("isEmpty")) {
-          MyType._registerBindObject(this.b, host, ["list"]);
+          MyType._registerOnLiftObject(this.b, host, ["list"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -148,11 +151,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(t, host, ["checkIfEmpty"]);
+          $Closure1._registerOnLiftObject(t, host, ["checkIfEmpty"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const t = new MyType(this,"MyType");

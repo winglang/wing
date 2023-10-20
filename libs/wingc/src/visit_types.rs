@@ -142,7 +142,7 @@ where
 	V: VisitType<'a> + ?Sized,
 {
 	for variable in node.env.symbol_map.values() {
-		if let SymbolKind::Variable(variable) = &variable.1 {
+		if let SymbolKind::Variable(variable) = &variable.kind {
 			v.visit_typeref(&variable.type_);
 		}
 	}
@@ -153,7 +153,7 @@ where
 	V: VisitType<'a> + ?Sized,
 {
 	for field in node.env.symbol_map.values() {
-		if let SymbolKind::Variable(variable) = &field.1 {
+		if let SymbolKind::Variable(variable) = &field.kind {
 			v.visit_typeref(&variable.type_);
 		}
 	}
@@ -164,7 +164,7 @@ where
 	V: VisitType<'a> + ?Sized,
 {
 	for field in node.env.symbol_map.values() {
-		if let SymbolKind::Variable(variable) = &field.1 {
+		if let SymbolKind::Variable(variable) = &field.kind {
 			v.visit_typeref(&variable.type_);
 		}
 	}
@@ -192,7 +192,7 @@ where
 	V: VisitTypeMut<'a> + ?Sized,
 {
 	for variable in node.env.symbol_map.values_mut() {
-		if let SymbolKind::Variable(ref mut variable) = variable.1 {
+		if let SymbolKind::Variable(ref mut variable) = variable.kind {
 			v.visit_typeref_mut(&mut variable.type_);
 		}
 	}
@@ -203,7 +203,7 @@ where
 	V: VisitTypeMut<'a> + ?Sized,
 {
 	for field in node.env.symbol_map.values_mut() {
-		if let SymbolKind::Variable(ref mut variable) = field.1 {
+		if let SymbolKind::Variable(ref mut variable) = field.kind {
 			v.visit_typeref_mut(&mut variable.type_);
 		}
 	}
@@ -214,7 +214,7 @@ where
 	V: VisitTypeMut<'a> + ?Sized,
 {
 	for field in node.env.symbol_map.values_mut() {
-		if let SymbolKind::Variable(ref mut variable) = field.1 {
+		if let SymbolKind::Variable(ref mut variable) = field.kind {
 			v.visit_typeref_mut(&mut variable.type_);
 		}
 	}

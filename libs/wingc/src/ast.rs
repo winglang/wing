@@ -2,6 +2,7 @@ use std::fmt::{Debug, Display};
 use std::hash::{Hash, Hasher};
 use std::sync::atomic::{AtomicUsize, Ordering};
 
+use camino::Utf8PathBuf;
 use indexmap::{Equivalent, IndexMap, IndexSet};
 use itertools::Itertools;
 
@@ -48,12 +49,7 @@ impl Ord for Symbol {
 
 impl PartialOrd for Symbol {
 	fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-		let string_ord = self.name.partial_cmp(&other.name);
-		if string_ord == Some(std::cmp::Ordering::Equal) {
-			self.span.partial_cmp(&other.span)
-		} else {
-			string_ord
-		}
+		Some(self.cmp(other))
 	}
 }
 
@@ -186,6 +182,10 @@ impl UserDefinedType {
 	pub fn full_path_str(&self) -> String {
 		self.full_path().iter().join(".")
 	}
+
+	pub fn field_path_str(&self) -> String {
+		self.fields.iter().join(".")
+	}
 }
 
 impl Display for UserDefinedType {
@@ -298,7 +298,7 @@ pub struct FunctionDefinition {
 	/// Whether this function is static or not. In case of a closure, this is always true.
 	pub is_static: bool,
 	/// Function's access modifier. In case of a closure, this is always public.
-	pub access_modifier: AccessModifier,
+	pub access: AccessModifier,
 	pub span: WingSpan,
 }
 
@@ -312,14 +312,18 @@ pub struct Stmt {
 #[derive(Debug)]
 pub enum UtilityFunctions {
 	Log,
-	Throw,
 	Assert,
+	UnsafeCast,
 }
 
 impl UtilityFunctions {
 	/// Returns all utility functions.
 	pub fn all() -> Vec<UtilityFunctions> {
-		vec![UtilityFunctions::Log, UtilityFunctions::Throw, UtilityFunctions::Assert]
+		vec![
+			UtilityFunctions::Log,
+			UtilityFunctions::Assert,
+			UtilityFunctions::UnsafeCast,
+		]
 	}
 }
 
@@ -327,8 +331,8 @@ impl Display for UtilityFunctions {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
 			UtilityFunctions::Log => write!(f, "log"),
-			UtilityFunctions::Throw => write!(f, "throw"),
 			UtilityFunctions::Assert => write!(f, "assert"),
+			UtilityFunctions::UnsafeCast => write!(f, "unsafeCast"),
 		}
 	}
 }
@@ -357,6 +361,7 @@ pub struct Class {
 	pub parent: Option<UserDefinedType>, // base class (the expression is a reference to a user defined type)
 	pub implements: Vec<UserDefinedType>,
 	pub phase: Phase,
+	pub access: AccessModifier,
 }
 
 impl Class {
@@ -418,13 +423,19 @@ pub struct Interface {
 	pub name: Symbol,
 	pub methods: Vec<(Symbol, FunctionSignature)>,
 	pub extends: Vec<UserDefinedType>,
+	pub access: AccessModifier,
 }
 
 #[derive(Debug)]
 pub enum BringSource {
 	BuiltinModule(Symbol),
+	/// The name of the library, and the path to the library (usually inside node_modules)
+	WingLibrary(Symbol, Utf8PathBuf),
 	JsiiModule(Symbol),
+	/// Refers to a relative path to a file
 	WingFile(Symbol),
+	/// Refers to a relative path to a directory
+	Directory(Symbol),
 }
 
 #[derive(Debug)]
@@ -492,10 +503,12 @@ pub enum StmtKind {
 		name: Symbol,
 		extends: Vec<UserDefinedType>,
 		fields: Vec<StructField>,
+		access: AccessModifier,
 	},
 	Enum {
 		name: Symbol,
 		values: IndexSet<Symbol>,
+		access: AccessModifier,
 	},
 	TryCatch {
 		try_statements: Scope,
@@ -518,7 +531,7 @@ pub struct ClassField {
 	pub reassignable: bool,
 	pub phase: Phase,
 	pub is_static: bool,
-	pub access_modifier: AccessModifier,
+	pub access: AccessModifier,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -546,7 +559,7 @@ pub struct StructField {
 
 #[derive(Debug)]
 pub enum ExprKind {
-	New(NewExpr),
+	New(New),
 	Literal(Literal),
 	Range {
 		start: Box<Expr>,
@@ -638,8 +651,8 @@ impl Expr {
 }
 
 #[derive(Debug)]
-pub struct NewExpr {
-	pub class: UserDefinedType, // expression must be a reference to a user defined type
+pub struct New {
+	pub class: UserDefinedType,
 	pub obj_id: Option<Box<Expr>>,
 	pub obj_scope: Option<Box<Expr>>,
 	pub arg_list: ArgList,
@@ -750,6 +763,19 @@ pub enum Reference {
 		type_name: UserDefinedType,
 		property: Symbol,
 	},
+}
+
+impl Clone for Reference {
+	fn clone(&self) -> Reference {
+		match self {
+			Reference::Identifier(i) => Reference::Identifier(i.clone()),
+			Reference::InstanceMember { .. } => panic!("Unable to clone reference to instance member"),
+			Reference::TypeMember { type_name, property } => Reference::TypeMember {
+				type_name: type_name.clone(),
+				property: property.clone(),
+			},
+		}
+	}
 }
 
 impl Spanned for Reference {

@@ -37,15 +37,7 @@ export class Bucket extends cloud.Bucket {
 
     this.public = props.public ?? false;
 
-    const isTestEnvironment = App.of(scope).isTestEnvironment;
-
-    this.bucket = new S3Bucket(this, "Default", {
-      encryption: BucketEncryption.S3_MANAGED,
-      blockPublicAccess: this.public ? undefined : BlockPublicAccess.BLOCK_ALL,
-      publicReadAccess: this.public ? true : false,
-      removalPolicy: RemovalPolicy.DESTROY,
-      autoDeleteObjects: isTestEnvironment ? true : false,
-    });
+    this.bucket = createEncryptedBucket(this, this.public);
   }
 
   public addObject(key: string, body: string): void {
@@ -180,7 +172,7 @@ export class Bucket extends cloud.Bucket {
     );
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }
@@ -193,7 +185,7 @@ export class Bucket extends cloud.Bucket {
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.bucket.bucketName);
 
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */
@@ -216,4 +208,20 @@ export class Bucket extends cloud.Bucket {
   private envName(): string {
     return `BUCKET_NAME_${this.node.addr.slice(-8)}`;
   }
+}
+
+export function createEncryptedBucket(
+  scope: Construct,
+  isPublic: boolean,
+  name: string = "Default"
+): S3Bucket {
+  const isTestEnvironment = App.of(scope).isTestEnvironment;
+
+  return new S3Bucket(scope, name, {
+    encryption: BucketEncryption.S3_MANAGED,
+    blockPublicAccess: isPublic ? undefined : BlockPublicAccess.BLOCK_ALL,
+    publicReadAccess: isPublic ? true : false,
+    removalPolicy: RemovalPolicy.DESTROY,
+    autoDeleteObjects: isTestEnvironment ? true : false,
+  });
 }

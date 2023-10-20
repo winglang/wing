@@ -2,14 +2,14 @@ import { test, expect } from "vitest";
 import { Bucket } from "../../src/cloud";
 import * as testing from "../../src/simulator";
 import { Node } from "../../src/std";
-import * as sim from "../../src/target-sim";
+import { App } from "../../src/target-sim/app";
 import { mkdtemp } from "../util";
 
 test("reloading the simulator updates the state of the tree", async () => {
   let workdir = mkdtemp();
 
   // Create a .wsim file
-  const app = new sim.App({ outdir: workdir });
+  const app = new App({ outdir: workdir, entrypointDir: __dirname });
   const bucket1 = Bucket._newBucket(app, "my_bucket", { public: false });
   Node.of(bucket1).hidden = false;
   const simfile = app.synth();
@@ -23,7 +23,7 @@ test("reloading the simulator updates the state of the tree", async () => {
   );
 
   // Update the .wsim file in-place
-  const app2 = new sim.App({ outdir: workdir });
+  const app2 = new App({ outdir: workdir, entrypointDir: __dirname });
   const bucket2 = Bucket._newBucket(app2, "my_bucket", { public: true });
   Node.of(bucket2).hidden = true;
   app2.synth();

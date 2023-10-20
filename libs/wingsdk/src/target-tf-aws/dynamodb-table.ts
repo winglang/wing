@@ -41,7 +41,7 @@ export class DynamodbTable extends ex.DynamodbTable {
     });
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error(
         "Dynamodb tables can only be bound by tfaws.Function for now"
@@ -78,7 +78,20 @@ export class DynamodbTable extends ex.DynamodbTable {
         resources: [this.table.arn],
       });
     }
+    if (ops.includes(ex.DynamodbTableInflightMethods.QUERY)) {
+      host.addPolicyStatements({
+        actions: ["dynamodb:Query"],
+        resources: [this.table.arn],
+      });
+    }
+    if (ops.includes(ex.DynamodbTableInflightMethods.TRANSACT_GET_ITEMS)) {
+      host.addPolicyStatements({
+        actions: ["dynamodb:GetItem"],
+        resources: [this.table.arn],
+      });
+    }
     if (ops.includes(ex.DynamodbTableInflightMethods.TRANSACT_WRITE_ITEMS)) {
+      // TODO: Merge into a single policy statement.
       host.addPolicyStatements({
         actions: ["dynamodb:PutItem"],
         resources: [this.table.arn],
@@ -91,11 +104,27 @@ export class DynamodbTable extends ex.DynamodbTable {
         actions: ["dynamodb:DeleteItem"],
         resources: [this.table.arn],
       });
+      host.addPolicyStatements({
+        actions: ["dynamodb:ConditionCheckItem"],
+        resources: [this.table.arn],
+      });
+    }
+    if (ops.includes(ex.DynamodbTableInflightMethods.BATCH_GET_ITEM)) {
+      host.addPolicyStatements({
+        actions: ["dynamodb:BatchGetItem"],
+        resources: [this.table.arn],
+      });
+    }
+    if (ops.includes(ex.DynamodbTableInflightMethods.BATCH_WRITE_ITEM)) {
+      host.addPolicyStatements({
+        actions: ["dynamodb:BatchWriteItem"],
+        resources: [this.table.arn],
+      });
     }
 
     host.addEnvironment(this.envName(), this.table.name);
 
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

@@ -8,6 +8,8 @@ import { IInflightHost } from "../std";
  * Tokens values are captured as environment variable, and resolved through the compilation target token mechanism.
  */
 export class CdkTfTokens extends Tokens {
+  private _jsonEncodeCache = new Map<string, string>();
+
   /**
    * Returns true is the given value is a CDKTF token.
    */
@@ -28,16 +30,19 @@ export class CdkTfTokens extends Tokens {
   /**
    * CDKTF tokens are bounded as Json values.
    */
-  public bindValue(host: IInflightHost, value: any) {
+  public onLiftValue(host: IInflightHost, value: any) {
     if (!(host instanceof Function)) {
       throw new Error(`Tokens can only be bound by a Function for now`);
     }
 
     const envName = this.envName(JSON.stringify(value));
-    const envValue = Fn.jsonencode(value);
-    // the same token might be bound multiple times by different variables/inflight contexts
-    if (host.env[envName] === undefined) {
-      host.addEnvironment(envName, envValue);
+
+    // Fn.jsonencode produces a fresh CDKTF token each time, so we cache the results
+    let envValue = this._jsonEncodeCache.get(envName);
+    if (!envValue) {
+      envValue = Fn.jsonencode(value);
+      this._jsonEncodeCache.set(envName, envValue);
     }
+    host.addEnvironment(envName, envValue);
   }
 }

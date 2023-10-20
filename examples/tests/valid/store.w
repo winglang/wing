@@ -1,11 +1,13 @@
+// used by:
+// - bring_local.test.w
+
 bring "./subdir/empty.w" as file3;
 bring math;
-
 bring cloud;
 
-class Util {}
+pub class Util {}
 
-class Store {
+pub class Store {
   b: cloud.Bucket;
   init() {
     this.b = new cloud.Bucket();
@@ -19,17 +21,17 @@ class Store {
   }
 }
 
-enum Color {
+pub enum Color {
   RED,
   GREEN,
   BLUE,
 }
 
-struct Point {
+pub struct Point {
   x: num;
   y: num;
 }
 
-interface Shape {
+pub interface Shape {
   area(): num;
 }

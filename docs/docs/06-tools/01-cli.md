@@ -17,43 +17,49 @@ The CLI is distributed as an npm package which can be installed globally using:
 npm i -g winglang
 ```
 
-The usage is:
+Usage:
 
-```bash
-$ wing <command> <options>
+```sh
+$ wing [command] [options]
 ```
 
-## Run: `wing run` / `wing it`
+## Run: `wing run|it`
 
 You can use the `run` command (or `it`) when you want to interact with your Wing program in the
 [Wing Console](/docs/start-here/local).
 
 Usage:
 
-```
-$ wing run|it [<ENTRYPOINT.w> | <PROGRAM.wsim>]
+```sh
+$ wing run|it [entrypoint]
 ```
 
-The `run` command takes a single positional argument which can be one of:
+`[entrypoint]` is a valid entrypoint for a Wing program. An entrypoint can be either source code or compiled. If it's source code, the entrypoint refers to a file named `main.w` or ending with `.main.w`/`.test.w`, whereas if it's compiled the entrypoint refers to a directory whose name ends with `.wsim`.
 
-- `ENTRYPOINT.w` is an entrypoint for a Wing program (source code). In this case, Wing Console will
-  *watch for changes* and will automatically recompile your program when the source code change.
-  The entrypoint is optional if there's a single `.w` file in the working directory (in which case you
-  can just type `wing it` and it will run this file).
-- `PROGRAM.wsim` is the output of `wing compile -t sim`
+:::note Default Entrypoint
+
+By default, `wing run|it` will look for exactly one file named `main.w` or ending with `.main.w`
+
+:::
 
 ## Compile: `wing compile`
 
 You can use the `compile` command to compile a Wing program into a deployable artifact.
 
-```
-$ wing compile --target <TARGET> <ENTRYPOINT.w>
+```sh
+$ wing compile [entrypoint] --target <target>
 ```
 
-The `ENTRYPOINT.w` specifies the entrypoint file to compile (e.g. `hello.w`).
+`[entrypoint]` specifies the entrypoint file to compile. A file is considered a valid entrypoint if its name is `main.w` or if it ends with `.main.w`/`.test.w`.
 
-The `--target` option is **required**, and specifies the target platform to compile for. The
-following targets are supported:
+:::note Default Entrypoint
+
+By default, `wing compile` will look for exactly one file named `main.w` or ending with `.main.w`
+
+:::
+
+The --target option specifies the target platform to compile for. The default target is `sim`.
+The following targets are supported:
 
 * `sim` - [Wing Simulator](#sim-target)
 * `tf-aws` - Terraform/AWS
@@ -66,12 +72,13 @@ The Wing program is going to be compiled for the Wing simulator (`.wsim`).
 Usage:
 
 ```sh
-$ wing compile --target sim ENTRYPOINT.w
+$ wing compile [entrypoint] --target sim
 ```
 
-The output will be under `target/ENTRYPOINT.wsim` and can be opened in one two ways:
+The output will be found under `target/<entrypoint>.wsim` and can be opened in two ways:
 
-* Interactively using [Wing Console](/docs/start-here/local) using `wing it target/hello.wsim`.
+* Interactively through the [Wing Console](/docs/start-here/local)
+* Using the `wing run|it target/<entrypoint>.wsim` command through the Wing CLI.
 
 
 ### `tf-aws` Target
@@ -81,7 +88,7 @@ Compiles your program for Terraform and run on AWS.
 Usage:
 
 ```sh
-$ wing compile --target tf-aws ENTRYPOINT.w
+$ wing compile [entrypoint] --target tf-aws
 ```
 
 The output includes both a Terraform configuration file (under `target/cdktf.out/stacks/root`) and
@@ -95,11 +102,11 @@ You can deploy your stack to AWS using Terraform ([instructions](/docs/start-her
 
 Compiles your program for Terraform and run on Azure.
 
-For example:
+Usage:
 
 ```sh
 $ export AZURE_LOCATION="East US"
-$ wing compile --target tf-azure hello.w
+$ wing compile [entrypoint] --target tf-azure
 ```
 
 The variable `AZURE_LOCATION` is required and indicates the [deployment
@@ -114,12 +121,12 @@ Functions.
 
 Compiles your program for Terraform and run on Google Cloud Platform.
 
-For example:
+Usage:
 
 ```sh
 $ export GOOGLE_PROJECT_ID="my-project"
 $ export GOOGLE_STORAGE_LOCATION="US"
-$ wing compile --target tf-gcp hello.w
+$ wing compile [entrypoint] --target tf-gcp
 ```
 
 The variable `GOOGLE_STORAGE_LOCATION` is required and indicates the [deployment
@@ -139,10 +146,10 @@ Usage:
 
 ```sh
 $ export CDK_STACK_NAME="my-project"
-$ wing compile --target awscdk app.w
+$ wing compile [entrypoint] --target awscdk
 ```
 
-The output includes both a AWS-CDK configuration file (under `target/<file name>.awscdk`) and
+The output includes both a AWS-CDK configuration file (under `target/<entrypoint>.awscdk`) and
 JavaScript bundles that include inflight code that executes on compute platforms such as AWS Lambda.
 
 You can deploy your stack to AWS by installing the [AWS CDK Toolkit](https://docs.aws.amazon.com/cdk/v2/guide/cli.html) and running:
@@ -155,7 +162,7 @@ $ cdk deploy --app target/app.awscdk
 Additionally the `compile` command can be provided an optional list of plugins to use during the compilation process.
 
 ```sh
-$ wing compile --target tf-aws ENTRYPOINT.w --plugins PLUGIN1 PLUGIN2
+$ wing compile [entrypoint] --target tf-aws --plugins PLUGIN1 PLUGIN2
 ```
 Each plugin can be an absolute paths or relative path to a JavaScript file. For more 
 on how to create a plugin, see [Compiler Plugins](./compiler-plugins).
@@ -167,12 +174,20 @@ The `wing test` command can be used to compile and execute tests in Wing applica
 Usage:
 
 ```sh
-$ wing test ENTRYPOINT...
+$ wing test [entrypoint...] [--test-filter <regex>]
 ```
 
-This will compile each entrypoint, and for each entrypoint it will invoke all tests in the program.
+`[entrypoint...]` specifies the entrypoint list of files that will be compiled and tested. A file is considered a valid entrypoint if its name ends with `.w`.
 
-For example ([test_bucket.w](https://github.com/winglang/wing/tree/main/examples/tests/valid/test_bucket.w)):
+`[--test-filter <regex>]` option to run only specific tests within the entrypoints based on a provided regex.
+
+For example ([test_bucket.test.w](https://github.com/winglang/wing/tree/main/examples/tests/valid/test_bucket.test.w)):
+
+:::note Default Entrypoint(s)
+
+It's possible to execute `wing test` without specifying any entrypoint, in which case the CLI looks for all files ending with `.test.w` in the current directory. If no files are found, the CLI throws an error.
+
+:::
 
 ```js
 bring cloud;
@@ -194,9 +209,23 @@ test "get" {
 Now, if we run the following command:
 
 ```sh
-$ wing test test_bucket.w
-pass | test_bucket.w | root/test:get
-pass | test_bucket.w | root/test:put
+$ wing test test_bucket.test.w
+pass | test_bucket.test.w | root/test:get
+pass | test_bucket.test.w | root/test:put
 ```
 
 We will see that both functions were invoked and that the tests passed.
+
+## Package: `wing pack`
+
+The `wing pack` command can be used to package your project as a Wing library.
+
+Usage:
+
+```sh
+$ wing pack
+```
+
+This will compile your current Wing directory, and bundle it as a tarball that can be published to [GitHub packages](https://github.com/features/packages) or [npm](https://www.npmjs.com/).
+
+See [Libraries](../05-libraries.md) for more details on packaging and consuming Wing libraries.

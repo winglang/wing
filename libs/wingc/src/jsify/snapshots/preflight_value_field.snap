@@ -28,6 +28,7 @@ source: libs/wingc/src/jsify/tests.rs
 ## inflight.$Closure1-1.js
 
 ```js
+"use strict";
 module.exports = function({ $t_last, $t_name, $t_name_length }) {
   class $Closure1 {
     constructor({  }) {
@@ -48,6 +49,7 @@ module.exports = function({ $t_last, $t_name, $t_name_length }) {
 ## inflight.MyType-1.js
 
 ```js
+"use strict";
 module.exports = function({  }) {
   class MyType {
     constructor({  }) {
@@ -60,6 +62,7 @@ module.exports = function({  }) {
 ## preflight.js
 
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -123,13 +126,13 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(t.last, host, []);
-          $Closure1._registerBindObject(t.name, host, []);
-          $Closure1._registerBindObject(t.name.length, host, []);
+          $Closure1._registerOnLiftObject(t.last, host, []);
+          $Closure1._registerOnLiftObject(t.name, host, []);
+          $Closure1._registerOnLiftObject(t.name.length, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const t = new MyType(this,"MyType");

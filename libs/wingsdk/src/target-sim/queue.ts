@@ -21,10 +21,10 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
-    this.timeout = props.timeout ?? Duration.fromSeconds(10);
+    this.timeout = props.timeout ?? Duration.fromSeconds(30);
     this.retentionPeriod = props.retentionPeriod ?? Duration.fromHours(1);
 
-    if (this.retentionPeriod < this.timeout) {
+    if (this.retentionPeriod.seconds < this.timeout.seconds) {
       throw new Error(
         "Retention period must be greater than or equal to timeout"
       );
@@ -106,9 +106,9 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     return schema;
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

@@ -41,6 +41,16 @@ exports[`function with a function binding 3`] = `
     },
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "Function1_CloudwatchLogGroup_2120A680": {
+        "name": "/aws/lambda/Function1-c87c16f1",
+        "retention_in_days": 30,
+      },
+      "Function2_CloudwatchLogGroup_038FCB43": {
+        "name": "/aws/lambda/Function2-c827e998",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "Function1_IamRole_8B9BC80D": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -86,7 +96,7 @@ exports[`function with a function binding 3`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Function1_S3Object_AFBA38E0.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -109,7 +119,7 @@ exports[`function with a function binding 3`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Function2_S3Object_6F3ED347.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -175,6 +185,16 @@ exports[`function with a queue binding 3`] = `
     },
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "Function_CloudwatchLogGroup_ABDCF4C4": {
+        "name": "/aws/lambda/Function-c852aba6",
+        "retention_in_days": 30,
+      },
+      "Queue-SetConsumer-5cb7e554_CloudwatchLogGroup_9BC4EDAA": {
+        "name": "/aws/lambda/Queue-SetConsumer-5cb7e554-c8f6c540",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "Function_IamRole_678BE84C": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -228,7 +248,7 @@ exports[`function with a queue binding 3`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -250,7 +270,7 @@ exports[`function with a queue binding 3`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Queue-SetConsumer-5cb7e554_S3Object_074547A5.key}",
-        "timeout": 30,
+        "timeout": "\${aws_sqs_queue.Queue.visibility_timeout_seconds}",
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -276,7 +296,9 @@ exports[`function with a queue binding 3`] = `
     },
     "aws_sqs_queue": {
       "Queue": {
+        "message_retention_seconds": 3600,
         "name": "Queue-c822c726",
+        "visibility_timeout_seconds": 30,
       },
     },
   },
@@ -306,6 +328,12 @@ exports[`function with bucket binding > put operation 2`] = `
     },
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "Function_CloudwatchLogGroup_ABDCF4C4": {
+        "name": "/aws/lambda/Function-c852aba6",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "Function_IamRole_678BE84C": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -341,7 +369,7 @@ exports[`function with bucket binding > put operation 2`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -376,6 +404,16 @@ exports[`two functions reusing the same IFunctionHandler 1`] = `
     },
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "Function1_CloudwatchLogGroup_2120A680": {
+        "name": "/aws/lambda/Function1-c87c16f1",
+        "retention_in_days": 30,
+      },
+      "Function2_CloudwatchLogGroup_038FCB43": {
+        "name": "/aws/lambda/Function2-c827e998",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "Function1_IamRole_8B9BC80D": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -421,7 +459,7 @@ exports[`two functions reusing the same IFunctionHandler 1`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Function1_S3Object_AFBA38E0.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -443,7 +481,7 @@ exports[`two functions reusing the same IFunctionHandler 1`] = `
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Function2_S3Object_6F3ED347.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],

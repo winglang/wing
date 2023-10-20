@@ -10,15 +10,15 @@ use tree_sitter_traversal::{traverse, Order};
 use crate::ast::{
 	AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
 	ElifBlock, ElifLetBlock, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
-	IfLet, Interface, InterpolatedString, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Spanned,
-	Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
+	IfLet, Interface, InterpolatedString, InterpolatedStringPart, Literal, New, Phase, Reference, Scope, Spanned, Stmt,
+	StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
-use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan};
+use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan, ERR_EXPECTED_SEMICOLON};
 use crate::file_graph::FileGraph;
 use crate::files::Files;
 use crate::type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
-use crate::{dbg_panic, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
+use crate::{dbg_panic, is_absolute_path, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
 
 // A custom struct could be used to better maintain metadata and issue tracking, though ideally
 // this is meant to serve as a bandaide to be removed once wing is further developed.
@@ -134,8 +134,11 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 ///
 /// Expects an initial Wing file to be parsed. For Wing's CLI, this is usually
 /// the file the user asked to compile, and in the case of the LSP, the file that was
-/// just opened or changed. The file's path and text can be passed through `init_path` and
-/// `init_text`, respectively.
+/// just opened or changed.
+///
+/// If `init_text` is `None`, then the file will be read from disk. Otherwise, the
+/// provided text will be used as the source text for the file. This is useful for
+/// the LSP, where the text may not be saved to the disk yet, and for unit tests.
 ///
 /// Internally it parses the initial file, and then recursively parse all of the files that
 /// it depends on, storing all results in the `files`, `file_graph`, `tree_sitter_trees`,
@@ -146,58 +149,45 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 /// files that come before it in the ordering.
 pub fn parse_wing_project(
 	init_path: &Utf8Path,
-	init_text: String,
+	init_text: Option<String>,
 	files: &mut Files,
 	file_graph: &mut FileGraph,
 	tree_sitter_trees: &mut IndexMap<Utf8PathBuf, tree_sitter::Tree>,
 	asts: &mut IndexMap<Utf8PathBuf, Scope>,
 ) -> Vec<Utf8PathBuf> {
-	// Parse the initial file (even if we have already seen it before)
-	let (tree_sitter_tree, ast, dependent_wing_files) = parse_wing_file(init_path, &init_text);
+	// Parse the initial path (even if we have already seen it before)
+	let dependent_wing_paths = match init_path.is_dir() {
+		true => parse_wing_directory(&init_path, files, file_graph, tree_sitter_trees, asts),
+		false => parse_wing_file(&init_path, init_text, files, file_graph, tree_sitter_trees, asts),
+	};
 
-	// Update our files collection with the new source text. For a fresh compilation,
-	// this will be the first time we've seen this file. In the LSP we might already have
-	// text from a previous compilation, so we'll replace the contents.
-	files.update_file(&init_path, init_text);
-
-	// Update our collections of trees and ASTs and our file graph
-	tree_sitter_trees.insert(init_path.to_owned(), tree_sitter_tree);
-	asts.insert(init_path.to_owned(), ast);
-	file_graph.update_file(init_path, &dependent_wing_files);
-
-	// Track which files still need parsing
-	let mut unparsed_files = dependent_wing_files;
+	// Store a stack of files that still need parsing
+	let mut unparsed_files = dependent_wing_paths;
 
 	// Parse all remaining files in the project
-	while let Some(file_path) = unparsed_files.pop() {
+	while let Some(file_or_dir_path) = unparsed_files.pop() {
 		// Skip files that we have already seen before (they should already be parsed)
-		if files.contains_file(&file_path) {
+		if files.contains_file(&file_or_dir_path) {
 			assert!(
-				tree_sitter_trees.contains_key(&file_path),
+				tree_sitter_trees.contains_key(&file_or_dir_path),
 				"files is not in sync with tree_sitter_trees"
 			);
-			assert!(asts.contains_key(&file_path), "files is not in sync with asts");
+			assert!(asts.contains_key(&file_or_dir_path), "files is not in sync with asts");
 			assert!(
-				file_graph.contains_file(&file_path),
+				file_graph.contains_file(&file_or_dir_path),
 				"files is not in sync with file_graph"
 			);
 			continue;
 		}
 
-		let file_text = fs::read_to_string(&file_path).unwrap_or(String::new());
-		files.add_file(&file_path, file_text.clone()).unwrap();
-		files.get_file(&file_path).unwrap();
+		// Parse the file or directory
+		let dependent_wing_paths = match file_or_dir_path.is_dir() {
+			true => parse_wing_directory(&file_or_dir_path, files, file_graph, tree_sitter_trees, asts),
+			false => parse_wing_file(&file_or_dir_path, None, files, file_graph, tree_sitter_trees, asts),
+		};
 
-		// Parse the file
-		let (tree_sitter_tree, ast, dependent_wing_files) = parse_wing_file(&file_path, &file_text);
-
-		// Update our collections of trees and ASTs and our file graph
-		tree_sitter_trees.insert(file_path.clone(), tree_sitter_tree);
-		asts.insert(file_path.clone(), ast);
-		file_graph.update_file(&file_path, &dependent_wing_files);
-
-		// Add the file's dependencies to the list of files to parse
-		unparsed_files.extend(dependent_wing_files);
+		// Add the dependent files to the stack of files to parse
+		unparsed_files.extend(dependent_wing_paths);
 	}
 
 	// Return the files in the order they should be compiled
@@ -213,6 +203,7 @@ pub fn parse_wing_project(
 					formatted_cycle.trim_end()
 				),
 				span: None,
+				annotations: vec![],
 			});
 
 			// return a list of all files just so we can continue type-checking
@@ -221,7 +212,24 @@ pub fn parse_wing_project(
 	}
 }
 
-fn parse_wing_file(source_path: &Utf8Path, source_text: &str) -> (tree_sitter::Tree, Scope, Vec<Utf8PathBuf>) {
+fn parse_wing_file(
+	source_path: &Utf8Path,
+	source_text: Option<String>,
+	files: &mut Files,
+	file_graph: &mut FileGraph,
+	tree_sitter_trees: &mut IndexMap<Utf8PathBuf, tree_sitter::Tree>,
+	asts: &mut IndexMap<Utf8PathBuf, Scope>,
+) -> Vec<Utf8PathBuf> {
+	let source_text = match source_text {
+		Some(text) => text,
+		None => fs::read_to_string(source_path).expect("read_to_string call failed"),
+	};
+
+	// Update our files collection with the new source text. On a fresh compilation,
+	// this will be the first time we've seen this file. In the LSP we might already have
+	// text from a previous compilation, so we'll replace the contents.
+	files.update_file(&source_path, source_text.clone());
+
 	let language = tree_sitter_wing::language();
 	let mut tree_sitter_parser = tree_sitter::Parser::new();
 	tree_sitter_parser.set_language(language).unwrap();
@@ -235,9 +243,62 @@ fn parse_wing_file(source_path: &Utf8Path, source_text: &str) -> (tree_sitter::T
 
 	let tree_sitter_root = tree_sitter_tree.root_node();
 
+	// Parse the source text into an AST
 	let parser = Parser::new(&source_text.as_bytes(), source_path.to_owned());
-	let (scope, dependent_wing_files) = parser.parse(&tree_sitter_root);
-	(tree_sitter_tree, scope, dependent_wing_files)
+	let (scope, dependent_wing_paths) = parser.parse(&tree_sitter_root);
+
+	// Update our collections of trees and ASTs and our file graph
+	tree_sitter_trees.insert(source_path.to_owned(), tree_sitter_tree);
+	asts.insert(source_path.to_owned(), scope);
+	file_graph.update_file(source_path, &dependent_wing_paths);
+
+	dependent_wing_paths
+}
+
+fn parse_wing_directory(
+	source_path: &Utf8Path,
+	files: &mut Files,
+	file_graph: &mut FileGraph,
+	tree_sitter_trees: &mut IndexMap<Utf8PathBuf, tree_sitter::Tree>,
+	asts: &mut IndexMap<Utf8PathBuf, Scope>,
+) -> Vec<Utf8PathBuf> {
+	// Collect a list of all files and subdirectories in the directory
+	let mut files_and_dirs = Vec::new();
+	for entry in fs::read_dir(&source_path).expect("read_dir call failed") {
+		let entry = entry.unwrap();
+		let path = Utf8PathBuf::from_path_buf(entry.path()).expect("invalid utf8 path");
+
+		// If it's a directory and its name is not node_modules or .git or ending in .tmp, add it
+		// or if it's a file and its extension is .w, add it
+		//
+		// TODO: skip directories that don't contain any .w files anywhere in their subtree
+		if (path.is_dir()
+			&& path.file_name() != Some("node_modules")
+			&& path.file_name() != Some(".git")
+			&& path.extension() != Some("tmp"))
+			|| path.extension() == Some("w") && !is_entrypoint_file(&path)
+		{
+			files_and_dirs.push(path);
+		}
+	}
+
+	// Sort the files and directories so that we always visit them in the same order
+	files_and_dirs.sort();
+
+	// Create a fake AST (since the directory doesn't have any source code to parse)
+	let mut tree_sitter_parser = tree_sitter::Parser::new();
+	tree_sitter_parser.set_language(tree_sitter_wing::language()).unwrap();
+	let tree_sitter_tree = tree_sitter_parser.parse("", None).unwrap();
+	let scope = Scope::empty();
+	let dependent_wing_paths = files_and_dirs;
+
+	// Update our collections of trees and ASTs and our file graph
+	files.update_file(&source_path, "".to_string());
+	tree_sitter_trees.insert(source_path.to_owned(), tree_sitter_tree);
+	asts.insert(source_path.to_owned(), scope);
+	file_graph.update_file(source_path, &dependent_wing_paths);
+
+	dependent_wing_paths
 }
 
 /// Parses a single Wing source file.
@@ -252,7 +313,7 @@ pub struct Parser<'a> {
 	is_in_loop: RefCell<bool>,
 	/// Track all file paths that have been found while parsing the current file
 	/// These will need to be eventually parsed (or diagnostics will be reported if they don't exist)
-	referenced_wing_files: RefCell<Vec<Utf8PathBuf>>,
+	referenced_wing_paths: RefCell<Vec<Utf8PathBuf>>,
 }
 
 impl<'s> Parser<'s> {
@@ -268,7 +329,7 @@ impl<'s> Parser<'s> {
 			// mutability from the root of the Json literal.
 			in_json: RefCell::new(0),
 			is_in_mut_json: RefCell::new(false),
-			referenced_wing_files: RefCell::new(Vec::new()),
+			referenced_wing_paths: RefCell::new(Vec::new()),
 		}
 	}
 
@@ -283,7 +344,7 @@ impl<'s> Parser<'s> {
 			for stmt in &scope.statements {
 				if !is_valid_module_statement(&stmt) {
 					self.add_error_from_span(
-						"Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with `.main.w` to make this an entrypoint file.",
+						"Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with `.main.w` or `.test.w` to make this an entrypoint file.",
 						stmt.span(),
 					);
 				}
@@ -292,13 +353,14 @@ impl<'s> Parser<'s> {
 
 		self.report_unhandled_errors(&root);
 
-		(scope, self.referenced_wing_files.into_inner())
+		(scope, self.referenced_wing_paths.into_inner())
 	}
 
 	fn add_error_from_span(&self, message: impl ToString, span: WingSpan) {
 		let diag = Diagnostic {
 			message: message.to_string(),
 			span: Some(span),
+			annotations: vec![],
 		};
 		report_diagnostic(diag);
 	}
@@ -307,6 +369,7 @@ impl<'s> Parser<'s> {
 		let diag = Diagnostic {
 			message: message.to_string(),
 			span: Some(self.node_span(node)),
+			annotations: vec![],
 		};
 		report_diagnostic(diag);
 
@@ -473,8 +536,7 @@ impl<'s> Parser<'s> {
 			"continue_statement" => self.build_continue_statement(statement_node)?,
 			"return_statement" => self.build_return_statement(statement_node, phase)?,
 			"throw_statement" => self.build_throw_statement(statement_node, phase)?,
-			"class_definition" => self.build_class_statement(statement_node, Phase::Inflight)?, // `inflight class` is always "inflight"
-			"resource_definition" => self.build_class_statement(statement_node, phase)?, // `class` without a modifier inherits from scope
+			"class_definition" => self.build_class_statement(statement_node, phase)?,
 			"interface_definition" => self.build_interface_statement(statement_node, phase)?,
 			"enum_definition" => self.build_enum_statement(statement_node)?,
 			"try_catch_statement" => self.build_try_catch_statement(statement_node, phase)?,
@@ -706,10 +768,20 @@ impl<'s> Parser<'s> {
 			}
 		}
 
+		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
+		let access = self.build_access_modifier(access_modifier_node)?;
+		if access == AccessModifier::Protected {
+			self.with_error::<Node>(
+				"Structs must be public (\"pub\") or private",
+				&access_modifier_node.expect("access modifier node"),
+			)?;
+		}
+
 		Ok(StmtKind::Struct {
 			name,
 			extends,
 			fields: members,
+			access,
 		})
 	}
 
@@ -728,65 +800,165 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_bring_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
-		let module_name = self.node_symbol(&statement_node.child_by_field_name("module_name").unwrap())?;
+		let Some(module_name_node) = statement_node.child_by_field_name("module_name") else {
+			return self.with_error(
+				"Expected module specification (see https://www.winglang.io/docs/libraries)",
+				&statement_node
+					.child(statement_node.child_count() - 1)
+					.unwrap_or(*statement_node),
+			);
+		};
+
+		let module_name = self.node_symbol(&module_name_node)?;
 		let alias = if let Some(identifier) = statement_node.child_by_field_name("alias") {
 			Some(self.check_reserved_symbol(&identifier)?)
 		} else {
 			None
 		};
 
-		// if the module name is a path ending in .w, create a new Parser to parse it as a new Scope,
-		// and create a StmtKind::Module instead
-		if module_name.name.starts_with("\"") && module_name.name.ends_with(".w\"") {
-			let module_path = Utf8Path::new(&module_name.name[1..module_name.name.len() - 1]);
+		let module_path = if module_name.name.len() > 1 {
+			Utf8Path::new(&module_name.name[1..module_name.name.len() - 1])
+		} else {
+			Utf8Path::new(&module_name.name)
+		};
+
+		if is_absolute_path(&module_path) {
+			return self.with_error(
+				format!("Cannot bring \"{}\" since it is not a relative path", module_path),
+				&module_name_node,
+			);
+		}
+
+		if module_name.name.starts_with("\".") && module_name.name.ends_with("\"") {
 			let source_path = normalize_path(module_path, Some(&Utf8Path::new(&self.source_name)));
 			if source_path == Utf8Path::new(&self.source_name) {
-				return self.with_error("Cannot bring a module into itself", statement_node);
+				return self.with_error("Cannot bring a module into itself", &module_name_node);
 			}
 			if !source_path.exists() {
-				return self.with_error(format!("Cannot find module \"{}\"", source_path), statement_node);
+				return self.with_error(format!("Cannot find module \"{}\"", module_path), &module_name_node);
 			}
-			if !source_path.is_file() {
+
+			// case: .w file
+			if is_entrypoint_file(&source_path) {
 				return self.with_error(
-					format!("Cannot bring module \"{}\": not a file", source_path),
-					statement_node,
+					format!("Cannot bring module \"{}\" since it is an entrypoint file", module_path),
+					&module_name_node,
 				);
 			}
-			if source_path.ends_with(".main.w\"") {
-				return self.with_error(
-					format!("Cannot bring module \"{}\": main files cannot be brought", source_path),
-					statement_node,
-				);
+
+			if source_path.is_file() {
+				if source_path.extension() != Some("w") {
+					return self.with_error(
+						format!("Cannot bring \"{}\": not a recognized file type", module_path),
+						&module_name_node,
+					);
+				}
+
+				self.referenced_wing_paths.borrow_mut().push(source_path.clone());
+
+				// parse error if no alias is provided
+				let module = if let Some(alias) = alias {
+					Ok(StmtKind::Bring {
+						source: BringSource::WingFile(Symbol {
+							name: source_path.to_string(),
+							span: module_name.span,
+						}),
+						identifier: Some(alias),
+					})
+				} else {
+					self.with_error::<StmtKind>(
+						format!(
+							"bring {} must be assigned to an identifier (e.g. bring \"foo\" as foo)",
+							module_name
+						),
+						statement_node,
+					)
+				};
+				return module;
 			}
-			self.referenced_wing_files.borrow_mut().push(source_path.clone());
 
-			// parse error if no alias is provided
-			let module = if let Some(alias) = alias {
-				Ok(StmtKind::Bring {
-					source: BringSource::WingFile(Symbol {
-						name: source_path.to_string(),
-						span: module_name.span,
-					}),
-					identifier: Some(alias),
-				})
-			} else {
-				self.with_error::<StmtKind>(
-					format!(
-						"bring {} must be assigned to an identifier (e.g. bring \"foo\" as foo)",
-						module_name
-					),
-					statement_node,
-				)
-			};
+			// case: directory
+			if source_path.is_dir() {
+				self.referenced_wing_paths.borrow_mut().push(source_path.clone());
 
-			return module;
+				// parse error if no alias is provided
+				let module = if let Some(alias) = alias {
+					Ok(StmtKind::Bring {
+						source: BringSource::Directory(Symbol {
+							name: source_path.to_string(),
+							span: module_name.span,
+						}),
+						identifier: Some(alias),
+					})
+				} else {
+					self.with_error::<StmtKind>(
+						format!(
+							"bring {} must be assigned to an identifier (e.g. bring \"foo\" as foo)",
+							module_name
+						),
+						statement_node,
+					)
+				};
+				return module;
+			}
+
+			// case: path does not satisfy is_file or is_dir (is this possible?)
+			return self.with_error(
+				format!("Cannot bring \"{}\": not a recognized file type", module_path),
+				&module_name_node,
+			);
 		}
 
 		if module_name.name.starts_with("\"") && module_name.name.ends_with("\"") {
+			// we need to inspect the npm dependency to figure out if it's a JSII library or a Wing library
+			// first, find where the package.json is located
+			let module_name_parsed = module_name.name[1..module_name.name.len() - 1].to_string();
+			let source_dir = Utf8Path::new(&self.source_name).parent().unwrap();
+			let module_dir = wingii::util::package_json::find_dependency_directory(&module_name_parsed, &source_dir)
+				.ok_or_else(|| {
+					self
+						.with_error::<Node>(
+							format!(
+								"Unable to load {}: Module not found in \"{}\"",
+								module_name, self.source_name
+							),
+							&statement_node,
+						)
+						.err();
+				})?;
+
+			// If the package.json has a `wing` field, then we treat it as a Wing library
+			if is_wing_library(&Utf8Path::new(&module_dir)) {
+				return if let Some(alias) = alias {
+					// make sure the Wing library is also parsed
+					self.referenced_wing_paths.borrow_mut().push(module_dir.clone());
+
+					Ok(StmtKind::Bring {
+						source: BringSource::WingLibrary(
+							Symbol {
+								name: module_name_parsed,
+								span: module_name.span,
+							},
+							module_dir,
+						),
+						identifier: Some(alias),
+					})
+				} else {
+					self.with_error::<StmtKind>(
+						format!(
+							"bring {} must be assigned to an identifier (e.g. bring \"foo\" as foo)",
+							module_name
+						),
+						statement_node,
+					)
+				};
+			}
+
+			// otherwise, we treat it as a JSII library
 			return if let Some(alias) = alias {
 				Ok(StmtKind::Bring {
 					source: BringSource::JsiiModule(Symbol {
-						name: module_name.name[1..module_name.name.len() - 1].to_string(),
+						name: module_name_parsed,
 						span: module_name.span,
 					}),
 					identifier: Some(alias),
@@ -838,13 +1010,28 @@ impl<'s> Parser<'s> {
 			}
 		}
 
+		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
+		let access = self.build_access_modifier(access_modifier_node)?;
+		if access == AccessModifier::Protected {
+			self.with_error::<Node>(
+				"Enums must be public (\"pub\") or private",
+				&access_modifier_node.expect("access modifier node"),
+			)?;
+		}
+
 		Ok(StmtKind::Enum {
 			name: name.unwrap(),
 			values,
+			access,
 		})
 	}
 
 	fn build_class_statement(&self, statement_node: &Node, class_phase: Phase) -> DiagnosticResult<StmtKind> {
+		let class_phase = if statement_node.child_by_field_name("phase_modifier").is_some() {
+			Phase::Inflight
+		} else {
+			class_phase
+		};
 		let mut cursor = statement_node.walk();
 		let mut fields = vec![];
 		let mut methods = vec![];
@@ -871,7 +1058,9 @@ impl<'s> Parser<'s> {
 						continue;
 					};
 
-					let Ok(func_def) = self.build_function_definition(Some(method_name.clone()), &class_element, phase, is_static) else {
+					let Ok(func_def) =
+						self.build_function_definition(Some(method_name.clone()), &class_element, phase, is_static)
+					else {
 						continue;
 					};
 
@@ -894,6 +1083,7 @@ impl<'s> Parser<'s> {
 							message: "Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668"
 								.to_string(),
 							span: Some(self.node_span(&class_element)),
+							annotations: vec![],
 						});
 					}
 
@@ -910,7 +1100,7 @@ impl<'s> Parser<'s> {
 						reassignable: class_element.child_by_field_name("reassignable").is_some(),
 						is_static,
 						phase,
-						access_modifier: self.build_access_modifier(class_element.child_by_field_name("access_modifier"))?,
+						access: self.build_access_modifier(class_element.child_by_field_name("access_modifier"))?,
 					})
 				}
 				"initializer" => {
@@ -963,7 +1153,7 @@ impl<'s> Parser<'s> {
 							},
 							is_static: false,
 							span: self.node_span(&class_element),
-							access_modifier: AccessModifier::Public,
+							access: AccessModifier::Public,
 						})
 					} else {
 						initializer = Some(FunctionDefinition {
@@ -978,7 +1168,7 @@ impl<'s> Parser<'s> {
 								phase: Phase::Preflight,
 							},
 							span: self.node_span(&class_element),
-							access_modifier: AccessModifier::Public,
+							access: AccessModifier::Public,
 						})
 					}
 				}
@@ -1022,7 +1212,7 @@ impl<'s> Parser<'s> {
 				body: FunctionBody::Statements(Scope::new(vec![], WingSpan::default())),
 				is_static: false,
 				span: WingSpan::default(),
-				access_modifier: AccessModifier::Public,
+				access: AccessModifier::Public,
 			},
 		};
 
@@ -1047,7 +1237,7 @@ impl<'s> Parser<'s> {
 				body: FunctionBody::Statements(Scope::new(vec![], WingSpan::default())),
 				is_static: false,
 				span: WingSpan::default(),
-				access_modifier: AccessModifier::Public,
+				access: AccessModifier::Public,
 			},
 		};
 
@@ -1094,6 +1284,15 @@ impl<'s> Parser<'s> {
 			}
 		}
 
+		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
+		let access = self.build_access_modifier(access_modifier_node)?;
+		if access == AccessModifier::Protected {
+			self.with_error::<Node>(
+				"Classes must be public (\"pub\") or private",
+				&access_modifier_node.expect("access modifier node"),
+			)?;
+		}
+
 		Ok(StmtKind::Class(Class {
 			name,
 			fields,
@@ -1103,6 +1302,7 @@ impl<'s> Parser<'s> {
 			initializer,
 			phase: class_phase,
 			inflight_initializer,
+			access,
 		}))
 	}
 
@@ -1173,7 +1373,21 @@ impl<'s> Parser<'s> {
 			}
 		}
 
-		Ok(StmtKind::Interface(Interface { name, methods, extends }))
+		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
+		let access = self.build_access_modifier(access_modifier_node)?;
+		if access == AccessModifier::Protected {
+			self.with_error::<Node>(
+				"Interfaces must be public (\"pub\") or private",
+				&access_modifier_node.expect("access modifier node"),
+			)?;
+		}
+
+		Ok(StmtKind::Interface(Interface {
+			name,
+			methods,
+			extends,
+			access,
+		}))
 	}
 
 	fn build_interface_method(
@@ -1227,8 +1441,12 @@ impl<'s> Parser<'s> {
 		let signature = self.build_function_signature(func_def_node, phase)?;
 		let statements = if let Some(external) = func_def_node.child_by_field_name("extern_modifier") {
 			let node_text = self.node_text(&external.named_child(0).unwrap());
-			let node_text = &node_text[1..node_text.len() - 1];
-			FunctionBody::External(node_text.to_string())
+			let file_path = Utf8Path::new(&node_text[1..node_text.len() - 1]);
+			let file_path = normalize_path(file_path, Some(&Utf8Path::new(&self.source_name)));
+			if !file_path.exists() {
+				self.add_error(format!("File not found: {}", node_text), &external);
+			}
+			FunctionBody::External(file_path.to_string())
 		} else {
 			FunctionBody::Statements(self.build_scope(&self.get_child_field(func_def_node, "block")?, phase))
 		};
@@ -1239,7 +1457,7 @@ impl<'s> Parser<'s> {
 			signature,
 			is_static,
 			span: self.node_span(func_def_node),
-			access_modifier: self.build_access_modifier(func_def_node.child_by_field_name("access_modifier"))?,
+			access: self.build_access_modifier(func_def_node.child_by_field_name("access_modifier"))?,
 		})
 	}
 
@@ -1608,7 +1826,7 @@ impl<'s> Parser<'s> {
 				};
 
 				Ok(Expr::new(
-					ExprKind::New(NewExpr {
+					ExprKind::New(New {
 						class: class_udt,
 						obj_id,
 						arg_list: arg_list?,
@@ -2011,8 +2229,9 @@ impl<'s> Parser<'s> {
 			if node.kind() == "AUTOMATIC_SEMICOLON" {
 				let target_node = Self::last_non_extra(node);
 				let diag = Diagnostic {
-					message: "Expected ';'".to_string(),
+					message: ERR_EXPECTED_SEMICOLON.to_string(),
 					span: Some(self.node_span(&target_node)),
+					annotations: vec![],
 				};
 				report_diagnostic(diag);
 			} else if node.kind() == "AUTOMATIC_BLOCK" {
@@ -2033,6 +2252,7 @@ impl<'s> Parser<'s> {
 					let diag = Diagnostic {
 						message: format!("Expected '{}'", node.kind()),
 						span: Some(self.node_span(&target_node)),
+						annotations: vec![],
 					};
 					report_diagnostic(diag);
 				}
@@ -2124,14 +2344,14 @@ impl<'s> Parser<'s> {
 				},
 				is_static: true,
 				span: statements_span.clone(),
-				access_modifier: AccessModifier::Public,
+				access: AccessModifier::Public,
 			}),
 			statements_span.clone(),
 		);
 
 		let type_span = self.node_span(&statement_node.child(0).unwrap());
 		Ok(StmtKind::Expression(Expr::new(
-			ExprKind::New(NewExpr {
+			ExprKind::New(New {
 				class: UserDefinedType {
 					root: Symbol::global(WINGSDK_STD_MODULE),
 					fields: vec![Symbol::global(WINGSDK_TEST_CLASS_NAME)],
@@ -2150,12 +2370,34 @@ impl<'s> Parser<'s> {
 	}
 }
 
-fn is_entrypoint_file(path: &Utf8Path) -> bool {
-	path.file_name() == Some("main.w")
-		|| path
-			.file_name()
-			.map(|s| s.to_string().ends_with(".main.w"))
-			.unwrap_or(false)
+/// Check if the package.json in the given directory has a `wing` field
+fn is_wing_library(module_dir: &Utf8Path) -> bool {
+	let package_json_path = Utf8Path::new(module_dir).join("package.json");
+	if !package_json_path.exists() {
+		return false;
+	}
+
+	let package_json = match fs::read_to_string(package_json_path) {
+		Ok(package_json) => package_json,
+		Err(_) => return false,
+	};
+
+	let package_json: serde_json::Value = match serde_json::from_str(&package_json) {
+		Ok(package_json) => package_json,
+		Err(_) => return false,
+	};
+
+	match package_json.get("wing") {
+		Some(_) => true,
+		None => false,
+	}
+}
+
+pub fn is_entrypoint_file(path: &Utf8Path) -> bool {
+	path
+		.file_name()
+		.map(|s| s == "main.w" || s.ends_with(".main.w") || s.ends_with(".test.w"))
+		.unwrap_or(false)
 }
 
 fn is_valid_module_statement(stmt: &Stmt) -> bool {

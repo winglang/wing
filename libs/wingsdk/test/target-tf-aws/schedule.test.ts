@@ -8,7 +8,7 @@ import { mkdtemp, tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 test("schedule behavior with rate", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const fn = Testing.makeHandler(
     app,
     "Handler",
@@ -24,6 +24,7 @@ test("schedule behavior with rate", () => {
   expect(tfResourcesOf(output)).toEqual([
     "aws_cloudwatch_event_rule", // main schedule event
     "aws_cloudwatch_event_target", // schedule target
+    "aws_cloudwatch_log_group", // log group for function
     "aws_iam_role", // role for function
     "aws_iam_role_policy", // policy for role
     "aws_iam_role_policy_attachment", // execution policy for role
@@ -47,7 +48,7 @@ test("schedule behavior with rate", () => {
 
 test("schedule behavior with cron", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const fn = Testing.makeHandler(
     app,
     "Handler",
@@ -63,6 +64,7 @@ test("schedule behavior with cron", () => {
   expect(tfResourcesOf(output)).toEqual([
     "aws_cloudwatch_event_rule", // main schedule event
     "aws_cloudwatch_event_target", // schedule target
+    "aws_cloudwatch_log_group", // log group for function
     "aws_iam_role", // role for function
     "aws_iam_role_policy", // policy for role
     "aws_iam_role_policy_attachment", // execution policy for role
@@ -86,7 +88,7 @@ test("schedule behavior with cron", () => {
 
 test("schedule with two functions", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const fn1 = Testing.makeHandler(
     app,
     "Handler1",
@@ -108,6 +110,7 @@ test("schedule with two functions", () => {
   expect(tfResourcesOf(output)).toEqual([
     "aws_cloudwatch_event_rule", // main schedule event
     "aws_cloudwatch_event_target", // schedule target
+    "aws_cloudwatch_log_group", // log group for function
     "aws_iam_role", // role for function
     "aws_iam_role_policy", // policy for role
     "aws_iam_role_policy_attachment", // execution policy for role
@@ -122,7 +125,7 @@ test("schedule with two functions", () => {
 
 test("schedule with rate and cron simultaneously", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
 
   // THEN
   expect(() =>
@@ -135,7 +138,7 @@ test("schedule with rate and cron simultaneously", () => {
 
 test("cron with more than five values", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
 
   // THEN
   expect(() =>
@@ -149,7 +152,7 @@ test("cron with more than five values", () => {
 
 test("schedule without rate or cron", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
 
   // THEN
   expect(() => cloud.Schedule._newSchedule(app, "Schedule")).toThrow(
@@ -159,7 +162,7 @@ test("schedule without rate or cron", () => {
 
 test("schedule with rate less than 1 minute", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
 
   // THEN
   expect(() =>

@@ -2,41 +2,21 @@
 
 exports[`create a service with on start method 1`] = `
 {
-  ".wing/my_service-serviceonstartef2b13b9_c8dd91a7.js": "exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/service.onevent.inflight.js\\")).ServiceOnEventHandler({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(message) {
-  console.log(\\"Service Started\\");
-}
+  ".wing/my_service_c815f66e.js": "\\"use strict\\";
+let $obj;
+async function $initOnce() {
+  $obj = $obj || (await ({
+      handle: async () => {
+        console.log(\\"hi\\");
+      }
+    }));
+  return $obj;
 };
-})())({
-
-}), args: {} })).handle(event);
+exports.handle = async function() {
+  return (await $initOnce()).handle();
 };",
   "connections.json": {
-    "connections": [
-      {
-        "name": "handle()",
-        "source": "root/my_service/my_service-ServiceOnStartef2b13b9",
-        "target": "root/OnStartHandler",
-      },
-      {
-        "name": "$inflight_init()",
-        "source": "root/my_service/my_service-ServiceOnStartef2b13b9",
-        "target": "root/OnStartHandler",
-      },
-      {
-        "name": "onStart()",
-        "source": "root/my_service",
-        "target": "root/my_service/my_service-ServiceOnStartef2b13b9",
-      },
-    ],
+    "connections": [],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -51,21 +31,11 @@ async handle(message) {
       },
       {
         "attrs": {},
-        "path": "root/my_service/my_service-ServiceOnStartef2b13b9",
-        "props": {
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_service-serviceonstartef2b13b9_c8dd91a7.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "wingsdk.cloud.Function",
-      },
-      {
-        "attrs": {},
         "path": "root/my_service",
         "props": {
           "autoStart": true,
-          "onStartHandler": "\${root/my_service/my_service-ServiceOnStartef2b13b9#attrs.handle}",
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/my_service_c815f66e.js",
         },
         "type": "wingsdk.cloud.Service",
       },
@@ -75,18 +45,13 @@ async handle(message) {
   "tree.json": {
     "tree": {
       "children": {
-        "OnStartHandler": {
+        "Handler": {
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.2.70",
           },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "OnStartHandler",
-          "path": "root/OnStartHandler",
+          "id": "Handler",
+          "path": "root/Handler",
         },
         "cloud.TestRunner": {
           "constructInfo": {
@@ -102,32 +67,6 @@ async handle(message) {
           "path": "root/cloud.TestRunner",
         },
         "my_service": {
-          "children": {
-            "my_service-ServiceOnStart-ef2b13b9": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.2.70",
-              },
-              "display": {
-                "hidden": true,
-              },
-              "id": "my_service-ServiceOnStart-ef2b13b9",
-              "path": "root/my_service/my_service-ServiceOnStart-ef2b13b9",
-            },
-            "my_service-ServiceOnStartef2b13b9": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.2.70",
-              },
-              "display": {
-                "description": "A cloud function (FaaS)",
-                "sourceModule": "@winglang/sdk",
-                "title": "onStart()",
-              },
-              "id": "my_service-ServiceOnStartef2b13b9",
-              "path": "root/my_service/my_service-ServiceOnStartef2b13b9",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.2.70",

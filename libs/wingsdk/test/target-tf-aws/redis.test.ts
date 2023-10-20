@@ -16,7 +16,7 @@ const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
 describe("When creating a Redis resource", () => {
   it("should create an elasticache cluster and required vpc networking resources", () => {
     // GIVEN
-    const app = new tfaws.App({ outdir: mkdtemp() });
+    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     ex.Redis._newRedis(app, "Redis");
 
     // WHEN
@@ -40,7 +40,7 @@ describe("When creating a Redis resource", () => {
 
   it("should only contain a single instance of the vpc resources", () => {
     // GIVEN
-    const app = new tfaws.App({ outdir: mkdtemp() });
+    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     ex.Redis._newRedis(app, "Redis");
 
     // WHEN
@@ -57,11 +57,14 @@ describe("When creating a Redis resource", () => {
   describe("that is used by a function", () => {
     it("lambda function should have access to the redis cluster", () => {
       // GIVEN
-      const app = new tfaws.App({ outdir: mkdtemp() });
+      const app = new tfaws.App({
+        outdir: mkdtemp(),
+        entrypointDir: __dirname,
+      });
       const redisCluster = ex.Redis._newRedis(app, "Redis") as ex.Redis;
       const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
       const func = Function._newFunction(app, "Function", inflight);
-      redisCluster.bind(func, ["set", "get"]);
+      redisCluster.onLift(func, ["set", "get"]);
 
       // WHEN
       const output = app.synth();
@@ -79,7 +82,7 @@ describe("When creating a Redis resource", () => {
 describe("When creating multiple Redis resources", () => {
   it("should only contain a single instance of the vpc resources", () => {
     // GIVEN
-    const app = new tfaws.App({ outdir: mkdtemp() });
+    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     ex.Redis._newRedis(app, "RedisOne");
     ex.Redis._newRedis(app, "RedisTwo");
 
@@ -100,13 +103,16 @@ describe("When creating multiple Redis resources", () => {
   describe("that are used by a function", () => {
     it("the function should have access to both clusters", () => {
       // GIVEN
-      const app = new tfaws.App({ outdir: mkdtemp() });
+      const app = new tfaws.App({
+        outdir: mkdtemp(),
+        entrypointDir: __dirname,
+      });
       const redisCluster = ex.Redis._newRedis(app, "Redis") as ex.Redis;
       const otherCluster = ex.Redis._newRedis(app, "OtherRedis") as ex.Redis;
       const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
       const func = Function._newFunction(app, "Function", inflight);
-      redisCluster.bind(func, ["set", "get"]);
-      otherCluster.bind(func, ["set", "get"]);
+      redisCluster.onLift(func, ["set", "get"]);
+      otherCluster.onLift(func, ["set", "get"]);
 
       // WHEN
       const output = app.synth();

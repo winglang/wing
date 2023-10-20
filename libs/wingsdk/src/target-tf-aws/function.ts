@@ -2,6 +2,7 @@ import { resolve } from "path";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
+import { CloudwatchLogGroup } from "../.gen/providers/aws/cloudwatch-log-group";
 import { IamRole } from "../.gen/providers/aws/iam-role";
 import { IamRolePolicy } from "../.gen/providers/aws/iam-role-policy";
 import { IamRolePolicyAttachment } from "../.gen/providers/aws/iam-role-policy-attachment";
@@ -182,6 +183,15 @@ export class Function extends cloud.Function implements IAwsFunction {
       );
     }
 
+    if (!props.logRetentionDays || props.logRetentionDays >= 0) {
+      new CloudwatchLogGroup(this, "CloudwatchLogGroup", {
+        name: `/aws/lambda/${name}`,
+        retentionInDays: props.logRetentionDays ?? 30,
+      });
+    } else {
+      // Negative value means Infinite retention
+    }
+
     // Create Lambda function
     this.function = new LambdaFunction(this, "Default", {
       functionName: name,
@@ -206,7 +216,7 @@ export class Function extends cloud.Function implements IAwsFunction {
       },
       timeout: props.timeout
         ? props.timeout.seconds
-        : Duration.fromMinutes(0.5).seconds,
+        : Duration.fromMinutes(1).seconds,
       memorySize: props.memory ? props.memory : undefined,
       architectures: ["arm64"],
     });
@@ -223,7 +233,7 @@ export class Function extends cloud.Function implements IAwsFunction {
     return this.function.functionName;
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("functions can only be bound by tfaws.Function for now");
     }
@@ -239,7 +249,7 @@ export class Function extends cloud.Function implements IAwsFunction {
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.function.arn);
 
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

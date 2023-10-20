@@ -166,9 +166,11 @@ new cloud.Bucket(props?: BucketProps);
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.get">get</a></code> | Retrieve an object from the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.getJson">getJson</a></code> | Retrieve a Json object from the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.list">list</a></code> | Retrieve existing objects keys from the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.metadata">metadata</a></code> | Get the metadata of an object in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.publicUrl">publicUrl</a></code> | Returns a url to the given file. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.putJson">putJson</a></code> | Put a Json object in the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.signedUrl">signedUrl</a></code> | Returns a signed url to the given file. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.tryDelete">tryDelete</a></code> | Delete an object from the bucket if it exists. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGet">tryGet</a></code> | Get an object from the bucket if it exists. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGetJson">tryGetJson</a></code> | Gets an object from the bucket if it exists, parsing it as Json. |
@@ -400,6 +402,22 @@ Limits the response to keys that begin with the specified prefix.
 
 ---
 
+##### `metadata` <a name="metadata" id="@winglang/sdk.cloud.IBucketClient.metadata"></a>
+
+```wing
+inflight metadata(key: str): ObjectMetadata
+```
+
+Get the metadata of an object in the bucket.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.metadata.parameter.key"></a>
+
+- *Type:* str
+
+Key of the object.
+
+---
+
 ##### `publicUrl` <a name="publicUrl" id="@winglang/sdk.cloud.IBucketClient.publicUrl"></a>
 
 ```wing
@@ -417,7 +435,7 @@ Returns a url to the given file.
 ##### `put` <a name="put" id="@winglang/sdk.cloud.IBucketClient.put"></a>
 
 ```wing
-inflight put(key: str, body: str): void
+inflight put(key: str, body: str, options?: BucketPutOptions): void
 ```
 
 Put an object in the bucket.
@@ -435,6 +453,14 @@ Key of the object.
 - *Type:* str
 
 Content of the object we want to store into the bucket.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.IBucketClient.put.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.BucketPutOptions">BucketPutOptions</a>
+
+Additional options.
 
 ---
 
@@ -459,6 +485,30 @@ Key of the object.
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 Json object that we want to store into the bucket.
+
+---
+
+##### `signedUrl` <a name="signedUrl" id="@winglang/sdk.cloud.IBucketClient.signedUrl"></a>
+
+```wing
+inflight signedUrl(key: str, options?: BucketSignedUrlOptions): str
+```
+
+Returns a signed url to the given file.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.signedUrl.parameter.key"></a>
+
+- *Type:* str
+
+The key to access the cloud object.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.IBucketClient.signedUrl.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.BucketSignedUrlOptions">BucketSignedUrlOptions</a>
+
+The signedUrlOptions where you can provide the configurations of the signed url.
 
 ---
 
@@ -537,7 +587,7 @@ The tree node.
 
 ### BucketDeleteOptions <a name="BucketDeleteOptions" id="@winglang/sdk.cloud.BucketDeleteOptions"></a>
 
-Interface for delete method inside `Bucket`.
+Options for `Bucket.delete()`.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketDeleteOptions.Initializer"></a>
 
@@ -695,6 +745,131 @@ public: bool;
 - *Default:* false
 
 Whether the bucket's objects should be publicly accessible.
+
+---
+
+### BucketPutOptions <a name="BucketPutOptions" id="@winglang/sdk.cloud.BucketPutOptions"></a>
+
+Options for `Bucket.put()`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketPutOptions.Initializer"></a>
+
+```wing
+bring cloud;
+
+let BucketPutOptions = cloud.BucketPutOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.BucketPutOptions.property.contentType">contentType</a></code> | <code>str</code> | The HTTP Content-Type of the object. |
+
+---
+
+##### `contentType`<sup>Required</sup> <a name="contentType" id="@winglang/sdk.cloud.BucketPutOptions.property.contentType"></a>
+
+```wing
+contentType: str;
+```
+
+- *Type:* str
+- *Default:* Determined by file extension or fallback to "application/octet-stream"
+
+The HTTP Content-Type of the object.
+
+> [https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type)
+
+---
+
+### BucketSignedUrlOptions <a name="BucketSignedUrlOptions" id="@winglang/sdk.cloud.BucketSignedUrlOptions"></a>
+
+Options for `Bucket.signedUrl()`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketSignedUrlOptions.Initializer"></a>
+
+```wing
+bring cloud;
+
+let BucketSignedUrlOptions = cloud.BucketSignedUrlOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.BucketSignedUrlOptions.property.duration">duration</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The duration for the signed url to expire. |
+
+---
+
+##### `duration`<sup>Optional</sup> <a name="duration" id="@winglang/sdk.cloud.BucketSignedUrlOptions.property.duration"></a>
+
+```wing
+duration: duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+
+The duration for the signed url to expire.
+
+---
+
+### ObjectMetadata <a name="ObjectMetadata" id="@winglang/sdk.cloud.ObjectMetadata"></a>
+
+Metadata of a bucket object.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ObjectMetadata.Initializer"></a>
+
+```wing
+bring cloud;
+
+let ObjectMetadata = cloud.ObjectMetadata{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ObjectMetadata.property.lastModified">lastModified</a></code> | <code><a href="#@winglang/sdk.std.Datetime">datetime</a></code> | The time the object was last modified. |
+| <code><a href="#@winglang/sdk.cloud.ObjectMetadata.property.size">size</a></code> | <code>num</code> | The size of the object in bytes. |
+| <code><a href="#@winglang/sdk.cloud.ObjectMetadata.property.contentType">contentType</a></code> | <code>str</code> | The content type of the object, if it is known. |
+
+---
+
+##### `lastModified`<sup>Required</sup> <a name="lastModified" id="@winglang/sdk.cloud.ObjectMetadata.property.lastModified"></a>
+
+```wing
+lastModified: datetime;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Datetime">datetime</a>
+
+The time the object was last modified.
+
+---
+
+##### `size`<sup>Required</sup> <a name="size" id="@winglang/sdk.cloud.ObjectMetadata.property.size"></a>
+
+```wing
+size: num;
+```
+
+- *Type:* num
+
+The size of the object in bytes.
+
+---
+
+##### `contentType`<sup>Optional</sup> <a name="contentType" id="@winglang/sdk.cloud.ObjectMetadata.property.contentType"></a>
+
+```wing
+contentType: str;
+```
+
+- *Type:* str
+
+The content type of the object, if it is known.
 
 ---
 

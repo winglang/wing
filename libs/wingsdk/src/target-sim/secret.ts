@@ -22,9 +22,9 @@ export class Secret extends cloud.Secret implements ISimulatorResource {
       ResourceNames.generateName(this, { disallowedRegex: /[^\w]/g });
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */
