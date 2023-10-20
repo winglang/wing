@@ -404,7 +404,7 @@ export interface IBucketClient {
 
   /**
    * Copy an object to a new location in the bucket. If the destination object
-   * already exists, it will be overwritten.
+   * already exists, it will be overwritten. Returns once the copying is finished.
    *
    * @param srcKey The key of the source object you wish to copy.
    * @param dstKey The key of the destination object after copying.
