@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $a, $b, $testing_Assert }) {
   class $Closure1 {
     constructor({  }) {
@@ -25,6 +26,7 @@ module.exports = function({ $a, $b, $testing_Assert }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $c, $d, $testing_Assert }) {
   class $Closure2 {
     constructor({  }) {
@@ -48,6 +50,7 @@ module.exports = function({ $c, $d, $testing_Assert }) {
 
 ## inflight.$Closure3-1.js
 ```js
+"use strict";
 module.exports = function({ $e, $f, $testing_Assert }) {
   class $Closure3 {
     constructor({  }) {
@@ -101,6 +104,7 @@ module.exports = function({ $e, $f, $testing_Assert }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -121,7 +125,7 @@ class $Root extends $stdlib.std.Resource {
           require("./inflight.$Closure1-1.js")({
             $a: ${context._lift(a)},
             $b: ${context._lift(b)},
-            $testing_Assert: ${context._lift(testing.Assert)},
+            $testing_Assert: ${context._lift($stdlib.core.toLiftableModuleType(testing.Assert, "@winglang/sdk/testing", "Assert"))},
           })
         `;
       }
@@ -139,12 +143,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(a, host, []);
-          $Closure1._registerBindObject(b, host, []);
+          $Closure1._registerOnLiftObject(a, host, []);
+          $Closure1._registerOnLiftObject(b, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -157,7 +161,7 @@ class $Root extends $stdlib.std.Resource {
           require("./inflight.$Closure2-1.js")({
             $c: ${context._lift(c)},
             $d: ${context._lift(d)},
-            $testing_Assert: ${context._lift(testing.Assert)},
+            $testing_Assert: ${context._lift($stdlib.core.toLiftableModuleType(testing.Assert, "@winglang/sdk/testing", "Assert"))},
           })
         `;
       }
@@ -175,12 +179,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(c, host, []);
-          $Closure2._registerBindObject(d, host, []);
+          $Closure2._registerOnLiftObject(c, host, []);
+          $Closure2._registerOnLiftObject(d, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
@@ -193,7 +197,7 @@ class $Root extends $stdlib.std.Resource {
           require("./inflight.$Closure3-1.js")({
             $e: ${context._lift(e)},
             $f: ${context._lift(f)},
-            $testing_Assert: ${context._lift(testing.Assert)},
+            $testing_Assert: ${context._lift($stdlib.core.toLiftableModuleType(testing.Assert, "@winglang/sdk/testing", "Assert"))},
           })
         `;
       }
@@ -211,12 +215,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure3._registerBindObject(e, host, []);
-          $Closure3._registerBindObject(f, host, []);
+          $Closure3._registerOnLiftObject(e, host, []);
+          $Closure3._registerOnLiftObject(f, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const a = undefined;
