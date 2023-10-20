@@ -15,10 +15,10 @@ export class BucketClient implements IBucketClient {
   constructor(
     bucketName: string,
     storage: Storage,
-    projectId: string = process.env.GCP_PROJECT_ID || "wingsdk-test"
+    projectId: string = process.env.GCP_PROJECT_ID ?? "wingsdk-test"
   ) {
     this.bucketName = bucketName;
-    this.storage = storage ? storage : new Storage({ projectId: projectId });
+    this.storage = storage ? storage : new Storage({ projectId });
     this.bucket = this.storage.bucket(this.bucketName);
   }
 
@@ -26,8 +26,8 @@ export class BucketClient implements IBucketClient {
     throw new Error("Method not implemented.");
   }
 
-  // check if bucket is public or not from bucket metadata and set it to _public
-  public async isPublic(): Promise<boolean> {
+  // check if bucket is public or not from bucket metadata
+  private async isPublic(): Promise<boolean> {
     try {
       const [metadata] = await this.bucket.getMetadata();
       return metadata.iamConfiguration?.publicAccessPrevention === "inherited";
@@ -38,11 +38,6 @@ export class BucketClient implements IBucketClient {
     }
   }
 
-  /**
-   * Check if an object exists in the bucket
-   *
-   * @param key Key of the object
-   */
   public async exists(key: string): Promise<boolean> {
     try {
       const res = await this.bucket.file(key).exists();
@@ -52,12 +47,6 @@ export class BucketClient implements IBucketClient {
     }
   }
 
-  /**
-   * Put object into bucket with given body contents
-   *
-   * @param key Key of the object
-   * @param body string contents of the object
-   */
   public async put(key: string, body: string): Promise<void> {
     try {
       await this.bucket.file(key).save(body);
@@ -66,12 +55,6 @@ export class BucketClient implements IBucketClient {
     }
   }
 
-  /**
-   * Put Json object into bucket with given body contents
-   *
-   * @param key Key of the object
-   * @param body Json object
-   */
   public async putJson(key: string, body: Json): Promise<void> {
     try {
       await this.put(key, JSON.stringify(body, null, 2));
@@ -80,12 +63,6 @@ export class BucketClient implements IBucketClient {
     }
   }
 
-  /**
-   * Get an object from the bucket
-   *
-   * @param key Key of the object
-   * @returns string content of the object as string
-   */
   public async get(key: string): Promise<string> {
     try {
       const body = await this.bucket.file(key).download();
@@ -95,12 +72,6 @@ export class BucketClient implements IBucketClient {
     }
   }
 
-  /**
-   * Get an object from the bucket if it exists
-   *
-   * @param key Key of the object
-   * @returns string content of the object as string
-   */
   public async tryGet(key: string): Promise<string | undefined> {
     try {
       if (await this.exists(key)) {
@@ -112,12 +83,6 @@ export class BucketClient implements IBucketClient {
     }
   }
 
-  /**
-   * Get a Json object from the bucket
-   *
-   * @param key Key of the object
-   * @returns Json content of the object
-   */
   public async getJson(key: string): Promise<Json> {
     try {
       if (!(await this.exists(key))) {
@@ -131,12 +96,6 @@ export class BucketClient implements IBucketClient {
     }
   }
 
-  /**
-   * Get a Json object from the bucket if it exists
-   *
-   * @param key Key of the object
-   * @returns Json content of the object
-   */
   public async tryGetJson(key: string): Promise<Json | undefined> {
     try {
       if (await this.exists(key)) {
@@ -148,12 +107,6 @@ export class BucketClient implements IBucketClient {
     }
   }
 
-  /**
-   * Delete an object from the bucket
-   *
-   * @param key Key of the object
-   * @param opts Option object supporting additional strategies to delete item from a bucket
-   */
   public async delete(
     key: string,
     opts: BucketDeleteOptions = {}
@@ -171,12 +124,6 @@ export class BucketClient implements IBucketClient {
     }
   }
 
-  /**
-   * Delete an object from the bucket if it exists
-   *
-   * @param key Key of the object
-   * @param opts Option object supporting additional strategies to delete item from a bucket
-   */
   public async tryDelete(key: string): Promise<boolean> {
     try {
       if (await this.exists(key)) {
@@ -189,11 +136,6 @@ export class BucketClient implements IBucketClient {
     }
   }
 
-  /**
-   * List all keys in the bucket
-   *
-   * @param prefix Limits the response to keys that begin with the specified prefix
-   */
   public async list(prefix?: string): Promise<string[]> {
     try {
       const [files] = await this.bucket.getFiles({ prefix });
@@ -203,10 +145,6 @@ export class BucketClient implements IBucketClient {
     }
   }
 
-  /**
-   * Returns a url to the given file.
-   * @Throws if the file is not public or if object does not exist.
-   */
   public async publicUrl(key: string): Promise<string> {
     try {
       if (!(await this.exists(key))) {
@@ -225,14 +163,9 @@ export class BucketClient implements IBucketClient {
     }
   }
 
-  // TODO: implement
+  // TODO: implement signedUrl
   // https://github.com/winglang/wing/issues/4599
-  /**
-   * Returns a signed url to the given file. This URL can be used by anyone to
-   * access the file until the link expires (defaults to 24 hours).
-   * @param key The key to reach
-   * @param duration Time until expires
-   */
+
   public async signedUrl(
     _key: string,
     _options?: BucketSignedUrlOptions
