@@ -28,11 +28,15 @@ function loadEnvVariables(mode?: string) {
 }
 
 function getModeFromArgs(args: string[]): string | undefined {
-  if (args.includes("run") || args.includes("it")) return "run";
-  if (args.includes("compile")) return "compile";
-  if (args.includes("test")) return "test";
-  if (args.includes("lsp")) return "lsp";
-  return undefined;
+  return args.includes("run") || args.includes("it")
+    ? "run"
+    : args.includes("compile")
+    ? "compile"
+    : args.includes("test")
+    ? "test"
+    : args.includes("lsp")
+    ? "lsp"
+    : undefined;
 }
 
 function runSubCommand(subCommand: string, path: string = subCommand) {
