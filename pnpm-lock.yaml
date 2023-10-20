@@ -312,6 +312,9 @@ importers:
       dotenv:
         specifier: ^16.3.1
         version: 16.3.1
+      dotenv-expand:
+        specifier: ^10.0.0
+        version: 10.0.0
       glob:
         specifier: ^10.3.10
         version: 10.3.10
@@ -13267,7 +13270,6 @@ packages:
   /dotenv-expand@10.0.0:
     resolution: {integrity: sha512-GopVGCpVS1UKH75VKHGuQFqS1Gusej0z4FyQkPdwjil2gNIv+LNsqBlboOzpJFZKVT95GkCyWJbBSdFEFUWI2A==}
     engines: {node: '>=12'}
-    dev: true
 
   /dotenv@16.3.1:
     resolution: {integrity: sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==}
@@ -13287,7 +13289,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20231019
+      typescript: 5.3.0-dev.20231020
     dev: true
 
   /dset@3.1.2:
@@ -22719,8 +22721,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20231019:
-    resolution: {integrity: sha512-fdexB8vj46ZSMsAg6g5aSNjThPegwT73WYwNM1DLmEnt0+fKPmmyft3LzfUR1CMHtcQNic5hl+0FeNTv7l232Q==}
+  /typescript@5.3.0-dev.20231020:
+    resolution: {integrity: sha512-7C4VN/XIuL4MDSf06bSrCHUL4bZq8RMt58jZ5DdwoGZmBlnPE2YEm1gxygeUws72yvvlJJzU3BL89RMQjg7R9Q==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

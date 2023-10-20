@@ -1,6 +1,8 @@
+import fs from "fs";
 import { Command, Option } from "commander";
 import { satisfies } from "compare-versions";
-import * as dotenv from "dotenv";
+import { parse } from "dotenv";
+import { expand } from "dotenv-expand";
 
 import { collectCommandAnalytics } from "./analytics/collect";
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
@@ -18,16 +20,17 @@ if (!SUPPORTED_NODE_VERSION) {
   throw new Error("couldn't parse engines.node version from package.json");
 }
 
-function loadEnvVariables(mode?: string) {
-  dotenv.config();
-  dotenv.config({ path: ".env.local" });
-  if (mode) {
-    dotenv.config({ path: `.env.${mode}` });
-    dotenv.config({ path: `.env.${mode}.local` });
+function tryStatSync(file: string): fs.Stats | undefined {
+  try {
+    // The "throwIfNoEntry" is a performance optimization for cases where the file does not exist
+    return fs.statSync(file, { throwIfNoEntry: false });
+  } catch {
+    return undefined;
   }
 }
 
-function getModeFromArgs(args: string[]): string | undefined {
+function getMode(): string | undefined {
+  const args = process.argv;
   switch (true) {
     case args.includes("run"):
     case args.includes("it"):
@@ -40,6 +43,27 @@ function getModeFromArgs(args: string[]): string | undefined {
       return "lsp";
     default:
       return undefined;
+  }
+}
+
+function loadEnvVariables(): void {
+  const mode = getMode();
+  const envFiles = [`.env`, `.env.local`].concat(
+    mode ? [`.env.${mode}`, `.env.${mode}.local`] : []
+  );
+
+  // Parse `envFiles` and combine their variables into a single object
+  const parsed = Object.fromEntries(
+    envFiles.flatMap((file) => {
+      if (!tryStatSync(file)?.isFile()) return [];
+      return Object.entries(parse(fs.readFileSync(file)));
+    })
+  );
+
+  // Expand and load the environment variables
+  const expandedEnvVariables = expand({ parsed });
+  for (const [key, value] of Object.entries(expandedEnvVariables)) {
+    process.env[key] = value;
   }
 }
 
@@ -92,9 +116,7 @@ async function exportAnalyticsHook() {
 
 async function main() {
   checkNodeVersion();
-
-  const mode = getModeFromArgs(process.argv);
-  loadEnvVariables(mode);
+  loadEnvVariables();
 
   const program = new Command();
   program.configureHelp({
