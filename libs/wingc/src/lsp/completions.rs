@@ -188,7 +188,6 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			scope_visitor.visit();
 
 			let found_env = types.get_scope_env(&scope_visitor.found_scope);
-
 			if node_to_complete_kind == "." || node_to_complete_kind == "?." || node_to_complete_kind == "member_identifier" {
 				let parent = node_to_complete.parent().expect("A dot must have a parent");
 
@@ -312,9 +311,10 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 				let reference_bytes = &preceding_text.as_bytes()[parent.start_byte()..node_to_complete.start_byte()];
 				let reference_text =
 					fully_qualify_std_type(std::str::from_utf8(reference_bytes).expect("Reference must be valid utf8"));
+				let reference_text = reference_text.trim_end_matches(".");
 
 				if let Some((lookup_thing, _)) = found_env
-					.lookup_nested_str(&reference_text, scope_visitor.found_stmt_index)
+					.lookup_nested_str(reference_text, scope_visitor.found_stmt_index)
 					.ok()
 				{
 					let completions = match lookup_thing {
@@ -1830,5 +1830,17 @@ let s: S = { a: 1, b:  };
                    //^
 "#,
 		assert!(struct_show_values.iter().any(|c| c.label == "x"))
+	);
+
+	test_completion_list!(
+		partial_type_reference,
+		r#"
+class C {
+	pub static func() {}
+}
+C.fu
+  //^
+"#,
+		assert!(partial_type_reference.iter().any(|c| c.label == "func"))
 	);
 }
