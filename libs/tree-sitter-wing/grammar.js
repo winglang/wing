@@ -105,7 +105,6 @@ module.exports = grammar({
         $.variable_assignment_statement,
         $.return_statement,
         $.class_definition,
-        $.resource_definition,
         $.interface_definition,
         $.for_in_loop,
         $.while_statement,
@@ -131,6 +130,7 @@ module.exports = grammar({
 
     struct_definition: ($) =>
       seq(
+        optional(field("access_modifier", $.access_modifier)),
         "struct",
         field("name", $.identifier),
         optional(seq("extends", commaSep(field("extends", $.custom_type)))),
@@ -141,6 +141,7 @@ module.exports = grammar({
 
     enum_definition: ($) =>
       seq(
+        optional(field("access_modifier", $.access_modifier)),
         "enum",
         field("enum_name", $.identifier),
         braced(commaSep(alias($.identifier, $.enum_field)))
@@ -185,7 +186,8 @@ module.exports = grammar({
     // Classes
     class_definition: ($) =>
       seq(
-        $.inflight_specifier,
+        optional(field("access_modifier", $.access_modifier)),
+        optional(field("phase_modifier", $.inflight_specifier)),
         "class",
         field("name", $.identifier),
         optional(seq("extends", field("parent", $.custom_type))),
@@ -217,28 +219,9 @@ module.exports = grammar({
         $._semicolon
       ),
 
-    resource_definition: ($) =>
-      seq(
-        "class",
-        field("name", $.identifier),
-        optional(seq("extends", field("parent", $.custom_type))),
-        optional(seq("impl", field("implements", commaSep1($.custom_type)))),
-        field("implementation", $.resource_implementation)
-      ),
-    resource_implementation: ($) =>
-      braced(
-        repeat(
-          choice(
-            $.initializer,
-            $.method_definition,
-            $.inflight_method_definition,
-            $.class_field
-          )
-        )
-      ),
-
     interface_definition: ($) =>
       seq(
+        optional(field("access_modifier", $.access_modifier)),
         "interface",
         field("name", $.identifier),
         optional(seq("extends", field("extends", commaSep1($.custom_type)))),

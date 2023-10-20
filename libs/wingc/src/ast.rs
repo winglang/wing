@@ -298,7 +298,7 @@ pub struct FunctionDefinition {
 	/// Whether this function is static or not. In case of a closure, this is always true.
 	pub is_static: bool,
 	/// Function's access modifier. In case of a closure, this is always public.
-	pub access_modifier: AccessModifier,
+	pub access: AccessModifier,
 	pub span: WingSpan,
 }
 
@@ -361,6 +361,7 @@ pub struct Class {
 	pub parent: Option<UserDefinedType>, // base class (the expression is a reference to a user defined type)
 	pub implements: Vec<UserDefinedType>,
 	pub phase: Phase,
+	pub access: AccessModifier,
 }
 
 impl Class {
@@ -422,6 +423,7 @@ pub struct Interface {
 	pub name: Symbol,
 	pub methods: Vec<(Symbol, FunctionSignature)>,
 	pub extends: Vec<UserDefinedType>,
+	pub access: AccessModifier,
 }
 
 #[derive(Debug)]
@@ -501,10 +503,12 @@ pub enum StmtKind {
 		name: Symbol,
 		extends: Vec<UserDefinedType>,
 		fields: Vec<StructField>,
+		access: AccessModifier,
 	},
 	Enum {
 		name: Symbol,
 		values: IndexSet<Symbol>,
+		access: AccessModifier,
 	},
 	TryCatch {
 		try_statements: Scope,
@@ -527,7 +531,7 @@ pub struct ClassField {
 	pub reassignable: bool,
 	pub phase: Phase,
 	pub is_static: bool,
-	pub access_modifier: AccessModifier,
+	pub access: AccessModifier,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
