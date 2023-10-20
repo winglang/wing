@@ -40,8 +40,8 @@ export class BucketClient implements IBucketClient {
 
   public async exists(key: string): Promise<boolean> {
     try {
-      const res = await this.bucket.file(key).exists();
-      return res[0];
+      const [exists] = await this.bucket.file(key).exists();
+      return exists;
     } catch (err) {
       throw new Error(`Failed to check if object exists. (key=${key})`);
     }
