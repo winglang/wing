@@ -793,7 +793,17 @@ Duration <DURATION>"
 `;
 
 exports[`cloud_function_expects_inflight.test.w 1`] = `
-"error: Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
+"error: Expected phase to be preflight, but got inflight instead
+  --> ../../../examples/tests/invalid/cloud_function_expects_inflight.test.w:3:20
+  |  
+3 |   new cloud.Function((name: str): str => {
+  | /--------------------^
+4 | |   return \\"Hello \${name}\\";
+5 | | });
+  | \\\\-^ Expected phase to be preflight, but got inflight instead
+
+
+error: Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.test.w:3:20
   |  
 3 |   new cloud.Function((name: str): str => {

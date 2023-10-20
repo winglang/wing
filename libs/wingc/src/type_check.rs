@@ -496,6 +496,10 @@ pub struct EnumInstance {
 	pub enum_value: Symbol,
 }
 
+pub struct SubTypeOptions {
+	pub ignore_phase: Option<bool>,
+}
+
 trait Subtype {
 	/// Returns true if `self` is a subtype of `other`.
 	///
@@ -509,19 +513,19 @@ trait Subtype {
 	///
 	/// TODO: change return type to allow additional subtyping information to be
 	/// returned, for better error messages when one type isn't the subtype of another.
-	fn is_subtype_of(&self, other: &Self) -> bool;
+	fn is_subtype_of(&self, other: &Self, options: &Option<SubTypeOptions>) -> bool;
 
 	fn is_same_type_as(&self, other: &Self) -> bool {
-		self.is_subtype_of(other) && other.is_subtype_of(self)
+		self.is_subtype_of(other, &None) && other.is_subtype_of(self, &None)
 	}
 
 	fn is_strict_subtype_of(&self, other: &Self) -> bool {
-		self.is_subtype_of(other) && !other.is_subtype_of(self)
+		self.is_subtype_of(other, &None) && !other.is_subtype_of(self, &None)
 	}
 }
 
 impl Subtype for Phase {
-	fn is_subtype_of(&self, other: &Self) -> bool {
+	fn is_subtype_of(&self, other: &Self, options: &Option<SubTypeOptions>) -> bool {
 		// We model phase subtyping as if the independent phase is an
 		// intersection type of preflight and inflight. This means that
 		// independent = preflight & inflight.
@@ -533,7 +537,7 @@ impl Subtype for Phase {
 		// But the following pseudocode is not valid:
 		// > let x: independent fn = <preflight function>;
 		// (a preflight function is not a subtype of an inflight function)
-		if self == &Phase::Independent {
+		if self == &Phase::Independent || options.as_ref().is_some_and(|o| o.ignore_phase.unwrap_or(false)) {
 			true
 		} else {
 			self == other
@@ -542,11 +546,12 @@ impl Subtype for Phase {
 }
 
 impl Subtype for Type {
-	fn is_subtype_of(&self, other: &Self) -> bool {
+	fn is_subtype_of(&self, other: &Self, options: &Option<SubTypeOptions>) -> bool {
 		// If references are the same this is the same type, if not then compare content
 		if std::ptr::eq(self, other) {
 			return true;
 		}
+
 		match (self, other) {
 			(Self::Anything, _) | (_, Self::Anything) => {
 				// TODO: Hack to make anything's compatible with all other types, specifically useful for handling core.Inflight handlers
@@ -564,30 +569,30 @@ impl Subtype for Type {
 				// Remove this after https://github.com/winglang/wing/issues/1448
 
 				// First check that the function is in the inflight phase
-				if l0.phase != Phase::Inflight {
+				if !l0.phase.is_subtype_of(&Phase::Inflight, options) {
 					return false;
 				}
 
 				// Next, compare the function to a method on the interface named "handle" if it exists
 				if let Some((method, _)) = r0.get_env().lookup_ext(&CLOSURE_CLASS_HANDLE_METHOD.into(), None).ok() {
 					let method = method.as_variable().unwrap();
-					if method.phase != Phase::Inflight {
+					if !method.phase.is_subtype_of(&Phase::Inflight, options) {
 						return false;
 					}
 
-					return self.is_subtype_of(&*method.type_);
+					return self.is_subtype_of(&*method.type_, options);
 				}
 
 				false
 			}
 			(Self::Function(l0), Self::Function(r0)) => {
-				if !l0.phase.is_subtype_of(&r0.phase) {
+				if !l0.phase.is_subtype_of(&r0.phase, options) {
 					return false;
 				}
 
 				// If the return types are not subtypes of each other, then this is not a subtype
 				// exception: if function type we are assigning to returns void, then any return type is ok
-				if !l0.return_type.is_subtype_of(&r0.return_type) && !(r0.return_type.is_void()) {
+				if !l0.return_type.is_subtype_of(&r0.return_type, options) && !(r0.return_type.is_void()) {
 					return false;
 				}
 
@@ -607,7 +612,7 @@ impl Subtype for Type {
 					// (Cat) => void is not a subtype of (Animal) => void
 					// but (Animal) => void is a subtype of (Cat) => void
 					// see https://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)
-					if !r.typeref.is_subtype_of(&l.typeref) {
+					if !r.typeref.is_subtype_of(&l.typeref, options) {
 						return false;
 					}
 				}
@@ -617,7 +622,7 @@ impl Subtype for Type {
 				// If we extend from `other` then I'm a subtype of it (inheritance)
 				if let Some(parent) = l0.parent.as_ref() {
 					let parent_type: &Type = parent;
-					return parent_type.is_subtype_of(other);
+					return parent_type.is_subtype_of(other, options);
 				}
 				false
 			}
@@ -625,19 +630,19 @@ impl Subtype for Type {
 				// If we extend from `other` then I'm a subtype of it (inheritance)
 				l0.extends.iter().any(|parent| {
 					let parent_type: &Type = parent;
-					parent_type.is_subtype_of(other)
+					parent_type.is_subtype_of(other, options)
 				})
 			}
 			(Self::Class(class), Self::Interface(iface)) => {
 				// If a resource implements the interface then it's a subtype of it (nominal typing)
 				let implements_iface = class.implements.iter().any(|parent| {
 					let parent_type: &Type = parent;
-					parent_type.is_subtype_of(other)
+					parent_type.is_subtype_of(other, options)
 				});
 
 				let base_class_implements_iface = if let Some(base_class) = &class.parent {
 					let base_class_type: &Type = base_class;
-					base_class_type.is_subtype_of(other)
+					base_class_type.is_subtype_of(other, options)
 				} else {
 					false
 				};
@@ -677,7 +682,7 @@ impl Subtype for Type {
 				};
 
 				// Finally check if they're subtypes
-				res_handle_type.is_subtype_of(&handler_method_type)
+				res_handle_type.is_subtype_of(&handler_method_type, options)
 			}
 			(Self::Class(res), Self::Function(_)) => {
 				// To support flexible inflight closures, we say that any
@@ -696,7 +701,7 @@ impl Subtype for Type {
 				};
 
 				// Finally check if they're subtypes
-				(*res_handle_type).is_subtype_of(other)
+				(*res_handle_type).is_subtype_of(other, options)
 			}
 			(_, Self::Interface(_)) => {
 				// TODO - for now only resources can implement interfaces
@@ -707,7 +712,7 @@ impl Subtype for Type {
 				// If we extend from `other` then I'm a subtype of it (inheritance)
 				for parent in l0.extends.iter() {
 					let parent_type: &Type = parent;
-					if parent_type.is_subtype_of(other) {
+					if parent_type.is_subtype_of(other, options) {
 						return true;
 					}
 				}
@@ -717,37 +722,37 @@ impl Subtype for Type {
 				// An Array type is a subtype of another Array type if the value type is a subtype of the other value type
 				let l: &Type = l0;
 				let r: &Type = r0;
-				l.is_subtype_of(r)
+				l.is_subtype_of(r, options)
 			}
 			(Self::MutArray(l0), Self::MutArray(r0)) => {
 				// An Array type is a subtype of another Array type if the value type is a subtype of the other value type
 				let l: &Type = l0;
 				let r: &Type = r0;
-				l.is_subtype_of(r)
+				l.is_subtype_of(r, options)
 			}
 			(Self::Map(l0), Self::Map(r0)) => {
 				// A Map type is a subtype of another Map type if the value type is a subtype of the other value type
 				let l: &Type = l0;
 				let r: &Type = r0;
-				l.is_subtype_of(r)
+				l.is_subtype_of(r, options)
 			}
 			(Self::MutMap(l0), Self::MutMap(r0)) => {
 				// A Map type is a subtype of another Map type if the value type is a subtype of the other value type
 				let l: &Type = l0;
 				let r: &Type = r0;
-				l.is_subtype_of(r)
+				l.is_subtype_of(r, options)
 			}
 			(Self::Set(l0), Self::Set(r0)) => {
 				// A Set type is a subtype of another Set type if the value type is a subtype of the other value type
 				let l: &Type = l0;
 				let r: &Type = r0;
-				l.is_subtype_of(r)
+				l.is_subtype_of(r, options)
 			}
 			(Self::MutSet(l0), Self::MutSet(r0)) => {
 				// A Set type is a subtype of another Set type if the value type is a subtype of the other value type
 				let l: &Type = l0;
 				let r: &Type = r0;
-				l.is_subtype_of(r)
+				l.is_subtype_of(r, options)
 			}
 			(Self::Enum(e0), Self::Enum(e1)) => {
 				// An enum type is a subtype of another Enum type only if they are the exact same
@@ -757,7 +762,7 @@ impl Subtype for Type {
 				// An Optional type is a subtype of another Optional type if the value type is a subtype of the other value type
 				let l: &Type = l0;
 				let r: &Type = r0;
-				l.is_subtype_of(r)
+				l.is_subtype_of(r, options)
 			}
 			(Self::Nil, Self::Optional(_)) => {
 				// Nil is a subtype of Optional<T> for any T
@@ -767,7 +772,7 @@ impl Subtype for Type {
 				// A non-Optional type is a subtype of an Optional type if the non-optional's type is a subtype of the value type
 				// e.g. `String` is a subtype of `Optional<String>`
 				let r: &Type = r0;
-				self.is_subtype_of(r)
+				self.is_subtype_of(r, options)
 			}
 			(Self::Number, Self::Number) => true,
 			(Self::String, Self::String) => true,
@@ -1257,7 +1262,7 @@ impl TypeRef {
 }
 
 impl Subtype for TypeRef {
-	fn is_subtype_of(&self, other: &Self) -> bool {
+	fn is_subtype_of(&self, other: &Self, options: &Option<SubTypeOptions>) -> bool {
 		// Types are equal if they point to the same type definition
 		if self.0 == other.0 {
 			true
@@ -1265,7 +1270,7 @@ impl Subtype for TypeRef {
 			// If the self and other aren't the the same, we need to use the specific types equality function
 			let t1: &Type = self;
 			let t2: &Type = other;
-			t1.is_subtype_of(t2)
+			t1.is_subtype_of(t2, options)
 		}
 	}
 }
@@ -1860,9 +1865,11 @@ impl<'a> TypeChecker<'a> {
 						(self.types.bool(), Phase::Independent)
 					}
 					BinaryOperator::AddOrConcat => {
-						if ltype.is_subtype_of(&self.types.number()) && rtype.is_subtype_of(&self.types.number()) {
+						if ltype.is_subtype_of(&self.types.number(), &None) && rtype.is_subtype_of(&self.types.number(), &None) {
 							(self.types.number(), Phase::Independent)
-						} else if ltype.is_subtype_of(&self.types.string()) && rtype.is_subtype_of(&self.types.string()) {
+						} else if ltype.is_subtype_of(&self.types.string(), &None)
+							&& rtype.is_subtype_of(&self.types.string(), &None)
+						{
 							(self.types.string(), Phase::Independent)
 						} else {
 							// If any of the types are unresolved (error) then don't report this assuming the error has already been reported
@@ -2861,7 +2868,7 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		// If the actual type is anything or any of the expected types then we're good
-		if return_type.is_anything() || expected_types.iter().any(|t| return_type.is_subtype_of(t)) {
+		if return_type.is_anything() || expected_types.iter().any(|t| return_type.is_subtype_of(t, &None)) {
 			return return_type;
 		}
 
@@ -2888,6 +2895,27 @@ impl<'a> TypeChecker<'a> {
 				.any(|t| self.validate_type_json(actual_type, *t, span))
 			{
 				return return_type;
+			}
+		}
+
+		if let Some(function_signature) = actual_type.as_deep_function_sig() {
+			if let Some(phaseless_match) = expected_types.iter().find(|t| {
+				actual_type.is_subtype_of(
+					t,
+					&Some(SubTypeOptions {
+						ignore_phase: Some(true),
+					}),
+				)
+			}) {
+				if let Some(match_function_signature) = phaseless_match.as_deep_function_sig() {
+					self.spanned_error(
+						span,
+						format!(
+							"Expected phase to be {}, but got {} instead",
+							function_signature.phase, match_function_signature.phase
+						),
+					)
+				}
 			}
 		}
 
@@ -5716,21 +5744,21 @@ mod tests {
 	#[test]
 	fn phase_subtyping() {
 		// subtyping is reflexive
-		assert!(Phase::Independent.is_subtype_of(&Phase::Independent));
-		assert!(Phase::Preflight.is_subtype_of(&Phase::Preflight));
-		assert!(Phase::Inflight.is_subtype_of(&Phase::Inflight));
+		assert!(Phase::Independent.is_subtype_of(&Phase::Independent, &None));
+		assert!(Phase::Preflight.is_subtype_of(&Phase::Preflight, &None));
+		assert!(Phase::Inflight.is_subtype_of(&Phase::Inflight, &None));
 
 		// independent is a subtype of preflight
-		assert!(Phase::Independent.is_subtype_of(&Phase::Preflight));
-		assert!(!Phase::Preflight.is_subtype_of(&Phase::Independent));
+		assert!(Phase::Independent.is_subtype_of(&Phase::Preflight, &None));
+		assert!(!Phase::Preflight.is_subtype_of(&Phase::Independent, &None));
 
 		// independent is a subtype of inflight
-		assert!(Phase::Independent.is_subtype_of(&Phase::Inflight));
-		assert!(!Phase::Inflight.is_subtype_of(&Phase::Independent));
+		assert!(Phase::Independent.is_subtype_of(&Phase::Inflight, &None));
+		assert!(!Phase::Inflight.is_subtype_of(&Phase::Independent, &None));
 
 		// preflight and inflight are not subtypes of each other
-		assert!(!Phase::Preflight.is_subtype_of(&Phase::Inflight));
-		assert!(!Phase::Inflight.is_subtype_of(&Phase::Preflight));
+		assert!(!Phase::Preflight.is_subtype_of(&Phase::Inflight, &None));
+		assert!(!Phase::Inflight.is_subtype_of(&Phase::Preflight, &None));
 	}
 
 	fn make_function(params: Vec<FunctionParameter>, ret: TypeRef, phase: Phase) -> Type {
@@ -5751,12 +5779,12 @@ mod tests {
 
 		// T is a subtype of T? since T can be used anywhere a T? is expected
 		// (but not vice versa)
-		assert!(string.is_subtype_of(&opt_string));
-		assert!(!opt_string.is_subtype_of(&string));
+		assert!(string.is_subtype_of(&opt_string, &None));
+		assert!(!opt_string.is_subtype_of(&string, &None));
 
 		// subtyping is reflexive
-		assert!(string.is_subtype_of(&string));
-		assert!(opt_string.is_subtype_of(&opt_string));
+		assert!(string.is_subtype_of(&string, &None));
+		assert!(opt_string.is_subtype_of(&opt_string, &None));
 	}
 
 	#[test]
@@ -5766,12 +5794,12 @@ mod tests {
 		let preflight_fn = make_function(vec![], void, Phase::Preflight);
 
 		// functions of different phases are not subtypes of each other
-		assert!(!inflight_fn.is_subtype_of(&preflight_fn));
-		assert!(!preflight_fn.is_subtype_of(&inflight_fn));
+		assert!(!inflight_fn.is_subtype_of(&preflight_fn, &None));
+		assert!(!preflight_fn.is_subtype_of(&inflight_fn, &None));
 
 		// subtyping is reflexive
-		assert!(inflight_fn.is_subtype_of(&inflight_fn));
-		assert!(preflight_fn.is_subtype_of(&preflight_fn));
+		assert!(inflight_fn.is_subtype_of(&inflight_fn, &None));
+		assert!(preflight_fn.is_subtype_of(&preflight_fn, &None));
 	}
 
 	#[test]
@@ -5801,8 +5829,8 @@ mod tests {
 		);
 
 		// functions of incompatible arguments are not subtypes of each other
-		assert!(!num_fn.is_subtype_of(&str_fn));
-		assert!(!str_fn.is_subtype_of(&num_fn));
+		assert!(!num_fn.is_subtype_of(&str_fn, &None));
+		assert!(!str_fn.is_subtype_of(&num_fn, &None));
 	}
 
 	#[test]
@@ -5816,12 +5844,12 @@ mod tests {
 		let returns_void = make_function(vec![], void, Phase::Inflight);
 
 		// functions of incompatible return types are not subtypes of each other
-		assert!(!returns_num.is_subtype_of(&returns_str));
-		assert!(!returns_str.is_subtype_of(&returns_num));
+		assert!(!returns_num.is_subtype_of(&returns_str, &None));
+		assert!(!returns_str.is_subtype_of(&returns_num, &None));
 
 		// functions with specific return types are subtypes of functions with void return type
-		assert!(returns_num.is_subtype_of(&returns_void));
-		assert!(returns_str.is_subtype_of(&returns_void));
+		assert!(returns_num.is_subtype_of(&returns_void, &None));
+		assert!(returns_str.is_subtype_of(&returns_void, &None));
 	}
 
 	#[test]
@@ -5855,7 +5883,7 @@ mod tests {
 		// let y = (s: string?) => {};
 		// y is a subtype of x because a function that accepts a "string?" can be used
 		// in place of a function that accepts a "string", but not vice versa
-		assert!(opt_str_fn.is_subtype_of(&str_fn));
-		assert!(!str_fn.is_subtype_of(&opt_str_fn));
+		assert!(opt_str_fn.is_subtype_of(&str_fn, &None));
+		assert!(!str_fn.is_subtype_of(&opt_str_fn, &None));
 	}
 }
