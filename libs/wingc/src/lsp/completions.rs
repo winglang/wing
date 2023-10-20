@@ -111,6 +111,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 				params.text_document_position.position.line as usize,
 				params.text_document_position.position.character as usize,
 			);
+			// This is the exact position the completion is requested for
 			let true_node = root_ts_node
 				.named_descendant_for_point_range(true_point, true_point)
 				.unwrap();
@@ -136,7 +137,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 				.join("\n");
 			let last_char_is_colon = preceding_text.ends_with(':');
 
-			let node_to_complete = nearest_interesting_node(
+			let node_to_complete = nearest_interesting_sibling(
 				Point::new(
 					params.text_document_position.position.line as usize,
 					max(params.text_document_position.position.character as i64 - 1, 0) as usize,
@@ -150,22 +151,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			}
 
 			// references have a complicated hierarchy, so it's useful to know the nearest non-reference parent
-			let mut nearest_non_reference = node_to_complete;
-			while nearest_non_reference.is_error()
-				|| nearest_non_reference.is_extra()
-				|| !nearest_non_reference.is_named()
-				|| matches!(
-					nearest_non_reference.kind(),
-					"identifier" | "reference" | "reference_identifier"
-				) {
-				let parent = nearest_non_reference.parent();
-				if let Some(parent) = parent {
-					nearest_non_reference = parent;
-				} else {
-					nearest_non_reference = root_ts_node;
-					break;
-				}
-			}
+			let nearest_non_reference = nearest_non_reference_ancestor(&node_to_complete);
 
 			if nearest_non_reference.kind() == "import_statement" {
 				let mut modules = WINGSDK_BRINGABLE_MODULES
@@ -497,7 +483,9 @@ fn get_current_scope_completions(
 
 	// by default assume being after a colon means we're looking for a type, but this is not always true
 	let mut in_type = preceding_text.ends_with(':');
-	let expecting_statement = matches!(node_to_complete.kind(), "source" | "block" | "expression_statement");
+
+	// This is either a top-
+	let at_scope_level = matches!(node_to_complete.kind(), "source" | "block" | "expression_statement");
 
 	match node_to_complete.kind() {
 		"variable_definition_statement" => {
@@ -522,7 +510,7 @@ fn get_current_scope_completions(
 		}
 
 		"resource_implementation" | "class_implementation" => {
-			if preceding_text.ends_with("impl") {
+			if preceding_text.ends_with(" impl") {
 				// TODO Should only show namespaces and classes
 				in_type = true;
 			} else if !in_type {
@@ -638,7 +626,7 @@ fn get_current_scope_completions(
 		}
 	}
 
-	if !in_type && !expecting_statement {
+	if !in_type && !at_scope_level {
 		completions.push(CompletionItem {
 			label: "inflight () => {}".to_string(),
 			filter_text: Some("inflight".to_string()),
@@ -669,21 +657,22 @@ fn get_current_scope_completions(
 		completions
 			.into_iter()
 			.filter(|c| {
-				let not_type = !matches!(c.kind, Some(CompletionItemKind::INTERFACE));
+				let can_only_be_type = matches!(c.kind, Some(CompletionItemKind::INTERFACE));
 
-				if !expecting_statement && matches!(c.kind, Some(CompletionItemKind::FUNCTION)) {
+				if !at_scope_level && matches!(c.kind, Some(CompletionItemKind::FUNCTION)) {
 					// filter out functions that return void
-					return not_type && matches!(c.detail.as_ref(), Some(s) if !s.ends_with("): void"));
+					return !can_only_be_type && matches!(c.detail.as_ref(), Some(s) if !s.ends_with("): void"));
 				} else {
-					not_type
+					!can_only_be_type
 				}
 			})
 			.collect()
 	}
 }
 
-/// Within root_node, find the nearest (previous) node on the same line that is interesting for completion
-fn nearest_interesting_node<'a>(mut point: Point, root_node: &'a tree_sitter::Node<'a>) -> tree_sitter::Node<'a> {
+/// Within root_node, find the nearest (previous) node on the same line that is interesting for completion.
+/// This is mostly useful to move out of whitespace following something interesting
+fn nearest_interesting_sibling<'a>(mut point: Point, root_node: &'a tree_sitter::Node<'a>) -> tree_sitter::Node<'a> {
 	loop {
 		let search_node = root_node
 			.descendant_for_point_range(point, point)
@@ -696,6 +685,31 @@ fn nearest_interesting_node<'a>(mut point: Point, root_node: &'a tree_sitter::No
 
 		point.column -= 1;
 	}
+}
+
+/// Starting at the given node, traverse up the tree until a non-reference-like node is found.
+/// References have a complicated hierarchy, so it's useful to know the nearest non-reference parent.
+/// This helps to disambiguate the situation around a reference.
+///
+/// For example, `let x = a.` and `let x = ` are both variable definitions when checking the node at the last position
+fn nearest_non_reference_ancestor<'a>(start_node: &'a tree_sitter::Node<'a>) -> tree_sitter::Node<'a> {
+	let mut nearest_non_reference = *start_node;
+	while nearest_non_reference.is_error()
+		|| nearest_non_reference.is_extra()
+		|| !nearest_non_reference.is_named()
+		|| matches!(
+			nearest_non_reference.kind(),
+			"identifier" | "reference" | "reference_identifier"
+		) {
+		let parent = nearest_non_reference.parent();
+		if let Some(parent) = parent {
+			nearest_non_reference = parent;
+		} else {
+			break;
+		}
+	}
+
+	nearest_non_reference
 }
 
 /// Given a CompletionItem, mutates it so it can be used as a snippet to trigger parameter hints
