@@ -1,33 +1,22 @@
 import { createHash } from "crypto";
 import { join } from "path";
-
-import { Fn, Lazy } from "cdktf";
+import { Lazy } from "aws-cdk-lib";
+import {
+  ApiDefinition,
+  Deployment,
+  SpecRestApi,
+  Stage,
+} from "aws-cdk-lib/aws-apigateway";
+import { CfnPermission } from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
-import { core } from "..";
-import { ApiGatewayDeployment } from "../.gen/providers/aws/api-gateway-deployment";
-import { ApiGatewayRestApi } from "../.gen/providers/aws/api-gateway-rest-api";
-import { ApiGatewayStage } from "../.gen/providers/aws/api-gateway-stage";
-import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
 import * as cloud from "../cloud";
-import { OpenApiSpec } from "../cloud";
+import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import {
-  CaseConventions,
-  NameOptions,
-  ResourceNames,
-} from "../shared/resource-names";
 import { STAGE_NAME } from "../shared-aws/api";
 import { API_CORS_DEFAULT_RESPONSE } from "../shared-aws/api.cors";
-import { IInflightHost, Node } from "../std";
-
-/**
- * RestApi names are alphanumeric characters, hyphens (-) and underscores (_).
- */
-const NAME_OPTS: NameOptions = {
-  disallowedRegex: /[^a-zA-Z0-9\_\-]+/g,
-};
+import { Node } from "../std";
 
 /**
  * AWS Implementation of `cloud.Api`.
@@ -48,6 +37,39 @@ export class Api extends cloud.Api {
   }
 
   /**
+   * Build the http requests
+   *
+   * @param method htttp method
+   * @param path path to add
+   * @param inflight Inflight to handle request
+   * @param props Additional props
+   */
+  private httpRequests(
+    method: string,
+    path: string,
+    inflight: cloud.IApiEndpointHandler,
+    props?: cloud.ApiGetProps | undefined
+  ): void {
+    const lowerMethod = method.toLowerCase();
+    const upperMethod = method.toUpperCase();
+
+    if (props) {
+      console.warn(`Api.${lowerMethod} does not support props yet`);
+    }
+    this._validatePath(path);
+
+    const fn = this.addHandler(inflight);
+    const apiSpecEndpoint = this.api.addEndpoint(path, upperMethod, fn);
+    this._addToSpec(path, upperMethod, apiSpecEndpoint, this.corsOptions);
+
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: `${lowerMethod}()`,
+    });
+  }
+
+  /**
    * Add a inflight to handle GET requests to a path.
    * @param path path to add
    * @param inflight Inflight to handle request
@@ -56,24 +78,10 @@ export class Api extends cloud.Api {
   public get(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiGetProps
+    props?: cloud.ApiGetProps | undefined
   ): void {
-    if (props) {
-      console.warn("Api.get does not support props yet");
-    }
-    this._validatePath(path);
-
-    const fn = this.addHandler(inflight);
-    const apiSpecEndpoint = this.api.addEndpoint(path, "GET", fn);
-    this._addToSpec(path, "GET", apiSpecEndpoint, this.corsOptions);
-
-    Node.of(this).addConnection({
-      source: this,
-      target: fn,
-      name: "get()",
-    });
+    this.httpRequests("GET", path, inflight, props);
   }
-
   /**
    * Add a inflight to handle POST requests to a path.
    * @param path path to add
@@ -83,24 +91,10 @@ export class Api extends cloud.Api {
   public post(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiPostProps
+    props?: cloud.ApiPostProps | undefined
   ): void {
-    if (props) {
-      console.warn("Api.post does not support props yet");
-    }
-    this._validatePath(path);
-
-    const fn = this.addHandler(inflight);
-    const apiSpecEndpoint = this.api.addEndpoint(path, "POST", fn);
-    this._addToSpec(path, "POST", apiSpecEndpoint, this.corsOptions);
-
-    Node.of(this).addConnection({
-      source: this,
-      target: fn,
-      name: "post()",
-    });
+    this.httpRequests("POST", path, inflight, props);
   }
-
   /**
    * Add a inflight to handle PUT requests to a path.
    * @param path path to add
@@ -110,24 +104,10 @@ export class Api extends cloud.Api {
   public put(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiPutProps
+    props?: cloud.ApiPutProps | undefined
   ): void {
-    if (props) {
-      console.warn("Api.put does not support props yet");
-    }
-    this._validatePath(path);
-
-    const fn = this.addHandler(inflight);
-    const apiSpecEndpoint = this.api.addEndpoint(path, "PUT", fn);
-    this._addToSpec(path, "PUT", apiSpecEndpoint, this.corsOptions);
-
-    Node.of(this).addConnection({
-      source: this,
-      target: fn,
-      name: "put()",
-    });
+    this.httpRequests("PUT", path, inflight, props);
   }
-
   /**
    * Add a inflight to handle DELETE requests to a path.
    * @param path path to add
@@ -137,24 +117,10 @@ export class Api extends cloud.Api {
   public delete(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiDeleteProps
+    props?: cloud.ApiDeleteProps | undefined
   ): void {
-    if (props) {
-      console.warn("Api.delete does not support props yet");
-    }
-    this._validatePath(path);
-
-    const fn = this.addHandler(inflight);
-    const apiSpecEndpoint = this.api.addEndpoint(path, "DELETE", fn);
-    this._addToSpec(path, "DELETE", apiSpecEndpoint, this.corsOptions);
-
-    Node.of(this).addConnection({
-      source: this,
-      target: fn,
-      name: "delete()",
-    });
+    this.httpRequests("DELETE", path, inflight, props);
   }
-
   /**
    * Add a inflight to handle PATCH requests to a path.
    * @param path path to add
@@ -164,24 +130,10 @@ export class Api extends cloud.Api {
   public patch(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiPatchProps
+    props?: cloud.ApiPatchProps | undefined
   ): void {
-    if (props) {
-      console.warn("Api.patch does not support props yet");
-    }
-    this._validatePath(path);
-
-    const fn = this.addHandler(inflight);
-    const apiSpecEndpoint = this.api.addEndpoint(path, "PATCH", fn);
-    this._addToSpec(path, "PATCH", apiSpecEndpoint, this.corsOptions);
-
-    Node.of(this).addConnection({
-      source: this,
-      target: fn,
-      name: "patch()",
-    });
+    this.httpRequests("PATCH", path, inflight, props);
   }
-
   /**
    * Add a inflight to handle OPTIONS requests to a path.
    * @param path path to add
@@ -191,24 +143,10 @@ export class Api extends cloud.Api {
   public options(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiOptionsProps
+    props?: cloud.ApiOptionsProps | undefined
   ): void {
-    if (props) {
-      console.warn("Api.options does not support props yet");
-    }
-    this._validatePath(path);
-
-    const fn = this.addHandler(inflight);
-    const apiSpecEndpoint = this.api.addEndpoint(path, "OPTIONS", fn);
-    this._addToSpec(path, "OPTIONS", apiSpecEndpoint, this.corsOptions);
-
-    Node.of(this).addConnection({
-      source: this,
-      target: fn,
-      name: "options()",
-    });
+    this.httpRequests("OPTIONS", path, inflight, props);
   }
-
   /**
    * Add a inflight to handle HEAD requests to a path.
    * @param path path to add
@@ -218,24 +156,10 @@ export class Api extends cloud.Api {
   public head(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiHeadProps
+    props?: cloud.ApiHeadProps | undefined
   ): void {
-    if (props) {
-      console.warn("Api.head does not support props yet");
-    }
-    this._validatePath(path);
-
-    const fn = this.addHandler(inflight);
-    const apiSpecEndpoint = this.api.addEndpoint(path, "HEAD", fn);
-    this._addToSpec(path, "HEAD", apiSpecEndpoint, this.corsOptions);
-
-    Node.of(this).addConnection({
-      source: this,
-      target: fn,
-      name: "head()",
-    });
+    this.httpRequests("HEAD", path, inflight, props);
   }
-
   /**
    * Add a inflight to handle CONNECT requests to a path.
    * @param path path to add
@@ -245,22 +169,9 @@ export class Api extends cloud.Api {
   public connect(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiConnectProps
+    props?: cloud.ApiConnectProps | undefined
   ): void {
-    if (props) {
-      console.warn("Api.connect does not support props yet");
-    }
-    this._validatePath(path);
-
-    const fn = this.addHandler(inflight);
-    const apiSpecEndpoint = this.api.addEndpoint(path, "CONNECT", fn);
-    this._addToSpec(path, "CONNECT", apiSpecEndpoint);
-
-    Node.of(this).addConnection({
-      source: this,
-      target: fn,
-      name: "connect()",
-    });
+    this.httpRequests("CONNECT", path, inflight, props);
   }
 
   /**
@@ -318,7 +229,7 @@ export class Api extends cloud.Api {
       `${this.node.id}-OnRequestHandler-${inflightNodeHash}`,
       inflight,
       join(
-        __dirname.replace("target-tf-aws", "shared-aws"),
+        __dirname.replace("target-awscdk", "shared-aws"),
         "api.onrequest.inflight.js"
       ),
       "ApiOnRequestHandlerClient",
@@ -335,32 +246,17 @@ export class Api extends cloud.Api {
   }
 
   /** @internal */
-  public onLift(host: IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("topics can only be bound by tfaws.Function for now");
-    }
-
-    host.addEnvironment(this.urlEnvName(), this.url);
-
-    super.onLift(host, ops);
-  }
-
-  /** @internal */
   public _toInflight(): string {
     return core.InflightClient.for(
-      __dirname.replace("target-tf-aws", "shared-aws"),
+      __dirname.replace("target-awscdk", "shared-aws"),
       __filename,
       "ApiClient",
-      [`process.env["${this.urlEnvName()}"]`]
+      [`process.env["${this.envName()}"]`]
     );
   }
 
-  private urlEnvName(): string {
-    return ResourceNames.generateName(this, {
-      disallowedRegex: /[^a-zA-Z0-9_]/,
-      sep: "_",
-      case: CaseConventions.UPPERCASE,
-    });
+  private envName(): string {
+    return `API_${this.node.addr.slice(-8)}`;
   }
 }
 
@@ -368,17 +264,16 @@ export class Api extends cloud.Api {
  * Encapsulates the API Gateway REST API as a abstraction for Terraform.
  */
 class WingRestApi extends Construct {
-  public readonly url: string;
-  public readonly api: ApiGatewayRestApi;
-  public readonly stage: ApiGatewayStage;
-  private readonly deployment: ApiGatewayDeployment;
+  private readonly api: SpecRestApi;
+  private readonly deployment: Deployment;
+  private readonly stage: Stage;
   private readonly region: string;
 
   constructor(
     scope: Construct,
     id: string,
     props: {
-      apiSpec: OpenApiSpec;
+      apiSpec: cloud.OpenApiSpec;
       cors?: cloud.ApiCorsOptions;
     }
   ) {
@@ -387,42 +282,37 @@ class WingRestApi extends Construct {
 
     const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
 
-    this.api = new ApiGatewayRestApi(this, "api", {
-      name: ResourceNames.generateName(this, NAME_OPTS),
-      // Lazy generation of the api spec because routes can be added after the API is created
-      body: Lazy.stringValue({
-        produce: () => {
-          const injectGreedy404Handler = (openApiSpec: OpenApiSpec) => {
-            openApiSpec.paths = {
-              ...openApiSpec.paths,
-              ...defaultResponse,
+    this.api = new SpecRestApi(this, "api", {
+      apiDefinition: ApiDefinition.fromInline(
+        Lazy.any({
+          produce: () => {
+            const injectGreedy404Handler = (openApiSpec: cloud.OpenApiSpec) => {
+              openApiSpec.paths = {
+                ...openApiSpec.paths,
+                ...defaultResponse,
+              };
+              return openApiSpec;
             };
-            return openApiSpec;
-          };
-          return JSON.stringify(injectGreedy404Handler(props.apiSpec));
-        },
-      }),
+            return injectGreedy404Handler(props.apiSpec);
+          },
+        })
+      ),
+      deploy: false,
     });
 
-    this.deployment = new ApiGatewayDeployment(this, "deployment", {
-      restApiId: this.api.id,
-      lifecycle: {
-        createBeforeDestroy: true,
-      },
-      triggers: {
-        // Trigger redeployment when the api spec changes
-        redeployment: Fn.sha256(this.api.body),
-      },
+    this.deployment = new Deployment(this, "deployment", {
+      api: this.api,
+      retainDeployments: true,
     });
 
-    this.stage = new ApiGatewayStage(this, "stage", {
-      restApiId: this.api.id,
+    this.stage = new Stage(this, "stage", {
+      deployment: this.deployment,
       stageName: STAGE_NAME,
-      deploymentId: this.deployment.id,
     });
+  }
 
-    //should be exported from here, otherwise won't be mapped to the right token
-    this.url = this.stage.invokeUrl;
+  public get url(): string {
+    return this.stage.urlForPath();
   }
 
   /**
@@ -475,12 +365,11 @@ class WingRestApi extends Construct {
   ) => {
     const pathHash = createHash("sha1").update(path).digest("hex").slice(-8);
     const permissionId = `${method}-${pathHash}`;
-    new LambdaPermission(this, `permission-${permissionId}`, {
-      statementId: `AllowExecutionFromAPIGateway-${permissionId}`,
+    new CfnPermission(this, `permission-${permissionId}`, {
       action: "lambda:InvokeFunction",
       functionName: handler._functionName,
       principal: "apigateway.amazonaws.com",
-      sourceArn: `${this.api.executionArn}/*/${method}${path}`,
+      sourceArn: this.api.arnForExecuteApi(method, path, "prod"),
     });
   };
 }

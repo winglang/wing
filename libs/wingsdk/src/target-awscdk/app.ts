@@ -4,6 +4,7 @@ import * as cdk from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
 import { Construct } from "constructs";
 import stringify from "safe-stable-stringify";
+import { Api } from "./api";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
 import { Function } from "./function";
@@ -17,6 +18,7 @@ import { Topic } from "./topic";
 import { Website } from "./website";
 
 import {
+  API_FQN,
   BUCKET_FQN,
   COUNTER_FQN,
   FUNCTION_FQN,
@@ -57,6 +59,9 @@ export class App extends CoreApp {
   public readonly _tokens: CdkTokens;
 
   public readonly _target = "awscdk";
+
+  private awsAccount?: string;
+  private awsRegion?: string;
 
   private readonly cdkApp: cdk.App;
   private readonly cdkStack: cdk.Stack;
@@ -156,6 +161,9 @@ export class App extends CoreApp {
     ...args: any[]
   ): any {
     switch (fqn) {
+      case API_FQN:
+        return new Api(scope, id, args[0]);
+
       case FUNCTION_FQN:
         return new Function(scope, id, args[0], args[1]);
 
@@ -187,5 +195,25 @@ export class App extends CoreApp {
         return new Website(scope, id, args[0]);
     }
     return undefined;
+  }
+
+  /**
+   * The AWS account ID of the App
+   */
+  public get accountId(): string {
+    if (!this.awsAccount) {
+      this.awsAccount = this.cdkStack.account;
+    }
+    return this.awsAccount;
+  }
+
+  /**
+   * The AWS region of the App
+   */
+  public get region(): string {
+    if (!this.awsRegion) {
+      this.awsRegion = this.cdkStack.region;
+    }
+    return this.awsRegion;
   }
 }
