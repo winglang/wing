@@ -605,14 +605,14 @@ fn get_current_scope_completions(
 	let error_buffer = if node_to_complete.has_error() { 1 } else { 0 };
 
 	for symbol_data in found_env.symbol_map.iter().filter(|s| {
-		if let StatementIdx::Index(i) = s.1 .0 {
+		if let StatementIdx::Index(i) = s.1.statement_idx {
 			// within the found scope, we only want to show symbols that were defined before the current position
 			i + error_buffer < found_stmt_index
 		} else {
 			true
 		}
 	}) {
-		let symbol_kind = &symbol_data.1 .2;
+		let symbol_kind = &symbol_data.1.kind;
 
 		if let Some(completion) = format_symbol_kind_as_completion(symbol_data.0, symbol_kind) {
 			completions.push(completion);
@@ -886,7 +886,7 @@ fn get_completions_from_namespace(
 		.envs
 		.iter()
 		.flat_map(|env| env.symbol_map.iter())
-		.flat_map(|(name, symbol)| format_symbol_kind_as_completion(name, &symbol.2))
+		.flat_map(|(name, symbol)| format_symbol_kind_as_completion(name, &symbol.kind))
 		.chain(util_completions)
 		.collect()
 }
@@ -913,16 +913,13 @@ fn get_completions_from_class(
 			match access_context {
 				// hide private and protected members when accessing from outside the class
 				ObjectAccessContext::Outside => {
-					if matches!(
-						variable.access_modifier,
-						AccessModifier::Private | AccessModifier::Protected
-					) {
+					if matches!(variable.access, AccessModifier::Private | AccessModifier::Protected) {
 						return None;
 					}
 				}
 				// hide private members when accessing from inside the class with "super"
 				ObjectAccessContext::Super => {
-					if matches!(variable.access_modifier, AccessModifier::Private) {
+					if matches!(variable.access, AccessModifier::Private) {
 						return None;
 					}
 				}

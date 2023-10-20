@@ -416,7 +416,7 @@ fn render_classlike_members(classlike: &impl ClassLike) -> String {
 		.get_env()
 		.iter(true)
 		.flat_map(|f| if f.2.init { None } else { f.1.as_variable() })
-		.filter(|v| v.access_modifier == AccessModifier::Public)
+		.filter(|v| v.access == AccessModifier::Public)
 		// show optionals first, then sort alphabetically by name
 		.sorted_by(|a, b| {
 			let a_is_option = a.type_.is_option();
