@@ -672,11 +672,7 @@ impl Subtype for Type {
 
 				// Then get the type of the resource's "handle" method if it has one
 				let res_handle_type = if let Some(method) = class.get_method(&CLOSURE_CLASS_HANDLE_METHOD.into()) {
-					if method.type_.is_inflight_function() {
-						method.type_
-					} else {
-						return false;
-					}
+					method.type_
 				} else {
 					return false;
 				};
@@ -691,11 +687,7 @@ impl Subtype for Type {
 
 				// Get the type of the resource's "handle" method if it has one
 				let res_handle_type = if let Some(method) = res.get_method(&CLOSURE_CLASS_HANDLE_METHOD.into()) {
-					if method.type_.is_inflight_function() {
-						method.type_
-					} else {
-						return false;
-					}
+					method.type_
 				} else {
 					return false;
 				};
