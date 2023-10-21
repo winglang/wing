@@ -16,7 +16,7 @@ import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { STAGE_NAME } from "../shared-aws/api";
 import { API_CORS_DEFAULT_RESPONSE } from "../shared-aws/api.cors";
-import { Node } from "../std";
+import { IInflightHost, Node } from "../std";
 
 /**
  * AWS Implementation of `cloud.Api`.
@@ -246,16 +246,27 @@ export class Api extends cloud.Api {
   }
 
   /** @internal */
+  public onLift(host: IInflightHost, ops: string[]): void {
+    if (!(host instanceof Function)) {
+      throw new Error("apis can only be bound by awscdk.Function for now");
+    }
+
+    host.addEnvironment(this.urlEnvName(), this.url);
+
+    super.onLift(host, ops);
+  }
+
+  /** @internal */
   public _toInflight(): string {
     return core.InflightClient.for(
       __dirname.replace("target-awscdk", "shared-aws"),
       __filename,
       "ApiClient",
-      [`process.env["${this.envName()}"]`]
+      [`process.env["${this.urlEnvName()}"]`]
     );
   }
 
-  private envName(): string {
+  private urlEnvName(): string {
     return `API_${this.node.addr.slice(-8)}`;
   }
 }
