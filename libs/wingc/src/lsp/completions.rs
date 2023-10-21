@@ -452,9 +452,12 @@ fn get_current_scope_completions(
 	types: &Types,
 	scope_visitor: &ScopeVisitor,
 	node_to_complete: &Node,
-	preceding_text: &String,
+	preceding_text: &str,
 ) -> Vec<CompletionItem> {
 	let mut completions = vec![];
+
+	dbg!(node_to_complete);
+	dbg!(preceding_text);
 
 	// by default assume being after a colon means we're looking for a type, but this is not always true
 	let mut in_type = preceding_text.ends_with(':');
@@ -490,8 +493,8 @@ fn get_current_scope_completions(
 			}
 		}
 
-		"resource_implementation" | "class_implementation" => {
-			if preceding_text.ends_with(" impl") {
+		"resource_implementation" | "class_implementation" | "class_definition" => {
+			if preceding_text.ends_with(" impl") || preceding_text.ends_with(" extends") {
 				// TODO Should only show namespaces and classes
 				in_type = true;
 			} else if !in_type {
@@ -1874,5 +1877,16 @@ C.fu
   //^
 "#,
 		assert!(partial_type_reference.iter().any(|c| c.label == "func"))
+	);
+
+	test_completion_list!(
+		partial_type_reference_annotation,
+		r#"
+bring cloud;
+
+let x: cloud.Buc
+              //^
+"#,
+		assert!(partial_type_reference_annotation.iter().any(|c| c.label == "Bucket"))
 	);
 }
