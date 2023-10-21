@@ -1,10 +1,10 @@
+import { Match, Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
-import * as awscdk from "../../src/target-awscdk";
 import * as cloud from "../../src/cloud";
 import * as ex from "../../src/ex";
-import { mkdtemp, awscdkSanitize } from "../util";
-import { Match, Template } from "aws-cdk-lib/assertions";
 import { Testing } from "../../src/simulator";
+import * as awscdk from "../../src/target-awscdk";
+import { mkdtemp, awscdkSanitize } from "../util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",

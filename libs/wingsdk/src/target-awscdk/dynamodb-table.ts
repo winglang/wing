@@ -1,10 +1,10 @@
-import * as ex from "../ex";
+import { AttributeType, BillingMode, Table } from "aws-cdk-lib/aws-dynamodb";
 import { Construct } from "constructs";
 import { Function } from "./function";
 import * as core from "../core";
-import { IInflightHost } from "../std";
-import { AttributeType, BillingMode, Table } from "aws-cdk-lib/aws-dynamodb";
+import * as ex from "../ex";
 import { calculateDynamodbTablePermissions } from "../shared-aws/permissions";
+import { IInflightHost } from "../std";
 
 /**
  * AWS implementation of `ex.DynamodbTable`.
@@ -24,10 +24,12 @@ export class DynamodbTable extends ex.DynamodbTable {
         name: props.hashKey,
         type: attributeDefinitions[props.hashKey] as AttributeType,
       },
-      sortKey: props.rangeKey ? {
-        name: props.rangeKey,
-        type: attributeDefinitions[props.rangeKey] as AttributeType,
-      } : undefined,
+      sortKey: props.rangeKey
+        ? {
+            name: props.rangeKey,
+            type: attributeDefinitions[props.rangeKey] as AttributeType,
+          }
+        : undefined,
       billingMode: BillingMode.PAY_PER_REQUEST,
     });
   }

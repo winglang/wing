@@ -6,6 +6,7 @@ import { Construct } from "constructs";
 import stringify from "safe-stable-stringify";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
+import { DynamodbTable } from "./dynamodb-table";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
@@ -15,7 +16,6 @@ import { TestRunner } from "./test-runner";
 import { CdkTokens } from "./tokens";
 import { Topic } from "./topic";
 import { Website } from "./website";
-import { DynamodbTable } from "./dynamodb-table";
 
 import {
   BUCKET_FQN,
@@ -29,9 +29,6 @@ import {
   WEBSITE_FQN,
 } from "../cloud";
 import {
-  DYNAMODB_TABLE_FQN
-} from "../ex";
-import {
   App as CoreApp,
   AppProps,
   preSynthesizeAllConstructs,
@@ -39,6 +36,7 @@ import {
   Connections,
 } from "../core";
 import { PluginManager } from "../core/plugin-manager";
+import { DYNAMODB_TABLE_FQN } from "../ex";
 import { TEST_RUNNER_FQN } from "../std";
 
 /**

@@ -4,8 +4,8 @@ import { DynamodbTable as AwsDynamodbTable } from "../.gen/providers/aws/dynamod
 import * as core from "../core";
 import * as ex from "../ex";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
-import { IInflightHost } from "../std";
 import { calculateDynamodbTablePermissions } from "../shared-aws/permissions";
+import { IInflightHost } from "../std";
 
 /**
  * Table names must be between 3 and 255 characters.

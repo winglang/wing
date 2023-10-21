@@ -59,7 +59,6 @@ export function calculateDynamodbTablePermissions(
   arn: string,
   ops: string[]
 ): PolicyStatement[] {
-
   const policies: PolicyStatement[] = [];
 
   if (
