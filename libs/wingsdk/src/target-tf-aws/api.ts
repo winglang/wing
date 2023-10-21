@@ -53,6 +53,39 @@ export class Api extends cloud.Api {
   }
 
   /**
+   * Build the http requests
+   *
+   * @param method htttp method
+   * @param path path to add
+   * @param inflight Inflight to handle request
+   * @param props Additional props
+   */
+  private httpRequests(
+    method: string,
+    path: string,
+    inflight: cloud.IApiEndpointHandler,
+    props?: cloud.ApiGetProps
+  ): void {
+    const lowerMethod = method.toLowerCase();
+    const upperMethod = method.toUpperCase();
+
+    if (props) {
+      console.warn(`Api.${lowerMethod} does not support props yet`);
+    }
+    this._validatePath(path);
+
+    const fn = this.addHandler(inflight);
+    const apiSpecEndpoint = this.api.addEndpoint(path, upperMethod, fn);
+    this._addToSpec(path, upperMethod, apiSpecEndpoint, this.corsOptions);
+
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: `${lowerMethod}()`,
+    });
+  }
+
+  /**
    * Add a inflight to handle GET requests to a path.
    * @param path path to add
    * @param inflight Inflight to handle request
@@ -63,20 +96,7 @@ export class Api extends cloud.Api {
     inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiGetProps
   ): void {
-    if (props) {
-      console.warn("Api.get does not support props yet");
-    }
-    this._validatePath(path);
-
-    const fn = this.addHandler(inflight);
-    const apiSpecEndpoint = this.api.addEndpoint(path, "GET", fn);
-    this._addToSpec(path, "GET", apiSpecEndpoint, this.corsOptions);
-
-    Node.of(this).addConnection({
-      source: this,
-      target: fn,
-      name: "get()",
-    });
+    this.httpRequests("GET", path, inflight, props);
   }
 
   /**
@@ -90,20 +110,7 @@ export class Api extends cloud.Api {
     inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiPostProps
   ): void {
-    if (props) {
-      console.warn("Api.post does not support props yet");
-    }
-    this._validatePath(path);
-
-    const fn = this.addHandler(inflight);
-    const apiSpecEndpoint = this.api.addEndpoint(path, "POST", fn);
-    this._addToSpec(path, "POST", apiSpecEndpoint, this.corsOptions);
-
-    Node.of(this).addConnection({
-      source: this,
-      target: fn,
-      name: "post()",
-    });
+    this.httpRequests("POST", path, inflight, props);
   }
 
   /**
@@ -117,20 +124,7 @@ export class Api extends cloud.Api {
     inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiPutProps
   ): void {
-    if (props) {
-      console.warn("Api.put does not support props yet");
-    }
-    this._validatePath(path);
-
-    const fn = this.addHandler(inflight);
-    const apiSpecEndpoint = this.api.addEndpoint(path, "PUT", fn);
-    this._addToSpec(path, "PUT", apiSpecEndpoint, this.corsOptions);
-
-    Node.of(this).addConnection({
-      source: this,
-      target: fn,
-      name: "put()",
-    });
+    this.httpRequests("PUT", path, inflight, props);
   }
 
   /**
@@ -144,20 +138,7 @@ export class Api extends cloud.Api {
     inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiDeleteProps
   ): void {
-    if (props) {
-      console.warn("Api.delete does not support props yet");
-    }
-    this._validatePath(path);
-
-    const fn = this.addHandler(inflight);
-    const apiSpecEndpoint = this.api.addEndpoint(path, "DELETE", fn);
-    this._addToSpec(path, "DELETE", apiSpecEndpoint, this.corsOptions);
-
-    Node.of(this).addConnection({
-      source: this,
-      target: fn,
-      name: "delete()",
-    });
+    this.httpRequests("DELETE", path, inflight, props);
   }
 
   /**
@@ -171,20 +152,7 @@ export class Api extends cloud.Api {
     inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiPatchProps
   ): void {
-    if (props) {
-      console.warn("Api.patch does not support props yet");
-    }
-    this._validatePath(path);
-
-    const fn = this.addHandler(inflight);
-    const apiSpecEndpoint = this.api.addEndpoint(path, "PATCH", fn);
-    this._addToSpec(path, "PATCH", apiSpecEndpoint, this.corsOptions);
-
-    Node.of(this).addConnection({
-      source: this,
-      target: fn,
-      name: "patch()",
-    });
+    this.httpRequests("PATCH", path, inflight, props);
   }
 
   /**
@@ -198,20 +166,7 @@ export class Api extends cloud.Api {
     inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiOptionsProps
   ): void {
-    if (props) {
-      console.warn("Api.options does not support props yet");
-    }
-    this._validatePath(path);
-
-    const fn = this.addHandler(inflight);
-    const apiSpecEndpoint = this.api.addEndpoint(path, "OPTIONS", fn);
-    this._addToSpec(path, "OPTIONS", apiSpecEndpoint, this.corsOptions);
-
-    Node.of(this).addConnection({
-      source: this,
-      target: fn,
-      name: "options()",
-    });
+    this.httpRequests("OPTIONS", path, inflight, props);
   }
 
   /**
@@ -225,20 +180,7 @@ export class Api extends cloud.Api {
     inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiHeadProps
   ): void {
-    if (props) {
-      console.warn("Api.head does not support props yet");
-    }
-    this._validatePath(path);
-
-    const fn = this.addHandler(inflight);
-    const apiSpecEndpoint = this.api.addEndpoint(path, "HEAD", fn);
-    this._addToSpec(path, "HEAD", apiSpecEndpoint, this.corsOptions);
-
-    Node.of(this).addConnection({
-      source: this,
-      target: fn,
-      name: "head()",
-    });
+    this.httpRequests("HEAD", path, inflight, props);
   }
 
   /**
@@ -252,20 +194,7 @@ export class Api extends cloud.Api {
     inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiConnectProps
   ): void {
-    if (props) {
-      console.warn("Api.connect does not support props yet");
-    }
-    this._validatePath(path);
-
-    const fn = this.addHandler(inflight);
-    const apiSpecEndpoint = this.api.addEndpoint(path, "CONNECT", fn);
-    this._addToSpec(path, "CONNECT", apiSpecEndpoint);
-
-    Node.of(this).addConnection({
-      source: this,
-      target: fn,
-      name: "connect()",
-    });
+    this.httpRequests("CONNECT", path, inflight, props);
   }
 
   /**
