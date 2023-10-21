@@ -7,8 +7,7 @@ use std::cmp::max;
 use tree_sitter::{Node, Point};
 
 use crate::ast::{
-	AccessModifier, CalleeKind, Expr, ExprKind, Phase, Reference, Scope, Symbol, TypeAnnotation, TypeAnnotationKind,
-	UserDefinedType,
+	AccessModifier, CalleeKind, Expr, ExprKind, Phase, Reference, Scope, Symbol, TypeAnnotation, UserDefinedType,
 };
 use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};
 use crate::diagnostic::{WingLocation, WingSpan};
@@ -16,14 +15,17 @@ use crate::docs::Documented;
 use crate::lsp::sync::{JSII_TYPES, PROJECT_DATA, WING_TYPES};
 use crate::type_check::symbol_env::{LookupResult, StatementIdx};
 use crate::type_check::{
-	fully_qualify_std_type, import_udt_from_jsii, resolve_super_method, resolve_user_defined_type, ClassLike, Namespace,
-	Struct, SymbolKind, Type, TypeRef, Types, UnsafeRef, VariableKind, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
+	fully_qualify_std_type, import_udt_from_jsii, resolve_super_method, ClassLike, Namespace, Struct, SymbolKind, Type,
+	TypeRef, Types, UnsafeRef, VariableKind, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
 };
 use crate::visit::{visit_expr, visit_type_annotation, Visit};
 use crate::wasm_util::extern_json_fn;
 use crate::{UTIL_CLASS_NAME, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_STD_MODULE};
 
 use super::sync::check_utf8;
+
+const BUILTIN_TYPES: [&str; 6] = ["bool", "duration", "Json", "MutJson", "num", "str"];
+const BUILTIN_GENERICS: [&str; 6] = ["Array", "Map", "MutArray", "MutMap", "MutSet", "Set"];
 
 #[no_mangle]
 pub unsafe extern "C" fn wingc_on_completion(ptr: u32, len: u32) -> u64 {
@@ -105,7 +107,6 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			let file = check_utf8(uri.to_file_path().expect("LSP only works on real filesystems"));
 			let root_ts_node = project_data.trees.get(&file).expect("tree not found").root_node();
 			let root_scope = project_data.asts.get(&file).expect("ast not found");
-			let root_env = types.get_scope_env(root_scope);
 
 			let true_point = Point::new(
 				params.text_document_position.position.line as usize,
@@ -152,7 +153,6 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 			// references have a complicated hierarchy, so it's useful to know the nearest non-reference parent
 			let nearest_non_reference = nearest_non_reference_ancestor(&node_to_complete);
-
 			if nearest_non_reference.kind() == "import_statement" {
 				let mut modules = WINGSDK_BRINGABLE_MODULES
 					.map(|module| CompletionItem {
@@ -188,7 +188,10 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			scope_visitor.visit();
 
 			let found_env = types.get_scope_env(&scope_visitor.found_scope);
-			if node_to_complete_kind == "." || node_to_complete_kind == "?." || node_to_complete_kind == "member_identifier" {
+			if matches!(
+				node_to_complete_kind,
+				"." | "?." | "member_identifier" | "type_identifier"
+			) {
 				let parent = node_to_complete.parent().expect("A dot must have a parent");
 
 				if let Some(nearest_expr) = scope_visitor.nearest_expr {
@@ -278,76 +281,48 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 					}
 				};
 
-				if let Some(nearest_type_annotation) = scope_visitor.nearest_type_annotation {
-					if let TypeAnnotationKind::UserDefined(udt) = &nearest_type_annotation.kind {
-						let type_lookup = resolve_user_defined_type(udt, &found_env, scope_visitor.found_stmt_index.unwrap_or(0));
-
-						let completions = if let Ok(type_lookup) = type_lookup {
-							get_completions_from_type(
-								&type_lookup,
-								&types,
-								Some(found_env.phase),
-								&ObjectAccessContext::Static,
-							)
-						} else {
-							// this is probably a namespace, let's look it up
-							if let Some(namespace) = root_env
-								.lookup_nested_str(&udt.full_path_str(), scope_visitor.found_stmt_index)
-								.ok()
-								.and_then(|n| n.0.as_namespace_ref())
-							{
-								get_completions_from_namespace(&namespace, Some(found_env.phase))
-							} else {
-								// This is not a known type or namespace
-								vec![]
-							}
-						};
-
-						return filter_completions(completions);
-					}
-				}
-
 				// We're likely in a type reference of some kind, so let's use the raw text for a lookup
 				let reference_bytes = &preceding_text.as_bytes()[parent.start_byte()..node_to_complete.start_byte()];
 				let reference_text =
 					fully_qualify_std_type(std::str::from_utf8(reference_bytes).expect("Reference must be valid utf8"));
 				let reference_text = reference_text.trim_end_matches(".");
 
-				if let Some((lookup_thing, _)) = found_env
-					.lookup_nested_str(reference_text, scope_visitor.found_stmt_index)
-					.ok()
-				{
-					let completions = match lookup_thing {
-						SymbolKind::Type(t) => {
-							get_completions_from_type(&t, &types, Some(found_env.phase), &ObjectAccessContext::Static)
-						}
-						SymbolKind::Variable(v) => {
-							get_completions_from_type(&v.type_, &types, Some(found_env.phase), &ObjectAccessContext::Static)
-						}
-						SymbolKind::Namespace(n) => {
-							// If the types in this namespace aren't loaded yet, load them now to get completions
-							if !n.loaded {
-								JSII_TYPES.with(|jsii_types| {
-									let jsii_types = jsii_types.borrow();
-									let parts = reference_text.split(".").collect::<Vec<_>>();
-									// Dummy type representing the namespace to be loaded
-									let udt = UserDefinedType {
-										root: Symbol::global(parts[0].to_string()),
-										fields: parts[1..].iter().map(|s| Symbol::global(s.to_string())).collect(),
-										span: WingSpan::default(),
-									};
-									// Import all types in the namespace by trying to load the "dummy type"
-									import_udt_from_jsii(&mut types, &jsii_types, &udt, &project_data.jsii_imports);
-								});
+				if !reference_text.is_empty() {
+					if let Some((lookup_thing, _)) = found_env
+						.lookup_nested_str(reference_text, scope_visitor.found_stmt_index)
+						.ok()
+					{
+						let completions = match lookup_thing {
+							SymbolKind::Type(t) => {
+								get_completions_from_type(&t, &types, Some(found_env.phase), &ObjectAccessContext::Static)
 							}
-							get_completions_from_namespace(&n, Some(found_env.phase))
-						}
-					};
+							SymbolKind::Variable(v) => {
+								get_completions_from_type(&v.type_, &types, Some(found_env.phase), &ObjectAccessContext::Static)
+							}
+							SymbolKind::Namespace(n) => {
+								// If the types in this namespace aren't loaded yet, load them now to get completions
+								if !n.loaded {
+									JSII_TYPES.with(|jsii_types| {
+										let jsii_types = jsii_types.borrow();
+										let parts = reference_text.split(".").collect::<Vec<_>>();
+										// Dummy type representing the namespace to be loaded
+										let udt = UserDefinedType {
+											root: Symbol::global(parts[0].to_string()),
+											fields: parts[1..].iter().map(|s| Symbol::global(s.to_string())).collect(),
+											span: WingSpan::default(),
+										};
+										// Import all types in the namespace by trying to load the "dummy type"
+										import_udt_from_jsii(&mut types, &jsii_types, &udt, &project_data.jsii_imports);
+									});
+								}
+								get_completions_from_namespace(&n, Some(found_env.phase))
+							}
+						};
 
-					return filter_completions(completions);
+						return filter_completions(completions);
+					}
+					return vec![];
 				}
-
-				return vec![];
 			} else if matches!(
 				nearest_non_reference.kind(),
 				"struct_literal" | "json_map_literal" | "set_literal" | "struct_literal_member"
@@ -500,6 +475,12 @@ fn get_current_scope_completions(
 			in_type = false;
 		}
 
+		// Providing type arguments, like Map< > or MutArray< >
+		//                                    ^              ^
+		"immutable_container_type" | "mutable_container_type" => {
+			in_type = true;
+		}
+
 		"struct_definition" | "interface_implementation" => {
 			if preceding_text.ends_with(" extends") {
 				// TODO Should only show namespaces and matching types
@@ -517,7 +498,7 @@ fn get_current_scope_completions(
 				// we are inside a class definition, so for now let's show nothing at all
 				return vec![CompletionItem {
 					label: "init".to_string(),
-					insert_text: Some("init($1) {\n\t$2\n}".to_string()),
+					insert_text: Some("init($1) {\n\t$0\n}".to_string()),
 					insert_text_format: Some(InsertTextFormat::SNIPPET),
 					kind: Some(CompletionItemKind::SNIPPET),
 					..Default::default()
@@ -530,7 +511,7 @@ fn get_current_scope_completions(
 			completions.push(CompletionItem {
 				label: "test \"\" { }".to_string(),
 				filter_text: Some("test".to_string()),
-				insert_text: Some("test \"$1\" {\n\t$2\n}".to_string()),
+				insert_text: Some("test \"$1\" {\n\t$0\n}".to_string()),
 				insert_text_format: Some(InsertTextFormat::SNIPPET),
 				kind: Some(CompletionItemKind::SNIPPET),
 				..Default::default()
@@ -571,7 +552,7 @@ fn get_current_scope_completions(
 					// we are inside a class definition, so for now let's show nothing at all
 					return vec![CompletionItem {
 						label: "init".to_string(),
-						insert_text: Some("init($1) {\n\t$2\n}".to_string()),
+						insert_text: Some("init($1) {\n\t$0\n}".to_string()),
 						insert_text_format: Some(InsertTextFormat::SNIPPET),
 						kind: Some(CompletionItemKind::SNIPPET),
 						..Default::default()
@@ -626,18 +607,62 @@ fn get_current_scope_completions(
 		}
 	}
 
-	if !in_type && !at_scope_level {
-		completions.push(CompletionItem {
-			label: "inflight () => {}".to_string(),
-			filter_text: Some("inflight".to_string()),
-			insert_text: Some("inflight ($1) => {$2}".to_string()),
-			insert_text_format: Some(InsertTextFormat::SNIPPET),
-			kind: Some(CompletionItemKind::SNIPPET),
-			..Default::default()
-		});
+	if !in_type {
+		if node_to_complete.kind() == "source" {
+			// we're at the root scope, let's add some typical completions
+			completions.push(CompletionItem {
+				label: "bring".to_string(),
+				insert_text: Some("bring ".to_string()),
+				insert_text_format: Some(InsertTextFormat::SNIPPET),
+				kind: Some(CompletionItemKind::SNIPPET),
+				command: Some(command_to_trigger_completion()),
+				..Default::default()
+			});
+		}
+
+		if !at_scope_level {
+			completions.push(CompletionItem {
+				label: "inflight () => {}".to_string(),
+				filter_text: Some("inflight".to_string()),
+				insert_text: Some("inflight ($1) => {$0}".to_string()),
+				insert_text_format: Some(InsertTextFormat::SNIPPET),
+				kind: Some(CompletionItemKind::SNIPPET),
+				..Default::default()
+			});
+		}
 	}
 
 	if in_type {
+		// add the built-in types
+		for built_in in BUILTIN_TYPES {
+			completions.push(CompletionItem {
+				label: built_in.to_string(),
+				sort_text: Some(format!("zy{built_in}")),
+				kind: Some(CompletionItemKind::KEYWORD),
+				..Default::default()
+			});
+		}
+		for built_in in BUILTIN_GENERICS {
+			completions.push(CompletionItem {
+				label: format!("{built_in}<T>"),
+				sort_text: Some(format!("zz{}", built_in)),
+				insert_text_format: Some(InsertTextFormat::SNIPPET),
+				insert_text: Some(format!("{built_in}<$1>")),
+				kind: Some(CompletionItemKind::KEYWORD),
+				command: Some(command_to_trigger_completion()),
+				..Default::default()
+			});
+		}
+
+		completions.push(CompletionItem {
+			label: "bring".to_string(),
+			insert_text: Some("bring ".to_string()),
+			insert_text_format: Some(InsertTextFormat::SNIPPET),
+			kind: Some(CompletionItemKind::SNIPPET),
+			command: Some(command_to_trigger_completion()),
+			..Default::default()
+		});
+
 		// show only namespaces and types
 		completions
 			.into_iter()
@@ -645,6 +670,7 @@ fn get_current_scope_completions(
 				matches!(
 					c.kind,
 					Some(CompletionItemKind::CLASS)
+						| Some(CompletionItemKind::KEYWORD)
 						| Some(CompletionItemKind::MODULE)
 						| Some(CompletionItemKind::ENUM)
 						| Some(CompletionItemKind::STRUCT)
@@ -712,9 +738,19 @@ fn nearest_non_reference_ancestor<'a>(start_node: &'a tree_sitter::Node<'a>) -> 
 	nearest_non_reference
 }
 
+/// Tells the editor to trigger another request to completions.
+/// Note that this is not a standard part of the LSP and may not be respected by all clients.
+fn command_to_trigger_completion() -> Command {
+	Command {
+		title: "triggerCompletion".to_string(),
+		command: "editor.action.triggerSuggest".to_string(),
+		arguments: None,
+	}
+}
+
 /// Given a CompletionItem, mutates it so it can be used as a snippet to trigger parameter hints
 fn convert_to_call_completion(completion_item: &mut CompletionItem) {
-	completion_item.insert_text = Some(format!("{}($0)", completion_item.label));
+	completion_item.insert_text = Some(format!("{}($1)", completion_item.label));
 	completion_item.insert_text_format = Some(InsertTextFormat::SNIPPET);
 	completion_item.command = Some(Command {
 		title: "triggerParameterHints".to_string(),
@@ -773,11 +809,7 @@ fn get_inner_struct_completions(struct_: &Struct, existing_fields: &Vec<String>)
 				base_completion.label = format!("{}{}:", base_completion.label, if is_optional { "?" } else { "" });
 				base_completion.kind = Some(CompletionItemKind::FIELD);
 				base_completion.insert_text_format = Some(InsertTextFormat::SNIPPET);
-				base_completion.command = Some(Command {
-					title: "triggerCompletion".to_string(),
-					command: "editor.action.triggerSuggest".to_string(),
-					arguments: None,
-				});
+				base_completion.command = Some(command_to_trigger_completion());
 				base_completion.sort_text = if is_optional {
 					Some(format!("b|{}", base_completion.label))
 				} else {
@@ -1493,7 +1525,7 @@ struct Foo {}
 let x: 
     //^
 "#,
-		assert!(type_annotation_shows_struct.len() == 1)
+		assert!(!type_annotation_shows_struct.is_empty())
 		assert!(type_annotation_shows_struct.get(0).unwrap().label == "Foo")
 	);
 

@@ -4,6 +4,6 @@ source: libs/wingc/src/lsp/completions.rs
 - label: init
   kind: 15
   sortText: ll|init
-  insertText: "init($1) {\n\t$2\n}"
+  insertText: "init($1) {\n\t$0\n}"
   insertTextFormat: 2
 

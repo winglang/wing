@@ -15,7 +15,7 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nunsafeCast: (value: any): any\n```\n---\nCasts a value into a different type. This is unsafe and can cause runtime errors\n### Parameters\n- `value` — `any` — The value to cast into a different type"
   sortText: cc|unsafeCast
-  insertText: unsafeCast($0)
+  insertText: unsafeCast($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -30,6 +30,6 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 15
   sortText: "ll|inflight () => {}"
   filterText: inflight
-  insertText: "inflight ($1) => {$2}"
+  insertText: "inflight ($1) => {$0}"
   insertTextFormat: 2
 
