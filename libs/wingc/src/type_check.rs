@@ -5332,7 +5332,7 @@ impl<'a> TypeChecker<'a> {
 
 		if let Some(parent_class) = parent_type.as_class() {
 			// Parent class must be either the same phase as the child or, if the child is an inflight class, the parent can be an independent class
-			if parent_class.phase == phase || phase == Phase::Inflight && parent_class.phase == Phase::Independent {
+			if (parent_class.phase == phase) || (phase == Phase::Inflight && parent_class.phase == Phase::Independent) {
 				(Some(parent_type), Some(parent_class.env.get_ref()))
 			} else {
 				self.spanned_error(
