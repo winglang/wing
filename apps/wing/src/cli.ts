@@ -123,7 +123,7 @@ async function main() {
     .command("run")
     .alias("it")
     .description("Runs a Wing program in the Wing Console")
-    .argument("[entrypoint]", "program .w entrypoint")
+    .argument("[entrypoint]", "program .w or .wsim entrypoint")
     .option("-p, --port <port>", "specify port")
     .option("--no-open", "Do not open the Wing Console in the browser")
     .hook("preAction", collectAnalyticsHook)
