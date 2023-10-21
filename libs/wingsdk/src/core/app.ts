@@ -206,23 +206,30 @@ export abstract class App extends Construct {
 
   /**
    * Can be overridden by derived classes to inject dependencies.
+   * 
+   * @param fqn The fully qualified name of the class we want the type for (jsii).
+   */
+  protected typeForFqn(fqn: string): any {
+    fqn;
+    return undefined;
+  }
+
+  /**
+   * Can be overridden by derived classes to inject dependencies.
    *
    * @param fqn The fully qualified name of the class to instantiate (jsii).
    * @param scope The construct scope.
    * @param id The construct id.
    * @param args The arguments to pass to the constructor.
    */
-  protected tryNew(
+  private tryNew(
     fqn: string,
     scope: Construct,
     id: string,
     ...args: any[]
   ): any {
-    fqn;
-    scope;
-    id;
-    args;
-    return undefined;
+    const type = this.typeForFqn(fqn);
+    return new type(scope, id, ...args);
   }
 
   /**
