@@ -15,6 +15,7 @@ import { TestRunner } from "./test-runner";
 import { CdkTokens } from "./tokens";
 import { Topic } from "./topic";
 import { Website } from "./website";
+import { DynamodbTable } from "./dynamodb-table";
 
 import {
   BUCKET_FQN,
@@ -27,6 +28,9 @@ import {
   SCHEDULE_FQN,
   WEBSITE_FQN,
 } from "../cloud";
+import {
+  DYNAMODB_TABLE_FQN
+} from "../ex";
 import {
   App as CoreApp,
   AppProps,
@@ -185,6 +189,9 @@ export class App extends CoreApp {
 
       case WEBSITE_FQN:
         return new Website(scope, id, args[0]);
+
+      case DYNAMODB_TABLE_FQN:
+        return new DynamodbTable(scope, id, args[0]);
     }
     return undefined;
   }
