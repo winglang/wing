@@ -2,7 +2,7 @@ use crate::lsp::symbol_locator::SymbolLocator;
 use crate::lsp::sync::PROJECT_DATA;
 use crate::type_check::symbol_env::LookupResult;
 use crate::visit::Visit;
-use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
+use crate::wasm_util::extern_json_fn;
 use lsp_types::{GotoDefinitionParams, LocationLink, Position, Range, Url};
 use tree_sitter::Point;
 
@@ -10,15 +10,7 @@ use super::sync::{check_utf8, WING_TYPES};
 
 #[no_mangle]
 pub unsafe extern "C" fn wingc_on_goto_definition(ptr: u32, len: u32) -> u64 {
-	let parse_string = ptr_to_string(ptr, len);
-	if let Ok(parsed) = serde_json::from_str(&parse_string) {
-		let doc_symbols = on_goto_definition(parsed);
-		let result = serde_json::to_string(&doc_symbols).expect("Failed to serialize GotoDefinition response");
-
-		string_to_combined_ptr(result)
-	} else {
-		WASM_RETURN_ERROR
-	}
+	extern_json_fn(ptr, len, on_goto_definition)
 }
 
 pub fn on_goto_definition(params: GotoDefinitionParams) -> Vec<LocationLink> {

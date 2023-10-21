@@ -26,7 +26,7 @@ export class Counter extends cloud.Counter {
     });
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("counters can only be bound by awscdk.Function for now");
     }

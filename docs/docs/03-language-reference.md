@@ -1146,7 +1146,6 @@ The following features are not yet implemented, but we are planning to add them 
 
 ### 1.14 Roadmap
 
-* Module type visibility (exports/`pub` types) is not implemented yet - see https://github.com/winglang/wing/issues/130 to track.
 * `internal` access modifier is not yet implemented - see https://github.com/winglang/wing/issues/4156 to track.
 
 ## 2. Statements

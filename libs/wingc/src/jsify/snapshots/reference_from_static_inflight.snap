@@ -68,11 +68,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["staticMethod", "$inflight_init"];
       }
-      static _registerTypeBind(host, ops) {
+      static _registerTypeOnLift(host, ops) {
         if (ops.includes("staticMethod")) {
-          MyType._registerBindObject(s, host, []);
+          MyType._registerOnLiftObject(s, host, []);
         }
-        super._registerTypeBind(host, ops);
+        super._registerTypeOnLift(host, ops);
       }
     }
     const s = "hello";

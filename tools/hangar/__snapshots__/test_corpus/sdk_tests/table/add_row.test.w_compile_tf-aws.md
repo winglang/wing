@@ -144,15 +144,15 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(marioInfo, "gender"), host, []);
-          $Closure1._registerBindObject(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(marioInfo, "role"), host, []);
-          $Closure1._registerBindObject(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(peachInfo, "gender"), host, []);
-          $Closure1._registerBindObject(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(peachInfo, "role"), host, []);
-          $Closure1._registerBindObject(table, host, ["get"]);
+          $Closure1._registerOnLiftObject(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(marioInfo, "gender"), host, []);
+          $Closure1._registerOnLiftObject(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(marioInfo, "role"), host, []);
+          $Closure1._registerOnLiftObject(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(peachInfo, "gender"), host, []);
+          $Closure1._registerOnLiftObject(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(peachInfo, "role"), host, []);
+          $Closure1._registerOnLiftObject(table, host, ["get"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const table = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "users", primaryKey: "name", columns: ({"gender": ex.ColumnType.STRING,"role": ex.ColumnType.STRING}) });

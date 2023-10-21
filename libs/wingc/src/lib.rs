@@ -7,7 +7,7 @@
 #[macro_use]
 extern crate lazy_static;
 
-use ast::{Scope, Symbol, UtilityFunctions};
+use ast::{AccessModifier, Scope, Symbol, UtilityFunctions};
 use camino::{Utf8Path, Utf8PathBuf};
 use closure_transform::ClosureTransformer;
 use comp_ctx::set_custom_panic_hook;
@@ -28,7 +28,7 @@ use type_check::{FunctionSignature, SymbolKind, Type};
 use type_check_assert::TypeCheckAssert;
 use valid_json_visitor::ValidJsonVisitor;
 use visit::Visit;
-use wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
+use wasm_util::{ptr_to_str, string_to_combined_ptr, WASM_RETURN_ERROR};
 use wingii::type_system::TypeSystem;
 
 use crate::docs::Docs;
@@ -115,8 +115,6 @@ const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";
 const MACRO_REPLACE_ARGS_TEXT: &'static str = "$args_text$";
 
-pub const GLOBAL_SYMBOLS: [&'static str; 4] = [WINGSDK_STD_MODULE, "assert", "log", "unsafeCast"];
-
 pub struct CompilerOutput {}
 
 /// Exposes an allocation function to the WASM host
@@ -163,7 +161,7 @@ pub unsafe extern "C" fn wingc_init() {
 
 #[no_mangle]
 pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
-	let args = ptr_to_string(ptr, len);
+	let args = ptr_to_str(ptr, len);
 
 	let split = args.split(";").collect::<Vec<&str>>();
 	if split.len() != 3 {
@@ -288,6 +286,7 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 		.define(
 			&sym,
 			SymbolKind::make_free_variable(sym.clone(), types.add_type(typ), false, Phase::Independent),
+			AccessModifier::Private,
 			StatementIdx::Top,
 		)
 		.expect("Failed to add builtin");

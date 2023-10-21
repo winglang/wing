@@ -176,15 +176,15 @@ class $Root extends $stdlib.std.Resource {
         _getInflightOps() {
           return ["handle", "$inflight_init"];
         }
-        _registerBind(host, ops) {
+        _registerOnLift(host, ops) {
           if (ops.includes("handle")) {
-            $Closure1._registerBindObject(b, host, ["put"]);
-            $Closure1._registerBindObject(startCounter, host, ["dec", "inc"]);
-            $Closure1._registerBindObject(started, host, []);
-            $Closure1._registerBindObject(status, host, []);
-            $Closure1._registerBindObject(stopped, host, []);
+            $Closure1._registerOnLiftObject(b, host, ["put"]);
+            $Closure1._registerOnLiftObject(startCounter, host, ["dec", "inc"]);
+            $Closure1._registerOnLiftObject(started, host, []);
+            $Closure1._registerOnLiftObject(status, host, []);
+            $Closure1._registerOnLiftObject(stopped, host, []);
           }
-          super._registerBind(host, ops);
+          super._registerOnLift(host, ops);
         }
       }
       const s = this.node.root.newAbstract("@winglang/sdk.cloud.Service",this,"cloud.Service",new $Closure1(this,"$Closure1"),{ autoStart: false });
@@ -215,12 +215,12 @@ class $Root extends $stdlib.std.Resource {
         _getInflightOps() {
           return ["handle", "$inflight_init"];
         }
-        _registerBind(host, ops) {
+        _registerOnLift(host, ops) {
           if (ops.includes("handle")) {
-            $Closure2._registerBindObject(b, host, ["tryGet"]);
-            $Closure2._registerBindObject(status, host, []);
+            $Closure2._registerOnLiftObject(b, host, ["tryGet"]);
+            $Closure2._registerOnLiftObject(status, host, []);
           }
-          super._registerBind(host, ops);
+          super._registerOnLift(host, ops);
         }
       }
       this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:does not start automatically if autoStart is false",new $Closure2(this,"$Closure2"));
@@ -254,15 +254,15 @@ class $Root extends $stdlib.std.Resource {
         _getInflightOps() {
           return ["handle", "$inflight_init"];
         }
-        _registerBind(host, ops) {
+        _registerOnLift(host, ops) {
           if (ops.includes("handle")) {
-            $Closure3._registerBindObject(b, host, ["tryGet"]);
-            $Closure3._registerBindObject(s, host, ["start"]);
-            $Closure3._registerBindObject(startCounter, host, ["peek"]);
-            $Closure3._registerBindObject(started, host, []);
-            $Closure3._registerBindObject(status, host, []);
+            $Closure3._registerOnLiftObject(b, host, ["tryGet"]);
+            $Closure3._registerOnLiftObject(s, host, ["start"]);
+            $Closure3._registerOnLiftObject(startCounter, host, ["peek"]);
+            $Closure3._registerOnLiftObject(started, host, []);
+            $Closure3._registerOnLiftObject(status, host, []);
           }
-          super._registerBind(host, ops);
+          super._registerOnLift(host, ops);
         }
       }
       this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:start() calls onStart() idempotently",new $Closure3(this,"$Closure3"));
@@ -296,15 +296,15 @@ class $Root extends $stdlib.std.Resource {
         _getInflightOps() {
           return ["handle", "$inflight_init"];
         }
-        _registerBind(host, ops) {
+        _registerOnLift(host, ops) {
           if (ops.includes("handle")) {
-            $Closure4._registerBindObject(b, host, ["get", "tryGet"]);
-            $Closure4._registerBindObject(s, host, ["start", "stop"]);
-            $Closure4._registerBindObject(startCounter, host, ["peek"]);
-            $Closure4._registerBindObject(status, host, []);
-            $Closure4._registerBindObject(stopped, host, []);
+            $Closure4._registerOnLiftObject(b, host, ["get", "tryGet"]);
+            $Closure4._registerOnLiftObject(s, host, ["start", "stop"]);
+            $Closure4._registerOnLiftObject(startCounter, host, ["peek"]);
+            $Closure4._registerOnLiftObject(status, host, []);
+            $Closure4._registerOnLiftObject(stopped, host, []);
           }
-          super._registerBind(host, ops);
+          super._registerOnLift(host, ops);
         }
       }
       this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:stop() calls onStop()",new $Closure4(this,"$Closure4"));

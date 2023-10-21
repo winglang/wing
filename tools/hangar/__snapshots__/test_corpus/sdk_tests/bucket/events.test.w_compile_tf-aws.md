@@ -1069,12 +1069,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(idsCounter, host, ["inc"]);
-          $Closure1._registerBindObject(table, host, ["insert"]);
+          $Closure1._registerOnLiftObject(idsCounter, host, ["inc"]);
+          $Closure1._registerOnLiftObject(table, host, ["insert"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -1104,11 +1104,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(logHistory, host, ["handle"]);
+          $Closure2._registerOnLiftObject(logHistory, host, ["handle"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
@@ -1138,11 +1138,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure3._registerBindObject(logHistory, host, ["handle"]);
+          $Closure3._registerOnLiftObject(logHistory, host, ["handle"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
@@ -1172,11 +1172,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure4._registerBindObject(logHistory, host, ["handle"]);
+          $Closure4._registerOnLiftObject(logHistory, host, ["handle"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure5 extends $stdlib.std.Resource {
@@ -1206,11 +1206,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure5._registerBindObject(logHistory, host, ["handle"]);
+          $Closure5._registerOnLiftObject(logHistory, host, ["handle"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure6 extends $stdlib.std.Resource {
@@ -1267,11 +1267,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure7._registerBindObject(table, host, ["list"]);
+          $Closure7._registerOnLiftObject(table, host, ["list"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure8 extends $stdlib.std.Resource {
@@ -1304,13 +1304,13 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure8._registerBindObject(b, host, ["delete", "put"]);
-          $Closure8._registerBindObject(checkHitCount, host, ["handle"]);
-          $Closure8._registerBindObject(wait, host, ["handle"]);
+          $Closure8._registerOnLiftObject(b, host, ["delete", "put"]);
+          $Closure8._registerOnLiftObject(checkHitCount, host, ["handle"]);
+          $Closure8._registerOnLiftObject(wait, host, ["handle"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const Source =

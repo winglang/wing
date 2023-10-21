@@ -225,17 +225,17 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["isValidUrl", "foo", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          MyResource._registerBindObject(this.api.url, host, []);
-          MyResource._registerBindObject(this.url, host, []);
+          MyResource._registerOnLiftObject(this.api.url, host, []);
+          MyResource._registerOnLiftObject(this.url, host, []);
         }
         if (ops.includes("foo")) {
-          MyResource._registerBindObject(MyResource, host, ["isValidUrl"]);
-          MyResource._registerBindObject(this.api.url, host, []);
-          MyResource._registerBindObject(this.url, host, []);
+          MyResource._registerOnLiftObject(MyResource, host, ["isValidUrl"]);
+          MyResource._registerOnLiftObject(this.api.url, host, []);
+          MyResource._registerOnLiftObject(this.url, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -264,11 +264,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(r, host, ["foo"]);
+          $Closure1._registerOnLiftObject(r, host, ["foo"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -299,13 +299,13 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(MyResource, host, ["isValidUrl"]);
-          $Closure2._registerBindObject(api.url, host, []);
-          $Closure2._registerBindObject(url, host, []);
+          $Closure2._registerOnLiftObject(MyResource, host, ["isValidUrl"]);
+          $Closure2._registerOnLiftObject(api.url, host, []);
+          $Closure2._registerOnLiftObject(url, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const r = new MyResource(this,"MyResource");

@@ -226,11 +226,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["field1", "field2", "get_six", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject(this, host, ["field1", "field2", "get_six"]);
+          Foo._registerOnLiftObject(this, host, ["field1", "field2", "get_six"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class FooChild extends Foo {
@@ -258,11 +258,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["field3", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          FooChild._registerBindObject(this, host, ["field3"]);
+          FooChild._registerOnLiftObject(this, host, ["field3"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {

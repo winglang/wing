@@ -516,11 +516,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(c5, host, ["set", "x", "y"]);
+          $Closure1._registerOnLiftObject(c5, host, ["set", "x", "y"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class Person extends $stdlib.std.Resource {
@@ -631,13 +631,13 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(student.hrlyWage, host, []);
-          $Closure2._registerBindObject(student.major, host, []);
-          $Closure2._registerBindObject(student.name, host, []);
+          $Closure2._registerOnLiftObject(student.hrlyWage, host, []);
+          $Closure2._registerOnLiftObject(student.major, host, []);
+          $Closure2._registerOnLiftObject(student.name, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class TeacherAid extends PaidStudent {
@@ -693,11 +693,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure3._registerBindObject(ta.hrlyWage, host, []);
+          $Closure3._registerOnLiftObject(ta.hrlyWage, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class A extends $stdlib.std.Resource {
@@ -724,11 +724,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["sound", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          A._registerBindObject(this, host, ["sound"]);
+          A._registerOnLiftObject(this, host, ["sound"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class B extends A {
