@@ -1263,6 +1263,13 @@ error: Expected 3 positional argument(s) or named arguments for the last paramet
    | ^^^^^^^^^^^ Expected 3 positional argument(s) or named arguments for the last parameter but got 0
 
 
+error: Optional parameters must always be after all non-optional parameters.
+   --> ../../../examples/tests/invalid/function_call_arity.test.w:22:49
+   |
+22 | let namedOptionalParamsFunc = (n: num, b: bool, s: str?, opts: Options) => {};
+   |                                                 ^ Optional parameters must always be after all non-optional parameters.
+
+
 error: Expected between 3 and 4 positional arguments or named arguments for the last parameter but got 1
    --> ../../../examples/tests/invalid/function_call_arity.test.w:23:1
    |
@@ -1347,6 +1354,13 @@ error: Expected function return type
   |
 4 | let my_func2 = (callback: ((num)): (str)) => {  };
   |                            ^^^^^ Expected function return type
+
+
+error: Optional parameters must always be after all non-optional parameters.
+   --> ../../../examples/tests/invalid/function_type.test.w:16:25
+   |
+16 | let my_func3 = (a: num, b: str?, c: bool) => {};
+   |                         ^ Optional parameters must always be after all non-optional parameters.
 
 
  
