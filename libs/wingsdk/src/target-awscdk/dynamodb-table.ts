@@ -1,7 +1,6 @@
 import { RemovalPolicy } from "aws-cdk-lib";
 import { AttributeType, BillingMode, Table } from "aws-cdk-lib/aws-dynamodb";
 import { Construct } from "constructs";
-import { App } from "./app";
 import { Function } from "./function";
 import * as core from "../core";
 import * as ex from "../ex";
@@ -19,8 +18,6 @@ export class DynamodbTable extends ex.DynamodbTable {
   constructor(scope: Construct, id: string, props: ex.DynamodbTableProps) {
     super(scope, id, props);
 
-    const isTestEnvironment = App.of(scope).isTestEnvironment;
-
     const attributeDefinitions = props.attributeDefinitions as any;
 
     this.table = new Table(this, "Default", {
@@ -35,9 +32,7 @@ export class DynamodbTable extends ex.DynamodbTable {
           }
         : undefined,
       billingMode: BillingMode.PAY_PER_REQUEST,
-      removalPolicy: isTestEnvironment
-        ? RemovalPolicy.DESTROY
-        : RemovalPolicy.RETAIN,
+      removalPolicy: RemovalPolicy.DESTROY,
     });
   }
 
