@@ -16,7 +16,7 @@ exports[`default dynamodb table behavior 1`] = `
   },
   "Resources": {
     "TableCD117FA1": {
-      "DeletionPolicy": "Retain",
+      "DeletionPolicy": "Delete",
       "Properties": {
         "AttributeDefinitions": [
           {
@@ -33,7 +33,7 @@ exports[`default dynamodb table behavior 1`] = `
         ],
       },
       "Type": "AWS::DynamoDB::Table",
-      "UpdateReplacePolicy": "Retain",
+      "UpdateReplacePolicy": "Delete",
     },
   },
   "Rules": {
@@ -284,7 +284,7 @@ exports[`function with a table binding 1`] = `
       "Type": "AWS::IAM::Policy",
     },
     "TableCD117FA1": {
-      "DeletionPolicy": "Retain",
+      "DeletionPolicy": "Delete",
       "Properties": {
         "AttributeDefinitions": [
           {
@@ -301,7 +301,7 @@ exports[`function with a table binding 1`] = `
         ],
       },
       "Type": "AWS::DynamoDB::Table",
-      "UpdateReplacePolicy": "Retain",
+      "UpdateReplacePolicy": "Delete",
     },
   },
   "Rules": {
