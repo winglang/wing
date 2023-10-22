@@ -7,6 +7,8 @@ let my_func3 = (x: num) => {  };
 let my_func4 = (x: num): void => {  };
 let my_func5 = inflight (x: num) => {  };
 let my_func6 = inflight (x: num): void => {  };
+let my_func7 = inflight (x: num, y: bool?, ...z: Array<str>): void => {  };
+
 
 // return type is optional for methods
 class C {
