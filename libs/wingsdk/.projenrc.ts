@@ -76,6 +76,8 @@ const project = new cdk.JsiiProject({
     "@azure/storage-blob@12.14.0",
     "@azure/identity@3.1.3",
     "@azure/core-paging",
+    // gcp client dependencies
+    "@google-cloud/storage@6.9.5",
     // simulator dependencies
     "express",
     "uuid",
@@ -95,6 +97,7 @@ const project = new cdk.JsiiProject({
     "@types/aws-lambda",
     "@types/fs-extra",
     "@types/mime-types",
+    "mock-gcs@^1.0.0",
     "@types/express",
     "aws-sdk-client-mock",
     "aws-sdk-client-mock-jest",
@@ -364,6 +367,7 @@ project.gitignore.addPatterns("src/.gen");
 project.preCompileTask.exec("cdktf get --force");
 
 project.package.file.addDeletionOverride("pnpm");
+
 project.tryRemoveFile(".npmrc");
 
 project.packageTask.reset("bump-pack -b");
