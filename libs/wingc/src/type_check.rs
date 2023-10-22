@@ -2906,7 +2906,9 @@ impl<'a> TypeChecker<'a> {
 							"Expected phase to be {}, but got {} instead",
 							function_signature.phase, match_function_signature.phase
 						),
-					)
+					);
+
+					return first_expected_type;
 				}
 			}
 		}
