@@ -3,7 +3,7 @@
 exports[`bucket is public 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -152,7 +152,7 @@ exports[`bucket is public 2`] = `
 exports[`bucket prefix must be lowercase 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -267,7 +267,7 @@ exports[`bucket prefix must be lowercase 2`] = `
 exports[`bucket prefix valid 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -382,7 +382,7 @@ exports[`bucket prefix valid 2`] = `
 exports[`bucket with onCreate method 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -798,7 +798,7 @@ exports[`bucket with onCreate method 2`] = `
 exports[`bucket with onDelete method 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -1214,7 +1214,7 @@ exports[`bucket with onDelete method 2`] = `
 exports[`bucket with onEvent method 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -2042,7 +2042,7 @@ exports[`bucket with onEvent method 2`] = `
 exports[`bucket with onUpdate method 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -2458,7 +2458,7 @@ exports[`bucket with onUpdate method 2`] = `
 exports[`bucket with two preflight files 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -2635,7 +2635,7 @@ exports[`bucket with two preflight files 2`] = `
 exports[`bucket with two preflight objects 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -2812,7 +2812,7 @@ exports[`bucket with two preflight objects 2`] = `
 exports[`create a bucket 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },

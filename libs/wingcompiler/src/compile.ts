@@ -80,8 +80,9 @@ function resolveSynthDir(
     log?.(err);
     throw new Error("Source file cannot be found");
   }
-  const tmpSuffix = tmp ? `.${Date.now().toString().slice(-6)}.tmp` : "";
-  const lastPart = `${entrypointName}.${targetDirSuffix}${tmpSuffix}`;
+  const randomPart = tmp || (testing && target !== Target.SIM) ? `.${Date.now().toString().slice(-6)}` : "";
+  const tmpSuffix = tmp ? ".tmp" : "";
+  const lastPart = `${entrypointName}.${targetDirSuffix}${randomPart}${tmpSuffix}`;
   if (testing) {
     return join(outDir, "test", lastPart);
   } else {
