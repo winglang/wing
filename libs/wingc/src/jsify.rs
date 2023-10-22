@@ -1231,7 +1231,7 @@ impl<'a> JSifier<'a> {
 
 			// default base class for preflight classes is `core.Resource`
 			let extends = if let Some(parent) = &class.parent {
-				format!(" extends {}", self.jsify_user_defined_type(parent, ctx)) //bg! we think we're inflight but...
+				format!(" extends {}", self.jsify_user_defined_type(parent, ctx))
 			} else {
 				format!(" extends {}", STDLIB_CORE_RESOURCE)
 			};
