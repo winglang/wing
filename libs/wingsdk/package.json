@@ -33,7 +33,7 @@
   },
   "author": {
     "name": "Wing Cloud",
-    "email": "ping@monada.co",
+    "email": "ping@wing.cloud",
     "organization": true
   },
   "devDependencies": {
