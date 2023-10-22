@@ -157,7 +157,7 @@ pnpm turbo wing:e2e
 ### Test Meta-Comments
 
 In your wing files in `examples/tests/valid`, you can add a specially formatted comment to add additional information for hangar.
-Inside this comment, a yaml block will be read and used for serveral purposes.
+Inside this comment, a yaml block will be read and used for several purposes.
 
 Example:
 

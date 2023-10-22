@@ -176,7 +176,7 @@ inflight (arg1: <type1>, arg2: <type2>, ...) => <type>
 
 Wing has a data type called `Json` (alias is `json`). This type represents an immutable untyped [JSON
 value](https://www.json.org/json-en.html), including JSON primitives (`string`, `number`,
-`boolean`), arrays (both heterogenous and homogenous) and objects (key-value maps where keys are
+`boolean`), arrays (both heterogenous and homogeneous) and objects (key-value maps where keys are
 strings and values can be any other JSON value)).
 
 `Json` objects are immutable and can be referenced across inflight context.
@@ -1870,7 +1870,7 @@ class Foo {
 ```
 
 Preflight objects all have a scope and a unique ID. Compiler provides an implicit scope
-and ID for each object, both overrideable by user-defined ones in constructor.
+and ID for each object, both overridable by user-defined ones in constructor.
 
 The default for scope is `this`, which means the scope in which the object was
 defined (instantiated). The implicit ID is the type name of the class iff the type

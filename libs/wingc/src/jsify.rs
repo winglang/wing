@@ -10,9 +10,9 @@ use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, collections::BTreeMap, v
 
 use crate::{
 	ast::{
-		ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, ElifLetBlock, Expr, ExprKind,
-		FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, Literal, New, Phase, Reference, Scope, Stmt,
-		StmtKind, Symbol, UnaryOperator, UserDefinedType,
+		AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, ElifLetBlock,
+		Expr, ExprKind, FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, Literal, New, Phase, Reference,
+		Scope, Stmt, StmtKind, Symbol, UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic,
@@ -990,7 +990,7 @@ impl<'a> JSifier<'a> {
 				// Struct schemas are emitted before jsification phase
 				CodeMaker::default()
 			}
-			StmtKind::Enum { name, values } => {
+			StmtKind::Enum { name, values, .. } => {
 				let mut code = CodeMaker::default();
 				code.open(format!("const {name} ="));
 				code.add_code(self.jsify_enum(values));
@@ -1522,13 +1522,19 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 			StmtKind::Assignment { .. } => {}
 			StmtKind::Scope(_) => {}
 			StmtKind::Class(class) => {
-				symbols.push(class.name.clone());
+				if class.access == AccessModifier::Public {
+					symbols.push(class.name.clone());
+				}
 			}
 			// interfaces are bringable, but there's nothing to emit
 			StmtKind::Interface(_) => {}
+			// structs are bringable, but we don't emit anything for them
+			// unless a static method is called on them
 			StmtKind::Struct { .. } => {}
-			StmtKind::Enum { name, .. } => {
-				symbols.push(name.clone());
+			StmtKind::Enum { name, access, .. } => {
+				if *access == AccessModifier::Public {
+					symbols.push(name.clone());
+				}
 			}
 			StmtKind::TryCatch { .. } => {}
 			StmtKind::CompilerDebugEnv => {}
