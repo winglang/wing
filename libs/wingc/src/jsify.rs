@@ -1092,21 +1092,11 @@ impl<'a> JSifier<'a> {
 		async_init_body_code.add_code(self.jsify_scope_body(body_scope, ctx));
 		async_init_body_code.close("}");
 
-		// If this is an inflight init of an inflight class then we also need to generate a normat ctor, if it's a preflight class
+		// If this is an inflight init of an inflight class then we also need to generate a normal ctor, if it's a preflight class
 		// then we generate a binding ctor seperately see `jsify_inflight_binding_constructor`
 		let code = if class_phase == Phase::Inflight {
 			let mut code = CodeMaker::default();
-			let mut parameter_list = vec![];
-
-			for p in &func_def.signature.parameters {
-				if p.variadic {
-					parameter_list.push("...".to_string() + &p.name.to_string());
-				} else {
-					parameter_list.push(p.name.to_string());
-				}
-			}
-
-			let parameters = parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", ");
+			let parameters = jsify_function_parameters(func_def);
 
 			code.open(format!("constructor({parameters}){{"));
 
@@ -1140,22 +1130,12 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_function(&self, class: Option<&AstClass>, func_def: &FunctionDefinition, ctx: &mut JSifyContext) -> String {
-		let mut parameter_list = vec![];
-
-		for p in &func_def.signature.parameters {
-			if p.variadic {
-				parameter_list.push("...".to_string() + &p.name.to_string());
-			} else {
-				parameter_list.push(p.name.to_string());
-			}
-		}
+		let parameters = jsify_function_parameters(func_def);
 
 		let (name, arrow) = match &func_def.name {
 			Some(name) => (name.name.clone(), " ".to_string()),
 			None => ("".to_string(), " => ".to_string()),
 		};
-
-		let parameters = parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", ");
 
 		let body = match &func_def.body {
 			FunctionBody::Statements(scope) => {
@@ -1584,6 +1564,20 @@ impl<'a> JSifier<'a> {
 		};
 		format!("./inflight.{}-{}.js", class.name.name, id)
 	}
+}
+
+fn jsify_function_parameters(func_def: &FunctionDefinition) -> String {
+	let mut parameter_list = vec![];
+
+	for p in &func_def.signature.parameters {
+		if p.variadic {
+			parameter_list.push("...".to_string() + &p.name.to_string());
+		} else {
+			parameter_list.push(p.name.to_string());
+		}
+	}
+
+	parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", ")
 }
 
 fn parent_class_phase(ctx: &JSifyContext<'_>) -> Phase {
