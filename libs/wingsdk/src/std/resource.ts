@@ -230,11 +230,13 @@ export abstract class Resource extends Construct implements IResource {
     const opsForHost = this.onLiftMap.get(host)!;
 
     // For each operation, check if the host supports it. If it does, register the binding.
-    const supportedOps = [...(this._getInflightOps() ?? []), "$inflight_init"];
+    const supportedOps = this._getInflightOps() ?? [];
     for (const op of ops) {
       if (
-        !supportedOps.includes(op) ||
-        (this._clientClass && !this._clientClass.prototype.hasOwnProperty(op))
+        op !== "$inflight_init" &&
+        (!supportedOps.includes(op) ||
+          (this._clientClass &&
+            !this._clientClass.prototype.hasOwnProperty(op)))
       ) {
         throw new NotImplementedError(
           `Resource ${this.node.path} does not support inflight operation ${op} (requested by ${host.node.path}).\nIt might not be implemented yet.`
