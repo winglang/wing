@@ -25,12 +25,31 @@ Telemetry and Observability build the backbone of modern application systems and
 
 ## Design
 
-Typically, a user of a "traditional" language would simply use an endpoint exposed by the ingest service and "write" to it.
+Typically, a device/user writing to a real-time streaming system would simply write to the REST API endpoint exposed by the service.
 
-Within wing, for the "cloud native" developer, these endpoints and the nuances exposed by them should be abstracted by wing, so write to a streaming system is just like writing to any persistent storage. While still indicating that they're writing to a service capable of massive throughput.
+Within wing, these endpoints and the nuances exposed by them should be abstracted by wing, so write to a streaming system is just like writing to any persistent storage.
+
+For example:
+
+Writing to a data stream from a function should look like:
+```ts
+bring cloud;
+
+let stream = new cloud.Stream(
+    name: 'telemetry-ingest',
+    horizon: 48
+);
 
 
+let bloc = new cloud.Function(inflight (args): any => {
+    stream.put(args);
 
+    let argsCount = args.count;
+    return argsCount % 2;
+}) as "business-logic";
+```
+
+Another known pattern on 
 
 <!--
     This section works backwards from an the end user. It is written as one or more "artifacts from the future" such as the getting started documentation (readme), user interface wireframes (or link to them), press release, changelog entry, etc.

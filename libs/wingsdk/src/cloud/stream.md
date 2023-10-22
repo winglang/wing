@@ -15,7 +15,7 @@ sidebar_position: 1
 ---
 
 The `cloud.Stream` resource represents a real-time streaming service typically used to ingest continuous data transmissions.
-They typically involve high throughput, low size transmissions like: sensors, mobile devices, web servers, etc. 
+They typically involve high throughput, low size transmissions like: sensors, mobile devices, web servers, etc.
 
 When a data stream is created in a cloud provider, it typically exposes an endpoint acting as a "put" endpoint for all data sources. The cloud provider manages the ingest and temporary storage of your data. 
 
@@ -27,20 +27,36 @@ Most cloud providers have a data horizon for their streaming data to help provid
 bring cloud;
 
 let stream = new cloud.Stream(
-    name: ,
-    horizon: ,
+    name: 'test-data-stream',
+    horizon: 96,  // optional, defaults to 24 hours
 );
 ```
+
+## Advanced Usage
+
+If the expected throughput of your data is static and known, you can leverage provisioned throughput.
+
+```ts
+bring cloud;
+
+let stream = new cloud.Stream(
+  name: ,
+  read: ,
+  write: ,
+  horizon: ,
+)
 
 ## Target-specific details
 
 ### Simulator (`sim`)
 
-The sim implementation of `cloud.Function` runs the inflight code as a JavaScript function.
+The sim implementation of `cloud.Stream` uses a set of temporary local directories to store incoming data.
+
+Note that data is not persisted between simulator runs.
 
 ### AWS (`tf-aws` and `awscdk`)
 
-The AWS implementation of `cloud.Function` uses [AWS Lambda](https://aws.amazon.com/lambda/).
+The AWS implementation of `cloud.Stream` uses [AWS Kinesis Data Streams](https://aws.amazon.com/kinesis/data-streams/).
 
 To add extra IAM permissions to the function, you can use the `aws.Function` class as shown below.
 
