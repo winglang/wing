@@ -10,8 +10,8 @@ import debug from "debug";
 import { glob } from "glob";
 import { nanoid } from "nanoid";
 import { printResults, validateOutputFilePath, writeResultsToFile } from "./results";
-import { compile, CompileOptions, NotImplementedError } from "../compile";
 import { withSpinner } from "../../util";
+import { compile, CompileOptions, NotImplementedError } from "../compile";
 
 const log = debug("wing:test");
 
