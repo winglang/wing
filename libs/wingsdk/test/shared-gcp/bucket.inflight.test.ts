@@ -1,6 +1,7 @@
 import { MockStorage } from "mock-gcs";
 import { vi, test, beforeEach, expect } from "vitest";
 import { BucketClient } from "../../src/shared-gcp/bucket.inflight";
+import { Datetime } from "../../src/std";
 
 vi.mock("@google-cloud/storage", () => {
   return {
@@ -308,6 +309,35 @@ test("tryDelete a non-existent object from the bucket", async () => {
   const res = await client.tryDelete(NON_EXISTENT_KEY);
 
   expect(res).toBe(false);
+});
+
+test("get object's metadata from bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "test-bucket";
+  const KEY = "test-file-1";
+  const VALUE = "test-content-1";
+  const mockStorage = new MockStorage();
+  await mockStorage
+    .bucket(BUCKET_NAME)
+    .file(KEY)
+    .save(VALUE, {
+      metadata: {
+        contentType: "image/jpeg",
+        size: 3191,
+        updated: "2016-12-15T01:19:41Z",
+      },
+    });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME, mockStorage as any);
+  const response = await client.metadata(KEY);
+
+  // THEN
+  expect(response).toEqual({
+    size: 3191,
+    lastModified: Datetime.fromIso("2016-12-15T01:19:41Z"),
+    contentType: "image/jpeg",
+  });
 });
 
 // TODO: implement signedUrl related tests

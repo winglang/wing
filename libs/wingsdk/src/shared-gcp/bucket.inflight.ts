@@ -5,7 +5,7 @@ import {
   ObjectMetadata,
   BucketSignedUrlOptions,
 } from "../cloud";
-import { Json } from "../std";
+import { Datetime, Json } from "../std";
 
 export class BucketClient implements IBucketClient {
   private bucketName: string;
@@ -22,8 +22,17 @@ export class BucketClient implements IBucketClient {
     this.bucket = this.storage.bucket(this.bucketName);
   }
 
-  public async metadata(_key: string): Promise<ObjectMetadata> {
-    throw new Error("Method not implemented.");
+  public async metadata(key: string): Promise<ObjectMetadata> {
+    try {
+      const [metadata] = await this.bucket.file(key).getMetadata();
+      return {
+        contentType: metadata.contentType,
+        lastModified: Datetime.fromIso(metadata.updated),
+        size: metadata.size,
+      };
+    } catch (error) {
+      throw new Error(`Failed to get metadata for object. (key=${key})`);
+    }
   }
 
   // check if bucket is public or not from bucket metadata
