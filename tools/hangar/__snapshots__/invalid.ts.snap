@@ -803,16 +803,6 @@ exports[`cloud_function_expects_inflight.test.w 1`] = `
   | \\\\-^ Expected phase to be preflight, but got inflight instead
 
 
-error: Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
-  --> ../../../examples/tests/invalid/cloud_function_expects_inflight.test.w:3:20
-  |  
-3 |   new cloud.Function((name: str): str => {
-  | /--------------------^
-4 | |   return \\"Hello \${name}\\";
-5 | | });
-  | \\\\-^ Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
-
-
 error: Expected type to be \\"inflight (message: str): void\\", but got \\"inflight (x: num): unknown\\" instead
    --> ../../../examples/tests/invalid/cloud_function_expects_inflight.test.w:9:15
    |  
@@ -2493,6 +2483,35 @@ Duration <DURATION>"
 `;
 
 exports[`panic.test.w 2`] = `"Panicked, backtrace not captured: Unsupported"`;
+
+exports[`phase_mismatch.test.w 1`] = `
+"error: Expected phase to be preflight, but got inflight instead
+  --> ../../../examples/tests/invalid/phase_mismatch.test.w:2:10
+  |
+2 | my_func1((n: num): num => { return n * 2; });
+  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected phase to be preflight, but got inflight instead
+
+
+error: Expected phase to be inflight, but got preflight instead
+  --> ../../../examples/tests/invalid/phase_mismatch.test.w:5:10
+  |
+5 | my_func2(inflight (n: num): num => { return n * 2; });
+  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected phase to be inflight, but got preflight instead
+
+
+error: Expected phase to be preflight, but got inflight instead
+   --> ../../../examples/tests/invalid/phase_mismatch.test.w:12:10
+   |
+12 | my_func3((n: num): num => { return n * 2; });
+   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected phase to be preflight, but got inflight instead
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
 
 exports[`preflight_from_inflight.test.w 1`] = `
 "error: Cannot call into preflight phase while inflight
