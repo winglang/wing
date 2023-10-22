@@ -337,7 +337,7 @@ export class Api extends cloud.Api {
   /** @internal */
   public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
-      throw new Error("topics can only be bound by tfaws.Function for now");
+      throw new Error("apis can only be bound by tfaws.Function for now");
     }
 
     host.addEnvironment(this.urlEnvName(), this.url);

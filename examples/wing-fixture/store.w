@@ -1,7 +1,7 @@
 bring cloud;
 bring "./subdir/util.w" as myutil;
 
-class Store {
+pub class Store {
   data: cloud.Bucket;
   init() {
     this.data = new cloud.Bucket();

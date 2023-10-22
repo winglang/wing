@@ -92,6 +92,7 @@ exports[`queue with a consumer function 2`] = `
           ],
         },
         "Runtime": "nodejs18.x",
+        "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
     },

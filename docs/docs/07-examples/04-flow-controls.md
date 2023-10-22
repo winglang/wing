@@ -10,7 +10,7 @@ keywords: [Wing example]
 let iterable = ["a", "b", "c", "d", "e", "f", "g", "h"];
 for value in iterable {
   if value == "g" {
-    // stoping at g
+    // stopping at g
     break;
   }
   if value == "b" {
