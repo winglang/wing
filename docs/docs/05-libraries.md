@@ -12,8 +12,6 @@ As the project grows further, you can extract parts into separate libraries that
 
 Any Wing project can be packaged as a library, which will export all public types (like classes and structs) so that they can be used by multiple applications.
 
-> Note: today all types in libraries are public by default, but there is a planned breaking change to make types private by default. Follow <https://github.com/winglang/wing/issues/4294> for more information.
-
 Let's first start with how to consume a Wing library.
 
 ## Using a Wing library
