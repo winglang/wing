@@ -3,7 +3,7 @@
 bring "./bar.w" as bar;
 bring "../baz.w" as baz;
 
-class Foo {
+pub class Foo {
   pub static foo(): str {
     return "foo";
   }
