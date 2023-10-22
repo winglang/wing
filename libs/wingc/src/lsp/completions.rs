@@ -627,6 +627,7 @@ fn get_current_scope_completions(
 			completions.push(CompletionItem {
 				label: "inflight () => {}".to_string(),
 				filter_text: Some("inflight".to_string()),
+				sort_text: Some("zzinflight".to_string()),
 				insert_text: Some("inflight ($1) => {$0}".to_string()),
 				insert_text_format: Some(InsertTextFormat::SNIPPET),
 				kind: Some(CompletionItemKind::SNIPPET),
@@ -635,28 +636,28 @@ fn get_current_scope_completions(
 		}
 	}
 
-	if in_type {
-		// add the built-in types
-		for built_in in BUILTIN_TYPES {
-			completions.push(CompletionItem {
-				label: built_in.to_string(),
-				sort_text: Some(format!("zy{built_in}")),
-				kind: Some(CompletionItemKind::KEYWORD),
-				..Default::default()
-			});
-		}
-		for built_in in BUILTIN_GENERICS {
-			completions.push(CompletionItem {
-				label: format!("{built_in}<T>"),
-				sort_text: Some(format!("zz{}", built_in)),
-				insert_text_format: Some(InsertTextFormat::SNIPPET),
-				insert_text: Some(format!("{built_in}<$1>")),
-				kind: Some(CompletionItemKind::KEYWORD),
-				command: Some(command_to_trigger_completion()),
-				..Default::default()
-			});
-		}
+	// add the built-in types
+	for built_in in BUILTIN_TYPES {
+		completions.push(CompletionItem {
+			label: built_in.to_string(),
+			sort_text: Some(format!("zy{built_in}")),
+			kind: Some(CompletionItemKind::KEYWORD),
+			..Default::default()
+		});
+	}
+	for built_in in BUILTIN_GENERICS {
+		completions.push(CompletionItem {
+			label: format!("{built_in}<T>"),
+			sort_text: Some(format!("zz{}", built_in)),
+			insert_text_format: Some(InsertTextFormat::SNIPPET),
+			insert_text: Some(format!("{built_in}<$1>")),
+			kind: Some(CompletionItemKind::KEYWORD),
+			command: Some(command_to_trigger_completion()),
+			..Default::default()
+		});
+	}
 
+	if in_type {
 		completions.push(CompletionItem {
 			label: "bring".to_string(),
 			insert_text: Some("bring ".to_string()),
@@ -779,6 +780,7 @@ fn completion_sort_text(completion_item: &CompletionItem) -> String {
 			CompletionItemKind::INTERFACE => "ii",
 			CompletionItemKind::ENUM => "jj",
 			CompletionItemKind::MODULE => "kk",
+			CompletionItemKind::KEYWORD => "kl",
 			CompletionItemKind::SNIPPET => "ll",
 			_ => "z",
 		}
