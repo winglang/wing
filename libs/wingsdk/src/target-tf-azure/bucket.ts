@@ -1,5 +1,7 @@
 import { Construct } from "constructs";
 import { App } from "./app";
+// eslint-disable-next-line import/no-restricted-paths
+import { BucketClient } from "./bucket.inflight";
 import { Function } from "./function";
 import { StorageAccount } from "../.gen/providers/azurerm/storage-account";
 import { StorageBlob } from "../.gen/providers/azurerm/storage-blob";
@@ -52,6 +54,7 @@ export class Bucket extends cloud.Bucket {
   public readonly storageContainer: StorageContainer;
   private readonly public: boolean;
   private readonly storageAccount: StorageAccount;
+  protected _clientClass = BucketClient;
 
   constructor(scope: Construct, id: string, props: cloud.BucketProps = {}) {
     super(scope, id, props);

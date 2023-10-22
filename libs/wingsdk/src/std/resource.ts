@@ -1,6 +1,7 @@
 import { Construct, IConstruct } from "constructs";
 import { Duration } from "./duration";
 import { App } from "../core";
+import { NotImplementedError } from "../core/errors";
 import { liftObject } from "../core/internal";
 import { log } from "../shared/log";
 import { Node } from "../std";
@@ -174,6 +175,10 @@ export abstract class Resource extends Construct implements IResource {
   }
 
   private readonly onLiftMap: Map<IInflightHost, Set<string>> = new Map();
+  /**
+   * @internal
+   */
+  protected _clientClass?: any; // to assign the client class
 
   /** @internal */
   public abstract _getInflightOps(): string[];
@@ -227,9 +232,12 @@ export abstract class Resource extends Construct implements IResource {
     // For each operation, check if the host supports it. If it does, register the binding.
     const supportedOps = [...(this._getInflightOps() ?? []), "$inflight_init"];
     for (const op of ops) {
-      if (!supportedOps.includes(op)) {
-        throw new Error(
-          `Resource ${this.node.path} does not support inflight operation ${op} (requested by ${host.node.path})`
+      if (
+        !supportedOps.includes(op) ||
+        (this._clientClass && !this._clientClass.prototype.hasOwnProperty(op))
+      ) {
+        throw new NotImplementedError(
+          `Resource ${this.node.path} does not support inflight operation ${op} (requested by ${host.node.path}).\nIt might not be implemented yet.`
         );
       }
 
@@ -259,7 +267,7 @@ export abstract class Resource extends Construct implements IResource {
    * @internal
    */
   public _preSynthesize(): void {
-    // Perform the live bindings betweeen resources and hosts
+    // Perform the live bindings between resources and hosts
     // By aggregating the binding operations, we can avoid performing
     // multiple bindings for the same resource-host pairs.
     for (const [host, ops] of this.onLiftMap.entries()) {

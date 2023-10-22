@@ -5,16 +5,10 @@ import {
   ContainerClient,
 } from "@azure/storage-blob";
 import mime from "mime-types";
-import {
-  IBucketClient,
-  ObjectMetadata,
-  BucketPutOptions,
-  BucketDeleteOptions,
-  BucketSignedUrlOptions,
-} from "../cloud";
+import { IBucketClient, BucketPutOptions, BucketDeleteOptions } from "../cloud";
 import { Json } from "../std";
 
-export class BucketClient implements IBucketClient {
+export class BucketClient implements Partial<IBucketClient> {
   private readonly bucketName: string;
   private readonly storageAccount: string;
   private readonly blobServiceClient: BlobServiceClient;
@@ -214,16 +208,6 @@ export class BucketClient implements IBucketClient {
     return list;
   }
 
-  public async signedUrl(
-    key: string,
-    options?: BucketSignedUrlOptions
-  ): Promise<string> {
-    options;
-    throw new Error(
-      `signedUrl is not implemented yet for tf-azure (key=${key})`
-    );
-  }
-
   /**
    * Returns a url to the given file.
    * @Throws if the file is not public or if object does not exist.
@@ -241,15 +225,6 @@ export class BucketClient implements IBucketClient {
     return encodeURI(
       `https://${this.storageAccount}.blob.core.windows.net/${this.bucketName}/${key}`
     );
-  }
-
-  /**
-   * Get the metadata of an object in the bucket.
-   * @throws if the object does not exist.
-   * @param key Key of the object.
-   */
-  public async metadata(key: string): Promise<ObjectMetadata> {
-    return Promise.reject(`metadata is not implemented: (key=${key})`);
   }
 
   /**
