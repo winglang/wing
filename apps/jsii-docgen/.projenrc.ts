@@ -5,7 +5,7 @@ const project = new typescript.TypeScriptProject({
   description: "Generates API docs for Wing libraries",
   repository: "https://github.com/winglang/wing",
   authorName: "Wing Cloud",
-  authorEmail: "ping@monada.co",
+  authorEmail: "ping@wing.cloud",
   authorOrganization: true,
   authorUrl: "https://wing.cloud",
   defaultReleaseBranch: "main",
