@@ -47,6 +47,8 @@ const PLUGINS_VAR: &str = "$plugins";
 const ROOT_CLASS: &str = "$Root";
 const JS_CONSTRUCTOR: &str = "constructor";
 
+const SUPER_CLASS_INFLIGHT_INIT_NAME: &str = formatcp!("super_{}", CLASS_INFLIGHT_INIT_NAME);
+
 pub struct JSifyContext<'a> {
 	pub lifts: Option<&'a Lifts>,
 	pub visit_ctx: &'a mut VisitContext,
@@ -1120,7 +1122,7 @@ impl<'a> JSifier<'a> {
 				// If our parent's phase in inflight then backup a reference to the paren't inflight init to be used in the super ctor call
 				if parent_class_phase(ctx) == Phase::Inflight {
 					code.line(format!(
-						"this.super_{CLASS_INFLIGHT_INIT_NAME} = this.{CLASS_INFLIGHT_INIT_NAME};"
+						"this.{SUPER_CLASS_INFLIGHT_INIT_NAME} = this.{CLASS_INFLIGHT_INIT_NAME};"
 					));
 				}
 			}
