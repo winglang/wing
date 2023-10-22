@@ -39,8 +39,10 @@ module.exports = function({  }) {
         }
       }
       class B {
-        async $inflight_init() {
-          (await A.foo());
+        constructor(){
+          this.$inflight_init = async () => {
+            (await A.foo());
+          }
         }
       }
       (await A.foo());

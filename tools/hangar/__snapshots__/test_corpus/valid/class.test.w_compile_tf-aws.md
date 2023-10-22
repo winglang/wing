@@ -73,7 +73,7 @@ module.exports = function({ $B }) {
       return $obj;
     }
     async handle() {
-      const b = (await (async () => {const o = new $B(); await o.$inflight_init?.("ba"); return o; })());
+      const b = (await (async () => {const o = new $B("ba"); await o.$inflight_init?.(); return o; })());
       {((cond) => {if (!cond) throw new Error("assertion failed: b.sound == \"ba\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(b.sound,"ba")))};
     }
   }
@@ -87,8 +87,10 @@ module.exports = function({ $B }) {
 "use strict";
 module.exports = function({  }) {
   class A {
-    async $inflight_init(sound) {
-      this.sound = sound;
+    constructor(sound){
+      this.$inflight_init = async () => {
+        this.sound = sound;
+      }
     }
   }
   return A;
@@ -101,8 +103,12 @@ module.exports = function({  }) {
 "use strict";
 module.exports = function({ $A }) {
   class B extends $A {
-    async $inflight_init(sound) {
-      await super.$inflight_init?.(sound);
+    constructor(sound){
+      super(sound);
+      this.super_$inflight_init = this.$inflight_init;
+      this.$inflight_init = async () => {
+        await this.super_$inflight_init?.(sound);
+      }
     }
   }
   return B;

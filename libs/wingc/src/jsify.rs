@@ -27,7 +27,7 @@ use crate::{
 		symbol_env::SymbolEnv,
 		ClassLike, Type, TypeRef, Types, VariableKind, CLASS_INFLIGHT_INIT_NAME,
 	},
-	visit_context::VisitContext,
+	visit_context::{VisitContext, VisitorWithContext},
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
 	WINGSDK_STD_MODULE,
 };
@@ -46,6 +46,8 @@ const PLUGINS_VAR: &str = "$plugins";
 
 const ROOT_CLASS: &str = "$Root";
 const JS_CONSTRUCTOR: &str = "constructor";
+
+const SUPER_CLASS_INFLIGHT_INIT_NAME: &str = formatcp!("super_{}", CLASS_INFLIGHT_INIT_NAME);
 
 pub struct JSifyContext<'a> {
 	pub lifts: Option<&'a Lifts>,
@@ -73,6 +75,12 @@ pub struct JSifier<'a> {
 	source_file_graph: &'a FileGraph,
 	/// The path that compilation started at (file or directory)
 	compilation_init_path: &'a Utf8Path,
+}
+
+impl VisitorWithContext for JSifyContext<'_> {
+	fn ctx(&mut self) -> &mut VisitContext {
+		&mut self.visit_ctx
+	}
 }
 
 /// Preflight classes have two types of host binding methods:
@@ -466,7 +474,7 @@ impl<'a> JSifier<'a> {
 					// If we're inflight and this new expression evaluates to a type with an inflight init (that's not empty)
 					// make sure it's called before we return the object.
 					if ctx.visit_ctx.current_phase() == Phase::Inflight && expression_type.as_class().expect("a class").get_method(&Symbol::global(CLASS_INFLIGHT_INIT_NAME)).is_some() {
-						format!("(await (async () => {{const o = new {ctor}(); await o.{CLASS_INFLIGHT_INIT_NAME}?.({args}); return o; }})())")
+						format!("(await (async () => {{const o = new {ctor}({args}); await o.{CLASS_INFLIGHT_INIT_NAME}?.(); return o; }})())")
 					} else {
 						format!("new {}({})", ctor, args)
 					}
@@ -812,9 +820,16 @@ impl<'a> JSifier<'a> {
 			},
 			StmtKind::SuperConstructor { arg_list } => {
 				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
-				match ctx.visit_ctx.current_phase() {
-					Phase::Preflight => CodeMaker::one_line(format!("super(scope,id,{});", args)),
-					_ => CodeMaker::one_line(format!("await super.{CLASS_INFLIGHT_INIT_NAME}?.({});", args)),
+				match parent_class_phase(ctx) {
+					Phase::Inflight => CodeMaker::one_line(format!("await this.super_{CLASS_INFLIGHT_INIT_NAME}?.({args});")),
+					Phase::Preflight => CodeMaker::one_line(format!("super(scope,id,{args});")),
+					Phase::Independent => {
+						// If our parent is phase independent then we don't call its super, instead a call to its super will be
+						// generated in `jsify_inflight_init` when we generate the inflight init for this class.
+						// Note: this is only true for inflight clases which are the only type of classes that can have a phase independent parent.
+						// when/if this changes we'll need to be move verbose here.
+						CodeMaker::default()
+					}
 				}
 			}
 			StmtKind::Let {
@@ -1057,23 +1072,70 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_function(&self, class: Option<&AstClass>, func_def: &FunctionDefinition, ctx: &mut JSifyContext) -> String {
-		let mut parameter_list = vec![];
+	fn jsify_inflight_init(&self, func_def: &FunctionDefinition, class_phase: Phase, ctx: &mut JSifyContext) -> String {
+		assert!(ctx.visit_ctx.current_phase() == Phase::Inflight);
 
-		for p in &func_def.signature.parameters {
-			if p.variadic {
-				parameter_list.push("...".to_string() + &p.name.to_string());
-			} else {
-				parameter_list.push(p.name.to_string());
+		let FunctionBody::Statements(body_scope) = &func_def.body else {
+			panic!("inflight init must have a scope body")
+		};
+
+		// Create the async init function that'll capture the ctor's args
+		let mut async_init_body_code = CodeMaker::default();
+		// Define this as a closure if we're inside a regulat ctor (inflight class)
+		async_init_body_code.open(if class_phase == Phase::Inflight {
+			// A closure that'll capture the ctor args
+			format!("this.{CLASS_INFLIGHT_INIT_NAME} = async () => {{")
+		} else {
+			// Preflight class's inflight inits have no args
+			format!("async {CLASS_INFLIGHT_INIT_NAME}() {{")
+		});
+		async_init_body_code.add_code(self.jsify_scope_body(body_scope, ctx));
+		async_init_body_code.close("}");
+
+		// If this is an inflight init of an inflight class then we also need to generate a normal ctor, if it's a preflight class
+		// then we generate a binding ctor seperately see `jsify_inflight_binding_constructor`
+		let code = if class_phase == Phase::Inflight {
+			let mut code = CodeMaker::default();
+			let parameters = jsify_function_parameters(func_def);
+
+			code.open(format!("constructor({parameters}){{"));
+
+			// Issue a call to the parent class's regular ctor
+			if let Some(Stmt {
+				kind: StmtKind::SuperConstructor { arg_list },
+				..
+			}) = body_scope.statements.iter().next()
+			{
+				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
+				code.line(format!("super({args});"));
+
+				// If our parent's phase in inflight then backup a reference to the paren't inflight init to be used in the super ctor call
+				if parent_class_phase(ctx) == Phase::Inflight {
+					code.line(format!(
+						"this.{SUPER_CLASS_INFLIGHT_INIT_NAME} = this.{CLASS_INFLIGHT_INIT_NAME};"
+					));
+				}
 			}
-		}
+
+			code.add_code(async_init_body_code);
+
+			code.close("}");
+			code
+		} else {
+			assert!(func_def.signature.parameters.is_empty());
+			async_init_body_code
+		};
+
+		code.to_string()
+	}
+
+	fn jsify_function(&self, class: Option<&AstClass>, func_def: &FunctionDefinition, ctx: &mut JSifyContext) -> String {
+		let parameters = jsify_function_parameters(func_def);
 
 		let (name, arrow) = match &func_def.name {
 			Some(name) => (name.name.clone(), " ".to_string()),
 			None => ("".to_string(), " => ".to_string()),
 		};
-
-		let parameters = parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", ");
 
 		let body = match &func_def.body {
 			FunctionBody::Statements(scope) => {
@@ -1116,67 +1178,69 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_class(&self, env: &SymbolEnv, class: &AstClass, ctx: &mut JSifyContext) -> CodeMaker {
-		// lookup the class type
-		let class_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
+		ctx.with_class(class, |ctx| {
+			// lookup the class type
+			let class_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
 
-		// find the nearest lifts object. this could be in the current scope (in which case there will
-		// be a `lifts` fields in the `class_type` or the parent scope.
-		let lifts = if let Some(lifts) = &class_type.as_class().unwrap().lifts {
-			Some(lifts)
-		} else {
-			ctx.lifts
-		};
+			// find the nearest lifts object. this could be in the current scope (in which case there will
+			// be a `lifts` fields in the `class_type` or the parent scope.
+			let lifts = if let Some(lifts) = &class_type.as_class().unwrap().lifts {
+				Some(lifts)
+			} else {
+				ctx.lifts
+			};
 
-		let ctx = &mut JSifyContext {
-			lifts,
-			visit_ctx: &mut ctx.visit_ctx,
-		};
+			let ctx = &mut JSifyContext {
+				lifts,
+				visit_ctx: &mut ctx.visit_ctx,
+			};
 
-		// emit the inflight side of the class into a separate file
-		let inflight_class_code = self.jsify_class_inflight(&class, ctx);
+			// emit the inflight side of the class into a separate file
+			let inflight_class_code = self.jsify_class_inflight(&class, ctx);
 
-		// if this is inflight/independent, class, just emit the inflight class code inline and move on
-		// with your life.
-		if ctx.visit_ctx.current_phase() != Phase::Preflight {
-			return inflight_class_code;
-		}
+			// if this is inflight/independent, class, just emit the inflight class code inline and move on
+			// with your life.
+			if ctx.visit_ctx.current_phase() != Phase::Preflight {
+				return inflight_class_code;
+			}
 
-		// emit the inflight file
-		self.emit_inflight_file(&class, inflight_class_code, ctx);
+			// emit the inflight file
+			self.emit_inflight_file(&class, inflight_class_code, ctx);
 
-		// lets write the code for the preflight side of the class
-		// TODO: why would we want to do this for inflight classes?? maybe return here in that case?
-		let mut code = CodeMaker::default();
+			// lets write the code for the preflight side of the class
+			// TODO: why would we want to do this for inflight classes?? maybe return here in that case?
+			let mut code = CodeMaker::default();
 
-		// default base class for preflight classes is `core.Resource`
-		let extends = if let Some(parent) = &class.parent {
-			format!(" extends {}", self.jsify_user_defined_type(parent, ctx))
-		} else {
-			format!(" extends {}", STDLIB_CORE_RESOURCE)
-		};
+			// default base class for preflight classes is `core.Resource`
+			let extends = if let Some(parent) = &class.parent {
+				format!(" extends {}", self.jsify_user_defined_type(parent, ctx))
+			} else {
+				format!(" extends {}", STDLIB_CORE_RESOURCE)
+			};
 
-		code.open(format!("class {}{extends} {{", class.name));
+			code.open(format!("class {}{extends} {{", class.name));
 
-		// emit the preflight constructor
-		code.add_code(self.jsify_preflight_constructor(&class, ctx));
+			// emit the preflight constructor
+			code.add_code(self.jsify_preflight_constructor(&class, ctx));
 
-		// emit preflight methods
-		for m in class.preflight_methods(false) {
-			code.line(self.jsify_function(Some(class), m, ctx));
-		}
+			// emit preflight methods
+			for m in class.preflight_methods(false) {
+				code.line(self.jsify_function(Some(class), m, ctx));
+			}
 
-		// emit the `_toInflight` and `_toInflightType` methods (TODO: renamed to `_liftObject` and
-		// `_liftType`).
-		code.add_code(self.jsify_to_inflight_type_method(&class, ctx));
-		code.add_code(self.jsify_to_inflight_method(&class.name, ctx));
-		code.add_code(self.jsify_get_inflight_ops_method(&class));
+			// emit the `_toInflight` and `_toInflightType` methods (TODO: renamed to `_liftObject` and
+			// `_liftType`).
+			code.add_code(self.jsify_to_inflight_type_method(&class, ctx));
+			code.add_code(self.jsify_to_inflight_method(&class.name, ctx));
+			code.add_code(self.jsify_get_inflight_ops_method(&class));
 
-		// emit `_registerOnLiftObject` to register bindings (for type & instance binds)
-		code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Instance, ctx));
-		code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Type, ctx));
+			// emit `_registerOnLiftObject` to register bindings (for type & instance binds)
+			code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Instance, ctx));
+			code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Type, ctx));
 
-		code.close("}");
-		code
+			code.close("}");
+			code
+		})
 	}
 
 	fn jsify_preflight_constructor(&self, class: &AstClass, ctx: &mut JSifyContext) -> CodeMaker {
@@ -1329,7 +1393,7 @@ impl<'a> JSifier<'a> {
 		// emit the $inflight_init function (if it has a body).
 		if let FunctionBody::Statements(s) = &class.inflight_initializer.body {
 			if !s.statements.is_empty() {
-				class_code.line(self.jsify_function(Some(class), &class.inflight_initializer, &mut ctx));
+				class_code.line(self.jsify_inflight_init(&class.inflight_initializer, class.phase, &mut ctx));
 			}
 		}
 
@@ -1500,6 +1564,38 @@ impl<'a> JSifier<'a> {
 		};
 		format!("./inflight.{}-{}.js", class.name.name, id)
 	}
+}
+
+fn jsify_function_parameters(func_def: &FunctionDefinition) -> String {
+	let mut parameter_list = vec![];
+
+	for p in &func_def.signature.parameters {
+		if p.variadic {
+			parameter_list.push("...".to_string() + &p.name.to_string());
+		} else {
+			parameter_list.push(p.name.to_string());
+		}
+	}
+
+	parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", ")
+}
+
+fn parent_class_phase(ctx: &JSifyContext<'_>) -> Phase {
+	let current_class_type = resolve_user_defined_type(
+		ctx.visit_ctx.current_class().expect("a class"),
+		ctx.visit_ctx.current_env().expect("an env"),
+		ctx.visit_ctx.current_stmt_idx(),
+	)
+	.expect("a class type");
+	let parent_class_phase = current_class_type
+		.as_class()
+		.expect("a class")
+		.parent
+		.expect("a parent class")
+		.as_class()
+		.expect("a class")
+		.phase;
+	parent_class_phase
 }
 
 fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
