@@ -229,3 +229,24 @@ $ wing pack
 This will compile your current Wing directory, and bundle it as a tarball that can be published to [GitHub packages](https://github.com/features/packages) or [npm](https://www.npmjs.com/).
 
 See [Libraries](../05-libraries.md) for more details on packaging and consuming Wing libraries.
+
+## Environment Variables
+
+Wing uses `dotenv` to load additional environment variables from files in your current working directory. These environment variables can be accessed in Wing code using `util.env` and `util.tryEnv`.
+
+### Supported dotenv files
+
+Here's the list of supported dotenv files:
+
+- `.env` – Loaded in all cases
+- `.env.local` – Loaded in all cases and typically ignored by git
+- `.env.[mode]` – Only loaded in the specified mode (`run`, `compile`, `test`, `lsp`)
+- `.env.[mode].local` – Only loaded in the specified mode and typically ignored by git
+
+### Advanced dotenv usage
+
+- **Referencing within dotenv files**: You can reference already defined environment variables in your dotenv files. This can be useful for creating compound variables or reusing common values. For example, if you have `BASE_URL=https://example.com` and want to set an API endpoint, you could use `API_ENDPOINT=$BASE_URL/api/v1`.
+
+- **Loading from multiple files**: Wing can load environment variables from multiple dotenv files. If variables overlap, the last loaded file will overwrite previously set values. This allows for a layered setup where base configuration can be in `.env` and environment-specific overrides can be in `.env.[mode]` or `.env.[mode].local`.
+
+By leveraging these advanced features, you can create a more flexible and dynamic environment configuration for your Wing applications.
