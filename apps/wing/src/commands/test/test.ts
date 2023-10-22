@@ -10,7 +10,7 @@ import debug from "debug";
 import { glob } from "glob";
 import { nanoid } from "nanoid";
 import { printResults, validateOutputFilePath, writeResultsToFile } from "./results";
-import { generateTmpDir, withSpinner } from "../../util";
+import { withSpinner } from "../../util";
 import { compile, CompileOptions } from "../compile";
 
 const log = debug("wing:test");
@@ -98,9 +98,6 @@ async function testOne(entrypoint: string, options: TestOptions) {
         ...options,
         rootId: options.rootId ?? `Test.${nanoid(10)}`,
         testing: true,
-        // since the test cleans up after each run, it's essential to create a temporary output directory-
-        // at least one that is different then the usual compilation output dir,  otherwise we might end up cleaning up the user's actual resources.
-        ...(options.target !== Target.SIM && { targetDir: `${await generateTmpDir()}/target` }),
       })
   );
 
