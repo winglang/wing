@@ -6,7 +6,7 @@ import * as core from "../core";
 import * as std from "../std";
 
 const OUTPUT_TEST_RUNNER_FUNCTION_IDENTIFIERS =
-  "WING_TEST_RUNNER_FUNCTION_ARNS"; //TODO: [tsuf] rename arns to identifiers
+  "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS";
 
 /**
  * AWS implementation of `cloud.TestRunner`.
