@@ -103,8 +103,7 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 			} else {
 				provided_args.pos_args.len() - positional_arg_pos
 			}
-			.min(if param_data.is_empty() { 0 } else { param_data.len() - 1 })
-			.max(0);
+			.min(if param_data.is_empty() { 0 } else { param_data.len() - 1 });
 
 			let param_text = param_data.join(", ");
 			let label = format!("({}): {}", param_text, sig.return_type);
