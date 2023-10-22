@@ -27,7 +27,7 @@ exports[`captures tokens 2`] = `
     },
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
