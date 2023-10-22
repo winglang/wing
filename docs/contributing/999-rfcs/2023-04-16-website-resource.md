@@ -81,11 +81,11 @@ This can be achieved using the `cloud.Website.add_json` method.
 
 ### Implementation for aws
 
-The method will upload a json object to the bucket, making it accessible withing the static directory.
+The method will upload a json object to the bucket, making it accessible within the static directory.
 
 ### Implementation for the simulator
 
-A new express GET route will be added, returning a Json object containing the dynamic data. The route will be accessible withing the static directory.
+A new express GET route will be added, returning a Json object containing the dynamic data. The route will be accessible within the static directory.
 
 ### point for thought:
 
