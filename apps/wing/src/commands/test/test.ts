@@ -15,7 +15,7 @@ import { compile, CompileOptions } from "../compile";
 
 const log = debug("wing:test");
 
-const ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS = "WING_TEST_RUNNER_FUNCTION_ARNS"; //TODO: [tsuf] rename arns to identifiers
+const ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS = "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS";
 const ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS_AWSCDK = "WingTestRunnerFunctionArns";
 
 /**

@@ -12,14 +12,14 @@ exports[`Plugin examples > AWS target plugins > permission-boundary.js 1`] = `
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS",
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS",
           },
         },
       },
     },
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -185,14 +185,14 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS",
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS",
           },
         },
       },
     },
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -545,14 +545,14 @@ exports[`Plugin examples > AWS target plugins > tf-backend.js > azurerm backend 
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS",
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS",
           },
         },
       },
     },
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -717,14 +717,14 @@ exports[`Plugin examples > AWS target plugins > tf-backend.js > gcp backend 1`] 
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS",
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS",
           },
         },
       },
     },
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -889,14 +889,14 @@ exports[`Plugin examples > AWS target plugins > tf-backend.js > s3 backend 1`] =
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS",
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS",
           },
         },
       },
     },
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
