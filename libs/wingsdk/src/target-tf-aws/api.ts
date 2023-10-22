@@ -55,7 +55,7 @@ export class Api extends cloud.Api {
   /**
    * Build the http requests
    *
-   * @param method htttp method
+   * @param method http method
    * @param path path to add
    * @param inflight Inflight to handle request
    * @param props Additional props
