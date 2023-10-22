@@ -6,7 +6,7 @@ let x = 5;
 let y = ["hello", "world"];
 let z = new cloud.Bucket();
 
-class Bar {
+pub class Bar {
   x: num;
 }
 

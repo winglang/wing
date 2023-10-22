@@ -16,9 +16,9 @@ export abstract class Tokens {
   public abstract lift(value: any): string;
 
   /**
-   * Binds the given token to the host.
+   * Lifts the given token to the host.
    */
-  public abstract bindValue(host: IInflightHost, value: any): void;
+  public abstract onLiftValue(host: IInflightHost, value: any): void;
 
   /**
    * Creates a valid environment variable name from the given token.

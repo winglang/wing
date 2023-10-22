@@ -81,7 +81,7 @@ export class Bucket extends cloud.Bucket {
     });
   }
 
-  public bind(_inflightHost: IInflightHost, _ops: string[]): void {
+  public onLift(_inflightHost: IInflightHost, _ops: string[]): void {
     // TODO: support functions once tfgcp functions are implemented
     throw new Error("Method not implemented.");
   }

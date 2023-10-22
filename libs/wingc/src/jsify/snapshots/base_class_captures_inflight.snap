@@ -91,11 +91,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["bar", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("bar")) {
-          Base._registerBindObject(x, host, []);
+          Base._registerOnLiftObject(x, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class Derived extends Base {
@@ -123,11 +123,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["foo", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("foo")) {
-          Derived._registerBindObject(this, host, ["bar"]);
+          Derived._registerOnLiftObject(this, host, ["bar"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const x = "hello";

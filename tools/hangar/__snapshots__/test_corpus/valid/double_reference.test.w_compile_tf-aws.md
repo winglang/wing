@@ -146,11 +146,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["method", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject(initCount, host, ["inc"]);
+          Foo._registerOnLiftObject(initCount, host, ["inc"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class Bar extends $stdlib.std.Resource {
@@ -179,14 +179,14 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["callFoo", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Bar._registerBindObject(this.foo, host, []);
+          Bar._registerOnLiftObject(this.foo, host, []);
         }
         if (ops.includes("callFoo")) {
-          Bar._registerBindObject(this.foo, host, ["method"]);
+          Bar._registerOnLiftObject(this.foo, host, ["method"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -217,13 +217,13 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(bar, host, ["callFoo"]);
-          $Closure1._registerBindObject(bar.foo, host, ["method"]);
-          $Closure1._registerBindObject(initCount, host, ["peek"]);
+          $Closure1._registerOnLiftObject(bar, host, ["callFoo"]);
+          $Closure1._registerOnLiftObject(bar.foo, host, ["method"]);
+          $Closure1._registerOnLiftObject(initCount, host, ["peek"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const initCount = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");

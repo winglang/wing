@@ -402,18 +402,7 @@ exports[`objects can have keys that look like directories 1`] = `
 ]
 `;
 
-exports[`put and get object from bucket 1`] = `
-[
-  "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Bucket created.",
-  "Put (key=greeting.txt).",
-  "Get (key=greeting.txt).",
-  "wingsdk.cloud.Bucket deleted.",
-  "wingsdk.cloud.TestRunner deleted.",
-]
-`;
-
-exports[`put and getMetadata of objects from bucket 1`] = `
+exports[`put and get metadata of objects from bucket 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Bucket created.",
@@ -423,6 +412,17 @@ exports[`put and getMetadata of objects from bucket 1`] = `
   "Metadata (key=file1.main.w).",
   "Metadata (key=file2.txt).",
   "Metadata (key=file3.txt).",
+  "wingsdk.cloud.Bucket deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
+]
+`;
+
+exports[`put and get object from bucket 1`] = `
+[
+  "wingsdk.cloud.TestRunner created.",
+  "wingsdk.cloud.Bucket created.",
+  "Put (key=greeting.txt).",
+  "Get (key=greeting.txt).",
   "wingsdk.cloud.Bucket deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]

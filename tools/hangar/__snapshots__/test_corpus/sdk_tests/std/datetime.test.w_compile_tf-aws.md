@@ -118,13 +118,13 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject((d4.toUtc()).hours, host, []);
-          $Closure1._registerBindObject(d4.hours, host, []);
-          $Closure1._registerBindObject(d4.timezone, host, []);
+          $Closure1._registerOnLiftObject((d4.toUtc()).hours, host, []);
+          $Closure1._registerOnLiftObject(d4.hours, host, []);
+          $Closure1._registerOnLiftObject(d4.timezone, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const d1 = (std.Datetime.systemNow());

@@ -96,11 +96,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["staticMethod", "$inflight_init"];
       }
-      static _registerTypeBind(host, ops) {
+      static _registerTypeOnLift(host, ops) {
         if (ops.includes("staticMethod")) {
-          MyType._registerBindObject(b, host, ["list"]);
+          MyType._registerOnLiftObject(b, host, ["list"]);
         }
-        super._registerTypeBind(host, ops);
+        super._registerTypeOnLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -129,11 +129,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(MyType, host, ["staticMethod"]);
+          $Closure1._registerOnLiftObject(MyType, host, ["staticMethod"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");

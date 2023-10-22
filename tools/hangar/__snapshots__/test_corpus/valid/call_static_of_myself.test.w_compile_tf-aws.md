@@ -135,17 +135,17 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["foo", "bar", "callThis", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("callThis")) {
-          Foo._registerBindObject(Foo, host, ["bar"]);
+          Foo._registerOnLiftObject(Foo, host, ["bar"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
-      static _registerTypeBind(host, ops) {
+      static _registerTypeOnLift(host, ops) {
         if (ops.includes("bar")) {
-          Foo._registerBindObject(Foo, host, ["foo"]);
+          Foo._registerOnLiftObject(Foo, host, ["foo"]);
         }
-        super._registerTypeBind(host, ops);
+        super._registerTypeOnLift(host, ops);
       }
     }
     class Bar extends $stdlib.std.Resource {
@@ -201,12 +201,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(Foo, host, ["foo"]);
-          $Closure1._registerBindObject(foo, host, ["callThis"]);
+          $Closure1._registerOnLiftObject(Foo, host, ["foo"]);
+          $Closure1._registerOnLiftObject(foo, host, ["callThis"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const foo = new Foo(this,"Foo");
