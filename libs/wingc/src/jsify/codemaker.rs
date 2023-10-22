@@ -1,11 +1,17 @@
+use parcel_sourcemap::{OriginalLocation, SourceMap};
+use serde_json::json;
+
+use crate::diagnostic::WingSpan;
+
 /// A helper for generating code snippets with indentation.
 ///
 /// TODO: add `open_block` or `close_block` methods that automatically add
 /// `{` and `}`?
 #[derive(Default)]
 pub struct CodeMaker {
-	lines: Vec<(usize, String)>,
+	lines: Vec<(usize, String, Option<WingSpan>)>,
 	indent: usize,
+	original_span_stack: Vec<WingSpan>,
 }
 
 impl CodeMaker {
@@ -30,7 +36,7 @@ impl CodeMaker {
 
 		// if the line has newlines in it, consider each line separately
 		for subline in line.split('\n') {
-			self.lines.push((self.indent, subline.into()));
+			self.push_line(self.indent, subline.into());
 		}
 	}
 
@@ -42,8 +48,14 @@ impl CodeMaker {
 	/// Emits multiple lines of code starting with the current indent.
 	pub fn add_code(&mut self, code: CodeMaker) {
 		assert_eq!(code.indent, 0, "Cannot add code with indent");
-		for (indent, line) in code.lines {
-			self.lines.push((indent + self.indent, line));
+		for (indent, line, source_span) in code.lines {
+			if let Some(source_span) = &source_span {
+				self.push_original_span(source_span.clone());
+			}
+			self.push_line(self.indent + indent, line);
+			if source_span.is_some() {
+				self.pop_original_span();
+			}
 		}
 	}
 
@@ -58,13 +70,6 @@ impl CodeMaker {
 		self.indent += 1;
 	}
 
-	/// Insert a line at the given index.
-	pub fn insert_line<S: Into<String>>(&mut self, index: usize, line: S) {
-		// get the indent of the current line at that index
-		let indent = self.lines.get(index).map(|(indent, _)| *indent).unwrap_or(self.indent);
-		self.lines.insert(index, (indent, line.into()));
-	}
-
 	pub fn one_line<S: Into<String>>(s: S) -> CodeMaker {
 		let mut code = CodeMaker::default();
 		code.line(s);
@@ -75,15 +80,87 @@ impl CodeMaker {
 	pub fn is_empty(&self) -> bool {
 		self.lines.is_empty()
 	}
+
+	fn push_line(&mut self, indent: usize, line: String) {
+		self
+			.lines
+			.push((indent, line, self.original_span_stack.last().cloned()));
+		// if let Some(ref mut sourcemap) = self.source_map {
+		// 	let generated_line = self.lines.len() as u32;
+		// 	let generated_column = self.lines.last().unwrap().1.len() as u32;
+		// 	let original = if let Some(original_span) = &self.original_span_stack.last() {
+		// 		Some(OriginalLocation::new(
+		// 			original_span.start.line,
+		// 			original_span.start.col,
+		// 			0,
+		// 			None,
+		// 		))
+		// 	} else {
+		// 		None
+		// 	};
+		// 	sourcemap.add_mapping(generated_line, generated_column, original);
+		// }
+	}
+
+	pub fn push_original_span(&mut self, span: WingSpan) {
+		self.original_span_stack.push(span);
+	}
+
+	pub fn pop_original_span(&mut self) {
+		self.original_span_stack.pop();
+	}
+
+	pub fn get_sourcemap(&mut self, root: &str, source_content: &str, generated_path: &str) -> String {
+		let mut sourcemap = SourceMap::new(root);
+		let source_num = sourcemap.add_source(source_content);
+
+		for (line_idx, line) in self.lines.iter().enumerate() {
+			let generated_line = line_idx as u32;
+			let generated_column = (line.0 * 2) as u32;
+			let original = if let Some(original_span) = &self.original_span_stack.last() {
+				Some(OriginalLocation::new(
+					original_span.start.line,
+					original_span.start.col,
+					source_num,
+					None,
+				))
+			} else {
+				None
+			};
+			sourcemap.add_mapping(generated_line, generated_column, original);
+		}
+
+		let mut buffer: Vec<u8> = vec![];
+
+		sourcemap.write_vlq(&mut buffer);
+
+		let json: serde_json::Value = json!(
+			{
+				"version": 3,
+				"file": generated_path,
+				"sources": sourcemap.get_sources(),
+				"sourcesContent": sourcemap.get_sources_content(),
+				"names": sourcemap.get_names(),
+				"mappings": String::from_utf8(buffer).unwrap()
+			}
+		);
+
+		let json_string = serde_json::ser::to_string(&json).unwrap();
+
+		json_string
+	}
 }
 
 impl ToString for CodeMaker {
 	fn to_string(&self) -> String {
 		let mut code = String::new();
-		for (indent, line) in &self.lines {
+		for (indent, line, source_line) in &self.lines {
 			code.push_str(&"  ".repeat(*indent));
-			code.push_str(&line);
-			code.push_str(&"\n");
+			code.push_str(line);
+			// if let Some(source_line) = source_line {
+			// 	code.push_str(&format!("/* {source_line} */"));
+			// }
+			code.push_str("\n");
 		}
 		code
 	}
@@ -154,24 +231,6 @@ mod tests {
 				  hello
 				  world
 				>
-			"#}
-		);
-	}
-
-	#[test]
-	fn codemaker_insert_line() {
-		let mut code = CodeMaker::default();
-		code.open("if true {");
-		code.line("let b = 2;");
-		code.close("}");
-		code.insert_line(1, "let a = 1;");
-		assert_eq!(
-			code.to_string(),
-			indoc! {r#"
-				if true {
-				  let a = 1;
-				  let b = 2;
-				}
 			"#}
 		);
 	}

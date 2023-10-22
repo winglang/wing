@@ -145,6 +145,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		let mut output = CodeMaker::default();
+		output.push_original_span(scope.span.clone());
 
 		let is_compilation_init = source_path == self.compilation_init_path;
 		let is_entrypoint = is_entrypoint_file(source_path);
@@ -252,11 +253,25 @@ impl<'a> JSifier<'a> {
 			.borrow_mut()
 			.insert(source_path.to_path_buf(), preflight_file_name.clone());
 
+		let sourcemap_path = format!("{}.map", preflight_file_name);
+		output.line(format!("//# sourceMappingURL={sourcemap_path}"));
+
+		let output_base = output.to_string();
+		let output_sourcemap = output.get_sourcemap(source_path.as_str(), &output_base, &preflight_file_name);
+
 		// Emit the file
 		match self
 			.output_files
 			.borrow_mut()
-			.add_file(preflight_file_name, output.to_string())
+			.add_file(preflight_file_name.clone(), output_base)
+		{
+			Ok(()) => {}
+			Err(err) => report_diagnostic(err.into()),
+		}
+		match self
+			.output_files
+			.borrow_mut()
+			.add_file(sourcemap_path, output_sourcemap)
 		{
 			Ok(()) => {}
 			Err(err) => report_diagnostic(err.into()),
@@ -773,12 +788,15 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_statement(&self, env: &SymbolEnv, statement: &Stmt, ctx: &mut JSifyContext) -> CodeMaker {
+		let mut code = CodeMaker::default();
+
 		CompilationContext::set(CompilationPhase::Jsifying, &statement.span);
 		ctx.visit_ctx.push_stmt(statement.idx);
-		let code = match &statement.kind {
+		code.push_original_span(statement.span.clone());
+		match &statement.kind {
 			StmtKind::Bring { source, identifier } => match source {
-				BringSource::BuiltinModule(name) => CodeMaker::one_line(format!("const {} = {}.{};", name, STDLIB, name)),
-				BringSource::JsiiModule(name) => CodeMaker::one_line(format!(
+				BringSource::BuiltinModule(name) => code.line(format!("const {} = {}.{};", name, STDLIB, name)),
+				BringSource::JsiiModule(name) => code.line(format!(
 					"const {} = require(\"{}\");",
 					// checked during type checking
 					identifier.as_ref().expect("bring jsii module requires an alias"),
@@ -787,7 +805,7 @@ impl<'a> JSifier<'a> {
 				BringSource::WingLibrary(_, module_dir) => {
 					let preflight_file_map = self.preflight_file_map.borrow();
 					let preflight_file_name = preflight_file_map.get(module_dir).unwrap();
-					CodeMaker::one_line(format!(
+					code.line(format!(
 						"const {} = require(\"./{}\")({{ {} }});",
 						// checked during type checking
 						identifier.as_ref().expect("bring wing file requires an alias"),
@@ -798,7 +816,7 @@ impl<'a> JSifier<'a> {
 				BringSource::WingFile(name) => {
 					let preflight_file_map = self.preflight_file_map.borrow();
 					let preflight_file_name = preflight_file_map.get(Utf8Path::new(&name.name)).unwrap();
-					CodeMaker::one_line(format!(
+					code.line(format!(
 						"const {} = require(\"./{}\")({{ {} }});",
 						// checked during type checking
 						identifier.as_ref().expect("bring wing file requires an alias"),
@@ -809,7 +827,7 @@ impl<'a> JSifier<'a> {
 				BringSource::Directory(name) => {
 					let preflight_file_map = self.preflight_file_map.borrow();
 					let preflight_file_name = preflight_file_map.get(Utf8Path::new(&name.name)).unwrap();
-					CodeMaker::one_line(format!(
+					code.line(format!(
 						"const {} = require(\"./{}\")({{ {} }});",
 						// checked during type checking
 						identifier.as_ref().expect("bring wing file requires an alias"),
@@ -821,14 +839,13 @@ impl<'a> JSifier<'a> {
 			StmtKind::SuperConstructor { arg_list } => {
 				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
 				match parent_class_phase(ctx) {
-					Phase::Inflight => CodeMaker::one_line(format!("await this.super_{CLASS_INFLIGHT_INIT_NAME}?.({args});")),
-					Phase::Preflight => CodeMaker::one_line(format!("super(scope,id,{args});")),
+					Phase::Inflight => code.line(format!("await this.super_{CLASS_INFLIGHT_INIT_NAME}?.({args});")),
+					Phase::Preflight => code.line(format!("super(scope,id,{args});")),
 					Phase::Independent => {
 						// If our parent is phase independent then we don't call its super, instead a call to its super will be
 						// generated in `jsify_inflight_init` when we generate the inflight init for this class.
 						// Note: this is only true for inflight clases which are the only type of classes that can have a phase independent parent.
 						// when/if this changes we'll need to be move verbose here.
-						CodeMaker::default()
 					}
 				}
 			}
@@ -840,9 +857,9 @@ impl<'a> JSifier<'a> {
 			} => {
 				let initial_value = self.jsify_expression(initial_value, ctx);
 				if *reassignable {
-					CodeMaker::one_line(format!("let {var_name} = {initial_value};"))
+					code.line(format!("let {var_name} = {initial_value};"))
 				} else {
-					CodeMaker::one_line(format!("const {var_name} = {initial_value};"))
+					code.line(format!("const {var_name} = {initial_value};"))
 				}
 			}
 			StmtKind::ForLoop {
@@ -850,24 +867,20 @@ impl<'a> JSifier<'a> {
 				iterable,
 				statements,
 			} => {
-				let mut code = CodeMaker::default();
 				code.open(format!(
 					"for (const {iterator} of {}) {{",
 					self.jsify_expression(iterable, ctx)
 				));
 				code.add_code(self.jsify_scope_body(statements, ctx));
 				code.close("}");
-				code
 			}
 			StmtKind::While { condition, statements } => {
-				let mut code = CodeMaker::default();
 				code.open(format!("while ({}) {{", self.jsify_expression(condition, ctx)));
 				code.add_code(self.jsify_scope_body(statements, ctx));
 				code.close("}");
-				code
 			}
-			StmtKind::Break => CodeMaker::one_line("break;"),
-			StmtKind::Continue => CodeMaker::one_line("continue;"),
+			StmtKind::Break => code.line("break;"),
+			StmtKind::Continue => code.line("continue;"),
 			StmtKind::IfLet(IfLet {
 				reassignable,
 				value,
@@ -876,7 +889,6 @@ impl<'a> JSifier<'a> {
 				elif_statements,
 				else_statements,
 			}) => {
-				let mut code = CodeMaker::default();
 				// To enable shadowing variables in if let statements, the following does some scope trickery
 				// take for example the following wing code:
 				// let x: str? = "hello";
@@ -932,7 +944,6 @@ impl<'a> JSifier<'a> {
 				}
 
 				code.close("}");
-				code
 			}
 			StmtKind::If {
 				condition,
@@ -940,8 +951,6 @@ impl<'a> JSifier<'a> {
 				elif_statements,
 				else_statements,
 			} => {
-				let mut code = CodeMaker::default();
-
 				code.open(format!("if ({}) {{", self.jsify_expression(condition, ctx)));
 				code.add_code(self.jsify_scope_body(statements, ctx));
 				code.close("}");
@@ -960,10 +969,8 @@ impl<'a> JSifier<'a> {
 					code.add_code(self.jsify_scope_body(else_scope, ctx));
 					code.close("}");
 				}
-
-				code
 			}
-			StmtKind::Expression(e) => CodeMaker::one_line(format!("{};", self.jsify_expression(e, ctx))),
+			StmtKind::Expression(e) => code.line(format!("{};", self.jsify_expression(e, ctx))),
 
 			StmtKind::Assignment { kind, variable, value } => {
 				let operator = match kind {
@@ -972,7 +979,7 @@ impl<'a> JSifier<'a> {
 					AssignmentKind::AssignDecr => "-=",
 				};
 
-				CodeMaker::one_line(format!(
+				code.line(format!(
 					"{} {} {};",
 					self.jsify_reference(variable, ctx),
 					operator,
@@ -980,45 +987,37 @@ impl<'a> JSifier<'a> {
 				))
 			}
 			StmtKind::Scope(scope) => {
-				let mut code = CodeMaker::default();
 				if !scope.statements.is_empty() {
 					code.open("{");
 					code.add_code(self.jsify_scope_body(scope, ctx));
 					code.close("}");
 				}
-				code
 			}
 			StmtKind::Return(exp) => {
 				if let Some(exp) = exp {
-					CodeMaker::one_line(format!("return {};", self.jsify_expression(exp, ctx)))
+					code.line(format!("return {};", self.jsify_expression(exp, ctx)))
 				} else {
-					CodeMaker::one_line("return;")
+					code.line("return;")
 				}
 			}
-			StmtKind::Throw(exp) => CodeMaker::one_line(format!("throw new Error({});", self.jsify_expression(exp, ctx))),
-			StmtKind::Class(class) => self.jsify_class(env, class, ctx),
+			StmtKind::Throw(exp) => code.line(format!("throw new Error({});", self.jsify_expression(exp, ctx))),
+			StmtKind::Class(class) => code.add_code(self.jsify_class(env, class, ctx)),
 			StmtKind::Interface { .. } => {
 				// This is a no-op in JS
-				CodeMaker::default()
 			}
 			StmtKind::Struct { .. } => {
 				// Struct schemas are emitted before jsification phase
-				CodeMaker::default()
 			}
 			StmtKind::Enum { name, values, .. } => {
-				let mut code = CodeMaker::default();
 				code.open(format!("const {name} ="));
 				code.add_code(self.jsify_enum(values));
 				code.close(";");
-				code
 			}
 			StmtKind::TryCatch {
 				try_statements,
 				catch_block,
 				finally_statements,
 			} => {
-				let mut code = CodeMaker::default();
-
 				code.open("try {");
 				code.add_code(self.jsify_scope_body(try_statements, ctx));
 				code.close("}");
@@ -1042,12 +1041,11 @@ impl<'a> JSifier<'a> {
 					code.add_code(self.jsify_scope_body(finally_statements, ctx));
 					code.close("}");
 				}
-
-				code
 			}
-			StmtKind::CompilerDebugEnv => CodeMaker::default(),
+			StmtKind::CompilerDebugEnv => {}
 		};
 		ctx.visit_ctx.pop_stmt();
+		code.pop_original_span();
 		code
 	}
 

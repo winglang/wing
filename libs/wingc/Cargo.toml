@@ -25,6 +25,7 @@ duplicate = "1.0"
 strum = { version = "0.25", features = ["derive"] }
 petgraph = "0.6"
 camino = "1.1"
+parcel_sourcemap = "2.1.1"
 
 [lib]
 crate-type = ["rlib", "cdylib"]
