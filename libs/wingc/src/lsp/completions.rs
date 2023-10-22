@@ -456,14 +456,11 @@ fn get_current_scope_completions(
 ) -> Vec<CompletionItem> {
 	let mut completions = vec![];
 
-	dbg!(node_to_complete);
-	dbg!(preceding_text);
-
 	// by default assume being after a colon means we're looking for a type, but this is not always true
 	let mut in_type = preceding_text.ends_with(':');
 
 	// This is either a top-
-	let at_scope_level = matches!(node_to_complete.kind(), "source" | "block" | "expression_statement");
+	let at_scope_level = matches!(node_to_complete.kind(), "source" | "block");
 
 	match node_to_complete.kind() {
 		"variable_definition_statement" => {
@@ -729,7 +726,7 @@ fn nearest_non_reference_ancestor<'a>(start_node: &'a tree_sitter::Node<'a>) -> 
 		|| !nearest_non_reference.is_named()
 		|| matches!(
 			nearest_non_reference.kind(),
-			"identifier" | "reference" | "reference_identifier"
+			"identifier" | "reference" | "reference_identifier" | "expression_statement"
 		) {
 		let parent = nearest_non_reference.parent();
 		if let Some(parent) = parent {
