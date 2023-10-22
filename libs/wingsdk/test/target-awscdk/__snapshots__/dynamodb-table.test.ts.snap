@@ -225,6 +225,7 @@ exports[`function with a table binding 1`] = `
           ],
         },
         "Runtime": "nodejs18.x",
+        "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
     },
