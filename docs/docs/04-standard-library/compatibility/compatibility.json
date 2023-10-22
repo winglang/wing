@@ -149,10 +149,10 @@
     },
     "signedUrl": {
       "sim": { "implemented": false, "issue": 1383 },
-      "tf-aws": { "implemented": false, "issue": 1383 },
-      "tf-azure": { "implemented": false },
-      "tf-gcp": { "implemented": false },
-      "awscdk": { "implemented": false }
+      "tf-aws": { "implemented": true },
+      "tf-azure": { "implemented": false, "issue": 4635 },
+      "tf-gcp": { "implemented": false, "issue": 4599 },
+      "awscdk": { "implemented": true }
     }
   },
   "Queue": {
