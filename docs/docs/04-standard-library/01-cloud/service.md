@@ -446,7 +446,7 @@ handle(): IServiceStopHandler
 Handler to run when the service starts.
 
 This is where you implement the initialization logic of
-the service, start any activities asychronously.
+the service, start any activities asynchronously.
 
 DO NOT BLOCK! This handler should return as quickly as possible. If you need to run a long
 running process, start it asynchronously.

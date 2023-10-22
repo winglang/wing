@@ -12,7 +12,7 @@ Also, it includes some non-functional requirements:
 - Least privileged permissions syntax is defined in RFC
 - The code should work on sim, aws
 - VScode should help developers with code completion and hover
-  - Windows support - vscode extention should work on windows
+  - Windows support - vscode extension should work on windows
   - Hover: when you hover over a symbol you get its type information
 - Console should be able to show all resources, and interact with them
 - The wing command can be used in windows

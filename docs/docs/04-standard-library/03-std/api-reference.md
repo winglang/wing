@@ -1205,7 +1205,7 @@ Mutable Array.
 | <code><a href="#@winglang/sdk.std.MutArray.pop">pop</a></code> | Remove value from end of array. |
 | <code><a href="#@winglang/sdk.std.MutArray.popAt">popAt</a></code> | Removes value from the given index of an array. |
 | <code><a href="#@winglang/sdk.std.MutArray.push">push</a></code> | Add value to end of array. |
-| <code><a href="#@winglang/sdk.std.MutArray.removeFirst">removeFirst</a></code> | Removes first occurence of a given value in an array. |
+| <code><a href="#@winglang/sdk.std.MutArray.removeFirst">removeFirst</a></code> | Removes first occurrence of a given value in an array. |
 | <code><a href="#@winglang/sdk.std.MutArray.set">set</a></code> | Sets a new value at the given index of an array. |
 
 ---
@@ -1385,7 +1385,7 @@ value to add.
 removeFirst(value: <T>): bool
 ```
 
-Removes first occurence of a given value in an array.
+Removes first occurrence of a given value in an array.
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutArray.removeFirst.parameter.value"></a>
 
