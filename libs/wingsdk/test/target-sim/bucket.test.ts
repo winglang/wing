@@ -760,16 +760,16 @@ test("copy objects within the bucket", async () => {
   // WHEN
   await client.put(KEY1, VALUE1);
   await client.putJson(KEY2, VALUE2 as any);
-  const file1SrcMetadata = await client.metadata("file1.main.w");
-  const file2SrcMetadata = await client.metadata("file2.txt");
+  const file1SrcMetadata = await client.metadata(KEY1);
+  const file2SrcMetadata = await client.metadata(KEY2);
 
   // Sleep 100ms to ensure 'metadata.lastModified' changes upon copy.
   await new Promise((r) => setTimeout(r, 100));
 
-  await client.copy("file1.main.w", "file1.main.w");
-  await client.copy("file2.txt", "dir/file2.txt");
-  const file1DstMetadata = await client.metadata("file1.main.w");
-  const file2DstMetadata = await client.metadata("dir/file2.txt");
+  await client.copy(KEY1, KEY1);
+  await client.copy(KEY2, `dir/${KEY2}`);
+  const file1DstMetadata = await client.metadata(KEY1);
+  const file2DstMetadata = await client.metadata(`dir/${KEY2}`);
 
   // THEN
   await s.stop();
