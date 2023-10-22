@@ -163,7 +163,7 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
       const isNotImplementedError =
         (error as wingCompiler.PreflightError).causedBy.constructor.name === "NotImplementedError";
 
-      const errorColor = isNotImplementedError ? "yellowBright" : "red";
+      const errorColor = isNotImplementedError ? "yellow" : "red";
 
       const causedBy = annotatePreflightError(error.causedBy);
 
