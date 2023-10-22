@@ -260,18 +260,9 @@ export class BucketClient implements IBucketClient {
    * @throws if `srcKey` object doesn't exist.
    */
   public async copy(srcKey: string, dstKey: string): Promise<void> {
-    const srcBlobUrl = this.containerClient.getBlobClient(srcKey).url;
-    const dstBlobClient = this.containerClient.getBlockBlobClient(dstKey);
-
-    try {
-      await dstBlobClient.beginCopyFromURL(srcBlobUrl);
-    } catch (error) {
-      throw new Error(
-        `Unable to copy object from "${srcKey}" to "${dstKey}": ${
-          (error as Error).message
-        }`
-      );
-    }
+    return Promise.reject(
+      `copy is not implemented: (srcKey=${srcKey}, dstKey=${dstKey})`
+    );
   }
 
   /**
