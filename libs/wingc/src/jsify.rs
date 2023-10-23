@@ -1220,7 +1220,7 @@ impl<'a> JSifier<'a> {
 					.as_type()
 					.unwrap();
 				if let Some(fqn) = &parent_type.as_class().unwrap().fqn {
-					format!(" extends (this.node.root.typeForFqn(\"{fqn}\") || {parent})")
+					format!(" extends (this.node.root.typeForFqn(\"{fqn}\") ?? {parent})")
 				} else {
 					format!(" extends {}", self.jsify_user_defined_type(&parent, ctx))
 				}
