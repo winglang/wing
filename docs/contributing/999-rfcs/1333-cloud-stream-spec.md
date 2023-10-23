@@ -14,20 +14,27 @@ description: RFC - Cloud.Stream for Streaming Data Services
 
 Implementing design and library spec supporting and integrating real-time streaming services.
 
-<!--
-    This RFCs have 3 sections: Requirements -> Design -> Implementation. We intentionally start with *Design* since it
-    is a great way to introduice the feature to readers.
--->
-
 ## Background
 
-Telemetry and Observability build the backbone of modern application systems and an integral part of such iterative feedback systems is the availability of streaming data. This is implemented across varied cloud providers, specifically services like: AWS Kinesis Data Streams, Google Cloud Pub/Sub, Azure Event Hubs.
+Typically streaming data services form an integral backbone of high throughput systems. Specific scenarios where Data Streams are used are:
+* Real-time analytics - Analyzing realt-time data from sensors, applications, social media etc. to gain instant insights.
+* Monitoring - Tracking perofmrance metrics of infrastructure and applications in real-time to identify issues.
+* Messaging - High throughput order-agnostic messagning between applications and services.
+* ETL - Streaming ETL workflows for real-time data integration.
+* Fast Data - Applying complex analytics and machine learning on streaming data for low latency inference.
+* User Engagement - Analyzing user actions and behavior as they occur to provide personalized and real-time recommendations.
+* IoT - Collecting and processing telemetry streams from IoT devices.
+* Gaming - Processing real-time game data streams for features like leaderboards or in-game alerts.
+* Financial Services - Performing real-time analytics and compelx event processing on financial data feeds.
+* E-Commerce - Real-time monitoring of buying behaviour, stock levels, logistics data to enable instant actions.
+
+This is implemented across varied cloud providers, specifically services like: AWS Kinesis Data Streams, Google Cloud Pub/Sub, Azure Event Hubs and in open source solutions like Apache Kafka, Apache Pulsar, etc.
 
 ## Design
 
-Typically, a device/user writing to a real-time streaming system would simply write to the REST API endpoint exposed by the service.
+Traditionally, a device/user writing to a real-time streaming system would simply write to the REST API endpoint exposed by the service. While consumers of the service have to 
 
-Within wing, these endpoints and the nuances exposed by them should be abstracted by wing, so write to a streaming system is just like writing to any persistent storage.
+Within wing, these endpoints and their nuance should be abstracted, so writing to or reading from a streaming system is just like writing to or reading from any persistent storage.
 
 For example:
 
@@ -41,45 +48,44 @@ let stream = new cloud.Stream(
 );
 
 
-let bloc = new cloud.Function(inflight (args): any => {
-    stream.put(args);
+let bloc = new cloud.Function(inflight (event: any): any => {
+    stream.send(event);
 
-    let argsCount = args.count;
+    let eventSize = event.count;
     return argsCount % 2;
-}) as "business-logic";
+}) as "telemetry-writer";
 ```
 
-Another known pattern on 
+While reading from a stream will look like:
+```ts
+bring cloud;
 
-<!--
-    This section works backwards from an the end user. It is written as one or more "artifacts from the future" such as the getting started documentation (readme), user interface wireframes (or link to them), press release, changelog entry, etc.
--->
+let stream = new cloud.Stream(
+    name: 'telemetry-ingest',
+    horizon: 48
+);
+
+let bloc = new cloud.Function(inflight (event: any): any => {
+    let newestBatch = stream.fetch();
+
+    let batchSize = newestBatch.size();
+    return batchSize;
+}) as "telemetry-reader";
+```
 
 ## Requirements
 
-<!--
-    This section is a "shopping list" of requirements for this feature.
-
-    We try to start by identifying the use cases that are expected to be addressed by this RFC.
-    Ideally they should not inform the design or implementation but rather state the problems/pains/results
-    that our users expect to achieve with this RFC.
-
-    The requirements are the "contract" of the feature you're developing - "what does it do?" (as opposed to "how does it do it" - the implementation). The requirements usually specify use cases as well as edge case scenarios and the desired behavior of the software described.
-
-    NOTES:
-    * It is highly recommended to split functional and non-functional requirements.
-    * Requirements should be prioritized P0 (must), P1 (nice to have) or P2 (future).
-    * It is also recommended to give requirements an identifier that will make them easier to reference later.
--->
-
 ### Functional
 
-- REQ01 (P1): bla bla bla
-- REQ02 (P0): another requirement
+- Stream-01 (P0): Create a Streaming Data Endpoint in the cloud of your choice
+- Stream-02 (P1): Read, write APIs to transparently expose the underlying endpoint
+- Stream-06 (P2): Implicit integration with Stream Aggregration services
 
 ### Non-Functional
 
-- REQ03 (P1): bla bla bla
+- Stream-03 (P2): Deterministic reads from the underlying service
+- Stream-04 (P2): Implicit checkpointing system for downstream consumers
+- Stream-05 (P1): Batch Reads and Writes for buffering and non-realtime sensitive data
 
 ## Implementation
 
@@ -96,10 +102,7 @@ Another known pattern on
 ### Why are we doing this?
 
 > What is the motivation for this change?
-
-### Why should we _not_ do this?
-
-> Is there a way to address this use case with the current product? What are the downsides of implementing this feature?
+Streaming data services allow real-time processing of continuously generated high-velocity data to enable instant analytics and insights. They provide dynamic scaling, fault tolerance and distributed processing leveraging cheap commodity infrastructure to match the demands of cloud architectures. The cloud-native support, pay-per-use pricing, and integration capabilities make streaming a natural fit for building scalable, reliable and low-latency systems in the cloud.
 
 ### What is the technical solution (design) of this feature?
 
@@ -110,16 +113,7 @@ Another known pattern on
 > This is a good place to reference a prototype or proof of concept, which is highly recommended for most RFCs.
 
 ### Is this a breaking change?
-
-> Describe what ways did you consider to deliver this without breaking users? Make sure to include a `BREAKING CHANGE` clause under the CHANGELOG section with a description of the breaking changes and the migration path.
-
-### What alternative solutions did you consider?
-
-> Briefly describe alternative approaches that you considered. If there are hairy details, include them in an appendix.
-
-### What are the drawbacks of this solution?
-
-> Describe any problems/risks that can be introduced if we implement this RFC.
+No. It's a new feature, will not break a pre-existing deployment of wing.
 
 ### What is the high-level project plan?
 
@@ -133,9 +127,7 @@ Another known pattern on
 
 ## Appendix
 
-> Feel free to add any number of appendices as you see fit. Appendices are expected to allow readers to dive deeper to certain sections if they like. For example, you can include an appendix which describes the detailed design of an algorithm and reference it from the FAQ.
-
-Real-time streaming services are often a combination of services that cover (AWS):
+Real-time streaming services are often a combination of services that cover the following processes (in order of provider: AWS, GCP, Azure):
 * Ingest - Kinesis Data Streams, Pub/Sub, Event Hubs
 * Analysis - Kinesis Data Analytics, BigQuery, Stream Analytics
 * Delivery - Kinesis Firehose, Cloud Storage, Functions 
