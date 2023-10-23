@@ -45,6 +45,8 @@ class $Root extends $stdlib.std.Resource {
     super($scope, $id);
     const x = 2;
     const y = x;
+    const id = 1;
+    const scope = id;
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
