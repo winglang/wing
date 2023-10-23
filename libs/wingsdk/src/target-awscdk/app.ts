@@ -84,7 +84,7 @@ export class App extends CoreApp {
     if (props.isTestEnvironment) {
       const match = outdir.match(/\/(\w+)\./);
       if (match) {
-        stackName += "-" + match[1].replace(/[^a-zA-Z0-9]/g, '');
+        stackName += "-" + match[1].replace(/[^a-zA-Z0-9]/g, "");
       }
     }
 
