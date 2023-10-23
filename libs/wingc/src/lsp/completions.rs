@@ -569,14 +569,15 @@ fn get_current_scope_completions(
 		}
 	}
 
-	let found_stmt_index = scope_visitor.found_stmt_index.unwrap_or_default();
 	let found_env = types.get_scope_env(&scope_visitor.found_scope);
-	let error_buffer = if node_to_complete.has_error() { 1 } else { 0 };
 
 	for symbol_data in found_env.symbol_map.iter().filter(|s| {
-		if let StatementIdx::Index(i) = s.1.statement_idx {
-			// within the found scope, we only want to show symbols that were defined before the current position
-			i + error_buffer < found_stmt_index
+		if let StatementIdx::Index(stmt_idx) = s.1.statement_idx {
+			if let Some(defined_stmt) = scope_visitor.found_scope.statements.get(stmt_idx) {
+				scope_visitor.exact_position > defined_stmt.span.end
+			} else {
+				true
+			}
 		} else {
 			true
 		}
