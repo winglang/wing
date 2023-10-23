@@ -19,6 +19,7 @@ import {
   ResourceNames,
 } from "../shared/resource-names";
 import { IInflightHost, IResource } from "../std";
+import { NotImplementedError } from "../core/errors";
 
 /**
  * Function names are limited to 32 characters.
@@ -89,7 +90,7 @@ export class Function extends cloud.Function {
 
     // throw an error if props.memory is defined for an Azure function
     if (props.memory) {
-      throw new Error("memory is an invalid parameter on Azure");
+      throw new NotImplementedError("memory is an invalid parameter on Azure");
     }
 
     // As per documentation "a function must have exactly one trigger" so for now
@@ -118,7 +119,11 @@ export class Function extends cloud.Function {
     );
     // TODO: will be uncommented when fixing https://github.com/winglang/wing/issues/4494
     // const timeout = props.timeout ?? Duration.fromMinutes(1);
-
+    if (props.timeout) {
+      throw new NotImplementedError(
+        "Function.timeout is not implemented yet on tf-azure target. see  https://github.com/winglang/wing/issues/4494."
+      );
+    }
     // Write host.json file to set function timeout (must be set in root of function app)
     // https://learn.microsoft.com/en-us/azure/azure-functions/functions-host-json
     // this means that timeout is set for all functions in the function app

@@ -19,6 +19,7 @@ import {
   ResourceNames,
 } from "../shared/resource-names";
 import { IInflightHost } from "../std";
+import { NotImplementedError } from "../core/errors";
 
 /**
  * Bucket names must be between 3 and 63 characters.
@@ -135,8 +136,8 @@ export class Bucket extends cloud.Bucket {
   public onCreate(fn: IBucketEventHandler, opts?: BucketOnCreateProps): void {
     fn;
     opts;
-    throw new Error(
-      "on_create method isn't implemented yet on the current target."
+    throw new NotImplementedError(
+      "onCreate method isn't implemented yet on the current target."
     );
   }
 
@@ -146,8 +147,8 @@ export class Bucket extends cloud.Bucket {
   public onDelete(fn: IBucketEventHandler, opts?: BucketOnDeleteProps): void {
     fn;
     opts;
-    throw new Error(
-      "on_delete method isn't implemented yet on the current target."
+    throw new NotImplementedError(
+      "onDelete method isn't implemented yet on the current target."
     );
   }
 
@@ -157,8 +158,8 @@ export class Bucket extends cloud.Bucket {
   public onUpdate(fn: IBucketEventHandler, opts?: BucketOnUpdateProps): void {
     fn;
     opts;
-    throw new Error(
-      "on_update method isn't implemented yet on the current target."
+    throw new NotImplementedError(
+      "onUpdate method isn't implemented yet on the current target."
     );
   }
 
@@ -168,8 +169,8 @@ export class Bucket extends cloud.Bucket {
   public onEvent(fn: IBucketEventHandler, opts?: BucketOnEventProps): void {
     fn;
     opts;
-    throw new Error(
-      "on_event method isn't implemented yet on the current target."
+    throw new NotImplementedError(
+      "onEvent method isn't implemented yet on the current target."
     );
   }
 

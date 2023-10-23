@@ -13,6 +13,7 @@ import {
   ResourceNames,
 } from "../shared/resource-names";
 import { IInflightHost, IResource } from "../std";
+import { NotImplementedError } from "../core/errors";
 
 const FUNCTION_NAME_OPTS: NameOptions = {
   maxLen: 32,
@@ -152,9 +153,11 @@ export class Function extends cloud.Function {
         );
         break;
       case ResourceTypes.FUNCTION:
-        throw new Error("Function permissions not implemented yet");
+        throw new NotImplementedError(
+          "Function permissions not implemented yet"
+        );
       default:
-        throw new Error("Unsupported resource type");
+        throw new Error(`Unsupported resource type ${permissions.Resource}`);
     }
     const roleDefinitions = this.permissions.get(uniqueId) ?? new Set();
     roleDefinitions.add(permissions);
