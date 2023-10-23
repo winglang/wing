@@ -8,7 +8,6 @@ use tree_sitter::{Node, Point};
 
 use crate::ast::{
 	AccessModifier, CalleeKind, Expr, ExprKind, Phase, Reference, Scope, Symbol, TypeAnnotation, UserDefinedType,
-	UtilityFunctions,
 };
 use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};
 use crate::diagnostic::{WingLocation, WingSpan};
@@ -16,8 +15,8 @@ use crate::docs::Documented;
 use crate::lsp::sync::{JSII_TYPES, PROJECT_DATA, WING_TYPES};
 use crate::type_check::symbol_env::{LookupResult, StatementIdx};
 use crate::type_check::{
-	fully_qualify_std_type, import_udt_from_jsii, resolve_super_method, ClassLike, Namespace, ResolveSource, Struct,
-	SymbolKind, Type, TypeRef, Types, UnsafeRef, VariableKind, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
+	fully_qualify_std_type, import_udt_from_jsii, resolve_super_method, ClassLike, Namespace, Struct, SymbolKind, Type,
+	TypeRef, Types, UnsafeRef, VariableKind, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
 };
 use crate::visit::{visit_expr, visit_type_annotation, Visit};
 use crate::wasm_util::extern_json_fn;
@@ -932,23 +931,12 @@ fn get_completions_from_namespace(
 		}
 	}
 
-	let is_wing_file = matches!(namespace.module_path, ResolveSource::WingFile);
-
 	namespace
 		.envs
 		.iter()
 		.flat_map(|env| env.symbol_map.iter())
+		.filter(|t| matches!(t.1.access, AccessModifier::Public))
 		.flat_map(|(name, symbol)| format_symbol_kind_as_completion(name, &symbol.kind))
-		// ignore the builtin-functions
-		.filter(|c| {
-			if is_wing_file && c.kind == Some(CompletionItemKind::FUNCTION) {
-				c.label == UtilityFunctions::Assert.to_string()
-					&& c.label == UtilityFunctions::Log.to_string()
-					&& c.label == UtilityFunctions::Assert.to_string()
-			} else {
-				true
-			}
-		})
 		.chain(util_completions)
 		.collect()
 }
