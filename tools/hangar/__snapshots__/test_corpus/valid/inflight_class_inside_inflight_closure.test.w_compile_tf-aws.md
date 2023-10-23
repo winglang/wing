@@ -16,8 +16,10 @@ module.exports = function({ $__parent_this_1_b }) {
         async method() {
           {((cond) => {if (!cond) throw new Error("assertion failed: this.field == \"value\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.field,"value")))};
         }
-        async $inflight_init() {
-          this.field = "value";
+        constructor(){
+          this.$inflight_init = async () => {
+            this.field = "value";
+          }
         }
       }
       const c = (await (async () => {const o = new InflightClass(); await o.$inflight_init?.(); return o; })());
@@ -101,14 +103,14 @@ module.exports = function({  }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -280,11 +282,11 @@ class $Root extends $stdlib.std.Resource {
           _getInflightOps() {
             return ["handle", "$inflight_init"];
           }
-          _registerBind(host, ops) {
+          _registerOnLift(host, ops) {
             if (ops.includes("handle")) {
-              $Closure1._registerBindObject(__parent_this_1.b, host, ["put"]);
+              $Closure1._registerOnLiftObject(__parent_this_1.b, host, ["put"]);
             }
-            super._registerBind(host, ops);
+            super._registerOnLift(host, ops);
           }
         }
         const inflight_closure = new $Closure1(this,"$Closure1");
@@ -337,11 +339,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(f, host, ["invoke"]);
+          $Closure2._registerOnLiftObject(f, host, ["invoke"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.Resource {

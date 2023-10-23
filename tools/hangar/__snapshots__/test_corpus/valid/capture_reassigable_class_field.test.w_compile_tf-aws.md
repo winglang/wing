@@ -103,14 +103,14 @@ module.exports = function({  }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -226,19 +226,19 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["get", "set", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          KeyValueStore._registerBindObject(this.bucket, host, []);
-          KeyValueStore._registerBindObject(this.onUpdateCallback, host, []);
+          KeyValueStore._registerOnLiftObject(this.bucket, host, []);
+          KeyValueStore._registerOnLiftObject(this.onUpdateCallback, host, []);
         }
         if (ops.includes("get")) {
-          KeyValueStore._registerBindObject(this.bucket, host, ["getJson"]);
-          KeyValueStore._registerBindObject(this.onUpdateCallback, host, ["handle"]);
+          KeyValueStore._registerOnLiftObject(this.bucket, host, ["getJson"]);
+          KeyValueStore._registerOnLiftObject(this.onUpdateCallback, host, ["handle"]);
         }
         if (ops.includes("set")) {
-          KeyValueStore._registerBindObject(this.bucket, host, ["putJson"]);
+          KeyValueStore._registerOnLiftObject(this.bucket, host, ["putJson"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -267,11 +267,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(counter, host, ["inc"]);
+          $Closure2._registerOnLiftObject(counter, host, ["inc"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
@@ -302,12 +302,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure3._registerBindObject(counter, host, ["peek"]);
-          $Closure3._registerBindObject(kv, host, ["get", "set"]);
+          $Closure3._registerOnLiftObject(counter, host, ["peek"]);
+          $Closure3._registerOnLiftObject(kv, host, ["get", "set"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const kv = new KeyValueStore(this,"KeyValueStore");

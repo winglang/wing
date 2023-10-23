@@ -69,13 +69,16 @@ rateSchedule.onTick(inflight () => {
   log("Rate schedule ticked!");
 });
 
+let secret = new cloud.Secret(name: "secret");
+
 new cloud.Service(
-      onStart: inflight () => {
-        log("start!");
-      },
-      onStop: inflight () => {
-        log("stop!");
-      });
+  inflight () => {
+    log("start!");
+    return inflight () => {
+      log("stop!");
+    };
+  },
+);
 
 let cronSchedule = new cloud.Schedule(cloud.ScheduleProps{
   cron: "* * * * ?"

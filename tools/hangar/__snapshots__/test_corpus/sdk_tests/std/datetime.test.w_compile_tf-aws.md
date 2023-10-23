@@ -53,14 +53,14 @@ module.exports = function({ $_d4_toUtc____hours, $d4_hours, $d4_timezone, $math_
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -118,13 +118,13 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject((d4.toUtc()).hours, host, []);
-          $Closure1._registerBindObject(d4.hours, host, []);
-          $Closure1._registerBindObject(d4.timezone, host, []);
+          $Closure1._registerOnLiftObject((d4.toUtc()).hours, host, []);
+          $Closure1._registerOnLiftObject(d4.hours, host, []);
+          $Closure1._registerOnLiftObject(d4.timezone, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const d1 = (std.Datetime.systemNow());

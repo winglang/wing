@@ -55,7 +55,7 @@ export class Redis
     await runCommand("docker", ["rm", "-f", `${this.containerName}`]);
   }
 
-  protected async rawClient(): Promise<any> {
+  public async rawClient(): Promise<any> {
     if (this.connection) {
       return this.connection;
     }

@@ -42,9 +42,11 @@ module.exports = function({  }) {
           x;
           (await (async () => {const o = new Foo(); await o.$inflight_init?.(); return o; })());
         }
-        async $inflight_init() {
-          x;
-          (await (async () => {const o = new Foo(); await o.$inflight_init?.(); return o; })());
+        constructor(){
+          this.$inflight_init = async () => {
+            x;
+            (await (async () => {const o = new Foo(); await o.$inflight_init?.(); return o; })());
+          }
         }
       }
     }

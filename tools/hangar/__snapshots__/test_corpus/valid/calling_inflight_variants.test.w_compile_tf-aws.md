@@ -93,14 +93,14 @@ module.exports = function({  }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -176,23 +176,23 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["inflight2", "makeFn", "callFn", "callFn2", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject(this, host, ["inflight2"]);
-          Foo._registerBindObject(this.inflight1, host, []);
+          Foo._registerOnLiftObject(this, host, ["inflight2"]);
+          Foo._registerOnLiftObject(this.inflight1, host, []);
         }
         if (ops.includes("callFn")) {
-          Foo._registerBindObject(this, host, ["makeFn"]);
+          Foo._registerOnLiftObject(this, host, ["makeFn"]);
         }
         if (ops.includes("callFn2")) {
-          Foo._registerBindObject(this, host, ["inflight2"]);
-          Foo._registerBindObject(this.inflight1, host, ["handle"]);
+          Foo._registerOnLiftObject(this, host, ["inflight2"]);
+          Foo._registerOnLiftObject(this.inflight1, host, ["handle"]);
         }
         if (ops.includes("makeFn")) {
-          Foo._registerBindObject(this, host, ["inflight2"]);
-          Foo._registerBindObject(this.inflight1, host, ["handle"]);
+          Foo._registerOnLiftObject(this, host, ["inflight2"]);
+          Foo._registerOnLiftObject(this.inflight1, host, ["handle"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -221,11 +221,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(foo, host, ["callFn", "callFn2"]);
+          $Closure2._registerOnLiftObject(foo, host, ["callFn", "callFn2"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const foo = new Foo(this,"Foo");

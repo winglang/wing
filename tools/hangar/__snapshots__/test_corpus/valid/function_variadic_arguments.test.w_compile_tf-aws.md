@@ -1,5 +1,32 @@
 # [function_variadic_arguments.test.w](../../../../../examples/tests/valid/function_variadic_arguments.test.w) | compile | tf-aws
 
+## inflight.A-1.js
+```js
+"use strict";
+module.exports = function({  }) {
+  class A {
+    constructor({  }) {
+    }
+  }
+  return A;
+}
+
+```
+
+## inflight.B-1.js
+```js
+"use strict";
+module.exports = function({ $A }) {
+  class B extends $A {
+    constructor({  }) {
+      super({  });
+    }
+  }
+  return B;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -13,14 +40,14 @@
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -78,6 +105,59 @@ const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class A extends $stdlib.std.Resource {
+      constructor(scope, id, msg) {
+        super(scope, id);
+        this.message = msg;
+      }
+      static _toInflightType(context) {
+        return `
+          require("./inflight.A-1.js")({
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const AClient = ${A._toInflightType(this)};
+            const client = new AClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      _getInflightOps() {
+        return ["$inflight_init"];
+      }
+    }
+    class B extends A {
+      constructor(scope, id, msg) {
+        super(scope, id);
+        this.message = msg;
+      }
+      static _toInflightType(context) {
+        return `
+          require("./inflight.B-1.js")({
+            $A: ${context._lift(A)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const BClient = ${B._toInflightType(this)};
+            const client = new BClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      _getInflightOps() {
+        return ["$inflight_init"];
+      }
+    }
     const bucket1 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"bucket1");
     const bucket2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"bucket2");
     const bucket3 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"bucket3");
@@ -107,6 +187,21 @@ class $Root extends $stdlib.std.Resource {
     });
     {((cond) => {if (!cond) throw new Error("assertion failed: addNums(1, 2, 3) == 6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((addNums(1,2,3)),6)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: addNums() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((addNums()),0)))};
+    const arityFunc = ((n, b, ...events) => {
+      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(-1) == \"d\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((events.at((-1))),"d")))};
+    });
+    (arityFunc(1,true,"a","b","c","d"));
+    const subTypeFunc = ((...events) => {
+      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(0).message == \"this is A\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((events.at(0)).message,"this is A")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(1).message == \"this is B\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((events.at(1)).message,"this is B")))};
+    });
+    (subTypeFunc(new A(this,"A","this is A"),new B(this,"B","this is B")));
+    const jsonCastingFunc = ((...events) => {
+      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(0) == \"str\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((events.at(0)),"str")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(1) == \"json str\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((events.at(1)),"json str")))};
+    });
+    const jsonStr = "json str";
+    (jsonCastingFunc("str",jsonStr));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

@@ -54,7 +54,7 @@ module.exports = function({ $api_url, $http_Util, $preflightVariable, $website_u
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
@@ -110,7 +110,7 @@ module.exports = function({ $api_url, $http_Util, $preflightVariable, $website_u
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -501,13 +501,13 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(api.url, host, []);
-          $Closure2._registerBindObject(preflightVariable, host, []);
-          $Closure2._registerBindObject(website.url, host, ["body", "ok"]);
+          $Closure2._registerOnLiftObject(api.url, host, []);
+          $Closure2._registerOnLiftObject(preflightVariable, host, []);
+          $Closure2._registerOnLiftObject(website.url, host, ["body", "ok"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");

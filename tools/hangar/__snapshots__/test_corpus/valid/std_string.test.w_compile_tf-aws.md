@@ -34,14 +34,14 @@ module.exports = function({ $__s1_split_______at_1__, $_s1_concat_s2__, $s1_inde
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -92,13 +92,13 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(((s1.split(" ")).at(1)), host, []);
-          $Closure1._registerBindObject((s1.concat(s2)), host, []);
-          $Closure1._registerBindObject(s1.indexOf("s"), host, []);
+          $Closure1._registerOnLiftObject(((s1.split(" ")).at(1)), host, []);
+          $Closure1._registerOnLiftObject((s1.concat(s2)), host, []);
+          $Closure1._registerOnLiftObject(s1.indexOf("s"), host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const s1 = "some string";

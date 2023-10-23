@@ -51,14 +51,14 @@ module.exports = function({ $compoundOneYear, $interest, $math_Util, $value }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -138,13 +138,13 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(compoundOneYear, host, ["handle"]);
-          $Closure2._registerBindObject(interest, host, []);
-          $Closure2._registerBindObject(value, host, []);
+          $Closure2._registerOnLiftObject(compoundOneYear, host, ["handle"]);
+          $Closure2._registerOnLiftObject(interest, host, []);
+          $Closure2._registerOnLiftObject(value, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const interest = 0.05;

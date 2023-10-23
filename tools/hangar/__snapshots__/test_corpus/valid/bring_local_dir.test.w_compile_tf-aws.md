@@ -26,6 +26,19 @@ module.exports = function({  }) {
 
 ```
 
+## inflight.Foo-3.js
+```js
+"use strict";
+module.exports = function({  }) {
+  class Foo {
+    constructor({  }) {
+    }
+  }
+  return Foo;
+}
+
+```
+
 ## inflight.Widget-1.js
 ```js
 "use strict";
@@ -52,14 +65,14 @@ module.exports = function({  }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -77,6 +90,7 @@ module.exports = function({  }) {
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   const blah = require("./preflight.inner-2.js")({ $stdlib });
+  const util = $stdlib.util;
   class Foo extends $stdlib.std.Resource {
     constructor(scope, id, ) {
       super(scope, id);
@@ -118,6 +132,7 @@ module.exports = function({ $stdlib }) {
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
+  const util = $stdlib.util;
   class Bar extends $stdlib.std.Resource {
     constructor(scope, id, ) {
       super(scope, id);
@@ -136,6 +151,31 @@ module.exports = function({ $stdlib }) {
         (await (async () => {
           const BarClient = ${Bar._toInflightType(this)};
           const client = new BarClient({
+          });
+          if (client.$inflight_init) { await client.$inflight_init(); }
+          return client;
+        })())
+      `;
+    }
+    _getInflightOps() {
+      return ["$inflight_init"];
+    }
+  }
+  class Foo extends $stdlib.std.Resource {
+    constructor(scope, id, ) {
+      super(scope, id);
+    }
+    static _toInflightType(context) {
+      return `
+        require("./inflight.Foo-3.js")({
+        })
+      `;
+    }
+    _toInflight() {
+      return `
+        (await (async () => {
+          const FooClient = ${Foo._toInflightType(this)};
+          const client = new FooClient({
           });
           if (client.$inflight_init) { await client.$inflight_init(); }
           return client;

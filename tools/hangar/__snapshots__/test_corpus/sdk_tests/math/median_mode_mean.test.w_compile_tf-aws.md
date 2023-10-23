@@ -78,14 +78,14 @@ module.exports = function({ $math_Util, $mean_arr }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -137,12 +137,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(even_arr, host, []);
-          $Closure1._registerBindObject(odd_arr, host, []);
+          $Closure1._registerOnLiftObject(even_arr, host, []);
+          $Closure1._registerOnLiftObject(odd_arr, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -177,16 +177,16 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject((bimodal.at(0)), host, []);
-          $Closure2._registerBindObject((bimodal.at(1)), host, []);
-          $Closure2._registerBindObject((multimodal.at(0)), host, []);
-          $Closure2._registerBindObject((multimodal.at(1)), host, []);
-          $Closure2._registerBindObject((multimodal.at(2)), host, []);
-          $Closure2._registerBindObject(modal_arr, host, ["at"]);
+          $Closure2._registerOnLiftObject((bimodal.at(0)), host, []);
+          $Closure2._registerOnLiftObject((bimodal.at(1)), host, []);
+          $Closure2._registerOnLiftObject((multimodal.at(0)), host, []);
+          $Closure2._registerOnLiftObject((multimodal.at(1)), host, []);
+          $Closure2._registerOnLiftObject((multimodal.at(2)), host, []);
+          $Closure2._registerOnLiftObject(modal_arr, host, ["at"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
@@ -216,11 +216,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure3._registerBindObject(mean_arr, host, []);
+          $Closure3._registerOnLiftObject(mean_arr, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const odd_arr = [1, 3, 3, 6, 7, 8, 9];

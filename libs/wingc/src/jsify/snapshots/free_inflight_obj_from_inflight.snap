@@ -31,8 +31,10 @@ module.exports = function({  }) {
     async handle() {
       const y = "hello";
       class A {
-        async $inflight_init() {
-          {console.log(y)};
+        constructor(){
+          this.$inflight_init = async () => {
+            {console.log(y)};
+          }
         }
       }
     }

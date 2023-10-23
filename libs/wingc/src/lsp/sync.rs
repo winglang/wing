@@ -21,7 +21,8 @@ use crate::type_check::type_reference_transform::TypeReferenceTransformer;
 use crate::type_check_assert::TypeCheckAssert;
 use crate::valid_json_visitor::ValidJsonVisitor;
 use crate::visit::Visit;
-use crate::{ast::Scope, type_check::Types, wasm_util::ptr_to_string};
+use crate::wasm_util::extern_json_fn;
+use crate::{ast::Scope, type_check::Types};
 
 /// The output of compiling a Wing project with one or more files
 pub struct ProjectData {
@@ -61,12 +62,7 @@ thread_local! {
 
 #[no_mangle]
 pub unsafe extern "C" fn wingc_on_did_open_text_document(ptr: u32, len: u32) {
-	let parse_string = ptr_to_string(ptr, len);
-	if let Ok(parsed) = serde_json::from_str(&parse_string) {
-		on_document_did_open(parsed);
-	} else {
-		eprintln!("Failed to parse 'did open' text document: {}", parse_string);
-	}
+	extern_json_fn(ptr, len, on_document_did_open);
 }
 
 pub fn on_document_did_open(params: DidOpenTextDocumentParams) {
@@ -91,12 +87,7 @@ pub fn on_document_did_open(params: DidOpenTextDocumentParams) {
 
 #[no_mangle]
 pub unsafe extern "C" fn wingc_on_did_change_text_document(ptr: u32, len: u32) {
-	let parse_string = ptr_to_string(ptr, len);
-	if let Ok(parsed) = serde_json::from_str(&parse_string) {
-		on_document_did_change(parsed);
-	} else {
-		eprintln!("Failed to parse 'did change' text document: {}", parse_string);
-	}
+	extern_json_fn(ptr, len, on_document_did_change);
 }
 
 pub fn on_document_did_change(params: DidChangeTextDocumentParams) {

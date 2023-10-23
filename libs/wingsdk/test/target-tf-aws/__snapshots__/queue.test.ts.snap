@@ -3,14 +3,16 @@
 exports[`default queue behavior 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
   "resource": {
     "aws_sqs_queue": {
       "Queue": {
+        "message_retention_seconds": 3600,
         "name": "Queue-c822c726",
+        "visibility_timeout_seconds": 30,
       },
     },
   },
@@ -117,14 +119,16 @@ exports[`default queue behavior 2`] = `
 exports[`queue name valid 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
   "resource": {
     "aws_sqs_queue": {
       "The-Incredible_Queue-01": {
+        "message_retention_seconds": 3600,
         "name": "The-Incredible_Queue-01-c8d1a14d",
+        "visibility_timeout_seconds": 30,
       },
     },
   },
@@ -233,7 +237,7 @@ exports[`queue with a consumer function 1`] = `"new (require(\\"[REDACTED]/wings
 exports[`queue with a consumer function 2`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -306,6 +310,7 @@ exports[`queue with a consumer function 2`] = `
     },
     "aws_sqs_queue": {
       "Queue": {
+        "message_retention_seconds": 3600,
         "name": "Queue-c822c726",
         "visibility_timeout_seconds": 30,
       },
@@ -524,7 +529,7 @@ exports[`queue with a consumer function 3`] = `
 exports[`queue with custom retention 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -533,6 +538,7 @@ exports[`queue with custom retention 1`] = `
       "Queue": {
         "message_retention_seconds": 1800,
         "name": "Queue-c822c726",
+        "visibility_timeout_seconds": 30,
       },
     },
   },
@@ -639,13 +645,14 @@ exports[`queue with custom retention 2`] = `
 exports[`queue with custom timeout 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
   "resource": {
     "aws_sqs_queue": {
       "Queue": {
+        "message_retention_seconds": 3600,
         "name": "Queue-c822c726",
         "visibility_timeout_seconds": 30,
       },
@@ -754,14 +761,16 @@ exports[`queue with custom timeout 2`] = `
 exports[`replace invalid character from queue name 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
   "resource": {
     "aws_sqs_queue": {
       "TheIncredibleQueue": {
+        "message_retention_seconds": 3600,
         "name": "The-Incredible-Queue-c8305287",
+        "visibility_timeout_seconds": 30,
       },
     },
   },

@@ -17,7 +17,20 @@ bucket: new (require(\\"[REDACTED]/wingsdk/src/target-tf-azure/bucket.inflight\\
 
 exports[`function with a bucket binding requiring only read 2`] = `
 {
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+      "value": "[]",
+    },
+  },
   "resource": {
+    "azurerm_application_insights": {
+      "ApplicationInsights": {
+        "application_type": "web",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "application-insights",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
+    },
     "azurerm_linux_function_app": {
       "Function_042596DC": {
         "app_settings": {
@@ -36,8 +49,10 @@ exports[`function with a bucket binding requiring only read 2`] = `
         "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
         "service_plan_id": "\${azurerm_service_plan.ServicePlan.id}",
         "site_config": {
+          "application_insights_connection_string": "\${azurerm_application_insights.ApplicationInsights.connection_string}",
+          "application_insights_key": "\${azurerm_application_insights.ApplicationInsights.instrumentation_key}",
           "application_stack": {
-            "node_version": "16",
+            "node_version": "18",
           },
         },
         "storage_account_access_key": "\${azurerm_storage_account.StorageAccount.primary_access_key}",
@@ -122,7 +137,20 @@ bucket: new (require(\\"[REDACTED]/wingsdk/src/target-tf-azure/bucket.inflight\\
 
 exports[`function with a bucket binding requiring read_write 2`] = `
 {
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+      "value": "[]",
+    },
+  },
   "resource": {
+    "azurerm_application_insights": {
+      "ApplicationInsights": {
+        "application_type": "web",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "application-insights",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
+    },
     "azurerm_linux_function_app": {
       "Function_042596DC": {
         "app_settings": {
@@ -141,8 +169,10 @@ exports[`function with a bucket binding requiring read_write 2`] = `
         "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
         "service_plan_id": "\${azurerm_service_plan.ServicePlan.id}",
         "site_config": {
+          "application_insights_connection_string": "\${azurerm_application_insights.ApplicationInsights.connection_string}",
+          "application_insights_key": "\${azurerm_application_insights.ApplicationInsights.instrumentation_key}",
           "application_stack": {
-            "node_version": "16",
+            "node_version": "18",
           },
         },
         "storage_account_access_key": "\${azurerm_storage_account.StorageAccount.primary_access_key}",

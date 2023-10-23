@@ -52,14 +52,14 @@ module.exports = function({  }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -131,14 +131,14 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["incCounter", "bar", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          A._registerBindObject(this.counter, host, []);
+          A._registerOnLiftObject(this.counter, host, []);
         }
         if (ops.includes("incCounter")) {
-          A._registerBindObject(this.counter, host, ["inc"]);
+          A._registerOnLiftObject(this.counter, host, ["inc"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -168,12 +168,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(a, host, ["bar"]);
-          $Closure1._registerBindObject(a.field, host, []);
+          $Closure1._registerOnLiftObject(a, host, ["bar"]);
+          $Closure1._registerOnLiftObject(a.field, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const a = new A(this,"A");

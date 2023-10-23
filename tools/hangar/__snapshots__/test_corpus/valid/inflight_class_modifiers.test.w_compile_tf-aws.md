@@ -7,8 +7,10 @@ module.exports = function({  }) {
   class C {
     async method() {
     }
-    async $inflight_init() {
-      this.field = 12;
+    constructor(){
+      this.$inflight_init = async () => {
+        this.field = 12;
+      }
     }
   }
   return C;
@@ -29,14 +31,14 @@ module.exports = function({  }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -83,11 +85,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["field", "method", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          C._registerBindObject(this, host, ["field"]);
+          C._registerOnLiftObject(this, host, ["field"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
   }

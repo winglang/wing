@@ -108,7 +108,7 @@ export class Bucket extends cloud.Bucket {
     }
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof AWSFunction)) {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }
@@ -121,7 +121,7 @@ export class Bucket extends cloud.Bucket {
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.bucket.bucket);
 
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

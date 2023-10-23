@@ -59,7 +59,7 @@ export class Function extends cloud.Function implements IAwsFunction {
     this.arn = this.function.functionArn;
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("functions can only be bound by awscdk.Function for now");
     }
@@ -75,7 +75,7 @@ export class Function extends cloud.Function implements IAwsFunction {
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.function.functionArn);
 
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

@@ -57,14 +57,14 @@ module.exports = function({ $s }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -143,11 +143,11 @@ class $Root extends $stdlib.std.Resource {
         _getInflightOps() {
           return ["handle", "$inflight_init"];
         }
-        _registerBind(host, ops) {
+        _registerOnLift(host, ops) {
           if (ops.includes("handle")) {
-            $Closure2._registerBindObject(s, host, ["started", "stop"]);
+            $Closure2._registerOnLiftObject(s, host, ["started", "stop"]);
           }
-          super._registerBind(host, ops);
+          super._registerOnLift(host, ops);
         }
       }
       this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:start and stop",new $Closure2(this,"$Closure2"));

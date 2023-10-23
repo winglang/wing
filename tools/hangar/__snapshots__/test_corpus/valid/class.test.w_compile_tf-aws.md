@@ -73,7 +73,7 @@ module.exports = function({ $B }) {
       return $obj;
     }
     async handle() {
-      const b = (await (async () => {const o = new $B(); await o.$inflight_init?.("ba"); return o; })());
+      const b = (await (async () => {const o = new $B("ba"); await o.$inflight_init?.(); return o; })());
       {((cond) => {if (!cond) throw new Error("assertion failed: b.sound == \"ba\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(b.sound,"ba")))};
     }
   }
@@ -87,8 +87,10 @@ module.exports = function({ $B }) {
 "use strict";
 module.exports = function({  }) {
   class A {
-    async $inflight_init(sound) {
-      this.sound = sound;
+    constructor(sound){
+      this.$inflight_init = async () => {
+        this.sound = sound;
+      }
     }
   }
   return A;
@@ -101,8 +103,12 @@ module.exports = function({  }) {
 "use strict";
 module.exports = function({ $A }) {
   class B extends $A {
-    async $inflight_init(sound) {
-      await super.$inflight_init?.(sound);
+    constructor(sound){
+      super(sound);
+      this.super_$inflight_init = this.$inflight_init;
+      this.$inflight_init = async () => {
+        await this.super_$inflight_init?.(sound);
+      }
     }
   }
   return B;
@@ -320,14 +326,14 @@ module.exports = function({ $PaidStudent }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -510,11 +516,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(c5, host, ["set", "x", "y"]);
+          $Closure1._registerOnLiftObject(c5, host, ["set", "x", "y"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class Person extends $stdlib.std.Resource {
@@ -625,13 +631,13 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(student.hrlyWage, host, []);
-          $Closure2._registerBindObject(student.major, host, []);
-          $Closure2._registerBindObject(student.name, host, []);
+          $Closure2._registerOnLiftObject(student.hrlyWage, host, []);
+          $Closure2._registerOnLiftObject(student.major, host, []);
+          $Closure2._registerOnLiftObject(student.name, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class TeacherAid extends PaidStudent {
@@ -687,11 +693,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure3._registerBindObject(ta.hrlyWage, host, []);
+          $Closure3._registerOnLiftObject(ta.hrlyWage, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class A extends $stdlib.std.Resource {
@@ -718,11 +724,11 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["sound", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          A._registerBindObject(this, host, ["sound"]);
+          A._registerOnLiftObject(this, host, ["sound"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class B extends A {
