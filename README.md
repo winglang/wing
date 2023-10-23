@@ -29,7 +29,7 @@ Winglang addresses these pains by letting you work at a higher level of abstract
 We also provide you with a set of tools that let you test your code locally, significantly faster than before.
 
 <p align="center">
-  <img src="./logo/demo.gif" alt="Wing Demo" height="360px">
+  <img src="./apps/wing/logo/demo.gif" alt="Wing Demo" height="360px">
 </p>
 
 Wing is built by [Elad Ben-Israel](https://github.com/eladb), the guy behind the [AWS CDK](https://github.com/aws/aws-cdk), the gang at the [Wing Cloud team](https://www.wing.cloud/) and an amazing [community](https://t.winglang.io/slack) of contributors (also known as Wingnuts).
