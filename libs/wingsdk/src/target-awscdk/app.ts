@@ -71,7 +71,7 @@ export class App extends CoreApp {
   protected readonly testRunner: TestRunner;
 
   constructor(props: CdkAppProps) {
-    const stackName = props.stackName ?? process.env.CDK_STACK_NAME;
+    let stackName = props.stackName ?? process.env.CDK_STACK_NAME;
     if (stackName === undefined) {
       throw new Error(
         "A CDK stack name must be specified through the CDK_STACK_NAME environment variable."
@@ -80,6 +80,13 @@ export class App extends CoreApp {
 
     const outdir = props.outdir ?? ".";
     const cdkOutdir = join(outdir, ".");
+
+    if (props.isTestEnvironment) {
+      const match = outdir.match(/\/(\w+)\./);
+      if (match) {
+        stackName += "-" + match[1];
+      }
+    }
 
     mkdirSync(cdkOutdir, { recursive: true });
 
