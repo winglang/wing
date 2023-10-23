@@ -310,5 +310,27 @@ test("tryDelete a non-existent object from the bucket", async () => {
   expect(res).toBe(false);
 });
 
+/**
+ * Not usable since `mock-gcs` module misses `File.copy()`
+ */
+// test("copy objects within the bucket", async () => {
+//   // GIVEN
+//   const BUCKET_NAME = "BUCKET_NAME";
+//   const SRC_KEY = "SRC/KEY";
+//   const DST_KEY = "DST/KEY";
+//   const SRC_VALUE = "hello world";
+//   const mockStorage = new MockStorage();
+//   await mockStorage.bucket(BUCKET_NAME).file(SRC_KEY).save(SRC_VALUE);
+
+//   // WHEN
+//   const client = new BucketClient(BUCKET_NAME, mockStorage as any);
+//   const response1 = await client.copy(SRC_KEY, SRC_KEY);
+//   const response2 = await client.copy(SRC_KEY, DST_KEY);
+
+//   // THEN
+//   expect(response1).toEqual(undefined);
+//   expect(response2).toEqual(undefined);
+// });
+
 // TODO: implement signedUrl related tests
 // https://github.com/winglang/wing/issues/4599

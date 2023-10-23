@@ -240,6 +240,20 @@ export class BucketClient implements IBucketClient {
     }
     return list;
   }
+
+  /**
+   * Copy an object to a new location in the bucket. If the destination object
+   * already exists, it will be overwritten.
+   *
+   * @param srcKey The key of the source object you wish to copy.
+   * @param dstKey The key of the destination object after copying.
+   */
+  public async copy(srcKey: string, dstKey: string): Promise<void> {
+    return Promise.reject(
+      `copy is not implemented: (srcKey=${srcKey}, dstKey=${dstKey})`
+    );
+  }
+
   /**
    * Checks if the bucket is public
    * @returns true if the bucket is public and false otherwise
