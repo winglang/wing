@@ -1,14 +1,14 @@
 ---
 source: libs/wingc/src/lsp/completions.rs
 ---
-- label: hello
+- label: func
   kind: 2
   detail: "preflight (): void"
   documentation:
     kind: markdown
-    value: "```wing\nstatic preflight hello: preflight (): void\n```"
-  sortText: ff|hello
-  insertText: hello()
+    value: "```wing\nstatic preflight func: preflight (): void\n```"
+  sortText: ff|func
+  insertText: func()
 - label: isConstruct
   kind: 2
   detail: "preflight (x: any): bool"

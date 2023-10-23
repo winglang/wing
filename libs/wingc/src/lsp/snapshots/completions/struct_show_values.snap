@@ -1,6 +1,13 @@
 ---
 source: libs/wingc/src/lsp/completions.rs
 ---
+- label: x
+  kind: 6
+  detail: num
+  documentation:
+    kind: markdown
+    value: "```wing\npreflight x: num\n```"
+  sortText: bb|x
 - label: unsafeCast
   kind: 3
   detail: "(value: any): any"
@@ -13,12 +20,12 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
-- label: Foo
+- label: S
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct Foo\n```\n---\n### Fields\n- `x` — `str`\n- `y` — `num`"
-  sortText: hh|Foo
+    value: "```wing\nstruct S\n```\n---\n### Fields\n- `a` — `num`\n- `b` — `num`"
+  sortText: hh|S
 - label: Json
   kind: 14
   sortText: kl|zyJson

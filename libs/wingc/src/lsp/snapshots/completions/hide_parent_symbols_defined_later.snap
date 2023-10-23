@@ -1,6 +1,44 @@
 ---
 source: libs/wingc/src/lsp/completions.rs
 ---
+- label: this
+  kind: 6
+  detail: "inflight (): void"
+  documentation:
+    kind: markdown
+    value: "```wing\npreflight this: inflight (): void\n```"
+  sortText: bb|this
+- label: x
+  kind: 6
+  detail: num
+  documentation:
+    kind: markdown
+    value: "```wing\npreflight x: num\n```"
+  sortText: bb|x
+- label: assert
+  kind: 3
+  detail: "(condition: bool): void"
+  documentation:
+    kind: markdown
+    value: "```wing\nassert: (condition: bool): void\n```\n---\nAsserts that a condition is true\n### Parameters\n- `condition` — `bool` — The condition to assert"
+  sortText: cc|assert
+  insertText: assert($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: log
+  kind: 3
+  detail: "(message: str): void"
+  documentation:
+    kind: markdown
+    value: "```wing\nlog: (message: str): void\n```\n---\nLogs a message\n### Parameters\n- `message` — `str` — The message to log"
+  sortText: cc|log
+  insertText: log($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: unsafeCast
   kind: 3
   detail: "(value: any): any"
@@ -13,12 +51,6 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
-- label: Foo
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nstruct Foo\n```\n---\n### Fields\n- `x` — `str`\n- `y` — `num`"
-  sortText: hh|Foo
 - label: Json
   kind: 14
   sortText: kl|zyJson
@@ -85,10 +117,4 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerCompletion
     command: editor.action.triggerSuggest
-- label: "inflight () => {}"
-  kind: 15
-  sortText: ll|zzinflight
-  filterText: inflight
-  insertText: "inflight ($1) => {$0}"
-  insertTextFormat: 2
 
