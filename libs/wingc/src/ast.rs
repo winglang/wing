@@ -190,12 +190,7 @@ impl UserDefinedType {
 
 impl Display for UserDefinedType {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let mut name = self.root.name.clone();
-		for field in &self.fields {
-			name.push('.');
-			name.push_str(&field.name);
-		}
-		write!(f, "{}", name)
+		write!(f, "{}", self.full_path_str())
 	}
 }
 

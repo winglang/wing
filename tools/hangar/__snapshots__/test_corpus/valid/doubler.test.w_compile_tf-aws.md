@@ -257,11 +257,11 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class Doubler extends $stdlib.std.Resource {
-      constructor(scope, id, func) {
-        super(scope, id);
+      constructor($scope, $id, func) {
+        super($scope, $id);
         this.func = func;
       }
       static _toInflightType(context) {
@@ -296,8 +296,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -322,14 +322,14 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class Doubler2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       makeFunc(handler) {
         const __parent_this_2 = this;
         class $Closure2 extends $stdlib.std.Resource {
-          constructor(scope, id, ) {
-            super(scope, id);
+          constructor($scope, $id, ) {
+            super($scope, $id);
             (std.Node.of(this)).hidden = true;
           }
           static _toInflightType(context) {
@@ -362,7 +362,7 @@ class $Root extends $stdlib.std.Resource {
             super._registerOnLift(host, ops);
           }
         }
-        return this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $Closure2(this,"$Closure2"));
+        return this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "cloud.Function", new $Closure2(this, "$Closure2"));
       }
       static _toInflightType(context) {
         return `
@@ -386,8 +386,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -412,8 +412,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -444,10 +444,10 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const fn = new Doubler(this,"Doubler",new $Closure1(this,"$Closure1"));
-    const doubler2 = new Doubler2(this,"Doubler2");
-    const f = (doubler2.makeFunc(new $Closure3(this,"$Closure3")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:f(2) == 8",new $Closure4(this,"$Closure4"));
+    const fn = new Doubler(this, "Doubler", new $Closure1(this, "$Closure1"));
+    const doubler2 = new Doubler2(this, "Doubler2");
+    const f = (doubler2.makeFunc(new $Closure3(this, "$Closure3")));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:f(2) == 8", new $Closure4(this, "$Closure4"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

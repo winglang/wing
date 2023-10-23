@@ -73,12 +73,12 @@ const std = $stdlib.std;
 const aws = require("@cdktf/provider-aws");
 const cdktf = require("cdktf");
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class Foo extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        this.node.root.new("cdktf.S3Backend",cdktf.S3Backend,this,({"bucket": "foo","key": "bar"}));
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        this.node.root.new("cdktf.S3Backend",cdktf.S3Backend,this, ({"bucket": "foo","key": "bar"}));
       }
       static _toInflightType(context) {
         return `
@@ -101,7 +101,7 @@ class $Root extends $stdlib.std.Resource {
         return ["$inflight_init"];
       }
     }
-    this.node.root.new("@cdktf/provider-aws.s3Bucket.S3Bucket",aws.s3Bucket.S3Bucket,this,"Bucket",{ bucketPrefix: "hello", versioning: ({"enabled": true,"mfaDelete": true}) });
+    this.node.root.new("@cdktf/provider-aws.s3Bucket.S3Bucket",aws.s3Bucket.S3Bucket,this, "Bucket", { bucketPrefix: "hello", versioning: ({"enabled": true,"mfaDelete": true}) });
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

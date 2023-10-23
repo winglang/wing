@@ -101,11 +101,11 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -139,11 +139,11 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
     const jsonObj1 = ({"key1": "value1"});
-    (b.addObject("file1.json",((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([jsonObj1])));
-    (b.addObject("file2.txt","Bar"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:addObject",new $Closure1(this,"$Closure1"));
+    (b.addObject("file1.json", ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([jsonObj1])));
+    (b.addObject("file2.txt", "Bar"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:addObject", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
