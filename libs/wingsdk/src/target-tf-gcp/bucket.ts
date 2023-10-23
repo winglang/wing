@@ -79,6 +79,23 @@ export class Bucket extends cloud.Bucket {
     }
   }
 
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [
+      cloud.BucketInflightMethods.DELETE,
+      cloud.BucketInflightMethods.GET,
+      cloud.BucketInflightMethods.GET_JSON,
+      cloud.BucketInflightMethods.LIST,
+      cloud.BucketInflightMethods.PUT,
+      cloud.BucketInflightMethods.PUT_JSON,
+      cloud.BucketInflightMethods.PUBLIC_URL,
+      cloud.BucketInflightMethods.EXISTS,
+      cloud.BucketInflightMethods.TRY_GET,
+      cloud.BucketInflightMethods.TRY_GET_JSON,
+      cloud.BucketInflightMethods.TRY_DELETE,
+    ];
+  }
+
   public addObject(key: string, body: string): void {
     new StorageBucketObject(this, `Object-${key}`, {
       bucket: this.bucket.id,

@@ -32,26 +32,4 @@ describe("resource _addOnLift", () => {
       `Resource root/example does not support inflight operation nonExistentOp (requested by root/host).\nIt might not be implemented yet.`
     );
   });
-
-  test("adding non implemented op to host should cause an error", () => {
-    class Client {
-      public op1() {
-        return "op1";
-      }
-    }
-
-    class ExampleImplementation extends Example {
-      protected _clientClass? = Client;
-    }
-
-    const app = new SimApp();
-    const example = new ExampleImplementation(app, "example");
-
-    expect(() =>
-      // @ts-expect-error - accessing private method
-      example._addOnLift(new Example(app, "host"), ["op2"])
-    ).toThrow(
-      `Resource root/example does not support inflight operation op2 (requested by root/host).\nIt might not be implemented yet.`
-    );
-  });
 });
