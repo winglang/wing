@@ -1212,7 +1212,7 @@ impl<'a> JSifier<'a> {
 			let mut code = CodeMaker::default();
 
 			let extends = if let Some(parent) = &class.parent {
-				// If this is an imported type (with an package fqn) attemp to go through the stdlib target dep-injection mechanism
+				// If this is an imported type (with a package fqn) attemp to go through the stdlib target dep-injection mechanism
 				let parent_type = env
 					.lookup_nested_str(&parent.full_path_str(), None)
 					.unwrap()
