@@ -231,6 +231,7 @@ async function runPreflightCodeInVm(
   const artifactPath = join(workDir, WINGC_PREFLIGHT);
   log?.("reading artifact from %s", artifactPath);
   const artifact = await fs.readFile(artifactPath, "utf-8");
+  const artifactScript = new vm.Script(artifact, { filename: artifactPath });
   log?.("artifact: %s", artifact);
 
   // Try looking for dependencies not only in the current directory (wherever
@@ -268,7 +269,8 @@ async function runPreflightCodeInVm(
   });
 
   try {
-    vm.runInContext(artifact, context);
+    console.log("SOURCEMAP", artifactScript.sourceMapURL);
+    artifactScript.runInContext(context);
   } catch (error) {
     throw new PreflightError(error as any, artifactPath, artifact);
   }

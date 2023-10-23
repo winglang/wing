@@ -1,4 +1,5 @@
-use parcel_sourcemap::{OriginalLocation, SourceMap};
+use indexmap::IndexMap;
+use parcel_sourcemap::{Mapping, OriginalLocation, SourceMap};
 use serde_json::json;
 
 use crate::diagnostic::WingSpan;
@@ -11,7 +12,7 @@ use crate::diagnostic::WingSpan;
 pub struct CodeMaker {
 	lines: Vec<(usize, String, Option<WingSpan>)>,
 	indent: usize,
-	original_span_stack: Vec<WingSpan>,
+	pub original_span_stack: Vec<WingSpan>,
 }
 
 impl CodeMaker {
@@ -112,12 +113,13 @@ impl CodeMaker {
 
 	pub fn get_sourcemap(&mut self, root: &str, source_content: &str, generated_path: &str) -> String {
 		let mut sourcemap = SourceMap::new(root);
-		let source_num = sourcemap.add_source(source_content);
+		let source_num = sourcemap.add_source("/Users/markm/Documents/GitHub/winglang/libs/wingc/main.w");
+		sourcemap.set_source_content(source_num as usize, source_content);
 
 		for (line_idx, line) in self.lines.iter().enumerate() {
 			let generated_line = line_idx as u32;
-			let generated_column = (line.0 * 2) as u32;
-			let original = if let Some(original_span) = &self.original_span_stack.last() {
+			let generated_column = 0;
+			let original = if let Some(original_span) = &line.2 {
 				Some(OriginalLocation::new(
 					original_span.start.line,
 					original_span.start.col,
@@ -127,23 +129,27 @@ impl CodeMaker {
 			} else {
 				None
 			};
+
 			sourcemap.add_mapping(generated_line, generated_column, original);
+			sourcemap.add_mapping(generated_line, line.1.len() as u32, original);
 		}
 
 		let mut buffer: Vec<u8> = vec![];
 
 		sourcemap.write_vlq(&mut buffer);
 
-		let json: serde_json::Value = json!(
-			{
-				"version": 3,
-				"file": generated_path,
-				"sources": sourcemap.get_sources(),
-				"sourcesContent": sourcemap.get_sources_content(),
-				"names": sourcemap.get_names(),
-				"mappings": String::from_utf8(buffer).unwrap()
-			}
+		let mut json = IndexMap::new();
+
+		json.insert("version", json!(3));
+		json.insert("file", json!(generated_path));
+		json.insert("sourceRoot", json!(""));
+		json.insert(
+			"sources",
+			json!(vec!["/Users/markm/Documents/GitHub/winglang/libs/wingc/main.w"]),
 		);
+		json.insert("sourcesContent", json!(sourcemap.get_sources_content()));
+		json.insert("names", json!(sourcemap.get_names()));
+		json.insert("mappings", json!(String::from_utf8(buffer).unwrap()));
 
 		let json_string = serde_json::ser::to_string(&json).unwrap();
 

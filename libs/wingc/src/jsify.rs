@@ -255,9 +255,10 @@ impl<'a> JSifier<'a> {
 
 		let sourcemap_path = format!("{}.map", preflight_file_name);
 		output.line(format!("//# sourceMappingURL={sourcemap_path}"));
+		let source_content = self.source_files.get_file(source_path.as_str()).unwrap();
 
 		let output_base = output.to_string();
-		let output_sourcemap = output.get_sourcemap(source_path.as_str(), &output_base, &preflight_file_name);
+		let output_sourcemap = output.get_sourcemap(source_path.as_str(), source_content, &preflight_file_name);
 
 		// Emit the file
 		match self

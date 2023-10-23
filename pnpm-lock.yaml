@@ -327,6 +327,9 @@ importers:
       ora:
         specifier: ^5.4.1
         version: 5.4.1
+      stacktracey:
+        specifier: ^2.1.8
+        version: 2.1.8
       tar:
         specifier: ^6.2.0
         version: 6.2.0
@@ -1142,6 +1145,9 @@ importers:
       '@winglang/sdk':
         specifier: workspace:^
         version: link:../wingsdk
+      stacktracey:
+        specifier: ^2.1.8
+        version: 2.1.8
       wasi-js:
         specifier: ^1.7.3
         version: 1.7.3(patch_hash=rmwvp46j2ligfusbdx5dzh4a3q)
@@ -13446,7 +13452,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20231022
+      typescript: 5.3.0-dev.20231023
     dev: true
 
   /dset@3.1.2:
@@ -22907,8 +22913,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20231022:
-    resolution: {integrity: sha512-g8ICZidqxW5HGoyFFTyMvbHd4EbZlTSXILKT71uyPagM4asj/3JRaOw0A+xgHSf4PrLHAGAbJ7P/JgtbgZNgcw==}
+  /typescript@5.3.0-dev.20231023:
+    resolution: {integrity: sha512-epSBdrSFF5apIzARZXsSC0BlNVGy7UO7FL1UJIKNDUIZuzlHVDFoAx1wAmV+dNn9AyIUY8LSion0D6QoIx5Dzw==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
