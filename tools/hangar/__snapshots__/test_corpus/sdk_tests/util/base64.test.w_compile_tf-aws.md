@@ -13,9 +13,9 @@ module.exports = function({ $util_Util }) {
     async handle() {
       const string = "https://www.winglang.io/docs";
       const base64Encode = (await $util_Util.base64Encode(string));
-      const base64urlEncode = (await $util_Util.base64Encode(string,true));
+      const base64urlEncode = (await $util_Util.base64Encode(string, true));
       const base64Decode = (await $util_Util.base64Decode("aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw=="));
-      const base64urlDecode = (await $util_Util.base64Decode("aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw",true));
+      const base64urlDecode = (await $util_Util.base64Decode("aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw", true));
       {((cond) => {if (!cond) throw new Error("assertion failed: base64Encode == \"aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw==\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(base64Encode,"aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw==")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: base64urlEncode == \"aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(base64urlEncode,"aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: base64Decode == string")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(base64Decode,string)))};
@@ -69,11 +69,11 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -100,14 +100,14 @@ class $Root extends $stdlib.std.Resource {
     }
     const string = "https://www.winglang.io/docs";
     const base64Encode = (util.Util.base64Encode(string));
-    const base64urlEncode = (util.Util.base64Encode(string,true));
+    const base64urlEncode = (util.Util.base64Encode(string, true));
     const base64Decode = (util.Util.base64Decode("aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw=="));
-    const base64urlDecode = (util.Util.base64Decode("aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw",true));
+    const base64urlDecode = (util.Util.base64Decode("aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw", true));
     {((cond) => {if (!cond) throw new Error("assertion failed: base64Encode == \"aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw==\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(base64Encode,"aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw==")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: base64urlEncode == \"aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(base64urlEncode,"aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: base64Decode == string")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(base64Decode,string)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: base64urlDecode == string")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(base64urlDecode,string)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight base64",new $Closure1(this,"$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight base64", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

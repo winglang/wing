@@ -31,7 +31,7 @@ module.exports = function({ $b, $fileName, $getJson, $j }) {
       return $obj;
     }
     async handle() {
-      (await $b.putJson($fileName,$j));
+      (await $b.putJson($fileName, $j));
       (await $getJson.invoke(""));
     }
   }
@@ -197,11 +197,11 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -235,8 +235,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -273,11 +273,11 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
     const fileName = "file.json";
     const j = ({"persons": [({"age": 30,"name": "hasan","fears": ["heights", "failure"]})]});
-    const getJson = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $Closure1(this,"$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:put",new $Closure2(this,"$Closure2"));
+    const getJson = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "cloud.Function", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:put", new $Closure2(this, "$Closure2"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

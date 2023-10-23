@@ -46,8 +46,8 @@ module.exports = function({  }) {
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   class Assert extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
+    constructor($scope, $id, ) {
+      super($scope, $id);
     }
     static _toInflightType(context) {
       return `
