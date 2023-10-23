@@ -11,16 +11,16 @@ module.exports = function({ $from, $fs_Util, $regex_Util, $to }) {
       return $obj;
     }
     async handle() {
-      let result = (await $fs_Util.join($from,$to));
+      let result = (await $fs_Util.join($from, $to));
       {((cond) => {if (!cond) throw new Error("assertion failed: result == \"/a/b/c/d/a/b/e/f\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(result,"/a/b/c/d/a/b/e/f")))};
-      result = (await $fs_Util.relative($from,$to));
+      result = (await $fs_Util.relative($from, $to));
       {((cond) => {if (!cond) throw new Error("assertion failed: result == \"../../e/f\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(result,"../../e/f")))};
       result = (await $fs_Util.dirname($from));
       {((cond) => {if (!cond) throw new Error("assertion failed: result == \"/a/b/c\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(result,"/a/b/c")))};
       result = (await $fs_Util.basename($from));
       {((cond) => {if (!cond) throw new Error("assertion failed: result == \"d\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(result,"d")))};
-      result = (await $fs_Util.resolve($from,$to));
-      {((cond) => {if (!cond) throw new Error("assertion failed: regex.match(\"/a/b/e/f\", result)")})((await $regex_Util.match("/a/b/e/f",result)))};
+      result = (await $fs_Util.resolve($from, $to));
+      {((cond) => {if (!cond) throw new Error("assertion failed: regex.match(\"/a/b/e/f\", result)")})((await $regex_Util.match("/a/b/e/f", result)))};
     }
   }
   return $Closure1;
@@ -71,11 +71,11 @@ const std = $stdlib.std;
 const fs = $stdlib.fs;
 const regex = $stdlib.regex;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -112,17 +112,17 @@ class $Root extends $stdlib.std.Resource {
     }
     const from = "/a/b/c/d";
     const to = "/a/b/e/f";
-    let result = (fs.Util.join(from,to));
+    let result = (fs.Util.join(from, to));
     {((cond) => {if (!cond) throw new Error("assertion failed: result == \"/a/b/c/d/a/b/e/f\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(result,"/a/b/c/d/a/b/e/f")))};
-    result = (fs.Util.relative(from,to));
+    result = (fs.Util.relative(from, to));
     {((cond) => {if (!cond) throw new Error("assertion failed: result == \"../../e/f\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(result,"../../e/f")))};
     result = (fs.Util.dirname(from));
     {((cond) => {if (!cond) throw new Error("assertion failed: result == \"/a/b/c\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(result,"/a/b/c")))};
     result = (fs.Util.basename(from));
     {((cond) => {if (!cond) throw new Error("assertion failed: result == \"d\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(result,"d")))};
-    result = (fs.Util.resolve(from,to));
-    {((cond) => {if (!cond) throw new Error("assertion failed: regex.match(\"/a/b/e/f\", result)")})((regex.Util.match("/a/b/e/f",result)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight path conversion",new $Closure1(this,"$Closure1"));
+    result = (fs.Util.resolve(from, to));
+    {((cond) => {if (!cond) throw new Error("assertion failed: regex.match(\"/a/b/e/f\", result)")})((regex.Util.match("/a/b/e/f", result)))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight path conversion", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
