@@ -11,7 +11,7 @@ module.exports = function({ $__parent_this_1_b }) {
       return $obj;
     }
     async handle() {
-      (await $__parent_this_1_b.put("data.txt","<empty>"));
+      (await $__parent_this_1_b.put("data.txt", "<empty>"));
     }
   }
   return $Closure1;
@@ -28,7 +28,7 @@ module.exports = function({  }) {
       this.$this_b = $this_b;
     }
     async store(data) {
-      (await this.$this_b.put("data.txt",data));
+      (await this.$this_b.put("data.txt", data));
     }
   }
   return Store;
@@ -68,8 +68,8 @@ module.exports = function({ $stdlib }) {
   const math = $stdlib.math;
   const cloud = $stdlib.cloud;
   class Util extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
+    constructor($scope, $id, ) {
+      super($scope, $id);
     }
     static _toInflightType(context) {
       return `
@@ -93,13 +93,13 @@ module.exports = function({ $stdlib }) {
     }
   }
   class Store extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
-      this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+    constructor($scope, $id, ) {
+      super($scope, $id);
+      this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
       const __parent_this_1 = this;
       class $Closure1 extends $stdlib.std.Resource {
-        constructor(scope, id, ) {
-          super(scope, id);
+        constructor($scope, $id, ) {
+          super($scope, $id);
           (std.Node.of(this)).hidden = true;
         }
         static _toInflightType(context) {
@@ -130,7 +130,7 @@ module.exports = function({ $stdlib }) {
           super._registerOnLift(host, ops);
         }
       }
-      const prefill = this.node.root.newAbstract("@winglang/sdk.cloud.OnDeploy",this,"cloud.OnDeploy",new $Closure1(this,"$Closure1"));
+      const prefill = this.node.root.newAbstract("@winglang/sdk.cloud.OnDeploy",this, "cloud.OnDeploy", new $Closure1(this, "$Closure1"));
     }
     static _toInflightType(context) {
       return `

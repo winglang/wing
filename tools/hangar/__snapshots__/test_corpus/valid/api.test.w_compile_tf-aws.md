@@ -439,11 +439,11 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -476,8 +476,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -509,13 +509,13 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class A extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        this.api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        this.api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
         const __parent_this_3 = this;
         class $Closure3 extends $stdlib.std.Resource {
-          constructor(scope, id, ) {
-            super(scope, id);
+          constructor($scope, $id, ) {
+            super($scope, $id);
             (std.Node.of(this)).hidden = true;
           }
           static _toInflightType(context) {
@@ -546,7 +546,7 @@ class $Root extends $stdlib.std.Resource {
             super._registerOnLift(host, ops);
           }
         }
-        (this.api.get("/endpoint1",new $Closure3(this,"$Closure3")));
+        (this.api.get("/endpoint1", new $Closure3(this, "$Closure3")));
       }
       static _toInflightType(context) {
         return `
@@ -569,12 +569,12 @@ class $Root extends $stdlib.std.Resource {
         return ["$inflight_init"];
       }
     }
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
-    const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
-    const handler = new $Closure1(this,"$Closure1");
-    (api.get("/hello/world",handler));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:api url",new $Closure2(this,"$Closure2"));
-    new A(this,"A");
+    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
+    const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter");
+    const handler = new $Closure1(this, "$Closure1");
+    (api.get("/hello/world", handler));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:api url", new $Closure2(this, "$Closure2"));
+    new A(this, "A");
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

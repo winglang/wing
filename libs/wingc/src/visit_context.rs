@@ -81,12 +81,10 @@ impl VisitContext {
 
 	pub fn push_class(&mut self, class: &Class) {
 		self.class.push(UserDefinedType::for_class(class));
-		self.push_phase(class.phase);
 	}
 
 	pub fn pop_class(&mut self) {
 		self.class.pop();
-		self.pop_phase();
 	}
 
 	pub fn current_class(&self) -> Option<&UserDefinedType> {
@@ -229,6 +227,13 @@ pub trait VisitorWithContext {
 		self.ctx().push_function_definition(function_name, sig, env);
 		let res = f(self);
 		self.ctx().pop_function_definition();
+		res
+	}
+
+	fn with_class<T>(&mut self, class: &Class, f: impl FnOnce(&mut Self) -> T) -> T {
+		self.ctx().push_class(class);
+		let res = f(self);
+		self.ctx().pop_class();
 		res
 	}
 }

@@ -14,21 +14,21 @@ module.exports = function({ $data, $fs_Util, $regex_Util, $std_Json }) {
       const tmpdir = (await $fs_Util.mkdtemp());
       const filepath = String.raw({ raw: ["", "/test-inflight.json"] }, tmpdir);
       try {
-        (await $fs_Util.writeFile(filepath,"invalid content"));
+        (await $fs_Util.writeFile(filepath, "invalid content"));
         (await $fs_Util.readJson(filepath));
       }
       catch ($error_e) {
         const e = $error_e.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: regex.match(\"^Unexpected token\", e) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $regex_Util.match("^Unexpected token",e)),true)))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: regex.match(\"^Unexpected token\", e) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $regex_Util.match("^Unexpected token", e)),true)))};
       }
-      (await $fs_Util.writeJson(filepath,$data));
+      (await $fs_Util.writeJson(filepath, $data));
       {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(filepath) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists(filepath)),true)))};
       const obj = (await $fs_Util.readJson(filepath));
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(obj) == Json.stringify(data)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([obj]),((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$data]))))};
       (await $fs_Util.remove(filepath));
       {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(filepath) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists(filepath)),false)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: fs.tryReadJson(filepath) == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.tryReadJson(filepath)),undefined)))};
-      (await $fs_Util.remove(tmpdir,({"recursive": true})));
+      (await $fs_Util.remove(tmpdir, ({"recursive": true})));
       {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(tmpdir) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists(tmpdir)),false)))};
     }
   }
@@ -80,11 +80,11 @@ const std = $stdlib.std;
 const fs = $stdlib.fs;
 const regex = $stdlib.regex;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -122,23 +122,23 @@ class $Root extends $stdlib.std.Resource {
     const filepath = String.raw({ raw: ["", "/test-preflight.json"] }, tmpdir);
     const data = ({"foo": "bar","arr": [1, 2, 3, "test", ({"foo": "bar"})]});
     try {
-      (fs.Util.writeFile(filepath,"invalid content"));
+      (fs.Util.writeFile(filepath, "invalid content"));
       (fs.Util.readJson(filepath));
     }
     catch ($error_e) {
       const e = $error_e.message;
-      {((cond) => {if (!cond) throw new Error("assertion failed: regex.match(\"^Unexpected token\", e) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((regex.Util.match("^Unexpected token",e)),true)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: regex.match(\"^Unexpected token\", e) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((regex.Util.match("^Unexpected token", e)),true)))};
     }
-    (fs.Util.writeJson(filepath,data));
+    (fs.Util.writeJson(filepath, data));
     {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(filepath) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.exists(filepath)),true)))};
     const obj = (fs.Util.readJson(filepath));
     {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(obj) == Json.stringify(data)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([obj]),((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([data]))))};
     (fs.Util.remove(filepath));
     {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(filepath) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.exists(filepath)),false)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: fs.tryReadJson(filepath) == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.tryReadJson(filepath)),undefined)))};
-    (fs.Util.remove(tmpdir,({"recursive": true})));
+    (fs.Util.remove(tmpdir, ({"recursive": true})));
     {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(tmpdir) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.exists(tmpdir)),false)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight json operations",new $Closure1(this,"$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight json operations", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
