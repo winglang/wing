@@ -208,6 +208,8 @@ export abstract class App extends Construct {
    * Can be overridden by derived classes to inject dependencies.
    *
    * @param fqn The fully qualified name of the class we want the type for (jsii).
+   * 
+   * @returns The dependency injected specific target type for the given FQN, or undefined if not found.
    */
   protected typeForFqn(fqn: string): any {
     fqn;
