@@ -4487,7 +4487,7 @@ impl<'a> TypeChecker<'a> {
 		let jsii = if let Some(jsii) = self
 			.jsii_imports
 			.iter()
-			.find(|j| j.assembly_name == library_name && j.alias.name == alias.name)
+			.find(|j| j.assembly_name == library_name && j.alias.same(alias))
 		{
 			// This spec has already been pre-supplied to the typechecker, so we'll still use this to populate the symbol environment
 			jsii
@@ -4542,7 +4542,7 @@ impl<'a> TypeChecker<'a> {
 			self
 				.jsii_imports
 				.iter()
-				.find(|j| j.assembly_name == assembly_name && j.alias.name == alias.name)
+				.find(|j| j.assembly_name == assembly_name && j.alias.same(alias))
 				.expect("Expected to find the just-added jsii import spec")
 		};
 
