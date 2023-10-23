@@ -112,11 +112,11 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -141,8 +141,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -167,8 +167,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -193,8 +193,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class C extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       my_method(x) {
       }
@@ -229,9 +229,9 @@ class $Root extends $stdlib.std.Resource {
     });
     const my_func4 = ((x) => {
     });
-    const my_func5 = new $Closure1(this,"$Closure1");
-    const my_func6 = new $Closure2(this,"$Closure2");
-    const my_func7 = new $Closure3(this,"$Closure3");
+    const my_func5 = new $Closure1(this, "$Closure1");
+    const my_func6 = new $Closure2(this, "$Closure2");
+    const my_func7 = new $Closure3(this, "$Closure3");
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
