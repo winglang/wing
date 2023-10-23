@@ -93,6 +93,6 @@ class MyFoo extends Foo {
   }
 }
 
-abstract class BarBase extends Construct { }
+abstract class BarBase extends Construct {}
 
-class Bar extends BarBase { }
+class Bar extends BarBase {}
