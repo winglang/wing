@@ -3071,6 +3071,11 @@ impl<'a> TypeChecker<'a> {
 				self.types.add_type(Type::Optional(value_type))
 			}
 			TypeAnnotationKind::Function(ast_sig) => {
+				let last_non_optional_index = ast_sig.parameters.iter().rposition(|p| match p.type_annotation.kind {
+					TypeAnnotationKind::Optional(_) => false,
+					_ => !p.variadic,
+				});
+
 				let mut parameters = vec![];
 				for i in 0..ast_sig.parameters.len() {
 					let p = ast_sig.parameters.get(i).unwrap();
@@ -3088,6 +3093,16 @@ impl<'a> TypeChecker<'a> {
 								&ast_sig.parameters.get(i).unwrap().name.span,
 								"Variadic parameters must be type Array or MutArray.".to_string(),
 							),
+						};
+					}
+
+					if last_non_optional_index.is_some_and(|li| i <= li) {
+						match &p.type_annotation.kind {
+							TypeAnnotationKind::Optional(_) => self.spanned_error(
+								&ast_sig.parameters.get(i).unwrap().name.span,
+								"Optional parameters must always be after all non-optional parameters.".to_string(),
+							),
+							_ => {}
 						};
 					}
 				}
