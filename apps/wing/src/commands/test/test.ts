@@ -259,7 +259,8 @@ async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.T
       // get the file name to concat with stack name
       const match = synthDir.match(/\/(\w+)\./);
       if (match) {
-        stackName += "-" + match[1];
+        // remove special characters from file name
+        stackName += "-" + match[1].replace(/[^a-zA-Z0-9]/g, '');
       }
 
       const testArns = await awsCdkOutput(
