@@ -218,7 +218,7 @@ fn render_signature_help(f: &FunctionSignature) -> String {
 		let is_last = param_idx == f.parameters.len() - 1;
 
 		let param_name = if param.name.is_empty() {
-			param_idx.to_string()
+			format!("arg{}", param_idx)
 		} else {
 			param.name.clone()
 		};
