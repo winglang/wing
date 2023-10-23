@@ -459,7 +459,7 @@ fn get_current_scope_completions(
 	// by default assume being after a colon means we're looking for a type, but this is not always true
 	let mut in_type = preceding_text.ends_with(':');
 
-	// This is either a top-
+	// This is top-level or inside a block where a statement is expected
 	let at_scope_level = matches!(node_to_complete.kind(), "source" | "block");
 
 	match node_to_complete.kind() {
