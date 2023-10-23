@@ -4,6 +4,8 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as core from "../core";
 import * as ex from "../ex";
+import { ResourceNames } from "../shared/resource-names";
+import { NAME_OPTS } from "../shared-aws/dynamodb-table";
 import { calculateDynamodbTablePermissions } from "../shared-aws/permissions";
 import { IInflightHost } from "../std";
 
@@ -21,6 +23,10 @@ export class DynamodbTable extends ex.DynamodbTable {
     const attributeDefinitions = props.attributeDefinitions as any;
 
     this.table = new Table(this, "Default", {
+      tableName: ResourceNames.generateName(this, {
+        prefix: this.name,
+        ...NAME_OPTS,
+      }),
       partitionKey: {
         name: props.hashKey,
         type: attributeDefinitions[props.hashKey] as AttributeType,

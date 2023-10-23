@@ -3,18 +3,10 @@ import { Function } from "./function";
 import { DynamodbTable as AwsDynamodbTable } from "../.gen/providers/aws/dynamodb-table";
 import * as core from "../core";
 import * as ex from "../ex";
-import { NameOptions, ResourceNames } from "../shared/resource-names";
+import { ResourceNames } from "../shared/resource-names";
+import { NAME_OPTS } from "../shared-aws/dynamodb-table";
 import { calculateDynamodbTablePermissions } from "../shared-aws/permissions";
 import { IInflightHost } from "../std";
-
-/**
- * Table names must be between 3 and 255 characters.
- * You can use alphanumeric characters, dot (.), dash (-), and underscores (_).
- */
-const NAME_OPTS: NameOptions = {
-  maxLen: 255,
-  disallowedRegex: /[^a-zA-Z0-9\_\.\-]+/g,
-};
 
 /**
  * AWS implementation of `ex.DynamodbTable`.
