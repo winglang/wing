@@ -100,7 +100,6 @@ export class Api extends cloud.Api implements ISimulatorResource {
     inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiGetProps | undefined
   ): void {
-    console.log("get sim", path, inflight, props);
     this.addEndpoint(path, cloud.HttpMethod.GET, inflight, props);
   }
 

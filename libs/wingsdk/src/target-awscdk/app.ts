@@ -149,9 +149,7 @@ export class App extends CoreApp {
     return this.synthedOutput;
   }
 
-  protected typeForFqn(
-    fqn: string,
-  ): any {
+  protected typeForFqn(fqn: string): any {
     switch (fqn) {
       case FUNCTION_FQN:
         return Function;
@@ -172,16 +170,16 @@ export class App extends CoreApp {
         return Topic;
 
       case TEST_RUNNER_FQN:
-        return TestRunner(scope, id, args[0]);
+        return TestRunner;
 
       case SECRET_FQN:
-        return Secret(scope, id, args[0]);
+        return Secret;
 
       case ON_DEPLOY_FQN:
-        return OnDeploy(scope, id, args[0], args[1]);
+        return OnDeploy;
 
       case WEBSITE_FQN:
-        return Website(scope, id, args[0]);
+        return Website;
     }
     return undefined;
   }

@@ -1211,11 +1211,22 @@ impl<'a> JSifier<'a> {
 			// TODO: why would we want to do this for inflight classes?? maybe return here in that case?
 			let mut code = CodeMaker::default();
 
-			// default base class for preflight classes is `core.Resource`
 			let extends = if let Some(parent) = &class.parent {
-				format!(" extends {}", self.jsify_user_defined_type(parent, ctx))
+				// If this is an imported type (with an package fqn) attemp to go through the stdlib target dep-injection mechanism
+				let parent_type = env
+					.lookup_nested_str(&parent.full_path_str(), None)
+					.unwrap()
+					.0
+					.as_type()
+					.unwrap();
+				if let Some(fqn) = &parent_type.as_class().unwrap().fqn {
+					format!(" extends (this.node.root.typeForFqn(\"{fqn}\") || {parent})")
+				} else {
+					format!(" extends {}", self.jsify_user_defined_type(&parent, ctx))
+				}
 			} else {
-				format!(" extends {}", STDLIB_CORE_RESOURCE)
+				// default base class for preflight classes is `core.Resource`
+				format!(" extends {STDLIB_CORE_RESOURCE}")
 			};
 
 			code.open(format!("class {}{extends} {{", class.name));

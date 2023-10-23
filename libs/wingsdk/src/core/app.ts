@@ -229,6 +229,9 @@ export abstract class App extends Construct {
     ...args: any[]
   ): any {
     const type = this.typeForFqn(fqn);
+    if (!type) {
+      return undefined;
+    }
     return new type(scope, id, ...args);
   }
 
