@@ -41,10 +41,12 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     const x = 2;
     const y = x;
+    const id = 1;
+    const scope = id;
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
