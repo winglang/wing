@@ -255,7 +255,6 @@ async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.T
     await withSpinner("cdk deploy", () => awsCdkDeploy(synthDir));
 
     const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
-
       let stackName = process.env.CDK_STACK_NAME!;
       // get the file name to concat with stack name
       const match = synthDir.match(/\/(\w+)\./);
