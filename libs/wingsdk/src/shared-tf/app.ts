@@ -67,12 +67,7 @@ export abstract class CdktfApp extends App {
       ...args: any[]
     ) => this.new(fqn, ctor, scope, id, ...args);
 
-    (cdktfApp as any).newAbstract = (
-      fqn: string,
-      scope: Construct,
-      id: string,
-      ...args: any[]
-    ) => this.newAbstract(fqn, scope, id, ...args);
+    (cdktfApp as any).typeForFqn = (fqn: string) => this.typeForFqn(fqn);
 
     this.pluginManager = new PluginManager(props.plugins ?? []);
 
