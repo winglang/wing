@@ -163,6 +163,6 @@ test("bucket onEvent is not implemented yet", () => {
 
   // THEN
   expect(error).toBe(
-    "on_event method isn't implemented yet on the current target."
+    "onEvent method isn't implemented yet on the current target."
   );
 });

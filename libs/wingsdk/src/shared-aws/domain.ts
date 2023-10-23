@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { getPlatformSpecificValues } from "../util/platform-specific";
 import { NotImplementedError } from "../core/errors";
+import { getPlatformSpecificValues } from "../util/platform-specific";
 
 /**
  * AWS implementation of `cloud.Domain`.

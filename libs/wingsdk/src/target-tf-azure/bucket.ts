@@ -13,13 +13,13 @@ import {
   IBucketEventHandler,
 } from "../cloud";
 import * as core from "../core";
+import { NotImplementedError } from "../core/errors";
 import {
   CaseConventions,
   NameOptions,
   ResourceNames,
 } from "../shared/resource-names";
 import { IInflightHost } from "../std";
-import { NotImplementedError } from "../core/errors";
 
 /**
  * Bucket names must be between 3 and 63 characters.

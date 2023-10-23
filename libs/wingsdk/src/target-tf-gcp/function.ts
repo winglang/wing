@@ -6,6 +6,7 @@ import { Bucket, addBucketPermission } from "./bucket";
 import { CloudfunctionsFunction } from "../.gen/providers/google/cloudfunctions-function";
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
 import * as cloud from "../cloud";
+import { NotImplementedError } from "../core/errors";
 import { createBundle } from "../shared/bundling";
 import {
   CaseConventions,
@@ -13,7 +14,6 @@ import {
   ResourceNames,
 } from "../shared/resource-names";
 import { IInflightHost, IResource } from "../std";
-import { NotImplementedError } from "../core/errors";
 
 const FUNCTION_NAME_OPTS: NameOptions = {
   maxLen: 32,

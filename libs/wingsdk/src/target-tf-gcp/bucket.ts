@@ -11,13 +11,13 @@ import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-obj
 import { Id } from "../.gen/providers/random/id";
 import * as cloud from "../cloud";
 import { InflightClient } from "../core";
+import { NotImplementedError } from "../core/errors";
 import {
   CaseConventions,
   NameOptions,
   ResourceNames,
 } from "../shared/resource-names";
 import { IInflightHost } from "../std";
-import { NotImplementedError } from "../core/errors";
 
 /**
  * Bucket names must be between 3 and 63 characters. We reserve 9 characters for

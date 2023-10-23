@@ -11,6 +11,7 @@ import {
   BigtableTableConfig,
   BigtableTableColumnFamily,
 } from "../.gen/providers/google/bigtable-table";
+import { NotImplementedError } from "../core/errors";
 import * as ex from "../ex";
 import {
   ResourceNames,
@@ -18,7 +19,6 @@ import {
   CaseConventions,
 } from "../shared/resource-names";
 import { IInflightHost, Json } from "../std";
-import { NotImplementedError } from "../core/errors";
 
 const TABLE_NAME_OPTS: NameOptions = {
   maxLen: 22,

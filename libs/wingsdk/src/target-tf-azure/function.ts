@@ -12,6 +12,7 @@ import { ServicePlan } from "../.gen/providers/azurerm/service-plan";
 import { StorageAccount } from "../.gen/providers/azurerm/storage-account";
 import { StorageBlob } from "../.gen/providers/azurerm/storage-blob";
 import * as cloud from "../cloud";
+import { NotImplementedError } from "../core/errors";
 import { createBundle } from "../shared/bundling";
 import {
   CaseConventions,
@@ -19,7 +20,6 @@ import {
   ResourceNames,
 } from "../shared/resource-names";
 import { IInflightHost, IResource } from "../std";
-import { NotImplementedError } from "../core/errors";
 
 /**
  * Function names are limited to 32 characters.
