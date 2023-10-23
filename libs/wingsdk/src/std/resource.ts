@@ -1,10 +1,10 @@
 import { Construct, IConstruct } from "constructs";
 import { Duration } from "./duration";
 import { App } from "../core";
+import { NotImplementedError } from "../core/errors";
 import { liftObject } from "../core/internal";
 import { log } from "../shared/log";
 import { Node } from "../std";
-import { NotImplementedError } from "../core/errors";
 
 /**
  * A resource that can run inflight code.
