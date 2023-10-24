@@ -5,6 +5,7 @@ import { basename, resolve, sep } from "path";
 import { promisify } from "util";
 import { Target } from "@winglang/compiler";
 import { std, simulator } from "@winglang/sdk";
+import { Util } from "@winglang/sdk/lib/util";
 import chalk from "chalk";
 import debug from "debug";
 import { glob } from "glob";
@@ -255,13 +256,7 @@ async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.T
     await withSpinner("cdk deploy", () => awsCdkDeploy(synthDir));
 
     const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
-      let stackName = process.env.CDK_STACK_NAME!;
-      // get the file name to concat with stack name
-      const match = synthDir.match(/\/(\w+)\./);
-      if (match) {
-        // remove special characters from file name
-        stackName += "-" + match[1].replace(/[^a-zA-Z0-9]/g, "");
-      }
+      const stackName = process.env.CDK_STACK_NAME! + Util.sha256(synthDir).slice(-8);
 
       const testArns = await awsCdkOutput(
         synthDir,

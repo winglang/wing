@@ -38,6 +38,7 @@ import {
 import { PluginManager } from "../core/plugin-manager";
 import { DYNAMODB_TABLE_FQN } from "../ex";
 import { TEST_RUNNER_FQN } from "../std";
+import { Util } from "../util";
 
 /**
  * AWS-CDK App props
@@ -84,10 +85,7 @@ export class App extends CoreApp {
     const cdkOutdir = join(outdir, ".");
 
     if (props.isTestEnvironment) {
-      const match = outdir.match(/\/(\w+)\./);
-      if (match) {
-        stackName += "-" + match[1].replace(/[^a-zA-Z0-9]/g, "");
-      }
+      stackName += Util.sha256(outdir.replace(/\.tmp$/, "")).slice(-8);
     }
 
     mkdirSync(cdkOutdir, { recursive: true });
