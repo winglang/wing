@@ -175,8 +175,8 @@ impl<'a> JSifier<'a> {
 		if is_entrypoint {
 			let mut root_class = CodeMaker::default();
 			root_class.open(format!("class {} extends {} {{", ROOT_CLASS, STDLIB_CORE_RESOURCE));
-			root_class.open(format!("{JS_CONSTRUCTOR}(scope, id) {{"));
-			root_class.line("super(scope, id);");
+			root_class.open(format!("{JS_CONSTRUCTOR}($scope, $id) {{"));
+			root_class.line("super($scope, $id);");
 			root_class.add_code(self.jsify_struct_schemas());
 			root_class.add_code(js);
 			root_class.close("}");
@@ -359,7 +359,7 @@ impl<'a> JSifier<'a> {
 		if args.is_empty() {
 			"".to_string()
 		} else {
-			args.join(",")
+			args.join(", ")
 		}
 	}
 
@@ -841,7 +841,7 @@ impl<'a> JSifier<'a> {
 				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
 				match parent_class_phase(ctx) {
 					Phase::Inflight => code.line(format!("await this.super_{CLASS_INFLIGHT_INIT_NAME}?.({args});")),
-					Phase::Preflight => code.line(format!("super(scope,id,{args});")),
+					Phase::Preflight => code.line(format!("super($scope, $id, {args});")),
 					Phase::Independent => {
 						// If our parent is phase independent then we don't call its super, instead a call to its super will be
 						// generated in `jsify_inflight_init` when we generate the inflight init for this class.
@@ -1210,11 +1210,22 @@ impl<'a> JSifier<'a> {
 			// TODO: why would we want to do this for inflight classes?? maybe return here in that case?
 			let mut code = CodeMaker::default();
 
-			// default base class for preflight classes is `core.Resource`
 			let extends = if let Some(parent) = &class.parent {
-				format!(" extends {}", self.jsify_user_defined_type(parent, ctx))
+				// If this is an imported type (with a package fqn) attemp to go through the stdlib target dep-injection mechanism
+				let parent_type = env
+					.lookup_nested_str(&parent.full_path_str(), None)
+					.unwrap()
+					.0
+					.as_type()
+					.unwrap();
+				if let Some(fqn) = &parent_type.as_class().unwrap().fqn {
+					format!(" extends (this.node.root.typeForFqn(\"{fqn}\") ?? {parent})")
+				} else {
+					format!(" extends {}", self.jsify_user_defined_type(&parent, ctx))
+				}
 			} else {
-				format!(" extends {}", STDLIB_CORE_RESOURCE)
+				// default base class for preflight classes is `core.Resource`
+				format!(" extends {STDLIB_CORE_RESOURCE}")
 			};
 
 			code.open(format!("class {}{extends} {{", class.name));
@@ -1245,7 +1256,7 @@ impl<'a> JSifier<'a> {
 	fn jsify_preflight_constructor(&self, class: &AstClass, ctx: &mut JSifyContext) -> CodeMaker {
 		let mut code = CodeMaker::default();
 		code.open(format!(
-			"constructor(scope, id, {}) {{",
+			"{JS_CONSTRUCTOR}($scope, $id, {}) {{",
 			class
 				.initializer
 				.signature
@@ -1273,7 +1284,7 @@ impl<'a> JSifier<'a> {
 		// we always need a super() call because even if the class doesn't have an explicit parent, it
 		// will inherit from core.Resource.
 		if !super_called {
-			body_code.line("super(scope, id);");
+			body_code.line("super($scope, $id);");
 		}
 		body_code.add_code(self.jsify_scope_body(&init_statements, ctx));
 

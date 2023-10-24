@@ -1,4 +1,3 @@
-import { Construct } from "constructs";
 import { Bucket } from "./bucket";
 import { Function } from "./function";
 import { APP_AZURE_TF_SYMBOL } from "./internal";
@@ -174,21 +173,16 @@ export class App extends CdktfApp {
     return this._servicePlan;
   }
 
-  protected tryNew(
-    fqn: string,
-    scope: Construct,
-    id: string,
-    ...args: any[]
-  ): any {
+  protected typeForFqn(fqn: string): any {
     switch (fqn) {
       case TEST_RUNNER_FQN:
-        return new TestRunner(scope, id, args[0]);
+        return TestRunner;
 
       case FUNCTION_FQN:
-        return new Function(scope, id, args[0], args[1]);
+        return Function;
 
       case BUCKET_FQN:
-        return new Bucket(scope, id, args[0]);
+        return Bucket;
     }
 
     return undefined;

@@ -31,7 +31,7 @@ module.exports = function({ $myutil_Util }) {
       return (require("<ABSOLUTE_PATH>/util.js")["makeKeyInflight"])(name)
     }
     async set(message) {
-      (await this.$this_data.put("data.txt",(await $myutil_Util.double(message))));
+      (await this.$this_data.put("data.txt", (await $myutil_Util.double(message))));
     }
   }
   return Store;
@@ -128,11 +128,11 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const fixture = require("./preflight.wingfixture-5.js")({ $stdlib });
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -163,10 +163,10 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    new fixture.Store(this,"fixture.Store");
+    new fixture.Store(this, "fixture.Store");
     const fave_num = fixture.FavoriteNumbers.SEVEN;
     {((cond) => {if (!cond) throw new Error("assertion failed: fixture.Store.makeKey(\"hello\") == \"data/hello.json\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fixture.Store.makeKey("hello")),"data/hello.json")))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:makeKeyInflight",new $Closure1(this,"$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:makeKeyInflight", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
@@ -182,9 +182,9 @@ module.exports = function({ $stdlib }) {
   const cloud = $stdlib.cloud;
   const myutil = require("./preflight.util-2.js")({ $stdlib });
   class Store extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
-      this.data = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+    constructor($scope, $id, ) {
+      super($scope, $id);
+      this.data = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
     }
     static makeKey(name) {
       return (require("<ABSOLUTE_PATH>/util.js")["makeKey"])(name)
@@ -245,8 +245,8 @@ module.exports = function({ $stdlib }) {
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   class Util extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
+    constructor($scope, $id, ) {
+      super($scope, $id);
     }
     static _toInflightType(context) {
       return `
