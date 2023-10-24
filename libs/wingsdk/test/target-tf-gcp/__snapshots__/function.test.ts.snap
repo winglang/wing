@@ -21,6 +21,7 @@ exports[`basic function 1`] = `
     },
     "google_storage_bucket": {
       "Function_FunctionBucket_CD7D2793": {
+        "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
         "public_access_prevention": "enforced",
@@ -208,6 +209,7 @@ exports[`basic function with environment variables 1`] = `
     },
     "google_storage_bucket": {
       "Function_FunctionBucket_CD7D2793": {
+        "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
         "public_access_prevention": "enforced",
@@ -394,6 +396,7 @@ exports[`basic function with memory size specified 1`] = `
     },
     "google_storage_bucket": {
       "Function_FunctionBucket_CD7D2793": {
+        "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
         "public_access_prevention": "enforced",
@@ -580,6 +583,7 @@ exports[`basic function with timeout explicitly set 1`] = `
     },
     "google_storage_bucket": {
       "Function_FunctionBucket_CD7D2793": {
+        "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
         "public_access_prevention": "enforced",
