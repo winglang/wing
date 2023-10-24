@@ -11,7 +11,7 @@ module.exports = function({ $bucket1, $bucket2, $bucket3 }) {
       return $obj;
     }
     async handle(event) {
-      (await $bucket1.put("file.txt","data"));
+      (await $bucket1.put("file.txt", "data"));
       (await $bucket2.get("file.txt"));
       (await $bucket2.get("file2.txt"));
       (await $bucket3.get("file3.txt"));
@@ -599,11 +599,11 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -639,8 +639,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -671,18 +671,18 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const bucket1 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    const bucket2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"PublicBucket",({"public": true}));
-    const bucket3 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"PrivateBucket",{ public: false });
-    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
-    const handler = new $Closure1(this,"$Closure1");
-    (queue.setConsumer(handler,{ batchSize: 5 }));
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",handler,{ env: ({}) });
+    const bucket1 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+    const bucket2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "PublicBucket", ({"public": true}));
+    const bucket3 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "PrivateBucket", { public: false });
+    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue");
+    const handler = new $Closure1(this, "$Closure1");
+    (queue.setConsumer(handler, { batchSize: 5 }));
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "cloud.Function", handler, { env: ({}) });
     const emptyEnv = ({});
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"AnotherFunction",handler,{ env: emptyEnv });
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "AnotherFunction", handler, { env: emptyEnv });
     const headers = ({"my-fancy-header": "my-fancy-value","not-even-real\"": "wow` !"});
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
-    (api.get("/hello",new $Closure2(this,"$Closure2")));
+    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
+    (api.get("/hello", new $Closure2(this, "$Closure2")));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

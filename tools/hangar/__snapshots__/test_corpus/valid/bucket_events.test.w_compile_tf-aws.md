@@ -68,7 +68,7 @@ module.exports = function({ $other }) {
       return $obj;
     }
     async handle(key, event) {
-      (await $other.put(String.raw({ raw: ["last_", "_key"] }, event),key));
+      (await $other.put(String.raw({ raw: ["last_", "_key"] }, event), key));
     }
   }
   return $Closure4;
@@ -106,10 +106,10 @@ module.exports = function({ $b }) {
       return $obj;
     }
     async handle() {
-      (await $b.put("a","1"));
-      (await $b.put("b","1"));
-      (await $b.put("b","100"));
-      (await $b.put("c","1"));
+      (await $b.put("a", "1"));
+      (await $b.put("b", "1"));
+      (await $b.put("b", "100"));
+      (await $b.put("c", "1"));
       (await $b.delete("c"));
     }
   }
@@ -1324,11 +1324,11 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -1353,8 +1353,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -1379,8 +1379,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -1405,8 +1405,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -1438,8 +1438,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure5 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -1464,8 +1464,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure6 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -1496,14 +1496,14 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const other = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"other");
-    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"b");
-    (b.onDelete(new $Closure1(this,"$Closure1")));
-    (b.onUpdate(new $Closure2(this,"$Closure2")));
-    (b.onCreate(new $Closure3(this,"$Closure3")));
-    (b.onEvent(new $Closure4(this,"$Closure4")));
-    (other.onEvent(new $Closure5(this,"$Closure5")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:putting and deleting from a bucket to trigger bucket events",new $Closure6(this,"$Closure6"));
+    const other = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "other");
+    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "b");
+    (b.onDelete(new $Closure1(this, "$Closure1")));
+    (b.onUpdate(new $Closure2(this, "$Closure2")));
+    (b.onCreate(new $Closure3(this, "$Closure3")));
+    (b.onEvent(new $Closure4(this, "$Closure4")));
+    (other.onEvent(new $Closure5(this, "$Closure5")));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:putting and deleting from a bucket to trigger bucket events", new $Closure6(this, "$Closure6"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
