@@ -174,6 +174,11 @@ async function main() {
       "-o, --output-file <outputFile>",
       "File name to write test results to (file extension is required, supports only .json at the moment)"
     )
+    .addOption(
+      new Option("-R, --retry [retryCount]", "Number of times to retry a failed test")
+        .preset(3)
+        .argParser(parseInt)
+    )
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("test", "test/test"));
