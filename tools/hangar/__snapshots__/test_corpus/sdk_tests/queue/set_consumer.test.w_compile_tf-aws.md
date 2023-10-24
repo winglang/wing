@@ -259,11 +259,11 @@ const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class Predicate extends $stdlib.std.Resource {
-      constructor(scope, id, c) {
-        super(scope, id);
+      constructor($scope, $id, c) {
+        super($scope, $id);
         this.c = c;
       }
       static _toInflightType(context) {
@@ -298,8 +298,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -331,8 +331,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -367,11 +367,11 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
-    const c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
-    (q.setConsumer(new $Closure1(this,"$Closure1")));
-    const predicate = new Predicate(this,"Predicate",c);
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:setConsumer",new $Closure2(this,"$Closure2"));
+    const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue");
+    const c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter");
+    (q.setConsumer(new $Closure1(this, "$Closure1")));
+    const predicate = new Predicate(this, "Predicate", c);
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:setConsumer", new $Closure2(this, "$Closure2"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

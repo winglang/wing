@@ -11,13 +11,13 @@ module.exports = function({ $math_Util }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(90, 15) == 1.4056476493802699")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.atan2(90,15)),1.4056476493802699)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(15, 90) == 0.16514867741462683")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.atan2(15,90)),0.16514867741462683)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(-1, -1) == -1 * math.PI * 3 / 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.atan2((-1),(-1))),((((-1) * $math_Util.PI) * 3) / 4))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(-0, -1) == -1 * math.PI")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.atan2((-0),(-1))),((-1) * $math_Util.PI))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(0, -1) == math.PI")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.atan2(0,(-1))),$math_Util.PI)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(1, -1) == math.PI * 3 / 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.atan2(1,(-1))),(($math_Util.PI * 3) / 4))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(0, 0) == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.atan2(0,0)),0)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(90, 15) == 1.4056476493802699")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.atan2(90, 15)),1.4056476493802699)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(15, 90) == 0.16514867741462683")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.atan2(15, 90)),0.16514867741462683)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(-1, -1) == -1 * math.PI * 3 / 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.atan2((-1), (-1))),((((-1) * $math_Util.PI) * 3) / 4))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(-0, -1) == -1 * math.PI")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.atan2((-0), (-1))),((-1) * $math_Util.PI))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(0, -1) == math.PI")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.atan2(0, (-1))),$math_Util.PI)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(1, -1) == math.PI * 3 / 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.atan2(1, (-1))),(($math_Util.PI * 3) / 4))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(0, 0) == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.atan2(0, 0)),0)))};
     }
   }
   return $Closure1;
@@ -67,11 +67,11 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const math = $stdlib.math;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -96,14 +96,14 @@ class $Root extends $stdlib.std.Resource {
         return ["handle", "$inflight_init"];
       }
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(90, 15) == 1.4056476493802699")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.atan2(90,15)),1.4056476493802699)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(15, 90) == 0.16514867741462683")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.atan2(15,90)),0.16514867741462683)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(-1, -1) == -1 * math.PI * 3 / 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.atan2((-1),(-1))),((((-1) * math.Util.PI) * 3) / 4))))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(-0, -1) == -1 * math.PI")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.atan2((-0),(-1))),((-1) * math.Util.PI))))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(0, -1) == math.PI")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.atan2(0,(-1))),math.Util.PI)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(1, -1) == math.PI * 3 / 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.atan2(1,(-1))),((math.Util.PI * 3) / 4))))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(0, 0) == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.atan2(0,0)),0)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight arc tangent 2",new $Closure1(this,"$Closure1"));
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(90, 15) == 1.4056476493802699")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.atan2(90, 15)),1.4056476493802699)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(15, 90) == 0.16514867741462683")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.atan2(15, 90)),0.16514867741462683)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(-1, -1) == -1 * math.PI * 3 / 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.atan2((-1), (-1))),((((-1) * math.Util.PI) * 3) / 4))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(-0, -1) == -1 * math.PI")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.atan2((-0), (-1))),((-1) * math.Util.PI))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(0, -1) == math.PI")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.atan2(0, (-1))),math.Util.PI)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(1, -1) == math.PI * 3 / 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.atan2(1, (-1))),((math.Util.PI * 3) / 4))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.atan2(0, 0) == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.atan2(0, 0)),0)))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight arc tangent 2", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

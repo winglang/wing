@@ -42,8 +42,8 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const projen = require("projen");
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     {((cond) => {if (!cond) throw new Error("assertion failed: projen.LogLevel.OFF != projen.LogLevel.VERBOSE")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(projen.LogLevel.OFF,projen.LogLevel.VERBOSE)))};
   }
 }
