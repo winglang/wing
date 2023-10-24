@@ -183,11 +183,11 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class A extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       foo() {
         return "a1";
@@ -214,8 +214,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class B extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       static _toInflightType(context) {
         return `
@@ -239,8 +239,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -265,11 +265,11 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class D extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         class E extends $stdlib.std.Resource {
-          constructor(scope, id, ) {
-            super(scope, id);
+          constructor($scope, $id, ) {
+            super($scope, $id);
           }
           foo() {
             return "e1";
@@ -295,11 +295,11 @@ class $Root extends $stdlib.std.Resource {
             return ["$inflight_init"];
           }
         }
-        const pb = new E(this,"E");
+        const pb = new E(this, "E");
         {((cond) => {if (!cond) throw new Error("assertion failed: pb.foo() == \"e1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((pb.foo()),"e1")))};
         class F extends $stdlib.std.Resource {
-          constructor(scope, id, ) {
-            super(scope, id);
+          constructor($scope, $id, ) {
+            super($scope, $id);
           }
           static _toInflightType(context) {
             return `
@@ -324,8 +324,8 @@ class $Root extends $stdlib.std.Resource {
         }
         const __parent_this_2 = this;
         class $Closure2 extends $stdlib.std.Resource {
-          constructor(scope, id, ) {
-            super(scope, id);
+          constructor($scope, $id, ) {
+            super($scope, $id);
             (std.Node.of(this)).hidden = true;
           }
           static _toInflightType(context) {
@@ -350,7 +350,7 @@ class $Root extends $stdlib.std.Resource {
             return ["handle", "$inflight_init"];
           }
         }
-        this.inner = new $Closure2(this,"$Closure2");
+        this.inner = new $Closure2(this, "$Closure2");
       }
       getInner() {
         return this.inner;
@@ -387,8 +387,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -426,12 +426,12 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const a = new A(this,"A");
+    const a = new A(this, "A");
     {((cond) => {if (!cond) throw new Error("assertion failed: a.foo() == \"a1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((a.foo()),"a1")))};
-    const fn = new $Closure1(this,"$Closure1");
-    const d = new D(this,"D");
+    const fn = new $Closure1(this, "$Closure1");
+    const d = new D(this, "D");
     const innerD = (d.getInner());
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure3(this,"$Closure3"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:test", new $Closure3(this, "$Closure3"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

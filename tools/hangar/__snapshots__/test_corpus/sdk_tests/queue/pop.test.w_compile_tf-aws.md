@@ -11,7 +11,7 @@ module.exports = function({ $q, $timeout, $util_Util }) {
       return $obj;
     }
     async handle() {
-      (await $q.push("Foo","Bar"));
+      (await $q.push("Foo", "Bar"));
       const first = (await $q.pop());
       const second = (await $q.pop());
       (await $util_Util.sleep($timeout));
@@ -84,11 +84,11 @@ const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -123,8 +123,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const timeout = (std.Duration.fromSeconds(3));
-    const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue",{ timeout: timeout });
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:pop",new $Closure1(this,"$Closure1"));
+    const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue", { timeout: timeout });
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:pop", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

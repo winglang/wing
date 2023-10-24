@@ -1,0 +1,101 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: x
+  kind: 6
+  detail: num
+  documentation:
+    kind: markdown
+    value: "```wing\npreflight x: num\n```"
+  sortText: bb|x
+- label: unsafeCast
+  kind: 3
+  detail: "(value: any): any"
+  documentation:
+    kind: markdown
+    value: "```wing\nunsafeCast: (value: any): any\n```\n---\nCasts a value into a different type. This is unsafe and can cause runtime errors\n### Parameters\n- `value` — `any` — The value to cast into a different type"
+  sortText: cc|unsafeCast
+  insertText: unsafeCast($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: S
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct S\n```\n---\n### Fields\n- `a` — `num`\n- `b` — `num`"
+  sortText: hh|S
+- label: Json
+  kind: 14
+  sortText: kl|zyJson
+- label: MutJson
+  kind: 14
+  sortText: kl|zyMutJson
+- label: bool
+  kind: 14
+  sortText: kl|zybool
+- label: duration
+  kind: 14
+  sortText: kl|zyduration
+- label: num
+  kind: 14
+  sortText: kl|zynum
+- label: str
+  kind: 14
+  sortText: kl|zystr
+- label: Array<T>
+  kind: 14
+  sortText: kl|zzArray
+  insertText: Array<$1>
+  insertTextFormat: 2
+  command:
+    title: triggerCompletion
+    command: editor.action.triggerSuggest
+- label: Map<T>
+  kind: 14
+  sortText: kl|zzMap
+  insertText: Map<$1>
+  insertTextFormat: 2
+  command:
+    title: triggerCompletion
+    command: editor.action.triggerSuggest
+- label: MutArray<T>
+  kind: 14
+  sortText: kl|zzMutArray
+  insertText: MutArray<$1>
+  insertTextFormat: 2
+  command:
+    title: triggerCompletion
+    command: editor.action.triggerSuggest
+- label: MutMap<T>
+  kind: 14
+  sortText: kl|zzMutMap
+  insertText: MutMap<$1>
+  insertTextFormat: 2
+  command:
+    title: triggerCompletion
+    command: editor.action.triggerSuggest
+- label: MutSet<T>
+  kind: 14
+  sortText: kl|zzMutSet
+  insertText: MutSet<$1>
+  insertTextFormat: 2
+  command:
+    title: triggerCompletion
+    command: editor.action.triggerSuggest
+- label: Set<T>
+  kind: 14
+  sortText: kl|zzSet
+  insertText: Set<$1>
+  insertTextFormat: 2
+  command:
+    title: triggerCompletion
+    command: editor.action.triggerSuggest
+- label: "inflight () => {}"
+  kind: 15
+  sortText: ll|zzinflight
+  filterText: inflight
+  insertText: "inflight ($1) => {$0}"
+  insertTextFormat: 2
+

@@ -133,7 +133,7 @@ module.exports = function({ $BaseClass, $b }) {
       super({  });
     }
     async do() {
-      (await $b.put("k","value"));
+      (await $b.put("k", "value"));
       return (await super.do());
     }
   }
@@ -226,11 +226,11 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class A extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         this.message = "A message from your ancestor";
       }
       static _toInflightType(context) {
@@ -255,8 +255,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class B extends A {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       description() {
         return "B";
@@ -284,8 +284,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class C extends B {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       description() {
         return String.raw({ raw: ["C extends ", ""] }, (super.description()));
@@ -313,8 +313,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class D extends C {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       static _toInflightType(context) {
         return `
@@ -339,8 +339,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class E extends D {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       description() {
         return String.raw({ raw: ["E extends ", ""] }, (super.description()));
@@ -368,8 +368,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class InflightA extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       static _toInflightType(context) {
         return `
@@ -393,8 +393,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class InflightB extends InflightA {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       static _toInflightType(context) {
         return `
@@ -419,8 +419,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -446,8 +446,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class BaseClass extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       static _toInflightType(context) {
         return `
@@ -478,8 +478,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class ExtendedClass extends BaseClass {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       static _toInflightType(context) {
         return `
@@ -511,8 +511,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -543,12 +543,12 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const e = new E(this,"E");
+    const e = new E(this, "E");
     {((cond) => {if (!cond) throw new Error("assertion failed: e.description() == \"E extends C extends B\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((e.description()),"E extends C extends B")))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:super call inflight",new $Closure1(this,"$Closure1"));
-    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    const extended = new ExtendedClass(this,"ExtendedClass");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:super call sets binding permissions",new $Closure2(this,"$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:super call inflight", new $Closure1(this, "$Closure1"));
+    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+    const extended = new ExtendedClass(this, "ExtendedClass");
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:super call sets binding permissions", new $Closure2(this, "$Closure2"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
