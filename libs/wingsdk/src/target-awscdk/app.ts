@@ -159,7 +159,7 @@ export class App extends CoreApp {
   protected typeForFqn(fqn: string): any {
     switch (fqn) {
       case API_FQN:
-        return new Api(scope, id, args[0]);
+        return Api;
 
       case FUNCTION_FQN:
         return Function;
