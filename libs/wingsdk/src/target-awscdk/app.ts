@@ -6,6 +6,7 @@ import { Construct } from "constructs";
 import stringify from "safe-stable-stringify";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
+import { DynamodbTable } from "./dynamodb-table";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
@@ -35,6 +36,7 @@ import {
   Connections,
 } from "../core";
 import { PluginManager } from "../core/plugin-manager";
+import { DYNAMODB_TABLE_FQN } from "../ex";
 import { TEST_RUNNER_FQN } from "../std";
 
 /**
@@ -187,6 +189,9 @@ export class App extends CoreApp {
 
       case WEBSITE_FQN:
         return Website;
+
+      case DYNAMODB_TABLE_FQN:
+        return DynamodbTable;
     }
     return undefined;
   }

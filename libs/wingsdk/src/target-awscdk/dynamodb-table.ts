@@ -1,6 +1,7 @@
+import { RemovalPolicy } from "aws-cdk-lib";
+import { AttributeType, BillingMode, Table } from "aws-cdk-lib/aws-dynamodb";
 import { Construct } from "constructs";
 import { Function } from "./function";
-import { DynamodbTable as AwsDynamodbTable } from "../.gen/providers/aws/dynamodb-table";
 import * as core from "../core";
 import * as ex from "../ex";
 import { ResourceNames } from "../shared/resource-names";
@@ -14,23 +15,30 @@ import { IInflightHost } from "../std";
  * @inflight `@winglang/sdk.ex.IDynamodbTableClient`
  */
 export class DynamodbTable extends ex.DynamodbTable {
-  private readonly table: AwsDynamodbTable;
+  private readonly table: Table;
 
   constructor(scope: Construct, id: string, props: ex.DynamodbTableProps) {
     super(scope, id, props);
 
-    this.table = new AwsDynamodbTable(this, "Default", {
-      name: ResourceNames.generateName(this, {
+    const attributeDefinitions = props.attributeDefinitions as any;
+
+    this.table = new Table(this, "Default", {
+      tableName: ResourceNames.generateName(this, {
         prefix: this.name,
         ...NAME_OPTS,
       }),
-      attribute: Object.entries(props.attributeDefinitions).map(([k, v]) => ({
-        name: k,
-        type: v,
-      })),
-      hashKey: props.hashKey,
-      rangeKey: props.rangeKey,
-      billingMode: "PAY_PER_REQUEST",
+      partitionKey: {
+        name: props.hashKey,
+        type: attributeDefinitions[props.hashKey] as AttributeType,
+      },
+      sortKey: props.rangeKey
+        ? {
+            name: props.rangeKey,
+            type: attributeDefinitions[props.rangeKey] as AttributeType,
+          }
+        : undefined,
+      billingMode: BillingMode.PAY_PER_REQUEST,
+      removalPolicy: RemovalPolicy.DESTROY,
     });
   }
 
@@ -42,18 +50,17 @@ export class DynamodbTable extends ex.DynamodbTable {
     }
 
     host.addPolicyStatements(
-      ...calculateDynamodbTablePermissions(this.table.arn, ops)
+      ...calculateDynamodbTablePermissions(this.table.tableArn, ops)
     );
 
-    host.addEnvironment(this.envName(), this.table.name);
+    host.addEnvironment(this.envName(), this.table.tableName);
 
     super.onLift(host, ops);
   }
 
-  /** @internal */
   public _toInflight(): string {
     return core.InflightClient.for(
-      __dirname.replace("target-tf-aws", "shared-aws"),
+      __dirname.replace("target-awscdk", "shared-aws"),
       __filename,
       "DynamodbTableClient",
       [`process.env["${this.envName()}"]`]
