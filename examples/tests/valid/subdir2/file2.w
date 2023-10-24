@@ -2,6 +2,7 @@ bring util;
 
 pub class Bar {
   pub bar(): str {
+    util.nanoid();
     return "bar";
   }
 }

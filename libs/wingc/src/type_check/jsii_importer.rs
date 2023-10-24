@@ -48,6 +48,7 @@ impl JsiiInterface for jsii::InterfaceType {
 	}
 }
 
+#[derive(Debug)]
 pub struct JsiiImportSpec {
 	/// The assembly to import from the JSII library. This is typically the name of the NPM package.
 	pub assembly_name: String,
