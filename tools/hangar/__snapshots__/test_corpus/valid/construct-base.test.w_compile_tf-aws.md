@@ -69,11 +69,11 @@ const cloud = $stdlib.cloud;
 const cx = require("constructs");
 const aws = require("@cdktf/provider-aws");
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class WingResource extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         {console.log(String.raw({ raw: ["my id is ", ""] }, this.node.id))};
       }
       static _toInflightType(context) {
@@ -103,8 +103,8 @@ class $Root extends $stdlib.std.Resource {
     const getDisplayName = ((r) => {
       return (std.Node.of(r)).title;
     });
-    const q = this.node.root.new("@cdktf/provider-aws.sqsQueue.SqsQueue",aws.sqsQueue.SqsQueue,this,"aws.sqsQueue.SqsQueue");
-    const wr = new WingResource(this,"WingResource");
+    const q = this.node.root.new("@cdktf/provider-aws.sqsQueue.SqsQueue",aws.sqsQueue.SqsQueue,this, "aws.sqsQueue.SqsQueue");
+    const wr = new WingResource(this, "WingResource");
     const another_resource = wr;
     {console.log(String.raw({ raw: ["path of sqs.queue: ", ""] }, (getPath(q))))};
     {console.log(String.raw({ raw: ["path of wing resource: ", ""] }, (getPath(wr))))};

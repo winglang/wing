@@ -1,4 +1,3 @@
-import { Construct } from "constructs";
 import { Bucket } from "./bucket";
 import { Function } from "./function";
 import { Table } from "./table";
@@ -91,19 +90,14 @@ export class App extends CdktfApp {
     }
   }
 
-  protected tryNew(
-    fqn: string,
-    scope: Construct,
-    id: string,
-    ...args: any[]
-  ): any {
+  protected typeForFqn(fqn: string): any {
     switch (fqn) {
       case BUCKET_FQN:
-        return new Bucket(scope, id, args[0]);
+        return Bucket;
       case FUNCTION_FQN:
-        return new Function(scope, id, args[0], args[1]);
+        return Function;
       case TABLE_FQN:
-        return new Table(scope, id, args[0]);
+        return Table;
     }
 
     return undefined;

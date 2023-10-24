@@ -3071,6 +3071,11 @@ impl<'a> TypeChecker<'a> {
 				self.types.add_type(Type::Optional(value_type))
 			}
 			TypeAnnotationKind::Function(ast_sig) => {
+				let last_non_optional_index = ast_sig.parameters.iter().rposition(|p| match p.type_annotation.kind {
+					TypeAnnotationKind::Optional(_) => false,
+					_ => !p.variadic,
+				});
+
 				let mut parameters = vec![];
 				for i in 0..ast_sig.parameters.len() {
 					let p = ast_sig.parameters.get(i).unwrap();
@@ -3088,6 +3093,16 @@ impl<'a> TypeChecker<'a> {
 								&ast_sig.parameters.get(i).unwrap().name.span,
 								"Variadic parameters must be type Array or MutArray.".to_string(),
 							),
+						};
+					}
+
+					if last_non_optional_index.is_some_and(|li| i <= li) {
+						match &p.type_annotation.kind {
+							TypeAnnotationKind::Optional(_) => self.spanned_error(
+								&ast_sig.parameters.get(i).unwrap().name.span,
+								"Optional parameters must always be after all non-optional parameters.".to_string(),
+							),
+							_ => {}
 						};
 					}
 				}
@@ -4251,11 +4266,19 @@ impl<'a> TypeChecker<'a> {
 			return;
 		};
 
+		// If the parent class is phase independent than its init name is just "init" regadless of
+		// whether we're inflight or not.
+		let parent_init_name = if parent_class.as_class().unwrap().phase == Phase::Independent {
+			CLASS_INIT_NAME
+		} else {
+			init_name
+		};
+
 		let parent_initializer = parent_class
 			.as_class()
 			.unwrap()
 			.methods(false)
-			.filter(|(name, _type)| name == init_name)
+			.filter(|(name, _type)| name == parent_init_name)
 			.collect_vec()[0]
 			.1;
 
@@ -5323,7 +5346,8 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		if let Some(parent_class) = parent_type.as_class() {
-			if parent_class.phase == phase {
+			// Parent class must be either the same phase as the child or, if the child is an inflight class, the parent can be an independent class
+			if (parent_class.phase == phase) || (phase == Phase::Inflight && parent_class.phase == Phase::Independent) {
 				(Some(parent_type), Some(parent_class.env.get_ref()))
 			} else {
 				self.spanned_error(
