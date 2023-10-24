@@ -405,7 +405,6 @@ export class Simulator {
 
     // create the resource based on its type
     const resourceObject = this._factory.resolve(
-      resourceConfig.path,
       resourceConfig.type,
       resolvedProps,
       context
@@ -574,7 +573,6 @@ export interface ISimulatorFactory {
    * Resolve the parameters needed for creating a specific resource simulation.
    */
   resolve(
-    path: string,
     type: string,
     props: any,
     context: ISimulatorContext

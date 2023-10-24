@@ -35,7 +35,6 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
    * @returns a new instance
    */
   public resolve(
-    path: string,
     type: string,
     props: any,
     context: ISimulatorContext
@@ -96,7 +95,7 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
         return new DynamodbTable(props, context);
       case SIMULATOR_STATE_TYPE:
         const StateClient = require("./state.inflight").State;
-        return new StateClient(path, props, context);
+        return new StateClient(props, context);
       default:
         throw new Error(`Type ${type} not implemented by the simulator.`);
     }
