@@ -20,7 +20,7 @@ The following code is an initial implementation of TaskList with api gateway and
 - [x] console requirements
 - [x] Optionality ? and ??
 - [x] redis is packaged inside our SDK
-- [x] I wanted to use ioredis as an inflight memebr but there are 2 issues:
+- [x] I wanted to use ioredis as an inflight member but there are 2 issues:
   - [x] Missing inflight init (used lazy getter style method instead) 
   - [x] ioredis is from type any (redis.IRedisClient) 
 
@@ -31,7 +31,7 @@ This section focuses on the develoepr experience
 
 ### Redis on localhost 
 
-There is a range of posibilities here:
+There is a range of possibilities here:
 
 One option is to have a a complete battery included solution that handle installing and running redis instance w/wo docker.<br/>
 Another option is taking the do-it-yourself approach that require the developer to setup the instance listening on a configured port.

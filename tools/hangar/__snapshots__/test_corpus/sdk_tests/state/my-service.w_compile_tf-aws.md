@@ -11,7 +11,7 @@ module.exports = function({ $__parent_this_1_startTimeKey, $__parent_this_1_stat
       return $obj;
     }
     async handle() {
-      (await $__parent_this_1_state.set($__parent_this_1_startTimeKey,"2023-10-16T20:47:39.511Z"));
+      (await $__parent_this_1_state.set($__parent_this_1_startTimeKey, "2023-10-16T20:47:39.511Z"));
     }
   }
   return $Closure1;
@@ -46,14 +46,14 @@ module.exports = function({ $stdlib }) {
   const cloud = $stdlib.cloud;
   const util = $stdlib.util;
   class MyService extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
-      this.state = this.node.root.new("@winglang/sdk.sim.State",sim.State,this,"sim.State");
+    constructor($scope, $id, ) {
+      super($scope, $id);
+      this.state = this.node.root.new("@winglang/sdk.sim.State",sim.State,this, "sim.State");
       this.startTimeKey = "start_time";
       const __parent_this_1 = this;
       class $Closure1 extends $stdlib.std.Resource {
-        constructor(scope, id, ) {
-          super(scope, id);
+        constructor($scope, $id, ) {
+          super($scope, $id);
           (std.Node.of(this)).hidden = true;
         }
         static _toInflightType(context) {
@@ -86,7 +86,7 @@ module.exports = function({ $stdlib }) {
           super._registerOnLift(host, ops);
         }
       }
-      this.node.root.newAbstract("@winglang/sdk.cloud.Service",this,"cloud.Service",new $Closure1(this,"$Closure1"));
+      this.node.root.newAbstract("@winglang/sdk.cloud.Service",this, "cloud.Service", new $Closure1(this, "$Closure1"));
       this.startTime = (this.state.token(this.startTimeKey));
     }
     static _toInflightType(context) {

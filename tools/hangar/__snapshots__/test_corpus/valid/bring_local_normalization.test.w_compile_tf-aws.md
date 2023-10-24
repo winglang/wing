@@ -52,14 +52,14 @@ module.exports = function({  }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -77,8 +77,8 @@ module.exports = function({  }) {
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   class Bar extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
+    constructor($scope, $id, ) {
+      super($scope, $id);
     }
     static bar() {
       return "bar";
@@ -115,8 +115,8 @@ module.exports = function({ $stdlib }) {
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   class Baz extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
+    constructor($scope, $id, ) {
+      super($scope, $id);
     }
     static baz() {
       return "baz";
@@ -155,8 +155,8 @@ module.exports = function({ $stdlib }) {
   const bar = require("./preflight.bar-1.js")({ $stdlib });
   const baz = require("./preflight.baz-2.js")({ $stdlib });
   class Foo extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
+    constructor($scope, $id, ) {
+      super($scope, $id);
     }
     static foo() {
       return "foo";
@@ -205,8 +205,8 @@ const foo = require("./preflight.foo-3.js")({ $stdlib });
 const bar = require("./preflight.bar-1.js")({ $stdlib });
 const baz = require("./preflight.baz-2.js")({ $stdlib });
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     {((cond) => {if (!cond) throw new Error("assertion failed: foo.Foo.foo() == \"foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((foo.Foo.foo()),"foo")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: foo.Foo.bar() == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((foo.Foo.bar()),"bar")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: foo.Foo.baz() == \"baz\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((foo.Foo.baz()),"baz")))};

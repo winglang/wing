@@ -35,8 +35,8 @@ module.exports = function({ $api_url, $body, $http_HttpMethod, $http_Util, $std_
     }
     async handle() {
       const url = ($api_url + "/path");
-      const response = (await $http_Util.post(url,{ headers: ({"content-type": "application/json"}), body: ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$body]) }));
-      const fetchResponse = (await $http_Util.post(url,{ method: $http_HttpMethod.POST, headers: ({"content-type": "application/json"}), body: ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$body]) }));
+      const response = (await $http_Util.post(url, { headers: ({"content-type": "application/json"}), body: ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$body]) }));
+      const fetchResponse = (await $http_Util.post(url, { method: $http_HttpMethod.POST, headers: ({"content-type": "application/json"}), body: ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$body]) }));
       {((cond) => {if (!cond) throw new Error("assertion failed: response.body == Json.stringify(body)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(response.body,((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$body]))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: response.status == 200")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(response.status,200)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: response.url == url")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(response.url,url)))};
@@ -63,7 +63,7 @@ module.exports = function({ $api_url, $body, $http_HttpMethod, $http_Util, $std_
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
@@ -82,7 +82,7 @@ module.exports = function({ $api_url, $body, $http_HttpMethod, $http_Util, $std_
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -267,11 +267,11 @@ const cloud = $stdlib.cloud;
 const http = $stdlib.http;
 const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -305,8 +305,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -342,10 +342,10 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
+    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
     const body = ({"cat": "Tion"});
-    (api.post("/path",new $Closure1(this,"$Closure1")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:http.post and http.fetch can preform a call to an api",new $Closure2(this,"$Closure2"));
+    (api.post("/path", new $Closure1(this, "$Closure1")));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:http.post and http.fetch can preform a call to an api", new $Closure2(this, "$Closure2"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

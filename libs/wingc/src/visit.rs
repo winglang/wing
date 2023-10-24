@@ -200,18 +200,23 @@ where
 		StmtKind::Struct {
 			name,
 			extends,
-			fields: members,
+			fields,
+			access: _,
 		} => {
 			v.visit_symbol(name);
 			for extend in extends {
 				v.visit_user_defined_type(extend);
 			}
-			for member in members {
+			for member in fields {
 				v.visit_symbol(&member.name);
 				v.visit_type_annotation(&member.member_type);
 			}
 		}
-		StmtKind::Enum { name, values } => {
+		StmtKind::Enum {
+			name,
+			values,
+			access: _,
+		} => {
 			v.visit_symbol(name);
 			for value in values {
 				v.visit_symbol(value);

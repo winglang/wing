@@ -22,9 +22,9 @@ use crate::type_check::symbol_env::SymbolEnvKind;
 use crate::visit_context::{VisitContext, VisitorWithContext};
 use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
-	dbg_panic, debug, GLOBAL_SYMBOLS, UTIL_CLASS_NAME, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES,
-	WINGSDK_DURATION, WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET,
-	WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
+	dbg_panic, debug, UTIL_CLASS_NAME, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION,
+	WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_RESOURCE,
+	WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
@@ -123,7 +123,7 @@ pub struct VariableInfo {
 	/// The kind of variable
 	pub kind: VariableKind,
 	/// Access rules for this variable (only applies to methods and fields)
-	pub access_modifier: AccessModifier,
+	pub access: AccessModifier,
 
 	pub docs: Option<Docs>,
 }
@@ -136,7 +136,7 @@ impl SymbolKind {
 		reassignable: bool,
 		is_static: bool,
 		phase: Phase,
-		access_modifier: AccessModifier,
+		access: AccessModifier,
 		docs: Option<Docs>,
 	) -> Self {
 		SymbolKind::Variable(VariableInfo {
@@ -149,7 +149,7 @@ impl SymbolKind {
 			} else {
 				VariableKind::InstanceMember
 			},
-			access_modifier,
+			access,
 			docs,
 		})
 	}
@@ -161,7 +161,7 @@ impl SymbolKind {
 			reassignable,
 			phase,
 			kind: VariableKind::Free,
-			access_modifier: AccessModifier::Public,
+			access: AccessModifier::Public,
 			docs: None,
 		})
 	}
@@ -1811,7 +1811,7 @@ impl<'a> TypeChecker<'a> {
 			reassignable: false,
 			phase: Phase::Independent,
 			kind: VariableKind::Error,
-			access_modifier: AccessModifier::Public,
+			access: AccessModifier::Public,
 			docs: None,
 		}
 	}
@@ -2952,6 +2952,7 @@ impl<'a> TypeChecker<'a> {
 						.define(
 							&Symbol::global(child_path.file_stem().unwrap().to_string()),
 							SymbolKind::Namespace(*ns),
+							AccessModifier::Public,
 							StatementIdx::Top,
 						)
 						.unwrap();
@@ -2979,16 +2980,15 @@ impl<'a> TypeChecker<'a> {
 			};
 		}
 
-		// Check that there aren't multiply-defined symbols in the directory
-		let mut seen_symbols = HashSet::new();
+		// Check that there aren't multiply-defined public symbols in the directory
+		let mut seen_public_symbols = HashSet::new();
 		for child_env in &child_envs {
 			for key in child_env.symbol_map.keys() {
-				// ignore globals
-				if GLOBAL_SYMBOLS.contains(&key.as_str()) {
+				if child_env.symbol_map[key].access != AccessModifier::Public {
 					continue;
 				}
 
-				if seen_symbols.contains(key) {
+				if seen_public_symbols.contains(key) {
 					self.types.source_file_envs.insert(
 						source_path.to_owned(),
 						SymbolEnvOrNamespace::Error(Diagnostic {
@@ -2999,7 +2999,7 @@ impl<'a> TypeChecker<'a> {
 					);
 					return;
 				}
-				seen_symbols.insert(key.clone());
+				seen_public_symbols.insert(key.clone());
 			}
 		}
 
@@ -3031,7 +3031,7 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		if let SymbolEnvKind::Function { sig, .. } = env.kind {
-			let mut return_type = sig.as_function_sig().expect("a fucntion type").return_type;
+			let mut return_type = sig.as_function_sig().expect("a function type").return_type;
 			if let Type::Inferred(n) = &*return_type {
 				if self.types.get_inference_by_id(*n).is_none() {
 					// If function types don't return anything then we should set the return type to void
@@ -3042,7 +3042,7 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		for symbol_data in env.symbol_map.values_mut() {
-			if let SymbolKind::Variable(ref mut var_info) = symbol_data.2 {
+			if let SymbolKind::Variable(ref mut var_info) = symbol_data.kind {
 				// Update any possible inferred types in this variable.
 				// This must be called before checking for un-inferred types because some variable were not used in this scope so they did not get a chance to get updated.
 				self.update_known_inferences(&mut var_info.type_, &var_info.name.span);
@@ -3071,6 +3071,11 @@ impl<'a> TypeChecker<'a> {
 				self.types.add_type(Type::Optional(value_type))
 			}
 			TypeAnnotationKind::Function(ast_sig) => {
+				let last_non_optional_index = ast_sig.parameters.iter().rposition(|p| match p.type_annotation.kind {
+					TypeAnnotationKind::Optional(_) => false,
+					_ => !p.variadic,
+				});
+
 				let mut parameters = vec![];
 				for i in 0..ast_sig.parameters.len() {
 					let p = ast_sig.parameters.get(i).unwrap();
@@ -3088,6 +3093,16 @@ impl<'a> TypeChecker<'a> {
 								&ast_sig.parameters.get(i).unwrap().name.span,
 								"Variadic parameters must be type Array or MutArray.".to_string(),
 							),
+						};
+					}
+
+					if last_non_optional_index.is_some_and(|li| i <= li) {
+						match &p.type_annotation.kind {
+							TypeAnnotationKind::Optional(_) => self.spanned_error(
+								&ast_sig.parameters.get(i).unwrap().name.span,
+								"Optional parameters must always be after all non-optional parameters.".to_string(),
+							),
+							_ => {}
 						};
 					}
 				}
@@ -3187,21 +3202,21 @@ impl<'a> TypeChecker<'a> {
 				initial_value,
 				type_,
 			} => {
-				tc.type_check_let(type_, env, initial_value, var_name, reassignable);
+				tc.type_check_let(type_, initial_value, var_name, reassignable, env);
 			}
 			StmtKind::ForLoop {
 				iterator,
 				iterable,
 				statements,
 			} => {
-				tc.type_check_for_loop(iterable, env, iterator, statements);
+				tc.type_check_for_loop(iterable, iterator, statements, env);
 			}
 			StmtKind::While { condition, statements } => {
-				tc.type_check_while(condition, env, statements);
+				tc.type_check_while(condition, statements, env);
 			}
 			StmtKind::Break | StmtKind::Continue => {}
 			StmtKind::IfLet(iflet) => {
-				tc.type_check_iflet(env, iflet);
+				tc.type_check_iflet(iflet, env);
 			}
 			StmtKind::If {
 				condition,
@@ -3209,13 +3224,13 @@ impl<'a> TypeChecker<'a> {
 				elif_statements,
 				else_statements,
 			} => {
-				tc.type_check_if(condition, statements, env, elif_statements, else_statements);
+				tc.type_check_if(condition, statements, elif_statements, else_statements, env);
 			}
 			StmtKind::Expression(e) => {
 				tc.type_check_exp(e, env);
 			}
 			StmtKind::Assignment { kind, variable, value } => {
-				tc.type_check_assignment(kind, value, env, variable);
+				tc.type_check_assignment(kind, value, variable, env);
 			}
 			StmtKind::Bring { source, identifier } => {
 				tc.type_check_bring(source, identifier, stmt, env);
@@ -3234,26 +3249,31 @@ impl<'a> TypeChecker<'a> {
 				tc.type_check_throw(exp, env);
 			}
 			StmtKind::Return(exp) => {
-				tc.type_check_return(env, stmt, exp);
+				tc.type_check_return(stmt, exp, env);
 			}
 			StmtKind::Class(ast_class) => {
-				tc.type_check_class(env, stmt, ast_class);
+				tc.type_check_class(stmt, ast_class, env);
 			}
-			StmtKind::Interface(AstInterface { name, methods, extends }) => {
-				tc.type_check_interface(env, extends, name, methods);
+			StmtKind::Interface(ast_iface) => {
+				tc.type_check_interface(ast_iface, env);
 			}
-			StmtKind::Struct { name, extends, fields } => {
-				tc.type_check_struct(fields, env, extends, name);
+			StmtKind::Struct {
+				name,
+				extends,
+				fields,
+				access,
+			} => {
+				tc.type_check_struct(fields, extends, name, access, env);
 			}
-			StmtKind::Enum { name, values } => {
-				tc.type_check_enum(name, values, env);
+			StmtKind::Enum { name, values, access } => {
+				tc.type_check_enum(name, values, access, env);
 			}
 			StmtKind::TryCatch {
 				try_statements,
 				catch_block,
 				finally_statements,
 			} => {
-				tc.type_check_try_catch(env, try_statements, catch_block, finally_statements);
+				tc.type_check_try_catch(try_statements, catch_block, finally_statements, env);
 			}
 			StmtKind::CompilerDebugEnv => {
 				eprintln!("[symbol environment at {}]", stmt.span);
@@ -3267,10 +3287,10 @@ impl<'a> TypeChecker<'a> {
 
 	fn type_check_try_catch(
 		&mut self,
-		env: &mut SymbolEnv,
 		try_statements: &Scope,
 		catch_block: &Option<ast::CatchBlock>,
 		finally_statements: &Option<Scope>,
+		env: &mut SymbolEnv,
 	) {
 		// Create a new environment for the try block
 		let try_env = self.types.add_symbol_env(SymbolEnv::new(
@@ -3296,6 +3316,7 @@ impl<'a> TypeChecker<'a> {
 				match catch_env.define(
 					exception_var,
 					SymbolKind::make_free_variable(exception_var.clone(), self.types.string(), false, env.phase),
+					AccessModifier::Private,
 					StatementIdx::Top,
 				) {
 					Err(type_error) => {
@@ -3321,14 +3342,20 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn type_check_enum(&mut self, name: &Symbol, values: &IndexSet<Symbol>, env: &mut SymbolEnv) {
+	fn type_check_enum(
+		&mut self,
+		name: &Symbol,
+		values: &IndexSet<Symbol>,
+		access: &AccessModifier,
+		env: &mut SymbolEnv,
+	) {
 		let enum_type_ref = self.types.add_type(Type::Enum(Enum {
 			name: name.clone(),
 			values: values.clone(),
 			docs: Default::default(),
 		}));
 
-		match env.define(name, SymbolKind::Type(enum_type_ref), StatementIdx::Top) {
+		match env.define(name, SymbolKind::Type(enum_type_ref), *access, StatementIdx::Top) {
 			Err(type_error) => {
 				self.type_error(type_error);
 			}
@@ -3339,9 +3366,10 @@ impl<'a> TypeChecker<'a> {
 	fn type_check_struct(
 		&mut self,
 		fields: &Vec<ast::StructField>,
-		env: &mut SymbolEnv,
 		extends: &Vec<UserDefinedType>,
 		name: &Symbol,
+		access: &AccessModifier,
+		env: &mut SymbolEnv,
 	) {
 		// Note: structs don't have a parent environment, instead they flatten their parent's members into the struct's env.
 		//   If we encounter an existing member with the same name and type we skip it, if the types are different we
@@ -3404,6 +3432,7 @@ impl<'a> TypeChecker<'a> {
 					AccessModifier::Public,
 					None,
 				),
+				AccessModifier::Public,
 				StatementIdx::Top,
 			) {
 				Err(type_error) => {
@@ -3416,7 +3445,7 @@ impl<'a> TypeChecker<'a> {
 		if let Err(e) = add_parent_members_to_struct_env(&extends_types, name, &mut struct_env) {
 			self.type_error(e);
 		}
-		match env.define(name, SymbolKind::Type(struct_type), StatementIdx::Top) {
+		match env.define(name, SymbolKind::Type(struct_type), *access, StatementIdx::Top) {
 			Err(type_error) => {
 				self.type_error(type_error);
 			}
@@ -3427,13 +3456,13 @@ impl<'a> TypeChecker<'a> {
 		struct_type.as_mut_struct().unwrap().env = struct_env;
 	}
 
-	fn type_check_interface(
-		&mut self,
-		env: &mut SymbolEnv,
-		extends: &Vec<UserDefinedType>,
-		name: &Symbol,
-		methods: &Vec<(Symbol, ast::FunctionSignature)>,
-	) {
+	fn type_check_interface(&mut self, ast_iface: &AstInterface, env: &mut SymbolEnv) {
+		let AstInterface {
+			name,
+			extends,
+			methods,
+			access,
+		} = ast_iface;
 		// Create environment representing this interface, for now it'll be empty just so we can support referencing ourselves from the interface definition.
 		let dummy_env = SymbolEnv::new(
 			None,
@@ -3468,7 +3497,7 @@ impl<'a> TypeChecker<'a> {
 			extends: extend_interfaces.clone(),
 		};
 		let mut interface_type = self.types.add_type(Type::Interface(interface_spec));
-		match env.define(name, SymbolKind::Type(interface_type), StatementIdx::Top) {
+		match env.define(name, SymbolKind::Type(interface_type), *access, StatementIdx::Top) {
 			Err(type_error) => {
 				self.type_error(type_error);
 			}
@@ -3504,6 +3533,7 @@ impl<'a> TypeChecker<'a> {
 					AccessModifier::Public,
 					None,
 				),
+				AccessModifier::Public,
 				StatementIdx::Top,
 			) {
 				Err(type_error) => {
@@ -3522,7 +3552,7 @@ impl<'a> TypeChecker<'a> {
 		interface_type.as_mut_interface().unwrap().env = interface_env;
 	}
 
-	fn type_check_class(&mut self, env: &mut SymbolEnv, stmt: &Stmt, ast_class: &AstClass) {
+	fn type_check_class(&mut self, stmt: &Stmt, ast_class: &AstClass, env: &mut SymbolEnv) {
 		self.ctx.push_class(ast_class);
 
 		// preflight classes cannot be declared inside an inflight scope
@@ -3571,7 +3601,12 @@ impl<'a> TypeChecker<'a> {
 			lifts: None,
 		};
 		let mut class_type = self.types.add_type(Type::Class(class_spec));
-		match env.define(&ast_class.name, SymbolKind::Type(class_type), StatementIdx::Top) {
+		match env.define(
+			&ast_class.name,
+			SymbolKind::Type(class_type),
+			ast_class.access,
+			StatementIdx::Top,
+		) {
 			Err(type_error) => {
 				self.type_error(type_error);
 			}
@@ -3592,9 +3627,10 @@ impl<'a> TypeChecker<'a> {
 					field.reassignable,
 					field.is_static,
 					field.phase,
-					field.access_modifier,
+					field.access,
 					None,
 				),
+				field.access,
 				StatementIdx::Top,
 			) {
 				Err(type_error) => {
@@ -3610,7 +3646,7 @@ impl<'a> TypeChecker<'a> {
 				&method_def.signature,
 				env,
 				if method_def.is_static { None } else { Some(class_type) },
-				method_def.access_modifier,
+				method_def.access,
 				&mut class_env,
 				method_name,
 			);
@@ -3626,7 +3662,7 @@ impl<'a> TypeChecker<'a> {
 			&ast_class.initializer.signature,
 			env,
 			None,
-			ast_class.initializer.access_modifier,
+			ast_class.initializer.access,
 			&mut class_env,
 			&init_symb,
 		);
@@ -3641,7 +3677,7 @@ impl<'a> TypeChecker<'a> {
 			&ast_class.inflight_initializer.signature,
 			env,
 			Some(class_type),
-			ast_class.inflight_initializer.access_modifier,
+			ast_class.inflight_initializer.access,
 			&mut class_env,
 			&inflight_init_symb,
 		);
@@ -3707,12 +3743,12 @@ impl<'a> TypeChecker<'a> {
 					let class_method_type = class_method_var.type_;
 					self.validate_type(class_method_type, method_type, &ast_class.name);
 					// Make sure the method is public (interface methods must be public)
-					if class_method_var.access_modifier != AccessModifier::Public {
+					if class_method_var.access != AccessModifier::Public {
 						self.spanned_error(
 							&class_method_var.name,
 							format!(
 								"Method \"{method_name}\" is {} in \"{}\" but it's an implementation of \"{interface_type}\". Interface members must be public.",
-								class_method_var.access_modifier, ast_class.name,
+								class_method_var.access, ast_class.name,
 							),
 						);
 					}
@@ -3730,7 +3766,7 @@ impl<'a> TypeChecker<'a> {
 		self.ctx.pop_class();
 	}
 
-	fn type_check_return(&mut self, env: &mut SymbolEnv, stmt: &Stmt, exp: &Option<Expr>) {
+	fn type_check_return(&mut self, stmt: &Stmt, exp: &Option<Expr>, env: &mut SymbolEnv) {
 		// Type check the return expression
 		let return_type = exp.as_ref().map(|exp| (self.type_check_exp(exp, env).0, exp));
 
@@ -3832,6 +3868,7 @@ impl<'a> TypeChecker<'a> {
 				if let Err(e) = env.define(
 					identifier.as_ref().unwrap(),
 					SymbolKind::Namespace(ns),
+					AccessModifier::Private,
 					StatementIdx::Top,
 				) {
 					self.type_error(e);
@@ -3862,6 +3899,7 @@ impl<'a> TypeChecker<'a> {
 				if let Err(e) = env.define(
 					identifier.as_ref().unwrap(),
 					SymbolKind::Namespace(*brought_ns),
+					AccessModifier::Private,
 					StatementIdx::Top,
 				) {
 					self.type_error(e);
@@ -3892,6 +3930,7 @@ impl<'a> TypeChecker<'a> {
 				if let Err(e) = env.define(
 					identifier.as_ref().unwrap(),
 					SymbolKind::Namespace(*brought_ns),
+					AccessModifier::Private,
 					StatementIdx::Top,
 				) {
 					self.type_error(e);
@@ -3907,7 +3946,7 @@ impl<'a> TypeChecker<'a> {
 		// alias is the symbol we are giving to the imported library or namespace
 	}
 
-	fn type_check_assignment(&mut self, kind: &AssignmentKind, value: &Expr, env: &mut SymbolEnv, variable: &Reference) {
+	fn type_check_assignment(&mut self, kind: &AssignmentKind, value: &Expr, variable: &Reference, env: &mut SymbolEnv) {
 		let (exp_type, _) = self.type_check_exp(value, env);
 
 		// TODO: we need to verify that if this variable is defined in a parent environment (i.e.
@@ -3940,9 +3979,9 @@ impl<'a> TypeChecker<'a> {
 		&mut self,
 		condition: &Expr,
 		statements: &Scope,
-		env: &mut SymbolEnv,
 		elif_statements: &Vec<ast::ElifBlock>,
 		else_statements: &Option<Scope>,
+		env: &mut SymbolEnv,
 	) {
 		self.type_check_if_statement(condition, statements, env);
 
@@ -3962,7 +4001,7 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn type_check_iflet(&mut self, env: &mut SymbolEnv, iflet: &IfLet) {
+	fn type_check_iflet(&mut self, iflet: &IfLet, env: &mut SymbolEnv) {
 		self.type_check_if_let_statement(
 			&iflet.value,
 			&iflet.statements,
@@ -3993,7 +4032,7 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn type_check_while(&mut self, condition: &Expr, env: &mut SymbolEnv, statements: &Scope) {
+	fn type_check_while(&mut self, condition: &Expr, statements: &Scope, env: &mut SymbolEnv) {
 		let (cond_type, _) = self.type_check_exp(condition, env);
 		self.validate_type(cond_type, self.types.bool(), condition);
 
@@ -4008,7 +4047,7 @@ impl<'a> TypeChecker<'a> {
 		self.inner_scopes.push((statements, self.ctx.clone()));
 	}
 
-	fn type_check_for_loop(&mut self, iterable: &Expr, env: &mut SymbolEnv, iterator: &Symbol, statements: &Scope) {
+	fn type_check_for_loop(&mut self, iterable: &Expr, iterator: &Symbol, statements: &Scope, env: &mut SymbolEnv) {
 		// TODO: Expression must be iterable
 		let (exp_type, _) = self.type_check_exp(iterable, env);
 
@@ -4035,6 +4074,7 @@ impl<'a> TypeChecker<'a> {
 		match scope_env.define(
 			&iterator,
 			SymbolKind::make_free_variable(iterator.clone(), iterator_type, false, env.phase),
+			AccessModifier::Private,
 			StatementIdx::Top,
 		) {
 			Err(type_error) => {
@@ -4050,10 +4090,10 @@ impl<'a> TypeChecker<'a> {
 	fn type_check_let(
 		&mut self,
 		type_: &Option<TypeAnnotation>,
-		env: &mut SymbolEnv,
 		initial_value: &Expr,
 		var_name: &Symbol,
 		reassignable: &bool,
+		env: &mut SymbolEnv,
 	) {
 		let explicit_type = type_.as_ref().map(|t| self.resolve_type_annotation(t, env));
 		let (mut inferred_type, _) = self.type_check_exp(initial_value, env);
@@ -4080,6 +4120,7 @@ impl<'a> TypeChecker<'a> {
 			match env.define(
 				var_name,
 				SymbolKind::make_free_variable(var_name.clone(), final_type, *reassignable, env.phase),
+				AccessModifier::Private,
 				StatementIdx::Index(self.ctx.current_stmt_idx()),
 			) {
 				Err(type_error) => {
@@ -4097,6 +4138,7 @@ impl<'a> TypeChecker<'a> {
 			match env.define(
 				var_name,
 				SymbolKind::make_free_variable(var_name.clone(), inferred_type, *reassignable, env.phase),
+				AccessModifier::Private,
 				StatementIdx::Index(self.ctx.current_stmt_idx()),
 			) {
 				Err(type_error) => {
@@ -4151,6 +4193,7 @@ impl<'a> TypeChecker<'a> {
 		match stmt_env.define(
 			var_name,
 			SymbolKind::make_free_variable(var_name.clone(), var_type, *reassignable, env.phase),
+			AccessModifier::Private,
 			StatementIdx::Top,
 		) {
 			Err(type_error) => {
@@ -4223,11 +4266,19 @@ impl<'a> TypeChecker<'a> {
 			return;
 		};
 
+		// If the parent class is phase independent than its init name is just "init" regadless of
+		// whether we're inflight or not.
+		let parent_init_name = if parent_class.as_class().unwrap().phase == Phase::Independent {
+			CLASS_INIT_NAME
+		} else {
+			init_name
+		};
+
 		let parent_initializer = parent_class
 			.as_class()
 			.unwrap()
 			.methods(false)
-			.filter(|(name, _type)| name == init_name)
+			.filter(|(name, _type)| name == parent_init_name)
 			.collect_vec()[0]
 			.1;
 
@@ -4329,6 +4380,7 @@ impl<'a> TypeChecker<'a> {
 						span: method_name.span.clone(),
 					},
 					SymbolKind::make_free_variable("this".into(), class_type, false, class_env.phase),
+					AccessModifier::Private,
 					StatementIdx::Top,
 				)
 				.expect("Expected `this` to be added to constructor env");
@@ -4357,7 +4409,7 @@ impl<'a> TypeChecker<'a> {
 		method_sig: &ast::FunctionSignature,
 		env: &mut SymbolEnv,
 		instance_type: Option<TypeRef>,
-		access_modifier: AccessModifier,
+		access: AccessModifier,
 		class_env: &mut SymbolEnv,
 		method_name: &Symbol,
 	) {
@@ -4376,7 +4428,7 @@ impl<'a> TypeChecker<'a> {
 						panic!("Expected env to be a type env");
 					};
 					// If parent method is private we don't allow overriding
-					if var.access_modifier == AccessModifier::Private {
+					if var.access == AccessModifier::Private {
 						self.spanned_error(
 							method_name,
 							format!("Cannot override private method \"{method_name}\" of \"{method_defined_in}\""),
@@ -4385,15 +4437,15 @@ impl<'a> TypeChecker<'a> {
 						// For non private methods, we only allow overriding if the access modifier is the same or more permissive:
 						// - public can override public or protected
 						// - protected can only override protected
-						if !(access_modifier == AccessModifier::Public
-							&& matches!(var.access_modifier, AccessModifier::Public | AccessModifier::Protected)
-							|| access_modifier == AccessModifier::Protected && var.access_modifier == AccessModifier::Protected)
+						if !(access == AccessModifier::Public
+							&& matches!(var.access, AccessModifier::Public | AccessModifier::Protected)
+							|| access == AccessModifier::Protected && var.access == AccessModifier::Protected)
 						{
 							self.spanned_error(
 								method_name,
 								format!(
-									"Cannot override {} method \"{method_name}\" of \"{method_defined_in}\" with a {access_modifier} method",
-									var.access_modifier
+									"Cannot override {} method \"{method_name}\" of \"{method_defined_in}\" with a {access} method",
+									var.access
 								),
 							);
 						}
@@ -4410,9 +4462,10 @@ impl<'a> TypeChecker<'a> {
 				false,
 				instance_type.is_none(),
 				method_sig.phase,
-				access_modifier,
+				access,
 				None,
 			),
+			access,
 			StatementIdx::Top,
 		) {
 			Err(type_error) => {
@@ -4532,6 +4585,7 @@ impl<'a> TypeChecker<'a> {
 			match env.define(
 				&arg.name,
 				SymbolKind::make_free_variable(arg.name.clone(), param.typeref, arg.reassignable, env.phase),
+				AccessModifier::Public,
 				StatementIdx::Top,
 			) {
 				Err(type_error) => {
@@ -4625,7 +4679,7 @@ impl<'a> TypeChecker<'a> {
 					reassignable,
 					phase: flight,
 					kind,
-					access_modifier,
+					access,
 					docs: _,
 				}) => {
 					// Replace type params in function signatures
@@ -4667,9 +4721,10 @@ impl<'a> TypeChecker<'a> {
 								*reassignable,
 								matches!(kind, VariableKind::StaticMember),
 								*flight,
-								*access_modifier,
+								*access,
 								None,
 							),
+							*access,
 							StatementIdx::Top,
 						) {
 							Err(type_error) => {
@@ -4689,9 +4744,10 @@ impl<'a> TypeChecker<'a> {
 								*reassignable,
 								matches!(kind, VariableKind::StaticMember),
 								*flight,
-								*access_modifier,
+								*access,
 								None,
 							),
+							*access,
 							StatementIdx::Top,
 						) {
 							Err(type_error) => {
@@ -4996,7 +5052,7 @@ impl<'a> TypeChecker<'a> {
 									type_,
 									reassignable: false,
 									phase: Phase::Independent,
-									access_modifier: AccessModifier::Public,
+									access: AccessModifier::Public,
 									docs: None,
 								},
 								Phase::Independent,
@@ -5068,7 +5124,7 @@ impl<'a> TypeChecker<'a> {
 				reassignable: false,
 				phase: env.phase,
 				kind: VariableKind::InstanceMember,
-				access_modifier: AccessModifier::Public,
+				access: AccessModifier::Public,
 				docs: None,
 			},
 
@@ -5191,7 +5247,7 @@ impl<'a> TypeChecker<'a> {
 			}
 
 			// Compare the access type with what's allowed
-			match var.access_modifier {
+			match var.access {
 				AccessModifier::Private => {
 					if !private_access {
 						self.spanned_error(
@@ -5290,7 +5346,8 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		if let Some(parent_class) = parent_type.as_class() {
-			if parent_class.phase == phase {
+			// Parent class must be either the same phase as the child or, if the child is an inflight class, the parent can be an independent class
+			if (parent_class.phase == phase) || (phase == Phase::Inflight && parent_class.phase == Phase::Independent) {
 				(Some(parent_type), Some(parent_class.env.get_ref()))
 			} else {
 				self.spanned_error(
@@ -5373,6 +5430,7 @@ fn add_parent_members_to_struct_env(
 						AccessModifier::Public,
 						None,
 					),
+					AccessModifier::Public,
 					StatementIdx::Top,
 				)?;
 			}
@@ -5438,6 +5496,7 @@ fn add_parent_members_to_iface_env(
 						AccessModifier::Public,
 						None,
 					),
+					AccessModifier::Public,
 					StatementIdx::Top,
 				)?;
 			}
@@ -5460,6 +5519,33 @@ where
 			message: format!("Unknown symbol \"{s}\""),
 			span: s.span(),
 			annotations: vec![],
+		},
+		LookupResult::NotPublic(kind, lookup_info) => TypeError {
+			message: {
+				let access = lookup_info.access.to_string();
+				match kind {
+					SymbolKind::Type(type_) => {
+						if matches!(**type_, Type::Class(_)) {
+							format!("Class \"{looked_up_object}\" is {access}")
+						} else if matches!(**type_, Type::Interface(_)) {
+							format!("Interface \"{looked_up_object}\" is {access}")
+						} else if matches!(**type_, Type::Struct(_)) {
+							format!("Struct \"{looked_up_object}\" is {access}")
+						} else if matches!(**type_, Type::Enum(_)) {
+							format!("Enum \"{looked_up_object}\" is {access}")
+						} else {
+							format!("Symbol \"{looked_up_object}\" is {access}")
+						}
+					}
+					SymbolKind::Variable(_) => format!("Symbol \"{looked_up_object}\" is {access}"),
+					SymbolKind::Namespace(_) => format!("namespace \"{looked_up_object}\" is {access}"),
+				}
+			},
+			span: looked_up_object.span(),
+			annotations: vec![DiagnosticAnnotation {
+				message: "defined here".to_string(),
+				span: lookup_info.span,
+			}],
 		},
 		LookupResult::MultipleFound => TypeError {
 			message: format!("Ambiguous symbol \"{looked_up_object}\""),

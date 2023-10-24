@@ -26,6 +26,19 @@ module.exports = function({  }) {
 
 ```
 
+## inflight.Foo-3.js
+```js
+"use strict";
+module.exports = function({  }) {
+  class Foo {
+    constructor({  }) {
+    }
+  }
+  return Foo;
+}
+
+```
+
 ## inflight.Widget-1.js
 ```js
 "use strict";
@@ -52,14 +65,14 @@ module.exports = function({  }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -77,9 +90,10 @@ module.exports = function({  }) {
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   const blah = require("./preflight.inner-2.js")({ $stdlib });
+  const util = $stdlib.util;
   class Foo extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
+    constructor($scope, $id, ) {
+      super($scope, $id);
     }
     foo() {
       return "foo";
@@ -118,9 +132,10 @@ module.exports = function({ $stdlib }) {
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
+  const util = $stdlib.util;
   class Bar extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
+    constructor($scope, $id, ) {
+      super($scope, $id);
     }
     bar() {
       return "bar";
@@ -136,6 +151,31 @@ module.exports = function({ $stdlib }) {
         (await (async () => {
           const BarClient = ${Bar._toInflightType(this)};
           const client = new BarClient({
+          });
+          if (client.$inflight_init) { await client.$inflight_init(); }
+          return client;
+        })())
+      `;
+    }
+    _getInflightOps() {
+      return ["$inflight_init"];
+    }
+  }
+  class Foo extends $stdlib.std.Resource {
+    constructor($scope, $id, ) {
+      super($scope, $id);
+    }
+    static _toInflightType(context) {
+      return `
+        require("./inflight.Foo-3.js")({
+        })
+      `;
+    }
+    _toInflight() {
+      return `
+        (await (async () => {
+          const FooClient = ${Foo._toInflightType(this)};
+          const client = new FooClient({
           });
           if (client.$inflight_init) { await client.$inflight_init(); }
           return client;
@@ -174,15 +214,15 @@ const std = $stdlib.std;
 const w = require("./preflight.widget-1.js")({ $stdlib });
 const subdir = require("./preflight.subdir2-5.js")({ $stdlib });
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
-    const widget1 = new w.Widget(this,"w.Widget");
+  constructor($scope, $id) {
+    super($scope, $id);
+    const widget1 = new w.Widget(this, "w.Widget");
     {((cond) => {if (!cond) throw new Error("assertion failed: widget1.compute() == 42")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((widget1.compute()),42)))};
-    const foo = new subdir.Foo(this,"subdir.Foo");
+    const foo = new subdir.Foo(this, "subdir.Foo");
     {((cond) => {if (!cond) throw new Error("assertion failed: foo.foo() == \"foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((foo.foo()),"foo")))};
-    const bar = new subdir.Bar(this,"subdir.Bar");
+    const bar = new subdir.Bar(this, "subdir.Bar");
     {((cond) => {if (!cond) throw new Error("assertion failed: bar.bar() == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((bar.bar()),"bar")))};
-    const widget2 = new subdir.inner.Widget(this,"subdir.inner.Widget");
+    const widget2 = new subdir.inner.Widget(this, "subdir.inner.Widget");
     {((cond) => {if (!cond) throw new Error("assertion failed: widget2.compute() == 42")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((widget2.compute()),42)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: foo.checkWidget(widget2) == 1379")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((foo.checkWidget(widget2)),1379)))};
   }
@@ -212,8 +252,8 @@ module.exports = function({ $stdlib }) {
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   class Widget extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
+    constructor($scope, $id, ) {
+      super($scope, $id);
     }
     compute() {
       return 42;

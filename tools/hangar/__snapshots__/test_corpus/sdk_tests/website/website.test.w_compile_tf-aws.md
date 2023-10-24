@@ -35,7 +35,7 @@ module.exports = function({ $config, $htmlContent, $http_Util, $indexFile, $othe
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
@@ -81,7 +81,7 @@ module.exports = function({ $config, $htmlContent, $http_Util, $indexFile, $othe
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -274,11 +274,11 @@ const cloud = $stdlib.cloud;
 const http = $stdlib.http;
 const fs = $stdlib.fs;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -319,15 +319,15 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const w = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this,"cloud.Website",{ path: "./website" });
+    const w = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this, "cloud.Website", { path: "./website" });
     const config = ({"json": 1});
     const htmlContent = "<html>Hello World!</html>";
     const indexFile = (fs.Util.readFile(String.raw({ raw: ["", "/index.html"] }, w.path)));
     const otherFile = (fs.Util.readFile(String.raw({ raw: ["", "/inner-folder/other.html"] }, w.path)));
-    (w.addJson("config.json",config));
-    (w.addFile("another-file.html",htmlContent,{ contentType: "text/html" }));
+    (w.addJson("config.json", config));
+    (w.addFile("another-file.html", htmlContent, { contentType: "text/html" }));
     {((cond) => {if (!cond) throw new Error("assertion failed: w.path.endsWith(\"sdk_tests/website/website\") || w.path.endsWith(\"sdk_tests\\\\website\\\\website\")")})((w.path.endsWith("sdk_tests/website/website") || w.path.endsWith("sdk_tests\\website\\website")))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:access files on the website",new $Closure1(this,"$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:access files on the website", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

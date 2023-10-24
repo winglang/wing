@@ -5,6 +5,7 @@ exports[`bucket is public 1`] = `
   "resource": {
     "google_storage_bucket": {
       "my_bucket": {
+        "force_destroy": false,
         "location": "us-central1",
         "name": "my_bucket-\${random_id.my_bucket_Id_50F73A6B.hex}",
         "public_access_prevention": "inherited",
@@ -130,6 +131,7 @@ exports[`bucket with two preflight files 1`] = `
   "resource": {
     "google_storage_bucket": {
       "my_bucket": {
+        "force_destroy": false,
         "location": "us-central1",
         "name": "my_bucket-\${random_id.my_bucket_Id_50F73A6B.hex}",
         "public_access_prevention": "enforced",
@@ -268,6 +270,7 @@ exports[`bucket with two preflight objects 1`] = `
   "resource": {
     "google_storage_bucket": {
       "my_bucket": {
+        "force_destroy": false,
         "location": "us-central1",
         "name": "my_bucket-\${random_id.my_bucket_Id_50F73A6B.hex}",
         "public_access_prevention": "enforced",
@@ -406,6 +409,7 @@ exports[`create a bucket 1`] = `
   "resource": {
     "google_storage_bucket": {
       "my_bucket": {
+        "force_destroy": false,
         "location": "us-central1",
         "name": "my_bucket-\${random_id.my_bucket_Id_50F73A6B.hex}",
         "public_access_prevention": "enforced",
@@ -516,12 +520,14 @@ exports[`two buckets 1`] = `
   "resource": {
     "google_storage_bucket": {
       "my_bucket1": {
+        "force_destroy": false,
         "location": "us-central1",
         "name": "my_bucket1-\${random_id.my_bucket1_Id_D79FE240.hex}",
         "public_access_prevention": "enforced",
         "uniform_bucket_level_access": true,
       },
       "my_bucket2": {
+        "force_destroy": false,
         "location": "us-central1",
         "name": "my_bucket2-\${random_id.my_bucket2_Id_0AB96F49.hex}",
         "public_access_prevention": "enforced",

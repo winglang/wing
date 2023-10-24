@@ -26,13 +26,13 @@ module.exports = function({ $b }) {
       ;
       const OBJECT_DOES_NOT_EXIST_ERROR = "Object does not exist (key=file1.json).";
       const jsonObj1 = ({"key1": "value1"});
-      (await $b.putJson("file1.json",jsonObj1));
+      (await $b.putJson("file1.json", jsonObj1));
       (await $b.delete("file1.txt"));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file1.json\")")})((await $b.exists("file1.json")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file2.txt\")")})((await $b.exists("file2.txt")))};
-      (await $b.delete("file1.json",{ mustExist: true }));
-      (await assertThrows(OBJECT_DOES_NOT_EXIST_ERROR,async () => {
-        (await $b.delete("file1.json",{ mustExist: true }));
+      (await $b.delete("file1.json", { mustExist: true }));
+      (await assertThrows(OBJECT_DOES_NOT_EXIST_ERROR, async () => {
+        (await $b.delete("file1.json", { mustExist: true }));
       }
       ));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file2.txt\")")})((await $b.exists("file2.txt")))};
@@ -58,14 +58,14 @@ module.exports = function({ $b }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -114,11 +114,11 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -149,9 +149,9 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    (b.addObject("file2.txt","Bar"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:delete",new $Closure1(this,"$Closure1"));
+    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+    (b.addObject("file2.txt", "Bar"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:delete", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

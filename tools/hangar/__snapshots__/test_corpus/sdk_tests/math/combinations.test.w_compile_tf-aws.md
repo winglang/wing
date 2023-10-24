@@ -11,7 +11,7 @@ module.exports = function({ $math_Util, $population, $subset }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.combinations(population, subset) == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.combinations($population,$subset)),10)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.combinations(population, subset) == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.combinations($population, $subset)),10)))};
     }
   }
   return $Closure1;
@@ -32,14 +32,14 @@ module.exports = function({ $math_Util, $population, $subset }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -61,11 +61,11 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const math = $stdlib.math;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -101,8 +101,8 @@ class $Root extends $stdlib.std.Resource {
     }
     const population = 5;
     const subset = 3;
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.combinations(population, subset) == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.combinations(population,subset)),10)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight combinations",new $Closure1(this,"$Closure1"));
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.combinations(population, subset) == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.combinations(population, subset)),10)))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight combinations", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

@@ -217,7 +217,11 @@ fn render_signature_help(f: &FunctionSignature) -> String {
 		let param_type_unwrapped = param.typeref.maybe_unwrap_option();
 		let is_last = param_idx == f.parameters.len() - 1;
 
-		let param_name: &String = &param.name;
+		let param_name = if param.name.is_empty() {
+			format!("arg{}", param_idx)
+		} else {
+			param.name.clone()
+		};
 		let detail_text = if let Some(summary) = &param.docs.summary {
 			format!("— `{param_type}` — {summary}")
 		} else {
@@ -412,7 +416,7 @@ fn render_classlike_members(classlike: &impl ClassLike) -> String {
 		.get_env()
 		.iter(true)
 		.flat_map(|f| if f.2.init { None } else { f.1.as_variable() })
-		.filter(|v| v.access_modifier == AccessModifier::Public)
+		.filter(|v| v.access == AccessModifier::Public)
 		// show optionals first, then sort alphabetically by name
 		.sorted_by(|a, b| {
 			let a_is_option = a.type_.is_option();

@@ -35,7 +35,7 @@ module.exports = function({ $__parent_this_2_b }) {
       return $obj;
     }
     async handle() {
-      (await $__parent_this_2_b.put("foo1.txt","bar"));
+      (await $__parent_this_2_b.put("foo1.txt", "bar"));
     }
   }
   return $Closure2;
@@ -54,7 +54,7 @@ module.exports = function({ $__parent_this_3_b }) {
       return $obj;
     }
     async handle() {
-      (await $__parent_this_3_b.put("foo2.txt","bar"));
+      (await $__parent_this_3_b.put("foo2.txt", "bar"));
     }
   }
   return $Closure3;
@@ -117,7 +117,7 @@ module.exports = function({ $Foo, $MyEnum }) {
     async myMethod() {
       (await this.$this_foo.fooInc());
       const s = (await $Foo.fooStatic());
-      (await this.$this_b.put("foo",String.raw({ raw: ["counter is: ", ""] }, (await this.$this_foo.fooGet()))));
+      (await this.$this_b.put("foo", String.raw({ raw: ["counter is: ", ""] }, (await this.$this_foo.fooGet()))));
       return (await this.$this_b.get("foo"));
     }
     async testTypeAccess() {
@@ -147,7 +147,7 @@ module.exports = function({  }) {
     async publish(s) {
       (await this.$this_t.publish(s));
       (await this.$this_q.push(s));
-      (await this.$this_b2.put("foo",s));
+      (await this.$this_b2.put("foo", s));
     }
     async getObjectCount() {
       return (await this.$this_b.list()).length;
@@ -225,14 +225,14 @@ module.exports = function({  }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -699,12 +699,12 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class Foo extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        this.c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        this.c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter");
       }
       static _toInflightType(context) {
         return `
@@ -741,11 +741,11 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class Bar extends $stdlib.std.Resource {
-      constructor(scope, id, name, b, e) {
-        super(scope, id);
+      constructor($scope, $id, name, b, e) {
+        super($scope, $id);
         this.name = name;
         this.b = b;
-        this.foo = new Foo(this,"Foo");
+        this.foo = new Foo(this, "Foo");
         this.e = e;
       }
       static _toInflightType(context) {
@@ -793,8 +793,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -830,16 +830,16 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class BigPublisher extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-        this.b2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"b2");
-        this.q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
-        this.t = this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this,"cloud.Topic");
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+        this.b2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "b2");
+        this.q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue");
+        this.t = this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this, "cloud.Topic");
         const __parent_this_2 = this;
         class $Closure2 extends $stdlib.std.Resource {
-          constructor(scope, id, ) {
-            super(scope, id);
+          constructor($scope, $id, ) {
+            super($scope, $id);
             (std.Node.of(this)).hidden = true;
           }
           static _toInflightType(context) {
@@ -870,11 +870,11 @@ class $Root extends $stdlib.std.Resource {
             super._registerOnLift(host, ops);
           }
         }
-        (this.t.onMessage(new $Closure2(this,"$Closure2")));
+        (this.t.onMessage(new $Closure2(this, "$Closure2")));
         const __parent_this_3 = this;
         class $Closure3 extends $stdlib.std.Resource {
-          constructor(scope, id, ) {
-            super(scope, id);
+          constructor($scope, $id, ) {
+            super($scope, $id);
             (std.Node.of(this)).hidden = true;
           }
           static _toInflightType(context) {
@@ -905,11 +905,11 @@ class $Root extends $stdlib.std.Resource {
             super._registerOnLift(host, ops);
           }
         }
-        (this.q.setConsumer(new $Closure3(this,"$Closure3")));
+        (this.q.setConsumer(new $Closure3(this, "$Closure3")));
         const __parent_this_4 = this;
         class $Closure4 extends $stdlib.std.Resource {
-          constructor(scope, id, ) {
-            super(scope, id);
+          constructor($scope, $id, ) {
+            super($scope, $id);
             (std.Node.of(this)).hidden = true;
           }
           static _toInflightType(context) {
@@ -940,7 +940,7 @@ class $Root extends $stdlib.std.Resource {
             super._registerOnLift(host, ops);
           }
         }
-        (this.b2.onCreate(new $Closure4(this,"$Closure4")));
+        (this.b2.onCreate(new $Closure4(this, "$Closure4")));
       }
       static _toInflightType(context) {
         return `
@@ -985,8 +985,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure5 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -1018,11 +1018,11 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class Dummy extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       static getInstance(scope) {
-        return new Dummy(scope,"StaticDummy");
+        return new Dummy(scope, "StaticDummy");
       }
       static _toInflightType(context) {
         return `
@@ -1046,16 +1046,16 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class ScopeAndIdTestClass extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        const d1 = new Dummy(this,"Dummy");
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        const d1 = new Dummy(this, "Dummy");
         {((cond) => {if (!cond) throw new Error("assertion failed: d1.node.path.endsWith(\"/ScopeAndIdTestClass/Dummy\")")})(d1.node.path.endsWith("/ScopeAndIdTestClass/Dummy"))};
-        const d2 = new Dummy(d1,"Dummy");
+        const d2 = new Dummy(d1, "Dummy");
         {((cond) => {if (!cond) throw new Error("assertion failed: d2.node.path.endsWith(\"/ScopeAndIdTestClass/Dummy/Dummy\")")})(d2.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy"))};
-        const d3 = new Dummy((Dummy.getInstance(d2)),"Dummy");
+        const d3 = new Dummy((Dummy.getInstance(d2)), "Dummy");
         {((cond) => {if (!cond) throw new Error("assertion failed: d3.node.path.endsWith(\"/ScopeAndIdTestClass/Dummy/Dummy/StaticDummy/Dummy\")")})(d3.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy/StaticDummy/Dummy"))};
         for (const i of $stdlib.std.Range.of(0, 3, false)) {
-          const x = new Dummy(this,String.raw({ raw: ["tc", ""] }, i));
+          const x = new Dummy(this, String.raw({ raw: ["tc", ""] }, i));
           const expected_path = String.raw({ raw: ["/ScopeAndIdTestClass/tc", ""] }, i);
           {((cond) => {if (!cond) throw new Error("assertion failed: x.node.path.endsWith(expected_path)")})(x.node.path.endsWith(expected_path))};
         }
@@ -1089,12 +1089,12 @@ class $Root extends $stdlib.std.Resource {
         return tmp;
       })({})
     ;
-    const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    const res = new Bar(this,"Bar","Arr",bucket,MyEnum.B);
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
-    const bigOlPublisher = new BigPublisher(this,"BigPublisher");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:dependency cycles",new $Closure5(this,"$Closure5"));
-    new ScopeAndIdTestClass(this,"ScopeAndIdTestClass");
+    const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+    const res = new Bar(this, "Bar", "Arr", bucket, MyEnum.B);
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:test", new $Closure1(this, "$Closure1"));
+    const bigOlPublisher = new BigPublisher(this, "BigPublisher");
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:dependency cycles", new $Closure5(this, "$Closure5"));
+    new ScopeAndIdTestClass(this, "ScopeAndIdTestClass");
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

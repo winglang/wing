@@ -13,7 +13,7 @@ module.exports = function({ $fs_Util }) {
     async handle() {
       const tmpdir = (await $fs_Util.mkdtemp());
       {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(tmpdir) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists(tmpdir)),true)))};
-      (await $fs_Util.remove(tmpdir,({"recursive": true})));
+      (await $fs_Util.remove(tmpdir, ({"recursive": true})));
       {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(tmpdir) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists(tmpdir)),false)))};
     }
   }
@@ -35,14 +35,14 @@ module.exports = function({ $fs_Util }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -64,11 +64,11 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const fs = $stdlib.fs;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -95,9 +95,9 @@ class $Root extends $stdlib.std.Resource {
     }
     const tmpdir = (fs.Util.mkdtemp());
     {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(tmpdir) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.exists(tmpdir)),true)))};
-    (fs.Util.remove(tmpdir,({"recursive": true})));
+    (fs.Util.remove(tmpdir, ({"recursive": true})));
     {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(tmpdir) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.exists(tmpdir)),false)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight create temporary directory",new $Closure1(this,"$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight create temporary directory", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

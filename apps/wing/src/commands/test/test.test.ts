@@ -1,12 +1,14 @@
-import { writeFileSync } from "fs";
+// import { writeFileSync } from "fs";
+import fs from "fs";
 import { mkdtemp } from "fs/promises";
 import { tmpdir } from "os";
-import { join } from "path";
+import { join, resolve } from "path";
 import { Target } from "@winglang/compiler";
 import { TestResult, TraceType } from "@winglang/sdk/lib/std";
 import chalk from "chalk";
 import { describe, test, expect, beforeEach, afterEach, vi } from "vitest";
-import { renderTestReport, test as wingTest, filterTests, pickOneTestPerEnvironment } from "./test";
+import { filterTests, pickOneTestPerEnvironment, renderTestReport, test as wingTest } from ".";
+import * as resultsFn from "./results";
 
 const defaultChalkLevel = chalk.level;
 
@@ -55,9 +57,9 @@ describe("test options", () => {
 
     try {
       process.chdir(outDir);
-      writeFileSync("foo.test.w", "bring cloud;");
-      writeFileSync("bar.test.w", "bring cloud;");
-      writeFileSync("baz.test.w", "bring cloud;");
+      fs.writeFileSync("foo.test.w", "bring cloud;");
+      fs.writeFileSync("bar.test.w", "bring cloud;");
+      fs.writeFileSync("baz.test.w", "bring cloud;");
 
       await wingTest([], { clean: true, target: Target.SIM });
 
@@ -68,6 +70,73 @@ describe("test options", () => {
       process.chdir(prevdir);
       logSpy.mockRestore();
     }
+  });
+
+  test("wing test with output file calls writeResultsToFile", async () => {
+    const outDir = await mkdtemp(join(tmpdir(), "-wing-compile-test"));
+    const prevdir = process.cwd();
+    const writeResults = vi.spyOn(resultsFn, "writeResultsToFile");
+    const writeFile = vi.spyOn(fs, "writeFile").mockImplementation(() => null);
+
+    try {
+      process.chdir(outDir);
+      fs.writeFileSync("test.test.w", EXAMPLE_TEST);
+
+      const outputFile = "out.json";
+
+      await wingTest(["test.test.w"], {
+        clean: true,
+        target: Target.SIM,
+        outputFile,
+      });
+
+      expect(writeResults).toBeCalledTimes(1);
+      const { testName, results } = writeResults.mock.calls[0][0][0];
+      expect(results).toMatchObject(BUCKET_TEST_RESULT);
+      expect(testName).toBe("test.test.w");
+      expect(writeResults.mock.calls[0][2]).toBe(outputFile);
+
+      expect(writeFile).toBeCalledTimes(1);
+      const [filePath, output] = writeFile.mock.calls[0];
+      expect(filePath).toBe(resolve("out.json"));
+      expect(JSON.parse(output as string)).toMatchObject(OUTPUT_FILE);
+    } finally {
+      writeResults.mockClear();
+      process.chdir(prevdir);
+    }
+  });
+
+  test("wing test without output file calls writeResultsToFile", async () => {
+    const writeResults = vi.spyOn(resultsFn, "writeResultsToFile");
+    const outDir = await mkdtemp(join(tmpdir(), "-wing-compile-test"));
+    const prevdir = process.cwd();
+
+    try {
+      process.chdir(outDir);
+      fs.writeFileSync("test.test.w", EXAMPLE_TEST);
+
+      await wingTest(["test.test.w"], {
+        clean: true,
+        target: Target.SIM,
+      });
+      expect(writeResults).toBeCalledTimes(0);
+      writeResults.mockClear();
+    } finally {
+      process.chdir(prevdir);
+    }
+  });
+
+  test("validate output file", () => {
+    expect(resultsFn.validateOutputFilePath("/path/out.json")).toBeUndefined();
+    expect(resultsFn.validateOutputFilePath("out.json")).toBeUndefined();
+
+    expect(() => resultsFn.validateOutputFilePath("/path/out.csv")).toThrow(
+      'only .json output files are supported. (found ".csv")'
+    );
+
+    expect(() => resultsFn.validateOutputFilePath("/path/json")).toThrow(
+      'only .json output files are supported. (found "")'
+    );
   });
 
   test("wing test (no filter)", () => {
@@ -153,6 +222,84 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
     ],
   },
 ];
+
+const EXAMPLE_TEST = `
+bring cloud;
+let b = new cloud.Bucket();
+
+test "put" {
+  b.put("test1.txt", "Foo");
+  assert(b.get("test1.txt") == "Foo");
+}
+`;
+
+const BUCKET_TEST_RESULT = [
+  {
+    path: "root/env0/test:put",
+    pass: true,
+    traces: [
+      {
+        data: { message: "Put (key=test1.txt).", status: "success" },
+        type: "resource",
+        sourcePath: "root/env0/cloud.Bucket",
+        sourceType: "wingsdk.cloud.Bucket",
+      },
+      {
+        data: { message: "Get (key=test1.txt).", status: "success", result: '"Foo"' },
+        type: "resource",
+        sourcePath: "root/env0/cloud.Bucket",
+        sourceType: "wingsdk.cloud.Bucket",
+      },
+      {
+        data: { message: 'Invoke (payload="").', status: "success" },
+        type: "resource",
+        sourcePath: "root/env0/test:put/Handler",
+        sourceType: "wingsdk.cloud.Function",
+      },
+    ],
+  },
+];
+
+const OUTPUT_FILE = {
+  results: {
+    "test.test.w": {
+      put: {
+        path: "root/env0/test:put",
+        pass: true,
+        traces: [
+          {
+            data: {
+              message: "Put (key=test1.txt).",
+              status: "success",
+            },
+            type: "resource",
+            sourcePath: "root/env0/cloud.Bucket",
+            sourceType: "wingsdk.cloud.Bucket",
+          },
+          {
+            data: {
+              message: "Get (key=test1.txt).",
+              status: "success",
+              result: '"Foo"',
+            },
+            type: "resource",
+            sourcePath: "root/env0/cloud.Bucket",
+            sourceType: "wingsdk.cloud.Bucket",
+          },
+          {
+            data: {
+              message: 'Invoke (payload="").',
+              status: "success",
+            },
+            type: "resource",
+            sourcePath: "root/env0/test:put/Handler",
+            sourceType: "wingsdk.cloud.Function",
+          },
+        ],
+      },
+    },
+  },
+};
 
 const EXAMPLE_UNFILTERED_TESTS: string[] = [
   "root/env0/test:get()",

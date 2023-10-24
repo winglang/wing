@@ -75,8 +75,8 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
     }
     async handle() {
       const url = ($api_url + $path);
-      const options = (await $http_Util.fetch(url,{ method: $http_HttpMethod.OPTIONS }));
-      const head = (await $http_Util.fetch(url,{ method: $http_HttpMethod.HEAD }));
+      const options = (await $http_Util.fetch(url, { method: $http_HttpMethod.OPTIONS }));
+      const head = (await $http_Util.fetch(url, { method: $http_HttpMethod.HEAD }));
       {((cond) => {if (!cond) throw new Error("assertion failed: options.status == 204")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(options.status,204)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: options.url == url")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(options.url,url)))};
     }
@@ -99,7 +99,7 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
@@ -118,7 +118,7 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -487,11 +487,11 @@ const cloud = $stdlib.cloud;
 const http = $stdlib.http;
 const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -524,8 +524,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -558,8 +558,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -584,8 +584,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -620,12 +620,12 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
+    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
     const path = "/path";
-    (api.options(path,new $Closure1(this,"$Closure1")));
-    (api.head(path,new $Closure2(this,"$Closure2")));
-    (api.connect(path,new $Closure3(this,"$Closure3")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:http.fetch can preform a call to an api to CONNECT, HEAD and OPTIONS",new $Closure4(this,"$Closure4"));
+    (api.options(path, new $Closure1(this, "$Closure1")));
+    (api.head(path, new $Closure2(this, "$Closure2")));
+    (api.connect(path, new $Closure3(this, "$Closure3")));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:http.fetch can preform a call to an api to CONNECT, HEAD and OPTIONS", new $Closure4(this, "$Closure4"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
