@@ -30,7 +30,7 @@ module.exports = function({ $circumference, $math_Util, $r }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(circumference(r), decimalPlaces: 2) == 62.83")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round((await $circumference($r)),{ decimalPlaces: 2 })),62.83)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(circumference(r), decimalPlaces: 2) == 62.83")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round((await $circumference($r)), { decimalPlaces: 2 })),62.83)))};
     }
   }
   return $Closure2;
@@ -51,14 +51,14 @@ module.exports = function({ $circumference, $math_Util, $r }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -80,11 +80,11 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const math = $stdlib.math;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -110,8 +110,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -146,9 +146,9 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const r = 10;
-    const circumference = new $Closure1(this,"$Closure1");
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.PI, decimalPlaces: 3) == 3.142")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round(math.Util.PI,{ decimalPlaces: 3 })),3.142)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:PI",new $Closure2(this,"$Closure2"));
+    const circumference = new $Closure1(this, "$Closure1");
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.PI, decimalPlaces: 3) == 3.142")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round(math.Util.PI, { decimalPlaces: 3 })),3.142)))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:PI", new $Closure2(this, "$Closure2"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

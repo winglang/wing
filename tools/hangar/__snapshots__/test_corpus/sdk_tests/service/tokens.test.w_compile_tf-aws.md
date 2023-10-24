@@ -31,7 +31,7 @@ module.exports = function({ $api_url, $b, $http_Util }) {
     }
     async handle() {
       const result = (await $http_Util.get($api_url));
-      (await $b.put("service.txt",(result.body ?? "")));
+      (await $b.put("service.txt", (result.body ?? "")));
     }
   }
   return $Closure2;
@@ -75,14 +75,14 @@ module.exports = function({ $b, $util_Util }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -106,14 +106,14 @@ const cloud = $stdlib.cloud;
 const util = $stdlib.util;
 const http = $stdlib.http;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     if ((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((util.Util.env("WING_TARGET")),"sim"))) {
-      const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-      const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
+      const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+      const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
       class $Closure1 extends $stdlib.std.Resource {
-        constructor(scope, id, ) {
-          super(scope, id);
+        constructor($scope, $id, ) {
+          super($scope, $id);
           (std.Node.of(this)).hidden = true;
         }
         static _toInflightType(context) {
@@ -137,10 +137,10 @@ class $Root extends $stdlib.std.Resource {
           return ["handle", "$inflight_init"];
         }
       }
-      (api.get("/",new $Closure1(this,"$Closure1")));
+      (api.get("/", new $Closure1(this, "$Closure1")));
       class $Closure2 extends $stdlib.std.Resource {
-        constructor(scope, id, ) {
-          super(scope, id);
+        constructor($scope, $id, ) {
+          super($scope, $id);
           (std.Node.of(this)).hidden = true;
         }
         static _toInflightType(context) {
@@ -174,10 +174,10 @@ class $Root extends $stdlib.std.Resource {
           super._registerOnLift(host, ops);
         }
       }
-      const s = this.node.root.newAbstract("@winglang/sdk.cloud.Service",this,"cloud.Service",new $Closure2(this,"$Closure2"));
+      const s = this.node.root.newAbstract("@winglang/sdk.cloud.Service",this, "cloud.Service", new $Closure2(this, "$Closure2"));
       class $Closure3 extends $stdlib.std.Resource {
-        constructor(scope, id, ) {
-          super(scope, id);
+        constructor($scope, $id, ) {
+          super($scope, $id);
           (std.Node.of(this)).hidden = true;
         }
         static _toInflightType(context) {
@@ -209,7 +209,7 @@ class $Root extends $stdlib.std.Resource {
           super._registerOnLift(host, ops);
         }
       }
-      this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:will bind and use tokens",new $Closure3(this,"$Closure3"));
+      this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:will bind and use tokens", new $Closure3(this, "$Closure3"));
     }
   }
 }

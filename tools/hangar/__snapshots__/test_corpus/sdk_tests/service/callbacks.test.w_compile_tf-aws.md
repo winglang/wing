@@ -11,10 +11,10 @@ module.exports = function({ $b, $startCounter, $started, $status, $stopped }) {
       return $obj;
     }
     async handle() {
-      (await $b.put($status,$started));
+      (await $b.put($status, $started));
       (await $startCounter.inc());
       return async () => {
-        (await $b.put($status,$stopped));
+        (await $b.put($status, $stopped));
         (await $startCounter.dec());
       }
       ;
@@ -107,14 +107,14 @@ module.exports = function({ $b, $s, $startCounter, $status, $stopped }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -138,17 +138,17 @@ const cloud = $stdlib.cloud;
 const util = $stdlib.util;
 const http = $stdlib.http;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     if ((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((util.Util.env("WING_TARGET")),"sim"))) {
-      const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-      const startCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
+      const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+      const startCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter");
       const status = "status";
       const started = "started";
       const stopped = "stopped";
       class $Closure1 extends $stdlib.std.Resource {
-        constructor(scope, id, ) {
-          super(scope, id);
+        constructor($scope, $id, ) {
+          super($scope, $id);
           (std.Node.of(this)).hidden = true;
         }
         static _toInflightType(context) {
@@ -187,10 +187,10 @@ class $Root extends $stdlib.std.Resource {
           super._registerOnLift(host, ops);
         }
       }
-      const s = this.node.root.newAbstract("@winglang/sdk.cloud.Service",this,"cloud.Service",new $Closure1(this,"$Closure1"),{ autoStart: false });
+      const s = this.node.root.newAbstract("@winglang/sdk.cloud.Service",this, "cloud.Service", new $Closure1(this, "$Closure1"), { autoStart: false });
       class $Closure2 extends $stdlib.std.Resource {
-        constructor(scope, id, ) {
-          super(scope, id);
+        constructor($scope, $id, ) {
+          super($scope, $id);
           (std.Node.of(this)).hidden = true;
         }
         static _toInflightType(context) {
@@ -223,10 +223,10 @@ class $Root extends $stdlib.std.Resource {
           super._registerOnLift(host, ops);
         }
       }
-      this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:does not start automatically if autoStart is false",new $Closure2(this,"$Closure2"));
+      this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:does not start automatically if autoStart is false", new $Closure2(this, "$Closure2"));
       class $Closure3 extends $stdlib.std.Resource {
-        constructor(scope, id, ) {
-          super(scope, id);
+        constructor($scope, $id, ) {
+          super($scope, $id);
           (std.Node.of(this)).hidden = true;
         }
         static _toInflightType(context) {
@@ -265,10 +265,10 @@ class $Root extends $stdlib.std.Resource {
           super._registerOnLift(host, ops);
         }
       }
-      this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:start() calls onStart() idempotently",new $Closure3(this,"$Closure3"));
+      this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:start() calls onStart() idempotently", new $Closure3(this, "$Closure3"));
       class $Closure4 extends $stdlib.std.Resource {
-        constructor(scope, id, ) {
-          super(scope, id);
+        constructor($scope, $id, ) {
+          super($scope, $id);
           (std.Node.of(this)).hidden = true;
         }
         static _toInflightType(context) {
@@ -307,7 +307,7 @@ class $Root extends $stdlib.std.Resource {
           super._registerOnLift(host, ops);
         }
       }
-      this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:stop() calls onStop()",new $Closure4(this,"$Closure4"));
+      this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:stop() calls onStop()", new $Closure4(this, "$Closure4"));
     }
   }
 }

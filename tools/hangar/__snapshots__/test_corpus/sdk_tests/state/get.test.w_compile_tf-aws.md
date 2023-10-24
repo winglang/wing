@@ -11,7 +11,7 @@ module.exports = function({ $__parent_this_1_startTimeKey, $__parent_this_1_stat
       return $obj;
     }
     async handle() {
-      (await $__parent_this_1_state.set($__parent_this_1_startTimeKey,"2023-10-16T20:47:39.511Z"));
+      (await $__parent_this_1_state.set($__parent_this_1_startTimeKey, "2023-10-16T20:47:39.511Z"));
     }
   }
   return $Closure1;
@@ -90,14 +90,14 @@ module.exports = function({  }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -120,13 +120,13 @@ const std = $stdlib.std;
 const my = require("./preflight.myservice-1.js")({ $stdlib });
 const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     if ((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((util.Util.env("WING_TARGET")),"sim"))) {
-      const svc = new my.MyService(this,"my.MyService");
+      const svc = new my.MyService(this, "my.MyService");
       class $Closure1 extends $stdlib.std.Resource {
-        constructor(scope, id, ) {
-          super(scope, id);
+        constructor($scope, $id, ) {
+          super($scope, $id);
           (std.Node.of(this)).hidden = true;
         }
         static _toInflightType(context) {
@@ -159,10 +159,10 @@ class $Root extends $stdlib.std.Resource {
           super._registerOnLift(host, ops);
         }
       }
-      this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:state.get() returns the runtime value",new $Closure1(this,"$Closure1"));
+      this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:state.get() returns the runtime value", new $Closure1(this, "$Closure1"));
       class $Closure2 extends $stdlib.std.Resource {
-        constructor(scope, id, ) {
-          super(scope, id);
+        constructor($scope, $id, ) {
+          super($scope, $id);
           (std.Node.of(this)).hidden = true;
         }
         static _toInflightType(context) {
@@ -193,7 +193,7 @@ class $Root extends $stdlib.std.Resource {
           super._registerOnLift(host, ops);
         }
       }
-      this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:state.tryGet() return nil if there is no value",new $Closure2(this,"$Closure2"));
+      this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:state.tryGet() return nil if there is no value", new $Closure2(this, "$Closure2"));
     }
   }
 }
@@ -211,14 +211,14 @@ module.exports = function({ $stdlib }) {
   const cloud = $stdlib.cloud;
   const util = $stdlib.util;
   class MyService extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
-      this.state = this.node.root.new("@winglang/sdk.sim.State",sim.State,this,"sim.State");
+    constructor($scope, $id, ) {
+      super($scope, $id);
+      this.state = this.node.root.new("@winglang/sdk.sim.State",sim.State,this, "sim.State");
       this.startTimeKey = "start_time";
       const __parent_this_1 = this;
       class $Closure1 extends $stdlib.std.Resource {
-        constructor(scope, id, ) {
-          super(scope, id);
+        constructor($scope, $id, ) {
+          super($scope, $id);
           (std.Node.of(this)).hidden = true;
         }
         static _toInflightType(context) {
@@ -251,7 +251,7 @@ module.exports = function({ $stdlib }) {
           super._registerOnLift(host, ops);
         }
       }
-      this.node.root.newAbstract("@winglang/sdk.cloud.Service",this,"cloud.Service",new $Closure1(this,"$Closure1"));
+      this.node.root.newAbstract("@winglang/sdk.cloud.Service",this, "cloud.Service", new $Closure1(this, "$Closure1"));
       this.startTime = (this.state.token(this.startTimeKey));
     }
     static _toInflightType(context) {

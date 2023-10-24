@@ -11,7 +11,7 @@ module.exports = function({ $__parent_this_1_b }) {
       return $obj;
     }
     async handle() {
-      (await $__parent_this_1_b.put("data.txt","<empty>"));
+      (await $__parent_this_1_b.put("data.txt", "<empty>"));
     }
   }
   return $Closure1;
@@ -63,7 +63,7 @@ module.exports = function({  }) {
       this.$this_b = $this_b;
     }
     async store(data) {
-      (await this.$this_b.put("data.txt",data));
+      (await this.$this_b.put("data.txt", data));
     }
   }
   return Store;
@@ -123,7 +123,7 @@ module.exports = function({  }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
@@ -145,7 +145,7 @@ module.exports = function({  }) {
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -295,11 +295,11 @@ const file2 = require("./preflight.subfile-3.js")({ $stdlib });
 const file3 = require("./preflight.empty-1.js")({ $stdlib });
 const math = $stdlib.math;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -331,8 +331,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class Triangle extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       area() {
         return 1;
@@ -359,8 +359,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class Util extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       static _toInflightType(context) {
         return `
@@ -383,13 +383,13 @@ class $Root extends $stdlib.std.Resource {
         return ["$inflight_init"];
       }
     }
-    const store = new file1.Store(this,"file1.Store");
-    const q = new file2.Q(this,"file2.Q");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:add data to store",new $Closure1(this,"$Closure1"));
+    const store = new file1.Store(this, "file1.Store");
+    const q = new file2.Q(this, "file2.Q");
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:add data to store", new $Closure1(this, "$Closure1"));
     const s = ({"x": 1,"y": 2});
     const c = file1.Color.BLUE;
     {((cond) => {if (!cond) throw new Error("assertion failed: c != file1.Color.RED")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(c,file1.Color.RED)))};
-    const t = new Triangle(this,"Triangle");
+    const t = new Triangle(this, "Triangle");
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
@@ -406,8 +406,8 @@ module.exports = function({ $stdlib }) {
   const math = $stdlib.math;
   const cloud = $stdlib.cloud;
   class Util extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
+    constructor($scope, $id, ) {
+      super($scope, $id);
     }
     static _toInflightType(context) {
       return `
@@ -431,13 +431,13 @@ module.exports = function({ $stdlib }) {
     }
   }
   class Store extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
-      this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+    constructor($scope, $id, ) {
+      super($scope, $id);
+      this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
       const __parent_this_1 = this;
       class $Closure1 extends $stdlib.std.Resource {
-        constructor(scope, id, ) {
-          super(scope, id);
+        constructor($scope, $id, ) {
+          super($scope, $id);
           (std.Node.of(this)).hidden = true;
         }
         static _toInflightType(context) {
@@ -468,7 +468,7 @@ module.exports = function({ $stdlib }) {
           super._registerOnLift(host, ops);
         }
       }
-      const prefill = this.node.root.newAbstract("@winglang/sdk.cloud.OnDeploy",this,"cloud.OnDeploy",new $Closure1(this,"$Closure1"));
+      const prefill = this.node.root.newAbstract("@winglang/sdk.cloud.OnDeploy",this, "cloud.OnDeploy", new $Closure1(this, "$Closure1"));
     }
     static _toInflightType(context) {
       return `
@@ -521,8 +521,8 @@ module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   const math = $stdlib.math;
   class Q extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
+    constructor($scope, $id, ) {
+      super($scope, $id);
     }
     static _toInflightType(context) {
       return `

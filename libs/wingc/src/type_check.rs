@@ -1651,7 +1651,7 @@ impl Types {
 		}
 	}
 
-	/// Given an unqualified type name of a builtin type, return the full type info.
+	/// Given a builtin type, return the full class info from the standard library.
 	///
 	/// This is needed because our builtin types have no API.
 	/// So we have to get the API from the std lib
@@ -1659,10 +1659,36 @@ impl Types {
 	/// https://github.com/winglang/wing/issues/1780
 	///
 	/// Note: This doesn't handle generics (i.e. this keeps the `T1`)
-	pub fn get_std_class(&self, type_: &str) -> Option<(&SymbolKind, symbol_env::SymbolLookupInfo)> {
-		let type_name = fully_qualify_std_type(type_);
+	pub fn get_std_class(&self, type_: &TypeRef) -> Option<(&SymbolKind, symbol_env::SymbolLookupInfo)> {
+		let type_name = match &**type_ {
+			Type::Number => "Number",
+			Type::String => "String",
+			Type::Boolean => "Boolean",
+			Type::Duration => "Duration",
+			Type::Json(_) => "Json",
+			Type::MutJson => "MutJson",
+			Type::Array(_) => "Array",
+			Type::MutArray(_) => "MutArray",
+			Type::Map(_) => "Map",
+			Type::MutMap(_) => "MutMap",
+			Type::Set(_) => "Set",
+			Type::MutSet(_) => "MutSet",
+			Type::Struct(_) => "Struct",
 
-		let fqn = format!("{WINGSDK_ASSEMBLY_NAME}.{type_name}");
+			Type::Optional(t) => return self.get_std_class(t),
+
+			Type::Function(_)
+			| Type::Class(_)
+			| Type::Interface(_)
+			| Type::Enum(_)
+			| Type::Void
+			| Type::Nil
+			| Type::Anything
+			| Type::Unresolved
+			| Type::Inferred(_) => return None,
+		};
+
+		let fqn = format!("{WINGSDK_ASSEMBLY_NAME}.{WINGSDK_STD_MODULE}.{type_name}");
 
 		self.libraries.lookup_nested_str(fqn.as_str(), None).ok()
 	}
@@ -3071,6 +3097,11 @@ impl<'a> TypeChecker<'a> {
 				self.types.add_type(Type::Optional(value_type))
 			}
 			TypeAnnotationKind::Function(ast_sig) => {
+				let last_non_optional_index = ast_sig.parameters.iter().rposition(|p| match p.type_annotation.kind {
+					TypeAnnotationKind::Optional(_) => false,
+					_ => !p.variadic,
+				});
+
 				let mut parameters = vec![];
 				for i in 0..ast_sig.parameters.len() {
 					let p = ast_sig.parameters.get(i).unwrap();
@@ -3088,6 +3119,16 @@ impl<'a> TypeChecker<'a> {
 								&ast_sig.parameters.get(i).unwrap().name.span,
 								"Variadic parameters must be type Array or MutArray.".to_string(),
 							),
+						};
+					}
+
+					if last_non_optional_index.is_some_and(|li| i <= li) {
+						match &p.type_annotation.kind {
+							TypeAnnotationKind::Optional(_) => self.spanned_error(
+								&ast_sig.parameters.get(i).unwrap().name.span,
+								"Optional parameters must always be after all non-optional parameters.".to_string(),
+							),
+							_ => {}
 						};
 					}
 				}
@@ -4251,11 +4292,19 @@ impl<'a> TypeChecker<'a> {
 			return;
 		};
 
+		// If the parent class is phase independent than its init name is just "init" regadless of
+		// whether we're inflight or not.
+		let parent_init_name = if parent_class.as_class().unwrap().phase == Phase::Independent {
+			CLASS_INIT_NAME
+		} else {
+			init_name
+		};
+
 		let parent_initializer = parent_class
 			.as_class()
 			.unwrap()
 			.methods(false)
-			.filter(|(name, _type)| name == init_name)
+			.filter(|(name, _type)| name == parent_init_name)
 			.collect_vec()[0]
 			.1;
 
@@ -5323,7 +5372,8 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		if let Some(parent_class) = parent_type.as_class() {
-			if parent_class.phase == phase {
+			// Parent class must be either the same phase as the child or, if the child is an inflight class, the parent can be an independent class
+			if (parent_class.phase == phase) || (phase == Phase::Inflight && parent_class.phase == Phase::Independent) {
 				(Some(parent_type), Some(parent_class.env.get_ref()))
 			} else {
 				self.spanned_error(
@@ -5679,34 +5729,32 @@ pub fn import_udt_from_jsii(
 /// https://github.com/winglang/wing/issues/1780
 pub fn fully_qualify_std_type(type_: &str) -> String {
 	// Additionally, this doesn't handle for generics
-	let type_name = type_.to_string();
-	let type_name = if let Some((prefix, _)) = type_name.split_once(" ") {
-		prefix
-	} else {
-		&type_name
-	};
-	let type_name = if let Some((prefix, _)) = type_name.split_once("<") {
-		prefix
-	} else {
-		&type_name
-	};
-
-	let type_name = match type_name {
+	let type_ = match type_ {
 		"str" => "String",
 		"duration" => "Duration",
 		"datetime" => "Datetime",
 		"bool" => "Boolean",
 		"num" => "Number",
-		_ => type_name,
+		_ => {
+			// Check for generics or Json
+			let type_ = if let Some((prefix, _)) = type_.split_once(" ") {
+				prefix
+			} else {
+				type_
+			};
+			let type_ = if let Some((prefix, _)) = type_.split_once("<") {
+				prefix
+			} else {
+				type_
+			};
+			match type_ {
+				"Json" | "MutJson" | "MutArray" | "MutMap" | "MutSet" | "Array" | "Map" | "Set" => type_,
+				_ => return type_.to_owned(),
+			}
+		}
 	};
 
-	match type_name {
-		"Json" | "MutJson" | "MutArray" | "MutMap" | "MutSet" | "Array" | "Map" | "Set" | "String" | "Duration"
-		| "Boolean" | "Number" | "Struct" => {
-			format!("{WINGSDK_STD_MODULE}.{type_name}")
-		}
-		_ => type_name.to_string(),
-	}
+	format!("{WINGSDK_STD_MODULE}.{type_}")
 }
 
 #[cfg(test)]

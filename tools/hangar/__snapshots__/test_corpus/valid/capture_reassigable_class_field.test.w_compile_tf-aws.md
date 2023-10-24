@@ -29,7 +29,7 @@ module.exports = function({ $counter }) {
       return $obj;
     }
     async handle(key) {
-      (await $counter.inc(1,key));
+      (await $counter.inc(1, key));
     }
   }
   return $Closure2;
@@ -48,8 +48,8 @@ module.exports = function({ $counter, $kv, $util_Util }) {
       return $obj;
     }
     async handle() {
-      (await $kv.set("k",({"value": "v"})));
-      (await $kv.set("k2",({"value": "v"})));
+      (await $kv.set("k", ({"value": "v"})));
+      (await $kv.set("k2", ({"value": "v"})));
       (await $kv.get("k"));
       (await $kv.get("k"));
       (await $kv.get("k2"));
@@ -82,7 +82,7 @@ module.exports = function({  }) {
       return (await this.$this_bucket.getJson(key));
     }
     async set(key, value) {
-      (await this.$this_bucket.putJson(key,value));
+      (await this.$this_bucket.putJson(key, value));
     }
   }
   return KeyValueStore;
@@ -103,14 +103,14 @@ module.exports = function({  }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -166,16 +166,16 @@ const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class KeyValueStore extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        this.bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        this.bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
         const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.Resource {
-          constructor(scope, id, ) {
-            super(scope, id);
+          constructor($scope, $id, ) {
+            super($scope, $id);
             (std.Node.of(this)).hidden = true;
           }
           static _toInflightType(context) {
@@ -199,7 +199,7 @@ class $Root extends $stdlib.std.Resource {
             return ["handle", "$inflight_init"];
           }
         }
-        this.onUpdateCallback = new $Closure1(this,"$Closure1");
+        this.onUpdateCallback = new $Closure1(this, "$Closure1");
       }
       onUpdate(fn) {
         this.onUpdateCallback = fn;
@@ -242,8 +242,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -275,8 +275,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -310,10 +310,10 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const kv = new KeyValueStore(this,"KeyValueStore");
-    const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"sasa");
-    (kv.onUpdate(new $Closure2(this,"$Closure2")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:main",new $Closure3(this,"$Closure3"));
+    const kv = new KeyValueStore(this, "KeyValueStore");
+    const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "sasa");
+    (kv.onUpdate(new $Closure2(this, "$Closure2")));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:main", new $Closure3(this, "$Closure3"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

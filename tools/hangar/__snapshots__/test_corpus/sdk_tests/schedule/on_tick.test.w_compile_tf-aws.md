@@ -74,14 +74,14 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -397,11 +397,11 @@ const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -433,8 +433,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -466,8 +466,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -502,13 +502,13 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const from_cron = this.node.root.newAbstract("@winglang/sdk.cloud.Schedule",this,"from_cron",{ cron: "* * * * ?" });
-    const from_rate = this.node.root.newAbstract("@winglang/sdk.cloud.Schedule",this,"from_rate",{ rate: (std.Duration.fromSeconds(60)) });
-    const c1 = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"c1");
-    const c2 = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"c2");
-    (from_cron.onTick(new $Closure1(this,"$Closure1")));
-    (from_rate.onTick(new $Closure2(this,"$Closure2")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"on tick is called both for rate and cron schedules",new $Closure3(this,"$Closure3"),({"timeout": (std.Duration.fromSeconds(120))}));
+    const from_cron = this.node.root.newAbstract("@winglang/sdk.cloud.Schedule",this, "from_cron", { cron: "* * * * ?" });
+    const from_rate = this.node.root.newAbstract("@winglang/sdk.cloud.Schedule",this, "from_rate", { rate: (std.Duration.fromSeconds(60)) });
+    const c1 = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "c1");
+    const c2 = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "c2");
+    (from_cron.onTick(new $Closure1(this, "$Closure1")));
+    (from_rate.onTick(new $Closure2(this, "$Closure2")));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "on tick is called both for rate and cron schedules", new $Closure3(this, "$Closure3"), ({"timeout": (std.Duration.fromSeconds(120))}));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
