@@ -1,3 +1,9 @@
-let x = 3;
-let y = 4;
-assert(false);
+let errFunc = () => {
+  throw "error";
+};
+
+let otherFunc = () => {
+  errFunc();
+};
+
+otherFunc();

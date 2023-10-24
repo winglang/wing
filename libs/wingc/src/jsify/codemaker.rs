@@ -112,8 +112,8 @@ impl CodeMaker {
 	}
 
 	pub fn get_sourcemap(&mut self, root: &str, source_content: &str, generated_path: &str) -> String {
-		let mut sourcemap = SourceMap::new(root);
-		let source_num = sourcemap.add_source("/Users/markm/Documents/GitHub/winglang/libs/wingc/main.w");
+		let mut sourcemap = SourceMap::new("");
+		let source_num = sourcemap.add_source(root);
 		sourcemap.set_source_content(source_num as usize, source_content);
 
 		for (line_idx, line) in self.lines.iter().enumerate() {

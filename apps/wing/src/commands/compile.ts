@@ -160,6 +160,7 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
       throw new Error(result.join("\n"));
     } else if (error instanceof wingCompiler.PreflightError) {
       const causedBy = annotatePreflightError(error.causedBy);
+      console.log(causedBy.stack);
       const testTrace = new StackTracey(causedBy.stack).withSources();
       console.log(testTrace.clean().asTable());
 

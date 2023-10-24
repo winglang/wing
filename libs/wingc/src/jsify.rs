@@ -145,7 +145,6 @@ impl<'a> JSifier<'a> {
 		}
 
 		let mut output = CodeMaker::default();
-		output.push_original_span(scope.span.clone());
 
 		let is_compilation_init = source_path == self.compilation_init_path;
 		let is_entrypoint = is_entrypoint_file(source_path);
