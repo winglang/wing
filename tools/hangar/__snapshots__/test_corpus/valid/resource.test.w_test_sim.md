@@ -4,7 +4,8 @@
 ```log
 pass ┌ resource.test.wsim » root/env0/test:test             
      └ counter is: 201
-pass ─ resource.test.wsim » root/env1/test:dependency cycles
+pass ┌ resource.test.wsim » root/env1/test:dependency cycles
+     └ counter is: 201
  
  
 Tests 2 passed (2)
