@@ -25,7 +25,9 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
   // check that the library compiles to the "sim" target
   console.log('Compiling to the "sim" target...');
 
-  await compile(".", { target: Target.SIM });
+  // TODO: workaround for https://github.com/winglang/wing/issues/4431
+  // await compile(".", { target: Target.SIM });
+  await compile(path.join("..", path.basename(process.cwd())), { target: Target.SIM });
 
   const userDir = process.cwd();
   const outfile = options.outfile ? resolve(options.outfile) : undefined;
