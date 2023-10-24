@@ -59,11 +59,11 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class R extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         this.s1 = "hello";
       }
       static _toInflightType(context) {
@@ -97,7 +97,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const r = new R(this,"R");
+    const r = new R(this, "R");
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

@@ -154,11 +154,11 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -190,8 +190,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -223,8 +223,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -255,12 +255,12 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const counterA = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"counterA");
-    const counterB = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"counterB",{ initial: 500 });
-    const counterC = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"counterC",{ initial: (-198) });
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:initial:default",new $Closure1(this,"$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:initial:positive-value",new $Closure2(this,"$Closure2"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:initial:negative-value",new $Closure3(this,"$Closure3"));
+    const counterA = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "counterA");
+    const counterB = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "counterB", { initial: 500 });
+    const counterC = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "counterC", { initial: (-198) });
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:initial:default", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:initial:positive-value", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:initial:negative-value", new $Closure3(this, "$Closure3"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

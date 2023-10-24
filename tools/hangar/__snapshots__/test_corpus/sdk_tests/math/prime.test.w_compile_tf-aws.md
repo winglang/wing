@@ -67,11 +67,11 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const math = $stdlib.math;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -103,7 +103,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(10) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.isPrime(10)),false)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(11) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.isPrime(11)),true)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(12) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.isPrime(12)),false)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight prime numbers",new $Closure1(this,"$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight prime numbers", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

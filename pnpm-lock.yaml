@@ -1027,6 +1027,18 @@ importers:
 
   docs/docs: {}
 
+  examples/jsii-fixture:
+    devDependencies:
+      jsii:
+        specifier: ^1.70.0
+        version: 1.90.0
+      jsii-pacmak:
+        specifier: ^1.70.0
+        version: 1.90.0
+      jsii-release:
+        specifier: ^0.2.519
+        version: 0.2.519
+
   examples/tests/error: {}
 
   examples/tests/invalid:
@@ -1085,6 +1097,9 @@ importers:
       jsii-code-samples:
         specifier: 1.7.0
         version: 1.7.0
+      jsii-fixture:
+        specifier: workspace:^
+        version: link:../../jsii-fixture
       projen:
         specifier: ^0.71.163
         version: 0.71.163
@@ -9506,6 +9521,12 @@ packages:
       '@types/node': 18.18.4
     dev: true
 
+  /@types/fs-extra@8.1.4:
+    resolution: {integrity: sha512-OMcQKnlrkrOI0TaZ/MgVDA8LYFl7CykzFsjMj9l5x3un2nFxCY20ZFlnqrM0lcqlbs0Yro2HbnZlmopyRaoJ5w==}
+    dependencies:
+      '@types/node': 18.18.4
+    dev: true
+
   /@types/fs-extra@9.0.13:
     resolution: {integrity: sha512-nEnwB++1u5lVDM2UI4c1+5R+FYaKfaAzS4OococimjVm3nQw3TuzH5UNsocrcTBbhnerblyHj4A49qXbIiZdpA==}
     dependencies:
@@ -12116,6 +12137,7 @@ packages:
 
   /chardet@0.7.0:
     resolution: {integrity: sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==}
+    requiresBuild: true
 
   /check-error@1.0.3:
     resolution: {integrity: sha512-iKEoDYaRmd1mxM90a2OEfWhjsjPpYPuQ+lMYsoxB126+t8fw7ySEO48nmDg5COTjxDI65/Y2OWpeEHk3ZOe8zg==}
@@ -12163,6 +12185,7 @@ packages:
 
   /chownr@1.1.4:
     resolution: {integrity: sha512-jJ0bqzaylmJtVnNgzTeSOs8DPavpbYgEr/b0YL8/2GO3xJEhInFmhKMUnEJQjZumK7KXGFhUy89PrsJWlakBVg==}
+    requiresBuild: true
     dev: true
 
   /chownr@2.0.0:
@@ -13423,7 +13446,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20231019
+      typescript: 5.3.0-dev.20231022
     dev: true
 
   /dset@3.1.2:
@@ -16119,6 +16142,7 @@ packages:
   /is-path-cwd@2.2.0:
     resolution: {integrity: sha512-w942bTcih8fdJPJmQHFzkS76NEP8Kzzvmw92cXsazb8intwLqPibPPdXf4ANdKV3rYMuuQYGIWtvz9JilB3NFQ==}
     engines: {node: '>=6'}
+    requiresBuild: true
 
   /is-path-inside@3.0.3:
     resolution: {integrity: sha512-Fd4gABb+ycGAmKou8eMftCupSir5lRxqf4aD/vd0cD2qc4HL07OjCeuHMr8Ro4CoMaeCKDB0/ECBOVWjTwUvPQ==}
@@ -17518,6 +17542,15 @@ packages:
       fs-extra: 10.1.0
       oo-ascii-tree: 1.90.0
       yargs: 16.2.0
+
+  /jsii-release@0.2.519:
+    resolution: {integrity: sha512-R3HD2u4W5Rdy+Tj0mQizmqfmefn7jhKz9KxpZT+WrC6U5Cb7xDM61KWXLjW3/OOkqhonSPyaRx2xPQPLKzzrKQ==}
+    hasBin: true
+    dependencies:
+      '@types/fs-extra': 8.1.4
+      fs-extra: 8.1.0
+      shlex: 2.1.2
+    dev: true
 
   /jsii-rosetta@1.90.0:
     resolution: {integrity: sha512-UN9kUl12CwulaIad/7wdRQpBLBP8EA9ESj0pMP/BhBfJnfvdn+uRL8rmL7JR4TUKV9D+VR8AOmZpGU/IKA0QBQ==}
@@ -19514,6 +19547,7 @@ packages:
   /os-tmpdir@1.0.2:
     resolution: {integrity: sha512-D2FR03Vir7FIu45XBY20mTb+/ZSWB00sjU9jdQXt83gDrI4Ztz5Fs7/yy74g2N5SVQY4xY1qDr4rNddwYRVX0g==}
     engines: {node: '>=0.10.0'}
+    requiresBuild: true
 
   /p-cancelable@3.0.0:
     resolution: {integrity: sha512-mlVgR3PGuzlo0MmTdk4cXqXWlwQDLnONTAg6sm62XkMJEiRxN3GL3SffkYvqwonbkJBcrI7Uvv5Zh9yjvn2iUw==}
@@ -21350,6 +21384,10 @@ packages:
       interpret: 1.4.0
       rechoir: 0.6.2
 
+  /shlex@2.1.2:
+    resolution: {integrity: sha512-Nz6gtibMVgYeMEhUjp2KuwAgqaJA1K155dU/HuDaEJUGgnmYfVtVZah+uerVWdH8UGnyahhDCgABbYTbs254+w==}
+    dev: true
+
   /shx@0.3.4:
     resolution: {integrity: sha512-N6A9MLVqjxZYcVn8hLmtneQWIJtp8IKzMP4eMnx+nqkvXoqinUPCbUFLp2UcWTEIUONhlk0ewxr/jaVGlc+J+g==}
     engines: {node: '>=6'}
@@ -21404,6 +21442,7 @@ packages:
 
   /simple-concat@1.0.1:
     resolution: {integrity: sha512-cSFtAPtRhljv69IK0hTVZQ+OfE9nePi/rtJmw5UjHeVyVroEqJXP1sFztKUy1qU+xvz3u/sfYJLa947b7nAN2Q==}
+    requiresBuild: true
     dev: true
 
   /simple-get@4.0.1:
@@ -22194,6 +22233,7 @@ packages:
   /tmp@0.0.33:
     resolution: {integrity: sha512-jRCJlojKnZ3addtTOjdIqoRuPEKBvNXcGYqzO6zWZX8KfKEpnGY5jfggJQ3EjKuu8D4bJRr0y+cYJFmYbImXGw==}
     engines: {node: '>=0.6.0'}
+    requiresBuild: true
     dependencies:
       os-tmpdir: 1.0.2
 
@@ -22867,8 +22907,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20231019:
-    resolution: {integrity: sha512-fdexB8vj46ZSMsAg6g5aSNjThPegwT73WYwNM1DLmEnt0+fKPmmyft3LzfUR1CMHtcQNic5hl+0FeNTv7l232Q==}
+  /typescript@5.3.0-dev.20231022:
+    resolution: {integrity: sha512-g8ICZidqxW5HGoyFFTyMvbHd4EbZlTSXILKT71uyPagM4asj/3JRaOw0A+xgHSf4PrLHAGAbJ7P/JgtbgZNgcw==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
