@@ -5,10 +5,10 @@ import { SimApp } from "../sim-app";
 describe("resource _addOnLift", () => {
   const inflightOps = ["op1", "op2"];
   class Example extends Resource {
-    _getInflightOps() {
+    public _getInflightOps() {
       return inflightOps;
     }
-    _toInflight() {
+    public _toInflight() {
       return "inflight";
     }
   }
