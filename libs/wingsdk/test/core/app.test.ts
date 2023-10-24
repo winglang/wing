@@ -69,12 +69,12 @@ class MyApp extends App {
     throw new Error("Method not implemented.");
   }
 
-  protected tryNew(fqn: string, scope: Construct, id: string, ...args: any[]) {
+  protected typeForFqn(fqn: string) {
     switch (fqn) {
       case FOO_FQN:
-        return new MyFoo(scope, id, args[0]);
+        return MyFoo;
       case BAR_FQN:
-        return new Bar(scope, id);
+        return Bar;
     }
 
     return undefined;

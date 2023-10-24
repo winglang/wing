@@ -13,14 +13,14 @@ module.exports = function({ $b }) {
     async handle() {
       const jsonObj1 = ({"test": "test1"});
       const jsonObj2 = ({"test": "test2"});
-      (await $b.putJson("test1.txt",jsonObj1));
-      (await $b.putJson("test2.txt",jsonObj2));
+      (await $b.putJson("test1.txt", jsonObj1));
+      (await $b.putJson("test2.txt", jsonObj2));
       const testJson1 = (await $b.getJson("test1.txt"));
       const testJson2 = (await $b.getJson("test2.txt"));
       {((cond) => {if (!cond) throw new Error("assertion failed: testJson1.get(\"test\") == jsonObj1.get(\"test\")")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(testJson1, "test"),((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(jsonObj1, "test"))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: testJson2.get(\"test\") == jsonObj2.get(\"test\")")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(testJson2, "test"),((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(jsonObj2, "test"))))};
       const jsonObj3 = ({"test": "test3"});
-      (await $b.putJson("test3.txt",jsonObj3));
+      (await $b.putJson("test3.txt", jsonObj3));
       const testJson3 = (await $b.getJson("test3.txt"));
       {((cond) => {if (!cond) throw new Error("assertion failed: testJson3.get(\"test\") == jsonObj3.get(\"test\")")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(testJson3, "test"),((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(jsonObj3, "test"))))};
       (await $b.delete("test1.txt"));
@@ -90,11 +90,11 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -125,8 +125,8 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:putJson",new $Closure1(this,"$Closure1"));
+    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:putJson", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

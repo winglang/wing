@@ -118,10 +118,10 @@ module.exports = function({ $Student, $std_Boolean, $std_Number, $std_String }) 
       return $obj;
     }
     async handle() {
-      (await $std_String.fromJson(10,{ unsafe: true }));
-      (await $std_Boolean.fromJson(10,{ unsafe: true }));
-      (await $std_Number.fromJson("cool",{ unsafe: true }));
-      ((json, validateOptions) => ($Student._fromJson(json, validateOptions)))(({"obviously": "not a student"}),{ unsafe: true });
+      (await $std_String.fromJson(10, { unsafe: true }));
+      (await $std_Boolean.fromJson(10, { unsafe: true }));
+      (await $std_Number.fromJson("cool", { unsafe: true }));
+      ((json, validateOptions) => ($Student._fromJson(json, validateOptions)))(({"obviously": "not a student"}), { unsafe: true });
     }
   }
   return $Closure5;
@@ -186,8 +186,8 @@ const cloud = $stdlib.cloud;
 const externalStructs = require("./preflight.structs-1.js")({ $stdlib });
 const otherExternalStructs = require("./preflight.structs2-2.js")({ $stdlib });
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     const Bar = $stdlib.std.Struct._createJsonSchema({id:"/Bar",type:"object",properties:{b:{type:"number"},f:{type:"string"},},required:["b","f",]});
     const Foo = $stdlib.std.Struct._createJsonSchema({id:"/Foo",type:"object",properties:{f:{type:"string"},},required:["f",]});
     const Foosible = $stdlib.std.Struct._createJsonSchema({id:"/Foosible",type:"object",properties:{f:{type:"string"},},required:[]});
@@ -197,8 +197,8 @@ class $Root extends $stdlib.std.Resource {
     const cloud_BucketProps = $stdlib.std.Struct._createJsonSchema({id:"/BucketProps",type:"object",properties:{public:{type:"boolean"},},required:[]});
     const externalStructs_MyOtherStruct = $stdlib.std.Struct._createJsonSchema({id:"/MyOtherStruct",type:"object",properties:{data:{type:"object",properties:{val:{type:"number"},},required:["val",]},},required:["data",]});
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -231,8 +231,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -258,8 +258,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -292,8 +292,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -331,8 +331,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure5 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -363,7 +363,7 @@ class $Root extends $stdlib.std.Resource {
     const j = ({"public": false});
     const x = ((json, validateOptions) => (cloud_BucketProps._fromJson(json, validateOptions)))(j);
     {((cond) => {if (!cond) throw new Error("assertion failed: x.public == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x.public,false)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight jsii struct conversion",new $Closure1(this,"$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight jsii struct conversion", new $Closure1(this, "$Closure1"));
     const jFoo = ({"f": "bar"});
     {((cond) => {if (!cond) throw new Error("assertion failed: Foo.fromJson(jFoo).f == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((json, validateOptions) => (Foo._fromJson(json, validateOptions)))(jFoo).f,"bar")))};
     const jFoosible = ({});
@@ -463,8 +463,8 @@ class $Root extends $stdlib.std.Resource {
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
     }
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:flight school student :)",new $Closure2(this,"$Closure2"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:lifting a student",new $Closure3(this,"$Closure3"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:flight school student :)", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:lifting a student", new $Closure3(this, "$Closure3"));
     const jj1 = ({"data": ({"val": 10})});
     const externalBar = ((json, validateOptions) => (externalStructs_MyOtherStruct._fromJson(json, validateOptions)))(jj1);
     {((cond) => {if (!cond) throw new Error("assertion failed: externalBar.data.val == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(externalBar.data.val,10)))};
@@ -476,13 +476,13 @@ class $Root extends $stdlib.std.Resource {
     (schema.validate(jMyStruct));
     const expectedSchema = ({"id": "/MyStruct","type": "object","properties": ({"m1": ({"type": "object","properties": ({"val": ({"type": "number"})}),"required": ["val"]}),"m2": ({"type": "object","properties": ({"val": ({"type": "string"})}),"required": ["val"]})}),"required": ["m1", "m2"]});
     {((cond) => {if (!cond) throw new Error("assertion failed: schema.asStr() == Json.stringify(expectedSchema)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((schema.asStr()),((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([expectedSchema]))))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight schema usage",new $Closure4(this,"$Closure4"));
-    (std.String.fromJson(10,{ unsafe: true }));
-    (std.Boolean.fromJson(10,{ unsafe: true }));
-    (std.Number.fromJson("cool",{ unsafe: true }));
-    ((json, validateOptions) => (Student._fromJson(json, validateOptions)))(({"obviously": "not a student"}),{ unsafe: true });
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:unsafe flight",new $Closure5(this,"$Closure5"));
-    new otherExternalStructs.UsesStructInImportedFile(this,"otherExternalStructs.UsesStructInImportedFile");
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight schema usage", new $Closure4(this, "$Closure4"));
+    (std.String.fromJson(10, { unsafe: true }));
+    (std.Boolean.fromJson(10, { unsafe: true }));
+    (std.Number.fromJson("cool", { unsafe: true }));
+    ((json, validateOptions) => (Student._fromJson(json, validateOptions)))(({"obviously": "not a student"}), { unsafe: true });
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:unsafe flight", new $Closure5(this, "$Closure5"));
+    new otherExternalStructs.UsesStructInImportedFile(this, "otherExternalStructs.UsesStructInImportedFile");
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
@@ -522,8 +522,8 @@ module.exports = function({ $stdlib }) {
   const cloud_BucketProps = $stdlib.std.Struct._createJsonSchema({id:"/BucketProps",type:"object",properties:{public:{type:"boolean"},},required:[]});
   const externalStructs_MyOtherStruct = $stdlib.std.Struct._createJsonSchema({id:"/MyOtherStruct",type:"object",properties:{data:{type:"object",properties:{val:{type:"number"},},required:["val",]},},required:["data",]});
   class UsesStructInImportedFile extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
+    constructor($scope, $id, ) {
+      super($scope, $id);
       this.someStruct = ((json, validateOptions) => (SomeStruct._fromJson(json, validateOptions)))(({"foo": "123"}));
     }
     static _toInflightType(context) {
