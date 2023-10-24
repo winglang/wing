@@ -121,7 +121,8 @@ export class Function extends cloud.Function {
     // const timeout = props.timeout ?? Duration.fromMinutes(1);
     if (props.timeout) {
       throw new NotImplementedError(
-        "Function.timeout is not implemented yet on tf-azure target. see  https://github.com/winglang/wing/issues/4494."
+        "Function.timeout is not implemented yet on tf-azure target.",
+        "https://github.com/winglang/wing/issues/4494"
       );
     }
     // Write host.json file to set function timeout (must be set in root of function app)
