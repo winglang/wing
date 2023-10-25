@@ -337,9 +337,9 @@ export const ResourceMetadata = ({
             </InspectorSection>
           )}
 
-          {(node.type.startsWith("wingsdk.cloud") ||
-            node.type.startsWith("wingsdk.redis") ||
-            node.type.startsWith("wingsdk.ex")) && (
+          {(node.type.startsWith("@winglang/sdk.cloud") ||
+            node.type.startsWith("@winglang/sdk.redis") ||
+            node.type.startsWith("@winglang/sdk.ex")) && (
             <>
               <InspectorSection
                 text={resourceGroup?.groupName || "Interact"}
