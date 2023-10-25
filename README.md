@@ -79,7 +79,7 @@ You are welcome to read more about it [here](https://www.winglang.io/docs/faq/wh
 
 ## What makes Wing a good fit for cloud development? 🌟
 
-Wing was built from the ground up to make it easy for building applications on any cloud.
+Wing was built from the scratch to make it easy for building applications on any cloud.
 It includes an assembly of different features that serve that purpose:
 
 * [Cloud services](https://www.winglang.io/docs/faq/supported-clouds-services-and-engines/supported-services) as first-class citizens, with [phase modifiers](https://www.winglang.io/contributing/rfcs/language-spec#13-phase-modifiers) for describing infrastructure and runtime code ([`preflight` and `inflight`](https://www.winglang.io/docs/concepts/inflights)). 
@@ -132,7 +132,7 @@ You can also get started by opening the project in GitHub Codespaces.
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/winglang/wing)
 
-We are incredibly grateful to our entire community for contributing bug fixes and improvements:
+We are incredibly grateful to our entire community for fixing bugs and improvements:
 
 <a href="https://github.com/winglang/wing/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=winglang/wing" />
