@@ -82,7 +82,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["field", "method", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
