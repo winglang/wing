@@ -35,6 +35,7 @@ module.exports = function({  }) {
       const separator = ";";
       const joinedString = (await i.join(separator));
       const expectedString = ((((obj, args) => { if (args[0] < 0 || args[0] >= i.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(i, [0]) + separator) + ((obj, args) => { if (args[0] < 0 || args[0] >= i.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(i, [1]));
+      const expectedString = ((((obj, args) => { if (args[0] < 0 || args[0] >= i.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(i, [0]) + separator) + ((obj, args) => { if (args[0] < 0 || args[0] >= i.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(i, [1]));
       {((cond) => {if (!cond) throw new Error("assertion failed: joinedString == expectedString")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(joinedString,expectedString)))};
     }
   }
@@ -163,6 +164,13 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.at(0) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= mutArr.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(mutArr, [0]),2)))};
       (await assertThrows(INDEX_OUT_OF_BOUNDS_ERROR, async () => {
         ((obj, args) => { if (args[0] < 0 || args[0] >= mutArr.length) throw new Error("Index out of bounds"); obj[args[0]] = args[1]; })(mutArr, [(-1), 1]);
+=======
+      {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.at(0) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= mutArr.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(mutArr, [0]),1)))};
+      ((obj, args) => { if (args[0] < 0 || args[0] >= mutArr.length) throw new Error("Index out of bounds"); obj[args[0]] = args[1]; })(mutArr, [0,2]);
+      {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.at(0) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= mutArr.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(mutArr, [0]),2)))};
+      (await assertThrows(INDEX_OUT_OF_BOUNDS_ERROR,async () => {
+        ((obj, args) => { if (args[0] < 0 || args[0] >= mutArr.length) throw new Error("Index out of bounds"); obj[args[0]] = args[1]; })(mutArr, [(-1),1]);
+>>>>>>> f654d7855 (Fixing tests.)
       }
       ));
       (await assertThrows(INDEX_OUT_OF_BOUNDS_ERROR, async () => {
@@ -206,8 +214,9 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.length == 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mutArr.length,4)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.at(2) == 15")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= mutArr.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(mutArr, [2]),15)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.at(3) == 20")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= mutArr.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(mutArr, [3]),20)))};
-      (await assertThrows(INDEX_OUT_OF_BOUNDS_ERROR, async () => {
-        ((obj, args) => { if (args[0] < 0 || args[0] > mutArr.length) throw new Error("Index out of bounds"); obj.splice(args[0], 0, args[1]); })(mutArr, [(-3), 15]);
+      (await assertThrows(INDEX_OUT_OF_BOUNDS_ERROR,async () => {
+        ((obj, args) => { if (args[0] < 0 || args[0] > mutArr.length) throw new Error("Index out of bounds"); obj.splice(args[0], 0, args[1]); })(mutArr, [(-3),15]);
+
       }
       ));
       {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.length == 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mutArr.length,4)))};
@@ -360,7 +369,8 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: item == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(item,"hello")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mutArr.length,1)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.at(0) == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= mutArr.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(mutArr, [0]),"world")))};
-      (await assertThrows(INDEX_OUT_OF_BOUNDS_ERROR, async () => {
+      (await assertThrows(INDEX_OUT_OF_BOUNDS_ERROR,async () => {
+
         ((obj, args) => { if (args[0] < 0 || args[0] >= mutArr.length) throw new Error("Index out of bounds"); return obj.splice(args[0], 1)[0]; })(mutArr, [(-3)]);
       }
       ));
@@ -1018,11 +1028,11 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: buckets.length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(buckets.length,1)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: [1,2,3].length == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })([1, 2, 3].length,3)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: MutArray<num>[1,2,3].length == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })([1, 2, 3].length,3)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:length", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:length",new $Closure1(this,"$Closure1"));
     {((cond) => {if (!cond) throw new Error("assertion failed: [\"hello\"].at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= ["hello"].length) throw new Error("Index out of bounds"); return obj[args[0]]; })(["hello"], [0]),"hello")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: MutArray<str>[\"hello\", \"world\"].at(1) == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= ["hello", "world"].length) throw new Error("Index out of bounds"); return obj[args[0]]; })(["hello", "world"], [1]),"world")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: buckets.at(0).node.id == \"myBucket\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= buckets.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(buckets, [0]).node.id,"myBucket")))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:at()", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:at()",new $Closure2(this,"$Closure2"));
     const a = ["hello"];
     {((cond) => {if (!cond) throw new Error("assertion failed: a.length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(a.length,1)))};
     (a.push("world"));
@@ -1033,8 +1043,9 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: item == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(item,"world")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: a.length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(a.length,1)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: a.at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= a.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(a, [0]),"hello")))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:pushAndPop()", new $Closure3(this, "$Closure3"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:popAt()", new $Closure4(this, "$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:pushAndPop()",new $Closure3(this,"$Closure3"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:popAt()",new $Closure4(this,"$Closure4"));
+
     const array = ["hello"];
     {((cond) => {if (!cond) throw new Error("assertion failed: array.length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(array.length,1)))};
     const mergedArray = (array.concat(["wing"]));
@@ -1051,13 +1062,14 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: mergedBuckets.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mergedBuckets.length,2)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: mergedBuckets.at(0).node.id == \"myBucket\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= mergedBuckets.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(mergedBuckets, [0]).node.id,"myBucket")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: mergedBuckets.at(1).node.id == \"mySecondBucket\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= mergedBuckets.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(mergedBuckets, [1]).node.id,"mySecondBucket")))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:concatMutArray()", new $Closure5(this, "$Closure5"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:concatArray()", new $Closure6(this, "$Closure6"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:concatMutArray()",new $Closure5(this,"$Closure5"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:concatArray()",new $Closure6(this,"$Closure6"));
     const e = ["hello", "wing"];
     {((cond) => {if (!cond) throw new Error("assertion failed: e.contains(\"wing\")")})(e.includes("wing"))};
     {((cond) => {if (!cond) throw new Error("assertion failed: !e.contains(\"NotThere\")")})((!e.includes("NotThere")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: buckets.contains(buckets.at(0))")})(buckets.includes(((obj, args) => { if (args[0] < 0 || args[0] >= buckets.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(buckets, [0])))};
-    const dummyBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+    const dummyBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+
     {((cond) => {if (!cond) throw new Error("assertion failed: !buckets.contains(dummyBucket)")})((!buckets.includes(dummyBucket)))};
     const h = ["hello", "wing"];
     {((cond) => {if (!cond) throw new Error("assertion failed: h.contains(\"wing\")")})(h.includes("wing"))};
@@ -1091,13 +1103,19 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: o.at(0) == p.at(0)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= o.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(o, [0]),((obj, args) => { if (args[0] < 0 || args[0] >= p.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(p, [0]))))};
     const copiedBuckets = [...(buckets)];
     {((cond) => {if (!cond) throw new Error("assertion failed: copiedBuckets.length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(copiedBuckets.length,1)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: copiedBuckets.at(0).node.id == \"myBucket\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= copiedBuckets.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(copiedBuckets, [0]).node.id,"myBucket")))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:copy()", new $Closure12(this, "$Closure12"));
     const v = ["hello", "wing"];
     const r = [...(v)];
     {((cond) => {if (!cond) throw new Error("assertion failed: q.length == r.length")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(q.length,r.length)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: q.at(0) == r.at(0)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= q.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(q, [0]),((obj, args) => { if (args[0] < 0 || args[0] >= r.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(r, [0]))))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:copyMut()", new $Closure13(this, "$Closure13"));
+    {((cond) => {if (!cond) throw new Error("assertion failed: copiedBuckets.at(0).node.id == \"myBucket\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= copiedBuckets.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(copiedBuckets, [0]).node.id,"myBucket")))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:copy()",new $Closure12(this,"$Closure12"));
+    const v = ["hello", "wing"];
+    const r = [...(v)];
+    {((cond) => {if (!cond) throw new Error("assertion failed: q.length == r.length")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(q.length,r.length)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: q.at(0) == r.at(0)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= q.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(q, [0]),((obj, args) => { if (args[0] < 0 || args[0] >= r.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(r, [0]))))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:copyMut()",new $Closure13(this,"$Closure13"));
     const lastStr = "wing";
     const s = ["hello", lastStr, lastStr];
     {((cond) => {if (!cond) throw new Error("assertion failed: s.lastIndexOf(lastStr) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s.lastIndexOf(lastStr),2)))};
