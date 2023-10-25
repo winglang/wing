@@ -9,10 +9,20 @@ export function printResults(
 ) {
   const durationInSeconds = duration / 1000;
   const totalSum = testResults.length;
-  const failing = testResults.filter(({ results }) => results.some(({ pass }) => !pass));
+  const unsupportedFiles = testResults.filter(({ results }) =>
+    results.some(({ unsupported }) => unsupported)
+  );
+  const failing = testResults.filter(({ results }) =>
+    results.some(({ pass, unsupported }) => !pass && !unsupported)
+  );
   const passing = testResults.filter(({ results }) => results.every(({ pass }) => !!pass));
   const failingTestsNumber = failing.reduce(
-    (acc, { results }) => acc + results.filter(({ pass }) => !pass).length,
+    (acc, { results }) =>
+      acc + results.filter(({ pass, unsupported }) => !pass && !unsupported).length,
+    0
+  );
+  const unsupportedTestsNumber = unsupportedFiles.reduce(
+    (acc, { results }) => acc + results.filter(({ unsupported }) => !!unsupported).length,
     0
   );
   const passingTestsNumber = testResults.reduce(
@@ -20,7 +30,7 @@ export function printResults(
     0
   );
   console.log(" "); // for getting a new line- \n does't seem to work :(
-  const areErrors = failing.length > 0 && totalSum > 1;
+  const areErrors = failing.length + unsupportedFiles.length > 0 && totalSum > 1;
   const showTitle = totalSum > 1;
 
   const res = [];
@@ -30,6 +40,7 @@ export function printResults(
     res.push(`Results:`);
     res.push(...passing.map(({ testName }) => `    ${chalk.green("✓")} ${testName}`));
     res.push(...failing.map(({ testName }) => `    ${chalk.red("×")} ${testName}`));
+    res.push(...unsupportedFiles.map(({ testName }) => `    ${chalk.yellow("?")} ${testName}`));
   }
 
   if (areErrors) {
@@ -37,7 +48,7 @@ export function printResults(
     res.push(" ");
     res.push("Errors:");
     res.push(
-      ...failing.map(({ testName, results }) =>
+      ...[...failing, ...unsupportedFiles].map(({ testName, results }) =>
         [
           `At ${testName}`,
           results.filter(({ pass }) => !pass).map(({ error }) => chalk.red(error)),
@@ -48,21 +59,29 @@ export function printResults(
 
   // prints a summary of how many tests passed and failed
   res.push(" ");
+  const testCount = [
+    failingTestsNumber && chalk.red(` ${failingTestsNumber} failed`),
+    passingTestsNumber && chalk.green(` ${passingTestsNumber} passed`),
+    unsupportedTestsNumber && chalk.yellow(` ${unsupportedTestsNumber} unsupported`),
+  ]
+    .filter((item) => !!item)
+    .join(chalk.dim(" |"));
+
+  const fileCount = [
+    failing.length && chalk.red(` ${failing.length} failed`),
+    passing.length && chalk.green(` ${passing.length} passed`),
+    unsupportedFiles.length && chalk.yellow(` ${unsupportedFiles.length} unsupported`),
+  ]
+    .filter((item) => !!item)
+    .join(chalk.dim(" |"));
+
   res.push(
-    `${chalk.dim("Tests")}${failingTestsNumber ? chalk.red(` ${failingTestsNumber} failed`) : ""}${
-      failingTestsNumber && passingTestsNumber ? chalk.dim(" |") : ""
-    }${passingTestsNumber ? chalk.green(` ${passingTestsNumber} passed`) : ""} ${chalk.dim(
-      `(${failingTestsNumber + passingTestsNumber})`
+    `${chalk.dim("Tests")}${testCount} ${chalk.dim(
+      `(${failingTestsNumber + passingTestsNumber + unsupportedTestsNumber})`
     )}`
   );
   // prints a summary of how many tests files passed and failed
-  res.push(
-    `${chalk.dim("Test Files")}${failing.length ? chalk.red(` ${failing.length} failed`) : ""}${
-      failing.length && passing.length ? chalk.dim(" |") : ""
-    }${passing.length ? chalk.green(` ${passing.length} passed`) : ""} ${chalk.dim(
-      `(${totalSum})`
-    )}`
-  );
+  res.push(`${chalk.dim("Test Files")}${fileCount} ${chalk.dim(`(${totalSum})`)}`);
 
   // prints the test duration
   res.push(
