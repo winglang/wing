@@ -66,7 +66,7 @@ module.exports = function({ $stdlib }) {
         })())
       `;
     }
-    _getInflightOps() {
+    _supportedOps() {
       return ["equalStr", "isNil", "equalNum", "$inflight_init"];
     }
   }
