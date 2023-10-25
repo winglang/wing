@@ -1651,7 +1651,7 @@ impl Types {
 		}
 	}
 
-	/// Given an unqualified type name of a builtin type, return the full type info.
+	/// Given a builtin type, return the full class info from the standard library.
 	///
 	/// This is needed because our builtin types have no API.
 	/// So we have to get the API from the std lib
@@ -1659,10 +1659,36 @@ impl Types {
 	/// https://github.com/winglang/wing/issues/1780
 	///
 	/// Note: This doesn't handle generics (i.e. this keeps the `T1`)
-	pub fn get_std_class(&self, type_: &str) -> Option<(&SymbolKind, symbol_env::SymbolLookupInfo)> {
-		let type_name = fully_qualify_std_type(type_);
+	pub fn get_std_class(&self, type_: &TypeRef) -> Option<(&SymbolKind, symbol_env::SymbolLookupInfo)> {
+		let type_name = match &**type_ {
+			Type::Number => "Number",
+			Type::String => "String",
+			Type::Boolean => "Boolean",
+			Type::Duration => "Duration",
+			Type::Json(_) => "Json",
+			Type::MutJson => "MutJson",
+			Type::Array(_) => "Array",
+			Type::MutArray(_) => "MutArray",
+			Type::Map(_) => "Map",
+			Type::MutMap(_) => "MutMap",
+			Type::Set(_) => "Set",
+			Type::MutSet(_) => "MutSet",
+			Type::Struct(_) => "Struct",
 
-		let fqn = format!("{WINGSDK_ASSEMBLY_NAME}.{type_name}");
+			Type::Optional(t) => return self.get_std_class(t),
+
+			Type::Function(_)
+			| Type::Class(_)
+			| Type::Interface(_)
+			| Type::Enum(_)
+			| Type::Void
+			| Type::Nil
+			| Type::Anything
+			| Type::Unresolved
+			| Type::Inferred(_) => return None,
+		};
+
+		let fqn = format!("{WINGSDK_ASSEMBLY_NAME}.{WINGSDK_STD_MODULE}.{type_name}");
 
 		self.libraries.lookup_nested_str(fqn.as_str(), None).ok()
 	}
@@ -4487,7 +4513,7 @@ impl<'a> TypeChecker<'a> {
 		let jsii = if let Some(jsii) = self
 			.jsii_imports
 			.iter()
-			.find(|j| j.assembly_name == library_name && j.alias.name == alias.name)
+			.find(|j| j.assembly_name == library_name && j.alias.same(alias))
 		{
 			// This spec has already been pre-supplied to the typechecker, so we'll still use this to populate the symbol environment
 			jsii
@@ -4542,7 +4568,7 @@ impl<'a> TypeChecker<'a> {
 			self
 				.jsii_imports
 				.iter()
-				.find(|j| j.assembly_name == assembly_name && j.alias.name == alias.name)
+				.find(|j| j.assembly_name == assembly_name && j.alias.same(alias))
 				.expect("Expected to find the just-added jsii import spec")
 		};
 
@@ -5703,34 +5729,32 @@ pub fn import_udt_from_jsii(
 /// https://github.com/winglang/wing/issues/1780
 pub fn fully_qualify_std_type(type_: &str) -> String {
 	// Additionally, this doesn't handle for generics
-	let type_name = type_.to_string();
-	let type_name = if let Some((prefix, _)) = type_name.split_once(" ") {
-		prefix
-	} else {
-		&type_name
-	};
-	let type_name = if let Some((prefix, _)) = type_name.split_once("<") {
-		prefix
-	} else {
-		&type_name
-	};
-
-	let type_name = match type_name {
+	let type_ = match type_ {
 		"str" => "String",
 		"duration" => "Duration",
 		"datetime" => "Datetime",
 		"bool" => "Boolean",
 		"num" => "Number",
-		_ => type_name,
+		_ => {
+			// Check for generics or Json
+			let type_ = if let Some((prefix, _)) = type_.split_once(" ") {
+				prefix
+			} else {
+				type_
+			};
+			let type_ = if let Some((prefix, _)) = type_.split_once("<") {
+				prefix
+			} else {
+				type_
+			};
+			match type_ {
+				"Json" | "MutJson" | "MutArray" | "MutMap" | "MutSet" | "Array" | "Map" | "Set" => type_,
+				_ => return type_.to_owned(),
+			}
+		}
 	};
 
-	match type_name {
-		"Json" | "MutJson" | "MutArray" | "MutMap" | "MutSet" | "Array" | "Map" | "Set" | "String" | "Duration"
-		| "Boolean" | "Number" | "Struct" => {
-			format!("{WINGSDK_STD_MODULE}.{type_name}")
-		}
-		_ => type_name.to_string(),
-	}
+	format!("{WINGSDK_STD_MODULE}.{type_}")
 }
 
 #[cfg(test)]
