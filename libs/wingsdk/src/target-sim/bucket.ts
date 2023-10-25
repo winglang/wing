@@ -23,7 +23,7 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
   }
 
   /** @internal */
-  public _getInflightOps(): string[] {
+  public _supportedOps(): string[] {
     return [
       cloud.BucketInflightMethods.DELETE,
       cloud.BucketInflightMethods.GET,

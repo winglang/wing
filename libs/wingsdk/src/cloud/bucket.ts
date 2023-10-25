@@ -54,7 +54,7 @@ export abstract class Bucket extends Resource {
   }
 
   /** @internal */
-  public abstract _getInflightOps(): string[];
+  public abstract _supportedOps(): string[];
 
   /**
    * Add a file to the bucket that is uploaded when the app is deployed.

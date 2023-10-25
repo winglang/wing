@@ -98,7 +98,7 @@ export class Bucket extends cloud.Bucket {
   }
 
   /** @internal */
-  public _getInflightOps(): string[] {
+  public _supportedOps(): string[] {
     return [
       cloud.BucketInflightMethods.DELETE,
       cloud.BucketInflightMethods.GET,

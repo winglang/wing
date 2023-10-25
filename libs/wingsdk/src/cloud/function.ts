@@ -109,7 +109,7 @@ export abstract class Function extends Resource implements IInflightHost {
   }
 
   /** @internal */
-  public _getInflightOps(): string[] {
+  public _supportedOps(): string[] {
     return [FunctionInflightMethods.INVOKE];
   }
 
