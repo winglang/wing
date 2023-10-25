@@ -54,7 +54,7 @@ export abstract class Bucket extends Resource {
   }
 
   /** @internal */
-  public _getInflightOps(): string[] {
+  public _supportedOps(): string[] {
     return [
       BucketInflightMethods.DELETE,
       BucketInflightMethods.GET,
