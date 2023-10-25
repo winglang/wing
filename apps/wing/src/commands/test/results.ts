@@ -51,7 +51,11 @@ export function printResults(
       ...[...failing, ...unsupportedFiles].map(({ testName, results }) =>
         [
           `At ${testName}`,
-          results.filter(({ pass }) => !pass).map(({ error }) => chalk.red(error)),
+          results.reduce(
+            (acc: string[], { pass, error, unsupported }) =>
+              pass ? acc : unsupported && error ? [...acc, error] : [...acc, chalk.red(error)],
+            []
+          ),
         ].join("\n")
       )
     );
