@@ -103,6 +103,11 @@ export interface TestResult {
   readonly pass: boolean;
 
   /**
+   * Whether the test contains code that is unsupported by the target.
+   */
+  readonly unsupported?: boolean;
+
+  /**
    * The error message if the test failed.
    */
   readonly error?: string;
