@@ -25,7 +25,7 @@ test("create a secret", async () => {
     props: {
       name: "my_secret-c84793b7",
     },
-    type: "wingsdk.cloud.Secret",
+    type: cloud.SECRET_FQN,
   });
   await s.stop();
 

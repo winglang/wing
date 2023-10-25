@@ -1,8 +1,9 @@
 import { mkdtempSync, readFileSync, readdirSync, statSync } from "fs";
 import { tmpdir } from "os";
-import { extname, isAbsolute, join } from "path";
+import { extname, isAbsolute, join, basename } from "path";
 import { Template } from "aws-cdk-lib/assertions";
 import { App } from "../src/core";
+import { WingSimulatorSchema } from "../src/simulator";
 
 export function treeJsonOf(outdir: string): any {
   return JSON.parse(readFileSync(join(outdir, "tree.json"), "utf8"));
@@ -153,6 +154,9 @@ export function directorySnapshot(initialRoot: string) {
           case ".json":
             const data = readFileSync(abspath, "utf-8");
             snapshot[key] = JSON.parse(data);
+            if (key.endsWith("simulator.json")) {
+              snapshot[key] = sanitizePaths(snapshot[key]);
+            }
             break;
 
           case ".js":
@@ -170,6 +174,16 @@ export function directorySnapshot(initialRoot: string) {
   visit(initialRoot, ".");
 
   return snapshot;
+}
+
+type DeepWriteable<T> = { -readonly [P in keyof T]: DeepWriteable<T[P]> };
+
+export function sanitizePaths(json: DeepWriteable<WingSimulatorSchema>) {
+  for (const key of Object.keys(json.types)) {
+    const sanitized = `<ABSOLUTE PATH>/${basename(json.types[key].sourcePath)}`;
+    json.types[key].sourcePath = sanitized;
+  }
+  return json;
 }
 
 /**

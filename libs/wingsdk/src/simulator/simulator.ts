@@ -405,7 +405,6 @@ export class Simulator {
 
     // look up the location of the code for the type
     const typeInfo = this.typeInfo(resourceConfig.type);
-    console.error(typeInfo);
 
     // create the resource based on its type
     // eslint-disable-next-line @typescript-eslint/no-require-imports
