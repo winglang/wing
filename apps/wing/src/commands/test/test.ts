@@ -12,7 +12,7 @@ import { glob } from "glob";
 import { nanoid } from "nanoid";
 import { printResults, validateOutputFilePath, writeResultsToFile } from "./results";
 import { withSpinner } from "../../util";
-import { compile, CompileOptions } from "../compile";
+import { compile, CompileOptions, NotImplementedError } from "../compile";
 
 const log = debug("wing:test");
 
@@ -68,7 +68,15 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
       console.log((error as Error).message);
       results.push({
         testName: generateTestName(entrypoint),
-        results: [{ pass: false, path: "", error: (error as Error).message, traces: [] }],
+        results: [
+          {
+            pass: false,
+            unsupported: error instanceof NotImplementedError,
+            path: "",
+            error: (error as Error).message,
+            traces: [],
+          },
+        ],
       });
     }
   };
@@ -82,7 +90,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
   // if we have any failures, exit with 1
   for (const testSuite of results) {
     for (const r of testSuite.results) {
-      if (r.error) {
+      if (!r.pass && !r.unsupported) {
         return 1;
       }
     }
@@ -111,7 +119,7 @@ async function testOne(entrypoint: string, options: TestOptions) {
     case Target.AWSCDK:
       return testAwsCdk(synthDir, options);
     default:
-      throw new Error(`unsupported target ${options.target}`);
+      throw new NotImplementedError(`unsupported target ${options.target}`);
   }
 }
 

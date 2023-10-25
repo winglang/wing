@@ -20,7 +20,7 @@ use crate::type_check::{
 };
 use crate::visit::{visit_expr, visit_type_annotation, Visit};
 use crate::wasm_util::extern_json_fn;
-use crate::{UTIL_CLASS_NAME, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_STD_MODULE};
+use crate::{UTIL_CLASS_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_STD_MODULE};
 
 use super::sync::check_utf8;
 
@@ -68,6 +68,9 @@ fn check_ts_to_completions(interesting_node: &Node) -> bool {
 
 		// There will always be options following a colon
 		":" => return false,
+
+		// Starting a type parameter
+		"<" => return false,
 
 		_ => false,
 	};
@@ -283,13 +286,15 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 				// We're likely in a type reference of some kind, so let's use the raw text for a lookup
 				let reference_bytes = &preceding_text.as_bytes()[parent.start_byte()..node_to_complete.start_byte()];
-				let reference_text =
-					fully_qualify_std_type(std::str::from_utf8(reference_bytes).expect("Reference must be valid utf8"));
-				let reference_text = reference_text.trim_end_matches(".");
+				let mut reference_text = std::str::from_utf8(reference_bytes)
+					.expect("Reference must be valid utf8")
+					.trim_end_matches(".")
+					.to_owned();
+				reference_text = fully_qualify_std_type(&reference_text);
 
 				if !reference_text.is_empty() {
 					if let Some((lookup_thing, _)) = found_env
-						.lookup_nested_str(reference_text, scope_visitor.found_stmt_index)
+						.lookup_nested_str(&reference_text, scope_visitor.found_stmt_index)
 						.ok()
 					{
 						let completions = match lookup_thing {
@@ -461,6 +466,13 @@ fn get_current_scope_completions(
 
 	// This is top-level or inside a block where a statement is expected
 	let at_scope_level = matches!(node_to_complete.kind(), "source" | "block");
+
+	if at_scope_level {
+		if preceding_text.ends_with("<") {
+			// Starting a type parameter
+			in_type = true;
+		}
+	}
 
 	match node_to_complete.kind() {
 		"variable_definition_statement" => {
@@ -841,8 +853,8 @@ fn get_completions_from_type(
 	access_context: &ObjectAccessContext,
 ) -> Vec<CompletionItem> {
 	let type_ = *type_.maybe_unwrap_option();
-	let type_ = &*types.maybe_unwrap_inference(type_);
-	match type_ {
+	let type_ = types.maybe_unwrap_inference(type_);
+	match &*type_ {
 		Type::Class(c) => get_completions_from_class(c, current_phase, access_context),
 		Type::Interface(i) => get_completions_from_class(i, current_phase, access_context),
 		Type::Struct(s) if !matches!(access_context, ObjectAccessContext::Static) => {
@@ -862,47 +874,10 @@ fn get_completions_from_type(
 		}
 		Type::Optional(t) => get_completions_from_type(t, types, current_phase, access_context),
 		Type::Void | Type::Function(_) | Type::Anything | Type::Unresolved | Type::Inferred(_) => vec![],
-		Type::Number
-		| Type::String
-		| Type::Duration
-		| Type::Boolean
-		| Type::Json(_)
-		| Type::MutJson
-		| Type::Nil
-		| Type::Array(_)
-		| Type::MutArray(_)
-		| Type::Map(_)
-		| Type::MutMap(_)
-		| Type::Set(_)
-		| Type::MutSet(_)
-		| Type::Struct(_) => {
-			let type_name = type_.to_string();
-			let mut type_name = type_name.as_str();
-
-			if matches!(type_, Type::Struct(_)) {
-				type_name = "Struct";
-			}
-
-			// Certain primitive type names differ from how they actually appear in the std namespace
-			// These are unique when used as a type definition, rather than as a type reference when calling a static method
-			type_name = match type_name {
-				"str" => "String",
-				"duration" => "Duration",
-				"bool" => "Boolean",
-				"num" => "Number",
-				_ => type_name,
-			};
-			let final_type_name = fully_qualify_std_type(type_name);
-			let final_type_name = final_type_name.as_str();
-
-			let fqn = format!("{WINGSDK_ASSEMBLY_NAME}.{final_type_name}");
-			if let LookupResult::Found(std_type, _) = types.libraries.lookup_nested_str(fqn.as_str(), None) {
-				return get_completions_from_type(
-					&std_type.as_type().expect("is type"),
-					types,
-					current_phase,
-					access_context,
-				);
+		_ => {
+			if let Some(lookup) = types.get_std_class(&type_) {
+				let class = lookup.0.as_type_ref().unwrap().as_class().unwrap();
+				get_completions_from_class(class, current_phase, access_context)
 			} else {
 				vec![]
 			}
@@ -1328,7 +1303,7 @@ let c = 3;
 		incomplete_if_statement,
 		r#"
 let a = MutMap<str> {};
-if a. 
+if a.
    //^
 "#,
 		assert!(!incomplete_if_statement.is_empty())
@@ -1890,5 +1865,23 @@ let x: cloud.Buc
               //^
 "#,
 		assert!(partial_type_reference_annotation.iter().any(|c| c.label == "Bucket"))
+	);
+
+	test_completion_list!(
+		no_completion_wrong_builtin,
+		r#"
+String.
+     //^
+"#,
+		assert!(no_completion_wrong_builtin.is_empty())
+	);
+
+	test_completion_list!(
+		type_parameter,
+		r#"
+let x: Array< >
+           //^
+"#,
+		assert!(!type_parameter.is_empty())
 	);
 }

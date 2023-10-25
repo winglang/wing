@@ -1,4 +1,5 @@
 import { Construct } from "constructs";
+import { NotImplementedError } from "./errors";
 import { Tokens } from "./tokens";
 import { SDK_PACKAGE_NAME } from "../constants";
 import { IResource } from "../std/resource";
@@ -196,7 +197,7 @@ export abstract class App extends Construct {
     const instance = this.tryNew(fqn, scope, id, ...args);
     const typeName = fqn.replace(`${SDK_PACKAGE_NAME}.`, "");
     if (!instance) {
-      throw new Error(
+      throw new NotImplementedError(
         `Resource "${fqn}" is not yet implemented for "${this._target}" target. Please refer to the roadmap https://github.com/orgs/winglang/projects/3/views/1?filterQuery=${typeName}`
       );
     }
