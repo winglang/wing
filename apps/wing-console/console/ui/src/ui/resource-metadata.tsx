@@ -85,7 +85,7 @@ export const ResourceMetadata = ({
     if (node.props) {
       const icon = getResourceIconComponent(node.type, { resourceId: node.id });
       switch (node.type) {
-        case "wingsdk.cloud.Function": {
+        case "@winglang/sdk.cloud.Function": {
           resourceGroup = {
             groupName: "Function",
             actionName: "Invoke",
@@ -93,7 +93,7 @@ export const ResourceMetadata = ({
           };
           break;
         }
-        case "wingsdk.cloud.Queue": {
+        case "@winglang/sdk.cloud.Queue": {
           resourceGroup = {
             groupName: "Queue",
             actionName: "Push Message",
@@ -102,7 +102,7 @@ export const ResourceMetadata = ({
 
           break;
         }
-        case "wingsdk.cloud.Bucket": {
+        case "@winglang/sdk.cloud.Bucket": {
           resourceGroup = {
             groupName: "Bucket",
             actionName: "Files",
@@ -111,7 +111,7 @@ export const ResourceMetadata = ({
 
           break;
         }
-        case "wingsdk.cloud.Counter": {
+        case "@winglang/sdk.cloud.Counter": {
           resourceGroup = {
             groupName: "Counter",
             icon,
@@ -119,7 +119,7 @@ export const ResourceMetadata = ({
 
           break;
         }
-        case "wingsdk.cloud.Topic": {
+        case "@winglang/sdk.cloud.Topic": {
           resourceGroup = {
             groupName: "Topic",
             actionName: "Publish Message",
@@ -128,7 +128,7 @@ export const ResourceMetadata = ({
 
           break;
         }
-        case "wingsdk.cloud.Api": {
+        case "@winglang/sdk.cloud.Api": {
           resourceGroup = {
             groupName: "Api",
             icon,
@@ -136,7 +136,7 @@ export const ResourceMetadata = ({
 
           break;
         }
-        case "wingsdk.cloud.Table": {
+        case "@winglang/sdk.ex.Table": {
           resourceGroup = {
             groupName: "Table",
             icon,
@@ -144,7 +144,7 @@ export const ResourceMetadata = ({
 
           break;
         }
-        case "wingsdk.cloud.Schedule": {
+        case "@winglang/sdk.cloud.Schedule": {
           resourceGroup = {
             groupName: "Schedule",
             icon,
@@ -152,7 +152,7 @@ export const ResourceMetadata = ({
 
           break;
         }
-        case "wingsdk.redis.Redis": {
+        case "@winglang/sdk.ex.Redis": {
           resourceGroup = {
             groupName: "Redis",
             icon,
@@ -358,19 +358,19 @@ export const ResourceMetadata = ({
                 >
                   {resourceGroup?.groupName && (
                     <>
-                      {node.type === "wingsdk.cloud.Function" && (
+                      {node.type === "@winglang/sdk.cloud.Function" && (
                         <FunctionMetadata node={node} />
                       )}
-                      {node.type === "wingsdk.cloud.Queue" && (
+                      {node.type === "@winglang/sdk.cloud.Queue" && (
                         <QueueMetadataView node={node} />
                       )}
-                      {node.type === "wingsdk.cloud.Bucket" && (
+                      {node.type === "@winglang/sdk.cloud.Bucket" && (
                         <BucketMetadata node={node} />
                       )}
-                      {node.type === "wingsdk.cloud.Counter" && (
+                      {node.type === "@winglang/sdk.cloud.Counter" && (
                         <CounterMetadata node={node} />
                       )}
-                      {node.type === "wingsdk.cloud.Schedule" && (
+                      {node.type === "@winglang/sdk.cloud.Schedule" && (
                         <ScheduleMetadata node={node} />
                       )}
                       {resourceGroup?.actionName && (

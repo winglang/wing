@@ -34,7 +34,7 @@ my_capture: [\\"hello\\",\\"dude\\"]
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -90,10 +90,6 @@ my_capture: [\\"hello\\",\\"dude\\"]
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -125,6 +121,10 @@ my_capture: [\\"hello\\",\\"dude\\"]
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -242,7 +242,7 @@ my_buckets: [(function(env) {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -321,10 +321,6 @@ my_buckets: [(function(env) {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -356,6 +352,10 @@ my_buckets: [(function(env) {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -471,7 +471,7 @@ my_array: [{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.1666666666666666
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -527,10 +527,6 @@ my_array: [{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.1666666666666666
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -562,6 +558,10 @@ my_array: [{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.1666666666666666
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -652,7 +652,7 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -708,10 +708,6 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -743,6 +739,10 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -832,7 +832,7 @@ my_capture: false
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -888,10 +888,6 @@ my_capture: false
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -923,6 +919,10 @@ my_capture: false
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -1014,7 +1014,7 @@ my_capture: {\\"seconds\\": 7200,\\"minutes\\": 120,\\"hours\\": 2,}
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -1070,10 +1070,6 @@ my_capture: {\\"seconds\\": 7200,\\"minutes\\": 120,\\"hours\\": 2,}
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -1105,6 +1101,10 @@ my_capture: {\\"seconds\\": 7200,\\"minutes\\": 120,\\"hours\\": 2,}
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -1198,7 +1198,7 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -1254,10 +1254,6 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -1289,6 +1285,10 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -1384,7 +1384,7 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -1440,10 +1440,6 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -1475,6 +1471,10 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -1567,7 +1567,7 @@ my_map: new Map([[\\"foo\\",[{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -1623,10 +1623,6 @@ my_map: new Map([[\\"foo\\",[{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -1658,6 +1654,10 @@ my_map: new Map([[\\"foo\\",[{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -1772,7 +1772,7 @@ my_map: new Map([[\\"foo\\",(function(env) {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -1851,10 +1851,6 @@ my_map: new Map([[\\"foo\\",(function(env) {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -1886,6 +1882,10 @@ my_map: new Map([[\\"foo\\",(function(env) {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -1999,7 +1999,7 @@ my_capture: 123
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -2055,10 +2055,6 @@ my_capture: 123
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -2090,6 +2086,10 @@ my_capture: 123
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -2182,7 +2182,7 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -2238,10 +2238,6 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -2273,6 +2269,10 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -2364,7 +2364,7 @@ my_set: new Set([{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.1666666666
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -2420,10 +2420,6 @@ my_set: new Set([{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.1666666666
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -2455,6 +2451,10 @@ my_set: new Set([{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.1666666666
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -2545,7 +2545,7 @@ my_capture: \\"bam bam bam\\"
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -2601,10 +2601,6 @@ my_capture: \\"bam bam bam\\"
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -2636,6 +2632,10 @@ my_capture: \\"bam bam bam\\"
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -2728,7 +2728,7 @@ my_capture: {\\"hello\\": \\"dude\\",\\"world\\": \\"cup\\",\\"foo\\": \\"bar\\"
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -2784,10 +2784,6 @@ my_capture: {\\"hello\\": \\"dude\\",\\"world\\": \\"cup\\",\\"foo\\": \\"bar\\"
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -2819,6 +2815,10 @@ my_capture: {\\"hello\\": \\"dude\\",\\"world\\": \\"cup\\",\\"foo\\": \\"bar\\"
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -2911,7 +2911,7 @@ my_struct: {\\"foo\\": new Map([[\\"foo\\",1],[\\"bar\\",2]]),\\"bar\\": new Map
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -2967,10 +2967,6 @@ my_struct: {\\"foo\\": new Map([[\\"foo\\",1],[\\"bar\\",2]]),\\"bar\\": new Map
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -3002,6 +2998,10 @@ my_struct: {\\"foo\\": new Map([[\\"foo\\",1],[\\"bar\\",2]]),\\"bar\\": new Map
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -3154,7 +3154,7 @@ my_struct: {\\"bucky\\": (function(env) {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -3266,10 +3266,6 @@ my_struct: {\\"bucky\\": (function(env) {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -3301,6 +3297,10 @@ my_struct: {\\"bucky\\": (function(env) {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },

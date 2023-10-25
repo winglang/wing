@@ -40,7 +40,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -151,10 +151,6 @@ return class Handler {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -186,6 +182,10 @@ return class Handler {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -271,7 +271,7 @@ return class Handler {
 
 exports[`api handler can read the request params 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -283,7 +283,7 @@ exports[`api handler can read the request params 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -322,7 +322,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -419,10 +419,6 @@ return class Handler {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -454,6 +450,10 @@ return class Handler {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -539,7 +539,7 @@ return class Handler {
 
 exports[`api handler can read the request path 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -551,7 +551,7 @@ exports[`api handler can read the request path 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -590,7 +590,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -687,10 +687,6 @@ return class Handler {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -722,6 +718,10 @@ return class Handler {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -807,7 +807,7 @@ return class Handler {
 
 exports[`api handler can set response headers 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -819,7 +819,7 @@ exports[`api handler can set response headers 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -858,7 +858,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -955,10 +955,6 @@ return class Handler {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -990,6 +986,10 @@ return class Handler {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -1075,7 +1075,7 @@ return class Handler {
 
 exports[`api response returns Content-Type header from inflight 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -1087,7 +1087,7 @@ exports[`api response returns Content-Type header from inflight 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -1126,7 +1126,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -1223,10 +1223,6 @@ return class Handler {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -1258,6 +1254,10 @@ return class Handler {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -1343,7 +1343,7 @@ return class Handler {
 
 exports[`api response returns default Content-Type header 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -1355,7 +1355,7 @@ exports[`api response returns default Content-Type header 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -1394,7 +1394,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -1491,10 +1491,6 @@ return class Handler {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -1526,6 +1522,10 @@ return class Handler {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -1611,7 +1611,7 @@ return class Handler {
 
 exports[`api supports every method type 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -1641,7 +1641,7 @@ exports[`api supports every method type 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -1710,7 +1710,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -1891,10 +1891,6 @@ return class Handler {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -1926,6 +1922,10 @@ return class Handler {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -2011,7 +2011,7 @@ return class Handler {
 
 exports[`api with 'name' & 'age' parameter 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -2023,7 +2023,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -2062,7 +2062,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -2176,10 +2176,6 @@ return class Handler {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -2211,6 +2207,10 @@ return class Handler {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -2296,7 +2296,7 @@ return class Handler {
 
 exports[`api with 'name' parameter 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -2308,7 +2308,7 @@ exports[`api with 'name' parameter 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -2347,7 +2347,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -2453,10 +2453,6 @@ return class Handler {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -2488,6 +2484,10 @@ return class Handler {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -2606,7 +2606,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -2719,10 +2719,6 @@ return class Handler {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -2754,6 +2750,10 @@ return class Handler {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -2839,7 +2839,7 @@ return class Handler {
 
 exports[`api with multiple methods on same route 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -2858,7 +2858,7 @@ exports[`api with multiple methods on same route 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -2917,7 +2917,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -3052,10 +3052,6 @@ return class Handler {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -3087,6 +3083,10 @@ return class Handler {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -3209,7 +3209,7 @@ return class Handler {
 
 exports[`api with multiple routes 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -3228,7 +3228,7 @@ exports[`api with multiple routes 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -3287,7 +3287,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -3424,10 +3424,6 @@ return class Handler {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -3459,6 +3455,10 @@ return class Handler {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -3581,7 +3581,7 @@ return class Handler {
 
 exports[`api with one GET route 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -3593,7 +3593,7 @@ exports[`api with one GET route 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -3632,7 +3632,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -3729,10 +3729,6 @@ return class Handler {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -3764,6 +3760,10 @@ return class Handler {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -3849,7 +3849,7 @@ return class Handler {
 
 exports[`api with one GET route with request params 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -3861,7 +3861,7 @@ exports[`api with one GET route with request params 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -3900,7 +3900,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -4006,10 +4006,6 @@ return class Handler {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -4041,6 +4037,10 @@ return class Handler {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -4126,7 +4126,7 @@ return class Handler {
 
 exports[`api with one POST route, with body 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -4138,7 +4138,7 @@ exports[`api with one POST route, with body 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -4177,7 +4177,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -4274,10 +4274,6 @@ return class Handler {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -4309,6 +4305,10 @@ return class Handler {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -4406,7 +4406,7 @@ exports[`create an api 1`] = `
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -4462,10 +4462,6 @@ exports[`create an api 1`] = `
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -4497,6 +4493,10 @@ exports[`create an api 1`] = `
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },

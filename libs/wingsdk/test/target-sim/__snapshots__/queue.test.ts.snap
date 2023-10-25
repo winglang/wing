@@ -14,7 +14,7 @@ exports[`create a queue 2`] = `
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -68,10 +68,6 @@ exports[`create a queue 2`] = `
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -103,6 +99,10 @@ exports[`create a queue 2`] = `
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -197,7 +197,7 @@ async handle(message) {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -274,10 +274,6 @@ async handle(message) {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -309,6 +305,10 @@ async handle(message) {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -405,7 +405,7 @@ async handle(message) {
 
 exports[`messages are not requeued if the function fails before timeout 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "@winglang/sdk.cloud.Queue created.",
   "@winglang/sdk.sim.EventMapping created.",
@@ -416,7 +416,7 @@ exports[`messages are not requeued if the function fails before timeout 1`] = `
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Queue deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -470,7 +470,7 @@ async handle(message) {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -547,10 +547,6 @@ async handle(message) {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -582,6 +578,10 @@ async handle(message) {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -678,7 +678,7 @@ async handle(message) {
 
 exports[`messages are requeued if the function fails after timeout 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "@winglang/sdk.cloud.Queue created.",
   "@winglang/sdk.sim.EventMapping created.",
@@ -689,7 +689,7 @@ exports[`messages are requeued if the function fails after timeout 1`] = `
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Queue deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
   "1 messages pushed back to queue after visibility timeout.",
 ]
 `;
@@ -744,7 +744,7 @@ async handle(message) {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -821,10 +821,6 @@ async handle(message) {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -856,6 +852,10 @@ async handle(message) {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -952,11 +952,11 @@ async handle(message) {
 
 exports[`push rejects empty message 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Queue created.",
   "Push (messages=).",
   "@winglang/sdk.cloud.Queue deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -974,7 +974,7 @@ exports[`push rejects empty message 2`] = `
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -1028,10 +1028,6 @@ exports[`push rejects empty message 2`] = `
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -1063,6 +1059,10 @@ exports[`push rejects empty message 2`] = `
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -1109,7 +1109,7 @@ exports[`push rejects empty message 2`] = `
 
 exports[`queue batch size of 2, purge the queue 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Queue created.",
   "Push (messages=A).",
   "Push (messages=B).",
@@ -1117,7 +1117,7 @@ exports[`queue batch size of 2, purge the queue 1`] = `
   "Purge ().",
   "ApproxSize ().",
   "@winglang/sdk.cloud.Queue deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -1135,7 +1135,7 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -1189,10 +1189,6 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -1224,6 +1220,10 @@ exports[`queue batch size of 2, purge the queue 2`] = `
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -1356,7 +1356,7 @@ async handle(message) {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -1454,10 +1454,6 @@ async handle(message) {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -1489,6 +1485,10 @@ async handle(message) {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -1673,7 +1673,7 @@ async handle(message) {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -1750,10 +1750,6 @@ async handle(message) {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -1785,6 +1781,10 @@ async handle(message) {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },

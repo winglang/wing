@@ -82,7 +82,7 @@ bucket: (function(env) {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -180,10 +180,6 @@ bucket: (function(env) {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -215,6 +211,10 @@ bucket: (function(env) {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },

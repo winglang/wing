@@ -14,7 +14,7 @@ exports[`create a schedule 1`] = `
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -67,10 +67,6 @@ exports[`create a schedule 1`] = `
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -102,6 +98,10 @@ exports[`create a schedule 1`] = `
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -194,7 +194,7 @@ console.log(\\"Hello from schedule!\\");
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -268,10 +268,6 @@ console.log(\\"Hello from schedule!\\");
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -303,6 +299,10 @@ console.log(\\"Hello from schedule!\\");
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -445,7 +445,7 @@ console.log(\\"Hello from schedule!\\");
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -519,10 +519,6 @@ console.log(\\"Hello from schedule!\\");
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -554,6 +550,10 @@ console.log(\\"Hello from schedule!\\");
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -696,7 +696,7 @@ console.log(\\"Hello from schedule!\\");
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -770,10 +770,6 @@ console.log(\\"Hello from schedule!\\");
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -805,6 +801,10 @@ console.log(\\"Hello from schedule!\\");
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },

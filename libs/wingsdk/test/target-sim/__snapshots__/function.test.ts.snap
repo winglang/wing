@@ -42,7 +42,7 @@ async handle(event) {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -100,10 +100,6 @@ async handle(event) {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -135,6 +131,10 @@ async handle(event) {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -194,11 +194,11 @@ async handle(event) {
 
 exports[`invoke function fails 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "Invoke (payload=\\"{\\\\\\"name\\\\\\":\\\\\\"alice\\\\\\"}\\").",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -244,7 +244,7 @@ async handle(event) {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -300,10 +300,6 @@ async handle(event) {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -335,6 +331,10 @@ async handle(event) {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -394,11 +394,11 @@ async handle(event) {
 
 exports[`invoke function succeeds 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "Invoke (payload=\\"{\\\\\\"name\\\\\\":\\\\\\"Alice\\\\\\"}\\").",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -444,7 +444,7 @@ async handle(event) {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -500,10 +500,6 @@ async handle(event) {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -535,6 +531,10 @@ async handle(event) {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -594,11 +594,11 @@ async handle(event) {
 
 exports[`invoke function with environment variables 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "Invoke (payload=\\"{\\\\\\"name\\\\\\":\\\\\\"Alice\\\\\\"}\\").",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -644,7 +644,7 @@ async handle(event) {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -702,10 +702,6 @@ async handle(event) {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -737,6 +733,10 @@ async handle(event) {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -796,11 +796,11 @@ async handle(event) {
 
 exports[`invoke function with process.exit(1) 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "Invoke (payload=\\"{}\\").",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -836,7 +836,7 @@ async handle() {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -892,10 +892,6 @@ async handle() {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -927,6 +923,10 @@ async handle() {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -1078,7 +1078,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -1167,10 +1167,6 @@ return class Handler {
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -1202,6 +1198,10 @@ return class Handler {
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },

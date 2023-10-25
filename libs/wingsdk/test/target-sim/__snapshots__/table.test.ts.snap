@@ -2,12 +2,12 @@
 
 exports[`can add row in preflight 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "Adding initial row (key=joe-id).",
   "@winglang/sdk.ex.Table created.",
   "get row joe-id from table my_addrow_table.",
   "@winglang/sdk.ex.Table deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -25,7 +25,7 @@ exports[`can add row in preflight 2`] = `
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -90,10 +90,6 @@ exports[`can add row in preflight 2`] = `
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -125,6 +121,10 @@ exports[`can add row in preflight 2`] = `
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -183,7 +183,7 @@ exports[`create a table 1`] = `
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -242,10 +242,6 @@ exports[`create a table 1`] = `
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -277,6 +273,10 @@ exports[`create a table 1`] = `
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -323,13 +323,13 @@ exports[`create a table 1`] = `
 
 exports[`get row 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.ex.Table created.",
   "insert row joe-id into the table my_get_table.",
   "get row joe-id from table my_get_table.",
   "get row NON_EXISTENT_KEY from table my_get_table.",
   "@winglang/sdk.ex.Table deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -347,7 +347,7 @@ exports[`get row 2`] = `
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -406,10 +406,6 @@ exports[`get row 2`] = `
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -441,6 +437,10 @@ exports[`get row 2`] = `
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -487,11 +487,11 @@ exports[`get row 2`] = `
 
 exports[`insert row 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.ex.Table created.",
   "insert row joe-id into the table my_insert_table.",
   "@winglang/sdk.ex.Table deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -509,7 +509,7 @@ exports[`insert row 2`] = `
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -568,10 +568,6 @@ exports[`insert row 2`] = `
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -603,6 +599,10 @@ exports[`insert row 2`] = `
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -649,13 +649,13 @@ exports[`insert row 2`] = `
 
 exports[`list table 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.ex.Table created.",
   "insert row joe-id into the table my_list_table.",
   "insert row jane-id into the table my_list_table.",
   "list all rows from table my_list_table.",
   "@winglang/sdk.ex.Table deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -673,7 +673,7 @@ exports[`list table 2`] = `
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -732,10 +732,6 @@ exports[`list table 2`] = `
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -767,6 +763,10 @@ exports[`list table 2`] = `
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -813,12 +813,12 @@ exports[`list table 2`] = `
 
 exports[`tryGet row 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.ex.Table created.",
   "insert row joe-id into the table my_get_table.",
   "get row joe-id from table my_get_table.",
   "@winglang/sdk.ex.Table deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -836,7 +836,7 @@ exports[`tryGet row 2`] = `
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -895,10 +895,6 @@ exports[`tryGet row 2`] = `
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -930,6 +926,10 @@ exports[`tryGet row 2`] = `
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },
@@ -976,7 +976,7 @@ exports[`tryGet row 2`] = `
 
 exports[`update row 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.ex.Table created.",
   "insert row joe-id into the table my_update_table.",
   "get row joe-id from table my_update_table.",
@@ -984,7 +984,7 @@ exports[`update row 1`] = `
   "update row joe-id in table my_update_table.",
   "get row joe-id from table my_update_table.",
   "@winglang/sdk.ex.Table deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -1002,7 +1002,7 @@ exports[`update row 2`] = `
         "props": {
           "tests": {},
         },
-        "type": "@winglang/sdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -1061,10 +1061,6 @@ exports[`update row 2`] = `
         "className": "Service",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
-      "@winglang/sdk.cloud.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
       "@winglang/sdk.cloud.Topic": {
         "className": "Topic",
         "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
@@ -1096,6 +1092,10 @@ exports[`update row 2`] = `
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
       },
     },
   },

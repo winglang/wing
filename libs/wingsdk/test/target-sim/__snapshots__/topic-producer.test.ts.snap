@@ -2,7 +2,7 @@
 
 exports[`publishing messages to topic 1`] = `
 [
-  "@winglang/sdk.cloud.TestRunner created.",
+  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "@winglang/sdk.cloud.Topic created.",
   "@winglang/sdk.sim.EventMapping created.",
@@ -15,6 +15,6 @@ exports[`publishing messages to topic 1`] = `
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Topic deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
