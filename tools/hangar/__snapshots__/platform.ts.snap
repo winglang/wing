@@ -293,7 +293,6 @@ exports[`Platform examples > AWS target platform > replicate-s3.js 1`] = `
           },
         },
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
-        "permissions_boundary": "some:fake:arn:SUPERADMIN",
       },
     },
     "aws_iam_role_policy": {
@@ -575,77 +574,7 @@ exports[`Platform examples > AWS target platform > tf-backend.js > azurerm backe
         "retention_in_days": 30,
       },
     },
-    "aws_iam_policy": {
-      "ReplicaCodePolicy": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/ReplicaCodePolicy",
-            "uniqueId": "ReplicaCodePolicy",
-          },
-        },
-        "name": "some-prefix\${aws_s3_bucket.Code.bucket}",
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:GetReplicationConfiguration\\",\\"s3:ListBucket\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":[\\"\${aws_s3_bucket.Code.arn}\\",\\"\${aws_s3_bucket.Code.arn}/*\\"]},{\\"Action\\":[\\"s3:GetObjectVersionForReplication\\",\\"s3:GetObjectVersionAcl\\",\\"s3:GetObjectVersionTagging\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":\\"\${aws_s3_bucket.Code.arn}/*\\"},{\\"Action\\":[\\"s3:ReplicateObject\\",\\"s3:ReplicateDelete\\",\\"s3:ReplicateTags\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":\\"\${aws_s3_bucket.ReplicaCode.arn}/*\\"}]}",
-      },
-      "cloudBucket_ReplicaDefaultPolicy_8B2539A7": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/ReplicaDefaultPolicy",
-            "uniqueId": "cloudBucket_ReplicaDefaultPolicy_8B2539A7",
-          },
-        },
-        "name": "some-prefix\${aws_s3_bucket.cloudBucket.bucket}",
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:GetReplicationConfiguration\\",\\"s3:ListBucket\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":[\\"\${aws_s3_bucket.cloudBucket.arn}\\",\\"\${aws_s3_bucket.cloudBucket.arn}/*\\"]},{\\"Action\\":[\\"s3:GetObjectVersionForReplication\\",\\"s3:GetObjectVersionAcl\\",\\"s3:GetObjectVersionTagging\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":\\"\${aws_s3_bucket.cloudBucket.arn}/*\\"},{\\"Action\\":[\\"s3:ReplicateObject\\",\\"s3:ReplicateDelete\\",\\"s3:ReplicateTags\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":\\"\${aws_s3_bucket.cloudBucket_ReplicaDefault_870F5CB9.arn}/*\\"}]}",
-      },
-    },
-    "aws_iam_policy_attachment": {
-      "ReplicaCodePolicyAttachment": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/ReplicaCodePolicyAttachment",
-            "uniqueId": "ReplicaCodePolicyAttachment",
-          },
-        },
-        "name": "some-prefixpolicy-attachment\${aws_s3_bucket.Code.bucket}",
-        "policy_arn": "\${aws_iam_policy.ReplicaCodePolicy.arn}",
-        "roles": [
-          "\${aws_iam_role.ReplicaCodeRole.name}",
-        ],
-      },
-      "cloudBucket_ReplicaDefaultPolicyAttachment_7A65C0F4": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/ReplicaDefaultPolicyAttachment",
-            "uniqueId": "cloudBucket_ReplicaDefaultPolicyAttachment_7A65C0F4",
-          },
-        },
-        "name": "some-prefixpolicy-attachment\${aws_s3_bucket.cloudBucket.bucket}",
-        "policy_arn": "\${aws_iam_policy.cloudBucket_ReplicaDefaultPolicy_8B2539A7.arn}",
-        "roles": [
-          "\${aws_iam_role.cloudBucket_ReplicaDefaultRole_8996C4FA.name}",
-        ],
-      },
-    },
     "aws_iam_role": {
-      "ReplicaCodeRole": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/ReplicaCodeRole",
-            "uniqueId": "ReplicaCodeRole",
-          },
-        },
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"s3.amazonaws.com\\"},\\"Effect\\":\\"Allow\\",\\"Sid\\":\\"AllowS3Replication\\"}]}",
-        "name": "some-prefix\${aws_s3_bucket.Code.bucket}",
-      },
-      "cloudBucket_ReplicaDefaultRole_8996C4FA": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/ReplicaDefaultRole",
-            "uniqueId": "cloudBucket_ReplicaDefaultRole_8996C4FA",
-          },
-        },
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"s3.amazonaws.com\\"},\\"Effect\\":\\"Allow\\",\\"Sid\\":\\"AllowS3Replication\\"}]}",
-        "name": "some-prefix\${aws_s3_bucket.cloudBucket.bucket}",
-      },
       "cloudQueue-SetConsumer-cdafee6e_IamRole_2548D828": {
         "//": {
           "metadata": {
@@ -654,7 +583,6 @@ exports[`Platform examples > AWS target platform > tf-backend.js > azurerm backe
           },
         },
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
-        "permissions_boundary": "some:fake:arn:SUPERADMIN",
       },
     },
     "aws_iam_role_policy": {
@@ -736,15 +664,6 @@ exports[`Platform examples > AWS target platform > tf-backend.js > azurerm backe
         },
         "bucket_prefix": "code-c84a50b1-",
       },
-      "ReplicaCode": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/ReplicaCode",
-            "uniqueId": "ReplicaCode",
-          },
-        },
-        "bucket": "some-prefix\${aws_s3_bucket.Code.bucket}",
-      },
       "cloudBucket": {
         "//": {
           "metadata": {
@@ -754,115 +673,6 @@ exports[`Platform examples > AWS target platform > tf-backend.js > azurerm backe
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
         "force_destroy": false,
-      },
-      "cloudBucket_ReplicaDefault_870F5CB9": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/ReplicaDefault",
-            "uniqueId": "cloudBucket_ReplicaDefault_870F5CB9",
-          },
-        },
-        "bucket": "some-prefix\${aws_s3_bucket.cloudBucket.bucket}",
-      },
-    },
-    "aws_s3_bucket_replication_configuration": {
-      "ReplicaCodeConfig": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/ReplicaCodeConfig",
-            "uniqueId": "ReplicaCodeConfig",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.Code.id}",
-        "depends_on": [
-          "aws_s3_bucket_versioning.ReplicaCodeVersioning",
-          "aws_s3_bucket_versioning.SourceCodeVersioning",
-        ],
-        "role": "\${aws_iam_role.ReplicaCodeRole.arn}",
-        "rule": [
-          {
-            "destination": {
-              "bucket": "\${aws_s3_bucket.ReplicaCode.arn}",
-              "storage_class": "STANDARD",
-            },
-            "id": "some-prefix\${aws_s3_bucket.Code.bucket}",
-            "status": "Enabled",
-          },
-        ],
-      },
-      "cloudBucket_ReplicaDefaultConfig_B5F7C7E5": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/ReplicaDefaultConfig",
-            "uniqueId": "cloudBucket_ReplicaDefaultConfig_B5F7C7E5",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.cloudBucket.id}",
-        "depends_on": [
-          "aws_s3_bucket_versioning.cloudBucket_ReplicaDefaultVersioning_1CE02442",
-          "aws_s3_bucket_versioning.cloudBucket_SourceDefaultVersioning_6A904B70",
-        ],
-        "role": "\${aws_iam_role.cloudBucket_ReplicaDefaultRole_8996C4FA.arn}",
-        "rule": [
-          {
-            "destination": {
-              "bucket": "\${aws_s3_bucket.cloudBucket_ReplicaDefault_870F5CB9.arn}",
-              "storage_class": "STANDARD",
-            },
-            "id": "some-prefix\${aws_s3_bucket.cloudBucket.bucket}",
-            "status": "Enabled",
-          },
-        ],
-      },
-    },
-    "aws_s3_bucket_versioning": {
-      "ReplicaCodeVersioning": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/ReplicaCodeVersioning",
-            "uniqueId": "ReplicaCodeVersioning",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.ReplicaCode.id}",
-        "versioning_configuration": {
-          "status": "Enabled",
-        },
-      },
-      "SourceCodeVersioning": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/SourceCodeVersioning",
-            "uniqueId": "SourceCodeVersioning",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.Code.id}",
-        "versioning_configuration": {
-          "status": "Enabled",
-        },
-      },
-      "cloudBucket_ReplicaDefaultVersioning_1CE02442": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/ReplicaDefaultVersioning",
-            "uniqueId": "cloudBucket_ReplicaDefaultVersioning_1CE02442",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.cloudBucket_ReplicaDefault_870F5CB9.id}",
-        "versioning_configuration": {
-          "status": "Enabled",
-        },
-      },
-      "cloudBucket_SourceDefaultVersioning_6A904B70": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/SourceDefaultVersioning",
-            "uniqueId": "cloudBucket_SourceDefaultVersioning_6A904B70",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.cloudBucket.id}",
-        "versioning_configuration": {
-          "status": "Enabled",
-        },
       },
     },
     "aws_s3_object": {
@@ -936,77 +746,7 @@ exports[`Platform examples > AWS target platform > tf-backend.js > gcp backend 1
         "retention_in_days": 30,
       },
     },
-    "aws_iam_policy": {
-      "ReplicaCodePolicy": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/ReplicaCodePolicy",
-            "uniqueId": "ReplicaCodePolicy",
-          },
-        },
-        "name": "some-prefix\${aws_s3_bucket.Code.bucket}",
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:GetReplicationConfiguration\\",\\"s3:ListBucket\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":[\\"\${aws_s3_bucket.Code.arn}\\",\\"\${aws_s3_bucket.Code.arn}/*\\"]},{\\"Action\\":[\\"s3:GetObjectVersionForReplication\\",\\"s3:GetObjectVersionAcl\\",\\"s3:GetObjectVersionTagging\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":\\"\${aws_s3_bucket.Code.arn}/*\\"},{\\"Action\\":[\\"s3:ReplicateObject\\",\\"s3:ReplicateDelete\\",\\"s3:ReplicateTags\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":\\"\${aws_s3_bucket.ReplicaCode.arn}/*\\"}]}",
-      },
-      "cloudBucket_ReplicaDefaultPolicy_8B2539A7": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/ReplicaDefaultPolicy",
-            "uniqueId": "cloudBucket_ReplicaDefaultPolicy_8B2539A7",
-          },
-        },
-        "name": "some-prefix\${aws_s3_bucket.cloudBucket.bucket}",
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:GetReplicationConfiguration\\",\\"s3:ListBucket\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":[\\"\${aws_s3_bucket.cloudBucket.arn}\\",\\"\${aws_s3_bucket.cloudBucket.arn}/*\\"]},{\\"Action\\":[\\"s3:GetObjectVersionForReplication\\",\\"s3:GetObjectVersionAcl\\",\\"s3:GetObjectVersionTagging\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":\\"\${aws_s3_bucket.cloudBucket.arn}/*\\"},{\\"Action\\":[\\"s3:ReplicateObject\\",\\"s3:ReplicateDelete\\",\\"s3:ReplicateTags\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":\\"\${aws_s3_bucket.cloudBucket_ReplicaDefault_870F5CB9.arn}/*\\"}]}",
-      },
-    },
-    "aws_iam_policy_attachment": {
-      "ReplicaCodePolicyAttachment": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/ReplicaCodePolicyAttachment",
-            "uniqueId": "ReplicaCodePolicyAttachment",
-          },
-        },
-        "name": "some-prefixpolicy-attachment\${aws_s3_bucket.Code.bucket}",
-        "policy_arn": "\${aws_iam_policy.ReplicaCodePolicy.arn}",
-        "roles": [
-          "\${aws_iam_role.ReplicaCodeRole.name}",
-        ],
-      },
-      "cloudBucket_ReplicaDefaultPolicyAttachment_7A65C0F4": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/ReplicaDefaultPolicyAttachment",
-            "uniqueId": "cloudBucket_ReplicaDefaultPolicyAttachment_7A65C0F4",
-          },
-        },
-        "name": "some-prefixpolicy-attachment\${aws_s3_bucket.cloudBucket.bucket}",
-        "policy_arn": "\${aws_iam_policy.cloudBucket_ReplicaDefaultPolicy_8B2539A7.arn}",
-        "roles": [
-          "\${aws_iam_role.cloudBucket_ReplicaDefaultRole_8996C4FA.name}",
-        ],
-      },
-    },
     "aws_iam_role": {
-      "ReplicaCodeRole": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/ReplicaCodeRole",
-            "uniqueId": "ReplicaCodeRole",
-          },
-        },
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"s3.amazonaws.com\\"},\\"Effect\\":\\"Allow\\",\\"Sid\\":\\"AllowS3Replication\\"}]}",
-        "name": "some-prefix\${aws_s3_bucket.Code.bucket}",
-      },
-      "cloudBucket_ReplicaDefaultRole_8996C4FA": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/ReplicaDefaultRole",
-            "uniqueId": "cloudBucket_ReplicaDefaultRole_8996C4FA",
-          },
-        },
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"s3.amazonaws.com\\"},\\"Effect\\":\\"Allow\\",\\"Sid\\":\\"AllowS3Replication\\"}]}",
-        "name": "some-prefix\${aws_s3_bucket.cloudBucket.bucket}",
-      },
       "cloudQueue-SetConsumer-cdafee6e_IamRole_2548D828": {
         "//": {
           "metadata": {
@@ -1015,7 +755,6 @@ exports[`Platform examples > AWS target platform > tf-backend.js > gcp backend 1
           },
         },
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
-        "permissions_boundary": "some:fake:arn:SUPERADMIN",
       },
     },
     "aws_iam_role_policy": {
@@ -1097,15 +836,6 @@ exports[`Platform examples > AWS target platform > tf-backend.js > gcp backend 1
         },
         "bucket_prefix": "code-c84a50b1-",
       },
-      "ReplicaCode": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/ReplicaCode",
-            "uniqueId": "ReplicaCode",
-          },
-        },
-        "bucket": "some-prefix\${aws_s3_bucket.Code.bucket}",
-      },
       "cloudBucket": {
         "//": {
           "metadata": {
@@ -1115,115 +845,6 @@ exports[`Platform examples > AWS target platform > tf-backend.js > gcp backend 1
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
         "force_destroy": false,
-      },
-      "cloudBucket_ReplicaDefault_870F5CB9": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/ReplicaDefault",
-            "uniqueId": "cloudBucket_ReplicaDefault_870F5CB9",
-          },
-        },
-        "bucket": "some-prefix\${aws_s3_bucket.cloudBucket.bucket}",
-      },
-    },
-    "aws_s3_bucket_replication_configuration": {
-      "ReplicaCodeConfig": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/ReplicaCodeConfig",
-            "uniqueId": "ReplicaCodeConfig",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.Code.id}",
-        "depends_on": [
-          "aws_s3_bucket_versioning.ReplicaCodeVersioning",
-          "aws_s3_bucket_versioning.SourceCodeVersioning",
-        ],
-        "role": "\${aws_iam_role.ReplicaCodeRole.arn}",
-        "rule": [
-          {
-            "destination": {
-              "bucket": "\${aws_s3_bucket.ReplicaCode.arn}",
-              "storage_class": "STANDARD",
-            },
-            "id": "some-prefix\${aws_s3_bucket.Code.bucket}",
-            "status": "Enabled",
-          },
-        ],
-      },
-      "cloudBucket_ReplicaDefaultConfig_B5F7C7E5": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/ReplicaDefaultConfig",
-            "uniqueId": "cloudBucket_ReplicaDefaultConfig_B5F7C7E5",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.cloudBucket.id}",
-        "depends_on": [
-          "aws_s3_bucket_versioning.cloudBucket_ReplicaDefaultVersioning_1CE02442",
-          "aws_s3_bucket_versioning.cloudBucket_SourceDefaultVersioning_6A904B70",
-        ],
-        "role": "\${aws_iam_role.cloudBucket_ReplicaDefaultRole_8996C4FA.arn}",
-        "rule": [
-          {
-            "destination": {
-              "bucket": "\${aws_s3_bucket.cloudBucket_ReplicaDefault_870F5CB9.arn}",
-              "storage_class": "STANDARD",
-            },
-            "id": "some-prefix\${aws_s3_bucket.cloudBucket.bucket}",
-            "status": "Enabled",
-          },
-        ],
-      },
-    },
-    "aws_s3_bucket_versioning": {
-      "ReplicaCodeVersioning": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/ReplicaCodeVersioning",
-            "uniqueId": "ReplicaCodeVersioning",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.ReplicaCode.id}",
-        "versioning_configuration": {
-          "status": "Enabled",
-        },
-      },
-      "SourceCodeVersioning": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/SourceCodeVersioning",
-            "uniqueId": "SourceCodeVersioning",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.Code.id}",
-        "versioning_configuration": {
-          "status": "Enabled",
-        },
-      },
-      "cloudBucket_ReplicaDefaultVersioning_1CE02442": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/ReplicaDefaultVersioning",
-            "uniqueId": "cloudBucket_ReplicaDefaultVersioning_1CE02442",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.cloudBucket_ReplicaDefault_870F5CB9.id}",
-        "versioning_configuration": {
-          "status": "Enabled",
-        },
-      },
-      "cloudBucket_SourceDefaultVersioning_6A904B70": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/SourceDefaultVersioning",
-            "uniqueId": "cloudBucket_SourceDefaultVersioning_6A904B70",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.cloudBucket.id}",
-        "versioning_configuration": {
-          "status": "Enabled",
-        },
       },
     },
     "aws_s3_object": {
@@ -1297,77 +918,7 @@ exports[`Platform examples > AWS target platform > tf-backend.js > s3 backend 1`
         "retention_in_days": 30,
       },
     },
-    "aws_iam_policy": {
-      "ReplicaCodePolicy": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/ReplicaCodePolicy",
-            "uniqueId": "ReplicaCodePolicy",
-          },
-        },
-        "name": "some-prefix\${aws_s3_bucket.Code.bucket}",
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:GetReplicationConfiguration\\",\\"s3:ListBucket\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":[\\"\${aws_s3_bucket.Code.arn}\\",\\"\${aws_s3_bucket.Code.arn}/*\\"]},{\\"Action\\":[\\"s3:GetObjectVersionForReplication\\",\\"s3:GetObjectVersionAcl\\",\\"s3:GetObjectVersionTagging\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":\\"\${aws_s3_bucket.Code.arn}/*\\"},{\\"Action\\":[\\"s3:ReplicateObject\\",\\"s3:ReplicateDelete\\",\\"s3:ReplicateTags\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":\\"\${aws_s3_bucket.ReplicaCode.arn}/*\\"}]}",
-      },
-      "cloudBucket_ReplicaDefaultPolicy_8B2539A7": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/ReplicaDefaultPolicy",
-            "uniqueId": "cloudBucket_ReplicaDefaultPolicy_8B2539A7",
-          },
-        },
-        "name": "some-prefix\${aws_s3_bucket.cloudBucket.bucket}",
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:GetReplicationConfiguration\\",\\"s3:ListBucket\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":[\\"\${aws_s3_bucket.cloudBucket.arn}\\",\\"\${aws_s3_bucket.cloudBucket.arn}/*\\"]},{\\"Action\\":[\\"s3:GetObjectVersionForReplication\\",\\"s3:GetObjectVersionAcl\\",\\"s3:GetObjectVersionTagging\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":\\"\${aws_s3_bucket.cloudBucket.arn}/*\\"},{\\"Action\\":[\\"s3:ReplicateObject\\",\\"s3:ReplicateDelete\\",\\"s3:ReplicateTags\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":\\"\${aws_s3_bucket.cloudBucket_ReplicaDefault_870F5CB9.arn}/*\\"}]}",
-      },
-    },
-    "aws_iam_policy_attachment": {
-      "ReplicaCodePolicyAttachment": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/ReplicaCodePolicyAttachment",
-            "uniqueId": "ReplicaCodePolicyAttachment",
-          },
-        },
-        "name": "some-prefixpolicy-attachment\${aws_s3_bucket.Code.bucket}",
-        "policy_arn": "\${aws_iam_policy.ReplicaCodePolicy.arn}",
-        "roles": [
-          "\${aws_iam_role.ReplicaCodeRole.name}",
-        ],
-      },
-      "cloudBucket_ReplicaDefaultPolicyAttachment_7A65C0F4": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/ReplicaDefaultPolicyAttachment",
-            "uniqueId": "cloudBucket_ReplicaDefaultPolicyAttachment_7A65C0F4",
-          },
-        },
-        "name": "some-prefixpolicy-attachment\${aws_s3_bucket.cloudBucket.bucket}",
-        "policy_arn": "\${aws_iam_policy.cloudBucket_ReplicaDefaultPolicy_8B2539A7.arn}",
-        "roles": [
-          "\${aws_iam_role.cloudBucket_ReplicaDefaultRole_8996C4FA.name}",
-        ],
-      },
-    },
     "aws_iam_role": {
-      "ReplicaCodeRole": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/ReplicaCodeRole",
-            "uniqueId": "ReplicaCodeRole",
-          },
-        },
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"s3.amazonaws.com\\"},\\"Effect\\":\\"Allow\\",\\"Sid\\":\\"AllowS3Replication\\"}]}",
-        "name": "some-prefix\${aws_s3_bucket.Code.bucket}",
-      },
-      "cloudBucket_ReplicaDefaultRole_8996C4FA": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/ReplicaDefaultRole",
-            "uniqueId": "cloudBucket_ReplicaDefaultRole_8996C4FA",
-          },
-        },
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"s3.amazonaws.com\\"},\\"Effect\\":\\"Allow\\",\\"Sid\\":\\"AllowS3Replication\\"}]}",
-        "name": "some-prefix\${aws_s3_bucket.cloudBucket.bucket}",
-      },
       "cloudQueue-SetConsumer-cdafee6e_IamRole_2548D828": {
         "//": {
           "metadata": {
@@ -1376,7 +927,6 @@ exports[`Platform examples > AWS target platform > tf-backend.js > s3 backend 1`
           },
         },
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
-        "permissions_boundary": "some:fake:arn:SUPERADMIN",
       },
     },
     "aws_iam_role_policy": {
@@ -1458,15 +1008,6 @@ exports[`Platform examples > AWS target platform > tf-backend.js > s3 backend 1`
         },
         "bucket_prefix": "code-c84a50b1-",
       },
-      "ReplicaCode": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/ReplicaCode",
-            "uniqueId": "ReplicaCode",
-          },
-        },
-        "bucket": "some-prefix\${aws_s3_bucket.Code.bucket}",
-      },
       "cloudBucket": {
         "//": {
           "metadata": {
@@ -1476,115 +1017,6 @@ exports[`Platform examples > AWS target platform > tf-backend.js > s3 backend 1`
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
         "force_destroy": false,
-      },
-      "cloudBucket_ReplicaDefault_870F5CB9": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/ReplicaDefault",
-            "uniqueId": "cloudBucket_ReplicaDefault_870F5CB9",
-          },
-        },
-        "bucket": "some-prefix\${aws_s3_bucket.cloudBucket.bucket}",
-      },
-    },
-    "aws_s3_bucket_replication_configuration": {
-      "ReplicaCodeConfig": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/ReplicaCodeConfig",
-            "uniqueId": "ReplicaCodeConfig",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.Code.id}",
-        "depends_on": [
-          "aws_s3_bucket_versioning.ReplicaCodeVersioning",
-          "aws_s3_bucket_versioning.SourceCodeVersioning",
-        ],
-        "role": "\${aws_iam_role.ReplicaCodeRole.arn}",
-        "rule": [
-          {
-            "destination": {
-              "bucket": "\${aws_s3_bucket.ReplicaCode.arn}",
-              "storage_class": "STANDARD",
-            },
-            "id": "some-prefix\${aws_s3_bucket.Code.bucket}",
-            "status": "Enabled",
-          },
-        ],
-      },
-      "cloudBucket_ReplicaDefaultConfig_B5F7C7E5": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/ReplicaDefaultConfig",
-            "uniqueId": "cloudBucket_ReplicaDefaultConfig_B5F7C7E5",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.cloudBucket.id}",
-        "depends_on": [
-          "aws_s3_bucket_versioning.cloudBucket_ReplicaDefaultVersioning_1CE02442",
-          "aws_s3_bucket_versioning.cloudBucket_SourceDefaultVersioning_6A904B70",
-        ],
-        "role": "\${aws_iam_role.cloudBucket_ReplicaDefaultRole_8996C4FA.arn}",
-        "rule": [
-          {
-            "destination": {
-              "bucket": "\${aws_s3_bucket.cloudBucket_ReplicaDefault_870F5CB9.arn}",
-              "storage_class": "STANDARD",
-            },
-            "id": "some-prefix\${aws_s3_bucket.cloudBucket.bucket}",
-            "status": "Enabled",
-          },
-        ],
-      },
-    },
-    "aws_s3_bucket_versioning": {
-      "ReplicaCodeVersioning": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/ReplicaCodeVersioning",
-            "uniqueId": "ReplicaCodeVersioning",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.ReplicaCode.id}",
-        "versioning_configuration": {
-          "status": "Enabled",
-        },
-      },
-      "SourceCodeVersioning": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/SourceCodeVersioning",
-            "uniqueId": "SourceCodeVersioning",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.Code.id}",
-        "versioning_configuration": {
-          "status": "Enabled",
-        },
-      },
-      "cloudBucket_ReplicaDefaultVersioning_1CE02442": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/ReplicaDefaultVersioning",
-            "uniqueId": "cloudBucket_ReplicaDefaultVersioning_1CE02442",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.cloudBucket_ReplicaDefault_870F5CB9.id}",
-        "versioning_configuration": {
-          "status": "Enabled",
-        },
-      },
-      "cloudBucket_SourceDefaultVersioning_6A904B70": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/SourceDefaultVersioning",
-            "uniqueId": "cloudBucket_SourceDefaultVersioning_6A904B70",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.cloudBucket.id}",
-        "versioning_configuration": {
-          "status": "Enabled",
-        },
       },
     },
     "aws_s3_object": {

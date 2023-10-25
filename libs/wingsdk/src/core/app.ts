@@ -29,12 +29,6 @@ export interface AppProps {
   readonly stateFile?: string;
 
   /**
-   * Absolute paths to plugin javascript files.
-   * @default - [] no plugins
-   */
-  readonly plugins?: string[];
-
-  /**
    * The root construct class that should be instantiated with a scope and id.
    * If provided, then it will be instantiated on the user's behalf.
    * When the app is synthesized with `isTestEnvironment` set to `true`, then

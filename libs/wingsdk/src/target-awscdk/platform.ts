@@ -4,7 +4,7 @@ import { IPlatform } from "../platform";
 /**
  * AWS CDK Platform
  */
-export class AWSCDKPlatform implements IPlatform {
+export class Platform implements IPlatform {
   /** Platform model */
   public readonly model = "awscdk";
 
@@ -12,5 +12,3 @@ export class AWSCDKPlatform implements IPlatform {
     return new App(appProps);
   }
 }
-
-export const Platform = AWSCDKPlatform;

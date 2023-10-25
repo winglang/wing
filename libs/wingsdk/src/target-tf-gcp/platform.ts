@@ -4,7 +4,7 @@ import { IPlatform } from "../platform";
 /**
  * GCP Terraform Platform
  */
-export class TFGCPPlatform implements IPlatform {
+export class Platform implements IPlatform {
   /** Platform model */
   public readonly model = "tf-gcp";
 
@@ -12,5 +12,3 @@ export class TFGCPPlatform implements IPlatform {
     return new App(appProps);
   }
 }
-
-export const Platform = TFGCPPlatform;

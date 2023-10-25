@@ -4,6 +4,9 @@ import { App, AppProps, SynthHooks } from "../core";
 
 interface PlatformManagerOptions {
   readonly appProps: AppProps;
+  /**
+   * Either a builtin platform name or a path to a custom platform
+   */
   readonly platformPaths?: string[];
 }
 
@@ -21,7 +24,7 @@ export class PlatformManager {
     this.appProps;
   }
 
-  private addPlatformPath(platformPath: string) {
+  private loadPlatformPath(platformPath: string) {
     const platformName = basename(platformPath);
     const pathToRead = BUILTIN_PLATFORMS.includes(platformName)
       ? join(__dirname, `../target-${platformName}/platform`)
@@ -37,29 +40,33 @@ export class PlatformManager {
     this.platformInstances.push(new loadedPlatform.Platform());
   }
 
-  public createPlatformInstances() {
+  private createPlatformInstances() {
     this.platformPaths.forEach((platformPath) => {
-      this.addPlatformPath(platformPath);
+      this.loadPlatformPath(platformPath);
     });
   }
 
-  public createApp(appProps: AppProps): App {
+  // This method is called from preflight.js in order to return an App instance
+  // that can be synthesized, so need to ignore the "declared but never read"
+  // @ts-ignore-next-line
+  private createApp(appProps: AppProps): App {
     this.createPlatformInstances();
 
-    let appCall: (props: AppProps) => App | undefined;
+    let appCall = this.platformInstances[0].newApp;
+
+    if (!appCall) {
+      throw new Error(
+        `No newApp method found on platform: ${this.platformPaths[0]} (Hint: The first platform provided must have a newApp method)`
+      );
+    }
+
     let synthHooks: SynthHooks = {
       preSynthesize: [],
       postSynthesize: [],
       validate: [],
     };
 
-    let firstAppFound = false;
     this.platformInstances.forEach((instance) => {
-      if (instance.newApp && !firstAppFound) {
-        appCall = instance.newApp;
-        firstAppFound = true;
-      }
-
       if (instance.preSynth) {
         synthHooks.preSynthesize!.push(instance.preSynth);
       }
@@ -72,10 +79,6 @@ export class PlatformManager {
         synthHooks.validate!.push(instance.validate);
       }
     });
-
-    if (!firstAppFound) {
-      throw new Error("No platform instance has a newApp method");
-    }
 
     return appCall!({
       ...appProps,

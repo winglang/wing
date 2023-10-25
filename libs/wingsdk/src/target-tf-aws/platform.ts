@@ -4,7 +4,7 @@ import { IPlatform } from "../platform";
 /**
  * AWS Terraform Platform
  */
-export class TFAWSPlatform implements IPlatform {
+export class Platform implements IPlatform {
   /** Platform model */
   public readonly model = "tf-aws";
 
@@ -12,5 +12,3 @@ export class TFAWSPlatform implements IPlatform {
     return new App(appProps);
   }
 }
-
-export const Platform = TFAWSPlatform;

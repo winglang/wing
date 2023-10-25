@@ -1,5 +1,5 @@
 import { Construct } from "constructs";
-import { App } from "../core";
+import { App, AppProps } from "../core";
 
 /**
  * Platform interface
@@ -20,7 +20,7 @@ export interface IPlatform {
    *
    * @param appProps the props to pass to the app
    */
-  newApp?(appProps: any): App;
+  newApp?(appProps: AppProps): App;
 
   /**
    * Pre-synth hook

@@ -5,7 +5,8 @@ import { runWingCommand } from "./utils";
 
 errorWingFiles.forEach((wingFile) => {
   test(wingFile, async ({ expect }) => {
-    const args = ["test", "-t", "sim"];
+    const platforms = ["tf-aws"];
+    const args = ["test"];
 
     const relativeWingFile = path.relative(
       tmpDir,
@@ -15,6 +16,7 @@ errorWingFiles.forEach((wingFile) => {
     const out = await runWingCommand({
       cwd: tmpDir,
       wingFile: relativeWingFile,
+      platforms,
       args,
       expectFailure: true,
     });

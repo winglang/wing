@@ -4,7 +4,7 @@ import { IPlatform } from "../platform";
 /**
  * Azure Terraform Platform
  */
-export class TFAzurePlatform implements IPlatform {
+export class Platform implements IPlatform {
   /** Platform model */
   public readonly model = "tf-azure";
 
@@ -12,5 +12,3 @@ export class TFAzurePlatform implements IPlatform {
     return new App(appProps);
   }
 }
-
-export const Platform = TFAzurePlatform;

@@ -15,18 +15,17 @@ describe("Platform examples", () => {
 
   describe("AWS target platform", () => {
     const args = ["compile"];
-    const platforms = ["tf-aws"]
+    const basePlatforms = ["tf-aws"]
     const targetDir = path.join(platformsDir, "target", "main.tfaws");
 
     test("permission-boundary.js", async () => {
-      const plugin = path.join(platformsDir, "permission-boundary.js");
-      platforms.push(plugin);
-
+      const platform = path.join(platformsDir, "permission-boundary.js");
+  
       const expectedPermissionBoundaryArn = "some:fake:arn:SUPERADMIN";
       process.env.PERMISSION_BOUNDARY_ARN = expectedPermissionBoundaryArn;
       await runWingCommand({
         cwd: tmpDir,
-        platforms,
+        platforms: [...basePlatforms, platform],
         wingFile: appFile,
         args,
         expectFailure: false
@@ -50,8 +49,8 @@ describe("Platform examples", () => {
     });
 
     test("replicate-s3.js", async () => {
-      const plugin = path.join(platformsDir, "replicate-s3.js");
-      platforms.push(plugin);
+      const platform = path.join(platformsDir, "replicate-s3.js");
+
       const replicaPrefix = "some-prefix";
       const replicaStorageClass = "STANDARD";
       process.env.REPLICA_PREFIX = replicaPrefix;
@@ -59,7 +58,7 @@ describe("Platform examples", () => {
 
       await runWingCommand({
         cwd: tmpDir,
-        platforms,
+        platforms: [...basePlatforms, platform],
         wingFile: appFile,
         args,
         expectFailure: false
@@ -88,8 +87,8 @@ describe("Platform examples", () => {
     describe("tf-backend.js", () => {
       const tfBackendPluginName = "tf-backend.js";
       test("s3 backend", async () => {
-        const plugin = path.join(platformsDir, tfBackendPluginName);
-        platforms.push(plugin);
+        const platform = path.join(platformsDir, tfBackendPluginName);
+
         const tfBackend = "s3";
         const tfBackendBucket = "my-wing-bucket";
         const tfBackendBucketRegion = "us-east-1";
@@ -101,7 +100,7 @@ describe("Platform examples", () => {
 
         await runWingCommand({
           cwd: tmpDir,
-          platforms,
+          platforms: [...basePlatforms, platform],
           wingFile: appFile,
           args,
           expectFailure: false
@@ -124,8 +123,8 @@ describe("Platform examples", () => {
       });
 
       test("gcp backend", async () => {
-        const plugin = path.join(platformsDir, tfBackendPluginName);
-        platforms.push(plugin);
+        const platform = path.join(platformsDir, tfBackendPluginName);
+        
         const tfBackend = "gcs";
         const tfBackendBucket = "my-wing-bucket";
         const stateFile = "some-state-file.tfstate";
@@ -135,7 +134,7 @@ describe("Platform examples", () => {
 
         await runWingCommand({
           cwd: tmpDir,
-          platforms,
+          platforms: [...basePlatforms, platform],
           wingFile: appFile,
           args,
           expectFailure: false
@@ -157,8 +156,8 @@ describe("Platform examples", () => {
       });
 
       test("azurerm backend", async () => {
-        const plugin = path.join(platformsDir, tfBackendPluginName);
-        platforms.push(plugin);
+        const platform = path.join(platformsDir, tfBackendPluginName);
+
         const tfBackend = "azurerm";
         const tfBackendStorageAccountName = "my-wing-storage-account";
         const tfBackendContainerName = "my-wing-container";
@@ -176,7 +175,7 @@ describe("Platform examples", () => {
         await runWingCommand({
           cwd: tmpDir,
           wingFile: appFile,
-          platforms,
+          platforms: [...basePlatforms, platform],
           args,
           expectFailure: false
         });

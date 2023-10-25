@@ -107,6 +107,7 @@ function resolveSynthDir(
  * @returns the resolved model
  */
 export function determineModelFromPlatforms(platforms: string[]): string {
+  if (platforms.length === 0) { return ""; }
   // determine model based on first platform
   const platform = platforms[0];
 
@@ -118,7 +119,7 @@ export function determineModelFromPlatforms(platforms: string[]): string {
   // If its a custom platform, then we need to load it and get the model
   const platformPath = resolve(platform);
 
-  return new (require(platformPath).Platform()).model;
+  return new (require(platformPath)).Platform().model;
 }
 
 /**
@@ -307,15 +308,15 @@ async function runPreflightCodeInVm(
 }
 
 /**
- * Resolves a list of plugin paths as absolute paths, using the current working directory
+ * Resolves a list of platform paths as absolute paths, using the current working directory
  * if absolute path is not provided.
  *
- * @param plugins list of plugin paths (absolute or relative)
- * @returns list of absolute plugin paths or relative to cwd, joined by ";"
+ * @param platforms list of platform paths (absolute or relative or builtin)
+ * @returns list of absolute platform paths or relative to cwd, joined by ";"
  */
-function resolvePlatformPaths(plugins: string[]): string {
+function resolvePlatformPaths(platform: string[]): string {
   const resolvedPluginPaths: string[] = [];
-  for (const plugin of plugins) {
+  for (const plugin of platform) {
     resolvedPluginPaths.push(resolve(process.cwd(), plugin));
   }
   return resolvedPluginPaths.join(";");
