@@ -3,11 +3,10 @@ import {
   QueueAttributes,
   QueueSchema,
   QueueSubscriber,
-  QUEUE_TYPE,
   EventSubscription,
   FunctionHandle,
 } from "./schema-resources";
-import { IFunctionClient, IQueueClient } from "../cloud";
+import { IFunctionClient, IQueueClient, QUEUE_FQN } from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
@@ -144,7 +143,7 @@ export class Queue
             )}, subscriber=${subscriber.functionHandle}).`,
           },
           sourcePath: this.context.resourcePath,
-          sourceType: QUEUE_TYPE,
+          sourceType: QUEUE_FQN,
           timestamp: new Date().toISOString(),
         });
         void fnClient
@@ -156,7 +155,7 @@ export class Queue
                 message: `Subscriber error - returning ${messagesPayload.length} messages to queue: ${err.message}`,
               },
               sourcePath: this.context.resourcePath,
-              sourceType: QUEUE_TYPE,
+              sourceType: QUEUE_FQN,
               type: TraceType.RESOURCE,
               timestamp: new Date().toISOString(),
             });
@@ -166,7 +165,7 @@ export class Queue
                   message: `Error pushing ${messagesPayload.length} messages back to queue: ${requeueErr.message}`,
                 },
                 sourcePath: this.context.resourcePath,
-                sourceType: QUEUE_TYPE,
+                sourceType: QUEUE_FQN,
                 type: TraceType.RESOURCE,
                 timestamp: new Date().toISOString(),
               });
@@ -191,7 +190,7 @@ export class Queue
           message: `${retainedMessages.length} messages pushed back to queue after visibility timeout.`,
         },
         sourcePath: this.context.resourcePath,
-        sourceType: QUEUE_TYPE,
+        sourceType: QUEUE_FQN,
         type: TraceType.RESOURCE,
         timestamp: new Date().toISOString(),
       });

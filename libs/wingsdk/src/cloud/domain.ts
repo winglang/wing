@@ -58,3 +58,8 @@ export abstract class Domain extends Resource {
     return this._domain;
   }
 }
+
+/**
+ * Inflight interface for `Domain`.
+ */
+export interface IDomainClient {}
