@@ -229,7 +229,7 @@ export abstract class Api extends Resource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
+  public _getInflightOps(): string[] {
     return [];
   }
 

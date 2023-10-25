@@ -48,7 +48,7 @@ export class Testing {
         Node.of(this).hidden = true;
       }
 
-      public _supportedOps(): string[] {
+      public _getInflightOps(): string[] {
         return ["handle"];
       }
 

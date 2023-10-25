@@ -51,7 +51,7 @@ export abstract class Counter extends Resource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
+  public _getInflightOps(): string[] {
     return [
       CounterInflightMethods.INC,
       CounterInflightMethods.DEC,

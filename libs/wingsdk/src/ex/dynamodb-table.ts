@@ -83,7 +83,7 @@ export abstract class DynamodbTable extends Resource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
+  public _getInflightOps(): string[] {
     return [
       DynamodbTableInflightMethods.PUT_ITEM,
       DynamodbTableInflightMethods.UPDATE_ITEM,

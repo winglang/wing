@@ -47,7 +47,7 @@ export abstract class TestRunner extends Resource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
+  public _getInflightOps(): string[] {
     return [
       TestRunnerInflightMethods.LIST_TESTS,
       TestRunnerInflightMethods.RUN_TEST,

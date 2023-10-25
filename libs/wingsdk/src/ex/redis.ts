@@ -30,7 +30,7 @@ export abstract class Redis extends Resource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
+  public _getInflightOps(): string[] {
     return [
       RedisInflightMethods.RAW_CLIENT,
       RedisInflightMethods.URL,

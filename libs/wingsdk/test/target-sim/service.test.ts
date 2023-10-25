@@ -188,7 +188,7 @@ class ServiceHandler extends Resource implements cloud.IServiceHandler {
   constructor(scope: Construct, id: string, private readonly code: string) {
     super(scope, id);
   }
-  public _supportedOps(): string[] {
+  public _getInflightOps(): string[] {
     throw new Error("Method not implemented.");
   }
   public _toInflight(): string {

@@ -47,7 +47,7 @@ export abstract class Domain extends Resource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
+  public _getInflightOps(): string[] {
     return [];
   }
 

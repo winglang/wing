@@ -57,7 +57,7 @@ export interface IResource extends IConstruct {
    *
    * @internal
    */
-  _supportedOps(): string[];
+  _getInflightOps(): string[];
 
   /**
    * A hook for performing operations after the tree of resources has been
@@ -176,7 +176,7 @@ export abstract class Resource extends Construct implements IResource {
   private readonly onLiftMap: Map<IInflightHost, Set<string>> = new Map();
 
   /** @internal */
-  public abstract _supportedOps(): string[];
+  public abstract _getInflightOps(): string[];
 
   /**
    * A hook called by the Wing compiler once for each inflight host that needs to
@@ -225,7 +225,7 @@ export abstract class Resource extends Construct implements IResource {
     const opsForHost = this.onLiftMap.get(host)!;
 
     // For each operation, check if the host supports it. If it does, register the binding.
-    const supportedOps = [...(this._supportedOps() ?? []), "$inflight_init"];
+    const supportedOps = [...(this._getInflightOps() ?? []), "$inflight_init"];
     for (const op of ops) {
       if (!supportedOps.includes(op)) {
         throw new Error(

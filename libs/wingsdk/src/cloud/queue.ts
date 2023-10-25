@@ -54,7 +54,7 @@ export abstract class Queue extends Resource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
+  public _getInflightOps(): string[] {
     return [
       QueueInflightMethods.PUSH,
       QueueInflightMethods.PURGE,

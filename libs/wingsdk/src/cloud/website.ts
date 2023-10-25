@@ -69,7 +69,7 @@ export abstract class Website extends Resource implements IWebsite {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
+  public _getInflightOps(): string[] {
     return [];
   }
 

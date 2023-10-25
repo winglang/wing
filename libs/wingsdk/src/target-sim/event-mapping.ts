@@ -57,7 +57,7 @@ export class EventMapping extends Resource implements ISimulatorResource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
+  public _getInflightOps(): string[] {
     return [];
   }
 
