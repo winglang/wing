@@ -5,6 +5,7 @@ import { GoogleProvider } from "../.gen/providers/google/provider";
 import { RandomProvider } from "../.gen/providers/random/provider";
 import { BUCKET_FQN, FUNCTION_FQN } from "../cloud";
 import { AppProps as CdktfAppProps } from "../core";
+import { NotImplementedError } from "../core/errors";
 import { TABLE_FQN } from "../ex";
 import { CdktfApp } from "../shared-tf/app";
 
@@ -80,7 +81,9 @@ export class App extends CdktfApp {
     if (props.rootConstruct) {
       const Root = props.rootConstruct;
       if (this.isTestEnvironment) {
-        throw new Error("wing test not supported for tf-gcp target yet");
+        throw new NotImplementedError(
+          "wing test not supported for tf-gcp target yet"
+        );
       } else {
         new Root(this, "Default");
       }

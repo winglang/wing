@@ -13,6 +13,8 @@ Error.stackTraceLimit = 50;
 
 const log = debug("wing:compile");
 
+export class NotImplementedError extends Error {}
+
 /**
  * Compile options for the `compile` command.
  * This is passed from Commander to the `compile` function.
@@ -158,11 +160,16 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
       }
       throw new Error(result.join("\n"));
     } else if (error instanceof wingCompiler.PreflightError) {
+      const isNotImplementedError =
+        (error as wingCompiler.PreflightError).causedBy.constructor.name === "NotImplementedError";
+
+      const errorColor = isNotImplementedError ? "yellow" : "red";
+
       const causedBy = annotatePreflightError(error.causedBy);
 
       const output = new Array<string>();
 
-      output.push(chalk.red(`ERROR: ${causedBy.message}`));
+      output.push(chalk[errorColor](`ERROR: ${causedBy.message}`));
 
       if (causedBy.stack && causedBy.stack.includes("evalmachine.<anonymous>:")) {
         const lineNumber =
@@ -180,7 +187,7 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
         // print line and its surrounding lines
         for (let i = startLine; i <= finishLine; i++) {
           if (i === lineNumber) {
-            output.push(chalk.bold.red(">> ") + chalk.red(lines[i]));
+            output.push(chalk.bold[errorColor](">> ") + chalk[errorColor](lines[i]));
           } else {
             output.push("   " + chalk.dim(lines[i]));
           }
@@ -196,7 +203,11 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
         output.push(causedBy.stack ?? "");
       }
 
-      throw new Error(output.join("\n"));
+      if (isNotImplementedError) {
+        throw new NotImplementedError(output.join("\n"));
+      } else {
+        throw new Error(output.join("\n"));
+      }
     } else {
       throw error;
     }
