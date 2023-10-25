@@ -23,7 +23,7 @@ module.exports = function({ $even_arr, $math_Util, $odd_arr }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
-module.exports = function({ $_bimodal_at_0__, $_bimodal_at_1__, $_multimodal_at_0__, $_multimodal_at_1__, $_multimodal_at_2__, $math_Util, $modal_arr }) {
+module.exports = function({ $__obj__args_______if__args_0____0____args_0_____bimodal_length__throw_new_Error__Index_out_of_bounds____return_obj_args_0_______bimodal___0__, $__obj__args_______if__args_0____0____args_0_____bimodal_length__throw_new_Error__Index_out_of_bounds____return_obj_args_0_______bimodal___1__, $__obj__args_______if__args_0____0____args_0_____multimodal_length__throw_new_Error__Index_out_of_bounds____return_obj_args_0_______multimodal___0__, $__obj__args_______if__args_0____0____args_0_____multimodal_length__throw_new_Error__Index_out_of_bounds____return_obj_args_0_______multimodal___1__, $__obj__args_______if__args_0____0____args_0_____multimodal_length__throw_new_Error__Index_out_of_bounds____return_obj_args_0_______multimodal___2__, $math_Util, $modal_arr }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -31,12 +31,12 @@ module.exports = function({ $_bimodal_at_0__, $_bimodal_at_1__, $_multimodal_at_
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.mode(modal_arr).at(0) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await (await $math_Util.mode($modal_arr)).at(0)),2)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: bimodal.at(0) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($_bimodal_at_0__,2)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: bimodal.at(1) == 7")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($_bimodal_at_1__,7)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(0) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($_multimodal_at_0__,2)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(1) == 7")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($_multimodal_at_1__,7)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(2) == 9")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($_multimodal_at_2__,9)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.mode(modal_arr).at(0) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= (await $math_Util.mode($modal_arr)).length) throw new Error("Index out of bounds"); return obj[args[0]]; })((await $math_Util.mode($modal_arr)), [0]),2)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: bimodal.at(0) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($__obj__args_______if__args_0____0____args_0_____bimodal_length__throw_new_Error__Index_out_of_bounds____return_obj_args_0_______bimodal___0__,2)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: bimodal.at(1) == 7")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($__obj__args_______if__args_0____0____args_0_____bimodal_length__throw_new_Error__Index_out_of_bounds____return_obj_args_0_______bimodal___1__,7)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(0) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($__obj__args_______if__args_0____0____args_0_____multimodal_length__throw_new_Error__Index_out_of_bounds____return_obj_args_0_______multimodal___0__,2)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(1) == 7")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($__obj__args_______if__args_0____0____args_0_____multimodal_length__throw_new_Error__Index_out_of_bounds____return_obj_args_0_______multimodal___1__,7)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(2) == 9")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($__obj__args_______if__args_0____0____args_0_____multimodal_length__throw_new_Error__Index_out_of_bounds____return_obj_args_0_______multimodal___2__,9)))};
     }
   }
   return $Closure2;
@@ -153,11 +153,11 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure2-1.js")({
-            $_bimodal_at_0__: ${context._lift((bimodal.at(0)))},
-            $_bimodal_at_1__: ${context._lift((bimodal.at(1)))},
-            $_multimodal_at_0__: ${context._lift((multimodal.at(0)))},
-            $_multimodal_at_1__: ${context._lift((multimodal.at(1)))},
-            $_multimodal_at_2__: ${context._lift((multimodal.at(2)))},
+            $__obj__args_______if__args_0____0____args_0_____bimodal_length__throw_new_Error__Index_out_of_bounds____return_obj_args_0_______bimodal___0__: ${context._lift(((obj, args) => { if (args[0] < 0 || args[0] >= bimodal.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(bimodal, [0]))},
+            $__obj__args_______if__args_0____0____args_0_____bimodal_length__throw_new_Error__Index_out_of_bounds____return_obj_args_0_______bimodal___1__: ${context._lift(((obj, args) => { if (args[0] < 0 || args[0] >= bimodal.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(bimodal, [1]))},
+            $__obj__args_______if__args_0____0____args_0_____multimodal_length__throw_new_Error__Index_out_of_bounds____return_obj_args_0_______multimodal___0__: ${context._lift(((obj, args) => { if (args[0] < 0 || args[0] >= multimodal.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(multimodal, [0]))},
+            $__obj__args_______if__args_0____0____args_0_____multimodal_length__throw_new_Error__Index_out_of_bounds____return_obj_args_0_______multimodal___1__: ${context._lift(((obj, args) => { if (args[0] < 0 || args[0] >= multimodal.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(multimodal, [1]))},
+            $__obj__args_______if__args_0____0____args_0_____multimodal_length__throw_new_Error__Index_out_of_bounds____return_obj_args_0_______multimodal___2__: ${context._lift(((obj, args) => { if (args[0] < 0 || args[0] >= multimodal.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(multimodal, [2]))},
             $math_Util: ${context._lift($stdlib.core.toLiftableModuleType(math.Util, "@winglang/sdk/math", "Util"))},
             $modal_arr: ${context._lift(modal_arr)},
           })
@@ -179,11 +179,11 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerOnLiftObject((bimodal.at(0)), host, []);
-          $Closure2._registerOnLiftObject((bimodal.at(1)), host, []);
-          $Closure2._registerOnLiftObject((multimodal.at(0)), host, []);
-          $Closure2._registerOnLiftObject((multimodal.at(1)), host, []);
-          $Closure2._registerOnLiftObject((multimodal.at(2)), host, []);
+          $Closure2._registerOnLiftObject(((obj, args) => { if (args[0] < 0 || args[0] >= bimodal.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(bimodal, [0]), host, []);
+          $Closure2._registerOnLiftObject(((obj, args) => { if (args[0] < 0 || args[0] >= bimodal.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(bimodal, [1]), host, []);
+          $Closure2._registerOnLiftObject(((obj, args) => { if (args[0] < 0 || args[0] >= multimodal.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(multimodal, [0]), host, []);
+          $Closure2._registerOnLiftObject(((obj, args) => { if (args[0] < 0 || args[0] >= multimodal.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(multimodal, [1]), host, []);
+          $Closure2._registerOnLiftObject(((obj, args) => { if (args[0] < 0 || args[0] >= multimodal.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(multimodal, [2]), host, []);
           $Closure2._registerOnLiftObject(modal_arr, host, ["at"]);
         }
         super._registerOnLift(host, ops);
@@ -229,17 +229,24 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: math.median(even_arr) == 4.5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.median(even_arr)),4.5)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight median", new $Closure1(this, "$Closure1"));
     const modal_arr = [1, 2, 2, 3, 4, 7, 9];
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.mode(modal_arr).at(0) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((math.Util.mode(modal_arr)).at(0)),2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.mode(modal_arr).at(0) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= (math.Util.mode(modal_arr)).length) throw new Error("Index out of bounds"); return obj[args[0]]; })((math.Util.mode(modal_arr)), [0]),2)))};
     const bimodal_arr = [1, 2, 2, 3, 4, 7, 7, 9, 7, 2];
     const bimodal = (math.Util.mode(bimodal_arr));
-    {((cond) => {if (!cond) throw new Error("assertion failed: bimodal.at(0) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((bimodal.at(0)),2)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: bimodal.at(1) == 7")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((bimodal.at(1)),7)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: bimodal.at(0) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= bimodal.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(bimodal, [0]),2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: bimodal.at(1) == 7")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= bimodal.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(bimodal, [1]),7)))};
     const multimodal_arr = [1, 3, 4, 7, 7, 9, 9, 2, 2];
     const multimodal = (math.Util.mode(multimodal_arr));
+<<<<<<< HEAD
     {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(0) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((multimodal.at(0)),2)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(1) == 7")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((multimodal.at(1)),7)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(2) == 9")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((multimodal.at(2)),9)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight mode", new $Closure2(this, "$Closure2"));
+=======
+    {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(0) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= multimodal.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(multimodal, [0]),2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(1) == 7")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= multimodal.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(multimodal, [1]),7)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(2) == 9")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= multimodal.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(multimodal, [2]),9)))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight mode",new $Closure2(this,"$Closure2"));
+>>>>>>> f654d7855 (Fixing tests.)
     const mean_arr = [4, 36, 45, 50, 75];
     {((cond) => {if (!cond) throw new Error("assertion failed: math.arithmeticMean(mean_arr) == 42")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.arithmeticMean(mean_arr)),42)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: math.geometricMean(mean_arr) == 30")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.geometricMean(mean_arr)),30)))};

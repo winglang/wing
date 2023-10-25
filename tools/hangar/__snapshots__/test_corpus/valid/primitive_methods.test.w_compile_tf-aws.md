@@ -49,7 +49,7 @@ class $Root extends $stdlib.std.Resource {
     });
     const stringy = String.raw({ raw: ["", ":", ""] }, dur.minutes, dur.seconds);
     {console.log(stringy)};
-    if ((stringy.includes("60") && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((stringy.split(":")).at(0)),"60")))) {
+    if ((stringy.includes("60") && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= (stringy.split(":")).length) throw new Error("Index out of bounds"); return obj[args[0]]; })((stringy.split(":")), [0]),"60")))) {
       {console.log(String.raw({ raw: ["", "!"] }, stringy.length))};
     }
     {((cond) => {if (!cond) throw new Error("assertion failed: num.fromStr(\"123\") == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return parseInt(args) })("123"),123)))};
