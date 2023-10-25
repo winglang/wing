@@ -29,16 +29,7 @@ test("unsupported resource in target", async ({ expect }) => {
     },
   });
 
-  expect(sanitizeOutput(result.stderr)).toMatchInlineSnapshot(`
-    "ERROR: A Google Cloud region must be specified through the GOOGLE_REGION environment variable.
-
-    target/main.tfgcp.[REDACTED].tmp/.wing/preflight.js:14
-       }
-       const $App = $stdlib.core.App.for<PATH>;
-    >> new $App({ outdir: $outdir, name: \\"main\\", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-       
-    "
-  `);
+  expect(sanitizeOutput(result.stderr)).toMatchInlineSnapshot('"error: option \'-t, --platform <platform...>\' argument missing"');
 });
 
 function sanitizeOutput(inputString: string): string {

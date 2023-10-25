@@ -3,7 +3,7 @@ import { readFile, rm, rmSync } from "fs";
 import * as os from "os";
 import { basename, resolve, sep } from "path";
 import { promisify } from "util";
-import { Target } from "@winglang/compiler";
+import { BuiltinPlatform, determineModelFromPlatforms } from "@winglang/compiler";
 import { std, simulator } from "@winglang/sdk";
 import { Util } from "@winglang/sdk/lib/util";
 import chalk from "chalk";
@@ -59,6 +59,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
 
   const startTime = Date.now();
   const results: { testName: string; results: std.TestResult[] }[] = [];
+  process.env.WING_MODEL = determineModelFromPlatforms(options.platform ?? []);
   const testFile = async (entrypoint: string) => {
     const testName = generateTestName(entrypoint);
     try {
@@ -100,8 +101,9 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
 }
 
 async function testOne(entrypoint: string, options: TestOptions) {
+  const model = process.env.WING_MODEL; // TODO: try to just call method
   const synthDir = await withSpinner(
-    `Compiling ${generateTestName(entrypoint)} to ${options.target}...`,
+    `Compiling ${generateTestName(entrypoint)} to ${model}...`,
     async () =>
       compile(entrypoint, {
         ...options,
@@ -110,16 +112,16 @@ async function testOne(entrypoint: string, options: TestOptions) {
       })
   );
 
-  switch (options.target) {
-    case Target.SIM:
+  switch (model) {
+    case BuiltinPlatform.SIM:
       return testSimulator(synthDir, options);
-    case Target.TF_AZURE:
-    case Target.TF_AWS:
+    case BuiltinPlatform.TF_AZURE:
+    case BuiltinPlatform.TF_AWS:
       return testTf(synthDir, options);
-    case Target.AWSCDK:
+    case BuiltinPlatform.AWSCDK:
       return testAwsCdk(synthDir, options);
     default:
-      throw new NotImplementedError(`unsupported target ${options.target}`);
+      throw new Error(`unsupported target ${model}`);
   }
 }
 
@@ -345,12 +347,12 @@ async function awsCdkOutput(synthDir: string, name: string, stackName: string) {
 }
 
 const targetFolder: Record<string, string> = {
-  [Target.TF_AWS]: "shared-aws",
-  [Target.TF_AZURE]: "shared-azure",
+  [BuiltinPlatform.TF_AWS]: "shared-aws",
+  [BuiltinPlatform.TF_AZURE]: "shared-azure",
 };
 
 async function testTf(synthDir: string, options: TestOptions): Promise<std.TestResult[] | void> {
-  const { clean, testFilter, target = Target.SIM } = options;
+  const { clean, testFilter, platform = [BuiltinPlatform.SIM] } = options;
 
   try {
     if (!isTerraformInstalled(synthDir)) {
@@ -366,7 +368,7 @@ async function testTf(synthDir: string, options: TestOptions): Promise<std.TestR
     const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
       const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS);
       const { TestRunnerClient } = await import(
-        `@winglang/sdk/lib/${targetFolder[target]}/test-runner.inflight`
+        `@winglang/sdk/lib/${targetFolder[platform[0]]}/test-runner.inflight`
       );
       const runner = new TestRunnerClient(testArns);
 

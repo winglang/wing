@@ -29,21 +29,21 @@
  * STATE_FILE - The object key used to store state file (default: wing-tf.tfstate)
  */
 
-// compatibleTargets not currently used see: https://github.com/winglang/wing/issues/1474
-exports.compatibleTargets = ["tf-aws", "tf-azure", "tf-gcp"]
-
-exports.postSynth = function(config) {
-  if (!process.env.TF_BACKEND) {throw new Error("env var TF_BACKEND not set")}
-
-  switch (process.env.TF_BACKEND) {
-    case "s3":
-      return configureS3Backend(config);
-    case "azurerm":
-      return configureAzurermBackend(config);
-    case "gcs":
-      return configureGcsBackend(config);
-    default:
-      throw new Error(`Invalid value for TF_BACKEND: ${process.env.TF_BACKEND} (valid values: s3, azurerm, gcs)`)
+exports.Platform = class TFBackend {
+  model = "tf-*";
+  postSynth(config) {
+    if (!process.env.TF_BACKEND) {throw new Error("env var TF_BACKEND not set")}
+  
+    switch (process.env.TF_BACKEND) {
+      case "s3":
+        return configureS3Backend(config);
+      case "azurerm":
+        return configureAzurermBackend(config);
+      case "gcs":
+        return configureGcsBackend(config);
+      default:
+        throw new Error(`Invalid value for TF_BACKEND: ${process.env.TF_BACKEND} (valid values: s3, azurerm, gcs)`)
+    }
   }
 }
 

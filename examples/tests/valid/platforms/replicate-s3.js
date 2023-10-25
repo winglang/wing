@@ -18,9 +18,6 @@ const s3_bucket_versioning = require("@cdktf/provider-aws/lib/s3-bucket-versioni
  * REPLICA_STORAGE_CLASS - storage class for replica buckets. (default: STANDARD) https://docs.aws.amazon.com/AmazonS3/latest/API/API_Destination.html#AmazonS3-Type-Destination-StorageClass
  */
 
-// compatibleTargets not currently used see: https://github.com/winglang/wing/issues/1474
-exports.compatibleTargets = ["tf-aws"]
-
 class ReplicateS3Aspect {
   constructor() {
     this.replicaPrefix = process.env.REPLICA_PREFIX ?? "replica-"
@@ -128,6 +125,9 @@ class ReplicateS3Aspect {
     }
 }
 
-exports.preSynth = function (app) {
-  cdktf.Aspects.of(app).add(new ReplicateS3Aspect());
-};
+exports.Platform = class ReplicateS3 {
+  model = "tf-aws";
+  preSynth(app) {
+    cdktf.Aspects.of(app).add(new ReplicateS3Aspect());
+  }
+}

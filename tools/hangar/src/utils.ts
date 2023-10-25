@@ -9,12 +9,11 @@ export interface RunWingCommandOptions {
   wingFile?: string;
   args: string[];
   expectFailure: boolean;
-  plugins?: string[];
+  platforms?: string[];
   env?: Record<string, string>;
 }
 
 export async function runWingCommand(options: RunWingCommandOptions) {
-  const plugins = options.plugins ? ["--plugins", ...options.plugins] : [];
   const out = await execa(
     wingBin,
     [
@@ -22,7 +21,8 @@ export async function runWingCommand(options: RunWingCommandOptions) {
       "--no-analytics",
       ...options.args,
       options.wingFile ?? "",
-      ...plugins,
+      "--platform",
+      ...options.platforms ?? []
     ],
     {
       cwd: options.cwd,

@@ -60,6 +60,32 @@ export interface AppProps {
    * @default Default
    */
   readonly rootId?: string;
+
+  /**
+   * Hooks to be called at various stages of the synthesis process.
+   * @default - no hooks
+   */
+  readonly synthHooks?: SynthHooks;
+}
+
+/**
+ * Hooks for the synthesis process.
+ */
+export interface SynthHooks {
+  /**
+   * Hooks to be called before synthesizing the app.
+   */
+  readonly preSynthesize?: any[];
+
+  /**
+   * Hooks to be called after synthesizing the app.
+   */
+  readonly postSynthesize?: any[];
+
+  /**
+   * Hooks to be called for validating the synthesized configuration.
+   */
+  readonly validate?: any[];
 }
 
 /**

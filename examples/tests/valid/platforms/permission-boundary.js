@@ -11,9 +11,6 @@ var cdktf = require("cdktf");
  * PERMISSION_BOUNDARY_ARN - ARN of desired permission boundary
  */
 
-// compatibleTargets not currently used see: https://github.com/winglang/wing/issues/1474
-exports.compatibleTargets = ["tf-aws"]
-
 class PermissionBoundaryAspect {
   constructor(permissionBoundaryArn) {
     this.permissionBoundaryArn = permissionBoundaryArn;
@@ -26,8 +23,11 @@ class PermissionBoundaryAspect {
   }
 }
 
-exports.preSynth = function(app) {
-  if (!process.env.PERMISSION_BOUNDARY_ARN) {throw new Error("env var PERMISSION_BOUNDARY_ARN not set")}
-
-  cdktf.Aspects.of(app).add(new PermissionBoundaryAspect(process.env.PERMISSION_BOUNDARY_ARN))
+exports.Platform = class PermissionBoundary {
+  model = "tf-aws";
+  preSynth(app) {
+    if (!process.env.PERMISSION_BOUNDARY_ARN) {throw new Error("env var PERMISSION_BOUNDARY_ARN not set")}
+    cdktf.Aspects.of(app).add(new PermissionBoundaryAspect(process.env.PERMISSION_BOUNDARY_ARN))
+  }
 }
+

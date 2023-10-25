@@ -21,10 +21,10 @@ export class NotImplementedError extends Error {}
  */
 export interface CompileOptions {
   /**
-   * Target plaform
-   * @default wingCompiler.Target.SIM
+   * Target platform
+   * @default wingCompiler.BuiltinPlatform.SIM
    */
-  readonly target?: wingCompiler.Target;
+  readonly platform: string[];
   /**
    * List of compiler plugins
    */
@@ -90,7 +90,7 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
       ...options,
       log,
       color: coloring,
-      target: options?.target || wingCompiler.Target.SIM,
+      platform: options?.platform || [wingCompiler.BuiltinPlatform.SIM],
     });
   } catch (error) {
     if (error instanceof wingCompiler.CompileError) {

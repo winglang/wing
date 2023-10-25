@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 import * as path from "path";
 import fs from "fs";
-import { pluginsDir, tmpDir } from "./paths";
+import { platformsDir, tmpDir } from "./paths";
 import {
   runWingCommand,
   sanitize_json_paths,
@@ -9,26 +9,27 @@ import {
 } from "./utils";
 import { Testing } from "cdktf";
 
-describe("Plugin examples", () => {
+describe("Platform examples", () => {
   const app = "main.w";
-  const appFile = path.join(pluginsDir, app);
+  const appFile = path.join(platformsDir, app);
 
-  describe("AWS target plugins", () => {
-    const args = ["compile", "--target", "tf-aws"];
-    const targetDir = path.join(pluginsDir, "target", "main.tfaws");
+  describe("AWS target platform", () => {
+    const args = ["compile"];
+    const platforms = ["tf-aws"]
+    const targetDir = path.join(platformsDir, "target", "main.tfaws");
 
     test("permission-boundary.js", async () => {
-      const plugin = path.join(pluginsDir, "permission-boundary.js");
+      const plugin = path.join(platformsDir, "permission-boundary.js");
+      platforms.push(plugin);
 
       const expectedPermissionBoundaryArn = "some:fake:arn:SUPERADMIN";
       process.env.PERMISSION_BOUNDARY_ARN = expectedPermissionBoundaryArn;
-
       await runWingCommand({
         cwd: tmpDir,
+        platforms,
         wingFile: appFile,
         args,
-        expectFailure: false,
-        plugins: [plugin],
+        expectFailure: false
       });
 
       const terraformOutput = sanitize_json_paths(
@@ -49,7 +50,8 @@ describe("Plugin examples", () => {
     });
 
     test("replicate-s3.js", async () => {
-      const plugin = path.join(pluginsDir, "replicate-s3.js");
+      const plugin = path.join(platformsDir, "replicate-s3.js");
+      platforms.push(plugin);
       const replicaPrefix = "some-prefix";
       const replicaStorageClass = "STANDARD";
       process.env.REPLICA_PREFIX = replicaPrefix;
@@ -57,10 +59,10 @@ describe("Plugin examples", () => {
 
       await runWingCommand({
         cwd: tmpDir,
+        platforms,
         wingFile: appFile,
         args,
-        expectFailure: false,
-        plugins: [plugin],
+        expectFailure: false
       });
 
       const terraformOutput = sanitize_json_paths(
@@ -86,7 +88,8 @@ describe("Plugin examples", () => {
     describe("tf-backend.js", () => {
       const tfBackendPluginName = "tf-backend.js";
       test("s3 backend", async () => {
-        const plugin = path.join(pluginsDir, tfBackendPluginName);
+        const plugin = path.join(platformsDir, tfBackendPluginName);
+        platforms.push(plugin);
         const tfBackend = "s3";
         const tfBackendBucket = "my-wing-bucket";
         const tfBackendBucketRegion = "us-east-1";
@@ -98,10 +101,10 @@ describe("Plugin examples", () => {
 
         await runWingCommand({
           cwd: tmpDir,
+          platforms,
           wingFile: appFile,
           args,
-          expectFailure: false,
-          plugins: [plugin],
+          expectFailure: false
         });
 
         const tfPath = path.join(targetDir, "main.tf.json");
@@ -121,7 +124,8 @@ describe("Plugin examples", () => {
       });
 
       test("gcp backend", async () => {
-        const plugin = path.join(pluginsDir, tfBackendPluginName);
+        const plugin = path.join(platformsDir, tfBackendPluginName);
+        platforms.push(plugin);
         const tfBackend = "gcs";
         const tfBackendBucket = "my-wing-bucket";
         const stateFile = "some-state-file.tfstate";
@@ -131,10 +135,10 @@ describe("Plugin examples", () => {
 
         await runWingCommand({
           cwd: tmpDir,
+          platforms,
           wingFile: appFile,
           args,
-          expectFailure: false,
-          plugins: [plugin],
+          expectFailure: false
         });
 
         const tfPath = path.join(targetDir, "main.tf.json");
@@ -153,7 +157,8 @@ describe("Plugin examples", () => {
       });
 
       test("azurerm backend", async () => {
-        const plugin = path.join(pluginsDir, tfBackendPluginName);
+        const plugin = path.join(platformsDir, tfBackendPluginName);
+        platforms.push(plugin);
         const tfBackend = "azurerm";
         const tfBackendStorageAccountName = "my-wing-storage-account";
         const tfBackendContainerName = "my-wing-container";
@@ -171,9 +176,9 @@ describe("Plugin examples", () => {
         await runWingCommand({
           cwd: tmpDir,
           wingFile: appFile,
+          platforms,
           args,
-          expectFailure: false,
-          plugins: [plugin],
+          expectFailure: false
         });
 
         const tfPath = path.join(targetDir, "main.tf.json");

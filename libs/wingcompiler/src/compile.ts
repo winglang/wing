@@ -7,7 +7,7 @@ import * as os from "os";
 import * as wingCompiler from "./wingc";
 import { copyDir, normalPath } from "./util";
 import { existsSync } from "fs";
-import { Target } from "./constants";
+import { BuiltinPlatform } from "./constants";
 import { CompileError, PreflightError } from "./errors";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
@@ -18,21 +18,35 @@ Error.stackTraceLimit = 50;
 const WINGC_COMPILE = "wingc_compile";
 const WINGC_PREFLIGHT = "preflight.js";
 
-const DEFAULT_SYNTH_DIR_SUFFIX: Record<Target, string | undefined> = {
-  [Target.TF_AWS]: "tfaws",
-  [Target.TF_AZURE]: "tfazure",
-  [Target.TF_GCP]: "tfgcp",
-  [Target.SIM]: "wsim",
-  [Target.AWSCDK]: "awscdk",
-};
+const BUILTIN_PLATFORMS = [
+  BuiltinPlatform.SIM,
+  BuiltinPlatform.TF_AWS,
+  BuiltinPlatform.TF_AZURE,
+  BuiltinPlatform.TF_GCP,
+  BuiltinPlatform.AWSCDK, // TODO: remove this when awscdk platform is implemented external platform
+];
+
+const defaultSynthDir = (model: string): string => {
+  switch (model) {
+    case BuiltinPlatform.TF_AWS:
+      return "tfaws";
+    case BuiltinPlatform.TF_AZURE:
+      return "tfazure";
+    case BuiltinPlatform.TF_GCP:
+      return "tfgcp";
+    case BuiltinPlatform.SIM:
+      return "wsim";
+    default:
+      return model;
+  }
+}
 
 /**
  * Compile options for the `compile` command.
  * This is passed from Commander to the `compile` function.
  */
 export interface CompileOptions {
-  readonly target: Target;
-  readonly plugins?: string[];
+  readonly platform: string[];
   readonly rootId?: string;
   readonly value?: string;
   readonly values?: string;
@@ -58,14 +72,11 @@ export interface CompileOptions {
 function resolveSynthDir(
   outDir: string,
   entrypoint: string,
-  target: Target,
+  model: string,
   testing: boolean = false,
   tmp: boolean = false
 ) {
-  const targetDirSuffix = DEFAULT_SYNTH_DIR_SUFFIX[target];
-  if (!targetDirSuffix) {
-    throw new Error(`unsupported target ${target}`);
-  }
+  const targetDirSuffix = defaultSynthDir(model);
 
   let entrypointName;
   try {
@@ -79,8 +90,7 @@ function resolveSynthDir(
     console.error(err);
     throw new Error("Source file cannot be found");
   }
-  const randomPart =
-    tmp || (testing && target !== Target.SIM) ? `.${Date.now().toString().slice(-6)}` : "";
+  const randomPart = tmp || (testing && model !== BuiltinPlatform.SIM) ? `.${Date.now().toString().slice(-6)}` : "";
   const tmpSuffix = tmp ? ".tmp" : "";
   const lastPart = `${entrypointName}.${targetDirSuffix}${randomPart}${tmpSuffix}`;
   if (testing) {
@@ -88,6 +98,27 @@ function resolveSynthDir(
   } else {
     return join(outDir, lastPart);
   }
+}
+
+/**
+ * Determines the model for a given list of platforms.
+ * 
+ * @param platforms list of wing platforms
+ * @returns the resolved model
+ */
+export function determineModelFromPlatforms(platforms: string[]): string {
+  // determine model based on first platform
+  const platform = platforms[0];
+
+  // If its a builtin platform just return
+  if (BUILTIN_PLATFORMS.includes(platform)) {
+    return platform;
+  }
+
+  // If its a custom platform, then we need to load it and get the model
+  const platformPath = resolve(platform);
+
+  return new (require(platformPath).Platform()).model;
 }
 
 /**
@@ -106,20 +137,21 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   log?.("wing dir: %s", wingDir);
   const testing = options.testing ?? false;
   log?.("testing: %s", testing);
-  const tmpSynthDir = resolveSynthDir(targetdir, wingFile, options.target, testing, true);
+  const model = determineModelFromPlatforms(options.platform);
+  const tmpSynthDir = resolveSynthDir(targetdir, wingFile, model, testing, true);
   log?.("temp synth dir: %s", tmpSynthDir);
-  const synthDir = resolveSynthDir(targetdir, wingFile, options.target, testing);
+  const synthDir = resolveSynthDir(targetdir, wingFile, model, testing);
   log?.("synth dir: %s", synthDir);
   const workDir = resolve(tmpSynthDir, ".wing");
   log?.("work dir: %s", workDir);
 
   // TODO: couldn't be moved to the context's since used in utils.env(...)
   // in the future we may look for a unified approach
-  process.env["WING_TARGET"] = options.target;
+  process.env["WING_TARGET"] = model; // TODO: remove this once I confirm its safe to do so
   process.env["WING_VALUES"] = options.value?.length == 0 ? undefined : options.value;
   process.env["WING_VALUES_FILE"] = options.values;
   process.env["WING_IS_TEST"] = testing.toString();
-  process.env["WING_PLUGIN_PATHS"] = resolvePluginPaths(options.plugins ?? []);
+  process.env["WING_PLATFORMS"] = resolvePlatformPaths(options.platform);
 
   const tempProcess: { env: Record<string, string | undefined> } = { env: { ...process.env } };
 
@@ -281,7 +313,7 @@ async function runPreflightCodeInVm(
  * @param plugins list of plugin paths (absolute or relative)
  * @returns list of absolute plugin paths or relative to cwd, joined by ";"
  */
-function resolvePluginPaths(plugins: string[]): string {
+function resolvePlatformPaths(plugins: string[]): string {
   const resolvedPluginPaths: string[] = [];
   for (const plugin of plugins) {
     resolvedPluginPaths.push(resolve(process.cwd(), plugin));

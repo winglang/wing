@@ -97,9 +97,8 @@ async function main() {
     });
 
   async function progressHook(cmd: Command) {
-    const target = cmd.opts().target;
     const progress = program.opts().progress;
-    if (progress !== false && target !== "sim") {
+    if (progress !== false && cmd.opts().platform[0] !== "sim") {
       process.env.PROGRESS = "1";
     }
   }
@@ -139,11 +138,7 @@ async function main() {
     .command("compile")
     .description("Compiles a Wing program")
     .argument("[entrypoint]", "program .w entrypoint")
-    .addOption(
-      new Option("-t, --target <target>", "Target platform")
-        .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])
-        .default("sim")
-    )
+    .addOption(new Option("-t, --platform <platform...>", "Target platform").default(["sim"]))
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .option("-r, --rootId <rootId>", "App root id")
     .option("-v, --value <value>", "Platform-specific value in the form KEY=VALUE", addValue, [])
@@ -158,11 +153,7 @@ async function main() {
       "Compiles a Wing program and runs all functions with the word 'test' or start with 'test:' in their resource identifiers"
     )
     .argument("[entrypoint...]", "all files to test (globs are supported)")
-    .addOption(
-      new Option("-t, --target <target>", "Target platform")
-        .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])
-        .default("sim")
-    )
+    .addOption(new Option("-t, --platform <platform...>", "Target platform").default(["sim"]))
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .option("-r, --rootId <rootId>", "App root id")
     .option(
