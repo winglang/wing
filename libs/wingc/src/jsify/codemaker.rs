@@ -10,9 +10,17 @@ use crate::diagnostic::WingSpan;
 /// `{` and `}`?
 #[derive(Default)]
 pub struct CodeMaker {
-	lines: Vec<(usize, String, Option<WingSpan>)>,
-	indent: usize,
+	lines: Vec<LineData>,
+	indent: IndentAmount,
 	pub original_span_stack: Vec<WingSpan>,
+}
+
+pub type IndentAmount = usize;
+
+pub struct LineData {
+	pub indent: IndentAmount,
+	pub line: String,
+	pub mappings: Option<Vec<Mapping>>,
 }
 
 impl CodeMaker {
@@ -28,6 +36,26 @@ impl CodeMaker {
 		self.line(line);
 	}
 
+	pub fn line_with_span<S: Into<String>>(&mut self, line: S, span: WingSpan) {
+		let line: String = line.into();
+
+		// remove trailing newline
+		let line = line.strip_suffix("\n").unwrap_or(&line);
+
+		// if the line has newlines in it, consider each line separately
+		for subline in line.split('\n') {
+			self.push_line(LineData {
+				indent: self.indent,
+				line: subline.into(),
+				mappings: Some(vec![Mapping {
+					generated_line: self.lines.len() as u32,
+					generated_column: 0,
+					original: Some(OriginalLocation::new(span.start.line, span.start.col, 0, None)),
+				}]),
+			});
+		}
+	}
+
 	/// Emits a line of code with the current indent.
 	pub fn line<S: Into<String>>(&mut self, line: S) {
 		let line: String = line.into();
@@ -37,7 +65,11 @@ impl CodeMaker {
 
 		// if the line has newlines in it, consider each line separately
 		for subline in line.split('\n') {
-			self.push_line(self.indent, subline.into());
+			self.push_line(LineData {
+				indent: self.indent,
+				line: subline.into(),
+				mappings: None,
+			});
 		}
 	}
 
@@ -49,7 +81,7 @@ impl CodeMaker {
 	/// Emits multiple lines of code starting with the current indent.
 	pub fn add_code(&mut self, code: CodeMaker) {
 		assert_eq!(code.indent, 0, "Cannot add code with indent");
-		for (indent, line, source_span) in code.lines {
+		for line_data in code.lines {
 			if let Some(source_span) = &source_span {
 				self.push_original_span(source_span.clone());
 			}
@@ -82,10 +114,8 @@ impl CodeMaker {
 		self.lines.is_empty()
 	}
 
-	fn push_line(&mut self, indent: usize, line: String) {
-		self
-			.lines
-			.push((indent, line, self.original_span_stack.last().cloned()));
+	fn push_line(&mut self, line: LineData) {
+		self.lines.push(line);
 		// if let Some(ref mut sourcemap) = self.source_map {
 		// 	let generated_line = self.lines.len() as u32;
 		// 	let generated_column = self.lines.last().unwrap().1.len() as u32;
