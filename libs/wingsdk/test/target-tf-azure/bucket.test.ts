@@ -163,6 +163,6 @@ test("bucket onEvent is not implemented yet", () => {
 
   // THEN
   expect(error).toBe(
-    "onEvent method isn't implemented yet on the current target."
+    "onEvent method isn't implemented yet on the current target.\nFor more information see: https://github.com/winglang/wing/issues/1954.\nContributions welcome ❤️"
   );
 });
