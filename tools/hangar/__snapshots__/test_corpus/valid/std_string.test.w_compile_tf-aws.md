@@ -3,7 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
-module.exports = function({ $__s1_split_______at_1__, $_s1_concat_s2__, $s1_indexOf__s__ }) {
+module.exports = function({ $__obj__args_______if__args_0____0____args_0______s1_split_______length__throw_new_Error__Index_out_of_bounds____return_obj_args_0________s1_split_________1__, $_s1_concat_s2__, $s1_indexOf__s__ }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,7 +12,7 @@ module.exports = function({ $__s1_split_______at_1__, $_s1_concat_s2__, $s1_inde
     }
     async handle() {
       {console.log(String.raw({ raw: ["index of \"s\" in s1 is ", ""] }, $s1_indexOf__s__))};
-      {console.log($__s1_split_______at_1__)};
+      {console.log($__obj__args_______if__args_0____0____args_0______s1_split_______length__throw_new_Error__Index_out_of_bounds____return_obj_args_0________s1_split_________1__)};
       {console.log($_s1_concat_s2__)};
     }
   }
@@ -72,7 +72,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $__s1_split_______at_1__: ${context._lift(((s1.split(" ")).at(1)))},
+            $__obj__args_______if__args_0____0____args_0______s1_split_______length__throw_new_Error__Index_out_of_bounds____return_obj_args_0________s1_split_________1__: ${context._lift(((obj, args) => { if (args[0] < 0 || args[0] >= (s1.split(" ")).length) throw new Error("Index out of bounds"); return obj[args[0]]; })((s1.split(" ")), [1]))},
             $_s1_concat_s2__: ${context._lift((s1.concat(s2)))},
             $s1_indexOf__s__: ${context._lift(s1.indexOf("s"))},
           })
@@ -94,7 +94,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(((s1.split(" ")).at(1)), host, []);
+          $Closure1._registerOnLiftObject(((obj, args) => { if (args[0] < 0 || args[0] >= (s1.split(" ")).length) throw new Error("Index out of bounds"); return obj[args[0]]; })((s1.split(" ")), [1]), host, []);
           $Closure1._registerOnLiftObject((s1.concat(s2)), host, []);
           $Closure1._registerOnLiftObject(s1.indexOf("s"), host, []);
         }
@@ -111,7 +111,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: s1.endsWith(\"string\")")})(s1.endsWith("string"))};
     {((cond) => {if (!cond) throw new Error("assertion failed: s1.indexOf(\"s\") == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s1.indexOf("s"),0)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: \"Some String\".lowercase() == \"some string\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("Some String".toLocaleLowerCase(),"some string")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: s1.split(\" \").at(0) == \"some\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((s1.split(" ")).at(0)),"some")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s1.split(\" \").at(0) == \"some\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= (s1.split(" ")).length) throw new Error("Index out of bounds"); return obj[args[0]]; })((s1.split(" ")), [0]),"some")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: s1.startsWith(\"some\")")})(s1.startsWith("some"))};
     {((cond) => {if (!cond) throw new Error("assertion failed: s1.substring(5) == \"string\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((s1.substring(5)),"string")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: s1.substring(5, 7) == \"st\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((s1.substring(5, 7)),"st")))};

@@ -213,14 +213,14 @@ module.exports = function({  }) {
       const valArr = [["malak", "vader", "bane"], ["sunrider", "bastila", "bindo"]];
       {((cond) => {if (!cond) throw new Error("assertion failed: userKeys.length == valArr.length")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(userKeys.length,valArr.length)))};
       for (const i of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,userKeys.length,false)) {
-        {((cond) => {if (!cond) throw new Error("assertion failed: userKeys.at(i) == valArr.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await userKeys.at(i)),(await valArr.at(i)))))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: userKeys.at(i) == valArr.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= userKeys.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(userKeys, [i]),((obj, args) => { if (args[0] < 0 || args[0] >= valArr.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(valArr, [i]))))};
       }
       const saberforms = ({"1st": "shii-cho","2nd": "makashi","3rd": "soresu","4th": "ataru","5th": "shien","6th": "niman","7th": "juyo"});
       const saberformNames = Object.values(saberforms);
       const nameArr = ["shii-cho", "makashi", "soresu", "ataru", "shien", "niman", "juyo"];
       {((cond) => {if (!cond) throw new Error("assertion failed: saberformNames.length == nameArr.length")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(saberformNames.length,nameArr.length)))};
       for (const i of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,saberformNames.length,false)) {
-        {((cond) => {if (!cond) throw new Error("assertion failed: saberformNames.at(i) == nameArr.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await saberformNames.at(i)),(await nameArr.at(i)))))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: saberformNames.at(i) == nameArr.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= saberformNames.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(saberformNames, [i]),((obj, args) => { if (args[0] < 0 || args[0] >= nameArr.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(nameArr, [i]))))};
       }
     }
   }
@@ -245,14 +245,14 @@ module.exports = function({  }) {
       const colorArr = ["red", "blue"];
       {((cond) => {if (!cond) throw new Error("assertion failed: lightsaberColors.length == colorArr.length")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(lightsaberColors.length,colorArr.length)))};
       for (const i of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,lightsaberColors.length,false)) {
-        {((cond) => {if (!cond) throw new Error("assertion failed: lightsaberColors.at(i) == colorArr.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await lightsaberColors.at(i)),(await colorArr.at(i)))))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: lightsaberColors.at(i) == colorArr.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= lightsaberColors.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(lightsaberColors, [i]),((obj, args) => { if (args[0] < 0 || args[0] >= colorArr.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(colorArr, [i]))))};
       }
       const isMandalorianWarrior = ({"bo katan": true,"jango": true,"satine": false,"boba": true});
       const mandalorianKeys = Object.keys(isMandalorianWarrior);
       const keysArr = ["bo katan", "jango", "satine", "boba"];
       {((cond) => {if (!cond) throw new Error("assertion failed: mandalorianKeys.length == keysArr.length")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mandalorianKeys.length,keysArr.length)))};
       for (const i of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,mandalorianKeys.length,false)) {
-        {((cond) => {if (!cond) throw new Error("assertion failed: mandalorianKeys.at(i) == keysArr.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await mandalorianKeys.at(i)),(await keysArr.at(i)))))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: mandalorianKeys.at(i) == keysArr.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= mandalorianKeys.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(mandalorianKeys, [i]),((obj, args) => { if (args[0] < 0 || args[0] >= keysArr.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(keysArr, [i]))))};
       }
     }
   }
@@ -663,12 +663,12 @@ class $Root extends $stdlib.std.Resource {
     const m = ({"hello": 123,"world": 99});
     const mkeys = Object.keys(m);
     {((cond) => {if (!cond) throw new Error("assertion failed: mkeys.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mkeys.length,2)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: mkeys.at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((mkeys.at(0)),"hello")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: mkeys.at(1) == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((mkeys.at(1)),"world")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: mkeys.at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= mkeys.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(mkeys, [0]),"hello")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: mkeys.at(1) == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= mkeys.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(mkeys, [1]),"world")))};
     const mvalues = Object.values(m);
     {((cond) => {if (!cond) throw new Error("assertion failed: mvalues.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mvalues.length,2)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: mvalues.at(0) == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((mvalues.at(0)),123)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: mvalues.at(1) == 99")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((mvalues.at(1)),99)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: mvalues.at(0) == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= mvalues.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(mvalues, [0]),123)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: mvalues.at(1) == 99")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= mvalues.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(mvalues, [1]),99)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: Map<str>{} == MutMap<str>{}")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(({}),({}))))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:equality", new $Closure1(this, "$Closure1"));
     const apprentices = ({"plagueis": "sidious","dooku": "ventress"});
@@ -720,14 +720,14 @@ class $Root extends $stdlib.std.Resource {
     const valArr = [["malak", "vader", "bane"], ["sunrider", "bastila", "bindo"]];
     {((cond) => {if (!cond) throw new Error("assertion failed: userKeys.length == valArr.length")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(userKeys.length,valArr.length)))};
     for (const i of $stdlib.std.Range.of(0, userKeys.length, false)) {
-      {((cond) => {if (!cond) throw new Error("assertion failed: userKeys.at(i) == valArr.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((userKeys.at(i)),(valArr.at(i)))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: userKeys.at(i) == valArr.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= userKeys.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(userKeys, [i]),((obj, args) => { if (args[0] < 0 || args[0] >= valArr.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(valArr, [i]))))};
     }
     const saberforms = ({"1st": "shii-cho","2nd": "makashi","3rd": "soresu","4th": "ataru","5th": "shien","6th": "niman","7th": "juyo"});
     const saberformNames = Object.values(saberforms);
     const nameArr = ["shii-cho", "makashi", "soresu", "ataru", "shien", "niman", "juyo"];
     {((cond) => {if (!cond) throw new Error("assertion failed: saberformNames.length == nameArr.length")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(saberformNames.length,nameArr.length)))};
     for (const i of $stdlib.std.Range.of(0, saberformNames.length, false)) {
-      {((cond) => {if (!cond) throw new Error("assertion failed: saberformNames.at(i) == nameArr.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((saberformNames.at(i)),(nameArr.at(i)))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: saberformNames.at(i) == nameArr.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= saberformNames.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(saberformNames, [i]),((obj, args) => { if (args[0] < 0 || args[0] >= nameArr.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(nameArr, [i]))))};
     }
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:values()", new $Closure6(this, "$Closure6"));
     const lightsaberColorMap = ({"red": "sith","blue": "jedi"});
@@ -735,14 +735,14 @@ class $Root extends $stdlib.std.Resource {
     const colorArr = ["red", "blue"];
     {((cond) => {if (!cond) throw new Error("assertion failed: lightsaberColors.length == colorArr.length")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(lightsaberColors.length,colorArr.length)))};
     for (const i of $stdlib.std.Range.of(0, lightsaberColors.length, false)) {
-      {((cond) => {if (!cond) throw new Error("assertion failed: lightsaberColors.at(i) == colorArr.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((lightsaberColors.at(i)),(colorArr.at(i)))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: lightsaberColors.at(i) == colorArr.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= lightsaberColors.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(lightsaberColors, [i]),((obj, args) => { if (args[0] < 0 || args[0] >= colorArr.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(colorArr, [i]))))};
     }
     const isMandalorianWarrior = ({"bo katan": true,"jango": true,"satine": false,"boba": true});
     const mandalorianKeys = Object.keys(isMandalorianWarrior);
     const keysArr = ["bo katan", "jango", "satine", "boba"];
     {((cond) => {if (!cond) throw new Error("assertion failed: mandalorianKeys.length == keysArr.length")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mandalorianKeys.length,keysArr.length)))};
     for (const i of $stdlib.std.Range.of(0, mandalorianKeys.length, false)) {
-      {((cond) => {if (!cond) throw new Error("assertion failed: mandalorianKeys.at(i) == keysArr.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((mandalorianKeys.at(i)),(keysArr.at(i)))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mandalorianKeys.at(i) == keysArr.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= mandalorianKeys.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(mandalorianKeys, [i]),((obj, args) => { if (args[0] < 0 || args[0] >= keysArr.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(keysArr, [i]))))};
     }
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:keys()", new $Closure7(this, "$Closure7"));
     const ruleOfTwo = ({"master": "apprentice"});

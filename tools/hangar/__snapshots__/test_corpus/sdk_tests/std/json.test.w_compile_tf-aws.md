@@ -218,8 +218,8 @@ module.exports = function({ $std_Json }) {
       const values = (Object.values(obj));
       let i = 0;
       for (const e of entries) {
-        {((cond) => {if (!cond) throw new Error("assertion failed: e.key == keys.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e.key,(await keys.at(i)))))};
-        {((cond) => {if (!cond) throw new Error("assertion failed: e.value == values.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e.value,(await values.at(i)))))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: e.key == keys.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e.key,((obj, args) => { if (args[0] < 0 || args[0] >= keys.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(keys, [i]))))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: e.value == values.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e.value,((obj, args) => { if (args[0] < 0 || args[0] >= values.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(values, [i]))))};
         i += 1;
       }
     }

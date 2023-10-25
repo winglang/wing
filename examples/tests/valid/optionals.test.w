@@ -53,8 +53,8 @@ let tryParseName = (fullName: str): Name? => {
     return nil;
   }
   return Name {
-    first: parts.at(0),
-    last: parts.at(1),
+    first: parts.tryAt(0),
+    last: parts.tryAt(1),
   };
 };
 

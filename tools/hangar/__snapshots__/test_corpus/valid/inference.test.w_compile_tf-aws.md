@@ -278,9 +278,9 @@ class $Root extends $stdlib.std.Resource {
     const clonedArray2 = [...(emptyArray2)];
     (clonedArray2.push(1));
     (clonedArray2.push(2));
-    (clonedArray2.push(((clonedArray2.at(0)) + (clonedArray2.at(1)))));
-    {((cond) => {if (!cond) throw new Error("assertion failed: clonedArray2.at(2) == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((clonedArray2.at(2)),3)))};
-    const emptySet = new Set([(clonedArray2.at(2))]);
+    (clonedArray2.push((((obj, args) => { if (args[0] < 0 || args[0] >= clonedArray2.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(clonedArray2, [0]) + ((obj, args) => { if (args[0] < 0 || args[0] >= clonedArray2.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(clonedArray2, [1]))));
+    {((cond) => {if (!cond) throw new Error("assertion failed: clonedArray2.at(2) == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= clonedArray2.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(clonedArray2, [2]),3)))};
+    const emptySet = new Set([((obj, args) => { if (args[0] < 0 || args[0] >= clonedArray2.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(clonedArray2, [2])]);
     const clonedSet = new Set(emptySet);
     (clonedSet.add(4));
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
