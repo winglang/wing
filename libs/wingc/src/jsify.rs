@@ -792,7 +792,7 @@ impl<'a> JSifier<'a> {
 
 		CompilationContext::set(CompilationPhase::Jsifying, &statement.span);
 		ctx.visit_ctx.push_stmt(statement.idx);
-		code.push_original_span(statement.span.clone());
+		// code.push_original_span(statement.span.clone());
 		match &statement.kind {
 			StmtKind::Bring { source, identifier } => match source {
 				BringSource::BuiltinModule(name) => code.line(format!("const {} = {}.{};", name, STDLIB, name)),
@@ -1045,7 +1045,7 @@ impl<'a> JSifier<'a> {
 			StmtKind::CompilerDebugEnv => {}
 		};
 		ctx.visit_ctx.pop_stmt();
-		code.pop_original_span();
+		// code.pop_original_span();
 		code
 	}
 

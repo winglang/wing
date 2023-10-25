@@ -1,5 +1,5 @@
 use indexmap::IndexMap;
-use parcel_sourcemap::{Mapping, OriginalLocation, SourceMap};
+use parcel_sourcemap::{OriginalLocation, SourceMap};
 use serde_json::json;
 
 use crate::diagnostic::WingSpan;
@@ -12,59 +12,79 @@ use crate::diagnostic::WingSpan;
 pub struct CodeMaker {
 	lines: Vec<LineData>,
 	indent: IndentAmount,
-	pub original_span_stack: Vec<WingSpan>,
 }
 
 pub type IndentAmount = usize;
+pub type CharacterOffset = usize;
 
 pub struct LineData {
-	pub indent: IndentAmount,
 	pub line: String,
-	pub mappings: Option<Vec<Mapping>>,
+	pub indent: IndentAmount,
+	pub mappings: Option<Vec<(CharacterOffset, WingSpan)>>,
+}
+
+impl Into<LineData> for String {
+	fn into(self) -> LineData {
+		LineData {
+			line: self,
+			indent: 0,
+			mappings: None,
+		}
+	}
+}
+
+impl Into<LineData> for &String {
+	fn into(self) -> LineData {
+		LineData {
+			line: self.to_owned(),
+			indent: 0,
+			mappings: None,
+		}
+	}
+}
+
+impl Into<LineData> for &str {
+	fn into(self) -> LineData {
+		LineData {
+			line: self.to_string(),
+			indent: 0,
+			mappings: None,
+		}
+	}
+}
+
+impl Into<LineData> for (String, WingSpan) {
+	fn into(self) -> LineData {
+		LineData {
+			line: self.0,
+			indent: 0,
+			mappings: Some(vec![(0, self.1)]),
+		}
+	}
 }
 
 impl CodeMaker {
 	/// Emits a line of code and then increases the indent by one.
-	pub fn open<S: Into<String>>(&mut self, line: S) {
+	pub fn open<S: Into<LineData>>(&mut self, line: S) {
 		self.line(line);
 		self.indent += 1;
 	}
 
 	/// Decreases the indent by one and then emits a line of code.
-	pub fn close<S: Into<String>>(&mut self, line: S) {
+	pub fn close<S: Into<LineData>>(&mut self, line: S) {
 		self.indent -= 1;
 		self.line(line);
 	}
 
-	pub fn line_with_span<S: Into<String>>(&mut self, line: S, span: WingSpan) {
-		let line: String = line.into();
-
-		// remove trailing newline
-		let line = line.strip_suffix("\n").unwrap_or(&line);
-
-		// if the line has newlines in it, consider each line separately
-		for subline in line.split('\n') {
-			self.push_line(LineData {
-				indent: self.indent,
-				line: subline.into(),
-				mappings: Some(vec![Mapping {
-					generated_line: self.lines.len() as u32,
-					generated_column: 0,
-					original: Some(OriginalLocation::new(span.start.line, span.start.col, 0, None)),
-				}]),
-			});
-		}
-	}
-
 	/// Emits a line of code with the current indent.
-	pub fn line<S: Into<String>>(&mut self, line: S) {
-		let line: String = line.into();
+	pub fn line<S: Into<LineData>>(&mut self, line: S) {
+		let line_data: LineData = line.into();
 
 		// remove trailing newline
-		let line = line.strip_suffix("\n").unwrap_or(&line);
+		let line_text = line_data.line.strip_suffix("\n").unwrap_or(&line_data.line);
 
 		// if the line has newlines in it, consider each line separately
-		for subline in line.split('\n') {
+		for subline in line_text.split('\n') {
 			self.push_line(LineData {
 				indent: self.indent,
 				line: subline.into(),
@@ -82,13 +102,7 @@ impl CodeMaker {
 	pub fn add_code(&mut self, code: CodeMaker) {
 		assert_eq!(code.indent, 0, "Cannot add code with indent");
 		for line_data in code.lines {
-			if let Some(source_span) = &source_span {
-				self.push_original_span(source_span.clone());
-			}
-			self.push_line(self.indent + indent, line);
-			if source_span.is_some() {
-				self.pop_original_span();
-			}
+			self.push_line(line_data);
 		}
 	}
 
@@ -103,7 +117,7 @@ impl CodeMaker {
 		self.indent += 1;
 	}
 
-	pub fn one_line<S: Into<String>>(s: S) -> CodeMaker {
+	pub fn one_line<S: Into<LineData>>(s: S) -> CodeMaker {
 		let mut code = CodeMaker::default();
 		code.line(s);
 		code
@@ -133,14 +147,6 @@ impl CodeMaker {
 		// }
 	}
 
-	pub fn push_original_span(&mut self, span: WingSpan) {
-		self.original_span_stack.push(span);
-	}
-
-	pub fn pop_original_span(&mut self) {
-		self.original_span_stack.pop();
-	}
-
 	pub fn get_sourcemap(&mut self, root: &str, source_content: &str, generated_path: &str) -> String {
 		let mut sourcemap = SourceMap::new("");
 		let source_num = sourcemap.add_source(root);
@@ -149,19 +155,14 @@ impl CodeMaker {
 		for (line_idx, line) in self.lines.iter().enumerate() {
 			let generated_line = line_idx as u32;
 			let generated_column = 0;
-			let original = if let Some(original_span) = &line.2 {
-				Some(OriginalLocation::new(
-					original_span.start.line,
-					original_span.start.col,
-					source_num,
-					None,
-				))
+			if let Some(mappings) = &line.mappings {
+				for mapping in mappings {
+					let original = OriginalLocation::new(mapping.1.start.line, mapping.1.start.col, 0, None);
+					sourcemap.add_mapping(generated_line, mapping.0 as u32, Some(original));
+				}
 			} else {
-				None
-			};
-
-			sourcemap.add_mapping(generated_line, generated_column, original);
-			sourcemap.add_mapping(generated_line, line.1.len() as u32, original);
+				sourcemap.add_mapping(generated_line, generated_column, None);
+			}
 		}
 
 		let mut buffer: Vec<u8> = vec![];
@@ -173,10 +174,7 @@ impl CodeMaker {
 		json.insert("version", json!(3));
 		json.insert("file", json!(generated_path));
 		json.insert("sourceRoot", json!(""));
-		json.insert(
-			"sources",
-			json!(vec!["/Users/markm/Documents/GitHub/winglang/libs/wingc/main.w"]),
-		);
+		json.insert("sources", json!(vec![root]));
 		json.insert("sourcesContent", json!(sourcemap.get_sources_content()));
 		json.insert("names", json!(sourcemap.get_names()));
 		json.insert("mappings", json!(String::from_utf8(buffer).unwrap()));
@@ -190,12 +188,9 @@ impl CodeMaker {
 impl ToString for CodeMaker {
 	fn to_string(&self) -> String {
 		let mut code = String::new();
-		for (indent, line, source_line) in &self.lines {
-			code.push_str(&"  ".repeat(*indent));
-			code.push_str(line);
-			// if let Some(source_line) = source_line {
-			// 	code.push_str(&format!("/* {source_line} */"));
-			// }
+		for line_data in &self.lines {
+			code.push_str(&"  ".repeat(line_data.indent));
+			code.push_str(&line_data.line);
 			code.push_str("\n");
 		}
 		code
