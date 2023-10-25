@@ -473,7 +473,6 @@ module.exports = grammar({
 
     method_signature: ($) =>
       seq(
-        optional(field("async", $.async_modifier)),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
         optional($._return_type),
@@ -485,7 +484,6 @@ module.exports = grammar({
         optional(field("extern_modifier", $.extern_modifier)),
         optional(field("access_modifier", $.access_modifier)),
         optional(field("static", $.static)),
-        optional(field("async", $.async_modifier)),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
         optional($._return_type),
@@ -512,8 +510,6 @@ module.exports = grammar({
         optional($._return_type),
         choice(field("block", $.block), $._semicolon)
       ),
-
-    async_modifier: ($) => "async",
 
     access_modifier: ($) => choice("pub", "protected", "internal"),
 
