@@ -135,7 +135,7 @@ impl<'a> SymbolLocator<'a> {
 			| Type::String
 			| Type::Duration
 			| Type::Boolean => {
-				if let Some((std_type, ..)) = self.types.get_std_class(&type_.to_string()) {
+				if let Some((std_type, ..)) = self.types.get_std_class(&type_) {
 					if let Some(t) = std_type.as_type_ref() {
 						if let Some(c) = t.as_class() {
 							let env = c.get_env();

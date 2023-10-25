@@ -254,6 +254,7 @@ export class Function extends cloud.Function {
     const inflightClient = handler._toInflight();
     const lines = new Array<string>();
 
+    lines.push('"use strict";');
     lines.push("module.exports = async function(context, req) {");
     lines.push(
       `  const body = await (${inflightClient}).handle(context.req.body ?? "");`
