@@ -21,7 +21,7 @@ export interface Bundle {
 export function createBundle(entrypoint: string, outputDir?: string): Bundle {
   const outdir = resolve(outputDir ?? entrypoint + ".bundle");
   mkdirSync(outdir, { recursive: true });
-  const outfile = join(outdir, "index.js");
+  const outfile = join(outdir, "index.cjs");
 
   let esbuild = buildSync({
     bundle: true,

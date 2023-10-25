@@ -34,7 +34,7 @@ use crate::{
 
 use self::codemaker::CodeMaker;
 
-const PREFLIGHT_FILE_NAME: &str = "preflight.js";
+const PREFLIGHT_FILE_NAME: &str = "preflight.cjs";
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
@@ -246,7 +246,7 @@ impl<'a> JSifier<'a> {
 			// add a number to the end to avoid name collisions
 			let mut preflight_file_counter = self.preflight_file_counter.borrow_mut();
 			*preflight_file_counter += 1;
-			format!("preflight.{}-{}.js", sanitized_name, preflight_file_counter)
+			format!("preflight.{}-{}.cjs", sanitized_name, preflight_file_counter)
 		};
 
 		// Store the file name in a map so if anyone tries to "bring" it as a module,
@@ -1595,7 +1595,7 @@ impl<'a> JSifier<'a> {
 			file_map.insert(class.name.span.file_id.clone(), *id);
 			*id
 		};
-		format!("./inflight.{}-{}.js", class.name.name, id)
+		format!("./inflight.{}-{}.cjs", class.name.name, id)
 	}
 }
 
