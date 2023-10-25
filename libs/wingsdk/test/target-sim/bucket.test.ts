@@ -26,7 +26,7 @@ test("create a bucket", async () => {
       initialObjects: {},
       topics: {},
     },
-    type: "wingsdk.cloud.Bucket",
+    type: cloud.BUCKET_FQN,
   });
   await s.stop();
 

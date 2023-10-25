@@ -1,5 +1,4 @@
 import { ISimulatorResource } from "./resource";
-import { SIMULATOR_STATE_TYPE } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
@@ -56,7 +55,7 @@ export class State extends Resource implements ISimulatorResource {
 
   public toSimulator(): BaseResourceSchema {
     return {
-      type: SIMULATOR_STATE_TYPE,
+      type: STATE_FQN,
       path: this.node.path,
       props: {},
       attrs: {},

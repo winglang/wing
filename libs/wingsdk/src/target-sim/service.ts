@@ -1,7 +1,7 @@
 import { relative } from "path";
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
-import { SERVICE_TYPE, ServiceSchema } from "./schema-resources";
+import { ServiceSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { App } from "../core";
@@ -23,7 +23,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
 
   public toSimulator(): BaseResourceSchema {
     const schema: ServiceSchema = {
-      type: SERVICE_TYPE,
+      type: cloud.SERVICE_FQN,
       path: this.node.path,
       props: {
         environmentVariables: this.env,

@@ -1,7 +1,7 @@
 import { join } from "path";
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
-import { BucketSchema, BUCKET_TYPE } from "./schema-resources";
+import { BucketSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
@@ -63,7 +63,7 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
 
   public toSimulator(): BaseResourceSchema {
     const schema: BucketSchema = {
-      type: BUCKET_TYPE,
+      type: cloud.BUCKET_FQN,
       path: this.node.path,
       props: {
         public: this.public,
