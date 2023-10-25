@@ -71,7 +71,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["s", "foo", "$inflight_init"];
       }
     }
