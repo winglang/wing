@@ -69,8 +69,7 @@ export async function compileTest(
 export async function testTest(
   sourceDir: string,
   wingFile: string,
-  env?: Record<string, string>,
-  includeJavaScriptInSnapshots: boolean = true
+  env?: Record<string, string>
 ) {
   const fileMap: Record<string, string> = {};
   const args = ["test", "-t", "sim"];
