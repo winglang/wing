@@ -2,12 +2,11 @@ import { CronExpression, parseExpression } from "cron-parser";
 import { IEventPublisher } from "./event-mapping";
 import {
   EventSubscription,
-  SCHEDULE_TYPE,
   ScheduleAttributes,
   ScheduleSchema,
   ScheduleTask,
 } from "./schema-resources";
-import { IFunctionClient, IScheduleClient } from "../cloud";
+import { IFunctionClient, IScheduleClient, SCHEDULE_FQN } from "../cloud";
 import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
 import { TraceType } from "../std";
 
@@ -72,7 +71,7 @@ export class Schedule
           message: `Running task with function handle: ${task.functionHandle}.`,
         },
         sourcePath: this.context.resourcePath,
-        sourceType: SCHEDULE_TYPE,
+        sourceType: SCHEDULE_FQN,
         timestamp: new Date().toISOString(),
       });
 
@@ -82,7 +81,7 @@ export class Schedule
             message: `Schedule error: ${err}`,
           },
           sourcePath: this.context.resourcePath,
-          sourceType: SCHEDULE_TYPE,
+          sourceType: SCHEDULE_FQN,
           timestamp: new Date().toISOString(),
           type: TraceType.RESOURCE,
         });

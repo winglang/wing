@@ -8,7 +8,7 @@ import { Node } from "../std";
 /**
  * Global identifier for `TestRunner`.
  */
-export const TEST_RUNNER_FQN = fqnForType("cloud.TestRunner");
+export const TEST_RUNNER_FQN = fqnForType("std.TestRunner");
 
 /**
  * Properties for `TestRunner`.

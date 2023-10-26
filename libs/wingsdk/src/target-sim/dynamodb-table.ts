@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
-import { DynamodbTableSchema, DYNAMODB_TABLE_TYPE } from "./schema-resources";
+import { DynamodbTableSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as ex from "../ex";
 import { BaseResourceSchema } from "../simulator/simulator";
@@ -25,7 +25,7 @@ export class DynamodbTable
 
   public toSimulator(): BaseResourceSchema {
     const schema: DynamodbTableSchema = {
-      type: DYNAMODB_TABLE_TYPE,
+      type: ex.DYNAMODB_TABLE_FQN,
       path: this.node.path,
       props: {
         name: this.name,

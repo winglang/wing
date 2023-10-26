@@ -2,7 +2,6 @@ import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import { Testing } from "../../src/simulator";
 import { Duration } from "../../src/std";
-import { SCHEDULE_TYPE } from "../../src/target-sim/schema-resources";
 import { SimApp } from "../sim-app";
 
 const INFLIGHT_CODE = `
@@ -26,7 +25,7 @@ test("create a schedule", async () => {
     props: {
       cronExpression: cron,
     },
-    type: SCHEDULE_TYPE,
+    type: cloud.SCHEDULE_FQN,
   });
   await s.stop();
 
@@ -74,7 +73,7 @@ test("schedule with one task using rate of 10m", async () => {
     props: {
       cronExpression: expectedCron,
     },
-    type: SCHEDULE_TYPE,
+    type: cloud.SCHEDULE_FQN,
   });
 });
 
@@ -100,6 +99,6 @@ test("schedule with one task using rate of 3h", async () => {
     props: {
       cronExpression: expectedCron,
     },
-    type: SCHEDULE_TYPE,
+    type: cloud.SCHEDULE_FQN,
   });
 });

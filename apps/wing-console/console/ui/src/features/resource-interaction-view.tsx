@@ -21,37 +21,37 @@ export const ResourceInteractionView = ({
 }: ResourceViewProps) => {
   const getResourceView = () => {
     switch (resourceType) {
-      case "wingsdk.cloud.Queue": {
+      case "@winglang/sdk.cloud.Queue": {
         return <QueueInteractionView resourcePath={resourcePath} />;
       }
-      case "wingsdk.cloud.Function": {
+      case "@winglang/sdk.cloud.Function": {
         return <FunctionInteractionView resourcePath={resourcePath} />;
       }
-      case "wingsdk.cloud.Bucket": {
+      case "@winglang/sdk.cloud.Bucket": {
         return <BucketInteractionView resourcePath={resourcePath} />;
       }
-      case "wingsdk.cloud.Counter": {
+      case "@winglang/sdk.cloud.Counter": {
         return <CounterInteractionView resourcePath={resourcePath} />;
       }
-      case "wingsdk.cloud.Api": {
+      case "@winglang/sdk.cloud.Api": {
         return <ApiInteractionView resourcePath={resourcePath} />;
       }
-      case "wingsdk.cloud.Topic": {
+      case "@winglang/sdk.cloud.Topic": {
         return <TopicInteractionView resourcePath={resourcePath} />;
       }
-      case "wingsdk.cloud.Table": {
+      case "@winglang/sdk.ex.Table": {
         return <TableInteractionView resourcePath={resourcePath} />;
       }
-      case "wingsdk.cloud.Schedule": {
+      case "@winglang/sdk.cloud.Schedule": {
         return <ScheduleInteractionView resourcePath={resourcePath} />;
       }
-      case "wingsdk.redis.Redis": {
+      case "@winglang/sdk.ex.Redis": {
         return <RedisInteractionView resourcePath={resourcePath} />;
       }
-      case "wingsdk.cloud.Website": {
+      case "@winglang/sdk.cloud.Website": {
         return <WebsiteInteractionView resourcePath={resourcePath} />;
       }
-      case "wingsdk.ex.DynamodbTable": {
+      case "@winglang/sdk.ex.DynamodbTable": {
         return <DynamodbTableInteractionView resourcePath={resourcePath} />;
       }
       default: {

@@ -40,7 +40,7 @@ interface IFunctionPermissions {
 /**
  * GCP implementation of `cloud.Function`.
  *
- * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
+ * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
 
 export class Function extends cloud.Function {
