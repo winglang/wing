@@ -35,9 +35,9 @@ module.exports = function({ $api_url, $body, $http_HttpMethod, $http_Util }) {
     }
     async handle() {
       const url = ($api_url + "/path");
-      const getResponse = (await $http_Util.get(url,{ headers: ({"content-type": "application/json"}) }));
-      const fetchResponse = (await $http_Util.fetch(url,{ method: $http_HttpMethod.GET, headers: ({"content-type": "application/json"}) }));
-      const fetchResponseNoMethod = (await $http_Util.fetch(url,{ headers: ({"content-type": "application/json"}) }));
+      const getResponse = (await $http_Util.get(url, { headers: ({"content-type": "application/json"}) }));
+      const fetchResponse = (await $http_Util.fetch(url, { method: $http_HttpMethod.GET, headers: ({"content-type": "application/json"}) }));
+      const fetchResponseNoMethod = (await $http_Util.fetch(url, { headers: ({"content-type": "application/json"}) }));
       {((cond) => {if (!cond) throw new Error("assertion failed: getResponse.body == body")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(getResponse.body,$body)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: getResponse.status == 200")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(getResponse.status,200)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: getResponse.url == url")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(getResponse.url,url)))};
@@ -67,7 +67,7 @@ module.exports = function({ $api_url, $body, $http_HttpMethod, $http_Util }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
@@ -86,7 +86,7 @@ module.exports = function({ $api_url, $body, $http_HttpMethod, $http_Util }) {
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -271,11 +271,11 @@ const cloud = $stdlib.cloud;
 const http = $stdlib.http;
 const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -297,7 +297,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -308,8 +308,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -333,7 +333,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -344,10 +344,10 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
+    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
     const body = "ok!";
-    (api.get("/path",new $Closure1(this,"$Closure1")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:http.get and http.fetch can preform a call to an api",new $Closure2(this,"$Closure2"));
+    (api.get("/path", new $Closure1(this, "$Closure1")));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:http.get and http.fetch can preform a call to an api", new $Closure2(this, "$Closure2"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

@@ -3,11 +3,10 @@ import {
   TopicAttributes,
   TopicSchema,
   TopicSubscriber,
-  TOPIC_TYPE,
   EventSubscription,
   FunctionHandle,
 } from "./schema-resources";
-import { IFunctionClient, ITopicClient } from "../cloud";
+import { IFunctionClient, ITopicClient, TOPIC_FQN } from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
@@ -47,7 +46,7 @@ export class Topic
           message: `Sending message (message=${message}, subscriber=${subscriber.functionHandle}).`,
         },
         sourcePath: this.context.resourcePath,
-        sourceType: TOPIC_TYPE,
+        sourceType: TOPIC_FQN,
         timestamp: new Date().toISOString(),
       });
 
@@ -57,7 +56,7 @@ export class Topic
             message: `Subscriber error: ${err}`,
           },
           sourcePath: this.context.resourcePath,
-          sourceType: TOPIC_TYPE,
+          sourceType: TOPIC_FQN,
           type: TraceType.RESOURCE,
           timestamp: new Date().toISOString(),
         });
@@ -82,7 +81,7 @@ export class Topic
         message: `Publish (message=${message}).`,
       },
       sourcePath: this.context.resourcePath,
-      sourceType: TOPIC_TYPE,
+      sourceType: TOPIC_FQN,
       type: TraceType.RESOURCE,
       timestamp: new Date().toISOString(),
     });

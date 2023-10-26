@@ -12,7 +12,7 @@ module.exports = function({ $http_Util, $testBucket, $util_Util }) {
     }
     async handle() {
       let error = "";
-      (await $testBucket.put("file1.txt","Foo"));
+      (await $testBucket.put("file1.txt", "Foo"));
       if ((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })((await $util_Util.env("WING_TARGET")),"sim"))) {
         const signedUrl = (await $testBucket.signedUrl("file1.txt"));
         {((cond) => {if (!cond) throw new Error("assertion failed: http.get(signedUrl).body ==  \"Foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get(signedUrl)).body,"Foo")))};
@@ -66,14 +66,14 @@ module.exports = function({ $testBucket, $util_Util }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -141,11 +141,11 @@ const cloud = $stdlib.cloud;
 const http = $stdlib.http;
 const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -168,7 +168,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -179,8 +179,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -202,7 +202,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -212,9 +212,9 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const testBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"testBucket",{ public: true });
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:signedUrl",new $Closure1(this,"$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:signedUrl for non existent key",new $Closure2(this,"$Closure2"));
+    const testBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "testBucket", { public: true });
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:signedUrl", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:signedUrl for non existent key", new $Closure2(this, "$Closure2"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

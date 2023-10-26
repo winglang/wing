@@ -11,7 +11,7 @@ module.exports = function({ $idsCounter, $table }) {
       return $obj;
     }
     async handle(key, operation, source) {
-      (await $table.insert(String.raw({ raw: ["", ""] }, (await $idsCounter.inc())),({"key": key,"operation": operation,"source": String.raw({ raw: ["", ""] }, source)})));
+      (await $table.insert(String.raw({ raw: ["", ""] }, (await $idsCounter.inc())), ({"key": key,"operation": operation,"source": String.raw({ raw: ["", ""] }, source)})));
     }
   }
   return $Closure1;
@@ -30,7 +30,7 @@ module.exports = function({ $Source, $logHistory }) {
       return $obj;
     }
     async handle(key) {
-      (await $logHistory(key,"onDelete()",$Source.anyEvent));
+      (await $logHistory(key, "onDelete()", $Source.anyEvent));
     }
   }
   return $Closure2;
@@ -49,7 +49,7 @@ module.exports = function({ $Source, $logHistory }) {
       return $obj;
     }
     async handle(key) {
-      (await $logHistory(key,"onUpdate()",$Source.anyEvent));
+      (await $logHistory(key, "onUpdate()", $Source.anyEvent));
     }
   }
   return $Closure3;
@@ -68,7 +68,7 @@ module.exports = function({ $Source, $logHistory }) {
       return $obj;
     }
     async handle(key) {
-      (await $logHistory(key,"onCreate()",$Source.anyEvent));
+      (await $logHistory(key, "onCreate()", $Source.anyEvent));
     }
   }
   return $Closure4;
@@ -87,7 +87,7 @@ module.exports = function({ $Source, $logHistory }) {
       return $obj;
     }
     async handle(key, event) {
-      (await $logHistory(key,String.raw({ raw: ["", "()"] }, event),$Source.onEvent));
+      (await $logHistory(key, String.raw({ raw: ["", "()"] }, event), $Source.onEvent));
     }
   }
   return $Closure5;
@@ -161,10 +161,10 @@ module.exports = function({ $Source, $b, $checkHitCount, $util_Util, $wait }) {
       return $obj;
     }
     async handle() {
-      (await $b.put("a","1"));
-      (await $b.put("b","1"));
-      (await $b.put("c","1"));
-      (await $b.put("b","100"));
+      (await $b.put("a", "1"));
+      (await $b.put("b", "1"));
+      (await $b.put("c", "1"));
+      (await $b.put("b", "100"));
       (await $b.delete("c"));
       if ((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })((await $util_Util.env("WING_TARGET")),"tf-aws"))) {
         {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"a\", type: \"onCreate()\", source: Source.anyEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "a", type: "onCreate()", source: $Source.anyEvent, count: 1 })))))};
@@ -198,14 +198,14 @@ module.exports = function({ $Source, $b, $checkHitCount, $util_Util, $wait }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -1040,11 +1040,11 @@ const cloud = $stdlib.cloud;
 const ex = $stdlib.ex;
 const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -1066,7 +1066,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -1078,8 +1078,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -1101,7 +1101,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -1112,8 +1112,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -1135,7 +1135,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -1146,8 +1146,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -1169,7 +1169,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -1180,8 +1180,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure5 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -1203,7 +1203,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -1214,8 +1214,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure6 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -1237,13 +1237,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
     }
     class $Closure7 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -1264,7 +1264,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -1275,8 +1275,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure8 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -1301,7 +1301,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -1320,17 +1320,17 @@ class $Root extends $stdlib.std.Resource {
         return tmp;
       })({})
     ;
-    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    const idsCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
-    const table = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "key-history", primaryKey: "_id", columns: ({"_id": ex.ColumnType.STRING,"key": ex.ColumnType.STRING,"operation": ex.ColumnType.STRING,"source": ex.ColumnType.STRING}) });
-    const logHistory = new $Closure1(this,"$Closure1");
-    (b.onDelete(new $Closure2(this,"$Closure2")));
-    (b.onUpdate(new $Closure3(this,"$Closure3")));
-    (b.onCreate(new $Closure4(this,"$Closure4")));
-    (b.onEvent(new $Closure5(this,"$Closure5")));
-    const wait = new $Closure6(this,"$Closure6");
-    const checkHitCount = new $Closure7(this,"$Closure7");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"hitCount is incremented according to the bucket event",new $Closure8(this,"$Closure8"),{ timeout: (std.Duration.fromSeconds(480)) });
+    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+    const idsCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter");
+    const table = this.node.root.newAbstract("@winglang/sdk.ex.Table",this, "ex.Table", { name: "key-history", primaryKey: "_id", columns: ({"_id": ex.ColumnType.STRING,"key": ex.ColumnType.STRING,"operation": ex.ColumnType.STRING,"source": ex.ColumnType.STRING}) });
+    const logHistory = new $Closure1(this, "$Closure1");
+    (b.onDelete(new $Closure2(this, "$Closure2")));
+    (b.onUpdate(new $Closure3(this, "$Closure3")));
+    (b.onCreate(new $Closure4(this, "$Closure4")));
+    (b.onEvent(new $Closure5(this, "$Closure5")));
+    const wait = new $Closure6(this, "$Closure6");
+    const checkHitCount = new $Closure7(this, "$Closure7");
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "hitCount is incremented according to the bucket event", new $Closure8(this, "$Closure8"), { timeout: (std.Duration.fromSeconds(480)) });
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

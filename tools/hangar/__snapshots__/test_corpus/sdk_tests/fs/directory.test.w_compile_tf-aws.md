@@ -20,12 +20,12 @@ module.exports = function({ $filename, $fs_Util, $regex_Util }) {
       }
       catch ($error_e) {
         const e = $error_e.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: regex.match(\"^EEXIST: file already exists\", e) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $regex_Util.match("^EEXIST: file already exists",e)),true)))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: regex.match(\"^EEXIST: file already exists\", e) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $regex_Util.match("^EEXIST: file already exists", e)),true)))};
       }
-      (await $fs_Util.writeFile((await $fs_Util.join(dirpath,$filename)),""));
+      (await $fs_Util.writeFile((await $fs_Util.join(dirpath, $filename)), ""));
       const files = (await $fs_Util.readdir(dirpath));
       {((cond) => {if (!cond) throw new Error("assertion failed: files.length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(files.length,1)))};
-      (await $fs_Util.remove(dirpath,({"recursive": true})));
+      (await $fs_Util.remove(dirpath, ({"recursive": true})));
       {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(dirpath) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists(dirpath)),false)))};
       const nilFiles = (await $fs_Util.tryReaddir(dirpath));
       {((cond) => {if (!cond) throw new Error("assertion failed: nilFiles == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(nilFiles,undefined)))};
@@ -49,14 +49,14 @@ module.exports = function({ $filename, $fs_Util, $regex_Util }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -79,11 +79,11 @@ const std = $stdlib.std;
 const fs = $stdlib.fs;
 const regex = $stdlib.regex;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -106,7 +106,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -126,16 +126,16 @@ class $Root extends $stdlib.std.Resource {
     }
     catch ($error_e) {
       const e = $error_e.message;
-      {((cond) => {if (!cond) throw new Error("assertion failed: regex.match(\"^EEXIST: file already exists\", e) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((regex.Util.match("^EEXIST: file already exists",e)),true)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: regex.match(\"^EEXIST: file already exists\", e) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((regex.Util.match("^EEXIST: file already exists", e)),true)))};
     }
-    (fs.Util.writeFile((fs.Util.join(dirpath,filename)),""));
+    (fs.Util.writeFile((fs.Util.join(dirpath, filename)), ""));
     const files = (fs.Util.readdir(dirpath));
     {((cond) => {if (!cond) throw new Error("assertion failed: files.length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(files.length,1)))};
-    (fs.Util.remove(dirpath,({"recursive": true})));
+    (fs.Util.remove(dirpath, ({"recursive": true})));
     {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(dirpath) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.exists(dirpath)),false)))};
     const nilFiles = (fs.Util.tryReaddir(dirpath));
     {((cond) => {if (!cond) throw new Error("assertion failed: nilFiles == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(nilFiles,undefined)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight create normal directory",new $Closure1(this,"$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight create normal directory", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

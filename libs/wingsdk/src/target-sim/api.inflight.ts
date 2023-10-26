@@ -6,10 +6,10 @@ import {
   ApiAttributes,
   ApiRoute,
   ApiSchema,
-  API_TYPE,
   EventSubscription,
 } from "./schema-resources";
 import {
+  API_FQN,
   ApiRequest,
   ApiResponse,
   IApiClient,
@@ -190,7 +190,7 @@ export class Api
         message,
       },
       sourcePath: this.context.resourcePath,
-      sourceType: API_TYPE,
+      sourceType: API_FQN,
       timestamp: new Date().toISOString(),
     });
   }

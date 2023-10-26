@@ -76,14 +76,14 @@ test("parse logs", () => {
     {
       data: { message: "hello world" },
       timestamp: "2023-08-04T16:40:47.309Z",
-      sourceType: "wingsdk.cloud.Function",
+      sourceType: "@winglang/sdk.cloud.Function",
       sourcePath: "fake-source",
       type: "log",
     },
     {
       data: { message: "hello world" },
       timestamp: "2023-08-04T16:40:50.691Z",
-      sourceType: "wingsdk.cloud.Function",
+      sourceType: "@winglang/sdk.cloud.Function",
       sourcePath: "fake-source",
       type: "log",
     },

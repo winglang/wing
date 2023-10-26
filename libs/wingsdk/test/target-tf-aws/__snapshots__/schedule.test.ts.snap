@@ -3,7 +3,7 @@
 exports[`schedule behavior with cron 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -310,7 +310,7 @@ exports[`schedule behavior with cron 2`] = `
 exports[`schedule behavior with rate 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -617,7 +617,7 @@ exports[`schedule behavior with rate 2`] = `
 exports[`schedule with two functions 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },

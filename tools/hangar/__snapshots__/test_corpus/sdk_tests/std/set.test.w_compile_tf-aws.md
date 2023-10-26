@@ -257,14 +257,14 @@ module.exports = function({  }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -285,11 +285,11 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -309,13 +309,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -335,13 +335,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -361,13 +361,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -387,13 +387,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
     }
     class $Closure5 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -413,13 +413,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
     }
     class $Closure6 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -439,13 +439,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
     }
     class $Closure7 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -465,13 +465,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
     }
     class $Closure8 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -491,13 +491,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
     }
     class $Closure9 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -517,13 +517,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
     }
     class $Closure10 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -543,7 +543,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
     }
@@ -563,7 +563,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: myArrayFromMutSet.length == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(myArrayFromMutSet.length,3)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: Set<num>{1, 2} == MutSet<num>{1, 2}")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(new Set([1, 2]),new Set([1, 2]))))};
     {((cond) => {if (!cond) throw new Error("assertion failed: Set<bool>{true, false} == MutSet<bool>{false, true}")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(new Set([true, false]),new Set([false, true]))))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:equality",new $Closure1(this,"$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:equality", new $Closure1(this, "$Closure1"));
     const openings = new Set(["A Cruel Angel's Thesis", "Lilium", "Unravel", "TOP"]);
     const immutOpenings = new Set(openings);
     {((cond) => {if (!cond) throw new Error("assertion failed: immutOpenings.copyMut() == openings")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(new Set(immutOpenings),openings)))};
@@ -573,7 +573,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: openings.has(\"TOP\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((openings.has("TOP")),false)))};
     (openings.clear());
     {((cond) => {if (!cond) throw new Error("assertion failed: openings.size == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(openings.size,0)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:mutability",new $Closure2(this,"$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:mutability", new $Closure2(this, "$Closure2"));
     const maleVA = new Set(["Kenjiro Tsuda", "Akira Ishida", "Yoshitsugu Matsuoka"]);
     {((cond) => {if (!cond) throw new Error("assertion failed: maleVA.size == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(maleVA.size,3)))};
     const femaleVA = new Set(["Saori Hayami", "Miyuki Sawashiro"]);
@@ -582,7 +582,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: femaleVA.size == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(femaleVA.size,3)))};
     (femaleVA.clear());
     {((cond) => {if (!cond) throw new Error("assertion failed: femaleVA.size == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(femaleVA.size,0)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:size()",new $Closure3(this,"$Closure3"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:size()", new $Closure3(this, "$Closure3"));
     const genre = new Set(["isekai", "mecha", "cyberpunk"]);
     {((cond) => {if (!cond) throw new Error("assertion failed: genre.has(\"drama\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((genre.has("drama")),false)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: genre.has(\"mecha\")")})((genre.has("mecha")))};
@@ -593,7 +593,7 @@ class $Root extends $stdlib.std.Resource {
     (mutGenre.add("psychological"));
     {((cond) => {if (!cond) throw new Error("assertion failed: mutGenre.has(\"psychological\")")})((mutGenre.has("psychological")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: mutGenre.has(\"rom-com\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((mutGenre.has("rom-com")),false)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:has()",new $Closure4(this,"$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:has()", new $Closure4(this, "$Closure4"));
     const endings = new Set([]);
     {((cond) => {if (!cond) throw new Error("assertion failed: endings.toArray() == Array<bool>[]")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })([...(endings)],[])))};
     const strEndings = new Set(["Somewhere, Faraway, Everyone is Listening to a Ballad"]);
@@ -606,35 +606,35 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: mutEndings.toArray() == [[\"Fly Me To The Moon\", \"Slump\"], [\"Heikousen\"], [\"Wagamama\"]]")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })([...(mutEndings)],[["Fly Me To The Moon", "Slump"], ["Heikousen"], ["Wagamama"]])))};
     const immutEndings = new Set(mutEndings);
     {((cond) => {if (!cond) throw new Error("assertion failed: immutEndings.toArray() == mutEndings.toArray()")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })([...(immutEndings)],[...(mutEndings)])))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:toArray()",new $Closure5(this,"$Closure5"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:toArray()", new $Closure5(this, "$Closure5"));
     const talkingQuirks = new Set(["dattebane", "battebayo", "dattebasa"]);
     {((cond) => {if (!cond) throw new Error("assertion failed: talkingQuirks.copyMut() == MutSet<str> {\"dattebane\", \"battebayo\", \"dattebasa\"}")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(new Set(talkingQuirks),new Set(["dattebane", "battebayo", "dattebasa"]))))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:copyMut()",new $Closure6(this,"$Closure6"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:copyMut()", new $Closure6(this, "$Closure6"));
     const evaRebuild = new Set([1.11, 2.22, 3.33]);
     (evaRebuild.add((3 + 1)));
     {((cond) => {if (!cond) throw new Error("assertion failed: evaRebuild.has(3.0+1.0)")})((evaRebuild.has((3 + 1))))};
     {((cond) => {if (!cond) throw new Error("assertion failed: evaRebuild == MutSet<num>{1.11, 2.22, 3.33, 3.0+1.0}")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(evaRebuild,new Set([1.11, 2.22, 3.33, (3 + 1)]))))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:add()",new $Closure7(this,"$Closure7"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:add()", new $Closure7(this, "$Closure7"));
     const studios = new Set(["Gainax", "Ghibli", "Production I.G.", "Shaft"]);
     {((cond) => {if (!cond) throw new Error("assertion failed: studios.delete(\"Gainax\")")})((studios.delete("Gainax")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: studios.has(\"Gainax\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((studios.has("Gainax")),false)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: studios.delete(\"Sunrise\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((studios.delete("Sunrise")),false)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: studios.size == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(studios.size,3)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:delete()",new $Closure8(this,"$Closure8"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:delete()", new $Closure8(this, "$Closure8"));
     const demographics = new Set(["shounen", "shoujo", "josei", "seinen"]);
     (demographics.clear());
     {((cond) => {if (!cond) throw new Error("assertion failed: demographics.size == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(demographics.size,0)))};
     (demographics.add("kodomo"));
     (demographics.clear());
     {((cond) => {if (!cond) throw new Error("assertion failed: demographics.has(\"kodomo\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((demographics.has("kodomo")),false)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:clear()",new $Closure9(this,"$Closure9"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:clear()", new $Closure9(this, "$Closure9"));
     const acronyms = new Set([({"SEL": "Serial Experiments Lain","NGE": "Neon Genesis Evangelion"})]);
     const copyAcronyms = new Set(acronyms);
     {((cond) => {if (!cond) throw new Error("assertion failed: copyAcronyms == {{\"SEL\" => \"Serial Experiments Lain\", \"NGE\" => \"Neon Genesis Evangelion\"}}")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(copyAcronyms,new Set([({"SEL": "Serial Experiments Lain","NGE": "Neon Genesis Evangelion"})]))))};
     (acronyms.add(({"DomeKano": "Domestic na Kanojo"})));
     const copyAcronymsNew = new Set(new Set(acronyms));
     {((cond) => {if (!cond) throw new Error("assertion failed: copyAcronymsNew == acronyms")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(copyAcronymsNew,acronyms)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:copy()",new $Closure10(this,"$Closure10"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:copy()", new $Closure10(this, "$Closure10"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

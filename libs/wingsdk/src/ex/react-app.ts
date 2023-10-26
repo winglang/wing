@@ -145,7 +145,7 @@ export abstract class ReactApp extends Resource {
   }
 
   /** @internal */
-  public _getInflightOps(): string[] {
+  public _supportedOps(): string[] {
     return [];
   }
 }

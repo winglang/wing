@@ -1,10 +1,16 @@
 import { Construct } from "constructs";
 import { App } from "./app";
+import {
+  ActionTypes,
+  Function as GCPFunction,
+  ResourceTypes,
+} from "./function";
 import { StorageBucket } from "../.gen/providers/google/storage-bucket";
 import { StorageBucketIamMember } from "../.gen/providers/google/storage-bucket-iam-member";
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
 import { Id } from "../.gen/providers/random/id";
 import * as cloud from "../cloud";
+import { InflightClient } from "../core";
 import {
   CaseConventions,
   NameOptions,
@@ -55,22 +61,42 @@ export class Bucket extends cloud.Bucket {
       byteLength: 4, // 4 bytes = 8 hex characters
     });
 
+    const isTestEnvironment = App.of(scope).isTestEnvironment;
+
     this.bucket = new StorageBucket(this, "Default", {
       name: bucketName + "-" + randomId.hex,
       location: (App.of(this) as App).region,
       // recommended by GCP: https://cloud.google.com/storage/docs/uniform-bucket-level-access#should-you-use
       uniformBucketLevelAccess: true,
       publicAccessPrevention: props.public ? "inherited" : "enforced",
+      forceDestroy: !!isTestEnvironment,
     });
 
     if (props.public) {
       // https://cloud.google.com/storage/docs/access-control/making-data-public#terraform
       new StorageBucketIamMember(this, "PublicAccessIamMember", {
         bucket: this.bucket.name,
-        role: "roles/storage.objectViewer",
+        role: ActionTypes.STORAGE_READ,
         member: "allUsers",
       });
     }
+  }
+
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      cloud.BucketInflightMethods.DELETE,
+      cloud.BucketInflightMethods.GET,
+      cloud.BucketInflightMethods.GET_JSON,
+      cloud.BucketInflightMethods.LIST,
+      cloud.BucketInflightMethods.PUT,
+      cloud.BucketInflightMethods.PUT_JSON,
+      cloud.BucketInflightMethods.PUBLIC_URL,
+      cloud.BucketInflightMethods.EXISTS,
+      cloud.BucketInflightMethods.TRY_GET,
+      cloud.BucketInflightMethods.TRY_GET_JSON,
+      cloud.BucketInflightMethods.TRY_DELETE,
+    ];
   }
 
   public addObject(key: string, body: string): void {
@@ -81,13 +107,85 @@ export class Bucket extends cloud.Bucket {
     });
   }
 
-  public onLift(_inflightHost: IInflightHost, _ops: string[]): void {
-    // TODO: support functions once tfgcp functions are implemented
-    throw new Error("Method not implemented.");
+  public onLift(host: IInflightHost, ops: string[]): void {
+    if (!(host instanceof GCPFunction)) {
+      throw new Error("buckets can only be bound by tfgcp.Function for now");
+    }
+    if (
+      ops.includes(cloud.BucketInflightMethods.GET) ||
+      ops.includes(cloud.BucketInflightMethods.GET_JSON) ||
+      ops.includes(cloud.BucketInflightMethods.LIST) ||
+      ops.includes(cloud.BucketInflightMethods.EXISTS) ||
+      ops.includes(cloud.BucketInflightMethods.PUBLIC_URL) ||
+      // ops.includes(cloud.BucketInflightMethods.SIGNED_URL) ||
+      ops.includes(cloud.BucketInflightMethods.TRY_GET) ||
+      ops.includes(cloud.BucketInflightMethods.TRY_GET_JSON)
+    ) {
+      host.addPermission(this, {
+        Action: ActionTypes.STORAGE_READ,
+        Resource: ResourceTypes.BUCKET,
+      });
+    } else if (
+      ops.includes(cloud.BucketInflightMethods.DELETE) ||
+      ops.includes(cloud.BucketInflightMethods.PUT) ||
+      ops.includes(cloud.BucketInflightMethods.PUT_JSON) ||
+      ops.includes(cloud.BucketInflightMethods.TRY_DELETE)
+    ) {
+      host.addPermission(this, {
+        Action: ActionTypes.STORAGE_READ_WRITE,
+        Resource: ResourceTypes.BUCKET,
+      });
+    } else {
+      throw new Error("Method not implemented.");
+    }
+    host.addEnvironment(this.envName(), this.bucket.name);
+
+    super.onLift(host, ops);
   }
 
   /** @internal */
   public _toInflight(): string {
-    throw new Error("Method not implemented.");
+    return InflightClient.for(
+      __dirname.replace("target-tf-gcp", "shared-gcp"),
+      __filename,
+      "BucketClient",
+      [`process.env["${this.envName()}"]`]
+    );
+  }
+
+  private envName(): string {
+    return `BUCKET_NAME_${this.node.addr.slice(-8)}`;
   }
 }
+
+export const addBucketPermission = (
+  scopedConstruct: Construct,
+  bucket: Bucket,
+  permission: ActionTypes,
+  projectId: string
+) => {
+  try {
+    const permissionId = `RoleAssignment-${permission.replace(
+      /[.\\\/]/g,
+      "-"
+    )}-${bucket.node.addr.slice(-8)}-${scopedConstruct.node.addr.slice(-8)}`;
+
+    if (permission === ActionTypes.STORAGE_READ) {
+      new StorageBucketIamMember(bucket, permissionId, {
+        bucket: bucket.bucket.name,
+        role: permission,
+        member: `projectViewer:${projectId}`,
+      });
+    } else if (permission === ActionTypes.STORAGE_READ_WRITE) {
+      new StorageBucketIamMember(bucket, permissionId, {
+        bucket: bucket.bucket.name,
+        role: permission,
+        member: `projectEditor:${projectId}`,
+      });
+    } else {
+      throw new Error("Unsupported permission");
+    }
+  } catch (e) {
+    throw new Error(`Failed to add permission to bucket: ${e}`);
+  }
+};

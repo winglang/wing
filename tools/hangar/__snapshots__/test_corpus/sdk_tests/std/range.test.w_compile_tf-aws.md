@@ -11,7 +11,7 @@ module.exports = function({ $std_Range }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(1,5,true).join() == \"1,2,3,4,5\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await (await $std_Range.of(1,5,true)).join()),"1,2,3,4,5")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(1,5,true).join() == \"1,2,3,4,5\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await (await $std_Range.of(1, 5, true)).join()),"1,2,3,4,5")))};
     }
   }
   return $Closure1;
@@ -53,7 +53,7 @@ module.exports = function({ $std_Range }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(1, 5).join() == std.Range.of(1, 5, false).join()")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await (await $std_Range.of(1,5)).join()),(await (await $std_Range.of(1,5,false)).join()))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(1, 5).join() == std.Range.of(1, 5, false).join()")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await (await $std_Range.of(1, 5)).join()),(await (await $std_Range.of(1, 5, false)).join()))))};
     }
   }
   return $Closure2;
@@ -72,7 +72,7 @@ module.exports = function({ $std_Range }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(1,5,false).join() == \"1,2,3,4\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await (await $std_Range.of(1,5,false)).join()),"1,2,3,4")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(1,5,false).join() == \"1,2,3,4\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await (await $std_Range.of(1, 5, false)).join()),"1,2,3,4")))};
     }
   }
   return $Closure3;
@@ -91,7 +91,7 @@ module.exports = function({ $std_Range }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(1,5).join() == \"1,2,3,4\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await (await $std_Range.of(1,5)).join()),"1,2,3,4")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(1,5).join() == \"1,2,3,4\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await (await $std_Range.of(1, 5)).join()),"1,2,3,4")))};
     }
   }
   return $Closure4;
@@ -110,7 +110,7 @@ module.exports = function({ $std_Range }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(-3,3,true).join() == \"-3,-2,-1,0,1,2,3\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await (await $std_Range.of((-3),3,true)).join()),"-3,-2,-1,0,1,2,3")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(-3,3,true).join() == \"-3,-2,-1,0,1,2,3\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await (await $std_Range.of((-3), 3, true)).join()),"-3,-2,-1,0,1,2,3")))};
     }
   }
   return $Closure5;
@@ -129,7 +129,7 @@ module.exports = function({ $std_Range }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(-3,3,false).join() == \"-3,-2,-1,0,1,2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await (await $std_Range.of((-3),3,false)).join()),"-3,-2,-1,0,1,2")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(-3,3,false).join() == \"-3,-2,-1,0,1,2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await (await $std_Range.of((-3), 3, false)).join()),"-3,-2,-1,0,1,2")))};
     }
   }
   return $Closure6;
@@ -148,7 +148,7 @@ module.exports = function({ $std_Range }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(5,0,true).join() == \"5,4,3,2,1,0\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await (await $std_Range.of(5,0,true)).join()),"5,4,3,2,1,0")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(5,0,true).join() == \"5,4,3,2,1,0\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await (await $std_Range.of(5, 0, true)).join()),"5,4,3,2,1,0")))};
     }
   }
   return $Closure7;
@@ -167,7 +167,7 @@ module.exports = function({ $std_Range }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(5,0,false).join() == \"5,4,3,2,1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await (await $std_Range.of(5,0,false)).join()),"5,4,3,2,1")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(5,0,false).join() == \"5,4,3,2,1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await (await $std_Range.of(5, 0, false)).join()),"5,4,3,2,1")))};
     }
   }
   return $Closure8;
@@ -211,14 +211,14 @@ module.exports = function({  }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -239,11 +239,11 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -264,13 +264,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -291,13 +291,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -318,13 +318,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -345,13 +345,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
     }
     class $Closure5 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -372,13 +372,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
     }
     class $Closure6 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -399,13 +399,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
     }
     class $Closure7 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -426,13 +426,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
     }
     class $Closure8 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -453,13 +453,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
     }
     class $Closure9 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -479,13 +479,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
     }
     class $Closure10 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -505,38 +505,38 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(1,5,true).join() == \"1,2,3,4,5\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((std.Range.of(1,5,true)).join()),"1,2,3,4,5")))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:rangeOf",new $Closure1(this,"$Closure1"));
-    {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(1, 5).join() == std.Range.of(1, 5, false).join()")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((std.Range.of(1,5)).join()),((std.Range.of(1,5,false)).join()))))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:defaultRange",new $Closure2(this,"$Closure2"));
-    {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(1,5,false).join() == \"1,2,3,4\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((std.Range.of(1,5,false)).join()),"1,2,3,4")))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:rangeOfWithoutLastNumber",new $Closure3(this,"$Closure3"));
-    {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(1,5).join() == \"1,2,3,4\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((std.Range.of(1,5)).join()),"1,2,3,4")))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:rangeOfWithoutLastNumberDefault",new $Closure4(this,"$Closure4"));
-    {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(-3,3,true).join() == \"-3,-2,-1,0,1,2,3\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((std.Range.of((-3),3,true)).join()),"-3,-2,-1,0,1,2,3")))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:rangeOfWithNegativeRange",new $Closure5(this,"$Closure5"));
-    {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(-3,3,false).join() == \"-3,-2,-1,0,1,2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((std.Range.of((-3),3,false)).join()),"-3,-2,-1,0,1,2")))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:rangeOfWithNegativeRangeDefault",new $Closure6(this,"$Closure6"));
-    {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(5,0,true).join() == \"5,4,3,2,1,0\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((std.Range.of(5,0,true)).join()),"5,4,3,2,1,0")))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:rangeOfDecreasingNumbers",new $Closure7(this,"$Closure7"));
-    {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(5,0,false).join() == \"5,4,3,2,1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((std.Range.of(5,0,false)).join()),"5,4,3,2,1")))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:rangeOfDecreasingNumbersWithDefault",new $Closure8(this,"$Closure8"));
+    {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(1,5,true).join() == \"1,2,3,4,5\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((std.Range.of(1, 5, true)).join()),"1,2,3,4,5")))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:rangeOf", new $Closure1(this, "$Closure1"));
+    {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(1, 5).join() == std.Range.of(1, 5, false).join()")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((std.Range.of(1, 5)).join()),((std.Range.of(1, 5, false)).join()))))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:defaultRange", new $Closure2(this, "$Closure2"));
+    {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(1,5,false).join() == \"1,2,3,4\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((std.Range.of(1, 5, false)).join()),"1,2,3,4")))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:rangeOfWithoutLastNumber", new $Closure3(this, "$Closure3"));
+    {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(1,5).join() == \"1,2,3,4\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((std.Range.of(1, 5)).join()),"1,2,3,4")))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:rangeOfWithoutLastNumberDefault", new $Closure4(this, "$Closure4"));
+    {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(-3,3,true).join() == \"-3,-2,-1,0,1,2,3\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((std.Range.of((-3), 3, true)).join()),"-3,-2,-1,0,1,2,3")))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:rangeOfWithNegativeRange", new $Closure5(this, "$Closure5"));
+    {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(-3,3,false).join() == \"-3,-2,-1,0,1,2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((std.Range.of((-3), 3, false)).join()),"-3,-2,-1,0,1,2")))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:rangeOfWithNegativeRangeDefault", new $Closure6(this, "$Closure6"));
+    {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(5,0,true).join() == \"5,4,3,2,1,0\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((std.Range.of(5, 0, true)).join()),"5,4,3,2,1,0")))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:rangeOfDecreasingNumbers", new $Closure7(this, "$Closure7"));
+    {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(5,0,false).join() == \"5,4,3,2,1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((std.Range.of(5, 0, false)).join()),"5,4,3,2,1")))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:rangeOfDecreasingNumbersWithDefault", new $Closure8(this, "$Closure8"));
     let i = 0;
     for (const x of $stdlib.std.Range.of(0, 5, false)) {
       i += 1;
     }
     {((cond) => {if (!cond) throw new Error("assertion failed: i==5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(i,5)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:forWithRange",new $Closure9(this,"$Closure9"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:forWithRange", new $Closure9(this, "$Closure9"));
     let n = 0;
     for (const x of $stdlib.std.Range.of(0, 5, true)) {
       n += 1;
     }
     {((cond) => {if (!cond) throw new Error("assertion failed: n==6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(n,6)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:forWithRangeIncludeLastNumber",new $Closure10(this,"$Closure10"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:forWithRangeIncludeLastNumber", new $Closure10(this, "$Closure10"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

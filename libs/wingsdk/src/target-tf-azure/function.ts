@@ -44,7 +44,7 @@ export interface ScopedRoleAssignment {
 /**
  * Azure implementation of `cloud.Function`.
  *
- * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
+ * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
 export class Function extends cloud.Function {
   private readonly function: LinuxFunctionApp;
@@ -248,6 +248,7 @@ export class Function extends cloud.Function {
     const inflightClient = handler._toInflight();
     const lines = new Array<string>();
 
+    lines.push('"use strict";');
     lines.push("module.exports = async function(context, req) {");
     lines.push(
       `  const body = await (${inflightClient}).handle(context.req.body ?? "");`

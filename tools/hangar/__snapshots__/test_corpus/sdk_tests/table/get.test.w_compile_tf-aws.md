@@ -29,9 +29,9 @@ module.exports = function({ $table }) {
         {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
       }
       ;
-      (await $table.insert(VALID_KEY,({"gender": COLUMN_VALUE})));
+      (await $table.insert(VALID_KEY, ({"gender": COLUMN_VALUE})));
       {((cond) => {if (!cond) throw new Error("assertion failed: table.get(VALID_KEY).get(COLUMN_NAME) == COLUMN_VALUE")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })((await $table.get(VALID_KEY)), COLUMN_NAME),COLUMN_VALUE)))};
-      (await assertThrows(ROW_DOES_NOT_EXIST_ERROR,async () => {
+      (await assertThrows(ROW_DOES_NOT_EXIST_ERROR, async () => {
         (await $table.get(NON_EXISTENT_KEY));
       }
       ));
@@ -58,14 +58,14 @@ module.exports = function({ $table }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -109,11 +109,11 @@ const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 const ex = $stdlib.ex;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -134,7 +134,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -144,8 +144,8 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const table = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "users", primaryKey: "name", columns: ({"gender": ex.ColumnType.STRING}) });
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:get",new $Closure1(this,"$Closure1"));
+    const table = this.node.root.newAbstract("@winglang/sdk.ex.Table",this, "ex.Table", { name: "users", primaryKey: "name", columns: ({"gender": ex.ColumnType.STRING}) });
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:get", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

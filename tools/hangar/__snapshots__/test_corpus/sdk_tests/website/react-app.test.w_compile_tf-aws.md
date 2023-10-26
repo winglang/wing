@@ -54,7 +54,7 @@ module.exports = function({ $api_url, $http_Util, $preflightVariable, $website_u
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
@@ -110,7 +110,7 @@ module.exports = function({ $api_url, $http_Util, $preflightVariable, $website_u
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -444,11 +444,11 @@ const ex = $stdlib.ex;
 const cloud = $stdlib.cloud;
 const http = $stdlib.http;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -468,13 +468,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -498,7 +498,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -510,13 +510,13 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
-    (api.get("/",new $Closure1(this,"$Closure1")));
-    const website = this.node.root.newAbstract("@winglang/sdk.ex.ReactApp",this,"ex.ReactApp",{ projectPath: "./react-website", buildDir: "/build/public", useBuildCommand: true });
+    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
+    (api.get("/", new $Closure1(this, "$Closure1")));
+    const website = this.node.root.newAbstract("@winglang/sdk.ex.ReactApp",this, "ex.ReactApp", { projectPath: "./react-website", buildDir: "/build/public", useBuildCommand: true });
     const preflightVariable = "preflight variable";
-    (website.addEnvironment("apiUrl",api.url));
-    (website.addEnvironment("anotherEnvVar",preflightVariable));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:website is working",new $Closure2(this,"$Closure2"));
+    (website.addEnvironment("apiUrl", api.url));
+    (website.addEnvironment("anotherEnvVar", preflightVariable));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:website is working", new $Closure2(this, "$Closure2"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

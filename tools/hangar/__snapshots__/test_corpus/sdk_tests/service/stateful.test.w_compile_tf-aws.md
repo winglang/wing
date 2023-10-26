@@ -13,7 +13,7 @@ module.exports = function({ $__parent_this_1_b, $std_Duration, $util_Util }) {
     async handle() {
       {console.log("starting service")};
       (await $util_Util.sleep((await $std_Duration.fromSeconds(1))));
-      (await $__parent_this_1_b.put("ready","true"));
+      (await $__parent_this_1_b.put("ready", "true"));
       const state = 456;
       return async () => {
         {console.log("stopping service")};
@@ -80,14 +80,14 @@ module.exports = function({ $std_Number }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -111,18 +111,18 @@ const cloud = $stdlib.cloud;
 const util = $stdlib.util;
 const http = $stdlib.http;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     if ((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((util.Util.env("WING_TARGET")),"sim"))) {
       class MyService extends $stdlib.std.Resource {
-        constructor(scope, id, body) {
-          super(scope, id);
-          this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+        constructor($scope, $id, body) {
+          super($scope, $id);
+          this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
           this.body = body;
           const __parent_this_1 = this;
           class $Closure1 extends $stdlib.std.Resource {
-            constructor(scope, id, ) {
-              super(scope, id);
+            constructor($scope, $id, ) {
+              super($scope, $id);
               (std.Node.of(this)).hidden = true;
             }
             static _toInflightType(context) {
@@ -145,7 +145,7 @@ class $Root extends $stdlib.std.Resource {
                 })())
               `;
             }
-            _getInflightOps() {
+            _supportedOps() {
               return ["handle", "$inflight_init"];
             }
             _registerOnLift(host, ops) {
@@ -155,7 +155,7 @@ class $Root extends $stdlib.std.Resource {
               super._registerOnLift(host, ops);
             }
           }
-          this.s = this.node.root.newAbstract("@winglang/sdk.cloud.Service",this,"cloud.Service",new $Closure1(this,"$Closure1"));
+          this.s = this.node.root.newAbstract("@winglang/sdk.cloud.Service",this, "cloud.Service", new $Closure1(this, "$Closure1"));
         }
         static _toInflightType(context) {
           return `
@@ -176,7 +176,7 @@ class $Root extends $stdlib.std.Resource {
             })())
           `;
         }
-        _getInflightOps() {
+        _supportedOps() {
           return ["access", "port", "$inflight_init"];
         }
         _registerOnLift(host, ops) {
@@ -192,10 +192,10 @@ class $Root extends $stdlib.std.Resource {
           super._registerOnLift(host, ops);
         }
       }
-      const foo = new MyService(this,"MyService","bang bang!");
+      const foo = new MyService(this, "MyService", "bang bang!");
       class $Closure2 extends $stdlib.std.Resource {
-        constructor(scope, id, ) {
-          super(scope, id);
+        constructor($scope, $id, ) {
+          super($scope, $id);
           (std.Node.of(this)).hidden = true;
         }
         static _toInflightType(context) {
@@ -216,7 +216,7 @@ class $Root extends $stdlib.std.Resource {
             })())
           `;
         }
-        _getInflightOps() {
+        _supportedOps() {
           return ["handle", "$inflight_init"];
         }
         _registerOnLift(host, ops) {
@@ -226,7 +226,7 @@ class $Root extends $stdlib.std.Resource {
           super._registerOnLift(host, ops);
         }
       }
-      this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:service is ready only after onStart finishes",new $Closure2(this,"$Closure2"));
+      this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:service is ready only after onStart finishes", new $Closure2(this, "$Closure2"));
     }
   }
 }

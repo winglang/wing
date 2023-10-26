@@ -33,7 +33,7 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
@@ -114,7 +114,7 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -401,11 +401,11 @@ const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 const http = $stdlib.http;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -428,7 +428,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -439,9 +439,9 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const w1 = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this,"cloud.Website",{ path: "./website" });
-    const w2 = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this,"website-2",{ path: "./website" });
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:deploying two websites",new $Closure1(this,"$Closure1"));
+    const w1 = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this, "cloud.Website", { path: "./website" });
+    const w2 = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this, "website-2", { path: "./website" });
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:deploying two websites", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

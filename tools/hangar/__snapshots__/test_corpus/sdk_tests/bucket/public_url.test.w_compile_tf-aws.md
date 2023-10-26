@@ -25,14 +25,14 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
       }
       ;
       const BUCKET_NOT_PUBLIC_ERROR = "Cannot provide public url for a non-public bucket";
-      (await $publicBucket.put("file1.txt","Foo"));
-      (await $privateBucket.put("file2.txt","Bar"));
+      (await $publicBucket.put("file1.txt", "Foo"));
+      (await $privateBucket.put("file2.txt", "Bar"));
       const publicUrl = (await $publicBucket.publicUrl("file1.txt"));
       {((cond) => {if (!cond) throw new Error("assertion failed: publicUrl != \"\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(publicUrl,"")))};
       if ((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })((await $util_Util.env("WING_TARGET")),"sim"))) {
         {((cond) => {if (!cond) throw new Error("assertion failed: http.get(publicUrl).body ==  \"Foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get(publicUrl)).body,"Foo")))};
       }
-      (await assertThrows(BUCKET_NOT_PUBLIC_ERROR,async () => {
+      (await assertThrows(BUCKET_NOT_PUBLIC_ERROR, async () => {
         (await $privateBucket.publicUrl("file2.txt"));
       }
       ));
@@ -56,14 +56,14 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -141,11 +141,11 @@ const cloud = $stdlib.cloud;
 const http = $stdlib.http;
 const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -169,7 +169,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -180,9 +180,9 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const publicBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"publicBucket",{ public: true });
-    const privateBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"privateBucket");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:publicUrl",new $Closure1(this,"$Closure1"));
+    const publicBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "publicBucket", { public: true });
+    const privateBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "privateBucket");
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:publicUrl", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
