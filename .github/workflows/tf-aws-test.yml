@@ -12,6 +12,12 @@ on:
         type: string
         default: main
         description: "Ref to checkout. Must be present in the repo input."
+      targets:
+        type: choice
+        options:
+          - sim
+          - tf-aws
+          - tf-azure
 
 env:
   AWS_REGION: "us-east-1"
@@ -68,7 +74,7 @@ jobs:
       matrix:
         test: ${{ fromJson(needs.setup.outputs.tests) }}
         target: ["sim", "tf-aws", "tf-azure"]
-    name: ${{ matrix.test }} - ${{ matrix.target }}
+    name: ${{ matrix.test.name }} - ${{ matrix.target }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
