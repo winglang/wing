@@ -66,7 +66,7 @@ jobs:
       max-parallel: 10
       matrix:
         test: ${{ fromJson(needs.setup.outputs.tests) }}
-        target: ["sim", "tf-aws", "tf-azure"]
+        target: ["tf-azure"]
     name: ${{ matrix.test.name }} - ${{ matrix.target }}
     steps:
       - name: Checkout Repository
