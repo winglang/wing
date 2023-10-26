@@ -52,9 +52,7 @@ export abstract class Secret extends Resource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [SecretInflightMethods.VALUE, SecretInflightMethods.VALUE_JSON];
-  }
+  public abstract _supportedOps(): string[];
 }
 
 /**
