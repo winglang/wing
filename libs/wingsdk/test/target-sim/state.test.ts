@@ -2,7 +2,7 @@ import { test, expect } from "vitest";
 import { cloud } from "../../src";
 import { IFunctionClient, OnDeploy } from "../../src/cloud";
 import { Testing } from "../../src/simulator";
-import { IStateClient, State } from "../../src/target-sim";
+import { State } from "../../src/target-sim";
 import { SimApp } from "../sim-app";
 
 test("state can be resolved at any time", async () => {

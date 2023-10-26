@@ -30,7 +30,7 @@ test("create a table", async () => {
       primaryKey: "id",
       initialRows: {},
     },
-    type: "wingsdk.cloud.Table",
+    type: ex.TABLE_FQN,
   });
   await s.stop();
 
@@ -67,7 +67,7 @@ test("insert row", async () => {
       primaryKey: "id",
       initialRows: {},
     },
-    type: "wingsdk.cloud.Table",
+    type: ex.TABLE_FQN,
   });
   await s.stop();
 
@@ -112,7 +112,7 @@ test("get row", async () => {
       primaryKey: "id",
       initialRows: {},
     },
-    type: "wingsdk.cloud.Table",
+    type: ex.TABLE_FQN,
   });
   await s.stop();
 
@@ -156,7 +156,7 @@ test("tryGet row", async () => {
       primaryKey: "id",
       initialRows: {},
     },
-    type: "wingsdk.cloud.Table",
+    type: ex.TABLE_FQN,
   });
   await s.stop();
 
@@ -199,7 +199,7 @@ test("update row", async () => {
       primaryKey: "id",
       initialRows: {},
     },
-    type: "wingsdk.cloud.Table",
+    type: ex.TABLE_FQN,
   });
   await s.stop();
 
@@ -241,7 +241,7 @@ test("list table", async () => {
       primaryKey: "id",
       initialRows: {},
     },
-    type: "wingsdk.cloud.Table",
+    type: ex.TABLE_FQN,
   });
   await s.stop();
 
@@ -347,7 +347,7 @@ test("can add row in preflight", async () => {
         "joe-id": { name: "Joe Doe", age: 50, id: KEY },
       },
     },
-    type: "wingsdk.cloud.Table",
+    type: ex.TABLE_FQN,
   });
   await s.stop();
 

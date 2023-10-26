@@ -65,7 +65,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["staticMethod", "$inflight_init"];
       }
       static _registerTypeOnLift(host, ops) {
