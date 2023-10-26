@@ -119,11 +119,17 @@ jobs:
           npm install
 
       - name: Configure AWS credentials
+        if: ${{ matrix.target == 'tf-aws' }}
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
+      - name: Configure azure credentials
+        if: ${{ matrix.target == 'tf-azure' }}
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Execute wing test in matrix directory
         uses: nick-fields/retry@v2
         env:
@@ -136,13 +142,13 @@ jobs:
           command: |
             if  ${{ env.MANUAL == 'true' }}
             then
-              # pnpm install
-              # pnpm wing test -t ${{ matrix.target }} ${{ matrix.test.directory }}/*.test.w
+               pnpm install
+               pnpm wing test -t ${{ matrix.target }} ${{ matrix.test.directory }}/*.test.w
             elif ${{ env.LOCAL_BUILD == 'false'}}
             then 
-              # wing test -t ${{ matrix.target }} ${{ matrix.test.directory }}/*.test.w
+               wing test -t ${{ matrix.target }} ${{ matrix.test.directory }}/*.test.w
             else
-            # ./localwing/node_modules/.bin/wing test -t ${{ matrix.test.target }} ${{ matrix.test.directory }}/*.test.w
+             ./localwing/node_modules/.bin/wing test -t ${{ matrix.test.target }} ${{ matrix.test.directory }}/*.test.w
             fi
 
       - name: Output Terraform log
