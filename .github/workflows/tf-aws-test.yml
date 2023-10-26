@@ -1,5 +1,5 @@
-name: SDK Spec AWS Tests
-run-name: SDK Spec AWS Tests (${{ inputs.repo || github.repository }}/${{inputs.ref || github.ref}})
+name: SDK Spec Tests
+run-name: SDK Spec Tests (${{ inputs.repo || github.repository }}/${{inputs.ref || github.ref}})
 on:
   workflow_call: {}
   workflow_dispatch:
