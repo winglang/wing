@@ -3,7 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
-module.exports = function({ $InflightB }) {
+module.exports = function({ $InflightB, $testing_Assert }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,7 +12,7 @@ module.exports = function({ $InflightB }) {
     }
     async handle() {
       const b = (await (async () => {const o = new $InflightB(); await o.$inflight_init?.(); return o; })());
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.description() == \"InflightB extends InflightA\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await b.description()),"InflightB extends InflightA")))};
+      (await $testing_Assert.equal((await b.description()), "InflightB extends InflightA"));
     }
   }
   return $Closure1;
@@ -23,7 +23,7 @@ module.exports = function({ $InflightB }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
-module.exports = function({ $extended }) {
+module.exports = function({ $extended, $testing_Assert }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -31,7 +31,7 @@ module.exports = function({ $extended }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: extended.do() == \"value\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $extended.do()),"value")))};
+      (await $testing_Assert.equal((await $extended.do()), "value"));
     }
   }
   return $Closure2;
@@ -224,6 +224,7 @@ const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const testing = $stdlib.testing;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -427,6 +428,7 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("./inflight.$Closure1-1.js")({
             $InflightB: ${context._lift(InflightB)},
+            $testing_Assert: ${context._lift($stdlib.core.toLiftableModuleType(testing.Assert, "@winglang/sdk/testing", "Assert"))},
           })
         `;
       }
@@ -519,6 +521,7 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("./inflight.$Closure2-1.js")({
             $extended: ${context._lift(extended)},
+            $testing_Assert: ${context._lift($stdlib.core.toLiftableModuleType(testing.Assert, "@winglang/sdk/testing", "Assert"))},
           })
         `;
       }
@@ -544,7 +547,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const e = new E(this, "E");
-    {((cond) => {if (!cond) throw new Error("assertion failed: e.description() == \"E extends C extends B\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((e.description()),"E extends C extends B")))};
+    (testing.Assert.equal((e.description()), "E extends C extends B"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:super call inflight", new $Closure1(this, "$Closure1"));
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
     const extended = new ExtendedClass(this, "ExtendedClass");

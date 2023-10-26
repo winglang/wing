@@ -11,12 +11,12 @@ module.exports = function({ $a, $b, $testing_Assert }) {
       return $obj;
     }
     async handle() {
-      (await $testing_Assert.equal(1,1));
-      (await $testing_Assert.equal($b,1));
+      (await $testing_Assert.equal(1, 1));
+      (await $testing_Assert.equal($b, 1));
       (await $testing_Assert.isNil($a));
-      (await $testing_Assert.notEqual($b,2));
-      (await $testing_Assert.notEqual($b,"hello"));
-      (await $testing_Assert.notEqual($b,true));
+      (await $testing_Assert.notEqual($b, 2));
+      (await $testing_Assert.notEqual($b, "hello"));
+      (await $testing_Assert.notEqual($b, true));
     }
   }
   return $Closure1;
@@ -35,12 +35,12 @@ module.exports = function({ $c, $d, $testing_Assert }) {
       return $obj;
     }
     async handle() {
-      (await $testing_Assert.equal("hello","hello"));
-      (await $testing_Assert.equal($d,"hello"));
+      (await $testing_Assert.equal("hello", "hello"));
+      (await $testing_Assert.equal($d, "hello"));
       (await $testing_Assert.isNil($c));
-      (await $testing_Assert.notEqual($d,"world"));
-      (await $testing_Assert.notEqual($d,1));
-      (await $testing_Assert.notEqual($d,true));
+      (await $testing_Assert.notEqual($d, "world"));
+      (await $testing_Assert.notEqual($d, 1));
+      (await $testing_Assert.notEqual($d, true));
     }
   }
   return $Closure2;
@@ -59,10 +59,10 @@ module.exports = function({ $e, $f, $testing_Assert }) {
       return $obj;
     }
     async handle() {
-      (await $testing_Assert.equal(true,true));
-      (await $testing_Assert.equal($f,true));
+      (await $testing_Assert.equal(true, true));
+      (await $testing_Assert.equal($f, true));
       (await $testing_Assert.isNil($e));
-      (await $testing_Assert.notEqual($f,false));
+      (await $testing_Assert.notEqual($f, false));
     }
   }
   return $Closure3;
@@ -83,14 +83,14 @@ module.exports = function({ $e, $f, $testing_Assert }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -113,11 +113,11 @@ const std = $stdlib.std;
 const util = $stdlib.util;
 const testing = $stdlib.testing;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -140,7 +140,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -152,8 +152,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -176,7 +176,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -188,8 +188,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -212,7 +212,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -225,29 +225,29 @@ class $Root extends $stdlib.std.Resource {
     }
     const a = undefined;
     const b = 1;
-    (testing.Assert.equal(1,1));
-    (testing.Assert.equal(b,1));
+    (testing.Assert.equal(1, 1));
+    (testing.Assert.equal(b, 1));
     (testing.Assert.isNil(a));
-    (testing.Assert.notEqual(b,2));
-    (testing.Assert.notEqual(b,"hello"));
-    (testing.Assert.notEqual(b,true));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:equal num",new $Closure1(this,"$Closure1"));
+    (testing.Assert.notEqual(b, 2));
+    (testing.Assert.notEqual(b, "hello"));
+    (testing.Assert.notEqual(b, true));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:equal num", new $Closure1(this, "$Closure1"));
     const c = undefined;
     const d = "hello";
-    (testing.Assert.equal("hello","hello"));
-    (testing.Assert.equal(d,"hello"));
+    (testing.Assert.equal("hello", "hello"));
+    (testing.Assert.equal(d, "hello"));
     (testing.Assert.isNil(c));
-    (testing.Assert.notEqual(d,"world"));
-    (testing.Assert.notEqual(d,1));
-    (testing.Assert.notEqual(d,true));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:equal str",new $Closure2(this,"$Closure2"));
+    (testing.Assert.notEqual(d, "world"));
+    (testing.Assert.notEqual(d, 1));
+    (testing.Assert.notEqual(d, true));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:equal str", new $Closure2(this, "$Closure2"));
     const e = undefined;
     const f = true;
-    (testing.Assert.equal(true,true));
-    (testing.Assert.equal(f,true));
+    (testing.Assert.equal(true, true));
+    (testing.Assert.equal(f, true));
     (testing.Assert.isNil(e));
-    (testing.Assert.notEqual(f,false));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:equal bool",new $Closure3(this,"$Closure3"));
+    (testing.Assert.notEqual(f, false));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:equal bool", new $Closure3(this, "$Closure3"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
