@@ -4,92 +4,122 @@ use serde_json::json;
 
 use crate::diagnostic::WingSpan;
 
+macro_rules! codes {
+	($base:ident, $($arg:expr),*) => {
+		{
+			$($base.append($arg);)*
+		}
+	};
+}
+
+macro_rules! new_code {
+	($source:expr, $($arg:expr),*) => {
+		{
+			let mut base = CodeMaker::with_source($source);
+			$(base.append($arg);)*
+			base
+		}
+	};
+}
+
 /// A helper for generating code snippets with indentation.
 ///
 /// TODO: add `open_block` or `close_block` methods that automatically add
 /// `{` and `}`?
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct CodeMaker {
 	lines: Vec<LineData>,
 	indent: IndentAmount,
+	source: Option<WingSpan>,
 }
 
 pub type IndentAmount = usize;
 pub type CharacterOffset = usize;
 
+#[derive(Default, Clone)]
 pub struct LineData {
 	pub line: String,
 	pub indent: IndentAmount,
-	pub mappings: Option<Vec<(CharacterOffset, WingSpan)>>,
+	pub mappings: Vec<(CharacterOffset, WingSpan)>,
 }
 
-impl Into<LineData> for String {
-	fn into(self) -> LineData {
-		LineData {
-			line: self,
+/// Converts stringable data into a codemaker
+/// This handles splitting newlines
+fn string_to_code<S: Into<String>>(s: S) -> CodeMaker {
+	let text: String = s.into();
+	let mut code = CodeMaker::default();
+
+	// remove trailing newline
+	let line_text = text.strip_suffix("\n").unwrap_or(&text);
+
+	// if the line has newlines in it, consider each line separately
+	for subline in line_text.split('\n') {
+		code.line(LineData {
 			indent: 0,
-			mappings: None,
-		}
+			line: subline.into(),
+			mappings: vec![],
+		});
+	}
+
+	code
+}
+
+impl Into<CodeMaker> for String {
+	fn into(self) -> CodeMaker {
+		string_to_code(self)
 	}
 }
 
-impl Into<LineData> for &String {
-	fn into(self) -> LineData {
-		LineData {
-			line: self.to_owned(),
-			indent: 0,
-			mappings: None,
-		}
+impl Into<CodeMaker> for &String {
+	fn into(self) -> CodeMaker {
+		string_to_code(self)
 	}
 }
 
-impl Into<LineData> for &str {
-	fn into(self) -> LineData {
-		LineData {
-			line: self.to_string(),
-			indent: 0,
-			mappings: None,
-		}
+impl Into<CodeMaker> for &str {
+	fn into(self) -> CodeMaker {
+		string_to_code(self)
 	}
 }
 
-impl Into<LineData> for (String, WingSpan) {
-	fn into(self) -> LineData {
-		LineData {
-			line: self.0,
-			indent: 0,
-			mappings: Some(vec![(0, self.1)]),
-		}
+impl Into<CodeMaker> for LineData {
+	fn into(self) -> CodeMaker {
+		CodeMaker::one_line(self)
 	}
 }
 
 impl CodeMaker {
+	pub fn with_source<S: Into<WingSpan>>(source: S) -> Self {
+		Self {
+			source: Some(source.into()),
+			indent: 0,
+			lines: vec![],
+		}
+	}
+
 	/// Emits a line of code and then increases the indent by one.
-	pub fn open<S: Into<LineData>>(&mut self, line: S) {
+	pub fn open<S: Into<CodeMaker>>(&mut self, line: S) {
 		self.line(line);
 		self.indent += 1;
 	}
 
 	/// Decreases the indent by one and then emits a line of code.
-	pub fn close<S: Into<LineData>>(&mut self, line: S) {
+	pub fn close<S: Into<CodeMaker>>(&mut self, line: S) {
 		self.indent -= 1;
 		self.line(line);
 	}
 
 	/// Emits a line of code with the current indent.
-	pub fn line<S: Into<LineData>>(&mut self, line: S) {
-		let line_data: LineData = line.into();
+	pub fn line<S: Into<CodeMaker>>(&mut self, line: S) {
+		let mut new_code: CodeMaker = line.into();
 
-		// remove trailing newline
-		let line_text = line_data.line.strip_suffix("\n").unwrap_or(&line_data.line);
-
-		// if the line has newlines in it, consider each line separately
-		for subline in line_text.split('\n') {
-			self.push_line(LineData {
-				indent: self.indent,
-				line: subline.into(),
-				mappings: None,
-			});
+		for line_data in new_code.lines.iter_mut() {
+			line_data.indent += self.indent;
+			if line_data.mappings.is_empty() {
+				if let Some(source) = self.source.as_ref() {
+					line_data.mappings.push((0, source.clone()))
+				}
+			}
 		}
 	}
 
@@ -106,6 +136,31 @@ impl CodeMaker {
 		}
 	}
 
+	/// Emits code starting on the current line, mutating it if needed.
+	/// Note this mutates the given code.
+	pub fn append<S: Into<CodeMaker>>(&mut self, line: S) {
+		let mut new_code: CodeMaker = line.into();
+		if new_code.is_empty() {
+			return;
+		}
+
+		if let Some(last_line) = self.lines.last_mut() {
+			let mut first_new_line = new_code.lines.remove(0);
+			last_line.line.push_str(&first_new_line.line);
+
+			for (offset, span) in first_new_line.mappings.drain(..) {
+				last_line
+					.mappings
+					.push((last_line.line.len() - first_new_line.line.len() + offset, span));
+			}
+		}
+
+		for mut line_data in new_code.lines {
+			line_data.indent += self.indent;
+			self.push_line(line_data);
+		}
+	}
+
 	/// Decreases the current indent by one.
 	#[allow(dead_code)]
 	pub fn unindent(&mut self) {
@@ -117,10 +172,8 @@ impl CodeMaker {
 		self.indent += 1;
 	}
 
-	pub fn one_line<S: Into<LineData>>(s: S) -> CodeMaker {
-		let mut code = CodeMaker::default();
-		code.line(s);
-		code
+	pub fn one_line<S: Into<CodeMaker>>(s: S) -> CodeMaker {
+		s.into()
 	}
 
 	/// Checks if there are no lines of code
@@ -155,8 +208,8 @@ impl CodeMaker {
 		for (line_idx, line) in self.lines.iter().enumerate() {
 			let generated_line = line_idx as u32;
 			let generated_column = 0;
-			if let Some(mappings) = &line.mappings {
-				for mapping in mappings {
+			if !line.mappings.is_empty() {
+				for mapping in &line.mappings {
 					let original = OriginalLocation::new(mapping.1.start.line, mapping.1.start.col, 0, None);
 					sourcemap.add_mapping(generated_line, mapping.0 as u32, Some(original));
 				}

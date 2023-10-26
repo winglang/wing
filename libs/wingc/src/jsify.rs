@@ -1,3 +1,4 @@
+#[macro_use]
 pub mod codemaker;
 mod tests;
 use aho_corasick::AhoCorasick;
@@ -310,17 +311,22 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_reference(&self, reference: &Reference, ctx: &mut JSifyContext) -> String {
+	fn jsify_reference(&self, reference: &Reference, ctx: &mut JSifyContext) -> CodeMaker {
 		match reference {
-			Reference::Identifier(identifier) => identifier.to_string(),
+			Reference::Identifier(identifier) => new_code!(&identifier.span, &identifier.name),
 			Reference::InstanceMember {
 				object,
 				property,
 				optional_accessor,
-			} => self.jsify_expression(object, ctx) + (if *optional_accessor { "?." } else { "." }) + &property.to_string(),
+			} => new_code!(
+				&property.span,
+				self.jsify_expression(object, ctx),
+				if *optional_accessor { "?." } else { "." },
+				&property.to_string()
+			),
 			Reference::TypeMember { type_name, property } => {
 				let typename = self.jsify_user_defined_type(type_name, ctx);
-				typename + "." + &property.to_string()
+				new_code!(&property.span, typename + "." + &property.to_string())
 			}
 		}
 	}
@@ -551,7 +557,7 @@ impl<'a> JSifier<'a> {
 					)
 				}
 			}
-			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, ctx),
+			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, ctx).to_string(),
 			ExprKind::Call { callee, arg_list } => {
 
 				let function_type = match callee {
@@ -979,12 +985,15 @@ impl<'a> JSifier<'a> {
 					AssignmentKind::AssignDecr => "-=",
 				};
 
-				code.line(format!(
-					"{} {} {};",
+				codes!(
+					code,
 					self.jsify_reference(variable, ctx),
+					" ",
 					operator,
-					self.jsify_expression(value, ctx)
-				))
+					" ",
+					self.jsify_expression(value, ctx),
+					";"
+				);
 			}
 			StmtKind::Scope(scope) => {
 				if !scope.statements.is_empty() {
@@ -1070,7 +1079,12 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_inflight_init(&self, func_def: &FunctionDefinition, class_phase: Phase, ctx: &mut JSifyContext) -> String {
+	fn jsify_inflight_init(
+		&self,
+		func_def: &FunctionDefinition,
+		class_phase: Phase,
+		ctx: &mut JSifyContext,
+	) -> CodeMaker {
 		assert!(ctx.visit_ctx.current_phase() == Phase::Inflight);
 
 		let FunctionBody::Statements(body_scope) = &func_def.body else {
@@ -1093,10 +1107,15 @@ impl<'a> JSifier<'a> {
 		// If this is an inflight init of an inflight class then we also need to generate a normal ctor, if it's a preflight class
 		// then we generate a binding ctor seperately see `jsify_inflight_binding_constructor`
 		let code = if class_phase == Phase::Inflight {
-			let mut code = CodeMaker::default();
-			let parameters = jsify_function_parameters(func_def);
+			// let mut code = CodeMaker::with_source(&func_def.span);
 
-			code.open(format!("constructor({parameters}){{"));
+			let mut code = new_code!(
+				&func_def.span,
+				"constructor(",
+				jsify_function_parameters(func_def),
+				"){"
+			);
+			code.indent();
 
 			// Issue a call to the parent class's regular ctor
 			if let Some(Stmt {
@@ -1124,10 +1143,15 @@ impl<'a> JSifier<'a> {
 			async_init_body_code
 		};
 
-		code.to_string()
+		code
 	}
 
-	fn jsify_function(&self, class: Option<&AstClass>, func_def: &FunctionDefinition, ctx: &mut JSifyContext) -> String {
+	fn jsify_function(
+		&self,
+		class: Option<&AstClass>,
+		func_def: &FunctionDefinition,
+		ctx: &mut JSifyContext,
+	) -> CodeMaker {
 		let parameters = jsify_function_parameters(func_def);
 
 		let (name, arrow) = match &func_def.name {
@@ -1137,12 +1161,20 @@ impl<'a> JSifier<'a> {
 
 		let body = match &func_def.body {
 			FunctionBody::Statements(scope) => {
-				let mut code = CodeMaker::default();
-				code.add_code(self.jsify_scope_body(scope, ctx));
+				let mut code = CodeMaker::with_source(&scope.span);
+				codes!(code, self.jsify_scope_body(scope, ctx));
 				code
 			}
 			FunctionBody::External(file_path) => {
-				CodeMaker::one_line(format!("return (require(\"{file_path}\")[\"{name}\"])({parameters})"))
+				let mut code = CodeMaker::with_source(&func_def.span);
+				// let t = ;
+				codes!(
+					code,
+					format!("return (require(\"{file_path}\")[\"{name}\"])("),
+					parameters.clone(),
+					")"
+				);
+				code
 			}
 		};
 		let mut prefix = vec![];
@@ -1163,15 +1195,17 @@ impl<'a> JSifier<'a> {
 		}
 
 		let mut code = CodeMaker::default();
-		code.open(format!("{}({parameters}){arrow}{{", prefix.join(" ")));
+		let func_prefix = prefix.join(" ");
+		codes!(code, func_prefix, "(", parameters.clone(), ")", arrow, "{");
+
 		code.add_code(body);
 		code.close("}");
 
 		// if prefix is empty it means this is a closure, so we need to wrap it in `(`, `)`.
 		if prefix.is_empty() {
-			format!("({})", code.to_string().trim().to_string())
+			new_code!(&func_def.span, "(", code, ")")
 		} else {
-			code.to_string()
+			code
 		}
 	}
 
@@ -1575,7 +1609,7 @@ impl<'a> JSifier<'a> {
 	}
 }
 
-fn jsify_function_parameters(func_def: &FunctionDefinition) -> String {
+fn jsify_function_parameters(func_def: &FunctionDefinition) -> CodeMaker {
 	let mut parameter_list = vec![];
 
 	for p in &func_def.signature.parameters {
@@ -1586,7 +1620,7 @@ fn jsify_function_parameters(func_def: &FunctionDefinition) -> String {
 		}
 	}
 
-	parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", ")
+	CodeMaker::one_line(parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", "))
 }
 
 fn parent_class_phase(ctx: &JSifyContext<'_>) -> Phase {

@@ -119,6 +119,12 @@ impl Into<Range> for &WingSpan {
 	}
 }
 
+impl From<&WingSpan> for WingSpan {
+	fn from(span: &WingSpan) -> Self {
+		span.clone()
+	}
+}
+
 impl WingSpan {
 	/// Checks if the given span is contained within this span
 	pub fn contains_span(&self, position: &Self) -> bool {
