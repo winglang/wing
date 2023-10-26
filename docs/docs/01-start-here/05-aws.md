@@ -7,23 +7,23 @@ keywords: [Wing deploy, Wing deployment, deploy to AWS, deploy using Terraform]
 So far we've tested our program locally using our Wing Console. Next we'll see how you can deploy your
 program to AWS using Terraform.
 
-## Wing compiler supports multiple targets
+## Wing compiler supports multiple platforms
 
-The Wing compiler supports multiple compilation targets. Each resource in the
+The Wing compiler supports multiple compilation platforms. Each resource in the
 Wing ecosystem can support any number of *backends*. For example, the
 `cloud.Queue` resource we used in our app can be backed by [Amazon
 SQS](https://aws.amazon.com/sqs/) by [Azure Queue
 Storage](https://azure.microsoft.com/en-us/products/storage/queues/) or by
 [RabbitMQ by CloudAMQP](https://www.cloudamqp.com/).
 
-A target represents both the cloud provider and the provisioning engine. For
-example, the `tf-aws` target will compile your program to a set of AWS
+A platform represents both the cloud provider and the provisioning engine. For
+example, the `tf-aws` platform will compile your program to a set of AWS
 resources, using Terraform as the provisioning engine.
 
 
 :::info Under Construction
 
-:construction: We plan to also support [Azure](https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:azure) and [Google Cloud](https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:gcp) as targets out of
+:construction: We plan to also support [Azure](https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:azure) and [Google Cloud](https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:gcp) as platforms out of
 the box. In addition, we are planning support for other provisioning engines
 such as AWS CloudFormation and Kubernetes.
 
@@ -42,11 +42,11 @@ for more information.
 
 ## Compile to Terraform/AWS
 
-We will use the `tf-aws` target to tell the compiler to bind all of our resources
+We will use the `tf-aws` platform to tell the compiler to bind all of our resources
 to the default set of AWS resources and use Terraform as the provisioning engine.
 
 ```sh
-wing compile --target tf-aws main.w
+wing compile --platform tf-aws main.w
 ```
 
 ## Examine the output

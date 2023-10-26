@@ -47,7 +47,7 @@ By default, `wing run|it` will look for exactly one file named `main.w` or endin
 You can use the `compile` command to compile a Wing program into a deployable artifact.
 
 ```sh
-$ wing compile [entrypoint] --target <target>
+$ wing compile [entrypoint] --platform <platform>
 ```
 
 `[entrypoint]` specifies the entrypoint file to compile. A file is considered a valid entrypoint if its name is `main.w` or if it ends with `.main.w`/`.test.w`.
@@ -58,21 +58,22 @@ By default, `wing compile` will look for exactly one file named `main.w` or endi
 
 :::
 
-The --target option specifies the target platform to compile for. The default target is `sim`.
-The following targets are supported:
+The --platform option specifies the target platform to compile for. The default platform is `sim`.
+The following platforms are built-in:
 
 * `sim` - [Wing Simulator](#sim-target)
 * `tf-aws` - Terraform/AWS
 * `tf-azure` - Terraform/Azure
+* `tf-gcp` - Terraform/Google Cloud Platform
 
-### `sim` Target
+### `sim` Platform
 
 The Wing program is going to be compiled for the Wing simulator (`.wsim`).
 
 Usage:
 
 ```sh
-$ wing compile [entrypoint] --target sim
+$ wing compile [entrypoint] --platform sim
 ```
 
 The output will be found under `target/<entrypoint>.wsim` and can be opened in two ways:
@@ -81,14 +82,14 @@ The output will be found under `target/<entrypoint>.wsim` and can be opened in t
 * Using the `wing run|it target/<entrypoint>.wsim` command through the Wing CLI.
 
 
-### `tf-aws` Target
+### `tf-aws` Platform
 
 Compiles your program for Terraform and run on AWS.
 
 Usage:
 
 ```sh
-$ wing compile [entrypoint] --target tf-aws
+$ wing compile [entrypoint] --platform tf-aws
 ```
 
 The output includes both a Terraform configuration file (under `target/cdktf.out/stacks/root`) and
@@ -98,7 +99,7 @@ You can deploy your stack to AWS using Terraform ([instructions](/docs/start-her
 
 
 
-### `tf-azure` Target
+### `tf-azure` Platform
 
 Compiles your program for Terraform and run on Azure.
 
@@ -106,7 +107,7 @@ Usage:
 
 ```sh
 $ export AZURE_LOCATION="East US"
-$ wing compile [entrypoint] --target tf-azure
+$ wing compile [entrypoint] --platform tf-azure
 ```
 
 The variable `AZURE_LOCATION` is required and indicates the [deployment
@@ -117,7 +118,7 @@ The output includes both a Terraform configuration file (under `target/cdktf.out
 JavaScript bundles that include inflight code that executes on compute platform such as Azure
 Functions.
 
-### `tf-gcp` Target
+### `tf-gcp` Platform
 
 Compiles your program for Terraform and run on Google Cloud Platform.
 
@@ -126,7 +127,7 @@ Usage:
 ```sh
 $ export GOOGLE_PROJECT_ID="my-project"
 $ export GOOGLE_STORAGE_LOCATION="US"
-$ wing compile [entrypoint] --target tf-gcp
+$ wing compile [entrypoint] --platform tf-gcp
 ```
 
 The variable `GOOGLE_STORAGE_LOCATION` is required and indicates the [deployment
@@ -138,7 +139,7 @@ The output includes both a Terraform configuration file (under `target/cdktf.out
 JavaScript bundles that include inflight code that executes on compute platform such as Google Cloud Functions.
 
 
-### `awscdk` Target
+### `awscdk` Platform
 
 Compiles your program for AWS CDK with CloudFormation to run on AWS.
 
@@ -146,7 +147,7 @@ Usage:
 
 ```sh
 $ export CDK_STACK_NAME="my-project"
-$ wing compile [entrypoint] --target awscdk
+$ wing compile [entrypoint] --platform awscdk
 ```
 
 The output includes both a AWS-CDK configuration file (under `target/<entrypoint>.awscdk`) and
@@ -156,16 +157,6 @@ You can deploy your stack to AWS by installing the [AWS CDK Toolkit](https://doc
 ```sh
 $ cdk deploy --app target/app.awscdk
 ```
-
-### Plugins
-
-Additionally the `compile` command can be provided an optional list of plugins to use during the compilation process.
-
-```sh
-$ wing compile [entrypoint] --target tf-aws --plugins PLUGIN1 PLUGIN2
-```
-Each plugin can be an absolute paths or relative path to a JavaScript file. For more 
-on how to create a plugin, see [Compiler Plugins](./compiler-plugins).
 
 ## Test: `wing test`
 
