@@ -11,6 +11,7 @@ import {
   BigtableTableConfig,
   BigtableTableColumnFamily,
 } from "../.gen/providers/google/bigtable-table";
+import { NotImplementedError } from "../core/errors";
 import * as ex from "../ex";
 import {
   ResourceNames,
@@ -42,8 +43,8 @@ export class Table extends ex.Table {
     super(scope, id, props);
 
     if (props.initialRows) {
-      throw new Error(
-        `property initialRows is not supported for the GCP target`
+      throw new NotImplementedError(
+        `Property initialRows is not supported for the GCP target`
       );
     }
 
@@ -93,16 +94,18 @@ export class Table extends ex.Table {
   }
 
   public addRow(_key: string, _row: Json): void {
-    throw new Error(
+    throw new NotImplementedError(
       "Method is not supported as a preflight for the GCP target."
     );
   }
 
   public onLift(_host: IInflightHost, _ops: string[]): void {
-    throw new Error("Method not implemented.");
+    throw new NotImplementedError("Method not implemented.");
   }
 
   public _toInflight(): string {
-    throw new Error("cloud.Table cannot be used inflight on GCP yet");
+    throw new NotImplementedError(
+      "Table's Inflight client is not implemented yet on tf-GCP target"
+    );
   }
 }
