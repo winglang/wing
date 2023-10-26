@@ -1,0 +1,16 @@
+---
+source: libs/wingc/src/lsp/signature.rs
+---
+signatures:
+  - label: "(url: str, ...options): Response"
+    documentation:
+      kind: markdown
+      value: "Executes a GET request to a specified URL and provides a formatted response.\n### Parameters\n- `url` — `str` — The target URL for the GET request.\n- `...options` — `RequestOptions?` — Optional parameters for customizing the GET request.\n  \n  - `body?` — `str?` — Any body that you want to add to your request.\n  - `cache?` — `RequestCache?` — The cache mode you want to use for the request.\n  - `headers?` — `Map<str>?` — Any headers you want to add to your request.\n  - `method?` — `HttpMethod?` — The request method, e.g., GET, POST. The default is GET.\n  - `redirect?` — `RequestRedirect?` — The redirect mode to use: follow, error.\n  - `referrer?` — `str?` — A string specifying \"no-referrer\", client, or a URL.\n\n### Returns\nthe formatted response of the call"
+    parameters:
+      - label: "url: str"
+      - label: "...options"
+        documentation:
+          kind: markdown
+          value: "```wing\nstruct RequestOptions\n```\n---\nAn object containing any custom settings that you want to apply to the request.\n### Fields\n- `body?` — `str?` — Any body that you want to add to your request.\n- `cache?` — `RequestCache?` — The cache mode you want to use for the request.\n- `headers?` — `Map<str>?` — Any headers you want to add to your request.\n- `method?` — `HttpMethod?` — The request method, e.g., GET, POST. The default is GET.\n- `redirect?` — `RequestRedirect?` — The redirect mode to use: follow, error.\n- `referrer?` — `str?` — A string specifying \"no-referrer\", client, or a URL."
+    activeParameter: 0
+

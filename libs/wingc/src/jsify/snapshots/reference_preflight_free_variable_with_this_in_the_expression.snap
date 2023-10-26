@@ -32,7 +32,7 @@ module.exports = function({ $b }) {
       this.$this_name = $this_name;
     }
     async method() {
-      (await $b.put(this.$this_name,"value"));
+      (await $b.put(this.$this_name, "value"));
     }
   }
   return Foo;
@@ -50,11 +50,11 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class Foo extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         this.name = "my_object";
       }
       static _toInflightType(context) {
@@ -76,7 +76,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["method", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -90,7 +90,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

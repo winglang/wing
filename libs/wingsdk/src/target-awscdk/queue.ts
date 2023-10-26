@@ -78,6 +78,16 @@ export class Queue extends cloud.Queue {
     return fn;
   }
 
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      cloud.QueueInflightMethods.PUSH,
+      cloud.QueueInflightMethods.PURGE,
+      cloud.QueueInflightMethods.APPROX_SIZE,
+      cloud.QueueInflightMethods.POP,
+    ];
+  }
+
   public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("queues can only be bound by tfaws.Function for now");

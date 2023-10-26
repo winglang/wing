@@ -1,4 +1,5 @@
 import { Construct } from "constructs";
+import { NotImplementedError } from "./errors";
 import { Tokens } from "./tokens";
 import { SDK_PACKAGE_NAME } from "../constants";
 import { IResource } from "../std/resource";
@@ -196,7 +197,7 @@ export abstract class App extends Construct {
     const instance = this.tryNew(fqn, scope, id, ...args);
     const typeName = fqn.replace(`${SDK_PACKAGE_NAME}.`, "");
     if (!instance) {
-      throw new Error(
+      throw new NotImplementedError(
         `Resource "${fqn}" is not yet implemented for "${this._target}" target. Please refer to the roadmap https://github.com/orgs/winglang/projects/3/views/1?filterQuery=${typeName}`
       );
     }
@@ -207,22 +208,34 @@ export abstract class App extends Construct {
   /**
    * Can be overridden by derived classes to inject dependencies.
    *
+   * @param fqn The fully qualified name of the class we want the type for (jsii).
+   *
+   * @returns The dependency injected specific target type for the given FQN, or undefined if not found.
+   */
+  protected typeForFqn(fqn: string): any {
+    fqn;
+    return undefined;
+  }
+
+  /**
+   * Can be overridden by derived classes to inject dependencies.
+   *
    * @param fqn The fully qualified name of the class to instantiate (jsii).
    * @param scope The construct scope.
    * @param id The construct id.
    * @param args The arguments to pass to the constructor.
    */
-  protected tryNew(
+  private tryNew(
     fqn: string,
     scope: Construct,
     id: string,
     ...args: any[]
   ): any {
-    fqn;
-    scope;
-    id;
-    args;
-    return undefined;
+    const type = this.typeForFqn(fqn);
+    if (!type) {
+      return undefined;
+    }
+    return new type(scope, id, ...args);
   }
 
   /**

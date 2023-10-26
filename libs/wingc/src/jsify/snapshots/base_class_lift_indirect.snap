@@ -37,7 +37,7 @@ module.exports = function({  }) {
       this.$this_b = $this_b;
     }
     async put() {
-      (await this.$this_b.put("hello","world"));
+      (await this.$this_b.put("hello", "world"));
       (await this.$this_b.list());
     }
   }
@@ -73,12 +73,12 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class Base extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
       }
       static _toInflightType(context) {
         return `
@@ -98,7 +98,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["put", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -112,8 +112,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class Derived extends Base {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       static _toInflightType(context) {
         return `
@@ -133,7 +133,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["foo", "$inflight_init"];
       }
       _registerOnLift(host, ops) {

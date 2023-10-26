@@ -11,7 +11,7 @@ module.exports = function({ $r }) {
       return $obj;
     }
     async handle(message) {
-      (await $r.set("hello",message));
+      (await $r.set("hello", message));
     }
   }
   return $Closure1;
@@ -31,10 +31,10 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
     }
     async handle() {
       const connection = (await $r.rawClient());
-      (await connection.set("wing","does redis"));
+      (await connection.set("wing", "does redis"));
       const value = (await connection.get("wing"));
       {((cond) => {if (!cond) throw new Error("assertion failed: value == \"does redis\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(value,"does redis")))};
-      (await $r2.set("wing","does redis again"));
+      (await $r2.set("wing", "does redis again"));
       const value2 = (await $r2.get("wing"));
       {((cond) => {if (!cond) throw new Error("assertion failed: value2 == \"does redis again\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(value2,"does redis again")))};
       (await $queue.push("world!"));
@@ -63,7 +63,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
@@ -82,7 +82,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -558,11 +558,11 @@ const cloud = $stdlib.cloud;
 const util = $stdlib.util;
 const ex = $stdlib.ex;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -583,7 +583,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -594,8 +594,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -619,7 +619,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -631,11 +631,11 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const r = this.node.root.newAbstract("@winglang/sdk.ex.Redis",this,"ex.Redis");
-    const r2 = this.node.root.newAbstract("@winglang/sdk.ex.Redis",this,"r2");
-    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
-    (queue.setConsumer(new $Closure1(this,"$Closure1"),{ timeout: (std.Duration.fromSeconds(3)) }));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:testing Redis",new $Closure2(this,"$Closure2"));
+    const r = this.node.root.newAbstract("@winglang/sdk.ex.Redis",this, "ex.Redis");
+    const r2 = this.node.root.newAbstract("@winglang/sdk.ex.Redis",this, "r2");
+    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue");
+    (queue.setConsumer(new $Closure1(this, "$Closure1"), { timeout: (std.Duration.fromSeconds(3)) }));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:testing Redis", new $Closure2(this, "$Closure2"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
