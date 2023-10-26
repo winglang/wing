@@ -348,7 +348,7 @@ exports[`ambiguous_api_paths.test.w 1`] = `
 
 ERROR: Endpoint for path '/test/{variable}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '/test/path'
 
-../../../examples/tests/invalid/target/test/ambiguous_api_paths.test.tfaws.771675.tmp/.wing/preflight.js:39
+../../../examples/tests/invalid/target/test/ambiguous_api_paths.test.tfaws.534941.tmp/.wing/preflight.js:39
        const handler = new $Closure1(this, \\"$Closure1\\");
        (api.get(\\"<ABSOLUTE_PATH>/path\\", handler));
 >>     (api.get(\\"<ABSOLUTE_PATH>/{variable}\\", handler));
@@ -3665,8 +3665,8 @@ Command failed: terraform destroy -auto-approve
 [31m╷[0m[0m
 [31m│[0m [0m[1m[31mError: [0m[0m[1mUnclosed template interpolation sequence[0m
 [31m│[0m [0m
-[31m│[0m [0m[0m  on main.tf.json line 90, in resource.aws_lambda_function.TestZa12WDlFyI_env0_cloudFunction_7FB6B6FB.environment.variables:
-[31m│[0m [0m  90:             \\"FOO_VALUE\\": \\"[4m\${[0mroot/Test.Za12WDlFyI/env0/sim.State#attrs.my_unresolved_token}\\",[0m
+[31m│[0m [0m[0m  on main.tf.json line 90, in resource.aws_lambda_function.TestMZXYrZOZn5_env0_cloudFunction_2F54139A.environment.variables:
+[31m│[0m [0m  90:             \\"FOO_VALUE\\": \\"[4m\${[0mroot/Test.MZXYrZOZn5/env0/sim.State#attrs.my_unresolved_token}\\",[0m
 [31m│[0m [0m
 [31m│[0m [0mThere is no closing brace for this interpolation sequence before the end of
 [31m│[0m [0mthe file. This might be caused by incorrect nesting inside the given

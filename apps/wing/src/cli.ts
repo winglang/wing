@@ -138,7 +138,12 @@ async function main() {
     .command("compile")
     .description("Compiles a Wing program")
     .argument("[entrypoint]", "program .w entrypoint")
-    .addOption(new Option("-t, --platform <platform...>", "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk)").default(["sim"]))
+    .addOption(
+      new Option(
+        "-t, --platform <platform...>",
+        "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk)"
+      ).default(["sim"])
+    )
     .option("-r, --rootId <rootId>", "App root id")
     .option("-v, --value <value>", "Platform-specific value in the form KEY=VALUE", addValue, [])
     .option("--values <file>", "Yaml file with Platform-specific values")
@@ -152,7 +157,12 @@ async function main() {
       "Compiles a Wing program and runs all functions with the word 'test' or start with 'test:' in their resource identifiers"
     )
     .argument("[entrypoint...]", "all files to test (globs are supported)")
-    .addOption(new Option("-t, --platform <platform...>", "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk)").default(["sim"]))
+    .addOption(
+      new Option(
+        "-t, --platform <platform...>",
+        "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk)"
+      ).default(["sim"])
+    )
     .option("-r, --rootId <rootId>", "App root id")
     .option(
       "-f, --test-filter <regex>",

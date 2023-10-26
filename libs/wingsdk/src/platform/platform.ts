@@ -12,7 +12,7 @@ export interface IPlatform {
    */
   readonly model: string;
 
-  // TODO: implement newInstance
+  // TODO: implement newInstance https://github.com/winglang/wing/issues/4680
   // newInstance?(type: string, scope: Construct, id: string, props: any): any;
 
   /**
