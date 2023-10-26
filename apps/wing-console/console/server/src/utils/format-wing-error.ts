@@ -167,7 +167,7 @@ export const formatWingError = async (error: unknown) => {
         "",
         "",
         "Internal error:" +
-        " An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace.",
+          " An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace.",
       );
       return message.join("\n");
     }
