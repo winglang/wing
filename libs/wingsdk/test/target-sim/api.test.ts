@@ -44,7 +44,7 @@ test("create an api", async () => {
         paths: {},
       },
     },
-    type: "wingsdk.cloud.Api",
+    type: cloud.API_FQN,
   });
   await s.stop();
 

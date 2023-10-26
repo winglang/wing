@@ -1330,7 +1330,7 @@ impl<'a> JSifier<'a> {
 	fn jsify_get_inflight_ops_method(&self, class: &AstClass) -> CodeMaker {
 		let mut code = CodeMaker::default();
 
-		code.open("_getInflightOps() {");
+		code.open("_supportedOps() {");
 
 		let mut ops = vec![];
 		for field in class.inflight_fields() {

@@ -194,7 +194,7 @@ export const createConsoleServer = async ({
     }
 
     if (
-      trace.sourceType === "wingsdk.cloud.Queue" &&
+      trace.sourceType === "@winglang/sdk.cloud.Queue" &&
       // TODO: Change implementation after https://github.com/winglang/wing/issues/1713 is done
       trace.data.message?.includes("Sending messages")
     ) {

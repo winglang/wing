@@ -90,6 +90,7 @@ module.exports = function({  }) {
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   const blah = require("./preflight.inner-2.js")({ $stdlib });
+  const cloud = $stdlib.cloud;
   const util = $stdlib.util;
   class Foo extends $stdlib.std.Resource {
     constructor($scope, $id, ) {
@@ -118,7 +119,7 @@ module.exports = function({ $stdlib }) {
         })())
       `;
     }
-    _getInflightOps() {
+    _supportedOps() {
       return ["$inflight_init"];
     }
   }
@@ -138,6 +139,7 @@ module.exports = function({ $stdlib }) {
       super($scope, $id);
     }
     bar() {
+      (util.Util.nanoid());
       return "bar";
     }
     static _toInflightType(context) {
@@ -157,7 +159,7 @@ module.exports = function({ $stdlib }) {
         })())
       `;
     }
-    _getInflightOps() {
+    _supportedOps() {
       return ["$inflight_init"];
     }
   }
@@ -182,7 +184,7 @@ module.exports = function({ $stdlib }) {
         })())
       `;
     }
-    _getInflightOps() {
+    _supportedOps() {
       return ["$inflight_init"];
     }
   }
@@ -278,7 +280,7 @@ module.exports = function({ $stdlib }) {
         })())
       `;
     }
-    _getInflightOps() {
+    _supportedOps() {
       return ["$inflight_init"];
     }
   }

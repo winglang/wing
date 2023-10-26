@@ -25,7 +25,7 @@ test("create a table", async () => {
       },
       hashKey: "id",
     },
-    type: "wingsdk.ex.DynamodbTable",
+    type: ex.DYNAMODB_TABLE_FQN,
   });
   await s.stop();
 
@@ -60,7 +60,7 @@ test("put item", async () => {
       },
       hashKey: "id",
     },
-    type: "wingsdk.ex.DynamodbTable",
+    type: ex.DYNAMODB_TABLE_FQN,
   });
   await s.stop();
 
@@ -96,7 +96,7 @@ test("get item", async () => {
       },
       hashKey: "id",
     },
-    type: "wingsdk.ex.DynamodbTable",
+    type: ex.DYNAMODB_TABLE_FQN,
   });
   await s.stop();
 
@@ -139,7 +139,7 @@ test("update item", async () => {
       },
       hashKey: "id",
     },
-    type: "wingsdk.ex.DynamodbTable",
+    type: ex.DYNAMODB_TABLE_FQN,
   });
   await s.stop();
 

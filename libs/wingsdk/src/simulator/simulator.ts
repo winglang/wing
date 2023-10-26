@@ -5,8 +5,6 @@ import { SDK_VERSION } from "../constants";
 import { ConstructTree, TREE_FILE_PATH } from "../core";
 import { readJsonSync } from "../shared/misc";
 import { CONNECTIONS_FILE_PATH, Trace, TraceType } from "../std";
-// eslint-disable-next-line import/no-restricted-paths
-import { DefaultSimulatorFactory } from "../target-sim/factory.inflight";
 import { isToken } from "../target-sim/tokens";
 
 const START_ATTEMPT_COUNT = 10;
@@ -129,7 +127,6 @@ export interface ITraceSubscriber {
  */
 export class Simulator {
   // fields that are same between simulation runs / reloads
-  private readonly _factory: ISimulatorFactory;
   private _config: WingSimulatorSchema;
   private readonly simdir: string;
 
@@ -149,7 +146,6 @@ export class Simulator {
     this._connections = connectionData;
 
     this._running = false;
-    this._factory = props.factory ?? new DefaultSimulatorFactory();
     this._handles = new HandleManager();
     this._traces = new Array();
     this._traceSubscribers = new Array();
@@ -361,6 +357,10 @@ export class Simulator {
     return config;
   }
 
+  private typeInfo(fqn: string): TypeSchema {
+    return this._config.types[fqn];
+  }
+
   /**
    * Register a subscriber that will be notified when a trace is emitted by
    * the simulator.
@@ -403,13 +403,13 @@ export class Simulator {
       return false;
     }
 
+    // look up the location of the code for the type
+    const typeInfo = this.typeInfo(resourceConfig.type);
+
     // create the resource based on its type
-    const resourceObject = this._factory.resolve(
-      resourceConfig.path,
-      resourceConfig.type,
-      resolvedProps,
-      context
-    );
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const ResourceType = require(typeInfo.sourcePath)[typeInfo.className];
+    const resourceObject = new ResourceType(resolvedProps, context);
 
     // go ahead and initialize the resource
     const attrs = await resourceObject.init();
@@ -574,7 +574,6 @@ export interface ISimulatorFactory {
    * Resolve the parameters needed for creating a specific resource simulation.
    */
   resolve(
-    path: string,
     type: string,
     props: any,
     context: ISimulatorContext
@@ -640,8 +639,18 @@ export interface ISimulatorResourceInstance {
 export interface WingSimulatorSchema {
   /** The list of resources. */
   readonly resources: BaseResourceSchema[];
+  /** The map of types. */
+  readonly types: { [fqn: string]: TypeSchema };
   /** The version of the Wing SDK used to synthesize the .wsim file. */
   readonly sdkVersion: string;
+}
+
+/** Schema for individual types. */
+export interface TypeSchema {
+  /** Location of the source file that exports a simulation API. */
+  readonly sourcePath: string;
+  /** Name of the class that is exported by the `sourcePath`. */
+  readonly className: string;
 }
 
 /** Schema for individual resources */
