@@ -35,7 +35,13 @@ assert(addNums(1, 2, 3) == 6);
 assert(addNums() == 0);
 
 let arityFunc = (n: num, b: bool, ...events: Array<Json>) => {
-  assert(events.at(-1) == "d");
+   let var error = false;
+   try {
+     events.at(-1);
+   } catch ex {
+      error = true;
+   }
+   assert(error);
 };
 
 arityFunc(1, true, "a", "b", "c", "d"); // variadic args should be considered correctly in the arity check

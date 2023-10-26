@@ -312,7 +312,7 @@ class $Root extends $stdlib.std.Resource {
       if ((parts.length < 1)) {
         return undefined;
       }
-      return ({"first": (parts.at(0)),"last": (parts.at(1))});
+      return ({"first": ((parts.at(0)) ?? ""),"last": ((parts.at(1)) ?? "")});
     });
     const json_obj = ({"ghost": "spooky"});
     let something_else = false;
@@ -381,12 +381,8 @@ class $Root extends $stdlib.std.Resource {
       if ($if_let_value != undefined) {
         const parsedName = $if_let_value;
         {((cond) => {if (!cond) throw new Error("assertion failed: parsedName.first == \"BadName\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(parsedName.first,"BadName")))};
-        {
-          const $if_let_value = parsedName.last;
-          if ($if_let_value != undefined) {
-            const lastName = $if_let_value;
-            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
-          }
+        if ((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(parsedName.last,""))) {
+          {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
         }
       }
     }

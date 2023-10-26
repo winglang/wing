@@ -98,7 +98,7 @@ if let parsedName = tryParseName("Good Name") {
 
 if let parsedName = tryParseName("BadName") {
   assert(parsedName.first == "BadName");
-  if (parsedName.last !="") {
+  if parsedName.last != "" {
     assert(false); // No last name should exist
   }
 }
