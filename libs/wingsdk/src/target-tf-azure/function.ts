@@ -259,6 +259,11 @@ export class Function extends cloud.Function {
     return lines;
   }
 
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [cloud.FunctionInflightMethods.INVOKE];
+  }
+
   public onLift(host: IInflightHost, ops: string[]): void {
     //TODO: add permissions here when changing auth level: https://github.com/winglang/wing/issues/4497
     host.addEnvironment(this.envName(), this.function.name);

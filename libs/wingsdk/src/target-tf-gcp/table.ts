@@ -87,6 +87,11 @@ export class Table extends ex.Table {
     new BigtableTable(this, "Default", tableConfig);
   }
 
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [];
+  }
+
   public addRow(_key: string, _row: Json): void {
     throw new Error(
       "Method is not supported as a preflight for the GCP target."

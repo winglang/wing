@@ -54,14 +54,7 @@ export abstract class Queue extends Resource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      QueueInflightMethods.PUSH,
-      QueueInflightMethods.PURGE,
-      QueueInflightMethods.APPROX_SIZE,
-      QueueInflightMethods.POP,
-    ];
-  }
+  public abstract _supportedOps(): string[];
 
   /**
    * Create a function to consume messages from this queue.
