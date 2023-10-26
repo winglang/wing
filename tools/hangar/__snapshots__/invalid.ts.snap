@@ -793,14 +793,14 @@ Duration <DURATION>"
 `;
 
 exports[`cloud_function_expects_inflight.test.w 1`] = `
-"error: Expected phase to be preflight, but got inflight instead
+"error: Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead (hint: expected phase to be inflight, but got preflight instead)
   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.test.w:3:20
   |  
 3 |   new cloud.Function((name: str): str => {
   | /--------------------^
 4 | |   return \\"Hello \${name}\\";
 5 | | });
-  | \\\\-^ Expected phase to be preflight, but got inflight instead
+  | \\\\-^ Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead (hint: expected phase to be inflight, but got preflight instead)
 
 
 error: Expected type to be \\"inflight (message: str): void\\", but got \\"inflight (x: num): unknown\\" instead
@@ -2485,25 +2485,39 @@ Duration <DURATION>"
 exports[`panic.test.w 2`] = `"Panicked, backtrace not captured: Unsupported"`;
 
 exports[`phase_mismatch.test.w 1`] = `
-"error: Expected phase to be preflight, but got inflight instead
+"error: Expected type to be \\"inflight (num): num\\", but got \\"preflight (n: num): num\\" instead (hint: expected phase to be inflight, but got preflight instead)
   --> ../../../examples/tests/invalid/phase_mismatch.test.w:2:10
   |
 2 | my_func1((n: num): num => { return n * 2; });
-  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected phase to be preflight, but got inflight instead
+  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"inflight (num): num\\", but got \\"preflight (n: num): num\\" instead (hint: expected phase to be inflight, but got preflight instead)
 
 
-error: Expected phase to be inflight, but got preflight instead
+error: Expected type to be \\"preflight (num): num\\", but got \\"inflight (n: num): num\\" instead (hint: expected phase to be preflight, but got inflight instead)
   --> ../../../examples/tests/invalid/phase_mismatch.test.w:5:10
   |
 5 | my_func2(inflight (n: num): num => { return n * 2; });
-  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected phase to be inflight, but got preflight instead
+  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"preflight (num): num\\", but got \\"inflight (n: num): num\\" instead (hint: expected phase to be preflight, but got inflight instead)
 
 
-error: Expected phase to be preflight, but got inflight instead
+error: Expected type to be \\"inflight (n: num): num\\", but got \\"preflight (n: num): num\\" instead (hint: expected phase to be inflight, but got preflight instead)
    --> ../../../examples/tests/invalid/phase_mismatch.test.w:12:10
    |
 12 | my_func3((n: num): num => { return n * 2; });
-   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected phase to be preflight, but got inflight instead
+   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"inflight (n: num): num\\", but got \\"preflight (n: num): num\\" instead (hint: expected phase to be inflight, but got preflight instead)
+
+
+error: Expected type to be \\"preflight (num): num\\", but got \\"inflight (s: str): str\\" instead (hint: expected phase to be preflight, but got inflight instead)
+   --> ../../../examples/tests/invalid/phase_mismatch.test.w:15:10
+   |
+15 | my_func4(inflight (s: str): str => { return s.uppercase(); });
+   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"preflight (num): num\\", but got \\"inflight (s: str): str\\" instead (hint: expected phase to be preflight, but got inflight instead)
+
+
+error: Expected type to be \\"preflight (inflight (str): str): void\\", but got \\"preflight (inner_fn: preflight (preflight (str): str): void): void\\" instead
+   --> ../../../examples/tests/invalid/phase_mismatch.test.w:25:18
+   |
+25 | accepts_callback(callback); // error
+   |                  ^^^^^^^^ Expected type to be \\"preflight (inflight (str): str): void\\", but got \\"preflight (inner_fn: preflight (preflight (str): str): void): void\\" instead
 
 
  
