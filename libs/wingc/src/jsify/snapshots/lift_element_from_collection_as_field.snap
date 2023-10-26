@@ -29,7 +29,7 @@ module.exports = function({  }) {
       this.$__obj__args_______if__args_0____0____args_0_____this_arr_length__throw_new_Error__Index_out_of_bounds____return_obj_args_0_______this_arr___0__ = $__obj__args_______if__args_0____0____args_0_____this_arr_length__throw_new_Error__Index_out_of_bounds____return_obj_args_0_______this_arr___0__;
     }
     async foo() {
-      (await this.$__obj__args_______if__args_0____0____args_0_____this_arr_length__throw_new_Error__Index_out_of_bounds____return_obj_args_0_______this_arr___0__.put("hello","world"));
+      (await this.$__obj__args_______if__args_0____0____args_0_____this_arr_length__throw_new_Error__Index_out_of_bounds____return_obj_args_0_______this_arr___0__.put("hello", "world"));
     }
   }
   return Foo;
