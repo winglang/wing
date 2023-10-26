@@ -411,6 +411,7 @@ impl<'a> JSifier<'a> {
 						message: "Cannot reference an inflight value from within a preflight expression".to_string(),
 						span: Some(expression.span.clone()),
 						annotations: vec![],
+						hints: vec![],
 					});
 
 					return "<ERROR>".to_string();

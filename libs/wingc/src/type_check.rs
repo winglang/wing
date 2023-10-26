@@ -1477,6 +1477,7 @@ impl Types {
 					message: format!("Inferred type {new_type} conflicts with already inferred type {existing_type}"),
 					span: Some(span.clone()),
 					annotations: vec![],
+					hints: vec![],
 				});
 				existing_type_option.replace(error);
 				return;
@@ -1787,6 +1788,7 @@ impl<'a> TypeChecker<'a> {
 			message: message.into(),
 			span: Some(spanned.span()),
 			annotations: vec![],
+			hints: vec![],
 		});
 
 		(self.make_error_variable_info(), Phase::Independent)
@@ -1797,6 +1799,16 @@ impl<'a> TypeChecker<'a> {
 			message: message.into(),
 			span: Some(spanned.span()),
 			annotations: vec![],
+			hints: vec![],
+		});
+	}
+
+	fn spanned_error_with_hints<S: Into<String>>(&self, spanned: &impl Spanned, message: S, hints: Vec<String>) {
+		report_diagnostic(Diagnostic {
+			message: message.into(),
+			span: Some(spanned.span()),
+			annotations: vec![],
+			hints: hints,
 		});
 	}
 
@@ -1805,6 +1817,7 @@ impl<'a> TypeChecker<'a> {
 			message: message.into(),
 			span: None,
 			annotations: vec![],
+			hints: vec![],
 		});
 	}
 
@@ -1818,6 +1831,7 @@ impl<'a> TypeChecker<'a> {
 			message,
 			span: Some(span),
 			annotations,
+			hints: vec![],
 		});
 
 		self.types.error()
@@ -2921,13 +2935,18 @@ impl<'a> TypeChecker<'a> {
 			format!("\"{}\"", first_expected_type)
 		};
 
-		let mut message = format!("Expected type to be {expected_type_str}, but got \"{return_type}\" instead");
+		let message = format!("Expected type to be {expected_type_str}, but got \"{return_type}\" instead");
+		let mut hints: Vec<String> = vec![];
 		if return_type.is_nil() && expected_types.len() == 1 {
-			message = format!("{message} (hint: to allow \"nil\" assignment use optional type: \"{first_expected_type}?\")");
+			hints.push(format!(
+				"to allow \"nil\" assignment use optional type: \"{first_expected_type}?\""
+			));
 		}
 		if return_type.maybe_unwrap_option().is_json() {
 			// known json data is statically known
-			message = format!("{message} (hint: use {first_expected_type}.fromJson() to convert dynamic Json)");
+			hints.push(format!(
+				"use {first_expected_type}.fromJson() to convert dynamic Json\""
+			));
 		}
 		if let Some(function_signature) = actual_type.as_deep_function_sig() {
 			// No phases match
@@ -2940,16 +2959,16 @@ impl<'a> TypeChecker<'a> {
 					t.as_deep_function_sig()
 						.is_some_and(|f| !function_signature.phase.is_subtype_of(&f.phase))
 				}) {
-					message = format!(
-						"{message} (hint: expected phase to be {}, but got {} instead)",
+					hints.push(format!(
+						"expected phase to be {}, but got {} instead",
 						expected_function_type.as_deep_function_sig().unwrap().phase,
 						function_signature.phase
-					);
+					));
 				}
 			}
 		}
 
-		self.spanned_error(span, message);
+		self.spanned_error_with_hints(span, message, hints);
 
 		// Evaluate to one of the expected types
 		first_expected_type
@@ -3012,6 +3031,7 @@ impl<'a> TypeChecker<'a> {
 							message: format!("Could not bring \"{}\" due to cyclic bring statements", source_path,),
 							span: None,
 							annotations: vec![],
+							hints: vec![],
 						}),
 					);
 					return;
@@ -3034,6 +3054,7 @@ impl<'a> TypeChecker<'a> {
 							message: format!("Symbol \"{}\" has multiple definitions in \"{}\"", key, source_path),
 							span: None,
 							annotations: vec![],
+							hints: vec![],
 						}),
 					);
 					return;
@@ -4001,6 +4022,7 @@ impl<'a> TypeChecker<'a> {
 					message: "defined here (try adding \"var\" in front)".to_string(),
 					span: var.name.span(),
 				}],
+				hints: vec![],
 			});
 		} else if var_phase == Phase::Preflight && env.phase == Phase::Inflight {
 			self.spanned_error(variable, "Variable cannot be reassigned from inflight".to_string());

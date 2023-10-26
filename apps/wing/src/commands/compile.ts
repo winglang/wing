@@ -100,7 +100,7 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
       const result = [];
 
       for (const diagnostic of diagnostics) {
-        const { message, span, annotations } = diagnostic;
+        const { message, span, annotations, hints } = diagnostic;
         const files: File[] = [];
         const labels: Label[] = [];
 
@@ -150,6 +150,7 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
             message,
             severity: "error",
             labels,
+            notes: hints.map((hint) => `hint: ${hint}`),
           },
           {
             chars: CHARS_ASCII,

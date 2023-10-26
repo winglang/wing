@@ -42,7 +42,7 @@ export const formatWingError = async (error: unknown) => {
       const result = [];
 
       for (const error of errors) {
-        const { message, span, annotations } = error;
+        const { message, span, annotations, hints } = error;
         const files: File[] = [];
         const labels: Label[] = [];
         const cwd = process.cwd();
@@ -102,6 +102,7 @@ export const formatWingError = async (error: unknown) => {
             message,
             severity: "error",
             labels,
+            notes: hints.map((hint) => `hint: ${hint}`),
           },
           {
             chars: CHARS_ASCII,
@@ -166,7 +167,7 @@ export const formatWingError = async (error: unknown) => {
         "",
         "",
         "Internal error:" +
-          " An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace.",
+        " An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace.",
       );
       return message.join("\n");
     }
