@@ -23,6 +23,9 @@ env:
   REPO: ${{ inputs.repo || github.repository }}
   REF: ${{ inputs.ref || github.ref }}
   PNPM_VERSION: "8.6.3"
+  AZURE_LOCATION: "East Us"
+  GOOGLE_PROJECT_ID: "sdk-spec-tests" # for the future
+  GOOGLE_REGION: "us-central1" # for the future
 
 jobs:
   setup:
