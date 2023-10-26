@@ -12,13 +12,6 @@ on:
         type: string
         default: main
         description: "Ref to checkout. Must be present in the repo input."
-      targets:
-        type: choice
-        options:
-          - sim
-          - tf-aws
-          - tf-azure
-
 env:
   AWS_REGION: "us-east-1"
   NODE_VERSION: "18.16.0"
