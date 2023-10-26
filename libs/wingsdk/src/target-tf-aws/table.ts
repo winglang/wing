@@ -80,10 +80,8 @@ export class Table extends ex.Table {
     }
 
     if (
-      ops.includes(
-        ex.TableInflightMethods.GET ||
-          ops.includes(ex.TableInflightMethods.TRYGET)
-      )
+      ops.includes(ex.TableInflightMethods.GET) ||
+      ops.includes(ex.TableInflightMethods.TRYGET)
     ) {
       host.addPolicyStatements({
         actions: ["dynamodb:GetItem"],
