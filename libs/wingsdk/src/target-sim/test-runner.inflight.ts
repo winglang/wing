@@ -3,7 +3,7 @@ import { IFunctionClient } from "../cloud";
 import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
 import { ITestRunnerClient, TestResult } from "../std";
 
-export class TestRunnerClient
+export class TestRunner
   implements ITestRunnerClient, ISimulatorResourceInstance
 {
   // A map from test paths to their corresponding function handles.

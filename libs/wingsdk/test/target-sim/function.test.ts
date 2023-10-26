@@ -50,7 +50,7 @@ test("create a function", async () => {
       },
       timeout: 60000,
     },
-    type: "wingsdk.cloud.Function",
+    type: cloud.FUNCTION_FQN,
   });
   await s.stop();
 

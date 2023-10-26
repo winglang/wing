@@ -23,7 +23,7 @@ test("create a counter", async () => {
     props: {
       initial: 123,
     },
-    type: "wingsdk.cloud.Counter",
+    type: cloud.COUNTER_FQN,
   });
   await s.stop();
 

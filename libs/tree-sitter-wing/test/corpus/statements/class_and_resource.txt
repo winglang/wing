@@ -73,7 +73,6 @@ class A {
     init() {}
     inflight init() {}
     preflight_func() {}
-    async preflight_func() {}
     pub preflight_func2() {}
     inflight inflight_func() {}
     pub inflight inflight_func2(): num {}
@@ -101,11 +100,6 @@ class A {
         parameter_list: (parameter_list)
         block: (block))
       (method_definition
-        name: (identifier)
-        parameter_list: (parameter_list)
-        block: (block))
-      (method_definition
-        async: (async_modifier)
         name: (identifier)
         parameter_list: (parameter_list)
         block: (block))

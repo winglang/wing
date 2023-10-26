@@ -104,7 +104,7 @@ export abstract class Table extends Resource {
   }
 
   /** @internal */
-  public _getInflightOps(): string[] {
+  public _supportedOps(): string[] {
     return [
       TableInflightMethods.INSERT,
       TableInflightMethods.UPSERT,
