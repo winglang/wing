@@ -254,11 +254,18 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: bimodal.at(1) == 7")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= bimodal.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(bimodal, [1]),7)))};
     const multimodal_arr = [1, 3, 4, 7, 7, 9, 9, 2, 2];
     const multimodal = (math.Util.mode(multimodal_arr));
+<<<<<<< HEAD
 
     {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(0) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= multimodal.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(multimodal, [0]),2)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(1) == 7")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= multimodal.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(multimodal, [1]),7)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(2) == 9")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= multimodal.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(multimodal, [2]),9)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight mode",new $Closure2(this,"$Closure2"));
+=======
+    {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(0) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= multimodal.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(multimodal, [0]),2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(1) == 7")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= multimodal.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(multimodal, [1]),7)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(2) == 9")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= multimodal.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(multimodal, [2]),9)))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight mode", new $Closure2(this, "$Closure2"));
+>>>>>>> 0aebeb2d3 (Fixing failing unittests.)
     const mean_arr = [4, 36, 45, 50, 75];
     {((cond) => {if (!cond) throw new Error("assertion failed: math.arithmeticMean(mean_arr) == 42")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.arithmeticMean(mean_arr)),42)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: math.geometricMean(mean_arr) == 30")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.geometricMean(mean_arr)),30)))};

@@ -787,8 +787,8 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: \"BooM\".uppercase() == \"BOOM\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("BooM".toLocaleUpperCase(),"BOOM")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".uppercase() == \"BOOM\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("boom".toLocaleUpperCase(),"BOOM")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: \"123#@\".uppercase() == \"123#@\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("123#@".toLocaleUpperCase(),"123#@")))};
-<<<<<<< HEAD
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:uppercase()", new $Closure8(this, "$Closure8"));
+<<<<<<< HEAD
     {((cond) => {if (!cond) throw new Error("assertion failed: \"hello;wing\".split(\";\").at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= ("hello;wing".split(";")).length) throw new Error("Index out of bounds"); return obj[args[0]]; })(("hello;wing".split(";")), [0]),"hello")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: \"hello;wing\".split(\";\").at(1) == \"wing\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= ("hello;wing".split(";")).length) throw new Error("Index out of bounds"); return obj[args[0]]; })(("hello;wing".split(";")), [1]),"wing")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\" \").at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= ("hello wing".split(" ")).length) throw new Error("Index out of bounds"); return obj[args[0]]; })(("hello wing".split(" ")), [0]),"hello")))};
@@ -799,6 +799,8 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:split()", new $Closure9(this, "$Closure9"));
 =======
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:uppercase()",new $Closure8(this,"$Closure8"));
+=======
+>>>>>>> 0aebeb2d3 (Fixing failing unittests.)
     {((cond) => {if (!cond) throw new Error("assertion failed: \"hello;wing\".split(\";\").at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= ("hello;wing".split(";")).length) throw new Error("Index out of bounds"); return obj[args[0]]; })(("hello;wing".split(";")), [0]),"hello")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: \"hello;wing\".split(\";\").at(1) == \"wing\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= ("hello;wing".split(";")).length) throw new Error("Index out of bounds"); return obj[args[0]]; })(("hello;wing".split(";")), [1]),"wing")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\" \").at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= ("hello wing".split(" ")).length) throw new Error("Index out of bounds"); return obj[args[0]]; })(("hello wing".split(" ")), [0]),"hello")))};
@@ -806,8 +808,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\"\").length == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("hello wing".split("")).length,10)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\"\").at(0) == \"h\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= ("hello wing".split("")).length) throw new Error("Index out of bounds"); return obj[args[0]]; })(("hello wing".split("")), [0]),"h")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\"\").at(1) == \"e\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (args[0] < 0 || args[0] >= ("hello wing".split("")).length) throw new Error("Index out of bounds"); return obj[args[0]]; })(("hello wing".split("")), [1]),"e")))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:split()",new $Closure9(this,"$Closure9"));
->>>>>>> f654d7855 (Fixing tests.)
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:split()", new $Closure9(this, "$Closure9"));
     {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".startsWith(\"h\")")})("hello wing".startsWith("h"))};
     {((cond) => {if (!cond) throw new Error("assertion failed: !\"hello wing\".startsWith(\"H\")")})((!"hello wing".startsWith("H")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: !\"hello wing\".startsWith(\"w\")")})((!"hello wing".startsWith("w")))};
