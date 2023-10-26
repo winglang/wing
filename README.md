@@ -42,7 +42,7 @@ Cloud applications are fundamentally different from applications that run on a s
 they are distributed systems that rely on cloud infrastructure to achieve their goals.
 
 In order to be able to express both infrastructure and application logic in a safe and unified programming model, 
-Winglang has two execution phases: *preflight* for infrastructure definitions and *inflight*  for runtime code.
+Winglang has two execution phases: *preflight* for infrastructure definitions and *inflight* for runtime code.
 
 Preflight code is executed *during compilation* and produces the infrastructure configuration for your app (e.g. **Terraform**, **CloudFormation**, etc).
 Inflight code is compiled into **JavaScript** and executed within cloud compute platforms in Node.js environments.
