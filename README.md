@@ -79,7 +79,7 @@ You are welcome to read more about it [here](https://www.winglang.io/docs/faq/wh
 
 ## What makes Wing a good fit for cloud development? 🌟
 
-Wing was built from the scratch to make it easy for building applications on any cloud.
+Wing was built from scratch to make it easy for building applications on any cloud.
 It includes an assembly of different features that serve that purpose:
 
 * [Cloud services](https://www.winglang.io/docs/faq/supported-clouds-services-and-engines/supported-services) as first-class citizens, with [phase modifiers](https://www.winglang.io/contributing/rfcs/language-spec#13-phase-modifiers) for describing infrastructure and runtime code ([`preflight` and `inflight`](https://www.winglang.io/docs/concepts/inflights)). 
