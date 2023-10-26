@@ -128,13 +128,7 @@ export abstract class Service extends Resource implements IInflightHost {
   }
 
   /** @internal */
-  public _getInflightOps(): string[] {
-    return [
-      ServiceInflightMethods.START,
-      ServiceInflightMethods.STOP,
-      ServiceInflightMethods.STARTED,
-    ];
-  }
+  public abstract _supportedOps(): string[];
 }
 
 /**

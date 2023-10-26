@@ -72,6 +72,25 @@ export class Bucket extends cloud.Bucket {
     });
   }
 
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      cloud.BucketInflightMethods.DELETE,
+      cloud.BucketInflightMethods.GET,
+      cloud.BucketInflightMethods.GET_JSON,
+      cloud.BucketInflightMethods.LIST,
+      cloud.BucketInflightMethods.PUT,
+      cloud.BucketInflightMethods.PUT_JSON,
+      cloud.BucketInflightMethods.PUBLIC_URL,
+      cloud.BucketInflightMethods.EXISTS,
+      cloud.BucketInflightMethods.TRY_GET,
+      cloud.BucketInflightMethods.TRY_GET_JSON,
+      cloud.BucketInflightMethods.TRY_DELETE,
+      cloud.BucketInflightMethods.SIGNED_URL,
+      cloud.BucketInflightMethods.METADATA,
+    ];
+  }
+
   protected eventHandlerLocation(): string {
     return join(__dirname, "bucket.onevent.inflight.js");
   }

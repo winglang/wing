@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
-import { core } from "..";
 import * as cloud from "../cloud";
+import { NotImplementedError } from "../core/errors";
 import { getPlatformSpecificValues } from "../util/platform-specific";
 
 /**
@@ -51,6 +51,8 @@ export class Domain extends cloud.Domain {
 
   /** @internal */
   public _toInflight(): string {
-    return core.InflightClient.for(__dirname, __filename, "DomainClient", []);
+    throw new NotImplementedError(
+      "Domain inflight client is not implemented yet on this target."
+    );
   }
 }

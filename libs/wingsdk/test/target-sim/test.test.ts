@@ -29,7 +29,7 @@ test("create a test", async () => {
       sourceCodeLanguage: "javascript",
       timeout: 60000,
     },
-    type: "wingsdk.cloud.Function",
+    type: "@winglang/sdk.cloud.Function",
   });
   await s.stop();
 

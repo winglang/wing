@@ -38,6 +38,7 @@ import {
 import { PluginManager } from "../core/plugin-manager";
 import { DYNAMODB_TABLE_FQN } from "../ex";
 import { TEST_RUNNER_FQN } from "../std";
+import { Util } from "../util";
 
 /**
  * AWS-CDK App props
@@ -73,7 +74,7 @@ export class App extends CoreApp {
   protected readonly testRunner: TestRunner;
 
   constructor(props: CdkAppProps) {
-    const stackName = props.stackName ?? process.env.CDK_STACK_NAME;
+    let stackName = props.stackName ?? process.env.CDK_STACK_NAME;
     if (stackName === undefined) {
       throw new Error(
         "A CDK stack name must be specified through the CDK_STACK_NAME environment variable."
@@ -82,6 +83,10 @@ export class App extends CoreApp {
 
     const outdir = props.outdir ?? ".";
     const cdkOutdir = join(outdir, ".");
+
+    if (props.isTestEnvironment) {
+      stackName += Util.sha256(outdir.replace(/\.tmp$/, "")).slice(-8);
+    }
 
     mkdirSync(cdkOutdir, { recursive: true });
 

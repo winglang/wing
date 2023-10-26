@@ -22,7 +22,7 @@ test("create an OnDeploy", async () => {
     props: {
       functionHandle: expect.any(String),
     },
-    type: "wingsdk.cloud.OnDeploy",
+    type: cloud.ON_DEPLOY_FQN,
   });
 
   await s.stop();

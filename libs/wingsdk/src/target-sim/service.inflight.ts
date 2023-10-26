@@ -1,10 +1,10 @@
 import { resolve } from "path";
+import { ServiceAttributes, ServiceSchema } from "./schema-resources";
 import {
-  SERVICE_TYPE,
-  ServiceAttributes,
-  ServiceSchema,
-} from "./schema-resources";
-import { IServiceClient, IServiceStopHandlerClient } from "../cloud";
+  IServiceClient,
+  IServiceStopHandlerClient,
+  SERVICE_FQN,
+} from "../cloud";
 import { Sandbox } from "../shared/sandbox";
 import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
 import { TraceType } from "../std";
@@ -29,7 +29,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
           data: { message },
           type: TraceType.LOG,
           sourcePath: this.context.resourcePath,
-          sourceType: SERVICE_TYPE,
+          sourceType: SERVICE_FQN,
           timestamp: new Date().toISOString(),
         });
       },
