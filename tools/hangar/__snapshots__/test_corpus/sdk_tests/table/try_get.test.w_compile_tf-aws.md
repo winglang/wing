@@ -15,7 +15,6 @@ module.exports = function({ $table }) {
       const COLUMN_VALUE = "male";
       const VALID_KEY = "foo";
       const NON_EXISTENT_KEY = "bar";
-      const ROW_DOES_NOT_EXIST_ERROR = String.raw({ raw: ["Row does not exist (key=", ")"] }, NON_EXISTENT_KEY);
       const assertThrows = async (expected, block) => {
         let error = false;
         try {
