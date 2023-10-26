@@ -35,6 +35,15 @@ export class Service extends cloud.Service implements ISimulatorResource {
     return schema;
   }
 
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      cloud.ServiceInflightMethods.START,
+      cloud.ServiceInflightMethods.STOP,
+      cloud.ServiceInflightMethods.STARTED,
+    ];
+  }
+
   public onLift(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
     super.onLift(host, ops);

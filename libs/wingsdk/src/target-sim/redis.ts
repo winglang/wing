@@ -32,6 +32,21 @@ export class Redis extends ex.Redis implements ISimulatorResource {
   }
 
   /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      ex.RedisInflightMethods.RAW_CLIENT,
+      ex.RedisInflightMethods.URL,
+      ex.RedisInflightMethods.SET,
+      ex.RedisInflightMethods.GET,
+      ex.RedisInflightMethods.HSET,
+      ex.RedisInflightMethods.HGET,
+      ex.RedisInflightMethods.SADD,
+      ex.RedisInflightMethods.SMEMBERS,
+      ex.RedisInflightMethods.DEL,
+    ];
+  }
+
+  /** @internal */
   public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
   }

@@ -121,6 +121,11 @@ export class Function extends cloud.Function {
     return this.function.name;
   }
 
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [];
+  }
+
   // TODO: implement with https://github.com/winglang/wing/issues/4403
   public _toInflight(): string {
     throw new Error(

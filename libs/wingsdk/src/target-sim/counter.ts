@@ -19,6 +19,16 @@ export class Counter extends cloud.Counter implements ISimulatorResource {
     this.initial = props.initial ?? 0;
   }
 
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      cloud.CounterInflightMethods.INC,
+      cloud.CounterInflightMethods.DEC,
+      cloud.CounterInflightMethods.PEEK,
+      cloud.CounterInflightMethods.SET,
+    ];
+  }
+
   public toSimulator(): BaseResourceSchema {
     const schema: CounterSchema = {
       type: COUNTER_TYPE,

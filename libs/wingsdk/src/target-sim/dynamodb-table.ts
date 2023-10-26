@@ -38,6 +38,22 @@ export class DynamodbTable
     return schema;
   }
 
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      ex.DynamodbTableInflightMethods.PUT_ITEM,
+      ex.DynamodbTableInflightMethods.UPDATE_ITEM,
+      ex.DynamodbTableInflightMethods.DELETE_ITEM,
+      ex.DynamodbTableInflightMethods.GET_ITEM,
+      ex.DynamodbTableInflightMethods.SCAN,
+      ex.DynamodbTableInflightMethods.QUERY,
+      ex.DynamodbTableInflightMethods.TRANSACT_GET_ITEMS,
+      ex.DynamodbTableInflightMethods.TRANSACT_WRITE_ITEMS,
+      ex.DynamodbTableInflightMethods.BATCH_GET_ITEM,
+      ex.DynamodbTableInflightMethods.BATCH_WRITE_ITEM,
+    ];
+  }
+
   public onLift(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
     super.onLift(host, ops);

@@ -31,6 +31,16 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     }
   }
 
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      cloud.QueueInflightMethods.PUSH,
+      cloud.QueueInflightMethods.PURGE,
+      cloud.QueueInflightMethods.APPROX_SIZE,
+      cloud.QueueInflightMethods.POP,
+    ];
+  }
+
   public setConsumer(
     inflight: cloud.IQueueSetConsumerHandler,
     props: cloud.QueueSetConsumerProps = {}
