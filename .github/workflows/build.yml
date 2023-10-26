@@ -306,7 +306,7 @@ jobs:
         run: |
           if ! flyctl status --app "$APP_NAME"; then
             pushd ./apps/wing-console/console/app/preview
-            flyctl launch --no-deploy --copy-config --name "$APP_NAME" --image-label latest
+            flyctl launch --no-deploy --copy-config --name "$APP_NAME" --image-label latest -o personal
             popd
           fi
           flyctl deploy . --config ./apps/wing-console/console/app/preview/fly.toml --app "$APP_NAME" --image-label latest --vm-memory 512 --strategy immediate
