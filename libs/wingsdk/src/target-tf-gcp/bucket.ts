@@ -11,6 +11,7 @@ import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-obj
 import { Id } from "../.gen/providers/random/id";
 import * as cloud from "../cloud";
 import { InflightClient } from "../core";
+import { NotImplementedError } from "../core/errors";
 import {
   CaseConventions,
   NameOptions,
@@ -107,6 +108,62 @@ export class Bucket extends cloud.Bucket {
     });
   }
 
+  /**
+   * Run an inflight whenever a file is uploaded to the bucket.
+   */
+  public onCreate(
+    fn: cloud.IBucketEventHandler,
+    opts?: cloud.BucketOnCreateProps
+  ): void {
+    fn;
+    opts;
+    throw new NotImplementedError(
+      "onCreate method isn't implemented yet on the current target."
+    );
+  }
+
+  /**
+   * Run an inflight whenever a file is deleted from the bucket.
+   */
+  public onDelete(
+    fn: cloud.IBucketEventHandler,
+    opts?: cloud.BucketOnDeleteProps
+  ): void {
+    fn;
+    opts;
+    throw new NotImplementedError(
+      "onDelete method isn't implemented yet on the current target."
+    );
+  }
+
+  /**
+   * Run an inflight whenever a file is updated in the bucket.
+   */
+  public onUpdate(
+    fn: cloud.IBucketEventHandler,
+    opts?: cloud.BucketOnUpdateProps
+  ): void {
+    fn;
+    opts;
+    throw new NotImplementedError(
+      "onUpdate method isn't implemented yet on the current target."
+    );
+  }
+
+  /**
+   * Run an inflight whenever a file is uploaded, modified, or deleted from the bucket.
+   */
+  public onEvent(
+    fn: cloud.IBucketEventHandler,
+    opts?: cloud.BucketOnEventProps
+  ): void {
+    fn;
+    opts;
+    throw new NotImplementedError(
+      "onEvent method isn't implemented yet on the current target."
+    );
+  }
+
   public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof GCPFunction)) {
       throw new Error("buckets can only be bound by tfgcp.Function for now");
@@ -135,8 +192,6 @@ export class Bucket extends cloud.Bucket {
         Action: ActionTypes.STORAGE_READ_WRITE,
         Resource: ResourceTypes.BUCKET,
       });
-    } else {
-      throw new Error("Method not implemented.");
     }
     host.addEnvironment(this.envName(), this.bucket.name);
 

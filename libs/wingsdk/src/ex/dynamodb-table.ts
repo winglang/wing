@@ -83,20 +83,7 @@ export abstract class DynamodbTable extends Resource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      DynamodbTableInflightMethods.PUT_ITEM,
-      DynamodbTableInflightMethods.UPDATE_ITEM,
-      DynamodbTableInflightMethods.DELETE_ITEM,
-      DynamodbTableInflightMethods.GET_ITEM,
-      DynamodbTableInflightMethods.SCAN,
-      DynamodbTableInflightMethods.QUERY,
-      DynamodbTableInflightMethods.TRANSACT_GET_ITEMS,
-      DynamodbTableInflightMethods.TRANSACT_WRITE_ITEMS,
-      DynamodbTableInflightMethods.BATCH_GET_ITEM,
-      DynamodbTableInflightMethods.BATCH_WRITE_ITEM,
-    ];
-  }
+  public abstract _supportedOps(): string[];
 }
 
 /**
