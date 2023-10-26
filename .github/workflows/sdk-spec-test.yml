@@ -1,5 +1,5 @@
-name: SDK Spec AWS Tests
-run-name: SDK Spec AWS Tests (${{ inputs.repo || github.repository }}/${{inputs.ref || github.ref}})
+name: SDK Spec Tests
+run-name: SDK Spec Tests (${{ inputs.repo || github.repository }}/${{inputs.ref || github.ref}})
 on:
   workflow_call: {}
   workflow_dispatch:
@@ -65,7 +65,9 @@ jobs:
     strategy:
       fail-fast: false
       max-parallel: 10
-      matrix: ${{ fromJson(needs.setup.outputs.tests) }}
+      matrix:
+        test: ${{ fromJson(needs.setup.outputs.tests) }}
+        target: ["tf-aws"]
     name: ${{ matrix.test.name }}
     steps:
       - name: Checkout Repository
@@ -136,12 +138,12 @@ jobs:
             if  ${{ env.MANUAL == 'true' }}
             then
               pnpm install
-              pnpm wing test -t tf-aws ${{ matrix.test.directory }}/*.test.w
+              pnpm wing test -t ${{ matrix.test.target }} ${{ matrix.test.directory }}/*.test.w
             elif ${{ env.LOCAL_BUILD == 'false'}}
             then 
-              wing test -t tf-aws ${{ matrix.test.directory }}/*.test.w
+              wing test -t ${{ matrix.test.target }} ${{ matrix.test.directory }}/*.test.w
             else
-            ./localwing/node_modules/.bin/wing test -t tf-aws ${{ matrix.test.directory }}/*.test.w
+            ./localwing/node_modules/.bin/wing test -t ${{ matrix.test.target }} ${{ matrix.test.directory }}/*.test.w
             fi
 
       - name: Output Terraform log
