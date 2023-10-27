@@ -1,15 +1,15 @@
 ---
-title: Platform providers
-id: platform-providers
-description: Wing platform providers
-keywords: [Wing platform providers, provisioning engines, multi-cloud]
+title: Platform
+id: platform
+description: Wing platforms
+keywords: [Wing platform, provisioning engines, multi-cloud]
 ---
 
-When working with the Wing programming language, an integral part of the compilation process is the use of platform providers. In essence, platform providers specify how and where your application is deployed. They determine both the cloud environment and the provisioning engine that the code will be deployed with.
+When working with the Wing programming language, an integral part of the compilation process is the use of platform. In essence, platform specify how and where your application is deployed. They determine both the cloud environment and the provisioning engine that the code will be deployed with.
 
 ## Platforms
 
-You can view the list of available builtin platform providers with the `wing compile --help` command. Here is an example of the output:
+You can view the list of available builtin platform with the `wing compile --help` command. Here is an example of the output:
 
 ```sh
 mywing compile --help         
@@ -25,7 +25,7 @@ Options:
   -h, --help                    display help for command
 ```
 
-In the Options section above, there are several builtin platform providers that are shipped with Wing, such as `sim`, `tf-aws`, `tf-azure`, `tf-gcp`, and `awscdk`.
+In the Options section above, there are several builtin platform that are shipped with Wing, such as `sim`, `tf-aws`, `tf-azure`, `tf-gcp`, and `awscdk`.
 
 These providers contain a combination of provision engine and cloud environment in their names, we refer to these as the platform models (which is discussed in more detail below). The only exception is `sim`, which is a special platform for testing and simulating applications locally.
 
