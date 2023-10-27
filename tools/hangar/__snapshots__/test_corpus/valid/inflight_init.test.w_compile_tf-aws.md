@@ -1,7 +1,7 @@
 # [inflight_init.test.w](../../../../../examples/tests/valid/inflight_init.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $Foo }) {
   class $Closure1 {
@@ -20,8 +20,8 @@ module.exports = function({ $Foo }) {
 
 ```
 
-## inflight.$Closure2-1.js
-```js
+## inflight.$Closure2-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $FooChild }) {
   class $Closure2 {
@@ -40,8 +40,8 @@ module.exports = function({ $FooChild }) {
 
 ```
 
-## inflight.$Closure3-1.js
-```js
+## inflight.$Closure3-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class $Closure3 {
@@ -75,8 +75,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure4-1.js
-```js
+## inflight.$Closure4-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $jsii_fixture_JsiiClass }) {
   class $Closure4 {
@@ -119,8 +119,8 @@ module.exports = function({ $jsii_fixture_JsiiClass }) {
 
 ```
 
-## inflight.Foo-1.js
-```js
+## inflight.Foo-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Foo {
@@ -139,8 +139,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.FooChild-1.js
-```js
+## inflight.FooChild-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $Foo }) {
   class FooChild extends $Foo {
@@ -190,8 +190,8 @@ module.exports = function({ $Foo }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -208,7 +208,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Foo-1.js")({
+          require("./inflight.Foo-1.cjs")({
           })
         `;
       }
@@ -239,7 +239,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.FooChild-1.js")({
+          require("./inflight.FooChild-1.cjs")({
             $Foo: ${context._lift(Foo)},
           })
         `;
@@ -272,7 +272,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
             $Foo: ${context._lift(Foo)},
           })
         `;
@@ -299,7 +299,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure2-1.js")({
+          require("./inflight.$Closure2-1.cjs")({
             $FooChild: ${context._lift(FooChild)},
           })
         `;
@@ -326,7 +326,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure3-1.js")({
+          require("./inflight.$Closure3-1.cjs")({
           })
         `;
       }
@@ -352,7 +352,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure4-1.js")({
+          require("./inflight.$Closure4-1.cjs")({
             $jsii_fixture_JsiiClass: ${context._lift($stdlib.core.toLiftableModuleType(jsii_fixture.JsiiClass, "jsii-fixture", "JsiiClass"))},
           })
         `;

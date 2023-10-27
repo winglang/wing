@@ -1,7 +1,7 @@
 # [optionals.test.w](../../../../../examples/tests/valid/optionals.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutOptions_b_____null_, $payloadWithBucket_c }) {
   class $Closure1 {
@@ -22,8 +22,8 @@ module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutO
 
 ```
 
-## inflight.Node-1.js
-```js
+## inflight.Node-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Node {
@@ -35,8 +35,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Sub-1.js
-```js
+## inflight.Sub-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $Super }) {
   class Sub extends $Super {
@@ -49,8 +49,8 @@ module.exports = function({ $Super }) {
 
 ```
 
-## inflight.Sub1-1.js
-```js
+## inflight.Sub1-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $Super }) {
   class Sub1 extends $Super {
@@ -63,8 +63,8 @@ module.exports = function({ $Super }) {
 
 ```
 
-## inflight.Super-1.js
-```js
+## inflight.Super-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Super {
@@ -122,8 +122,8 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -141,7 +141,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Super-1.js")({
+          require("./inflight.Super-1.cjs")({
           })
         `;
       }
@@ -167,7 +167,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Sub-1.js")({
+          require("./inflight.Sub-1.cjs")({
             $Super: ${context._lift(Super)},
           })
         `;
@@ -194,7 +194,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Sub1-1.js")({
+          require("./inflight.Sub1-1.cjs")({
             $Super: ${context._lift(Super)},
           })
         `;
@@ -223,7 +223,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Node-1.js")({
+          require("./inflight.Node-1.cjs")({
           })
         `;
       }
@@ -249,7 +249,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
             $__payloadWithBucket_c_____null_: ${context._lift(((payloadWithBucket.c) != null))},
             $__payloadWithoutOptions_b_____null_: ${context._lift(((payloadWithoutOptions.b) != null))},
             $payloadWithBucket_c: ${context._lift(payloadWithBucket.c)},

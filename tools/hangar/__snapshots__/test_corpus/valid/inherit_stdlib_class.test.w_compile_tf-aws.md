@@ -1,7 +1,7 @@
 # [inherit_stdlib_class.test.w](../../../../../examples/tests/valid/inherit_stdlib_class.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class $Closure1 {
@@ -19,8 +19,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure2-1.js
-```js
+## inflight.$Closure2-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $api_url, $http_Util }) {
   class $Closure2 {
@@ -39,8 +39,8 @@ module.exports = function({ $api_url, $http_Util }) {
 
 ```
 
-## inflight.AnApi-1.js
-```js
+## inflight.AnApi-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $cloud_Api }) {
   class AnApi extends $cloud_Api {
@@ -259,8 +259,8 @@ module.exports = function({ $cloud_Api }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -278,7 +278,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.AnApi-1.js")({
+          require("./inflight.AnApi-1.cjs")({
             $cloud_Api: ${context._lift($stdlib.core.toLiftableModuleType(cloud.Api, "@winglang/sdk/cloud", "Api"))},
           })
         `;
@@ -305,7 +305,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
           })
         `;
       }
@@ -331,7 +331,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure2-1.js")({
+          require("./inflight.$Closure2-1.cjs")({
             $api_url: ${context._lift(api.url)},
             $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
           })

@@ -1,7 +1,7 @@
 # [capture_mutables.test.w](../../../../../examples/tests/valid/capture_mutables.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $Object_keys_m__length, $aCloned_length, $a_length, $s_size }) {
   class $Closure1 {
@@ -22,8 +22,8 @@ module.exports = function({ $Object_keys_m__length, $aCloned_length, $a_length, 
 
 ```
 
-## inflight.$Closure2-1.js
-```js
+## inflight.$Closure2-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $handler }) {
   class $Closure2 {
@@ -73,8 +73,8 @@ module.exports = function({ $handler }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -91,7 +91,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
             $Object_keys_m__length: ${context._lift(Object.keys(m).length)},
             $aCloned_length: ${context._lift(aCloned.length)},
             $a_length: ${context._lift(a.length)},
@@ -130,7 +130,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure2-1.js")({
+          require("./inflight.$Closure2-1.cjs")({
             $handler: ${context._lift(handler)},
           })
         `;

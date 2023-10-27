@@ -1,7 +1,7 @@
 # [resource_call_static.test.w](../../../../../examples/tests/valid/resource_call_static.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $Another }) {
   class $Closure1 {
@@ -19,8 +19,8 @@ module.exports = function({ $Another }) {
 
 ```
 
-## inflight.Another-1.js
-```js
+## inflight.Another-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $globalCounter }) {
   class Another {
@@ -88,8 +88,8 @@ module.exports = function({ $globalCounter }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -106,7 +106,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Another-1.js")({
+          require("./inflight.Another-1.cjs")({
             $globalCounter: ${context._lift(globalCounter)},
           })
         `;
@@ -139,7 +139,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
             $Another: ${context._lift(Another)},
           })
         `;

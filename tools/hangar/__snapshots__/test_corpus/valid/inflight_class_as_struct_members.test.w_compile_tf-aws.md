@@ -1,7 +1,7 @@
 # [inflight_class_as_struct_members.test.w](../../../../../examples/tests/valid/inflight_class_as_struct_members.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $Foo }) {
   class $Closure1 {
@@ -19,8 +19,8 @@ module.exports = function({ $Foo }) {
 
 ```
 
-## inflight.$Closure2-1.js
-```js
+## inflight.$Closure2-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $getBar }) {
   class $Closure2 {
@@ -39,8 +39,8 @@ module.exports = function({ $getBar }) {
 
 ```
 
-## inflight.Foo-1.js
-```js
+## inflight.Foo-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Foo {
@@ -85,8 +85,8 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -102,7 +102,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Foo-1.js")({
+          require("./inflight.Foo-1.cjs")({
           })
         `;
       }
@@ -128,7 +128,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
             $Foo: ${context._lift(Foo)},
           })
         `;
@@ -155,7 +155,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure2-1.js")({
+          require("./inflight.$Closure2-1.cjs")({
             $getBar: ${context._lift(getBar)},
           })
         `;

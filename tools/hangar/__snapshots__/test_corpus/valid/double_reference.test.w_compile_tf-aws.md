@@ -1,7 +1,7 @@
 # [double_reference.test.w](../../../../../examples/tests/valid/double_reference.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $bar, $bar_foo, $initCount }) {
   class $Closure1 {
@@ -21,8 +21,8 @@ module.exports = function({ $bar, $bar_foo, $initCount }) {
 
 ```
 
-## inflight.Bar-1.js
-```js
+## inflight.Bar-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Bar {
@@ -38,8 +38,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Foo-1.js
-```js
+## inflight.Foo-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $initCount }) {
   class Foo {
@@ -109,8 +109,8 @@ module.exports = function({ $initCount }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -127,7 +127,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Foo-1.js")({
+          require("./inflight.Foo-1.cjs")({
             $initCount: ${context._lift(initCount)},
           })
         `;
@@ -160,7 +160,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Bar-1.js")({
+          require("./inflight.Bar-1.cjs")({
           })
         `;
       }
@@ -196,7 +196,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
             $bar: ${context._lift(bar)},
             $bar_foo: ${context._lift(bar.foo)},
             $initCount: ${context._lift(initCount)},

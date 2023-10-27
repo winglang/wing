@@ -1,7 +1,7 @@
 # [impl_interface.test.w](../../../../../examples/tests/valid/impl_interface.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $x }) {
   class $Closure1 {
@@ -19,8 +19,8 @@ module.exports = function({ $x }) {
 
 ```
 
-## inflight.A-1.js
-```js
+## inflight.A-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class A {
@@ -38,8 +38,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Dog-1.js
-```js
+## inflight.Dog-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Dog {
@@ -54,8 +54,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Terrier-1.js
-```js
+## inflight.Terrier-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $Dog }) {
   class Terrier extends $Dog {
@@ -71,8 +71,8 @@ module.exports = function({ $Dog }) {
 
 ```
 
-## inflight.r-1.js
-```js
+## inflight.r-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class r {
@@ -119,8 +119,8 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -137,7 +137,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.A-1.js")({
+          require("./inflight.A-1.cjs")({
           })
         `;
       }
@@ -163,7 +163,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
             $x: ${context._lift(x)},
           })
         `;
@@ -201,7 +201,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.r-1.js")({
+          require("./inflight.r-1.cjs")({
           })
         `;
       }
@@ -226,7 +226,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Dog-1.js")({
+          require("./inflight.Dog-1.cjs")({
           })
         `;
       }
@@ -251,7 +251,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Terrier-1.js")({
+          require("./inflight.Terrier-1.cjs")({
             $Dog: ${context._lift(Dog)},
           })
         `;

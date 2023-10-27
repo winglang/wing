@@ -1,7 +1,7 @@
 # [lift_via_closure_explicit.test.w](../../../../../examples/tests/valid/lift_via_closure_explicit.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $fn }) {
   class $Closure1 {
@@ -19,8 +19,8 @@ module.exports = function({ $fn }) {
 
 ```
 
-## inflight.MyClosure-1.js
-```js
+## inflight.MyClosure-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class MyClosure {
@@ -86,8 +86,8 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -105,7 +105,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.MyClosure-1.js")({
+          require("./inflight.MyClosure-1.cjs")({
           })
         `;
       }
@@ -141,7 +141,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
             $fn: ${context._lift(fn)},
           })
         `;

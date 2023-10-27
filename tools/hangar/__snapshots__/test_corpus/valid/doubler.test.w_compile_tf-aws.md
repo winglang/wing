@@ -1,7 +1,7 @@
 # [doubler.test.w](../../../../../examples/tests/valid/doubler.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class $Closure1 {
@@ -19,8 +19,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure2-1.js
-```js
+## inflight.$Closure2-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $handler, $std_Json, $std_Number }) {
   class $Closure2 {
@@ -41,8 +41,8 @@ module.exports = function({ $handler, $std_Json, $std_Number }) {
 
 ```
 
-## inflight.$Closure3-1.js
-```js
+## inflight.$Closure3-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class $Closure3 {
@@ -60,8 +60,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure4-1.js
-```js
+## inflight.$Closure4-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $f }) {
   class $Closure4 {
@@ -80,8 +80,8 @@ module.exports = function({ $f }) {
 
 ```
 
-## inflight.Doubler-1.js
-```js
+## inflight.Doubler-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Doubler {
@@ -98,8 +98,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Doubler2-1.js
-```js
+## inflight.Doubler2-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Doubler2 {
@@ -248,8 +248,8 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -267,7 +267,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Doubler-1.js")({
+          require("./inflight.Doubler-1.cjs")({
           })
         `;
       }
@@ -303,7 +303,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
           })
         `;
       }
@@ -335,7 +335,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return `
-              require("./inflight.$Closure2-1.js")({
+              require("./inflight.$Closure2-1.cjs")({
                 $handler: ${context._lift(handler)},
                 $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
                 $std_Number: ${context._lift($stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"))},
@@ -367,7 +367,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Doubler2-1.js")({
+          require("./inflight.Doubler2-1.cjs")({
           })
         `;
       }
@@ -393,7 +393,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure3-1.js")({
+          require("./inflight.$Closure3-1.cjs")({
           })
         `;
       }
@@ -419,7 +419,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure4-1.js")({
+          require("./inflight.$Closure4-1.cjs")({
             $f: ${context._lift(f)},
           })
         `;

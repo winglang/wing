@@ -1,7 +1,7 @@
 # [debug_env.test.w](../../../../../examples/tests/valid/debug_env.test.w) | compile | tf-aws
 
-## inflight.A-1.js
-```js
+## inflight.A-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class A {
@@ -45,8 +45,8 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -64,7 +64,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.A-1.js")({
+          require("./inflight.A-1.cjs")({
           })
         `;
       }

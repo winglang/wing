@@ -1,7 +1,7 @@
 # [std_string.test.w](../../../../../examples/tests/valid/std_string.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $__s1_split_______at_1__, $_s1_concat_s2__, $s1_indexOf__s__ }) {
   class $Closure1 {
@@ -53,8 +53,8 @@ module.exports = function({ $__s1_split_______at_1__, $_s1_concat_s2__, $s1_inde
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -71,7 +71,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
             $__s1_split_______at_1__: ${context._lift(((s1.split(" ")).at(1)))},
             $_s1_concat_s2__: ${context._lift((s1.concat(s2)))},
             $s1_indexOf__s__: ${context._lift(s1.indexOf("s"))},

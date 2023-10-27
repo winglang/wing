@@ -1,7 +1,7 @@
 # [redis.test.w](../../../../../examples/tests/valid/redis.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $r }) {
   class $Closure1 {
@@ -19,8 +19,8 @@ module.exports = function({ $r }) {
 
 ```
 
-## inflight.$Closure2-1.js
-```js
+## inflight.$Closure2-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $queue, $r, $r2, $util_Util }) {
   class $Closure2 {
@@ -543,8 +543,8 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -564,7 +564,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
             $r: ${context._lift(r)},
           })
         `;
@@ -597,7 +597,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure2-1.js")({
+          require("./inflight.$Closure2-1.cjs")({
             $queue: ${context._lift(queue)},
             $r: ${context._lift(r)},
             $r2: ${context._lift(r2)},

@@ -1,7 +1,7 @@
 # [store.w](../../../../../examples/tests/valid/store.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $__parent_this_1_b }) {
   class $Closure1 {
@@ -19,8 +19,8 @@ module.exports = function({ $__parent_this_1_b }) {
 
 ```
 
-## inflight.Store-1.js
-```js
+## inflight.Store-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Store {
@@ -36,8 +36,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Util-1.js
-```js
+## inflight.Util-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Util {
@@ -49,22 +49,12 @@ module.exports = function({  }) {
 
 ```
 
-## preflight.empty-1.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
-  return {  };
-};
-
-```
-
-## preflight.js
-```js
-"use strict";
-module.exports = function({ $stdlib }) {
-  const std = $stdlib.std;
-  const file3 = require("./preflight.empty-1.js")({ $stdlib });
+  const file3 = require("./preflight.empty-1.cjs")({ $stdlib });
   const math = $stdlib.math;
   const cloud = $stdlib.cloud;
   class Util extends $stdlib.std.Resource {
@@ -73,7 +63,7 @@ module.exports = function({ $stdlib }) {
     }
     static _toInflightType(context) {
       return `
-        require("./inflight.Util-1.js")({
+        require("./inflight.Util-1.cjs")({
         })
       `;
     }
@@ -104,7 +94,7 @@ module.exports = function({ $stdlib }) {
         }
         static _toInflightType(context) {
           return `
-            require("./inflight.$Closure1-1.js")({
+            require("./inflight.$Closure1-1.cjs")({
               $__parent_this_1_b: ${context._lift(__parent_this_1.b)},
             })
           `;
@@ -134,7 +124,7 @@ module.exports = function({ $stdlib }) {
     }
     static _toInflightType(context) {
       return `
-        require("./inflight.Store-1.js")({
+        require("./inflight.Store-1.cjs")({
         })
       `;
     }
@@ -172,6 +162,16 @@ module.exports = function({ $stdlib }) {
     })({})
   ;
   return { Util, Store, Color };
+};
+
+```
+
+## preflight.empty-1.cjs
+```cjs
+"use strict";
+module.exports = function({ $stdlib }) {
+  const std = $stdlib.std;
+  return {  };
 };
 
 ```

@@ -1,7 +1,7 @@
 # [struct_from_json.test.w](../../../../../examples/tests/valid/struct_from_json.test.w) | compile | tf-aws
 
-## inflight.$Closure1-2.js
-```js
+## inflight.$Closure1-2.cjs
+```cjs
 "use strict";
 module.exports = function({ $cloud_BucketProps, $j }) {
   class $Closure1 {
@@ -20,8 +20,8 @@ module.exports = function({ $cloud_BucketProps, $j }) {
 
 ```
 
-## inflight.$Closure2-2.js
-```js
+## inflight.$Closure2-2.cjs
+```cjs
 "use strict";
 module.exports = function({ $Student }) {
   class $Closure2 {
@@ -60,8 +60,8 @@ module.exports = function({ $Student }) {
 
 ```
 
-## inflight.$Closure3-2.js
-```js
+## inflight.$Closure3-2.cjs
+```cjs
 "use strict";
 module.exports = function({ $Student, $jStudent1 }) {
   class $Closure3 {
@@ -86,8 +86,8 @@ module.exports = function({ $Student, $jStudent1 }) {
 
 ```
 
-## inflight.$Closure4-2.js
-```js
+## inflight.$Closure4-2.cjs
+```cjs
 "use strict";
 module.exports = function({ $MyStruct, $_schema_asStr___, $expectedSchema, $jMyStruct, $std_Json }) {
   class $Closure4 {
@@ -107,8 +107,8 @@ module.exports = function({ $MyStruct, $_schema_asStr___, $expectedSchema, $jMyS
 
 ```
 
-## inflight.$Closure5-2.js
-```js
+## inflight.$Closure5-2.cjs
+```cjs
 "use strict";
 module.exports = function({ $Student, $std_Boolean, $std_Number, $std_String }) {
   class $Closure5 {
@@ -129,8 +129,8 @@ module.exports = function({ $Student, $std_Boolean, $std_Number, $std_String }) 
 
 ```
 
-## inflight.UsesStructInImportedFile-1.js
-```js
+## inflight.UsesStructInImportedFile-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class UsesStructInImportedFile {
@@ -174,8 +174,8 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -183,8 +183,8 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
-const externalStructs = require("./preflight.structs-1.js")({ $stdlib });
-const otherExternalStructs = require("./preflight.structs2-2.js")({ $stdlib });
+const externalStructs = require("./preflight.structs-1.cjs")({ $stdlib });
+const otherExternalStructs = require("./preflight.structs2-2.cjs")({ $stdlib });
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -203,7 +203,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-2.js")({
+          require("./inflight.$Closure1-2.cjs")({
             $cloud_BucketProps: ${context._lift($stdlib.core.toLiftableModuleType(cloud_BucketProps, "@winglang/sdk/cloud", "BucketProps"))},
             $j: ${context._lift(j)},
           })
@@ -237,7 +237,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure2-2.js")({
+          require("./inflight.$Closure2-2.cjs")({
             $Student: ${context._lift(Student)},
           })
         `;
@@ -264,7 +264,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure3-2.js")({
+          require("./inflight.$Closure3-2.cjs")({
             $Student: ${context._lift(Student)},
             $jStudent1: ${context._lift(jStudent1)},
           })
@@ -298,7 +298,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure4-2.js")({
+          require("./inflight.$Closure4-2.cjs")({
             $MyStruct: ${context._lift(MyStruct)},
             $_schema_asStr___: ${context._lift((schema.asStr()))},
             $expectedSchema: ${context._lift(expectedSchema)},
@@ -337,7 +337,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure5-2.js")({
+          require("./inflight.$Closure5-2.cjs")({
             $Student: ${context._lift(Student)},
             $std_Boolean: ${context._lift($stdlib.core.toLiftableModuleType(std.Boolean, "@winglang/sdk/std", "Boolean"))},
             $std_Number: ${context._lift($stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"))},
@@ -491,8 +491,8 @@ $APP.synth();
 
 ```
 
-## preflight.structs-1.js
-```js
+## preflight.structs-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
@@ -509,8 +509,8 @@ module.exports = function({ $stdlib }) {
 
 ```
 
-## preflight.structs2-2.js
-```js
+## preflight.structs2-2.cjs
+```cjs
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
@@ -529,7 +529,7 @@ module.exports = function({ $stdlib }) {
     }
     static _toInflightType(context) {
       return `
-        require("./inflight.UsesStructInImportedFile-1.js")({
+        require("./inflight.UsesStructInImportedFile-1.cjs")({
         })
       `;
     }

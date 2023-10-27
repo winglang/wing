@@ -1,7 +1,7 @@
 # [resource.test.w](../../../../../examples/tests/valid/resource.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $bucket, $res, $res_foo }) {
   class $Closure1 {
@@ -24,8 +24,8 @@ module.exports = function({ $bucket, $res, $res_foo }) {
 
 ```
 
-## inflight.$Closure2-1.js
-```js
+## inflight.$Closure2-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $__parent_this_2_b }) {
   class $Closure2 {
@@ -43,8 +43,8 @@ module.exports = function({ $__parent_this_2_b }) {
 
 ```
 
-## inflight.$Closure3-1.js
-```js
+## inflight.$Closure3-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $__parent_this_3_b }) {
   class $Closure3 {
@@ -62,8 +62,8 @@ module.exports = function({ $__parent_this_3_b }) {
 
 ```
 
-## inflight.$Closure4-1.js
-```js
+## inflight.$Closure4-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $__parent_this_4_q }) {
   class $Closure4 {
@@ -81,8 +81,8 @@ module.exports = function({ $__parent_this_4_q }) {
 
 ```
 
-## inflight.$Closure5-1.js
-```js
+## inflight.$Closure5-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $bigOlPublisher }) {
   class $Closure5 {
@@ -101,8 +101,8 @@ module.exports = function({ $bigOlPublisher }) {
 
 ```
 
-## inflight.Bar-1.js
-```js
+## inflight.Bar-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $Foo, $MyEnum }) {
   class Bar {
@@ -133,8 +133,8 @@ module.exports = function({ $Foo, $MyEnum }) {
 
 ```
 
-## inflight.BigPublisher-1.js
-```js
+## inflight.BigPublisher-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class BigPublisher {
@@ -158,8 +158,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Dummy-1.js
-```js
+## inflight.Dummy-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Dummy {
@@ -171,8 +171,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Foo-1.js
-```js
+## inflight.Foo-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Foo {
@@ -199,8 +199,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.ScopeAndIdTestClass-1.js
-```js
+## inflight.ScopeAndIdTestClass-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class ScopeAndIdTestClass {
@@ -692,8 +692,8 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -711,7 +711,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Foo-1.js")({
+          require("./inflight.Foo-1.cjs")({
           })
         `;
       }
@@ -753,7 +753,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Bar-1.js")({
+          require("./inflight.Bar-1.cjs")({
             $Foo: ${context._lift(Foo)},
             $MyEnum: ${context._lift(MyEnum)},
           })
@@ -802,7 +802,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
             $bucket: ${context._lift(bucket)},
             $res: ${context._lift(res)},
             $res_foo: ${context._lift(res.foo)},
@@ -847,7 +847,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return `
-              require("./inflight.$Closure2-1.js")({
+              require("./inflight.$Closure2-1.cjs")({
                 $__parent_this_2_b: ${context._lift(__parent_this_2.b)},
               })
             `;
@@ -882,7 +882,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return `
-              require("./inflight.$Closure3-1.js")({
+              require("./inflight.$Closure3-1.cjs")({
                 $__parent_this_3_b: ${context._lift(__parent_this_3.b)},
               })
             `;
@@ -917,7 +917,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return `
-              require("./inflight.$Closure4-1.js")({
+              require("./inflight.$Closure4-1.cjs")({
                 $__parent_this_4_q: ${context._lift(__parent_this_4.q)},
               })
             `;
@@ -947,7 +947,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.BigPublisher-1.js")({
+          require("./inflight.BigPublisher-1.cjs")({
           })
         `;
       }
@@ -994,7 +994,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure5-1.js")({
+          require("./inflight.$Closure5-1.cjs")({
             $bigOlPublisher: ${context._lift(bigOlPublisher)},
           })
         `;
@@ -1029,7 +1029,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Dummy-1.js")({
+          require("./inflight.Dummy-1.cjs")({
           })
         `;
       }
@@ -1065,7 +1065,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.ScopeAndIdTestClass-1.js")({
+          require("./inflight.ScopeAndIdTestClass-1.cjs")({
           })
         `;
       }
