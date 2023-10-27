@@ -60,6 +60,11 @@ export interface AppProps {
    * @default - no hooks
    */
   readonly synthHooks?: SynthHooks;
+
+  /**
+   * Hooks for overriding newInstance calls
+   */
+  readonly newInstanceOverrides?: any[];
 }
 
 /**
@@ -154,6 +159,8 @@ export abstract class App extends Construct {
    */
   public abstract readonly _tokens: Tokens;
 
+  public readonly overrides: any[];
+
   constructor(scope: Construct, id: string, props: AppProps) {
     super(scope, id);
     if (!props.entrypointDir) {
@@ -161,6 +168,7 @@ export abstract class App extends Construct {
     }
 
     this.entrypointDir = props.entrypointDir;
+    this.overrides = props.newInstanceOverrides ?? [];
   }
 
   /**
@@ -213,7 +221,14 @@ export abstract class App extends Construct {
     id: string,
     ...args: any[]
   ): any {
-    // delegate to "tryNew" first, which will allow derived classes to inject
+    // first check if overrides have been provided
+    for (const override of this.overrides) {
+      const instance = override(fqn, scope, id, ...args);
+      if (instance) {
+        return instance;
+      }
+    }
+    // next delegate to "tryNew", which will allow derived classes to inject
     const instance = this.tryNew(fqn, scope, id, ...args);
     const typeName = fqn.replace(`${SDK_PACKAGE_NAME}.`, "");
     if (!instance) {

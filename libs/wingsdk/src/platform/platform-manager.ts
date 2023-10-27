@@ -66,6 +66,8 @@ export class PlatformManager {
       validate: [],
     };
 
+    let newInstanceOverrides: any[] = [];
+
     this.platformInstances.forEach((instance) => {
       if (instance.preSynth) {
         synthHooks.preSynthesize!.push(instance.preSynth);
@@ -78,11 +80,12 @@ export class PlatformManager {
       if (instance.validate) {
         synthHooks.validate!.push(instance.validate);
       }
+
+      if (instance.newInstance) {
+        newInstanceOverrides.push(instance.newInstance);
+      }
     });
 
-    return appCall!({
-      ...appProps,
-      synthHooks,
-    }) as App;
+    return appCall!({...appProps, synthHooks, newInstanceOverrides}) as App;;
   }
 }
