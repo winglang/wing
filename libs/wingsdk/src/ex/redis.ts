@@ -130,6 +130,9 @@ export enum RedisInflightMethods {
  * Base class for `Redis` Client.
  */
 export abstract class RedisClientBase implements IRedisClient {
+  /**
+   * Get raw redis client (currently IoRedis).
+   */
   protected abstract rawClient(): Promise<any>;
   public abstract url(): Promise<string>;
 
