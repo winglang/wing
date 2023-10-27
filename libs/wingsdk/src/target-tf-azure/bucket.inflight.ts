@@ -253,6 +253,28 @@ export class BucketClient implements IBucketClient {
   }
 
   /**
+   * Copy object within the bucket
+   *
+   * @param srcKey The key of the source object you wish to copy.
+   * @param dstKey The key of the destination object after copying.
+   * @throws if `srcKey` object doesn't exist.
+   */
+  public async copy(srcKey: string, dstKey: string): Promise<void> {
+    const srcBlobUrl = this.containerClient.getBlobClient(srcKey).url;
+    const dstBlobClient = this.containerClient.getBlockBlobClient(dstKey);
+
+    try {
+      await dstBlobClient.syncCopyFromURL(srcBlobUrl);
+    } catch (error) {
+      throw new Error(
+        `Unable to copy object from "${srcKey}" to "${dstKey}": ${
+          (error as Error).message
+        }`
+      );
+    }
+  }
+
+  /**
    * Required helper function for node js only.
    *
    * See https://github.com/Azure/azure-sdk-for-js/tree/main/sdk/storage/storage-blob
