@@ -50,7 +50,7 @@ export class MarcusPlatform extends tfaws.Platform {
 }
 
 // Custom Bucket class
-export class Bucket extends tfaws.Bucket {
+export class MarcusBucket extends tfaws.Bucket {
   constructor(scope: Construct, id: string, props: any) {
     super(scope, id, props);
 
