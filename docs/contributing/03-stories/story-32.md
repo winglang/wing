@@ -71,7 +71,7 @@ He is able to just add the following method to his platform
 ```typescript
   // .. code omitted for brevity
   export class MarcusPlatform extends TfAWS.Platform {
-    validate(app: Construct): void {
+    preSynth(app: Construct): void {
       // apply the Permission boundary aspect
       cdktf.Aspects.of(app).add(new PermissionBoundaryAspect("some-boundary-arn"));
     }
