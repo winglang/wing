@@ -1266,7 +1266,7 @@ importers:
         specifier: ^2.4.3
         version: 2.4.3
       undici:
-        specifier: '*'
+        specifier: ^5.25.4
         version: 5.25.4
       uuid:
         specifier: ^8.3.2
