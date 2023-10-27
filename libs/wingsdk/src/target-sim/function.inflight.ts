@@ -32,25 +32,28 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     return;
   }
 
+  private createSandbox(): Sandbox {
+    return new Sandbox(this.filename, {
+      context: { $simulator: this.context },
+      env: this.env,
+      timeout: this.timeout,
+      log: (_level, message) => {
+        this.context.addTrace({
+          data: { message },
+          type: TraceType.LOG,
+          sourcePath: this.context.resourcePath,
+          sourceType: FUNCTION_FQN,
+          timestamp: new Date().toISOString(),
+        });
+      },
+    });
+  }
+
   public async invoke(payload: string): Promise<string> {
     return this.context.withTrace({
       message: `Invoke (payload=${JSON.stringify(payload)}).`,
       activity: async () => {
-        const sb = new Sandbox(this.filename, {
-          context: { $simulator: this.context },
-          env: this.env,
-          timeout: this.timeout,
-          log: (_level, message) => {
-            this.context.addTrace({
-              data: { message },
-              type: TraceType.LOG,
-              sourcePath: this.context.resourcePath,
-              sourceType: FUNCTION_FQN,
-              timestamp: new Date().toISOString(),
-            });
-          },
-        });
-
+        const sb = this.createSandbox();
         return sb.call("handler", JSON.stringify(payload));
       },
     });
@@ -60,21 +63,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     void this.context.withTrace({
       message: `InvokeAsync (payload=${JSON.stringify(payload)}).`,
       activity: async () => {
-        const sb = new Sandbox(this.filename, {
-          context: { $simulator: this.context },
-          env: this.env,
-          timeout: this.timeout,
-          log: (_level, message) => {
-            this.context.addTrace({
-              data: { message },
-              type: TraceType.LOG,
-              sourcePath: this.context.resourcePath,
-              sourceType: FUNCTION_FQN,
-              timestamp: new Date().toISOString(),
-            });
-          },
-        });
-
+        const sb = this.createSandbox();
         setImmediate(async () => {
           await sb.call("handler", JSON.stringify(payload));
         });
