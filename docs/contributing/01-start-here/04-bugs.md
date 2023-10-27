@@ -7,7 +7,7 @@ keywords: [Wing contributors, contributors]
 ## 🐞 How do I submit a bug report?
 
 Wing is a work in progress! Our goal is to to keep the toolchain stable, and to minimize surprising
-behavior as new features are added -- but even then, sometimes bugs slip through.
+behaviour as new features are added -- but even then, sometimes bugs slip through.
 
 If you spot a bug or any behavior that doesn't match how you expected it to work, please go to our
 GitHub and [open an issue](https://github.com/winglang/wing/issues/new). A Wing maintainer will come
