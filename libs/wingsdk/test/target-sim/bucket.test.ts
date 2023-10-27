@@ -1,5 +1,4 @@
 import * as fs from "fs";
-// import { setImmediate } from "node:timers/promises";
 import { resolve } from "path";
 import * as url from "url";
 import { vi, test, expect } from "vitest";
