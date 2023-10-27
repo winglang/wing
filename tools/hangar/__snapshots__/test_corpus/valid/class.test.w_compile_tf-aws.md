@@ -1,7 +1,7 @@
 # [class.test.w](../../../../../examples/tests/valid/class.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $c5 }) {
   class $Closure1 {
@@ -22,8 +22,8 @@ module.exports = function({ $c5 }) {
 
 ```
 
-## inflight.$Closure2-1.js
-```js
+## inflight.$Closure2-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $student_hrlyWage, $student_major, $student_name }) {
   class $Closure2 {
@@ -43,8 +43,8 @@ module.exports = function({ $student_hrlyWage, $student_major, $student_name }) 
 
 ```
 
-## inflight.$Closure3-1.js
-```js
+## inflight.$Closure3-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $ta_hrlyWage }) {
   class $Closure3 {
@@ -62,8 +62,8 @@ module.exports = function({ $ta_hrlyWage }) {
 
 ```
 
-## inflight.$Closure4-1.js
-```js
+## inflight.$Closure4-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $B }) {
   class $Closure4 {
@@ -82,8 +82,8 @@ module.exports = function({ $B }) {
 
 ```
 
-## inflight.A-1.js
-```js
+## inflight.A-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class A {
@@ -98,8 +98,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.B-1.js
-```js
+## inflight.B-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $A }) {
   class B extends $A {
@@ -116,8 +116,8 @@ module.exports = function({ $A }) {
 
 ```
 
-## inflight.Bam-1.js
-```js
+## inflight.Bam-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $Boom }) {
   class Bam extends $Boom {
@@ -130,8 +130,8 @@ module.exports = function({ $Boom }) {
 
 ```
 
-## inflight.Bar-1.js
-```js
+## inflight.Bar-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Bar {
@@ -143,8 +143,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Baz-1.js
-```js
+## inflight.Baz-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $Bar }) {
   class Baz extends $Bar {
@@ -157,8 +157,8 @@ module.exports = function({ $Bar }) {
 
 ```
 
-## inflight.Boom-1.js
-```js
+## inflight.Boom-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Boom {
@@ -170,8 +170,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.C1-1.js
-```js
+## inflight.C1-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class C1 {
@@ -183,8 +183,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.C2-1.js
-```js
+## inflight.C2-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class C2 {
@@ -196,8 +196,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.C3-1.js
-```js
+## inflight.C3-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class C3 {
@@ -209,8 +209,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.C4-1.js
-```js
+## inflight.C4-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class C4 {
@@ -222,8 +222,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.C5-1.js
-```js
+## inflight.C5-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class C5 {
@@ -242,8 +242,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Foo-1.js
-```js
+## inflight.Foo-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $Bar }) {
   class Foo extends $Bar {
@@ -258,8 +258,8 @@ module.exports = function({ $Bar }) {
 
 ```
 
-## inflight.PaidStudent-1.js
-```js
+## inflight.PaidStudent-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $Student }) {
   class PaidStudent extends $Student {
@@ -272,8 +272,8 @@ module.exports = function({ $Student }) {
 
 ```
 
-## inflight.Person-1.js
-```js
+## inflight.Person-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Person {
@@ -285,8 +285,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Student-1.js
-```js
+## inflight.Student-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $Person }) {
   class Student extends $Person {
@@ -299,8 +299,8 @@ module.exports = function({ $Person }) {
 
 ```
 
-## inflight.TeacherAid-1.js
-```js
+## inflight.TeacherAid-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $PaidStudent }) {
   class TeacherAid extends $PaidStudent {
@@ -345,8 +345,8 @@ module.exports = function({ $PaidStudent }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -363,7 +363,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.C1-1.js")({
+          require("./inflight.C1-1.cjs")({
           })
         `;
       }
@@ -389,7 +389,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.C2-1.js")({
+          require("./inflight.C2-1.cjs")({
           })
         `;
       }
@@ -418,7 +418,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.C3-1.js")({
+          require("./inflight.C3-1.cjs")({
           })
         `;
       }
@@ -446,7 +446,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.C4-1.js")({
+          require("./inflight.C4-1.cjs")({
           })
         `;
       }
@@ -471,7 +471,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.C5-1.js")({
+          require("./inflight.C5-1.cjs")({
           })
         `;
       }
@@ -497,7 +497,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
             $c5: ${context._lift(c5)},
           })
         `;
@@ -530,7 +530,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Person-1.js")({
+          require("./inflight.Person-1.cjs")({
           })
         `;
       }
@@ -556,7 +556,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Student-1.js")({
+          require("./inflight.Student-1.cjs")({
             $Person: ${context._lift(Person)},
           })
         `;
@@ -583,7 +583,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.PaidStudent-1.js")({
+          require("./inflight.PaidStudent-1.cjs")({
             $Student: ${context._lift(Student)},
           })
         `;
@@ -610,7 +610,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure2-1.js")({
+          require("./inflight.$Closure2-1.cjs")({
             $student_hrlyWage: ${context._lift(student.hrlyWage)},
             $student_major: ${context._lift(student.major)},
             $student_name: ${context._lift(student.name)},
@@ -647,7 +647,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.TeacherAid-1.js")({
+          require("./inflight.TeacherAid-1.cjs")({
             $PaidStudent: ${context._lift(PaidStudent)},
           })
         `;
@@ -674,7 +674,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure3-1.js")({
+          require("./inflight.$Closure3-1.cjs")({
             $ta_hrlyWage: ${context._lift(ta.hrlyWage)},
           })
         `;
@@ -706,7 +706,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.A-1.js")({
+          require("./inflight.A-1.cjs")({
           })
         `;
       }
@@ -737,7 +737,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.B-1.js")({
+          require("./inflight.B-1.cjs")({
             $A: ${context._lift(A)},
           })
         `;
@@ -764,7 +764,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure4-1.js")({
+          require("./inflight.$Closure4-1.cjs")({
             $B: ${context._lift(B)},
           })
         `;
@@ -790,7 +790,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Bar-1.js")({
+          require("./inflight.Bar-1.cjs")({
           })
         `;
       }
@@ -815,7 +815,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Foo-1.js")({
+          require("./inflight.Foo-1.cjs")({
             $Bar: ${context._lift(Bar)},
           })
         `;
@@ -841,7 +841,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Baz-1.js")({
+          require("./inflight.Baz-1.cjs")({
             $Bar: ${context._lift(Bar)},
           })
         `;
@@ -867,7 +867,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Boom-1.js")({
+          require("./inflight.Boom-1.cjs")({
           })
         `;
       }
@@ -892,7 +892,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Bam-1.js")({
+          require("./inflight.Bam-1.cjs")({
             $Boom: ${context._lift(Boom)},
           })
         `;

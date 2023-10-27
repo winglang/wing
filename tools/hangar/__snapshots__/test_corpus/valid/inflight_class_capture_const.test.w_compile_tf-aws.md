@@ -1,7 +1,7 @@
 # [inflight_class_capture_const.test.w](../../../../../examples/tests/valid/inflight_class_capture_const.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $Foo, $myConst }) {
   class $Closure1 {
@@ -20,8 +20,8 @@ module.exports = function({ $Foo, $myConst }) {
 
 ```
 
-## inflight.Foo-1.js
-```js
+## inflight.Foo-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $myConst }) {
   class Foo {
@@ -66,8 +66,8 @@ module.exports = function({ $myConst }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -84,7 +84,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Foo-1.js")({
+          require("./inflight.Foo-1.cjs")({
             $myConst: ${context._lift(myConst)},
           })
         `;
@@ -117,7 +117,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
             $Foo: ${context._lift(Foo)},
             $myConst: ${context._lift(myConst)},
           })

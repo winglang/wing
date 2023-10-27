@@ -1,7 +1,7 @@
 # [resource_captures_globals.test.w](../../../../../examples/tests/valid/resource_captures_globals.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $res }) {
   class $Closure1 {
@@ -19,8 +19,8 @@ module.exports = function({ $res }) {
 
 ```
 
-## inflight.$Closure2-1.js
-```js
+## inflight.$Closure2-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $Another }) {
   class $Closure2 {
@@ -38,8 +38,8 @@ module.exports = function({ $Another }) {
 
 ```
 
-## inflight.Another-1.js
-```js
+## inflight.Another-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $globalCounter }) {
   class Another {
@@ -61,8 +61,8 @@ module.exports = function({ $globalCounter }) {
 
 ```
 
-## inflight.First-1.js
-```js
+## inflight.First-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class First {
@@ -74,8 +74,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.MyResource-1.js
-```js
+## inflight.MyResource-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $Another, $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______globalMapOfNum___a__, $_globalArrayOfStr_at_0__, $_globalSetOfStr_has__a___, $globalAnother, $globalAnother_first_myResource, $globalAnother_myField, $globalBool, $globalBucket, $globalNum, $globalStr }) {
   class MyResource {
@@ -102,8 +102,8 @@ module.exports = function({ $Another, $__obj__key_______if____key_in_obj___throw
 
 ```
 
-## inflight.R-1.js
-```js
+## inflight.R-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
   class R {
@@ -355,8 +355,8 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -374,7 +374,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.First-1.js")({
+          require("./inflight.First-1.cjs")({
           })
         `;
       }
@@ -401,7 +401,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Another-1.js")({
+          require("./inflight.Another-1.cjs")({
             $globalCounter: ${context._lift(globalCounter)},
           })
         `;
@@ -448,7 +448,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return `
-              require("./inflight.R-1.js")({
+              require("./inflight.R-1.cjs")({
                 $_parentThis_localCounter: ${context._lift($parentThis.localCounter)},
                 $globalCounter: ${context._lift(globalCounter)},
               })
@@ -480,7 +480,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.MyResource-1.js")({
+          require("./inflight.MyResource-1.cjs")({
             $Another: ${context._lift(Another)},
             $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______globalMapOfNum___a__: ${context._lift(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(globalMapOfNum, "a"))},
             $_globalArrayOfStr_at_0__: ${context._lift((globalArrayOfStr.at(0)))},
@@ -538,7 +538,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
             $res: ${context._lift(res)},
           })
         `;
@@ -571,7 +571,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure2-1.js")({
+          require("./inflight.$Closure2-1.cjs")({
             $Another: ${context._lift(Another)},
           })
         `;

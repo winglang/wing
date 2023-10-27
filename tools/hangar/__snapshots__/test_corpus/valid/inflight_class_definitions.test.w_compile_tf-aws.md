@@ -1,7 +1,7 @@
 # [inflight_class_definitions.test.w](../../../../../examples/tests/valid/inflight_class_definitions.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class $Closure1 {
@@ -25,8 +25,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure2-1.js
-```js
+## inflight.$Closure2-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $F }) {
   class $Closure2 {
@@ -44,8 +44,8 @@ module.exports = function({ $F }) {
 
 ```
 
-## inflight.$Closure3-1.js
-```js
+## inflight.$Closure3-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $B, $a, $d, $fn, $innerD }) {
   class $Closure3 {
@@ -68,8 +68,8 @@ module.exports = function({ $B, $a, $d, $fn, $innerD }) {
 
 ```
 
-## inflight.A-1.js
-```js
+## inflight.A-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class A {
@@ -84,8 +84,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.B-1.js
-```js
+## inflight.B-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class B {
@@ -98,8 +98,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.D-1.js
-```js
+## inflight.D-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class D {
@@ -115,8 +115,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.E-1.js
-```js
+## inflight.E-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class E {
@@ -128,8 +128,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.F-1.js
-```js
+## inflight.F-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class F {
@@ -174,8 +174,8 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -194,7 +194,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.A-1.js")({
+          require("./inflight.A-1.cjs")({
           })
         `;
       }
@@ -219,7 +219,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.B-1.js")({
+          require("./inflight.B-1.cjs")({
           })
         `;
       }
@@ -245,7 +245,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
           })
         `;
       }
@@ -276,7 +276,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return `
-              require("./inflight.E-1.js")({
+              require("./inflight.E-1.cjs")({
               })
             `;
           }
@@ -303,7 +303,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return `
-              require("./inflight.F-1.js")({
+              require("./inflight.F-1.cjs")({
               })
             `;
           }
@@ -330,7 +330,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return `
-              require("./inflight.$Closure2-1.js")({
+              require("./inflight.$Closure2-1.cjs")({
                 $F: ${context._lift(F)},
               })
             `;
@@ -357,7 +357,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.D-1.js")({
+          require("./inflight.D-1.cjs")({
           })
         `;
       }
@@ -393,7 +393,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure3-1.js")({
+          require("./inflight.$Closure3-1.cjs")({
             $B: ${context._lift(B)},
             $a: ${context._lift(a)},
             $d: ${context._lift(d)},

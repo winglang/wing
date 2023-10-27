@@ -1,7 +1,7 @@
 # [shadowing.test.w](../../../../../examples/tests/valid/shadowing.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $bar }) {
   class $Closure1 {
@@ -27,8 +27,8 @@ module.exports = function({ $bar }) {
 
 ```
 
-## inflight.$Closure2-1.js
-```js
+## inflight.$Closure2-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $fn }) {
   class $Closure2 {
@@ -82,8 +82,8 @@ module.exports = function({ $fn }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -101,7 +101,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
             $bar: ${context._lift(bar)},
           })
         `;
@@ -134,7 +134,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure2-1.js")({
+          require("./inflight.$Closure2-1.cjs")({
             $fn: ${context._lift(fn)},
           })
         `;

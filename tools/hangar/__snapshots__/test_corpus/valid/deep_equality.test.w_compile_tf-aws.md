@@ -1,7 +1,7 @@
 # [deep_equality.test.w](../../../../../examples/tests/valid/deep_equality.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $numA, $numB, $strA, $strB }) {
   class $Closure1 {
@@ -22,8 +22,8 @@ module.exports = function({ $numA, $numB, $strA, $strB }) {
 
 ```
 
-## inflight.$Closure10-1.js
-```js
+## inflight.$Closure10-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $arrayA, $arrayB, $arrayC }) {
   class $Closure10 {
@@ -42,8 +42,8 @@ module.exports = function({ $arrayA, $arrayB, $arrayC }) {
 
 ```
 
-## inflight.$Closure11-1.js
-```js
+## inflight.$Closure11-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $cat1, $cat2 }) {
   class $Closure11 {
@@ -62,8 +62,8 @@ module.exports = function({ $cat1, $cat2 }) {
 
 ```
 
-## inflight.$Closure12-1.js
-```js
+## inflight.$Closure12-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $cat1, $cat2, $cat3 }) {
   class $Closure12 {
@@ -82,8 +82,8 @@ module.exports = function({ $cat1, $cat2, $cat3 }) {
 
 ```
 
-## inflight.$Closure2-1.js
-```js
+## inflight.$Closure2-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $numA, $numC, $strA, $strC }) {
   class $Closure2 {
@@ -102,8 +102,8 @@ module.exports = function({ $numA, $numC, $strA, $strC }) {
 
 ```
 
-## inflight.$Closure3-1.js
-```js
+## inflight.$Closure3-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $jsonA, $jsonB }) {
   class $Closure3 {
@@ -122,8 +122,8 @@ module.exports = function({ $jsonA, $jsonB }) {
 
 ```
 
-## inflight.$Closure4-1.js
-```js
+## inflight.$Closure4-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $jsonA, $jsonB, $jsonC }) {
   class $Closure4 {
@@ -142,8 +142,8 @@ module.exports = function({ $jsonA, $jsonB, $jsonC }) {
 
 ```
 
-## inflight.$Closure5-1.js
-```js
+## inflight.$Closure5-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $setA, $setB }) {
   class $Closure5 {
@@ -162,8 +162,8 @@ module.exports = function({ $setA, $setB }) {
 
 ```
 
-## inflight.$Closure6-1.js
-```js
+## inflight.$Closure6-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $setA, $setB, $setC }) {
   class $Closure6 {
@@ -182,8 +182,8 @@ module.exports = function({ $setA, $setB, $setC }) {
 
 ```
 
-## inflight.$Closure7-1.js
-```js
+## inflight.$Closure7-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $mapA, $mapB }) {
   class $Closure7 {
@@ -202,8 +202,8 @@ module.exports = function({ $mapA, $mapB }) {
 
 ```
 
-## inflight.$Closure8-1.js
-```js
+## inflight.$Closure8-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $mapA, $mapB, $mapC }) {
   class $Closure8 {
@@ -222,8 +222,8 @@ module.exports = function({ $mapA, $mapB, $mapC }) {
 
 ```
 
-## inflight.$Closure9-1.js
-```js
+## inflight.$Closure9-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $arrayA, $arrayB }) {
   class $Closure9 {
@@ -274,8 +274,8 @@ module.exports = function({ $arrayA, $arrayB }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -292,7 +292,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
             $numA: ${context._lift(numA)},
             $numB: ${context._lift(numB)},
             $strA: ${context._lift(strA)},
@@ -331,7 +331,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure2-1.js")({
+          require("./inflight.$Closure2-1.cjs")({
             $numA: ${context._lift(numA)},
             $numC: ${context._lift(numC)},
             $strA: ${context._lift(strA)},
@@ -370,7 +370,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure3-1.js")({
+          require("./inflight.$Closure3-1.cjs")({
             $jsonA: ${context._lift(jsonA)},
             $jsonB: ${context._lift(jsonB)},
           })
@@ -405,7 +405,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure4-1.js")({
+          require("./inflight.$Closure4-1.cjs")({
             $jsonA: ${context._lift(jsonA)},
             $jsonB: ${context._lift(jsonB)},
             $jsonC: ${context._lift(jsonC)},
@@ -442,7 +442,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure5-1.js")({
+          require("./inflight.$Closure5-1.cjs")({
             $setA: ${context._lift(setA)},
             $setB: ${context._lift(setB)},
           })
@@ -477,7 +477,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure6-1.js")({
+          require("./inflight.$Closure6-1.cjs")({
             $setA: ${context._lift(setA)},
             $setB: ${context._lift(setB)},
             $setC: ${context._lift(setC)},
@@ -514,7 +514,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure7-1.js")({
+          require("./inflight.$Closure7-1.cjs")({
             $mapA: ${context._lift(mapA)},
             $mapB: ${context._lift(mapB)},
           })
@@ -549,7 +549,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure8-1.js")({
+          require("./inflight.$Closure8-1.cjs")({
             $mapA: ${context._lift(mapA)},
             $mapB: ${context._lift(mapB)},
             $mapC: ${context._lift(mapC)},
@@ -586,7 +586,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure9-1.js")({
+          require("./inflight.$Closure9-1.cjs")({
             $arrayA: ${context._lift(arrayA)},
             $arrayB: ${context._lift(arrayB)},
           })
@@ -621,7 +621,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure10-1.js")({
+          require("./inflight.$Closure10-1.cjs")({
             $arrayA: ${context._lift(arrayA)},
             $arrayB: ${context._lift(arrayB)},
             $arrayC: ${context._lift(arrayC)},
@@ -658,7 +658,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure11-1.js")({
+          require("./inflight.$Closure11-1.cjs")({
             $cat1: ${context._lift(cat1)},
             $cat2: ${context._lift(cat2)},
           })
@@ -693,7 +693,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure12-1.js")({
+          require("./inflight.$Closure12-1.cjs")({
             $cat1: ${context._lift(cat1)},
             $cat2: ${context._lift(cat2)},
             $cat3: ${context._lift(cat3)},

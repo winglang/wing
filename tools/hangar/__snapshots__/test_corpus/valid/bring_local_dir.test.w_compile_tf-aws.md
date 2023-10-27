@@ -1,7 +1,7 @@
 # [bring_local_dir.test.w](../../../../../examples/tests/valid/bring_local_dir.test.w) | compile | tf-aws
 
-## inflight.Bar-3.js
-```js
+## inflight.Bar-3.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Bar {
@@ -13,8 +13,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Foo-2.js
-```js
+## inflight.Foo-2.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Foo {
@@ -26,8 +26,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Foo-3.js
-```js
+## inflight.Foo-3.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Foo {
@@ -39,8 +39,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Widget-1.js
-```js
+## inflight.Widget-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Widget {
@@ -84,12 +84,41 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.file1-3.js
-```js
+## preflight.cjs
+```cjs
+"use strict";
+const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
+const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const $wing_is_test = process.env.WING_IS_TEST === "true";
+const std = $stdlib.std;
+const w = require("./preflight.widget-1.cjs")({ $stdlib });
+const subdir = require("./preflight.subdir2-5.cjs")({ $stdlib });
+class $Root extends $stdlib.std.Resource {
+  constructor($scope, $id) {
+    super($scope, $id);
+    const widget1 = new w.Widget(this, "w.Widget");
+    {((cond) => {if (!cond) throw new Error("assertion failed: widget1.compute() == 42")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((widget1.compute()),42)))};
+    const foo = new subdir.Foo(this, "subdir.Foo");
+    {((cond) => {if (!cond) throw new Error("assertion failed: foo.foo() == \"foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((foo.foo()),"foo")))};
+    const bar = new subdir.Bar(this, "subdir.Bar");
+    {((cond) => {if (!cond) throw new Error("assertion failed: bar.bar() == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((bar.bar()),"bar")))};
+    const widget2 = new subdir.inner.Widget(this, "subdir.inner.Widget");
+    {((cond) => {if (!cond) throw new Error("assertion failed: widget2.compute() == 42")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((widget2.compute()),42)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: foo.checkWidget(widget2) == 1379")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((foo.checkWidget(widget2)),1379)))};
+  }
+}
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "bring_local_dir.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+
+```
+
+## preflight.file1-3.cjs
+```cjs
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
-  const blah = require("./preflight.inner-2.js")({ $stdlib });
+  const blah = require("./preflight.inner-2.cjs")({ $stdlib });
   const cloud = $stdlib.cloud;
   const util = $stdlib.util;
   class Foo extends $stdlib.std.Resource {
@@ -104,7 +133,7 @@ module.exports = function({ $stdlib }) {
     }
     static _toInflightType(context) {
       return `
-        require("./inflight.Foo-2.js")({
+        require("./inflight.Foo-2.cjs")({
         })
       `;
     }
@@ -128,8 +157,8 @@ module.exports = function({ $stdlib }) {
 
 ```
 
-## preflight.file2-4.js
-```js
+## preflight.file2-4.cjs
+```cjs
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
@@ -144,7 +173,7 @@ module.exports = function({ $stdlib }) {
     }
     static _toInflightType(context) {
       return `
-        require("./inflight.Bar-3.js")({
+        require("./inflight.Bar-3.cjs")({
         })
       `;
     }
@@ -169,7 +198,7 @@ module.exports = function({ $stdlib }) {
     }
     static _toInflightType(context) {
       return `
-        require("./inflight.Foo-3.js")({
+        require("./inflight.Foo-3.cjs")({
         })
       `;
     }
@@ -193,64 +222,34 @@ module.exports = function({ $stdlib }) {
 
 ```
 
-## preflight.inner-2.js
-```js
+## preflight.inner-2.cjs
+```cjs
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   return {
-    ...require("./preflight.widget-1.js")({ $stdlib }),
+    ...require("./preflight.widget-1.cjs")({ $stdlib }),
   };
 };
 
 ```
 
-## preflight.js
-```js
-"use strict";
-const $stdlib = require('@winglang/sdk');
-const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
-const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const $wing_is_test = process.env.WING_IS_TEST === "true";
-const std = $stdlib.std;
-const w = require("./preflight.widget-1.js")({ $stdlib });
-const subdir = require("./preflight.subdir2-5.js")({ $stdlib });
-class $Root extends $stdlib.std.Resource {
-  constructor($scope, $id) {
-    super($scope, $id);
-    const widget1 = new w.Widget(this, "w.Widget");
-    {((cond) => {if (!cond) throw new Error("assertion failed: widget1.compute() == 42")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((widget1.compute()),42)))};
-    const foo = new subdir.Foo(this, "subdir.Foo");
-    {((cond) => {if (!cond) throw new Error("assertion failed: foo.foo() == \"foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((foo.foo()),"foo")))};
-    const bar = new subdir.Bar(this, "subdir.Bar");
-    {((cond) => {if (!cond) throw new Error("assertion failed: bar.bar() == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((bar.bar()),"bar")))};
-    const widget2 = new subdir.inner.Widget(this, "subdir.inner.Widget");
-    {((cond) => {if (!cond) throw new Error("assertion failed: widget2.compute() == 42")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((widget2.compute()),42)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: foo.checkWidget(widget2) == 1379")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((foo.checkWidget(widget2)),1379)))};
-  }
-}
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_local_dir.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
-$APP.synth();
-
-```
-
-## preflight.subdir2-5.js
-```js
+## preflight.subdir2-5.cjs
+```cjs
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   return {
-    inner: require("./preflight.inner-2.js")({ $stdlib }),
-    ...require("./preflight.file2-4.js")({ $stdlib }),
-    ...require("./preflight.file1-3.js")({ $stdlib }),
+    inner: require("./preflight.inner-2.cjs")({ $stdlib }),
+    ...require("./preflight.file2-4.cjs")({ $stdlib }),
+    ...require("./preflight.file1-3.cjs")({ $stdlib }),
   };
 };
 
 ```
 
-## preflight.widget-1.js
-```js
+## preflight.widget-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
@@ -266,7 +265,7 @@ module.exports = function({ $stdlib }) {
     }
     static _toInflightType(context) {
       return `
-        require("./inflight.Widget-1.js")({
+        require("./inflight.Widget-1.cjs")({
         })
       `;
     }

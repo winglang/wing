@@ -1,7 +1,7 @@
 # [inflight_capture_static.test.w](../../../../../examples/tests/valid/inflight_capture_static.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $Preflight }) {
   class $Closure1 {
@@ -19,8 +19,8 @@ module.exports = function({ $Preflight }) {
 
 ```
 
-## inflight.$Closure2-1.js
-```js
+## inflight.$Closure2-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $OuterInflight }) {
   class $Closure2 {
@@ -38,8 +38,8 @@ module.exports = function({ $OuterInflight }) {
 
 ```
 
-## inflight.$Closure3-1.js
-```js
+## inflight.$Closure3-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class $Closure3 {
@@ -62,8 +62,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure4-1.js
-```js
+## inflight.$Closure4-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $util_Util }) {
   class $Closure4 {
@@ -90,8 +90,8 @@ module.exports = function({ $util_Util }) {
 
 ```
 
-## inflight.OuterInflight-1.js
-```js
+## inflight.OuterInflight-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class OuterInflight {
@@ -104,8 +104,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Preflight-1.js
-```js
+## inflight.Preflight-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Preflight {
@@ -152,8 +152,8 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -170,7 +170,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Preflight-1.js")({
+          require("./inflight.Preflight-1.cjs")({
           })
         `;
       }
@@ -195,7 +195,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.OuterInflight-1.js")({
+          require("./inflight.OuterInflight-1.cjs")({
           })
         `;
       }
@@ -221,7 +221,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
             $Preflight: ${context._lift(Preflight)},
           })
         `;
@@ -254,7 +254,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure2-1.js")({
+          require("./inflight.$Closure2-1.cjs")({
             $OuterInflight: ${context._lift(OuterInflight)},
           })
         `;
@@ -281,7 +281,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure3-1.js")({
+          require("./inflight.$Closure3-1.cjs")({
           })
         `;
       }
@@ -307,7 +307,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure4-1.js")({
+          require("./inflight.$Closure4-1.cjs")({
             $util_Util: ${context._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;

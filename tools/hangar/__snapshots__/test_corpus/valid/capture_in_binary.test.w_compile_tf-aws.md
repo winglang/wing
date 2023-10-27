@@ -1,7 +1,7 @@
 # [capture_in_binary.test.w](../../../../../examples/tests/valid/capture_in_binary.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $b, $x }) {
   class $Closure1 {
@@ -67,8 +67,8 @@ module.exports = function({ $b, $x }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -86,7 +86,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
             $b: ${context._lift(b)},
             $x: ${context._lift(x)},
           })

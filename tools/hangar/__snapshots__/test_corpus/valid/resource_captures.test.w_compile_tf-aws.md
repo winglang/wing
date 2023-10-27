@@ -1,7 +1,7 @@
 # [resource_captures.test.w](../../../../../examples/tests/valid/resource_captures.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $r }) {
   class $Closure1 {
@@ -29,8 +29,8 @@ module.exports = function({ $r }) {
 
 ```
 
-## inflight.Another-1.js
-```js
+## inflight.Another-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Another {
@@ -48,8 +48,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.First-1.js
-```js
+## inflight.First-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class First {
@@ -61,8 +61,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.MyResource-1.js
-```js
+## inflight.MyResource-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class MyResource {
@@ -245,8 +245,8 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -264,7 +264,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.First-1.js")({
+          require("./inflight.First-1.cjs")({
           })
         `;
       }
@@ -291,7 +291,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Another-1.js")({
+          require("./inflight.Another-1.cjs")({
           })
         `;
       }
@@ -332,7 +332,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.MyResource-1.js")({
+          require("./inflight.MyResource-1.cjs")({
           })
         `;
       }
@@ -440,7 +440,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
             $r: ${context._lift(r)},
           })
         `;

@@ -1,7 +1,7 @@
 # [inflights_calling_inflights.test.w](../../../../../examples/tests/valid/inflights_calling_inflights.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $globalBucket }) {
   class $Closure1 {
@@ -19,8 +19,8 @@ module.exports = function({ $globalBucket }) {
 
 ```
 
-## inflight.$Closure2-1.js
-```js
+## inflight.$Closure2-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $storeInBucket }) {
   class $Closure2 {
@@ -38,8 +38,8 @@ module.exports = function({ $storeInBucket }) {
 
 ```
 
-## inflight.$Closure3-1.js
-```js
+## inflight.$Closure3-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $func1, $globalBucket }) {
   class $Closure3 {
@@ -58,8 +58,8 @@ module.exports = function({ $func1, $globalBucket }) {
 
 ```
 
-## inflight.$Closure4-1.js
-```js
+## inflight.$Closure4-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $globalBucket }) {
   class $Closure4 {
@@ -78,8 +78,8 @@ module.exports = function({ $globalBucket }) {
 
 ```
 
-## inflight.$Closure5-1.js
-```js
+## inflight.$Closure5-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $x }) {
   class $Closure5 {
@@ -98,8 +98,8 @@ module.exports = function({ $x }) {
 
 ```
 
-## inflight.MyResource-1.js
-```js
+## inflight.MyResource-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class MyResource {
@@ -263,8 +263,8 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -282,7 +282,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
             $globalBucket: ${context._lift(globalBucket)},
           })
         `;
@@ -315,7 +315,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure2-1.js")({
+          require("./inflight.$Closure2-1.cjs")({
             $storeInBucket: ${context._lift(storeInBucket)},
           })
         `;
@@ -348,7 +348,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure3-1.js")({
+          require("./inflight.$Closure3-1.cjs")({
             $func1: ${context._lift(func1)},
             $globalBucket: ${context._lift(globalBucket)},
           })
@@ -387,7 +387,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return `
-              require("./inflight.$Closure4-1.js")({
+              require("./inflight.$Closure4-1.cjs")({
                 $globalBucket: ${context._lift(globalBucket)},
               })
             `;
@@ -417,7 +417,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.MyResource-1.js")({
+          require("./inflight.MyResource-1.cjs")({
           })
         `;
       }
@@ -453,7 +453,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure5-1.js")({
+          require("./inflight.$Closure5-1.cjs")({
             $x: ${context._lift(x)},
           })
         `;

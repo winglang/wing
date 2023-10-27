@@ -1,7 +1,7 @@
 # [bring_wing_library.test.w](../../../../../examples/tests/valid/bring_wing_library.test.w) | compile | tf-aws
 
-## inflight.$Closure1-3.js
-```js
+## inflight.$Closure1-3.cjs
+```cjs
 "use strict";
 module.exports = function({ $fixture_Store }) {
   class $Closure1 {
@@ -19,8 +19,8 @@ module.exports = function({ $fixture_Store }) {
 
 ```
 
-## inflight.Store-2.js
-```js
+## inflight.Store-2.cjs
+```cjs
 "use strict";
 module.exports = function({ $myutil_Util }) {
   class Store {
@@ -39,8 +39,8 @@ module.exports = function({ $myutil_Util }) {
 
 ```
 
-## inflight.Util-1.js
-```js
+## inflight.Util-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Util {
@@ -101,34 +101,15 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.enums-1.js
-```js
-"use strict";
-module.exports = function({ $stdlib }) {
-  const std = $stdlib.std;
-  const FavoriteNumbers =
-    (function (tmp) {
-      tmp[tmp["SEVEN"] = 0] = "SEVEN";
-      tmp[tmp["FORTY_TWO"] = 1] = "FORTY_TWO";
-      return tmp;
-    })({})
-  ;
-  return { FavoriteNumbers };
-};
-
-```
-
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
-const fixture = require("./preflight.testfixture-5.js")({ $stdlib });
-const testfixture = require("./preflight.testfixture-5.js")({ $stdlib });
-const testfixture2 = require("./preflight.testfixture-5.js")({ $stdlib });
+const fixture = require("./preflight.wingfixture-5.cjs")({ $stdlib });
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -139,7 +120,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-3.js")({
+          require("./inflight.$Closure1-3.cjs")({
             $fixture_Store: ${context._lift($stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"))},
           })
         `;
@@ -167,25 +148,39 @@ class $Root extends $stdlib.std.Resource {
     }
     new fixture.Store(this, "fixture.Store");
     const fave_num = fixture.FavoriteNumbers.SEVEN;
-    const fave_num2 = testfixture.FavoriteNumbers.SEVEN;
-    const fave_num3 = testfixture2.FavoriteNumbers.SEVEN;
     {((cond) => {if (!cond) throw new Error("assertion failed: fixture.Store.makeKey(\"hello\") == \"data/hello.json\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fixture.Store.makeKey("hello")),"data/hello.json")))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:makeKeyInflight", new $Closure1(this, "$Closure1"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_wing_library.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
-$APP.synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "bring_wing_library.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 
-## preflight.store-3.js
-```js
+## preflight.enums-1.cjs
+```cjs
+"use strict";
+module.exports = function({ $stdlib }) {
+  const std = $stdlib.std;
+  const FavoriteNumbers =
+    (function (tmp) {
+      tmp[tmp["SEVEN"] = 0] = "SEVEN";
+      tmp[tmp["FORTY_TWO"] = 1] = "FORTY_TWO";
+      return tmp;
+    })({})
+  ;
+  return { FavoriteNumbers };
+};
+
+```
+
+## preflight.store-3.cjs
+```cjs
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   const cloud = $stdlib.cloud;
-  const myutil = require("./preflight.util-2.js")({ $stdlib });
+  const myutil = require("./preflight.util-2.cjs")({ $stdlib });
   class Store extends $stdlib.std.Resource {
     constructor($scope, $id, ) {
       super($scope, $id);
@@ -196,7 +191,7 @@ module.exports = function({ $stdlib }) {
     }
     static _toInflightType(context) {
       return `
-        require("./inflight.Store-2.js")({
+        require("./inflight.Store-2.cjs")({
           $myutil_Util: ${context._lift($stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"))},
         })
       `;
@@ -232,34 +227,20 @@ module.exports = function({ $stdlib }) {
 
 ```
 
-## preflight.subdir-4.js
-```js
+## preflight.subdir-4.cjs
+```cjs
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   return {
-    ...require("./preflight.util-2.js")({ $stdlib }),
+    ...require("./preflight.util-2.cjs")({ $stdlib }),
   };
 };
 
 ```
 
-## preflight.testfixture-5.js
-```js
-"use strict";
-module.exports = function({ $stdlib }) {
-  const std = $stdlib.std;
-  return {
-    subdir: require("./preflight.subdir-4.js")({ $stdlib }),
-    ...require("./preflight.store-3.js")({ $stdlib }),
-    ...require("./preflight.enums-1.js")({ $stdlib }),
-  };
-};
-
-```
-
-## preflight.util-2.js
-```js
+## preflight.util-2.cjs
+```cjs
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
@@ -269,7 +250,7 @@ module.exports = function({ $stdlib }) {
     }
     static _toInflightType(context) {
       return `
-        require("./inflight.Util-1.js")({
+        require("./inflight.Util-1.cjs")({
         })
       `;
     }
@@ -289,6 +270,20 @@ module.exports = function({ $stdlib }) {
     }
   }
   return { Util };
+};
+
+```
+
+## preflight.wingfixture-5.cjs
+```cjs
+"use strict";
+module.exports = function({ $stdlib }) {
+  const std = $stdlib.std;
+  return {
+    subdir: require("./preflight.subdir-4.cjs")({ $stdlib }),
+    ...require("./preflight.store-3.cjs")({ $stdlib }),
+    ...require("./preflight.enums-1.cjs")({ $stdlib }),
+  };
 };
 
 ```

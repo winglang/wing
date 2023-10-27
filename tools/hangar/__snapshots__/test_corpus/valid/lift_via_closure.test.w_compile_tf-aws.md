@@ -1,7 +1,7 @@
 # [lift_via_closure.test.w](../../../../../examples/tests/valid/lift_via_closure.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $bucket2 }) {
   class $Closure1 {
@@ -19,8 +19,8 @@ module.exports = function({ $bucket2 }) {
 
 ```
 
-## inflight.$Closure2-1.js
-```js
+## inflight.$Closure2-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $fn }) {
   class $Closure2 {
@@ -38,8 +38,8 @@ module.exports = function({ $fn }) {
 
 ```
 
-## inflight.$Closure3-1.js
-```js
+## inflight.$Closure3-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $bucket2, $fn2, $fn2_bucket }) {
   class $Closure3 {
@@ -60,8 +60,8 @@ module.exports = function({ $bucket2, $fn2, $fn2_bucket }) {
 
 ```
 
-## inflight.MyClosure-1.js
-```js
+## inflight.MyClosure-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $bucket2 }) {
   class MyClosure {
@@ -145,8 +145,8 @@ module.exports = function({ $bucket2 }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -164,7 +164,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
             $bucket2: ${context._lift(bucket2)},
           })
         `;
@@ -197,7 +197,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.MyClosure-1.js")({
+          require("./inflight.MyClosure-1.cjs")({
             $bucket2: ${context._lift(bucket2)},
           })
         `;
@@ -241,7 +241,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure2-1.js")({
+          require("./inflight.$Closure2-1.cjs")({
             $fn: ${context._lift(fn)},
           })
         `;
@@ -274,7 +274,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure3-1.js")({
+          require("./inflight.$Closure3-1.cjs")({
             $bucket2: ${context._lift(bucket2)},
             $fn2: ${context._lift(fn2)},
             $fn2_bucket: ${context._lift(fn2.bucket)},

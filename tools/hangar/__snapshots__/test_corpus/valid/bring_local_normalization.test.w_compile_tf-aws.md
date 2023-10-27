@@ -1,7 +1,7 @@
 # [bring_local_normalization.test.w](../../../../../examples/tests/valid/bring_local_normalization.test.w) | compile | tf-aws
 
-## inflight.Bar-1.js
-```js
+## inflight.Bar-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Bar {
@@ -13,8 +13,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Baz-2.js
-```js
+## inflight.Baz-2.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Baz {
@@ -26,8 +26,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Foo-3.js
-```js
+## inflight.Foo-3.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Foo {
@@ -71,8 +71,8 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.bar-1.js
-```js
+## preflight.bar-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
@@ -85,7 +85,7 @@ module.exports = function({ $stdlib }) {
     }
     static _toInflightType(context) {
       return `
-        require("./inflight.Bar-1.js")({
+        require("./inflight.Bar-1.cjs")({
         })
       `;
     }
@@ -109,8 +109,8 @@ module.exports = function({ $stdlib }) {
 
 ```
 
-## preflight.baz-2.js
-```js
+## preflight.baz-2.cjs
+```cjs
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
@@ -123,7 +123,7 @@ module.exports = function({ $stdlib }) {
     }
     static _toInflightType(context) {
       return `
-        require("./inflight.Baz-2.js")({
+        require("./inflight.Baz-2.cjs")({
         })
       `;
     }
@@ -147,13 +147,39 @@ module.exports = function({ $stdlib }) {
 
 ```
 
-## preflight.foo-3.js
-```js
+## preflight.cjs
+```cjs
+"use strict";
+const $stdlib = require('@winglang/sdk');
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
+const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const $wing_is_test = process.env.WING_IS_TEST === "true";
+const std = $stdlib.std;
+const foo = require("./preflight.foo-3.cjs")({ $stdlib });
+const bar = require("./preflight.bar-1.cjs")({ $stdlib });
+const baz = require("./preflight.baz-2.cjs")({ $stdlib });
+class $Root extends $stdlib.std.Resource {
+  constructor($scope, $id) {
+    super($scope, $id);
+    {((cond) => {if (!cond) throw new Error("assertion failed: foo.Foo.foo() == \"foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((foo.Foo.foo()),"foo")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: foo.Foo.bar() == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((foo.Foo.bar()),"bar")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: foo.Foo.baz() == \"baz\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((foo.Foo.baz()),"baz")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: bar.Bar.bar() == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((bar.Bar.bar()),"bar")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: baz.Baz.baz() == \"baz\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((baz.Baz.baz()),"baz")))};
+  }
+}
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "bring_local_normalization.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+
+```
+
+## preflight.foo-3.cjs
+```cjs
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
-  const bar = require("./preflight.bar-1.js")({ $stdlib });
-  const baz = require("./preflight.baz-2.js")({ $stdlib });
+  const bar = require("./preflight.bar-1.cjs")({ $stdlib });
+  const baz = require("./preflight.baz-2.cjs")({ $stdlib });
   class Foo extends $stdlib.std.Resource {
     constructor($scope, $id, ) {
       super($scope, $id);
@@ -169,7 +195,7 @@ module.exports = function({ $stdlib }) {
     }
     static _toInflightType(context) {
       return `
-        require("./inflight.Foo-3.js")({
+        require("./inflight.Foo-3.cjs")({
         })
       `;
     }
@@ -190,33 +216,6 @@ module.exports = function({ $stdlib }) {
   }
   return { Foo };
 };
-
-```
-
-## preflight.js
-```js
-"use strict";
-const $stdlib = require('@winglang/sdk');
-const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
-const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const $wing_is_test = process.env.WING_IS_TEST === "true";
-const std = $stdlib.std;
-const foo = require("./preflight.foo-3.js")({ $stdlib });
-const bar = require("./preflight.bar-1.js")({ $stdlib });
-const baz = require("./preflight.baz-2.js")({ $stdlib });
-class $Root extends $stdlib.std.Resource {
-  constructor($scope, $id) {
-    super($scope, $id);
-    {((cond) => {if (!cond) throw new Error("assertion failed: foo.Foo.foo() == \"foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((foo.Foo.foo()),"foo")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: foo.Foo.bar() == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((foo.Foo.bar()),"bar")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: foo.Foo.baz() == \"baz\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((foo.Foo.baz()),"baz")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: bar.Bar.bar() == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((bar.Bar.bar()),"bar")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: baz.Baz.baz() == \"baz\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((baz.Baz.baz()),"baz")))};
-  }
-}
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_local_normalization.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
-$APP.synth();
 
 ```
 

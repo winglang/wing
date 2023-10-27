@@ -1,7 +1,7 @@
 # [capture_reassigable_class_field.test.w](../../../../../examples/tests/valid/capture_reassigable_class_field.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class $Closure1 {
@@ -18,8 +18,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure2-1.js
-```js
+## inflight.$Closure2-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $counter }) {
   class $Closure2 {
@@ -37,8 +37,8 @@ module.exports = function({ $counter }) {
 
 ```
 
-## inflight.$Closure3-1.js
-```js
+## inflight.$Closure3-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $counter, $kv, $util_Util }) {
   class $Closure3 {
@@ -68,8 +68,8 @@ module.exports = function({ $counter, $kv, $util_Util }) {
 
 ```
 
-## inflight.KeyValueStore-1.js
-```js
+## inflight.KeyValueStore-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class KeyValueStore {
@@ -155,8 +155,8 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -180,7 +180,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return `
-              require("./inflight.$Closure1-1.js")({
+              require("./inflight.$Closure1-1.cjs")({
               })
             `;
           }
@@ -206,7 +206,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.KeyValueStore-1.js")({
+          require("./inflight.KeyValueStore-1.cjs")({
           })
         `;
       }
@@ -248,7 +248,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure2-1.js")({
+          require("./inflight.$Closure2-1.cjs")({
             $counter: ${context._lift(counter)},
           })
         `;
@@ -281,7 +281,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure3-1.js")({
+          require("./inflight.$Closure3-1.cjs")({
             $counter: ${context._lift(counter)},
             $kv: ${context._lift(kv)},
             $util_Util: ${context._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},

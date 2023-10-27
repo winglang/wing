@@ -1,7 +1,7 @@
 # [baz.w](../../../../../examples/tests/valid/baz.w) | compile | tf-aws
 
-## inflight.Baz-1.js
-```js
+## inflight.Baz-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Baz {
@@ -13,8 +13,8 @@ module.exports = function({  }) {
 
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
@@ -27,7 +27,7 @@ module.exports = function({ $stdlib }) {
     }
     static _toInflightType(context) {
       return `
-        require("./inflight.Baz-1.js")({
+        require("./inflight.Baz-1.cjs")({
         })
       `;
     }

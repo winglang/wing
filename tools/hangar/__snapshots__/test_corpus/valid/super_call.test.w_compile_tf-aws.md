@@ -1,9 +1,9 @@
 # [super_call.test.w](../../../../../examples/tests/valid/super_call.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
-module.exports = function({ $InflightB, $expect_Util }) {
+module.exports = function({ $InflightB }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,7 +12,7 @@ module.exports = function({ $InflightB, $expect_Util }) {
     }
     async handle() {
       const b = (await (async () => {const o = new $InflightB(); await o.$inflight_init?.(); return o; })());
-      (await $expect_Util.equal((await b.description()), "InflightB extends InflightA"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.description() == \"InflightB extends InflightA\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await b.description()),"InflightB extends InflightA")))};
     }
   }
   return $Closure1;
@@ -20,10 +20,10 @@ module.exports = function({ $InflightB, $expect_Util }) {
 
 ```
 
-## inflight.$Closure2-1.js
-```js
+## inflight.$Closure2-1.cjs
+```cjs
 "use strict";
-module.exports = function({ $expect_Util, $extended }) {
+module.exports = function({ $extended }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -31,7 +31,7 @@ module.exports = function({ $expect_Util, $extended }) {
       return $obj;
     }
     async handle() {
-      (await $expect_Util.equal((await $extended.do()), "value"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: extended.do() == \"value\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $extended.do()),"value")))};
     }
   }
   return $Closure2;
@@ -39,8 +39,8 @@ module.exports = function({ $expect_Util, $extended }) {
 
 ```
 
-## inflight.A-1.js
-```js
+## inflight.A-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class A {
@@ -52,8 +52,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.B-1.js
-```js
+## inflight.B-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $A }) {
   class B extends $A {
@@ -66,8 +66,8 @@ module.exports = function({ $A }) {
 
 ```
 
-## inflight.BaseClass-1.js
-```js
+## inflight.BaseClass-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $b }) {
   class BaseClass {
@@ -82,8 +82,8 @@ module.exports = function({ $b }) {
 
 ```
 
-## inflight.C-1.js
-```js
+## inflight.C-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $B }) {
   class C extends $B {
@@ -96,8 +96,8 @@ module.exports = function({ $B }) {
 
 ```
 
-## inflight.D-1.js
-```js
+## inflight.D-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $C }) {
   class D extends $C {
@@ -110,8 +110,8 @@ module.exports = function({ $C }) {
 
 ```
 
-## inflight.E-1.js
-```js
+## inflight.E-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $D }) {
   class E extends $D {
@@ -124,8 +124,8 @@ module.exports = function({ $D }) {
 
 ```
 
-## inflight.ExtendedClass-1.js
-```js
+## inflight.ExtendedClass-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $BaseClass, $b }) {
   class ExtendedClass extends $BaseClass {
@@ -142,8 +142,8 @@ module.exports = function({ $BaseClass, $b }) {
 
 ```
 
-## inflight.InflightA-1.js
-```js
+## inflight.InflightA-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class InflightA {
@@ -156,8 +156,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.InflightB-1.js
-```js
+## inflight.InflightB-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $InflightA }) {
   class InflightB extends $InflightA {
@@ -216,15 +216,14 @@ module.exports = function({ $InflightA }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
+const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
-const expect = $stdlib.expect;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -236,7 +235,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.A-1.js")({
+          require("./inflight.A-1.cjs")({
           })
         `;
       }
@@ -264,7 +263,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.B-1.js")({
+          require("./inflight.B-1.cjs")({
             $A: ${context._lift(A)},
           })
         `;
@@ -293,7 +292,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.C-1.js")({
+          require("./inflight.C-1.cjs")({
             $B: ${context._lift(B)},
           })
         `;
@@ -319,7 +318,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.D-1.js")({
+          require("./inflight.D-1.cjs")({
             $C: ${context._lift(C)},
           })
         `;
@@ -348,7 +347,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.E-1.js")({
+          require("./inflight.E-1.cjs")({
             $D: ${context._lift(D)},
           })
         `;
@@ -374,7 +373,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.InflightA-1.js")({
+          require("./inflight.InflightA-1.cjs")({
           })
         `;
       }
@@ -399,7 +398,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.InflightB-1.js")({
+          require("./inflight.InflightB-1.cjs")({
             $InflightA: ${context._lift(InflightA)},
           })
         `;
@@ -426,9 +425,8 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
             $InflightB: ${context._lift(InflightB)},
-            $expect_Util: ${context._lift($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
           })
         `;
       }
@@ -453,7 +451,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.BaseClass-1.js")({
+          require("./inflight.BaseClass-1.cjs")({
             $b: ${context._lift(b)},
           })
         `;
@@ -485,7 +483,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.ExtendedClass-1.js")({
+          require("./inflight.ExtendedClass-1.cjs")({
             $BaseClass: ${context._lift(BaseClass)},
             $b: ${context._lift(b)},
           })
@@ -519,8 +517,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure2-1.js")({
-            $expect_Util: ${context._lift($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
+          require("./inflight.$Closure2-1.cjs")({
             $extended: ${context._lift(extended)},
           })
         `;
@@ -547,16 +544,15 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const e = new E(this, "E");
-    (expect.Util.equal((e.description()), "E extends C extends B"));
+    {((cond) => {if (!cond) throw new Error("assertion failed: e.description() == \"E extends C extends B\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((e.description()),"E extends C extends B")))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:super call inflight", new $Closure1(this, "$Closure1"));
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
     const extended = new ExtendedClass(this, "ExtendedClass");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:super call sets binding permissions", new $Closure2(this, "$Closure2"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "super_call.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
-$APP.synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "super_call.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

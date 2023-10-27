@@ -1,7 +1,7 @@
 # [inflight_class_modifiers.test.w](../../../../../examples/tests/valid/inflight_class_modifiers.test.w) | compile | tf-aws
 
-## inflight.C-1.js
-```js
+## inflight.C-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class C {
@@ -50,8 +50,8 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -67,7 +67,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.C-1.js")({
+          require("./inflight.C-1.cjs")({
           })
         `;
       }

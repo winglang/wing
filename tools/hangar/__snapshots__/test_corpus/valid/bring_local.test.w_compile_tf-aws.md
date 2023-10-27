@@ -1,7 +1,7 @@
 # [bring_local.test.w](../../../../../examples/tests/valid/bring_local.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $__parent_this_1_b }) {
   class $Closure1 {
@@ -19,8 +19,8 @@ module.exports = function({ $__parent_this_1_b }) {
 
 ```
 
-## inflight.$Closure1-3.js
-```js
+## inflight.$Closure1-3.cjs
+```cjs
 "use strict";
 module.exports = function({ $store }) {
   class $Closure1 {
@@ -38,8 +38,8 @@ module.exports = function({ $store }) {
 
 ```
 
-## inflight.Q-2.js
-```js
+## inflight.Q-2.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Q {
@@ -54,8 +54,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Store-1.js
-```js
+## inflight.Store-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Store {
@@ -71,8 +71,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Triangle-3.js
-```js
+## inflight.Triangle-3.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Triangle {
@@ -84,8 +84,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Util-1.js
-```js
+## inflight.Util-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Util {
@@ -97,8 +97,8 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Util-3.js
-```js
+## inflight.Util-3.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class Util {
@@ -273,27 +273,17 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.empty-1.js
-```js
-"use strict";
-module.exports = function({ $stdlib }) {
-  const std = $stdlib.std;
-  return {  };
-};
-
-```
-
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
-const file1 = require("./preflight.store-2.js")({ $stdlib });
-const file2 = require("./preflight.subfile-3.js")({ $stdlib });
-const file3 = require("./preflight.empty-1.js")({ $stdlib });
+const file1 = require("./preflight.store-2.cjs")({ $stdlib });
+const file2 = require("./preflight.subfile-3.cjs")({ $stdlib });
+const file3 = require("./preflight.empty-1.cjs")({ $stdlib });
 const math = $stdlib.math;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -305,7 +295,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-3.js")({
+          require("./inflight.$Closure1-3.cjs")({
             $store: ${context._lift(store)},
           })
         `;
@@ -340,7 +330,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Triangle-3.js")({
+          require("./inflight.Triangle-3.cjs")({
           })
         `;
       }
@@ -365,7 +355,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Util-3.js")({
+          require("./inflight.Util-3.cjs")({
           })
         `;
       }
@@ -399,12 +389,22 @@ $APP.synth();
 
 ```
 
-## preflight.store-2.js
-```js
+## preflight.empty-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
-  const file3 = require("./preflight.empty-1.js")({ $stdlib });
+  return {  };
+};
+
+```
+
+## preflight.store-2.cjs
+```cjs
+"use strict";
+module.exports = function({ $stdlib }) {
+  const std = $stdlib.std;
+  const file3 = require("./preflight.empty-1.cjs")({ $stdlib });
   const math = $stdlib.math;
   const cloud = $stdlib.cloud;
   class Util extends $stdlib.std.Resource {
@@ -413,7 +413,7 @@ module.exports = function({ $stdlib }) {
     }
     static _toInflightType(context) {
       return `
-        require("./inflight.Util-1.js")({
+        require("./inflight.Util-1.cjs")({
         })
       `;
     }
@@ -444,7 +444,7 @@ module.exports = function({ $stdlib }) {
         }
         static _toInflightType(context) {
           return `
-            require("./inflight.$Closure1-1.js")({
+            require("./inflight.$Closure1-1.cjs")({
               $__parent_this_1_b: ${context._lift(__parent_this_1.b)},
             })
           `;
@@ -474,7 +474,7 @@ module.exports = function({ $stdlib }) {
     }
     static _toInflightType(context) {
       return `
-        require("./inflight.Store-1.js")({
+        require("./inflight.Store-1.cjs")({
         })
       `;
     }
@@ -516,8 +516,8 @@ module.exports = function({ $stdlib }) {
 
 ```
 
-## preflight.subfile-3.js
-```js
+## preflight.subfile-3.cjs
+```cjs
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
@@ -528,7 +528,7 @@ module.exports = function({ $stdlib }) {
     }
     static _toInflightType(context) {
       return `
-        require("./inflight.Q-2.js")({
+        require("./inflight.Q-2.cjs")({
         })
       `;
     }
