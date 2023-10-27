@@ -1,4 +1,6 @@
-import { basename, join } from "path";
+import { readFileSync } from "fs";
+import { basename, dirname, join } from "path";
+import * as vm from "vm";
 import { IPlatform } from "./platform";
 import { App, AppProps, SynthHooks } from "../core";
 
@@ -26,18 +28,71 @@ export class PlatformManager {
 
   private loadPlatformPath(platformPath: string) {
     const platformName = basename(platformPath);
-    const pathToRead = BUILTIN_PLATFORMS.includes(platformName)
+
+    const isBuiltin = BUILTIN_PLATFORMS.includes(platformName);
+
+    const pathToRead = isBuiltin
       ? join(__dirname, `../target-${platformName}/platform`)
       : join(platformPath);
 
+    isBuiltin
+      ? this.loadBuiltinPlatform(pathToRead)
+      : this.loadCustomPlatform(pathToRead);
+  }
+
+  /**
+   * Builtin platforms are loaded from the SDK
+   *
+   * @param builtinPlatformPath path to a builtin platform
+   */
+  private loadBuiltinPlatform(builtinPlatformPath: string) {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const loadedPlatform = require(pathToRead);
+    const loadedPlatform = require(builtinPlatformPath);
     if (!loadedPlatform || !loadedPlatform.Platform) {
-      console.error(`Failed to load platform from ${pathToRead}`);
+      console.error(`Failed to load platform from ${builtinPlatformPath}`);
       return;
     }
 
     this.platformInstances.push(new loadedPlatform.Platform());
+  }
+
+  /**
+   * Custom platforms need to be loaded into a custom context in order to
+   * resolve their dependencies correctly.
+   *
+   * @param customPlatformPath path to a custom platform
+   */
+  private loadCustomPlatform(customPlatformPath: string) {
+    const modulePaths = module.paths;
+    const platformDir = dirname(customPlatformPath);
+
+    const requireResolve = (path: string) =>
+      require.resolve(path, {
+        paths: [...modulePaths, platformDir],
+      });
+
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const platformRequire = (path: string) => require(requireResolve(path));
+    platformRequire.resolve = requireResolve;
+
+    const platformExports = {};
+    const context = vm.createContext({
+      require: platformRequire,
+      console,
+      exports: platformExports,
+      process,
+      __dirname: customPlatformPath,
+    });
+
+    const fullCustomPlatformPath = customPlatformPath.endsWith(".js")
+      ? customPlatformPath
+      : `${customPlatformPath}/index.js`;
+
+    const platformCode = readFileSync(fullCustomPlatformPath, "utf-8");
+    const script = new vm.Script(platformCode);
+    script.runInContext(context);
+
+    this.platformInstances.push(new (platformExports as any).Platform());
   }
 
   private createPlatformInstances() {
