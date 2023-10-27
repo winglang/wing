@@ -1,5 +1,12 @@
 import { existsSync } from "fs";
+import * as http from "http";
+import { Server } from "http";
 import { join } from "path";
+import {
+  deserializeValue,
+  makeSimulatorClient,
+  serializeValue,
+} from "./client";
 import { Tree } from "./tree";
 import { SDK_VERSION } from "../constants";
 import { ConstructTree, TREE_FILE_PATH } from "../core";
@@ -8,6 +15,7 @@ import { CONNECTIONS_FILE_PATH, Trace, TraceType } from "../std";
 import { isToken } from "../target-sim/tokens";
 
 const START_ATTEMPT_COUNT = 10;
+const LOCALHOST_ADDRESS = "127.0.0.1";
 
 /**
  * Props for `Simulator`.
@@ -76,6 +84,11 @@ export interface ISimulatorContext {
   readonly resourcePath: string;
 
   /**
+   * The url that the simulator server is listening on.
+   */
+  readonly serverUrl: string;
+
+  /**
    * Find a resource simulation by its handle. Throws if the handle isn't valid.
    */
   findInstance(handle: string): ISimulatorResourceInstance;
@@ -137,6 +150,8 @@ export class Simulator {
   private readonly _traceSubscribers: Array<ITraceSubscriber>;
   private _tree: Tree;
   private _connections: ConnectionData[];
+  private _serverUrl: string | undefined;
+  private _server: Server | undefined;
 
   constructor(props: SimulatorProps) {
     this.simdir = props.simfile;
@@ -212,6 +227,8 @@ export class Simulator {
       ...this._config.resources,
     ];
 
+    await this.startServer();
+
     while (true) {
       const next = initQueue.shift();
       if (!next) {
@@ -274,6 +291,9 @@ export class Simulator {
       this._addTrace(event);
     }
 
+    this._server!.close();
+    this._server!.closeAllConnections();
+
     this._handles.reset();
     this._running = false;
   }
@@ -308,28 +328,28 @@ export class Simulator {
   }
 
   /**
-   * Get a simulated resource instance.
+   * Get a resource client.
    * @returns the resource
    */
   public getResource(path: string): any {
-    const handle = this.tryGetResource(path);
-    if (!handle) {
+    const client = this.tryGetResource(path);
+    if (!client) {
       throw new Error(`Resource "${path}" not found.`);
     }
-    return handle;
+    return client;
   }
 
   /**
-   * Get a simulated resource instance.
-   * @returns The resource of undefined if not found
+   * Get a resource client.
+   * @returns The resource or undefined if not found
    */
   public tryGetResource(path: string): any | undefined {
-    const handle = this.tryGetResourceConfig(path)?.attrs.handle;
+    const handle: string = this.tryGetResourceConfig(path)?.attrs.handle;
     if (!handle) {
       return undefined;
     }
 
-    return this._handles.find(handle);
+    return makeSimulatorClient(this.url, handle);
   }
 
   /**
@@ -381,6 +401,70 @@ export class Simulator {
    */
   public connections(): ConnectionData[] {
     return structuredClone(this._connections);
+  }
+
+  /**
+   * Start a server that allows any resource to be accessed via HTTP.
+   */
+  private async startServer(): Promise<void> {
+    const requestListener = async (
+      req: http.IncomingMessage,
+      res: http.ServerResponse
+    ) => {
+      if (req.url?.startsWith("/v1/call")) {
+        let body = "";
+        req.on("data", (chunk) => {
+          body += chunk;
+        });
+        req.on("end", () => {
+          const request: SimulatorServerRequest = deserializeValue(body);
+          const { handle, method, args } = request;
+          const resource = this._handles.find(handle);
+
+          (resource as any)
+            [method](...args)
+            .then((result: any) => {
+              const resp: SimulatorServerResponse = { result };
+              res.writeHead(200, { "Content-Type": "application/json" });
+              res.end(serializeValue(resp), "utf-8");
+            })
+            .catch((err: any) => {
+              if (err instanceof Error) {
+                err = err.stack;
+              }
+              const resp: SimulatorServerResponse = { error: err };
+              res.writeHead(500, { "Content-Type": "application/json" });
+              res.end(serializeValue(resp), "utf-8");
+            });
+        });
+      } else {
+        res.writeHead(404);
+        res.end();
+      }
+    };
+
+    // start the server, and wait for it to be listening
+    const server = http.createServer(requestListener);
+    await new Promise<void>((resolve) => {
+      server!.listen(0, LOCALHOST_ADDRESS, () => {
+        const addr = server.address();
+        if (addr && typeof addr === "object" && (addr as any).port) {
+          this._serverUrl = `http://${addr.address}:${addr.port}`;
+        }
+        this._server = server;
+        resolve();
+      });
+    });
+  }
+
+  /**
+   * The URL that the simulator server is listening on.
+   */
+  public get url(): string {
+    if (!this._serverUrl) {
+      throw new Error("Simulator server is not running.");
+    }
+    return this._serverUrl;
   }
 
   private async tryStartResource(
@@ -436,6 +520,7 @@ export class Simulator {
     return {
       simdir: this.simdir,
       resourcePath: resourceConfig.path,
+      serverUrl: this.url,
       findInstance: (handle: string) => {
         return this._handles.find(handle);
       },
@@ -680,4 +765,28 @@ export interface ConnectionData {
   readonly target: string;
   /** A name for the connection. */
   readonly name: string;
+}
+
+/**
+ * Internal schema for requests to the simulator server's /v1/call endpoint.
+ * Subject to breaking changes.
+ */
+export interface SimulatorServerRequest {
+  /** The resource handle (an ID unique among resources in the simulation). */
+  readonly handle: string;
+  /** The method to call on the resource. */
+  readonly method: string;
+  /** The arguments to the method. */
+  readonly args: any[];
+}
+
+/**
+ * Internal schema for responses from the simulator server's /v1/call endpoint.
+ * Subject to breaking changes.
+ */
+export interface SimulatorServerResponse {
+  /** The result of the method call. */
+  readonly result?: any;
+  /** The error that occurred during the method call. */
+  readonly error?: any;
 }

@@ -1289,13 +1289,17 @@ return class Handler {
 }
 };
 })())({
-queue: (function(env) {
-  let handle = process.env[env];
+queue: (function() {
+  let handle = process.env.QUEUE_HANDLE_54fcf4cd;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: QUEUE_HANDLE_54fcf4cd\\");
   }
-  return $simulator.findInstance(handle);
-})(\\"QUEUE_HANDLE_54fcf4cd\\")
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+  }
+  return require(\\"@winglang/sdk\\").simulator.makeSimulatorClient(simulatorUrl, handle);
+})()
 })).handle(event);
 };",
   ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "\\"use strict\\";

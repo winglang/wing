@@ -1265,6 +1265,9 @@ importers:
       safe-stable-stringify:
         specifier: ^2.4.3
         version: 2.4.3
+      undici:
+        specifier: '*'
+        version: 5.25.4
       uuid:
         specifier: ^8.3.2
         version: 8.3.2
@@ -13446,7 +13449,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20231022
+      typescript: 5.3.0-dev.20231027
     dev: true
 
   /dset@3.1.2:
@@ -22907,8 +22910,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20231022:
-    resolution: {integrity: sha512-g8ICZidqxW5HGoyFFTyMvbHd4EbZlTSXILKT71uyPagM4asj/3JRaOw0A+xgHSf4PrLHAGAbJ7P/JgtbgZNgcw==}
+  /typescript@5.3.0-dev.20231027:
+    resolution: {integrity: sha512-YFAOvfXqPu/aZg27Xc6/Ftvbm5YmjgGEsVocBYbh3iZWRoYTcN3kF29ZZIdgRhoqSIN89+W29p4bBChsfVor2g==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
