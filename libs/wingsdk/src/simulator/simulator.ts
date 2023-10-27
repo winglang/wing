@@ -1,6 +1,5 @@
 import { existsSync } from "fs";
-import * as http from "http";
-import { Server } from "http";
+import type { Server, IncomingMessage, ServerResponse } from "http";
 import { join } from "path";
 import {
   deserializeValue,
@@ -408,8 +407,8 @@ export class Simulator {
    */
   private async startServer(): Promise<void> {
     const requestListener = async (
-      req: http.IncomingMessage,
-      res: http.ServerResponse
+      req: IncomingMessage,
+      res: ServerResponse
     ) => {
       if (req.url?.startsWith("/v1/call")) {
         let body = "";
@@ -442,6 +441,9 @@ export class Simulator {
         res.end();
       }
     };
+
+    // only import "http" when this method is called to reduce the time it takes to load Wing SDK
+    const http = await import("http");
 
     // start the server, and wait for it to be listening
     const server = http.createServer(requestListener);
