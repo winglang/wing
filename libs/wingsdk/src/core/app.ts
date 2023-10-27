@@ -63,6 +63,7 @@ export interface AppProps {
 
   /**
    * Hooks for overriding newInstance calls
+   * @default - []
    */
   readonly newInstanceOverrides?: any[];
 }
@@ -159,7 +160,11 @@ export abstract class App extends Construct {
    */
   public abstract readonly _tokens: Tokens;
 
-  public readonly overrides: any[];
+  /**
+   * NewInstance hooks for defining resource implementations.
+   * @internal
+   */
+  public readonly _newInstanceOverrides: any[];
 
   constructor(scope: Construct, id: string, props: AppProps) {
     super(scope, id);
@@ -168,7 +173,7 @@ export abstract class App extends Construct {
     }
 
     this.entrypointDir = props.entrypointDir;
-    this.overrides = props.newInstanceOverrides ?? [];
+    this._newInstanceOverrides = props.newInstanceOverrides ?? [];
   }
 
   /**
@@ -222,7 +227,7 @@ export abstract class App extends Construct {
     ...args: any[]
   ): any {
     // first check if overrides have been provided
-    for (const override of this.overrides) {
+    for (const override of this._newInstanceOverrides) {
       const instance = override(fqn, scope, id, ...args);
       if (instance) {
         return instance;

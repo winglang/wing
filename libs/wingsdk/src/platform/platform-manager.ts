@@ -86,6 +86,6 @@ export class PlatformManager {
       }
     });
 
-    return appCall!({...appProps, synthHooks, newInstanceOverrides}) as App;;
+    return appCall!({ ...appProps, synthHooks, newInstanceOverrides }) as App;
   }
 }
