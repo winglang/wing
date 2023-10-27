@@ -4,13 +4,16 @@ bring util;
 let payload = "hello";
 log("log preflight");
 
-let f = new cloud.Function(inflight (input: str): void => {
-  log("log inside function\ncontains 2 lines");
-  let target = util.tryEnv("WING_TARGET");
-  assert(target?); // make sure WING_TARGET is defined in all environments
-});
+let f1 = new cloud.Function(inflight (input: str): str => {
+  log("log inside f1");
+}) as "f1";
 
-test "invokeAsync()" {
+let f2 = new cloud.Function(inflight (input: str): str => {
+  log("log inside f2");
+}) as "f2";
+
+test "invoke" {
   log("log inside test");
-  f.invokeAsync("hello");
+  f1.invokeAsync(payload);
+  f2.invoke(payload);
 }
