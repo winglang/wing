@@ -184,7 +184,7 @@ exports[`create an OnDeploy 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "f80d449080b3bc6bdcb8d4d5c26fea4558a000376aa660842ca899dbe3179556.zip",
+          "S3Key": "40dbbd813fd28dc5f25bbaffed828ce417500de838c120c3368194be48a6db0f.zip",
         },
         "Handler": "index.handler",
         "MemorySize": 1024,
@@ -266,7 +266,11 @@ exports[`create an OnDeploy 1`] = `
       "Properties": {
         "ExecuteOnHandlerChange": true,
         "HandlerArn": {
+<<<<<<< HEAD
           "Ref": "myondeployFunctionCurrentVersion6BC237541c564042d3206a3d595a1ff746960898",
+=======
+          "Ref": "myondeployFunctionCurrentVersion6BC237541f758b982776f134a1f1b1bc52b6ccb5",
+>>>>>>> c5e44ca13 (chore: self mutation (build.diff))
         },
         "InvocationType": "RequestResponse",
         "ServiceToken": {
@@ -517,7 +521,7 @@ exports[`execute OnDeploy after other resources 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "f80d449080b3bc6bdcb8d4d5c26fea4558a000376aa660842ca899dbe3179556.zip",
+          "S3Key": "40dbbd813fd28dc5f25bbaffed828ce417500de838c120c3368194be48a6db0f.zip",
         },
         "Handler": "index.handler",
         "MemorySize": 1024,
@@ -532,7 +536,11 @@ exports[`execute OnDeploy after other resources 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
+<<<<<<< HEAD
     "myondeployFunctionCurrentVersion6BC237541c564042d3206a3d595a1ff746960898": {
+=======
+    "myondeployFunctionCurrentVersion6BC237541f758b982776f134a1f1b1bc52b6ccb5": {
+>>>>>>> c5e44ca13 (chore: self mutation (build.diff))
       "Properties": {
         "FunctionName": {
           "Ref": "myondeployFunction47551748",
@@ -602,7 +610,11 @@ exports[`execute OnDeploy after other resources 1`] = `
       "Properties": {
         "ExecuteOnHandlerChange": true,
         "HandlerArn": {
+<<<<<<< HEAD
           "Ref": "myondeployFunctionCurrentVersion6BC237541c564042d3206a3d595a1ff746960898",
+=======
+          "Ref": "myondeployFunctionCurrentVersion6BC237541f758b982776f134a1f1b1bc52b6ccb5",
+>>>>>>> c5e44ca13 (chore: self mutation (build.diff))
         },
         "InvocationType": "RequestResponse",
         "ServiceToken": {
@@ -856,7 +868,7 @@ exports[`execute OnDeploy before other resources 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "f80d449080b3bc6bdcb8d4d5c26fea4558a000376aa660842ca899dbe3179556.zip",
+          "S3Key": "40dbbd813fd28dc5f25bbaffed828ce417500de838c120c3368194be48a6db0f.zip",
         },
         "Handler": "index.handler",
         "MemorySize": 1024,
@@ -871,7 +883,11 @@ exports[`execute OnDeploy before other resources 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
+<<<<<<< HEAD
     "myondeployFunctionCurrentVersion6BC237541c564042d3206a3d595a1ff746960898": {
+=======
+    "myondeployFunctionCurrentVersion6BC237541f758b982776f134a1f1b1bc52b6ccb5": {
+>>>>>>> c5e44ca13 (chore: self mutation (build.diff))
       "Properties": {
         "FunctionName": {
           "Ref": "myondeployFunction47551748",
@@ -938,7 +954,11 @@ exports[`execute OnDeploy before other resources 1`] = `
       "Properties": {
         "ExecuteOnHandlerChange": true,
         "HandlerArn": {
+<<<<<<< HEAD
           "Ref": "myondeployFunctionCurrentVersion6BC237541c564042d3206a3d595a1ff746960898",
+=======
+          "Ref": "myondeployFunctionCurrentVersion6BC237541f758b982776f134a1f1b1bc52b6ccb5",
+>>>>>>> c5e44ca13 (chore: self mutation (build.diff))
         },
         "InvocationType": "RequestResponse",
         "ServiceToken": {

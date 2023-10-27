@@ -32,7 +32,7 @@ source: libs/wingc/src/jsify/tests.rs
     
 ```
 
-## inflight.$Closure1-1.js
+## inflight.$Closure1-1.cjs
 
 ```js
 "use strict";
@@ -52,7 +52,7 @@ module.exports = function({ $globalBucket }) {
 }
 ```
 
-## inflight.$Closure2-1.js
+## inflight.$Closure2-1.cjs
 
 ```js
 "use strict";
@@ -72,7 +72,7 @@ module.exports = function({ $x }) {
 }
 ```
 
-## inflight.MyResource-1.js
+## inflight.MyResource-1.cjs
 
 ```js
 "use strict";
@@ -89,7 +89,7 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
+## preflight.cjs
 
 ```js
 "use strict";
@@ -113,7 +113,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return `
-              require("./inflight.$Closure1-1.js")({
+              require("./inflight.$Closure1-1.cjs")({
                 $globalBucket: ${context._lift(globalBucket)},
               })
             `;
@@ -143,7 +143,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.MyResource-1.js")({
+          require("./inflight.MyResource-1.cjs")({
           })
         `;
       }
@@ -179,7 +179,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure2-1.js")({
+          require("./inflight.$Closure2-1.cjs")({
             $x: ${context._lift(x)},
           })
         `;

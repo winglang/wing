@@ -28,7 +28,7 @@ source: libs/wingc/src/jsify/tests.rs
     
 ```
 
-## inflight.$Closure1-1.js
+## inflight.$Closure1-1.cjs
 
 ```js
 "use strict";
@@ -47,7 +47,7 @@ module.exports = function({ $f }) {
 }
 ```
 
-## inflight.Capture-1.js
+## inflight.Capture-1.cjs
 
 ```js
 "use strict";
@@ -66,7 +66,7 @@ module.exports = function({ $b }) {
 }
 ```
 
-## preflight.js
+## preflight.cjs
 
 ```js
 "use strict";
@@ -86,7 +86,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.Capture-1.js")({
+          require("./inflight.Capture-1.cjs")({
             $b: ${context._lift(b)},
           })
         `;
@@ -122,7 +122,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
             $f: ${context._lift(f)},
           })
         `;

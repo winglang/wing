@@ -12,7 +12,7 @@ source: libs/wingc/src/jsify/tests.rs
     
 ```
 
-## preflight.js
+## preflight.cjs
 
 ```js
 "use strict";

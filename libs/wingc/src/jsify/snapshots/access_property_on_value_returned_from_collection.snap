@@ -13,7 +13,7 @@ source: libs/wingc/src/jsify/tests.rs
     
 ```
 
-## inflight.$Closure1-1.js
+## inflight.$Closure1-1.cjs
 
 ```js
 "use strict";
@@ -32,7 +32,7 @@ module.exports = function({ $__obj__key_______if____key_in_obj___throw_new_Error
 }
 ```
 
-## preflight.js
+## preflight.cjs
 
 ```js
 "use strict";
@@ -51,7 +51,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
             $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______s___hello___length: ${context._lift(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(s, "hello").length)},
           })
         `;

@@ -22,7 +22,7 @@ source: libs/wingc/src/jsify/tests.rs
     
 ```
 
-## inflight.$Closure1-1.js
+## inflight.$Closure1-1.cjs
 
 ```js
 "use strict";
@@ -55,7 +55,7 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
+## preflight.cjs
 
 ```js
 "use strict";
@@ -74,7 +74,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-1.cjs")({
           })
         `;
       }
