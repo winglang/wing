@@ -130,6 +130,7 @@ module.exports = function({  }) {
         },
         "function_name": "cloud-Function-c8858302",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Foo_cloudFunction_IamRole_037E9FB3.arn}",
         "runtime": "nodejs18.x",
