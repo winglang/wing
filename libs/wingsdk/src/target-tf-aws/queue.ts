@@ -31,10 +31,24 @@ export class Queue extends cloud.Queue {
     super(scope, id, props);
 
     this.queue = new SqsQueue(this, "Default", {
-      visibilityTimeoutSeconds: props.timeout?.seconds,
-      messageRetentionSeconds: props.retentionPeriod?.seconds,
+      visibilityTimeoutSeconds: props.timeout
+        ? props.timeout.seconds
+        : Duration.fromSeconds(30).seconds,
+      messageRetentionSeconds: props.retentionPeriod
+        ? props.retentionPeriod.seconds
+        : Duration.fromHours(1).seconds,
       name: ResourceNames.generateName(this, NAME_OPTS),
     });
+  }
+
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      cloud.QueueInflightMethods.PUSH,
+      cloud.QueueInflightMethods.PURGE,
+      cloud.QueueInflightMethods.APPROX_SIZE,
+      cloud.QueueInflightMethods.POP,
+    ];
   }
 
   public setConsumer(
@@ -96,7 +110,7 @@ export class Queue extends cloud.Queue {
     return fn;
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("queues can only be bound by tfaws.Function for now");
     }
@@ -109,7 +123,7 @@ export class Queue extends cloud.Queue {
     // it may not be resolved until deployment time.
     host.addEnvironment(env, this.queue.url);
 
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

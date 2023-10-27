@@ -2,7 +2,8 @@
 
 exports[`can create sequential files in a bucket 1`] = `
 {
-  ".wing/queue-setconsumer-401ee792_c8c63697.js": "exports.handler = async function(event) {
+  ".wing/queue-setconsumer-401ee792_c8c63697.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
@@ -81,7 +82,7 @@ bucket: (function(env) {
         "props": {
           "tests": {},
         },
-        "type": "wingsdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -89,7 +90,7 @@ bucket: (function(env) {
         "props": {
           "initial": 1000,
         },
-        "type": "wingsdk.cloud.Counter",
+        "type": "@winglang/sdk.cloud.Counter",
       },
       {
         "attrs": {},
@@ -99,7 +100,7 @@ bucket: (function(env) {
           "public": false,
           "topics": {},
         },
-        "type": "wingsdk.cloud.Bucket",
+        "type": "@winglang/sdk.cloud.Bucket",
       },
       {
         "attrs": {},
@@ -113,16 +114,16 @@ bucket: (function(env) {
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "attrs": {},
         "path": "root/HelloWorld/Queue",
         "props": {
           "retentionPeriod": 3600,
-          "timeout": 10,
+          "timeout": 30,
         },
-        "type": "wingsdk.cloud.Queue",
+        "type": "@winglang/sdk.cloud.Queue",
       },
       {
         "attrs": {},
@@ -134,10 +135,88 @@ bucket: (function(env) {
             "batchSize": 1,
           },
         },
-        "type": "wingsdk.sim.EventMapping",
+        "type": "@winglang/sdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.DynamodbTable": {
+        "className": "DynamodbTable",
+        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
+      },
+      "@winglang/sdk.ex.ReactApp": {
+        "className": "ReactApp",
+        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
   "tree.json": {
     "tree": {

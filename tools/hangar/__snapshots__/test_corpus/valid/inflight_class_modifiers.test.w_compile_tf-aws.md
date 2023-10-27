@@ -2,12 +2,15 @@
 
 ## inflight.C-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class C {
     async method() {
     }
-    async $inflight_init() {
-      this.field = 12;
+    constructor(){
+      this.$inflight_init = async () => {
+        this.field = 12;
+      }
     }
   }
   return C;
@@ -28,14 +31,14 @@ module.exports = function({  }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -49,17 +52,18 @@ module.exports = function({  }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class C extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       static _toInflightType(context) {
         return `
@@ -78,14 +82,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["field", "method", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          C._registerBindObject(this, host, ["field"]);
+          C._registerOnLiftObject(this, host, ["field"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
   }

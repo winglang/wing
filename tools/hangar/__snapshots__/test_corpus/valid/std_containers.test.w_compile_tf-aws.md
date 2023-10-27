@@ -2,6 +2,7 @@
 
 ## inflight.Animal-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Animal {
     constructor({  }) {
@@ -14,6 +15,7 @@ module.exports = function({  }) {
 
 ## inflight.Cat-1.js
 ```js
+"use strict";
 module.exports = function({ $Animal }) {
   class Cat extends $Animal {
     constructor({  }) {
@@ -27,6 +29,7 @@ module.exports = function({ $Animal }) {
 
 ## inflight.Dog-1.js
 ```js
+"use strict";
 module.exports = function({ $Animal }) {
   class Dog extends $Animal {
     constructor({  }) {
@@ -51,14 +54,14 @@ module.exports = function({ $Animal }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -72,17 +75,18 @@ module.exports = function({ $Animal }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class Animal extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       static _toInflightType(context) {
         return `
@@ -101,13 +105,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["$inflight_init"];
       }
     }
     class Cat extends Animal {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       static _toInflightType(context) {
         return `
@@ -127,13 +131,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["$inflight_init"];
       }
     }
     class Dog extends Animal {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       static _toInflightType(context) {
         return `
@@ -153,7 +157,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["$inflight_init"];
       }
     }
@@ -191,16 +195,16 @@ class $Root extends $stdlib.std.Resource {
     const sMap = ({"one": 1,"two": 2});
     const nestedMap = ({"a": ({"b": ({"c": "hello"})})});
     const mutMap = {...(sMap)};
-    ((obj, args) => { obj[args[0]] = args[1]; })(mutMap, ["five",5]);
+    ((obj, args) => { obj[args[0]] = args[1]; })(mutMap, ["five", 5]);
     const immutMap = ({...(mutMap)});
-    {((cond) => {if (!cond) throw new Error("assertion failed: sMap.get(\"one\") == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((sMap)["one"],1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: sMap.get(\"one\") == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(sMap, "one"),1)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: sMap.size() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(sMap).length,2)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: immutMap.size() == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(immutMap).length,3)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: nestedMap.get(\"a\").get(\"b\").get(\"c\") == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((nestedMap)["a"])["b"], "c"),"hello")))};
-    const heterogeneousArray = [new Cat(this,"C1"), new Dog(this,"D1")];
-    const heterogeneousDoubleArray = [[new Cat(this,"C2")], [new Cat(this,"C3"), new Dog(this,"D2")], [new Animal(this,"A1")]];
-    const heterogeneousSet = new Set([new Cat(this,"C4"), new Dog(this,"D3")]);
-    const heterogeneousMap = ({"cat": new Cat(this,"C5"),"dog": new Dog(this,"D4")});
+    {((cond) => {if (!cond) throw new Error("assertion failed: nestedMap.get(\"a\").get(\"b\").get(\"c\") == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(nestedMap, "a"), "b"), "c"),"hello")))};
+    const heterogeneousArray = [new Cat(this, "C1"), new Dog(this, "D1")];
+    const heterogeneousDoubleArray = [[new Cat(this, "C2")], [new Cat(this, "C3"), new Dog(this, "D2")], [new Animal(this, "A1")]];
+    const heterogeneousSet = new Set([new Cat(this, "C4"), new Dog(this, "D3")]);
+    const heterogeneousMap = ({"cat": new Cat(this, "C5"),"dog": new Dog(this, "D4")});
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

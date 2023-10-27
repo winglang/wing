@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
-import { RedisSchema, REDIS_TYPE } from "./schema-resources";
+import { RedisSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as ex from "../ex";
 import { BaseResourceSchema } from "../simulator/simulator";
@@ -18,7 +18,7 @@ export class Redis extends ex.Redis implements ISimulatorResource {
 
   public toSimulator(): BaseResourceSchema {
     const schema: RedisSchema = {
-      type: REDIS_TYPE,
+      type: ex.REDIS_FQN,
       path: this.node.path,
       props: {},
       attrs: {} as any,
@@ -26,9 +26,24 @@ export class Redis extends ex.Redis implements ISimulatorResource {
     return schema;
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super.bind(host, ops);
+    super.onLift(host, ops);
+  }
+
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      ex.RedisInflightMethods.RAW_CLIENT,
+      ex.RedisInflightMethods.URL,
+      ex.RedisInflightMethods.SET,
+      ex.RedisInflightMethods.GET,
+      ex.RedisInflightMethods.HSET,
+      ex.RedisInflightMethods.HGET,
+      ex.RedisInflightMethods.SADD,
+      ex.RedisInflightMethods.SMEMBERS,
+      ex.RedisInflightMethods.DEL,
+    ];
   }
 
   /** @internal */

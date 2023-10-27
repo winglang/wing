@@ -74,11 +74,12 @@ export abstract class Service extends Resource implements IInflightHost {
 
     // indicates that we are calling the inflight constructor and the
     // inflight "handle" method on the handler resource.
-    handler._registerBind(this, ["handle", "$inflight_init"]);
+    handler._registerOnLift(this, ["handle", "$inflight_init"]);
 
     const inflightClient = handler._toInflight();
     const lines = new Array<string>();
 
+    lines.push('"use strict";');
     lines.push("let $obj;");
 
     lines.push("async function $initOnce() {");
@@ -127,13 +128,7 @@ export abstract class Service extends Resource implements IInflightHost {
   }
 
   /** @internal */
-  public _getInflightOps(): string[] {
-    return [
-      ServiceInflightMethods.START,
-      ServiceInflightMethods.STOP,
-      ServiceInflightMethods.STARTED,
-    ];
-  }
+  public abstract _supportedOps(): string[];
 }
 
 /**
@@ -177,7 +172,7 @@ export interface IServiceHandler extends IResource {}
 export interface IServiceHandlerClient {
   /**
    * Handler to run when the service starts. This is where you implement the initialization logic of
-   * the service, start any activities asychronously.
+   * the service, start any activities asynchronously.
    *
    * DO NOT BLOCK! This handler should return as quickly as possible. If you need to run a long
    * running process, start it asynchronously.

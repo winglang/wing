@@ -1,5 +1,5 @@
 import { Construct } from "constructs";
-import { ON_DEPLOY_TYPE, OnDeploySchema } from "./schema-resources";
+import { OnDeploySchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
@@ -32,7 +32,7 @@ export class OnDeploy extends cloud.OnDeploy {
 
   public toSimulator(): BaseResourceSchema {
     const schema: OnDeploySchema = {
-      type: ON_DEPLOY_TYPE,
+      type: cloud.ON_DEPLOY_FQN,
       path: this.node.path,
       props: {
         functionHandle: simulatorHandleToken(this.fn),
@@ -42,9 +42,9 @@ export class OnDeploy extends cloud.OnDeploy {
     return schema;
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

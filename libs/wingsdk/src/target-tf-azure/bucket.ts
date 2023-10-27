@@ -13,6 +13,7 @@ import {
   IBucketEventHandler,
 } from "../cloud";
 import * as core from "../core";
+import { NotImplementedError } from "../core/errors";
 import {
   CaseConventions,
   NameOptions,
@@ -97,7 +98,24 @@ export class Bucket extends cloud.Bucket {
     });
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      cloud.BucketInflightMethods.DELETE,
+      cloud.BucketInflightMethods.GET,
+      cloud.BucketInflightMethods.GET_JSON,
+      cloud.BucketInflightMethods.LIST,
+      cloud.BucketInflightMethods.PUT,
+      cloud.BucketInflightMethods.PUT_JSON,
+      cloud.BucketInflightMethods.PUBLIC_URL,
+      cloud.BucketInflightMethods.EXISTS,
+      cloud.BucketInflightMethods.TRY_GET,
+      cloud.BucketInflightMethods.TRY_GET_JSON,
+      cloud.BucketInflightMethods.TRY_DELETE,
+    ];
+  }
+
+  public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("buckets can only be bound by tfazure.Function for now");
     }
@@ -126,7 +144,7 @@ export class Bucket extends cloud.Bucket {
     host.addEnvironment(this.envName(), this.storageContainer.name);
     host.addEnvironment(this.envStorageAccountName(), this.storageAccount.name);
     host.addEnvironment(this.isPublicEnvName(), `${this.public}`);
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /**
@@ -135,8 +153,9 @@ export class Bucket extends cloud.Bucket {
   public onCreate(fn: IBucketEventHandler, opts?: BucketOnCreateProps): void {
     fn;
     opts;
-    throw new Error(
-      "on_create method isn't implemented yet on the current target."
+    throw new NotImplementedError(
+      "onCreate method isn't implemented yet on the current target.",
+      "https://github.com/winglang/wing/issues/1954"
     );
   }
 
@@ -146,8 +165,9 @@ export class Bucket extends cloud.Bucket {
   public onDelete(fn: IBucketEventHandler, opts?: BucketOnDeleteProps): void {
     fn;
     opts;
-    throw new Error(
-      "on_delete method isn't implemented yet on the current target."
+    throw new NotImplementedError(
+      "onDelete method isn't implemented yet on the current target.",
+      "https://github.com/winglang/wing/issues/1954"
     );
   }
 
@@ -157,8 +177,9 @@ export class Bucket extends cloud.Bucket {
   public onUpdate(fn: IBucketEventHandler, opts?: BucketOnUpdateProps): void {
     fn;
     opts;
-    throw new Error(
-      "on_update method isn't implemented yet on the current target."
+    throw new NotImplementedError(
+      "onUpdate method isn't implemented yet on the current target.",
+      "https://github.com/winglang/wing/issues/1954"
     );
   }
 
@@ -168,8 +189,9 @@ export class Bucket extends cloud.Bucket {
   public onEvent(fn: IBucketEventHandler, opts?: BucketOnEventProps): void {
     fn;
     opts;
-    throw new Error(
-      "on_event method isn't implemented yet on the current target."
+    throw new NotImplementedError(
+      "onEvent method isn't implemented yet on the current target.",
+      "https://github.com/winglang/wing/issues/1954"
     );
   }
 

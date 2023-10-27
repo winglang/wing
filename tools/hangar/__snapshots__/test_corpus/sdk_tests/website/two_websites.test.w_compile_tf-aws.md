@@ -1,24 +1,5 @@
 # [two_websites.test.w](../../../../../../examples/tests/sdk_tests/website/two_websites.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
-module.exports = function({ $http_Util, $w1_url, $w2_url }) {
-  class $Closure1 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(w1.url).ok")})((await $http_Util.get($w1_url)).ok)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(w2.url).ok")})((await $http_Util.get($w2_url)).ok)};
-    }
-  }
-  return $Closure1;
-}
-
-```
-
 ## main.tf.json
 ```json
 {
@@ -32,7 +13,7 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
@@ -113,7 +94,7 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -387,63 +368,5 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
     }
   }
 }
-```
-
-## preflight.js
-```js
-const $stdlib = require('@winglang/sdk');
-const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
-const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const $wing_is_test = process.env.WING_IS_TEST === "true";
-const std = $stdlib.std;
-const cloud = $stdlib.cloud;
-const http = $stdlib.http;
-class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
-    class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        (std.Node.of(this)).hidden = true;
-      }
-      static _toInflightType(context) {
-        return `
-          require("./inflight.$Closure1-1.js")({
-            $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
-            $w1_url: ${context._lift(w1.url)},
-            $w2_url: ${context._lift(w2.url)},
-          })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
-            const client = new $Closure1Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
-      }
-      _getInflightOps() {
-        return ["handle", "$inflight_init"];
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerBindObject(w1.url, host, ["ok"]);
-          $Closure1._registerBindObject(w2.url, host, ["ok"]);
-        }
-        super._registerBind(host, ops);
-      }
-    }
-    const w1 = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this,"cloud.Website",{ path: "./website" });
-    const w2 = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this,"website-2",{ path: "./website" });
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:deploying two websites",new $Closure1(this,"$Closure1"));
-  }
-}
-const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "two_websites.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
 ```
 

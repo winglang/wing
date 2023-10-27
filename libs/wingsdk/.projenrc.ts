@@ -11,7 +11,7 @@ const CDKTF_PROVIDERS = [
   "google@~>4.63.1",
 ];
 
-const PUBLIC_MODULES = ["std", "http", "util", "aws", "math", "regex"];
+const PUBLIC_MODULES = ["std", "http", "util", "aws", "math", "regex", "sim"];
 
 const CLOUD_DOCS_PREFIX = "../../docs/docs/04-standard-library/01-cloud/";
 const EX_DOCS_PREFIX = "../../docs/docs/04-standard-library/02-ex/";
@@ -31,7 +31,7 @@ const project = new cdk.JsiiProject({
   name: "@winglang/sdk",
   author: "Wing Cloud",
   authorOrganization: true,
-  authorAddress: "ping@monada.co",
+  authorAddress: "ping@wing.cloud",
   repositoryUrl: "https://github.com/winglang/wing.git",
   repositoryDirectory: "libs/wingsdk",
   license: "MIT",
@@ -71,10 +71,13 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/util-buffer-from@3.208.0",
     "@aws-sdk/is-array-buffer@3.201.0",
     "mime-types",
+    "mime@^3.0.0",
     // azure client dependencies
     "@azure/storage-blob@12.14.0",
     "@azure/identity@3.1.3",
     "@azure/core-paging",
+    // gcp client dependencies
+    "@google-cloud/storage@6.9.5",
     // simulator dependencies
     "express",
     "uuid",
@@ -84,6 +87,7 @@ const project = new cdk.JsiiProject({
     // shared client dependencies
     "ioredis",
     "jsonschema",
+    // fs module dependency
     "yaml",
   ],
   devDeps: [
@@ -93,6 +97,7 @@ const project = new cdk.JsiiProject({
     "@types/aws-lambda",
     "@types/fs-extra",
     "@types/mime-types",
+    "mock-gcs@^1.0.0",
     "@types/express",
     "aws-sdk-client-mock",
     "aws-sdk-client-mock-jest",
@@ -362,6 +367,7 @@ project.gitignore.addPatterns("src/.gen");
 project.preCompileTask.exec("cdktf get --force");
 
 project.package.file.addDeletionOverride("pnpm");
+
 project.tryRemoveFile(".npmrc");
 
 project.packageTask.reset("bump-pack -b");

@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
-import { TestRunnerSchema, TEST_RUNNER_TYPE } from "./schema-resources";
+import { TestRunnerSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { BaseResourceSchema } from "../simulator/simulator";
@@ -20,7 +20,7 @@ export class TestRunner extends std.TestRunner implements ISimulatorResource {
   public toSimulator(): BaseResourceSchema {
     const tests = this.getTestFunctionHandles();
     const schema: TestRunnerSchema = {
-      type: TEST_RUNNER_TYPE,
+      type: std.TEST_RUNNER_FQN,
       path: this.node.path,
       props: {
         tests,
@@ -30,9 +30,9 @@ export class TestRunner extends std.TestRunner implements ISimulatorResource {
     return schema;
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource("test-runner", this, host);
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

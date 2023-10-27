@@ -115,7 +115,7 @@ export function parseLogs(logs: string, sourcePath: string) {
       const trace: Trace = {
         data: { message },
         timestamp,
-        sourceType: "wingsdk.cloud.Function",
+        sourceType: "@winglang/sdk.cloud.Function",
         sourcePath,
         type: TraceType.LOG,
       };

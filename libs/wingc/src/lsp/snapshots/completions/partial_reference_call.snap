@@ -13,9 +13,9 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(index: num): str"
   documentation:
     kind: markdown
-    value: "```wing\nat: (index: num): str\n```\n---\nReturns the character at the specified index.\n\n\n### Returns\nstring at the specified index."
+    value: "```wing\nat: (index: num): str\n```\n---\nReturns the character at the specified index.\n### Parameters\n- `index` — `num` — position of the character.\n\n### Returns\nstring at the specified index."
   sortText: ff|at
-  insertText: at($0)
+  insertText: at($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -25,9 +25,9 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(strN: str): str"
   documentation:
     kind: markdown
-    value: "```wing\nconcat: (strN: str): str\n```\n---\nCombines the text of two (or more) strings and returns a new string.\n\n\n### Returns\na new combined string."
+    value: "```wing\nconcat: (strN: str): str\n```\n---\nCombines the text of two (or more) strings and returns a new string.\n### Parameters\n- `strN` — `str` — one or more strings to concatenate to this string.\n\n### Returns\na new combined string."
   sortText: ff|concat
-  insertText: concat($0)
+  insertText: concat($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -37,9 +37,9 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(searchString: str): bool"
   documentation:
     kind: markdown
-    value: "```wing\ncontains: (searchString: str): bool\n```\n---\nChecks if string includes substring.\n\n\n### Returns\ntrue if string includes substring."
+    value: "```wing\ncontains: (searchString: str): bool\n```\n---\nChecks if string includes substring.\n### Parameters\n- `searchString` — `str` — substring to search for.\n\n### Returns\ntrue if string includes substring."
   sortText: ff|contains
-  insertText: contains($0)
+  insertText: contains($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -49,9 +49,9 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(searchString: str): bool"
   documentation:
     kind: markdown
-    value: "```wing\nendsWith: (searchString: str): bool\n```\n---\nDoes this string end with the given searchString?\n\n\n### Returns\ntrue if string ends with searchString."
+    value: "```wing\nendsWith: (searchString: str): bool\n```\n---\nDoes this string end with the given searchString?\n### Parameters\n- `searchString` — `str` — substring to search for.\n\n### Returns\ntrue if string ends with searchString."
   sortText: ff|endsWith
-  insertText: endsWith($0)
+  insertText: endsWith($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -61,9 +61,9 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(searchString: str): num"
   documentation:
     kind: markdown
-    value: "```wing\nindexOf: (searchString: str): num\n```\n---\nReturns the index of the first occurrence of searchString found.\n\n\n### Returns\nthe index of the first occurrence of searchString found, or -1 if not found."
+    value: "```wing\nindexOf: (searchString: str): num\n```\n---\nReturns the index of the first occurrence of searchString found.\n### Parameters\n- `searchString` — `str` — substring to search for.\n\n### Returns\nthe index of the first occurrence of searchString found, or -1 if not found."
   sortText: ff|indexOf
-  insertText: indexOf($0)
+  insertText: indexOf($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -73,7 +73,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(): str"
   documentation:
     kind: markdown
-    value: "```wing\nlowercase: (): str\n```\n---\nReturns this string in lower case.\n\n\n### Returns\na new lower case string."
+    value: "```wing\nlowercase: (): str\n```\n---\nReturns this string in lower case.\n\n### Returns\na new lower case string."
   sortText: ff|lowercase
   insertText: lowercase()
 - label: replace
@@ -81,9 +81,9 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(searchString: str, replaceString: str): str"
   documentation:
     kind: markdown
-    value: "```wing\nreplace: (searchString: str, replaceString: str): str\n```\n---\nReplaces occurrences of a substring within a string.\n\n\n### Returns\nThe modified string after replacement."
+    value: "```wing\nreplace: (searchString: str, replaceString: str): str\n```\n---\nReplaces occurrences of a substring within a string.\n### Parameters\n- `searchString` — `str` — The substring to search for.\n- `replaceString` — `str` — The replacement substring.\n\n### Returns\nThe modified string after replacement."
   sortText: ff|replace
-  insertText: replace($0)
+  insertText: replace($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -93,9 +93,9 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(separator: str): Array<str>"
   documentation:
     kind: markdown
-    value: "```wing\nsplit: (separator: str): Array<str>\n```\n---\nSplits string by separator.\n\n\n### Returns\narray of strings."
+    value: "```wing\nsplit: (separator: str): Array<str>\n```\n---\nSplits string by separator.\n### Parameters\n- `separator` — `str` — separator to split by.\n\n### Returns\narray of strings."
   sortText: ff|split
-  insertText: split($0)
+  insertText: split($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -105,9 +105,9 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(searchString: str): bool"
   documentation:
     kind: markdown
-    value: "```wing\nstartsWith: (searchString: str): bool\n```\n---\nDoes this string start with the given searchString?\n\n\n### Returns\ntrue if string starts with searchString."
+    value: "```wing\nstartsWith: (searchString: str): bool\n```\n---\nDoes this string start with the given searchString?\n### Parameters\n- `searchString` — `str` — substring to search for.\n\n### Returns\ntrue if string starts with searchString."
   sortText: ff|startsWith
-  insertText: startsWith($0)
+  insertText: startsWith($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -117,9 +117,9 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(indexStart: num, indexEnd: num?): str"
   documentation:
     kind: markdown
-    value: "```wing\nsubstring: (indexStart: num, indexEnd: num?): str\n```\n---\nReturns a string between indexStart, indexEnd.\n\n\n### Returns\nthe string contained from indexStart to indexEnd."
+    value: "```wing\nsubstring: (indexStart: num, indexEnd: num?): str\n```\n---\nReturns a string between indexStart, indexEnd.\n### Parameters\n- `indexStart` — `num` — index of the character we slice at.\n- `indexEnd` — `num?` — optional - index of the character we end slicing at.\n\n### Returns\nthe string contained from indexStart to indexEnd."
   sortText: ff|substring
-  insertText: substring($0)
+  insertText: substring($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -129,7 +129,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(): str"
   documentation:
     kind: markdown
-    value: "```wing\ntrim: (): str\n```\n---\nRemoves white spaces from start and end of this string.\n\n\n### Returns\na new string with white spaces removed from start and end."
+    value: "```wing\ntrim: (): str\n```\n---\nRemoves white spaces from start and end of this string.\n\n### Returns\na new string with white spaces removed from start and end."
   sortText: ff|trim
   insertText: trim()
 - label: uppercase
@@ -137,7 +137,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(): str"
   documentation:
     kind: markdown
-    value: "```wing\nuppercase: (): str\n```\n---\nReturns this string in upper case.\n\n\n### Returns\na new upper case string."
+    value: "```wing\nuppercase: (): str\n```\n---\nReturns this string in upper case.\n\n### Returns\na new upper case string."
   sortText: ff|uppercase
   insertText: uppercase()
 

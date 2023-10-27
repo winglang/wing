@@ -1,10 +1,6 @@
 import * as path from "path";
-import {
-  FUNCTION_TYPE,
-  FunctionAttributes,
-  FunctionSchema,
-} from "./schema-resources";
-import { IFunctionClient } from "../cloud";
+import { FunctionAttributes, FunctionSchema } from "./schema-resources";
+import { FUNCTION_FQN, IFunctionClient } from "../cloud";
 import { Sandbox } from "../shared/sandbox";
 import {
   ISimulatorContext,
@@ -49,7 +45,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
               data: { message },
               type: TraceType.LOG,
               sourcePath: this.context.resourcePath,
-              sourceType: FUNCTION_TYPE,
+              sourceType: FUNCTION_FQN,
               timestamp: new Date().toISOString(),
             });
           },

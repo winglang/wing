@@ -49,7 +49,15 @@ export class Secret extends cloud.Secret {
     return this.secret.arn;
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      cloud.SecretInflightMethods.VALUE,
+      cloud.SecretInflightMethods.VALUE_JSON,
+    ];
+  }
+
+  public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("secrets can only be bound by tfaws.Function for now");
     }
@@ -60,7 +68,7 @@ export class Secret extends cloud.Secret {
 
     host.addEnvironment(this.envName(), this.secret.arn);
 
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

@@ -80,6 +80,24 @@ export class Bucket extends cloud.Bucket {
 
     return fn;
   }
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      cloud.BucketInflightMethods.DELETE,
+      cloud.BucketInflightMethods.GET,
+      cloud.BucketInflightMethods.GET_JSON,
+      cloud.BucketInflightMethods.LIST,
+      cloud.BucketInflightMethods.PUT,
+      cloud.BucketInflightMethods.PUT_JSON,
+      cloud.BucketInflightMethods.PUBLIC_URL,
+      cloud.BucketInflightMethods.EXISTS,
+      cloud.BucketInflightMethods.TRY_GET,
+      cloud.BucketInflightMethods.TRY_GET_JSON,
+      cloud.BucketInflightMethods.TRY_DELETE,
+      cloud.BucketInflightMethods.SIGNED_URL,
+      cloud.BucketInflightMethods.METADATA,
+    ];
+  }
 
   public onCreate(
     inflight: cloud.IBucketEventHandler,
@@ -172,7 +190,7 @@ export class Bucket extends cloud.Bucket {
     );
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }
@@ -185,7 +203,7 @@ export class Bucket extends cloud.Bucket {
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.bucket.bucketName);
 
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

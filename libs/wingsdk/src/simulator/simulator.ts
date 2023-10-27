@@ -5,8 +5,6 @@ import { SDK_VERSION } from "../constants";
 import { ConstructTree, TREE_FILE_PATH } from "../core";
 import { readJsonSync } from "../shared/misc";
 import { CONNECTIONS_FILE_PATH, Trace, TraceType } from "../std";
-// eslint-disable-next-line import/no-restricted-paths
-import { DefaultSimulatorFactory } from "../target-sim/factory.inflight";
 import { isToken } from "../target-sim/tokens";
 
 const START_ATTEMPT_COUNT = 10;
@@ -99,6 +97,19 @@ export interface ISimulatorContext {
    * Get a list of all traces until this point.
    */
   listTraces(): Trace[];
+
+  /**
+   * Sets the runtime attributes of a resource.
+   * @param path The resource path
+   * @param attrs Attributes to set (will be merged with existing attributes)
+   */
+  setResourceAttributes(path: string, attrs: Record<string, any>): void;
+
+  /**
+   * Returns the runtime attributes of a resource.
+   * @param path The resource path
+   */
+  resourceAttributes(path: string): Record<string, any>;
 }
 
 /**
@@ -116,7 +127,6 @@ export interface ITraceSubscriber {
  */
 export class Simulator {
   // fields that are same between simulation runs / reloads
-  private readonly _factory: ISimulatorFactory;
   private _config: WingSimulatorSchema;
   private readonly simdir: string;
 
@@ -136,7 +146,6 @@ export class Simulator {
     this._connections = connectionData;
 
     this._running = false;
-    this._factory = props.factory ?? new DefaultSimulatorFactory();
     this._handles = new HandleManager();
     this._traces = new Array();
     this._traceSubscribers = new Array();
@@ -348,6 +357,10 @@ export class Simulator {
     return config;
   }
 
+  private typeInfo(fqn: string): TypeSchema {
+    return this._config.types[fqn];
+  }
+
   /**
    * Register a subscriber that will be notified when a trace is emitted by
    * the simulator.
@@ -375,10 +388,7 @@ export class Simulator {
   ): Promise<boolean> {
     const context = this.createContext(resourceConfig);
 
-    const resolvedProps = this.tryResolveTokens(
-      resourceConfig.props,
-      resourceConfig.path
-    );
+    const resolvedProps = this.tryResolveTokens(resourceConfig.props);
     if (resolvedProps === undefined) {
       this._addTrace({
         type: TraceType.RESOURCE,
@@ -393,12 +403,13 @@ export class Simulator {
       return false;
     }
 
+    // look up the location of the code for the type
+    const typeInfo = this.typeInfo(resourceConfig.type);
+
     // create the resource based on its type
-    const resourceObject = this._factory.resolve(
-      resourceConfig.type,
-      resolvedProps,
-      context
-    );
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const ResourceType = require(typeInfo.sourcePath)[typeInfo.className];
+    const resourceObject = new ResourceType(resolvedProps, context);
 
     // go ahead and initialize the resource
     const attrs = await resourceObject.init();
@@ -407,7 +418,7 @@ export class Simulator {
     const handle = this._handles.allocate(resourceObject);
 
     // update the resource configuration with new attrs returned after initialization
-    (resourceConfig as any).attrs = { ...attrs, handle };
+    context.setResourceAttributes(resourceConfig.path, { ...attrs, handle });
 
     // trace the resource creation
     this._addTrace({
@@ -461,6 +472,14 @@ export class Simulator {
       listTraces: () => {
         return [...this._traces];
       },
+      setResourceAttributes: (path: string, attrs: Record<string, any>) => {
+        const config = this.getResourceConfig(path);
+        const prev = config.attrs;
+        (config as any).attrs = { ...prev, ...attrs };
+      },
+      resourceAttributes: (path: string) => {
+        return this.getResourceConfig(path).attrs;
+      },
     };
   }
 
@@ -483,11 +502,10 @@ export class Simulator {
    * Tokens can also be nested, like "${app/my_bucket#attrs.handle}/foo/bar".
    *
    * @param obj The object to resolve tokens in.
-   * @param source The path of the resource that requested the token to be resolved.
    * @returns `undefined` if the token could not be resolved (e.g. needs a dependency), otherwise
    * the resolved value.
    */
-  private tryResolveTokens(obj: any, source: string): any {
+  private tryResolveTokens(obj: any): any {
     if (typeof obj === "string") {
       if (isToken(obj)) {
         const ref = obj.slice(2, -1);
@@ -522,7 +540,7 @@ export class Simulator {
     if (Array.isArray(obj)) {
       const result = [];
       for (const x of obj) {
-        const value = this.tryResolveTokens(x, source);
+        const value = this.tryResolveTokens(x);
         if (value === undefined) {
           return undefined;
         }
@@ -535,7 +553,7 @@ export class Simulator {
     if (typeof obj === "object") {
       const ret: any = {};
       for (const [key, value] of Object.entries(obj)) {
-        const resolved = this.tryResolveTokens(value, source);
+        const resolved = this.tryResolveTokens(value);
         if (resolved === undefined) {
           return undefined;
         }
@@ -621,8 +639,18 @@ export interface ISimulatorResourceInstance {
 export interface WingSimulatorSchema {
   /** The list of resources. */
   readonly resources: BaseResourceSchema[];
+  /** The map of types. */
+  readonly types: { [fqn: string]: TypeSchema };
   /** The version of the Wing SDK used to synthesize the .wsim file. */
   readonly sdkVersion: string;
+}
+
+/** Schema for individual types. */
+export interface TypeSchema {
+  /** Location of the source file that exports a simulation API. */
+  readonly sourcePath: string;
+  /** Name of the class that is exported by the `sourcePath`. */
+  readonly className: string;
 }
 
 /** Schema for individual resources */

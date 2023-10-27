@@ -60,7 +60,7 @@ async function reportAnalytic() {
   fs.unlinkSync(filePath);
 }
 
-await (async () => {
+void (async () => {
   try {
     await reportAnalytic();
   } catch (err: any) {

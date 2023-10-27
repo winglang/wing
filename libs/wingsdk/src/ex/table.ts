@@ -104,17 +104,7 @@ export abstract class Table extends Resource {
   }
 
   /** @internal */
-  public _getInflightOps(): string[] {
-    return [
-      TableInflightMethods.INSERT,
-      TableInflightMethods.UPSERT,
-      TableInflightMethods.UPDATE,
-      TableInflightMethods.DELETE,
-      TableInflightMethods.GET,
-      TableInflightMethods.TRYGET,
-      TableInflightMethods.LIST,
-    ];
-  }
+  public abstract _supportedOps(): string[];
 
   /**
    * Add a row to the table that is created when the app is deployed.

@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $SomeEnum, $one, $two }) {
   class $Closure1 {
     constructor({  }) {
@@ -32,14 +33,14 @@ module.exports = function({ $SomeEnum, $one, $two }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -53,17 +54,18 @@ module.exports = function({ $SomeEnum, $one, $two }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -86,15 +88,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(one, host, []);
-          $Closure1._registerBindObject(two, host, []);
+          $Closure1._registerOnLiftObject(one, host, []);
+          $Closure1._registerOnLiftObject(two, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const SomeEnum =
@@ -107,7 +109,7 @@ class $Root extends $stdlib.std.Resource {
     ;
     const one = SomeEnum.ONE;
     const two = SomeEnum.TWO;
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight",new $Closure1(this,"$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

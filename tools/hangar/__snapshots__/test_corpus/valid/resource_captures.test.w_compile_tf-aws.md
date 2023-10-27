@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $r }) {
   class $Closure1 {
     constructor({  }) {
@@ -30,6 +31,7 @@ module.exports = function({ $r }) {
 
 ## inflight.Another-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Another {
     constructor({  }) {
@@ -48,6 +50,7 @@ module.exports = function({  }) {
 
 ## inflight.First-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class First {
     constructor({  }) {
@@ -60,14 +63,15 @@ module.exports = function({  }) {
 
 ## inflight.MyResource-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class MyResource {
-    constructor({ $___this_setOfStr_has__s3____, $_this_arrayOfStr_at_0__, $_this_arrayOfStr_at_1__, $_this_mapOfNum___k1__, $_this_mapOfNum___k2__, $_this_myOptStr_______, $_this_setOfStr_has__s1___, $_this_setOfStr_has__s2___, $this_another, $this_another_first_myResource, $this_another_myField, $this_arrayOfStr_length, $this_extBucket, $this_extNum, $this_myBool, $this_myNum, $this_myQueue, $this_myResource, $this_myStr }) {
+    constructor({ $___this_setOfStr_has__s3____, $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__, $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__, $_this_arrayOfStr_at_0__, $_this_arrayOfStr_at_1__, $_this_myOptStr_______, $_this_setOfStr_has__s1___, $_this_setOfStr_has__s2___, $this_another, $this_another_first_myResource, $this_another_myField, $this_arrayOfStr_length, $this_extBucket, $this_extNum, $this_myBool, $this_myNum, $this_myQueue, $this_myResource, $this_myStr }) {
       this.$___this_setOfStr_has__s3____ = $___this_setOfStr_has__s3____;
+      this.$__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__ = $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__;
+      this.$__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__ = $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__;
       this.$_this_arrayOfStr_at_0__ = $_this_arrayOfStr_at_0__;
       this.$_this_arrayOfStr_at_1__ = $_this_arrayOfStr_at_1__;
-      this.$_this_mapOfNum___k1__ = $_this_mapOfNum___k1__;
-      this.$_this_mapOfNum___k2__ = $_this_mapOfNum___k2__;
       this.$_this_myOptStr_______ = $_this_myOptStr_______;
       this.$_this_setOfStr_has__s1___ = $_this_setOfStr_has__s1___;
       this.$_this_setOfStr_has__s2___ = $_this_setOfStr_has__s2___;
@@ -92,8 +96,8 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: this.arrayOfStr.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.$this_arrayOfStr_length,2)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: this.arrayOfStr.at(0) == \"s1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.$_this_arrayOfStr_at_0__,"s1")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: this.arrayOfStr.at(1) == \"s2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.$_this_arrayOfStr_at_1__,"s2")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: this.mapOfNum.get(\"k1\") == 11")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.$_this_mapOfNum___k1__,11)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: this.mapOfNum.get(\"k2\") == 22")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.$_this_mapOfNum___k2__,22)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.mapOfNum.get(\"k1\") == 11")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.$__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__,11)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.mapOfNum.get(\"k2\") == 22")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.$__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__,22)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: this.setOfStr.has(\"s1\")")})(this.$_this_setOfStr_has__s1___)};
       {((cond) => {if (!cond) throw new Error("assertion failed: this.setOfStr.has(\"s2\")")})(this.$_this_setOfStr_has__s2___)};
       {((cond) => {if (!cond) throw new Error("assertion failed: !this.setOfStr.has(\"s3\")")})(this.$___this_setOfStr_has__s3____)};
@@ -107,7 +111,7 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: this.myOptStr ?? \"\" == \"myOptString\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.$_this_myOptStr_______,"myOptString")))};
     }
     async testCaptureResource() {
-      (await this.$this_myResource.put("f1.txt","f1"));
+      (await this.$this_myResource.put("f1.txt", "f1"));
       {((cond) => {if (!cond) throw new Error("assertion failed: this.myResource.get(\"f1.txt\") == \"f1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await this.$this_myResource.get("f1.txt")),"f1")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: this.myResource.list().length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await this.$this_myResource.list()).length,1)))};
     }
@@ -117,7 +121,7 @@ module.exports = function({  }) {
     }
     async testNestedResource() {
       {((cond) => {if (!cond) throw new Error("assertion failed: this.another.first.myResource.list().length == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await this.$this_another_first_myResource.list()).length,0)))};
-      (await this.$this_another_first_myResource.put("hello",this.$this_myStr));
+      (await this.$this_another_first_myResource.put("hello", this.$this_myStr));
       {console.log(String.raw({ raw: ["this.another.first.myResource:", ""] }, (await this.$this_another_first_myResource.get("hello"))))};
     }
     async testExpressionRecursive() {
@@ -156,14 +160,14 @@ module.exports = function({  }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -232,7 +236,9 @@ module.exports = function({  }) {
             "uniqueId": "MyResource_cloudQueue_E7A2C0F4"
           }
         },
-        "name": "cloud-Queue-c8185458"
+        "message_retention_seconds": 3600,
+        "name": "cloud-Queue-c8185458",
+        "visibility_timeout_seconds": 30
       }
     }
   }
@@ -241,6 +247,7 @@ module.exports = function({  }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -248,12 +255,12 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class First extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
       }
       static _toInflightType(context) {
         return `
@@ -272,15 +279,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["$inflight_init"];
       }
     }
     class Another extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         this.myField = "hello!";
-        this.first = new First(this,"First");
+        this.first = new First(this, "First");
       }
       static _toInflightType(context) {
         return `
@@ -299,14 +306,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["meaningOfLife", "anotherFunc", "$inflight_init"];
       }
     }
     class MyResource extends $stdlib.std.Resource {
-      constructor(scope, id, externalBucket, externalNum) {
-        super(scope, id);
-        this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+      constructor($scope, $id, externalBucket, externalNum) {
+        super($scope, $id);
+        this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
         this.myStr = "myString";
         this.myNum = 42;
         this.myBool = true;
@@ -314,11 +321,11 @@ class $Root extends $stdlib.std.Resource {
         this.arrayOfStr = ["s1", "s2"];
         this.mapOfNum = ({"k1": 11,"k2": 22});
         this.setOfStr = new Set(["s1", "s2", "s1"]);
-        this.another = new Another(this,"Another");
-        this.myQueue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
+        this.another = new Another(this, "Another");
+        this.myQueue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue");
         this.extBucket = externalBucket;
         this.extNum = externalNum;
-        this.unusedResource = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
+        this.unusedResource = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter");
       }
       helloPreflight() {
         return this.another;
@@ -335,10 +342,10 @@ class $Root extends $stdlib.std.Resource {
             const MyResourceClient = ${MyResource._toInflightType(this)};
             const client = new MyResourceClient({
               $___this_setOfStr_has__s3____: ${this._lift((!(this.setOfStr.has("s3"))))},
+              $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__: ${this._lift(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k1"))},
+              $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__: ${this._lift(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k2"))},
               $_this_arrayOfStr_at_0__: ${this._lift((this.arrayOfStr.at(0)))},
               $_this_arrayOfStr_at_1__: ${this._lift((this.arrayOfStr.at(1)))},
-              $_this_mapOfNum___k1__: ${this._lift((this.mapOfNum)["k1"])},
-              $_this_mapOfNum___k2__: ${this._lift((this.mapOfNum)["k2"])},
               $_this_myOptStr_______: ${this._lift((this.myOptStr ?? ""))},
               $_this_setOfStr_has__s1___: ${this._lift((this.setOfStr.has("s1")))},
               $_this_setOfStr_has__s2___: ${this._lift((this.setOfStr.has("s2")))},
@@ -359,76 +366,76 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["inflightField", "testNoCapture", "testCaptureCollectionsOfData", "testCapturePrimitives", "testCaptureOptional", "testCaptureResource", "testNestedInflightField", "testNestedResource", "testExpressionRecursive", "testExternal", "testUserDefinedResource", "testInflightField", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          MyResource._registerBindObject((!(this.setOfStr.has("s3"))), host, []);
-          MyResource._registerBindObject((this.arrayOfStr.at(0)), host, []);
-          MyResource._registerBindObject((this.arrayOfStr.at(1)), host, []);
-          MyResource._registerBindObject((this.mapOfNum)["k1"], host, []);
-          MyResource._registerBindObject((this.mapOfNum)["k2"], host, []);
-          MyResource._registerBindObject((this.myOptStr ?? ""), host, []);
-          MyResource._registerBindObject((this.setOfStr.has("s1")), host, []);
-          MyResource._registerBindObject((this.setOfStr.has("s2")), host, []);
-          MyResource._registerBindObject(this.another, host, []);
-          MyResource._registerBindObject(this.another.first.myResource, host, []);
-          MyResource._registerBindObject(this.another.myField, host, []);
-          MyResource._registerBindObject(this.arrayOfStr.length, host, []);
-          MyResource._registerBindObject(this.extBucket, host, []);
-          MyResource._registerBindObject(this.extNum, host, []);
-          MyResource._registerBindObject(this.myBool, host, []);
-          MyResource._registerBindObject(this.myNum, host, []);
-          MyResource._registerBindObject(this.myQueue, host, []);
-          MyResource._registerBindObject(this.myResource, host, []);
-          MyResource._registerBindObject(this.myStr, host, []);
+          MyResource._registerOnLiftObject((!(this.setOfStr.has("s3"))), host, []);
+          MyResource._registerOnLiftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k1"), host, []);
+          MyResource._registerOnLiftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k2"), host, []);
+          MyResource._registerOnLiftObject((this.arrayOfStr.at(0)), host, []);
+          MyResource._registerOnLiftObject((this.arrayOfStr.at(1)), host, []);
+          MyResource._registerOnLiftObject((this.myOptStr ?? ""), host, []);
+          MyResource._registerOnLiftObject((this.setOfStr.has("s1")), host, []);
+          MyResource._registerOnLiftObject((this.setOfStr.has("s2")), host, []);
+          MyResource._registerOnLiftObject(this.another, host, []);
+          MyResource._registerOnLiftObject(this.another.first.myResource, host, []);
+          MyResource._registerOnLiftObject(this.another.myField, host, []);
+          MyResource._registerOnLiftObject(this.arrayOfStr.length, host, []);
+          MyResource._registerOnLiftObject(this.extBucket, host, []);
+          MyResource._registerOnLiftObject(this.extNum, host, []);
+          MyResource._registerOnLiftObject(this.myBool, host, []);
+          MyResource._registerOnLiftObject(this.myNum, host, []);
+          MyResource._registerOnLiftObject(this.myQueue, host, []);
+          MyResource._registerOnLiftObject(this.myResource, host, []);
+          MyResource._registerOnLiftObject(this.myStr, host, []);
         }
         if (ops.includes("testCaptureCollectionsOfData")) {
-          MyResource._registerBindObject((!(this.setOfStr.has("s3"))), host, []);
-          MyResource._registerBindObject((this.arrayOfStr.at(0)), host, []);
-          MyResource._registerBindObject((this.arrayOfStr.at(1)), host, []);
-          MyResource._registerBindObject((this.mapOfNum)["k1"], host, []);
-          MyResource._registerBindObject((this.mapOfNum)["k2"], host, []);
-          MyResource._registerBindObject((this.setOfStr.has("s1")), host, []);
-          MyResource._registerBindObject((this.setOfStr.has("s2")), host, []);
-          MyResource._registerBindObject(this.arrayOfStr.length, host, []);
+          MyResource._registerOnLiftObject((!(this.setOfStr.has("s3"))), host, []);
+          MyResource._registerOnLiftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k1"), host, []);
+          MyResource._registerOnLiftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k2"), host, []);
+          MyResource._registerOnLiftObject((this.arrayOfStr.at(0)), host, []);
+          MyResource._registerOnLiftObject((this.arrayOfStr.at(1)), host, []);
+          MyResource._registerOnLiftObject((this.setOfStr.has("s1")), host, []);
+          MyResource._registerOnLiftObject((this.setOfStr.has("s2")), host, []);
+          MyResource._registerOnLiftObject(this.arrayOfStr.length, host, []);
         }
         if (ops.includes("testCaptureOptional")) {
-          MyResource._registerBindObject((this.myOptStr ?? ""), host, []);
+          MyResource._registerOnLiftObject((this.myOptStr ?? ""), host, []);
         }
         if (ops.includes("testCapturePrimitives")) {
-          MyResource._registerBindObject(this.myBool, host, []);
-          MyResource._registerBindObject(this.myNum, host, []);
-          MyResource._registerBindObject(this.myStr, host, []);
+          MyResource._registerOnLiftObject(this.myBool, host, []);
+          MyResource._registerOnLiftObject(this.myNum, host, []);
+          MyResource._registerOnLiftObject(this.myStr, host, []);
         }
         if (ops.includes("testCaptureResource")) {
-          MyResource._registerBindObject(this.myResource, host, ["get", "list", "put"]);
+          MyResource._registerOnLiftObject(this.myResource, host, ["get", "list", "put"]);
         }
         if (ops.includes("testExpressionRecursive")) {
-          MyResource._registerBindObject(this.myQueue, host, ["push"]);
-          MyResource._registerBindObject(this.myStr, host, []);
+          MyResource._registerOnLiftObject(this.myQueue, host, ["push"]);
+          MyResource._registerOnLiftObject(this.myStr, host, []);
         }
         if (ops.includes("testExternal")) {
-          MyResource._registerBindObject(this.extBucket, host, ["list"]);
-          MyResource._registerBindObject(this.extNum, host, []);
+          MyResource._registerOnLiftObject(this.extBucket, host, ["list"]);
+          MyResource._registerOnLiftObject(this.extNum, host, []);
         }
         if (ops.includes("testNestedInflightField")) {
-          MyResource._registerBindObject(this.another.myField, host, []);
+          MyResource._registerOnLiftObject(this.another.myField, host, []);
         }
         if (ops.includes("testNestedResource")) {
-          MyResource._registerBindObject(this.another.first.myResource, host, ["get", "list", "put"]);
-          MyResource._registerBindObject(this.myStr, host, []);
+          MyResource._registerOnLiftObject(this.another.first.myResource, host, ["get", "list", "put"]);
+          MyResource._registerOnLiftObject(this.myStr, host, []);
         }
         if (ops.includes("testUserDefinedResource")) {
-          MyResource._registerBindObject(this.another, host, ["anotherFunc", "meaningOfLife"]);
+          MyResource._registerOnLiftObject(this.another, host, ["anotherFunc", "meaningOfLife"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -449,19 +456,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(r, host, ["testCaptureCollectionsOfData", "testCaptureOptional", "testCapturePrimitives", "testCaptureResource", "testExpressionRecursive", "testExternal", "testInflightField", "testNestedInflightField", "testNestedResource", "testNoCapture", "testUserDefinedResource"]);
+          $Closure1._registerOnLiftObject(r, host, ["testCaptureCollectionsOfData", "testCaptureOptional", "testCapturePrimitives", "testCaptureResource", "testExpressionRecursive", "testExternal", "testInflightField", "testNestedInflightField", "testNestedResource", "testNoCapture", "testUserDefinedResource"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
-    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    const r = new MyResource(this,"MyResource",b,12);
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
+    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+    const r = new MyResource(this, "MyResource", b, 12);
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:test", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

@@ -13,14 +13,14 @@
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -34,6 +34,7 @@
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -42,11 +43,11 @@ const std = $stdlib.std;
 const cdk8s = require("cdk8s");
 const kplus = require("cdk8s-plus-27");
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     const app = this.node.root.new("cdk8s.App",cdk8s.App,);
-    const chart = this.node.root.new("cdk8s.Chart",cdk8s.Chart,this,"cdk8s.Chart");
-    const deploy = this.node.root.new("cdk8s-plus-27.Deployment",kplus.Deployment,chart,"kplus.Deployment");
+    const chart = this.node.root.new("cdk8s.Chart",cdk8s.Chart,this, "cdk8s.Chart");
+    const deploy = this.node.root.new("cdk8s-plus-27.Deployment",kplus.Deployment,chart, "kplus.Deployment");
     (deploy.addContainer(({"image": "hashicorp/http-echo","args": ["-text", "text"],"portNumber": 5678})));
   }
 }

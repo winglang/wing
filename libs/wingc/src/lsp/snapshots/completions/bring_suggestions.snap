@@ -10,6 +10,9 @@ source: libs/wingc/src/lsp/completions.rs
 - label: ex
   kind: 9
   sortText: kk|ex
+- label: fs
+  kind: 9
+  sortText: kk|fs
 - label: http
   kind: 9
   sortText: kk|http
@@ -19,6 +22,9 @@ source: libs/wingc/src/lsp/completions.rs
 - label: regex
   kind: 9
   sortText: kk|regex
+- label: sim
+  kind: 9
+  sortText: kk|sim
 - label: util
   kind: 9
   sortText: kk|util

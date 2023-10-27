@@ -16,7 +16,7 @@ inflight class A {
 
 (source
   (class_definition
-    (inflight_specifier)
+    phase_modifier: (inflight_specifier)
     name: (identifier)
     implementation: (class_implementation
       (initializer
@@ -59,7 +59,7 @@ inflight class A extends B {}
 
 (source
   (class_definition
-    (inflight_specifier)
+    phase_modifier: (inflight_specifier)
     name: (identifier)
     parent: (custom_type
       object: (type_identifier))
@@ -73,7 +73,6 @@ class A {
     init() {}
     inflight init() {}
     preflight_func() {}
-    async preflight_func() {}
     pub preflight_func2() {}
     inflight inflight_func() {}
     pub inflight inflight_func2(): num {}
@@ -90,9 +89,9 @@ class A {
 --------------------------------------------------------------------------------
 
 (source
-  (resource_definition
+  (class_definition
     name: (identifier)
-    implementation: (resource_implementation
+    implementation: (class_implementation
       (initializer
         parameter_list: (parameter_list)
         block: (block))
@@ -101,11 +100,6 @@ class A {
         parameter_list: (parameter_list)
         block: (block))
       (method_definition
-        name: (identifier)
-        parameter_list: (parameter_list)
-        block: (block))
-      (method_definition
-        async: (async_modifier)
         name: (identifier)
         parameter_list: (parameter_list)
         block: (block))
@@ -177,7 +171,7 @@ class A extends B impl C, D {}
 --------------------------------------------------------------------------------
 
 (source
-  (resource_definition
+  (class_definition
     name: (identifier)
     parent: (custom_type
       object: (type_identifier))
@@ -185,7 +179,7 @@ class A extends B impl C, D {}
       object: (type_identifier))
     implements: (custom_type
       object: (type_identifier))
-    implementation: (resource_implementation)))
+    implementation: (class_implementation)))
 
 ================================================================================
 Interface definition

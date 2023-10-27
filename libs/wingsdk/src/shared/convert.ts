@@ -29,7 +29,7 @@ export function convertBetweenHandlers(
       this.args = args;
     }
 
-    public _getInflightOps(): string[] {
+    public _supportedOps(): string[] {
       return ["handle"];
     }
 
@@ -42,9 +42,9 @@ export function convertBetweenHandlers(
       )} })`;
     }
 
-    public _registerBind(host: IInflightHost, ops: string[]): void {
-      NewHandler._registerBindObject(this.handler, host, ["handle"]);
-      super._registerBind(host, ops);
+    public _registerOnLift(host: IInflightHost, ops: string[]): void {
+      NewHandler._registerOnLiftObject(this.handler, host, ["handle"]);
+      super._registerOnLift(host, ops);
     }
   }
 

@@ -148,7 +148,7 @@ Return type is optional for closures.
 
 Wing has a primitive data type called `Json`. This type represents an immutable untyped [JSON
 value](https://www.json.org/json-en.html), including JSON primitives (`string`, `number`,
-`boolean`), arrays (both heterogenous and homogenous) and objects (key-value maps where keys are
+`boolean`), arrays (both heterogenous and homogeneous) and objects (key-value maps where keys are
 strings and values can be any other JSON value).
 
 `Json` objects are immutable and can be referenced across inflight context.
@@ -538,10 +538,11 @@ log("UTC: ${t1.utc.toIso())}");            // output: 2023-02-09T06:21:03.000Z
 
 ### 1.2 Utility Functions
 
-| Name     | Extra information                                     |
-| -------- | ----------------------------------------------------- |
-| `log`    | logs str                                              |
-| `assert` | checks a condition and _throws_ if evaluated to false |
+| Name         | Extra information                                     |
+| ------------ | ----------------------------------------------------- |
+| `log`        | logs str                                              |
+| `assert`     | checks a condition and _throws_ if evaluated to false |
+| `unsafeCast` | cast a value into a different type                    |
 
 > ```TS
 > log("Hello ${name}");
@@ -710,7 +711,7 @@ interface FooInterface {
 }
 
 class Foo impl FooInterface {
-  pub public_method() {} // This can be accessed from outside of the class implemenetation
+  pub public_method() {} // This can be accessed from outside of the class implementation
   pub interface_method() {} // This must be explicitly defined as `pub` since it's an interface implementation
 }
 let f = new Foo();
@@ -721,15 +722,15 @@ Access modifier rules apply for both fields and methods of a class.
 Struct fields are always public and do not have access modifiers.
 
 #### 1.5.1 Method overriding and access modifiers
-Private methods cannot be overriden. 
+Private methods cannot be overridden. 
 Overriding a method of a parent class requires the parent class's method to be either `pub` or `protected`.
 The overriding method can have either the same access modifier as the original method or a more permissive one.
-You cannot "decrease" the access level down the inheritence hierarchy, only "increase" it. 
+You cannot "decrease" the access level down the inheritance hierarchy, only "increase" it. 
 In practice this means:
-* `protected` methods can be overidden by either a `protected` or a `pub` method.
-* `pub` methods can be overriden by a `pub` method.
+* `protected` methods can be overridden by either a `protected` or a `pub` method.
+* `pub` methods can be overridden by a `pub` method.
 
-Note that method overriding only applies to instance methods. `static` methods are not treated as part of the inheritence hierarcy.
+Note that method overriding only applies to instance methods. `static` methods are not treated as part of the inheritance hierarchy.
 
 [`▲ top`][top]
 
@@ -1145,7 +1146,6 @@ The following features are not yet implemented, but we are planning to add them 
 
 ### 1.14 Roadmap
 
-* Module type visibility (exports/`pub` types) is not implemented yet - see https://github.com/winglang/wing/issues/130 to track.
 * `internal` access modifier is not yet implemented - see https://github.com/winglang/wing/issues/4156 to track.
 
 ## 2. Statements
@@ -1839,7 +1839,7 @@ let bucket = new awscdk.aws_s3.Bucket(
 
 ## 5.2 JavaScript
 
-The `extern "<commonjs module path or name>"` modifier can be used on method declarations in classes to indicate that a method is backed by an implementation imported from a JavaScript module. The module can either be a relative path or a name and will be loaded via [require()](https://nodejs.org/api/modules.html#requireid).
+The `extern "<commonjs module path>"` modifier can be used on method declarations in classes to indicate that a method is backed by an implementation imported from a JavaScript module. The module must be a relative path and will be loaded via [require()](https://nodejs.org/api/modules.html#requireid).
 
 In the following example, the static inflight method `makeId` is implemented
 in `helper.js`:
@@ -1859,9 +1859,6 @@ class TaskList {
 
   // Load js helper file
   extern "./helpers.js" static inflight makeId(): str;
-
-  // Alternatively, you can use a module name
-  extern "uuid" static inflight v4(): str;
 } 
 
 // helpers.js

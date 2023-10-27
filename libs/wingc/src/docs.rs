@@ -3,14 +3,18 @@ use std::collections::BTreeMap;
 use itertools::Itertools;
 
 use crate::{
-	ast::Phase,
+	ast::{AccessModifier, Phase, Symbol},
 	closure_transform::CLOSURE_CLASS_PREFIX,
 	jsify::codemaker::CodeMaker,
 	type_check::{
 		jsii_importer::is_construct_base, Class, ClassLike, Enum, FunctionSignature, Interface, Namespace, Struct,
-		SymbolKind, Type, TypeRef, VariableInfo, VariableKind,
+		SymbolKind, Type, TypeRef, VariableInfo, VariableKind, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
 	},
 };
+
+const FIELD_HEADER: &'static str = "### Fields";
+const METHOD_HEADER: &'static str = "### Methods";
+const PARAMETER_HEADER: &'static str = "### Parameters";
 
 #[derive(Debug, Default, Clone)]
 pub struct Docs {
@@ -120,31 +124,29 @@ impl Documented for VariableInfo {
 		markdown.line("```wing");
 		markdown.line(format!("{name_str}: {}", self.type_));
 
-		if let Some(d) = &self.docs {
-			markdown.line("```");
+		let type_docs = self.type_.render_docs();
 
-			markdown.line("---");
-
-			if let Some(summary) = &d.summary {
-				markdown.line(summary);
-				markdown.empty_line();
-			}
-
-			render_docs(&mut markdown, d);
-		} else {
-			let type_docs = self.type_.render_docs();
-
-			if !type_docs.is_empty() {
-				if type_docs.starts_with("```wing") {
-					// skip the first line to combine the code block
-					markdown.line(type_docs.lines().skip(1).join("\n"));
-				} else {
-					markdown.line("```");
-					markdown.line("---");
-					markdown.line(type_docs);
-				}
+		if !type_docs.is_empty() {
+			if type_docs.starts_with("```wing") {
+				// skip the first line to combine the code block
+				markdown.line(type_docs.lines().skip(1).join("\n"));
 			} else {
 				markdown.line("```");
+				markdown.line("---");
+				markdown.line(type_docs);
+			}
+		} else {
+			markdown.line("```");
+
+			if let Some(d) = &self.docs {
+				markdown.line("---");
+
+				if let Some(summary) = &d.summary {
+					markdown.line(summary);
+					markdown.empty_line();
+				}
+
+				render_docs(&mut markdown, d);
 			}
 		}
 
@@ -207,6 +209,42 @@ fn render_docs(markdown: &mut CodeMaker, docs: &Docs) {
 	}
 }
 
+fn render_signature_help(f: &FunctionSignature) -> String {
+	let mut markdown = CodeMaker::default();
+
+	for (param_idx, param) in f.parameters.iter().enumerate() {
+		let param_type = param.typeref;
+		let param_type_unwrapped = param.typeref.maybe_unwrap_option();
+		let is_last = param_idx == f.parameters.len() - 1;
+
+		let param_name = if param.name.is_empty() {
+			format!("arg{}", param_idx)
+		} else {
+			param.name.clone()
+		};
+		let detail_text = if let Some(summary) = &param.docs.summary {
+			format!("— `{param_type}` — {summary}")
+		} else {
+			format!("— `{param_type}`")
+		};
+
+		if !is_last || !param_type_unwrapped.is_struct() {
+			markdown.line(format!("- `{param_name}` {detail_text}"));
+		} else {
+			markdown.line(format!("- `...{param_name}` {detail_text}"));
+
+			let structy = param_type_unwrapped.as_struct().unwrap();
+			let struct_text = render_classlike_members(structy);
+
+			markdown.indent();
+			markdown.line(struct_text.replace(FIELD_HEADER, ""));
+			markdown.unindent();
+		}
+	}
+
+	markdown.to_string().trim().to_string()
+}
+
 fn render_function(f: &FunctionSignature) -> String {
 	let mut markdown = CodeMaker::default();
 
@@ -214,28 +252,14 @@ fn render_function(f: &FunctionSignature) -> String {
 		markdown.line(s);
 	}
 
-	if has_parameters_documentation(f) {
-		markdown.empty_line();
-		markdown.line("### Parameters");
-
-		for p in &f.parameters {
-			let summary = if let Some(s) = &p.docs.summary {
-				format!(" — {}", s)
-			} else {
-				String::default()
-			};
-
-			markdown.line(format!("- `{}`{}", p.name, summary));
-		}
+	if f.parameters.len() > 0 {
+		markdown.line(PARAMETER_HEADER);
+		markdown.line(render_signature_help(f));
 	}
 
 	render_docs(&mut markdown, &f.docs);
 
 	markdown.to_string().trim().to_string()
-}
-
-fn has_parameters_documentation(f: &FunctionSignature) -> bool {
-	f.parameters.iter().any(|p| p.docs.summary.is_some())
 }
 
 fn render_struct(s: &Struct) -> String {
@@ -257,23 +281,7 @@ fn render_struct(s: &Struct) -> String {
 		markdown.line(s);
 	}
 
-	if s.fields(true).count() > 0 {
-		markdown.line("### Fields");
-	}
-
-	for field in s.env.iter(true) {
-		let Some(variable) = field.1.as_variable() else { continue };
-		let optional = if variable.type_.is_option() { "?" } else { "" };
-		markdown.line(&format!(
-			"- `{}{optional}` — {}\n",
-			field.0,
-			variable
-				.docs
-				.as_ref()
-				.and_then(|d| d.summary.clone())
-				.unwrap_or(format!("{}", variable.type_))
-		));
-	}
+	markdown.line(render_classlike_members(s));
 
 	render_docs(&mut markdown, &s.docs);
 
@@ -305,21 +313,7 @@ fn render_interface(i: &Interface) -> String {
 		markdown.line(s);
 	}
 
-	if i.env.iter(true).next().is_some() {
-		markdown.line("### Methods");
-	}
-
-	for prop in i.env.iter(true) {
-		let prop_docs = prop
-			.1
-			.as_variable()
-			.and_then(|v| v.docs.as_ref().and_then(|d| d.summary.clone()));
-		markdown.line(&format!(
-			"- `{}` — {}\n",
-			prop.0,
-			prop_docs.unwrap_or(format!("`{}`", prop.1.as_variable().unwrap().type_))
-		));
-	}
+	markdown.line(render_classlike_members(i));
 
 	markdown.empty_line();
 
@@ -391,10 +385,80 @@ fn render_class(c: &Class) -> String {
 	}
 	render_docs(&mut markdown, &c.docs);
 
-	// if let Some(initializer) = c.get_init() {
-	// 	let rfn = initializer.render_docs();
-	// 	markdown.line(rfn);
-	// }
+	if matches!(c.phase, Phase::Preflight | Phase::Independent) {
+		if let Some(initializer) = c.get_method(&Symbol::global(CLASS_INIT_NAME)) {
+			let function_sig = initializer.type_.as_function_sig().unwrap();
+			if function_sig.parameters.len() > 0 {
+				markdown.line("### Initializer");
+				markdown.line(render_signature_help(&function_sig));
+			}
+		}
+	}
+
+	if let Some(initializer) = c.get_method(&Symbol::global(CLASS_INFLIGHT_INIT_NAME)) {
+		let function_sig = initializer.type_.as_function_sig().unwrap();
+		if function_sig.parameters.len() > 0 {
+			markdown.line("### Initializer (`inflight`)");
+			markdown.line(render_signature_help(&function_sig));
+		}
+	}
+
+	markdown.line(render_classlike_members(c));
+
+	markdown.to_string().trim().to_string()
+}
+
+fn render_classlike_members(classlike: &impl ClassLike) -> String {
+	let mut field_markdown = CodeMaker::default();
+	let mut method_markdown = CodeMaker::default();
+
+	let public_member_variables = classlike
+		.get_env()
+		.iter(true)
+		.flat_map(|f| if f.2.init { None } else { f.1.as_variable() })
+		.filter(|v| v.access == AccessModifier::Public)
+		// show optionals first, then sort alphabetically by name
+		.sorted_by(|a, b| {
+			let a_is_option = a.type_.is_option();
+			let b_is_option = b.type_.is_option();
+			a_is_option
+				.cmp(&b_is_option)
+				.then_with(|| a.name.name.cmp(&b.name.name))
+		})
+		.collect_vec();
+
+	for member in public_member_variables {
+		let member_type = member.type_;
+		let option_text = if member_type.is_option() { "?" } else { "" };
+		let member_name = &member.name.name;
+		let member_docs = member.docs.as_ref().and_then(|d| d.summary.clone());
+		let text = if let Some(member_docs) = member_docs {
+			format!("- `{member_name}{option_text}` — `{member_type}` — {member_docs}")
+		} else {
+			format!("- `{member_name}{option_text}` — `{member_type}`")
+		};
+
+		if member_type.maybe_unwrap_option().is_function_sig() {
+			if member.name.name == CLASS_INIT_NAME || member.name.name == CLASS_INFLIGHT_INIT_NAME {
+				continue;
+			}
+
+			method_markdown.line(text);
+		} else {
+			field_markdown.line(text);
+		}
+	}
+
+	let mut markdown = CodeMaker::default();
+
+	if !field_markdown.is_empty() {
+		markdown.line(FIELD_HEADER);
+		markdown.add_code(field_markdown);
+	}
+	if !method_markdown.is_empty() {
+		markdown.line(METHOD_HEADER);
+		markdown.add_code(method_markdown);
+	}
 
 	markdown.to_string().trim().to_string()
 }

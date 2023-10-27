@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $counter, $std_Json }) {
   class $Closure1 {
     constructor({  }) {
@@ -23,6 +24,7 @@ module.exports = function({ $counter, $std_Json }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $api_url }) {
   class $Closure2 {
     constructor({  }) {
@@ -42,6 +44,7 @@ module.exports = function({ $api_url }) {
 
 ## inflight.$Closure3-1.js
 ```js
+"use strict";
 module.exports = function({ $__parent_this_3_api_url }) {
   class $Closure3 {
     constructor({  }) {
@@ -61,6 +64,7 @@ module.exports = function({ $__parent_this_3_api_url }) {
 
 ## inflight.A-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class A {
     constructor({  }) {
@@ -84,7 +88,7 @@ module.exports = function({  }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
@@ -103,7 +107,7 @@ module.exports = function({  }) {
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -427,6 +431,7 @@ module.exports = function({  }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -434,11 +439,11 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -460,19 +465,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(counter, host, ["inc"]);
+          $Closure1._registerOnLiftObject(counter, host, ["inc"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -493,24 +498,24 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(api.url, host, []);
+          $Closure2._registerOnLiftObject(api.url, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class A extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        this.api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        this.api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
         const __parent_this_3 = this;
         class $Closure3 extends $stdlib.std.Resource {
-          constructor(scope, id, ) {
-            super(scope, id);
+          constructor($scope, $id, ) {
+            super($scope, $id);
             (std.Node.of(this)).hidden = true;
           }
           static _toInflightType(context) {
@@ -531,17 +536,17 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          _getInflightOps() {
+          _supportedOps() {
             return ["handle", "$inflight_init"];
           }
-          _registerBind(host, ops) {
+          _registerOnLift(host, ops) {
             if (ops.includes("handle")) {
-              $Closure3._registerBindObject(__parent_this_3.api.url, host, []);
+              $Closure3._registerOnLiftObject(__parent_this_3.api.url, host, []);
             }
-            super._registerBind(host, ops);
+            super._registerOnLift(host, ops);
           }
         }
-        (this.api.get("/endpoint1",new $Closure3(this,"$Closure3")));
+        (this.api.get("/endpoint1", new $Closure3(this, "$Closure3")));
       }
       static _toInflightType(context) {
         return `
@@ -560,16 +565,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["$inflight_init"];
       }
     }
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
-    const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
-    const handler = new $Closure1(this,"$Closure1");
-    (api.get("/hello/world",handler));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:api url",new $Closure2(this,"$Closure2"));
-    new A(this,"A");
+    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
+    const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter");
+    const handler = new $Closure1(this, "$Closure1");
+    (api.get("/hello/world", handler));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:api url", new $Closure2(this, "$Closure2"));
+    new A(this, "A");
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

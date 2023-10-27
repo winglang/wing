@@ -2,12 +2,8 @@ import { ChildProcess, ExecOptions, exec } from "child_process";
 import { writeFileSync } from "fs";
 import { join } from "path";
 import { promisify } from "util";
-import {
-  REACT_APP_TYPE,
-  ReactAppAttributes,
-  ReactAppSchema,
-} from "./schema-resources";
-import { IReactAppClient, WING_JS } from "../ex";
+import { ReactAppAttributes, ReactAppSchema } from "./schema-resources";
+import { IReactAppClient, REACT_APP_FQN, WING_JS } from "../ex";
 import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
 import { TraceType } from "../std";
 
@@ -90,7 +86,7 @@ window.wingEnv = ${JSON.stringify(this.environmentVariables, null, 2)};`
         message,
       },
       sourcePath: this.context.resourcePath,
-      sourceType: REACT_APP_TYPE,
+      sourceType: REACT_APP_FQN,
       timestamp: new Date().toISOString(),
     });
   }

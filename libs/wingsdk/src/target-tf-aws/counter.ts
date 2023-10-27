@@ -37,7 +37,17 @@ export class Counter extends cloud.Counter {
     });
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      cloud.CounterInflightMethods.INC,
+      cloud.CounterInflightMethods.DEC,
+      cloud.CounterInflightMethods.PEEK,
+      cloud.CounterInflightMethods.SET,
+    ];
+  }
+
+  public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("counters can only be bound by tfaws.Function for now");
     }
@@ -48,7 +58,7 @@ export class Counter extends cloud.Counter {
 
     host.addEnvironment(this.envName(), this.table.name);
 
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

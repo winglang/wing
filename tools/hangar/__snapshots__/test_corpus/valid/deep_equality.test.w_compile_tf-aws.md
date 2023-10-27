@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $numA, $numB, $strA, $strB }) {
   class $Closure1 {
     constructor({  }) {
@@ -23,6 +24,7 @@ module.exports = function({ $numA, $numB, $strA, $strB }) {
 
 ## inflight.$Closure10-1.js
 ```js
+"use strict";
 module.exports = function({ $arrayA, $arrayB, $arrayC }) {
   class $Closure10 {
     constructor({  }) {
@@ -42,6 +44,7 @@ module.exports = function({ $arrayA, $arrayB, $arrayC }) {
 
 ## inflight.$Closure11-1.js
 ```js
+"use strict";
 module.exports = function({ $cat1, $cat2 }) {
   class $Closure11 {
     constructor({  }) {
@@ -61,6 +64,7 @@ module.exports = function({ $cat1, $cat2 }) {
 
 ## inflight.$Closure12-1.js
 ```js
+"use strict";
 module.exports = function({ $cat1, $cat2, $cat3 }) {
   class $Closure12 {
     constructor({  }) {
@@ -80,6 +84,7 @@ module.exports = function({ $cat1, $cat2, $cat3 }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $numA, $numC, $strA, $strC }) {
   class $Closure2 {
     constructor({  }) {
@@ -99,6 +104,7 @@ module.exports = function({ $numA, $numC, $strA, $strC }) {
 
 ## inflight.$Closure3-1.js
 ```js
+"use strict";
 module.exports = function({ $jsonA, $jsonB }) {
   class $Closure3 {
     constructor({  }) {
@@ -118,6 +124,7 @@ module.exports = function({ $jsonA, $jsonB }) {
 
 ## inflight.$Closure4-1.js
 ```js
+"use strict";
 module.exports = function({ $jsonA, $jsonB, $jsonC }) {
   class $Closure4 {
     constructor({  }) {
@@ -137,6 +144,7 @@ module.exports = function({ $jsonA, $jsonB, $jsonC }) {
 
 ## inflight.$Closure5-1.js
 ```js
+"use strict";
 module.exports = function({ $setA, $setB }) {
   class $Closure5 {
     constructor({  }) {
@@ -156,6 +164,7 @@ module.exports = function({ $setA, $setB }) {
 
 ## inflight.$Closure6-1.js
 ```js
+"use strict";
 module.exports = function({ $setA, $setB, $setC }) {
   class $Closure6 {
     constructor({  }) {
@@ -175,6 +184,7 @@ module.exports = function({ $setA, $setB, $setC }) {
 
 ## inflight.$Closure7-1.js
 ```js
+"use strict";
 module.exports = function({ $mapA, $mapB }) {
   class $Closure7 {
     constructor({  }) {
@@ -194,6 +204,7 @@ module.exports = function({ $mapA, $mapB }) {
 
 ## inflight.$Closure8-1.js
 ```js
+"use strict";
 module.exports = function({ $mapA, $mapB, $mapC }) {
   class $Closure8 {
     constructor({  }) {
@@ -213,6 +224,7 @@ module.exports = function({ $mapA, $mapB, $mapC }) {
 
 ## inflight.$Closure9-1.js
 ```js
+"use strict";
 module.exports = function({ $arrayA, $arrayB }) {
   class $Closure9 {
     constructor({  }) {
@@ -243,14 +255,14 @@ module.exports = function({ $arrayA, $arrayB }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -264,17 +276,18 @@ module.exports = function({ $arrayA, $arrayB }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -298,22 +311,22 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(numA, host, []);
-          $Closure1._registerBindObject(numB, host, []);
-          $Closure1._registerBindObject(strA, host, []);
-          $Closure1._registerBindObject(strB, host, []);
+          $Closure1._registerOnLiftObject(numA, host, []);
+          $Closure1._registerOnLiftObject(numB, host, []);
+          $Closure1._registerOnLiftObject(strA, host, []);
+          $Closure1._registerOnLiftObject(strB, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -337,22 +350,22 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(numA, host, []);
-          $Closure2._registerBindObject(numC, host, []);
-          $Closure2._registerBindObject(strA, host, []);
-          $Closure2._registerBindObject(strC, host, []);
+          $Closure2._registerOnLiftObject(numA, host, []);
+          $Closure2._registerOnLiftObject(numC, host, []);
+          $Closure2._registerOnLiftObject(strA, host, []);
+          $Closure2._registerOnLiftObject(strC, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -374,20 +387,20 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure3._registerBindObject(jsonA, host, []);
-          $Closure3._registerBindObject(jsonB, host, []);
+          $Closure3._registerOnLiftObject(jsonA, host, []);
+          $Closure3._registerOnLiftObject(jsonB, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -410,21 +423,21 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure4._registerBindObject(jsonA, host, []);
-          $Closure4._registerBindObject(jsonB, host, []);
-          $Closure4._registerBindObject(jsonC, host, []);
+          $Closure4._registerOnLiftObject(jsonA, host, []);
+          $Closure4._registerOnLiftObject(jsonB, host, []);
+          $Closure4._registerOnLiftObject(jsonC, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure5 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -446,20 +459,20 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure5._registerBindObject(setA, host, []);
-          $Closure5._registerBindObject(setB, host, []);
+          $Closure5._registerOnLiftObject(setA, host, []);
+          $Closure5._registerOnLiftObject(setB, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure6 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -482,21 +495,21 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure6._registerBindObject(setA, host, []);
-          $Closure6._registerBindObject(setB, host, []);
-          $Closure6._registerBindObject(setC, host, []);
+          $Closure6._registerOnLiftObject(setA, host, []);
+          $Closure6._registerOnLiftObject(setB, host, []);
+          $Closure6._registerOnLiftObject(setC, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure7 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -518,20 +531,20 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure7._registerBindObject(mapA, host, []);
-          $Closure7._registerBindObject(mapB, host, []);
+          $Closure7._registerOnLiftObject(mapA, host, []);
+          $Closure7._registerOnLiftObject(mapB, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure8 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -554,21 +567,21 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure8._registerBindObject(mapA, host, []);
-          $Closure8._registerBindObject(mapB, host, []);
-          $Closure8._registerBindObject(mapC, host, []);
+          $Closure8._registerOnLiftObject(mapA, host, []);
+          $Closure8._registerOnLiftObject(mapB, host, []);
+          $Closure8._registerOnLiftObject(mapC, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure9 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -590,20 +603,20 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure9._registerBindObject(arrayA, host, []);
-          $Closure9._registerBindObject(arrayB, host, []);
+          $Closure9._registerOnLiftObject(arrayA, host, []);
+          $Closure9._registerOnLiftObject(arrayB, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure10 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -626,21 +639,21 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure10._registerBindObject(arrayA, host, []);
-          $Closure10._registerBindObject(arrayB, host, []);
-          $Closure10._registerBindObject(arrayC, host, []);
+          $Closure10._registerOnLiftObject(arrayA, host, []);
+          $Closure10._registerOnLiftObject(arrayB, host, []);
+          $Closure10._registerOnLiftObject(arrayC, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure11 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -662,20 +675,20 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure11._registerBindObject(cat1, host, []);
-          $Closure11._registerBindObject(cat2, host, []);
+          $Closure11._registerOnLiftObject(cat1, host, []);
+          $Closure11._registerOnLiftObject(cat2, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure12 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -698,16 +711,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure12._registerBindObject(cat1, host, []);
-          $Closure12._registerBindObject(cat2, host, []);
-          $Closure12._registerBindObject(cat3, host, []);
+          $Closure12._registerOnLiftObject(cat1, host, []);
+          $Closure12._registerOnLiftObject(cat2, host, []);
+          $Closure12._registerOnLiftObject(cat3, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const numA = 1;
@@ -716,33 +729,33 @@ class $Root extends $stdlib.std.Resource {
     const strA = "wing";
     const strB = "wing";
     const strC = "wingnuts";
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Primitive types with the same value",new $Closure1(this,"$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Primitive types with different values",new $Closure2(this,"$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:Primitive types with the same value", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:Primitive types with different values", new $Closure2(this, "$Closure2"));
     const jsonA = ({"a": 1});
     const jsonB = ({"a": 1});
     const jsonC = [1, 2, 3];
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Json with the same value",new $Closure3(this,"$Closure3"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Json with different values",new $Closure4(this,"$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:Json with the same value", new $Closure3(this, "$Closure3"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:Json with different values", new $Closure4(this, "$Closure4"));
     const setA = new Set([1, 2, 3]);
     const setB = new Set([1, 2, 3]);
     const setC = new Set([4, 5, 6]);
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Set types with the same value",new $Closure5(this,"$Closure5"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Set types with different values",new $Closure6(this,"$Closure6"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:Set types with the same value", new $Closure5(this, "$Closure5"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:Set types with different values", new $Closure6(this, "$Closure6"));
     const mapA = ({"a": 1,"b": 2});
     const mapB = ({"a": 1,"b": 2});
     const mapC = ({"c": 10,"b": 2});
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Map with the same value",new $Closure7(this,"$Closure7"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Map with different values",new $Closure8(this,"$Closure8"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:Map with the same value", new $Closure7(this, "$Closure7"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:Map with different values", new $Closure8(this, "$Closure8"));
     const arrayA = [1, 2, 3];
     const arrayB = [1, 2, 3];
     const arrayC = [4, 5, 6];
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Array with the same value",new $Closure9(this,"$Closure9"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Array with different values",new $Closure10(this,"$Closure10"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:Array with the same value", new $Closure9(this, "$Closure9"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:Array with different values", new $Closure10(this, "$Closure10"));
     const cat1 = ({"name": "Mittens","age": 3});
     const cat2 = ({"name": "Mittens","age": 3});
     const cat3 = ({"name": "Simba","age": 5});
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Struct with the same value",new $Closure11(this,"$Closure11"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Struct with different values",new $Closure12(this,"$Closure12"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:Struct with the same value", new $Closure11(this, "$Closure11"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:Struct with different values", new $Closure12(this, "$Closure12"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

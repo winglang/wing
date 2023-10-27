@@ -1,18 +1,19 @@
 import { resolve } from "path";
-import { AssetType, TerraformAsset } from "cdktf";
+import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
-import { Bucket } from "./bucket";
+import { Bucket, addBucketPermission } from "./bucket";
 import { CloudfunctionsFunction } from "../.gen/providers/google/cloudfunctions-function";
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
 import * as cloud from "../cloud";
+import { NotImplementedError } from "../core/errors";
 import { createBundle } from "../shared/bundling";
 import {
   CaseConventions,
   NameOptions,
   ResourceNames,
 } from "../shared/resource-names";
-import { IInflightHost } from "../std";
+import { IInflightHost, IResource } from "../std";
 
 const FUNCTION_NAME_OPTS: NameOptions = {
   maxLen: 32,
@@ -20,14 +21,32 @@ const FUNCTION_NAME_OPTS: NameOptions = {
   case: CaseConventions.LOWERCASE,
 };
 
+export enum ResourceTypes {
+  BUCKET = "Bucket",
+  FUNCTION = "Function",
+}
+
+export enum ActionTypes {
+  STORAGE_READ = "roles/storage.objectViewer",
+  STORAGE_READ_WRITE = "roles/storage.objectUser",
+  FUNCTION_INVOKER = "roles/cloudfunctions.invoker",
+  FUNCTION_VIEWER = "roles/cloudfunctions.viewer",
+}
+
+interface IFunctionPermissions {
+  Action: ActionTypes;
+  Resource: ResourceTypes;
+}
+
 /**
  * GCP implementation of `cloud.Function`.
  *
- * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
+ * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
 
 export class Function extends cloud.Function {
   private readonly function: CloudfunctionsFunction;
+  private permissions: Map<string, Set<IFunctionPermissions>> = new Map();
 
   constructor(
     scope: Construct,
@@ -93,7 +112,9 @@ export class Function extends cloud.Function {
       entryPoint: "handler",
       triggerHttp: true,
       timeout: props.timeout?.seconds ?? 60,
-      environmentVariables: props.env ?? {},
+      environmentVariables: Lazy.anyValue({
+        produce: () => this.env ?? {},
+      }) as any,
     });
   }
 
@@ -101,14 +122,54 @@ export class Function extends cloud.Function {
     return this.function.name;
   }
 
-  // TODO: implement with https://github.com/winglang/wing/issues/1282
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [];
+  }
+
+  // TODO: implement with https://github.com/winglang/wing/issues/4403
   public _toInflight(): string {
     throw new Error(
       "cloud.Function cannot be used as an Inflight resource on GCP yet"
     );
   }
 
-  public bind(_host: IInflightHost, _ops: string[]): void {
+  public addPermission(
+    scopedResource: IResource,
+    permissions: IFunctionPermissions
+  ): void {
+    const uniqueId = scopedResource.node.addr.substring(-8);
+
+    if (
+      this.permissions.has(uniqueId) &&
+      this.permissions.get(uniqueId)?.has(permissions)
+    ) {
+      return; // already exists
+    }
+    const app = App.of(this) as App;
+    // TODO: add support for other resource types
+    switch (permissions.Resource) {
+      case ResourceTypes.BUCKET:
+        addBucketPermission(
+          this,
+          scopedResource as Bucket,
+          permissions.Action,
+          app.projectId
+        );
+        break;
+      case ResourceTypes.FUNCTION:
+        throw new NotImplementedError(
+          "Function permissions not implemented yet"
+        );
+      default:
+        throw new Error(`Unsupported resource type ${permissions.Resource}`);
+    }
+    const roleDefinitions = this.permissions.get(uniqueId) ?? new Set();
+    roleDefinitions.add(permissions);
+    this.permissions.set(uniqueId, roleDefinitions);
+  }
+
+  public onLift(_host: IInflightHost, _ops: string[]): void {
     throw new Error("Method not implemented.");
   }
 }

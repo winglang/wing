@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-2.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -20,6 +21,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure2-2.js
 ```js
+"use strict";
 module.exports = function({ $apiDefaultCors_url, $http_Util, $t_Assert }) {
   class $Closure2 {
     constructor({  }) {
@@ -30,10 +32,10 @@ module.exports = function({ $apiDefaultCors_url, $http_Util, $t_Assert }) {
     async handle() {
       const response = (await $http_Util.get(($apiDefaultCors_url + "/users")));
       const headers = response.headers;
-      (await $t_Assert.equalNum(response.status,200));
-      (await $t_Assert.equalStr((headers)["access-control-allow-origin"],"*"));
-      (await $t_Assert.equalStr((headers)["access-control-allow-credentials"],"false"));
-      (await $t_Assert.equalStr((headers)["access-control-expose-headers"],""));
+      (await $t_Assert.equalNum(response.status, 200));
+      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-allow-origin"), "*"));
+      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-allow-credentials"), "false"));
+      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-expose-headers"), ""));
       (await $t_Assert.isNil((headers)["access-control-allow-headers"]));
       (await $t_Assert.isNil((headers)["access-control-allow-methods"]));
     }
@@ -45,6 +47,7 @@ module.exports = function({ $apiDefaultCors_url, $http_Util, $t_Assert }) {
 
 ## inflight.$Closure3-2.js
 ```js
+"use strict";
 module.exports = function({ $apiDefaultCors_url, $http_HttpMethod, $http_Util, $t_Assert }) {
   class $Closure3 {
     constructor({  }) {
@@ -53,12 +56,12 @@ module.exports = function({ $apiDefaultCors_url, $http_HttpMethod, $http_Util, $
       return $obj;
     }
     async handle() {
-      const response = (await $http_Util.fetch(($apiDefaultCors_url + "/users"),({"method": $http_HttpMethod.OPTIONS})));
+      const response = (await $http_Util.fetch(($apiDefaultCors_url + "/users"), ({"method": $http_HttpMethod.OPTIONS})));
       const headers = response.headers;
-      (await $t_Assert.equalNum(response.status,204));
-      (await $t_Assert.equalStr((headers)["access-control-allow-headers"],"Content-Type,Authorization,X-Requested-With"));
-      (await $t_Assert.equalStr((headers)["access-control-allow-methods"],"GET,POST,PUT,DELETE,HEAD,OPTIONS"));
-      (await $t_Assert.equalStr((headers)["access-control-allow-origin"],"*"));
+      (await $t_Assert.equalNum(response.status, 204));
+      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-allow-headers"), "Content-Type,Authorization,X-Requested-With"));
+      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-allow-methods"), "GET,POST,PUT,DELETE,HEAD,OPTIONS"));
+      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-allow-origin"), "*"));
       (await $t_Assert.isNil((headers)["access-control-allow-credentials"]));
       (await $t_Assert.isNil((headers)["access-control-expose-headers"]));
     }
@@ -70,6 +73,7 @@ module.exports = function({ $apiDefaultCors_url, $http_HttpMethod, $http_Util, $
 
 ## inflight.Assert-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Assert {
     static async equalStr(a, b) {
@@ -120,7 +124,7 @@ module.exports = function({  }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
@@ -139,7 +143,7 @@ module.exports = function({  }) {
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -314,11 +318,12 @@ module.exports = function({  }) {
 
 ## preflight.assertions-1.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   class Assert extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
+    constructor($scope, $id, ) {
+      super($scope, $id);
     }
     static _toInflightType(context) {
       return `
@@ -337,7 +342,7 @@ module.exports = function({ $stdlib }) {
         })())
       `;
     }
-    _getInflightOps() {
+    _supportedOps() {
       return ["equalStr", "isNil", "equalNum", "$inflight_init"];
     }
   }
@@ -348,6 +353,7 @@ module.exports = function({ $stdlib }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -358,11 +364,11 @@ const ex = $stdlib.ex;
 const http = $stdlib.http;
 const t = require("./preflight.assertions-1.js")({ $stdlib });
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -382,13 +388,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -411,19 +417,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(apiDefaultCors.url, host, []);
+          $Closure2._registerOnLiftObject(apiDefaultCors.url, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -447,20 +453,20 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure3._registerBindObject(apiDefaultCors.url, host, []);
+          $Closure3._registerOnLiftObject(apiDefaultCors.url, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
-    const apiDefaultCors = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api",{ cors: true });
-    (apiDefaultCors.get("/users",new $Closure1(this,"$Closure1")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:GET /users has default cors headers",new $Closure2(this,"$Closure2"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:OPTIONS /users has default cors headers",new $Closure3(this,"$Closure3"));
+    const apiDefaultCors = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api", { cors: true });
+    (apiDefaultCors.get("/users", new $Closure1(this, "$Closure1")));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:GET /users has default cors headers", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:OPTIONS /users has default cors headers", new $Closure3(this, "$Closure3"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

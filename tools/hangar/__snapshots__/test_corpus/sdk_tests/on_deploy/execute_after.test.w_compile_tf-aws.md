@@ -1,59 +1,5 @@
 # [execute_after.test.w](../../../../../../examples/tests/sdk_tests/on_deploy/execute_after.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
-module.exports = function({ $counter }) {
-  class $Closure1 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async handle() {
-      (await $counter.set(10));
-    }
-  }
-  return $Closure1;
-}
-
-```
-
-## inflight.$Closure2-1.js
-```js
-module.exports = function({ $counter }) {
-  class $Closure2 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async handle() {
-      (await $counter.inc());
-    }
-  }
-  return $Closure2;
-}
-
-```
-
-## inflight.$Closure3-1.js
-```js
-module.exports = function({ $counter }) {
-  class $Closure3 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 11")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counter.peek()),11)))};
-    }
-  }
-  return $Closure3;
-}
-
-```
-
 ## main.tf.json
 ```json
 {
@@ -67,7 +13,7 @@ module.exports = function({ $counter }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
@@ -108,7 +54,7 @@ module.exports = function({ $counter }) {
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -322,126 +268,5 @@ module.exports = function({ $counter }) {
     }
   }
 }
-```
-
-## preflight.js
-```js
-const $stdlib = require('@winglang/sdk');
-const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
-const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const $wing_is_test = process.env.WING_IS_TEST === "true";
-const std = $stdlib.std;
-const cloud = $stdlib.cloud;
-class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
-    class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        (std.Node.of(this)).hidden = true;
-      }
-      static _toInflightType(context) {
-        return `
-          require("./inflight.$Closure1-1.js")({
-            $counter: ${context._lift(counter)},
-          })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
-            const client = new $Closure1Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
-      }
-      _getInflightOps() {
-        return ["handle", "$inflight_init"];
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerBindObject(counter, host, ["set"]);
-        }
-        super._registerBind(host, ops);
-      }
-    }
-    class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        (std.Node.of(this)).hidden = true;
-      }
-      static _toInflightType(context) {
-        return `
-          require("./inflight.$Closure2-1.js")({
-            $counter: ${context._lift(counter)},
-          })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this)};
-            const client = new $Closure2Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
-      }
-      _getInflightOps() {
-        return ["handle", "$inflight_init"];
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure2._registerBindObject(counter, host, ["inc"]);
-        }
-        super._registerBind(host, ops);
-      }
-    }
-    class $Closure3 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        (std.Node.of(this)).hidden = true;
-      }
-      static _toInflightType(context) {
-        return `
-          require("./inflight.$Closure3-1.js")({
-            $counter: ${context._lift(counter)},
-          })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure3Client = ${$Closure3._toInflightType(this)};
-            const client = new $Closure3Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
-      }
-      _getInflightOps() {
-        return ["handle", "$inflight_init"];
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure3._registerBindObject(counter, host, ["peek"]);
-        }
-        super._registerBind(host, ops);
-      }
-    }
-    const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
-    const init1 = this.node.root.newAbstract("@winglang/sdk.cloud.OnDeploy",this,"init1",new $Closure1(this,"$Closure1"));
-    const init2 = this.node.root.newAbstract("@winglang/sdk.cloud.OnDeploy",this,"init2",new $Closure2(this,"$Closure2"),{ executeAfter: [init1] });
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:counter",new $Closure3(this,"$Closure3"));
-  }
-}
-const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "execute_after.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
 ```
 

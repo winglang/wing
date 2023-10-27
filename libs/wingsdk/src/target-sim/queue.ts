@@ -3,7 +3,7 @@ import { Construct } from "constructs";
 import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
-import { QueueSchema, QUEUE_TYPE } from "./schema-resources";
+import { QueueSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
@@ -21,7 +21,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
-    this.timeout = props.timeout ?? Duration.fromSeconds(10);
+    this.timeout = props.timeout ?? Duration.fromSeconds(30);
     this.retentionPeriod = props.retentionPeriod ?? Duration.fromHours(1);
 
     if (this.retentionPeriod.seconds < this.timeout.seconds) {
@@ -29,6 +29,16 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
         "Retention period must be greater than or equal to timeout"
       );
     }
+  }
+
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      cloud.QueueInflightMethods.PUSH,
+      cloud.QueueInflightMethods.PURGE,
+      cloud.QueueInflightMethods.APPROX_SIZE,
+      cloud.QueueInflightMethods.POP,
+    ];
   }
 
   public setConsumer(
@@ -95,7 +105,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
 
   public toSimulator(): BaseResourceSchema {
     const schema: QueueSchema = {
-      type: QUEUE_TYPE,
+      type: cloud.QUEUE_FQN,
       path: this.node.path,
       props: {
         timeout: this.timeout.seconds,
@@ -106,9 +116,9 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     return schema;
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

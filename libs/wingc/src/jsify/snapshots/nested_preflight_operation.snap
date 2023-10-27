@@ -30,6 +30,7 @@ source: libs/wingc/src/jsify/tests.rs
 ## inflight.$Closure1-1.js
 
 ```js
+"use strict";
 module.exports = function({ $t_y_b }) {
   class $Closure1 {
     constructor({  }) {
@@ -38,7 +39,7 @@ module.exports = function({ $t_y_b }) {
       return $obj;
     }
     async handle() {
-      (await $t_y_b.put("hello","world"));
+      (await $t_y_b.put("hello", "world"));
     }
   }
   return $Closure1;
@@ -48,6 +49,7 @@ module.exports = function({ $t_y_b }) {
 ## inflight.MyType-1.js
 
 ```js
+"use strict";
 module.exports = function({  }) {
   class MyType {
     constructor({  }) {
@@ -60,6 +62,7 @@ module.exports = function({  }) {
 ## inflight.YourType-1.js
 
 ```js
+"use strict";
 module.exports = function({  }) {
   class YourType {
     constructor({  }) {
@@ -72,6 +75,7 @@ module.exports = function({  }) {
 ## preflight.js
 
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -79,12 +83,12 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class YourType extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
       }
       static _toInflightType(context) {
         return `
@@ -103,14 +107,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["$inflight_init"];
       }
     }
     class MyType extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        this.y = new YourType(this,"YourType");
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        this.y = new YourType(this, "YourType");
       }
       static _toInflightType(context) {
         return `
@@ -129,13 +133,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["$inflight_init"];
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -156,18 +160,18 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(t.y.b, host, ["put"]);
+          $Closure1._registerOnLiftObject(t.y.b, host, ["put"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
-    const t = new MyType(this,"MyType");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
+    const t = new MyType(this, "MyType");
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:test", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

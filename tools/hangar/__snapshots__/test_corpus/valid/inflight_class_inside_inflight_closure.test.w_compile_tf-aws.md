@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $__parent_this_1_b }) {
   class $Closure1 {
     constructor({  }) {
@@ -10,13 +11,15 @@ module.exports = function({ $__parent_this_1_b }) {
       return $obj;
     }
     async handle(payload) {
-      (await $__parent_this_1_b.put("k","v"));
+      (await $__parent_this_1_b.put("k", "v"));
       class InflightClass {
         async method() {
           {((cond) => {if (!cond) throw new Error("assertion failed: this.field == \"value\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.field,"value")))};
         }
-        async $inflight_init() {
-          this.field = "value";
+        constructor(){
+          this.$inflight_init = async () => {
+            this.field = "value";
+          }
         }
       }
       const c = (await (async () => {const o = new InflightClass(); await o.$inflight_init?.(); return o; })());
@@ -30,6 +33,7 @@ module.exports = function({ $__parent_this_1_b }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $f }) {
   class $Closure2 {
     constructor({  }) {
@@ -48,6 +52,7 @@ module.exports = function({ $f }) {
 
 ## inflight.$Closure3-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure3 {
     constructor({  }) {
@@ -74,6 +79,7 @@ module.exports = function({  }) {
 
 ## inflight.PreflightClass-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class PreflightClass {
     constructor({  }) {
@@ -97,14 +103,14 @@ module.exports = function({  }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -233,6 +239,7 @@ module.exports = function({  }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -240,18 +247,18 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class PreflightClass extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
       }
       preflight_method() {
         const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.Resource {
-          constructor(scope, id, ) {
-            super(scope, id);
+          constructor($scope, $id, ) {
+            super($scope, $id);
             (std.Node.of(this)).hidden = true;
           }
           static _toInflightType(context) {
@@ -272,18 +279,18 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          _getInflightOps() {
+          _supportedOps() {
             return ["handle", "$inflight_init"];
           }
-          _registerBind(host, ops) {
+          _registerOnLift(host, ops) {
             if (ops.includes("handle")) {
-              $Closure1._registerBindObject(__parent_this_1.b, host, ["put"]);
+              $Closure1._registerOnLiftObject(__parent_this_1.b, host, ["put"]);
             }
-            super._registerBind(host, ops);
+            super._registerOnLift(host, ops);
           }
         }
-        const inflight_closure = new $Closure1(this,"$Closure1");
-        return this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",inflight_closure);
+        const inflight_closure = new $Closure1(this, "$Closure1");
+        return this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "cloud.Function", inflight_closure);
       }
       static _toInflightType(context) {
         return `
@@ -302,13 +309,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["$inflight_init"];
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -329,19 +336,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(f, host, ["invoke"]);
+          $Closure2._registerOnLiftObject(f, host, ["invoke"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -361,14 +368,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
     }
-    const p = new PreflightClass(this,"PreflightClass");
+    const p = new PreflightClass(this, "PreflightClass");
     const f = (p.preflight_method());
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:it works",new $Closure2(this,"$Closure2"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight class inside closure captures from closure",new $Closure3(this,"$Closure3"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:it works", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight class inside closure captures from closure", new $Closure3(this, "$Closure3"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

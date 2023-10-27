@@ -13,6 +13,7 @@ source: libs/wingc/src/jsify/tests.rs
 ## inflight.Base-1.js
 
 ```js
+"use strict";
 module.exports = function({  }) {
   class Base {
     constructor({  }) {
@@ -25,6 +26,7 @@ module.exports = function({  }) {
 ## inflight.Derived-1.js
 
 ```js
+"use strict";
 module.exports = function({ $Base }) {
   class Derived extends $Base {
     constructor({  }) {
@@ -38,17 +40,18 @@ module.exports = function({ $Base }) {
 ## preflight.js
 
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class Base extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       static _toInflightType(context) {
         return `
@@ -67,13 +70,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["$inflight_init"];
       }
     }
     class Derived extends Base {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       static _toInflightType(context) {
         return `
@@ -93,7 +96,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["$inflight_init"];
       }
     }

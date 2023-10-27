@@ -2,6 +2,7 @@
 
 ## inflight.Foo-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Foo {
     constructor({  }) {
@@ -25,14 +26,14 @@ module.exports = function({  }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -46,17 +47,18 @@ module.exports = function({  }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class Foo extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       static _toInflightType(context) {
         return `
@@ -75,12 +77,12 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["$inflight_init"];
       }
     }
-    const foo1 = new Foo(this,"Foo");
-    const bar2 = new Foo(this,"bar2");
+    const foo1 = new Foo(this, "Foo");
+    const bar2 = new Foo(this, "bar2");
     {((cond) => {if (!cond) throw new Error("assertion failed: foo1.node.id == \"Foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(foo1.node.id,"Foo")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: bar2.node.id == \"bar2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(bar2.node.id,"bar2")))};
   }

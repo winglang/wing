@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
-import { ReactAppSchema, REACT_APP_TYPE } from "./schema-resources";
+import { ReactAppSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
@@ -43,7 +43,7 @@ export class ReactApp extends ex.ReactApp implements ISimulatorResource {
 
   public toSimulator(): BaseResourceSchema {
     const schema: ReactAppSchema = {
-      type: REACT_APP_TYPE,
+      type: ex.REACT_APP_FQN,
       path: this.node.path,
       props: {
         path: this._projectPath,
@@ -59,9 +59,9 @@ export class ReactApp extends ex.ReactApp implements ISimulatorResource {
     return schema;
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

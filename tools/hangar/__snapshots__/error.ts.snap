@@ -4,8 +4,8 @@ exports[`bool_from_json.test.w 1`] = `
 "ERROR: unable to parse bool:
 - instance is not of a type(s) boolean
 
-../../../examples/tests/error/target/test/bool_from_json.test.wsim.[REDACTED].tmp/.wing/preflight.js:9
-       super(scope, id);
+../../../examples/tests/error/target/test/bool_from_json.test.wsim.[REDACTED].tmp/.wing/preflight.js:10
+       super($scope, $id);
        const j = ({\\"a\\": 123});
 >>     const a = (std.Boolean.fromJson(((obj, args) => { if (obj[args] === undefined) throw new Error(\`Json property \\"\${args}\\" does not exist\`); return obj[args] })(j, \\"a\\")));
      }
@@ -21,9 +21,9 @@ Duration <DURATION>"
 exports[`num_from_str.test.w 1`] = `
 "ERROR: unable to parse \\"123a\\" as a number
 
-../../../examples/tests/error/target/test/num_from_str.test.wsim.[REDACTED].tmp/.wing/preflight.js:8
-     constructor(scope, id) {
-       super(scope, id);
+../../../examples/tests/error/target/test/num_from_str.test.wsim.[REDACTED].tmp/.wing/preflight.js:9
+     constructor($scope, $id) {
+       super($scope, $id);
 >>     const a = ((args) => { if (isNaN(args)) {throw new Error(\\"unable to parse /\\"\\" + args + \\"/\\" as a number\\")}; return parseInt(args) })(\\"123a\\");
      }
    }
@@ -39,8 +39,8 @@ exports[`number_from_json.test.w 1`] = `
 "ERROR: unable to parse num:
 - instance is not of a type(s) number
 
-../../../examples/tests/error/target/test/number_from_json.test.wsim.[REDACTED].tmp/.wing/preflight.js:9
-       super(scope, id);
+../../../examples/tests/error/target/test/number_from_json.test.wsim.[REDACTED].tmp/.wing/preflight.js:10
+       super($scope, $id);
        const j = ({\\"a\\": \\"apples\\"});
 >>     const a = (std.Number.fromJson(((obj, args) => { if (obj[args] === undefined) throw new Error(\`Json property \\"\${args}\\" does not exist\`); return obj[args] })(j, \\"a\\")));
      }
@@ -60,12 +60,12 @@ hint: Every preflight object needs a unique identifier within its scope. You can
 
 > new cloud.Bucket() as \\"MyBucket\\";
 
-For more information, see https://www.winglang.io/docs/language-guide/language-reference#33-preflight-classes
+For more information, see https://www.winglang.io/docs/concepts/application-tree
 
-../../../examples/tests/error/target/test/repeat_construct_id.test.wsim.[REDACTED].tmp/.wing/preflight.js:10
-       super(scope, id);
-       const bucket1 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
->>     const bucket2 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
+../../../examples/tests/error/target/test/repeat_construct_id.test.wsim.[REDACTED].tmp/.wing/preflight.js:11
+       super($scope, $id);
+       const bucket1 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this, \\"cloud.Bucket\\");
+>>     const bucket2 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this, \\"cloud.Bucket\\");
      }
    }
 
@@ -83,12 +83,12 @@ hint: Every preflight object needs a unique identifier within its scope. You can
 
 > new cloud.Bucket() as \\"MyBucket\\";
 
-For more information, see https://www.winglang.io/docs/language-guide/language-reference#33-preflight-classes
+For more information, see https://www.winglang.io/docs/concepts/application-tree
 
-../../../examples/tests/error/target/test/repeat_construct_id2.test.wsim.[REDACTED].tmp/.wing/preflight.js:13
+../../../examples/tests/error/target/test/repeat_construct_id2.test.wsim.[REDACTED].tmp/.wing/preflight.js:14
        });
-       const bucket1 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,String.raw({ raw: [\\"\\", \\"\\"] }, (make_name())));
->>     const bucket2 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,String.raw({ raw: [\\"\\", \\"\\"] }, (make_name())));
+       const bucket1 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this, String.raw({ raw: [\\"\\", \\"\\"] }, (make_name())));
+>>     const bucket2 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this, String.raw({ raw: [\\"\\", \\"\\"] }, (make_name())));
      }
    }
 
@@ -103,8 +103,8 @@ exports[`string_from_json.test.w 1`] = `
 "ERROR: unable to parse string:
 - instance is not of a type(s) string
 
-../../../examples/tests/error/target/test/string_from_json.test.wsim.[REDACTED].tmp/.wing/preflight.js:9
-       super(scope, id);
+../../../examples/tests/error/target/test/string_from_json.test.wsim.[REDACTED].tmp/.wing/preflight.js:10
+       super($scope, $id);
        const j = ({\\"a\\": 123});
 >>     const a = (std.String.fromJson(((obj, args) => { if (obj[args] === undefined) throw new Error(\`Json property \\"\${args}\\" does not exist\`); return obj[args] })(j, \\"a\\")));
      }
@@ -121,7 +121,7 @@ exports[`struct_from_json_1.test.w 1`] = `
 "ERROR: unable to parse Person:
 - instance.age is not of a type(s) number
 
-../../../examples/tests/error/target/test/struct_from_json_1.test.wsim.[REDACTED].tmp/.wing/preflight.js:10
+../../../examples/tests/error/target/test/struct_from_json_1.test.wsim.[REDACTED].tmp/.wing/preflight.js:11
        const Person = $stdlib.std.Struct._createJsonSchema({id:\\"/Person\\",type:\\"object\\",properties:{age:{type:\\"number\\"},name:{type:\\"string\\"},},required:[\\"age\\",\\"name\\",]});
        const j = ({\\"name\\": \\"cool\\",\\"age\\": \\"not a number\\"});
 >>     ((json, validateOptions) => (Person._fromJson(json, validateOptions)))(j);
@@ -140,7 +140,7 @@ exports[`struct_from_json_2.test.w 1`] = `
 - instance.age is not of a type(s) number
 - instance requires property \\"advisor\\"
 
-../../../examples/tests/error/target/test/struct_from_json_2.test.wsim.[REDACTED].tmp/.wing/preflight.js:10
+../../../examples/tests/error/target/test/struct_from_json_2.test.wsim.[REDACTED].tmp/.wing/preflight.js:11
        const Student = $stdlib.std.Struct._createJsonSchema({id:\\"/Student\\",type:\\"object\\",properties:{advisor:{type:\\"object\\",properties:{age:{type:\\"number\\"},id:{type:\\"string\\"},name:{type:\\"string\\"},},required:[\\"age\\",\\"id\\",\\"name\\",]},age:{type:\\"number\\"},name:{type:\\"string\\"},},required:[\\"advisor\\",\\"age\\",\\"name\\",]});
        const missingAdvisor = ({\\"name\\": \\"cool\\",\\"age\\": \\"not a number\\"});
 >>     ((json, validateOptions) => (Student._fromJson(json, validateOptions)))(missingAdvisor);
@@ -159,7 +159,7 @@ exports[`struct_from_json_3.test.w 1`] = `
 - instance.advisors[1].id is not of a type(s) string
 - instance.age is not of a type(s) number
 
-../../../examples/tests/error/target/test/struct_from_json_3.test.wsim.[REDACTED].tmp/.wing/preflight.js:10
+../../../examples/tests/error/target/test/struct_from_json_3.test.wsim.[REDACTED].tmp/.wing/preflight.js:11
        const Student = $stdlib.std.Struct._createJsonSchema({id:\\"/Student\\",type:\\"object\\",properties:{advisors:{type:\\"array\\",items:{type:\\"object\\",properties:{age:{type:\\"number\\"},id:{type:\\"string\\"},name:{type:\\"string\\"},},required:[\\"age\\",\\"id\\",\\"name\\",]}},age:{type:\\"number\\"},name:{type:\\"string\\"},},required:[\\"advisors\\",\\"age\\",\\"name\\",]});
        const invalidAdvisorInArray = ({\\"name\\": \\"cool\\",\\"age\\": \\"not a number\\",\\"advisors\\": [({\\"id\\": \\"advisor1\\",\\"name\\": \\"Bob\\",\\"age\\": 34}), ({\\"id\\": 10,\\"name\\": \\"Jacob\\",\\"age\\": 45})]});
 >>     ((json, validateOptions) => (Student._fromJson(json, validateOptions)))(invalidAdvisorInArray);
@@ -177,7 +177,7 @@ exports[`struct_from_json_4.test.w 1`] = `
 "ERROR: unable to parse Student:
 - instance.advisors contains duplicate item
 
-../../../examples/tests/error/target/test/struct_from_json_4.test.wsim.[REDACTED].tmp/.wing/preflight.js:10
+../../../examples/tests/error/target/test/struct_from_json_4.test.wsim.[REDACTED].tmp/.wing/preflight.js:11
        const Student = $stdlib.std.Struct._createJsonSchema({id:\\"/Student\\",type:\\"object\\",properties:{advisors:{type:\\"array\\",uniqueItems:true,items:{type:\\"object\\",properties:{age:{type:\\"number\\"},id:{type:\\"string\\"},name:{type:\\"string\\"},},required:[\\"age\\",\\"id\\",\\"name\\",]}},age:{type:\\"number\\"},name:{type:\\"string\\"},},required:[\\"advisors\\",\\"age\\",\\"name\\",]});
        const invalidAdvisorInArray = ({\\"name\\": \\"cool\\",\\"age\\": 22,\\"advisors\\": [({\\"id\\": \\"advisor1\\",\\"name\\": \\"Bob\\",\\"age\\": 34}), ({\\"id\\": \\"advisor1\\",\\"name\\": \\"Bob\\",\\"age\\": 34})]});
 >>     ((json, validateOptions) => (Student._fromJson(json, validateOptions)))(invalidAdvisorInArray);
@@ -195,7 +195,7 @@ exports[`struct_from_json_5.test.w 1`] = `
 "ERROR: unable to parse Foo:
 - instance.names.c is not of a type(s) string
 
-../../../examples/tests/error/target/test/struct_from_json_5.test.wsim.[REDACTED].tmp/.wing/preflight.js:10
+../../../examples/tests/error/target/test/struct_from_json_5.test.wsim.[REDACTED].tmp/.wing/preflight.js:11
        const Foo = $stdlib.std.Struct._createJsonSchema({id:\\"/Foo\\",type:\\"object\\",properties:{names:{type:\\"object\\",patternProperties:{\\".*\\":{type:\\"string\\"}}},},required:[\\"names\\",]});
        const jFoo = ({\\"names\\": ({\\"a\\": \\"Amanda\\",\\"b\\": \\"Barry\\",\\"c\\": 10})});
 >>     ((json, validateOptions) => (Foo._fromJson(json, validateOptions)))(jFoo);
@@ -212,9 +212,9 @@ Duration <DURATION>"
 exports[`utilities.test.w 1`] = `
 "ERROR: assertion failed: false
 
-../../../examples/tests/error/target/test/utilities.test.wsim.[REDACTED].tmp/.wing/preflight.js:8
-     constructor(scope, id) {
-       super(scope, id);
+../../../examples/tests/error/target/test/utilities.test.wsim.[REDACTED].tmp/.wing/preflight.js:9
+     constructor($scope, $id) {
+       super($scope, $id);
 >>     {((cond) => {if (!cond) throw new Error(\\"assertion failed: false\\")})(false)};
        {console.log(\\"W\\")};
        throw new Error(\\"me\\");

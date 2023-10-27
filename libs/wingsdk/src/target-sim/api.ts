@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
-import { ApiSchema, API_TYPE, ApiRoute } from "./schema-resources";
+import { ApiSchema, ApiRoute } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
@@ -203,7 +203,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
 
   public toSimulator(): BaseResourceSchema {
     const schema: ApiSchema = {
-      type: API_TYPE,
+      type: cloud.API_FQN,
       path: this.node.path,
       props: {
         openApiSpec: this._getApiSpec(),
@@ -214,9 +214,9 @@ export class Api extends cloud.Api implements ISimulatorResource {
     return schema;
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

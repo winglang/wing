@@ -4,7 +4,7 @@ exports[`access_hidden_namespace.test.w 1`] = `
 "error: Unknown symbol \\"core\\"
   --> ../../../examples/tests/invalid/access_hidden_namespace.test.w:7:5
   |
-7 | new core.NodeJsCode(\\"/tmp/test.txt\\"); // This should fail even though \`fs.TextFile\` extends \`core.FileBase\` because we didn't bring in \`core\` explicitly.
+7 | new core.NodeJsCode(\\"<ABSOLUTE_PATH>/test.txt\\"); // This should fail even though \`fs.TextFile\` extends \`core.FileBase\` because we didn't bring in \`core\` explicitly.
   |     ^^^^ Unknown symbol \\"core\\"
 
 
@@ -212,6 +212,76 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`access_private_apis.test.w 1`] = `
+"error: Class \\"subdir2.MyPrivateClass\\" is private
+  --> ../../../examples/tests/invalid/access_private_apis.test.w:3:5
+  |
+3 | new subdir2.MyPrivateClass();
+  |     ^^^^^^^^^^^^^^^^^^^^^^ Class \\"subdir2.MyPrivateClass\\" is private
+  |
+  --> ../../../examples/tests/invalid/subdir2/file.w:1:7
+  |
+1 | class MyPrivateClass {}
+  |       -------------- defined here
+
+
+error: Class \\"subdir2.inner.MyOtherPrivateClass\\" is private
+  --> ../../../examples/tests/invalid/access_private_apis.test.w:6:5
+  |
+6 | new subdir2.inner.MyOtherPrivateClass();
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Class \\"subdir2.inner.MyOtherPrivateClass\\" is private
+  |
+  --> ../../../examples/tests/invalid/subdir2/inner/blah.w:1:7
+  |
+1 | class MyOtherPrivateClass {}
+  |       ------------------- defined here
+
+
+error: Interface \\"subdir2.MyPrivateInterface\\" is private
+   --> ../../../examples/tests/invalid/access_private_apis.test.w:11:14
+   |
+11 | class A impl subdir2.MyPrivateInterface {}
+   |              ^^^^^^^^^^^^^^^^^^^^^^^^^^ Interface \\"subdir2.MyPrivateInterface\\" is private
+   |
+   --> ../../../examples/tests/invalid/subdir2/file.w:7:11
+   |
+ 7 | interface MyPrivateInterface {}
+   |           ------------------ defined here
+
+
+error: Expected an interface, instead found type \\"unresolved\\"
+   --> ../../../examples/tests/invalid/access_private_apis.test.w:11:14
+   |
+11 | class A impl subdir2.MyPrivateInterface {}
+   |              ^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected an interface, instead found type \\"unresolved\\"
+
+
+error: Struct \\"subdir2.MyPrivateStruct\\" is private
+   --> ../../../examples/tests/invalid/access_private_apis.test.w:14:9
+   |
+14 | let s = subdir2.MyPrivateStruct {};
+   |         ^^^^^^^^^^^^^^^^^^^^^^^ Struct \\"subdir2.MyPrivateStruct\\" is private
+   |
+   --> ../../../examples/tests/invalid/subdir2/file.w:3:8
+   |
+ 3 | struct MyPrivateStruct {}
+   |        --------------- defined here
+
+
+error: Expected identifier \\"subdir2\\" to be a variable, but it's a namespace
+   --> ../../../examples/tests/invalid/access_private_apis.test.w:17:9
+   |
+17 | let e = subdir2.MyPrivateEnum.A;
+   |         ^^^^^^^ Expected identifier \\"subdir2\\" to be a variable, but it's a namespace
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`access_static_from_instance.test.w 1`] = `
 "error: Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
   --> ../../../examples/tests/invalid/access_static_from_instance.test.w:4:3
@@ -258,10 +328,10 @@ Duration <DURATION>"
 exports[`ambiguous_api_paths.test.w 1`] = `
 "ERROR: Endpoint for path '/test/{variable}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '/test/path'
 
-../../../examples/tests/invalid/target/test/ambiguous_api_paths.test.wsim.[REDACTED].tmp/.wing/preflight.js:38
-       const handler = new $Closure1(this,\\"$Closure1\\");
-       (api.get(\\"/test/path\\",handler));
->>     (api.get(\\"/test/{variable}\\",handler));
+../../../examples/tests/invalid/target/test/ambiguous_api_paths.test.wsim.[REDACTED].tmp/.wing/preflight.js:39
+       const handler = new $Closure1(this, \\"$Closure1\\");
+       (api.get(\\"<ABSOLUTE_PATH>/path\\", handler));
+>>     (api.get(\\"<ABSOLUTE_PATH>/{variable}\\", handler));
      }
    }
 
@@ -274,9 +344,9 @@ Duration <DURATION>"
 
 exports[`bring.test.w 1`] = `
 "error: Expected module specification (see https://www.winglang.io/docs/libraries)
-  --> ../../../examples/tests/invalid/bring.test.w:8:7
+  --> ../../../examples/tests/invalid/bring.test.w:6:7
   |
-8 | bring ;
+6 | bring ;
   |       ^ Expected module specification (see https://www.winglang.io/docs/libraries)
 
 
@@ -294,18 +364,11 @@ error: \\"cloud\\" is already defined
   |       ^^^^^ \\"cloud\\" is already defined
 
 
-error: \\"fs\\" is not a built-in module
-  --> ../../../examples/tests/invalid/bring.test.w:6:1
-  |
-6 | bring fs;
-  | ^^^^^^^^^ \\"fs\\" is not a built-in module
-
-
 error: \\"c\\" is not a built-in module
-   --> ../../../examples/tests/invalid/bring.test.w:10:1
-   |
-10 | bring c;
-   | ^^^^^^^^ \\"c\\" is not a built-in module
+  --> ../../../examples/tests/invalid/bring.test.w:8:1
+  |
+8 | bring c;
+  | ^^^^^^^^ \\"c\\" is not a built-in module
 
 
  
@@ -323,11 +386,11 @@ exports[`bring_jsii.test.w 1`] = `
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^ bring \\"jsii-code-samples\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
 
 
-error: Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid/bring_jsii.test.w\\"
+error: Unable to load \\"foobar\\": Module not found in \\"<ABSOLUTE_PATH>/bring_jsii.test.w\\"
   --> ../../../examples/tests/invalid/bring_jsii.test.w:4:1
   |
 4 | bring \\"foobar\\" as baz;
-  | ^^^^^^^^^^^^^^^^^^^^^^ Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid/bring_jsii.test.w\\"
+  | ^^^^^^^^^^^^^^^^^^^^^^ Unable to load \\"foobar\\": Module not found in \\"<ABSOLUTE_PATH>/bring_jsii.test.w\\"
 
 
  
@@ -345,18 +408,18 @@ exports[`bring_local_dir.test.w 1`] = `
   |       ^^^^^^^^^ Cannot bring \\"/subdir\\" since it is not a relative path
 
 
-error: Symbol \\"Foo\\" has multiple definitions in \\"../../../examples/tests/invalid/subdir/inner\\"
+error: Symbol \\"Foo\\" has multiple definitions in \\"<ABSOLUTE_PATH>/inner\\"
   --> ../../../examples/tests/invalid/subdir/other.w:1:1
   |
 1 | bring \\"./inner\\" as inner;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^ Symbol \\"Foo\\" has multiple definitions in \\"../../../examples/tests/invalid/subdir/inner\\"
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^ Symbol \\"Foo\\" has multiple definitions in \\"<ABSOLUTE_PATH>/inner\\"
 
 
-error: Symbol \\"Foo\\" has multiple definitions in \\"../../../examples/tests/invalid/subdir/inner\\"
+error: Symbol \\"Foo\\" has multiple definitions in \\"<ABSOLUTE_PATH>/inner\\"
   --> ../../../examples/tests/invalid/bring_local_dir.test.w:1:1
   |
 1 | bring \\"./subdir\\" as subdir;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Symbol \\"Foo\\" has multiple definitions in \\"../../../examples/tests/invalid/subdir/inner\\"
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Symbol \\"Foo\\" has multiple definitions in \\"<ABSOLUTE_PATH>/inner\\"
 
 
  
@@ -439,11 +502,11 @@ Duration <DURATION>"
 `;
 
 exports[`bring_non_std_construct.test.w 1`] = `
-"error: Expected 1 positional argument(s) but got 0
+"error: Expected 2 positional argument(s) or named arguments for the last parameter but got 0
   --> ../../../examples/tests/invalid/bring_non_std_construct.test.w:8:1
   |
 8 | new cdktf.S3Backend();
-  | ^^^^^^^^^^^^^^^^^^^^^ Expected 1 positional argument(s) but got 0
+  | ^^^^^^^^^^^^^^^^^^^^^ Expected 2 positional argument(s) or named arguments for the last parameter but got 0
 
 
 error: Cannot set id of non-standard preflight class \\"S3Backend\\" using \`as\`
@@ -568,18 +631,18 @@ error: Preflight field \\"x\\" is not initialized
   |    ^ Preflight field \\"x\\" is not initialized
 
 
-error: Expected 0 arguments but got 1
+error: Expected 0 positional argument(s) but got 1
   --> ../../../examples/tests/invalid/class.test.w:9:1
   |
 9 | new C2(1);
-  | ^^^^^^^^^ Expected 0 arguments but got 1
+  | ^^^^^^^^^ Expected 0 positional argument(s) but got 1
 
 
-error: Expected 0 named arguments for func at ../../../examples/tests/invalid/class.test.w:13:1
+error: No named arguments expected
    --> ../../../examples/tests/invalid/class.test.w:13:1
    |
 13 | new C9(token: \\"1\\");
-   | ^^^^^^^^^^^^^^^^^^ Expected 0 named arguments for func at ../../../examples/tests/invalid/class.test.w:13:1
+   | ^^^^^^^^^^^^^^^^^^ No named arguments expected
 
 
 error: Expected 1 positional argument(s) but got 0
@@ -587,6 +650,13 @@ error: Expected 1 positional argument(s) but got 0
    |
 19 | new C10(); 
    | ^^^^^^^^^ Expected 1 positional argument(s) but got 0
+
+
+error: No named arguments expected
+   --> ../../../examples/tests/invalid/class.test.w:22:1
+   |
+22 | new C10(foo: \\"bar\\"); 
+   | ^^^^^^^^^^^^^^^^^^^ No named arguments expected
 
 
 error: Expected 1 positional argument(s) but got 0
@@ -701,11 +771,11 @@ error: Expected 1 positional argument(s) but got 0
     |     ^^^^^^^^ Expected 1 positional argument(s) but got 0
 
 
-error: Expected 1 arguments but got 2
+error: Expected 1 positional argument(s) but got 2
     --> ../../../examples/tests/invalid/class.test.w:141:5
     |
 141 |     super(someNum, someStr);
-    |     ^^^^^^^^^^^^^^^^^^^^^^^^ Expected 1 arguments but got 2
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^ Expected 1 positional argument(s) but got 2
 
 
 error: Expected 1 positional argument(s) but got 0
@@ -935,24 +1005,24 @@ Duration <DURATION>"
 `;
 
 exports[`cyclic_bring1.w 1`] = `
-"error: Could not compile \\"../../../examples/tests/invalid/cyclic_bring1.w\\" due to cyclic bring statements:
-- ../../../examples/tests/invalid/cyclic_bring3.w
-- ../../../examples/tests/invalid/cyclic_bring2.w
-- ../../../examples/tests/invalid/cyclic_bring1.w
+"error: Could not compile \\"<ABSOLUTE_PATH>/cyclic_bring1.w\\" due to cyclic bring statements:
+- <ABSOLUTE_PATH>/cyclic_bring3.w
+- <ABSOLUTE_PATH>/cyclic_bring2.w
+- <ABSOLUTE_PATH>/cyclic_bring1.w
 
 
-error: Could not type check \\"../../../examples/tests/invalid/cyclic_bring2.w\\" due to cyclic bring statements
+error: Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring2.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring1.w:1:1
   |
 1 | bring \\"./cyclic_bring2.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"../../../examples/tests/invalid/cyclic_bring2.w\\" due to cyclic bring statements
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring2.w\\" due to cyclic bring statements
 
 
-error: Could not type check \\"../../../examples/tests/invalid/cyclic_bring3.w\\" due to cyclic bring statements
+error: Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring3.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring2.w:1:1
   |
 1 | bring \\"./cyclic_bring3.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"../../../examples/tests/invalid/cyclic_bring3.w\\" due to cyclic bring statements
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring3.w\\" due to cyclic bring statements
 
 
  
@@ -963,24 +1033,24 @@ Duration <DURATION>"
 `;
 
 exports[`cyclic_bring2.w 1`] = `
-"error: Could not compile \\"../../../examples/tests/invalid/cyclic_bring2.w\\" due to cyclic bring statements:
-- ../../../examples/tests/invalid/cyclic_bring1.w
-- ../../../examples/tests/invalid/cyclic_bring3.w
-- ../../../examples/tests/invalid/cyclic_bring2.w
+"error: Could not compile \\"<ABSOLUTE_PATH>/cyclic_bring2.w\\" due to cyclic bring statements:
+- <ABSOLUTE_PATH>/cyclic_bring1.w
+- <ABSOLUTE_PATH>/cyclic_bring3.w
+- <ABSOLUTE_PATH>/cyclic_bring2.w
 
 
-error: Could not type check \\"../../../examples/tests/invalid/cyclic_bring3.w\\" due to cyclic bring statements
+error: Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring3.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring2.w:1:1
   |
 1 | bring \\"./cyclic_bring3.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"../../../examples/tests/invalid/cyclic_bring3.w\\" due to cyclic bring statements
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring3.w\\" due to cyclic bring statements
 
 
-error: Could not type check \\"../../../examples/tests/invalid/cyclic_bring1.w\\" due to cyclic bring statements
+error: Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring1.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring3.w:1:1
   |
 1 | bring \\"./cyclic_bring1.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"../../../examples/tests/invalid/cyclic_bring1.w\\" due to cyclic bring statements
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring1.w\\" due to cyclic bring statements
 
 
  
@@ -991,24 +1061,24 @@ Duration <DURATION>"
 `;
 
 exports[`cyclic_bring3.w 1`] = `
-"error: Could not compile \\"../../../examples/tests/invalid/cyclic_bring3.w\\" due to cyclic bring statements:
-- ../../../examples/tests/invalid/cyclic_bring2.w
-- ../../../examples/tests/invalid/cyclic_bring1.w
-- ../../../examples/tests/invalid/cyclic_bring3.w
+"error: Could not compile \\"<ABSOLUTE_PATH>/cyclic_bring3.w\\" due to cyclic bring statements:
+- <ABSOLUTE_PATH>/cyclic_bring2.w
+- <ABSOLUTE_PATH>/cyclic_bring1.w
+- <ABSOLUTE_PATH>/cyclic_bring3.w
 
 
-error: Could not type check \\"../../../examples/tests/invalid/cyclic_bring1.w\\" due to cyclic bring statements
+error: Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring1.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring3.w:1:1
   |
 1 | bring \\"./cyclic_bring1.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"../../../examples/tests/invalid/cyclic_bring1.w\\" due to cyclic bring statements
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring1.w\\" due to cyclic bring statements
 
 
-error: Could not type check \\"../../../examples/tests/invalid/cyclic_bring2.w\\" due to cyclic bring statements
+error: Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring2.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring1.w:1:1
   |
 1 | bring \\"./cyclic_bring2.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"../../../examples/tests/invalid/cyclic_bring2.w\\" due to cyclic bring statements
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring2.w\\" due to cyclic bring statements
 
 
  
@@ -1056,18 +1126,11 @@ Duration <DURATION>"
 `;
 
 exports[`extern.test.w 1`] = `
-"error: Failed to resolve extern \\"./sad.js\\": Not Found
+"error: File not found: \\"./sad.js\\"
   --> ../../../examples/tests/invalid/extern.test.w:2:3
   |
 2 |   extern \\"./sad.js\\" static getNum(): num;
-  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Failed to resolve extern \\"./sad.js\\": Not Found
-
-
-error: Failed to resolve extern \\"not-installed\\": Not Found
-  --> ../../../examples/tests/invalid/extern.test.w:4:3
-  |
-4 |   extern \\"not-installed\\" static tooBad(): bool;
-  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Failed to resolve extern \\"not-installed\\": Not Found
+  |   ^^^^^^^^^^^^^^^^^ File not found: \\"./sad.js\\"
 
 
  
@@ -1079,10 +1142,10 @@ Duration <DURATION>"
 
 exports[`extern_static.test.w 1`] = `
 "error: Extern methods must be declared \\"static\\" (they cannot access instance members)
-  --> ../../../examples/tests/invalid/extern_static.test.w:2:39
+  --> ../../../examples/tests/invalid/extern_static.test.w:2:45
   |
-2 |   extern \\"../external_js.js\\" inflight getGreeting(name: str): str;
-  |                                       ^^^^^^^^^^^ Extern methods must be declared \\"static\\" (they cannot access instance members)
+2 |   extern \\"../valid/external_js.js\\" inflight getGreeting(name: str): str;
+  |                                             ^^^^^^^^^^^ Extern methods must be declared \\"static\\" (they cannot access instance members)
 
 
  
@@ -1150,6 +1213,134 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`function_call_arity.test.w 1`] = `
+"error: Unexpected 'identifier'
+   --> ../../../examples/tests/invalid/function_call_arity.test.w:31:62
+   |
+31 | invalidCombinationFunc2(1, 2, prefix: \\"debug\\", priority: 0, \\"hello\\", \\"world\\");
+   |                                                              ^^^^^ Unexpected 'identifier'
+
+
+error: Unexpected 'identifier'
+   --> ../../../examples/tests/invalid/function_call_arity.test.w:31:71
+   |
+31 | invalidCombinationFunc2(1, 2, prefix: \\"debug\\", priority: 0, \\"hello\\", \\"world\\");
+   |                                                                       ^^^^^ Unexpected 'identifier'
+
+
+error: Expected 2 positional argument(s) but got 0
+  --> ../../../examples/tests/invalid/function_call_arity.test.w:2:1
+  |
+2 | func(); // Expected {} positional arguments but got {}
+  | ^^^^^^ Expected 2 positional argument(s) but got 0
+
+
+error: Expected between 2 and 3 positional arguments but got 1
+  --> ../../../examples/tests/invalid/function_call_arity.test.w:5:1
+  |
+5 | optionalParamsFunc(1); // Expected between {} and {} positional arguments but got {}
+  | ^^^^^^^^^^^^^^^^^^^^^ Expected between 2 and 3 positional arguments but got 1
+
+
+error: Expected 2 positional argument(s) + variadic args but got 0
+  --> ../../../examples/tests/invalid/function_call_arity.test.w:8:1
+  |
+8 | variadicFunc(); // Expected {} positional arguments + variadic args but got {}
+  | ^^^^^^^^^^^^^^ Expected 2 positional argument(s) + variadic args but got 0
+
+
+error: Expected between 2 and 3 positional arguments + variadic args but got 1
+   --> ../../../examples/tests/invalid/function_call_arity.test.w:12:1
+   |
+12 | variadicOptionalParamsFunc(2); // Expected between {} and {} positional arguments + variadic args but got {}
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected between 2 and 3 positional arguments + variadic args but got 1
+
+
+error: Expected 3 positional argument(s) or named arguments for the last parameter but got 0
+   --> ../../../examples/tests/invalid/function_call_arity.test.w:20:1
+   |
+20 | namedFunc(); // Expected {} positional arguments or named arguments for the last parameter but got {}
+   | ^^^^^^^^^^^ Expected 3 positional argument(s) or named arguments for the last parameter but got 0
+
+
+error: Optional parameters must always be after all non-optional parameters.
+   --> ../../../examples/tests/invalid/function_call_arity.test.w:22:49
+   |
+22 | let namedOptionalParamsFunc = (n: num, b: bool, s: str?, opts: Options) => {};
+   |                                                 ^ Optional parameters must always be after all non-optional parameters.
+
+
+error: Expected between 3 and 4 positional arguments or named arguments for the last parameter but got 1
+   --> ../../../examples/tests/invalid/function_call_arity.test.w:23:1
+   |
+23 | namedOptionalParamsFunc(3); // Expected between {} and {} positional arguments or named arguments for the last parameter but got {}
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected between 3 and 4 positional arguments or named arguments for the last parameter but got 1
+
+
+error: Variadic parameters must always be the last parameter in a function.
+   --> ../../../examples/tests/invalid/function_call_arity.test.w:27:51
+   |
+27 | let invalidCombinationFunc = (n: num, b: bool, ...variadic: Array<str>, opts: Options) => {};
+   |                                                   ^^^^^^^^ Variadic parameters must always be the last parameter in a function.
+
+
+error: No named arguments expected
+   --> ../../../examples/tests/invalid/function_call_arity.test.w:31:1
+   |
+31 | invalidCombinationFunc2(1, 2, prefix: \\"debug\\", priority: 0, \\"hello\\", \\"world\\");
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ No named arguments expected
+
+
+error: Expected type to be \\"bool\\", but got \\"num\\" instead
+   --> ../../../examples/tests/invalid/function_call_arity.test.w:31:28
+   |
+31 | invalidCombinationFunc2(1, 2, prefix: \\"debug\\", priority: 0, \\"hello\\", \\"world\\");
+   |                            ^ Expected type to be \\"bool\\", but got \\"num\\" instead
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`function_call_variadic.test.w 1`] = `
+"error: Expected type to be \\"str\\", but got \\"num\\" instead
+  --> ../../../examples/tests/invalid/function_call_variadic.test.w:3:6
+  |
+3 | func(1, 2, 3); // should fail due to wrong type for variadic
+  |      ^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+  --> ../../../examples/tests/invalid/function_call_variadic.test.w:3:9
+  |
+3 | func(1, 2, 3); // should fail due to wrong type for variadic
+  |         ^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+  --> ../../../examples/tests/invalid/function_call_variadic.test.w:3:12
+  |
+3 | func(1, 2, 3); // should fail due to wrong type for variadic
+  |            ^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+error: Expected type to be \\"str\\", but got \\"Array<str>\\" instead
+  --> ../../../examples/tests/invalid/function_call_variadic.test.w:4:6
+  |
+4 | func([\\"a\\", \\"b\\", \\"c\\"]); // should fail as the parameter is variadic
+  |      ^^^^^^^^^^^^^^^ Expected type to be \\"str\\", but got \\"Array<str>\\" instead
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`function_type.test.w 1`] = `
 "error: Expected function return type
   --> ../../../examples/tests/invalid/function_type.test.w:2:26
@@ -1163,6 +1354,13 @@ error: Expected function return type
   |
 4 | let my_func2 = (callback: ((num)): (str)) => {  };
   |                            ^^^^^ Expected function return type
+
+
+error: Optional parameters must always be after all non-optional parameters.
+   --> ../../../examples/tests/invalid/function_type.test.w:16:25
+   |
+16 | let my_func3 = (a: num, b: str?, c: bool) => {};
+   |                         ^ Optional parameters must always be after all non-optional parameters.
 
 
  
@@ -1194,11 +1392,11 @@ error: Variadic parameters must always be the last parameter in a function.
   |              ^^^^ Variadic parameters must always be the last parameter in a function.
 
 
-error: Expected type to be num, but got bool instead.
+error: Expected type to be \\"num\\", but got \\"bool\\" instead
   --> ../../../examples/tests/invalid/function_variadic_definition.test.w:8:7
   |
 8 | f3(1, true, 2);
-  |       ^^^^ Expected type to be num, but got bool instead.
+  |       ^^^^ Expected type to be \\"num\\", but got \\"bool\\" instead
 
 
 error: Variadic parameters must be type Array or MutArray.
@@ -1215,11 +1413,11 @@ error: No named arguments expected
    | ^^^^^^^^^^^^^^ No named arguments expected
 
 
-error: Expected type to be Bucket, but got bool instead.
+error: Expected type to be \\"Bucket\\", but got \\"bool\\" instead
    --> ../../../examples/tests/invalid/function_variadic_definition.test.w:24:21
    |
 24 | funcBucket(bucket1, true, bucket2);
-   |                     ^^^^ Expected type to be Bucket, but got bool instead.
+   |                     ^^^^ Expected type to be \\"Bucket\\", but got \\"bool\\" instead
 
 
  
@@ -2282,11 +2480,13 @@ Duration <DURATION>"
 `;
 
 exports[`panic.test.w 1`] = `
-"error: Compiler bug (panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL) during type-checking, please report at https://www.winglang.io/contributing/start-here/bugs
+"error: Compiler bug during type-checking ('panicked at libs/wingc/src/type_check.rs:LINE:COL:
+User invoked panic'), please report at https://www.winglang.io/contributing/start-here/bugs
   --> ../../../examples/tests/invalid/panic.test.w:6:1
   |
 6 | 😱;
-  | ^^ Compiler bug (panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL) during type-checking, please report at https://www.winglang.io/contributing/start-here/bugs
+  | ^^ Compiler bug during type-checking ('panicked at libs/wingc/src/type_check.rs:LINE:COL:
+User invoked panic'), please report at https://www.winglang.io/contributing/start-here/bugs
 
 
  
@@ -2340,6 +2540,42 @@ error: Expected type to be \\"str\\", but got \\"num\\" instead
    |
 13 | let n: str = arr.at(0);
    |              ^^^^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`protected_access_modifiers.test.w 1`] = `
+"error: Structs must be public (\\"pub\\") or private
+  --> ../../../examples/tests/invalid/protected_access_modifiers.test.w:1:1
+  |
+1 | protected struct MyStruct {}
+  | ^^^^^^^^^ Structs must be public (\\"pub\\") or private
+
+
+error: Classes must be public (\\"pub\\") or private
+  --> ../../../examples/tests/invalid/protected_access_modifiers.test.w:4:1
+  |
+4 | protected class MyClass {}
+  | ^^^^^^^^^ Classes must be public (\\"pub\\") or private
+
+
+error: Interfaces must be public (\\"pub\\") or private
+  --> ../../../examples/tests/invalid/protected_access_modifiers.test.w:7:1
+  |
+7 | protected interface MyInterface {}
+  | ^^^^^^^^^ Interfaces must be public (\\"pub\\") or private
+
+
+error: Enums must be public (\\"pub\\") or private
+   --> ../../../examples/tests/invalid/protected_access_modifiers.test.w:10:1
+   |
+10 | protected enum MyEnum {}
+   | ^^^^^^^^^ Enums must be public (\\"pub\\") or private
 
 
  
@@ -2710,11 +2946,11 @@ error: \\"bublic\\" is not a field of \\"BucketProps\\"
   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \\"bublic\\" is not a field of \\"BucketProps\\"
 
 
-error: Expected between 0 and 1 arguments but got 2
+error: Expected either a positional argument or named arguments for the last parameter, but got both
   --> ../../../examples/tests/invalid/struct_expansion.test.w:7:15
   |
 7 | let bucket2 = new cloud.Bucket(2, public: true);
-  |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected between 0 and 1 arguments but got 2
+  |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected either a positional argument or named arguments for the last parameter, but got both
 
 
 error: Expected type to be \\"BucketProps?\\", but got \\"num\\" instead
@@ -2746,11 +2982,11 @@ error: \\"notAField\\" is not a field of \\"ApiResponse\\"
    | \\\\-^ \\"notAField\\" is not a field of \\"ApiResponse\\"
 
 
-error: Expected 2 positional argument(s) but got 1
+error: Expected between 2 and 3 positional arguments or named arguments for the last parameter but got 1
    --> ../../../examples/tests/invalid/struct_expansion.test.w:11:3
    |
 11 |   bucket1.put(file: \\"file.txt\\", \\"data\\");
-   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected 2 positional argument(s) but got 1
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected between 2 and 3 positional arguments or named arguments for the last parameter but got 1
 
 
  
@@ -2790,11 +3026,11 @@ Duration <DURATION>"
 `;
 
 exports[`structs.test.w 1`] = `
-"error: Struct \\"C\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != str)
-   --> ../../../examples/tests/invalid/structs.test.w:11:8
+"error: Struct \\"C\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != num)
+   --> ../../../examples/tests/invalid/structs.test.w:13:3
    |
-11 | struct C extends B {
-   |        ^ Struct \\"C\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != str)
+13 |   x: num;
+   |   ^ Struct \\"C\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != num)
 
 
 error: \\"x\\" is not initialized
@@ -2825,11 +3061,11 @@ error: Unknown symbol \\"badField\\"
    |       ^^^^^^^^ Unknown symbol \\"badField\\"
 
 
-error: Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != num)
-   --> ../../../examples/tests/invalid/structs.test.w:44:8
+error: Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != str)
+   --> ../../../examples/tests/invalid/structs.test.w:37:3
    |
-44 | struct Showtime extends Razzle, Dazzle {}
-   |        ^^^^^^^^ Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != num)
+37 |   a: str;
+   |   ^ Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != str)
 
 
 error: Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.
@@ -3101,6 +3337,15 @@ error: Unknown symbol \\"methodWhichIsNotPartOfBucketApi\\"
    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Unknown symbol \\"methodWhichIsNotPartOfBucketApi\\"
 
 
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`unresolved_state.test.w 1`] = `
+"Could not start resource root/env0/cloud.Function after 10 attempts. This could be due to a dependency cycle or an invalid attribute reference.
  
  
 Tests 1 failed (1)

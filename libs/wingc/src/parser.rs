@@ -536,8 +536,7 @@ impl<'s> Parser<'s> {
 			"continue_statement" => self.build_continue_statement(statement_node)?,
 			"return_statement" => self.build_return_statement(statement_node, phase)?,
 			"throw_statement" => self.build_throw_statement(statement_node, phase)?,
-			"class_definition" => self.build_class_statement(statement_node, Phase::Inflight)?, // `inflight class` is always "inflight"
-			"resource_definition" => self.build_class_statement(statement_node, phase)?, // `class` without a modifier inherits from scope
+			"class_definition" => self.build_class_statement(statement_node, phase)?,
 			"interface_definition" => self.build_interface_statement(statement_node, phase)?,
 			"enum_definition" => self.build_enum_statement(statement_node)?,
 			"try_catch_statement" => self.build_try_catch_statement(statement_node, phase)?,
@@ -769,10 +768,20 @@ impl<'s> Parser<'s> {
 			}
 		}
 
+		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
+		let access = self.build_access_modifier(access_modifier_node)?;
+		if access == AccessModifier::Protected {
+			self.with_error::<Node>(
+				"Structs must be public (\"pub\") or private",
+				&access_modifier_node.expect("access modifier node"),
+			)?;
+		}
+
 		Ok(StmtKind::Struct {
 			name,
 			extends,
 			fields: members,
+			access,
 		})
 	}
 
@@ -792,7 +801,12 @@ impl<'s> Parser<'s> {
 
 	fn build_bring_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
 		let Some(module_name_node) = statement_node.child_by_field_name("module_name") else {
-			return self.with_error("Expected module specification (see https://www.winglang.io/docs/libraries)", &statement_node.child(statement_node.child_count() - 1).unwrap_or(*statement_node));
+			return self.with_error(
+				"Expected module specification (see https://www.winglang.io/docs/libraries)",
+				&statement_node
+					.child(statement_node.child_count() - 1)
+					.unwrap_or(*statement_node),
+			);
 		};
 
 		let module_name = self.node_symbol(&module_name_node)?;
@@ -996,13 +1010,28 @@ impl<'s> Parser<'s> {
 			}
 		}
 
+		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
+		let access = self.build_access_modifier(access_modifier_node)?;
+		if access == AccessModifier::Protected {
+			self.with_error::<Node>(
+				"Enums must be public (\"pub\") or private",
+				&access_modifier_node.expect("access modifier node"),
+			)?;
+		}
+
 		Ok(StmtKind::Enum {
 			name: name.unwrap(),
 			values,
+			access,
 		})
 	}
 
 	fn build_class_statement(&self, statement_node: &Node, class_phase: Phase) -> DiagnosticResult<StmtKind> {
+		let class_phase = if statement_node.child_by_field_name("phase_modifier").is_some() {
+			Phase::Inflight
+		} else {
+			class_phase
+		};
 		let mut cursor = statement_node.walk();
 		let mut fields = vec![];
 		let mut methods = vec![];
@@ -1029,7 +1058,9 @@ impl<'s> Parser<'s> {
 						continue;
 					};
 
-					let Ok(func_def) = self.build_function_definition(Some(method_name.clone()), &class_element, phase, is_static) else {
+					let Ok(func_def) =
+						self.build_function_definition(Some(method_name.clone()), &class_element, phase, is_static)
+					else {
 						continue;
 					};
 
@@ -1069,7 +1100,7 @@ impl<'s> Parser<'s> {
 						reassignable: class_element.child_by_field_name("reassignable").is_some(),
 						is_static,
 						phase,
-						access_modifier: self.build_access_modifier(class_element.child_by_field_name("access_modifier"))?,
+						access: self.build_access_modifier(class_element.child_by_field_name("access_modifier"))?,
 					})
 				}
 				"initializer" => {
@@ -1122,7 +1153,7 @@ impl<'s> Parser<'s> {
 							},
 							is_static: false,
 							span: self.node_span(&class_element),
-							access_modifier: AccessModifier::Public,
+							access: AccessModifier::Public,
 						})
 					} else {
 						initializer = Some(FunctionDefinition {
@@ -1137,7 +1168,7 @@ impl<'s> Parser<'s> {
 								phase: Phase::Preflight,
 							},
 							span: self.node_span(&class_element),
-							access_modifier: AccessModifier::Public,
+							access: AccessModifier::Public,
 						})
 					}
 				}
@@ -1181,7 +1212,7 @@ impl<'s> Parser<'s> {
 				body: FunctionBody::Statements(Scope::new(vec![], WingSpan::default())),
 				is_static: false,
 				span: WingSpan::default(),
-				access_modifier: AccessModifier::Public,
+				access: AccessModifier::Public,
 			},
 		};
 
@@ -1206,7 +1237,7 @@ impl<'s> Parser<'s> {
 				body: FunctionBody::Statements(Scope::new(vec![], WingSpan::default())),
 				is_static: false,
 				span: WingSpan::default(),
-				access_modifier: AccessModifier::Public,
+				access: AccessModifier::Public,
 			},
 		};
 
@@ -1253,6 +1284,15 @@ impl<'s> Parser<'s> {
 			}
 		}
 
+		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
+		let access = self.build_access_modifier(access_modifier_node)?;
+		if access == AccessModifier::Protected {
+			self.with_error::<Node>(
+				"Classes must be public (\"pub\") or private",
+				&access_modifier_node.expect("access modifier node"),
+			)?;
+		}
+
 		Ok(StmtKind::Class(Class {
 			name,
 			fields,
@@ -1262,6 +1302,7 @@ impl<'s> Parser<'s> {
 			initializer,
 			phase: class_phase,
 			inflight_initializer,
+			access,
 		}))
 	}
 
@@ -1332,7 +1373,21 @@ impl<'s> Parser<'s> {
 			}
 		}
 
-		Ok(StmtKind::Interface(Interface { name, methods, extends }))
+		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
+		let access = self.build_access_modifier(access_modifier_node)?;
+		if access == AccessModifier::Protected {
+			self.with_error::<Node>(
+				"Interfaces must be public (\"pub\") or private",
+				&access_modifier_node.expect("access modifier node"),
+			)?;
+		}
+
+		Ok(StmtKind::Interface(Interface {
+			name,
+			methods,
+			extends,
+			access,
+		}))
 	}
 
 	fn build_interface_method(
@@ -1386,8 +1441,12 @@ impl<'s> Parser<'s> {
 		let signature = self.build_function_signature(func_def_node, phase)?;
 		let statements = if let Some(external) = func_def_node.child_by_field_name("extern_modifier") {
 			let node_text = self.node_text(&external.named_child(0).unwrap());
-			let node_text = &node_text[1..node_text.len() - 1];
-			FunctionBody::External(node_text.to_string())
+			let file_path = Utf8Path::new(&node_text[1..node_text.len() - 1]);
+			let file_path = normalize_path(file_path, Some(&Utf8Path::new(&self.source_name)));
+			if !file_path.exists() {
+				self.add_error(format!("File not found: {}", node_text), &external);
+			}
+			FunctionBody::External(file_path.to_string())
 		} else {
 			FunctionBody::Statements(self.build_scope(&self.get_child_field(func_def_node, "block")?, phase))
 		};
@@ -1398,7 +1457,7 @@ impl<'s> Parser<'s> {
 			signature,
 			is_static,
 			span: self.node_span(func_def_node),
-			access_modifier: self.build_access_modifier(func_def_node.child_by_field_name("access_modifier"))?,
+			access: self.build_access_modifier(func_def_node.child_by_field_name("access_modifier"))?,
 		})
 	}
 
@@ -2285,7 +2344,7 @@ impl<'s> Parser<'s> {
 				},
 				is_static: true,
 				span: statements_span.clone(),
-				access_modifier: AccessModifier::Public,
+				access: AccessModifier::Public,
 			}),
 			statements_span.clone(),
 		);

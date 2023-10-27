@@ -194,38 +194,38 @@ export class ResourceItem extends TreeItem {
       return "beaker";
     }
     switch (resourceType) {
-      case "wingsdk.cloud.Bucket": {
+      case "@winglang/sdk.cloud.Bucket": {
         return "archive-box";
       }
-      case "wingsdk.cloud.Function": {
+      case "@winglang/sdk.cloud.Function": {
         return "bolt";
       }
-      case "wingsdk.cloud.Queue": {
+      case "@winglang/sdk.cloud.Queue": {
         return "queue-list";
       }
-      case "wingsdk.cloud.Website":
-      case "wingsdk.cloud.Endpoint": {
+      case "@winglang/sdk.cloud.Website":
+      case "@winglang/sdk.cloud.Endpoint": {
         return "globe-alt";
       }
-      case "wingsdk.cloud.Counter": {
+      case "@winglang/sdk.cloud.Counter": {
         return "calculator";
       }
-      case "wingsdk.cloud.Topic": {
+      case "@winglang/sdk.cloud.Topic": {
         return "megaphone";
       }
-      case "wingsdk.cloud.Api": {
+      case "@winglang/sdk.cloud.Api": {
         return "cloud";
       }
-      case "wingsdk.cloud.Table": {
+      case "@winglang/sdk.ex.Table": {
         return "table-cells";
       }
-      case "wingsdk.cloud.Schedule": {
+      case "@winglang/sdk.cloud.Schedule": {
         return "clock";
       }
-      case "wingsdk.redis.Redis": {
+      case "@winglang/sdk.ex.Redis": {
         return "redis";
       }
-      case "wingsdk.cloud.Test": {
+      case "@winglang/sdk.std.Test": {
         return "beaker";
       }
       default: {

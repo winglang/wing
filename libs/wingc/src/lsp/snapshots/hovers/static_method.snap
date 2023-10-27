@@ -3,7 +3,7 @@ source: libs/wingc/src/lsp/hover.rs
 ---
 contents:
   kind: markdown
-  value: "```wing\nstatic preflight my: preflight (a: str, b: bool): str\n```"
+  value: "```wing\nstatic preflight my: preflight (a: str, b: bool): str\n```\n---\n### Parameters\n- `a` — `str`\n- `b` — `bool`"
 range:
   start:
     line: 5

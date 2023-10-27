@@ -47,7 +47,7 @@ export abstract class Domain extends Resource {
   }
 
   /** @internal */
-  public _getInflightOps(): string[] {
+  public _supportedOps(): string[] {
     return [];
   }
 
@@ -58,3 +58,8 @@ export abstract class Domain extends Resource {
     return this._domain;
   }
 }
+
+/**
+ * Inflight interface for `Domain`.
+ */
+export interface IDomainClient {}

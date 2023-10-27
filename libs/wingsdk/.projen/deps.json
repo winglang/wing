@@ -122,6 +122,11 @@
       "type": "build"
     },
     {
+      "name": "mock-gcs",
+      "version": "^1.0.0",
+      "type": "build"
+    },
+    {
       "name": "nanoid",
       "type": "build"
     },
@@ -249,6 +254,11 @@
       "type": "bundled"
     },
     {
+      "name": "@google-cloud/storage",
+      "version": "6.9.5",
+      "type": "bundled"
+    },
+    {
       "name": "@types/aws-lambda",
       "type": "bundled"
     },
@@ -284,6 +294,11 @@
     },
     {
       "name": "mime-types",
+      "type": "bundled"
+    },
+    {
+      "name": "mime",
+      "version": "^3.0.0",
       "type": "bundled"
     },
     {

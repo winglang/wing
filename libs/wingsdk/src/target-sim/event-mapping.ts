@@ -1,7 +1,6 @@
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import {
-  EVENT_MAPPING_TYPE,
   EventMappingSchema,
   EventSubscription,
   FunctionHandle,
@@ -30,7 +29,7 @@ export interface IEventPublisher extends ISimulatorResourceInstance {
   ) => Promise<void>;
 }
 
-export const EVENT_MAP_FQN = fqnForType("sim.EventMapping");
+export const EVENT_MAPPING_FQN = fqnForType("sim.EventMapping");
 
 export interface EventMappingProps {
   subscriber: IResource;
@@ -57,7 +56,7 @@ export class EventMapping extends Resource implements ISimulatorResource {
   }
 
   /** @internal */
-  public _getInflightOps(): string[] {
+  public _supportedOps(): string[] {
     return [];
   }
 
@@ -67,7 +66,7 @@ export class EventMapping extends Resource implements ISimulatorResource {
 
   public toSimulator(): BaseResourceSchema {
     const schema: EventMappingSchema = {
-      type: EVENT_MAPPING_TYPE,
+      type: EVENT_MAPPING_FQN,
       path: this.node.path,
       props: {
         subscriber: simulatorHandleToken(this.eventProps.subscriber),
@@ -79,9 +78,9 @@ export class EventMapping extends Resource implements ISimulatorResource {
     return schema;
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   public _toInflight(): string {

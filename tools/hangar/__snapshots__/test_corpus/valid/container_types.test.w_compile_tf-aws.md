@@ -13,14 +13,14 @@
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -68,6 +68,7 @@
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -75,11 +76,11 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
-    const bucket1 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"bucket1");
-    const bucket2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"bucket2");
-    const bucket3 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"bucket3");
+  constructor($scope, $id) {
+    super($scope, $id);
+    const bucket1 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "bucket1");
+    const bucket2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "bucket2");
+    const bucket3 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "bucket3");
     const emptyArray = [];
     {((cond) => {if (!cond) throw new Error("assertion failed: emptyArray.length == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(emptyArray.length,0)))};
     const emptyArray2 = [];
@@ -128,25 +129,25 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: emptyMap2.size() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(emptyMap2).length,0)))};
     const m1 = ({"a": 1,"b": 2,"c": 3});
     {((cond) => {if (!cond) throw new Error("assertion failed: m1.size() == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(m1).length,3)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: m1.get(\"b\") == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((m1)["b"],2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m1.get(\"b\") == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(m1, "b"),2)))};
     const m2 = ({"a": 1,"b": 2,"c": 3});
     {((cond) => {if (!cond) throw new Error("assertion failed: m2.size() == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(m2).length,3)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: m2.get(\"b\") == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((m2)["b"],2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m2.get(\"b\") == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(m2, "b"),2)))};
     const m3 = ({"a": 1,"b": 2,"c": 3});
     {((cond) => {if (!cond) throw new Error("assertion failed: m3.size() == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(m3).length,3)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: m3.get(\"b\") == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((m3)["b"],2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m3.get(\"b\") == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(m3, "b"),2)))};
     const m4 = ({"a": 1,"b": 2,"c": 3});
     {((cond) => {if (!cond) throw new Error("assertion failed: m4.size() == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(m4).length,3)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: m4.get(\"b\") == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((m4)["b"],2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m4.get(\"b\") == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(m4, "b"),2)))};
     const m5 = ({"a": bucket1,"b": bucket2,"c": bucket3});
     {((cond) => {if (!cond) throw new Error("assertion failed: m5.size() == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(m5).length,3)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: m5.get(\"b\") == bucket2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((m5)["b"],bucket2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m5.get(\"b\") == bucket2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(m5, "b"),bucket2)))};
     const m6 = ({"a": bucket1,"b": bucket2,"c": bucket3});
     {((cond) => {if (!cond) throw new Error("assertion failed: m6.size() == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(m6).length,3)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: m6.get(\"b\") == bucket2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((m6)["b"],bucket2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m6.get(\"b\") == bucket2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(m6, "b"),bucket2)))};
     const m7 = m1;
     {((cond) => {if (!cond) throw new Error("assertion failed: m7.size() == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(m7).length,3)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: m7.get(\"b\") == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((m7)["b"],2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m7.get(\"b\") == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(m7, "b"),2)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: m7.has(\"b\")")})(("b" in (m7)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: m4.has(\"boom\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("boom" in (m4)),false)))};
     const m8 = ({"a": "a1","b": "b1","c": "c1"});
@@ -174,6 +175,30 @@ class $Root extends $stdlib.std.Resource {
     }
     for (const val of Object.values(m9)) {
       {((cond) => {if (!cond) throw new Error("assertion failed: val.endsWith(\"1\")")})(val.endsWith("1"))};
+    }
+    {
+      const $if_let_value = (m9)["a"];
+      if ($if_let_value != undefined) {
+        const k = $if_let_value;
+        {((cond) => {if (!cond) throw new Error("assertion failed: k == \"a1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(k,"a1")))};
+      }
+      else {
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+      }
+    }
+    {
+      const $if_let_value = (m9)["def-fake"];
+      if ($if_let_value != undefined) {
+        const k = $if_let_value;
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+      }
+    }
+    try {
+      ((obj, key) => { if (!(key in obj)) throw new Error(`MutMap does not contain key: "${key}"`); return obj[key]; })(m9, "def-fake");
+    }
+    catch ($error_err) {
+      const err = $error_err.message;
+      {((cond) => {if (!cond) throw new Error("assertion failed: err.contains(\"does not contain key: \\\"def-fake\\\"\")")})(err.includes("does not contain key: \"def-fake\""))};
     }
     const emptySet = new Set([]);
     {((cond) => {if (!cond) throw new Error("assertion failed: emptySet.size == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(emptySet.size,0)))};

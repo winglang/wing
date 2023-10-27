@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $a, $a_field }) {
   class $Closure1 {
     constructor({  }) {
@@ -21,6 +22,7 @@ module.exports = function({ $a, $a_field }) {
 
 ## inflight.A-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class A {
     constructor({ $this_counter }) {
@@ -50,14 +52,14 @@ module.exports = function({  }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -92,6 +94,7 @@ module.exports = function({  }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -99,13 +102,13 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class A extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         this.field = "hey";
-        this.counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
+        this.counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter");
       }
       static _toInflightType(context) {
         return `
@@ -125,22 +128,22 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["incCounter", "bar", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          A._registerBindObject(this.counter, host, []);
+          A._registerOnLiftObject(this.counter, host, []);
         }
         if (ops.includes("incCounter")) {
-          A._registerBindObject(this.counter, host, ["inc"]);
+          A._registerOnLiftObject(this.counter, host, ["inc"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -162,19 +165,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(a, host, ["bar"]);
-          $Closure1._registerBindObject(a.field, host, []);
+          $Closure1._registerOnLiftObject(a, host, ["bar"]);
+          $Closure1._registerOnLiftObject(a.field, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
-    const a = new A(this,"A");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
+    const a = new A(this, "A");
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:test", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

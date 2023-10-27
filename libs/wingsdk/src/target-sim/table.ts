@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
-import { TableSchema, TABLE_TYPE } from "./schema-resources";
+import { TableSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as ex from "../ex";
 import { BaseResourceSchema } from "../simulator/simulator";
@@ -23,7 +23,7 @@ export class Table extends ex.Table implements ISimulatorResource {
 
   public toSimulator(): BaseResourceSchema {
     const schema: TableSchema = {
-      type: TABLE_TYPE,
+      type: ex.TABLE_FQN,
       path: this.node.path,
       props: {
         name: this.name,
@@ -36,9 +36,22 @@ export class Table extends ex.Table implements ISimulatorResource {
     return schema;
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      ex.TableInflightMethods.INSERT,
+      ex.TableInflightMethods.UPSERT,
+      ex.TableInflightMethods.UPDATE,
+      ex.TableInflightMethods.DELETE,
+      ex.TableInflightMethods.GET,
+      ex.TableInflightMethods.TRYGET,
+      ex.TableInflightMethods.LIST,
+    ];
+  }
+
+  public onLift(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

@@ -21,13 +21,14 @@ source: libs/wingc/src/jsify/tests.rs
 ## inflight.A-1.js
 
 ```js
+"use strict";
 module.exports = function({  }) {
   class A {
     constructor({ $this_bucket_this }) {
       this.$this_bucket_this = $this_bucket_this;
     }
     async foo() {
-      (await this.$this_bucket_this.put("hello","world"));
+      (await this.$this_bucket_this.put("hello", "world"));
     }
   }
   return A;
@@ -37,6 +38,7 @@ module.exports = function({  }) {
 ## preflight.js
 
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -44,12 +46,12 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class A extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        this.bucket_this = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        this.bucket_this = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
       }
       static _toInflightType(context) {
         return `
@@ -69,17 +71,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["foo", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          A._registerBindObject(this.bucket_this, host, []);
+          A._registerOnLiftObject(this.bucket_this, host, []);
         }
         if (ops.includes("foo")) {
-          A._registerBindObject(this.bucket_this, host, ["put"]);
+          A._registerOnLiftObject(this.bucket_this, host, ["put"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
   }

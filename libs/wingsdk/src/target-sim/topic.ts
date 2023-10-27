@@ -3,7 +3,7 @@ import { Construct } from "constructs";
 import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
-import { TopicSchema, TOPIC_TYPE } from "./schema-resources";
+import { TopicSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
@@ -57,9 +57,9 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
     return fn;
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */
@@ -69,7 +69,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
 
   public toSimulator(): BaseResourceSchema {
     const schema: TopicSchema = {
-      type: TOPIC_TYPE,
+      type: cloud.TOPIC_FQN,
       path: this.node.path,
       props: {},
       attrs: {} as any,

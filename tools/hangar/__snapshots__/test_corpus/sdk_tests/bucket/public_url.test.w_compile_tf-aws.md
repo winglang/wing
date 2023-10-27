@@ -1,47 +1,5 @@
 # [public_url.test.w](../../../../../../examples/tests/sdk_tests/bucket/public_url.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
-module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Util }) {
-  class $Closure1 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async handle() {
-      const assertThrows = async (expected, block) => {
-        let error = false;
-        try {
-          (await block());
-        }
-        catch ($error_actual) {
-          const actual = $error_actual.message;
-          {((cond) => {if (!cond) throw new Error("assertion failed: actual == expected")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(actual,expected)))};
-          error = true;
-        }
-        {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
-      }
-      ;
-      const BUCKET_NOT_PUBLIC_ERROR = "Cannot provide public url for a non-public bucket";
-      (await $publicBucket.put("file1.txt","Foo"));
-      (await $privateBucket.put("file2.txt","Bar"));
-      const publicUrl = (await $publicBucket.publicUrl("file1.txt"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: publicUrl != \"\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(publicUrl,"")))};
-      if ((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })((await $util_Util.env("WING_TARGET")),"sim"))) {
-        {((cond) => {if (!cond) throw new Error("assertion failed: http.get(publicUrl).body ==  \"Foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get(publicUrl)).body,"Foo")))};
-      }
-      (await assertThrows(BUCKET_NOT_PUBLIC_ERROR,async () => {
-        (await $privateBucket.publicUrl("file2.txt"));
-      }
-      ));
-    }
-  }
-  return $Closure1;
-}
-
-```
-
 ## main.tf.json
 ```json
 {
@@ -55,14 +13,14 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -126,65 +84,5 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
     }
   }
 }
-```
-
-## preflight.js
-```js
-const $stdlib = require('@winglang/sdk');
-const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
-const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const $wing_is_test = process.env.WING_IS_TEST === "true";
-const std = $stdlib.std;
-const cloud = $stdlib.cloud;
-const http = $stdlib.http;
-const util = $stdlib.util;
-class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
-    class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        (std.Node.of(this)).hidden = true;
-      }
-      static _toInflightType(context) {
-        return `
-          require("./inflight.$Closure1-1.js")({
-            $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
-            $privateBucket: ${context._lift(privateBucket)},
-            $publicBucket: ${context._lift(publicBucket)},
-            $util_Util: ${context._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
-          })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
-            const client = new $Closure1Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
-      }
-      _getInflightOps() {
-        return ["handle", "$inflight_init"];
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerBindObject(privateBucket, host, ["publicUrl", "put"]);
-          $Closure1._registerBindObject(publicBucket, host, ["publicUrl", "put"]);
-        }
-        super._registerBind(host, ops);
-      }
-    }
-    const publicBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"publicBucket",{ public: true });
-    const privateBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"privateBucket");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:publicUrl",new $Closure1(this,"$Closure1"));
-  }
-}
-const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "public_url.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
 ```
 

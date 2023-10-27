@@ -21,6 +21,7 @@ source: libs/wingc/src/jsify/tests.rs
 ## inflight.A-1.js
 
 ```js
+"use strict";
 module.exports = function({  }) {
   class A {
     constructor({  }) {
@@ -39,17 +40,18 @@ module.exports = function({  }) {
 ## preflight.js
 
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class A extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       static _toInflightType(context) {
         return `
@@ -68,7 +70,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["x", "method", "$inflight_init"];
       }
     }

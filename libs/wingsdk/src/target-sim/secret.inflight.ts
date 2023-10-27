@@ -1,12 +1,8 @@
 import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
-import {
-  SECRET_TYPE,
-  SecretAttributes,
-  SecretSchema,
-} from "./schema-resources";
-import { ISecretClient } from "../cloud";
+import { SecretAttributes, SecretSchema } from "./schema-resources";
+import { ISecretClient, SECRET_FQN } from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
@@ -43,7 +39,7 @@ export class Secret implements ISecretClient, ISimulatorResourceInstance {
         message: "Get value",
       },
       sourcePath: this.context.resourcePath,
-      sourceType: SECRET_TYPE,
+      sourceType: SECRET_FQN,
       type: TraceType.RESOURCE,
       timestamp: new Date().toISOString(),
     });

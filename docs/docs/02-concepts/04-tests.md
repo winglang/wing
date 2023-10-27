@@ -164,3 +164,11 @@ test "this test should fail" {
 
 Refer to the TESTS section in the image below. You have the option to run all tests or a single test.
 ![image](https://github.com/winglang/wing/assets/1727147/7d5ebc00-9316-41d1-9a3c-0e28e195d077)
+
+### Saving test output to a file
+
+To save test output to a file, add the relative path to the file to the `-o` or `--output-file` option. The format is inferred by the extension, only .json is supported at the moment.
+
+For example:
+`wing test -t sim -o out.json /test/file.test.w`
+`wing test -t sim --output-file path/to/out.json /test/file.test.w`

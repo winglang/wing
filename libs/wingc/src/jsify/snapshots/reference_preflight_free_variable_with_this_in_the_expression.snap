@@ -25,13 +25,14 @@ source: libs/wingc/src/jsify/tests.rs
 ## inflight.Foo-1.js
 
 ```js
+"use strict";
 module.exports = function({ $b }) {
   class Foo {
     constructor({ $this_name }) {
       this.$this_name = $this_name;
     }
     async method() {
-      (await $b.put(this.$this_name,"value"));
+      (await $b.put(this.$this_name, "value"));
     }
   }
   return Foo;
@@ -41,6 +42,7 @@ module.exports = function({ $b }) {
 ## preflight.js
 
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -48,11 +50,11 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class Foo extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         this.name = "my_object";
       }
       static _toInflightType(context) {
@@ -74,21 +76,21 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["method", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject(this.name, host, []);
+          Foo._registerOnLiftObject(this.name, host, []);
         }
         if (ops.includes("method")) {
-          Foo._registerBindObject(b, host, ["put"]);
-          Foo._registerBindObject(this.name, host, []);
+          Foo._registerOnLiftObject(b, host, ["put"]);
+          Foo._registerOnLiftObject(this.name, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
-    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

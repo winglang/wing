@@ -102,7 +102,7 @@ new cloud.Website(props: WebsiteProps);
 ##### `addFile` <a name="addFile" id="@winglang/sdk.cloud.Website.addFile"></a>
 
 ```wing
-addFile(path: str, data: str, options: AddFileOptions): str
+addFile(path: str, data: str, options?: AddFileOptions): str
 ```
 
 Add a file to the website during deployment.
@@ -125,7 +125,7 @@ the data to write to the file.
 
 ---
 
-###### `options`<sup>Required</sup> <a name="options" id="@winglang/sdk.cloud.Website.addFile.parameter.options"></a>
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.Website.addFile.parameter.options"></a>
 
 - *Type:* <a href="#@winglang/sdk.cloud.AddFileOptions">AddFileOptions</a>
 

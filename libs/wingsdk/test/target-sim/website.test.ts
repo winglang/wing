@@ -77,7 +77,7 @@ test("website is serving dynamic content", async () => {
   const website = cloud.Website._newWebsite(app, "website", {
     path: resolve(__dirname, "../test-files/website"),
   });
-  website.addFile(route, fileContent, "text/html");
+  website.addFile(route, fileContent, { contentType: "text/html" });
 
   // WHEN
   const s = await app.startSimulator();
@@ -88,6 +88,7 @@ test("website is serving dynamic content", async () => {
   // THEN
   await s.stop();
   expect(await configPage.text()).toEqual(fileContent);
+  expect(configPage.headers.get("content-type")).toContain("text/html");
 });
 
 test("addJson throws an error for no json path", async () => {

@@ -23,12 +23,13 @@ source: libs/wingc/src/jsify/tests.rs
 ## inflight.Foo-1.js
 
 ```js
+"use strict";
 module.exports = function({ $b }) {
   class Foo {
     constructor({  }) {
     }
     async put() {
-      (await $b.put("hello1","world"));
+      (await $b.put("hello1", "world"));
     }
     async list() {
       (await $b.list());
@@ -41,6 +42,7 @@ module.exports = function({ $b }) {
 ## preflight.js
 
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -48,11 +50,11 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class Foo extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       static _toInflightType(context) {
         return `
@@ -72,20 +74,20 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["put", "list", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("list")) {
-          Foo._registerBindObject(b, host, ["list"]);
+          Foo._registerOnLiftObject(b, host, ["list"]);
         }
         if (ops.includes("put")) {
-          Foo._registerBindObject(b, host, ["put"]);
+          Foo._registerOnLiftObject(b, host, ["put"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
-    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

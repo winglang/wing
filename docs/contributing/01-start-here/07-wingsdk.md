@@ -126,7 +126,7 @@ The SDK resources are written using the Constructs Programming Model.
 constructs serves as the low-level foundation of several other infrastructure-as-code frameworks, such as the [AWS CDK](https://github.com/aws/aws-cdk), [cdk8s](https://github.com/cdk8s-team/cdk8s), and [cdktf](https://github.com/hashicorp/terraform-cdk).
 
 Conceptually, constructs are ordinary classes that additionally have a unique **scope** (parent construct) and **id**.
-By adding constructs as children of other constructs, they can form in-memory trees, where each construct is uniquely addressible based on its location within the tree.
+By adding constructs as children of other constructs, they can form in-memory trees, where each construct is uniquely addressable based on its location within the tree.
 
 A construct's **path** is obtained by joining the sequence of construct ids from the tree root to the construct, with the "/" character.
 For example, if a construct with no parent is declared the root with an id "root", and it has a child named "Child1", the child has a path of "root/Child1".
@@ -199,14 +199,14 @@ Under the hood, two main functions are performed by the SDK with this informatio
 
 #### 1. Resource binding
 
-First, each referenced resource is "bound" to the inflight host through a `_bind` method that is defined on all resources.
+First, each referenced resource is "bound" to the inflight host through an `onLift` method that is defined on all resources.
 In the example above, `cloud.Function` is the host, and `cloud.Queue` is a referenced resource.
-The function would call `queue._bind(this, ["push"])` to bind the queue to the function host, providing information about the methods it expects to use on the queue.
+The function would call `queue.onLift(this, ["push"])` to bind the queue to the function host, providing information about the methods it expects to use on the queue.
 
 The referenced resource can then perform any necessary setup to allow the host to referenced it during runtime, such as setting up least privilege permissions.
 For example, when compiling to AWS, the queue can create an IAM role that allows the function to execute `sqs:SendMessage` API calls on the queue.
 
-In more complex resources, the `_bind` method will automatically call `_bind` on any sub-resources based on the operations that the host expects to use.
+In more complex resources, the `onLift` method will automatically call `onLift` on any sub-resources based on the operations that the host expects to use.
 For example, suppose the user defines a `TaskList` resource with a method named `addTask`, and `addTask` calls `put` on a `cloud.Bucket` (a child resource).
 Then whenever `TaskList` is bound to a host and `addTask` is one of the operations the inflight code expects to call, then the `cloud.Bucket` will automatically be bound to the host as well.
 

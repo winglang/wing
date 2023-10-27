@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 use crate::{
-	ast::{ExprId, FunctionSignature, Phase, Symbol, UserDefinedType},
+	ast::{Class, ExprId, FunctionSignature, Phase, Symbol, UserDefinedType},
 	type_check::symbol_env::SymbolEnvRef,
 };
 
@@ -65,11 +65,11 @@ impl VisitContext {
 
 	// --
 
-	fn push_expr(&mut self, expr: ExprId) {
+	pub fn push_expr(&mut self, expr: ExprId) {
 		self.expression.push(expr);
 	}
 
-	fn pop_expr(&mut self) {
+	pub fn pop_expr(&mut self) {
 		self.expression.pop();
 	}
 
@@ -79,14 +79,12 @@ impl VisitContext {
 
 	// --
 
-	pub fn push_class(&mut self, class: UserDefinedType, phase: &Phase) {
-		self.class.push(class);
-		self.push_phase(*phase);
+	pub fn push_class(&mut self, class: &Class) {
+		self.class.push(UserDefinedType::for_class(class));
 	}
 
 	pub fn pop_class(&mut self) {
 		self.class.pop();
-		self.pop_phase();
 	}
 
 	pub fn current_class(&self) -> Option<&UserDefinedType> {
@@ -229,6 +227,13 @@ pub trait VisitorWithContext {
 		self.ctx().push_function_definition(function_name, sig, env);
 		let res = f(self);
 		self.ctx().pop_function_definition();
+		res
+	}
+
+	fn with_class<T>(&mut self, class: &Class, f: impl FnOnce(&mut Self) -> T) -> T {
+		self.ctx().push_class(class);
+		let res = f(self);
+		self.ctx().pop_class();
 		res
 	}
 }

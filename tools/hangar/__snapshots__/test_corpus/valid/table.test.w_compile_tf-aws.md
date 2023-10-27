@@ -13,14 +13,14 @@
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -55,6 +55,7 @@
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -62,9 +63,9 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const ex = $stdlib.ex;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
-    const t = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "simple-table", primaryKey: "id", columns: ({"id": ex.ColumnType.STRING,"name": ex.ColumnType.STRING,"age": ex.ColumnType.NUMBER}) });
+  constructor($scope, $id) {
+    super($scope, $id);
+    const t = this.node.root.newAbstract("@winglang/sdk.ex.Table",this, "ex.Table", { name: "simple-table", primaryKey: "id", columns: ({"id": ex.ColumnType.STRING,"name": ex.ColumnType.STRING,"age": ex.ColumnType.NUMBER}) });
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

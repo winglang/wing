@@ -2,6 +2,7 @@
 
 ## inflight.Baz-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Baz {
     constructor({  }) {
@@ -14,11 +15,12 @@ module.exports = function({  }) {
 
 ## preflight.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   class Baz extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
+    constructor($scope, $id, ) {
+      super($scope, $id);
     }
     static baz() {
       return "baz";
@@ -40,7 +42,7 @@ module.exports = function({ $stdlib }) {
         })())
       `;
     }
-    _getInflightOps() {
+    _supportedOps() {
       return ["$inflight_init"];
     }
   }

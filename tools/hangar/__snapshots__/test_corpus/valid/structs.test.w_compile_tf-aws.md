@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -21,6 +22,7 @@ module.exports = function({  }) {
 
 ## inflight.Foo-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Foo {
     constructor({ $this_data_field0 }) {
@@ -48,14 +50,14 @@ module.exports = function({  }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -69,17 +71,18 @@ module.exports = function({  }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class Foo extends $stdlib.std.Resource {
-      constructor(scope, id, b) {
-        super(scope, id);
+      constructor($scope, $id, b) {
+        super($scope, $id);
         this.data = b;
       }
       static _toInflightType(context) {
@@ -100,22 +103,22 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["getStuff", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject(this.data.field0, host, []);
+          Foo._registerOnLiftObject(this.data.field0, host, []);
         }
         if (ops.includes("getStuff")) {
-          Foo._registerBindObject(this.data.field0, host, []);
+          Foo._registerOnLiftObject(this.data.field0, host, []);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -135,7 +138,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
     }
@@ -145,7 +148,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: y.field1 == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y.field1,1)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: y.field3.field0 == \"foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y.field3.field0,"foo")))};
     const s = ({"a": "Boom baby"});
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:struct definitions are phase independant",new $Closure1(this,"$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:struct definitions are phase independant", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $data_size, $queue, $res }) {
   class $Closure1 {
     constructor({  }) {
@@ -11,7 +12,7 @@ module.exports = function({ $data_size, $queue, $res }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: data.size == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($data_size,3)))};
-      (await $res.put("file.txt","world"));
+      (await $res.put("file.txt", "world"));
       {((cond) => {if (!cond) throw new Error("assertion failed: res.get(\"file.txt\") == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $res.get("file.txt")),"world")))};
       (await $queue.push("spirulina"));
     }
@@ -34,14 +35,14 @@ module.exports = function({ $data_size, $queue, $res }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -71,7 +72,9 @@ module.exports = function({ $data_size, $queue, $res }) {
             "uniqueId": "cloudQueue"
           }
         },
-        "name": "cloud-Queue-c86e03d8"
+        "message_retention_seconds": 3600,
+        "name": "cloud-Queue-c86e03d8",
+        "visibility_timeout_seconds": 30
       }
     }
   }
@@ -80,6 +83,7 @@ module.exports = function({ $data_size, $queue, $res }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -87,11 +91,11 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -114,22 +118,22 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(data.size, host, []);
-          $Closure1._registerBindObject(queue, host, ["push"]);
-          $Closure1._registerBindObject(res, host, ["get", "put"]);
+          $Closure1._registerOnLiftObject(data.size, host, []);
+          $Closure1._registerOnLiftObject(queue, host, ["push"]);
+          $Closure1._registerOnLiftObject(res, host, ["get", "put"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const data = new Set([1, 2, 3]);
-    const res = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:resource and data",new $Closure1(this,"$Closure1"));
+    const res = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue");
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:resource and data", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

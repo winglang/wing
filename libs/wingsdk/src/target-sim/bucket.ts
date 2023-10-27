@@ -1,7 +1,7 @@
 import { join } from "path";
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
-import { BucketSchema, BUCKET_TYPE } from "./schema-resources";
+import { BucketSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
@@ -22,6 +22,23 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
     this.public = props.public ?? false;
   }
 
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      cloud.BucketInflightMethods.DELETE,
+      cloud.BucketInflightMethods.GET,
+      cloud.BucketInflightMethods.GET_JSON,
+      cloud.BucketInflightMethods.LIST,
+      cloud.BucketInflightMethods.PUT,
+      cloud.BucketInflightMethods.PUT_JSON,
+      cloud.BucketInflightMethods.PUBLIC_URL,
+      cloud.BucketInflightMethods.EXISTS,
+      cloud.BucketInflightMethods.TRY_GET,
+      cloud.BucketInflightMethods.TRY_GET_JSON,
+      cloud.BucketInflightMethods.TRY_DELETE,
+      cloud.BucketInflightMethods.METADATA,
+    ];
+  }
   /**
    * Iterates over the topics and supply their sim handler
    * @returns an object of Bucket event types (keys) and their topic handlers (values)
@@ -46,7 +63,7 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
 
   public toSimulator(): BaseResourceSchema {
     const schema: BucketSchema = {
-      type: BUCKET_TYPE,
+      type: cloud.BUCKET_FQN,
       path: this.node.path,
       props: {
         public: this.public,
@@ -58,9 +75,9 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
     return schema;
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

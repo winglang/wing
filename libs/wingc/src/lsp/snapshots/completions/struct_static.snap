@@ -1,0 +1,36 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: fromJson
+  kind: 2
+  detail: "(json: Json, options: JsonValidationOptions?): T1"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic fromJson: (json: Json, options: JsonValidationOptions?): T1\n```\n---\nConverts a Json to a Struct.\n### Parameters\n- `json` — `Json`\n- `...options` — `JsonValidationOptions?`\n  \n  - `unsafe?` — `bool?` — Unsafe mode to skip validation (may lead to runtime errors)."
+  sortText: ff|fromJson
+  insertText: fromJson($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: schema
+  kind: 2
+  detail: "(): JsonSchema"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic schema: (): JsonSchema\n```\n---\nRetrieve the schema for this struct."
+  sortText: ff|schema
+  insertText: schema()
+- label: tryFromJson
+  kind: 2
+  detail: "(json: Json): T1?"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic tryFromJson: (json: Json): T1?\n```\n---\nConverts a Json to a Struct, returning nil if the Json is not valid.\n### Parameters\n- `json` — `Json`"
+  sortText: ff|tryFromJson
+  insertText: tryFromJson($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+

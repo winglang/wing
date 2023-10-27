@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -19,6 +20,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class $Closure2 {
     constructor({  }) {
@@ -34,8 +36,27 @@ module.exports = function({  }) {
 
 ```
 
+## inflight.$Closure3-1.js
+```js
+"use strict";
+module.exports = function({  }) {
+  class $Closure3 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle(x, y, ...z) {
+    }
+  }
+  return $Closure3;
+}
+
+```
+
 ## inflight.C-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class C {
     constructor({  }) {
@@ -63,14 +84,14 @@ module.exports = function({  }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -84,17 +105,18 @@ module.exports = function({  }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -114,13 +136,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -140,13 +162,39 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
+        return ["handle", "$inflight_init"];
+      }
+    }
+    class $Closure3 extends $stdlib.std.Resource {
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        (std.Node.of(this)).hidden = true;
+      }
+      static _toInflightType(context) {
+        return `
+          require("./inflight.$Closure3-1.js")({
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure3Client = ${$Closure3._toInflightType(this)};
+            const client = new $Closure3Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
     }
     class C extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       my_method(x) {
       }
@@ -169,7 +217,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["my_method3", "my_method4", "$inflight_init"];
       }
     }
@@ -181,8 +229,9 @@ class $Root extends $stdlib.std.Resource {
     });
     const my_func4 = ((x) => {
     });
-    const my_func5 = new $Closure1(this,"$Closure1");
-    const my_func6 = new $Closure2(this,"$Closure2");
+    const my_func5 = new $Closure1(this, "$Closure1");
+    const my_func6 = new $Closure2(this, "$Closure2");
+    const my_func7 = new $Closure3(this, "$Closure3");
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

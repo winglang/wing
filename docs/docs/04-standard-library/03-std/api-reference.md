@@ -1093,6 +1093,7 @@ Immutable Map.
 | <code><a href="#@winglang/sdk.std.Map.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
 | <code><a href="#@winglang/sdk.std.Map.keys">keys</a></code> | Returns the keys of this map. |
 | <code><a href="#@winglang/sdk.std.Map.size">size</a></code> | Returns the number of elements in the map. |
+| <code><a href="#@winglang/sdk.std.Map.tryGet">tryGet</a></code> | Optionally returns a specified element from the map. |
 | <code><a href="#@winglang/sdk.std.Map.values">values</a></code> | Returns the values of this map. |
 
 ---
@@ -1158,6 +1159,22 @@ Returns the number of elements in the map.
 
 TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
 
+##### `tryGet` <a name="tryGet" id="@winglang/sdk.std.Map.tryGet"></a>
+
+```wing
+tryGet(key: str): <T>
+```
+
+Optionally returns a specified element from the map.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Map.tryGet.parameter.key"></a>
+
+- *Type:* str
+
+The key of the element to return.
+
+---
+
 ##### `values` <a name="values" id="@winglang/sdk.std.Map.values"></a>
 
 ```wing
@@ -1188,7 +1205,7 @@ Mutable Array.
 | <code><a href="#@winglang/sdk.std.MutArray.pop">pop</a></code> | Remove value from end of array. |
 | <code><a href="#@winglang/sdk.std.MutArray.popAt">popAt</a></code> | Removes value from the given index of an array. |
 | <code><a href="#@winglang/sdk.std.MutArray.push">push</a></code> | Add value to end of array. |
-| <code><a href="#@winglang/sdk.std.MutArray.removeFirst">removeFirst</a></code> | Removes first occurence of a given value in an array. |
+| <code><a href="#@winglang/sdk.std.MutArray.removeFirst">removeFirst</a></code> | Removes first occurrence of a given value in an array. |
 | <code><a href="#@winglang/sdk.std.MutArray.set">set</a></code> | Sets a new value at the given index of an array. |
 
 ---
@@ -1368,7 +1385,7 @@ value to add.
 removeFirst(value: <T>): bool
 ```
 
-Removes first occurence of a given value in an array.
+Removes first occurrence of a given value in an array.
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutArray.removeFirst.parameter.value"></a>
 
@@ -1624,6 +1641,7 @@ Mutable Map.
 | <code><a href="#@winglang/sdk.std.MutMap.keys">keys</a></code> | Returns the keys of this map. |
 | <code><a href="#@winglang/sdk.std.MutMap.set">set</a></code> | Adds or updates an entry in a Map object with a specified key and a value. |
 | <code><a href="#@winglang/sdk.std.MutMap.size">size</a></code> | Returns the number of elements in the map. |
+| <code><a href="#@winglang/sdk.std.MutMap.tryGet">tryGet</a></code> | Optionally returns a specified element from the map. |
 | <code><a href="#@winglang/sdk.std.MutMap.values">values</a></code> | Returns the values of this map. |
 
 ---
@@ -1738,6 +1756,22 @@ size(): num
 Returns the number of elements in the map.
 
 TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
+
+##### `tryGet` <a name="tryGet" id="@winglang/sdk.std.MutMap.tryGet"></a>
+
+```wing
+tryGet(key: str): <T>
+```
+
+Optionally returns a specified element from the map.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutMap.tryGet.parameter.key"></a>
+
+- *Type:* str
+
+The key of the element to return.
+
+---
 
 ##### `values` <a name="values" id="@winglang/sdk.std.MutMap.values"></a>
 

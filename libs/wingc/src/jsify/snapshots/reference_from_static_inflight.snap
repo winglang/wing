@@ -18,6 +18,7 @@ source: libs/wingc/src/jsify/tests.rs
 ## inflight.MyType-1.js
 
 ```js
+"use strict";
 module.exports = function({ $s }) {
   class MyType {
     constructor({  }) {
@@ -33,17 +34,18 @@ module.exports = function({ $s }) {
 ## preflight.js
 
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class MyType extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       static _toInflightType(context) {
         return `
@@ -63,14 +65,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["staticMethod", "$inflight_init"];
       }
-      static _registerTypeBind(host, ops) {
+      static _registerTypeOnLift(host, ops) {
         if (ops.includes("staticMethod")) {
-          MyType._registerBindObject(s, host, []);
+          MyType._registerOnLiftObject(s, host, []);
         }
-        super._registerTypeBind(host, ops);
+        super._registerTypeOnLift(host, ops);
       }
     }
     const s = "hello";

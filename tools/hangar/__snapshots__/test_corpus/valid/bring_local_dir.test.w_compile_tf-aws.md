@@ -2,6 +2,7 @@
 
 ## inflight.Bar-3.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Bar {
     constructor({  }) {
@@ -14,6 +15,20 @@ module.exports = function({  }) {
 
 ## inflight.Foo-2.js
 ```js
+"use strict";
+module.exports = function({  }) {
+  class Foo {
+    constructor({  }) {
+    }
+  }
+  return Foo;
+}
+
+```
+
+## inflight.Foo-3.js
+```js
+"use strict";
 module.exports = function({  }) {
   class Foo {
     constructor({  }) {
@@ -26,6 +41,7 @@ module.exports = function({  }) {
 
 ## inflight.Widget-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Widget {
     constructor({  }) {
@@ -49,14 +65,14 @@ module.exports = function({  }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -70,12 +86,15 @@ module.exports = function({  }) {
 
 ## preflight.file1-3.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   const blah = require("./preflight.inner-2.js")({ $stdlib });
+  const cloud = $stdlib.cloud;
+  const util = $stdlib.util;
   class Foo extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
+    constructor($scope, $id, ) {
+      super($scope, $id);
     }
     foo() {
       return "foo";
@@ -100,7 +119,7 @@ module.exports = function({ $stdlib }) {
         })())
       `;
     }
-    _getInflightOps() {
+    _supportedOps() {
       return ["$inflight_init"];
     }
   }
@@ -111,13 +130,16 @@ module.exports = function({ $stdlib }) {
 
 ## preflight.file2-4.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
+  const util = $stdlib.util;
   class Bar extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
+    constructor($scope, $id, ) {
+      super($scope, $id);
     }
     bar() {
+      (util.Util.nanoid());
       return "bar";
     }
     static _toInflightType(context) {
@@ -137,7 +159,32 @@ module.exports = function({ $stdlib }) {
         })())
       `;
     }
-    _getInflightOps() {
+    _supportedOps() {
+      return ["$inflight_init"];
+    }
+  }
+  class Foo extends $stdlib.std.Resource {
+    constructor($scope, $id, ) {
+      super($scope, $id);
+    }
+    static _toInflightType(context) {
+      return `
+        require("./inflight.Foo-3.js")({
+        })
+      `;
+    }
+    _toInflight() {
+      return `
+        (await (async () => {
+          const FooClient = ${Foo._toInflightType(this)};
+          const client = new FooClient({
+          });
+          if (client.$inflight_init) { await client.$inflight_init(); }
+          return client;
+        })())
+      `;
+    }
+    _supportedOps() {
       return ["$inflight_init"];
     }
   }
@@ -148,6 +195,7 @@ module.exports = function({ $stdlib }) {
 
 ## preflight.inner-2.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   return {
@@ -159,6 +207,7 @@ module.exports = function({ $stdlib }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
 const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
@@ -167,15 +216,15 @@ const std = $stdlib.std;
 const w = require("./preflight.widget-1.js")({ $stdlib });
 const subdir = require("./preflight.subdir2-5.js")({ $stdlib });
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
-    const widget1 = new w.Widget(this,"w.Widget");
+  constructor($scope, $id) {
+    super($scope, $id);
+    const widget1 = new w.Widget(this, "w.Widget");
     {((cond) => {if (!cond) throw new Error("assertion failed: widget1.compute() == 42")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((widget1.compute()),42)))};
-    const foo = new subdir.Foo(this,"subdir.Foo");
+    const foo = new subdir.Foo(this, "subdir.Foo");
     {((cond) => {if (!cond) throw new Error("assertion failed: foo.foo() == \"foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((foo.foo()),"foo")))};
-    const bar = new subdir.Bar(this,"subdir.Bar");
+    const bar = new subdir.Bar(this, "subdir.Bar");
     {((cond) => {if (!cond) throw new Error("assertion failed: bar.bar() == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((bar.bar()),"bar")))};
-    const widget2 = new subdir.inner.Widget(this,"subdir.inner.Widget");
+    const widget2 = new subdir.inner.Widget(this, "subdir.inner.Widget");
     {((cond) => {if (!cond) throw new Error("assertion failed: widget2.compute() == 42")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((widget2.compute()),42)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: foo.checkWidget(widget2) == 1379")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((foo.checkWidget(widget2)),1379)))};
   }
@@ -187,6 +236,7 @@ new $App({ outdir: $outdir, name: "bring_local_dir.test", rootConstruct: $Root, 
 
 ## preflight.subdir2-5.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   return {
@@ -200,11 +250,12 @@ module.exports = function({ $stdlib }) {
 
 ## preflight.widget-1.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   class Widget extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
+    constructor($scope, $id, ) {
+      super($scope, $id);
     }
     compute() {
       return 42;
@@ -229,7 +280,7 @@ module.exports = function({ $stdlib }) {
         })())
       `;
     }
-    _getInflightOps() {
+    _supportedOps() {
       return ["$inflight_init"];
     }
   }
