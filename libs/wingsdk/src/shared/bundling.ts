@@ -32,6 +32,11 @@ export function createBundle(entrypoint: string, outputDir?: string): Bundle {
     minify: false,
     platform: "node",
     target: "node18",
+    // loader: {
+    //   ".node": "file",
+    // },
+    // external: ["vite"],
+    external: ["fsevents", "lightningcss"],
   });
 
   if (esbuild.errors.length > 0) {

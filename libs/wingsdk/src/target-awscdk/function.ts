@@ -51,7 +51,7 @@ export class Function extends cloud.Function implements IAwsFunction {
       timeout: props.timeout
         ? Duration.seconds(props.timeout.seconds)
         : Duration.minutes(1),
-      memorySize: props.memory ? props.memory : undefined,
+      memorySize: props.memory ?? 1024,
       architecture: Architecture.ARM_64,
       logRetention: logRetentionDays,
     });

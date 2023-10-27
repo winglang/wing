@@ -106,7 +106,7 @@ export class Function extends cloud.Function {
       project: app.projectId,
       region: app.region,
       runtime: "nodejs16",
-      availableMemoryMb: props.memory ?? 128,
+      availableMemoryMb: props.memory ?? 1024,
       sourceArchiveBucket: FunctionBucket.bucket.name,
       sourceArchiveObject: FunctionObjectBucket.name,
       entryPoint: "handler",
