@@ -69,7 +69,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
               data: { message },
               type: TraceType.LOG,
               sourcePath: this.context.resourcePath,
-              sourceType: FUNCTION_TYPE,
+              sourceType: FUNCTION_FQN,
               timestamp: new Date().toISOString(),
             });
           },
