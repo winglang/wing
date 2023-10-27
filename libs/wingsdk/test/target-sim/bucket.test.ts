@@ -85,14 +85,12 @@ test("bucket on event creates 3 topics, and sends the right event and key in the
   );
   expect(await logClient.get("a")).toBe(BucketEventType.CREATE);
   await client.put("a", "2");
-  // wait for the subscriber to finish
-  await waitUntilTraceCount(s, 1, (trace) =>
+  await waitUntilTraceCount(s, 2, (trace) =>
     trace.data.message.startsWith("Invoke")
   );
   expect(await logClient.get("a")).toBe(BucketEventType.UPDATE);
   await client.delete("a");
-  // wait for the subscriber to finish
-  await waitUntilTraceCount(s, 1, (trace) =>
+  await waitUntilTraceCount(s, 3, (trace) =>
     trace.data.message.startsWith("Invoke")
   );
   expect(await logClient.get("a")).toBe(BucketEventType.DELETE);
