@@ -1,8 +1,9 @@
 import * as fs from "fs";
+// import { setImmediate } from "node:timers/promises";
 import { resolve } from "path";
 import * as url from "url";
 import { vi, test, expect } from "vitest";
-import { listMessages, treeJsonOf } from "./util";
+import { listMessages, treeJsonOf, waitUntilTraceCount } from "./util";
 import * as cloud from "../../src/cloud";
 import { BucketEventType } from "../../src/cloud";
 import { Testing } from "../../src/simulator";
@@ -96,10 +97,20 @@ test("bucket on event creates 3 topics, and sends the right event and key in the
 
   // THEN
   await client.put("a", "1");
+  // wait for the subscriber to finish
+  await waitUntilTraceCount(s, 1, (trace) =>
+    trace.data.message.startsWith("Invoke")
+  );
   expect(await logClient.get("a")).toBe(BucketEventType.CREATE);
   await client.put("a", "2");
+  await waitUntilTraceCount(s, 2, (trace) =>
+    trace.data.message.startsWith("Invoke")
+  );
   expect(await logClient.get("a")).toBe(BucketEventType.UPDATE);
   await client.delete("a");
+  await waitUntilTraceCount(s, 3, (trace) =>
+    trace.data.message.startsWith("Invoke")
+  );
   expect(await logClient.get("a")).toBe(BucketEventType.DELETE);
   await s.stop();
   expect(listMessages(s)).toMatchSnapshot();
