@@ -92,6 +92,11 @@
     "onLanguage:wing"
   ],
   "contributes": {
+    "breakpoints": [
+      {
+        "language": "wing"
+      }
+    ],
     "languages": [
       {
         "id": "wing",

@@ -25,7 +25,6 @@
   },
   "dependencies": {
     "@winglang/sdk": "workspace:^",
-    "stacktracey": "^2.1.8",
     "wasi-js": "^1.7.3"
   },
   "bundledDependencies": [

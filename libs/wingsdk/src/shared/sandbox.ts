@@ -97,11 +97,12 @@ export class Sandbox {
     const workdir = await mkdtemp(path.join(tmpdir(), "wing-bundles-"));
     const bundle = createBundle(this.entrypoint, workdir);
     const code = await readFile(bundle.entrypointPath, "utf-8");
-
-    // this will add stuff to the "exports" object within our context
-    vm.runInContext(code, this.context, {
+    const script = new vm.Script(code, {
       filename: bundle.entrypointPath,
     });
+
+    // this will add stuff to the "exports" object within our context
+    script.runInContext(this.context);
 
     this.loaded = true;
   }
@@ -122,6 +123,8 @@ export class Sandbox {
 
       this.context.$reject = (reason?: any) => {
         cleanup();
+        // rewrite stack trace
+
         $reject(reason);
       };
 

@@ -119,33 +119,39 @@ export const formatWingError = async (error: unknown) => {
 
       output.push(`ERROR: ${causedBy.message}`);
 
-      if (
-        causedBy.stack &&
-        causedBy.stack.includes("evalmachine.<anonymous>:")
-      ) {
-        const lineNumber =
-          Number.parseInt(
-            causedBy.stack.split("evalmachine.<anonymous>:")[1]!.split(":")[0]!,
-          ) - 1;
-        const relativeArtifactPath = relative(
-          process.cwd(),
-          error.artifactPath,
-        );
+      if (causedBy.stack) {
+        const stacktraceRegex =
+          /at\s+(?:\[object\s+)?(\w+)\.(\S+)\s+\(([^:]+):(\d+):(\d+)\)/g;
 
-        output.push("", `${relativeArtifactPath}:${lineNumber}`);
-
-        const lines = error.artifact.split("\n");
-        let startLine = Math.max(lineNumber - 2, 0);
-        let finishLine = Math.min(lineNumber + 2, lines.length - 1);
-
-        // print line and its surrounding lines
-        for (let index = startLine; index <= finishLine; index++) {
-          if (index === lineNumber) {
-            output.push(">> " + lines[index]);
-          } else {
-            output.push("   " + lines[index]);
-          }
+        for (const match of causedBy.stack.matchAll(stacktraceRegex)) {
+          const [, filePath, lineNumber, columnNumber] = match;
+          const relativeFilePath = relative(process.cwd(), filePath!);
+          output.push("", `${relativeFilePath}:${lineNumber}:${columnNumber}`);
         }
+
+        // const lineNumber =
+        //   Number.parseInt(
+        //     causedBy.stack.split("evalmachine.<anonymous>:")[1]!.split(":")[0]!,
+        //   ) - 1;
+        // const relativeArtifactPath = relative(
+        //   process.cwd(),
+        //   error.artifactPath,
+        // );
+
+        // output.push("", `${relativeArtifactPath}:${lineNumber}`);
+
+        // const lines = error.artifact.split("\n");
+        // let startLine = Math.max(lineNumber - 2, 0);
+        // let finishLine = Math.min(lineNumber + 2, lines.length - 1);
+
+        // // print line and its surrounding lines
+        // for (let index = startLine; index <= finishLine; index++) {
+        //   if (index === lineNumber) {
+        //     output.push(">> " + lines[index]);
+        //   } else {
+        //     output.push("   " + lines[index]);
+        //   }
+        // }
 
         output.push("");
       }

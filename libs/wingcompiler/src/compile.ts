@@ -269,7 +269,6 @@ async function runPreflightCodeInVm(
   });
 
   try {
-    console.log("SOURCEMAP", artifactScript.sourceMapURL);
     artifactScript.runInContext(context);
   } catch (error) {
     throw new PreflightError(error as any, artifactPath, artifact);

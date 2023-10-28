@@ -30,6 +30,7 @@ export function createBundle(entrypoint: string, outputDir?: string): Bundle {
       ? [normalPath(process.env.WING_NODE_MODULES as string)]
       : undefined,
     minify: false,
+    sourcemap: "inline",
     platform: "node",
     target: "node18",
   });
@@ -43,7 +44,8 @@ export function createBundle(entrypoint: string, outputDir?: string): Bundle {
   // since they may contain system-specific paths. sadly, esbuild doesn't have a way to disable
   // this, so we simply filter those out from the bundle.
   const outlines = readFileSync(outfile, "utf-8").split("\n");
-  const isNotLineComment = (line: string) => !line.startsWith("//");
+  const isNotLineComment = (line: string) =>
+    !line.startsWith("//") || line.startsWith("//#");
   const final = outlines.filter(isNotLineComment).join("\n");
   writeFileSync(outfile, final);
 

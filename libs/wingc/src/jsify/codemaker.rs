@@ -26,7 +26,7 @@ macro_rules! new_code {
 ///
 /// TODO: add `open_block` or `close_block` methods that automatically add
 /// `{` and `}`?
-#[derive(Default, Clone)]
+#[derive(Default, Clone, Debug)]
 pub struct CodeMaker {
 	lines: Vec<LineData>,
 	indent: IndentAmount,
@@ -36,7 +36,7 @@ pub struct CodeMaker {
 pub type IndentAmount = usize;
 pub type CharacterOffset = usize;
 
-#[derive(Default, Clone)]
+#[derive(Default, Clone, Debug)]
 pub struct LineData {
 	pub line: String,
 	pub indent: IndentAmount,
@@ -54,9 +54,9 @@ fn string_to_code<S: Into<String>>(s: S) -> CodeMaker {
 
 	// if the line has newlines in it, consider each line separately
 	for subline in line_text.split('\n') {
-		code.line(LineData {
+		code.push_line(LineData {
+			line: subline.to_string(),
 			indent: 0,
-			line: subline.into(),
 			mappings: vec![],
 		});
 	}
@@ -82,9 +82,17 @@ impl Into<CodeMaker> for &str {
 	}
 }
 
-impl Into<CodeMaker> for LineData {
+impl Into<CodeMaker> for Vec<CodeMaker> {
 	fn into(self) -> CodeMaker {
-		CodeMaker::one_line(self)
+		let mut code: CodeMaker = CodeMaker::default();
+		for (idx, line) in self.iter().enumerate() {
+			if idx > 0 {
+				code.append(", ");
+			}
+			// TODO BAD CLONE
+			code.append(line.clone());
+		}
+		code
 	}
 }
 
@@ -113,13 +121,14 @@ impl CodeMaker {
 	pub fn line<S: Into<CodeMaker>>(&mut self, line: S) {
 		let mut new_code: CodeMaker = line.into();
 
-		for line_data in new_code.lines.iter_mut() {
+		for mut line_data in new_code.lines.drain(..) {
 			line_data.indent += self.indent;
 			if line_data.mappings.is_empty() {
 				if let Some(source) = self.source.as_ref() {
 					line_data.mappings.push((0, source.clone()))
 				}
 			}
+			self.push_line(line_data.clone());
 		}
 	}
 
@@ -131,7 +140,8 @@ impl CodeMaker {
 	/// Emits multiple lines of code starting with the current indent.
 	pub fn add_code(&mut self, code: CodeMaker) {
 		assert_eq!(code.indent, 0, "Cannot add code with indent");
-		for line_data in code.lines {
+		for mut line_data in code.lines {
+			line_data.indent += self.indent;
 			self.push_line(line_data);
 		}
 	}
@@ -144,14 +154,29 @@ impl CodeMaker {
 			return;
 		}
 
+		if self.lines.is_empty() {
+			self.empty_line();
+		}
+
 		if let Some(last_line) = self.lines.last_mut() {
 			let mut first_new_line = new_code.lines.remove(0);
 			last_line.line.push_str(&first_new_line.line);
+
+			let last_original_mapping = last_line.mappings.last().cloned();
+			let add_another_map = !first_new_line.mappings.is_empty();
 
 			for (offset, span) in first_new_line.mappings.drain(..) {
 				last_line
 					.mappings
 					.push((last_line.line.len() - first_new_line.line.len() + offset, span));
+			}
+
+			if add_another_map {
+				if let Some(last_original_mapping) = last_original_mapping {
+					last_line
+						.mappings
+						.push((last_line.line.len(), last_original_mapping.1.clone()));
+				}
 			}
 		}
 
@@ -172,8 +197,10 @@ impl CodeMaker {
 		self.indent += 1;
 	}
 
-	pub fn one_line<S: Into<CodeMaker>>(s: S) -> CodeMaker {
-		s.into()
+	pub fn one_line<S: Into<String>>(s: S) -> CodeMaker {
+		let mut code = CodeMaker::default();
+		code.line(s.into());
+		code
 	}
 
 	/// Checks if there are no lines of code
@@ -241,10 +268,12 @@ impl CodeMaker {
 impl ToString for CodeMaker {
 	fn to_string(&self) -> String {
 		let mut code = String::new();
-		for line_data in &self.lines {
+		for (idx, line_data) in self.lines.iter().enumerate() {
+			if idx > 0 {
+				code.push('\n');
+			}
 			code.push_str(&"  ".repeat(line_data.indent));
 			code.push_str(&line_data.line);
-			code.push_str("\n");
 		}
 		code
 	}
@@ -277,8 +306,7 @@ mod tests {
 				}
 				let b = 2;
 				  let c = 3;
-				let d = 4;
-			"#}
+				let d = 4;"#}
 		);
 	}
 
@@ -297,8 +325,7 @@ mod tests {
 			{
 			  let a = 1;
 			  let b = 2;
-			}
-		"#}
+			}"#}
 		);
 	}
 
@@ -314,8 +341,7 @@ mod tests {
 				<
 				  hello
 				  world
-				>
-			"#}
+				>"#}
 		);
 	}
 }

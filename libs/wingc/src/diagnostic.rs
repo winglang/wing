@@ -229,7 +229,7 @@ impl Display for WingSpan {
 		write!(
 			f,
 			"{}:{}:{}",
-			Utf8Path::new(&self.file_id).file_name().expect("invalid file id"),
+			Utf8Path::new(&self.file_id).file_name().unwrap_or("<unknown>"),
 			self.start.line + 1,
 			self.start.col + 1
 		)

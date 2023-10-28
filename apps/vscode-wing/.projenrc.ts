@@ -93,6 +93,7 @@ vscodeIgnore.addPatterns(
 );
 
 const contributes: VSCodeExtensionContributions = {
+  breakpoints: [{ language: "wing" }],
   languages: [
     {
       id: "wing",

@@ -1,3 +1,5 @@
+import "source-map-support/register";
+
 import { Command, Option } from "commander";
 import { satisfies } from "compare-versions";
 

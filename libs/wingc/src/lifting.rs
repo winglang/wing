@@ -117,20 +117,25 @@ impl<'a> LiftVisitor<'a> {
 			&mut JSifyContext {
 				lifts: None,
 				visit_ctx: &mut self.ctx,
+				source_path: None,
 			},
 		);
 		self.ctx.pop_phase();
-		res
+		res.to_string()
 	}
 
 	fn jsify_udt(&mut self, node: &UserDefinedType) -> String {
-		let udt_js = self.jsify.jsify_user_defined_type(
-			&node,
-			&mut JSifyContext {
-				lifts: None,
-				visit_ctx: &mut self.ctx,
-			},
-		);
+		let udt_js = self
+			.jsify
+			.jsify_user_defined_type(
+				&node,
+				&mut JSifyContext {
+					lifts: None,
+					visit_ctx: &mut self.ctx,
+					source_path: None,
+				},
+			)
+			.to_string();
 
 		let current_env = self.ctx.current_env().expect("an env");
 		if let Some(SymbolKind::Namespace(root_namespace)) = current_env.lookup(&node.root, None) {

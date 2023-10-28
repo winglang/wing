@@ -1,9 +1,18 @@
-let errFunc = () => {
-  throw "error";
-};
+class MyClosure {
+  pub inflight another(): str {
+    assert(false);
+    return "hello";
+  }
 
-let otherFunc = () => {
-  errFunc();
-};
+  inflight handle(): num {
+    this.another();
+    return 42;
+  }
+}
 
-otherFunc();
+let fn = new MyClosure();
+// assert(false);
+
+test "test" {
+  fn();
+}

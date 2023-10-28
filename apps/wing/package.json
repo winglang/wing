@@ -48,7 +48,7 @@
     "npm-packlist": "^8.0.0",
     "open": "^8.4.2",
     "ora": "^5.4.1",
-    "stacktracey": "^2.1.8",
+    "source-map-support": "^0.5.21",
     "tar": "^6.2.0",
     "tiny-updater": "^3.5.1",
     "uuid": "^8.3.2",
