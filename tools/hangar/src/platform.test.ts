@@ -9,6 +9,35 @@ import {
 } from "./utils";
 import { Testing } from "cdktf";
 
+describe("Multiple platforms", () => {
+  const app = "main.w";
+  const appFile = path.join(platformsDir, app);
+
+  test("only first platform app is used", async () => {
+    const args = ["compile"];
+    const platforms = ["tf-aws", "tf-azure"];
+    const targetDir = path.join(platformsDir, "target", "main.tfaws");
+
+    await runWingCommand({
+      cwd: tmpDir,
+      platforms,
+      wingFile: appFile,
+      args,
+      expectFailure: false
+    });
+
+    const terraformOutput = sanitize_json_paths(
+      path.join(targetDir, "main.tf.json")
+    );
+
+    const terraformOutputString = JSON.stringify(terraformOutput);
+
+    expect(terraformOutput).toMatchSnapshot();
+    expect(tfResourcesOfCount(terraformOutputString, "aws_s3_bucket")) // should be s3 since tf-aws
+    .toEqual(1);
+  });
+})
+
 describe("Platform examples", () => {
   const app = "main.w";
   const appFile = path.join(platformsDir, app);

@@ -26,10 +26,6 @@ export interface CompileOptions {
    */
   readonly platform: string[];
   /**
-   * List of compiler plugins
-   */
-  readonly plugins?: string[];
-  /**
    * App root id
    *
    * @default "Default"
