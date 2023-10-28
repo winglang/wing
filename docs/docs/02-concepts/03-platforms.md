@@ -103,7 +103,7 @@ There are many reasons why you might want to create a custom platform. Here are 
 
 ### Creating a custom platform
 
-Developing a custom platform requires understanding and adhering to the IPlatform interface. This ensures that your custom platform can be integrated smoothly with the Wing compilation process. 
+Developing a custom platform requires understanding and adhering to the `IPlatform` interface. This ensures that your custom platform can be integrated smoothly with the Wing compilation process. 
 
 The IPlatform interface is defined as follows:
 
