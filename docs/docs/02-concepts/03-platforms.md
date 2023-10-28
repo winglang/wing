@@ -1,8 +1,8 @@
 ---
-title: Platform
-id: platform
+title: Platforms
+id: platforms
 description: Wing platforms
-keywords: [Wing platform, provisioning engines, multi-cloud]
+keywords: [platforms, targets, target, platform, aws, gcp, azure, sim, terraform, cloudformation, pulumi, provisioning engines, multi-cloud]
 ---
 
 When working with the Wing programming language, an integral part of the compilation process is the use of platform. In essence, platform specify how and where your application is deployed. They determine both the cloud environment and the provisioning engine that the code will be deployed with.
