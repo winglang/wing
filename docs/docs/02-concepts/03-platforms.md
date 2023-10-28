@@ -12,7 +12,7 @@ When working with the Wing programming language, an integral part of the compila
 You can view the list of available builtin platform with the `wing compile --help` command. Here is an example of the output:
 
 ```sh
-mywing compile --help         
+wing compile --help
 Usage: wing compile [options] [entrypoint]
 
 Compiles a Wing program
