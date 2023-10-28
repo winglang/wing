@@ -57,7 +57,7 @@ _Add yours here!_
 ### Tweet queue
 
 * **Source code:** [./tweet-queue.w](./tweet-queue.w)
-* **Description:** This is a Wing app that lets you get a feed of Twitter search results into a queue. It works by periodically polling the freely available Twitter Standard Search API and sending all new tweets to the queue.
+* **Description:** This is a Wing app that lets you get a feed of X search results into a queue. It works by periodically polling the freely available X Standard Search API and sending all new tweets to the queue.
 * **Author:** [@Octocat](https://github.com/octocat)
 
 -->
