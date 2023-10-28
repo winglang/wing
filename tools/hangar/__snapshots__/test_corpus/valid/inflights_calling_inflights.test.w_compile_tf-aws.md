@@ -207,7 +207,7 @@ module.exports = function({  }) {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
             "WING_FUNCTION_NAME": "func1-c899062d",
-            "WING_TARGET": "tf-aws"
+            "WING_MODEL": "tf-aws"
           }
         },
         "function_name": "func1-c899062d",

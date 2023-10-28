@@ -27,7 +27,7 @@ assert(no_value == NIL);
 
 test "use util from inflight" {
   // --inflight env--
-  assert(util.env("WING_TARGET").length > 0);
+  assert(util.env("WING_MODEL").length > 0);
   
   // --inflight tryEnv--
   let noValue = util.Util.tryEnv(RANDOM) ?? NIL;

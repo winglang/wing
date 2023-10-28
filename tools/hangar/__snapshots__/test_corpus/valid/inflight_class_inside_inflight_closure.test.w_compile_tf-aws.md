@@ -182,7 +182,7 @@ module.exports = function({  }) {
           "variables": {
             "BUCKET_NAME_70ca4fed": "${aws_s3_bucket.PreflightClass_cloudBucket_05421049.bucket}",
             "WING_FUNCTION_NAME": "cloud-Function-c8db99e3",
-            "WING_TARGET": "tf-aws"
+            "WING_MODEL": "tf-aws"
           }
         },
         "function_name": "cloud-Function-c8db99e3",

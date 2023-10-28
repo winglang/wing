@@ -124,7 +124,7 @@ module.exports = function({ $bucket }) {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
-            "WING_TARGET": "tf-aws"
+            "WING_MODEL": "tf-aws"
           }
         },
         "function_name": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",

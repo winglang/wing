@@ -146,7 +146,7 @@ module.exports = function({ $bucket, $counter }) {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
-            "WING_TARGET": "tf-aws"
+            "WING_MODEL": "tf-aws"
           }
         },
         "function_name": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",

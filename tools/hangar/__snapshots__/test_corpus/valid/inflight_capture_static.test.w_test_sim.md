@@ -6,7 +6,7 @@ pass ─ inflight_capture_static.test.wsim » root/env0/test:call static method 
 pass ─ inflight_capture_static.test.wsim » root/env1/test:call static method of an outer inflight class
 pass ─ inflight_capture_static.test.wsim » root/env2/test:call static method of an inner inflight class
 pass ┌ inflight_capture_static.test.wsim » root/env3/test:call static method of a namespaced type      
-     └ WING_TARGET=sim
+     └ WING_MODEL=sim
  
  
 Tests 4 passed (4)

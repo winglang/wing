@@ -251,7 +251,7 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
             "DYNAMODB_TABLE_NAME_5afed199": "${aws_dynamodb_table.MyResource_cloudCounter_0782991D.name}",
             "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-f10eb240-c8df2c86",
-            "WING_TARGET": "tf-aws"
+            "WING_MODEL": "tf-aws"
           }
         },
         "function_name": "cloud-Topic-OnMessage-f10eb240-c8df2c86",

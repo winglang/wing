@@ -13,7 +13,7 @@ interface IHttpServer {
 
 
 // hack: only supported in the "sim" target for now
-if util.env("WING_TARGET") == "sim" {
+if util.env("WING_MODEL") == "sim" {
   class MyService {
     b: cloud.Bucket;
     body: str;

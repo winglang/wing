@@ -1,7 +1,7 @@
 bring "./my-service.w" as my;
 bring util;
 
-if util.env("WING_TARGET") == "sim" {
+if util.env("WING_MODEL") == "sim" {
 
   let svc = new my.MyService();
 

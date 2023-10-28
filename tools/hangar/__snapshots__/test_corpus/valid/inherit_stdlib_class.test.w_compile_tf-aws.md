@@ -198,7 +198,7 @@ module.exports = function({ $cloud_Api }) {
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "AnApi-OnRequest-cdafee6e-c8c5dbf2",
-            "WING_TARGET": "tf-aws"
+            "WING_MODEL": "tf-aws"
           }
         },
         "function_name": "AnApi-OnRequest-cdafee6e-c8c5dbf2",

@@ -330,7 +330,7 @@ module.exports = function({ $headers }) {
             "BUCKET_NAME_21bd2572": "${aws_s3_bucket.PublicBucket.bucket}",
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
             "WING_FUNCTION_NAME": "AnotherFunction-c88d2a81",
-            "WING_TARGET": "tf-aws"
+            "WING_MODEL": "tf-aws"
           }
         },
         "function_name": "AnotherFunction-c88d2a81",
@@ -359,7 +359,7 @@ module.exports = function({ $headers }) {
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-86898773-c8ed6547",
-            "WING_TARGET": "tf-aws"
+            "WING_MODEL": "tf-aws"
           }
         },
         "function_name": "cloud-Api-OnRequest-86898773-c8ed6547",
@@ -391,7 +391,7 @@ module.exports = function({ $headers }) {
             "BUCKET_NAME_21bd2572": "${aws_s3_bucket.PublicBucket.bucket}",
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
             "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1",
-            "WING_TARGET": "tf-aws"
+            "WING_MODEL": "tf-aws"
           }
         },
         "function_name": "cloud-Function-c8d2eca1",
@@ -423,7 +423,7 @@ module.exports = function({ $headers }) {
             "BUCKET_NAME_21bd2572": "${aws_s3_bucket.PublicBucket.bucket}",
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
-            "WING_TARGET": "tf-aws"
+            "WING_MODEL": "tf-aws"
           }
         },
         "function_name": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",

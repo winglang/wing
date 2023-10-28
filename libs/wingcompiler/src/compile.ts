@@ -148,7 +148,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
 
   // TODO: couldn't be moved to the context's since used in utils.env(...)
   // in the future we may look for a unified approach
-  process.env["WING_TARGET"] = model; // TODO: remove this once I confirm its safe to do so
+  process.env["WING_MODEL"] = model;
   process.env["WING_VALUES"] = options.value?.length == 0 ? undefined : options.value;
   process.env["WING_VALUES_FILE"] = options.values;
   process.env["WING_IS_TEST"] = testing.toString();

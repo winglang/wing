@@ -23,7 +23,7 @@ class DynamoTable {
   table: awscdk.aws_dynamodb.Table;
   tableName: str;
   init() {
-    let target = util.env("WING_TARGET");
+    let target = util.env("WING_MODEL");
     if target != "awscdk" {
       throw "Unsupported target: ${target} (expected 'awscdk')";
     }

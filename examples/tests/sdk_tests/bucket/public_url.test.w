@@ -26,7 +26,7 @@ test "publicUrl" {
   assert(publicUrl != "");
   
   // TODO: works in aws, doesn't work in sim since publicUrl is returning a path to the file, remove condition when #2833 is resolved.
-  if (util.env("WING_TARGET") != "sim") {
+  if (util.env("WING_MODEL") != "sim") {
     assert(http.get(publicUrl).body ==  "Foo");
   }
 

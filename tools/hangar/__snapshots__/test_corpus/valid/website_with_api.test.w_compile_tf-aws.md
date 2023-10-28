@@ -440,7 +440,7 @@ module.exports = function({  }) {
             "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"id\":0,\"name\":0,\"age\":1}",
             "DYNAMODB_TABLE_NAME_d5d44f18_PRIMARY_KEY": "id",
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-86898773-c8ed6547",
-            "WING_TARGET": "tf-aws"
+            "WING_MODEL": "tf-aws"
           }
         },
         "function_name": "cloud-Api-OnRequest-86898773-c8ed6547",
@@ -472,7 +472,7 @@ module.exports = function({  }) {
             "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"id\":0,\"name\":0,\"age\":1}",
             "DYNAMODB_TABLE_NAME_d5d44f18_PRIMARY_KEY": "id",
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-cdafee6e-c8147384",
-            "WING_TARGET": "tf-aws"
+            "WING_MODEL": "tf-aws"
           }
         },
         "function_name": "cloud-Api-OnRequest-cdafee6e-c8147384",

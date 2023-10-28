@@ -3,7 +3,7 @@ bring util;
 bring http;
 
 // hack: only supported in the "sim" target for now
-if util.env("WING_TARGET") == "sim" {
+if util.env("WING_MODEL") == "sim" {
   let b = new cloud.Bucket();
   let api = new cloud.Api();
   api.get("/", inflight () => {

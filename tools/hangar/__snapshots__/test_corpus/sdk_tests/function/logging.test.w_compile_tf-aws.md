@@ -130,7 +130,7 @@
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "f1-c8545025",
-            "WING_TARGET": "tf-aws"
+            "WING_MODEL": "tf-aws"
           }
         },
         "function_name": "f1-c8545025",
@@ -160,7 +160,7 @@
           "variables": {
             "FUNCTION_NAME_09b8c606": "${aws_lambda_function.f1.arn}",
             "WING_FUNCTION_NAME": "f2-c812cd39",
-            "WING_TARGET": "tf-aws"
+            "WING_MODEL": "tf-aws"
           }
         },
         "function_name": "f2-c812cd39",

@@ -34,7 +34,7 @@ describe("Multiple platforms", () => {
 
     expect(terraformOutput).toMatchSnapshot();
     expect(tfResourcesOfCount(terraformOutputString, "aws_s3_bucket")) // should be s3 since tf-aws
-    .toEqual(1);
+    .toEqual(2);
   });
 })
 
