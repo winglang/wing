@@ -53,7 +53,7 @@ const SUPER_CLASS_INFLIGHT_INIT_NAME: &str = formatcp!("super_{}", CLASS_INFLIGH
 pub struct JSifyContext<'a> {
 	pub lifts: Option<&'a Lifts>,
 	pub visit_ctx: &'a mut VisitContext,
-	pub source_path: Option<&'a Utf8Path>
+	pub source_path: Option<&'a Utf8Path>,
 }
 
 pub struct JSifier<'a> {
@@ -378,7 +378,7 @@ impl<'a> JSifier<'a> {
 		if !args.is_empty() {
 			codes!(code, args);
 		}
-		
+
 		code
 	}
 
@@ -720,13 +720,12 @@ impl<'a> JSifier<'a> {
 			}
 			ExprKind::StructLiteral { fields, .. } => {
 				new_code!(
-					expr_span, 
+					expr_span,
 					"({",  
 					fields
 				.iter()
 				.map(|(name, expr)| new_code!(expr_span, "\"", &name.name, "\": ",  self.jsify_expression(expr, ctx)))
 				.collect_vec(), "})")
-				
 			}
 			ExprKind::JsonLiteral { element, .. } => {
 				ctx.visit_ctx.push_json();
@@ -1160,7 +1159,16 @@ impl<'a> JSifier<'a> {
 
 		for value in values {
 			code.empty_line();
-			codes!(code, "tmp[tmp[\"", jsify_symbol(value), "\"] = ", value_index.to_string(), "] = \",", jsify_symbol(value), "\";");
+			codes!(
+				code,
+				"tmp[tmp[\"",
+				jsify_symbol(value),
+				"\"] = ",
+				value_index.to_string(),
+				"] = \",",
+				jsify_symbol(value),
+				"\";"
+			);
 
 			value_index = value_index + 1;
 		}
@@ -1255,9 +1263,7 @@ impl<'a> JSifier<'a> {
 		};
 
 		let body = match &func_def.body {
-			FunctionBody::Statements(scope) => {
-				self.jsify_scope_body(scope, ctx)
-			}
+			FunctionBody::Statements(scope) => self.jsify_scope_body(scope, ctx),
 			FunctionBody::External(file_path) => {
 				new_code!(
 					&func_def.span,
@@ -1386,11 +1392,12 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_preflight_constructor(&self, class: &AstClass, ctx: &mut JSifyContext) -> CodeMaker {
-		let mut code = new_code!(&class.name.span, 
-			JS_CONSTRUCTOR, 
-			"($scope, $id, ", 
+		let mut code = new_code!(
+			&class.name.span,
+			JS_CONSTRUCTOR,
+			"($scope, $id, ",
 			jsify_function_parameters(&class.initializer),
-		 	") {"
+			") {"
 		);
 		code.indent();
 
@@ -1576,11 +1583,14 @@ impl<'a> JSifier<'a> {
 			Ok(()) => {}
 			Err(err) => report_diagnostic(err.into()),
 		}
-		match self
-			.output_files
-			.borrow_mut()
-			.add_file(sourcemap_file, code.get_sourcemap(root_source.as_str(), self.source_files.get_file(root_source.as_str()).unwrap(), filename.as_str()))
-		{
+		match self.output_files.borrow_mut().add_file(
+			sourcemap_file,
+			code.get_sourcemap(
+				root_source.as_str(),
+				self.source_files.get_file(root_source.as_str()).unwrap(),
+				filename.as_str(),
+			),
+		) {
 			Ok(()) => {}
 			Err(err) => report_diagnostic(err.into()),
 		}
