@@ -37,7 +37,7 @@ module.exports = function({ $_d4_toUtc____hours, $d4_hours, $d4_timezone, $math_
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## main.tf.json
@@ -152,11 +152,11 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: d4.month == 6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d4.month,6)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: d4.year == 2023")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d4.year,2023)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: d4.toUtc().hours == (d4.hours + (d4.timezone / 60))")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((d4.toUtc()).hours,(d4.hours + (d4.timezone / 60)))))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight datetime", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight datetime", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "datetime.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

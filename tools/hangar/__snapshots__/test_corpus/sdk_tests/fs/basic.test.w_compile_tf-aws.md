@@ -27,7 +27,7 @@ module.exports = function({ $data, $fs_Util }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## main.tf.json
@@ -121,11 +121,11 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: nilContent == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(nilContent,undefined)))};
     (fs.Util.remove(tmpdir, ({"recursive": true})));
     {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(tmpdir) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.exists(tmpdir)),false)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight file basic operations", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight file basic operations", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "basic.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

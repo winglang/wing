@@ -19,7 +19,7 @@ module.exports = function({ $cloud_HttpMethod, $path }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -41,7 +41,7 @@ module.exports = function({ $cloud_HttpMethod, $path }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=./inflight.$Closure2-1.js.map
 ```
 
 ## inflight.$Closure3-1.js
@@ -60,7 +60,7 @@ module.exports = function({  }) {
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=./inflight.$Closure3-1.js.map
 ```
 
 ## inflight.$Closure4-1.js
@@ -83,7 +83,7 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
   }
   return $Closure4;
 }
-
+//# sourceMappingURL=./inflight.$Closure4-1.js.map
 ```
 
 ## main.tf.json
@@ -620,16 +620,16 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
+    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api", this, "cloud.Api");
     const path = "/path";
     (api.options(path, new $Closure1(this, "$Closure1")));
     (api.head(path, new $Closure2(this, "$Closure2")));
     (api.connect(path, new $Closure3(this, "$Closure3")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:http.fetch can preform a call to an api to CONNECT, HEAD and OPTIONS", new $Closure4(this, "$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:http.fetch can preform a call to an api to CONNECT, HEAD and OPTIONS", new $Closure4(this, "$Closure4"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "options.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

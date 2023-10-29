@@ -26,7 +26,7 @@ module.exports = function({ $__x_, $__y_, $math_Util, $x, $y }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## main.tf.json
@@ -127,11 +127,11 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 3) == 2.718")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round(math.Util.E, { decimalPlaces: 3 })),2.718)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 4) == 2.7183")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round(math.Util.E, { decimalPlaces: 4 })),2.7183)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 5) == 2.71828")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round(math.Util.E, { decimalPlaces: 5 })),2.71828)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight floor/ceil/round", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight floor/ceil/round", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "floor_ceil_round.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

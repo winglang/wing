@@ -16,7 +16,7 @@ module.exports = function({ $bucket }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## main.tf.json
@@ -237,13 +237,13 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
-    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue");
+    const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "cloud.Bucket");
+    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue", this, "cloud.Queue");
     (queue.setConsumer(new $Closure1(this, "$Closure1")));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "hello.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

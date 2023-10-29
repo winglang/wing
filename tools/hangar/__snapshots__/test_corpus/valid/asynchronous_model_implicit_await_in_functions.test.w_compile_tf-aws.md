@@ -15,7 +15,7 @@ module.exports = function({  }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -35,7 +35,7 @@ module.exports = function({ $strToStr }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=./inflight.$Closure2-1.js.map
 ```
 
 ## main.tf.json
@@ -338,13 +338,13 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue");
-    const strToStr = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "strToStr", new $Closure1(this, "$Closure1"));
-    const func = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "func", new $Closure2(this, "$Closure2"));
+    const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue", this, "cloud.Queue");
+    const strToStr = this.node.root.newAbstract("@winglang/sdk.cloud.Function", this, "strToStr", new $Closure1(this, "$Closure1"));
+    const func = this.node.root.newAbstract("@winglang/sdk.cloud.Function", this, "func", new $Closure2(this, "$Closure2"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "asynchronous_model_implicit_await_in_functions.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

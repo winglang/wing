@@ -20,7 +20,7 @@ module.exports = function({  }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## inflight.Foo-1.js
@@ -38,7 +38,7 @@ module.exports = function({  }) {
   }
   return Foo;
 }
-
+//# sourceMappingURL=./inflight.Foo-1.js.map
 ```
 
 ## main.tf.json
@@ -379,11 +379,11 @@ class $Root extends $stdlib.std.Resource {
       {((cond) => {if (!cond) throw new Error("assertion failed: x > 0")})((x > 0))};
       {console.log(String.raw({ raw: ["", ""] }, x))};
     }
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "cloud.Function", new $Closure1(this, "$Closure1"));
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function", this, "cloud.Function", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "for_loop.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

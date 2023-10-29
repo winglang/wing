@@ -11,7 +11,7 @@ module.exports = function({ $q, $std_Duration, $util_Util }) {
       return $obj;
     }
     async handle() {
-      const obj = ({"k1": 1,"k2": "hello","k3": true,"k4": ({"k1": [1, "a", true, ({})]})});
+      const obj = ({"k1": 1, "k2": "hello", "k3": true, "k4": ({"k1": [1, "a", true, ({})]})});
       try {
         (await $q.push(""));
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
@@ -31,26 +31,23 @@ module.exports = function({ $q, $std_Duration, $util_Util }) {
       (await $q.push("Foo"));
       {((cond) => {if (!cond) throw new Error("assertion failed: util.waitUntil((): bool => {\n    return q.approxSize() == 1;\n  })")})((await $util_Util.waitUntil(async () => {
         return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $q.approxSize()),1));
-      }
-      )))};
+      })))};
       (await $q.pop());
       (await $q.push("Bar", "Baz"));
       {((cond) => {if (!cond) throw new Error("assertion failed: util.waitUntil((): bool => {\n    return q.approxSize() == 2;\n  })")})((await $util_Util.waitUntil(async () => {
         return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $q.approxSize()),2));
-      }
-      )))};
+      })))};
       (await $q.purge());
       (await $util_Util.sleep((await $std_Duration.fromSeconds(60))));
       (await $q.push("123", "\r", String.raw({ raw: ["", ""] }, JSON.stringify(obj))));
       {((cond) => {if (!cond) throw new Error("assertion failed: util.waitUntil((): bool => {\n    return q.approxSize() == 3;\n  })")})((await $util_Util.waitUntil(async () => {
         return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $q.approxSize()),3));
-      }
-      )))};
+      })))};
     }
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## main.tf.json
@@ -148,12 +145,12 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "push", new $Closure1(this, "$Closure1"), ({"timeout": (std.Duration.fromSeconds(180))}));
+    const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue", this, "cloud.Queue");
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "push", new $Closure1(this, "$Closure1"), ({"timeout": (std.Duration.fromSeconds(180))}));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "push.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

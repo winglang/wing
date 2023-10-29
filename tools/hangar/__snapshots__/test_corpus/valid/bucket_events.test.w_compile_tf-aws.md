@@ -16,7 +16,7 @@ module.exports = function({  }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -35,7 +35,7 @@ module.exports = function({  }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=./inflight.$Closure2-1.js.map
 ```
 
 ## inflight.$Closure3-1.js
@@ -54,7 +54,7 @@ module.exports = function({  }) {
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=./inflight.$Closure3-1.js.map
 ```
 
 ## inflight.$Closure4-1.js
@@ -73,7 +73,7 @@ module.exports = function({ $other }) {
   }
   return $Closure4;
 }
-
+//# sourceMappingURL=./inflight.$Closure4-1.js.map
 ```
 
 ## inflight.$Closure5-1.js
@@ -92,7 +92,7 @@ module.exports = function({  }) {
   }
   return $Closure5;
 }
-
+//# sourceMappingURL=./inflight.$Closure5-1.js.map
 ```
 
 ## inflight.$Closure6-1.js
@@ -115,7 +115,7 @@ module.exports = function({ $b }) {
   }
   return $Closure6;
 }
-
+//# sourceMappingURL=./inflight.$Closure6-1.js.map
 ```
 
 ## main.tf.json
@@ -1496,18 +1496,18 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const other = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "other");
-    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "b");
+    const other = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "other");
+    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "b");
     (b.onDelete(new $Closure1(this, "$Closure1")));
     (b.onUpdate(new $Closure2(this, "$Closure2")));
     (b.onCreate(new $Closure3(this, "$Closure3")));
     (b.onEvent(new $Closure4(this, "$Closure4")));
     (other.onEvent(new $Closure5(this, "$Closure5")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:putting and deleting from a bucket to trigger bucket events", new $Closure6(this, "$Closure6"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:putting and deleting from a bucket to trigger bucket events", new $Closure6(this, "$Closure6"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "bucket_events.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

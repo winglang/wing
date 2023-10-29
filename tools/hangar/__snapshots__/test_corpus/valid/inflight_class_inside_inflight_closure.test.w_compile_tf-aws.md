@@ -28,7 +28,7 @@ module.exports = function({ $__parent_this_1_b }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -47,7 +47,7 @@ module.exports = function({ $f }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=./inflight.$Closure2-1.js.map
 ```
 
 ## inflight.$Closure3-1.js
@@ -74,7 +74,7 @@ module.exports = function({  }) {
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=./inflight.$Closure3-1.js.map
 ```
 
 ## inflight.PreflightClass-1.js
@@ -87,7 +87,7 @@ module.exports = function({  }) {
   }
   return PreflightClass;
 }
-
+//# sourceMappingURL=./inflight.PreflightClass-1.js.map
 ```
 
 ## main.tf.json
@@ -252,7 +252,7 @@ class $Root extends $stdlib.std.Resource {
     class PreflightClass extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+        this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "cloud.Bucket");
       }
       preflight_method() {
         const __parent_this_1 = this;
@@ -290,7 +290,7 @@ class $Root extends $stdlib.std.Resource {
           }
         }
         const inflight_closure = new $Closure1(this, "$Closure1");
-        return this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "cloud.Function", inflight_closure);
+        return this.node.root.newAbstract("@winglang/sdk.cloud.Function", this, "cloud.Function", inflight_closure);
       }
       static _toInflightType(context) {
         return `
@@ -374,12 +374,12 @@ class $Root extends $stdlib.std.Resource {
     }
     const p = new PreflightClass(this, "PreflightClass");
     const f = (p.preflight_method());
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:it works", new $Closure2(this, "$Closure2"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight class inside closure captures from closure", new $Closure3(this, "$Closure3"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:it works", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight class inside closure captures from closure", new $Closure3(this, "$Closure3"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "inflight_class_inside_inflight_closure.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

@@ -15,7 +15,7 @@ module.exports = function({  }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -33,7 +33,7 @@ module.exports = function({  }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=./inflight.$Closure2-1.js.map
 ```
 
 ## main.tf.json
@@ -137,6 +137,6 @@ class $Root extends $stdlib.std.Resource {
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "identical_inflights.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

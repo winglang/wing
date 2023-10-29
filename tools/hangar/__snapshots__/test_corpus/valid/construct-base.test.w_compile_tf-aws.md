@@ -10,7 +10,7 @@ module.exports = function({  }) {
   }
   return WingResource;
 }
-
+//# sourceMappingURL=./inflight.WingResource-1.js.map
 ```
 
 ## main.tf.json
@@ -103,7 +103,7 @@ class $Root extends $stdlib.std.Resource {
     const getDisplayName = ((r) => {
       return (std.Node.of(r)).title;
     });
-    const q = this.node.root.new("@cdktf/provider-aws.sqsQueue.SqsQueue",aws.sqsQueue.SqsQueue,this, "aws.sqsQueue.SqsQueue");
+    const q = this.node.root.new("@cdktf/provider-aws.sqsQueue.SqsQueue", aws.sqsQueue.SqsQueue, this, "aws.sqsQueue.SqsQueue");
     const wr = new WingResource(this, "WingResource");
     const another_resource = wr;
     {console.log(String.raw({ raw: ["path of sqs.queue: ", ""] }, (getPath(q))))};
@@ -114,6 +114,6 @@ class $Root extends $stdlib.std.Resource {
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "construct-base.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

@@ -17,7 +17,7 @@ module.exports = function({ $SomeEnum, $one, $two }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## main.tf.json
@@ -101,19 +101,19 @@ class $Root extends $stdlib.std.Resource {
     }
     const SomeEnum =
       (function (tmp) {
-        tmp[tmp["ONE"] = 0] = "ONE";
-        tmp[tmp["TWO"] = 1] = "TWO";
-        tmp[tmp["THREE"] = 2] = "THREE";
+        tmp[tmp["ONE"] = 0] = ",ONE";
+        tmp[tmp["TWO"] = 1] = ",TWO";
+        tmp[tmp["THREE"] = 2] = ",THREE";
         return tmp;
       })({})
     ;
     const one = SomeEnum.ONE;
     const two = SomeEnum.TWO;
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "enums.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

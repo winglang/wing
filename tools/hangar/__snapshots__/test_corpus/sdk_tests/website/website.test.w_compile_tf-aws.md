@@ -19,7 +19,7 @@ module.exports = function({ $config, $htmlContent, $http_Util, $indexFile, $othe
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## main.tf.json
@@ -319,7 +319,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const w = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this, "cloud.Website", { path: "./website" });
+    const w = this.node.root.newAbstract("@winglang/sdk.cloud.Website", this, "cloud.Website", { path: "./website" });
     const config = ({"json": 1});
     const htmlContent = "<html>Hello World!</html>";
     const indexFile = (fs.Util.readFile(String.raw({ raw: ["", "/index.html"] }, w.path)));
@@ -327,11 +327,11 @@ class $Root extends $stdlib.std.Resource {
     (w.addJson("config.json", config));
     (w.addFile("another-file.html", htmlContent, { contentType: "text/html" }));
     {((cond) => {if (!cond) throw new Error("assertion failed: w.path.endsWith(\"sdk_tests/website/website\") || w.path.endsWith(\"sdk_tests\\\\website\\\\website\")")})((w.path.endsWith("sdk_tests/website/website") || w.path.endsWith("sdk_tests\\website\\website")))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:access files on the website", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:access files on the website", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "website.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

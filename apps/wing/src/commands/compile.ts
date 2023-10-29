@@ -1,4 +1,5 @@
 import { promises as fsPromise } from "fs";
+import { readFile } from "fs/promises";
 import { relative } from "path";
 
 import * as wingCompiler from "@winglang/compiler";
@@ -6,6 +7,7 @@ import chalk from "chalk";
 import { CHARS_ASCII, emitDiagnostic, File, Label } from "codespan-wasm";
 import debug from "debug";
 import { glob } from "glob";
+import { SourceMapConsumer } from "source-map";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)
@@ -171,29 +173,87 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
 
       output.push(chalk[errorColor](`ERROR: ${causedBy.message}`));
 
-      if (causedBy.stack && causedBy.stack.includes("evalmachine.<anonymous>:")) {
-        const lineNumber =
-          Number.parseInt(causedBy.stack.split("evalmachine.<anonymous>:")[1].split(":")[0]) - 1;
-        const relativeArtifactPath = relative(process.cwd(), error.artifactPath);
-        log("relative artifact path: %s", relativeArtifactPath);
+      if (causedBy.stack) {
+        const stackLines = causedBy.stack.split("\n");
+        const fileRegex =
+          / *at (?<functionName>.+) \((?<filePath>.*):(?<lineNumber>\d+):(?<columnNumber>\d+)\)/;
+        for (const stackLine of stackLines) {
+          const match = stackLine.match(fileRegex);
+          if (match) {
+            const { filePath, lineNumber, columnNumber } = match.groups as any;
 
-        output.push("");
-        output.push(chalk.underline(chalk.dim(`${relativeArtifactPath}:${lineNumber}`)));
+            const sourceMapContents = await readFile(`${filePath}.map`, "utf8").catch(() => null);
+            if (!sourceMapContents) {
+              continue;
+            }
 
-        const lines = error.artifact.split("\n");
-        let startLine = Math.max(lineNumber - 2, 0);
-        let finishLine = Math.min(lineNumber + 2, lines.length - 1);
+            const sourcemap = await new SourceMapConsumer(
+              await readFile(`${filePath}.map`, "utf8")
+            );
 
-        // print line and its surrounding lines
-        for (let i = startLine; i <= finishLine; i++) {
-          if (i === lineNumber) {
-            output.push(chalk.bold[errorColor](">> ") + chalk[errorColor](lines[i]));
-          } else {
-            output.push("   " + chalk.dim(lines[i]));
+            const origin: any = sourcemap.originalPositionFor({
+              line: Number.parseInt(lineNumber),
+              column: Number.parseInt(columnNumber),
+            });
+
+            if (!origin?.source?.endsWith(".w")) {
+              continue;
+            }
+
+            const relativeSource = relative(process.cwd(), origin.source);
+            output.push("");
+            output.push(
+              chalk.underline(chalk.dim(`${relativeSource}:${origin.line}:${origin.column}`))
+            );
+            output.push("");
+            const sourceData = sourcemap.sourceContentFor(origin.source)!;
+
+            const lines = sourceData.split("\n");
+            let startLine = Math.max(origin.line - 2, 0);
+            let finishLine = Math.min(origin.line + 2, lines.length - 1);
+
+            // print line and its surrounding lines
+            for (let i = startLine; i <= finishLine; i++) {
+              if (i === origin.line - 1) {
+                const firstPart = lines[i].substring(0, origin.column - 1);
+                const secondPart = lines[i].substring(origin.column - 1);
+                output.push(
+                  chalk.bold[errorColor](">> ") +
+                    chalk.dim(firstPart) +
+                    chalk.bold[errorColor](secondPart)
+                );
+              } else {
+                output.push("   " + chalk.dim(lines[i]));
+              }
+            }
+
+            break;
           }
         }
 
-        output.push("");
+        // output.push("");
+        // const lineNumber =
+        //   Number.parseInt(causedBy.stack.split("evalmachine.<anonymous>:")[1].split(":")[0]) - 1;
+        // const relativeArtifactPath = relative(process.cwd(), error.artifactPath);
+        // log("relative artifact path: %s", relativeArtifactPath);
+
+        // output.push("");
+        // output.push(chalk.underline(chalk.dim(`${relativeArtifactPath}:${lineNumber}`)));
+
+        // const lines = error.artifact.split("\n");
+        // let startLine = Math.max(lineNumber - 2, 0);
+        // let finishLine = Math.min(lineNumber + 2, lines.length - 1);
+
+        // // print line and its surrounding lines
+        // for (let i = startLine; i <= finishLine; i++) {
+        //   if (i === lineNumber) {
+        //     output.push(chalk.bold[errorColor](">> ") + chalk[errorColor](lines[i]));
+        //   } else {
+        //     output.push("   " + chalk.dim(lines[i]));
+        //   }
+        // }
+
+        // output.push("");
       }
 
       if (process.env.DEBUG) {

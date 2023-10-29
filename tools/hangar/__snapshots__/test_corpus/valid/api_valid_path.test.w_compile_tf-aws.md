@@ -11,12 +11,12 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle(req) {
-      return ({"body": "ok","status": 200});
+      return ({"body": "ok", "status": 200});
     }
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## main.tf.json
@@ -405,7 +405,7 @@ class $Root extends $stdlib.std.Resource {
         return ["handle", "$inflight_init"];
       }
     }
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
+    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api", this, "cloud.Api");
     const handler = new $Closure1(this, "$Closure1");
     const testInvalidPath = ((path) => {
       let error = "";
@@ -465,6 +465,6 @@ class $Root extends $stdlib.std.Resource {
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "api_valid_path.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

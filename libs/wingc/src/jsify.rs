@@ -583,7 +583,7 @@ impl<'a> JSifier<'a> {
 			},
 			ExprKind::Range { start, inclusive, end } => match ctx.visit_ctx.current_phase() {
 				Phase::Inflight => new_code!(expr_span,
-					"((s,e,i) => {{ function* iterator(start,end,inclusive) {{ let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }}; return iterator(s,e,i); }})(",
+					"((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(",
 					self.jsify_expression(start, ctx),
 					",",
 					self.jsify_expression(end, ctx),
@@ -948,11 +948,11 @@ impl<'a> JSifier<'a> {
 			} => {
 				code.open(new_code!(
 					&statement.span,
-					"for (const {",
+					"for (const ",
 					jsify_symbol(&iterator),
 					" of ",
 					self.jsify_expression(iterable, ctx),
-					") {{"
+					") {"
 				));
 				code.add_code(self.jsify_scope_body(statements, ctx));
 				code.close("}");
@@ -962,7 +962,7 @@ impl<'a> JSifier<'a> {
 					&condition.span,
 					"while (",
 					self.jsify_expression(condition, ctx),
-					") {{"
+					") {"
 				));
 				code.add_code(self.jsify_scope_body(statements, ctx));
 				code.close("}");
@@ -1055,7 +1055,7 @@ impl<'a> JSifier<'a> {
 					let condition = self.jsify_expression(&elif_block.condition, ctx);
 					// TODO: this puts the "else if" in a separate line from the closing block but
 					// technically that shouldn't be a problem, its just ugly
-					code.open(new_code!(&elif_block.condition.span, "else if (", condition, ") {{"));
+					code.open(new_code!(&elif_block.condition.span, "else if (", condition, ") {"));
 					code.add_code(self.jsify_scope_body(&elif_block.statements, ctx));
 					code.close("}");
 				}

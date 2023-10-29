@@ -16,7 +16,7 @@ module.exports = function({ $c1 }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -35,7 +35,7 @@ module.exports = function({ $c2 }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=./inflight.$Closure2-1.js.map
 ```
 
 ## inflight.$Closure3-1.js
@@ -58,7 +58,7 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=./inflight.$Closure3-1.js.map
 ```
 
 ## main.tf.json
@@ -502,17 +502,17 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const from_cron = this.node.root.newAbstract("@winglang/sdk.cloud.Schedule",this, "from_cron", { cron: "* * * * ?" });
-    const from_rate = this.node.root.newAbstract("@winglang/sdk.cloud.Schedule",this, "from_rate", { rate: (std.Duration.fromSeconds(60)) });
-    const c1 = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "c1");
-    const c2 = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "c2");
+    const from_cron = this.node.root.newAbstract("@winglang/sdk.cloud.Schedule", this, "from_cron", { cron: "* * * * ?" });
+    const from_rate = this.node.root.newAbstract("@winglang/sdk.cloud.Schedule", this, "from_rate", { rate: (std.Duration.fromSeconds(60)) });
+    const c1 = this.node.root.newAbstract("@winglang/sdk.cloud.Counter", this, "c1");
+    const c2 = this.node.root.newAbstract("@winglang/sdk.cloud.Counter", this, "c2");
     (from_cron.onTick(new $Closure1(this, "$Closure1")));
     (from_rate.onTick(new $Closure2(this, "$Closure2")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "on tick is called both for rate and cron schedules", new $Closure3(this, "$Closure3"), ({"timeout": (std.Duration.fromSeconds(120))}));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "on tick is called both for rate and cron schedules", new $Closure3(this, "$Closure3"), ({"timeout": (std.Duration.fromSeconds(120))}));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "on_tick.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

@@ -30,7 +30,7 @@ module.exports = function({ $bucket1, $bucket2, $bucket3 }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -44,12 +44,12 @@ module.exports = function({ $headers }) {
       return $obj;
     }
     async handle(req) {
-      return ({"status": 200,"headers": $headers,"body": "Hello, world!"});
+      return ({"status": 200, "headers": $headers, "body": "Hello, world!"});
     }
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=./inflight.$Closure2-1.js.map
 ```
 
 ## main.tf.json
@@ -671,22 +671,22 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const bucket1 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
-    const bucket2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "PublicBucket", ({"public": true}));
-    const bucket3 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "PrivateBucket", { public: false });
-    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue");
+    const bucket1 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "cloud.Bucket");
+    const bucket2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "PublicBucket", ({"public": true}));
+    const bucket3 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "PrivateBucket", { public: false });
+    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue", this, "cloud.Queue");
     const handler = new $Closure1(this, "$Closure1");
     (queue.setConsumer(handler, { batchSize: 5 }));
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "cloud.Function", handler, { env: ({}) });
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function", this, "cloud.Function", handler, { env: ({}) });
     const emptyEnv = ({});
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "AnotherFunction", handler, { env: emptyEnv });
-    const headers = ({"my-fancy-header": "my-fancy-value","not-even-real\"": "wow` !"});
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function", this, "AnotherFunction", handler, { env: emptyEnv });
+    const headers = ({"my-fancy-header": "my-fancy-value", "not-even-real\"": "wow` !"});
+    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api", this, "cloud.Api");
     (api.get("/hello", new $Closure2(this, "$Closure2")));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "captures.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

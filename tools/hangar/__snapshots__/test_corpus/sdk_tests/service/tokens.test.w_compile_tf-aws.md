@@ -11,12 +11,12 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      return ({"body": "api test","status": 200});
+      return ({"body": "api test", "status": 200});
     }
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -36,7 +36,7 @@ module.exports = function({ $api_url, $b, $http_Util }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=./inflight.$Closure2-1.js.map
 ```
 
 ## inflight.$Closure3-1.js
@@ -52,14 +52,13 @@ module.exports = function({ $b, $util_Util }) {
     async handle() {
       (await $util_Util.waitUntil(async () => {
         return (await $b.exists("service.txt"));
-      }
-      ));
+      }));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.get(\"service.txt\") == \"api test\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.get("service.txt")),"api test")))};
     }
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=./inflight.$Closure3-1.js.map
 ```
 
 ## main.tf.json
@@ -109,8 +108,8 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     if ((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((util.Util.env("WING_TARGET")),"sim"))) {
-      const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
-      const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
+      const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "cloud.Bucket");
+      const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api", this, "cloud.Api");
       class $Closure1 extends $stdlib.std.Resource {
         constructor($scope, $id, ) {
           super($scope, $id);
@@ -174,7 +173,7 @@ class $Root extends $stdlib.std.Resource {
           super._registerOnLift(host, ops);
         }
       }
-      const s = this.node.root.newAbstract("@winglang/sdk.cloud.Service",this, "cloud.Service", new $Closure2(this, "$Closure2"));
+      const s = this.node.root.newAbstract("@winglang/sdk.cloud.Service", this, "cloud.Service", new $Closure2(this, "$Closure2"));
       class $Closure3 extends $stdlib.std.Resource {
         constructor($scope, $id, ) {
           super($scope, $id);
@@ -209,12 +208,12 @@ class $Root extends $stdlib.std.Resource {
           super._registerOnLift(host, ops);
         }
       }
-      this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:will bind and use tokens", new $Closure3(this, "$Closure3"));
+      this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:will bind and use tokens", new $Closure3(this, "$Closure3"));
     }
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "tokens.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

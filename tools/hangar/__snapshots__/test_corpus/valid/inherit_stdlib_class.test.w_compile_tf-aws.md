@@ -16,7 +16,7 @@ module.exports = function({  }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -36,7 +36,7 @@ module.exports = function({ $api_url, $http_Util }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=./inflight.$Closure2-1.js.map
 ```
 
 ## inflight.AnApi-1.js
@@ -50,7 +50,7 @@ module.exports = function({ $cloud_Api }) {
   }
   return AnApi;
 }
-
+//# sourceMappingURL=./inflight.AnApi-1.js.map
 ```
 
 ## main.tf.json
@@ -359,11 +359,11 @@ class $Root extends $stdlib.std.Resource {
     }
     const api = new AnApi(this, "AnApi");
     (api.get("/", new $Closure1(this, "$Closure1")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:can inherit std lib preflight class", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:can inherit std lib preflight class", new $Closure2(this, "$Closure2"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "inherit_stdlib_class.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

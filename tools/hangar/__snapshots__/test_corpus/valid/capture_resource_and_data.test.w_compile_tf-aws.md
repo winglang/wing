@@ -19,7 +19,7 @@ module.exports = function({ $data_size, $queue, $res }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## main.tf.json
@@ -131,13 +131,13 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const data = new Set([1, 2, 3]);
-    const res = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
-    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:resource and data", new $Closure1(this, "$Closure1"));
+    const res = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "cloud.Bucket");
+    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue", this, "cloud.Queue");
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:resource and data", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "capture_resource_and_data.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

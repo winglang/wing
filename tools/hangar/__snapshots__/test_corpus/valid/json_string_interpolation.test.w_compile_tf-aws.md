@@ -43,7 +43,7 @@ const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    const obj = ({"strValue": "test","numValue": 1});
+    const obj = ({"strValue": "test", "numValue": 1});
     const notStringifyStrValue = String.raw({ raw: ["string: ", ""] }, JSON.stringify(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(obj, "strValue")));
     {((cond) => {if (!cond) throw new Error("assertion failed: notStringifyStrValue == \"string: \\\"test\\\"\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(notStringifyStrValue,"string: \"test\"")))};
     const stringifyNumValue = String.raw({ raw: ["number: ", ""] }, JSON.stringify(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(obj, "numValue")));
@@ -56,6 +56,6 @@ class $Root extends $stdlib.std.Resource {
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "json_string_interpolation.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

@@ -10,7 +10,7 @@ module.exports = function({  }) {
   }
   return Foo;
 }
-
+//# sourceMappingURL=./inflight.Foo-1.js.map
 ```
 
 ## main.tf.json
@@ -78,7 +78,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.node.root.new("cdktf.S3Backend",cdktf.S3Backend,this, ({"bucket": "foo","key": "bar"}));
+        this.node.root.new("cdktf.S3Backend", cdktf.S3Backend, this, ({"bucket": "foo", "key": "bar"}));
       }
       static _toInflightType(context) {
         return `
@@ -101,11 +101,11 @@ class $Root extends $stdlib.std.Resource {
         return ["$inflight_init"];
       }
     }
-    this.node.root.new("@cdktf/provider-aws.s3Bucket.S3Bucket",aws.s3Bucket.S3Bucket,this, "Bucket", { bucketPrefix: "hello", versioning: ({"enabled": true,"mfaDelete": true}) });
+    this.node.root.new("@cdktf/provider-aws.s3Bucket.S3Bucket", aws.s3Bucket.S3Bucket, this, "Bucket", { bucketPrefix: "hello", versioning: ({"enabled": true, "mfaDelete": true}) });
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "bring_cdktf.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

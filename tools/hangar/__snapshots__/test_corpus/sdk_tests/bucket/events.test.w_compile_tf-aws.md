@@ -11,12 +11,12 @@ module.exports = function({ $idsCounter, $table }) {
       return $obj;
     }
     async handle(key, operation, source) {
-      (await $table.insert(String.raw({ raw: ["", ""] }, (await $idsCounter.inc())), ({"key": key,"operation": operation,"source": String.raw({ raw: ["", ""] }, source)})));
+      (await $table.insert(String.raw({ raw: ["", ""] }, (await $idsCounter.inc())), ({"key": key, "operation": operation, "source": String.raw({ raw: ["", ""] }, source)})));
     }
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -35,7 +35,7 @@ module.exports = function({ $Source, $logHistory }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=./inflight.$Closure2-1.js.map
 ```
 
 ## inflight.$Closure3-1.js
@@ -54,7 +54,7 @@ module.exports = function({ $Source, $logHistory }) {
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=./inflight.$Closure3-1.js.map
 ```
 
 ## inflight.$Closure4-1.js
@@ -73,7 +73,7 @@ module.exports = function({ $Source, $logHistory }) {
   }
   return $Closure4;
 }
-
+//# sourceMappingURL=./inflight.$Closure4-1.js.map
 ```
 
 ## inflight.$Closure5-1.js
@@ -92,7 +92,7 @@ module.exports = function({ $Source, $logHistory }) {
   }
   return $Closure5;
 }
-
+//# sourceMappingURL=./inflight.$Closure5-1.js.map
 ```
 
 ## inflight.$Closure6-1.js
@@ -119,7 +119,7 @@ module.exports = function({ $std_Duration, $util_Util }) {
   }
   return $Closure6;
 }
-
+//# sourceMappingURL=./inflight.$Closure6-1.js.map
 ```
 
 ## inflight.$Closure7-1.js
@@ -141,13 +141,12 @@ module.exports = function({ $table }) {
           }
         }
         return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(count,opts.count));
-      }
-      ;
+      };
     }
   }
   return $Closure7;
 }
-
+//# sourceMappingURL=./inflight.$Closure7-1.js.map
 ```
 
 ## inflight.$Closure8-1.js
@@ -182,7 +181,7 @@ module.exports = function({ $Source, $b, $checkHitCount, $util_Util, $wait }) {
   }
   return $Closure8;
 }
-
+//# sourceMappingURL=./inflight.$Closure8-1.js.map
 ```
 
 ## main.tf.json
@@ -1315,14 +1314,14 @@ class $Root extends $stdlib.std.Resource {
     }
     const Source =
       (function (tmp) {
-        tmp[tmp["anyEvent"] = 0] = "anyEvent";
-        tmp[tmp["onEvent"] = 1] = "onEvent";
+        tmp[tmp["anyEvent"] = 0] = ",anyEvent";
+        tmp[tmp["onEvent"] = 1] = ",onEvent";
         return tmp;
       })({})
     ;
-    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
-    const idsCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter");
-    const table = this.node.root.newAbstract("@winglang/sdk.ex.Table",this, "ex.Table", { name: "key-history", primaryKey: "_id", columns: ({"_id": ex.ColumnType.STRING,"key": ex.ColumnType.STRING,"operation": ex.ColumnType.STRING,"source": ex.ColumnType.STRING}) });
+    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "cloud.Bucket");
+    const idsCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter", this, "cloud.Counter");
+    const table = this.node.root.newAbstract("@winglang/sdk.ex.Table", this, "ex.Table", { name: "key-history", primaryKey: "_id", columns: ({"_id": ex.ColumnType.STRING, "key": ex.ColumnType.STRING, "operation": ex.ColumnType.STRING, "source": ex.ColumnType.STRING}) });
     const logHistory = new $Closure1(this, "$Closure1");
     (b.onDelete(new $Closure2(this, "$Closure2")));
     (b.onUpdate(new $Closure3(this, "$Closure3")));
@@ -1330,11 +1329,11 @@ class $Root extends $stdlib.std.Resource {
     (b.onEvent(new $Closure5(this, "$Closure5")));
     const wait = new $Closure6(this, "$Closure6");
     const checkHitCount = new $Closure7(this, "$Closure7");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "hitCount is incremented according to the bucket event", new $Closure8(this, "$Closure8"), { timeout: (std.Duration.fromSeconds(480)) });
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "hitCount is incremented according to the bucket event", new $Closure8(this, "$Closure8"), { timeout: (std.Duration.fromSeconds(480)) });
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "events.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

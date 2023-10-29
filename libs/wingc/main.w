@@ -11,7 +11,8 @@ class MyClosure {
 }
 
 let fn = new MyClosure();
-// assert(false);
+let breaking = () => {assert(false);};
+breaking();
 
 test "test" {
   fn();

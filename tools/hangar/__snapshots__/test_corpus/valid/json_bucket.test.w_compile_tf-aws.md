@@ -17,7 +17,7 @@ module.exports = function({ $b, $fileName }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -37,7 +37,7 @@ module.exports = function({ $b, $fileName, $getJson, $j }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=./inflight.$Closure2-1.js.map
 ```
 
 ## main.tf.json
@@ -273,15 +273,15 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "cloud.Bucket");
     const fileName = "file.json";
-    const j = ({"persons": [({"age": 30,"name": "hasan","fears": ["heights", "failure"]})]});
-    const getJson = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "cloud.Function", new $Closure1(this, "$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:put", new $Closure2(this, "$Closure2"));
+    const j = ({"persons": [({"age": 30, "name": "hasan", "fears": ["heights", "failure"]})]});
+    const getJson = this.node.root.newAbstract("@winglang/sdk.cloud.Function", this, "cloud.Function", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:put", new $Closure2(this, "$Closure2"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "json_bucket.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

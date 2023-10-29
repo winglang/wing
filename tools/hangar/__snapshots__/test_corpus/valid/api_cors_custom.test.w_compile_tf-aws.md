@@ -11,12 +11,12 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle(req) {
-      return ({"body": "hello world","status": 200});
+      return ({"body": "hello world", "status": 200});
     }
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-2.js.map
 ```
 
 ## inflight.$Closure2-2.js
@@ -42,7 +42,7 @@ module.exports = function({ $api_url, $http_Util, $t_Assert }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=./inflight.$Closure2-2.js.map
 ```
 
 ## inflight.$Closure3-2.js
@@ -68,7 +68,7 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert })
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=./inflight.$Closure3-2.js.map
 ```
 
 ## inflight.$Closure4-2.js
@@ -82,7 +82,7 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert })
       return $obj;
     }
     async handle() {
-      const response = (await $http_Util.fetch(($api_url + "/users"), ({"method": $http_HttpMethod.OPTIONS,"headers": ({"Access-Control-Request-Method": "PUT","Access-Control-Request-Headers": "Content-Type,Authorization,X-Custom-Foo"})})));
+      const response = (await $http_Util.fetch(($api_url + "/users"), ({"method": $http_HttpMethod.OPTIONS, "headers": ({"Access-Control-Request-Method": "PUT", "Access-Control-Request-Headers": "Content-Type,Authorization,X-Custom-Foo"})})));
       const headers = response.headers;
       (await $t_Assert.equalNum(response.status, 204));
       (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-allow-methods"), "GET,POST,OPTIONS"));
@@ -92,7 +92,7 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert })
   }
   return $Closure4;
 }
-
+//# sourceMappingURL=./inflight.$Closure4-2.js.map
 ```
 
 ## inflight.Assert-1.js
@@ -132,7 +132,7 @@ module.exports = function({  }) {
   }
   return Assert;
 }
-
+//# sourceMappingURL=./inflight.Assert-1.js.map
 ```
 
 ## main.tf.json
@@ -372,7 +372,7 @@ module.exports = function({ $stdlib }) {
   }
   return { Assert };
 };
-
+//# sourceMappingURL=preflight.assertions-1.js.map
 ```
 
 ## preflight.js
@@ -523,15 +523,15 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api", { cors: true, corsOptions: ({"allowOrigin": ["winglang.io"],"allowMethods": [cloud.HttpMethod.GET, cloud.HttpMethod.POST, cloud.HttpMethod.OPTIONS],"allowHeaders": ["Content-Type", "Authorization", "X-Custom-Header"],"allowCredentials": true,"exposeHeaders": ["Content-Type"]}) });
+    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api", this, "cloud.Api", { cors: true, corsOptions: ({"allowOrigin": ["winglang.io"], "allowMethods": [cloud.HttpMethod.GET, cloud.HttpMethod.POST, cloud.HttpMethod.OPTIONS], "allowHeaders": ["Content-Type", "Authorization", "X-Custom-Header"], "allowCredentials": true, "exposeHeaders": ["Content-Type"]}) });
     (api.get("/users", new $Closure1(this, "$Closure1")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:GET /users has cors headers", new $Closure2(this, "$Closure2"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:OPTIONS /users has cors headers", new $Closure3(this, "$Closure3"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:OPTIONS /users responds with proper headers for requested", new $Closure4(this, "$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:GET /users has cors headers", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:OPTIONS /users has cors headers", new $Closure3(this, "$Closure3"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:OPTIONS /users responds with proper headers for requested", new $Closure4(this, "$Closure4"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "api_cors_custom.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

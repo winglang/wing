@@ -11,8 +11,8 @@ module.exports = function({ $t1 }) {
       return $obj;
     }
     async handle() {
-      (await $t1.putItem(({"item": ({"k1": "key1","k2": "value1","k3": "other-value1"})})));
-      (await $t1.putItem(({"item": ({"k1": "key1","k2": "value2","k3": "other-value2"})})));
+      (await $t1.putItem(({"item": ({"k1": "key1", "k2": "value1", "k3": "other-value1"})})));
+      (await $t1.putItem(({"item": ({"k1": "key1", "k2": "value2", "k3": "other-value2"})})));
       const result = (await $t1.query({ keyConditionExpression: "k1 = :k1", expressionAttributeValues: ({":k1": "key1"}) }));
       {((cond) => {if (!cond) throw new Error("assertion failed: result.count == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(result.count,2)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: result.items.at(0).get(\"k1\") == \"key1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })((await result.items.at(0)), "k1"),"key1")))};
@@ -25,7 +25,7 @@ module.exports = function({ $t1 }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## main.tf.json
@@ -131,12 +131,12 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const t1 = this.node.root.newAbstract("@winglang/sdk.ex.DynamodbTable",this, "ex.DynamodbTable", { name: "test1", attributeDefinitions: ({"k1": "S","k2": "S"}), hashKey: "k1", rangeKey: "k2" });
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:query", new $Closure1(this, "$Closure1"));
+    const t1 = this.node.root.newAbstract("@winglang/sdk.ex.DynamodbTable", this, "ex.DynamodbTable", { name: "test1", attributeDefinitions: ({"k1": "S", "k2": "S"}), hashKey: "k1", rangeKey: "k2" });
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:query", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "query.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

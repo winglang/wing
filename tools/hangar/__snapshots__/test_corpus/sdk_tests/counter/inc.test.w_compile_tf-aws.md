@@ -27,7 +27,7 @@ module.exports = function({ $counter }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -58,7 +58,7 @@ module.exports = function({ $counter }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=./inflight.$Closure2-1.js.map
 ```
 
 ## main.tf.json
@@ -192,13 +192,13 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter", { initial: 0 });
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inc", new $Closure1(this, "$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:key inc", new $Closure2(this, "$Closure2"));
+    const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter", this, "cloud.Counter", { initial: 0 });
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inc", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:key inc", new $Closure2(this, "$Closure2"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "inc.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

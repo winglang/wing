@@ -65,11 +65,11 @@ const ex = $stdlib.ex;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    const t = this.node.root.newAbstract("@winglang/sdk.ex.Table",this, "ex.Table", { name: "simple-table", primaryKey: "id", columns: ({"id": ex.ColumnType.STRING,"name": ex.ColumnType.STRING,"age": ex.ColumnType.NUMBER}) });
+    const t = this.node.root.newAbstract("@winglang/sdk.ex.Table", this, "ex.Table", { name: "simple-table", primaryKey: "id", columns: ({"id": ex.ColumnType.STRING, "name": ex.ColumnType.STRING, "age": ex.ColumnType.NUMBER}) });
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "table.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

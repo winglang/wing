@@ -11,12 +11,12 @@ module.exports = function({ $std_Json }) {
       return $obj;
     }
     async handle(req) {
-      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"user": ((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(req.vars, "name")})]),"headers": ({"content-type": "application/json"}),"status": 200});
+      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"user": ((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(req.vars, "name")})]), "headers": ({"content-type": "application/json"}), "status": 200});
     }
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -30,12 +30,12 @@ module.exports = function({ $std_Json }) {
       return $obj;
     }
     async handle(req) {
-      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"user": ((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(req.vars, "name"),"age": ((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(req.vars, "age")})]),"headers": ({"content-type": "application/json"}),"status": 200});
+      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"user": ((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(req.vars, "name"), "age": ((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(req.vars, "age")})]), "headers": ({"content-type": "application/json"}), "status": 200});
     }
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=./inflight.$Closure2-1.js.map
 ```
 
 ## inflight.$Closure3-1.js
@@ -57,7 +57,7 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=./inflight.$Closure3-1.js.map
 ```
 
 ## inflight.$Closure4-1.js
@@ -79,7 +79,7 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
   }
   return $Closure4;
 }
-
+//# sourceMappingURL=./inflight.$Closure4-1.js.map
 ```
 
 ## inflight.$Closure5-1.js
@@ -101,7 +101,7 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
   }
   return $Closure5;
 }
-
+//# sourceMappingURL=./inflight.$Closure5-1.js.map
 ```
 
 ## inflight.$Closure6-1.js
@@ -125,7 +125,7 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
   }
   return $Closure6;
 }
-
+//# sourceMappingURL=./inflight.$Closure6-1.js.map
 ```
 
 ## main.tf.json
@@ -658,21 +658,21 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
+    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api", this, "cloud.Api");
     const handler = new $Closure1(this, "$Closure1");
     const handler_two = new $Closure2(this, "$Closure2");
     (api.get("/users/{name}", handler));
     (api.get("/path/{name}", handler));
     (api.get("/users/permission/{name}", handler));
     (api.get("/path/{name}/{age}", handler_two));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:test", new $Closure3(this, "$Closure3"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:test2", new $Closure4(this, "$Closure4"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:test3", new $Closure5(this, "$Closure5"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:test4", new $Closure6(this, "$Closure6"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure3(this, "$Closure3"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test2", new $Closure4(this, "$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test3", new $Closure5(this, "$Closure5"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test4", new $Closure6(this, "$Closure6"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "path_vars.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

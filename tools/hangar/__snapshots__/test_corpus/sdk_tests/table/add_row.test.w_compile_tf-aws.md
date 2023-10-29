@@ -21,7 +21,7 @@ module.exports = function({ $__obj__args_______if__obj_args______undefined__thro
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## main.tf.json
@@ -155,16 +155,16 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const table = this.node.root.newAbstract("@winglang/sdk.ex.Table",this, "ex.Table", { name: "users", primaryKey: "name", columns: ({"gender": ex.ColumnType.STRING,"role": ex.ColumnType.STRING}) });
-    const marioInfo = ({"gender": "male","role": "plumber"});
-    const peachInfo = ({"gender": "female","role": "princess"});
+    const table = this.node.root.newAbstract("@winglang/sdk.ex.Table", this, "ex.Table", { name: "users", primaryKey: "name", columns: ({"gender": ex.ColumnType.STRING, "role": ex.ColumnType.STRING}) });
+    const marioInfo = ({"gender": "male", "role": "plumber"});
+    const peachInfo = ({"gender": "female", "role": "princess"});
     (table.addRow("mario", marioInfo));
     (table.addRow("peach", peachInfo));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:addRow", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:addRow", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "add_row.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

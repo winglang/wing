@@ -22,26 +22,22 @@ module.exports = function({ $table }) {
           error = true;
         }
         {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
-      }
-      ;
+      };
       const JSON_PROPERTY_ROLE_DOES_NOT_EXIST_ERROR = "Json property \"role\" does not exist";
       const JSON_PROPERTY_GENDER_DOES_NOT_EXIST_ERROR = "Json property \"gender\" does not exist";
       (await $table.upsert("mario", ({})));
       (await $table.upsert("luigi", ({"role": "ghostbuster"})));
-      (await $table.upsert("peach", ({"gender": "female","role": "princess"})));
+      (await $table.upsert("peach", ({"gender": "female", "role": "princess"})));
       (await assertThrows(JSON_PROPERTY_ROLE_DOES_NOT_EXIST_ERROR, async () => {
         ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })((await $table.get("mario")), "role");
-      }
-      ));
+      }));
       (await assertThrows(JSON_PROPERTY_GENDER_DOES_NOT_EXIST_ERROR, async () => {
         ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })((await $table.get("mario")), "gender");
-      }
-      ));
+      }));
       {((cond) => {if (!cond) throw new Error("assertion failed: table.get(\"luigi\").get(\"role\") == \"ghostbuster\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })((await $table.get("luigi")), "role"),"ghostbuster")))};
       (await assertThrows(JSON_PROPERTY_GENDER_DOES_NOT_EXIST_ERROR, async () => {
         ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })((await $table.get("luigi")), "gender");
-      }
-      ));
+      }));
       {((cond) => {if (!cond) throw new Error("assertion failed: table.get(\"peach\").get(\"name\") == \"peach\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })((await $table.get("peach")), "name"),"peach")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: table.get(\"peach\").get(\"role\") == \"princess\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })((await $table.get("peach")), "role"),"princess")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: table.get(\"peach\").get(\"gender\") == \"female\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })((await $table.get("peach")), "gender"),"female")))};
@@ -49,7 +45,7 @@ module.exports = function({ $table }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## main.tf.json
@@ -175,14 +171,14 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const table = this.node.root.newAbstract("@winglang/sdk.ex.Table",this, "ex.Table", { name: "users", primaryKey: "name", columns: ({"gender": ex.ColumnType.STRING,"role": ex.ColumnType.STRING}) });
-    (table.addRow("mario", ({"gender": "male","role": "plumber"})));
-    (table.addRow("luigi", ({"gender": "male","role": "plumber"})));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:upsert", new $Closure1(this, "$Closure1"));
+    const table = this.node.root.newAbstract("@winglang/sdk.ex.Table", this, "ex.Table", { name: "users", primaryKey: "name", columns: ({"gender": ex.ColumnType.STRING, "role": ex.ColumnType.STRING}) });
+    (table.addRow("mario", ({"gender": "male", "role": "plumber"})));
+    (table.addRow("luigi", ({"gender": "male", "role": "plumber"})));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:upsert", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "upsert.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

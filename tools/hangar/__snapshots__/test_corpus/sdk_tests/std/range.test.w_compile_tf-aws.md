@@ -16,7 +16,7 @@ module.exports = function({ $std_Range }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure10-1.js
@@ -39,7 +39,7 @@ module.exports = function({  }) {
   }
   return $Closure10;
 }
-
+//# sourceMappingURL=./inflight.$Closure10-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -58,7 +58,7 @@ module.exports = function({ $std_Range }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=./inflight.$Closure2-1.js.map
 ```
 
 ## inflight.$Closure3-1.js
@@ -77,7 +77,7 @@ module.exports = function({ $std_Range }) {
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=./inflight.$Closure3-1.js.map
 ```
 
 ## inflight.$Closure4-1.js
@@ -96,7 +96,7 @@ module.exports = function({ $std_Range }) {
   }
   return $Closure4;
 }
-
+//# sourceMappingURL=./inflight.$Closure4-1.js.map
 ```
 
 ## inflight.$Closure5-1.js
@@ -115,7 +115,7 @@ module.exports = function({ $std_Range }) {
   }
   return $Closure5;
 }
-
+//# sourceMappingURL=./inflight.$Closure5-1.js.map
 ```
 
 ## inflight.$Closure6-1.js
@@ -134,7 +134,7 @@ module.exports = function({ $std_Range }) {
   }
   return $Closure6;
 }
-
+//# sourceMappingURL=./inflight.$Closure6-1.js.map
 ```
 
 ## inflight.$Closure7-1.js
@@ -153,7 +153,7 @@ module.exports = function({ $std_Range }) {
   }
   return $Closure7;
 }
-
+//# sourceMappingURL=./inflight.$Closure7-1.js.map
 ```
 
 ## inflight.$Closure8-1.js
@@ -172,7 +172,7 @@ module.exports = function({ $std_Range }) {
   }
   return $Closure8;
 }
-
+//# sourceMappingURL=./inflight.$Closure8-1.js.map
 ```
 
 ## inflight.$Closure9-1.js
@@ -195,7 +195,7 @@ module.exports = function({  }) {
   }
   return $Closure9;
 }
-
+//# sourceMappingURL=./inflight.$Closure9-1.js.map
 ```
 
 ## main.tf.json
@@ -510,37 +510,37 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(1,5,true).join() == \"1,2,3,4,5\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((std.Range.of(1, 5, true)).join()),"1,2,3,4,5")))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:rangeOf", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:rangeOf", new $Closure1(this, "$Closure1"));
     {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(1, 5).join() == std.Range.of(1, 5, false).join()")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((std.Range.of(1, 5)).join()),((std.Range.of(1, 5, false)).join()))))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:defaultRange", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:defaultRange", new $Closure2(this, "$Closure2"));
     {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(1,5,false).join() == \"1,2,3,4\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((std.Range.of(1, 5, false)).join()),"1,2,3,4")))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:rangeOfWithoutLastNumber", new $Closure3(this, "$Closure3"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:rangeOfWithoutLastNumber", new $Closure3(this, "$Closure3"));
     {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(1,5).join() == \"1,2,3,4\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((std.Range.of(1, 5)).join()),"1,2,3,4")))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:rangeOfWithoutLastNumberDefault", new $Closure4(this, "$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:rangeOfWithoutLastNumberDefault", new $Closure4(this, "$Closure4"));
     {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(-3,3,true).join() == \"-3,-2,-1,0,1,2,3\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((std.Range.of((-3), 3, true)).join()),"-3,-2,-1,0,1,2,3")))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:rangeOfWithNegativeRange", new $Closure5(this, "$Closure5"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:rangeOfWithNegativeRange", new $Closure5(this, "$Closure5"));
     {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(-3,3,false).join() == \"-3,-2,-1,0,1,2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((std.Range.of((-3), 3, false)).join()),"-3,-2,-1,0,1,2")))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:rangeOfWithNegativeRangeDefault", new $Closure6(this, "$Closure6"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:rangeOfWithNegativeRangeDefault", new $Closure6(this, "$Closure6"));
     {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(5,0,true).join() == \"5,4,3,2,1,0\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((std.Range.of(5, 0, true)).join()),"5,4,3,2,1,0")))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:rangeOfDecreasingNumbers", new $Closure7(this, "$Closure7"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:rangeOfDecreasingNumbers", new $Closure7(this, "$Closure7"));
     {((cond) => {if (!cond) throw new Error("assertion failed: std.Range.of(5,0,false).join() == \"5,4,3,2,1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((std.Range.of(5, 0, false)).join()),"5,4,3,2,1")))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:rangeOfDecreasingNumbersWithDefault", new $Closure8(this, "$Closure8"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:rangeOfDecreasingNumbersWithDefault", new $Closure8(this, "$Closure8"));
     let i = 0;
     for (const x of $stdlib.std.Range.of(0, 5, false)) {
       i += 1;
     }
     {((cond) => {if (!cond) throw new Error("assertion failed: i==5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(i,5)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:forWithRange", new $Closure9(this, "$Closure9"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:forWithRange", new $Closure9(this, "$Closure9"));
     let n = 0;
     for (const x of $stdlib.std.Range.of(0, 5, true)) {
       n += 1;
     }
     {((cond) => {if (!cond) throw new Error("assertion failed: n==6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(n,6)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:forWithRangeIncludeLastNumber", new $Closure10(this, "$Closure10"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:forWithRangeIncludeLastNumber", new $Closure10(this, "$Closure10"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "range.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

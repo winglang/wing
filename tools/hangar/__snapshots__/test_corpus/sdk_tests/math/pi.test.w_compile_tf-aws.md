@@ -16,7 +16,7 @@ module.exports = function({ $math_Util }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -35,7 +35,7 @@ module.exports = function({ $circumference, $math_Util, $r }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=./inflight.$Closure2-1.js.map
 ```
 
 ## main.tf.json
@@ -148,11 +148,11 @@ class $Root extends $stdlib.std.Resource {
     const r = 10;
     const circumference = new $Closure1(this, "$Closure1");
     {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.PI, decimalPlaces: 3) == 3.142")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round(math.Util.PI, { decimalPlaces: 3 })),3.142)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:PI", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:PI", new $Closure2(this, "$Closure2"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "pi.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

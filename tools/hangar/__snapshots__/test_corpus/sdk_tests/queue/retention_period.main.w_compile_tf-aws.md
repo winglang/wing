@@ -15,13 +15,12 @@ module.exports = function({ $q, $retentionPeriod, $util_Util }) {
       (await $util_Util.sleep($retentionPeriod));
       {((cond) => {if (!cond) throw new Error("assertion failed: util.waitUntil(() => {\n    return q.approxSize() == 0;\n  })")})((await $util_Util.waitUntil(async () => {
         return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $q.approxSize()),0));
-      }
-      )))};
+      })))};
     }
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## main.tf.json
@@ -122,12 +121,12 @@ class $Root extends $stdlib.std.Resource {
     }
     let timeout = (std.Duration.fromSeconds(30));
     let retentionPeriod = (std.Duration.fromSeconds(60));
-    const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue", { timeout: timeout, retentionPeriod: retentionPeriod });
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "retentionPeriod", new $Closure1(this, "$Closure1"), { timeout: (std.Duration.fromSeconds(120)) });
+    const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue", this, "cloud.Queue", { timeout: timeout, retentionPeriod: retentionPeriod });
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "retentionPeriod", new $Closure1(this, "$Closure1"), { timeout: (std.Duration.fromSeconds(120)) });
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "retention_period.main", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

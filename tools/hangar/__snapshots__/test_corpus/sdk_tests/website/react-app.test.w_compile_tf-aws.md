@@ -11,12 +11,12 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      return ({"body": "hi!","status": 200});
+      return ({"body": "hi!", "status": 200});
     }
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -38,7 +38,7 @@ module.exports = function({ $api_url, $http_Util, $preflightVariable, $website_u
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=./inflight.$Closure2-1.js.map
 ```
 
 ## main.tf.json
@@ -510,17 +510,17 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
+    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api", this, "cloud.Api");
     (api.get("/", new $Closure1(this, "$Closure1")));
-    const website = this.node.root.newAbstract("@winglang/sdk.ex.ReactApp",this, "ex.ReactApp", { projectPath: "./react-website", buildDir: "/build/public", useBuildCommand: true });
+    const website = this.node.root.newAbstract("@winglang/sdk.ex.ReactApp", this, "ex.ReactApp", { projectPath: "./react-website", buildDir: "/build/public", useBuildCommand: true });
     const preflightVariable = "preflight variable";
     (website.addEnvironment("apiUrl", api.url));
     (website.addEnvironment("anotherEnvVar", preflightVariable));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:website is working", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:website is working", new $Closure2(this, "$Closure2"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "react-app.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

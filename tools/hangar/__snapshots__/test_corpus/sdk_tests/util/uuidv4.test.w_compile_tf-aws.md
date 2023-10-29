@@ -17,7 +17,7 @@ module.exports = function({ $JSHelperInflight, $util_Util }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## inflight.JSHelper-1.js
@@ -30,7 +30,7 @@ module.exports = function({  }) {
   }
   return JSHelper;
 }
-
+//# sourceMappingURL=./inflight.JSHelper-1.js.map
 ```
 
 ## inflight.JSHelperInflight-1.js
@@ -46,7 +46,7 @@ module.exports = function({  }) {
   }
   return JSHelperInflight;
 }
-
+//# sourceMappingURL=./inflight.JSHelperInflight-1.js.map
 ```
 
 ## main.tf.json
@@ -182,11 +182,11 @@ class $Root extends $stdlib.std.Resource {
     }
     const data = (util.Util.uuidv4());
     {((cond) => {if (!cond) throw new Error("assertion failed: JSHelper.validateUUIDv4(data) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((JSHelper.validateUUIDv4(data)),true)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight uuidv4", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight uuidv4", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "uuidv4.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

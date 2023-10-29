@@ -327,9 +327,9 @@ importers:
       ora:
         specifier: ^5.4.1
         version: 5.4.1
-      source-map-support:
-        specifier: ^0.5.21
-        version: 0.5.21
+      source-map:
+        specifier: ^0.7.4
+        version: 0.7.4
       tar:
         specifier: ^6.2.0
         version: 6.2.0
@@ -13449,7 +13449,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20231027
+      typescript: 5.3.0-dev.20231028
     dev: true
 
   /dset@3.1.2:
@@ -21578,7 +21578,6 @@ packages:
   /source-map@0.7.4:
     resolution: {integrity: sha512-l3BikUxvPOcn5E74dZiq5BGsTb5yEwhaTSzccU6t4sDOH8NWJCstKO5QT2CvtFoK6F0saL7p9xHAqHOlCPJygA==}
     engines: {node: '>= 8'}
-    dev: true
 
   /source-map@0.8.0-beta.0:
     resolution: {integrity: sha512-2ymg6oRBpebeZi9UUNsgQ89bhx01TcTkmNTGnNO88imTmbSgy4nfujrgVEFKWpMTEGA11EDkTt7mqObTPdigIA==}
@@ -22910,8 +22909,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20231027:
-    resolution: {integrity: sha512-YFAOvfXqPu/aZg27Xc6/Ftvbm5YmjgGEsVocBYbh3iZWRoYTcN3kF29ZZIdgRhoqSIN89+W29p4bBChsfVor2g==}
+  /typescript@5.3.0-dev.20231028:
+    resolution: {integrity: sha512-zRGbgR24bwAC/7r5GhbUE2uBPa/PT+LxH4y5A7vVbjKXEfZbkvh/nPwjw1hi6CY1sGOhN3eU21APeNuwvhZfEQ==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

@@ -22,8 +22,7 @@ module.exports = function({ $b }) {
           error = true;
         }
         {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
-      }
-      ;
+      };
       const OBJECT_DOES_NOT_EXIST_ERROR = "Object does not exist (key=file1.json).";
       const jsonObj1 = ({"key1": "value1"});
       (await $b.putJson("file1.json", jsonObj1));
@@ -33,8 +32,7 @@ module.exports = function({ $b }) {
       (await $b.delete("file1.json", { mustExist: true }));
       (await assertThrows(OBJECT_DOES_NOT_EXIST_ERROR, async () => {
         (await $b.delete("file1.json", { mustExist: true }));
-      }
-      ));
+      }));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file2.txt\")")})((await $b.exists("file2.txt")))};
       (await $b.delete("file2.txt"));
       {((cond) => {if (!cond) throw new Error("assertion failed: !b.exists(\"file2.txt\")")})((!(await $b.exists("file2.txt"))))};
@@ -42,7 +40,7 @@ module.exports = function({ $b }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## main.tf.json
@@ -149,13 +147,13 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "cloud.Bucket");
     (b.addObject("file2.txt", "Bar"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:delete", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:delete", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "delete.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

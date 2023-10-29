@@ -17,7 +17,7 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## main.tf.json
@@ -439,13 +439,13 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const w1 = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this, "cloud.Website", { path: "./website" });
-    const w2 = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this, "website-2", { path: "./website" });
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:deploying two websites", new $Closure1(this, "$Closure1"));
+    const w1 = this.node.root.newAbstract("@winglang/sdk.cloud.Website", this, "cloud.Website", { path: "./website" });
+    const w2 = this.node.root.newAbstract("@winglang/sdk.cloud.Website", this, "website-2", { path: "./website" });
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:deploying two websites", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "two_websites.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

@@ -24,22 +24,19 @@ module.exports = function({ $q, $std_Duration, $util_Util }) {
           i = (i + 1);
         }
         return false;
-      }
-      ;
+      };
       {((cond) => {if (!cond) throw new Error("assertion failed: wait(inflight (): bool => { \n    return q.approxSize() == 3;\n  })")})((await wait(async () => {
         return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $q.approxSize()),3));
-      }
-      )))};
+      })))};
       (await $q.purge());
       {((cond) => {if (!cond) throw new Error("assertion failed: wait(inflight (): bool => {\n    return q.approxSize() == 0;\n  })")})((await wait(async () => {
         return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $q.approxSize()),0));
-      }
-      )))};
+      })))};
     }
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## main.tf.json
@@ -137,12 +134,12 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:purge", new $Closure1(this, "$Closure1"));
+    const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue", this, "cloud.Queue");
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:purge", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "purge.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

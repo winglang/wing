@@ -17,7 +17,7 @@ module.exports = function({ $Foo, $myConst }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
 ## inflight.Foo-1.js
@@ -31,7 +31,7 @@ module.exports = function({ $myConst }) {
   }
   return Foo;
 }
-
+//# sourceMappingURL=./inflight.Foo-1.js.map
 ```
 
 ## main.tf.json
@@ -145,11 +145,11 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const myConst = "bang bang";
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight class captures const", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight class captures const", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
 new $App({ outdir: $outdir, name: "inflight_class_capture_const.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 
