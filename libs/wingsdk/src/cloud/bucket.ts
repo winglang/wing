@@ -278,7 +278,7 @@ export interface IBucketClient {
    * @param options Additional options
    * @inflight
    */
-  put(key: string, body: string, options?: BucketPutOptions): void;
+  put(key: string, body: string, options?: BucketPutOptions): Promise<void>;
 
   /**
    * Put a Json object in the bucket.
