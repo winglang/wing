@@ -198,7 +198,7 @@ exports[`create an OnDeploy 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "myondeployFunctionCurrentVersion6BC237542ec8c3443e9c8a4828c1a0470d3ddc6e": {
+    "myondeployFunctionCurrentVersion6BC23754eacaa67806145ecd06a7588c1e753ec3": {
       "Properties": {
         "FunctionName": {
           "Ref": "myondeployFunction47551748",
@@ -265,7 +265,7 @@ exports[`create an OnDeploy 1`] = `
       "Properties": {
         "ExecuteOnHandlerChange": true,
         "HandlerArn": {
-          "Ref": "myondeployFunctionCurrentVersion6BC237542ec8c3443e9c8a4828c1a0470d3ddc6e",
+          "Ref": "myondeployFunctionCurrentVersion6BC23754eacaa67806145ecd06a7588c1e753ec3",
         },
         "InvocationType": "RequestResponse",
         "ServiceToken": {
@@ -530,7 +530,7 @@ exports[`execute OnDeploy after other resources 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "myondeployFunctionCurrentVersion6BC23754785ae905b4d5f020833a3aa94010f77a": {
+    "myondeployFunctionCurrentVersion6BC23754eacaa67806145ecd06a7588c1e753ec3": {
       "Properties": {
         "FunctionName": {
           "Ref": "myondeployFunction47551748",
@@ -600,7 +600,7 @@ exports[`execute OnDeploy after other resources 1`] = `
       "Properties": {
         "ExecuteOnHandlerChange": true,
         "HandlerArn": {
-          "Ref": "myondeployFunctionCurrentVersion6BC23754785ae905b4d5f020833a3aa94010f77a",
+          "Ref": "myondeployFunctionCurrentVersion6BC23754eacaa67806145ecd06a7588c1e753ec3",
         },
         "InvocationType": "RequestResponse",
         "ServiceToken": {
@@ -868,7 +868,7 @@ exports[`execute OnDeploy before other resources 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "myondeployFunctionCurrentVersion6BC237549e7e1db3550b9cd23a489010839e51c7": {
+    "myondeployFunctionCurrentVersion6BC23754eacaa67806145ecd06a7588c1e753ec3": {
       "Properties": {
         "FunctionName": {
           "Ref": "myondeployFunction47551748",
@@ -935,7 +935,7 @@ exports[`execute OnDeploy before other resources 1`] = `
       "Properties": {
         "ExecuteOnHandlerChange": true,
         "HandlerArn": {
-          "Ref": "myondeployFunctionCurrentVersion6BC237549e7e1db3550b9cd23a489010839e51c7",
+          "Ref": "myondeployFunctionCurrentVersion6BC23754eacaa67806145ecd06a7588c1e753ec3",
         },
         "InvocationType": "RequestResponse",
         "ServiceToken": {
