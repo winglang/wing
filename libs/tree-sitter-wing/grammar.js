@@ -201,7 +201,6 @@ module.exports = grammar({
           choice(
             $.initializer,
             $.method_definition,
-            $.inflight_method_definition,
             $.class_field
           )
         )
@@ -320,8 +319,7 @@ module.exports = grammar({
         $._literal,
         $.reference,
         $.call,
-        $.preflight_closure,
-        $.inflight_closure,
+        $.closure,
         $.await_expression,
         $.defer_expression,
         $._collection_literal,
@@ -479,11 +477,11 @@ module.exports = grammar({
         $._semicolon
       ),
 
+    method_modifiers: ($) => repeat(choice($.extern_modifier, $.access_modifier, $.static, $.inflight_specifier)),
+
     method_definition: ($) =>
       seq(
-        optional(field("extern_modifier", $.extern_modifier)),
-        optional(field("access_modifier", $.access_modifier)),
-        optional(field("static", $.static)),
+        field("modifiers", $.method_modifiers),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
         optional($._return_type),
@@ -497,18 +495,6 @@ module.exports = grammar({
         field("parameter_list", $.parameter_list),
         optional($._return_type),
         $._semicolon
-      ),
-
-    inflight_method_definition: ($) =>
-      seq(
-        optional(field("extern_modifier", $.extern_modifier)),
-        optional(field("access_modifier", $.access_modifier)),
-        optional(field("static", $.static)),
-        field("phase_modifier", $.inflight_specifier),
-        field("name", $.identifier),
-        field("parameter_list", $.parameter_list),
-        optional($._return_type),
-        choice(field("block", $.block), $._semicolon)
       ),
 
     access_modifier: ($) => choice("pub", "protected", "internal"),
@@ -605,17 +591,11 @@ module.exports = grammar({
       );
     },
 
-    preflight_closure: ($) =>
-      seq(
-        field("parameter_list", $.parameter_list),
-        optional($._return_type),
-        "=>",
-        field("block", $.block)
-      ),
+    closure_modifiers: ($) => repeat(choice($.inflight_specifier)),
 
-    inflight_closure: ($) =>
+    closure: ($) =>
       seq(
-        $.inflight_specifier,
+        field("modifiers", $.closure_modifiers),
         field("parameter_list", $.parameter_list),
         optional($._return_type),
         "=>",
