@@ -132,7 +132,7 @@ You can also get started by opening the project in GitHub Codespaces.
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/winglang/wing)
 
-We are incredibly grateful to our entire community for fixing bugs and improvements:
+We are incredibly grateful to our entire community for contributing bug fixes and improvements:
 
 <a href="https://github.com/winglang/wing/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=winglang/wing" />
