@@ -19,7 +19,7 @@ source: libs/wingc/src/jsify/tests.rs
 
 ```js
 "use strict";
-module.exports = function({ $_y_at_0__, $x_length }) {
+module.exports = function({ $__obj__args_______if__args_0____0____args_0_____y_length__throw_new_Error__Index_out_of_bounds____return_obj_args_0_______y___0__, $x_length }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -28,7 +28,7 @@ module.exports = function({ $_y_at_0__, $x_length }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: x.length == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($x_length,3)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: y.at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($_y_at_0__,"hello")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: y.at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($__obj__args_______if__args_0____0____args_0_____y_length__throw_new_Error__Index_out_of_bounds____return_obj_args_0_______y___0__,"hello")))};
     }
   }
   return $Closure1;
@@ -55,7 +55,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $_y_at_0__: ${context._lift((y.at(0)))},
+            $__obj__args_______if__args_0____0____args_0_____y_length__throw_new_Error__Index_out_of_bounds____return_obj_args_0_______y___0__: ${context._lift(((obj, args) => { if (args[0] < 0 || args[0] >= y.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(y, [0]))},
             $x_length: ${context._lift(x.length)},
           })
         `;
@@ -76,7 +76,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject((y.at(0)), host, []);
+          $Closure1._registerOnLiftObject(((obj, args) => { if (args[0] < 0 || args[0] >= y.length) throw new Error("Index out of bounds"); return obj[args[0]]; })(y, [0]), host, []);
           $Closure1._registerOnLiftObject(x.length, host, []);
         }
         super._registerOnLift(host, ops);

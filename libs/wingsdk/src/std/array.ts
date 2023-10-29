@@ -152,7 +152,7 @@ export class MutArray {
 
   /**
    * Get the value at the given index
-   * @macro ((obj, args) => { if (args[0] < 0 || args[0] >= $self$.length) throw new Error("Index out of bounds"); return obj[args[0]]; })($self$, [$args$]) 
+   * @macro ((obj, args) => { if (args[0] < 0 || args[0] >= $self$.length) throw new Error("Index out of bounds"); return obj[args[0]]; })($self$, [$args$])
    * @param index index of the value to get
    * @returns the value at the given index
    */
