@@ -1,5 +1,6 @@
 # [bool.test.w](../../../../../../examples/tests/sdk_tests/std/bool.test.w) | compile | tf-aws
 
+<<<<<<< HEAD
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
@@ -29,6 +30,8 @@ module.exports = function({ $PARSE_ERROR, $std_Boolean, $std_Json }) {
 //# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
+=======
+>>>>>>> 5f6a31d348b198f70983d0eef65719ddc0604ef5
 ## main.tf.json
 ```json
 {
@@ -61,6 +64,7 @@ module.exports = function({ $PARSE_ERROR, $std_Boolean, $std_Json }) {
 }
 ```
 
+<<<<<<< HEAD
 ## preflight.js
 ```js
 "use strict";
@@ -135,3 +139,5 @@ new $App({ outdir: $outdir, name: "bool.test", rootConstruct: $Root, plugins: $p
 //# sourceMappingURL=preflight.js.map
 ```
 
+=======
+>>>>>>> 5f6a31d348b198f70983d0eef65719ddc0604ef5

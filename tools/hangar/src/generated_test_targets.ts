@@ -12,7 +12,8 @@ const TERRAFORM_JSON_FILENAME = "main.tf.json";
 export async function compileTest(
   sourceDir: string,
   wingFile: string,
-  env?: Record<string, string>
+  env?: Record<string, string>,
+  includeJavaScriptInSnapshots: boolean = true
 ) {
   const fileMap: Record<string, string> = {};
   const wingBasename = basename(wingFile);
@@ -50,6 +51,9 @@ export async function compileTest(
     }
     const subpath = relative(dotWing, dotFile).replace(/\\/g, "/");
     if (!include.find((f) => subpath.includes(f))) {
+      continue;
+    }
+    if (subpath.endsWith(".js") && !includeJavaScriptInSnapshots) {
       continue;
     }
     let fileContents = await fs.readFile(dotFile, "utf8");

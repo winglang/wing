@@ -1,5 +1,6 @@
 # [public_url.test.w](../../../../../../examples/tests/sdk_tests/bucket/public_url.test.w) | compile | tf-aws
 
+<<<<<<< HEAD
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
@@ -41,6 +42,8 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
 //# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
+=======
+>>>>>>> 5f6a31d348b198f70983d0eef65719ddc0604ef5
 ## main.tf.json
 ```json
 {
@@ -127,6 +130,7 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
 }
 ```
 
+<<<<<<< HEAD
 ## preflight.js
 ```js
 "use strict";
@@ -188,3 +192,5 @@ new $App({ outdir: $outdir, name: "public_url.test", rootConstruct: $Root, plugi
 //# sourceMappingURL=preflight.js.map
 ```
 
+=======
+>>>>>>> 5f6a31d348b198f70983d0eef65719ddc0604ef5

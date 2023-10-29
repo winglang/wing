@@ -50,15 +50,19 @@ export class Topic
         timestamp: new Date().toISOString(),
       });
 
-      await fnClient.invoke(message).catch((err) => {
-        this.context.addTrace({
-          data: {
-            message: `Subscriber error: ${err}`,
-          },
-          sourcePath: this.context.resourcePath,
-          sourceType: TOPIC_FQN,
-          type: TraceType.RESOURCE,
-          timestamp: new Date().toISOString(),
+      // we are not awaiting `fnClient.invoke` so that if the function sleeps,
+      // performs IO, etc. it does not block the other subscribers
+      process.nextTick(() => {
+        fnClient.invoke(message).catch((err) => {
+          this.context.addTrace({
+            data: {
+              message: `Subscriber error: ${err}`,
+            },
+            sourcePath: this.context.resourcePath,
+            sourceType: TOPIC_FQN,
+            type: TraceType.RESOURCE,
+            timestamp: new Date().toISOString(),
+          });
         });
       });
     }

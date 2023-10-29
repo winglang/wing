@@ -1,5 +1,6 @@
 # [my-service.w](../../../../../../examples/tests/sdk_tests/state/my-service.w) | compile | tf-aws
 
+<<<<<<< HEAD
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
@@ -128,3 +129,5 @@ module.exports = function({ $stdlib }) {
 //# sourceMappingURL=preflight.js.map
 ```
 
+=======
+>>>>>>> 5f6a31d348b198f70983d0eef65719ddc0604ef5

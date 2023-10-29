@@ -1,5 +1,6 @@
 # [execute_after.test.w](../../../../../../examples/tests/sdk_tests/on_deploy/execute_after.test.w) | compile | tf-aws
 
+<<<<<<< HEAD
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
@@ -57,6 +58,8 @@ module.exports = function({ $counter }) {
 //# sourceMappingURL=./inflight.$Closure3-1.js.map
 ```
 
+=======
+>>>>>>> 5f6a31d348b198f70983d0eef65719ddc0604ef5
 ## main.tf.json
 ```json
 {
@@ -327,6 +330,7 @@ module.exports = function({ $counter }) {
 }
 ```
 
+<<<<<<< HEAD
 ## preflight.js
 ```js
 "use strict";
@@ -449,3 +453,5 @@ new $App({ outdir: $outdir, name: "execute_after.test", rootConstruct: $Root, pl
 //# sourceMappingURL=preflight.js.map
 ```
 
+=======
+>>>>>>> 5f6a31d348b198f70983d0eef65719ddc0604ef5

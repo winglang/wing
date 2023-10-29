@@ -1,5 +1,6 @@
 # [env.test.w](../../../../../../examples/tests/sdk_tests/util/env.test.w) | compile | tf-aws
 
+<<<<<<< HEAD
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
@@ -21,6 +22,8 @@ module.exports = function({ $NIL, $RANDOM, $util_Util }) {
 //# sourceMappingURL=./inflight.$Closure1-1.js.map
 ```
 
+=======
+>>>>>>> 5f6a31d348b198f70983d0eef65719ddc0604ef5
 ## main.tf.json
 ```json
 {
@@ -53,6 +56,7 @@ module.exports = function({ $NIL, $RANDOM, $util_Util }) {
 }
 ```
 
+<<<<<<< HEAD
 ## preflight.js
 ```js
 "use strict";
@@ -125,3 +129,5 @@ new $App({ outdir: $outdir, name: "env.test", rootConstruct: $Root, plugins: $pl
 //# sourceMappingURL=preflight.js.map
 ```
 
+=======
+>>>>>>> 5f6a31d348b198f70983d0eef65719ddc0604ef5

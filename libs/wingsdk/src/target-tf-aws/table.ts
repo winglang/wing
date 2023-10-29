@@ -79,7 +79,10 @@ export class Table extends ex.Table {
       });
     }
 
-    if (ops.includes(ex.TableInflightMethods.GET)) {
+    if (
+      ops.includes(ex.TableInflightMethods.GET) ||
+      ops.includes(ex.TableInflightMethods.TRYGET)
+    ) {
       host.addPolicyStatements({
         actions: ["dynamodb:GetItem"],
         resources: [this.table.arn],
