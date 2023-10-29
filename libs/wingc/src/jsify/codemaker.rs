@@ -230,7 +230,9 @@ impl CodeMaker {
 	pub fn get_sourcemap(&mut self, root: &str, source_content: &str, generated_path: &str) -> String {
 		let mut sourcemap = SourceMap::new("");
 		let source_num = sourcemap.add_source(root);
-		sourcemap.set_source_content(source_num as usize, source_content);
+
+		// TODO
+		let _ = sourcemap.set_source_content(source_num as usize, source_content);
 
 		for (line_idx, line) in self.lines.iter().enumerate() {
 			let generated_line = line_idx as u32;
@@ -247,7 +249,8 @@ impl CodeMaker {
 
 		let mut buffer: Vec<u8> = vec![];
 
-		sourcemap.write_vlq(&mut buffer);
+		// TODO
+		let _ = sourcemap.write_vlq(&mut buffer);
 
 		let mut json = IndexMap::new();
 
