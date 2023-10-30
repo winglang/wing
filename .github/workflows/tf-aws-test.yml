@@ -76,7 +76,7 @@ jobs:
           else
             targets=("${{env.TARGET}}") 
           fi
-          echo "targets=$(echo $targets | jq -c .) >> $GITHUB_OUTPUT
+          echo "targets=$(echo $targets | jq -c .)" >> $GITHUB_OUTPUT
     outputs:
       tests: ${{ steps.setdirs.outputs.dirs }}
       targets: ${{ steps.settargets.outputs.targets }}
@@ -89,7 +89,7 @@ jobs:
       max-parallel: 10
       matrix:
         test: ${{ fromJson(needs.setup.outputs.tests) }}
-        target: ${{  fromJson(needs.setup.outputs.targets) }}
+        target: ${{ fromJson(needs.setup.outputs.targets) }}
     name: ${{ matrix.test.name }} - ${{ matrix.target }}
     steps:
       - name: Checkout Repository
