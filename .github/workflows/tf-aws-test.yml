@@ -70,12 +70,12 @@ jobs:
       - name: Get targets list
         id: settargets
         run: |
-          if ${{env.TARGET == 'all'}} then
-            target=("tf-aws" "tf-azure")  
+          if [ "${{env.TARGET}}" = "all" ]; then
+            target=("tf-aws" "tf-azure")
           else
-            target=("${{env.TARGET}}") 
+           target=("${{env.TARGET}}")
           fi
-          echo "targets=$(echo ${target[*]} | jq -c .)" >> $GITHUB_OUTPUT
+          echo "targets=$(echo ${target[*]})" >> $GITHUB_OUTPUT
     outputs:
       tests: ${{ steps.setdirs.outputs.dirs }}
       targets: ${{ steps.settargets.outputs.targets }}
