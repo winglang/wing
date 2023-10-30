@@ -67,9 +67,19 @@ jobs:
           processed_dirs=$(echo "{ \"directory\": $dirs }" | jq -c '[ .directory[] | {directory: ., name: (split("/") | last)}]')
           wrapped_dirs=$(echo $processed_dirs | jq -c .)
           echo "dirs=$wrapped_dirs" >> $GITHUB_OUTPUT
+      - name: Get targets list
+        id: settargets
+        shell: bash
+        run: |
+          if [ "${{env.TARGET}}" = "all" ]; then
+            targets=("tf-aws" "tf-azure")  
+          else
+            targets=("${{env.TARGET}}") 
+          fi
+          echo "targets=$targets" >> $GITHUB_OUTPUT
     outputs:
       tests: ${{ steps.setdirs.outputs.dirs }}
-      targets: ${{ env.TARGET == 'all' && fromJson('["tf-aws", "tf-azure"]') || env.TARGET }}
+      targets: ${{ steps.settargets.outputs.targets }}
 
   test-tf-aws:
     needs: setup
