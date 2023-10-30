@@ -69,7 +69,6 @@ jobs:
           echo "dirs=$wrapped_dirs" >> $GITHUB_OUTPUT
       - name: Get targets list
         id: settargets
-        shell: bash
         run: |
           if ${{env.TARGET == 'all'}} then
             target=("tf-aws" "tf-azure")  
