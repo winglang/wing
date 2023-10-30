@@ -205,11 +205,6 @@
       "type": "bundled"
     },
     {
-      "name": "@aws-sdk/is-array-buffer",
-      "version": "3.201.0",
-      "type": "bundled"
-    },
-    {
       "name": "@aws-sdk/s3-request-presigner",
       "version": "3.438.0",
       "type": "bundled"
@@ -220,23 +215,8 @@
       "type": "bundled"
     },
     {
-      "name": "@aws-sdk/util-buffer-from",
-      "version": "3.208.0",
-      "type": "bundled"
-    },
-    {
       "name": "@aws-sdk/util-dynamodb",
       "version": "3.438.0",
-      "type": "bundled"
-    },
-    {
-      "name": "@aws-sdk/util-stream-node",
-      "version": "3.350.0",
-      "type": "bundled"
-    },
-    {
-      "name": "@aws-sdk/util-utf8-node",
-      "version": "3.259.0",
       "type": "bundled"
     },
     {
@@ -256,6 +236,16 @@
     {
       "name": "@google-cloud/storage",
       "version": "6.9.5",
+      "type": "bundled"
+    },
+    {
+      "name": "@smithy/util-stream",
+      "version": "2.0.17",
+      "type": "bundled"
+    },
+    {
+      "name": "@smithy/util-utf8",
+      "version": "2.0.0",
       "type": "bundled"
     },
     {

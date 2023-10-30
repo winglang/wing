@@ -63,13 +63,10 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/client-sqs@3.438.0",
     "@aws-sdk/client-sns@3.438.0",
     "@aws-sdk/types@3.433.0",
-    "@aws-sdk/util-stream-node@3.350.0",
-    "@aws-sdk/util-utf8-node@3.259.0",
+    "@smithy/util-stream@2.0.17",
+    "@smithy/util-utf8@2.0.0",
     "@aws-sdk/s3-request-presigner@3.438.0",
     "@types/aws-lambda",
-    // the following 2 deps are required by @aws-sdk/util-utf8-node
-    "@aws-sdk/util-buffer-from@3.208.0",
-    "@aws-sdk/is-array-buffer@3.201.0",
     "mime-types",
     "mime@^3.0.0",
     // azure client dependencies
