@@ -76,7 +76,7 @@ jobs:
           else
             targets=("${{env.TARGET}}") 
           fi
-          echo "targets=$targets" >> $GITHUB_OUTPUT
+          echo "targets=$(echo $targets | jq -c .) >> $GITHUB_OUTPUT
     outputs:
       tests: ${{ steps.setdirs.outputs.dirs }}
       targets: ${{ steps.settargets.outputs.targets }}
