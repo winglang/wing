@@ -49,43 +49,34 @@ export function deserializeValue(input: string): any {
 }
 
 export function makeSimulatorClient(url: string, handle: string) {
-  return new Proxy(
-    {},
-    {
-      get: function (_target, method, _receiver) {
-        return async function (...args: any[]) {
-          const body: SimulatorServerRequest = {
-            handle,
-            method: method as string,
-            args,
-          };
-          let resp;
-          try {
-            resp = await fetch(url + "/v1/call", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(body),
-              dispatcher: new Agent({
-                keepAliveTimeout: 15 * 60 * 1000,
-                keepAliveMaxTimeout: 15 * 60 * 1000,
-                headersTimeout: 15 * 60 * 1000,
-                bodyTimeout: 15 * 60 * 1000,
-              }),
-            });
-          } catch (e) {
-            throw e;
-          }
+  const get = (_target: any, method: string, _receiver: any) => {
+    return async function (...args: any[]) {
+      const body: SimulatorServerRequest = { handle, method, args };
+      let resp;
+      try {
+        resp = await fetch(url + "/v1/call", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+          dispatcher: new Agent({
+            keepAliveTimeout: 15 * 60 * 1000,
+            keepAliveMaxTimeout: 15 * 60 * 1000,
+            headersTimeout: 15 * 60 * 1000,
+            bodyTimeout: 15 * 60 * 1000,
+          }),
+        });
+      } catch (e) {
+        throw e;
+      }
 
-          let parsed: SimulatorServerResponse = deserializeValue(
-            await resp.text()
-          );
+      let parsed: SimulatorServerResponse = deserializeValue(await resp.text());
 
-          if (parsed.error) {
-            throw new Error(parsed.error);
-          }
-          return parsed.result;
-        };
-      },
-    }
-  );
+      if (parsed.error) {
+        throw new Error(parsed.error);
+      }
+      return parsed.result;
+    };
+  };
+
+  return new Proxy({}, { get });
 }

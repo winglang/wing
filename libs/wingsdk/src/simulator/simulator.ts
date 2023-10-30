@@ -431,58 +431,60 @@ export class Simulator {
       req: IncomingMessage,
       res: ServerResponse
     ) => {
-      if (req.url?.startsWith("/v1/call")) {
-        let body = "";
-        req.on("data", (chunk) => {
-          body += chunk;
-        });
-        req.on("end", () => {
-          const request: SimulatorServerRequest = deserializeValue(body);
-          const { handle, method, args } = request;
-          const resource = this._handles.tryFind(handle);
-          if (!resource) {
-            if (this._running === "starting") {
-              res.writeHead(500, { "Content-Type": "application/json" });
-              res.end(
-                serializeValue({
-                  error: `Resource ${handle} not found. It may not have been initialized yet.`,
-                }),
-                "utf-8"
-              );
-              return;
-            }
-            if (this._running === "stopping") {
-              res.writeHead(500, { "Content-Type": "application/json" });
-              res.end(
-                serializeValue({
-                  error: `Resource ${handle} not found. It may have been cleaned up already.`,
-                }),
-                "utf-8"
-              );
-              return;
-            }
-          }
-
-          (resource as any)
-            [method](...args)
-            .then((result: any) => {
-              const resp: SimulatorServerResponse = { result };
-              res.writeHead(200, { "Content-Type": "application/json" });
-              res.end(serializeValue(resp), "utf-8");
-            })
-            .catch((err: any) => {
-              if (err instanceof Error) {
-                err = err.stack;
-              }
-              const resp: SimulatorServerResponse = { error: err };
-              res.writeHead(500, { "Content-Type": "application/json" });
-              res.end(serializeValue(resp), "utf-8");
-            });
-        });
-      } else {
+      if (!req.url?.startsWith("/v1/call")) {
         res.writeHead(404);
         res.end();
+        return;
       }
+
+      let body = "";
+      req.on("data", (chunk) => {
+        body += chunk;
+      });
+      req.on("end", () => {
+        const request: SimulatorServerRequest = deserializeValue(body);
+        const { handle, method, args } = request;
+        const resource = this._handles.tryFind(handle);
+        if (!resource) {
+          if (this._running === "starting") {
+            res.writeHead(500, { "Content-Type": "application/json" });
+            res.end(
+              serializeValue({
+                error: `Resource ${handle} not found. It may not have been initialized yet.`,
+              }),
+              "utf-8"
+            );
+            return;
+          } else if (this._running === "stopping") {
+            res.writeHead(500, { "Content-Type": "application/json" });
+            res.end(
+              serializeValue({
+                error: `Resource ${handle} not found. It may have been cleaned up already.`,
+              }),
+              "utf-8"
+            );
+            return;
+          } else {
+            throw new Error(`Internal error - resource ${handle} not found.`);
+          }
+        }
+
+        (resource as any)
+          [method](...args)
+          .then((result: any) => {
+            const resp: SimulatorServerResponse = { result };
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(serializeValue(resp), "utf-8");
+          })
+          .catch((err: any) => {
+            if (err instanceof Error) {
+              err = err.stack;
+            }
+            const resp: SimulatorServerResponse = { error: err };
+            res.writeHead(500, { "Content-Type": "application/json" });
+            res.end(serializeValue(resp), "utf-8");
+          });
+      });
     };
 
     // only import "http" when this method is called to reduce the time it takes to load Wing SDK
