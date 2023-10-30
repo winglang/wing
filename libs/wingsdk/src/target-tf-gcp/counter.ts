@@ -54,7 +54,7 @@ export class Counter extends cloud.Counter {
 
   /** @internal */
   public _supportedOps(): string[] {
-    return [];
+    return [cloud.CounterInflightMethods.INC];
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
