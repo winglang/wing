@@ -17,3 +17,110 @@ exports[`printing test reports > resource traces are shown if debug mode is enab
      │ [trace] Invoke (payload=\\"\\").
      └ Error: Object does not exist (key=file.txt)"
 `;
+
+exports[`test options > wing test with output file calls writeResultsToFile 1`] = `
+[
+  {
+    "pass": true,
+    "path": "root/env0/test:put",
+    "traces": [
+      {
+        "data": {
+          "message": "Bundled code (700525 bytes).",
+        },
+        "sourcePath": "root/env0/test:put/Handler",
+        "sourceType": "@winglang/sdk.cloud.Function",
+        "timestamp": "2023-10-30T23:03:09.759Z",
+        "type": "resource",
+      },
+      {
+        "data": {
+          "message": "Put (key=test1.txt).",
+          "status": "success",
+        },
+        "sourcePath": "root/env0/cloud.Bucket",
+        "sourceType": "@winglang/sdk.cloud.Bucket",
+        "timestamp": "2023-10-30T23:03:09.775Z",
+        "type": "resource",
+      },
+      {
+        "data": {
+          "message": "Get (key=test1.txt).",
+          "result": "\\"Foo\\"",
+          "status": "success",
+        },
+        "sourcePath": "root/env0/cloud.Bucket",
+        "sourceType": "@winglang/sdk.cloud.Bucket",
+        "timestamp": "2023-10-30T23:03:09.778Z",
+        "type": "resource",
+      },
+      {
+        "data": {
+          "message": "Invoke (payload=\\"\\").",
+          "status": "success",
+        },
+        "sourcePath": "root/env0/test:put/Handler",
+        "sourceType": "@winglang/sdk.cloud.Function",
+        "timestamp": "2023-10-30T23:03:09.779Z",
+        "type": "resource",
+      },
+    ],
+  },
+]
+`;
+
+exports[`test options > wing test with output file calls writeResultsToFile 2`] = `
+{
+  "duration": 901,
+  "results": {
+    "test.test.w": {
+      "put": {
+        "pass": true,
+        "path": "root/env0/test:put",
+        "traces": [
+          {
+            "data": {
+              "message": "Bundled code (700525 bytes).",
+            },
+            "sourcePath": "root/env0/test:put/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2023-10-30T23:03:09.759Z",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Put (key=test1.txt).",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/cloud.Bucket",
+            "sourceType": "@winglang/sdk.cloud.Bucket",
+            "timestamp": "2023-10-30T23:03:09.775Z",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Get (key=test1.txt).",
+              "result": "\\"Foo\\"",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/cloud.Bucket",
+            "sourceType": "@winglang/sdk.cloud.Bucket",
+            "timestamp": "2023-10-30T23:03:09.778Z",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\\"\\").",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/test:put/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2023-10-30T23:03:09.779Z",
+            "type": "resource",
+          },
+        ],
+      },
+    },
+  },
+}
+`;
