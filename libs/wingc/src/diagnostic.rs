@@ -256,7 +256,7 @@ pub struct Diagnostic {
 }
 
 impl Diagnostic {
-	pub fn new(msg: impl ToString, span: impl Spanned) -> Self {
+	pub fn new(msg: impl ToString, span: &impl Spanned) -> Self {
 		Self {
 			message: msg.to_string(),
 			span: Some(span.span()),
@@ -264,7 +264,7 @@ impl Diagnostic {
 		}
 	}
 
-	fn add_anotation(&mut self, msg: impl ToString, span: impl Spanned) {
+	pub fn add_anotation(&mut self, msg: impl ToString, span: impl Spanned) {
 		self.annotations.push(DiagnosticAnnotation {
 			message: msg.to_string(),
 			span: span.span(),

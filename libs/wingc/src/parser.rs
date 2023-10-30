@@ -318,31 +318,28 @@ pub struct Parser<'a> {
 }
 
 struct ParseErrorBuilder<'s> {
-	node: &'s Node,
+	node: &'s Node<'s>,
 	diag: Diagnostic,
-	parer: &'s Parser<'s>,
+	parser: &'s Parser<'s>,
 }
 
-impl ParseErrorBuilder<'_> {
-	fn new(message: impl ToString, node: &Node, parser: &Parser) -> Self {
+impl<'a> ParseErrorBuilder<'a> {
+	fn new(message: impl ToString, node: &'a Node, parser: &'a Parser) -> Self {
 		Self {
 			node,
-			diag: Diagnostic::new(message, node),
-			parer,
+			diag: Diagnostic::new(message, &parser.node_span(node)),
+			parser,
 		}
 	}
 
 	fn with_annotation(mut self, message: impl ToString, span: impl Spanned) -> Self {
-		self.diag.annotations.push(DiagnosticsAnnotation {
-			message: message.to_string(),
-			span: span.span(),
-		});
+		self.diag.add_anotation(message, span);
 		self
 	}
 
 	fn report(self) {
 		self.diag.report();
-		self.parer.error_nodes.borrow_mut().insert(node.id());
+		self.parser.error_nodes.borrow_mut().insert(self.node.id());
 	}
 }
 
@@ -390,14 +387,12 @@ impl<'s> Parser<'s> {
 		self.build_error(message, node).report();
 	}
 
-	fn build_error(&self, message: impl ToString, node: &Node) -> ParseErrorBuilder {
+	fn build_error<'a>(&'a self, message: impl ToString, node: &'a Node) -> ParseErrorBuilder {
 		ParseErrorBuilder::new(message, node, self)
 	}
 
 	fn with_error<T>(&self, message: impl ToString, node: &Node) -> Result<T, ()> {
-		self.with_error_builder(self.build_error(message, node));
-
-		Err(())
+		self.with_error_builder::<T>(self.build_error(message, node))
 	}
 
 	fn with_error_builder<T>(&self, error_builder: ParseErrorBuilder) -> Result<T, ()> {
@@ -791,7 +786,7 @@ impl<'s> Parser<'s> {
 		}
 
 		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
-		let access = self.build_access_modifier(access_modifier_node)?;
+		let access = self.build_access_modifier(&access_modifier_node)?;
 		if access == AccessModifier::Protected {
 			self.with_error::<Node>(
 				"Structs must be public (\"pub\") or private",
@@ -1033,7 +1028,7 @@ impl<'s> Parser<'s> {
 		}
 
 		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
-		let access = self.build_access_modifier(access_modifier_node)?;
+		let access = self.build_access_modifier(&access_modifier_node)?;
 		if access == AccessModifier::Protected {
 			self.with_error::<Node>(
 				"Enums must be public (\"pub\") or private",
@@ -1048,21 +1043,27 @@ impl<'s> Parser<'s> {
 		})
 	}
 
-	fn get_modifier(&self, modifier: &str, modifiers_node: &Node) -> DiagnosticResult<Option<&Node>> {
+	fn get_modifier<'a>(&'a self, modifier: &str, maybe_modifiers: &'a Option<Node>) -> DiagnosticResult<Option<Node>> {
+		let modifiers_node = if let Some(modifiers_node) = maybe_modifiers {
+			modifiers_node
+		} else {
+			return Ok(None);
+		};
+
 		let found_modifiers = modifiers_node
 			.children(&mut modifiers_node.walk())
 			.filter(|node| node.kind() == modifier)
 			.collect_vec();
 
 		if found_modifiers.len() > 1 {
-			let mut err = self.build_error("Multiple or ambiguous modifiers found", modifier);
+			let mut err = self.build_error("Multiple or ambiguous modifiers found", modifiers_node);
 			for m in found_modifiers.iter() {
 				err = err.with_annotation("possible redundant modifier", self.node_span(m));
 			}
 
-			self.with_error_builder::<Node>(err)?
+			self.with_error_builder::<_>(err)
 		} else {
-			Ok(found_modifiers.first())
+			Ok(found_modifiers.first().map(|x| *x))
 		}
 	}
 
@@ -1100,14 +1101,16 @@ impl<'s> Parser<'s> {
 					// make sure all the parameters have type annotations
 					for param in &func_def.signature.parameters {
 						if matches!(param.type_annotation.kind, TypeAnnotationKind::Inferred) {
-							Diagnostic::new("Missing required type annotation for method signature", param.name).report();
+							Diagnostic::new("Missing required type annotation for method signature", &param.name).report();
 						}
 					}
 
 					methods.push((method_name, func_def))
 				}
 				"class_field" => {
-					let is_static = class_element.child_by_field_name("static").is_some();
+					let modifiers = class_element.child_by_field_name("modifiers");
+
+					let is_static = self.get_modifier("static", &modifiers)?.is_some();
 					if is_static {
 						report_diagnostic(Diagnostic {
 							message: "Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668"
@@ -1119,7 +1122,7 @@ impl<'s> Parser<'s> {
 
 					// if there is no "phase_modifier", then inherit from the class phase
 					// currently "phase_modifier" can only be "inflight".
-					let phase = match class_element.child_by_field_name("phase_modifier") {
+					let phase = match self.get_modifier("inflight_specifier", &modifiers)? {
 						None => class_phase,
 						Some(_) => Phase::Inflight,
 					};
@@ -1130,7 +1133,7 @@ impl<'s> Parser<'s> {
 						reassignable: class_element.child_by_field_name("reassignable").is_some(),
 						is_static,
 						phase,
-						access: self.build_access_modifier(class_element.child_by_field_name("access_modifier"))?,
+						access: self.build_access_modifier(&class_element.child_by_field_name("access_modifier"))?,
 					})
 				}
 				"initializer" => {
@@ -1217,7 +1220,7 @@ impl<'s> Parser<'s> {
 			if method.0.name == "constructor" {
 				Diagnostic::new(
 					"Reserved method name. Initializers are declared with \"init\"",
-					method.0,
+					&method.0,
 				)
 				.report();
 			}
@@ -1316,7 +1319,7 @@ impl<'s> Parser<'s> {
 		}
 
 		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
-		let access = self.build_access_modifier(access_modifier_node)?;
+		let access = self.build_access_modifier(&access_modifier_node)?;
 		if access == AccessModifier::Protected {
 			self.with_error::<Node>(
 				"Classes must be public (\"pub\") or private",
@@ -1365,11 +1368,6 @@ impl<'s> Parser<'s> {
 						methods.push((method_name, func_sig))
 					}
 				}
-				"class_field" => {
-					self
-						.with_error::<Node>("Properties are not supported in interfaces", &interface_element)
-						.err();
-				}
 				"ERROR" => {
 					self
 						.with_error::<Node>("Expected interface element node", &interface_element)
@@ -1405,7 +1403,7 @@ impl<'s> Parser<'s> {
 		}
 
 		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
-		let access = self.build_access_modifier(access_modifier_node)?;
+		let access = self.build_access_modifier(&access_modifier_node)?;
 		if access == AccessModifier::Protected {
 			self.with_error::<Node>(
 				"Interfaces must be public (\"pub\") or private",
@@ -1468,7 +1466,7 @@ impl<'s> Parser<'s> {
 		func_def_node: &Node,
 		phase: Phase,
 	) -> DiagnosticResult<FunctionDefinition> {
-		let modifiers = func_def_node.child_by_field_name("modifiers").unwrap();
+		let modifiers = func_def_node.child_by_field_name("modifiers");
 
 		let phase = match self.get_modifier("inflight_specifier", &modifiers)? {
 			Some(_) => Phase::Inflight,
@@ -1479,11 +1477,11 @@ impl<'s> Parser<'s> {
 			// Anonymous closures are always static
 			true
 		} else {
-			self.get_modifier("static", modifiers_node)?
+			self.get_modifier("static", &modifiers)?.is_some()
 		};
 
 		let signature = self.build_function_signature(func_def_node, phase)?;
-		let statements = if let Some(external) = self.get_modifier("extern_modifier", modifiers_node)? {
+		let statements = if let Some(external) = self.get_modifier("extern_modifier", &modifiers)? {
 			let node_text = self.node_text(&external.named_child(0).unwrap());
 			let file_path = Utf8Path::new(&node_text[1..node_text.len() - 1]);
 			let file_path = normalize_path(file_path, Some(&Utf8Path::new(&self.source_name)));
@@ -1494,8 +1492,8 @@ impl<'s> Parser<'s> {
 			// Make sure there's no statements block for extern functions
 			if let Some(body) = &func_def_node.child_by_field_name("block") {
 				self
-					.build_error("Extern functions cannot have a body", external)
-					.with_annotation("Body defined here", body)
+					.build_error("Extern functions cannot have a body", &external)
+					.with_annotation("Body defined here", self.node_span(body))
 					.report();
 			}
 
@@ -1583,9 +1581,9 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn build_access_modifier(&self, modifiers: &Node) -> DiagnosticResult<AccessModifier> {
+	fn build_access_modifier(&self, modifiers: &Option<Node>) -> DiagnosticResult<AccessModifier> {
 		match self.get_modifier("access_modifier", modifiers)? {
-			Some(n) => match self.node_text(n) {
+			Some(n) => match self.node_text(&n) {
 				"pub" => Ok(AccessModifier::Public),
 				"protected" => Ok(AccessModifier::Protected),
 				other => panic!("Unexpected access modifier {}", other),
