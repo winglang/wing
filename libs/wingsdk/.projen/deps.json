@@ -254,6 +254,11 @@
       "type": "bundled"
     },
     {
+      "name": "@google-cloud/datastore",
+      "version": "8.2.2",
+      "type": "bundled"
+    },
+    {
       "name": "@google-cloud/storage",
       "version": "6.9.5",
       "type": "bundled"
