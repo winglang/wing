@@ -204,6 +204,7 @@ exports[`create an OnDeploy 2`] = `
 [
   "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
+  "Bundled code (370 bytes).",
   "super duper success",
   "Invoke (payload=\\"\\").",
   "OnDeploy invoked.",

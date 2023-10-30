@@ -213,7 +213,7 @@ my_buckets: [(function() {
   if (!simulatorUrl) {
     throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
   }
-  return require(\\"@winglang/sdk\\").simulator.makeSimulatorClient(simulatorUrl, handle);
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
 })(),(function() {
   let handle = process.env.BUCKET_HANDLE_300e8055;
   if (!handle) {
@@ -223,7 +223,7 @@ my_buckets: [(function() {
   if (!simulatorUrl) {
     throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
   }
-  return require(\\"@winglang/sdk\\").simulator.makeSimulatorClient(simulatorUrl, handle);
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
 })()]
 })).handle(event);
 };",
@@ -1751,7 +1751,7 @@ my_map: new Map([[\\"foo\\",(function() {
   if (!simulatorUrl) {
     throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
   }
-  return require(\\"@winglang/sdk\\").simulator.makeSimulatorClient(simulatorUrl, handle);
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
 })()],[\\"bar\\",(function() {
   let handle = process.env.BUCKET_HANDLE_300e8055;
   if (!handle) {
@@ -1761,7 +1761,7 @@ my_map: new Map([[\\"foo\\",(function() {
   if (!simulatorUrl) {
     throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
   }
-  return require(\\"@winglang/sdk\\").simulator.makeSimulatorClient(simulatorUrl, handle);
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
 })()]])
 })).handle(event);
 };",
@@ -3108,7 +3108,7 @@ my_struct: {\\"bucky\\": (function() {
   if (!simulatorUrl) {
     throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
   }
-  return require(\\"@winglang/sdk\\").simulator.makeSimulatorClient(simulatorUrl, handle);
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
 })(),\\"mapy\\": new Map([[\\"foo\\",(function() {
   let handle = process.env.BUCKET_HANDLE_300e8055;
   if (!handle) {
@@ -3118,7 +3118,7 @@ my_struct: {\\"bucky\\": (function() {
   if (!simulatorUrl) {
     throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
   }
-  return require(\\"@winglang/sdk\\").simulator.makeSimulatorClient(simulatorUrl, handle);
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
 })()],[\\"bar\\",(function() {
   let handle = process.env.BUCKET_HANDLE_0120daf4;
   if (!handle) {
@@ -3128,7 +3128,7 @@ my_struct: {\\"bucky\\": (function() {
   if (!simulatorUrl) {
     throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
   }
-  return require(\\"@winglang/sdk\\").simulator.makeSimulatorClient(simulatorUrl, handle);
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
 })()]]),\\"arry\\": {\\"boom\\": [(function() {
   let handle = process.env.BUCKET_HANDLE_ea7944ef;
   if (!handle) {
@@ -3138,7 +3138,7 @@ my_struct: {\\"bucky\\": (function() {
   if (!simulatorUrl) {
     throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
   }
-  return require(\\"@winglang/sdk\\").simulator.makeSimulatorClient(simulatorUrl, handle);
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
 })(),(function() {
   let handle = process.env.BUCKET_HANDLE_1d7ab674;
   if (!handle) {
@@ -3148,7 +3148,7 @@ my_struct: {\\"bucky\\": (function() {
   if (!simulatorUrl) {
     throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
   }
-  return require(\\"@winglang/sdk\\").simulator.makeSimulatorClient(simulatorUrl, handle);
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
 })()],},}
 })).handle(event);
 };",

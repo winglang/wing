@@ -77,6 +77,15 @@ exports[`run all tests > single test 1`] = `
     "traces": [
       {
         "data": {
+          "message": "Bundled code (353 bytes).",
+        },
+        "sourcePath": "root/test/Handler",
+        "sourceType": "@winglang/sdk.cloud.Function",
+        "timestamp": "<TIMESTAMP>",
+        "type": "resource",
+      },
+      {
+        "data": {
           "message": "hi",
         },
         "sourcePath": "root/test/Handler",
@@ -105,6 +114,15 @@ exports[`run single test > happy path 1`] = `
   "pass": true,
   "path": "root/test",
   "traces": [
+    {
+      "data": {
+        "message": "Bundled code (353 bytes).",
+      },
+      "sourcePath": "root/test/Handler",
+      "sourceType": "@winglang/sdk.cloud.Function",
+      "timestamp": "<TIMESTAMP>",
+      "type": "resource",
+    },
     {
       "data": {
         "message": "hi",
@@ -144,6 +162,15 @@ exports[`run single test > test failure 1`] = `
   "pass": false,
   "path": "root/test",
   "traces": [
+    {
+      "data": {
+        "message": "Bundled code (409 bytes).",
+      },
+      "sourcePath": "root/test/Handler",
+      "sourceType": "@winglang/sdk.cloud.Function",
+      "timestamp": "<TIMESTAMP>",
+      "type": "resource",
+    },
     {
       "data": {
         "message": "I am about to fail",
