@@ -135,6 +135,19 @@ export interface ITraceSubscriber {
 }
 
 /**
+ * The simulator can transition between these states:
+ * ┌─────────┐    ┌─────────┐
+ * │ stopped ├───►│starting │
+ * └─────────┘    └────┬────┘
+ *      ▲              │
+ *      │              ▼
+ * ┌────┴────┐    ┌─────────┐
+ * │stopping │◄───┤ running │
+ * └─────────┘    └─────────┘
+ */
+type RunningState = "starting" | "running" | "stopping" | "stopped";
+
+/**
  * A simulator that can be used to test your application locally.
  */
 export class Simulator {
@@ -143,7 +156,7 @@ export class Simulator {
   private readonly simdir: string;
 
   // fields that change between simulation runs / reloads
-  private _running: boolean;
+  private _running: RunningState;
   private readonly _handles: HandleManager;
   private _traces: Array<Trace>;
   private readonly _traceSubscribers: Array<ITraceSubscriber>;
@@ -159,7 +172,7 @@ export class Simulator {
     this._tree = new Tree(treeData);
     this._connections = connectionData;
 
-    this._running = false;
+    this._running = "stopped";
     this._handles = new HandleManager();
     this._traces = new Array();
     this._traceSubscribers = new Array();
@@ -215,11 +228,12 @@ export class Simulator {
    * Start the simulator.
    */
   public async start(): Promise<void> {
-    if (this._running) {
+    if (this._running !== "stopped") {
       throw new Error(
         "A simulation is already running. Did you mean to call `await simulator.stop()` first?"
       );
     }
+    this._running = "starting";
 
     // create a copy of the resource list to be used as an init queue.
     const initQueue: (BaseResourceSchema & { _attempts?: number })[] = [
@@ -253,18 +267,25 @@ export class Simulator {
       }
     }
 
-    this._running = true;
+    this._running = "running";
   }
 
   /**
    * Stop the simulation and clean up all resources.
    */
   public async stop(): Promise<void> {
-    if (!this._running) {
+    if (this._running === "starting") {
+      throw new Error("Cannot stop a simulation that is still starting.");
+    }
+    if (this._running === "stopping") {
+      throw new Error("There is already a stop operation in progress.");
+    }
+    if (this._running === "stopped") {
       throw new Error(
         "There is no running simulation to stop. Did you mean to call `await simulator.start()` first?"
       );
     }
+    this._running = "stopping";
 
     for (const resourceConfig of this._config.resources.slice().reverse()) {
       const handle = resourceConfig.attrs?.handle;
@@ -294,7 +315,7 @@ export class Simulator {
     this._server!.closeAllConnections();
 
     this._handles.reset();
-    this._running = false;
+    this._running = "stopped";
   }
 
   /**
@@ -418,7 +439,29 @@ export class Simulator {
         req.on("end", () => {
           const request: SimulatorServerRequest = deserializeValue(body);
           const { handle, method, args } = request;
-          const resource = this._handles.find(handle);
+          const resource = this._handles.tryFind(handle);
+          if (!resource) {
+            if (this._running === "starting") {
+              res.writeHead(500, { "Content-Type": "application/json" });
+              res.end(
+                serializeValue({
+                  error: `Resource ${handle} not found. It may not have been initialized yet.`,
+                }),
+                "utf-8"
+              );
+              return;
+            }
+            if (this._running === "stopping") {
+              res.writeHead(500, { "Content-Type": "application/json" });
+              res.end(
+                serializeValue({
+                  error: `Resource ${handle} not found. It may have been cleaned up already.`,
+                }),
+                "utf-8"
+              );
+              return;
+            }
+          }
 
           (resource as any)
             [method](...args)
@@ -683,11 +726,15 @@ class HandleManager {
   }
 
   public find(handle: string): ISimulatorResourceInstance {
-    const instance = this.handles.get(handle);
+    const instance = this.tryFind(handle);
     if (!instance) {
       throw new Error(`No resource found with handle "${handle}".`);
     }
     return instance;
+  }
+
+  public tryFind(handle: string): ISimulatorResourceInstance | undefined {
+    return this.handles.get(handle);
   }
 
   public deallocate(handle: string): ISimulatorResourceInstance {
