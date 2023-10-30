@@ -89,7 +89,7 @@ jobs:
       max-parallel: 10
       matrix:
         test: ${{ fromJson(needs.setup.outputs.tests) }}
-        target: ${{ needs.setup.outputs.targets }}
+        target: ${{  fromJson(needs.setup.outputs.targets) }}
     name: ${{ matrix.test.name }} - ${{ matrix.target }}
     steps:
       - name: Checkout Repository
