@@ -26,11 +26,10 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
         ...props.environmentVariables,
         WING_SIMULATOR_URL: this.context.serverUrl,
       },
-      context: { $simulator: this.context },
-      log: (_level, message) => {
+      log: (internal, _level, message) => {
         this.context.addTrace({
           data: { message },
-          type: TraceType.LOG,
+          type: internal ? TraceType.RESOURCE : TraceType.LOG,
           sourcePath: this.context.resourcePath,
           sourceType: SERVICE_FQN,
           timestamp: new Date().toISOString(),
