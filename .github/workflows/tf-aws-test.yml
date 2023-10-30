@@ -71,11 +71,11 @@ jobs:
         id: settargets
         run: |
           if [ "${{env.TARGET}}" = "all" ]; then
-            target=("tf-aws" "tf-azure")
+            target='["tf-aws", "tf-azure"]'
           else
-           target=("${{env.TARGET}}")
+           target='["${{env.TARGET}}"]'
           fi
-          echo "targets=$(echo ${target[*]})" >> $GITHUB_OUTPUT
+          echo "targets=$target" >> $GITHUB_OUTPUT
     outputs:
       tests: ${{ steps.setdirs.outputs.dirs }}
       targets: ${{ steps.settargets.outputs.targets }}
