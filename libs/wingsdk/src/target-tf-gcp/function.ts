@@ -160,6 +160,8 @@ export class Function extends cloud.Function {
           app.projectId
         );
         break;
+      case ResourceTypes.COUNTER:
+        break;
       case ResourceTypes.FUNCTION:
         throw new NotImplementedError(
           "Function permissions not implemented yet"
