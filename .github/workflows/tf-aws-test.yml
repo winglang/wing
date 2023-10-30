@@ -71,7 +71,7 @@ jobs:
         id: settargets
         shell: bash
         run: |
-          if [ "${{env.TARGET}}" = "all" ]; then
+          if ${{env.TARGET == 'all'}} then
             target=("tf-aws" "tf-azure")  
           else
             target=("${{env.TARGET}}") 
