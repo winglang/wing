@@ -1013,6 +1013,6 @@ This is a list of features we will consider for wing as it evolves:-
 * [Hindley–Milner type system](https://en.wikipedia.org/wiki/Hindley%E2%80%93Milner_type_system)
 * [Funarg problem](https://en.wikipedia.org/wiki/Funarg_problem)
 * [Multi-stage programming](https://en.wikipedia.org/wiki/Multi-stage_programming)
-* [Compiler Books](https://nitter.net/mikhailshilkov/status/1492801675068952576)
+* [Compiler Books](https://x.com/mikhailshilkov/status/1492801675068952576?s=21)
 * [Comprehending Monads](https://groups.csail.mit.edu/pag/OLD/reading-group/wadler-monads.pdf)
 * [Zaplib](https://zaplib.com/) (deprecated -- worth reading)
