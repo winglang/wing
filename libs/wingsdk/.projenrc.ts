@@ -8,7 +8,7 @@ const CDKTF_PROVIDERS = [
   "aws@~>4.65.0",
   "random@~>3.5.1",
   "azurerm@~>3.54.0",
-  "google@~>4.63.1",
+  "google@~>5.3.0",
 ];
 
 const PUBLIC_MODULES = ["std", "http", "util", "aws", "math", "regex", "sim"];

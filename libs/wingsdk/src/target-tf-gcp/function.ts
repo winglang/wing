@@ -24,6 +24,7 @@ const FUNCTION_NAME_OPTS: NameOptions = {
 export enum ResourceTypes {
   BUCKET = "Bucket",
   FUNCTION = "Function",
+  COUNTER = "Counter",
 }
 
 export enum ActionTypes {
@@ -31,6 +32,8 @@ export enum ActionTypes {
   STORAGE_READ_WRITE = "roles/storage.objectUser",
   FUNCTION_INVOKER = "roles/cloudfunctions.invoker",
   FUNCTION_VIEWER = "roles/cloudfunctions.viewer",
+  DATASTORE_READ = "roles/datastore.viewer",
+  DATASTORE_READ_WRITE = "roles/datastore.user",
 }
 
 interface IFunctionPermissions {
