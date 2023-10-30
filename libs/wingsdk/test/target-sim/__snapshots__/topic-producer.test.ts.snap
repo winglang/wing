@@ -7,7 +7,6 @@ exports[`publishing messages to topic 1`] = `
   "@winglang/sdk.cloud.Topic created.",
   "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Function created.",
-  "Bundled code (695993 bytes).",
   "Publish (message=ABC).",
   "Sending message (message=ABC, subscriber=sim-1).",
   "Invoke (payload=\\"ABC\\").",

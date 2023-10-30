@@ -70,7 +70,6 @@ test("create a service with a on stop method", async () => {
       .filter((v) => v.sourceType == cloud.SERVICE_FQN)
       .map((trace) => trace.data.message)
   ).toEqual([
-    expect.stringContaining("Bundled code"),
     "start!",
     "@winglang/sdk.cloud.Service created.",
     "stop!",
@@ -146,7 +145,6 @@ test("start and stop service", async () => {
       .map((trace) => trace.data.message)
   ).toEqual([
     "@winglang/sdk.cloud.Service created.",
-    expect.stringContaining("Bundled code"),
     "start!",
     "stop!",
     "start!",
@@ -182,12 +180,7 @@ test("consecutive start and stop service", async () => {
       .listTraces()
       .filter((v) => v.sourceType == cloud.SERVICE_FQN)
       .map((trace) => trace.data.message)
-  ).toEqual([
-    "@winglang/sdk.cloud.Service created.",
-    expect.stringContaining("Bundled code"),
-    "start!",
-    "stop!",
-  ]);
+  ).toEqual(["@winglang/sdk.cloud.Service created.", "start!", "stop!"]);
 });
 
 class ServiceHandler extends Resource implements cloud.IServiceHandler {

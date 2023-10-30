@@ -196,7 +196,6 @@ exports[`invoke function fails 1`] = `
 [
   "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
-  "Bundled code (727 bytes).",
   "Invoke (payload=\\"{\\\\\\"name\\\\\\":\\\\\\"alice\\\\\\"}\\").",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.std.TestRunner deleted.",
@@ -397,7 +396,6 @@ exports[`invoke function succeeds 1`] = `
 [
   "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
-  "Bundled code (727 bytes).",
   "Invoke (payload=\\"{\\\\\\"name\\\\\\":\\\\\\"Alice\\\\\\"}\\").",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.std.TestRunner deleted.",
@@ -598,7 +596,6 @@ exports[`invoke function with environment variables 1`] = `
 [
   "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
-  "Bundled code (727 bytes).",
   "Invoke (payload=\\"{\\\\\\"name\\\\\\":\\\\\\"Alice\\\\\\"}\\").",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.std.TestRunner deleted.",
@@ -801,7 +798,6 @@ exports[`invoke function with process.exit(1) 1`] = `
 [
   "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
-  "Bundled code (351 bytes).",
   "Invoke (payload=\\"{}\\").",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.std.TestRunner deleted.",

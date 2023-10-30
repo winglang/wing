@@ -98,7 +98,9 @@ export class Sandbox {
     const bundle = createBundle(this.entrypoint, workdir);
     const code = await readFile(bundle.entrypointPath, "utf-8");
     const bundleSize = Buffer.byteLength(code, "utf-8");
-    this.options.log?.(true, "log", `Bundled code (${bundleSize} bytes).`);
+    if (process.env.DEBUG) {
+      this.options.log?.(true, "log", `Bundled code (${bundleSize} bytes).`);
+    }
 
     // this will add stuff to the "exports" object within our context
     vm.runInContext(code, this.context, {
