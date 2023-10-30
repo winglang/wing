@@ -46,6 +46,8 @@ export class Counter extends cloud.Counter {
     );
 
     host.addEnvironment(this.envName(), this.table.tableName);
+
+    super.onLift(host, ops);
   }
 
   /** @internal */

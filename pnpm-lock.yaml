@@ -806,6 +806,12 @@ importers:
       jszip:
         specifier: ^3.10.1
         version: 3.10.1
+      linkify-react:
+        specifier: ^4.1.1
+        version: 4.1.1(linkifyjs@4.1.1)(react@18.2.0)
+      linkifyjs:
+        specifier: ^4.1.1
+        version: 4.1.1
       lodash.debounce:
         specifier: ^4.0.8
         version: 4.0.8
@@ -13446,7 +13452,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20231022
+      typescript: 5.3.0-dev.20231030
     dev: true
 
   /dset@3.1.2:
@@ -17965,6 +17971,20 @@ packages:
     dependencies:
       uc.micro: 1.0.6
     dev: true
+
+  /linkify-react@4.1.1(linkifyjs@4.1.1)(react@18.2.0):
+    resolution: {integrity: sha512-2K9Y1cUdvq40dFWqCJ//X+WP19nlzIVITFGI93RjLnA0M7KbnxQ/ffC3AZIZaEIrLangF9Hjt3i0GQ9/anEG5A==}
+    peerDependencies:
+      linkifyjs: ^4.0.0
+      react: '>= 15.0.0'
+    dependencies:
+      linkifyjs: 4.1.1
+      react: 18.2.0
+    dev: false
+
+  /linkifyjs@4.1.1:
+    resolution: {integrity: sha512-zFN/CTVmbcVef+WaDXT63dNzzkfRBKT1j464NJQkV7iSgJU0sLBus9W0HBwnXK13/hf168pbrx/V/bjEHOXNHA==}
+    dev: false
 
   /load-json-file@4.0.0:
     resolution: {integrity: sha512-Kx8hMakjX03tiGTLAIdJ+lL0htKnXjEZN6hk/tozf/WOuYGdZBJrZ+rCJRbVCugsjB3jMLn9746NsQIf5VjBMw==}
@@ -22907,8 +22927,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20231022:
-    resolution: {integrity: sha512-g8ICZidqxW5HGoyFFTyMvbHd4EbZlTSXILKT71uyPagM4asj/3JRaOw0A+xgHSf4PrLHAGAbJ7P/JgtbgZNgcw==}
+  /typescript@5.3.0-dev.20231030:
+    resolution: {integrity: sha512-azWrF0lAiu8cBHNr6yq3RDkU/DtQScvT48ea3Ngq6oXJ/GPO0n96wCFSRQA5UbZlVVf3fAAqsUfvOdohRbrPVg==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
