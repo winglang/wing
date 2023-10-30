@@ -182,7 +182,6 @@ export const DefaultLayout = ({
                   className={classNames(
                     "absolute h-full w-full bg-white/70 dark:bg-slate-600/70",
                     "transition-all",
-                    deferredLoading && "opacity-100 z-50",
                     !deferredLoading && "opacity-0 -z-10",
                     theme.text2,
                   )}
@@ -192,7 +191,7 @@ export const DefaultLayout = ({
                   selectedLogTypeFilters={selectedLogTypeFilters}
                   setSelectedLogTypeFilters={setSelectedLogTypeFilters}
                   clearLogs={() => setLogsTimeFilter(Date.now())}
-                  isLoading={loading}
+                  isLoading={false} // display logs also while in loading state
                   onSearch={setSearchText}
                 />
                 <div className="relative h-full">
