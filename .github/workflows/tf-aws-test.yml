@@ -12,6 +12,14 @@ on:
         type: string
         default: main
         description: "Ref to checkout. Must be present in the repo input."
+      target:
+        type: choice
+        default: all
+        description: "target to run at, can be one or all of them"
+        options:
+          - all
+          - tf-aws
+          - tf-azure
 env:
   AWS_REGION: "us-east-1"
   NODE_VERSION: "18.16.0"
@@ -19,9 +27,10 @@ env:
   # or use the latest remote npm version
   LOCAL_BUILD: ${{ github.workflow == 'build' }}
   # indicates if the action triggered from a workflow_dispatch
-  MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
+  MANUAL: ${{ github.event_name != 'workflow_dispatch' }}
   REPO: ${{ inputs.repo || github.repository }}
   REF: ${{ inputs.ref || github.ref }}
+  TARGET: ${{ inputs.target || 'all' }}
   PNPM_VERSION: "8.6.3"
   AZURE_LOCATION: "East Us"
   GOOGLE_PROJECT_ID: "sdk-spec-tests" # for the future
@@ -60,6 +69,7 @@ jobs:
           echo "dirs=$wrapped_dirs" >> $GITHUB_OUTPUT
     outputs:
       tests: ${{ steps.setdirs.outputs.dirs }}
+      targets: ${{ env.TARGET == 'all' && fromJson('["tf-aws", "tf-azure"]') || env.TARGET }}
 
   test-tf-aws:
     needs: setup
@@ -69,7 +79,7 @@ jobs:
       max-parallel: 10
       matrix:
         test: ${{ fromJson(needs.setup.outputs.tests) }}
-        target: ["tf-aws", "tf-azure"]
+        target: ${{ needs.setup.outputs.targets }}
     name: ${{ matrix.test.name }} - ${{ matrix.target }}
     steps:
       - name: Checkout Repository
