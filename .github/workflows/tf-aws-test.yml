@@ -72,11 +72,11 @@ jobs:
         shell: bash
         run: |
           if [ "${{env.TARGET}}" = "all" ]; then
-            targets=("tf-aws" "tf-azure")  
+            target=("tf-aws" "tf-azure")  
           else
-            targets=("${{env.TARGET}}") 
+            target=("${{env.TARGET}}") 
           fi
-          echo "targets=$(echo $targets | jq -c .)" >> $GITHUB_OUTPUT
+          echo "targets=$(echo ${target[*]} | jq -c .)" >> $GITHUB_OUTPUT
     outputs:
       tests: ${{ steps.setdirs.outputs.dirs }}
       targets: ${{ steps.settargets.outputs.targets }}
