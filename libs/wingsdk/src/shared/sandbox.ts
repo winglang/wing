@@ -97,6 +97,7 @@ export class Sandbox {
     const workdir = await mkdtemp(path.join(tmpdir(), "wing-bundles-"));
     const bundle = createBundle(this.entrypoint, workdir);
     const code = await readFile(bundle.entrypointPath, "utf-8");
+    console.error(bundle.entrypointPath);
 
     // this will add stuff to the "exports" object within our context
     vm.runInContext(code, this.context, {

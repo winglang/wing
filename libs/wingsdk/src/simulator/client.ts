@@ -3,7 +3,7 @@ import type {
   SimulatorServerRequest,
   SimulatorServerResponse,
 } from "./simulator";
-import { Datetime } from "../std";
+import { Datetime } from "../std/datetime";
 
 // TODO: more robust serialization scheme
 

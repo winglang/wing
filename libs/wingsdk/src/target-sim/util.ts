@@ -52,7 +52,7 @@ export function makeSimulatorJsClient(filename: string, resource: Resource) {
   if (!simulatorUrl) {
     throw new Error("Missing environment variable: WING_SIMULATOR_URL");
   }
-  return require("@winglang/sdk").simulator.makeSimulatorClient(simulatorUrl, handle);
+  return require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, handle);
 })()`;
 }
 
