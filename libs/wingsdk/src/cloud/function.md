@@ -25,19 +25,33 @@ For performance reasons, most cloud providers impose a timeout on functions, aft
 
 ## Usage
 
+A function can be invoked in two ways:
+
+* **invoke()** - Executes the function with a payload and waits for the result.
+* **invokeAsync()** - Kicks off the execution of the function with a payload and returns immediately while the function is running.
+
 ```ts playground
 bring cloud;
+bring util;
 
 // defining a cloud.Function resource
 let countWords = new cloud.Function(inflight (s: str): str => {
   return "${s.split(" ").length}";
 }) as "countWords";
 
+let longTask = new cloud.Function(inflight () => {
+  util.sleep(30s);
+  log("done!");
+});
+
 new cloud.Function(inflight () => {
   let sentence = "I am a sentence with 7 words";
   // invoking cloud.Function from inflight context
   let wordsCount = countWords.invoke(sentence);
   log("'${sentence}' has ${wordsCount} words");
+
+  longTask.invokeAsync();
+  log("task started");
 }) as "Invoke Me";
 ```
 
