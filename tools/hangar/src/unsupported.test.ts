@@ -35,7 +35,7 @@ test("unsupported resource in target", async ({ expect }) => {
     target/main.tfgcp.[REDACTED].tmp/.wing/preflight.js:14
        }
        const $App = $stdlib.core.App.for<PATH>;
-    >> new $App({ outdir: $outdir, name: \\"main\\", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+    >> new $App({ outdir: $outdir, name: \\"main\\", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], traceUsage: process.env['WING_TRACE_USAGE'] }).synth();
        
     "
   `);
