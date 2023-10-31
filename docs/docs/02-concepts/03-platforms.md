@@ -95,7 +95,7 @@ Wing's platform architecture is not just limited to the built-in platforms that 
 
 There are many reasons why you might want to create a custom platform. Here are a few examples:
 
-- Specialized Requirements: PErhaps your organization utilizes a particular cloud provider that isn't supported by Wing, or maybe you've built your own cloud infrastructure. Custom platforms allow you to tailor the deployment process precisely to your needs.
+- Custom infrastructure requirements: Wing's built-in platforms are opinionated about how various resources are implemented. With custom platforms, you can fully control the infrastructure configuration of each cloud resource based on the needs, policies and constraints of your team.
 
 - Enhanced Security: Some organizations have stringent security requirements. With custom platforms, you can embed additional security checks, audits, or encryption layers to suit these needs.
 
