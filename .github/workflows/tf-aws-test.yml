@@ -141,7 +141,9 @@ jobs:
         run: |
           cd examples/tests/sdk_tests
           npm install
-
+      - name: Installing aws-cdk globally
+        if: ${{ matrix.target == 'awscdk'}}
+        run: npm i -g aws-cdk
       - name: Configure AWS credentials
         if: ${{ matrix.target == 'tf-aws' || matrix.target == 'awscdk'}}
         uses: aws-actions/configure-aws-credentials@v2
