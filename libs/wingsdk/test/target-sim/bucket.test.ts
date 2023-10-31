@@ -795,6 +795,24 @@ test("copy objects within the bucket", async () => {
   );
 });
 
+test("copy non-existent object within the bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Bucket._newBucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  const SRC_KEY = "SRC/KEY";
+  const DST_KEY = "DST/KEY";
+
+  // THEN
+  await expect(() => client.copy(SRC_KEY, DST_KEY)).rejects.toThrowError(
+    /Unable to copy. Source object does not exist/
+  );
+  await s.stop();
+});
+
 // Deceided to seperate this feature in a different release,(see https://github.com/winglang/wing/issues/4143)
 
 // test("Given a bucket when reaching to a non existent key, signed url it should throw an error", async () => {
