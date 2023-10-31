@@ -27,6 +27,12 @@ exports[`bucket is public 1`] = `
             },
           ],
         },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": false,
+          "BlockPublicPolicy": false,
+          "IgnorePublicAcls": false,
+          "RestrictPublicBuckets": false,
+        },
       },
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Delete",
@@ -2128,6 +2134,12 @@ exports[`bucket with two preflight files 1`] = `
             },
           ],
         },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": false,
+          "BlockPublicPolicy": false,
+          "IgnorePublicAcls": false,
+          "RestrictPublicBuckets": false,
+        },
         "Tags": [
           {
             "Key": "aws-cdk:cr-owned:573ee45c",
@@ -2472,6 +2484,12 @@ exports[`bucket with two preflight objects 1`] = `
               },
             },
           ],
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": false,
+          "BlockPublicPolicy": false,
+          "IgnorePublicAcls": false,
+          "RestrictPublicBuckets": false,
         },
         "Tags": [
           {

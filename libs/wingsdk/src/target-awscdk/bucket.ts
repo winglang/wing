@@ -237,7 +237,14 @@ export function createEncryptedBucket(
 
   return new S3Bucket(scope, name, {
     encryption: BucketEncryption.S3_MANAGED,
-    blockPublicAccess: isPublic ? undefined : BlockPublicAccess.BLOCK_ALL,
+    blockPublicAccess: isPublic
+      ? {
+          blockPublicAcls: false,
+          blockPublicPolicy: false,
+          ignorePublicAcls: false,
+          restrictPublicBuckets: false,
+        }
+      : BlockPublicAccess.BLOCK_ALL,
     publicReadAccess: isPublic ? true : false,
     removalPolicy: RemovalPolicy.DESTROY,
     autoDeleteObjects: isTestEnvironment ? true : false,
