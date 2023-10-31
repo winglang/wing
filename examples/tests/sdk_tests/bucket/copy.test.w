@@ -4,6 +4,19 @@ bring util;
 let b = new cloud.Bucket();
 
 test "copy()" {
+  let assertThrows = (expected: str, block: (): void) => {
+    let var error = false;
+    try {
+      block();
+    } catch actual {
+      assert(actual == expected);
+      error = true;
+    }
+    assert(error);
+  };
+  let UNEXISTING_KEY = "no-such-file.txt";
+  let OBJECT_DOES_NOT_EXIST_ERROR = "Object does not exist (srcKey=${UNEXISTING_KEY}).";
+
   let KEY1 = "file1.main.w";
   let VALUE1 = "bring cloud;";
   let KEY2 = "file2.txt";
@@ -29,4 +42,9 @@ test "copy()" {
   assert(file2SrcMetadata.contentType == file2DstMetadata.contentType);
   assert(file2SrcMetadata.size == file2DstMetadata.size);
   assert(file2SrcMetadata.lastModified != file2DstMetadata.lastModified);
+  assert(b.get(KEY2) == b.get("dir/${KEY2}"));
+
+  assertThrows(OBJECT_DOES_NOT_EXIST_ERROR, () => {
+    b.copy(UNEXISTING_KEY, KEY1);
+  });
 }
