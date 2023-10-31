@@ -3,7 +3,7 @@ const aws = require("@cdktf/provider-aws");
 const BUCKET_FQN = "@winglang/sdk.cloud.Bucket";
 
 exports.Platform = class ReplaceTFBucket {
-  model = "tf-aws";
+  target = "tf-aws";
 
   newInstance(type, scope, id, props) {
     if (type === BUCKET_FQN) {

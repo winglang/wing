@@ -30,7 +30,7 @@
  */
 
 exports.Platform = class TFBackend {
-  model = "tf-*";
+  target = "tf-*";
   postSynth(config) {
     if (!process.env.TF_BACKEND) {throw new Error("env var TF_BACKEND not set")}
   

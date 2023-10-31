@@ -126,7 +126,7 @@ class ReplicateS3Aspect {
 }
 
 exports.Platform = class ReplicateS3 {
-  model = "tf-aws";
+  target = "tf-aws";
   preSynth(app) {
     cdktf.Aspects.of(app).add(new ReplicateS3Aspect());
   }

@@ -24,7 +24,7 @@ class PermissionBoundaryAspect {
 }
 
 exports.Platform = class PermissionBoundary {
-  model = "tf-aws";
+  target = "tf-aws";
   preSynth(app) {
     if (!process.env.PERMISSION_BOUNDARY_ARN) {throw new Error("env var PERMISSION_BOUNDARY_ARN not set")}
     cdktf.Aspects.of(app).add(new PermissionBoundaryAspect(process.env.PERMISSION_BOUNDARY_ARN))
