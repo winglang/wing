@@ -54,7 +54,7 @@ export class FunctionClient implements IFunctionClient {
 
     if (response.StatusCode !== 202) {
       console.error("Error: " + response.FunctionError);
-      console.error(fromUtf8(response.Payload));
+      console.error(response.Payload ? toUtf8(response.Payload) : "");
       throw new Error(
         `Failed to enqueue event. Received status code: ${response.StatusCode}`
       );
