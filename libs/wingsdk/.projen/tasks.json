@@ -298,6 +298,12 @@
           "exec": "cat API.md >> ../../docs/docs/04-standard-library/cloud/service.md"
         },
         {
+          "exec": "jsii-docgen -o API.md -l wing --submodule cloud/stream"
+        },
+        {
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/stream.md"
+        },
+        {
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/topic"
         },
         {
