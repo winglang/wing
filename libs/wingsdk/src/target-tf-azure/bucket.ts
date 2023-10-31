@@ -112,7 +112,6 @@ export class Bucket extends cloud.Bucket {
       cloud.BucketInflightMethods.TRY_GET,
       cloud.BucketInflightMethods.TRY_GET_JSON,
       cloud.BucketInflightMethods.TRY_DELETE,
-      cloud.BucketInflightMethods.COPY,
     ];
   }
 
