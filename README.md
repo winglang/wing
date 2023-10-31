@@ -79,13 +79,13 @@ You are welcome to read more about it [here](https://www.winglang.io/docs/faq/wh
 
 ## What makes Wing a good fit for cloud development? 🌟
 
-Wing was built from scratch to make it easy for building applications on any cloud.
+Wing was built from scratch to make it easy to build applications on any cloud.
 It includes an assembly of different features that serve that purpose:
 
 * [Cloud services](https://www.winglang.io/docs/faq/supported-clouds-services-and-engines/supported-services) as first-class citizens, with [phase modifiers](https://www.winglang.io/contributing/rfcs/language-spec#13-phase-modifiers) for describing infrastructure and runtime code ([`preflight` and `inflight`](https://www.winglang.io/docs/concepts/inflights)). 
 * [Wing Cloud Library](https://www.winglang.io/docs/category/cloud-library) provides a standard set of resources that lets you write cloud portable code.
 * [Compiler plugins](https://www.winglang.io/docs/tools/compiler-plugins) that keep you in control by allowing you to customize the infrastructure definitions and run policy checks.
-* Use any resource in the Terraform ecosystem as first-class citizen in your app.
+* Use any resource in the Terraform ecosystem as a first-class citizen in your app.
 * [JavaScript interoperability](https://www.winglang.io/contributing/rfcs/language-spec#5-interoperability).
 * Automatic generation of IAM policies and other cloud mechanics based on source code.
 * [Wing Console](https://www.winglang.io/docs/start-here/installation#wing-console) - a visual application-centric operations and management console, that lets you interact with...
