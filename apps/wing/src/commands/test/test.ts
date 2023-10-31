@@ -101,7 +101,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
 }
 
 async function testOne(entrypoint: string, options: TestOptions) {
-  const model = process.env.WING_TARGET; // TODO: try to just call method
+  const target = process.env.WING_TARGET; // TODO: try to just call method
   const synthDir = await withSpinner(
     `Compiling ${generateTestName(entrypoint)} to ${model}...`,
     async () =>
