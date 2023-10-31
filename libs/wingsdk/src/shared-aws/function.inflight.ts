@@ -53,6 +53,8 @@ export class FunctionClient implements IFunctionClient {
     const response = await this.lambdaClient.send(command);
 
     if (response.StatusCode !== 202) {
+      console.error("Error: " + response.FunctionError);
+      console.error(fromUtf8(response.Payload));
       throw new Error(
         `Failed to enqueue event. Received status code: ${response.StatusCode}`
       );
