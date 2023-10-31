@@ -1,5 +1,5 @@
 import { InvokeCommand, LambdaClient } from "@aws-sdk/client-lambda";
-import { fromUtf8 } from "@aws-sdk/util-utf8-node";
+import { fromUtf8 } from "@smithy/util-utf8";
 import { mockClient } from "aws-sdk-client-mock";
 import { test, expect, beforeEach } from "vitest";
 import {
