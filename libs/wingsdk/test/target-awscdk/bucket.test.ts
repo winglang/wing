@@ -54,7 +54,16 @@ test("bucket with two preflight objects", () => {
 
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
-  template.resourceCountIs("Custom::CDKBucketDeployment", 2);
+  template.resourceCountIs("Custom::CDKBucketDeployment", 1);
+  template.hasResourceProperties(
+    "Custom::CDKBucketDeployment",
+    Match.objectLike({
+      SourceObjectKeys: Match.arrayWith([
+        Match.stringLikeRegexp(".zip"),
+        Match.stringLikeRegexp(".zip"),
+      ]),
+    })
+  );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
@@ -68,7 +77,16 @@ test("bucket with two preflight files", () => {
 
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
-  template.resourceCountIs("Custom::CDKBucketDeployment", 2);
+  template.resourceCountIs("Custom::CDKBucketDeployment", 1);
+  template.hasResourceProperties(
+    "Custom::CDKBucketDeployment",
+    Match.objectLike({
+      SourceObjectKeys: Match.arrayWith([
+        Match.stringLikeRegexp(".zip"),
+        Match.stringLikeRegexp(".zip"),
+      ]),
+    })
+  );
   expect(template.toJSON()).toMatchSnapshot();
 });
 
