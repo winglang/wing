@@ -90,10 +90,11 @@ module.exports = function({  }) {
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   const blah = require("./preflight.inner-2.js")({ $stdlib });
+  const cloud = $stdlib.cloud;
   const util = $stdlib.util;
   class Foo extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
+    constructor($scope, $id, ) {
+      super($scope, $id);
     }
     foo() {
       return "foo";
@@ -118,7 +119,7 @@ module.exports = function({ $stdlib }) {
         })())
       `;
     }
-    _getInflightOps() {
+    _supportedOps() {
       return ["$inflight_init"];
     }
   }
@@ -134,10 +135,11 @@ module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   const util = $stdlib.util;
   class Bar extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
+    constructor($scope, $id, ) {
+      super($scope, $id);
     }
     bar() {
+      (util.Util.nanoid());
       return "bar";
     }
     static _toInflightType(context) {
@@ -157,13 +159,13 @@ module.exports = function({ $stdlib }) {
         })())
       `;
     }
-    _getInflightOps() {
+    _supportedOps() {
       return ["$inflight_init"];
     }
   }
   class Foo extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
+    constructor($scope, $id, ) {
+      super($scope, $id);
     }
     static _toInflightType(context) {
       return `
@@ -182,7 +184,7 @@ module.exports = function({ $stdlib }) {
         })())
       `;
     }
-    _getInflightOps() {
+    _supportedOps() {
       return ["$inflight_init"];
     }
   }
@@ -214,15 +216,15 @@ const std = $stdlib.std;
 const w = require("./preflight.widget-1.js")({ $stdlib });
 const subdir = require("./preflight.subdir2-5.js")({ $stdlib });
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
-    const widget1 = new w.Widget(this,"w.Widget");
+  constructor($scope, $id) {
+    super($scope, $id);
+    const widget1 = new w.Widget(this, "w.Widget");
     {((cond) => {if (!cond) throw new Error("assertion failed: widget1.compute() == 42")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((widget1.compute()),42)))};
-    const foo = new subdir.Foo(this,"subdir.Foo");
+    const foo = new subdir.Foo(this, "subdir.Foo");
     {((cond) => {if (!cond) throw new Error("assertion failed: foo.foo() == \"foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((foo.foo()),"foo")))};
-    const bar = new subdir.Bar(this,"subdir.Bar");
+    const bar = new subdir.Bar(this, "subdir.Bar");
     {((cond) => {if (!cond) throw new Error("assertion failed: bar.bar() == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((bar.bar()),"bar")))};
-    const widget2 = new subdir.inner.Widget(this,"subdir.inner.Widget");
+    const widget2 = new subdir.inner.Widget(this, "subdir.inner.Widget");
     {((cond) => {if (!cond) throw new Error("assertion failed: widget2.compute() == 42")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((widget2.compute()),42)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: foo.checkWidget(widget2) == 1379")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((foo.checkWidget(widget2)),1379)))};
   }
@@ -252,8 +254,8 @@ module.exports = function({ $stdlib }) {
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   class Widget extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
+    constructor($scope, $id, ) {
+      super($scope, $id);
     }
     compute() {
       return 42;
@@ -278,7 +280,7 @@ module.exports = function({ $stdlib }) {
         })())
       `;
     }
-    _getInflightOps() {
+    _supportedOps() {
       return ["$inflight_init"];
     }
   }

@@ -1,5 +1,5 @@
 import { InvokeCommand, LambdaClient, LogType } from "@aws-sdk/client-lambda";
-import { fromUtf8, toUtf8 } from "@aws-sdk/util-utf8-node";
+import { fromUtf8, toUtf8 } from "@smithy/util-utf8";
 import { IFunctionClient } from "../cloud";
 import { Trace, TraceType } from "../std";
 
@@ -97,7 +97,7 @@ export function parseLogs(logs: string, sourcePath: string) {
       const trace: Trace = {
         data: { message },
         timestamp,
-        sourceType: "wingsdk.cloud.Function",
+        sourceType: "@winglang/sdk.cloud.Function",
         sourcePath,
         type: TraceType.LOG,
       };

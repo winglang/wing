@@ -73,7 +73,7 @@ export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
         return;
       }
 
-      const resourceName = trace.sourceType.replace("wingsdk.cloud.", "");
+      const resourceName = trace.sourceType.replace("@winglang/sdk.cloud.", "");
       if (!trace.data.message.includes("(")) {
         return;
       }

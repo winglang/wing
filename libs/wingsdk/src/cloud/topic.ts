@@ -39,7 +39,7 @@ export abstract class Topic extends Resource {
   }
 
   /** @internal */
-  public _getInflightOps(): string[] {
+  public _supportedOps(): string[] {
     return [TopicInflightMethods.PUBLISH];
   }
 

@@ -7,8 +7,10 @@ module.exports = function({  }) {
   class C {
     async method() {
     }
-    async $inflight_init() {
-      this.field = 12;
+    constructor(){
+      this.$inflight_init = async () => {
+        this.field = 12;
+      }
     }
   }
   return C;
@@ -57,11 +59,11 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class C extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
       static _toInflightType(context) {
         return `
@@ -80,7 +82,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["field", "method", "$inflight_init"];
       }
       _registerOnLift(host, ops) {

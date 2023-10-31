@@ -29,7 +29,7 @@ Winglang addresses these pains by letting you work at a higher level of abstract
 We also provide you with a set of tools that let you test your code locally, significantly faster than before.
 
 <p align="center">
-  <img src="./logo/demo.gif" alt="Wing Demo" height="360px">
+  <img src="./apps/wing/logo/demo.gif" alt="Wing Demo" height="360px">
 </p>
 
 Wing is built by [Elad Ben-Israel](https://github.com/eladb), the guy behind the [AWS CDK](https://github.com/aws/aws-cdk), the gang at the [Wing Cloud team](https://www.wing.cloud/) and an amazing [community](https://t.winglang.io/slack) of contributors (also known as Wingnuts).
@@ -42,7 +42,7 @@ Cloud applications are fundamentally different from applications that run on a s
 they are distributed systems that rely on cloud infrastructure to achieve their goals.
 
 In order to be able to express both infrastructure and application logic in a safe and unified programming model, 
-Winglang has two execution phases: *preflight* for infrastructure definitions and *inflight* is for runtime code.
+Winglang has two execution phases: *preflight* for infrastructure definitions and *inflight* for runtime code.
 
 Preflight code is executed *during compilation* and produces the infrastructure configuration for your app (e.g. **Terraform**, **CloudFormation**, etc).
 Inflight code is compiled into **JavaScript** and executed within cloud compute platforms in Node.js environments.
@@ -79,7 +79,7 @@ You are welcome to read more about it [here](https://www.winglang.io/docs/faq/wh
 
 ## What makes Wing a good fit for cloud development? 🌟
 
-Wing was built from the ground up to make it easy for building applications on any cloud.
+Wing was built from scratch to make it easy for building applications on any cloud.
 It includes an assembly of different features that serve that purpose:
 
 * [Cloud services](https://www.winglang.io/docs/faq/supported-clouds-services-and-engines/supported-services) as first-class citizens, with [phase modifiers](https://www.winglang.io/contributing/rfcs/language-spec#13-phase-modifiers) for describing infrastructure and runtime code ([`preflight` and `inflight`](https://www.winglang.io/docs/concepts/inflights)). 

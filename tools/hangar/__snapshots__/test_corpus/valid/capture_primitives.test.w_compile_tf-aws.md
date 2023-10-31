@@ -179,11 +179,11 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -210,7 +210,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -231,8 +231,8 @@ class $Root extends $stdlib.std.Resource {
     const myBool = true;
     const mySecondBool = false;
     const myDur = (std.Duration.fromSeconds(600));
-    const handler = new $Closure1(this,"$Closure1");
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",handler);
+    const handler = new $Closure1(this, "$Closure1");
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "cloud.Function", handler);
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

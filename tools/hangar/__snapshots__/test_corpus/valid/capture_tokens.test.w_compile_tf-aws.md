@@ -195,12 +195,12 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class MyResource extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        this.api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        this.api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
         this.url = this.api.url;
       }
       static _toInflightType(context) {
@@ -222,7 +222,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["isValidUrl", "foo", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -239,8 +239,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -261,7 +261,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -272,8 +272,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -296,7 +296,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -308,11 +308,11 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const r = new MyResource(this,"MyResource");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight class",new $Closure1(this,"$Closure1"));
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
+    const r = new MyResource(this, "MyResource");
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight class", new $Closure1(this, "$Closure1"));
+    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
     const url = api.url;
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight globals",new $Closure2(this,"$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight globals", new $Closure2(this, "$Closure2"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

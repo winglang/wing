@@ -349,6 +349,12 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\ninterface ICounterClient\n```\n---\nInflight interface for `Counter`.\n### Methods\n- `dec` — `inflight (amount: num?, key: str?): num` — Decrement the counter, returning the previous value.\n- `inc` — `inflight (amount: num?, key: str?): num` — Increments the counter atomically by a certain amount and returns the previous value.\n- `peek` — `inflight (key: str?): num` — Get the current value of the counter.\n- `set` — `inflight (value: num, key: str?): void` — Set a counter to a given value."
   sortText: ii|ICounterClient
+- label: IDomainClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IDomainClient\n```\n---\nInflight interface for `Domain`."
+  sortText: ii|IDomainClient
 - label: IFunctionClient
   kind: 8
   documentation:

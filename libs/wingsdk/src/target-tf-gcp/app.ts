@@ -1,4 +1,3 @@
-import { Construct } from "constructs";
 import { Bucket } from "./bucket";
 import { Function } from "./function";
 import { Table } from "./table";
@@ -6,6 +5,7 @@ import { GoogleProvider } from "../.gen/providers/google/provider";
 import { RandomProvider } from "../.gen/providers/random/provider";
 import { BUCKET_FQN, FUNCTION_FQN } from "../cloud";
 import { AppProps as CdktfAppProps } from "../core";
+import { NotImplementedError } from "../core/errors";
 import { TABLE_FQN } from "../ex";
 import { CdktfApp } from "../shared-tf/app";
 
@@ -81,26 +81,23 @@ export class App extends CdktfApp {
     if (props.rootConstruct) {
       const Root = props.rootConstruct;
       if (this.isTestEnvironment) {
-        throw new Error("wing test not supported for tf-gcp target yet");
+        throw new NotImplementedError(
+          "wing test not supported for tf-gcp target yet"
+        );
       } else {
         new Root(this, "Default");
       }
     }
   }
 
-  protected tryNew(
-    fqn: string,
-    scope: Construct,
-    id: string,
-    ...args: any[]
-  ): any {
+  protected typeForFqn(fqn: string): any {
     switch (fqn) {
       case BUCKET_FQN:
-        return new Bucket(scope, id, args[0]);
+        return Bucket;
       case FUNCTION_FQN:
-        return new Function(scope, id, args[0], args[1]);
+        return Function;
       case TABLE_FQN:
-        return new Table(scope, id, args[0]);
+        return Table;
     }
 
     return undefined;

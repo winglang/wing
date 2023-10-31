@@ -30,19 +30,7 @@ export abstract class Redis extends Resource {
   }
 
   /** @internal */
-  public _getInflightOps(): string[] {
-    return [
-      RedisInflightMethods.RAW_CLIENT,
-      RedisInflightMethods.URL,
-      RedisInflightMethods.SET,
-      RedisInflightMethods.GET,
-      RedisInflightMethods.HSET,
-      RedisInflightMethods.HGET,
-      RedisInflightMethods.SADD,
-      RedisInflightMethods.SMEMBERS,
-      RedisInflightMethods.DEL,
-    ];
-  }
+  public abstract _supportedOps(): string[];
 }
 
 /**

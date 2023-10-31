@@ -6,6 +6,7 @@ import { Construct } from "constructs";
 import stringify from "safe-stable-stringify";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
+import { DynamodbTable } from "./dynamodb-table";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
@@ -35,7 +36,9 @@ import {
   Connections,
 } from "../core";
 import { PluginManager } from "../core/plugin-manager";
+import { DYNAMODB_TABLE_FQN } from "../ex";
 import { TEST_RUNNER_FQN } from "../std";
+import { Util } from "../util";
 
 /**
  * AWS-CDK App props
@@ -71,7 +74,7 @@ export class App extends CoreApp {
   protected readonly testRunner: TestRunner;
 
   constructor(props: CdkAppProps) {
-    const stackName = props.stackName ?? process.env.CDK_STACK_NAME;
+    let stackName = props.stackName ?? process.env.CDK_STACK_NAME;
     if (stackName === undefined) {
       throw new Error(
         "A CDK stack name must be specified through the CDK_STACK_NAME environment variable."
@@ -80,6 +83,10 @@ export class App extends CoreApp {
 
     const outdir = props.outdir ?? ".";
     const cdkOutdir = join(outdir, ".");
+
+    if (props.isTestEnvironment) {
+      stackName += Util.sha256(outdir.replace(/\.tmp$/, "")).slice(-8);
+    }
 
     mkdirSync(cdkOutdir, { recursive: true });
 
@@ -149,42 +156,40 @@ export class App extends CoreApp {
     return this.synthedOutput;
   }
 
-  protected tryNew(
-    fqn: string,
-    scope: Construct,
-    id: string,
-    ...args: any[]
-  ): any {
+  protected typeForFqn(fqn: string): any {
     switch (fqn) {
       case FUNCTION_FQN:
-        return new Function(scope, id, args[0], args[1]);
+        return Function;
 
       case BUCKET_FQN:
-        return new Bucket(scope, id, args[0]);
+        return Bucket;
 
       case COUNTER_FQN:
-        return new Counter(scope, id, args[0]);
+        return Counter;
 
       case SCHEDULE_FQN:
-        return new Schedule(scope, id, args[0]);
+        return Schedule;
 
       case QUEUE_FQN:
-        return new Queue(scope, id, args[0]);
+        return Queue;
 
       case TOPIC_FQN:
-        return new Topic(scope, id, args[0]);
+        return Topic;
 
       case TEST_RUNNER_FQN:
-        return new TestRunner(scope, id, args[0]);
+        return TestRunner;
 
       case SECRET_FQN:
-        return new Secret(scope, id, args[0]);
+        return Secret;
 
       case ON_DEPLOY_FQN:
-        return new OnDeploy(scope, id, args[0], args[1]);
+        return OnDeploy;
 
       case WEBSITE_FQN:
-        return new Website(scope, id, args[0]);
+        return Website;
+
+      case DYNAMODB_TABLE_FQN:
+        return DynamodbTable;
     }
     return undefined;
   }
