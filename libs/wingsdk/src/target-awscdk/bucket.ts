@@ -31,6 +31,7 @@ const EVENTS = {
 export class Bucket extends cloud.Bucket {
   private readonly bucket: S3Bucket;
   private readonly public: boolean;
+  private bucketDeployment?: BucketDeployment;
 
   constructor(scope: Construct, id: string, props: cloud.BucketProps = {}) {
     super(scope, id, props);
@@ -41,10 +42,14 @@ export class Bucket extends cloud.Bucket {
   }
 
   public addObject(key: string, body: string): void {
-    new BucketDeployment(this, `S3Object-${key}`, {
-      destinationBucket: this.bucket,
-      sources: [Source.data(key, body)],
-    });
+    if (!this.bucketDeployment) {
+      this.bucketDeployment = new BucketDeployment(this, `S3Object-${key}`, {
+        destinationBucket: this.bucket,
+        sources: [Source.data(key, body)],
+      });
+    } else {
+      this.bucketDeployment.addSource(Source.data(key, body));
+    }
   }
 
   protected eventHandlerLocation(): string {
