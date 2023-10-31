@@ -174,6 +174,10 @@ async function main() {
       "-o, --output-file <outputFile>",
       "File name to write test results to (file extension is required, supports only .json at the moment)"
     )
+    .option(
+      "--trace-usage",
+      "Trace the usage of resources, methods, and properties in a dedicated file in the output dir"
+    )
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("test", "test/test"));

@@ -185,7 +185,7 @@ impl<'a> JSifier<'a> {
 			output.line("const $App = $stdlib.core.App.for(process.env.WING_TARGET);".to_string());
 			let app_name = source_path.file_stem().unwrap();
 			output.line(format!(
-				"new $App({{ outdir: {}, name: \"{}\", rootConstruct: {}, plugins: {}, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }}).synth();",
+				"new $App({{ outdir: {}, name: \"{}\", rootConstruct: {}, plugins: {}, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], traceUsage: process.env['WING_TRACE_USAGE'] }}).synth();",
 				OUTDIR_VAR, app_name, ROOT_CLASS, PLUGINS_VAR, ENV_WING_IS_TEST
 			));
 		} else if is_directory {

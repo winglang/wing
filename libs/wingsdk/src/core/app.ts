@@ -1,3 +1,5 @@
+import { writeFileSync } from "fs";
+import { resolve } from "path";
 import { Construct } from "constructs";
 import { NotImplementedError } from "./errors";
 import { Tokens } from "./tokens";
@@ -60,6 +62,12 @@ export interface AppProps {
    * @default Default
    */
   readonly rootId?: string;
+
+  /**
+   *  Whether resources' methods and props usage is  traced
+   * @default false
+   */
+  readonly traceUsage?: boolean;
 }
 
 /**
@@ -129,17 +137,28 @@ export abstract class App extends Construct {
   public abstract readonly isTestEnvironment: boolean;
 
   /**
+   * Whether or not this app's resources' methods and properties should be traced
+   */
+  public readonly traceUsage: boolean;
+
+  /**
    * Tokens handling for this app.
    * @internal
    */
   public abstract readonly _tokens: Tokens;
+
+  /**
+   * A summary of methods and property usage for each resource time
+   * @internal
+   */
+  public _usageContext: Map<string, Set<string>> = new Map();
 
   constructor(scope: Construct, id: string, props: AppProps) {
     super(scope, id);
     if (!props.entrypointDir) {
       throw new Error("Missing environment variable: WING_SOURCE_DIR");
     }
-
+    this.traceUsage = props.traceUsage ?? false;
     this.entrypointDir = props.entrypointDir;
   }
 
@@ -260,6 +279,24 @@ export abstract class App extends Construct {
       }
     }
   }
+
+  /**
+   * Write the usage context into a file in the out dir
+   * @internal
+   */
+  public _writeAppUsage(): void {
+    if (this.traceUsage) {
+      const context: Record<string, string[]> = {};
+      for (const key of this._usageContext.keys()) {
+        context[key] = Array.from(this._usageContext.get(key) ?? []);
+      }
+
+      writeFileSync(
+        resolve(this.outdir, "usage_context.json"),
+        JSON.stringify(context, null, 2)
+      );
+    }
+  }
 }
 
 export function preSynthesizeAllConstructs(app: App): void {
@@ -268,4 +305,6 @@ export function preSynthesizeAllConstructs(app: App): void {
       (c as IResource)._preSynthesize();
     }
   }
+
+  app._writeAppUsage();
 }

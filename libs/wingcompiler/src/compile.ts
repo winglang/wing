@@ -48,6 +48,8 @@ export interface CompileOptions {
 
   // target directory for the output files
   readonly targetDir?: string;
+
+  readonly traceUsage?: boolean;
 }
 
 /**
@@ -80,7 +82,8 @@ function resolveSynthDir(
     log?.(err);
     throw new Error("Source file cannot be found");
   }
-  const randomPart = tmp || (testing && target !== Target.SIM) ? `.${Date.now().toString().slice(-6)}` : "";
+  const randomPart =
+    tmp || (testing && target !== Target.SIM) ? `.${Date.now().toString().slice(-6)}` : "";
   const tmpSuffix = tmp ? ".tmp" : "";
   const lastPart = `${entrypointName}.${targetDirSuffix}${randomPart}${tmpSuffix}`;
   if (testing) {
@@ -120,6 +123,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   process.env["WING_VALUES_FILE"] = options.values;
   process.env["WING_IS_TEST"] = testing.toString();
   process.env["WING_PLUGIN_PATHS"] = resolvePluginPaths(options.plugins ?? []);
+  process.env["WING_TRACE_USAGE"] = `${options.traceUsage ?? false}`;
 
   const tempProcess: { env: Record<string, string | undefined> } = { env: { ...process.env } };
 

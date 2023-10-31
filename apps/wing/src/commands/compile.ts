@@ -58,6 +58,10 @@ export interface CompileOptions {
    * copies of the application resources in order to run tests in parallel.
    */
   readonly testing?: boolean;
+  /**
+   * Whether th compiler should collect resource's methods and property usage, saving the output to a file in the output dir.
+   */
+  readonly traceUsage?: boolean;
 }
 
 /**
