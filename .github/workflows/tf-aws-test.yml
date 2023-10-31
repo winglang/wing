@@ -144,6 +144,9 @@ jobs:
       - name: Installing aws-cdk globally
         if: ${{ matrix.target == 'awscdk'}}
         run: npm i -g aws-cdk
+      - name: Installing wing locally
+        if: ${{ env.MANUAL == 'true' }}
+        run: pnpm install
       - name: Configure AWS credentials
         if: ${{ matrix.target == 'tf-aws' || matrix.target == 'awscdk'}}
         uses: aws-actions/configure-aws-credentials@v2
@@ -168,7 +171,6 @@ jobs:
           command: |
             if  ${{ env.MANUAL == 'true' }}
             then
-               pnpm install
                pnpm wing test -t ${{ matrix.target }} ${{ matrix.test.directory }}/*.test.w
             elif ${{ env.LOCAL_BUILD == 'false'}}
             then 
