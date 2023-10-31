@@ -1,7 +1,6 @@
 import { Command, Option } from "commander";
 import { satisfies } from "compare-versions";
 
-import { collectCommandAnalytics } from "./analytics/collect";
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { exportAnalytics } from "./analytics/export";
 import { currentPackage } from "./util";
@@ -40,7 +39,8 @@ async function collectAnalyticsHook(cmd: Command) {
   // Fail silently if collection fails
   try {
     optionallyDisplayDisclaimer();
-    analyticsExportFile = collectCommandAnalytics(cmd);
+    const analyticsModule = await import("./analytics/collect");
+    analyticsExportFile = analyticsModule.collectCommandAnalytics(cmd);
   } catch (err) {
     if (process.env.DEBUG) {
       console.error(err);

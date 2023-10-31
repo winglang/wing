@@ -1,3 +1,4 @@
+import { determineTargetFromPlatforms } from "@winglang/compiler";
 import { Command } from "commander";
 import { CICollector } from "./collectors/ci-collector";
 import { CLICollector } from "./collectors/cli-collector";
@@ -28,8 +29,7 @@ export async function collectCommandAnalytics(cmd: Command): Promise<string | un
   const platform = cmd.opts().platform;
   let target = "";
   if (platform) {
-    const compilerModule = await import("@winglang/compiler");
-    target = compilerModule.determineTargetFromPlatforms(platform);
+    target = determineTargetFromPlatforms(platform);
   }
   const eventName = `cli_${target}_${cmd.name()}`;
 
