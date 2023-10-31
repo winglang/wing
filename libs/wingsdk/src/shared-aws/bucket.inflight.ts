@@ -261,7 +261,7 @@ export class BucketClient implements IBucketClient {
     } catch (error) {
       if (error instanceof NotFound) {
         throw new Error(
-          `Unable to copy object from "${srcKey}" to "${dstKey}".`
+          `Unable to copy. Source object does not exist (srcKey=${srcKey}).`
         );
       }
       throw error;
