@@ -11,7 +11,7 @@ export class FunctionClient implements IFunctionClient {
   ) {}
 
   /**
-   * Invokes the function synchronously, passing the given payload as an argument.
+   * Invokes the function with a payload and waits for the result.
    *  @returns the function response payload.
    */
   public async invoke(payload: string): Promise<string> {
