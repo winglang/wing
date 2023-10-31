@@ -1,4 +1,6 @@
 import { Construct, IConstruct } from "constructs";
+import { writeFileSync } from "fs";
+import { resolve } from "path";
 import { NotImplementedError } from "./errors";
 import { SDK_PACKAGE_NAME } from "../constants";
 import { APP_SYMBOL, IApp, Node } from "../std/node";
@@ -59,6 +61,11 @@ export interface AppProps {
    * @default - []
    */
   readonly newInstanceOverrides?: any[];
+
+  /** Whether resources' methods and props usage is  traced
+   * @default false
+   */
+  readonly traceUsage?: boolean;
 }
 
 /**
@@ -148,6 +155,11 @@ export abstract class App extends Construct implements IApp {
   public readonly isTestEnvironment: boolean;
 
   /**
+   * Whether or not this app's resources' methods and properties should be traced
+   */
+  public readonly traceUsage: boolean;
+
+  /**
    * NewInstance hooks for defining resource implementations.
    * @internal
    */
@@ -158,6 +170,12 @@ export abstract class App extends Construct implements IApp {
    * @internal
    */
   public _testRunner: TestRunner | undefined;
+
+  /**
+   * A summary of methods and property usage for each resource time
+   * @internal
+   */
+  public _usageContext: Map<string, Set<string>> = new Map();
 
   constructor(scope: Construct, id: string, props: AppProps) {
     super(scope, id);
@@ -170,6 +188,7 @@ export abstract class App extends Construct implements IApp {
       Node._markRoot(this.constructor);
     }
 
+    this.traceUsage = props.traceUsage ?? false;
     this.entrypointDir = props.entrypointDir;
     this._newInstanceOverrides = props.newInstanceOverrides ?? [];
     this.isTestEnvironment = props.isTestEnvironment ?? false;
@@ -285,6 +304,47 @@ export abstract class App extends Construct implements IApp {
     }
     return new type(scope, id, ...args);
   }
+
+  /**
+   * Synthesize the root construct if one was given. If this is a test environment, then
+   * we will synthesize one root construct per test. Otherwise, we will synthesize exactly
+   * one root construct.
+   *
+   * @param props The App props
+   * @param testRunner The test runner
+   */
+  protected synthRoots(props: AppProps, testRunner: TestRunner) {
+    if (props.rootConstruct) {
+      const Root = props.rootConstruct;
+      if (this.isTestEnvironment) {
+        new Root(this, "env0");
+        const tests = testRunner.findTests();
+        for (let i = 1; i < tests.length; i++) {
+          new Root(this, "env" + i);
+        }
+      } else {
+        new Root(this, "Default");
+      }
+    }
+  }
+
+  /**
+   * Write the usage context into a file in the out dir
+   * @internal
+   */
+  public _writeAppUsage(): void {
+    if (this.traceUsage) {
+      const context: Record<string, string[]> = {};
+      for (const key of this._usageContext.keys()) {
+        context[key] = Array.from(this._usageContext.get(key) ?? []);
+      }
+
+      writeFileSync(
+        resolve(this.outdir, "usage_context.json"),
+        JSON.stringify(context, null, 2)
+      );
+    }
+  }
 }
 
 export function preSynthesizeAllConstructs(app: App): void {
@@ -293,4 +353,6 @@ export function preSynthesizeAllConstructs(app: App): void {
       (c as IResource)._preSynthesize();
     }
   }
+
+  app._writeAppUsage();
 }

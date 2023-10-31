@@ -62,6 +62,8 @@ export interface CompileOptions {
 
   // target directory for the output files
   readonly targetDir?: string;
+
+  readonly traceUsage?: boolean;
 }
 
 /**
@@ -112,7 +114,9 @@ function resolveSynthDir(
  * @returns the resolved model
  */
 export function determineTargetFromPlatforms(platforms: string[]): string {
-  if (platforms.length === 0) { return ""; }
+  if (platforms.length === 0) {
+    return "";
+  }
   // determine target based on first platform
   const platform = platforms[0];
 
@@ -157,6 +161,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   process.env["WING_VALUES_FILE"] = options.values;
   process.env["WING_IS_TEST"] = testing.toString();
   process.env["WING_PLATFORMS"] = resolvePlatformPaths(options.platform);
+  process.env["WING_TRACE_USAGE"] = `${options.traceUsage ?? false}`;
 
   const tempProcess: { env: Record<string, string | undefined> } = { env: { ...process.env } };
 
@@ -306,7 +311,7 @@ async function runPreflightCodeInVm(
 
   try {
     vm.runInContext(artifact, context, {
-      filename: artifactPath
+      filename: artifactPath,
     });
   } catch (error) {
     throw new PreflightError(error as any, artifactPath, artifact);

@@ -229,6 +229,34 @@ export abstract class Resource extends Construct implements IResource {
 
   private readonly onLiftMap: Map<IInflightHost, Set<string>> = new Map();
 
+  constructor(scope: Construct, id: string) {
+    super(scope, id);
+    if (App.of(this).traceUsage) {
+      return new Proxy(this, {
+        get: (target, prop: string | Symbol) => {
+          if (
+            typeof prop === "string" &&
+            !prop.startsWith("_") &&
+            !PARENT_PROPERTIES.has(prop) &&
+            this.constructor.prototype.hasOwnProperty(prop)
+          ) {
+            this._addToUsageContext(prop);
+          }
+          //@ts-ignore
+          return target[prop];
+        },
+        set: (target, prop, newValue) => {
+          if (typeof prop === "string" && !prop.startsWith("_")) {
+            this._addToUsageContext(prop);
+          }
+          //@ts-ignore
+          target[prop] = newValue;
+          return true;
+        },
+      });
+    }
+  }
+
   /**
    * @internal
    * */
@@ -305,6 +333,7 @@ export abstract class Resource extends Construct implements IResource {
         // first add the operation to the set of operations for the host so that we can avoid
         // infinite recursion.
         opsForHost.add(op);
+        this._addToUsageContext(op);
 
         this._registerOnLift(host, [op]);
 
@@ -315,6 +344,24 @@ export abstract class Resource extends Construct implements IResource {
           name: op.endsWith("()") ? op : `${op}()`,
         });
       }
+    }
+  }
+
+  /**
+   * Adds an op to usage context
+   * @param op
+   * @internal
+   */
+  private _addToUsageContext(op: string): void {
+    const className = this.constructor.name;
+    if (["handle", "$inflight_init"].includes(op) || !App.of(this).traceUsage) {
+      return;
+    }
+    const usageContext = App.of(this)._usageContext.get(className);
+    if (!usageContext) {
+      App.of(this)._usageContext.set(className, new Set([op]));
+    } else {
+      usageContext.add(op);
     }
   }
 
@@ -364,3 +411,10 @@ function isLiftable(t: any): t is ILiftable {
 function isLiftableType(t: any): t is ILiftable {
   return typeof t._registerOnLift === "function" && isLiftable(t.prototype);
 }
+
+const PARENT_PROPERTIES: Set<string> = new Set([
+  ...Object.getOwnPropertyNames(Resource),
+  ...Object.getOwnPropertyNames(Resource.prototype),
+  ...Object.getOwnPropertyNames(Construct),
+  ...Object.getOwnPropertyNames(Construct.prototype),
+]);
