@@ -138,17 +138,17 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   log?.("wing dir: %s", wingDir);
   const testing = options.testing ?? false;
   log?.("testing: %s", testing);
-  const model = determineTargetFromPlatforms(options.platform);
-  const tmpSynthDir = resolveSynthDir(targetdir, wingFile, model, testing, true);
+  const target = determineTargetFromPlatforms(options.platform);
+  const tmpSynthDir = resolveSynthDir(targetdir, wingFile, target, testing, true);
   log?.("temp synth dir: %s", tmpSynthDir);
-  const synthDir = resolveSynthDir(targetdir, wingFile, model, testing);
+  const synthDir = resolveSynthDir(targetdir, wingFile, target, testing);
   log?.("synth dir: %s", synthDir);
   const workDir = resolve(tmpSynthDir, ".wing");
   log?.("work dir: %s", workDir);
 
   // TODO: couldn't be moved to the context's since used in utils.env(...)
   // in the future we may look for a unified approach
-  process.env["WING_TARGET"] = model;
+  process.env["WING_TARGET"] = target;
   process.env["WING_VALUES"] = options.value?.length == 0 ? undefined : options.value;
   process.env["WING_VALUES_FILE"] = options.values;
   process.env["WING_IS_TEST"] = testing.toString();
