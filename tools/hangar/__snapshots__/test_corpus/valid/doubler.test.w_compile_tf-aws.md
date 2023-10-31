@@ -202,7 +202,7 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "cloud-Function-c8d4b6f0",
-            "WING_MODEL": "tf-aws"
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "cloud-Function-c8d4b6f0",

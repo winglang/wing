@@ -6,7 +6,7 @@ import { IPlatform } from "../platform";
  */
 export class Platform implements IPlatform {
   /** Platform model */
-  public readonly model = "tf-azure";
+  public readonly target = "tf-azure";
 
   public newApp?(appProps: any): any {
     return new App(appProps);

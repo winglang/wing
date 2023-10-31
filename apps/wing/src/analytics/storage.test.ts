@@ -12,7 +12,7 @@ describe("storage tests", () => {
       cli: {
         platform: ["xbox", "ps5"].join(","),
         options: '{"-t": "fake-aws"}',
-        model: "fake-aws",
+        target: "fake-aws",
         version: "4.2.0",
         wing_console_version: "1.2.3",
         wing_sdk_version: "4.5.6",
@@ -60,7 +60,7 @@ describe("storage tests", () => {
         expect.objectContaining({
           event: DUMMY_ANALYTIC.event,
           properties: {
-            cli_model: "fake-aws",
+            cli_target: "fake-aws",
             cli_platform: "xbox,ps5",
             cli_version: "4.2.0",
             cli_options: '{"-t": "fake-aws"}',

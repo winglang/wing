@@ -21,7 +21,7 @@ export async function runWingCommand(options: RunWingCommandOptions) {
       "--no-analytics",
       ...options.args,
       options.wingFile ?? "",
-      "--platform",
+      "-t",
       ...options.platforms ?? []
     ],
     {

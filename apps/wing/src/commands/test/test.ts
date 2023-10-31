@@ -3,7 +3,7 @@ import { readFile, rm, rmSync } from "fs";
 import * as os from "os";
 import { basename, resolve, sep } from "path";
 import { promisify } from "util";
-import { BuiltinPlatform, determineModelFromPlatforms } from "@winglang/compiler";
+import { BuiltinPlatform, determineTargetFromPlatforms } from "@winglang/compiler";
 import { std, simulator } from "@winglang/sdk";
 import { Util } from "@winglang/sdk/lib/util";
 import chalk from "chalk";
@@ -59,7 +59,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
 
   const startTime = Date.now();
   const results: { testName: string; results: std.TestResult[] }[] = [];
-  process.env.WING_MODEL = determineModelFromPlatforms(options.platform ?? []);
+  process.env.WING_TARGET = determineTargetFromPlatforms(options.platform ?? []);
   const testFile = async (entrypoint: string) => {
     const testName = generateTestName(entrypoint);
     try {
@@ -101,7 +101,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
 }
 
 async function testOne(entrypoint: string, options: TestOptions) {
-  const model = process.env.WING_MODEL; // TODO: try to just call method
+  const model = process.env.WING_TARGET; // TODO: try to just call method
   const synthDir = await withSpinner(
     `Compiling ${generateTestName(entrypoint)} to ${model}...`,
     async () =>

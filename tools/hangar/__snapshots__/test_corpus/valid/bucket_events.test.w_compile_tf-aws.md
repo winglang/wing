@@ -521,7 +521,7 @@ module.exports = function({ $b }) {
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "b-oncreate-OnMessage-1d3b2039-c8a821e7",
-            "WING_MODEL": "tf-aws"
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "b-oncreate-OnMessage-1d3b2039-c8a821e7",
@@ -551,7 +551,7 @@ module.exports = function({ $b }) {
           "variables": {
             "BUCKET_NAME_73fd1ead": "${aws_s3_bucket.other.bucket}",
             "WING_FUNCTION_NAME": "b-oncreate-OnMessage-a729fee3-c81091e7",
-            "WING_MODEL": "tf-aws"
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "b-oncreate-OnMessage-a729fee3-c81091e7",
@@ -581,7 +581,7 @@ module.exports = function({ $b }) {
           "variables": {
             "BUCKET_NAME_73fd1ead": "${aws_s3_bucket.other.bucket}",
             "WING_FUNCTION_NAME": "b-ondelete-OnMessage-4b2cd998-c8718454",
-            "WING_MODEL": "tf-aws"
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "b-ondelete-OnMessage-4b2cd998-c8718454",
@@ -610,7 +610,7 @@ module.exports = function({ $b }) {
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "b-ondelete-OnMessage-b83da9f8-c80fdb5a",
-            "WING_MODEL": "tf-aws"
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "b-ondelete-OnMessage-b83da9f8-c80fdb5a",
@@ -639,7 +639,7 @@ module.exports = function({ $b }) {
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "b-onupdate-OnMessage-2dce4026-c8164eef",
-            "WING_MODEL": "tf-aws"
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "b-onupdate-OnMessage-2dce4026-c8164eef",
@@ -669,7 +669,7 @@ module.exports = function({ $b }) {
           "variables": {
             "BUCKET_NAME_73fd1ead": "${aws_s3_bucket.other.bucket}",
             "WING_FUNCTION_NAME": "b-onupdate-OnMessage-b03e6c67-c81eb9cc",
-            "WING_MODEL": "tf-aws"
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "b-onupdate-OnMessage-b03e6c67-c81eb9cc",
@@ -698,7 +698,7 @@ module.exports = function({ $b }) {
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "other-oncreate-OnMessage-2b1e14fd-c8a9cff0",
-            "WING_MODEL": "tf-aws"
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "other-oncreate-OnMessage-2b1e14fd-c8a9cff0",
@@ -727,7 +727,7 @@ module.exports = function({ $b }) {
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "other-ondelete-OnMessage-9bef38d2-c8c0555a",
-            "WING_MODEL": "tf-aws"
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "other-ondelete-OnMessage-9bef38d2-c8c0555a",
@@ -756,7 +756,7 @@ module.exports = function({ $b }) {
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "other-onupdate-OnMessage-bffa2a20-c85595aa",
-            "WING_MODEL": "tf-aws"
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "other-onupdate-OnMessage-bffa2a20-c85595aa",

@@ -150,7 +150,7 @@
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
             "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-86898773-c82dc92d",
-            "WING_MODEL": "tf-aws"
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "cloud-Topic-OnMessage-86898773-c82dc92d",
@@ -180,7 +180,7 @@
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
             "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-cdafee6e-c814de3f",
-            "WING_MODEL": "tf-aws"
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "cloud-Topic-OnMessage-cdafee6e-c814de3f",

@@ -314,7 +314,7 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-73c5308f-c85168bb",
-            "WING_MODEL": "tf-aws",
+            "WING_TARGET": "tf-aws",
             "WING_TOKEN_TFTOKEN_TOKEN_30": "${jsonencode(aws_api_gateway_stage.A_cloudApi_api_stage_6D822CCE.invoke_url)}"
           }
         },
@@ -345,7 +345,7 @@ module.exports = function({  }) {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-cdafee6e-c8147384",
-            "WING_MODEL": "tf-aws"
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "cloud-Api-OnRequest-cdafee6e-c8147384",

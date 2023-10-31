@@ -10,7 +10,7 @@ export interface IPlatform {
    *
    * @example "sim"
    */
-  readonly model: string;
+  readonly target: string;
 
   /**
    * Hooks for overriding newInstance calls

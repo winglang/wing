@@ -23,7 +23,7 @@ class DynamoTable {
   table: tfaws.dynamodbTable.DynamodbTable;
   tableName: str;
   init() {
-    let target = util.env("WING_MODEL");
+    let target = util.env("WING_TARGET");
     if target != "tf-aws" {
       throw "Unsupported target: ${target} (expected 'tf-aws')";
     }

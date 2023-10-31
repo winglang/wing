@@ -6,7 +6,7 @@ import { IPlatform } from "../platform";
  */
 export class Platform implements IPlatform {
   /** Platform model */
-  public readonly model = "awscdk";
+  public readonly target = "awscdk";
 
   public newApp?(appProps: any): any {
     return new App(appProps);

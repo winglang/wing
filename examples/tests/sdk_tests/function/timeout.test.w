@@ -31,11 +31,11 @@ new std.Test(inflight () => {
     e = error;
   }
 
-  if (["tf-aws", "awscdk"].contains(util.env("WING_MODEL"))) {
+  if (["tf-aws", "awscdk"].contains(util.env("WING_TARGET"))) {
     assert(e.contains("Task timed out after"));
   }
 
-  if (util.env("WING_MODEL") != "sim") {
+  if (util.env("WING_TARGET") != "sim") {
     assert(c.peek() == 0);
   }
 
@@ -45,11 +45,11 @@ new std.Test(inflight () => {
     e = error;
   }
 
-  if (["tf-aws", "awscdk"].contains(util.env("WING_MODEL"))) {
+  if (["tf-aws", "awscdk"].contains(util.env("WING_TARGET"))) {
     assert(e.contains("Task timed out after"));
   }
 
-  if (util.env("WING_MODEL") != "sim") {
+  if (util.env("WING_TARGET") != "sim") {
     assert(c.peek() == 1);
   }
  

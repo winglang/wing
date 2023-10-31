@@ -103,8 +103,8 @@ export abstract class Service extends Resource implements IInflightHost {
     writeFileSync(entrypoint, lines.join("\n"));
     this.entrypoint = entrypoint;
 
-    if (process.env.WING_MODEL) {
-      this.addEnvironment("WING_MODEL", process.env.WING_MODEL);
+    if (process.env.WING_TARGET) {
+      this.addEnvironment("WING_TARGET", process.env.WING_TARGET);
     }
   }
 

@@ -106,7 +106,7 @@ function resolveSynthDir(
  * @param platforms list of wing platforms
  * @returns the resolved model
  */
-export function determineModelFromPlatforms(platforms: string[]): string {
+export function determineTargetFromPlatforms(platforms: string[]): string {
   if (platforms.length === 0) { return ""; }
   // determine model based on first platform
   const platform = platforms[0];
@@ -119,7 +119,7 @@ export function determineModelFromPlatforms(platforms: string[]): string {
   // If its a custom platform, then we need to load it and get the model
   const platformPath = resolve(platform);
 
-  return new (require(platformPath)).Platform().model;
+  return new (require(platformPath)).Platform().target;
 }
 
 /**
@@ -138,7 +138,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   log?.("wing dir: %s", wingDir);
   const testing = options.testing ?? false;
   log?.("testing: %s", testing);
-  const model = determineModelFromPlatforms(options.platform);
+  const model = determineTargetFromPlatforms(options.platform);
   const tmpSynthDir = resolveSynthDir(targetdir, wingFile, model, testing, true);
   log?.("temp synth dir: %s", tmpSynthDir);
   const synthDir = resolveSynthDir(targetdir, wingFile, model, testing);
@@ -148,7 +148,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
 
   // TODO: couldn't be moved to the context's since used in utils.env(...)
   // in the future we may look for a unified approach
-  process.env["WING_MODEL"] = model;
+  process.env["WING_TARGET"] = model;
   process.env["WING_VALUES"] = options.value?.length == 0 ? undefined : options.value;
   process.env["WING_VALUES_FILE"] = options.values;
   process.env["WING_IS_TEST"] = testing.toString();

@@ -7,7 +7,7 @@ bring util;
 
 let var timeout: duration = 30s;
 let var sleep: duration = 31s;
-if (util.env("WING_MODEL") == "sim") {
+if (util.env("WING_TARGET") == "sim") {
   timeout = 1s;
   sleep = 2s;
 }
@@ -29,7 +29,7 @@ new std.Test(inflight () => {
   util.sleep(duration.fromSeconds(timeout.seconds + 1));
   // The queue should have 2 messages still due to timeout - doesn't work on aws or sim unfortunately
   // for aws- https://github.com/winglang/wing/issues/3354
-  if (util.env("WING_MODEL") != "tf-aws") {
+  if (util.env("WING_TARGET") != "tf-aws") {
     assert(q.approxSize() == 2);
   }
   }, timeout: 2m) as "timeout";

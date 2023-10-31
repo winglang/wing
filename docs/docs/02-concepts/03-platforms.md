@@ -27,7 +27,7 @@ Options:
 
 In the Options section above, there are several builtin platform that are shipped with Wing, such as `sim`, `tf-aws`, `tf-azure`, `tf-gcp`, and `awscdk`.
 
-These providers contain a combination of provision engine and cloud environment in their names, we refer to these as the platform models (which is discussed in more detail below). The only exception is `sim`, which is a special platform for testing and simulating applications locally.
+These providers contain a combination of provision engine and cloud environment in their names, we refer to these as the platform target (which is discussed in more detail below). The only exception is `sim`, which is a special platform for testing and simulating applications locally.
 
 ### Specifying Multiple Platforms
 
@@ -38,7 +38,7 @@ wing compile app.main.w --platform tf-aws platform-foo platform-bar
 ```
 The order in which platforms are evaluated is important. 
 
-The first platform in the list is the primary platform, it is responsible for providing the Wing compiler with the base App that will be used to determine how resources are created, as well it will also lay the ground work for what model the rest of the platforms will need to be compatible with.
+The first platform in the list is the primary platform, it is responsible for providing the Wing compiler with the base App that will be used to determine how resources are created, as well it will also lay the ground work for what target the rest of the platforms will need to be compatible with.
 
 ### Provisioning Engines
 
@@ -46,19 +46,19 @@ Provisioning is the process of setting up and creating infrastructure, and the p
 
 Understanding the differences between provisioning engines will help as we dive deeper into the additional concepts of the platform provider system.
 
-### Platform Models
+### Platform Targets
 
-Platform models are the combination of a provisioning engine and a cloud environment. For example, `tf-aws` is a platform model that uses Terraform as the provisioning engine and AWS as the cloud environment. Similarly, `awscdk` is a platform model that uses AWS CDK as the provisioning engine and AWS as the cloud environment.
+Platform targets are the combination of a provisioning engine and a cloud environment. For example, `tf-aws` is a platform target that uses Terraform as the provisioning engine and AWS as the cloud environment. Similarly, `awscdk` is a platform target that uses AWS CDK as the provisioning engine and AWS as the cloud environment.
 
-It is worth noting that the platform names are not guaranteed to match their models, we will see this more as we delve into the idea of Custom Platforms below.
+It is worth noting that the platform names are not guaranteed to match their targets, we will see this more as we delve into the idea of Custom Platforms below.
 
-Though not currently implemented, the platform model system is designed with extensibility in mind, as it will be used to determine compatibility between different platforms ([tracking issue](https://github.com/winglang/wing/issues/1474))
+Though not currently implemented, the platform target system is designed with extensibility in mind, as it will be used to determine compatibility between different platforms ([tracking issue](https://github.com/winglang/wing/issues/1474))
 
-#### Model-specific code
+#### Target-specific code
 
-There might be times when you need to write code that is specific to a particular platform model. For example, you may want to activate a verbose logging service only when testing locally to save on cloud log storage costs.
+There might be times when you need to write code that is specific to a particular platform target. For example, you may want to activate a verbose logging service only when testing locally to save on cloud log storage costs.
 
-With the Wing `util` library, you can access environment variables. The `WING_MODEL` environment variable contains the current platform model as it's value, which you can use to conditionally run model-specific code. See the example below:
+With the Wing `util` library, you can access environment variables. The `WING_TARGET` environment variable contains the current platform target as it's value, which you can use to conditionally run target-specific code. See the example below:
 
 ```js playground
 bring cloud;
@@ -74,8 +74,8 @@ queue.setConsumer(inflight (msg: str) => {
 new cloud.Function(inflight ()=> { 
   // push a message to queue
   queue.push("m");
-  // sleep according to model 
-  if util.env("WING_MODEL") == "sim" {
+  // sleep according to target 
+  if util.env("WING_TARGET") == "sim" {
     log("Running on Simulator, sleeping for 1s");
     util.sleep(1s);
   } else {
@@ -109,8 +109,8 @@ The IPlatform interface is defined as follows:
 
 ```ts
 export interface IPlatform {
-  // Define the model compatibility of the platform
-  readonly model: string;
+  // Define the target compatibility of the platform
+  readonly target: string;
 
   // Define the App that will be used for creating resources
   newApp?(appProps: AppProps): App;

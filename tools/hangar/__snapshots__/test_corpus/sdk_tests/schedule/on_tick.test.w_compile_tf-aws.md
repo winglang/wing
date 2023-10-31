@@ -211,7 +211,7 @@
           "variables": {
             "DYNAMODB_TABLE_NAME_bca69a1d": "${aws_dynamodb_table.c1.name}",
             "WING_FUNCTION_NAME": "from_cron-OnTick-cdafee6e-c8a82a50",
-            "WING_MODEL": "tf-aws"
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "from_cron-OnTick-cdafee6e-c8a82a50",
@@ -241,7 +241,7 @@
           "variables": {
             "DYNAMODB_TABLE_NAME_7ba9f967": "${aws_dynamodb_table.c2.name}",
             "WING_FUNCTION_NAME": "from_rate-OnTick-86898773-c8fb9fa6",
-            "WING_MODEL": "tf-aws"
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "from_rate-OnTick-86898773-c8fb9fa6",

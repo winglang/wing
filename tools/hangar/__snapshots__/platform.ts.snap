@@ -104,7 +104,7 @@ exports[`Multiple platforms > only first platform app is used 1`] = `
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.cloudBucket.bucket}",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
-            "WING_MODEL": "tf-aws",
+            "WING_TARGET": "tf-aws",
           },
         },
         "function_name": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
@@ -277,7 +277,7 @@ exports[`Platform examples > AWS target platform > permission-boundary.js 1`] = 
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.cloudBucket.bucket}",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
-            "WING_MODEL": "tf-aws",
+            "WING_TARGET": "tf-aws",
           },
         },
         "function_name": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
@@ -519,7 +519,7 @@ exports[`Platform examples > AWS target platform > replicate-s3.js 1`] = `
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.cloudBucket.bucket}",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
-            "WING_MODEL": "tf-aws",
+            "WING_TARGET": "tf-aws",
           },
         },
         "function_name": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
@@ -809,7 +809,7 @@ exports[`Platform examples > AWS target platform > tf-backend.js > azurerm backe
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.cloudBucket.bucket}",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
-            "WING_MODEL": "tf-aws",
+            "WING_TARGET": "tf-aws",
           },
         },
         "function_name": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
@@ -981,7 +981,7 @@ exports[`Platform examples > AWS target platform > tf-backend.js > gcp backend 1
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.cloudBucket.bucket}",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
-            "WING_MODEL": "tf-aws",
+            "WING_TARGET": "tf-aws",
           },
         },
         "function_name": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
@@ -1153,7 +1153,7 @@ exports[`Platform examples > AWS target platform > tf-backend.js > s3 backend 1`
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.cloudBucket.bucket}",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
-            "WING_MODEL": "tf-aws",
+            "WING_TARGET": "tf-aws",
           },
         },
         "function_name": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",

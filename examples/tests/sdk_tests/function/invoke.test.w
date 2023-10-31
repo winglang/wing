@@ -6,8 +6,8 @@ log("log preflight");
 
 let f = new cloud.Function(inflight (input: str): str => {
   log("log inside function\ncontains 2 lines");
-  let target = util.tryEnv("WING_MODEL");
-  assert(target?); // make sure WING_MODEL is defined in all environments
+  let target = util.tryEnv("WING_TARGET");
+  assert(target?); // make sure WING_TARGET is defined in all environments
 
   return "${input}-response";
 });

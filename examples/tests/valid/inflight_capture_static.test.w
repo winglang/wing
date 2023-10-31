@@ -29,8 +29,8 @@ test "call static method of an inner inflight class" {
 }
 
 test "call static method of a namespaced type" {
-  if let target = util.tryEnv("WING_MODEL") {
-    log("WING_MODEL=${target}");
+  if let target = util.tryEnv("WING_TARGET") {
+    log("WING_TARGET=${target}");
   } else {
     assert(false /* target not defined*/);
   }
