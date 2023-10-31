@@ -41,7 +41,7 @@ export class FunctionClient implements IFunctionClient {
   }
 
   /**
-   * Invokes the function asynchronously, passing the given payload as an argument.
+   * Kicks off the execution of the function with a payload and returns immediately while the function is running.
    * @returns immediately once the event has been handed off to AWS Lambda.
    */
   public async invokeAsync(payload: string): Promise<void> {
