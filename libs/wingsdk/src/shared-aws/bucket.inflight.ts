@@ -48,7 +48,7 @@ export class BucketClient implements IBucketClient {
       await this.s3Client.send(command);
       return true;
     } catch (error) {
-      if (error instanceof NotFound) {
+      if ((error as Error).name === "NotFound") {
         return false;
       }
       throw error;
