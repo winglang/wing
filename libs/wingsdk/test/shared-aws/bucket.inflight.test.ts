@@ -727,6 +727,6 @@ test("copy a non-existent object within the bucket", async () => {
 
   // THEN
   await expect(() => client.copy(SRC_KEY, DST_KEY)).rejects.toThrowError(
-    `Unable to copy object from "${SRC_KEY}" to "${DST_KEY}"`
+    `Unable to copy object from "${SRC_KEY}" to "${DST_KEY}".`
   );
 });

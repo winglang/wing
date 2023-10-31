@@ -259,11 +259,12 @@ export class BucketClient implements IBucketClient {
     try {
       await this.s3Client.send(command);
     } catch (error) {
-      throw new Error(
-        `Unable to copy object from "${srcKey}" to "${dstKey}": ${
-          (error as Error).message
-        }`
-      );
+      if (error instanceof NotFound) {
+        throw new Error(
+          `Unable to copy object from "${srcKey}" to "${dstKey}".`
+        );
+      }
+      throw error;
     }
   }
 
