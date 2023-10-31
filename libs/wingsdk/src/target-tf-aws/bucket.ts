@@ -183,7 +183,7 @@ export function createEncryptedBucket(
 
   const bucket = new S3Bucket(scope, name, {
     bucketPrefix,
-    forceDestroy: isTestEnvironment ? true : false,
+    forceDestroy: !!isTestEnvironment,
   });
 
   if (isPublic) {
