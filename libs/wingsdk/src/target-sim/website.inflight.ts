@@ -1,13 +1,8 @@
 import { Server } from "http";
 import { AddressInfo } from "net";
 import express from "express";
-import {
-  ApiAttributes,
-  WebsiteSchema,
-  WEBSITE_TYPE,
-  FileRoutes,
-} from "./schema-resources";
-import { IWebsiteClient } from "../cloud";
+import { ApiAttributes, WebsiteSchema, FileRoutes } from "./schema-resources";
+import { IWebsiteClient, WEBSITE_FQN } from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
@@ -78,7 +73,7 @@ export class Website implements IWebsiteClient, ISimulatorResourceInstance {
         message,
       },
       sourcePath: this.context.resourcePath,
-      sourceType: WEBSITE_TYPE,
+      sourceType: WEBSITE_FQN,
       timestamp: new Date().toISOString(),
     });
   }

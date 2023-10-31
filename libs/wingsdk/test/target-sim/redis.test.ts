@@ -16,7 +16,7 @@ test("create a Redis resource", async () => {
       },
       path: "root/my_redis",
       props: {},
-      type: "wingsdk.redis.Redis",
+      type: ex.REDIS_FQN,
     });
   });
   expect(app.snapshot()).toMatchSnapshot();

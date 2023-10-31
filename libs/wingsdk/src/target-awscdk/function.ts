@@ -59,6 +59,11 @@ export class Function extends cloud.Function implements IAwsFunction {
     this.arn = this.function.functionArn;
   }
 
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [cloud.FunctionInflightMethods.INVOKE];
+  }
+
   public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("functions can only be bound by awscdk.Function for now");

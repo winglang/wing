@@ -11,11 +11,11 @@ module.exports = function({ $b }) {
       return $obj;
     }
     async handle() {
-      (await $b.put("foo","text"));
-      (await $b.put("foo/","text"));
-      (await $b.put("foo/bar","text"));
-      (await $b.put("foo/bar/","text"));
-      (await $b.put("foo/bar/baz","text"));
+      (await $b.put("foo", "text"));
+      (await $b.put("foo/", "text"));
+      (await $b.put("foo/bar", "text"));
+      (await $b.put("foo/bar/", "text"));
+      (await $b.put("foo/bar/baz", "text"));
       const objs = (await $b.list());
       {((cond) => {if (!cond) throw new Error("assertion failed: objs.at(0) == \"foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await objs.at(0)),"foo")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: objs.at(1) == \"foo/\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await objs.at(1)),"foo/")))};
@@ -42,14 +42,14 @@ module.exports = function({ $b }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -85,11 +85,11 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -110,7 +110,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -120,8 +120,8 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
+    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:test", new $Closure1(this, "$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

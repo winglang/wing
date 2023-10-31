@@ -5,17 +5,18 @@ import { basename, resolve, sep } from "path";
 import { promisify } from "util";
 import { Target } from "@winglang/compiler";
 import { std, simulator } from "@winglang/sdk";
+import { Util } from "@winglang/sdk/lib/util";
 import chalk from "chalk";
 import debug from "debug";
 import { glob } from "glob";
 import { nanoid } from "nanoid";
 import { printResults, validateOutputFilePath, writeResultsToFile } from "./results";
-import { generateTmpDir, withSpinner } from "../../util";
-import { compile, CompileOptions } from "../compile";
+import { withSpinner } from "../../util";
+import { compile, CompileOptions, NotImplementedError } from "../compile";
 
 const log = debug("wing:test");
 
-const ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS = "WING_TEST_RUNNER_FUNCTION_ARNS"; //TODO: [tsuf] rename arns to identifiers
+const ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS = "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS";
 const ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS_AWSCDK = "WingTestRunnerFunctionArns";
 
 /**
@@ -67,7 +68,15 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
       console.log((error as Error).message);
       results.push({
         testName: generateTestName(entrypoint),
-        results: [{ pass: false, path: "", error: (error as Error).message, traces: [] }],
+        results: [
+          {
+            pass: false,
+            unsupported: error instanceof NotImplementedError,
+            path: "",
+            error: (error as Error).message,
+            traces: [],
+          },
+        ],
       });
     }
   };
@@ -81,7 +90,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
   // if we have any failures, exit with 1
   for (const testSuite of results) {
     for (const r of testSuite.results) {
-      if (r.error) {
+      if (!r.pass && !r.unsupported) {
         return 1;
       }
     }
@@ -98,9 +107,6 @@ async function testOne(entrypoint: string, options: TestOptions) {
         ...options,
         rootId: options.rootId ?? `Test.${nanoid(10)}`,
         testing: true,
-        // since the test cleans up after each run, it's essential to create a temporary output directory-
-        // at least one that is different then the usual compilation output dir,  otherwise we might end up cleaning up the user's actual resources.
-        ...(options.target !== Target.SIM && { targetDir: `${await generateTmpDir()}/target` }),
       })
   );
 
@@ -113,7 +119,7 @@ async function testOne(entrypoint: string, options: TestOptions) {
     case Target.AWSCDK:
       return testAwsCdk(synthDir, options);
     default:
-      throw new Error(`unsupported target ${options.target}`);
+      throw new NotImplementedError(`unsupported target ${options.target}`);
   }
 }
 
@@ -258,10 +264,12 @@ async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.T
     await withSpinner("cdk deploy", () => awsCdkDeploy(synthDir));
 
     const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
+      const stackName = process.env.CDK_STACK_NAME! + Util.sha256(synthDir).slice(-8);
+
       const testArns = await awsCdkOutput(
         synthDir,
         ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS_AWSCDK,
-        process.env.CDK_STACK_NAME!
+        stackName
       );
 
       const { TestRunnerClient } = await import(

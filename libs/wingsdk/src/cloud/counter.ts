@@ -51,14 +51,7 @@ export abstract class Counter extends Resource {
   }
 
   /** @internal */
-  public _getInflightOps(): string[] {
-    return [
-      CounterInflightMethods.INC,
-      CounterInflightMethods.DEC,
-      CounterInflightMethods.PEEK,
-      CounterInflightMethods.SET,
-    ];
-  }
+  public abstract _supportedOps(): string[];
 }
 
 /**

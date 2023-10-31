@@ -6,11 +6,11 @@ import {
 import { useTheme, ResourceIcon } from "@wingconsole/design-system";
 import { LogEntry } from "@wingconsole/server";
 import classNames from "classnames";
+import Linkify from "linkify-react";
 import throttle from "lodash.throttle";
 import { Fragment, useEffect, useRef, useState } from "react";
 
 import { OpenFileInEditorButton } from "../shared/use-file-link.js";
-import { createHtmlLink } from "../shared/use-file-link.js";
 
 const dateTimeFormat = new Intl.DateTimeFormat(undefined, {
   hour: "2-digit",
@@ -61,18 +61,6 @@ const LogEntryRow = ({
 
   const ChevronIcon = expanded ? ChevronDownIcon : ChevronRightIcon;
 
-  useEffect(() => {
-    if (expandableRef.current === null) {
-      return;
-    }
-    const html = createHtmlLink(
-      log.message,
-      "text-sky-500 underline hover:text-sky-800",
-      expanded,
-    );
-    expandableRef.current.innerHTML = html;
-  }, [log.message, expanded]);
-
   return (
     <Fragment>
       {/*TODO: Fix a11y*/}
@@ -113,7 +101,7 @@ const LogEntryRow = ({
         )}
 
         {log.timestamp && !log.ctx?.hideTimestamp && (
-          <div className={classNames(theme.text2, "flex")}>
+          <div className={classNames(theme.text2, "flex-shrink-0")}>
             {dateTimeFormat.format(log.timestamp)}
           </div>
         )}
@@ -142,22 +130,32 @@ const LogEntryRow = ({
               />
             </button>
           )}
-          <OpenFileInEditorButton>
-            <span
-              className={classNames(
-                log.ctx?.messageType === "info" && theme.text2,
-                log.ctx?.messageType === "title" && theme.text1,
-                log.ctx?.messageType === "success" &&
-                  "text-green-700 dark:text-green-500",
-                log.ctx?.messageType === "fail" && "text-red-500",
-                log.ctx?.messageType === "summary" && [
-                  "font-medium",
-                  theme.text1,
-                ],
-              )}
-              ref={expandableRef}
-            />
-          </OpenFileInEditorButton>
+          <span
+            className={classNames(
+              log.ctx?.messageType === "info" && theme.text2,
+              log.ctx?.messageType === "title" && theme.text1,
+              log.ctx?.messageType === "success" &&
+                "text-green-700 dark:text-green-500",
+              log.ctx?.messageType === "fail" && "text-red-500",
+              log.ctx?.messageType === "summary" && [
+                "font-medium",
+                theme.text1,
+              ],
+            )}
+            ref={expandableRef}
+          >
+            <Linkify
+              options={{
+                className: "text-sky-500 underline hover:text-sky-800",
+                attributes: {
+                  target: "_blank",
+                  rel: "noopener noreferrer",
+                },
+              }}
+            >
+              {log.message}
+            </Linkify>
+          </span>
         </div>
 
         {onResourceClick && (

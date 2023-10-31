@@ -19,8 +19,8 @@ module.exports = function({  }) {
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   class Baz extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
+    constructor($scope, $id, ) {
+      super($scope, $id);
     }
     static baz() {
       return "baz";
@@ -42,7 +42,7 @@ module.exports = function({ $stdlib }) {
         })())
       `;
     }
-    _getInflightOps() {
+    _supportedOps() {
       return ["$inflight_init"];
     }
   }

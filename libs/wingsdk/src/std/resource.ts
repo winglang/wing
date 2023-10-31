@@ -1,6 +1,7 @@
 import { Construct, IConstruct } from "constructs";
 import { Duration } from "./duration";
 import { App } from "../core";
+import { NotImplementedError } from "../core/errors";
 import { liftObject } from "../core/internal";
 import { log } from "../shared/log";
 import { Node } from "../std";
@@ -57,7 +58,7 @@ export interface IResource extends IConstruct {
    *
    * @internal
    */
-  _getInflightOps(): string[];
+  _supportedOps(): string[];
 
   /**
    * A hook for performing operations after the tree of resources has been
@@ -176,7 +177,7 @@ export abstract class Resource extends Construct implements IResource {
   private readonly onLiftMap: Map<IInflightHost, Set<string>> = new Map();
 
   /** @internal */
-  public abstract _getInflightOps(): string[];
+  public abstract _supportedOps(): string[];
 
   /**
    * A hook called by the Wing compiler once for each inflight host that needs to
@@ -225,11 +226,11 @@ export abstract class Resource extends Construct implements IResource {
     const opsForHost = this.onLiftMap.get(host)!;
 
     // For each operation, check if the host supports it. If it does, register the binding.
-    const supportedOps = [...(this._getInflightOps() ?? []), "$inflight_init"];
+    const supportedOps = [...(this._supportedOps() ?? []), "$inflight_init"];
     for (const op of ops) {
       if (!supportedOps.includes(op)) {
-        throw new Error(
-          `Resource ${this.node.path} does not support inflight operation ${op} (requested by ${host.node.path})`
+        throw new NotImplementedError(
+          `Resource ${this.node.path} does not support inflight operation ${op} (requested by ${host.node.path}).\nIt might not be implemented yet.`
         );
       }
 
@@ -259,7 +260,7 @@ export abstract class Resource extends Construct implements IResource {
    * @internal
    */
   public _preSynthesize(): void {
-    // Perform the live bindings betweeen resources and hosts
+    // Perform the live bindings between resources and hosts
     // By aggregating the binding operations, we can avoid performing
     // multiple bindings for the same resource-host pairs.
     for (const [host, ops] of this.onLiftMap.entries()) {

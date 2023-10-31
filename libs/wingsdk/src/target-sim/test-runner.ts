@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
-import { TestRunnerSchema, TEST_RUNNER_TYPE } from "./schema-resources";
+import { TestRunnerSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { BaseResourceSchema } from "../simulator/simulator";
@@ -20,7 +20,7 @@ export class TestRunner extends std.TestRunner implements ISimulatorResource {
   public toSimulator(): BaseResourceSchema {
     const tests = this.getTestFunctionHandles();
     const schema: TestRunnerSchema = {
-      type: TEST_RUNNER_TYPE,
+      type: std.TEST_RUNNER_FQN,
       path: this.node.path,
       props: {
         tests,

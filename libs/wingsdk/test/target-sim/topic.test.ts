@@ -18,7 +18,7 @@ test("create a topic", async () => {
     },
     path: "root/my_topic",
     props: {},
-    type: "wingsdk.cloud.Topic",
+    type: cloud.TOPIC_FQN,
   });
   await s.stop();
 

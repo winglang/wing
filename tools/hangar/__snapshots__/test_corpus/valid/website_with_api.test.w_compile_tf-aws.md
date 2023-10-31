@@ -34,7 +34,7 @@ module.exports = function({ $std_Json, $usersTable }) {
       if ((((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "name"),"")) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "age"),""))) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id"),"")))) {
         return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"error": "incomplete details"})]),"status": 400});
       }
-      (await $usersTable.insert(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id")]),body));
+      (await $usersTable.insert(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id")]), body));
       return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"user": ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id")})]),"status": 201});
     }
   }
@@ -54,12 +54,12 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert })
       return $obj;
     }
     async handle() {
-      const response = (await $http_Util.fetch(($api_url + "/users"),({"method": $http_HttpMethod.GET,"headers": ({"Content-Type": "text/json"})})));
+      const response = (await $http_Util.fetch(($api_url + "/users"), ({"method": $http_HttpMethod.GET,"headers": ({"Content-Type": "text/json"})})));
       const headers = response.headers;
-      (await $t_Assert.equalNum(response.status,200));
-      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-allow-origin"),"*"));
-      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-expose-headers"),"Content-Type"));
-      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-allow-credentials"),"false"));
+      (await $t_Assert.equalNum(response.status, 200));
+      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-allow-origin"), "*"));
+      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-expose-headers"), "Content-Type"));
+      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-allow-credentials"), "false"));
       (await $t_Assert.isNil((headers)["access-control-allow-headers"]));
       (await $t_Assert.isNil((headers)["access-control-allow-methods"]));
     }
@@ -80,11 +80,11 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert })
       return $obj;
     }
     async handle() {
-      const response = (await $http_Util.fetch(($api_url + "/users"),({"method": $http_HttpMethod.OPTIONS,"headers": ({"Content-Type": "text/json"})})));
+      const response = (await $http_Util.fetch(($api_url + "/users"), ({"method": $http_HttpMethod.OPTIONS,"headers": ({"Content-Type": "text/json"})})));
       const headers = response.headers;
-      (await $t_Assert.equalNum(response.status,204));
-      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-allow-methods"),"GET,POST,OPTIONS"));
-      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-allow-headers"),"Content-Type"));
+      (await $t_Assert.equalNum(response.status, 204));
+      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-allow-methods"), "GET,POST,OPTIONS"));
+      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-allow-headers"), "Content-Type"));
     }
   }
   return $Closure4;
@@ -145,7 +145,7 @@ module.exports = function({  }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
@@ -201,7 +201,7 @@ module.exports = function({  }) {
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -629,8 +629,8 @@ module.exports = function({  }) {
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   class Assert extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
+    constructor($scope, $id, ) {
+      super($scope, $id);
     }
     static _toInflightType(context) {
       return `
@@ -649,7 +649,7 @@ module.exports = function({ $stdlib }) {
         })())
       `;
     }
-    _getInflightOps() {
+    _supportedOps() {
       return ["equalStr", "isNil", "equalNum", "$inflight_init"];
     }
   }
@@ -671,11 +671,11 @@ const ex = $stdlib.ex;
 const http = $stdlib.http;
 const t = require("./preflight.assertions-1.js")({ $stdlib });
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -697,7 +697,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -708,8 +708,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -731,7 +731,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -742,8 +742,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -767,7 +767,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -778,8 +778,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -803,7 +803,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -813,16 +813,16 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api",{ cors: true, corsOptions: ({"allowOrigin": ["*"],"allowMethods": [cloud.HttpMethod.GET, cloud.HttpMethod.POST, cloud.HttpMethod.OPTIONS],"allowHeaders": ["Content-Type"],"allowCredentials": false,"exposeHeaders": ["Content-Type"],"maxAge": (std.Duration.fromSeconds(600))}) });
-    const website = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this,"cloud.Website",{ path: "./website_with_api" });
-    const usersTable = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "users-table", primaryKey: "id", columns: ({"id": ex.ColumnType.STRING,"name": ex.ColumnType.STRING,"age": ex.ColumnType.NUMBER}) });
-    const getHandler = new $Closure1(this,"$Closure1");
-    const postHandler = new $Closure2(this,"$Closure2");
-    (api.get("/users",getHandler));
-    (api.post("/users",postHandler));
-    (website.addJson("config.json",({"apiUrl": api.url})));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:GET /users",new $Closure3(this,"$Closure3"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:OPTIONS /users",new $Closure4(this,"$Closure4"));
+    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api", { cors: true, corsOptions: ({"allowOrigin": ["*"],"allowMethods": [cloud.HttpMethod.GET, cloud.HttpMethod.POST, cloud.HttpMethod.OPTIONS],"allowHeaders": ["Content-Type"],"allowCredentials": false,"exposeHeaders": ["Content-Type"],"maxAge": (std.Duration.fromSeconds(600))}) });
+    const website = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this, "cloud.Website", { path: "./website_with_api" });
+    const usersTable = this.node.root.newAbstract("@winglang/sdk.ex.Table",this, "ex.Table", { name: "users-table", primaryKey: "id", columns: ({"id": ex.ColumnType.STRING,"name": ex.ColumnType.STRING,"age": ex.ColumnType.NUMBER}) });
+    const getHandler = new $Closure1(this, "$Closure1");
+    const postHandler = new $Closure2(this, "$Closure2");
+    (api.get("/users", getHandler));
+    (api.post("/users", postHandler));
+    (website.addJson("config.json", ({"apiUrl": api.url})));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:GET /users", new $Closure3(this, "$Closure3"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:OPTIONS /users", new $Closure4(this, "$Closure4"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

@@ -176,7 +176,7 @@ Hub](https://constructs.dev) is central repository for sharing constructs for
 all CDKs, and we indend for wing resources to be part of this ecosystem.
 
 Resources share the capabilities of classic object-oriented classes (such as
-initializers, methods, properties, inheritence, etc) but they have a very unique
+initializers, methods, properties, inheritance, etc) but they have a very unique
 attribute that makes them suitable for defining desired-state through software -
 they have a **deterministic address** across compilations. In traditional
 object-oriented languages, instances of classes also have addresses, but these
@@ -518,12 +518,12 @@ to implement this application for AWS:
 1. Pass the ARN of the topic into the AWS Lambda function through an environment
    variable.
 2. Add `sns:PublishMessage` permissions to the AWS Lambda execution policy, with
-   the least-privilage permissions for this specific topic.
+   the least-privilege permissions for this specific topic.
 3. Include the client library of `cloud.Topic` with implementation for AWS
    in the AWS Lambda bundle.
 
 Resources cannot be defined within inflight functions, because there is no
-synthesizer and no provisiong engine to deploy those resources.
+synthesizer and no provisioning engine to deploy those resources.
 
 > Reqtag: `w:inflight-no-resource-definitions`
 <span id="w:inflight-no-resource-definitions"/>
@@ -739,7 +739,7 @@ implementation for it when we compile.
 
 The wing compiler supports resolving abstract definitions in multiple ways: via
 the compiler command line, a declarative resolution file or library or via
-addiional code (TODO).
+additional code (TODO).
 
 Sketch:
 
@@ -1013,6 +1013,6 @@ This is a list of features we will consider for wing as it evolves:-
 * [Hindley–Milner type system](https://en.wikipedia.org/wiki/Hindley%E2%80%93Milner_type_system)
 * [Funarg problem](https://en.wikipedia.org/wiki/Funarg_problem)
 * [Multi-stage programming](https://en.wikipedia.org/wiki/Multi-stage_programming)
-* [Compiler Books](https://twitter.com/mikhailshilkov/status/1492801675068952576?s=21)
+* [Compiler Books](https://x.com/mikhailshilkov/status/1492801675068952576?s=21)
 * [Comprehending Monads](https://groups.csail.mit.edu/pag/OLD/reading-group/wadler-monads.pdf)
 * [Zaplib](https://zaplib.com/) (deprecated -- worth reading)
