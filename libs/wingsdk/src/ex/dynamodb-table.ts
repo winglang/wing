@@ -581,7 +581,7 @@ export interface DynamodbTableQueryResult {
 /**
  * Options for transact write item's update operation.
  */
-export interface DynamodbTransactWriteItemPutProps {
+export interface DynamodbTransactWriteItemPutOptions {
   /**
    * The values of the item to be put.
    */
@@ -841,7 +841,7 @@ export interface DynamodbTransactWriteItem {
   /**
    * A request to perform a put operation.
    */
-  readonly put?: DynamodbTransactWriteItemPutProps;
+  readonly put?: DynamodbTransactWriteItemPutOptions;
 
   /**
    * A request to perform a update operation.
@@ -892,7 +892,7 @@ export interface DynamodbTableTransactWriteItemsResult {
 /**
  * Options for `DynamodbTable.transactGetItems`'s get operation.
  */
-export interface DynamodbTransactGetItemGetProps {
+export interface DynamodbTransactGetItemGetOptions {
   /**
    * The primary key of the item to be retrieved.
    */
@@ -918,7 +918,7 @@ export interface DynamodbTransactGetItem {
   /**
    * A request to perform a get operation.
    */
-  readonly get?: DynamodbTransactGetItemGetProps;
+  readonly get?: DynamodbTransactGetItemGetOptions;
 }
 
 /**
