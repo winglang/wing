@@ -26,8 +26,8 @@ export async function collectCommandAnalytics(cmd: Command): Promise<string | un
     appEntrypoint: cmd.args.length > 0 ? cmd.args[0] : ".",
   });
 
-  const model = determineTargetFromPlatforms(cmd.opts().platform);
-  const eventName = `cli_${model}_${cmd.name()}`;
+  const target = determineTargetFromPlatforms(cmd.opts().platform);
+  const eventName = `cli_${target}_${cmd.name()}`;
 
   let event: AnalyticEvent = {
     event: eventName.replace(/[^a-zA-Z_]/g, ""),
