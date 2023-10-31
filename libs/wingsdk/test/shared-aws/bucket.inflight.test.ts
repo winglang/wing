@@ -707,3 +707,26 @@ test("copy objects within the bucket", async () => {
   expect(response1).toEqual(undefined);
   expect(response2).toEqual(undefined);
 });
+
+test("copy a non-existent object within the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const SRC_KEY = "SRC/KEY";
+  const DST_KEY = "DST/KEY";
+
+  s3Mock
+    .on(CopyObjectCommand, {
+      Bucket: BUCKET_NAME,
+      CopySource: `${BUCKET_NAME}/${SRC_KEY}`,
+      Key: DST_KEY,
+    })
+    .rejects(new NotFound({ message: "NotFound error", $metadata: {} }));
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+
+  // THEN
+  await expect(() => client.copy(SRC_KEY, DST_KEY)).rejects.toThrowError(
+    `Unable to copy object from "${SRC_KEY}" to "${DST_KEY}"`
+  );
+});
