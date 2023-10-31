@@ -43,6 +43,8 @@
     "elkjs": "^0.8.2",
     "framer-motion": "^10.16.2",
     "jszip": "^3.10.1",
+    "linkify-react": "^4.1.1",
+    "linkifyjs": "^4.1.1",
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
     "lodash.uniqby": "^4.7.0",
