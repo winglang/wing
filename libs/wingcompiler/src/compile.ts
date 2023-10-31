@@ -72,11 +72,11 @@ export interface CompileOptions {
 function resolveSynthDir(
   outDir: string,
   entrypoint: string,
-  model: string,
+  target: string,
   testing: boolean = false,
   tmp: boolean = false
 ) {
-  const targetDirSuffix = defaultSynthDir(model);
+  const targetDirSuffix = defaultSynthDir(target);
 
   let entrypointName;
   try {
@@ -90,7 +90,7 @@ function resolveSynthDir(
     console.error(err);
     throw new Error("Source file cannot be found");
   }
-  const randomPart = tmp || (testing && model !== BuiltinPlatform.SIM) ? `.${Date.now().toString().slice(-6)}` : "";
+  const randomPart = tmp || (testing && target !== BuiltinPlatform.SIM) ? `.${Date.now().toString().slice(-6)}` : "";
   const tmpSuffix = tmp ? ".tmp" : "";
   const lastPart = `${entrypointName}.${targetDirSuffix}${randomPart}${tmpSuffix}`;
   if (testing) {

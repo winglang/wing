@@ -103,7 +103,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
 async function testOne(entrypoint: string, options: TestOptions) {
   const target = process.env.WING_TARGET; // TODO: try to just call method
   const synthDir = await withSpinner(
-    `Compiling ${generateTestName(entrypoint)} to ${model}...`,
+    `Compiling ${generateTestName(entrypoint)} to ${target}...`,
     async () =>
       compile(entrypoint, {
         ...options,
@@ -112,7 +112,7 @@ async function testOne(entrypoint: string, options: TestOptions) {
       })
   );
 
-  switch (model) {
+  switch (target) {
     case BuiltinPlatform.SIM:
       return testSimulator(synthDir, options);
     case BuiltinPlatform.TF_AZURE:
@@ -121,7 +121,7 @@ async function testOne(entrypoint: string, options: TestOptions) {
     case BuiltinPlatform.AWSCDK:
       return testAwsCdk(synthDir, options);
     default:
-      throw new Error(`unsupported target ${model}`);
+      throw new Error(`unsupported target ${target}`);
   }
 }
 

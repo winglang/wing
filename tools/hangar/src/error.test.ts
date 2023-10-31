@@ -5,7 +5,7 @@ import { runWingCommand } from "./utils";
 
 errorWingFiles.forEach((wingFile) => {
   test(wingFile, async ({ expect }) => {
-    const platforms = ["tf-aws"];
+    const platforms = ["sim"];
     const args = ["test"];
 
     const relativeWingFile = path.relative(
