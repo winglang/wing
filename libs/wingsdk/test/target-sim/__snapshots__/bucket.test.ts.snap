@@ -799,6 +799,8 @@ exports[`removing a key will call onDelete method 1`] = `
   "Publish (message=unknown.txt).",
   "Sending message (message=unknown.txt, subscriber=sim-3).",
   "Delete (key=unknown.txt).",
+  "Invoke (payload=\\"unknown.txt\\").",
+  "Subscriber error: TypeError: this.handler.handle is not a function",
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.cloud.Bucket deleted.",

@@ -380,6 +380,9 @@ test("removing a key will call onDelete method", async () => {
   await client.put(fileName, JSON.stringify({ msg: "Hello world!" }));
   const response = await client.delete(fileName);
 
+  const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
+  await sleep(500); // wait for the subscriber to finish
+
   // THEN
   await s.stop();
 
