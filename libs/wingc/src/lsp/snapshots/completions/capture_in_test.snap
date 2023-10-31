@@ -15,7 +15,7 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\ninflight copy: inflight (srcKey: str, dstKey: str): void\n```\n---\nCopy an object to a new location in the bucket.\n### Parameters\n- `srcKey` — `str` — The key of the source object you wish to copy.\n- `dstKey` — `str` — The key of the destination object after copying.\n\n### Remarks\nIf the destination object\nalready exists, it will be overwritten. Returns once the copying is finished.\n\n*@throws* *if `srcKey` object doesn't exist.*"
   sortText: ff|copy
-  insertText: copy($0)
+  insertText: copy($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
