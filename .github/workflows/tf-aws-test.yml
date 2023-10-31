@@ -20,6 +20,7 @@ on:
           - all
           - tf-aws
           - tf-azure
+          - awscdk
 env:
   AWS_REGION: "us-east-1"
   NODE_VERSION: "18.16.0"
@@ -33,6 +34,7 @@ env:
   TARGET: ${{ inputs.target || 'all' }}
   PNPM_VERSION: "8.6.3"
   AZURE_LOCATION: "East Us"
+  CDK_STACK_NAME: "sdk-spec-tests"
   GOOGLE_PROJECT_ID: "sdk-spec-tests" # for the future
   GOOGLE_REGION: "us-central1" # for the future
 
@@ -71,7 +73,7 @@ jobs:
         id: settargets
         run: |
           if [ "${{env.TARGET}}" = "all" ]; then
-            target='["tf-aws", "tf-azure"]'
+            target='["tf-aws", "tf-azure", "awscdk"]'
           else
            target='["${{env.TARGET}}"]'
           fi
