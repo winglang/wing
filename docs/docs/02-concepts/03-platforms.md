@@ -25,7 +25,7 @@ Options:
   -h, --help                    display help for command
 ```
 
-In the Options section above, there are several builtin platform that are shipped with Wing, such as `sim`, `tf-aws`, `tf-azure`, `tf-gcp`, and `awscdk`.
+Wing is shipped with several builtin platforms such as `sim`, `tf-aws`, `tf-azure`, `tf-gcp`, and `awscdk`, but it is also possible to create and use [custom platforms] to fully control how Wing resources are deployed to the cloud.
 
 These providers contain a combination of provision engine and cloud environment in their names, we refer to these as the platform target (which is discussed in more detail below). The only exception is `sim`, which is a special platform for testing and simulating applications locally.
 
