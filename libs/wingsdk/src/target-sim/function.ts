@@ -49,6 +49,11 @@ export class Function extends cloud.Function implements ISimulatorResource {
     return schema;
   }
 
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [cloud.FunctionInflightMethods.INVOKE];
+  }
+
   public onLift(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
     super.onLift(host, ops);

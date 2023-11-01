@@ -51,13 +51,3 @@ _Add yours here!_
 * **Source code:** [./proposed/url-shortener.w](./proposed/url-shortener.w)
 * **Description:** A URL shortener consisting of two API endpoints, `/create` and `/u/:id`. IDs are managed using buckets, but could be swapped with a table or other stateful storage mechanism. Requires installing `node-fetch@2` from npm.
 * **Author:** [@Chriscbr](https://github.com/Chriscbr)
-
-<!--
-
-### Tweet queue
-
-* **Source code:** [./tweet-queue.w](./tweet-queue.w)
-* **Description:** This is a Wing app that lets you get a feed of Twitter search results into a queue. It works by periodically polling the freely available Twitter Standard Search API and sending all new tweets to the queue.
-* **Author:** [@Octocat](https://github.com/octocat)
-
--->

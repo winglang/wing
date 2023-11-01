@@ -49,6 +49,14 @@ export class Secret extends cloud.Secret {
     return this.secret.arn;
   }
 
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      cloud.SecretInflightMethods.VALUE,
+      cloud.SecretInflightMethods.VALUE_JSON,
+    ];
+  }
+
   public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("secrets can only be bound by tfaws.Function for now");

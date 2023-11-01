@@ -32,6 +32,14 @@ export class Secret extends cloud.Secret implements ISimulatorResource {
     return makeSimulatorJsClient(__filename, this);
   }
 
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      cloud.SecretInflightMethods.VALUE,
+      cloud.SecretInflightMethods.VALUE_JSON,
+    ];
+  }
+
   public toSimulator(): BaseResourceSchema {
     const schema: SecretSchema = {
       type: cloud.SECRET_FQN,

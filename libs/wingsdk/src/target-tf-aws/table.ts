@@ -79,7 +79,10 @@ export class Table extends ex.Table {
       });
     }
 
-    if (ops.includes(ex.TableInflightMethods.GET)) {
+    if (
+      ops.includes(ex.TableInflightMethods.GET) ||
+      ops.includes(ex.TableInflightMethods.TRYGET)
+    ) {
       host.addPolicyStatements({
         actions: ["dynamodb:GetItem"],
         resources: [this.table.arn],
@@ -112,6 +115,19 @@ export class Table extends ex.Table {
         `process.env["${this.columnsEnvName()}"]`,
       ]
     );
+  }
+
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      ex.TableInflightMethods.INSERT,
+      ex.TableInflightMethods.UPSERT,
+      ex.TableInflightMethods.UPDATE,
+      ex.TableInflightMethods.DELETE,
+      ex.TableInflightMethods.GET,
+      ex.TableInflightMethods.TRYGET,
+      ex.TableInflightMethods.LIST,
+    ];
   }
 
   private envName(): string {
