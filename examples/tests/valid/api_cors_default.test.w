@@ -26,8 +26,8 @@ test "GET /users has default cors headers" {
  expect.equal(headers.tryGet("access-control-expose-headers"), "");
 
   // OPTIONS headers are not set
- expect.isNil(headers.tryGet("access-control-allow-headers"));
- expect.isNil(headers.tryGet("access-control-allow-methods"));
+ expect.nil(headers.tryGet("access-control-allow-headers"));
+ expect.nil(headers.tryGet("access-control-allow-methods"));
 }
 
 test "OPTIONS /users has default cors headers" {
@@ -44,7 +44,7 @@ test "OPTIONS /users has default cors headers" {
  expect.equal(headers.tryGet("access-control-allow-origin"), "*");
 
   // Other headers are not set
- expect.isNil(headers.tryGet("access-control-allow-credentials"));
- expect.isNil(headers.tryGet("access-control-expose-headers"));
+ expect.nil(headers.tryGet("access-control-allow-credentials"));
+ expect.nil(headers.tryGet("access-control-expose-headers"));
 }
 

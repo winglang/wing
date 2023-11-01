@@ -42,7 +42,7 @@ export class Util {
    * @throws Will throw an error if the actual value is not nil.
    * @returns void
    */
-  public static isNil(actual: unknown): void {
+  public static nil(actual: unknown): void {
     nodeAssert.ok(
       actual === null || actual === undefined,
       `Expected "${actual}" to be nil`

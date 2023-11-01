@@ -50,19 +50,19 @@ describe("equal boolean", () => {
 describe("is nil", () => {
   test("is null", () => {
     expect(() => {
-      Assert.isNil(undefined);
+      Assert.nil(undefined);
     }).not.toThrow();
   });
 
   test("is not null", () => {
     expect(() => {
-      Assert.isNil("not null");
+      Assert.nil("not null");
     }).toThrow();
   });
 
   test("is not null number", () => {
     expect(() => {
-      Assert.isNil(5);
+      Assert.nil(5);
     }).toThrow();
   });
 });

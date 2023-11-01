@@ -60,8 +60,8 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
       (await $expect_Util.equal((headers)["access-control-allow-origin"], "*"));
       (await $expect_Util.equal((headers)["access-control-expose-headers"], "Content-Type"));
       (await $expect_Util.equal((headers)["access-control-allow-credentials"], "false"));
-      (await $expect_Util.isNil((headers)["access-control-allow-headers"]));
-      (await $expect_Util.isNil((headers)["access-control-allow-methods"]));
+      (await $expect_Util.nil((headers)["access-control-allow-headers"]));
+      (await $expect_Util.nil((headers)["access-control-allow-methods"]));
     }
   }
   return $Closure3;

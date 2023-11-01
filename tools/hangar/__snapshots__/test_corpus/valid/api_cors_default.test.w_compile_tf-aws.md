@@ -36,8 +36,8 @@ module.exports = function({ $apiDefaultCors_url, $expect_Util, $http_Util }) {
       (await $expect_Util.equal((headers)["access-control-allow-origin"], "*"));
       (await $expect_Util.equal((headers)["access-control-allow-credentials"], "false"));
       (await $expect_Util.equal((headers)["access-control-expose-headers"], ""));
-      (await $expect_Util.isNil((headers)["access-control-allow-headers"]));
-      (await $expect_Util.isNil((headers)["access-control-allow-methods"]));
+      (await $expect_Util.nil((headers)["access-control-allow-headers"]));
+      (await $expect_Util.nil((headers)["access-control-allow-methods"]));
     }
   }
   return $Closure2;
@@ -62,8 +62,8 @@ module.exports = function({ $apiDefaultCors_url, $expect_Util, $http_HttpMethod,
       (await $expect_Util.equal((headers)["access-control-allow-headers"], "Content-Type,Authorization,X-Requested-With"));
       (await $expect_Util.equal((headers)["access-control-allow-methods"], "GET,POST,PUT,DELETE,HEAD,OPTIONS"));
       (await $expect_Util.equal((headers)["access-control-allow-origin"], "*"));
-      (await $expect_Util.isNil((headers)["access-control-allow-credentials"]));
-      (await $expect_Util.isNil((headers)["access-control-expose-headers"]));
+      (await $expect_Util.nil((headers)["access-control-allow-credentials"]));
+      (await $expect_Util.nil((headers)["access-control-expose-headers"]));
     }
   }
   return $Closure3;

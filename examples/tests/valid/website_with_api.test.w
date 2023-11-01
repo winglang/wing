@@ -70,8 +70,8 @@ let headers = response.headers;
   expect.equal(headers.tryGet("access-control-expose-headers"), "Content-Type");
   expect.equal(headers.tryGet("access-control-allow-credentials"), "false");
 
-  expect.isNil(headers.tryGet("access-control-allow-headers"));
-  expect.isNil(headers.tryGet("access-control-allow-methods"));
+  expect.nil(headers.tryGet("access-control-allow-headers"));
+  expect.nil(headers.tryGet("access-control-allow-methods"));
 }
 
 test "OPTIONS /users" {

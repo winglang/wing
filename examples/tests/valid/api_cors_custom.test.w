@@ -33,8 +33,8 @@ test "GET /users has cors headers" {
   expect.equal(headers.tryGet("access-control-expose-headers"), "Content-Type");
 
   // OPTIONS cors headers are not set
-  expect.isNil(headers.tryGet("access-control-allow-headers"));
-  expect.isNil(headers.tryGet("access-control-allow-methods"));
+  expect.nil(headers.tryGet("access-control-allow-headers"));
+  expect.nil(headers.tryGet("access-control-allow-methods"));
 }
 
 test "OPTIONS /users has cors headers" {
@@ -52,8 +52,8 @@ test "OPTIONS /users has cors headers" {
   expect.equal(headers.tryGet("access-control-allow-origin"), "winglang.io");
 
   // Other cors headers are not set
-  expect.isNil(headers.tryGet("access-control-expose-headers"));
-  expect.isNil(headers.tryGet("access-control-allow-credentials"));
+  expect.nil(headers.tryGet("access-control-expose-headers"));
+  expect.nil(headers.tryGet("access-control-allow-credentials"));
 }
 
 test "OPTIONS /users responds with proper headers for requested" {

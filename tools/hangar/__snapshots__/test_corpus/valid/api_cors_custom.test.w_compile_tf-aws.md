@@ -36,8 +36,8 @@ module.exports = function({ $api_url, $expect_Util, $http_Util }) {
       (await $expect_Util.equal((headers)["access-control-allow-origin"], "winglang.io"));
       (await $expect_Util.equal((headers)["access-control-allow-credentials"], "true"));
       (await $expect_Util.equal((headers)["access-control-expose-headers"], "Content-Type"));
-      (await $expect_Util.isNil((headers)["access-control-allow-headers"]));
-      (await $expect_Util.isNil((headers)["access-control-allow-methods"]));
+      (await $expect_Util.nil((headers)["access-control-allow-headers"]));
+      (await $expect_Util.nil((headers)["access-control-allow-methods"]));
     }
   }
   return $Closure2;
@@ -62,8 +62,8 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
       (await $expect_Util.equal((headers)["access-control-allow-methods"], "GET,POST,OPTIONS"));
       (await $expect_Util.equal((headers)["access-control-allow-headers"], "Content-Type,Authorization,X-Custom-Header"));
       (await $expect_Util.equal((headers)["access-control-allow-origin"], "winglang.io"));
-      (await $expect_Util.isNil((headers)["access-control-expose-headers"]));
-      (await $expect_Util.isNil((headers)["access-control-allow-credentials"]));
+      (await $expect_Util.nil((headers)["access-control-expose-headers"]));
+      (await $expect_Util.nil((headers)["access-control-allow-credentials"]));
     }
   }
   return $Closure3;
