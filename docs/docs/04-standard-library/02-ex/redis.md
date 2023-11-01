@@ -36,7 +36,6 @@ new ex.Redis();
 | <code><a href="#@winglang/sdk.ex.IRedisClient.get">get</a></code> | Get value at given key. |
 | <code><a href="#@winglang/sdk.ex.IRedisClient.hget">hget</a></code> | Returns the value associated with field in the hash stored at key. |
 | <code><a href="#@winglang/sdk.ex.IRedisClient.hset">hset</a></code> | Sets the specified field to respective value in the hash stored at key. |
-| <code><a href="#@winglang/sdk.ex.IRedisClient.rawClient">rawClient</a></code> | Get raw redis client (currently IoRedis). |
 | <code><a href="#@winglang/sdk.ex.IRedisClient.sadd">sadd</a></code> | Add the specified members to the set stored at key. |
 | <code><a href="#@winglang/sdk.ex.IRedisClient.set">set</a></code> | Set key value pair. |
 | <code><a href="#@winglang/sdk.ex.IRedisClient.smembers">smembers</a></code> | Returns all the members of the set value stored at key. |
@@ -131,14 +130,6 @@ field in key to set.
 value to set at field in key.
 
 ---
-
-##### `rawClient` <a name="rawClient" id="@winglang/sdk.ex.IRedisClient.rawClient"></a>
-
-```wing
-inflight rawClient(): any
-```
-
-Get raw redis client (currently IoRedis).
 
 ##### `sadd` <a name="sadd" id="@winglang/sdk.ex.IRedisClient.sadd"></a>
 
@@ -263,7 +254,6 @@ new ex.RedisClientBase();
 | <code><a href="#@winglang/sdk.ex.RedisClientBase.get">get</a></code> | Get value at given key. |
 | <code><a href="#@winglang/sdk.ex.RedisClientBase.hget">hget</a></code> | Returns the value associated with field in the hash stored at key. |
 | <code><a href="#@winglang/sdk.ex.RedisClientBase.hset">hset</a></code> | Sets the specified field to respective value in the hash stored at key. |
-| <code><a href="#@winglang/sdk.ex.RedisClientBase.rawClient">rawClient</a></code> | Get raw redis client (currently IoRedis). |
 | <code><a href="#@winglang/sdk.ex.RedisClientBase.sadd">sadd</a></code> | Add the specified members to the set stored at key. |
 | <code><a href="#@winglang/sdk.ex.RedisClientBase.set">set</a></code> | Set key value pair. |
 | <code><a href="#@winglang/sdk.ex.RedisClientBase.smembers">smembers</a></code> | Returns all the members of the set value stored at key. |
@@ -344,14 +334,6 @@ Sets the specified field to respective value in the hash stored at key.
 - *Type:* str
 
 ---
-
-##### `rawClient` <a name="rawClient" id="@winglang/sdk.ex.RedisClientBase.rawClient"></a>
-
-```wing
-rawClient(): any
-```
-
-Get raw redis client (currently IoRedis).
 
 ##### `sadd` <a name="sadd" id="@winglang/sdk.ex.RedisClientBase.sadd"></a>
 
