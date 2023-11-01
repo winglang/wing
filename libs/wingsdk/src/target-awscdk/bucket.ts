@@ -101,7 +101,6 @@ export class Bucket extends cloud.Bucket {
       cloud.BucketInflightMethods.TRY_DELETE,
       cloud.BucketInflightMethods.SIGNED_URL,
       cloud.BucketInflightMethods.METADATA,
-      cloud.BucketInflightMethods.COPY,
     ];
   }
 
