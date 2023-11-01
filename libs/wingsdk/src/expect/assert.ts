@@ -49,5 +49,18 @@ export class Util {
     );
   }
 
+  /**
+   * Checks if a value is not nil.
+   * @param actual The value to test.
+   * @throws Will throw an error if the actual value is nil.
+   * @returns void
+   */
+  public static notNil(actual: unknown): void {
+    nodeAssert.ok(
+      actual !== null && actual !== undefined,
+      `Expected "${actual}" to be not nil`
+    );
+  }
+
   private constructor() {}
 }

@@ -50,6 +50,12 @@ describe("equal boolean", () => {
 describe("is nil", () => {
   test("is null", () => {
     expect(() => {
+      Assert.nil(null);
+    }).not.toThrow();
+  });
+
+  test("is undefined", () => {
+    expect(() => {
       Assert.nil(undefined);
     }).not.toThrow();
   });
@@ -64,5 +70,31 @@ describe("is nil", () => {
     expect(() => {
       Assert.nil(5);
     }).toThrow();
+  });
+});
+
+describe("is not nil", () => {
+  test("is not undefined", () => {
+    expect(() => {
+      Assert.notNil(undefined);
+    }).toThrow();
+  });
+
+  test("is not null", () => {
+    expect(() => {
+      Assert.notNil(null);
+    }).toThrow();
+  });
+
+  test("is not null string", () => {
+    expect(() => {
+      Assert.notNil("not null");
+    }).not.toThrow();
+  });
+
+  test("is not null number", () => {
+    expect(() => {
+      Assert.notNil(5);
+    }).not.toThrow();
   });
 });

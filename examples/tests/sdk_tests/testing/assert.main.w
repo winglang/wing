@@ -9,6 +9,7 @@ let b: num? = 1;
 expect.equal(1, 1);
 expect.equal(b, 1);
 expect.nil(a);
+expect.notNil(b);
 expect.notEqual(b, 2);
 expect.notEqual(b, "hello");
 expect.notEqual(b, true);
@@ -17,6 +18,7 @@ test "equal num" {
     expect.equal(1, 1);
     expect.equal(b, 1);
     expect.nil(a);
+    expect.notNil(b);
     expect.notEqual(b, 2);
     expect.notEqual(b, "hello");
     expect.notEqual(b, true);
@@ -30,6 +32,7 @@ let d: str? = "hello";
 expect.equal("hello", "hello");
 expect.equal(d, "hello");
 expect.nil(c);
+expect.notNil(d);
 expect.notEqual(d, "world");
 expect.notEqual(d, 1);
 expect.notEqual(d, true);
@@ -38,6 +41,7 @@ test "equal str" {
     expect.equal("hello", "hello");
     expect.equal(d, "hello");
     expect.nil(c);
+    expect.notNil(d);
     expect.notEqual(d, "world");
     expect.notEqual(d, 1);
     expect.notEqual(d, true);
@@ -51,12 +55,14 @@ let f: bool? = true;
 expect.equal(true, true);
 expect.equal(f, true);
 expect.nil(e);
+expect.notNil(f);
 expect.notEqual(f, false);
 
 test "equal bool" {
     expect.equal(true, true);
     expect.equal(f, true);
     expect.nil(e);
+    expect.notNil(f);
     expect.notEqual(f, false);
 }
 
