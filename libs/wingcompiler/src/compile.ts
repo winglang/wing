@@ -60,8 +60,7 @@ function resolveSynthDir(
   entrypoint: string,
   target: Target,
   testing: boolean = false,
-  tmp: boolean = false,
-  log?: (...args: any[]) => void
+  tmp: boolean = false
 ) {
   const targetDirSuffix = DEFAULT_SYNTH_DIR_SUFFIX[target];
   if (!targetDirSuffix) {
@@ -77,10 +76,11 @@ function resolveSynthDir(
       entrypointName = basename(entrypoint, ".w");
     }
   } catch (err) {
-    log?.(err);
+    console.error(err);
     throw new Error("Source file cannot be found");
   }
-  const randomPart = tmp || (testing && target !== Target.SIM) ? `.${Date.now().toString().slice(-6)}` : "";
+  const randomPart =
+    tmp || (testing && target !== Target.SIM) ? `.${Date.now().toString().slice(-6)}` : "";
   const tmpSuffix = tmp ? ".tmp" : "";
   const lastPart = `${entrypointName}.${targetDirSuffix}${randomPart}${tmpSuffix}`;
   if (testing) {
