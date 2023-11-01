@@ -31,6 +31,7 @@ const EVENTS = {
 export class Bucket extends cloud.Bucket {
   private readonly bucket: S3Bucket;
   private readonly public: boolean;
+  private bucketDeployment?: BucketDeployment;
 
   constructor(scope: Construct, id: string, props: cloud.BucketProps = {}) {
     super(scope, id, props);
@@ -41,10 +42,14 @@ export class Bucket extends cloud.Bucket {
   }
 
   public addObject(key: string, body: string): void {
-    new BucketDeployment(this, `S3Object-${key}`, {
-      destinationBucket: this.bucket,
-      sources: [Source.data(key, body)],
-    });
+    if (!this.bucketDeployment) {
+      this.bucketDeployment = new BucketDeployment(this, `S3Object-${key}`, {
+        destinationBucket: this.bucket,
+        sources: [Source.data(key, body)],
+      });
+    } else {
+      this.bucketDeployment.addSource(Source.data(key, body));
+    }
   }
 
   protected eventHandlerLocation(): string {
@@ -79,6 +84,24 @@ export class Bucket extends cloud.Bucket {
     }
 
     return fn;
+  }
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      cloud.BucketInflightMethods.DELETE,
+      cloud.BucketInflightMethods.GET,
+      cloud.BucketInflightMethods.GET_JSON,
+      cloud.BucketInflightMethods.LIST,
+      cloud.BucketInflightMethods.PUT,
+      cloud.BucketInflightMethods.PUT_JSON,
+      cloud.BucketInflightMethods.PUBLIC_URL,
+      cloud.BucketInflightMethods.EXISTS,
+      cloud.BucketInflightMethods.TRY_GET,
+      cloud.BucketInflightMethods.TRY_GET_JSON,
+      cloud.BucketInflightMethods.TRY_DELETE,
+      cloud.BucketInflightMethods.SIGNED_URL,
+      cloud.BucketInflightMethods.METADATA,
+    ];
   }
 
   public onCreate(
@@ -219,7 +242,14 @@ export function createEncryptedBucket(
 
   return new S3Bucket(scope, name, {
     encryption: BucketEncryption.S3_MANAGED,
-    blockPublicAccess: isPublic ? undefined : BlockPublicAccess.BLOCK_ALL,
+    blockPublicAccess: isPublic
+      ? {
+          blockPublicAcls: false,
+          blockPublicPolicy: false,
+          ignorePublicAcls: false,
+          restrictPublicBuckets: false,
+        }
+      : BlockPublicAccess.BLOCK_ALL,
     publicReadAccess: isPublic ? true : false,
     removalPolicy: RemovalPolicy.DESTROY,
     autoDeleteObjects: isTestEnvironment ? true : false,

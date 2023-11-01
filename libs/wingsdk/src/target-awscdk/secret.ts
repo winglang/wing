@@ -34,6 +34,14 @@ export class Secret extends cloud.Secret {
     }
   }
 
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      cloud.SecretInflightMethods.VALUE,
+      cloud.SecretInflightMethods.VALUE_JSON,
+    ];
+  }
+
   /**
    * Secret's arn
    */

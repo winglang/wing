@@ -1,5 +1,5 @@
 import { InvokeCommand, LambdaClient } from "@aws-sdk/client-lambda";
-import { fromUtf8 } from "@aws-sdk/util-utf8-node";
+import { fromUtf8 } from "@smithy/util-utf8";
 import { mockClient } from "aws-sdk-client-mock";
 import { test, expect, beforeEach } from "vitest";
 import {
@@ -76,14 +76,14 @@ test("parse logs", () => {
     {
       data: { message: "hello world" },
       timestamp: "2023-08-04T16:40:47.309Z",
-      sourceType: "wingsdk.cloud.Function",
+      sourceType: "@winglang/sdk.cloud.Function",
       sourcePath: "fake-source",
       type: "log",
     },
     {
       data: { message: "hello world" },
       timestamp: "2023-08-04T16:40:50.691Z",
-      sourceType: "wingsdk.cloud.Function",
+      sourceType: "@winglang/sdk.cloud.Function",
       sourcePath: "fake-source",
       type: "log",
     },

@@ -54,23 +54,7 @@ export abstract class Bucket extends Resource {
   }
 
   /** @internal */
-  public _getInflightOps(): string[] {
-    return [
-      BucketInflightMethods.DELETE,
-      BucketInflightMethods.GET,
-      BucketInflightMethods.GET_JSON,
-      BucketInflightMethods.LIST,
-      BucketInflightMethods.PUT,
-      BucketInflightMethods.PUT_JSON,
-      BucketInflightMethods.PUBLIC_URL,
-      BucketInflightMethods.EXISTS,
-      BucketInflightMethods.TRY_GET,
-      BucketInflightMethods.TRY_GET_JSON,
-      BucketInflightMethods.TRY_DELETE,
-      BucketInflightMethods.SIGNED_URL,
-      BucketInflightMethods.METADATA,
-    ];
-  }
+  public abstract _supportedOps(): string[];
 
   /**
    * Add a file to the bucket that is uploaded when the app is deployed.
@@ -294,7 +278,7 @@ export interface IBucketClient {
    * @param options Additional options
    * @inflight
    */
-  put(key: string, body: string, options?: BucketPutOptions): void;
+  put(key: string, body: string, options?: BucketPutOptions): Promise<void>;
 
   /**
    * Put a Json object in the bucket.
