@@ -38,7 +38,7 @@ export interface TestOptions extends CompileOptions {
    */
   outputFile?: string;
   /**
-   * string representing a RegEx pattern used to filter tests.
+   * String representing a RegEx pattern used to filter tests.
    */
   testFilter?: string;
   /**
