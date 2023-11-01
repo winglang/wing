@@ -6,7 +6,7 @@ import { parseMetaCommentFromPath } from "./meta_comment";
 
 invalidWingFiles.forEach((wingFile) => {
   test(wingFile, async ({ expect }) => {
-    const platforms = ["tf-aws"];
+    const platforms = ["sim"];
     const args = ["test"];
 
     const absoluteWingFile = path.join(invalidTestDir, wingFile);

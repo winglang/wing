@@ -1,11 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`access_hidden_namespace.test.w 1`] = `
-"- Compiling invalid/access_hidden_namespace.test.w to tf-aws...
-
-✖ Compiling invalid/access_hidden_namespace.test.w to tf-aws...
-
-error: Unknown symbol \\"core\\"
+"error: Unknown symbol \\"core\\"
   --> ../../../examples/tests/invalid/access_hidden_namespace.test.w:7:5
   |
 7 | new core.NodeJsCode(\\"<ABSOLUTE_PATH>/test.txt\\"); // This should fail even though \`fs.TextFile\` extends \`core.FileBase\` because we didn't bring in \`core\` explicitly.
@@ -20,11 +16,7 @@ Duration <DURATION>"
 `;
 
 exports[`access_modifiers.test.w 1`] = `
-"- Compiling invalid/access_modifiers.test.w to tf-aws...
-
-✖ Compiling invalid/access_modifiers.test.w to tf-aws...
-
-error: Method \\"private_method\\" is private in \\"Foo\\" but it's an implementation of \\"SomeInterface\\". Interface members must be public.
+"error: Method \\"private_method\\" is private in \\"Foo\\" but it's an implementation of \\"SomeInterface\\". Interface members must be public.
    --> ../../../examples/tests/invalid/access_modifiers.test.w:49:3
    |
 49 |   private_method() {}
@@ -221,11 +213,7 @@ Duration <DURATION>"
 `;
 
 exports[`access_private_apis.test.w 1`] = `
-"- Compiling invalid/access_private_apis.test.w to tf-aws...
-
-✖ Compiling invalid/access_private_apis.test.w to tf-aws...
-
-error: Class \\"subdir2.MyPrivateClass\\" is private
+"error: Class \\"subdir2.MyPrivateClass\\" is private
   --> ../../../examples/tests/invalid/access_private_apis.test.w:3:5
   |
 3 | new subdir2.MyPrivateClass();
@@ -295,11 +283,7 @@ Duration <DURATION>"
 `;
 
 exports[`access_static_from_instance.test.w 1`] = `
-"- Compiling invalid/access_static_from_instance.test.w to tf-aws...
-
-✖ Compiling invalid/access_static_from_instance.test.w to tf-aws...
-
-error: Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
+"error: Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
   --> ../../../examples/tests/invalid/access_static_from_instance.test.w:4:3
   |
 4 |   pub static f: num;
@@ -342,13 +326,9 @@ Duration <DURATION>"
 `;
 
 exports[`ambiguous_api_paths.test.w 1`] = `
-"- Compiling invalid/ambiguous_api_paths.test.w to tf-aws...
+"ERROR: Endpoint for path '/test/{variable}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '/test/path'
 
-✖ Compiling invalid/ambiguous_api_paths.test.w to tf-aws...
-
-ERROR: Endpoint for path '/test/{variable}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '/test/path'
-
-../../../examples/tests/invalid/target/test/ambiguous_api_paths.test.tfaws.605215.tmp/.wing/preflight.js:39
+../../../examples/tests/invalid/target/test/ambiguous_api_paths.test.wsim.[REDACTED].tmp/.wing/preflight.js:39
        const handler = new $Closure1(this, \\"$Closure1\\");
        (api.get(\\"<ABSOLUTE_PATH>/path\\", handler));
 >>     (api.get(\\"<ABSOLUTE_PATH>/{variable}\\", handler));
@@ -363,11 +343,7 @@ Duration <DURATION>"
 `;
 
 exports[`bring.test.w 1`] = `
-"- Compiling invalid/bring.test.w to tf-aws...
-
-✖ Compiling invalid/bring.test.w to tf-aws...
-
-error: Expected module specification (see https://www.winglang.io/docs/libraries)
+"error: Expected module specification (see https://www.winglang.io/docs/libraries)
   --> ../../../examples/tests/invalid/bring.test.w:6:7
   |
 6 | bring ;
@@ -403,11 +379,7 @@ Duration <DURATION>"
 `;
 
 exports[`bring_jsii.test.w 1`] = `
-"- Compiling invalid/bring_jsii.test.w to tf-aws...
-
-✖ Compiling invalid/bring_jsii.test.w to tf-aws...
-
-error: bring \\"jsii-code-samples\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
+"error: bring \\"jsii-code-samples\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
   --> ../../../examples/tests/invalid/bring_jsii.test.w:1:1
   |
 1 | bring \\"jsii-code-samples\\";
@@ -429,11 +401,7 @@ Duration <DURATION>"
 `;
 
 exports[`bring_local_dir.test.w 1`] = `
-"- Compiling invalid/bring_local_dir.test.w to tf-aws...
-
-✖ Compiling invalid/bring_local_dir.test.w to tf-aws...
-
-error: Cannot bring \\"/subdir\\" since it is not a relative path
+"error: Cannot bring \\"/subdir\\" since it is not a relative path
   --> ../../../examples/tests/invalid/bring_local_dir.test.w:4:7
   |
 4 | bring \\"/subdir\\" as baz;
@@ -462,11 +430,7 @@ Duration <DURATION>"
 `;
 
 exports[`bring_local_self.test.w 1`] = `
-"- Compiling invalid/bring_local_self.test.w to tf-aws...
-
-✖ Compiling invalid/bring_local_self.test.w to tf-aws...
-
-error: Cannot find module \\"./bring_local_self.main.w\\"
+"error: Cannot find module \\"./bring_local_self.main.w\\"
   --> ../../../examples/tests/invalid/bring_local_self.test.w:1:7
   |
 1 | bring \\"./bring_local_self.main.w\\" as foo;
@@ -502,11 +466,7 @@ Duration <DURATION>"
 `;
 
 exports[`bring_local_variables.test.w 1`] = `
-"- Compiling invalid/bring_local_variables.test.w to tf-aws...
-
-✖ Compiling invalid/bring_local_variables.test.w to tf-aws...
-
-error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` or \`.test.w\` to make this an entrypoint file.
+"error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` or \`.test.w\` to make this an entrypoint file.
   --> ../../../examples/tests/invalid/file_with_variables.w:5:1
   |
 5 | let x = 5;
@@ -542,11 +502,7 @@ Duration <DURATION>"
 `;
 
 exports[`bring_non_std_construct.test.w 1`] = `
-"- Compiling invalid/bring_non_std_construct.test.w to tf-aws...
-
-✖ Compiling invalid/bring_non_std_construct.test.w to tf-aws...
-
-error: Expected 2 positional argument(s) or named arguments for the last parameter but got 0
+"error: Expected 2 positional argument(s) or named arguments for the last parameter but got 0
   --> ../../../examples/tests/invalid/bring_non_std_construct.test.w:8:1
   |
 8 | new cdktf.S3Backend();
@@ -575,11 +531,7 @@ Duration <DURATION>"
 `;
 
 exports[`call_inflight_from_preflight.test.w 1`] = `
-"- Compiling invalid/call_inflight_from_preflight.test.w to tf-aws...
-
-✖ Compiling invalid/call_inflight_from_preflight.test.w to tf-aws...
-
-error: Cannot call into inflight phase while preflight
+"error: Cannot call into inflight phase while preflight
   --> ../../../examples/tests/invalid/call_inflight_from_preflight.test.w:4:1
   |
 4 | util.sleep(1s);
@@ -601,11 +553,7 @@ Duration <DURATION>"
 `;
 
 exports[`capture_redefinition.test.w 1`] = `
-"- Compiling invalid/capture_redefinition.test.w to tf-aws...
-
-✖ Compiling invalid/capture_redefinition.test.w to tf-aws...
-
-error: Cannot access \\"y\\" because it is shadowed by another symbol with the same name
+"error: Cannot access \\"y\\" because it is shadowed by another symbol with the same name
   --> ../../../examples/tests/invalid/capture_redefinition.test.w:5:7
   |
 5 |   log(y);
@@ -634,11 +582,7 @@ Duration <DURATION>"
 `;
 
 exports[`class.test.w 1`] = `
-"- Compiling invalid/class.test.w to tf-aws...
-
-✖ Compiling invalid/class.test.w to tf-aws...
-
-error: Call to super constructor can only be made from derived classes
+"error: Call to super constructor can only be made from derived classes
    --> ../../../examples/tests/invalid/class.test.w:86:5
    |
 86 |     super();
@@ -849,11 +793,7 @@ Duration <DURATION>"
 `;
 
 exports[`cloud_function_expects_inflight.test.w 1`] = `
-"- Compiling invalid/cloud_function_expects_inflight.test.w to tf-aws...
-
-✖ Compiling invalid/cloud_function_expects_inflight.test.w to tf-aws...
-
-error: Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
+"error: Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.test.w:3:20
   |  
 3 |   new cloud.Function((name: str): str => {
@@ -882,11 +822,7 @@ Duration <DURATION>"
 `;
 
 exports[`container_types.test.w 1`] = `
-"- Compiling invalid/container_types.test.w to tf-aws...
-
-✖ Compiling invalid/container_types.test.w to tf-aws...
-
-error: Unknown parser error
+"error: Unknown parser error
    --> ../../../examples/tests/invalid/container_types.test.w:14:25
    |
 14 | let m2: Map<num> = [\\"a\\" => 1, \\"b\\" => \\"2\\", \\"c\\" => 3];
@@ -1069,11 +1005,7 @@ Duration <DURATION>"
 `;
 
 exports[`cyclic_bring1.w 1`] = `
-"- Compiling invalid/cyclic_bring1.w to tf-aws...
-
-✖ Compiling invalid/cyclic_bring1.w to tf-aws...
-
-error: Could not compile \\"<ABSOLUTE_PATH>/cyclic_bring1.w\\" due to cyclic bring statements:
+"error: Could not compile \\"<ABSOLUTE_PATH>/cyclic_bring1.w\\" due to cyclic bring statements:
 - <ABSOLUTE_PATH>/cyclic_bring3.w
 - <ABSOLUTE_PATH>/cyclic_bring2.w
 - <ABSOLUTE_PATH>/cyclic_bring1.w
@@ -1101,11 +1033,7 @@ Duration <DURATION>"
 `;
 
 exports[`cyclic_bring2.w 1`] = `
-"- Compiling invalid/cyclic_bring2.w to tf-aws...
-
-✖ Compiling invalid/cyclic_bring2.w to tf-aws...
-
-error: Could not compile \\"<ABSOLUTE_PATH>/cyclic_bring2.w\\" due to cyclic bring statements:
+"error: Could not compile \\"<ABSOLUTE_PATH>/cyclic_bring2.w\\" due to cyclic bring statements:
 - <ABSOLUTE_PATH>/cyclic_bring1.w
 - <ABSOLUTE_PATH>/cyclic_bring3.w
 - <ABSOLUTE_PATH>/cyclic_bring2.w
@@ -1133,11 +1061,7 @@ Duration <DURATION>"
 `;
 
 exports[`cyclic_bring3.w 1`] = `
-"- Compiling invalid/cyclic_bring3.w to tf-aws...
-
-✖ Compiling invalid/cyclic_bring3.w to tf-aws...
-
-error: Could not compile \\"<ABSOLUTE_PATH>/cyclic_bring3.w\\" due to cyclic bring statements:
+"error: Could not compile \\"<ABSOLUTE_PATH>/cyclic_bring3.w\\" due to cyclic bring statements:
 - <ABSOLUTE_PATH>/cyclic_bring2.w
 - <ABSOLUTE_PATH>/cyclic_bring1.w
 - <ABSOLUTE_PATH>/cyclic_bring3.w
@@ -1165,11 +1089,7 @@ Duration <DURATION>"
 `;
 
 exports[`diags_with_multibyte_chars.test.w 1`] = `
-"- Compiling invalid/diags_with_multibyte_chars.test.w to tf-aws...
-
-✖ Compiling invalid/diags_with_multibyte_chars.test.w to tf-aws...
-
-error: Unknown symbol \\"asdf\\"
+"error: Unknown symbol \\"asdf\\"
   --> ../../../examples/tests/invalid/diags_with_multibyte_chars.test.w:4:1
   |
 4 | asdf;
@@ -1184,11 +1104,7 @@ Duration <DURATION>"
 `;
 
 exports[`enums.test.w 1`] = `
-"- Compiling invalid/enums.test.w to tf-aws...
-
-✖ Compiling invalid/enums.test.w to tf-aws...
-
-error: Enum \\"SomeEnum\\" does not contain value \\"FOUR\\"
+"error: Enum \\"SomeEnum\\" does not contain value \\"FOUR\\"
   --> ../../../examples/tests/invalid/enums.test.w:5:21
   |
 5 | let four = SomeEnum.FOUR;
@@ -1210,11 +1126,7 @@ Duration <DURATION>"
 `;
 
 exports[`extern.test.w 1`] = `
-"- Compiling invalid/extern.test.w to tf-aws...
-
-✖ Compiling invalid/extern.test.w to tf-aws...
-
-error: File not found: \\"./sad.js\\"
+"error: File not found: \\"./sad.js\\"
   --> ../../../examples/tests/invalid/extern.test.w:2:3
   |
 2 |   extern \\"./sad.js\\" static getNum(): num;
@@ -1229,11 +1141,7 @@ Duration <DURATION>"
 `;
 
 exports[`extern_static.test.w 1`] = `
-"- Compiling invalid/extern_static.test.w to tf-aws...
-
-✖ Compiling invalid/extern_static.test.w to tf-aws...
-
-error: Extern methods must be declared \\"static\\" (they cannot access instance members)
+"error: Extern methods must be declared \\"static\\" (they cannot access instance members)
   --> ../../../examples/tests/invalid/extern_static.test.w:2:45
   |
 2 |   extern \\"../valid/external_js.js\\" inflight getGreeting(name: str): str;
@@ -1248,11 +1156,7 @@ Duration <DURATION>"
 `;
 
 exports[`file_with_variables.w 1`] = `
-"- Compiling invalid/file_with_variables.w to tf-aws...
-
-✖ Compiling invalid/file_with_variables.w to tf-aws...
-
-error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` or \`.test.w\` to make this an entrypoint file.
+"error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` or \`.test.w\` to make this an entrypoint file.
   --> ../../../examples/tests/invalid/file_with_variables.w:5:1
   |
 5 | let x = 5;
@@ -1288,11 +1192,7 @@ Duration <DURATION>"
 `;
 
 exports[`for_loop.test.w 1`] = `
-"- Compiling invalid/for_loop.test.w to tf-aws...
-
-✖ Compiling invalid/for_loop.test.w to tf-aws...
-
-error: Reserved word
+"error: Reserved word
   --> ../../../examples/tests/invalid/for_loop.test.w:5:5
   |
 5 | for test in bucket {
@@ -1314,11 +1214,7 @@ Duration <DURATION>"
 `;
 
 exports[`function_call_arity.test.w 1`] = `
-"- Compiling invalid/function_call_arity.test.w to tf-aws...
-
-✖ Compiling invalid/function_call_arity.test.w to tf-aws...
-
-error: Unexpected 'identifier'
+"error: Unexpected 'identifier'
    --> ../../../examples/tests/invalid/function_call_arity.test.w:31:62
    |
 31 | invalidCombinationFunc2(1, 2, prefix: \\"debug\\", priority: 0, \\"hello\\", \\"world\\");
@@ -1410,11 +1306,7 @@ Duration <DURATION>"
 `;
 
 exports[`function_call_variadic.test.w 1`] = `
-"- Compiling invalid/function_call_variadic.test.w to tf-aws...
-
-✖ Compiling invalid/function_call_variadic.test.w to tf-aws...
-
-error: Expected type to be \\"str\\", but got \\"num\\" instead
+"error: Expected type to be \\"str\\", but got \\"num\\" instead
   --> ../../../examples/tests/invalid/function_call_variadic.test.w:3:6
   |
 3 | func(1, 2, 3); // should fail due to wrong type for variadic
@@ -1450,11 +1342,7 @@ Duration <DURATION>"
 `;
 
 exports[`function_type.test.w 1`] = `
-"- Compiling invalid/function_type.test.w to tf-aws...
-
-✖ Compiling invalid/function_type.test.w to tf-aws...
-
-error: Expected function return type
+"error: Expected function return type
   --> ../../../examples/tests/invalid/function_type.test.w:2:26
   |
 2 | let my_func = (callback: (num)) => {  };
@@ -1483,11 +1371,7 @@ Duration <DURATION>"
 `;
 
 exports[`function_variadic_definition.test.w 1`] = `
-"- Compiling invalid/function_variadic_definition.test.w to tf-aws...
-
-✖ Compiling invalid/function_variadic_definition.test.w to tf-aws...
-
-error: Unknown parser error
+"error: Unknown parser error
    --> ../../../examples/tests/invalid/function_variadic_definition.test.w:15:13
    |
 15 | f5(args: 1, 2);
@@ -1544,11 +1428,7 @@ Duration <DURATION>"
 `;
 
 exports[`immutable_container_types.test.w 1`] = `
-"- Compiling invalid/immutable_container_types.test.w to tf-aws...
-
-✖ Compiling invalid/immutable_container_types.test.w to tf-aws...
-
-error: Unknown symbol \\"set\\"
+"error: Unknown symbol \\"set\\"
   --> ../../../examples/tests/invalid/immutable_container_types.test.w:3:4
   |
 3 | m1.set(\\"a\\", \\"bye\\");
@@ -1647,11 +1527,7 @@ Duration <DURATION>"
 `;
 
 exports[`impl_interface.test.w 1`] = `
-"- Compiling invalid/impl_interface.test.w to tf-aws...
-
-✖ Compiling invalid/impl_interface.test.w to tf-aws...
-
-error: Class \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueSetConsumerHandler\\"
+"error: Class \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueSetConsumerHandler\\"
   --> ../../../examples/tests/invalid/impl_interface.test.w:3:7
   |
 3 | class A impl cloud.IQueueSetConsumerHandler {
@@ -1701,11 +1577,7 @@ Duration <DURATION>"
 `;
 
 exports[`inference.test.w 1`] = `
-"- Compiling invalid/inference.test.w to tf-aws...
-
-✖ Compiling invalid/inference.test.w to tf-aws...
-
-error: Missing required type annotation for method signature
+"error: Missing required type annotation for method signature
    --> ../../../examples/tests/invalid/inference.test.w:78:8
    |
 78 |   args(nice) {
@@ -1885,11 +1757,7 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_class_created_in_preflight.test.w 1`] = `
-"- Compiling invalid/inflight_class_created_in_preflight.test.w to tf-aws...
-
-✖ Compiling invalid/inflight_class_created_in_preflight.test.w to tf-aws...
-
-error: Cannot create inflight class \\"Foo\\" in preflight phase
+"error: Cannot create inflight class \\"Foo\\" in preflight phase
   --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.test.w:3:1
   |
 3 | new Foo();
@@ -1932,11 +1800,7 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_class_dup_init.test.w 1`] = `
-"- Compiling invalid/inflight_class_dup_init.test.w to tf-aws...
-
-✖ Compiling invalid/inflight_class_dup_init.test.w to tf-aws...
-
-error: Multiple inflight initializers defined in class Foo
+"error: Multiple inflight initializers defined in class Foo
   --> ../../../examples/tests/invalid/inflight_class_dup_init.test.w:6:3
   |  
 6 | /   inflight init() {
@@ -1953,11 +1817,7 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_class_in_preflight.test.w 1`] = `
-"- Compiling invalid/inflight_class_in_preflight.test.w to tf-aws...
-
-✖ Compiling invalid/inflight_class_in_preflight.test.w to tf-aws...
-
-error: Cannot create inflight class \\"Foo\\" in preflight phase
+"error: Cannot create inflight class \\"Foo\\" in preflight phase
   --> ../../../examples/tests/invalid/inflight_class_in_preflight.test.w:5:1
   |
 5 | new Foo();
@@ -1972,11 +1832,7 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_class_interface_structural_typing.test.w 1`] = `
-"- Compiling invalid/inflight_class_interface_structural_typing.test.w to tf-aws...
-
-✖ Compiling invalid/inflight_class_interface_structural_typing.test.w to tf-aws...
-
-error: Expected type to be \\"IGoo\\", but got \\"NotGoo\\" instead
+"error: Expected type to be \\"IGoo\\", but got \\"NotGoo\\" instead
    --> ../../../examples/tests/invalid/inflight_class_interface_structural_typing.test.w:26:17
    |
 26 |   let x: IGoo = new NotGoo();
@@ -1991,11 +1847,7 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_reassign.test.w 1`] = `
-"- Compiling invalid/inflight_reassign.test.w to tf-aws...
-
-✖ Compiling invalid/inflight_reassign.test.w to tf-aws...
-
-error: Variable cannot be reassigned from inflight
+"error: Variable cannot be reassigned from inflight
   --> ../../../examples/tests/invalid/inflight_reassign.test.w:5:3
   |
 5 |   xvar = \\"hi\\";
@@ -2020,11 +1872,7 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_ref_explicit_ops.test.w 1`] = `
-"- Compiling invalid/inflight_ref_explicit_ops.test.w to tf-aws...
-
-✖ Compiling invalid/inflight_ref_explicit_ops.test.w to tf-aws...
-
-error: Cannot qualify access to a lifted object of type \\"Queue\\" (see https://github.com/winglang/wing/issues/76 for more details)
+"error: Cannot qualify access to a lifted object of type \\"Queue\\" (see https://github.com/winglang/wing/issues/76 for more details)
    --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:13:12
    |
 13 |     return this.myQueue;
@@ -2053,11 +1901,7 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_ref_resource_sub_method.test.w 1`] = `
-"- Compiling invalid/inflight_ref_resource_sub_method.test.w to tf-aws...
-
-✖ Compiling invalid/inflight_ref_resource_sub_method.test.w to tf-aws...
-
-error: Cannot qualify access to a lifted object of type \\"Queue\\" (see https://github.com/winglang/wing/issues/76 for more details)
+"error: Cannot qualify access to a lifted object of type \\"Queue\\" (see https://github.com/winglang/wing/issues/76 for more details)
    --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.test.w:13:12
    |
 13 |     return this.myQueue;
@@ -2079,11 +1923,7 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_ref_unknown_op.test.w 1`] = `
-"- Compiling invalid/inflight_ref_unknown_op.test.w to tf-aws...
-
-✖ Compiling invalid/inflight_ref_unknown_op.test.w to tf-aws...
-
-error: Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
+"error: Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
    --> ../../../examples/tests/invalid/inflight_ref_unknown_op.test.w:13:13
    |
 13 |     let x = this.b;
@@ -2105,11 +1945,7 @@ Duration <DURATION>"
 `;
 
 exports[`interface.test.w 1`] = `
-"- Compiling invalid/interface.test.w to tf-aws...
-
-✖ Compiling invalid/interface.test.w to tf-aws...
-
-error: Properties are not supported in interfaces
+"error: Properties are not supported in interfaces
    --> ../../../examples/tests/invalid/interface.test.w:30:3
    |
 30 |   bar: str;
@@ -2164,11 +2000,7 @@ Duration <DURATION>"
 `;
 
 exports[`issue_2767.test.w 1`] = `
-"- Compiling invalid/issue_2767.test.w to tf-aws...
-
-✖ Compiling invalid/issue_2767.test.w to tf-aws...
-
-error: Expected type to be \\"MutJson\\", but got \\"Bucket\\" instead
+"error: Expected type to be \\"MutJson\\", but got \\"Bucket\\" instead
   --> ../../../examples/tests/invalid/issue_2767.test.w:4:16
   |
 4 | x.set(\\"hello\\", new cloud.Bucket());
@@ -2183,11 +2015,7 @@ Duration <DURATION>"
 `;
 
 exports[`jsii_access_modifiers.test.w 1`] = `
-"- Compiling invalid/jsii_access_modifiers.test.w to tf-aws...
-
-✖ Compiling invalid/jsii_access_modifiers.test.w to tf-aws...
-
-error: Cannot access protected member \\"createTopic\\" of \\"Bucket\\"
+"error: Cannot access protected member \\"createTopic\\" of \\"Bucket\\"
    --> ../../../examples/tests/invalid/jsii_access_modifiers.test.w:13:3
    |
 13 | b.createTopic(cloud.BucketEventType.CREATE);
@@ -2202,11 +2030,7 @@ Duration <DURATION>"
 `;
 
 exports[`json.test.w 1`] = `
-"- Compiling invalid/json.test.w to tf-aws...
-
-✖ Compiling invalid/json.test.w to tf-aws...
-
-error: Json literal must have an element
+"error: Json literal must have an element
    --> ../../../examples/tests/invalid/json.test.w:29:26
    |
 29 | let jsonIncomplete = Json;
@@ -2361,11 +2185,7 @@ Duration <DURATION>"
 `;
 
 exports[`json_static.test.w 1`] = `
-"- Compiling invalid/json_static.test.w to tf-aws...
-
-✖ Compiling invalid/json_static.test.w to tf-aws...
-
-error: Unknown symbol \\"set\\"
+"error: Unknown symbol \\"set\\"
   --> ../../../examples/tests/invalid/json_static.test.w:4:10
   |
 4 | immutObj.set(\\"a\\", \\"foo\\");
@@ -2380,11 +2200,7 @@ Duration <DURATION>"
 `;
 
 exports[`missing_semicolon.test.w 1`] = `
-"- Compiling invalid/missing_semicolon.test.w to tf-aws...
-
-✖ Compiling invalid/missing_semicolon.test.w to tf-aws...
-
-error: Expected ';'
+"error: Expected ';'
   --> ../../../examples/tests/invalid/missing_semicolon.test.w:9:3
   |
 9 | })
@@ -2413,11 +2229,7 @@ Duration <DURATION>"
 `;
 
 exports[`mut_container_types.test.w 1`] = `
-"- Compiling invalid/mut_container_types.test.w to tf-aws...
-
-✖ Compiling invalid/mut_container_types.test.w to tf-aws...
-
-error: Expected type to be \\"num\\", but got \\"str\\" instead
+"error: Expected type to be \\"num\\", but got \\"str\\" instead
   --> ../../../examples/tests/invalid/mut_container_types.test.w:2:29
   |
 2 | let arr1 = MutArray<num>[1, \\"2\\", 3];
@@ -2523,11 +2335,7 @@ Duration <DURATION>"
 `;
 
 exports[`nil.test.w 1`] = `
-"- Compiling invalid/nil.test.w to tf-aws...
-
-✖ Compiling invalid/nil.test.w to tf-aws...
-
-error: Expected type to be \\"str\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"str?\\")
+"error: Expected type to be \\"str\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"str?\\")
   --> ../../../examples/tests/invalid/nil.test.w:3:14
   |
 3 | let x: str = nil;
@@ -2570,11 +2378,7 @@ Duration <DURATION>"
 `;
 
 exports[`optionals.test.w 1`] = `
-"- Compiling invalid/optionals.test.w to tf-aws...
-
-✖ Compiling invalid/optionals.test.w to tf-aws...
-
-error: Expected type to be \\"num\\", but got \\"num?\\" instead
+"error: Expected type to be \\"num\\", but got \\"num?\\" instead
    --> ../../../examples/tests/invalid/optionals.test.w:11:3
    |
 11 | f(x);
@@ -2676,11 +2480,7 @@ Duration <DURATION>"
 `;
 
 exports[`panic.test.w 1`] = `
-"- Compiling invalid/panic.test.w to tf-aws...
-
-✖ Compiling invalid/panic.test.w to tf-aws...
-
-error: Compiler bug during type-checking ('panicked at libs/wingc/src/type_check.rs:LINE:COL:
+"error: Compiler bug during type-checking ('panicked at libs/wingc/src/type_check.rs:LINE:COL:
 User invoked panic'), please report at https://www.winglang.io/contributing/start-here/bugs
   --> ../../../examples/tests/invalid/panic.test.w:6:1
   |
@@ -2699,11 +2499,7 @@ Duration <DURATION>"
 exports[`panic.test.w 2`] = `"Panicked, backtrace not captured: Unsupported"`;
 
 exports[`preflight_from_inflight.test.w 1`] = `
-"- Compiling invalid/preflight_from_inflight.test.w to tf-aws...
-
-✖ Compiling invalid/preflight_from_inflight.test.w to tf-aws...
-
-error: Cannot call into preflight phase while inflight
+"error: Cannot call into preflight phase while inflight
    --> ../../../examples/tests/invalid/preflight_from_inflight.test.w:15:5
    |
 15 |     this.r.myPreflight();
@@ -2718,11 +2514,7 @@ Duration <DURATION>"
 `;
 
 exports[`primitives.test.w 1`] = `
-"- Compiling invalid/primitives.test.w to tf-aws...
-
-✖ Compiling invalid/primitives.test.w to tf-aws...
-
-error: Unexpected reference \\"structured_access_expression\\"
+"error: Unexpected reference \\"structured_access_expression\\"
   --> ../../../examples/tests/invalid/primitives.test.w:5:5
   |
 5 | log(y[0]);
@@ -2758,11 +2550,7 @@ Duration <DURATION>"
 `;
 
 exports[`protected_access_modifiers.test.w 1`] = `
-"- Compiling invalid/protected_access_modifiers.test.w to tf-aws...
-
-✖ Compiling invalid/protected_access_modifiers.test.w to tf-aws...
-
-error: Structs must be public (\\"pub\\") or private
+"error: Structs must be public (\\"pub\\") or private
   --> ../../../examples/tests/invalid/protected_access_modifiers.test.w:1:1
   |
 1 | protected struct MyStruct {}
@@ -2798,11 +2586,7 @@ Duration <DURATION>"
 `;
 
 exports[`reassign_to_nonreassignable.test.w 1`] = `
-"- Compiling invalid/reassign_to_nonreassignable.test.w to tf-aws...
-
-✖ Compiling invalid/reassign_to_nonreassignable.test.w to tf-aws...
-
-error: Variable is not reassignable
+"error: Variable is not reassignable
   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.test.w:3:1
   |
 2 | let x = 5;
@@ -2858,11 +2642,7 @@ Duration <DURATION>"
 `;
 
 exports[`resource_access_field_as_method.test.w 1`] = `
-"- Compiling invalid/resource_access_field_as_method.test.w to tf-aws...
-
-✖ Compiling invalid/resource_access_field_as_method.test.w to tf-aws...
-
-error: Expected a function or method, found \\"str\\"
+"error: Expected a function or method, found \\"str\\"
   --> ../../../examples/tests/invalid/resource_access_field_as_method.test.w:9:1
   |
 9 | x.name();
@@ -2877,11 +2657,7 @@ Duration <DURATION>"
 `;
 
 exports[`resource_captures.test.w 1`] = `
-"- Compiling invalid/resource_captures.test.w to tf-aws...
-
-✖ Compiling invalid/resource_captures.test.w to tf-aws...
-
-error: Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
+"error: Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
    --> ../../../examples/tests/invalid/resource_captures.test.w:13:13
    |
 13 |     let b = this.bucket;
@@ -2896,11 +2672,7 @@ Duration <DURATION>"
 `;
 
 exports[`resource_inflight.test.w 1`] = `
-"- Compiling invalid/resource_inflight.test.w to tf-aws...
-
-✖ Compiling invalid/resource_inflight.test.w to tf-aws...
-
-error: Cannot create preflight class \\"Bucket\\" in inflight phase
+"error: Cannot create preflight class \\"Bucket\\" in inflight phase
   --> ../../../examples/tests/invalid/resource_inflight.test.w:4:3
   |
 4 |   new cloud.Bucket(); // Should fail because we can't create resources inflight
@@ -2922,11 +2694,7 @@ Duration <DURATION>"
 `;
 
 exports[`resource_init.test.w 1`] = `
-"- Compiling invalid/resource_init.test.w to tf-aws...
-
-✖ Compiling invalid/resource_init.test.w to tf-aws...
-
-error: Multiple initializers defined in class R
+"error: Multiple initializers defined in class R
   --> ../../../examples/tests/invalid/resource_init.test.w:3:3
   |
 3 |   init() {}
@@ -2962,11 +2730,7 @@ Duration <DURATION>"
 `;
 
 exports[`return_types.test.w 1`] = `
-"- Compiling invalid/return_types.test.w to tf-aws...
-
-✖ Compiling invalid/return_types.test.w to tf-aws...
-
-error: Return statement outside of function cannot return a value
+"error: Return statement outside of function cannot return a value
   --> ../../../examples/tests/invalid/return_types.test.w:1:5
   |
 1 |     return 9;
@@ -3009,11 +2773,7 @@ Duration <DURATION>"
 `;
 
 exports[`scope_and_id.test.w 1`] = `
-"- Compiling invalid/scope_and_id.test.w to tf-aws...
-
-✖ Compiling invalid/scope_and_id.test.w to tf-aws...
-
-error: Expected type to be \\"str\\", but got \\"num\\" instead
+"error: Expected type to be \\"str\\", but got \\"num\\" instead
   --> ../../../examples/tests/invalid/scope_and_id.test.w:6:25
   |
 6 | new PreflightClass() as x;
@@ -3056,11 +2816,7 @@ Duration <DURATION>"
 `;
 
 exports[`sorted_errors_no_span.test.w 1`] = `
-"- Compiling invalid/sorted_errors_no_span.test.w to tf-aws...
-
-✖ Compiling invalid/sorted_errors_no_span.test.w to tf-aws...
-
-error: Expected type to be \\"num\\", but got \\"str\\" instead
+"error: Expected type to be \\"num\\", but got \\"str\\" instead
   --> ../../../examples/tests/invalid/sorted_errors_no_span.test.w:1:14
   |
 1 | let a: num = \\"s\\";
@@ -3096,11 +2852,7 @@ Duration <DURATION>"
 `;
 
 exports[`statement_invalid_scope.test.w 1`] = `
-"- Compiling invalid/statement_invalid_scope.test.w to tf-aws...
-
-✖ Compiling invalid/statement_invalid_scope.test.w to tf-aws...
-
-error: Expected break statement to be inside of a loop (while/for)
+"error: Expected break statement to be inside of a loop (while/for)
   --> ../../../examples/tests/invalid/statement_invalid_scope.test.w:3:5
   |
 3 |     break;
@@ -3136,11 +2888,7 @@ Duration <DURATION>"
 `;
 
 exports[`statements_if.test.w 1`] = `
-"- Compiling invalid/statements_if.test.w to tf-aws...
-
-✖ Compiling invalid/statements_if.test.w to tf-aws...
-
-error: Unexpected unary operator \\"--\\"
+"error: Unexpected unary operator \\"--\\"
   --> ../../../examples/tests/invalid/statements_if.test.w:2:1
   |
 2 | --n;
@@ -3169,11 +2917,7 @@ Duration <DURATION>"
 `;
 
 exports[`std_containers.test.w 1`] = `
-"- Compiling invalid/std_containers.test.w to tf-aws...
-
-✖ Compiling invalid/std_containers.test.w to tf-aws...
-
-error: Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead
+"error: Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead
   --> ../../../examples/tests/invalid/std_containers.test.w:3:18
   |
 3 | let c = a.concat(b); 
@@ -3188,11 +2932,7 @@ Duration <DURATION>"
 `;
 
 exports[`struct_expansion.test.w 1`] = `
-"- Compiling invalid/struct_expansion.test.w to tf-aws...
-
-✖ Compiling invalid/struct_expansion.test.w to tf-aws...
-
-error: Unexpected 'keyword_argument'
+"error: Unexpected 'keyword_argument'
    --> ../../../examples/tests/invalid/struct_expansion.test.w:11:15
    |
 11 |   bucket1.put(file: \\"file.txt\\", \\"data\\");
@@ -3257,11 +2997,7 @@ Duration <DURATION>"
 `;
 
 exports[`struct_json_conversion.test.w 1`] = `
-"- Compiling invalid/struct_json_conversion.test.w to tf-aws...
-
-✖ Compiling invalid/struct_json_conversion.test.w to tf-aws...
-
-error: Struct \\"A\\" contains field \\"b\\" which cannot be represented in Json
+"error: Struct \\"A\\" contains field \\"b\\" which cannot be represented in Json
   --> ../../../examples/tests/invalid/struct_json_conversion.test.w:8:3
   |
 8 | A.fromJson({});
@@ -3290,11 +3026,7 @@ Duration <DURATION>"
 `;
 
 exports[`structs.test.w 1`] = `
-"- Compiling invalid/structs.test.w to tf-aws...
-
-✖ Compiling invalid/structs.test.w to tf-aws...
-
-error: Struct \\"C\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != num)
+"error: Struct \\"C\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != num)
    --> ../../../examples/tests/invalid/structs.test.w:13:3
    |
 13 |   x: num;
@@ -3351,11 +3083,7 @@ Duration <DURATION>"
 `;
 
 exports[`super_call.test.w 1`] = `
-"- Compiling invalid/super_call.test.w to tf-aws...
-
-✖ Compiling invalid/super_call.test.w to tf-aws...
-
-error: \\"super\\" can only be used inside of classes
+"error: \\"super\\" can only be used inside of classes
    --> ../../../examples/tests/invalid/super_call.test.w:32:7
    |
 32 | super.do();
@@ -3412,11 +3140,7 @@ Duration <DURATION>"
 `;
 
 exports[`throw_non_string.test.w 1`] = `
-"- Compiling invalid/throw_non_string.test.w to tf-aws...
-
-✖ Compiling invalid/throw_non_string.test.w to tf-aws...
-
-error: Expected type to be \\"str\\", but got \\"num\\" instead
+"error: Expected type to be \\"str\\", but got \\"num\\" instead
   --> ../../../examples/tests/invalid/throw_non_string.test.w:1:7
   |
 1 | throw 42;
@@ -3431,11 +3155,7 @@ Duration <DURATION>"
 `;
 
 exports[`try_no_catch_or_finally.test.w 1`] = `
-"- Compiling invalid/try_no_catch_or_finally.test.w to tf-aws...
-
-✖ Compiling invalid/try_no_catch_or_finally.test.w to tf-aws...
-
-error: Missing \`catch\` or \`finally\` blocks for this try statement
+"error: Missing \`catch\` or \`finally\` blocks for this try statement
   --> ../../../examples/tests/invalid/try_no_catch_or_finally.test.w:1:1
   |  
 1 | / try {
@@ -3452,11 +3172,7 @@ Duration <DURATION>"
 `;
 
 exports[`types_strings_arithmetic.test.w 1`] = `
-"- Compiling invalid/types_strings_arithmetic.test.w to tf-aws...
-
-✖ Compiling invalid/types_strings_arithmetic.test.w to tf-aws...
-
-error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+"error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
   --> ../../../examples/tests/invalid/types_strings_arithmetic.test.w:1:10
   |
 1 | let e1 = 2 + \\"2\\";
@@ -3485,11 +3201,7 @@ Duration <DURATION>"
 `;
 
 exports[`unimplemented_grammar.test.w 1`] = `
-"- Compiling invalid/unimplemented_grammar.test.w to tf-aws...
-
-✖ Compiling invalid/unimplemented_grammar.test.w to tf-aws...
-
-error: builtin \\"any\\" is not supported yet - see https://github.com/winglang/wing/issues/434
+"error: builtin \\"any\\" is not supported yet - see https://github.com/winglang/wing/issues/434
   --> ../../../examples/tests/invalid/unimplemented_grammar.test.w:1:8
   |
 1 | let b: any = 0;
@@ -3532,11 +3244,7 @@ Duration <DURATION>"
 `;
 
 exports[`unknown_field.test.w 1`] = `
-"- Compiling invalid/unknown_field.test.w to tf-aws...
-
-✖ Compiling invalid/unknown_field.test.w to tf-aws...
-
-error: Unknown symbol \\"a\\"
+"error: Unknown symbol \\"a\\"
   --> ../../../examples/tests/invalid/unknown_field.test.w:1:12
   |
 1 | std.String.a.b.c.fromJson();
@@ -3551,11 +3259,7 @@ Duration <DURATION>"
 `;
 
 exports[`unknown_submodule.test.w 1`] = `
-"- Compiling invalid/unknown_submodule.test.w to tf-aws...
-
-✖ Compiling invalid/unknown_submodule.test.w to tf-aws...
-
-error: Expected identifier \\"std\\" to be a variable, but it's a namespace
+"error: Expected identifier \\"std\\" to be a variable, but it's a namespace
   --> ../../../examples/tests/invalid/unknown_submodule.test.w:1:1
   |
 1 | std.random.String.fromJson(\\"hello\\");
@@ -3570,11 +3274,7 @@ Duration <DURATION>"
 `;
 
 exports[`unknown_symbol.test.w 1`] = `
-"- Compiling invalid/unknown_symbol.test.w to tf-aws...
-
-✖ Compiling invalid/unknown_symbol.test.w to tf-aws...
-
-error: Reserved word
+"error: Reserved word
    --> ../../../examples/tests/invalid/unknown_symbol.test.w:35:5
    |
 35 | let let = 2;
@@ -3645,34 +3345,7 @@ Duration <DURATION>"
 `;
 
 exports[`unresolved_state.test.w 1`] = `
-"- Compiling invalid/unresolved_state.test.w to tf-aws...
-
-✔ Compiling invalid/unresolved_state.test.w to tf-aws...
-
-- terraform init
-
-✔ terraform init
-
-- terraform apply
-
-✖ terraform apply
-
-- terraform destroy
-
-✖ terraform destroy
-
-Command failed: terraform destroy -auto-approve
-[31m╷[0m[0m
-[31m│[0m [0m[1m[31mError: [0m[0m[1mUnclosed template interpolation sequence[0m
-[31m│[0m [0m
-[31m│[0m [0m[0m  on main.tf.json line 90, in resource.aws_lambda_function.TestrIXC1bThS6_env0_cloudFunction_4E003EB4.environment.variables:
-[31m│[0m [0m  90:             \\"FOO_VALUE\\": \\"[4m\${[0mroot/Test.rIXC1bThS6/env0/sim.State#attrs.my_unresolved_token}\\",[0m
-[31m│[0m [0m
-[31m│[0m [0mThere is no closing brace for this interpolation sequence before the end of
-[31m│[0m [0mthe file. This might be caused by incorrect nesting inside the given
-[31m│[0m [0mexpression.
-[31m╵[0m[0m
-
+"Could not start resource root/env0/cloud.Function after 10 attempts. This could be due to a dependency cycle or an invalid attribute reference.
  
  
 Tests 1 failed (1)
@@ -3681,11 +3354,7 @@ Duration <DURATION>"
 `;
 
 exports[`use_before_defined.test.w 1`] = `
-"- Compiling invalid/use_before_defined.test.w to tf-aws...
-
-✖ Compiling invalid/use_before_defined.test.w to tf-aws...
-
-error: Unknown symbol \\"y\\"
+"error: Unknown symbol \\"y\\"
   --> ../../../examples/tests/invalid/use_before_defined.test.w:1:8
   |
 1 | log(\\"\${y}\\"); // Access y before it's defined
@@ -3710,11 +3379,7 @@ Duration <DURATION>"
 `;
 
 exports[`variable_scoping.test.w 1`] = `
-"- Compiling invalid/variable_scoping.test.w to tf-aws...
-
-✖ Compiling invalid/variable_scoping.test.w to tf-aws...
-
-error: Unknown symbol \\"x\\"
+"error: Unknown symbol \\"x\\"
   --> ../../../examples/tests/invalid/variable_scoping.test.w:6:11
   |
 6 |   let z = x;
@@ -3729,11 +3394,7 @@ Duration <DURATION>"
 `;
 
 exports[`void_in_expression_position.test.w 1`] = `
-"- Compiling invalid/void_in_expression_position.test.w to tf-aws...
-
-✖ Compiling invalid/void_in_expression_position.test.w to tf-aws...
-
-error: Property not found
+"error: Property not found
   --> ../../../examples/tests/invalid/void_in_expression_position.test.w:1:12
   |
 1 | log(\\"hey\\").get(\\"x\\");
