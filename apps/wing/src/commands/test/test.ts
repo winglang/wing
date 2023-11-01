@@ -30,15 +30,15 @@ const generateTestName = (path: string) => path.split(sep).slice(-2).join("/");
  */
 export interface TestOptions extends CompileOptions {
   /**
-   * Whether to keep the build output or not.
+   * Whether the output artifacts should be kept or cleaned up after the test run.
    */
   clean: boolean;
   /**
-   * The output file name.
+   * The name of the output file.
    */
   outputFile?: string;
   /**
-   * String representing a RegEx pattern used to filter tests.
+   * String representing a regex pattern used to selectively filter which tests to run.
    */
   testFilter?: string;
   /**
