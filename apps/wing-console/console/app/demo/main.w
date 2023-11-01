@@ -69,8 +69,6 @@ rateSchedule.onTick(inflight () => {
   log("Rate schedule ticked!");
 });
 
-let secret = new cloud.Secret(name: "secret");
-
 new cloud.Service(
   inflight () => {
     log("start!");

@@ -88,6 +88,7 @@ export class Bucket extends cloud.Bucket {
       cloud.BucketInflightMethods.TRY_DELETE,
       cloud.BucketInflightMethods.SIGNED_URL,
       cloud.BucketInflightMethods.METADATA,
+      cloud.BucketInflightMethods.COPY,
     ];
   }
 
@@ -183,7 +184,7 @@ export function createEncryptedBucket(
 
   const bucket = new S3Bucket(scope, name, {
     bucketPrefix,
-    forceDestroy: isTestEnvironment ? true : false,
+    forceDestroy: !!isTestEnvironment,
   });
 
   if (isPublic) {
