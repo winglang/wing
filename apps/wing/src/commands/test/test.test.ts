@@ -53,6 +53,7 @@ describe("test options", () => {
 
   afterEach(() => {
     chalk.level = defaultChalkLevel;
+    process.chdir(cwd);
   });
 
   test("wing test (default entrypoint)", async () => {
