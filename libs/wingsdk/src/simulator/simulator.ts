@@ -445,6 +445,10 @@ export class Simulator {
         const request: SimulatorServerRequest = deserializeValue(body);
         const { handle, method, args } = request;
         const resource = this._handles.tryFind(handle);
+
+        // If we weren't able to find a resource with the given handle, it could actually
+        // be OK if the resource is still starting up or has already been cleaned up.
+        // In that case, we return a 500 error with a message that explains what happened.
         if (!resource) {
           if (this._running === "starting") {
             res.writeHead(500, { "Content-Type": "application/json" });

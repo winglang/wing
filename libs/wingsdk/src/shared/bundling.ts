@@ -4,7 +4,7 @@ import { join, resolve } from "path";
 import { buildSync } from "esbuild-wasm";
 import { normalPath } from "./misc";
 
-const SDK_PATH = normalPath(resolve(join(__dirname, "..", "..")));
+const SDK_PATH = normalPath(resolve(__dirname, "..", ".."));
 
 export interface Bundle {
   entrypointPath: string;
