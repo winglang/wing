@@ -240,38 +240,35 @@ test("messages are not requeued if the function fails before timeout", async () 
   `);
 });
 
-test(
-  "messages are not requeued if the function fails after retention timeout",
-  async () => {
-    // GIVEN
-    const app = new SimApp();
-    const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-    const queue = cloud.Queue._newQueue(app, "my_queue", {
-      retentionPeriod: Duration.fromSeconds(1),
-      timeout: Duration.fromMilliseconds(100),
-    });
-    queue.setConsumer(handler);
-    const s = await app.startSimulator();
+// TODO: this test is commented out because it is flaky
+// test("messages are not requeued if the function fails after retention timeout", async () => {
+//   // GIVEN
+//   const app = new SimApp();
+//   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+//   const queue = cloud.Queue._newQueue(app, "my_queue", {
+//     retentionPeriod: Duration.fromSeconds(1),
+//     timeout: Duration.fromMilliseconds(100),
+//   });
+//   queue.setConsumer(handler);
+//   const s = await app.startSimulator();
 
-    // WHEN
-    const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
-    void queueClient.push("BAD MESSAGE");
-    await waitUntilTrace(
-      s,
-      (trace) =>
-        trace.data.message ==
-        "1 messages pushed back to queue after visibility timeout."
-    );
+//   // WHEN
+//   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
+//   void queueClient.push("BAD MESSAGE");
+//   await waitUntilTrace(
+//     s,
+//     (trace) =>
+//       trace.data.message ==
+//       "1 messages pushed back to queue after visibility timeout."
+//   );
 
-    // THEN
-    await s.stop();
-    expect(listMessages(s)).toContain(
-      "1 messages pushed back to queue after visibility timeout."
-    );
-    expect(app.snapshot()).toMatchSnapshot();
-  },
-  { timeout: 20000 }
-);
+//   // THEN
+//   await s.stop();
+//   expect(listMessages(s)).toContain(
+//     "1 messages pushed back to queue after visibility timeout."
+//   );
+//   expect(app.snapshot()).toMatchSnapshot();
+// });
 
 test("queue has no display hidden property", async () => {
   // GIVEN

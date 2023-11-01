@@ -110,6 +110,7 @@
     "mime-types": "^2.1.35",
     "nanoid": "^3.3.6",
     "safe-stable-stringify": "^2.4.3",
+    "undici": "^5.25.4",
     "uuid": "^8.3.2",
     "yaml": "^2.3.2"
   },
@@ -143,6 +144,7 @@
     "mime-types",
     "nanoid",
     "safe-stable-stringify",
+    "undici",
     "uuid",
     "yaml"
   ],

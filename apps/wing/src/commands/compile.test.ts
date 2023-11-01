@@ -5,7 +5,7 @@ import { join, resolve } from "path";
 import { Target } from "@winglang/compiler";
 import { describe, test, expect } from "vitest";
 import { compile } from "./compile";
-import { generateTmpDir } from "src/util";
+import { generateTmpDir } from "../util";
 
 const exampleDir = resolve("../../examples/tests/valid");
 const exampleSmallDir = resolve("../../examples/tests/valid/subdir2");
