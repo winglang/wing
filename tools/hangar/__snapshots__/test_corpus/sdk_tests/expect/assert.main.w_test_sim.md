@@ -10,9 +10,10 @@ pass ─ assert.main.wsim » root/env4/test:equal array of numbers
 pass ─ assert.main.wsim » root/env5/test:equal objects         
 pass ─ assert.main.wsim » root/env6/test:equal maps            
 pass ─ assert.main.wsim » root/env7/test:equal sets            
+pass ─ assert.main.wsim » root/env8/test:equal durations       
  
  
-Tests 8 passed (8)
+Tests 9 passed (9)
 Test Files 1 passed (1)
 Duration <DURATION>
 ```
