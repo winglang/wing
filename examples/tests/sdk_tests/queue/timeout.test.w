@@ -26,6 +26,11 @@ new std.Test(inflight () => {
   q.push("foo");
   q.push("foo");
 
-  util.sleep(duration.fromSeconds(timeout.seconds + 1));
-    assert(q.approxSize() == 2);
-  }, timeout: 2m) as "timeout";
+  if (util.env("WING_TARGET") == "sim") {
+    util.sleep(duration.fromSeconds(timeout.seconds + 1));
+  } else {
+    util.sleep(duration.fromMinutes(1));
+  }
+
+  assert(q.approxSize() == 2);
+}, timeout: 2m) as "timeout";
