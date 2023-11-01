@@ -26,6 +26,12 @@ export class BucketClient implements IBucketClient {
     throw new Error("Method not implemented.");
   }
 
+  public async copy(srcKey: string, dstKey: string): Promise<void> {
+    return Promise.reject(
+      `copy is not implemented: (srcKey=${srcKey}, dstKey=${dstKey})`
+    );
+  }
+
   // check if bucket is public or not from bucket metadata
   private async isPublic(): Promise<boolean> {
     try {

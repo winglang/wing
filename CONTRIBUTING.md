@@ -3,12 +3,12 @@
 ### Thank you for your interest in contributing to Wing! ❤️
 
 We are a friendly and inclusive community of programmers from across the
-industry and from around the world.  We are here to create the best programming
+industry and around the world.  We are here to create the best programming
 language designed for the cloud. We celebrate contributions and involvement of
 any kind.
 
 The [Wing Contributor's Handbook] has tons of relevant information. If you can't find what you need
-there, please let us know by [submitting an issue].
+here, please let us know by [submitting an issue].
 
 The best way to get started is by asking for help in the [#contrib] channel on
 the [Wing Slack].
