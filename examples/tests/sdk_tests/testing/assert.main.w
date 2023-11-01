@@ -1,25 +1,25 @@
 bring util;
-bring testing;
+bring expect;
 
 // Num tests
 
 let a: num? = nil;
 let b: num? = 1;
 
-testing.Assert.equal(1, 1);
-testing.Assert.equal(b, 1);
-testing.Assert.isNil(a);
-testing.Assert.notEqual(b, 2);
-testing.Assert.notEqual(b, "hello");
-testing.Assert.notEqual(b, true);
+expect.equal(1, 1);
+expect.equal(b, 1);
+expect.isNil(a);
+expect.notEqual(b, 2);
+expect.notEqual(b, "hello");
+expect.notEqual(b, true);
 
 test "equal num" {
-    testing.Assert.equal(1, 1);
-    testing.Assert.equal(b, 1);
-    testing.Assert.isNil(a);
-    testing.Assert.notEqual(b, 2);
-    testing.Assert.notEqual(b, "hello");
-    testing.Assert.notEqual(b, true);
+    expect.equal(1, 1);
+    expect.equal(b, 1);
+    expect.isNil(a);
+    expect.notEqual(b, 2);
+    expect.notEqual(b, "hello");
+    expect.notEqual(b, true);
 }
 
 // String tests
@@ -27,20 +27,20 @@ test "equal num" {
 let c: str? = nil;
 let d: str? = "hello";
 
-testing.Assert.equal("hello", "hello");
-testing.Assert.equal(d, "hello");
-testing.Assert.isNil(c);
-testing.Assert.notEqual(d, "world");
-testing.Assert.notEqual(d, 1);
-testing.Assert.notEqual(d, true);
+expect.equal("hello", "hello");
+expect.equal(d, "hello");
+expect.isNil(c);
+expect.notEqual(d, "world");
+expect.notEqual(d, 1);
+expect.notEqual(d, true);
 
 test "equal str" {
-    testing.Assert.equal("hello", "hello");
-    testing.Assert.equal(d, "hello");
-    testing.Assert.isNil(c);
-    testing.Assert.notEqual(d, "world");
-    testing.Assert.notEqual(d, 1);
-    testing.Assert.notEqual(d, true);
+    expect.equal("hello", "hello");
+    expect.equal(d, "hello");
+    expect.isNil(c);
+    expect.notEqual(d, "world");
+    expect.notEqual(d, 1);
+    expect.notEqual(d, true);
 }
 
 // Bool tests
@@ -48,15 +48,15 @@ test "equal str" {
 let e: bool? = nil;
 let f: bool? = true;
 
-testing.Assert.equal(true, true);
-testing.Assert.equal(f, true);
-testing.Assert.isNil(e);
-testing.Assert.notEqual(f, false);
+expect.equal(true, true);
+expect.equal(f, true);
+expect.isNil(e);
+expect.notEqual(f, false);
 
 test "equal bool" {
-    testing.Assert.equal(true, true);
-    testing.Assert.equal(f, true);
-    testing.Assert.isNil(e);
-    testing.Assert.notEqual(f, false);
+    expect.equal(true, true);
+    expect.equal(f, true);
+    expect.isNil(e);
+    expect.notEqual(f, false);
 }
 

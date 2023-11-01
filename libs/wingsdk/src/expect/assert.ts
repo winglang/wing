@@ -2,11 +2,11 @@ import nodeAssert from "node:assert/strict";
 import { InflightClient } from "../core";
 
 /**
- * The Assert class provides methods for making assertions in tests,
- * such as comparing two strings for equality.
+ * The Util class provides methods for making assertions in tests,
+ * such as comparing two strings for equality with rich error messages.
  * @inflight
  */
-export class Assert {
+export class Util {
   /**
    * @internal
    */

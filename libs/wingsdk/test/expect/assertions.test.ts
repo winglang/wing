@@ -3,7 +3,7 @@
 // exit with a non-zero code when trying to generate
 // coverage reports. See https://github.com/istanbuljs/v8-to-istanbul/issues/198
 import { test, describe, expect } from "vitest";
-import { Assert } from "../../src/testing";
+import { Util as Assert } from "../../src/expect";
 
 describe("equal string", () => {
   test("is equal", () => {

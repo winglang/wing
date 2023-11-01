@@ -22,7 +22,7 @@ module.exports = function({  }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
-module.exports = function({ $api_url, $http_Util, $testing_Assert }) {
+module.exports = function({ $api_url, $expect_Util, $http_Util }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -32,12 +32,12 @@ module.exports = function({ $api_url, $http_Util, $testing_Assert }) {
     async handle() {
       const response = (await $http_Util.get(($api_url + "/users")));
       const headers = response.headers;
-      (await $testing_Assert.equal(response.status, 200));
-      (await $testing_Assert.equal((headers)["access-control-allow-origin"], "winglang.io"));
-      (await $testing_Assert.equal((headers)["access-control-allow-credentials"], "true"));
-      (await $testing_Assert.equal((headers)["access-control-expose-headers"], "Content-Type"));
-      (await $testing_Assert.isNil((headers)["access-control-allow-headers"]));
-      (await $testing_Assert.isNil((headers)["access-control-allow-methods"]));
+      (await $expect_Util.equal(response.status, 200));
+      (await $expect_Util.equal((headers)["access-control-allow-origin"], "winglang.io"));
+      (await $expect_Util.equal((headers)["access-control-allow-credentials"], "true"));
+      (await $expect_Util.equal((headers)["access-control-expose-headers"], "Content-Type"));
+      (await $expect_Util.isNil((headers)["access-control-allow-headers"]));
+      (await $expect_Util.isNil((headers)["access-control-allow-methods"]));
     }
   }
   return $Closure2;
@@ -48,7 +48,7 @@ module.exports = function({ $api_url, $http_Util, $testing_Assert }) {
 ## inflight.$Closure3-1.js
 ```js
 "use strict";
-module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $testing_Assert }) {
+module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util }) {
   class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -58,12 +58,12 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $testing_Ass
     async handle() {
       const response = (await $http_Util.fetch(($api_url + "/users"), ({"method": $http_HttpMethod.OPTIONS})));
       const headers = response.headers;
-      (await $testing_Assert.equal(response.status, 204));
-      (await $testing_Assert.equal((headers)["access-control-allow-methods"], "GET,POST,OPTIONS"));
-      (await $testing_Assert.equal((headers)["access-control-allow-headers"], "Content-Type,Authorization,X-Custom-Header"));
-      (await $testing_Assert.equal((headers)["access-control-allow-origin"], "winglang.io"));
-      (await $testing_Assert.isNil((headers)["access-control-expose-headers"]));
-      (await $testing_Assert.isNil((headers)["access-control-allow-credentials"]));
+      (await $expect_Util.equal(response.status, 204));
+      (await $expect_Util.equal((headers)["access-control-allow-methods"], "GET,POST,OPTIONS"));
+      (await $expect_Util.equal((headers)["access-control-allow-headers"], "Content-Type,Authorization,X-Custom-Header"));
+      (await $expect_Util.equal((headers)["access-control-allow-origin"], "winglang.io"));
+      (await $expect_Util.isNil((headers)["access-control-expose-headers"]));
+      (await $expect_Util.isNil((headers)["access-control-allow-credentials"]));
     }
   }
   return $Closure3;
@@ -74,7 +74,7 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $testing_Ass
 ## inflight.$Closure4-1.js
 ```js
 "use strict";
-module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $testing_Assert }) {
+module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util }) {
   class $Closure4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -84,10 +84,10 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $testing_Ass
     async handle() {
       const response = (await $http_Util.fetch(($api_url + "/users"), ({"method": $http_HttpMethod.OPTIONS,"headers": ({"Access-Control-Request-Method": "PUT","Access-Control-Request-Headers": "Content-Type,Authorization,X-Custom-Foo"})})));
       const headers = response.headers;
-      (await $testing_Assert.equal(response.status, 204));
-      (await $testing_Assert.equal((headers)["access-control-allow-methods"], "GET,POST,OPTIONS"));
-      (await $testing_Assert.equal((headers)["access-control-allow-headers"], "Content-Type,Authorization,X-Custom-Header"));
-      (await $testing_Assert.equal((headers)["access-control-allow-origin"], "winglang.io"));
+      (await $expect_Util.equal(response.status, 204));
+      (await $expect_Util.equal((headers)["access-control-allow-methods"], "GET,POST,OPTIONS"));
+      (await $expect_Util.equal((headers)["access-control-allow-headers"], "Content-Type,Authorization,X-Custom-Header"));
+      (await $expect_Util.equal((headers)["access-control-allow-origin"], "winglang.io"));
     }
   }
   return $Closure4;
@@ -311,7 +311,7 @@ const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 const ex = $stdlib.ex;
 const http = $stdlib.http;
-const testing = $stdlib.testing;
+const expect = $stdlib.expect;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -350,8 +350,8 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("./inflight.$Closure2-1.js")({
             $api_url: ${context._lift(api.url)},
+            $expect_Util: ${context._lift($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
             $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
-            $testing_Assert: ${context._lift($stdlib.core.toLiftableModuleType(testing.Assert, "@winglang/sdk/testing", "Assert"))},
           })
         `;
       }
@@ -385,9 +385,9 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("./inflight.$Closure3-1.js")({
             $api_url: ${context._lift(api.url)},
+            $expect_Util: ${context._lift($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
             $http_HttpMethod: ${context._lift($stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"))},
             $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
-            $testing_Assert: ${context._lift($stdlib.core.toLiftableModuleType(testing.Assert, "@winglang/sdk/testing", "Assert"))},
           })
         `;
       }
@@ -421,9 +421,9 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("./inflight.$Closure4-1.js")({
             $api_url: ${context._lift(api.url)},
+            $expect_Util: ${context._lift($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
             $http_HttpMethod: ${context._lift($stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"))},
             $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
-            $testing_Assert: ${context._lift($stdlib.core.toLiftableModuleType(testing.Assert, "@winglang/sdk/testing", "Assert"))},
           })
         `;
       }

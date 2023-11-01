@@ -1,7 +1,7 @@
 bring cloud;
 bring ex;
 bring http;
-bring testing;
+bring expect;
 
 //needs to be written before the website (so the website will be able to use it's url on sim env)
 let api = new cloud.Api(
@@ -64,14 +64,14 @@ test "GET /users" {
   });
 
 let headers = response.headers;
-  testing.Assert.equal(response.status, 200);
+  expect.equal(response.status, 200);
 
-  testing.Assert.equal(headers.tryGet("access-control-allow-origin"), "*");
-  testing.Assert.equal(headers.tryGet("access-control-expose-headers"), "Content-Type");
-  testing.Assert.equal(headers.tryGet("access-control-allow-credentials"), "false");
+  expect.equal(headers.tryGet("access-control-allow-origin"), "*");
+  expect.equal(headers.tryGet("access-control-expose-headers"), "Content-Type");
+  expect.equal(headers.tryGet("access-control-allow-credentials"), "false");
 
-  testing.Assert.isNil(headers.tryGet("access-control-allow-headers"));
-  testing.Assert.isNil(headers.tryGet("access-control-allow-methods"));
+  expect.isNil(headers.tryGet("access-control-allow-headers"));
+  expect.isNil(headers.tryGet("access-control-allow-methods"));
 }
 
 test "OPTIONS /users" {
@@ -83,7 +83,7 @@ test "OPTIONS /users" {
   });
 
   let headers = response.headers;
-  testing.Assert.equal(response.status, 204);
-  testing.Assert.equal(headers.tryGet("access-control-allow-methods"), "GET,POST,OPTIONS");
-  testing.Assert.equal(headers.tryGet("access-control-allow-headers"), "Content-Type");
+  expect.equal(response.status, 204);
+  expect.equal(headers.tryGet("access-control-allow-methods"), "GET,POST,OPTIONS");
+  expect.equal(headers.tryGet("access-control-allow-headers"), "Content-Type");
 }
