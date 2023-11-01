@@ -2,7 +2,7 @@ import * as fs from "fs/promises";
 import { join } from "path";
 import { describe, it, expect, afterEach, vi } from "vitest";
 import { pack } from "./pack";
-import { exec, generateTmpDir } from "src/util";
+import { exec, generateTmpDir } from "../util";
 
 const fixturesDir = join(__dirname, "..", "..", "fixtures");
 const goodFixtureDir = join(__dirname, "..", "..", "..", "..", "examples", "wing-fixture");
