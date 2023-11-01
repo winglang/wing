@@ -214,7 +214,7 @@ async handle(message) {
         "attrs": {},
         "path": "root/my_queue",
         "props": {
-          "retentionPeriod": 1,
+          "retentionPeriod": 2,
           "timeout": 0.1,
         },
         "type": "@winglang/sdk.cloud.Queue",

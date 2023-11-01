@@ -245,7 +245,7 @@ test("messages are not requeued if the function fails after retention timeout", 
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   const queue = cloud.Queue._newQueue(app, "my_queue", {
-    retentionPeriod: Duration.fromSeconds(1),
+    retentionPeriod: Duration.fromSeconds(2),
     timeout: Duration.fromMilliseconds(100),
   });
   queue.setConsumer(handler);
