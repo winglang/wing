@@ -1,4 +1,3 @@
-import { fetch, Agent } from "undici";
 import type {
   SimulatorServerRequest,
   SimulatorServerResponse,
@@ -54,6 +53,10 @@ export function makeSimulatorClient(url: string, handle: string) {
       const body: SimulatorServerRequest = { handle, method, args };
       let resp;
       try {
+        // import undici dynamically to reduce the time it takes to load Wing SDK
+        // undici is used instead of the built-in fetch so that we can customize the
+        // keep-alive and headers timeouts to be 15 minutes instead of the default 5 seconds
+        const { fetch, Agent } = await import("undici");
         resp = await fetch(url + "/v1/call", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
