@@ -1,4 +1,3 @@
-// import { writeFileSync } from "fs";
 import fs from "fs";
 import { mkdtemp } from "fs/promises";
 import { tmpdir } from "os";
@@ -11,6 +10,7 @@ import { filterTests, pickOneTestPerEnvironment, renderTestReport, test as wingT
 import * as resultsFn from "./results";
 
 const defaultChalkLevel = chalk.level;
+const cwd = process.cwd();
 
 describe("printing test reports", () => {
   beforeEach(() => {
@@ -19,6 +19,7 @@ describe("printing test reports", () => {
 
   afterEach(() => {
     chalk.level = defaultChalkLevel;
+    process.chdir(cwd);
   });
 
   test("resource traces are not shown if debug mode is disabled", () => {
@@ -56,7 +57,6 @@ describe("test options", () => {
 
   test("wing test (default entrypoint)", async () => {
     const outDir = await mkdtemp(join(tmpdir(), "-wing-compile-test"));
-    const prevdir = process.cwd();
     const logSpy = vi.spyOn(console, "log");
 
     try {
@@ -71,7 +71,6 @@ describe("test options", () => {
       expect(logSpy).toHaveBeenCalledWith("pass ─ bar.test.wsim (no tests)");
       expect(logSpy).toHaveBeenCalledWith("pass ─ baz.test.wsim (no tests)");
     } finally {
-      process.chdir(prevdir);
       logSpy.mockRestore();
     }
   });
@@ -80,7 +79,6 @@ describe("test options", () => {
     "wing test with output file calls writeResultsToFile",
     async () => {
       const outDir = await mkdtemp(join(tmpdir(), "-wing-compile-test"));
-      const prevdir = process.cwd();
       const writeResults = vi.spyOn(resultsFn, "writeResultsToFile");
       const writeFile = vi.spyOn(fs, "writeFile").mockImplementation(() => null);
 
@@ -108,7 +106,6 @@ describe("test options", () => {
         expect(JSON.parse(output as string)).toMatchObject(OUTPUT_FILE);
       } finally {
         writeResults.mockClear();
-        process.chdir(prevdir);
       }
     },
     { timeout: 10000 }
