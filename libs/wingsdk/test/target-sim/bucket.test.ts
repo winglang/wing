@@ -379,9 +379,9 @@ test("removing a key will call onDelete method", async () => {
   // WHEN
   await client.put(fileName, JSON.stringify({ msg: "Hello world!" }));
   const response = await client.delete(fileName);
-
-  const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
-  await sleep(500); // wait for the subscriber to finish
+  await waitUntilTraceCount(s, 1, (trace) =>
+    trace.data.message.startsWith("Invoke")
+  );
 
   // THEN
   await s.stop();
