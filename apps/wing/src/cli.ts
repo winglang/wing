@@ -175,7 +175,7 @@ async function main() {
       "File name to write test results to (file extension is required, supports only .json at the moment)"
     )
     .addOption(
-      new Option("-R, --retry [retryCount]", "Number of times to retry a failed test")
+      new Option("-R, --retry [retries]", "Number of times to retry a failed test")
         .preset(3)
         .argParser(parseInt)
     )
