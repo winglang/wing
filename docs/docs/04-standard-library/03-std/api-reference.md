@@ -2438,6 +2438,17 @@ to parse number from.
 
 Range.
 
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.Range.Initializer"></a>
+
+```wing
+new Range();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
 
 
 

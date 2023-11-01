@@ -33,6 +33,4 @@ export class Range {
   public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
-
-  private constructor() {}
 }

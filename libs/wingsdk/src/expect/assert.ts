@@ -22,7 +22,7 @@ export class Util {
    * @returns void
    */
   public static equal(actual: unknown, expected: unknown): void {
-    nodeAssert.strictEqual(actual, expected);
+    nodeAssert.deepStrictEqual(actual, expected);
   }
 
   /**
@@ -33,7 +33,7 @@ export class Util {
    * @returns void
    */
   public static notEqual(actual: unknown, expected: unknown): void {
-    nodeAssert.notStrictEqual(actual, expected);
+    nodeAssert.notDeepStrictEqual(actual, expected);
   }
 
   /**
