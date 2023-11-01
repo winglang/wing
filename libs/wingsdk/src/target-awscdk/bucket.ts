@@ -31,6 +31,7 @@ const EVENTS = {
 export class Bucket extends cloud.Bucket {
   private readonly bucket: S3Bucket;
   private readonly public: boolean;
+  private bucketDeployment?: BucketDeployment;
 
   constructor(scope: Construct, id: string, props: cloud.BucketProps = {}) {
     super(scope, id, props);
@@ -41,10 +42,14 @@ export class Bucket extends cloud.Bucket {
   }
 
   public addObject(key: string, body: string): void {
-    new BucketDeployment(this, `S3Object-${key}`, {
-      destinationBucket: this.bucket,
-      sources: [Source.data(key, body)],
-    });
+    if (!this.bucketDeployment) {
+      this.bucketDeployment = new BucketDeployment(this, `S3Object-${key}`, {
+        destinationBucket: this.bucket,
+        sources: [Source.data(key, body)],
+      });
+    } else {
+      this.bucketDeployment.addSource(Source.data(key, body));
+    }
   }
 
   protected eventHandlerLocation(): string {
@@ -238,7 +243,14 @@ export function createEncryptedBucket(
 
   return new S3Bucket(scope, name, {
     encryption: BucketEncryption.S3_MANAGED,
-    blockPublicAccess: isPublic ? undefined : BlockPublicAccess.BLOCK_ALL,
+    blockPublicAccess: isPublic
+      ? {
+          blockPublicAcls: false,
+          blockPublicPolicy: false,
+          ignorePublicAcls: false,
+          restrictPublicBuckets: false,
+        }
+      : BlockPublicAccess.BLOCK_ALL,
     publicReadAccess: isPublic ? true : false,
     removalPolicy: RemovalPolicy.DESTROY,
     autoDeleteObjects: isTestEnvironment ? true : false,
