@@ -13,7 +13,7 @@ export class QueueClient implements IQueueClient {
   constructor(
     private readonly queueUrl: string,
     private readonly client: SQSClient = new SQSClient({})
-  ) {}
+  ) { }
 
   public async push(...messages: string[]): Promise<void> {
     if (messages.includes("")) {
@@ -29,8 +29,7 @@ export class QueueClient implements IQueueClient {
       } catch (e) {
         if (e instanceof InvalidMessageContents) {
           throw new Error(
-            `The message contains characters outside the allowed set (message=${message}): ${
-              (e as Error).stack
+            `The message contains characters outside the allowed set (message=${message}): ${(e as Error).stack
             })}`
           );
         }
@@ -51,10 +50,11 @@ export class QueueClient implements IQueueClient {
   public async approxSize(): Promise<number> {
     const command = new GetQueueAttributesCommand({
       QueueUrl: this.queueUrl,
-      AttributeNames: ["ApproximateNumberOfMessages"],
+      AttributeNames: ["ApproximateNumberOfMessages", "ApproximateNumberOfMessagesNotVisible"],
     });
     const data = await this.client.send(command);
-    return Number.parseInt(data.Attributes?.ApproximateNumberOfMessages ?? "0");
+    return Number.parseInt(data.Attributes?.ApproximateNumberOfMessages ?? "0") +
+      Number.parseInt(data.Attributes?.ApproximateNumberOfMessagesNotVisible ?? "0");
   }
 
   public async pop(): Promise<string | undefined> {

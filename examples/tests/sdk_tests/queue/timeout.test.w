@@ -27,9 +27,5 @@ new std.Test(inflight () => {
   q.push("foo");
 
   util.sleep(duration.fromSeconds(timeout.seconds + 1));
-  // The queue should have 2 messages still due to timeout - doesn't work on aws or sim unfortunately
-  // for aws- https://github.com/winglang/wing/issues/3354
-  if (util.env("WING_TARGET") != "tf-aws") {
     assert(q.approxSize() == 2);
-  }
   }, timeout: 2m) as "timeout";
