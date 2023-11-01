@@ -369,7 +369,11 @@ test("removing a key will call onDelete method", async () => {
   const app = new SimApp();
 
   const bucket = cloud.Bucket._newBucket(app, bucketName);
-  const testInflight = Testing.makeHandler(app, "inflight_test", "null");
+  const testInflight = Testing.makeHandler(
+    app,
+    "inflight_test",
+    `async handle(key) { console.log("Received " + key); }`
+  );
   bucket.onDelete(testInflight);
 
   const s = await app.startSimulator();
