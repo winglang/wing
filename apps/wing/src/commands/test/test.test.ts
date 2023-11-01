@@ -6,7 +6,7 @@ import { join, resolve } from "path";
 import { Target } from "@winglang/compiler";
 import { TestResult, TraceType } from "@winglang/sdk/lib/std";
 import chalk from "chalk";
-import { describe, test, expect, beforeEach, afterEach, vi } from "vitest";
+import { describe, test, expect, beforeEach, afterEach, vi, SpyInstance } from "vitest";
 import { filterTests, pickOneTestPerEnvironment, renderTestReport, test as wingTest } from ".";
 import * as resultsFn from "./results";
 
@@ -41,7 +41,7 @@ describe("printing test reports", () => {
   });
 });
 
-describe("test options", () => {
+describe("wing test (no options)", () => {
   beforeEach(() => {
     chalk.level = 0;
   });
@@ -50,7 +50,7 @@ describe("test options", () => {
     chalk.level = defaultChalkLevel;
   });
 
-  test("wing test (default entrypoint)", async () => {
+  test("default entrypoint behaviour", async () => {
     const outDir = await mkdtemp(join(tmpdir(), "-wing-compile-test"));
     const prevdir = process.cwd();
     const logSpy = vi.spyOn(console, "log");
@@ -138,6 +138,16 @@ describe("test options", () => {
       'only .json output files are supported. (found "")'
     );
   });
+});
+
+describe("test-filter option", () => {
+  beforeEach(() => {
+    chalk.level = 0;
+  });
+
+  afterEach(() => {
+    chalk.level = defaultChalkLevel;
+  });
 
   test("wing test (no filter)", () => {
     const filteredTests = pickOneTestPerEnvironment(filterTests(EXAMPLE_UNFILTERED_TESTS));
@@ -154,6 +164,52 @@ describe("test options", () => {
     expect(filteredTests.length).toBe(2);
     expect(filteredTests[0]).toBe("root/env0/test:get()");
     expect(filteredTests[1]).toBe("root/env1/test:get:At()");
+  });
+});
+
+describe("retry option", () => {
+  let logSpy: SpyInstance;
+
+  beforeEach(() => {
+    chalk.level = 0;
+    logSpy = vi.spyOn(console, "log");
+  });
+
+  afterEach(() => {
+    chalk.level = defaultChalkLevel;
+    logSpy.mockRestore();
+  });
+
+  test("wing test --retry [retries]", async () => {
+    const outDir = await mkdtemp(join(tmpdir(), "-wing-retry-test"));
+    const prevdir = process.cwd();
+
+    try {
+      process.chdir(outDir);
+
+      // Create a test that will consistently fail
+      fs.writeFileSync(
+        "fail.test.w",
+        `
+        bring cloud;
+        test "alwaysFail" {
+          assert(false);
+        }
+      `
+      );
+
+      // Equivalent to `wing test --retry` (default 3 retries)
+      await wingTest(["fail.test.w"], {
+        clean: true,
+        target: Target.SIM,
+        retry: 3,
+      });
+
+      const retryLogs = logSpy.mock.calls.filter((args) => args[0].includes("Retrying"));
+      expect(retryLogs.length).toBe(3);
+    } finally {
+      process.chdir(prevdir);
+    }
   });
 });
 
