@@ -87,14 +87,14 @@ export abstract class Schedule extends Resource {
    */
   public abstract onTick(
     inflight: IScheduleOnTickHandler,
-    props?: ScheduleOnTickProps
+    props?: ScheduleOnTickOptions
   ): Function;
 }
 
 /**
  * Options for Schedule.onTick.
  */
-export interface ScheduleOnTickProps extends FunctionProps {}
+export interface ScheduleOnTickOptions extends FunctionProps {}
 
 /**
  * A resource with an inflight "handle" method that can be passed to
