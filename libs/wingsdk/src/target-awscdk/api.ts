@@ -48,7 +48,7 @@ export class Api extends cloud.Api {
     method: string,
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiGetProps
+    props?: cloud.ApiGetOptions
   ): void {
     const lowerMethod = method.toLowerCase();
     const upperMethod = method.toUpperCase();
@@ -78,7 +78,7 @@ export class Api extends cloud.Api {
   public get(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiGetProps
+    props?: cloud.ApiGetOptions
   ): void {
     this.httpRequests("GET", path, inflight, props);
   }
@@ -91,7 +91,7 @@ export class Api extends cloud.Api {
   public post(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiPostProps
+    props?: cloud.ApiPostOptions
   ): void {
     this.httpRequests("POST", path, inflight, props);
   }
@@ -104,7 +104,7 @@ export class Api extends cloud.Api {
   public put(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiPutProps
+    props?: cloud.ApiPutOptions
   ): void {
     this.httpRequests("PUT", path, inflight, props);
   }
@@ -117,7 +117,7 @@ export class Api extends cloud.Api {
   public delete(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiDeleteProps
+    props?: cloud.ApiDeleteOptions
   ): void {
     this.httpRequests("DELETE", path, inflight, props);
   }
@@ -130,7 +130,7 @@ export class Api extends cloud.Api {
   public patch(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiPatchProps
+    props?: cloud.ApiPatchOptions
   ): void {
     this.httpRequests("PATCH", path, inflight, props);
   }
@@ -143,7 +143,7 @@ export class Api extends cloud.Api {
   public options(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiOptionsProps
+    props?: cloud.ApiOptionsOptions
   ): void {
     this.httpRequests("OPTIONS", path, inflight, props);
   }
@@ -156,7 +156,7 @@ export class Api extends cloud.Api {
   public head(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiHeadProps
+    props?: cloud.ApiHeadOptions
   ): void {
     this.httpRequests("HEAD", path, inflight, props);
   }
@@ -169,7 +169,7 @@ export class Api extends cloud.Api {
   public connect(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiConnectProps
+    props?: cloud.ApiConnectOptions
   ): void {
     this.httpRequests("CONNECT", path, inflight, props);
   }
