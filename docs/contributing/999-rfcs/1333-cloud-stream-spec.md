@@ -60,7 +60,7 @@ While reading from a stream will look like:
 bring cloud;
 
 let stream = new cloud.Stream(
-    horizon: 48
+    horizon: 48h
 ) as "TelemetryIngest";
 
 let bloc = new cloud.Function(inflight (event: Json)=> {
