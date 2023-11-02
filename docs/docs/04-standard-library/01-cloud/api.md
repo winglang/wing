@@ -163,7 +163,7 @@ new cloud.Api(props?: ApiProps);
 ##### `connect` <a name="connect" id="@winglang/sdk.cloud.Api.connect"></a>
 
 ```wing
-connect(path: str, inflight: IApiEndpointHandler, props?: ApiConnectProps): void
+connect(path: str, inflight: IApiEndpointHandler, props?: ApiConnectOptions): void
 ```
 
 Add a inflight handler to the api for CONNECT requests on the given path.
@@ -186,7 +186,7 @@ The function to handle the request.
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.connect.parameter.props"></a>
 
-- *Type:* <a href="#@winglang/sdk.cloud.ApiConnectProps">ApiConnectProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.ApiConnectOptions">ApiConnectOptions</a>
 
 Options for the route.
 
@@ -195,7 +195,7 @@ Options for the route.
 ##### `delete` <a name="delete" id="@winglang/sdk.cloud.Api.delete"></a>
 
 ```wing
-delete(path: str, inflight: IApiEndpointHandler, props?: ApiDeleteProps): void
+delete(path: str, inflight: IApiEndpointHandler, props?: ApiDeleteOptions): void
 ```
 
 Add a inflight handler to the api for DELETE requests on the given path.
@@ -218,7 +218,7 @@ The function to handle the request.
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.delete.parameter.props"></a>
 
-- *Type:* <a href="#@winglang/sdk.cloud.ApiDeleteProps">ApiDeleteProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.ApiDeleteOptions">ApiDeleteOptions</a>
 
 Options for the route.
 
@@ -227,7 +227,7 @@ Options for the route.
 ##### `get` <a name="get" id="@winglang/sdk.cloud.Api.get"></a>
 
 ```wing
-get(path: str, inflight: IApiEndpointHandler, props?: ApiGetProps): void
+get(path: str, inflight: IApiEndpointHandler, props?: ApiGetOptions): void
 ```
 
 Add a inflight handler to the api for GET requests on the given path.
@@ -250,7 +250,7 @@ The function to handle the request.
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.get.parameter.props"></a>
 
-- *Type:* <a href="#@winglang/sdk.cloud.ApiGetProps">ApiGetProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.ApiGetOptions">ApiGetOptions</a>
 
 Options for the route.
 
@@ -259,7 +259,7 @@ Options for the route.
 ##### `head` <a name="head" id="@winglang/sdk.cloud.Api.head"></a>
 
 ```wing
-head(path: str, inflight: IApiEndpointHandler, props?: ApiHeadProps): void
+head(path: str, inflight: IApiEndpointHandler, props?: ApiHeadOptions): void
 ```
 
 Add a inflight handler to the api for HEAD requests on the given path.
@@ -282,7 +282,7 @@ The function to handle the request.
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.head.parameter.props"></a>
 
-- *Type:* <a href="#@winglang/sdk.cloud.ApiHeadProps">ApiHeadProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.ApiHeadOptions">ApiHeadOptions</a>
 
 Options for the route.
 
@@ -291,7 +291,7 @@ Options for the route.
 ##### `options` <a name="options" id="@winglang/sdk.cloud.Api.options"></a>
 
 ```wing
-options(path: str, inflight: IApiEndpointHandler, props?: ApiOptionsProps): void
+options(path: str, inflight: IApiEndpointHandler, props?: ApiOptionsOptions): void
 ```
 
 Add a inflight handler to the api for OPTIONS requests on the given path.
@@ -314,7 +314,7 @@ The function to handle the request.
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.options.parameter.props"></a>
 
-- *Type:* <a href="#@winglang/sdk.cloud.ApiOptionsProps">ApiOptionsProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.ApiOptionsOptions">ApiOptionsOptions</a>
 
 Options for the route.
 
@@ -323,7 +323,7 @@ Options for the route.
 ##### `patch` <a name="patch" id="@winglang/sdk.cloud.Api.patch"></a>
 
 ```wing
-patch(path: str, inflight: IApiEndpointHandler, props?: ApiPatchProps): void
+patch(path: str, inflight: IApiEndpointHandler, props?: ApiPatchOptions): void
 ```
 
 Add a inflight handler to the api for PATCH requests on the given path.
@@ -346,7 +346,7 @@ The function to handle the request.
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.patch.parameter.props"></a>
 
-- *Type:* <a href="#@winglang/sdk.cloud.ApiPatchProps">ApiPatchProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.ApiPatchOptions">ApiPatchOptions</a>
 
 Options for the route.
 
@@ -355,7 +355,7 @@ Options for the route.
 ##### `post` <a name="post" id="@winglang/sdk.cloud.Api.post"></a>
 
 ```wing
-post(path: str, inflight: IApiEndpointHandler, props?: ApiPostProps): void
+post(path: str, inflight: IApiEndpointHandler, props?: ApiPostOptions): void
 ```
 
 Add a inflight handler to the api for POST requests on the given path.
@@ -378,7 +378,7 @@ The function to handle the request.
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.post.parameter.props"></a>
 
-- *Type:* <a href="#@winglang/sdk.cloud.ApiPostProps">ApiPostProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.ApiPostOptions">ApiPostOptions</a>
 
 Options for the route.
 
@@ -387,7 +387,7 @@ Options for the route.
 ##### `put` <a name="put" id="@winglang/sdk.cloud.Api.put"></a>
 
 ```wing
-put(path: str, inflight: IApiEndpointHandler, props?: ApiPutProps): void
+put(path: str, inflight: IApiEndpointHandler, props?: ApiPutOptions): void
 ```
 
 Add a inflight handler to the api for PUT requests on the given path.
@@ -410,7 +410,7 @@ The function to handle the request.
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.put.parameter.props"></a>
 
-- *Type:* <a href="#@winglang/sdk.cloud.ApiPutProps">ApiPutProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.ApiPutOptions">ApiPutOptions</a>
 
 Options for the route.
 
@@ -454,16 +454,16 @@ The base URL of the API endpoint.
 
 ## Structs <a name="Structs" id="Structs"></a>
 
-### ApiConnectProps <a name="ApiConnectProps" id="@winglang/sdk.cloud.ApiConnectProps"></a>
+### ApiConnectOptions <a name="ApiConnectOptions" id="@winglang/sdk.cloud.ApiConnectOptions"></a>
 
 Options for Api patch endpoint.
 
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiConnectProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiConnectOptions.Initializer"></a>
 
 ```wing
 bring cloud;
 
-let ApiConnectProps = cloud.ApiConnectProps{ ... };
+let ApiConnectOptions = cloud.ApiConnectOptions{ ... };
 ```
 
 
@@ -598,81 +598,81 @@ How long the browser should cache preflight request results.
 
 ---
 
-### ApiDeleteProps <a name="ApiDeleteProps" id="@winglang/sdk.cloud.ApiDeleteProps"></a>
+### ApiDeleteOptions <a name="ApiDeleteOptions" id="@winglang/sdk.cloud.ApiDeleteOptions"></a>
 
 Options for Api put endpoint.
 
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiDeleteProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiDeleteOptions.Initializer"></a>
 
 ```wing
 bring cloud;
 
-let ApiDeleteProps = cloud.ApiDeleteProps{ ... };
+let ApiDeleteOptions = cloud.ApiDeleteOptions{ ... };
 ```
 
 
-### ApiGetProps <a name="ApiGetProps" id="@winglang/sdk.cloud.ApiGetProps"></a>
+### ApiGetOptions <a name="ApiGetOptions" id="@winglang/sdk.cloud.ApiGetOptions"></a>
 
 Options for Api get endpoint.
 
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiGetProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiGetOptions.Initializer"></a>
 
 ```wing
 bring cloud;
 
-let ApiGetProps = cloud.ApiGetProps{ ... };
+let ApiGetOptions = cloud.ApiGetOptions{ ... };
 ```
 
 
-### ApiHeadProps <a name="ApiHeadProps" id="@winglang/sdk.cloud.ApiHeadProps"></a>
+### ApiHeadOptions <a name="ApiHeadOptions" id="@winglang/sdk.cloud.ApiHeadOptions"></a>
 
 Options for Api patch endpoint.
 
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiHeadProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiHeadOptions.Initializer"></a>
 
 ```wing
 bring cloud;
 
-let ApiHeadProps = cloud.ApiHeadProps{ ... };
+let ApiHeadOptions = cloud.ApiHeadOptions{ ... };
 ```
 
 
-### ApiOptionsProps <a name="ApiOptionsProps" id="@winglang/sdk.cloud.ApiOptionsProps"></a>
+### ApiOptionsOptions <a name="ApiOptionsOptions" id="@winglang/sdk.cloud.ApiOptionsOptions"></a>
 
 Options for Api patch endpoint.
 
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiOptionsProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiOptionsOptions.Initializer"></a>
 
 ```wing
 bring cloud;
 
-let ApiOptionsProps = cloud.ApiOptionsProps{ ... };
+let ApiOptionsOptions = cloud.ApiOptionsOptions{ ... };
 ```
 
 
-### ApiPatchProps <a name="ApiPatchProps" id="@winglang/sdk.cloud.ApiPatchProps"></a>
+### ApiPatchOptions <a name="ApiPatchOptions" id="@winglang/sdk.cloud.ApiPatchOptions"></a>
 
 Options for Api patch endpoint.
 
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiPatchProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiPatchOptions.Initializer"></a>
 
 ```wing
 bring cloud;
 
-let ApiPatchProps = cloud.ApiPatchProps{ ... };
+let ApiPatchOptions = cloud.ApiPatchOptions{ ... };
 ```
 
 
-### ApiPostProps <a name="ApiPostProps" id="@winglang/sdk.cloud.ApiPostProps"></a>
+### ApiPostOptions <a name="ApiPostOptions" id="@winglang/sdk.cloud.ApiPostOptions"></a>
 
 Options for Api post endpoint.
 
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiPostProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiPostOptions.Initializer"></a>
 
 ```wing
 bring cloud;
 
-let ApiPostProps = cloud.ApiPostProps{ ... };
+let ApiPostOptions = cloud.ApiPostOptions{ ... };
 ```
 
 
@@ -743,16 +743,16 @@ Options can also be overridden on a per-route basis. (not yet implemented)
 ```
 
 
-### ApiPutProps <a name="ApiPutProps" id="@winglang/sdk.cloud.ApiPutProps"></a>
+### ApiPutOptions <a name="ApiPutOptions" id="@winglang/sdk.cloud.ApiPutOptions"></a>
 
 Options for Api put endpoint.
 
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiPutProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiPutOptions.Initializer"></a>
 
 ```wing
 bring cloud;
 
-let ApiPutProps = cloud.ApiPutProps{ ... };
+let ApiPutOptions = cloud.ApiPutOptions{ ... };
 ```
 
 
