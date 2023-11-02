@@ -113,7 +113,7 @@ export class Bucket extends cloud.Bucket {
    */
   public onCreate(
     fn: cloud.IBucketEventHandler,
-    opts?: cloud.BucketOnCreateProps
+    opts?: cloud.BucketOnCreateOptions
   ): void {
     fn;
     opts;
@@ -127,7 +127,7 @@ export class Bucket extends cloud.Bucket {
    */
   public onDelete(
     fn: cloud.IBucketEventHandler,
-    opts?: cloud.BucketOnDeleteProps
+    opts?: cloud.BucketOnDeleteOptions
   ): void {
     fn;
     opts;
@@ -141,7 +141,7 @@ export class Bucket extends cloud.Bucket {
    */
   public onUpdate(
     fn: cloud.IBucketEventHandler,
-    opts?: cloud.BucketOnUpdateProps
+    opts?: cloud.BucketOnUpdateOptions
   ): void {
     fn;
     opts;
@@ -155,7 +155,7 @@ export class Bucket extends cloud.Bucket {
    */
   public onEvent(
     fn: cloud.IBucketEventHandler,
-    opts?: cloud.BucketOnEventProps
+    opts?: cloud.BucketOnEventOptions
   ): void {
     fn;
     opts;

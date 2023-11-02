@@ -1,5 +1,11 @@
 import { existsSync } from "fs";
+import type { Server, IncomingMessage, ServerResponse } from "http";
 import { join } from "path";
+import {
+  deserializeValue,
+  makeSimulatorClient,
+  serializeValue,
+} from "./client";
 import { Tree } from "./tree";
 import { SDK_VERSION } from "../constants";
 import { ConstructTree, TREE_FILE_PATH } from "../core";
@@ -8,6 +14,7 @@ import { CONNECTIONS_FILE_PATH, Trace, TraceType } from "../std";
 import { isToken } from "../target-sim/tokens";
 
 const START_ATTEMPT_COUNT = 10;
+const LOCALHOST_ADDRESS = "127.0.0.1";
 
 /**
  * Props for `Simulator`.
@@ -76,6 +83,11 @@ export interface ISimulatorContext {
   readonly resourcePath: string;
 
   /**
+   * The url that the simulator server is listening on.
+   */
+  readonly serverUrl: string;
+
+  /**
    * Find a resource simulation by its handle. Throws if the handle isn't valid.
    */
   findInstance(handle: string): ISimulatorResourceInstance;
@@ -123,6 +135,19 @@ export interface ITraceSubscriber {
 }
 
 /**
+ * The simulator can transition between these states:
+ * ┌─────────┐    ┌─────────┐
+ * │ stopped ├───►│starting │
+ * └─────────┘    └────┬────┘
+ *      ▲              │
+ *      │              ▼
+ * ┌────┴────┐    ┌─────────┐
+ * │stopping │◄───┤ running │
+ * └─────────┘    └─────────┘
+ */
+type RunningState = "starting" | "running" | "stopping" | "stopped";
+
+/**
  * A simulator that can be used to test your application locally.
  */
 export class Simulator {
@@ -131,12 +156,14 @@ export class Simulator {
   private readonly simdir: string;
 
   // fields that change between simulation runs / reloads
-  private _running: boolean;
+  private _running: RunningState;
   private readonly _handles: HandleManager;
   private _traces: Array<Trace>;
   private readonly _traceSubscribers: Array<ITraceSubscriber>;
   private _tree: Tree;
   private _connections: ConnectionData[];
+  private _serverUrl: string | undefined;
+  private _server: Server | undefined;
 
   constructor(props: SimulatorProps) {
     this.simdir = props.simfile;
@@ -145,7 +172,7 @@ export class Simulator {
     this._tree = new Tree(treeData);
     this._connections = connectionData;
 
-    this._running = false;
+    this._running = "stopped";
     this._handles = new HandleManager();
     this._traces = new Array();
     this._traceSubscribers = new Array();
@@ -201,16 +228,19 @@ export class Simulator {
    * Start the simulator.
    */
   public async start(): Promise<void> {
-    if (this._running) {
+    if (this._running !== "stopped") {
       throw new Error(
         "A simulation is already running. Did you mean to call `await simulator.stop()` first?"
       );
     }
+    this._running = "starting";
 
     // create a copy of the resource list to be used as an init queue.
     const initQueue: (BaseResourceSchema & { _attempts?: number })[] = [
       ...this._config.resources,
     ];
+
+    await this.startServer();
 
     while (true) {
       const next = initQueue.shift();
@@ -237,18 +267,25 @@ export class Simulator {
       }
     }
 
-    this._running = true;
+    this._running = "running";
   }
 
   /**
    * Stop the simulation and clean up all resources.
    */
   public async stop(): Promise<void> {
-    if (!this._running) {
+    if (this._running === "starting") {
+      throw new Error("Cannot stop a simulation that is still starting.");
+    }
+    if (this._running === "stopping") {
+      throw new Error("There is already a stop operation in progress.");
+    }
+    if (this._running === "stopped") {
       throw new Error(
         "There is no running simulation to stop. Did you mean to call `await simulator.start()` first?"
       );
     }
+    this._running = "stopping";
 
     for (const resourceConfig of this._config.resources.slice().reverse()) {
       const handle = resourceConfig.attrs?.handle;
@@ -274,8 +311,11 @@ export class Simulator {
       this._addTrace(event);
     }
 
+    this._server!.close();
+    this._server!.closeAllConnections();
+
     this._handles.reset();
-    this._running = false;
+    this._running = "stopped";
   }
 
   /**
@@ -308,28 +348,28 @@ export class Simulator {
   }
 
   /**
-   * Get a simulated resource instance.
+   * Get a resource client.
    * @returns the resource
    */
   public getResource(path: string): any {
-    const handle = this.tryGetResource(path);
-    if (!handle) {
+    const client = this.tryGetResource(path);
+    if (!client) {
       throw new Error(`Resource "${path}" not found.`);
     }
-    return handle;
+    return client;
   }
 
   /**
-   * Get a simulated resource instance.
-   * @returns The resource of undefined if not found
+   * Get a resource client.
+   * @returns The resource or undefined if not found
    */
   public tryGetResource(path: string): any | undefined {
-    const handle = this.tryGetResourceConfig(path)?.attrs.handle;
+    const handle: string = this.tryGetResourceConfig(path)?.attrs.handle;
     if (!handle) {
       return undefined;
     }
 
-    return this._handles.find(handle);
+    return makeSimulatorClient(this.url, handle);
   }
 
   /**
@@ -381,6 +421,101 @@ export class Simulator {
    */
   public connections(): ConnectionData[] {
     return structuredClone(this._connections);
+  }
+
+  /**
+   * Start a server that allows any resource to be accessed via HTTP.
+   */
+  private async startServer(): Promise<void> {
+    const requestListener = async (
+      req: IncomingMessage,
+      res: ServerResponse
+    ) => {
+      if (!req.url?.startsWith("/v1/call")) {
+        res.writeHead(404);
+        res.end();
+        return;
+      }
+
+      let body = "";
+      req.on("data", (chunk) => {
+        body += chunk;
+      });
+      req.on("end", () => {
+        const request: SimulatorServerRequest = deserializeValue(body);
+        const { handle, method, args } = request;
+        const resource = this._handles.tryFind(handle);
+
+        // If we weren't able to find a resource with the given handle, it could actually
+        // be OK if the resource is still starting up or has already been cleaned up.
+        // In that case, we return a 500 error with a message that explains what happened.
+        if (!resource) {
+          if (this._running === "starting") {
+            res.writeHead(500, { "Content-Type": "application/json" });
+            res.end(
+              serializeValue({
+                error: `Resource ${handle} not found. It may not have been initialized yet.`,
+              }),
+              "utf-8"
+            );
+            return;
+          } else if (this._running === "stopping") {
+            res.writeHead(500, { "Content-Type": "application/json" });
+            res.end(
+              serializeValue({
+                error: `Resource ${handle} not found. It may have been cleaned up already.`,
+              }),
+              "utf-8"
+            );
+            return;
+          } else {
+            throw new Error(`Internal error - resource ${handle} not found.`);
+          }
+        }
+
+        (resource as any)
+          [method](...args)
+          .then((result: any) => {
+            const resp: SimulatorServerResponse = { result };
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(serializeValue(resp), "utf-8");
+          })
+          .catch((err: any) => {
+            if (err instanceof Error) {
+              err = err.stack;
+            }
+            const resp: SimulatorServerResponse = { error: err };
+            res.writeHead(500, { "Content-Type": "application/json" });
+            res.end(serializeValue(resp), "utf-8");
+          });
+      });
+    };
+
+    // only import "http" when this method is called to reduce the time it takes to load Wing SDK
+    const http = await import("http");
+
+    // start the server, and wait for it to be listening
+    const server = http.createServer(requestListener);
+    await new Promise<void>((resolve) => {
+      server!.listen(0, LOCALHOST_ADDRESS, () => {
+        const addr = server.address();
+        if (addr && typeof addr === "object" && (addr as any).port) {
+          this._serverUrl = `http://${addr.address}:${addr.port}`;
+        }
+        this._server = server;
+        resolve();
+      });
+    });
+  }
+
+  /**
+   * The URL that the simulator server is listening on.
+   */
+  public get url(): string {
+    if (!this._serverUrl) {
+      throw new Error("Simulator server is not running.");
+    }
+    return this._serverUrl;
   }
 
   private async tryStartResource(
@@ -436,6 +571,7 @@ export class Simulator {
     return {
       simdir: this.simdir,
       resourcePath: resourceConfig.path,
+      serverUrl: this.url,
       findInstance: (handle: string) => {
         return this._handles.find(handle);
       },
@@ -596,11 +732,15 @@ class HandleManager {
   }
 
   public find(handle: string): ISimulatorResourceInstance {
-    const instance = this.handles.get(handle);
+    const instance = this.tryFind(handle);
     if (!instance) {
       throw new Error(`No resource found with handle "${handle}".`);
     }
     return instance;
+  }
+
+  public tryFind(handle: string): ISimulatorResourceInstance | undefined {
+    return this.handles.get(handle);
   }
 
   public deallocate(handle: string): ISimulatorResourceInstance {
@@ -680,4 +820,28 @@ export interface ConnectionData {
   readonly target: string;
   /** A name for the connection. */
   readonly name: string;
+}
+
+/**
+ * Internal schema for requests to the simulator server's /v1/call endpoint.
+ * Subject to breaking changes.
+ */
+export interface SimulatorServerRequest {
+  /** The resource handle (an ID unique among resources in the simulation). */
+  readonly handle: string;
+  /** The method to call on the resource. */
+  readonly method: string;
+  /** The arguments to the method. */
+  readonly args: any[];
+}
+
+/**
+ * Internal schema for responses from the simulator server's /v1/call endpoint.
+ * Subject to breaking changes.
+ */
+export interface SimulatorServerResponse {
+  /** The result of the method call. */
+  readonly result?: any;
+  /** The error that occurred during the method call. */
+  readonly error?: any;
 }

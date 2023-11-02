@@ -22,7 +22,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
 
   public onMessage(
     inflight: cloud.ITopicOnMessageHandler,
-    props: cloud.TopicOnMessageProps = {}
+    props: cloud.TopicOnMessageOptions = {}
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(

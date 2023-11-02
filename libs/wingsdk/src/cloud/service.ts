@@ -134,7 +134,7 @@ export abstract class Service extends Resource implements IInflightHost {
 /**
  * Options for Service.onStart.
  */
-export interface ServiceOnStartProps extends FunctionProps {}
+export interface ServiceOnStartOptions extends FunctionProps {}
 
 /**
  * Inflight interface for `Service`.

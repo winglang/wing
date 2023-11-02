@@ -98,7 +98,7 @@ jobs:
 
   test:
     name: Test
-    timeout-minutes: 60
+    timeout-minutes: 30
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
