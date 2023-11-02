@@ -4,6 +4,8 @@ import { join, resolve } from "path";
 import { buildSync } from "esbuild-wasm";
 import { normalPath } from "./misc";
 
+const SDK_PATH = normalPath(resolve(__dirname, "..", ".."));
+
 export interface Bundle {
   entrypointPath: string;
   directory: string;
@@ -29,6 +31,9 @@ export function createBundle(entrypoint: string, outputDir?: string): Bundle {
     nodePaths: process.env.WING_NODE_MODULES
       ? [normalPath(process.env.WING_NODE_MODULES as string)]
       : undefined,
+    alias: {
+      "@winglang/sdk": SDK_PATH,
+    },
     minify: false,
     platform: "node",
     target: "node18",
