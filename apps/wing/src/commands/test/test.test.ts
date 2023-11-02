@@ -125,7 +125,6 @@ describe("test options", () => {
         target: Target.SIM,
       });
       expect(writeResultsSpy).toBeCalledTimes(0);
-      writeResultsSpy.mockClear();
     } finally {
     }
   });
