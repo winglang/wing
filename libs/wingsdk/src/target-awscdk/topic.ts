@@ -31,7 +31,7 @@ export class Topic extends cloud.Topic {
 
   public onMessage(
     inflight: cloud.ITopicOnMessageHandler,
-    props: cloud.TopicOnMessageProps = {}
+    props: cloud.TopicOnMessageOptions = {}
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
