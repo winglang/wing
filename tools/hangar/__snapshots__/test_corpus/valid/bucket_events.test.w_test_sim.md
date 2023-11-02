@@ -6,7 +6,9 @@ pass ┌ bucket_events.test.wsim » root/env0/test:putting and deleting from a b
      │ created a
      │ created b
      │ other bucket event called!
-     └ updated b
+     │ updated b
+     │ other bucket event called!
+     └ created c
  
  
 Tests 1 passed (1)
