@@ -2,6 +2,7 @@
 export * as cloud from "./cloud";
 export * as core from "./core";
 export * as ex from "./ex";
+export * as expect from "./expect";
 export * as fs from "./fs";
 export * as http from "./http";
 export * as math from "./math";
