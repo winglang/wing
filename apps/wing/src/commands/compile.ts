@@ -81,12 +81,13 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
   }
 
   const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
+  const platforms = options?.platform ?? [];
   try {
     return await wingCompiler.compile(entrypoint, {
       ...options,
       log,
       color: coloring,
-      platform: options?.platform || [wingCompiler.BuiltinPlatform.SIM],
+      platform: platforms.length == 0 ? [wingCompiler.BuiltinPlatform.SIM] : platforms,
     });
   } catch (error) {
     if (error instanceof wingCompiler.CompileError) {

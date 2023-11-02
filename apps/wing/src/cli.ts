@@ -32,6 +32,11 @@ function runSubCommand(subCommand: string, path: string = subCommand) {
   };
 }
 
+// Required to support --option x --option y --option z rather than --option x y z
+function collectVariadic(value: string, previous: string[]) {
+  return previous.concat([value]);
+}
+
 async function collectAnalyticsHook(cmd: Command) {
   if (process.env.WING_DISABLE_ANALYTICS) {
     return;
@@ -138,11 +143,11 @@ async function main() {
     .command("compile")
     .description("Compiles a Wing program")
     .argument("[entrypoint]", "program .w entrypoint")
-    .addOption(
-      new Option(
-        "-t, --platform <platform...>",
-        "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk)"
-      ).default(["sim"])
+    .option(
+      "-t, --platform <platform> --platform <platform>",
+      "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk) (default: [sim])",
+      collectVariadic,
+      []
     )
     .option("-r, --rootId <rootId>", "App root id")
     .option("-v, --value <value>", "Platform-specific value in the form KEY=VALUE", addValue, [])
@@ -157,11 +162,11 @@ async function main() {
       "Compiles a Wing program and runs all functions with the word 'test' or start with 'test:' in their resource identifiers"
     )
     .argument("[entrypoint...]", "all files to test (globs are supported)")
-    .addOption(
-      new Option(
-        "-t, --platform <platform...>",
-        "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk)"
-      ).default(["sim"])
+    .option(
+      "-t, --platform <platform> --platform <platform>",
+      "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk) (default: [sim])",
+      collectVariadic,
+      []
     )
     .option("-r, --rootId <rootId>", "App root id")
     .option(
