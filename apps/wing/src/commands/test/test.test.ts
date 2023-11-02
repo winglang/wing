@@ -89,11 +89,11 @@ describe("test options", () => {
 
     const outputFile = "out.json";
 
-      await wingTest(["test.test.w"], {
-        clean: true,
-        platform: [BuiltinPlatform.SIM],
-        outputFile,
-      });
+        await wingTest(["test.test.w"], {
+          clean: true,
+          platform: [BuiltinPlatform.SIM],
+          outputFile,
+        });
 
     expect(writeResultsSpy).toBeCalledTimes(1);
     const { testName, results } = writeResultsSpy.mock.calls[0][0][0];
