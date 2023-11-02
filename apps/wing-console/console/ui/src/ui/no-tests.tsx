@@ -14,9 +14,9 @@ export const NoTests = () => {
       <div>
         <span>Learn how to add tests </span>
         <a
-          className={"text-sky-500 hover:text-sky-600"}
-          href={"https://www.winglang.io/docs/concepts/tests"}
-          target={"_blank"}
+          className="text-sky-500 hover:text-sky-600"
+          href="https://www.winglang.io/docs/concepts/tests"
+          target="_blank"
           rel="noreferrer"
         >
           here.
