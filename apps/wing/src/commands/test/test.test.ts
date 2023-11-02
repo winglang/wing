@@ -171,39 +171,34 @@ describe("retry option", () => {
 
   afterEach(() => {
     chalk.level = defaultChalkLevel;
+    process.chdir(cwd);
     logSpy.mockRestore();
   });
 
   test("wing test --retry [retries]", async () => {
     const outDir = await mkdtemp(join(tmpdir(), "-wing-retry-test"));
-    const prevdir = process.cwd();
 
-    try {
-      process.chdir(outDir);
-
-      // Create a test that will consistently fail
-      fs.writeFileSync(
-        "fail.test.w",
-        `
+    process.chdir(outDir);
+    // Create a test that will consistently fail
+    fs.writeFileSync(
+      "fail.test.w",
+      `
         bring cloud;
         test "alwaysFail" {
           assert(false);
         }
       `
-      );
+    );
 
-      // Equivalent to `wing test --retry` (default 3 retries)
-      await wingTest(["fail.test.w"], {
-        clean: true,
-        target: Target.SIM,
-        retry: 3,
-      });
+    // Equivalent to `wing test --retry` (default 3 retries)
+    await wingTest(["fail.test.w"], {
+      clean: true,
+      target: Target.SIM,
+      retry: 3,
+    });
 
-      const retryLogs = logSpy.mock.calls.filter((args) => args[0].includes("Retrying"));
-      expect(retryLogs.length).toBe(3);
-    } finally {
-      process.chdir(prevdir);
-    }
+    const retryLogs = logSpy.mock.calls.filter((args) => args[0].includes("Retrying"));
+    expect(retryLogs.length).toBe(3);
   });
 });
 
