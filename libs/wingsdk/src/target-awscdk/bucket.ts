@@ -59,7 +59,7 @@ export class Bucket extends cloud.Bucket {
   private onEventFunction(
     event: string,
     inflight: cloud.IBucketEventHandler,
-    opts?: cloud.BucketOnCreateProps
+    opts?: cloud.BucketOnCreateOptions
   ): Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
@@ -106,7 +106,7 @@ export class Bucket extends cloud.Bucket {
 
   public onCreate(
     inflight: cloud.IBucketEventHandler,
-    opts?: cloud.BucketOnCreateProps
+    opts?: cloud.BucketOnCreateOptions
   ): void {
     const fn = this.onEventFunction("OnCreate", inflight, opts);
 
@@ -124,7 +124,7 @@ export class Bucket extends cloud.Bucket {
 
   public onDelete(
     inflight: cloud.IBucketEventHandler,
-    opts?: cloud.BucketOnDeleteProps
+    opts?: cloud.BucketOnDeleteOptions
   ): void {
     const fn = this.onEventFunction("OnDelete", inflight, opts);
 
@@ -142,7 +142,7 @@ export class Bucket extends cloud.Bucket {
 
   public onUpdate(
     inflight: cloud.IBucketEventHandler,
-    opts?: cloud.BucketOnUpdateProps
+    opts?: cloud.BucketOnUpdateOptions
   ): void {
     const fn = this.onEventFunction("OnUpdate", inflight, opts);
 
@@ -160,7 +160,7 @@ export class Bucket extends cloud.Bucket {
 
   public onEvent(
     inflight: cloud.IBucketEventHandler,
-    opts?: cloud.BucketOnEventProps
+    opts?: cloud.BucketOnEventOptions
   ) {
     const fn = this.onEventFunction("OnEvent", inflight, opts);
 

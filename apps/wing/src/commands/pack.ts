@@ -4,7 +4,7 @@ import * as os from "os";
 import * as path from "path";
 import { resolve } from "path";
 import Arborist from "@npmcli/arborist";
-import { Target } from "@winglang/compiler";
+import { BuiltinPlatform } from "@winglang/compiler";
 import { minimatch } from "minimatch";
 import packlist from "npm-packlist";
 import * as tar from "tar";
@@ -27,7 +27,7 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
 
   // TODO: workaround for https://github.com/winglang/wing/issues/4431
   // await compile(".", { target: Target.SIM });
-  await compile(path.join("..", path.basename(process.cwd())), { target: Target.SIM });
+  await compile(path.join("..", path.basename(process.cwd())), { platform: [BuiltinPlatform.SIM] });
 
   const userDir = process.cwd();
   const outfile = options.outfile ? resolve(options.outfile) : undefined;
