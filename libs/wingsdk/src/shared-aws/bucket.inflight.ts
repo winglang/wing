@@ -266,13 +266,13 @@ export class BucketClient implements IBucketClient {
         Key: dstKey,
         MetadataDirective: "REPLACE",
         // Properties carried over from the source object
-        ContentType: headResult.ContentType,
-        ContentLanguage: headResult.ContentLanguage,
-        ContentEncoding: headResult.ContentEncoding,
-        ContentDisposition: headResult.ContentDisposition,
-        CacheControl: headResult.CacheControl,
-        Expires: headResult.Expires,
-        Metadata: headResult.Metadata,
+        ContentType: headResult?.ContentType,
+        ContentLanguage: headResult?.ContentLanguage,
+        ContentEncoding: headResult?.ContentEncoding,
+        ContentDisposition: headResult?.ContentDisposition,
+        CacheControl: headResult?.CacheControl,
+        Expires: headResult?.Expires,
+        Metadata: headResult?.Metadata,
       });
 
       await this.s3Client.send(command);
