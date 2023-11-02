@@ -52,7 +52,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
 
     const fn = Function._newFunction(this, fnPath, inflight, props) as Function;
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
-    Node.of(fn).title = `${method.toLowerCase()}()`;
+    Node.of(fn).title = `${method.toUpperCase()} ${path}`;
 
     const eventMapping = new EventMapping(this, eventId, {
       publisher: this,

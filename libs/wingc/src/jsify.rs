@@ -777,7 +777,14 @@ impl<'a> JSifier<'a> {
 		ctx.visit_ctx.push_stmt(statement.idx);
 		let code = match &statement.kind {
 			StmtKind::Bring { source, identifier } => match source {
-				BringSource::BuiltinModule(name) => CodeMaker::one_line(format!("const {} = {}.{};", name, STDLIB, name)),
+				BringSource::BuiltinModule(name) => {
+					let var_name = if let Some(identifier) = identifier {
+						identifier
+					} else {
+						name
+					};
+					CodeMaker::one_line(format!("const {} = {}.{};", var_name, STDLIB, name))
+				}
 				BringSource::JsiiModule(name) => CodeMaker::one_line(format!(
 					"const {} = require(\"{}\");",
 					// checked during type checking
