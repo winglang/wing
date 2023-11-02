@@ -69,64 +69,55 @@ describe("test options", () => {
   test("wing test (default entrypoint)", async () => {
     const outDir = await mkdtemp(join(tmpdir(), "-wing-compile-test"));
 
-    try {
-      process.chdir(outDir);
-      fs.writeFileSync("foo.test.w", "bring cloud;");
-      fs.writeFileSync("bar.test.w", "bring cloud;");
-      fs.writeFileSync("baz.test.w", "bring cloud;");
+    process.chdir(outDir);
+    fs.writeFileSync("foo.test.w", "bring cloud;");
+    fs.writeFileSync("bar.test.w", "bring cloud;");
+    fs.writeFileSync("baz.test.w", "bring cloud;");
 
-      await wingTest([], { clean: true, target: Target.SIM });
+    await wingTest([], { clean: true, target: Target.SIM });
 
-      expect(logSpy).toHaveBeenCalledWith("pass ─ foo.test.wsim (no tests)");
-      expect(logSpy).toHaveBeenCalledWith("pass ─ bar.test.wsim (no tests)");
-      expect(logSpy).toHaveBeenCalledWith("pass ─ baz.test.wsim (no tests)");
-    } finally {
-    }
+    expect(logSpy).toHaveBeenCalledWith("pass ─ foo.test.wsim (no tests)");
+    expect(logSpy).toHaveBeenCalledWith("pass ─ bar.test.wsim (no tests)");
+    expect(logSpy).toHaveBeenCalledWith("pass ─ baz.test.wsim (no tests)");
   });
 
   test("wing test with output file calls writeResultsToFile", async () => {
     const outDir = await mkdtemp(join(tmpdir(), "-wing-compile-test"));
 
-    try {
-      process.chdir(outDir);
-      fs.writeFileSync("test.test.w", EXAMPLE_TEST);
+    process.chdir(outDir);
+    fs.writeFileSync("test.test.w", EXAMPLE_TEST);
 
-      const outputFile = "out.json";
+    const outputFile = "out.json";
 
-      await wingTest(["test.test.w"], {
-        clean: true,
-        target: Target.SIM,
-        outputFile,
-      });
+    await wingTest(["test.test.w"], {
+      clean: true,
+      target: Target.SIM,
+      outputFile,
+    });
 
-      expect(writeResultsSpy).toBeCalledTimes(1);
-      const { testName, results } = writeResultsSpy.mock.calls[0][0][0];
-      expect(results).toMatchObject(BUCKET_TEST_RESULT);
-      expect(testName).toBe("test.test.w");
-      expect(writeResultsSpy.mock.calls[0][2]).toBe(outputFile);
+    expect(writeResultsSpy).toBeCalledTimes(1);
+    const { testName, results } = writeResultsSpy.mock.calls[0][0][0];
+    expect(results).toMatchObject(BUCKET_TEST_RESULT);
+    expect(testName).toBe("test.test.w");
+    expect(writeResultsSpy.mock.calls[0][2]).toBe(outputFile);
 
-      expect(writeFileSpy).toBeCalledTimes(1);
-      const [filePath, output] = writeFileSpy.mock.calls[0];
-      expect(filePath).toBe(resolve("out.json"));
-      expect(JSON.parse(output as string)).toMatchObject(OUTPUT_FILE);
-    } finally {
-    }
+    expect(writeFileSpy).toBeCalledTimes(1);
+    const [filePath, output] = writeFileSpy.mock.calls[0];
+    expect(filePath).toBe(resolve("out.json"));
+    expect(JSON.parse(output as string)).toMatchObject(OUTPUT_FILE);
   });
 
   test("wing test without output file calls writeResultsToFile", async () => {
     const outDir = await mkdtemp(join(tmpdir(), "-wing-compile-test"));
 
-    try {
-      process.chdir(outDir);
-      fs.writeFileSync("test.test.w", EXAMPLE_TEST);
+    process.chdir(outDir);
+    fs.writeFileSync("test.test.w", EXAMPLE_TEST);
 
-      await wingTest(["test.test.w"], {
-        clean: true,
-        target: Target.SIM,
-      });
-      expect(writeResultsSpy).toBeCalledTimes(0);
-    } finally {
-    }
+    await wingTest(["test.test.w"], {
+      clean: true,
+      target: Target.SIM,
+    });
+    expect(writeResultsSpy).toBeCalledTimes(0);
   });
 
   test("validate output file", () => {
