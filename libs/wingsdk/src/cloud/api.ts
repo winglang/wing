@@ -242,7 +242,7 @@ export abstract class Api extends Resource {
   public abstract get(
     path: string,
     inflight: IApiEndpointHandler,
-    props?: ApiGetProps
+    props?: ApiGetOptions
   ): void;
 
   /**
@@ -254,7 +254,7 @@ export abstract class Api extends Resource {
   public abstract post(
     path: string,
     inflight: IApiEndpointHandler,
-    props?: ApiPostProps
+    props?: ApiPostOptions
   ): void;
 
   /**
@@ -266,7 +266,7 @@ export abstract class Api extends Resource {
   public abstract put(
     path: string,
     inflight: IApiEndpointHandler,
-    props?: ApiPutProps
+    props?: ApiPutOptions
   ): void;
 
   /**
@@ -278,7 +278,7 @@ export abstract class Api extends Resource {
   public abstract delete(
     path: string,
     inflight: IApiEndpointHandler,
-    props?: ApiDeleteProps
+    props?: ApiDeleteOptions
   ): void;
 
   /**
@@ -290,7 +290,7 @@ export abstract class Api extends Resource {
   public abstract patch(
     path: string,
     inflight: IApiEndpointHandler,
-    props?: ApiPatchProps
+    props?: ApiPatchOptions
   ): void;
 
   /**
@@ -302,7 +302,7 @@ export abstract class Api extends Resource {
   public abstract options(
     path: string,
     inflight: IApiEndpointHandler,
-    props?: ApiOptionsProps
+    props?: ApiOptionsOptions
   ): void;
 
   /**
@@ -314,7 +314,7 @@ export abstract class Api extends Resource {
   public abstract head(
     path: string,
     inflight: IApiEndpointHandler,
-    props?: ApiHeadProps
+    props?: ApiHeadOptions
   ): void;
 
   /**
@@ -326,7 +326,7 @@ export abstract class Api extends Resource {
   public abstract connect(
     path: string,
     inflight: IApiEndpointHandler,
-    props?: ApiConnectProps
+    props?: ApiConnectOptions
   ): void;
   /**
    * Validating path:
@@ -550,42 +550,42 @@ export abstract class Api extends Resource {
 /**
  * Options for Api get endpoint.
  */
-export interface ApiGetProps {}
+export interface ApiGetOptions {}
 
 /**
  * Options for Api post endpoint.
  */
-export interface ApiPostProps {}
+export interface ApiPostOptions {}
 
 /**
  * Options for Api put endpoint.
  */
-export interface ApiPutProps {}
+export interface ApiPutOptions {}
 
 /**
  * Options for Api put endpoint.
  */
-export interface ApiDeleteProps {}
+export interface ApiDeleteOptions {}
 
 /**
  * Options for Api patch endpoint.
  */
-export interface ApiPatchProps {}
+export interface ApiPatchOptions {}
 
 /**
  * Options for Api patch endpoint.
  */
-export interface ApiOptionsProps {}
+export interface ApiOptionsOptions {}
 
 /**
  * Options for Api patch endpoint.
  */
-export interface ApiHeadProps {}
+export interface ApiHeadOptions {}
 
 /**
  * Options for Api patch endpoint.
  */
-export interface ApiConnectProps {}
+export interface ApiConnectOptions {}
 
 /**
  * Inflight methods and members of `cloud.Api`.

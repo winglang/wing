@@ -43,7 +43,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
 
   public setConsumer(
     inflight: cloud.IQueueSetConsumerHandler,
-    props: cloud.QueueSetConsumerProps = {}
+    props: cloud.QueueSetConsumerOptions = {}
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
 
