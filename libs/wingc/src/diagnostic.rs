@@ -251,6 +251,7 @@ pub struct Diagnostic {
 	pub message: String,
 	pub annotations: Vec<DiagnosticAnnotation>,
 	pub span: Option<WingSpan>,
+	pub hints: Vec<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize)]
