@@ -96,7 +96,6 @@ export class Redis extends ex.Redis {
   /** @internal */
   public _supportedOps(): string[] {
     return [
-      ex.RedisInflightMethods.RAW_CLIENT,
       ex.RedisInflightMethods.URL,
       ex.RedisInflightMethods.SET,
       ex.RedisInflightMethods.GET,

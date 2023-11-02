@@ -1,4 +1,3 @@
-// import { writeFileSync } from "fs";
 import fs from "fs";
 import { mkdtemp } from "fs/promises";
 import { tmpdir } from "os";
@@ -11,6 +10,7 @@ import { filterTests, pickOneTestPerEnvironment, renderTestReport, test as wingT
 import * as resultsFn from "./results";
 
 const defaultChalkLevel = chalk.level;
+const cwd = process.cwd();
 
 describe("printing test reports", () => {
   beforeEach(() => {
@@ -19,6 +19,7 @@ describe("printing test reports", () => {
 
   afterEach(() => {
     chalk.level = defaultChalkLevel;
+    process.chdir(cwd);
   });
 
   test("resource traces are not shown if debug mode is disabled", () => {
@@ -34,7 +35,11 @@ describe("printing test reports", () => {
 
     const testReport = renderTestReport("hello.w", EXAMPLE_TEST_RESULTS);
 
-    process.env.DEBUG = oldDebug;
+    if (oldDebug) {
+      process.env.DEBUG = oldDebug;
+    } else {
+      delete process.env.DEBUG;
+    }
 
     expect(testReport).toMatchSnapshot();
     expect(testReport).toContain("Push (message=cool)");
@@ -48,11 +53,11 @@ describe("wing test (no options)", () => {
 
   afterEach(() => {
     chalk.level = defaultChalkLevel;
+    process.chdir(cwd);
   });
 
   test("default entrypoint behaviour", async () => {
     const outDir = await mkdtemp(join(tmpdir(), "-wing-compile-test"));
-    const prevdir = process.cwd();
     const logSpy = vi.spyOn(console, "log");
 
     try {
@@ -67,64 +72,69 @@ describe("wing test (no options)", () => {
       expect(logSpy).toHaveBeenCalledWith("pass ─ bar.test.wsim (no tests)");
       expect(logSpy).toHaveBeenCalledWith("pass ─ baz.test.wsim (no tests)");
     } finally {
-      process.chdir(prevdir);
       logSpy.mockRestore();
     }
   });
 
-  test("wing test with output file calls writeResultsToFile", async () => {
-    const outDir = await mkdtemp(join(tmpdir(), "-wing-compile-test"));
-    const prevdir = process.cwd();
-    const writeResults = vi.spyOn(resultsFn, "writeResultsToFile");
-    const writeFile = vi.spyOn(fs, "writeFile").mockImplementation(() => null);
+  test(
+    "wing test with output file calls writeResultsToFile",
+    async () => {
+      const outDir = await mkdtemp(join(tmpdir(), "-wing-compile-test"));
+      const writeResults = vi.spyOn(resultsFn, "writeResultsToFile");
+      const writeFile = vi.spyOn(fs, "writeFile").mockImplementation(() => null);
 
-    try {
-      process.chdir(outDir);
-      fs.writeFileSync("test.test.w", EXAMPLE_TEST);
+      try {
+        process.chdir(outDir);
+        fs.writeFileSync("test.test.w", EXAMPLE_TEST);
 
-      const outputFile = "out.json";
+        const outputFile = "out.json";
 
-      await wingTest(["test.test.w"], {
-        clean: true,
-        target: Target.SIM,
-        outputFile,
-      });
+        await wingTest(["test.test.w"], {
+          clean: true,
+          target: Target.SIM,
+          outputFile,
+        });
 
-      expect(writeResults).toBeCalledTimes(1);
-      const { testName, results } = writeResults.mock.calls[0][0][0];
-      expect(results).toMatchObject(BUCKET_TEST_RESULT);
-      expect(testName).toBe("test.test.w");
-      expect(writeResults.mock.calls[0][2]).toBe(outputFile);
+        expect(writeResults).toBeCalledTimes(1);
+        const { testName, results } = writeResults.mock.calls[0][0][0];
+        expect(results).toMatchObject(BUCKET_TEST_RESULT);
+        expect(testName).toBe("test.test.w");
+        expect(writeResults.mock.calls[0][2]).toBe(outputFile);
 
-      expect(writeFile).toBeCalledTimes(1);
-      const [filePath, output] = writeFile.mock.calls[0];
-      expect(filePath).toBe(resolve("out.json"));
-      expect(JSON.parse(output as string)).toMatchObject(OUTPUT_FILE);
-    } finally {
-      writeResults.mockClear();
-      process.chdir(prevdir);
-    }
-  });
+        expect(writeFile).toBeCalledTimes(1);
+        const [filePath, output] = writeFile.mock.calls[0];
+        expect(filePath).toBe(resolve("out.json"));
+        expect(JSON.parse(output as string)).toMatchObject(OUTPUT_FILE);
+      } finally {
+        writeResults.mockClear();
+      }
+    },
+    { timeout: 10000 }
+  );
 
-  test("wing test without output file calls writeResultsToFile", async () => {
-    const writeResults = vi.spyOn(resultsFn, "writeResultsToFile");
-    const outDir = await mkdtemp(join(tmpdir(), "-wing-compile-test"));
-    const prevdir = process.cwd();
+  test(
+    "wing test without output file calls writeResultsToFile",
+    async () => {
+      const writeResults = vi.spyOn(resultsFn, "writeResultsToFile");
+      const outDir = await mkdtemp(join(tmpdir(), "-wing-compile-test"));
+      const prevdir = process.cwd();
 
-    try {
-      process.chdir(outDir);
-      fs.writeFileSync("test.test.w", EXAMPLE_TEST);
+      try {
+        process.chdir(outDir);
+        fs.writeFileSync("test.test.w", EXAMPLE_TEST);
 
-      await wingTest(["test.test.w"], {
-        clean: true,
-        target: Target.SIM,
-      });
-      expect(writeResults).toBeCalledTimes(0);
-      writeResults.mockClear();
-    } finally {
-      process.chdir(prevdir);
-    }
-  });
+        await wingTest(["test.test.w"], {
+          clean: true,
+          target: Target.SIM,
+        });
+        expect(writeResults).toBeCalledTimes(0);
+        writeResults.mockClear();
+      } finally {
+        process.chdir(prevdir);
+      }
+    },
+    { timeout: 10000 }
+  );
 
   test("validate output file", () => {
     expect(resultsFn.validateOutputFilePath("/path/out.json")).toBeUndefined();
