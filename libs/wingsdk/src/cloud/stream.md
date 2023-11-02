@@ -27,9 +27,8 @@ Most cloud providers have a data horizon for their streaming data to help provid
 bring cloud;
 
 let stream = new cloud.Stream(
-    name: 'test-data-stream',
-    horizon: 96,  // optional, defaults to 24 hours
-);
+    horizon: 96h,  // optional, defaults to 24 hours
+) as "TestDataStream";
 ```
 
 ## Advanced Usage
@@ -40,11 +39,11 @@ If the expected throughput of your data is static and known, you can leverage pr
 bring cloud;
 
 let stream = new cloud.Stream(
-  name: ,
   read: ,
   write: ,
   horizon: ,
-)
+) as "MyStream";
+```
 
 ## Target-specific details
 
@@ -58,32 +57,14 @@ Note that data is not persisted between simulator runs.
 
 The AWS implementation of `cloud.Stream` uses [AWS Kinesis Data Streams](https://aws.amazon.com/kinesis/data-streams/).
 
-To add extra IAM permissions to the function, you can use the `aws.Function` class as shown below.
-
-```ts playground
-bring aws;
-bring cloud;
-
-let f = new cloud.Function(inflight () => {
-  log("Hello world!");
-});
-if let lambdaFn = aws.Function.from(f) {
-  lambdaFn.addPolicyStatements(
-    aws.PolicyStatement {
-      actions: ["ses:sendEmail"],
-      effect: aws.Effect.ALLOW,
-      resources: ["*"],
-    },
-  );
-}
-```
-
 ### Azure (`tf-azure`)
 
-The Azure implementation of `cloud.Function` uses [Azure Functions](https://azure.microsoft.com/en-us/products/functions).
+The Azure implementation of `cloud.Stream` uses [Event Hubs](https://azure.microsoft.com/products/event-hubs).
 
-🚧 `invoke` API is not supported yet (tracking issue: [#1371](https://github.com/winglang/wing/issues/1371))
+🚧 Not supported yet (tracking issue: [](https://github.com/winglang/wing/issues/))
 
 ### GCP (`tf-gcp`)
 
-🚧 Not supported yet (tracking issue: [#614](https://github.com/winglang/wing/issues/614))
+The GCP implementation of `cloud.Stream` uses [Pub/Sub](https://cloud.google.com/pubsub)
+
+🚧 Not supported yet (tracking issue: [#](https://github.com/winglang/wing/issues/))

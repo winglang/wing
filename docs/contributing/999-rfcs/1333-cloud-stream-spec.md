@@ -17,15 +17,15 @@ Implementing design and library spec supporting and integrating real-time stream
 ## Background
 
 Typically streaming data services form an integral backbone of high throughput systems. Specific scenarios where Data Streams are used are:
-* Real-time analytics - Analyzing realt-time data from sensors, applications, social media etc. to gain instant insights.
-* Monitoring - Tracking perofmrance metrics of infrastructure and applications in real-time to identify issues.
-* Messaging - High throughput order-agnostic messagning between applications and services.
+* Real-time analytics - Analyzing real-time data from sensors, applications, social media etc. to gain instant insights.
+* Monitoring - Tracking performance metrics of infrastructure and applications in real-time to identify issues.
+* Messaging - High throughput order-agnostic messaging between applications and services.
 * ETL - Streaming ETL workflows for real-time data integration.
 * Fast Data - Applying complex analytics and machine learning on streaming data for low latency inference.
 * User Engagement - Analyzing user actions and behavior as they occur to provide personalized and real-time recommendations.
 * IoT - Collecting and processing telemetry streams from IoT devices.
 * Gaming - Processing real-time game data streams for features like leaderboards or in-game alerts.
-* Financial Services - Performing real-time analytics and compelx event processing on financial data feeds.
+* Financial Services - Performing real-time analytics and complex event processing on financial data feeds.
 * E-Commerce - Real-time monitoring of buying behaviour, stock levels, logistics data to enable instant actions.
 
 This is implemented across varied cloud providers, specifically services like: AWS Kinesis Data Streams, Google Cloud Pub/Sub, Azure Event Hubs and in open source solutions like Apache Kafka, Apache Pulsar, etc.
@@ -43,9 +43,8 @@ Writing to a data stream from a function should look like:
 bring cloud;
 
 let stream = new cloud.Stream(
-    name: 'telemetry-ingest',
-    horizon: 48
-);
+    horizon: 48h
+) as "TelemetryIngest";
 
 
 let bloc = new cloud.Function(inflight (event: any): any => {
@@ -53,7 +52,7 @@ let bloc = new cloud.Function(inflight (event: any): any => {
 
     let eventSize = event.count;
     return argsCount % 2;
-}) as "telemetry-writer";
+}) as "TelemetryWriter";
 ```
 
 While reading from a stream will look like:
@@ -61,16 +60,37 @@ While reading from a stream will look like:
 bring cloud;
 
 let stream = new cloud.Stream(
-    name: 'telemetry-ingest',
     horizon: 48
-);
+) as "TelemetryIngest";
 
-let bloc = new cloud.Function(inflight (event: any): any => {
+let bloc = new cloud.Function(inflight (event: Json)=> {
     let newestBatch = stream.fetch();
 
     let batchSize = newestBatch.size();
     return batchSize;
 }) as "telemetry-reader";
+```
+
+Reading from the stream should also be possible through an `onEvent` function which sets up an event trigger to read all 
+events from the stream:
+
+```ts
+bring cloud;
+
+let stream = new cloud.Stream(
+  horizon: 48h
+) as "TelemetryIngest";
+
+stream.onEvent(inflight (event: Json) => {
+  /**
+   * data returned by stream has some common information
+   * Other data is as the user sets it.
+   */
+  
+  return event.body;
+  
+}) as "ReadAll";
+
 ```
 
 ## Requirements
