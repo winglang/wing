@@ -14,6 +14,8 @@ export interface RunWingCommandOptions {
 }
 
 export async function runWingCommand(options: RunWingCommandOptions) {
+  const platformOptions: string[] = [];
+  options.platforms?.forEach((p) => platformOptions.push(...["-t",  `${p}`])) ?? [];
   const out = await execa(
     wingBin,
     [
@@ -21,8 +23,7 @@ export async function runWingCommand(options: RunWingCommandOptions) {
       "--no-analytics",
       ...options.args,
       options.wingFile ?? "",
-      "-t",
-      ...options.platforms ?? []
+      ...platformOptions
     ],
     {
       cwd: options.cwd,

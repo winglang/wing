@@ -21,7 +21,7 @@ Arguments:
   entrypoint                    program .w entrypoint
 
 Options:
-  -t, --platform <platform...>  Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk) (default: ["sim"])
+  -t, --platform <platform> --platform <platform>  Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk) (default: [sim])
   -h, --help                    display help for command
 ```
 
@@ -31,10 +31,10 @@ These providers contain a combination of provision engine and cloud environment 
 
 ### Specifying Multiple Platforms
 
-You may have noticed that the `--platform` option accepts multiple arguments. This means you can specify multiple platforms to compile your application to. For example, if you wanted to compile your application using multiple platforms
+You may have noticed that the `--platform` option can be provided multiple times. This means you can specify multiple platforms to compile your application to. For example, if you wanted to compile your application using multiple platforms
 
 ```sh
-wing compile app.main.w --platform tf-aws platform-foo platform-bar
+wing compile app.main.w --platform tf-aws --platform platform-foo --platform platform-bar
 ```
 The order in which platforms are evaluated is important. 
 
@@ -129,7 +129,7 @@ When running the `wing compile` command, the `--platform` option is used to spec
 The specified platform can be a built-in platform, or a path to a custom platform. For example, if you have a custom platform named `my-platform`, you can specify it as follows:
 
 ```sh
-wing compile --platform tf-aws ../my-platform
+wing compile --platform tf-aws --platform ../my-platform
 ```
 
 ### Synthesis Hooks
