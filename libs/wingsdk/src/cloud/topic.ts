@@ -48,14 +48,14 @@ export abstract class Topic extends Resource {
    */
   public abstract onMessage(
     inflight: ITopicOnMessageHandler,
-    props?: TopicOnMessageProps
+    props?: TopicOnMessageOptions
   ): Function;
 }
 
 /**
  * Options for `Topic.onMessage`.
  */
-export interface TopicOnMessageProps extends FunctionProps {}
+export interface TopicOnMessageOptions extends FunctionProps {}
 
 /**
  * Inflight interface for `Topic`.

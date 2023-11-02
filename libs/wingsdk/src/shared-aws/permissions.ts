@@ -222,11 +222,6 @@ export function calculateBucketPermissions(
     );
   }
 
-  // copying an object
-  if (ops.includes(cloud.BucketInflightMethods.COPY)) {
-    actions.push("s3:CopyObject");
-  }
-
   return [{ actions, resources: [arn, `${arn}/*`] }];
 }
 

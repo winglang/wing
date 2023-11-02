@@ -18,20 +18,28 @@ return class Handler {
         }
 };
 })())({
-counter: (function(env) {
-  let handle = process.env[env];
+counter: (function() {
+  let handle = process.env.COUNTER_HANDLE_4ecd8d46;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: COUNTER_HANDLE_4ecd8d46\\");
   }
-  return $simulator.findInstance(handle);
-})(\\"COUNTER_HANDLE_4ecd8d46\\"),
-bucket: (function(env) {
-  let handle = process.env[env];
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+  }
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
+})(),
+bucket: (function() {
+  let handle = process.env.BUCKET_HANDLE_5f2a41c8;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_5f2a41c8\\");
   }
-  return $simulator.findInstance(handle);
-})(\\"BUCKET_HANDLE_5f2a41c8\\")
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+  }
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
+})()
 }), args: {} })).handle(event);
 };",
   "connections.json": {
